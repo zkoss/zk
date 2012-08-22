@@ -16,6 +16,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
@@ -29,6 +31,10 @@ import org.zkoss.zul.impl.Utils;
  * A layout region in a border layout.
  * <p>
  * Events:<br/> onOpen, onSize.<br/>
+ * 
+ * <h3>Support Caption component</h3>
+ * [ZK EE]
+ * [Since 6.5.0]
  * 
  * @author jumperchen
  * @since 5.0.0
@@ -49,6 +55,7 @@ public abstract class LayoutRegion extends XulElement {
 	private boolean _splittable;
 	private boolean _collapsible;
 	private boolean _open = true;
+	private transient Caption _caption;
 
 	static {
 		addClientEvent(LayoutRegion.class, Events.ON_OPEN, CE_IMPORTANT);
@@ -59,6 +66,13 @@ public abstract class LayoutRegion extends XulElement {
 		_cmargins = getDefaultCmargins();
 	}
 
+	/** Returns the caption of this region.
+	 * @since 6.5.0
+	 */
+	public Caption getCaption() {
+		return _caption;
+	}
+	
 	/**
 	 * Returns the border.
 	 * <p>
@@ -340,14 +354,43 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	public void beforeChildAdded(Component child, Component refChild) {
-		if (getChildren().size() > 0)
-			throw new UiException("Only one child is allowed: " + this);
+		if (child instanceof Caption) {
+			if (_caption != null && _caption != child)
+				throw new UiException("Only one caption is allowed: "+this);
+		} else {
+			int size = getChildren().size();
+			if ((size > 0 && _caption == null) || size > 1)
+				throw new UiException("Only one child and one caption is allowed: " + this);
+		}
 		super.beforeChildAdded(child, refChild);
 	}
+	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Borderlayout))
 			throw new UiException("Wrong parent: "+parent);
 		super.beforeParentChanged(parent);
+	}
+	
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Caption) {
+			refChild = getFirstChild();
+				//always makes caption as the first child
+			if (super.insertBefore(child, refChild)) {
+				_caption = (Caption)child;
+				invalidate();
+				return true;
+			}
+			return false;
+		}
+		return super.insertBefore(child, refChild);
+	}
+	
+	public void onChildRemoved(Component child) {
+		if (child instanceof Caption) {
+			_caption = null;
+			invalidate();
+		}
+		super.onChildRemoved(child);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
@@ -396,5 +439,28 @@ public abstract class LayoutRegion extends XulElement {
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
+	}
+	
+	//Cloneable//
+	public Object clone() {
+		final LayoutRegion clone = (LayoutRegion)super.clone();
+		if (clone._caption != null) clone.afterUnmarshal();
+		return clone;
+	}
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Caption) {
+				_caption = (Caption)child;
+				break;
+			}
+		}
+	}
+
+	//Serializable//
+	private void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		afterUnmarshal();
 	}
 }

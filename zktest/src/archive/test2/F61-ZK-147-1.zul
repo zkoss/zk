@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-147-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun 14, 2012 12:11:42 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="grid" extends="grid" width="700px"?>
+<zk>
+<label style="font-weight:bold; font-size:14px">ZK EE version only (Grid)</label>
+	<vlayout id="vb">
+	<label multiline="true">
+	1. Please check each column's menupopup contains a "Group" icon but NO "Ungroup" icon.
+	2. Please click the "Group" icon in the "Author" menupopup.
+	3. Please check the content of the grid contains a grouping structure.
+	4. Please check each column's menupopup contains a "Ungroup" icon.
+	5. Please click the "Ungroup" icon in the "Author" menupopup, and then the content of the grid should be ungrouped structure.
+	6. Please check each column's menupopup contains a "Group" icon but NO "Ungroup" icon.
+	</label>
+<hlayout>No-Model:
+	<grid>
+		<columns menupopup="auto">
+			<column label="Author" sort="auto"/>
+			<column label="Title" sort="auto"/>
+			<column label="Publisher" sort="auto"/>
+			<column label="Hardcover" sort="auto"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Fit"/>
+				<label value="HarperPerennial (April 4, 2005)"/>
+				<label value="240 pages"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="Kitchen Venom"/>
+				<label value="Flamingo (May 19, 2003)"/>
+				<label value="336 pages"/>
+			</row>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Hurry Down Sunshine"/>
+				<label value="Other Press (September 9, 2008)"/>
+				<label value="240 pages"/>
+			</row>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Painless Vocabulary (Painless)"/>
+				<label value="Barron's Educational Series (September 1, 2001)"/>
+				<label value="292 pages"/>
+			</row>
+		</rows>
+	</grid>
+	</hlayout>
+    <zscript><![CDATA[
+  int cnt = 0;
+Object[][] foods = new Object[][] {
+    new Object[] { "Vegetables", "Asparagus", "Vitamin K", 115, 43},
+    new Object[] { "Vegetables", "Beets", "Folate", 33, 74},
+    new Object[] { "Vegetables", "Tomatoes", "Vitamin C", 57, 37},
+    new Object[] { "Seafood", "Salmon", "Tryptophan", 103, 261},
+    new Object[] { "Seafood", "Cod", "Tryptophan", 90, 119}
+};
+
+ListModelList listmodel = new ListModelList();
+for (int i = 0; i < foods.length; i++)
+	listmodel.add(foods[i]);
+RowRenderer renderer = new org.zkoss.zktest.test2.group.FoodGroupRenderer();
+GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
+    ]]></zscript>
+    <label multiline="true">
+	7. Please check each column's menupopup contains a "Group" icon and only the first column can contain a "Ungroup" icon.
+	8. Please click the "Ungroup" icon in the "Categrory" menupopup, and then the content of the grid should be ungrouped structure.
+	9. Please check each column's menupopup contains a "Group" icon but NO "Ungroup" icon.
+	10. Please click the "Group" icon in the "Categrory" menupopup, and then the content of the grid contains a grouping structure again.
+	</label>
+    <hlayout>Group-Model:
+    <grid id="grid" model="${model}" rowRenderer="${renderer}">
+        <columns menupopup="auto">
+            <column label="Category" sort="auto(0)" onGroup='grid.setModel(model)' onUngroup='grid.setModel(listmodel);'/>
+            <column label="Name" sort="auto(1)"/>
+            <column label="Top Nutrients" sort="auto(2)"/>
+            <column label="% of Daily" sort="auto(3)"/>
+            <column label="Calories" sort="auto(4)"/>
+        </columns>
+    </grid>
+    </hlayout>
+    <label multiline="true">
+	11. Please check each column's menupopup should not contain any "Group" icon and "Ungroup" icon.
+	</label>
+    <hlayout>List-Model:
+    <grid id="grid2" model="${listmodel}" rowRenderer="${renderer}">
+        <columns menupopup="auto">
+            <column label="Category" sort="auto(0)" />
+            <column label="Name" sort="auto(1)"/>
+            <column label="Top Nutrients" sort="auto(2)"/>
+            <column label="% of Daily" sort="auto(3)"/>
+            <column label="Calories" sort="auto(4)"/>
+        </columns>
+    </grid>
+    </hlayout>
+	</vlayout>
+</zk>

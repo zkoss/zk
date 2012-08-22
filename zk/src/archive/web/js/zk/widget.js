@@ -2184,6 +2184,10 @@ redraw: function (out) {
 			s.height = t.style.height;
 		return s;
 	},
+	getZclass: function () {
+		var zcls = this._zclass;
+		return zcls != null ? zcls : 'z-' + this.widgetName;
+	},
 	/** Returns the DOM element that is used to hold the text, or null
 	 * if this widget doesn't show any text.
 	 * <p>Default: return null (no text node).
@@ -2787,6 +2791,7 @@ bind_: function (desktop, skipper, after) {
 					self.fire('onBind');
 			});
 		}
+		this.bindSwipe_();
 	},
 	/** Binds the children of this widget.
 	 * It is called by {@link #bind_} to invoke child's {@link #bind_} one-by-one.
@@ -2838,6 +2843,7 @@ unbind_: function (skipper, after) {
 
 		this.unbindChildren_(skipper, after);
 		this.cleanDrag_(); //ok to invoke even if not init
+		this.unbindSwipe_();
 
 		if (this.isListen('onUnbind')) {
 			var self = this;
@@ -3155,6 +3161,31 @@ unbind_: function (skipper, after) {
 
 		jq(this.getDragNode()).removeClass('z-dragged');
 	},
+	/** Bind swipe event to the widget on tablet device.
+	 * It is called if HTML 5 data attribute (data-swipeable) is set to true.
+	 * <p>You rarely need to override this method, unless you want to bind swipe behavior differently.
+	 * <p>Default: use {@link zk.Swipe} to implement swipe event.
+	 * @see #doSwipe_
+	 * @since 6.5.0
+	 */
+	bindSwipe_: zk.mobile ? function () {
+		var node = this.$n();
+		if (this.isListen('onSwipe') || jq(node).data('swipeable'))
+			this._swipe = new zk.Swipe(this, node);
+	} : zk.$void,
+	/** Unbind swipe event to the widget on tablet device.
+	 * It is called if swipe event is unbound.
+	 * <p>You rarely need to override this method, unless you want to unbind swipe event differently.
+	 * @see #doSwipe_
+	 * @since 6.5.0
+	 */
+	unbindSwipe_: zk.mobile ? function () {
+		var swipe = this._swipe;
+		if (swipe) {
+			this._swipe = null;
+			swipe.destroy(this.$n());
+		}
+	} : zk.$void,
 
 	/** Sets the focus to this widget.
 	 * This method will check if this widget can be activated by invoking {@link #canActivate} first.
@@ -3887,6 +3918,49 @@ wgt.setListeners({
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doKeyPress_(evt);
+		}
+	},
+	/** Called when the user swipe left/right/up/down this widget.
+	 * <p>For example,
+<pre><code>
+var opts = evt.opts, dir = opts.dir;
+switch (dir) {
+case 'left': doSwipeLeft(); break;
+case 'right': doSwipeRight(); break;
+case 'up': doSwipeUp(); break;
+case 'down': doSwipeDown(); break;
+}
+</code></pre>
+	 * To define swipe direction rather than default condition,
+<pre><code>
+var opts = evt.opts, start = opts.start, stop = opts.stop,
+	dispT = stop.time - start.time,
+	deltaX = start.coords[0] - stop.coords[0],
+	deltaY = start.coords[1] - stop.coords[1],
+	dispX = Math.abs(deltaX),
+	dispY = Math.abs(deltaY);
+
+//if swipe time is less than 500ms, it is considered as swipe event
+if (dispT < 500) {
+ 	//if horizontal displacement is larger than 30px and vertical displacement is smaller than 75px, it is considered swipe left/right
+	if (dispX > 30 && dispY < 75)
+		//swipe left if deltaX > 0
+	
+	//if vertical displacement is large than 30px and horizontal displacement is smaller than 75px, it is considered swipe up/down
+	else if (dispY > 30 && dispX < 75)
+		//swipe up if deltaY > 0
+}
+</code></pre>
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doSwipe_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * @param zk.Event evt the widget event.
+	 * @since 6.5.0
+	 */
+	doSwipe_: function(evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doSwipe_(evt);
 		}
 	},
 
@@ -4877,7 +4951,7 @@ Object skip(zk.Widget wgt);
 	 * @return DOMElement
 	 */
 	skip: function (wgt, skipId) {
-		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
+		var skip = jq(skipId || wgt.getCaveNode(), zk)[0];
 		if (skip && skip.firstChild) {
 			skip.parentNode.removeChild(skip);
 				//don't use jq to remove, since it unlisten events

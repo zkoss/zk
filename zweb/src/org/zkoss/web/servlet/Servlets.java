@@ -312,7 +312,7 @@ public class Servlets {
 	 * @param name the browser's name. It includes "ie", "ff", "gecko",
 	 * "webkit", "safari", "opera", "android", "mobile", "ios", "iphone", "ipad"
 	 * and "ipod".
-	 * And, "ff" is the same as "gecko", and "webit" is the same as "safari".
+	 * And, "ff" is the same as "gecko", and "webkit" is the same as "safari".
 	 * @since 6.0.0
 	 */
 	public static Double getBrowser(ServletRequest request, String name) {

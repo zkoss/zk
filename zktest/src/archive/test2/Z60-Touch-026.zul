@@ -1,0 +1,33 @@
+<zk>
+<vlayout width="100%" height="100%">
+	1.Should see scrollbar inside groupbox.  2.Click "add/remove" button, the scrollbar length should be changed.
+	<groupbox id="gbx" title="Groupbox" hflex="1" vflex="1" contentStyle="overflow: auto;">
+		<caption label="Scrollable Content"/>
+		<hlayout width="1600px" height="200px" spacing="0">
+			<div hflex="1" vflex="1" style="background: green;"></div>
+			<div hflex="1" vflex="1" style="background: yellow;"></div>
+			<div hflex="1" vflex="1" style="background: blue;"></div>
+			<div hflex="1" vflex="1" style="background: red;"></div>
+		</hlayout>
+		<div height="200px" width="200px" style="background: red;">
+			<button label="add">
+				<attribute name="onClick"><![CDATA[
+					Div d = new Div();
+					d.setId("add");
+					d.setHeight("400px");
+					d.setWidth("100%");
+					d.setStyle("background: black;");
+					gbx.appendChild(d);
+				]]></attribute>
+			</button>
+			<button label="remove" onClick="gbx.removeChild(add)" />
+		</div>
+		<zscript>Object[] o = new Object[40]</zscript>
+		<div vflex="min" width="200px" style="background: yellow;">
+			<zk forEach="${o}">
+			test ${forEachStatus.index}<separator/>
+			</zk>
+		</div>
+	</groupbox>
+</vlayout>
+</zk>

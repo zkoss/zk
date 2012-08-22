@@ -25,7 +25,6 @@
 .z-calendar-tdl,
 .z-calendar-tdr {
 	position: relative;
-	width : 10px;
 	padding-bottom: 10px;
 	width: 16px;
 	cursor: pointer;
@@ -160,7 +159,8 @@
 	text-align: center;
 }
 .z-calendar-caldow .z-calendar-wkend,
-.z-calendar-caldow .z-calendar-wkday {
+.z-calendar-caldow .z-calendar-wkday,
+.z-calendar-caldow .z-calendar-woy {
 	font-family: ${fontFamilyT};
 	font-weight: bold;
 	font-size: ${fontSizeS};
@@ -196,3 +196,9 @@ td.z-calendar-wkend {
 	color: #363636;
 }
 </c:if>
+
+td.z-calendar-woy {
+	background: #636363;
+	font-style: italic;
+	color: #FFFFFF;
+}

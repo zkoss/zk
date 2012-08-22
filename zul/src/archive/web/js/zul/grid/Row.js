@@ -125,9 +125,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	_getIndex: function () {
 		return this.parent ? this.getChildIndex() : -1;
 	},
-	getZclass: function () {
-		return this._zclass != null ? this._zclass : "z-row";
-	},
 	/** Returns the group that this row belongs to, or null.
 	 * @return zkex.grid.Group
 	 */

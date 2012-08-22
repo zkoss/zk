@@ -184,6 +184,7 @@
 	border: 1px solid #C5C5C5;
 	overflow: hidden;
 	position: absolute;
+ 	cursor: pointer;<%-- ios issue --%>
 }
 .z-east-colpsd-over,
 .z-west-colpsd-over,
@@ -253,3 +254,14 @@
 	background-image: url(${c:encodeThemeURL('~./zul/img/splt/colps-b.gif')});
 }
 </c:if>
+
+.z-north-capcnt,
+.z-south-capcnt,
+.z-west-capcnt,
+.z-east-capcnt,
+.z-center-capcnt {
+	float: left;
+	overflow: hidden;
+	min-height: 21px;
+	white-space: nowrap;
+}

@@ -1,0 +1,112 @@
+<zk>
+	<zscript><![CDATA[
+	public void showFileInfo(org.zkoss.zk.ui.event.UploadEvent event){
+		org.zkoss.util.media.Media[] medias = event.getMedias();
+		StringBuffer sb = new StringBuffer();
+		for (org.zkoss.util.media.Media m : medias) {
+			sb.append(m.getName()+" : "+m.getContentType()+"\n");
+		}
+		Messagebox.show(sb.toString());
+	}
+	]]></zscript>
+		
+	<label multiline="true"><![CDATA[
+	Browser support : Firefox (13+), Chrome (19+), Safari (5.1+)
+	Browser unsupport : IE9, Opera (11)
+	
+	Suggestion : Server and client run in different machine.		
+	]]></label>
+	
+	<separator bar="true" />
+
+	<label multiline="true"><![CDATA[
+	Detection test case :
+	The behavior of test case, please see the bottom grid.
+	Notice : This test is for detection="browser". Other Dropupload use case please test at "F61-ZK-447.zul".
+	]]></label>
+	<hlayout>
+		<vlayout>
+			<dropupload maxsize="-1" content="content" detection="browser" onUpload="showFileInfo(event)" />
+			<label>detection = browser</label>
+		</vlayout>
+		<vlayout>
+			<dropupload maxsize="-1" content="content" detection="foo" onUpload="showFileInfo(event)" />
+			<label>detection = foo</label>
+		</vlayout>
+		<vlayout>
+			<dropupload maxsize="-1" content="content" onUpload="showFileInfo(event)" />
+			<label>not detection</label>
+		</vlayout>
+	</hlayout>
+
+	<grid id="triggerBlock">
+		<auxhead>
+			<auxheader colspan="4" label="id=triggerBlock" />
+		</auxhead>
+		<columns>
+			<column>  </column>
+			<column>detection="none"</column>
+			<column>detection="self"</column>
+			<column>detection="triggerBlock"</column>
+			<column>detection="browser" or id not found</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="initialization" />
+				<label value="Show both block and content" />
+				<label value="Show block without content" />
+				<label value="Show block without content" />
+				<label value="Nothing" />
+			</row>
+			<row>
+				<label multiline="true"><![CDATA[ Drag over document.body,
+					but not over Dropupload 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"><![CDATA[ Show both block and content.
+					 
+					The cursor will look like "stop".
+					Drop file will do nothing.
+				]]></label>
+			</row>
+			<row>
+				<label multiline="true">drag over id=triggerBlock</label>
+				<label multiline="true"> -- </label>
+				<label multiline="true"> -- </label>
+				<label multiline="true"><![CDATA[ Show content.
+					
+					The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"> N/A </label>
+			</row>
+			<row>
+				<label multiline="true">drag over Dropupload</label>
+				<label multiline="true"><![CDATA[ The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>				
+				<label multiline="true"><![CDATA[ Show content.
+				
+					The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>
+				<label multiline="true"><![CDATA[ Show both block and content.
+				
+					The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>
+			</row>
+		</rows>
+	</grid>
+</zk>

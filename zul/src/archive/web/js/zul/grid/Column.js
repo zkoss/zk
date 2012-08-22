@@ -169,25 +169,22 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		else if ("descending" == dir) this.group(true, evt);
 		else if (!this.group(true, evt)) this.group(false, evt);
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-column" : this._zclass;
-	},
 	bind_: function () {
 		this.$supers(zul.grid.Column, 'bind_', arguments);
 		var n = this.$n();
-		this.domListen_(n, "onMouseOver")
-			.domListen_(n, "onMouseOut");
+		this.domListen_(n, 'onMouseOver')
+			.domListen_(n, 'onMouseOut');
 		var btn = this.$n('btn');
 		if (btn)
-			this.domListen_(btn, "onClick");
+			this.domListen_(btn, 'onClick', '_doMenuClick');
 	},
 	unbind_: function () {
 		var n = this.$n();
-		this.domUnlisten_(n, "onMouseOver")
-			.domUnlisten_(n, "onMouseOut");
+		this.domUnlisten_(n, 'onMouseOver')
+			.domUnlisten_(n, 'onMouseOut');
 		var btn = this.$n('btn');
 		if (btn)
-			this.domUnlisten_(btn, "onClick");
+			this.domUnlisten_(btn, 'onClick', '_doMenuClick');
 		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {
@@ -203,41 +200,6 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			if (!$n.hasClass(zcls + "-visi") &&
 				(!zk.ie || !jq.isAncestor(n, evt.domEvent.relatedTarget || evt.domEvent.toElement)))
 					$n.removeClass(zcls + "-over");
-		}
-	},
-	_doClick: function (evt) {
-		if (this.parent._menupopup && this.parent._menupopup != 'none') {
-			var pp = this.parent._menupopup,
-				n = this.$n(),
-				btn = this.$n('btn'),
-				zcls = this.getZclass();
-				
-			jq(n).addClass(zcls + "-visi");
-			
-			if (pp == 'auto' && this.parent._mpop)
-				pp = this.parent._mpop;
-			else
-				pp = this.$f(this.parent._menupopup);
-
-			if (zul.menu.Menupopup.isInstance(pp)) {
-				var ofs = zk(btn).revisedOffset(),
-					asc = this.getSortAscending() != 'none',
-					desc = this.getSortDescending() != 'none';
-				if (pp.$instanceof(zul.grid.ColumnMenupopup)) {
-					pp.getAscitem().setVisible(asc);
-					pp.getDescitem().setVisible(desc);
-					if (pp.getGroupitem()) 
-						pp.getGroupitem().setVisible((asc || desc));
-					
-					var sep = pp.getDescitem().nextSibling;
-					if (sep) 
-						sep.setVisible((asc || desc));
-				} else {
-					pp.listen({onOpen: [this.parent, this.parent._onMenuPopup]});
-				}
-				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
-			}
-			evt.stop(); // avoid onSort event.
 		}
 	}
 });

@@ -6,8 +6,8 @@
 	<tabbox>
 		<custom-attributes org.zkoss.zul.client.rod="false" />
 		<tabs>
-			<tab>1</tab>
-			<tab id="t2">2</tab>
+			<tab label="1"></tab>
+			<tab id="t2" label="2"></tab>
 		</tabs>
 		<tabpanels>
 			<tabpanel>

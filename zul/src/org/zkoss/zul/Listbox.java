@@ -2242,14 +2242,15 @@ public class Listbox extends MeshElement {
 					_model.removeListDataListener(_dataListener);
 					if (_model instanceof GroupsListModel)
 						getItems().clear();
-					
+
 					resetDataLoader(); // Bug 3357641
 				} else {
 					getItems().clear(); // Bug 1807414
-					if (!inSelectMold())
-						smartUpdate("model", true);
 				}
-
+				
+				if (!inSelectMold()) {
+					smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
+				}
 				_model = model;
 				initDataListener();
 			}
@@ -3169,7 +3170,7 @@ public class Listbox extends MeshElement {
 			render(renderer, "multiple", isMultiple());
 
 			if (_model != null)
-				render(renderer, "model", true);
+				render(renderer, "model", _model instanceof GroupsListModel || _model instanceof GroupsModel ? "group" : true);
 
 			if (!"100%".equals(_innerWidth))
 				render(renderer, "innerWidth", _innerWidth);

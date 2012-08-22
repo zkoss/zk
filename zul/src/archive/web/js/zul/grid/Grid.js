@@ -130,9 +130,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-grid" : this._zclass;
-	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);
@@ -260,6 +257,14 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	getBodyWidgetIterator: function (opts) {
 		return new zul.grid.RowIter(this, opts);
+	},
+	/**
+	 * Returns whether the grid has group.
+	 * @since 6.5.0
+	 * @return boolean
+	 */
+	hasGroup: function () {
+		return this.rows && this.rows.hasGroup();
 	}
 });
 })();

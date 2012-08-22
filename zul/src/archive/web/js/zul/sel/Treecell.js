@@ -169,9 +169,6 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		}
 		return pitems;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-treecell" : this._zclass;
-	},
 	_appendIcon: function (sb, iconScls, name, button) {
 		sb.push('<span class="');
 		if (name == zul.sel.Treecell.TEE || name == zul.sel.Treecell.LAST || name == zul.sel.Treecell.VBAR || name == zul.sel.Treecell.SPACER) {

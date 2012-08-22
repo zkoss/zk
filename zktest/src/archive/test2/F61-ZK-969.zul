@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-969.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 11, 2012  4:43:14 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please check each layout region works well. (like dropdown selection, collapsed title, splitter resizing) 
+	<borderlayout height="450px">
+		<north title="North" maxsize="400" size="50%" splittable="true"
+			collapsible="true">
+			<caption label="search" image="/img/live.gif">
+				<combobox>
+					<comboitem label="item 1" />
+					<comboitem label="item 2" />
+					<comboitem label="item 3" />
+					<comboitem label="item 4" />
+				</combobox>
+			</caption>
+			<borderlayout>
+				<west id="west" title="West" size="25%" flex="true" maxsize="350"
+					splittable="true" collapsible="true">
+					<caption label="search" image="/img/live.gif">
+						<combobox>
+							<comboitem label="item 1" />
+							<comboitem label="item 2" />
+							<comboitem label="item 3" />
+							<comboitem label="item 4" />
+						</combobox>
+					</caption>
+					<div style="background:#B8D335">
+						<label value="25%" style="color:white;font-size:50px" />
+					</div>
+				</west>
+				<center border="none" flex="true">
+					<div style="background:#E6D92C">
+						<label value="25%" style="color:white;font-size:50px" />
+					</div>
+				</center>
+				<east size="50%" border="none" flex="true">
+					<label value="Here is a non-border" style="color:gray;font-size:30px" />
+				</east>
+			</borderlayout>
+		</north>
+		<center border="0">
+			<caption label="search" image="/img/live.gif">
+				Search:
+				<textbox />
+			</caption>
+			<borderlayout>
+				<west maxsize="600" size="30%" flex="true" border="0"
+					splittable="true">
+					<caption label="search" image="/img/live.gif">
+						<combobox>
+							<comboitem label="item 1" />
+							<comboitem label="item 2" />
+							<comboitem label="item 3" />
+							<comboitem label="item 4" />
+						</combobox>
+					</caption>
+					<div style="background:#E6D92C">
+						<label value="30%" style="color:white;font-size:50px" />
+					</div>
+				</west>
+				<center>
+					<label value="Here is a border" style="color:gray;font-size:30px" />
+				</center>
+				<east title="East" size="30%" flex="true" collapsible="true">
+					<div style="background:#B8D335">
+						<label value="30%" style="color:white;font-size:50px" />
+					</div>
+				</east>
+			</borderlayout>
+		</center>
+	</borderlayout>
+</zk>

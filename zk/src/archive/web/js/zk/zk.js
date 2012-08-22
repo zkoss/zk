@@ -1096,7 +1096,10 @@ zk.log('value is", value);
 			, (detailed === zk)
 		);
 		_logmsg = (_logmsg ? _logmsg + msg: msg) + '\n';
-		setTimeout(function(){jq(doLog);}, 300);
+		if (zk.mobile) {
+			console.log(_logmsg);
+			_logmsg = null;
+		} else setTimeout(function(){jq(doLog);}, 300);
 	},
 	/** Make a time stamp for this momemt; used for performance tuning.
 	 * A time stamp is represented by a name. It is an easy way to measure
@@ -1200,7 +1203,7 @@ zk.log('value is", value);
 	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
+	zk.ios = zk.safari && /iphone|ipad|ipod/.test(agent);
 	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf('linux') >= 0;
@@ -1209,14 +1212,18 @@ zk.log('value is", value);
 	zk.safari_ = zk.safari && !zk.chrome; // safari only
 	zk.css3 = true;
 	
+	zk.vendor = zk.safari ? 'webkit' : '';
+
 	var bodycls;
 	if (zk.ff) {
 		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
 		&& (bodycls = agent.indexOf("firefox/")) > 0)
 			zk.ff = zk.gecko = _ver(agent.substring(bodycls + 8));
 		bodycls = 'gecko gecko' + Math.floor(zk.ff);
+		zk.vendor = 'Moz';
 	} else if (zk.opera) { //no longer to worry 10.5 or earlier
 		bodycls = 'opera';
+		zk.vendor = 'O';
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 			//zk.iex is the Browser Mode (aka., Compatibility View)
@@ -1231,9 +1238,17 @@ zk.log('value is", value);
 			zk.ie7_ = zk.ie == 7;
 			zk.ie8_ = zk.ie == 8;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
+			zk.vendor = 'ms';
 		} else {
 			if (zk.safari)
 				bodycls = 'safari safari' + Math.floor(zk.safari);
+			if (zk.mobile) {
+				bodycls = (bodycls || '') + ' mobile';
+				if (zk.ios)
+					bodycls = (bodycls || '') + ' ios';
+				else
+					bodycls = (bodycls || '') + ' android';
+			}
 		}
 	}
 	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
@@ -1243,6 +1258,8 @@ zk.log('value is", value);
 		jq(function () {
 			jq(document.body).addClass(bodycls);
 		});
+	
+	zk.vendor_ = zk.vendor.toLowerCase();
 })();
 
 //zk.Object//
@@ -1498,8 +1515,9 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
  			html = '<div class="z-error" id="' + id + '"><table cellpadding="2" cellspacing="2" width="100%">'
  					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
  					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >'
-					+ '<div class="btn redraw" onclick="zk._Erbx.redraw()"></div>'
-					+ '<div class="btn close" onclick="zk._Erbx.remove()"></div></div></td></tr></table></div>';
+					+ '<div class="btn redraw" onclick="zk._Erbx.redraw()"' + (zk.mobile ? ' ontouchstart="zk._Erbx.redraw()"' : '') + '></div>'
+					+ '<div class="btn close" onclick="zk._Erbx.remove()"' + (zk.mobile ? ' ontouchstart="zk._Erbx.remove()"' : '')	+ '></div>'
+					+ '</div></td></tr></table></div>';
 
 		jq(document.body).append(html);
 		_erbx = this;

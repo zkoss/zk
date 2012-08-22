@@ -83,6 +83,10 @@ public class Events {
 	/** The onScrolling event (used with {@link ScrollEvent}).
 	 */
 	public static final String ON_SCROLLING = "onScrolling";
+	/** The onSwipe event (used with {@link SwipeEvent}).
+	 * @since 6.5.0
+	 */
+	public static final String ON_SWIPE = "onSwipe";
 	/** The onSelect event (used with {@link SelectEvent}).
 	 */
 	public static final String ON_SELECT = "onSelect";
@@ -142,6 +146,11 @@ public class Events {
 	 * @since 5.0.0
 	 */
 	public static final String ON_GROUP = "onGroup";
+	/** The onUngroup event (used with {@link Event})
+	 * to notify a request for ungrouping.
+	 * @since 6.5.0
+	 */
+	public static final String ON_UNGROUP = "onUngroup";
 	/** The onUpload event (used with {@link UploadEvent}.
 	 */
 	public static final String ON_UPLOAD = "onUpload";
@@ -162,7 +171,6 @@ public class Events {
 	/** The onClientInfo event (used with {@link ClientInfoEvent}).
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";
-
 	/** The onCreate event (used with {@link CreateEvent}) to notify a compoent
 	 * that it (and its children) has been created by ZK's evaluating a ZUML page.
 	 */

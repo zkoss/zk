@@ -18,9 +18,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.4
  */
 zul.box.Vlayout = zk.$extends(zul.box.Layout, {
-	getZclass: function () {
-		return this._zclass == null ? "z-vlayout" : this._zclass;
-	},
 	isVertical_: function () {
 		return true;
 	}

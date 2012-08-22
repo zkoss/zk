@@ -144,10 +144,6 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		if (n)
 			n.name = this.getName();
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-radio";
-	},
 	beforeParentChanged_: function (newParent) {
 		var oldParent = this.parentNode,
 			oldGroup = this.getRadiogroup(),

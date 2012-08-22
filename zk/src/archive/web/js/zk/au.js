@@ -24,13 +24,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
 		_detached = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
-		Widget = zk.Widget;
-
+		Widget = zk.Widget,
+		_portrait = {'0': true, '180': true}, //default portrait definition
+		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+		_initDefault = _portrait[window.orientation]; //default orientation
+	
 	// Checks whether to turn off the progress prompt
 	function checkProgressing() {
 		if (!zAu.processing()) {
 			_detached = []; //clean up
-			zk.endProcessing();
+			if (!(zk.mobile && zAu._cInfoReg)) // ignore it when touch devices
+				zk.endProcessing();
 			zAu.doneTime = jq.now();
 		}
 	}
@@ -338,6 +342,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
 				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
+				if (zk.mobile && rtags.onClientInfo) {
+					setTimeout(zk.endProcessing, 150);
+				}
+					
 			}
 		}
 		if (ex)
@@ -1030,11 +1038,27 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	clientInfo: function (dtid) {
 		zAu._cInfoReg = true;
+		var orient = '',
+			dpr = 1;
+		
+		if (zk.mobile) {
+			//change default portrait definition because landscape is the default orientation for this device/browser.
+			if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
+				_portrait = {'-90': true, '90': true};
+			
+			orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
+		} else {
+			orient = jq.innerWidth() > jq.innerHeight() ? 'landscape' : 'portrait';
+		}
+		
+		if (window.devicePixelRatio)
+			dpr = window.devicePixelRatio;
+		
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY()],
-			{implicit:true}));
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
+			{implicit:true, rtags: {onClientInfo: 1}}));
 	},
 	/** Asks the client to download the resource at the specified URL.
 	 * @param String url the URL to download from
@@ -1111,15 +1135,16 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String ref uuid of a reference component
 	 * @param String pos the position of notification
 	 * @param int dur the duration of notification
+	 * @param boolean closable the close button of notification
 	 */
-	showNotification: function (msg, type, pid, ref, pos, off, dur) {
+	showNotification: function (msg, type, pid, ref, pos, off, dur, closable) {
 		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
 		if (notif) {
 			// B60-ZK-1205
 			// Delay the showing of notification to avoid being closed accidentally
 			// by autodisable mechanism
-			setTimeout(function() {
-				notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type});
+			setTimeout(function() {		
+				notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable});
 			}, 100);
 		} else {
 			// TODO: provide a hook to customize

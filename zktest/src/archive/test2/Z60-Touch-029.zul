@@ -1,0 +1,13 @@
+<zk xmlns:n="native">
+	<n:h3>iPad/Android only</n:h3>
+	<div>
+		1. Click on chosenbox to show drop-down list. <separator />
+		2. Should be able to scorll the drop-down list.
+	</div>
+	<zscript><![CDATA[
+	import org.zkoss.zktest.test2.select.models.ListModelLists;
+	import org.zkoss.zul.*;
+	ListModelList model = ListModelLists.getModel(ListModelLists.MULTIPLE);
+	]]></zscript>
+	<chosenbox width="240px" model="${model}" separator=",./" />
+</zk>

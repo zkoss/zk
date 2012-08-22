@@ -69,6 +69,27 @@ implements Constrainted, Readonly, Disable {
 	/** Whether this input is validated (Feature 1461209). */
 	private boolean _valided;
 	private boolean _inplace;
+	private String _placeholder;
+	
+	/**
+	 * Returns the placeholder text
+	 * @since 6.5.0
+	 */
+	public String getPlaceholder() {
+		return _placeholder;
+	}
+	
+	/**
+	 * Sets the placeholder text that is displayed when input is empty.
+	 * Only works for browsers supporting HTML5.
+	 * @since 6.5.0
+	 */
+	public void setPlaceholder(String placeholder) {
+		if (_placeholder != placeholder) {
+			_placeholder = placeholder;
+			smartUpdate("placeholder", _placeholder);
+		}
+	}
 
 	/**
 	 * Sets to enable the inplace-editing function that the look and feel is
@@ -784,6 +805,9 @@ implements Constrainted, Readonly, Disable {
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", getName());
 		render(renderer, "inplace", _inplace);
+		
+		if (_placeholder != null) render(renderer, "placeholder", _placeholder);
+		
 		int v;
 		if ((v = getMaxlength()) > 0) renderer.render("maxlength", v);
 		if (_cols > 0) renderer.render("cols", _cols);

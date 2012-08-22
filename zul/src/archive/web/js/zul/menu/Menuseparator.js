@@ -33,9 +33,6 @@ zul.menu.Menuseparator = zk.$extends(zul.Widget, {
 				return p;
 		return null;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-menuseparator" : this._zclass;
-	},
 	doMouseOver_: function () {
 		if (zul.menu._nOpen)
 			zWatch.fire('onFloatUp', this); //notify all

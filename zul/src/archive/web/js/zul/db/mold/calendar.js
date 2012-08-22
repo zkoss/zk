@@ -72,54 +72,16 @@ function (out) {
 	//year view
 	switch(view) {
 	case "day" :
-		out.push('<tr><td colspan="3"><table id="', uuid, '-mid" class="', zcls, '-calday" width="100%" border="0" cellspacing="0" cellpadding="0">',
-				'<tr class="', zcls, '-caldow">');
-			var sun = (7 - localizedSymbols.DOW_1ST) % 7, sat = (6 + sun) % 7;
-			for (var j = 0 ; j < 7; ++j)
-				out.push('<td class="', zcls, (j == sun || j == sat) ? '-wkend' : '-wkday', 
-						'">' + localizedSymbols.S2DOW[j] + '</td>');
-			out.push('</tr>');
-			for (var j = 0; j < 6; ++j) { //at most 7 rows
-				out.push('<tr class="', zcls, '-caldayrow" id="', uuid, '-w', j, '" >');
-				for (var k = 0; k < 7; ++k)
-					out.push ('<td class="', zcls, (k == sun || k == sat) ? '-wkend' : '-wkday', '"></td>');
-				out.push('</tr>');
-			}
+		zul.db.Renderer.dayView(this, out, localizedSymbols);
 		break;
 	case "month" :
-		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calmon" width="100%" border="0" cellspacing="0" cellpadding="0">');
-		for (var j = 0 ; j < 12; ++j) {
-			if (!(j % 4)) out.push('<tr>');
-			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'">', localizedSymbols.SMON[j] + '</td>');
-			if (!((j + 1) % 4)) out.push('</tr>');
-		}
+		zul.db.Renderer.monthView(this, out, localizedSymbols);
 		break;
 	case "year" :
-		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
-
-		for (var j = 0 ; j < 12; ++j) {
-			if (!(j % 4)) out.push('<tr>');
-			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '" >', yofs + ydelta, '</td>');
-			if (!((j + 1) % 4)) out.push('</tr>');
-			yofs++;
-		}
+		zul.db.Renderer.yearView(this, out, localizedSymbols);
 		break;
 	case "decade" :
-		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
-		var temp = ydec*100 - 10;
-		for (var j = 0 ; j < 12; ++j, temp += 10) {
-			if (!(j % 4)) out.push('<tr>');
-			if (temp < 1900 || temp > 2090) {
-				out.push('<td>&nbsp;</td>');
-				if (j + 1 == 12)
-					out.push('</tr>'); 
-				continue;
-			}
-			
-			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="', (y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"',
-					' >', temp + ydelta, '-<br />', temp + ydelta + 9, '</td>');
-			if (!((j + 1) % 4)) out.push('</tr>');
-		}
+		zul.db.Renderer.decadeView(this, out, localizedSymbols);
 		break;
 	}
 	out.push('</table><', tagnm, ' id="', uuid,

@@ -20,8 +20,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -31,14 +33,24 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>
  * Default {@link #getZclass}: z-tab. (since 3.5.0)
  * 
+ * <h3>Support child component</h3>
+ * {@link Caption} child component is allowed.
+ * [ZK EE]
+ * [Since 6.5.0]
+ * 
  * @author tomyeh
  */
 public class Tab extends LabelImageElement {
+
+	private static final Log log = Log.lookup(Tab.class);
+			
 	private boolean _selected;
 	/** Whether to show a close button. */
 	private boolean _closable;
 
 	private boolean _disabled;
+	private transient Caption _caption;
+	
 	static {
 		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
 		addClientEvent(Tab.class, Events.ON_SELECT, CE_IMPORTANT);
@@ -53,6 +65,13 @@ public class Tab extends LabelImageElement {
 		super(label, image);
 	}
 
+	/** Returns the caption of this tab.
+	 * @since 6.5.0
+	 */
+	public Caption getCaption() {
+		return _caption;
+	}
+	
 	//-- super --//
 	public void setWidth(String width) {
 		Tabbox tb = getTabbox();
@@ -249,16 +268,92 @@ public class Tab extends LabelImageElement {
 
 	// -- Component --//
 	/**
-	 * No child is allowed.
+	 * Child is allowed, {@link Caption} only.
+	 * @since 6.5.0
 	 */
 	protected boolean isChildable() {
-		return false;
+		return true;
 	}
+	
+	public void beforeChildAdded(Component child, Component refChild) {
+		if (child instanceof Caption) {
+			if (_caption != null && _caption != child)
+				throw new UiException("Only one caption is allowed: "+this);
+			super.beforeChildAdded(child, refChild);
+		} else if (child instanceof Label) {// backward compatible
+			super.beforeChildAdded(child, refChild);
+		} else
+			throw new UiException("Only caption is allowed: "+this);
+	}
+	
+	// backward compatible
+	private transient Label _tmpLabel;
+	/**
+	 * Internal use only
+	 * @since 6.5.0
+	 */
+	public void onCreate(Event evt) {
+		if (_tmpLabel != null) {
+			setLabel(_tmpLabel.getValue());
+			removeChild(_tmpLabel);
+		}
+		_tmpLabel = null;
+	}
+	
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Caption) {
+			refChild = getFirstChild();
+				//always makes caption as the first child
+			if (super.insertBefore(child, refChild)) {
+				_caption = (Caption)child;
+				invalidate();
+				return true;
+			}
+			return false;
+		} else if (child instanceof Label) {// backward compatible
+			_tmpLabel = (Label)child;
+			log.warning("Please use Tab#setLabel(msg) instead! ["+this+"]");
+		}
+		return super.insertBefore(child, refChild);
+		
+	}
+	
+	public void onChildRemoved(Component child) {
+		if (child instanceof Caption) {
+			_caption = null;
+			invalidate();
+		}
+		super.onChildRemoved(child);
+	}
+
 
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabs))
 			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
+	}
+	
+	//Cloneable//
+	public Object clone() {
+		final Tab clone = (Tab)super.clone();
+		if (clone._caption != null) clone.afterUnmarshal();
+		return clone;
+	}
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Caption) {
+				_caption = (Caption)child;
+				break;
+			}
+		}
+	}
+
+	//Serializable//
+	private void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		afterUnmarshal();
 	}
 
 	// -- ComponentCtrl --//

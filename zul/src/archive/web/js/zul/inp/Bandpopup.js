@@ -23,10 +23,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 	//super
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-bandpopup";
-	},
 	afterChildrenMinFlex_: function(orient) {
 		if (orient == 'w') {
 			var bandbox = this.parent,

@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Checkbox extends LabelImageElement
 implements org.zkoss.zk.ui.ext.Disable {
-	private String _value = "";
+	private Object _value;
 	/** The name. */
 	private String _name;
 	private int _tabindex;
@@ -132,19 +132,18 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 
 	/** Returns the value.
-	 * <p>Default: "".
+	 * <p>Default: null. (since 6.5.0)
 	 * @since 5.0.4
 	 */
-	public String getValue() {
-		return _value;
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T) _value;
 	}
 	/** Sets the value.
-	 * @param value the value; If null, it is considered as empty.
+	 * @param value the value;
 	 * @since 5.0.4
 	 */
-	public void setValue(String value) {
-		if (value == null)
-			value = "";
+	public <T> void setValue(T value) {
 		if (!Objects.equals(_value, value)) {
 			_value = value;
 			smartUpdate("value", _value);

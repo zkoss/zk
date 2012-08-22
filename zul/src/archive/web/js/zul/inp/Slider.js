@@ -240,10 +240,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_startDrag: function(dg) {
 		var widget = dg.control;
 		widget.$n('btn').title = ""; //to avoid annoying effect
-		widget.slidepos = widget._curpos;
+		widget.slidepos = widget._curpos,
+		vert = widget.isVertical(),
+		cls = vert ? 'z-slider-ver-pp' : 'z-slider-hor-pp';
 		
 		jq(document.body)
-			.append('<div id="zul_slidetip" class="z-slider-pp"'
+			.append('<div id="zul_slidetip" class="z-slider-pp ' + cls + '"'
 			+ 'style="position:absolute;display:none;z-index:60000;'
 			+ 'background-color:white;border: 1px outset">' + widget.slidepos +
 			'</div>');

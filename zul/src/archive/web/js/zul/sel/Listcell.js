@@ -63,9 +63,6 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
-	getZclass: function () {
-		return this._zclass == null ? "z-listcell" : this._zclass;
-	},
 	getTextNode: function () {
 		return jq(this.$n()).find('>div:first')[0];
 	},

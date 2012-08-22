@@ -70,8 +70,5 @@ zul.layout.Absolutechildren = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.layout.Absolutechildren, 'bind_', arguments);
 		this._rePositionBoth();
-	},
-	getZclass: function () {
-		return this._zclass != null ? this._zclass: "z-absolutechildren";
 	}
 });

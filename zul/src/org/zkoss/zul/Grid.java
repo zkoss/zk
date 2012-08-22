@@ -649,8 +649,9 @@ public class Grid extends MeshElement {
 					resetDataLoader(); // Bug 3357641
 				} else {
 					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
-					smartUpdate("model", true);
 				}
+				
+				smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
 
 				_model = model;
 				initDataListener();
@@ -1481,7 +1482,6 @@ public class Grid extends MeshElement {
 			}
 		}
 	}
-
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -1490,7 +1490,7 @@ public class Grid extends MeshElement {
 		render(renderer, "oddRowSclass", _scOddRow);
 		
 		if (_model != null)
-			render(renderer, "model", true);
+			render(renderer, "model", _model instanceof GroupsListModel || _model instanceof GroupsModel ? "group" : true);
 
 		if (!"100%".equals(_innerWidth))
 			render(renderer, "innerWidth", _innerWidth);

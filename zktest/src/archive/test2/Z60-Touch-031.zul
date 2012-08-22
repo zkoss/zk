@@ -1,0 +1,32 @@
+<zk xmlns:n="native">
+	<n:h3>iPad/Android only</n:h3>
+	<div>
+		1. Change tablet's orientation.<separator />
+		2. The height and width of the tabbox should changed.<separator />
+		3. Height should be larger than width when orientation is portrait.
+	</div>
+	<tabbox id="tbx" height="400px" width="600px">
+		<attribute name="onClientInfo"><![CDATA[
+			ClientInfoEvent oe = (ClientInfoEvent) event;
+			String orient = oe.getOrientation();
+			lbl.setValue(orient);
+			lbl2.setValue("" + oe.getDevicePixelRatio());
+			if (orient.equals("portrait")) {
+				tbx.setHeight("600px");
+				tbx.setWidth("400px");
+			} else {
+				tbx.setHeight("400px");
+				tbx.setWidth("600px");
+			}
+		]]></attribute>
+		<tabs>
+			<tab label="tab 1" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				Current Orientation: <label id="lbl"/><separator />
+				Current Device Pixel Ratio: <label id="lbl2"/>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

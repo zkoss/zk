@@ -21,6 +21,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		this.setWidth("260px");
 		this.setSclass('z-errbox');
 	},
+	getZclass: function () {
+		return this._zclass == null ? 'z-popup' : this._zclass;
+	},
 	/** Opens the popup.
 	 * @param zk.Widget owner the owner widget
 	 * @param String msg the error message
@@ -108,7 +111,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 				$el = jq(el),
 				size = zk.parseInt($el.css('padding-right')),
 				offs = $el.zk.revisedOffset();
-			$el[y >= offs[1] && y < offs[1] + size ? 'addClass':'removeClass']('z-errbox-close-over');
+			if (zul.inp.InputCtrl.isPreservedMouseMove(this))
+				$el[y >= offs[1] && y < offs[1] + size ? 'addClass':'removeClass']('z-errbox-close-over');
 		} else this.$supers('doMouseMove_', arguments);
 	},
 	doMouseOut_: function (evt) {
@@ -248,8 +252,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		errbox._fixarrow();
 	},
 	_ignoredrag: function (dg, pointer, evt) {
-		var c = dg.control.$n('c');
-		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
+		return zul.inp.InputCtrl.isIgnoredDragForErrorbox(dg, pointer, evt);
 	},
 	_change: function (dg) {
 		var errbox = dg.control,

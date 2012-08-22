@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-147.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun 14, 2012 12:11:37 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="listbox" extends=listbox" width="700px"?>
+<zk>
+	<label style="font-weight:bold; font-size:14px">ZK EE version only (Listbox)</label>
+	<vlayout id="vb">
+		<label multiline="true">
+			1. Please check each listheader's menupopup contains a "Group" icon but
+			NO "Ungroup" icon.
+			2. Please click the "Group" icon in the "Author" menupopup.
+			3. Please check the content of the grid contains a grouping structure.
+			4. Please check each listheader's menupopup contains a "Ungroup"
+			icon.
+			5. Please click the "Ungroup" icon in the "Author" menupopup, and then
+			the content of the grid should be ungrouped structure.
+			6. Please check each listheader's menupopup contains a "Group" icon but
+			NO "Ungroup" icon.
+	</label>
+		<hlayout>
+			No-Model:
+			<listbox>
+				<listhead menupopup="auto">
+					<listheader label="Author" sort="auto" />
+					<listheader label="Title" sort="auto" />
+					<listheader label="Publisher" sort="auto" />
+					<listheader label="Hardcover" sort="auto" />
+				</listhead>
+				<listitem>
+					<listcell label="Philip Hensher" />
+					<listcell label="The Northern Clemency" />
+					<listcell label="Knopf (October 30, 2008)" />
+					<listcell label="608 pages" />
+				</listitem>
+				<listitem>
+					<listcell label="Philip Hensher" />
+					<listcell label="The Fit" />
+					<listcell label="HarperPerennial (April 4, 2005)" />
+					<listcell label="240 pages" />
+				</listitem>
+				<listitem>
+					<listcell label="Philip Hensher" />
+					<listcell label="Kitchen Venom" />
+					<listcell label="Flamingo (May 19, 2003)" />
+					<listcell label="336 pages" />
+				</listitem>
+				<listitem>
+					<listcell label="Michael Greenberg" />
+					<listcell label="Hurry Down Sunshine" />
+					<listcell label="Other Press (September 9, 2008)" />
+					<listcell label="240 pages" />
+				</listitem>
+				<listitem>
+					<listcell label="Michael Greenberg" />
+					<listcell label="Painless Vocabulary (Painless)" />
+					<listcell label="Barron's Educational Series (September 1, 2001)" />
+					<listcell label="292 pages" />
+				</listitem>
+			</listbox>
+		</hlayout>
+		<zscript><![CDATA[
+  int cnt = 0;
+Object[][] foods = new Object[][] {
+    new Object[] { "Vegetables", "Asparagus", "Vitamin K", 115, 43},
+    new Object[] { "Vegetables", "Beets", "Folate", 33, 74},
+    new Object[] { "Vegetables", "Tomatoes", "Vitamin C", 57, 37},
+    new Object[] { "Seafood", "Salmon", "Tryptophan", 103, 261},
+    new Object[] { "Seafood", "Cod", "Tryptophan", 90, 119}
+};
+
+ListModelList listmodel = new ListModelList();
+for (int i = 0; i < foods.length; i++)
+	listmodel.add(foods[i]);
+ListitemRenderer renderer = new org.zkoss.zktest.test2.group.FoodGroupRenderer2();
+GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
+    ]]></zscript>
+		<label multiline="true">
+			7. Please check each listheader's menupopup contains a "Group" icon and
+			only the first listheader can contain a "Ungroup" icon.
+			8. Please click the "Ungroup" icon in the "Categrory" menupopup, and
+			then the content of the grid should be ungrouped structure.
+			9. Please check each listheader's menupopup contains a "Group" icon but
+			NO "Ungroup" icon.
+			10. Please click the "Group" icon in the "Categrory" menupopup, and then
+			the content of the grid contains a grouping structure again.
+	</label>
+		<hlayout>
+			Group-Model:
+			<listbox id="grid" model="${model}" itemRenderer="${renderer}">
+				<listhead menupopup="auto">
+					<listheader label="Category" sort="auto(0)" onGroup='grid.setModel(model)'
+						onUngroup='grid.setModel(listmodel);' />
+					<listheader label="Name" sort="auto(1)" />
+					<listheader label="Top Nutrients" sort="auto(2)" />
+					<listheader label="% of Daily" sort="auto(3)" />
+					<listheader label="Calories" sort="auto(4)" />
+				</listhead>
+			</listbox>
+		</hlayout>
+		<label multiline="true">
+			11. Please check each listheader's menupopup should not contain any
+			"Group" icon and "Ungroup" icon.
+	</label>
+		<hlayout>
+			List-Model:
+			<listbox id="grid2" model="${listmodel}" itemRenderer="${renderer}">
+				<listhead menupopup="auto">
+					<listheader label="Category" sort="auto(0)" />
+					<listheader label="Name" sort="auto(1)" />
+					<listheader label="Top Nutrients" sort="auto(2)" />
+					<listheader label="% of Daily" sort="auto(3)" />
+					<listheader label="Calories" sort="auto(4)" />
+				</listhead>
+			</listbox>
+		</hlayout>
+	</vlayout>
+</zk>

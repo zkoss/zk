@@ -191,13 +191,21 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
-		if (this.desktop)
+		if (this.desktop) {
+			this._calcHgh();
 			zUtl.fireSized(this.parent);
+		}
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
 		if (this.desktop)
 			zUtl.fireSized(this.parent);
+	},
+	_calcHgh: function () {
+		var n = this.$n(),
+			cnt = this.$n('cnt');
+		if (cnt && (cnt = cnt.parentNode))
+			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
 	},
 	//protected
 	doClick_: function(evt) {
@@ -260,6 +268,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				}
 			});
 		});
+		
+		if (this.getHeight())
+			this._calcHgh();
 	},
 	unbind_: function () {
 		var closebtn = this.$n('close');
@@ -288,6 +299,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		// ZK-886
 		_logId(this);
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
+	},
+	contentRenderer_: function (out) {
+		var zcls = this.getZclass();
+		out.push('<span id="', this.uuid, '-cnt" class="', zcls, '-text">', this.domContent_(), '</span>');
 	}
 });
 /** @class zul.tab.TabRenderer

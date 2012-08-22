@@ -140,6 +140,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_cols: 0,
 	//_tabindex: 0,
 	_type: 'text',
+	_placeholder: null,
 	$define: {
 		/** Returns the name of this component.
 		 * <p>Default: null.
@@ -260,6 +261,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 * @param boolean inplace
 		 */
 		inplace: function (inplace) {
+			this.rerender();
+		},
+		/**
+		 * Returns the placeholder text
+		 * @since 6.5.0
+		 */
+		/**
+		 * Sets the placeholder text that is displayed when input is empty.
+		 * Only works for browsers supporting HTML5.
+		 * @since 6.5.0
+		 */
+		placeholder: function (placeholder) {
 			this.rerender();
 		},
 		/** Returns whether to send onChange event as soon as user types in the 
@@ -403,6 +416,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (v) html += ' name="' + v + '"';
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
+		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
 		
 		var s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
 		if (s) html += ' style="' + s + '"';
@@ -887,4 +901,39 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	onChangingForced: true
 });
+
+/** @class InputCtrl
+ * The extra control for the InputWidget.
+ * It is designed to be overriden
+ * @since 6.5.0
+ */
+zul.inp.InputCtrl = {
+	/**
+	 * Returns whether to preserve the focus state.
+	 * @param Widget wgt a widget
+	 * @return boolean
+	 */
+	isPreservedFocus: function (wgt) {
+		return true;
+	},
+	/**
+	 * Returns whether to preserve the mousemove state.
+	 * @param Widget wgt a widget
+	 * @return boolean
+	 */
+	isPreservedMouseMove: function (wgt) {
+		return true;
+	},
+	/**
+	 * Returns whether to ignore the dragdrop for errorbox
+	 * @param zk.Draggable dg the drag object
+	 * @param Offset pointer
+	 * @param zk.Event evt
+	 * @return boolean
+	 */
+	isIgnoredDragForErrorbox: function (dg, pointer, evt) {
+		var c = dg.control.$n('c');
+		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
+	}
+};
 })();

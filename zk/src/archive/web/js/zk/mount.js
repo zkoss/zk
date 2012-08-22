@@ -230,7 +230,16 @@ function zkamn(pkg, fn) {
 		zk.mounting = false;
 		doAfterMount(mtBL1);
 		_paci && ++_paci.s;
-		zk.endProcessing();
+		if (zk.mobile) {
+			setTimeout(function () {
+			// close it when no ClientInfo event registered,
+			// otherwise the onResponse event will take care that.
+			if (!zAu._cInfoReg)
+				zk.endProcessing();
+			}, 500);
+		} else {
+			zk.endProcessing();
+		}
 
 		zk.bmk.onURLChange();
 		if (zk.pfmeter) {
@@ -318,7 +327,7 @@ function zkamn(pkg, fn) {
 					//zkac used as token to optimize the performance of zk.Widget.$init
 				wgt.uuid = uuid;
 				if (v = wi[4])
-					wgt._mold = v;
+					wgt.setMold(v);
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
@@ -344,7 +353,7 @@ function zkamn(pkg, fn) {
 	 */
 	function breathe(fn) {
 		var t = jq.now(), dt = t - _t0;
-		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
+		if (!(zk.android && zk.chrome) && dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
 			_t0 = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
@@ -698,7 +707,7 @@ jq(function() {
 	zjq.fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
 
 	
-	var _sizeHandler = function(){
+	var _sizeHandler = function(evt){
 		if (zk.mounting || zk.skipResize)
 			return;
 
@@ -718,6 +727,12 @@ jq(function() {
 		var delay = zk.ie ? 250: 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
+
+		if (zk.mobile && zAu._cInfoReg) {
+			if (!jq("#zk_proc").length && !jq("#zk_showBusy").length) {
+				zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+			}
+		}
 	};
 	
 	if(zk.mobile)

@@ -61,6 +61,7 @@
 	height: 50px;
 }
 .z-notification .z-notification-cl {
+	position: relative;
 	padding: 15px;
 	padding-left: 55px;
 	border-radius: 10px;
@@ -76,6 +77,21 @@
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	background-position: 17px 18px;
+}
+.z-notification .z-notification-close,
+.z-notification-ref .z-notification-close {
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	cursor: pointer;
+}
+.z-notification .z-notification-close {
+	top: 10px;
+	right: 10px;
+}
+.z-notification-ref .z-notification-close {
+	top: 5px;
+	right: 5px;
 }
 .z-notification .z-notification-cnt {
 	overflow: hidden;
@@ -105,6 +121,20 @@
 	background-color: ${zk.ie <= 8 ? "#444444" : "rgba(51, 51, 51, 0.9)"}; <%-- bug ZK-1135: IE8 does not support rgba --%>
 	color: #FFFFFF;
 }
+.z-notification .z-notification-close {
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-close.png')});
+}
+.z-notification .z-notification-close-over {
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-close-over.png')});
+}
+<c:if test="${zk.ie == 6}">
+.z-notification .z-notification-close {
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-close.gif')});
+}
+.z-notification .z-notification-close-over {
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-close-over.gif')});
+}
+</c:if>
 .z-notification .z-notification-pointer-l,
 .z-notification .z-notification-pointer-r,
 .z-notification .z-notification-pointer-u,

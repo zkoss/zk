@@ -28,8 +28,8 @@ import org.zkoss.zk.au.out.AuInvoke;
  * It is similar to {@link Bandbox} except the input box is changed
  * to button.
  *
- * <p>Default {@link #getZclass}: z-combobutton. If {@link #getMold()} is tbbtn,
- * "z-combobutton-tbbtn" is assumed.(since 6.0.0)
+ * <p>Default {@link #getZclass}: z-combobutton. If {@link #getMold()} is toolbar,
+ * "z-combobutton-toolbar" is assumed.(since 6.5.0)
  *
  * <p>Events: onClick<br/>
  * Developers can listen to the onClick event.
@@ -122,7 +122,7 @@ public class Combobutton extends Button {
 	// super
 	public String getZclass() {
 		// F60-ZK-719
-		return _zclass == null ? "default".equals(getMold()) ? "z-combobutton" : "z-combobutton-tbbtn" : _zclass;
+		return _zclass == null ? "default".equals(getMold()) ? "z-combobutton" : "z-combobutton-toolbar" : _zclass;
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

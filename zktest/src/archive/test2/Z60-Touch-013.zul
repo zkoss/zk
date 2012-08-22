@@ -1,0 +1,10 @@
+<zk>
+	<vlayout>
+		Support HTML5 input type:<separator spacing="0" />
+		<hlayout>1. number: intbox <intbox /></hlayout>
+		<hlayout>2. number: doublebox <doublebox /></hlayout>
+		<hlayout>3. tel: textbox <textbox type="tel" /></hlayout>
+		<hlayout>4. email: textbox <textbox type="email" /></hlayout>
+		<hlayout>5. url: textbox <textbox type="url" /></hlayout>
+	</vlayout>
+</zk>

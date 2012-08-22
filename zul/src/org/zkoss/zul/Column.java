@@ -22,12 +22,14 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -69,6 +71,7 @@ public class Column extends HeaderElement {
 	static {
 		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
 		addClientEvent(Column.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
+		addClientEvent(Column.class, Events.ON_UNGROUP, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Column() {
@@ -609,16 +612,69 @@ public class Column extends HeaderElement {
 		else if (!sort(true)) sort(false);
 	}
 	
-	/** It invokes {@link #group(boolean)} to group list items and maintain
-	 * {@link #getSortDirection}.
+	/**
+	 * Internal use only.
+	 * @since 6.5.0
 	 */
-	public void onGroup() {
-		final String dir = getSortDirection();
-		if ("ascending".equals(dir)) group(false);
-		else if ("descending".equals(dir)) group(true);
-		else if (!group(true)) group(false);
+	public void onGroupLater(SortEvent event) {
+		group(event.isAscending());
 	}
+	
+	/**
+	 * Ungroups and sorts the rows ({@link Row}) based on the ascending.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * 
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @since 6.5.0
+	 */
+	public void ungroup(boolean ascending) {
+		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr != null) {
 
+			final Grid grid = getGrid();
+			if (grid.getModel() == null) {
+
+				// comparator might be zscript
+				Scopes.beforeInterpret(this);
+				try {
+					final Rows rows = grid.getRows();
+					if (rows != null) {
+						if (rows.hasGroup()) {
+							for (Group group : new ArrayList<Group>(
+									rows.getGroups()))
+								group.detach(); // Groupfoot is removed
+												// automatically, if any.
+						}
+
+						Comparator<?> cmprx;
+						if (cmpr instanceof GroupComparator) {
+							cmprx = new GroupToComparator(
+									(GroupComparator) cmpr);
+						} else {
+							cmprx = cmpr;
+						}
+
+						final List<Component> children = new LinkedList<Component>(
+								rows.getChildren());
+						rows.getChildren().clear();
+						sortCollection(children, cmprx);
+						for (Component c : children)
+							rows.appendChild(c);
+					}
+				} finally {
+					Scopes.afterInterpret();
+				}
+			}
+			fixDirection(grid, ascending);
+
+			// sometimes the items at client side are out of date
+			grid.getRows().invalidate();
+		}
+	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-column" : _zclass;
 	}
@@ -640,6 +696,18 @@ public class Column extends HeaderElement {
 		if (cmd.equals(Events.ON_SORT)) {
 			SortEvent evt = SortEvent.getSortEvent(request);
 			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_GROUP)) {
+			final Map<String, Object> data = request.getData();
+			final boolean ascending = AuRequests.getBoolean(data, "");
+			Events.postEvent(new SortEvent(cmd, this, ascending));
+
+			// internal use, and it should be invoked after onGroup event.
+			Events.postEvent(-1000, new SortEvent("onGroupLater", this, ascending));
+		} else if (cmd.equals(Events.ON_UNGROUP)) {
+			final Map<String, Object> data = request.getData();
+			final boolean ascending = AuRequests.getBoolean(data, "");
+			ungroup(ascending);
+			Events.postEvent(new SortEvent(cmd, request.getComponent(), ascending));
 		} else
 			super.service(request, everError);
 	}

@@ -46,7 +46,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			<space />
 			<toolbarbutton label="Right" image="/img/network.gif"
 				dir="reverse" />
-			<combobutton id="bd" label="combobutton one" image="/img/network.gif" mold="tbbtn"
+			<combobutton id="bd" label="combobutton one" image="/img/network.gif" mold="toolbar"
 				onClick='lb.setValue("message: combobutton clicked.");'
 				onOpen='lb.setValue("message: combobutton popup "+ (self.open? "opened." : "closed."));'>
 				<popup id="ppOne">
@@ -84,7 +84,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			<combobutton id="bdTwo" label="combobutton two"
 				onClick='lb.setValue("message: combobutton two clicked.");'
 				onOpen='lb.setValue("message: combobutton two popup "+ (self.open? "opened." : "closed."));'
-				dir="reverse" image="/img/network.gif" mold="tbbtn">
+				dir="reverse" image="/img/network.gif" mold="toolbar">
 				<popup id="ppTwo">
 					<vbox>
 						<hbox>

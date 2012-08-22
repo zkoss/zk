@@ -22,10 +22,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.0.0
  */
 zul.layout.Anchorlayout = zk.$extends(zul.Widget, {
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-anchorlayout";
-	},
 	onSize: function () {
 		if (this.isRealVisible() && this.nChildren) {
 			var cmp = this.$n(),

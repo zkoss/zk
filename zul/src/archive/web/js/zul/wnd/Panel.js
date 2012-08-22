@@ -739,9 +739,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				return;
 		}
 	},
-	getZclass: function () {
-		return this._zclass == null ?  "z-panel" : this._zclass;
-	},
 	_makeSizer: function () {
 		if (!this._sizer) {
 			this.domListen_(this.$n(), 'onMouseMove');
@@ -1046,8 +1043,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		//zkau.closeFloats(cmp, handle);
 	},
 	_ignoremove: function (dg, pointer, evt) {
-		var wgt = dg.control;
-		switch (evt.domTarget) {
+		var wgt = dg.control,
+			tar = evt.domTarget;
+		if (!tar.id)
+			tar = tar.parentNode;
+
+		switch (tar) {
 		case wgt.$n('close'):
 		case wgt.$n('max'):
 		case wgt.$n('min'):

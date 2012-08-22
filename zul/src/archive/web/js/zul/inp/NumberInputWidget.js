@@ -25,6 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.8
  */
 zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
+	_type: zk.mobile ? 'number' : 'text',
 	$define: { //zk.def
 		/** Returns the rounding mode.
 		 * <ul>

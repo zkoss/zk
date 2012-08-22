@@ -47,7 +47,8 @@ public class Caption extends LabelImageElement {
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Window)
-		&& !(parent instanceof Groupbox) && !(parent instanceof Panel))
+		&& !(parent instanceof Groupbox) && !(parent instanceof Panel)
+		&& !(parent instanceof Tab) && !(parent instanceof LayoutRegion))
 			throw new UiException("Wrong parent: "+parent);
 		super.beforeParentChanged(parent);
 	}

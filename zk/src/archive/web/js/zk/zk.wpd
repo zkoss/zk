@@ -46,6 +46,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="bookmark.js"/>
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
+	<script src="zswipe.js" browser="ios,android"/>
 
 	<script src="zkie.js" browser="ie"/>
 

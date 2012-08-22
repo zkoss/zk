@@ -48,9 +48,6 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		}
 		return scls;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-treerow" : this._zclass;
-	},
 	domTooltiptext_ : function () {
 		return this._tooltiptext || this.parent._tooltiptext || this.parent.parent._tooltiptext;
 	},

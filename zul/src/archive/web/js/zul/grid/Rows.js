@@ -65,9 +65,6 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	hasGroup: function () {
 		return this._groupsInfo.length;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-rows" : this._zclass;
-	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Rows, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
