@@ -28,6 +28,7 @@ ZK 6.5.0
 
 * Bugs
   ZK-1285: Modal window position issue with virtual keyboard on ipad
+  ZK-1313: combobox dropdown changes document scroll height on iPad
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"
