@@ -1608,10 +1608,11 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 	 */
 	isInput: function () {
 		var $jq = this.jq,
-			len = $jq.length;
+			len = $jq.length,
+			types = ['text', 'password', 'number', 'tel', 'url', 'email'];
 		for (var j = len, tag, n; j--;)
 			if ((tag = jq.nodeName(n = $jq[j])) != "textarea"
-			&& (tag != "input" || (n.type != "text" && n.type != "password")))
+			&& (tag != "input" || (jq.inArray(n.type, types) == -1)))
 				return false;
 		return len > 0; //false if nothing selected
 	}
