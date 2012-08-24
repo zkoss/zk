@@ -796,7 +796,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domListen_(n, "onBlur", "doBlur_")
 			.domListen_(n, "onSelect");
 		
-		if (zk.mobile)
+		if (zk.ios)
 			this.domListen_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)
