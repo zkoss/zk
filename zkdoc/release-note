@@ -29,6 +29,7 @@ ZK 6.5.0
 * Bugs
   ZK-1285: Modal window position issue with virtual keyboard on ipad
   ZK-1313: combobox dropdown changes document scroll height on iPad
+  ZK-1314: input component focus in modal window causes virtual keyboard to show up and down on iPad
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"

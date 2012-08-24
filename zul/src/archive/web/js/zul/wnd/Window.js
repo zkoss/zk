@@ -1028,9 +1028,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setZindex: _zkf,
 	focus_: function (timeout) {
 		var cap = this.caption;
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != cap && w.focus_(timeout))
-				return true;
+		if(!zk.mobile) { //Bug ZK-1314: avoid focus on input widget to show keyboard on ipad
+			for (var w = this.firstChild; w; w = w.nextSibling)
+				if (w != cap && w.focus_(timeout))
+					return true;
+		}
 		return cap && cap.focus_(timeout);
 	},
 	getZclass: function () {
