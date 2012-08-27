@@ -52,9 +52,9 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final Component comp = getComponent();
 		final Object bean = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		//ZK-1016 Nested form binding doesn't work.
-		final ValueReference beanvr = eval.getValueReference(ctx, comp,  _accessInfo.getProperty());
+		final ValueReference valref = eval.getValueReference(ctx, comp,  _accessInfo.getProperty());
 		//value-reference is null if it is a simple node, ex ${vm}
-		if( (beanvr!=null && beanvr.getBase() instanceof Form) || bean instanceof Form){
+		if( (valref!=null && valref.getBase() instanceof Form) || bean instanceof Form){
 			throw new UiException("doesn't support to load a nested form , formId "+getFormId());
 		}
 		

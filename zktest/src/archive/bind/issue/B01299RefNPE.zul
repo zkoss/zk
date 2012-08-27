@@ -1,0 +1,158 @@
+<zk>
+	<hlayout>
+		<vlayout>
+			--prompt binding--
+			<window apply="org.zkoss.bind.BindComposer" title="CaseA-1"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then tab out, the label should be
+				updated
+				<vlayout text="@ref(vm.text)">
+					<textbox id="tba1" value="@save(text)" />
+					<label id="lba1" value="@load(text)" />
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseA-2"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then tab out, the label should be
+				updated
+				<vlayout text="@ref(vm.text)">
+					<textbox  id="tba2" 
+						value="@save(text) @validator(vm.textValidator)" />
+					<label id="lba2" value="@load(text)" />
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseA-3"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then tab out, the label should be
+				updated
+				<vlayout person="@ref(vm.person)">
+					<vlayout address="@ref(person.address)">
+						<vlayout street="@ref(address.street)">
+							<textbox  id="tba3" 
+								value="@save(street) @validator(vm.addressValidator)" />
+							<hlayout>
+								<label id="lba31" value="@load(street)" />
+								<label id="lba32" value="@load(address.street)" />
+								<label id="lba33" 
+									value="@load(person.address.street)" />
+								<label id="lba34" 
+									value="@load(vm.person.address.street)" />
+							</hlayout>
+						</vlayout>
+					</vlayout>
+				</vlayout>
+			</window>
+		</vlayout>
+		<vlayout>
+			--condition binding--
+			<window apply="org.zkoss.bind.BindComposer" title="CaseB-1"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then click update, the label should
+				be updated
+				<vlayout>
+					<textbox value="@save(vm.text, after='submit')"  id="tbb1"  />
+					<label value="@load(vm.text)" id="lbb1" />
+					<button label="update" onClick="@command('submit')" id="btnb1" />
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseB-2"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then click update, the label should
+				be updated
+				<vlayout p="@ref(vm.person)">
+					<textbox value="@save(p.name, after='submit')"  id="tbb2"/>
+					<label value="@load(p.name)" id="lbb2" />
+					<button label="update" onClick="@command('submit')" id="btnb2"/>
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseB-3"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then click update, the label should
+				be updated
+				<vlayout text="@ref(vm.text)">
+					<textbox value="@save(text, after='submit')"  id="tbb3"/>
+					<label value="@load(text)" id="lbb3"/>
+					<button label="update" onClick="@command('submit')" id="btnb3"/>
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseB-4"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then click update, the label should
+				be updated
+				<vlayout person="@ref(vm.person)">
+					<vlayout address="@ref(person.address)">
+						<vlayout street="@ref(address.street)">
+							<textbox
+								value="@save(street,after='submit')"  id="tbb4"/>
+							<hlayout>
+								<label value="@load(street)" id="lbb41"/>
+								<label value="@load(address.street)" id="lbb42"/>
+								<label id="lbb43"
+									value="@load(person.address.street)" />
+								<label id="lbb44"
+									value="@load(vm.person.address.street)" />
+							</hlayout>
+							<button label="update" id="btnb4"
+								onClick="@command('submit')" />
+						</vlayout>
+					</vlayout>
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseB-5"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then click update, the label should
+				be updated
+				<vlayout text="@ref(vm.text)">
+					<textbox  id="tbb5"
+						value="@save(text, after='submit') @validator(vm.textValidator)" />
+					<label value="@load(text)" id="lbb5"/>
+					<button label="update" onClick="@command('submit')" id="btnb5"/>
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseB-6"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then click update, the label should
+				be updated
+				<vlayout person="@ref(vm.person)">
+					<vlayout address="@ref(person.address)">
+						<vlayout street="@ref(address.street)">
+							<textbox  id="tbb6"
+								value="@save(street, after='submit') @validator(vm.addressValidator)" />
+							<hlayout>
+								<label value="@load(street)" id="lbb61"/>
+								<label value="@load(address.street)" id="lbb62"/>
+								<label
+									value="@load(person.address.street)" id="lbb63"/>
+								<label
+									value="@load(vm.person.address.street)" id="lbb64"/>
+							</hlayout>
+							<button label="update"
+								onClick="@command('submit')" id="btnb6"/>
+						</vlayout>
+					</vlayout>
+				</vlayout>
+			</window>
+		</vlayout>
+		Exceptions
+		<vlayout>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseC-1"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then tab out, you will see exception
+				<vlayout text="@ref(vm)">
+					<textbox  id="tbc1"
+						value="@save(text) @validator(vm.textValidator)" />
+				</vlayout>
+			</window>
+			<window apply="org.zkoss.bind.BindComposer" title="CaseC-2"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
+				type on the textbox, then tab out, you will see exception
+				<vlayout text="@ref(vm)">
+					<textbox  id="tbc2"
+						value="@save(text, after='submit') @validator(vm.textValidator)" />
+					<button label="update" id="btnc2"
+							onClick="@command('submit')" />
+				</vlayout>
+			</window>
+		</vlayout>
+	</hlayout>
+</zk>
