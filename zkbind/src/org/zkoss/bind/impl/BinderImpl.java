@@ -116,6 +116,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$";//The attribute name of a loaded bean class, internal use only
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
+	
+	public static final String IGNORE_REF_VALUE = "$IGNORE_REF_VALUE$"; //ignore getting nested value form ref-binding when doing el evaluation.
 
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
 	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization

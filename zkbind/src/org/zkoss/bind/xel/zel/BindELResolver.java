@@ -73,9 +73,17 @@ public class BindELResolver extends XelELResolver {
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
 		Object value = super.getValue(ctx, base, property);
+		
+		final BindELContext bctx = (BindELContext)((EvaluationContext)ctx).getELContext();
+		Object ignoreRefVal = bctx.getAttribute(BinderImpl.IGNORE_REF_VALUE);
+		
 		//ZK-950: The expression reference doesn't update while change the instant of the reference
 		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding)value : null;
 		if (rbinding != null) {
+			//ZK-1299 Use @ref and save after will cause null point exception
+			if(Boolean.TRUE.equals(ignoreRefVal)){
+				return rbinding;
+			}
 			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
 		} 
 		//If value evaluated to a ReferenceBinding, always tie the ReferenceBinding itself as the 

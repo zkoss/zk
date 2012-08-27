@@ -15,6 +15,7 @@ package org.zkoss.bind.impl;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;
@@ -73,7 +74,18 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 	
 	public ValueReference getValueReference(BindContext ctx, Component comp, ExpressionX expression)
 	throws XelException {
-		return expression.getValueReference(newXelContext(ctx, comp));
+		ValueReference ref = expression.getValueReference(newXelContext(ctx, comp));
+		//bug 1129-ref NPE, no value reference if it is a SimpleNode
+		if(ref==null){
+			XelContext xctx = newXelContext(ctx, comp);
+			//Dennis, a special control flag to ignore ref-binding getValue in BindELResolver
+			xctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.TRUE);
+			Object val = expression.evaluate(xctx);
+			if(val instanceof ReferenceBindingImpl){//get value-reference from ref-binding
+				ref = ((ReferenceBindingImpl)val).getValueReference();
+			}
+		}
+		return ref;
 	}
 
 	//utility to create an XelContext associated to the reference

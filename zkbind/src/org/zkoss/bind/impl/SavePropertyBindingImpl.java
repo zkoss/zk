@@ -130,20 +130,24 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	
 	//get and cache value reference of this binding
 	private ValueReference getValueReference(BindContext ctx){
-		ValueReference ref = (ValueReference) getAttribute(ctx, $VALUEREF$);
-		if (ref == null) {
+		ValueReference valref = (ValueReference) getAttribute(ctx, $VALUEREF$);
+		if (valref == null) {
 			if (_formFieldInfo != null) { //ZK-1017: Property of a form is not correct when validation
 				final Object form = getComponent().getAttribute(_formFieldInfo._id, true);
 				final String fieldName = _formFieldInfo._fieldName;
-				ref = new org.zkoss.xel.zel.ELXelExpression.ValueReferenceImpl(form, fieldName);
+				valref = new org.zkoss.xel.zel.ELXelExpression.ValueReferenceImpl(form, fieldName);
 			} else {
 				final Component comp = getComponent();//ctx.getComponent();
 				final BindEvaluatorX eval = getBinder().getEvaluatorX();
-				ref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
+				valref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
+				if(valref==null){
+					throw new UiException("value reference not found by expression ["+
+							_accessInfo.getProperty().getExpressionString()+"], check if you are trying to save to a variable only expression");
+				}
 			}
-			setAttribute(ctx, $VALUEREF$, ref);
+			setAttribute(ctx, $VALUEREF$, valref);
 		}
-		return ref;
+		return valref;
 	}
 
 	//ZK-1017: Property of a form is not correct when validation

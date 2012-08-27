@@ -20,6 +20,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
+import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -83,5 +84,11 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	public String toString(){
 		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
 				.append(",component:").append(getComponent()).toString();
+	}
+
+	
+	/*package*/ ValueReference getValueReference() {
+		final BindContext bctx = newBindContext();
+		return getBinder().getEvaluatorX().getValueReference(bctx, getComponent(), _exprX);
 	}
 }
