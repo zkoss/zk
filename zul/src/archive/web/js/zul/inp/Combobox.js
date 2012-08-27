@@ -392,8 +392,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	afterAnima_: function (visible) {
 		// B50-ZK-568: Combobox does not scroll to selected item
 		// shall do after slide down
-		if (visible && this._lastsel)
-			zk(this._lastsel).scrollIntoView(this.$n('pp'));
+		// Bug ZK-1276: this._lastsel is null when set selected item during onCreate phase
+		if (visible && this._sel)
+			zk(this._sel).scrollIntoView(this.$n('pp'));
 		this.$supers('afterAnima_', arguments);
 	}
 });

@@ -1,0 +1,12 @@
+<zk>
+	Open the combobox, should see drop-down list scroll to "Item 29" <separator />
+	<combobox id="cbx">
+		<attribute name="onCreate"><![CDATA[
+			for (int i = 0; i < 30; i++) {
+				Comboitem ci = new Comboitem("Item "+i);
+				ci.setParent(self);
+				self.setSelectedItem(ci);
+			}
+		]]></attribute>
+	</combobox>
+</zk>
