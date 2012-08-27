@@ -1,5 +1,5 @@
 <zk>
-	Open the combobox, should see drop-down list scroll to "Item 29" <separator />
+	Open the combobox, should see "Item 29" in drop-down list without scroll.<separator />
 	<combobox id="cbx">
 		<attribute name="onCreate"><![CDATA[
 			for (int i = 0; i < 30; i++) {
