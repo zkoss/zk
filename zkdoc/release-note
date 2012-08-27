@@ -7,6 +7,7 @@ ZK 6.0.3
   ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
   ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
   ZK-1298: Can not set composer name with <custom-attributes>
+  ZK-1237: NullPointerException at org.zkoss.web.servlet.Servlets.getVersion(Servlets.java:460) on Konqueror browser
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.

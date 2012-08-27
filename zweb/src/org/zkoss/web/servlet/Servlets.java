@@ -457,13 +457,13 @@ public class Servlets {
 		return m.groupCount() < 2 ? 1/*ignore it*/: getVersion(m.group(2));
 	}
 	private static double getVersion(String version) {
-		int j = version.indexOf('.');
-		if (j >= 0) {
-			j = version.indexOf('.', j + 1);
-			if (j >= 0)
-				version = version.substring(0, j);
-		}
 		try {
+			int j = version.indexOf('.');
+			if (j >= 0) {
+				j = version.indexOf('.', j + 1);
+				if (j >= 0)
+					version = version.substring(0, j);
+			}
 			return Double.parseDouble(version);
 		} catch (Throwable t) {
 			return 1; //ignore it
