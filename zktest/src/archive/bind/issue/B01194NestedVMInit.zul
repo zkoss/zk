@@ -29,10 +29,10 @@
 </n:p>
 <div apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01194NestedVMInit', type='admin')">
-	
 	<n:span style="font-weight:bold;" >myLbl:( </n:span>
 		<!-- manually configuring ZUL Annotation in VM. -->
-		<label id="myLbl" style="color:green; font-weight:bold;" />
+		<label id="headerNameLb" 
+			style="color:green; font-weight:bold;" />
 	<n:span style="font-weight:bold;">)</n:span>
 	
 	<grid width="600px" apply="org.zkoss.bind.BindComposer"
@@ -65,7 +65,7 @@
 			</row>
 			<row>
 				outerDescTxb: 
-				<textbox id="outerDescTxb" value="@load(vm.innerVm.desc)" />
+				<textbox id="outerDescTxb" value="@bind(vm.innerVm.desc)" />
 			</row>
 		</rows>
 	</grid>
