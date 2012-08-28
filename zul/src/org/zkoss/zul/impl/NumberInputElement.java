@@ -214,7 +214,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 
 		String fmt = getFormat();
 		if (fmt == null) fmt = defaultFormat;
-		if (fmt != null) df.applyPattern(fmt);
+		if (fmt != null) df.applyLocalizedPattern(fmt); //Bug ZK-1227: apply localized pattern for decimalbox
 		return df.format(value);
 	}
 	/** Filters out non digit characters, such comma and whitespace,
