@@ -91,6 +91,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this.$supers('setValue', arguments);
 		this._reIndex();
 		this.valueEnter_ = null; // reset bug #3014660
+		this._lastsel = this._sel; // ZK-1256, ZK-1276: set initial selected item
 	},
 	_reIndex: function () {
 		var value = this.getValue();
@@ -363,6 +364,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
 			this.listen({onChanging: zk.$void}, -1000);
+		// Bug ZK-1256, ZK-1276: set initial selected item
+		if (this._value && !this._sel)
+			this.setValue(this._value, true);
 	},
 	unbind_: function () {
 		this._hilite2();
@@ -392,9 +396,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	afterAnima_: function (visible) {
 		// B50-ZK-568: Combobox does not scroll to selected item
 		// shall do after slide down
-		// Bug ZK-1276: this._lastsel is null when set selected item during onCreate phase
-		if (visible && this._sel)
-			zk(this._sel).scrollIntoView(this.$n('pp'));
+		if (visible && this._lastsel)
+			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 		this.$supers('afterAnima_', arguments);
 	}
 });
