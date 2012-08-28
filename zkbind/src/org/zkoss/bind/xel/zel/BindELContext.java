@@ -94,6 +94,9 @@ public class BindELContext extends XelELContext {
 				final ExpressionX exprX = eval.parseExpressionX(bctx, expression, Object.class);
 				final String propTrim = prop.trim();
 				final ValueReference valref = eval.getValueReference(bctx, comp, exprX);
+				if(valref==null){
+					throw new UiException("value reference not found by expression ["+exprX.getExpressionString()+"]");
+				}
 				base = valref.getBase();
 				prop = propTrim.endsWith("]") ? 
 						"[" + valref.getProperty() + "]" :

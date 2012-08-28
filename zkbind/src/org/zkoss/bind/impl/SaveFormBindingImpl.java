@@ -31,6 +31,7 @@ import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of {@link SaveFormBinding}.
@@ -140,11 +141,14 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 			for (String field : ((FormExt)form).getSaveFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
-					final ValueReference ref = eval.getValueReference(ctx, comp, expr);
+					final ValueReference valref = eval.getValueReference(ctx, comp, expr);
+					if(valref==null){
+						throw new UiException("value reference not found by expression ["+expr.getExpressionString()+"], check if you are trying to save to a variable only expression");
+					}
 					//ZK-911. Load from Form bean via expression(so will use form's AccessFieldName)
 					final ExpressionX formExpr = getFormExpression(eval, field);
 					final Object value = eval.getValue(null, comp, formExpr);//form.getField(field);
-					properties.add(new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value));
+					properties.add(new PropertyImpl(valref.getBase(), (String) valref.getProperty(), value));
 				}
 			}
 		}
@@ -184,14 +188,18 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	
 	//get and cache value reference of this binding
 	private ValueReference getValueReference(BindContext ctx){
-		ValueReference ref = (ValueReference) getAttribute(ctx, $VALUEREF$);
-		if (ref == null) {
+		ValueReference valref = (ValueReference) getAttribute(ctx, $VALUEREF$);
+		if (valref == null) {
 			final Component comp = getComponent();//ctx.getComponent();
 			final BindEvaluatorX eval = getBinder().getEvaluatorX();
-			ref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
-			setAttribute(ctx, $VALUEREF$, ref);
+			valref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
+			if(valref==null){
+				throw new UiException("value reference not found by expression ["+
+						_accessInfo.getProperty().getExpressionString()+"], check if you are trying to save to a variable only expression");
+			}
+			setAttribute(ctx, $VALUEREF$, valref);
 		}
-		return ref;
+		return valref;
 	}
 	
 	private Method getValidatorMethod(Class<? extends Validator> cls) {
