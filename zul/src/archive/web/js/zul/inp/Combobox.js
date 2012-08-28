@@ -91,6 +91,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this.$supers('setValue', arguments);
 		this._reIndex();
 		this.valueEnter_ = null; // reset bug #3014660
+		this._lastsel = this._sel; // ZK-1256, ZK-1276: set initial selected item
 	},
 	_reIndex: function () {
 		var value = this.getValue();
@@ -363,6 +364,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
 			this.listen({onChanging: zk.$void}, -1000);
+		// Bug ZK-1256, ZK-1276: set initial selected item
+		if (this._value && !this._sel)
+			this.setValue(this._value, true);
 	},
 	unbind_: function () {
 		this._hilite2();

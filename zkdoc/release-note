@@ -9,6 +9,8 @@ ZK 6.0.3
   ZK-1237: NullPointerException at org.zkoss.web.servlet.Servlets.getVersion(Servlets.java:460) on Konqueror browser
   ZK-1227: NumberInputElement.formatNumber() should use dt.applyLocalizedPattern() instead of dt.applyPattern()
   ZK-1299: Use @ref and save after will cause null point exception
+  ZK-1256: Combobox onSelect not working properly
+  ZK-1276: Combobox does not sync the selected item
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
