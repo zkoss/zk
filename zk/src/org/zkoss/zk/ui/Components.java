@@ -929,6 +929,10 @@ public class Components {
 			Object onm = comp.getAttribute("composerName");
 			if (onm instanceof String && ((String)onm).length() > 0)
 				comp.setAttribute((String)onm, _controller);
+			
+			//bug zk-1298, the timing doesn't correct to get composerName in doBeforeComposeChildren
+			//fix by post processing in AttributesInfo#apply
+			comp.setAttribute("_$composer$_", _controller);//stored in a special attribute
 
 			//feature #2778513, support {id}$composer name
 			final String nm = composerNameById(id);
