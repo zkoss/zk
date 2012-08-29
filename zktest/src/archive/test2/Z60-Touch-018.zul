@@ -1,4 +1,3 @@
-<?meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"?>
 <window title="color window" border="normal" width="500px">
 	<label multiline="true">
 		<attribute name="value"><![CDATA[
