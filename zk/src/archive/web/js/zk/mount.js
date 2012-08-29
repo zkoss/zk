@@ -673,7 +673,7 @@ jq(function() {
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
-		if (zk.ios && zk.Draggable.ignoreClick()) return;
+		if (zk.mobile) return; // unsupported on touch device for better performance
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
