@@ -16,15 +16,21 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zktest.bind.issue;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
+import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Default;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
@@ -63,7 +69,7 @@ public class B01194NestedVMInit {
 	}
 
 	@Wire
-	private Label myLbl;
+	private Label headerNameLb;
 	private VM2 innerVm;
 
 	@Init
@@ -71,7 +77,7 @@ public class B01194NestedVMInit {
 			@ContextParam(ContextType.VIEW) Component self) {
 
 		if ("admin".equals(type)) {
-			innerVm = new VM2("Ian", " is an Admin");
+			innerVm = new VM2("Ian", "is an Admin");
 		} else if ("user".equals(type)) {
 			innerVm = new VM2("Peter", "is a User");
 		}
@@ -81,14 +87,16 @@ public class B01194NestedVMInit {
 	
 	@AfterCompose
 	public void doAfterCompose(@BindingParam("type")@Default("user") String type,
-			@ContextParam(ContextType.VIEW) Component self){
+			@ContextParam(ContextType.VIEW) Component self, 
+			@ContextParam(ContextType.BINDER) Binder binder){
 		
 		Selectors.wireComponents(self, this, false);
 		HashMap<String, String[]> annotAttrs = new HashMap<String, String[]>();
-		annotAttrs.put("value", new String[]{"vm.innerVm.desc"});
-		myLbl.addAnnotation("value", "load", annotAttrs);
+		annotAttrs.put("value", new String[]{"vm.innerVm.name"});
+		headerNameLb.addAnnotation("value", "load", annotAttrs);
+		new AnnotateBinderHelper(binder).initComponentBindings(headerNameLb);
 	}
-
+	
 	public VM2 getInnerVm() {
 		return innerVm;
 	}
