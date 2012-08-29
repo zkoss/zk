@@ -1226,9 +1226,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the DOM element.
 	 */
 	scrollIntoView: function (id) {
-		var w = Widget.$(id);
-		if (w) w.scrollIntoView();
-		else zk(id).scrollIntoView();
+		setTimeout(function (){
+			var w = Widget.$(id);
+			if (w) w.scrollIntoView();
+			else zk(id).scrollIntoView();
+		}, 50);
 	}
 };
 /** @class zk.AuCmd1

@@ -11,6 +11,7 @@ ZK 6.0.3
   ZK-1299: Use @ref and save after will cause null point exception
   ZK-1256: Combobox onSelect not working properly
   ZK-1276: Combobox does not sync the selected item
+  ZK-1208: Clients.scrollIntoView don't work in Chrome browser
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
