@@ -591,6 +591,7 @@ jq(function() {
 		return wgt.afterKeyDown_(wevt,true);
 	}
 
+	var lastTimestamp, lastTarget;
 	jq(document)
 	.keydown(function (evt) {
 		var wgt = Widget.$(evt, {child:true}),
@@ -684,13 +685,21 @@ jq(function() {
 	})
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
-
-		zjq._fixClick(evt);
-
-		if (evt.which == 1)
-			_doEvt(new zk.Event(Widget.$(evt, {child:true}),
-				'onClick', evt.mouseData(), {}, evt));
+		
+		if (zk.android && lastTimestamp && lastTarget) { //fix android 4.1.1 fire twice
+			lastTimestamp = lastTarget = null;
+			return;
+		} else {
+			lastTimestamp = evt.timeStamp;
+			lastTarget = evt.target;
+			
+			zjq._fixClick(evt);
+			
+			if (evt.which == 1)
+				_doEvt(new zk.Event(Widget.$(evt, {child:true}),
+					'onClick', evt.mouseData(), {}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+		}
 	})
 	.bind('zdblclick', function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
