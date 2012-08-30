@@ -1,0 +1,11 @@
+<zk>
+	<vlayout hflex="1" vflex="1">
+		iPad/Android Only
+		<div hflex="1" vflex="1" style="border: 1px solid black" onDoubleClick='alert("zoom in/out disabled")'>
+			Double click inside this div will show alert message.
+		</div>
+		<div width="300px" height="300px" style="border: 1px solid black">
+			Double click inside this div will zoom in.
+		</div>
+	</vlayout>
+</zk>

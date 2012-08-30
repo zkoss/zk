@@ -82,7 +82,6 @@ zk.copy(zjq, {
 		zmousedown: 'touchstart',
 		zmouseup: 'touchend',
 		zmousemove: 'touchmove',
-		zdblclick: 'doubletap',
 		zcontextmenu: 'iosHold'
 	}
 });
@@ -118,14 +117,6 @@ function _removeEventFunction(elem, type, fn) {
 			return true; //has no listen
 		}
 	}
-}
-function startTap(node) {
-	lastTap = node;
-	tapValid = true;
-	tapTimeout = setTimeout(cancelTap, doubleClickTime);
-}
-function cancelTap() {
-	tapValid = false;
 }
 function cancelHold() {
 	if (rightClickPending) {
@@ -166,42 +157,7 @@ function doRightClick() {
 	rightClickEvent = null;
 }
 
-var lastTap,	// Holds last tapped element (so we can compare for double tap)
-	tapValid,	// Are we still in the .5 second window where a double tap can occur
-	tapTimeout,	// The timeout reference
-	doubleClickTime = 500,
-	dbTap,
-	doubleTapHandler = {
-		touchstart: function (evt) {
-			var touchEvt = evt.originalEvent;
-			if (touchEvt.touches.length > 1) return;
-			var	changedTouch = touchEvt.changedTouches[0],
-				node = changedTouch.target;
-			if (!tapValid) {
-				startTap(node);
-			} else {
-				clearTimeout(tapTimeout);
-				if (node == lastTap) {
-					dbTap = true;
-				} else {
-					startTap(node);
-				}
-			}
-		},
-		touchend: function (evt) {
-			var touchEvt = evt.originalEvent;
-			if (touchEvt.touches.length > 1) return;
-			var	changedTouch = touchEvt.changedTouches[0],
-				node = changedTouch.target;
-			if (dbTap) {
-				dbTap = tapValid = lastTap = null;
-				_doEvt('doubletap', evt, 
-					_createJQEvent(changedTouch.target, 'dblclick', 0, changedTouch));
-				touchEvt.preventDefault();// stop ios zoom
-			}
-		}
-	},
-	rightClickPending,	// Is a right click still feasibl
+var rightClickPending,	// Is a right click still feasibl
 	rightClickEvent,	// the original event
 	holdTimeout,		// timeout reference
 	holdTime = 800,
@@ -261,10 +217,6 @@ zk.override(jq.fn, _jq, {
 			}
 			if (_storeEventFunction(this[0], evtType, data, fn)) {
 				switch (evtType) {
-				case 'doubletap':
-					this.zbind('touchstart', data, doubleTapHandler.touchstart)
-						.zbind('touchend', data, doubleTapHandler.touchend);
-					break;
 				case 'iosHold':
 					this.zbind('touchstart', data, contextmenuHandler.touchstart)
 						.zbind('touchmove', data, contextmenuHandler.touchmove)
@@ -285,10 +237,6 @@ zk.override(jq.fn, _jq, {
 		if (evtType = zjq.eventTypes[type]) {
 			if (_removeEventFunction(this[0], evtType, fn)) {
 				switch (evtType) {
-				case 'doubletap':
-					this.zunbind('touchstart', doubleTapHandler.touchstart)
-						.zunbind('touchend', doubleTapHandler.touchend);
-					break;
 				case 'iosHold':
 					this.zunbind('touchstart', contextmenuHandler.touchstart)
 						.zunbind('touchmove', contextmenuHandler.touchmove)
