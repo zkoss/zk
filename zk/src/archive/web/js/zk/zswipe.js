@@ -64,7 +64,8 @@ zk.Swipe = zk.$extends(zk.Object, {
 		if (!start) return;
 		var evt = devt.originalEvent,
 			data = evt.touches ? evt.touches[0] : evt;
-			
+		evt.stopPropagation();
+		
 		stop = {
 			time: evt.timeStamp || Date.now(),
 			coords: [data.pageX, data.pageY]
