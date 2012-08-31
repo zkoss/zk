@@ -13,11 +13,13 @@ package org.zkoss.bind.converter;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.util.Locales;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -37,10 +39,10 @@ public class FormatedNumberConverter implements Converter,Serializable {
 	 */
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		//user sets format in annotation of binding or args when calling binder.addPropertyBinding()  
-		final String format = (String) ctx.getConverterArg("format");
-		if(format==null) throw new NullPointerException("format attribute not found");
-		final Number number = (Number) val;
-		return number == null ? null : new DecimalFormat(format).format(number);
+		final String formatPtn = (String) ctx.getConverterArg("format");
+		if(formatPtn==null) throw new NullPointerException("format attribute not found");
+		return val == null ? null : 
+			getLocalizedDecimalFormat(formatPtn).format((Number) val);
 	}
 	
 	/**
@@ -53,11 +55,18 @@ public class FormatedNumberConverter implements Converter,Serializable {
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 		final String format = (String) ctx.getConverterArg("format");
 		if(format==null) throw new NullPointerException("format attribute not found");
-		final String number = (String) val;
 		try {
-			return number == null ? null : new DecimalFormat(format).parse(number);
+			return val == null ? null : 
+				getLocalizedDecimalFormat(format).parse((String) val);
 		} catch (ParseException e) {
 			throw UiException.Aide.wrap(e);
 		}
+	}
+	
+	private static DecimalFormat getLocalizedDecimalFormat(String pattern){
+		final DecimalFormat df = 
+			(DecimalFormat)NumberFormat.getInstance(Locales.getCurrent());
+		df.applyLocalizedPattern(pattern);
+		return df;
 	}
 }
