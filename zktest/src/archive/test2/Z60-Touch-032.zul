@@ -8,7 +8,7 @@
 		2. Swipe left/right edges of grid/listbox/tree components, the page number should changed.
 	</div>
 	<hlayout>
-		<grid mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false">
+		<grid mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false" ca:data-swipeable="true">
 			<columns>
 				<column label="Grid" />
 			</columns>
@@ -21,7 +21,7 @@
 				<row><textbox></textbox></row>
 			</rows>
 		</grid>
-		<listbox mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false">
+		<listbox mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false" ca:data-swipeable="true">
 			<listhead>
 				<listheader label="Listbox" />
 			</listhead>
@@ -31,7 +31,7 @@
 				</listitem>
 			</zk>
 		</listbox>
-		<tree mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false">
+		<tree mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false" ca:data-swipeable="true">
 			<treecols>
 	            <treecol label="Tree" />
 	        </treecols>
