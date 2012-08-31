@@ -591,7 +591,7 @@ jq(function() {
 		return wgt.afterKeyDown_(wevt,true);
 	}
 
-	var lastTimestamp, lastTarget;
+	var click = 0, lastTimestamp, lastTarget;
 	jq(document)
 	.keydown(function (evt) {
 		var wgt = Widget.$(evt, {child:true}),
@@ -686,10 +686,15 @@ jq(function() {
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 		
-		if (zk.android 
+		var android = window.navigator.userAgent.match(/Android\s+([\d\.]+)/);
+		click++;
+		if (zk.android && (android && android[1] == '4.1.1') 
 				&& (lastTimestamp && lastTimestamp + 50 < jq.now()) 
 				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice
-			lastTimestamp = lastTarget = null;
+			if(click > 2) {
+				lastTimestamp = lastTarget = null;
+				click = 0;
+			}
 			return;
 		} else {
 			lastTimestamp = evt.timeStamp;
