@@ -686,7 +686,9 @@ jq(function() {
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 		
-		if (zk.android && (lastTimestamp && lastTimestamp + 50 < jq.now()) && lastTarget) { //fix android 4.1.1 fire twice
+		if (zk.android 
+				&& (lastTimestamp && lastTimestamp + 50 < jq.now()) 
+				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice
 			lastTimestamp = lastTarget = null;
 			return;
 		} else {
