@@ -2,6 +2,7 @@
 ZK 6.0.3
 * Features
   ZK-1301: The buttons in the Messagebox shall use autodisable
+  ZK-1312: formattedNumber & formattedDate should use proper Locale & Timezone
 * Bugs
   ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
   ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
@@ -13,6 +14,7 @@ ZK 6.0.3
   ZK-1315: grid column doesn't reappear if columns menupopup set to auto and grid is sizedByContent
   ZK-1276: Combobox does not sync the selected item
   ZK-1208: Clients.scrollIntoView don't work in Chrome browser
+  ZK-1268: ZK bind children throw Unsupported child exception
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.

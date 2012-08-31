@@ -19,6 +19,8 @@ import java.util.Date;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -43,7 +45,7 @@ public class FormatedDateConverter implements Converter,Serializable {
 		final String format = (String) ctx.getConverterArg("format");
 		if(format==null) throw new NullPointerException("format attribute not found");
 		final Date date = (Date) val;
-		return date == null ? null : new SimpleDateFormat(format).format(date);
+		return date == null ? null : getLocalizedSimpleDateFormat(format).format(date);
 	}
 	
 	/**
@@ -58,9 +60,15 @@ public class FormatedDateConverter implements Converter,Serializable {
 		if(format==null) throw new NullPointerException("format attribute not found");
 		final String date = (String) val;
 		try {
-			return date == null ? null : new SimpleDateFormat(format).parse(date);
+			return date == null ? null : getLocalizedSimpleDateFormat(format).parse(date);
 		} catch (ParseException e) {
 			throw UiException.Aide.wrap(e);
 		}
+	}
+	
+	private static SimpleDateFormat getLocalizedSimpleDateFormat(String formatPtn){
+		SimpleDateFormat sdf = new SimpleDateFormat(formatPtn, Locales.getCurrent());
+		sdf.setTimeZone(TimeZones.getCurrent());
+		return sdf;
 	}
 }

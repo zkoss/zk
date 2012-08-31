@@ -52,7 +52,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);
 							//ZK-611 have wrong binding on a removed treecell in a template
 							//if it was detached, ignore it
-							if(comp.getParent()==null || comp.getPage()==null){
+							if(comp.getPage()==null){
 								return;
 							}
 							
