@@ -31,6 +31,7 @@ ZK 6.5.0
   ZK-1285: Modal window position issue with virtual keyboard on ipad
   ZK-1313: combobox dropdown changes document scroll height on iPad
   ZK-1314: input component focus in modal window causes virtual keyboard to show up and down on iPad
+  ZK-1315: grid column doesn't reappear if columns menupopup set to auto and grid is sizedByContent
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"
