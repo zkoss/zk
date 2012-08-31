@@ -165,7 +165,30 @@ public class ClientInfoEvent extends Event {
 	 * Utility to check if the current orientation is portrait on tablet/mobile device.
 	 * @since 6.5.0
 	 */
-	public boolean isVertical() {
+	public boolean isPortrait() {
 		return "portrait".equals(_orient);
+	}
+	/**
+	 * Utility to check if the current orientation is portrait on tablet/mobile device.
+	 * @see #isPortrait()
+	 * @since 6.5.0
+	 */
+	public boolean isVertical() {
+		return isPortrait();
+	}
+	/**
+	 * Utility to check if the current orientation is landscape on tablet/mobile device.
+	 * @since 6.5.0
+	 */	
+	public boolean isLandscape(){
+		return "landscape".equals(_orient);
+	}
+	/**
+	 * Utility to check if the current orientation is landscape on tablet/mobile device.
+	 * @see #isLandscape()
+	 * @since 6.5.0
+	 */	
+	public boolean isHorizontal() {
+		return isLandscape();
 	}
 }
