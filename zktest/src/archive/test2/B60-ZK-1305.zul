@@ -1,0 +1,24 @@
+<zk>
+	<listbox height="200px" onSelect='lbl.value="select index: " + self.selectedIndex'>
+		<listitem label="test" draggable="true" />
+		<listitem label="test" draggable="true" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+		<listitem label="test" />
+	</listbox>
+	<label id="lbl" />
+</zk>

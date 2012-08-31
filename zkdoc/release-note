@@ -25,6 +25,7 @@ ZK 6.5.0
   ZK-1283: Grid/List/Tree support changing page by swipe event on tablet device
   ZK-1272: Scrollview component for tablet device
   ZK-1269: Need layout that allow user change view like change card
+  ZK-1305: Scroll on Ipad if Element is draggable
 
 * Bugs
   ZK-1285: Modal window position issue with virtual keyboard on ipad
