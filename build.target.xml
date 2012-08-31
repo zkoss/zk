@@ -130,6 +130,7 @@ if="deploy.tomcat.required">
            	fork="true">
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
+    	<jvmarg value="-Xss1024k"/>
 		<classpath>
 		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
 		   <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
@@ -141,6 +142,7 @@ if="deploy.tomcat.required">
            	fork="true">
 		<arg value="${src.archive.dir}/${zipcss}"/>
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
+    	<jvmarg value="-Xss1024k"/>
 		<classpath>
 		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
 		   <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
