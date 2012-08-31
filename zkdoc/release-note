@@ -2,6 +2,7 @@
 ZK 6.0.3
 * Features
   ZK-1301: The buttons in the Messagebox shall use autodisable
+  ZK-1312: formattedNumber & formattedDate should use proper Locale & Timezone
 * Bugs
   ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
   ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
