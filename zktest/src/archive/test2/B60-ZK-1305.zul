@@ -1,6 +1,10 @@
 <zk>
+	<div>
+	1. Click on the first listitem, should see "select index: 0" message showed. <separator />
+	2. Should be able to drag test0 item.
+	</div>
 	<listbox height="200px" onSelect='lbl.value="select index: " + self.selectedIndex'>
-		<listitem label="test" draggable="true" />
+		<listitem label="test0" draggable="true" />
 		<listitem label="test" draggable="true" />
 		<listitem label="test" />
 		<listitem label="test" />
