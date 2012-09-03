@@ -138,6 +138,16 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * the lifecycle of the loading page.
 	 */
 	public void setStyle(String style);
+	
+	/**
+	 * Return the meta viewport of this page, or "auto" if not specified.
+	 * <p>Default: "auto".
+	 */
+	public String getViewport();
+	/**
+	 * Sets the viewport of this page.
+	 */
+	public void setViewport(String viewport);
 
 	/** Returns the request path of this page, or "" if not available.
 	 * <p>It is the same as the servlet path

@@ -373,6 +373,8 @@ public class Parser {
 				pgdef.setTitle(val);
 			} else if ("style".equals(nm)) {
 				pgdef.setStyle(val);
+			} else if ("viewport".equals(nm)) {
+				pgdef.setViewport(val);
 			} else if ("id".equals(nm)) {
 				pgdef.setId(val);
 			} else if ("widgetClass".equals(nm)) {

@@ -54,6 +54,12 @@ public interface PageConfig {
 	 * a non-empty value before, this method is ignored.
 	 */
 	public String getStyle();
+	/**
+	 * Return the page's viewport, or null if not specified.
+	 * <p>Note: if {@link org.zkoss.zk.ui.Page#setViewport} was called with
+	 * a non-empty value before, this method is ignored.
+	 */
+	public String getViewport();
 
 	/** Returns the content that shall be generated inside the head element
 	 * and before ZK's default tags (never null).

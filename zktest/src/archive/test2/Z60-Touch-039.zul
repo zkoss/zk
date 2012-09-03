@@ -1,3 +1,4 @@
+<?page title="Page, Title" viewport="width=device-width, initial-scale=1.0"?>
 <zk>
 	<vlayout hflex="1" vflex="1">
 		iPad/Android Only
