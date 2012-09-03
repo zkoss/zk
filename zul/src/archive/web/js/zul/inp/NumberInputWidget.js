@@ -84,7 +84,10 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 			this.$supers('doKeyPress_', arguments);
 	},
 	getType: function () {
-		return zk.mobile ? (this.getFormat() ? 'text' : 'number') : 'text';
+		var type = this._type;
+		if (zk.mobile && !this.getFormat() && !this.$instanceof(zul.inp.Decimalbox))
+			type = 'number';
+		return type;
 	}
 });
 })();
