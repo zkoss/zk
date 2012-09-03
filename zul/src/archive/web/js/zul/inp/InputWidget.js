@@ -390,6 +390,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var attr = this.$supers('domAttrs_', arguments);
 		if (!no || !no.text)
 			attr += this.textAttrs_();
+		zk.log(attr);
 		return attr;
 	},
 	/** Attributes for the text control.
@@ -404,7 +405,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (v > 0) html += ' cols="' + v + '"';
 		} else {
 			html += ' value="' + this._areaText() + '"';
-			html += ' type="' + this._type + '"';
+			html += ' type="' + this.getType() + '"';
 			v = this._cols;
 			if (v > 0) html += ' size="' + v + '"';
 			v = this._maxlength;
