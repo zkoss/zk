@@ -404,7 +404,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (v > 0) html += ' cols="' + v + '"';
 		} else {
 			html += ' value="' + this._areaText() + '"';
-			html += ' type="' + this._type + '"';
+			html += ' type="' + this.getType() + '"';
 			v = this._cols;
 			if (v > 0) html += ' size="' + v + '"';
 			v = this._maxlength;
