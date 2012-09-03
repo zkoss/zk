@@ -390,7 +390,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var attr = this.$supers('domAttrs_', arguments);
 		if (!no || !no.text)
 			attr += this.textAttrs_();
-		zk.log(attr);
 		return attr;
 	},
 	/** Attributes for the text control.
