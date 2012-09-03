@@ -114,7 +114,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private transient String _ownerUuid;
 	private transient Desktop _desktop;
 	private String _id = "", _uuid;
-	private String _title = "", _style = "", _viewport = "";
+	private String _title = "", _style = "", _viewport = "auto";
 	private String _path;
 	private String _zslang;
 	/** A list of deferred zscript [Component parent, {@link ZScript}]. */
@@ -680,9 +680,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			s = config.getStyle();
 			if (s != null) setStyle(s);
 		}
-		if (_viewport.length() == 0) {
+		if ("auto".equals(_viewport)) {
 			s = config.getViewport();
-			setViewport(s);
+			if (s != null) setViewport(s);
 		}
 
 		s = config.getBeforeHeadTags();

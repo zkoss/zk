@@ -142,10 +142,12 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	/**
 	 * Return the meta viewport of this page, or "auto" if not specified.
 	 * <p>Default: "auto".
+	 * @since 6.5.0
 	 */
 	public String getViewport();
 	/**
 	 * Sets the viewport of this page.
+	 * @since 6.5.0
 	 */
 	public void setViewport(String viewport);
 

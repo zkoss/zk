@@ -55,9 +55,10 @@ public interface PageConfig {
 	 */
 	public String getStyle();
 	/**
-	 * Return the page's viewport, or null if not specified.
+	 * Return the page's viewport, or "auto" if not specified.
 	 * <p>Note: if {@link org.zkoss.zk.ui.Page#setViewport} was called with
 	 * a non-empty value before, this method is ignored.
+	 * @since 6.5.0
 	 */
 	public String getViewport();
 

@@ -419,7 +419,7 @@ public class UiEngineImpl implements UiEngine {
 						public String getUuid() {return null;}
 						public String getTitle() {return null;}
 						public String getStyle() {return null;}
-						public String getViewport() {return null;}
+						public String getViewport() {return "auto";}
 						public String getBeforeHeadTags() {return "";}
 						public String getAfterHeadTags() {return "";}
 						public Collection<Object[]> getResponseHeaders() {return Collections.emptyList();}

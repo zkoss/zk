@@ -217,18 +217,20 @@ public class PageDefinition implements NodeInfo {
 	}
 	
 	/** Returns the viewport that will be assigned to pages created from
-	 * this definition, or null if no viewport is assigned at the beginning.
+	 * this definition, or "auto" if no viewport is assigned at the beginning.
 	 * <p>Note: the returned value might contain EL expressions.
+	 * @since 6.5.0
 	 */
 	public String getViewport() {
 		return _viewport;
 	}
 	/** Sets the viewport that will be assigned to pages created from
-	 * this definition, or null if no viewport is assigned at the beginning.
-	 * @param viewport the viewport setting. If empty, null is assumed.
+	 * this definition, or "auto" if no viewport is assigned at the beginning.
+	 * @param viewport the viewport setting. If empty, "auto" is assumed.
+	 * @since 6.5.0
 	 */
 	public void setViewport(String viewport) {
-		_viewport = viewport != null && viewport.length() > 0 ? viewport: null;
+		_viewport = viewport != null && viewport.length() > 0 ? viewport: "auto";
 	}
 
 	/** Returns the widget class of the given page, or null if the default is used.
