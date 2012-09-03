@@ -81,8 +81,11 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
 					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n");
 			
-			if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
-				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" > \n");
+			String viewport = page.getViewport();
+			if (!"auto".equals(viewport))
+				out.write("<meta name=\"viewport\" content=\"" + viewport + "\" > \n");
+			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
+				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n");
 			
 			out.write("<title>");
 		}

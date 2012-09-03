@@ -688,8 +688,7 @@ jq(function() {
 		
 		if (zk.android 
 				&& (lastTimestamp && lastTimestamp + 50 < jq.now()) 
-				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice
-			lastTimestamp = lastTarget = null;
+				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice or more
 			return;
 		} else {
 			lastTimestamp = evt.timeStamp;

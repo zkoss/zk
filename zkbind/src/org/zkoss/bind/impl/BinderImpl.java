@@ -301,7 +301,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		for(LoadBinding binding : bindings) {
 			//BUG 828, the sub-sequence binding might be removed after the previous loading.
 			final Component comp = binding.getComponent();
-			if(comp==null || comp.getParent()==null || comp.getPage()==null) continue;
+			if(comp==null || comp.getPage()==null) continue;
 			
 			final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
 			if(binding instanceof PropertyBinding){

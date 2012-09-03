@@ -173,6 +173,7 @@ public class AuDropUploader implements AuExtension {
 
 	/** Process fileitems named file0, file1 and so on.
 	 */
+	@SuppressWarnings("unchecked")
 	private static final
 	void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
 	throws IOException {
