@@ -17,13 +17,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
 		<h4>Date and Time</h4>
 		<p>Datebox and Timebox can support Java Date Format.</p>
 	]]></html>
 	<separator/>
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo"/>
 			<tab id="srcView" label="View Source"/>
@@ -35,10 +35,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 			
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="22" width="95%">
-			<attribute name="value"><![CDATA[
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
 <zk>
 Calendar:<calendar/>
 <separator/>
@@ -51,7 +51,7 @@ Datebox: <datebox id="db" cols="20" format="yyyy/MM/dd a hh:mm:ss"  onCreate="se
 	onCheck='db.mold=self.checked? "rounded": "default"'/>
 <separator/>
 </zk>
-			]]></attribute>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

@@ -17,8 +17,7 @@
 	{{IS_RIGHT
 	}}IS_RIGHT
 -->
-<window id="demo"
-	apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
 		<h4>Form with Popup</h4>
 		<p>Demonstrate a series of popup components in a form. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>		
@@ -28,7 +27,7 @@
 			<li>A context is shown when right click, disappear when option clicking.</li>
 		</ul>
 	]]></html>
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo" />
 			<tab id="srcView" label="View Source" />
@@ -39,11 +38,10 @@
 			</tabpanel>
 
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20"
-							width="95%">
-							<attribute name="value"><![CDATA[
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
 <zk>
 	ZK Mail Composer
 	<grid width="450px">
@@ -116,7 +114,8 @@
 			Example:&lt;u&gt;zk@zkoss.org&lt;/u&gt;;&lt;u&gt;info@zkoss.org&lt;/u&gt;
 		</html>
 	</popup>
-</zk>		]]></attribute>
+</zk>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

@@ -68,7 +68,7 @@ Source from <a href="misc/immigration.txt" target="zksandbox">immigration.txt</a
 			<plotinfo id="plot 1" plotDataSource="&#36;{pds}"
 				dotColor="#000000" showValues="true" lineColor="#008bb6"
 				valueGeometry="&#36;{vg}" timeGeometry="&#36;{tg}"
-				eventSourceUri="misc/us_history.xml" />
+				 />
 		</timeplot>
 	</div>
 </zk>

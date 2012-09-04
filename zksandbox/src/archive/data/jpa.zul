@@ -16,33 +16,34 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" xmlns:h="xhtml" xmlns:zk="zk">
-	<vbox>
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%" contentStyle="overflow:auto">
+	<custom-attributes org.zkoss.zul.image.preload="true"/>
+		<vbox>
 		<html><![CDATA[
-				<h4>JPA</h4>
-				<h5>ZK With Spring JPA And A Model-View-Controller Pattern</h5>
-				<p>In this article we will introduce a refactored
-				version of the&nbsp;ZK&nbsp;<a target="zksandbox" href="http://zkforge.svn.sourceforge.net/viewvc/zkforge/trunk/todo/">ToDo</a>
-				sample application using
-				a <a target="zksandbox" href="http://static.springframework.org/spring/docs/2.5.x/reference/orm.html">Spring
-				JPA</a> database backend. The sample application
-				"ZkToDo2"&nbsp;demonstrates the&nbsp;MVC&nbsp;approach
-				documented by the <a target="zksandbox" href="http://books.zkoss.org/wiki/Small_Talks/2008/August/ZK_MVC_Made_Easy">MVC
-				Patterns</a>
-				smalltalk. The MVC approach allows you to centralize application logic
-				in one or more classes resulting in code which is easier to maintain
-				over time.&nbsp;&nbsp;</p>
-				<p>The Spring and JPA configuration used in this article are
-				adapted
-				from the persistence add-on of the <a target="zksandbox" href="https://sourceforge.net/projects/loom/">Loom</a>
-				framework. My thanks go to Ignacio Coloma and his collaborators on
-				Loom for their well documented and&nbsp;discussed JPA
-				code.&nbsp;</p>
-			]]></html>
-		<separator bar="true" />		
-		<html><![CDATA[
+			<h4>JPA</h4>
+			<h5>ZK With Spring JPA And A Model-View-Controller Pattern</h5>
+			<p>In this article we will introduce a refactored
+			version of the&nbsp;ZK&nbsp;<a target="zksandbox" href="http://zkforge.svn.sourceforge.net/viewvc/zkforge/trunk/todo/">ToDo</a>
+			sample application using
+			a <a target="zksandbox" href="http://static.springframework.org/spring/docs/2.5.x/reference/orm.html">Spring
+			JPA</a> database backend. The sample application
+			"ZkToDo2"&nbsp;demonstrates the&nbsp;MVC&nbsp;approach
+			documented by the <a target="zksandbox" href="http://books.zkoss.org/wiki/Small_Talks/2008/August/ZK_MVC_Made_Easy">MVC
+			Patterns</a>
+			smalltalk. The MVC approach allows you to centralize application logic
+			in one or more classes resulting in code which is easier to maintain
+			over time.&nbsp;&nbsp;</p>
+			<p>The Spring and JPA configuration used in this article are
+			adapted
+			from the persistence add-on of the <a target="zksandbox" href="https://sourceforge.net/projects/loom/">Loom</a>
+			framework. My thanks go to Ignacio Coloma and his collaborators on
+			Loom for their well documented and&nbsp;discussed JPA
+			code.&nbsp;</p>
+			<hr />
 			<h5>Sample:ZK ToDo</h5>
-			<image src="http://books.zkoss.org/images/3/3c/Zktodo2.png" />
+		]]></html>
+		<image src="http://books.zkoss.org/images/3/3c/Zktodo2.png" />
+		<html><![CDATA[
 			<h5>Content:</h5>
 			<ul>
 				<li>Why Spring & JPA? </li>
@@ -52,7 +53,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<li>The Service & Data Layers</li>
 			<ul>
 		]]></html>
-	</vbox>
+		</vbox>
 	For more information, see our
 	<toolbarbutton id="target" label="Smalltalk" target="zksandbox"
 		href="http://books.zkoss.org/wiki/Small_Talks/2008/November/ZK_With_Spring_JPA_And_A_Model-View-Controller_Pattern" />
