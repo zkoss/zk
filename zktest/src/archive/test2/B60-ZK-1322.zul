@@ -1,0 +1,15 @@
+<zk>
+	<zscript>
+		Date d = new Date();
+		public void setValueForDatebox() {
+		    d = null;
+		    tm.setValue(d);
+		}
+	</zscript>
+	<div>
+	1. Click on the timebox and modify the time on the screen.<separator />
+	2. Click on the button, setting value to null -> timebox should be blank.
+	</div>
+	<button label="Date to null" onClick="setValueForDatebox()"/>
+	<timebox id="tm" value="${d}"/>
+</zk>
