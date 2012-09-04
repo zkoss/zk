@@ -409,7 +409,7 @@ public class Objects {
 	}
 
 	/**
-	 * Clones the specified object. Use clone() if Cloeable.
+	 * Clones the specified object. Use clone() if Cloneable.
 	 * Otherwise, try to serialize/deserialize it by use of MarshalledObject.
 	 *
 	 * <p>If o is null, null is returned.
