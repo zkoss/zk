@@ -351,7 +351,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._value = value;
 			var inp = this.getInputNode();
 			if (inp) //check if bind
-				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value);
+				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value, fromServer);
+				//Bug ZK-1322: pass fromServer to coerceToString_ to check if set value from server side
 		}
 	},
 	//value object set from server(smartUpdate, renderProperites)

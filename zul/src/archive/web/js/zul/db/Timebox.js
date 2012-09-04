@@ -252,7 +252,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		_updFormat(this, fmt);
 		this.$supers('setFormat', arguments);
 	},
-	coerceToString_: function (date) {
+	coerceToString_: function (date, fromServer) {
+		if (fromServer) //Bug ZK-1322: if from server side, return empty string
+			this._changed = false;
 		if (!this._changed && !date && arguments.length) return '';
 		var out = [], th, text, offset;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
