@@ -27,6 +27,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <zscript><![CDATA[
 	String themeSClass = org.zkoss.zkplus.theme.Themes.getCurrentTheme();
 ]]></zscript>
+<style>
+.z-html {
+	display: block;
+}
+</style>
 <borderlayout id="main" sclass="${themeSClass}" apply="org.zkoss.zksandbox.MainLayoutComposer">
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
@@ -42,9 +47,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</categorybar>
 		</div>
 	</north>
-	<west title="ZK ${desktop.webApp.version}" size="250px" flex="true" splittable="true"
+	<west title="ZK ${desktop.webApp.version}" size="250px" splittable="true"
 		minsize="210" maxsize="500" collapsible="true">
-		<panel>
+		<panel vflex="1">
 			<toolbar>
 				<label value="Search:"/><textbox id="searchBox" 
 					ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
@@ -58,7 +63,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</panelchildren>
 		</panel>
 	</west>
-	<center autoscroll="true" flex="true">
+	<center>
 		<include style="padding:3px;" id="xcontents" />
 	</center>
 </borderlayout>
