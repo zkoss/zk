@@ -530,11 +530,11 @@ public class Servlets {
 
 		String btype = type.substring(0, last);
 		Double vclient = getBrowser(userAgent, btype);
-		if (vclient == null && userAgent.indexOf(btype) < 0)
+		if (vclient == null && (userAgent.indexOf(btype + ("ie".equals(btype) ? ' ' : "")) < 0)) //Bug ZK-1289: for Viewpad and IE mixed bug
 			return false; //not matched
 		if (vtype == null)
 			return true; //not care about version
-
+		
 		double v1 = vclient.doubleValue(), v2 = vtype.doubleValue();
 		return equals ? v1 == v2: v1 >= v2;
 	}	
