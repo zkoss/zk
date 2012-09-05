@@ -1,0 +1,16 @@
+<zk>
+	<div style="height: 300px">
+	iPad/Android only<separator />
+	1. Focus on the textbox, then press "Tab" key, focus should change to combobox.<separator />
+	2. Click on combobox/datebox/timebox button when virtual keyboard showed.<separator />
+	3. Should see the keyboard hidden and show the combobox/datebox/timebox spin wheel popup showed on correct position. 
+	</div>
+	<textbox /><separator />
+	<combobox>
+		<zk forEach="1,2,3,4,5,6,7,8,9,10">
+			<comboitem label="Option ${each}" />
+		</zk>
+	</combobox>
+	<datebox id="dbx" width="200px" />
+	<timebox id="tbx" width="200px" />
+</zk>
