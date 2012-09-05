@@ -2,7 +2,8 @@
 <zscript>
 int season = 3 * (self.getParent().getParent().getChildren().indexOf(self.getParent()));
 </zscript>
-<grid sclass="blue" oddRowSclass="myinner">
+<grid sclass="blue" oddRowSclass="myinner" 
+ xmlns:ca="client/attribute" ca:data-scrollable="false">
 	<columns>
 		<column label="Month"/>
 		<column label="High"  align="center" sort="auto"/>
@@ -21,7 +22,6 @@ int season = 3 * (self.getParent().getParent().getChildren().indexOf(self.getPar
 	<chart type="line" width="600px" height="300px"
 			fgAlpha="128">
 		<attribute name="onCreate">
-		
 		SimpleCategoryModel cateModel = new SimpleCategoryModel();
 		Grid grid = (Grid)self.getPreviousSibling();
 		String stockName = grid.getParent().getParent().getParent().getGrid().getParent().getNextSibling().getValue();
