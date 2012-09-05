@@ -530,8 +530,24 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * <p>
 	 * If the error message is set, we say this input is in the error mode.
 	 * @return String
+	 * @deprecated use getErrorMessage() instead.
 	 */
 	getErrorMesssage: function () {
+		return this.getErrorMessage();
+	},
+	/** Returns the error message that is caused when user entered invalid value,
+	 * or null if no error at all.
+	 * 
+	 * <p>
+	 * The error message is set when user has entered a wrong value, or setValue
+	 * is called with a wrong value. It is cleared once a correct value is
+	 * assigned.
+	 * 
+	 * <p>
+	 * If the error message is set, we say this input is in the error mode.
+	 * @return String
+	 */
+	getErrorMessage: function () {
 		return this._errmsg;
 	},
 	/** Marks this widget's value is wrong and show the error message.
