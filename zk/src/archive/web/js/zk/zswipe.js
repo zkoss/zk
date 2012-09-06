@@ -26,13 +26,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				wevt.domEvent.stop();
 		}
 	}
-/**
+/** 
  * A swipe object used to make a DOM element swipe-able.
  * @disable(zkgwt)
  */
 zk.Swipe = zk.$extends(zk.Object, {
-	/**
-	 * Constructor
+	/** 
+	 * The Constructor.
 	 * @param Object widget the object for swipe.
 	 * It can be anything, but it is usually a widget ({@link zk.Widget}).
 	 * @param DOMElement node [optional] the DOM element that is made to be swipe-able.
@@ -60,7 +60,10 @@ zk.Swipe = zk.$extends(zk.Object, {
 		
 		jq(this.node).bind(startEvt, this.proxy(this._swipeStart));
 	},
-	
+	/** 
+	 * Destroys this swipe-able object.
+	 * This method must be called to clean up, if you don't want to associate the swipe-able feature to a DOM element.
+	 */
 	destroy: function (node) {
 		jq(node).unbind(startEvt, this.proxy(this._swipeStart));
 		this.widget = this.node = this.opts = null;
