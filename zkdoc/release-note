@@ -1,4 +1,12 @@
   --------
+ZK 6.0.2.1
+* Features
+* Bugs
+  ZK-1338: The page content will be empty when the Javascript takes a long time
+  
+* Upgrade Notes
+
+  --------
 ZK 6.0.2
 Jul 24, 2012
 * Features
