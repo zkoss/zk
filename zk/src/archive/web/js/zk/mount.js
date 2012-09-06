@@ -184,15 +184,15 @@ function zkamn(pkg, fn) {
 			if (!inf)
 				break; //done
 
-			if (breathe(mtBL)) 
-				return; //mtBL has been scheduled for later execution
-
 			_crInfBL1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
 				//inf[3]: owner passed from zkx
 				//inf[2]: bindOnly
 				//inf[4]: aucmds (if BL)
 				//true: don't update DOM
+
+			if (breathe(mtBL)) 
+				return; //mtBL has been scheduled for later execution
 		}
 
 		mtBL0();
@@ -259,9 +259,6 @@ function zkamn(pkg, fn) {
 			if (!inf)
 				break; //done
 
-			if (breathe(mtAU))
-				return; //mtAU has been scheduled for later execution
-
 			if (filter = inf[4][1]) //inf[4] is extra if AU
 				Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
 			try {
@@ -270,6 +267,9 @@ function zkamn(pkg, fn) {
 				if (filter) Widget.$ = _wgt_$;
 			}
 			inf[4][0](wgt); //invoke stub
+
+			if (breathe(mtAU))
+				return; //mtAU has been scheduled for later execution
 		}
 		mtAU0();
 	}
