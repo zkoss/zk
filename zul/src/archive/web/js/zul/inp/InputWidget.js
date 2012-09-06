@@ -33,7 +33,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt._tidChg = null;
 		}
 		if (onBlur) {
-			if ((zul.inp.InputWidget.onChangingForced && 
+			if ((zul.inp.InputWidget.onChangingForced &&
 					wgt.isListen("onChanging")) || wgt._instant)
 				_onChanging.call(wgt, -1); //force
 			_clearOnChanging(wgt);
@@ -86,7 +86,7 @@ zul.inp.RoundUtl = {
 
 		var inp = wgt.getInputNode();
 		
-		if (!node.style.width && wgt._inplace && 
+		if (!node.style.width && wgt._inplace &&
 			(wgt._buttonVisible == undefined
 				|| wgt._buttonVisible)) {
 			node.style.width = jq.px0(this.getOuterWidth(wgt, true));
@@ -97,8 +97,8 @@ zul.inp.RoundUtl = {
 	
 		var width = this.getOuterWidth(wgt, wgt.inRoundedMold()),
 			// ignore left border, as it is countered by margin-left
-			rightElemWidth = rightElem ? rightElem.offsetWidth - 
-					zk(rightElem).sumStyles('l', jq.borders) : 0, 
+			rightElemWidth = rightElem ? rightElem.offsetWidth -
+					zk(rightElem).sumStyles('l', jq.borders) : 0,
 			rev = zk(inp).revisedWidth(width - rightElemWidth);
 		inp.style.width = jq.px0(rev);
 	},
@@ -114,7 +114,7 @@ zul.inp.RoundUtl = {
     		$inp.removeClass(inc);
 		}
 		var	width = zk(node).revisedWidth(
-				node[zk.opera ? 'clientWidth': 'offsetWidth']) 
+				node[zk.opera ? 'clientWidth': 'offsetWidth'])
 				+ (zk.opera ? zk(node).borderWidth(): 0);
 		if (rmInplace && shallClean) {
     		$n.addClass(inc);
@@ -266,23 +266,25 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		/**
 		 * Returns the placeholder text
 		 * @since 6.5.0
+		 * @return String placeholder
 		 */
 		/**
 		 * Sets the placeholder text that is displayed when input is empty.
 		 * Only works for browsers supporting HTML5.
 		 * @since 6.5.0
+		 * @param String placeholder
 		 */
 		placeholder: function (placeholder) {
 			this.rerender();
 		},
-		/** Returns whether to send onChange event as soon as user types in the 
+		/** Returns whether to send onChange event as soon as user types in the
 		 * input.
 		 * <p>Default: false.
 		 * @return boolean
 		 * @since 6.0.0
 		 */
 		/**
-		 * Sets whether to send onChange event as soon as user types in the 
+		 * Sets whether to send onChange event as soon as user types in the
 		 * input.
 		 * @param boolean instant
 		 * @since 6.0.0
@@ -298,7 +300,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	/** Selects the whole text in this input.
 	 * @param int start the starting index of the selection range
 	 * @param int end the ending index of the selection range (excluding).
-	 * 		In other words, the text between start and (end-1) is selected. 
+	 * 		In other words, the text between start and (end-1) is selected.
 	 */
 	select: function (start, end) {
 		zk(this.getInputNode()).setSelectionRange(start, end);
@@ -472,7 +474,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				var self = this, cstp = self._cst && self._cst._pos;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, cstp || "end_before", 
+						self._errbox.open(self, null, cstp || "end_before",
 								{dodgeRef: !cstp}); // Bug 3251564
 				});
 			}
@@ -490,7 +492,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
-		if (zk.ios) {		
+		if (zk.ios) {
 			var x = window.pageXOffset,
 				y = window.pageYOffset,
 				winX = this._windowX,
@@ -521,12 +523,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Returns the error message that is caused when user entered invalid value,
 	 * or null if no error at all.
-	 * 
+	 *
 	 * <p>
 	 * The error message is set when user has entered a wrong value, or setValue
 	 * is called with a wrong value. It is cleared once a correct value is
 	 * assigned.
-	 * 
+	 *
 	 * <p>
 	 * If the error message is set, we say this input is in the error mode.
 	 * @return String
@@ -537,12 +539,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Returns the error message that is caused when user entered invalid value,
 	 * or null if no error at all.
-	 * 
+	 *
 	 * <p>
 	 * The error message is set when user has entered a wrong value, or setValue
 	 * is called with a wrong value. It is cleared once a correct value is
 	 * assigned.
-	 * 
+	 *
 	 * <p>
 	 * If the error message is set, we say this input is in the error mode.
 	 * @return String
@@ -571,7 +573,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._errbox = null;
 			w.destroy();
 		}
-		if (!remainError) {			
+		if (!remainError) {
 			var zcls = this.getZclass();
 			this._errmsg = null;
 			jq(this.getInputNode()).removeClass(zcls + "-text-invalid");
@@ -640,7 +642,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Make the {@link zul.inp.SimpleConstraint} calls the validate for val,
 	 * if {@link zul.inp.SimpleConstraint} is exist
-	 * @param Object val a String, a number, or a date,the number or name of flag, 
+	 * @param Object val a String, a number, or a date,the number or name of flag,
 	 * such as "no positive", 0x0001.
 	 */
 	validate_: function (val) {
@@ -718,7 +720,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	unmarshall_: function(val) {
 		return val;
 	},
-	/** Updates the change to server by firing onChange if necessary. 
+	/** Updates the change to server by firing onChange if necessary.
 	 * @return boolean
 	 */
 	updateChange_: function () {
@@ -889,7 +891,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
-				if ($inp.toggleClass(inc).hasClass(inc)) 
+				if ($inp.toggleClass(inc).hasClass(inc))
 					$inp.zk.setSelectionRange(0, $inp[0].value.length);
 			} else
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
@@ -918,7 +920,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	onChangingForced: true
 });
 
-/** @class InputCtrl
+/** @class zk.InputCtrl
+ * @import zk.Widget
+ * @import jq.Event
+ * @import zk.Draggable
  * The extra control for the InputWidget.
  * It is designed to be overriden
  * @since 6.5.0
@@ -926,7 +931,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 zul.inp.InputCtrl = {
 	/**
 	 * Returns whether to preserve the focus state.
-	 * @param Widget wgt a widget
+	 * @param zk.Widget wgt a widget
 	 * @return boolean
 	 */
 	isPreservedFocus: function (wgt) {
@@ -934,7 +939,7 @@ zul.inp.InputCtrl = {
 	},
 	/**
 	 * Returns whether to preserve the mousemove state.
-	 * @param Widget wgt a widget
+	 * @param zk.Widget wgt a widget
 	 * @return boolean
 	 */
 	isPreservedMouseMove: function (wgt) {
@@ -944,7 +949,7 @@ zul.inp.InputCtrl = {
 	 * Returns whether to ignore the dragdrop for errorbox
 	 * @param zk.Draggable dg the drag object
 	 * @param Offset pointer
-	 * @param zk.Event evt
+	 * @param jq.Event evt
 	 * @return boolean
 	 */
 	isIgnoredDragForErrorbox: function (dg, pointer, evt) {
