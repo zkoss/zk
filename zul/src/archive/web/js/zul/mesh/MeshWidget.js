@@ -1559,7 +1559,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_adjMinWd(this);
 	}
 });
-/** @class Scrollbar
+/** @class zk.Scrollbar
+ * @import zk.Widget
  * The extra Scrollbar for the MeshWidget.
  * It is designed to be overriden
  * @since 6.5.0
@@ -1567,14 +1568,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 zul.mesh.Scrollbar = {
 	/**
 	 * Initialize the scrollbar.
-	 * @param Widget wgt a widget
+	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
 		return;
 	},
 	/**
 	 * Return the vertical scroll position of the given DOM elements.
-	 * @param Widget wgt the widget
+	 * @param zk.Widget wgt the widget
 	 * @return int
 	 */
 	getScrollPosV: function (wgt) {
