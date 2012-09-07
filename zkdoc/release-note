@@ -78,6 +78,7 @@ ZK 6.0.3
   ZK-1268: ZK bind children throw Unsupported child exception
   ZK-1289: Servlets.browser() causes null exception on Viewpad
   ZK-1322: Issue on timebox with null value
+  ZK-1313: combobox dropdown changes document scroll height on iPad
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
