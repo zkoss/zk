@@ -492,7 +492,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
-		if (zk.ios) {
+		if (zk.ios && jq(this.$n()).data('fixScrollPosition')) {
 			var x = window.pageXOffset,
 				y = window.pageYOffset,
 				winX = this._windowX,
