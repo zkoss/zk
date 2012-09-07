@@ -479,6 +479,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			if (this._open) this.close({focus:true,sendOnOpen:true});
 			else this.open({focus:true,sendOnOpen:true});	
 		}
+		if (zk.ios) { //Bug ZK-1313: keep window offset information before virtual keyboard opened on ipad
+			this._windowX = window.pageXOffset;
+			this._windowY = window.pageYOffset;
+		}
 		evt.stop();
 	},
 	doKeyDown_: function (evt) {
