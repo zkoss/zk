@@ -476,7 +476,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
-		if (zk.mobile) {		
+		if (zk.ios && jq(this.$n()).data('fixScrollPosition')) {		
 			var x = window.pageXOffset,
 				y = window.pageYOffset,
 				winX = this._windowX,
@@ -485,7 +485,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				window.scrollTo(winX, winY);
 		}
 	},
-	_doTouch: zk.mobile ? function (evt) {
+	_doTouch: zk.ios ? function (evt) {
 		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
 		this._windowX = window.pageXOffset;
 		this._windowY = window.pageYOffset;
@@ -782,7 +782,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domListen_(n, "onBlur", "doBlur_")
 			.domListen_(n, "onSelect");
 		
-		if (zk.mobile)
+		if (zk.ios && jq(this.$n()).data('fixScrollPosition')) //only scroll back when data-fixScrollPosition attribute is applied
 			this.domListen_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)
@@ -796,7 +796,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domUnlisten_(n, "onBlur", "doBlur_")
 			.domUnlisten_(n, "onSelect");
 		
-		if (zk.mobile)
+		if (zk.ios && jq(this.$n()).data('fixScrollPosition'))
 			this.domUnlisten_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)

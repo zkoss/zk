@@ -16,9 +16,18 @@ ZK 6.0.3
   ZK-1208: Clients.scrollIntoView don't work in Chrome browser
   ZK-1268: ZK bind children throw Unsupported child exception
   ZK-1322: Issue on timebox with null value
+  ZK-1313: combobox dropdown changes document scroll height on iPad
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
+  
+  --------
+ZK 6.0.2.1
+* Features
+* Bugs
+  ZK-1338: The page content will be empty when the Javascript takes a long time
+  
+* Upgrade Notes
 
   --------
 ZK 6.0.2
