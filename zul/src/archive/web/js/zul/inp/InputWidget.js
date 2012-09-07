@@ -71,6 +71,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zjq.fixInput(wgt.getInputNode());
 			}, 0);
 		}: zk.$void;
+	var windowX = windowY = 0;
 
 /** @class zul.inp.RoundUtl
  * The RoundUtl used to adjust the display of the rounded input.
@@ -492,19 +493,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
-		if (zk.ios && jq(this.$n()).data('fixScrollPosition')) {
+		if (zk.ios && jq(this.$n()).data('fixscrollposition')) { //only scroll back when data-fixScrollPosition attribute is applied
 			var x = window.pageXOffset,
-				y = window.pageYOffset,
-				winX = this._windowX,
-				winY = this._windowY;
-			if (x != winX || y != winY)
-				window.scrollTo(winX, winY);
+				y = window.pageYOffset;
+			
+			if (x != windowX || y != windowY)
+				window.scrollTo(windowX, windowY);
 		}
 	},
 	_doTouch: zk.ios ? function (evt) {
 		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
-		this._windowX = window.pageXOffset;
-		this._windowY = window.pageYOffset;
+		windowX = window.pageXOffset;
+		windowY = window.pageYOffset;
 	} : zk.$void,
 	_doSelect: function (evt) { //domListen_
 		if (this.isListen('onSelection')) {
@@ -814,7 +814,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domListen_(n, "onBlur", "doBlur_")
 			.domListen_(n, "onSelect");
 		
-		if (zk.ios && jq(this.$n()).data('fixScrollPosition')) //only scroll back when data-fixScrollPosition attribute is applied
+		if (zk.ios)
 			this.domListen_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)
@@ -828,7 +828,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domUnlisten_(n, "onBlur", "doBlur_")
 			.domUnlisten_(n, "onSelect");
 		
-		if (zk.ios && jq(this.$n()).data('fixScrollPosition'))
+		if (zk.ios)
 			this.domUnlisten_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)

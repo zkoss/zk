@@ -640,6 +640,10 @@ jq(function() {
 		return !zk.ie || evt.returnValue;
 	})
 	.bind('zmousedown', function(evt){
+		if (zk.mobile) {
+			zk.currentPointer[0] = evt.pageX;
+			zk.currentPointer[1] = evt.pageY;
+		}
 		var wgt = Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
