@@ -1,0 +1,10 @@
+<zk>
+	Click inside the red div, the popup should showed at the point where you clicked.
+	<div style="height:200px; width: 200px; border:1px solid red; cursor:pointer" onClick='mailPop.open(self, "at_pointer")'></div>
+	<popup id="mailPop" width="150px">
+		<groupbox sclass="z-demo-config" closable="false">
+			<caption>This is Popup</caption>
+			<html><![CDATA[ Contact Us : info@zkoss.org ]]></html>
+		</groupbox>
+	</popup>
+</zk>
