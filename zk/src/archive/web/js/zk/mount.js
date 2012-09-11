@@ -691,7 +691,7 @@ jq(function() {
 		if (zk.Draggable.ignoreClick()) return;
 		
 		if (zk.android 
-				&& (lastTimestamp && lastTimestamp + 50 < jq.now()) 
+				&& (lastTimestamp && lastTimestamp + 400 > evt.timeStamp) 
 				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice or more
 			return;
 		} else {
