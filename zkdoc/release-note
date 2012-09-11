@@ -30,6 +30,9 @@ ZK 6.5.0
   ZK-1285: Modal window position issue with virtual keyboard on ipad
   ZK-1313: combobox dropdown changes document scroll height on iPad
   ZK-1314: input component focus in modal window causes virtual keyboard to show up and down on iPad
+  ZK-1315: grid column doesn't reappear if columns menupopup set to auto and grid is sizedByContent
+  ZK-1305: Scroll on Ipad if Element is draggable
+  ZK-1289: Servlets.browser() causes null exception on Viewpad
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"
@@ -60,6 +63,7 @@ ZK 6.5.0
 ZK 6.0.3
 * Features
   ZK-1301: The buttons in the Messagebox shall use autodisable
+  ZK-1312: formattedNumber & formattedDate should use proper Locale & Timezone
 * Bugs
   ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
   ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
@@ -68,10 +72,24 @@ ZK 6.0.3
   ZK-1227: NumberInputElement.formatNumber() should use dt.applyLocalizedPattern() instead of dt.applyPattern()
   ZK-1299: Use @ref and save after will cause null point exception
   ZK-1256: Combobox onSelect not working properly
+  ZK-1315: grid column doesn't reappear if columns menupopup set to auto and grid is sizedByContent
   ZK-1276: Combobox does not sync the selected item
+  ZK-1208: Clients.scrollIntoView don't work in Chrome browser
+  ZK-1268: ZK bind children throw Unsupported child exception
+  ZK-1289: Servlets.browser() causes null exception on Viewpad
+  ZK-1322: Issue on timebox with null value
+  ZK-1313: combobox dropdown changes document scroll height on iPad
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
+  
+  --------
+ZK 6.0.2.1
+* Features
+* Bugs
+  ZK-1338: The page content will be empty when the Javascript takes a long time
+  
+* Upgrade Notes
 
   --------
 ZK 6.0.2

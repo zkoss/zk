@@ -291,6 +291,7 @@ tr.z-row .z-cell {
 	line-height: 18px;
 }
 tr.z-row td.z-row-inner,
+tr.z-row td.z-cell,
 tr.z-group td.z-group-inner,
 tr.z-groupfoot td.z-groupfoot-inner {
 	padding: 4px 4px 4px 6px;

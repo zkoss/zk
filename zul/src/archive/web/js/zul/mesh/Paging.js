@@ -35,7 +35,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_totalSize: 0,
 	_pageCount: 1,
 	_activePage: 0,
-	_pageIncrement: 10,
+	_pageIncrement: zk.mobile ? 5 : 10,
 
 	$define: { //zk.def
     	/** Returns the total number of items.

@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
 		<h4>Portallayout</h4>
 	]]></html>
@@ -33,25 +33,25 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		Note: the following materials borrow from iGoogle gadget.</p>	
 	]]></html>
 	<separator/>
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo"/>
 			<tab id="srcView" label="View Source"/>
 		</tabs>
 		<tabpanels>
-			<tabpanel>
+			<tabpanel style="overflow:auto">
 				<window id="view">
 				</window>
 			</tabpanel>
 			
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
-			<attribute name="value"><![CDATA[
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
 <portallayout maximizedMode="whole">
-	<portalchildren style="padding: 5px" width="30%">
-		<panel height="150px" title="Google Tools" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+	<portalchildren style="padding: 5px" width="40%">
+		<panel height="200px" title="Google Tools" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
 			<panelchildren>
 				<iframe width="100%" height="100%" src="http://3.gmodules.com/ig/ifr?url=http://www.google.com/ig/modules/toolspromo.xml&amp;nocache=0&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=3&amp;ifpctok=5090480830848781425&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMAs4ACwrMBA4ACwrMBI4ACwrMBM4ACw/zYieI_ujwr4.js"/>
 			</panelchildren>
@@ -63,7 +63,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</panel>
 	</portalchildren>
 	
-	<portalchildren style="padding: 5px" width="40%">
+	<portalchildren style="padding: 5px" width="50%">
 		<panel height="400px" title="Trio" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
 			<panelchildren>
 				<iframe width="100%" height="100%" src="http://ig.gmodules.com/gadgets/ifr?url=http://www.labpixies.com/campaigns/trio/trio.xml&amp;nocache=0&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=35&amp;ifpctok=7430207052966295609&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
@@ -71,7 +71,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</panel>
 	</portalchildren>
 </portallayout>
-			]]></attribute>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

@@ -29,13 +29,15 @@ public class Category {
 	private String _icon;
 	private String _label;
 	private String _href;
-	private List _items;
+	private List<DemoItem> _items;
+	@SuppressWarnings("serial")
 	public Category(String id, String icon, String label, String href) {
 		_id = id;
 		_icon = icon;
 		_label = label; 
-		_items = new LinkedList() {
-			public Object remove(int index) {
+		_items = new LinkedList<DemoItem>() {
+			@Override
+			public DemoItem remove(int index) {
 				throw new UnsupportedOperationException();
 			}
 		};
@@ -47,7 +49,7 @@ public class Category {
 	public String getHref() {
 		return _href;
 	}
-	public List getItems() {
+	public List<DemoItem> getItems() {
 		return _items;
 	}
 	

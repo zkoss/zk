@@ -38,14 +38,14 @@ import org.zkoss.zul.impl.Utils;
  * component like this:</p>
  *
  * <pre><code>&lt;image ...&gt;
- *	&lt;custom-attributes org.zkoss.zul.listbox.rod='true'/&gt;
+ *	&lt;custom-attributes org.zkoss.zul.image.preload='true'/&gt;
  *&lt;/image&gt;
  * </code></pre>
  * 
  * Or specify it onto the root component.
  * For example,
  * <pre><code>&lt;window ...&gt;
- * 	&lt;custom-attributes org.zkoss.zul.listbox.rod=&quot;true&quot;/&gt;
+ * 	&lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
  *  &lt;image .../&gt;
  * &lt;/window&gt;
  * </code></pre>

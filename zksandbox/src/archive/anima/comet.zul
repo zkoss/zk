@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
 		<h4>Comet Server Push</h4>
 	]]></html>
@@ -171,7 +171,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</div>
 	</popup>	
 	<separator/>
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo"/>
 			<tab id="srcView" label="View Source"/>
@@ -183,10 +183,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 			
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
-			<attribute name="value"><![CDATA[
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
 <zk>
 	<style dynamic="true">
 		.comet-news {
@@ -209,7 +209,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<image id="info" width="150px" height="150px"/>
 	</window>
 </zk>
-			]]></attribute>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

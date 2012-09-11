@@ -53,7 +53,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected Template resoloveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName) {
 		//a detached component(ex,grid.onInitRender) will still calling the render, see test case collection-template-grid.zul
 		//TODO need to check is this a zk bug and repor it
-		if(comp.getPage()==null || comp.getParent()==null) return null;//no template
+		if(comp.getPage()==null) return null;//no template
 		
 		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER,true);
 		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);

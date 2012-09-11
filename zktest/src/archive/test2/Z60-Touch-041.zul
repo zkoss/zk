@@ -1,0 +1,14 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<label multiline="true"><![CDATA[
+	0. "short distance" means smaller than 200px
+	1. swipe a short distance (right to left), it will transform to yellow block.
+	2. swipe a short distance, it will not transform to image.
+	3. swipe a distance (bigger than 200px), it will tranfrom to image.
+]]></label>
+<cardlayout width="600px" height="600px">
+	<image src="../img/sun.jpg" vflex="1" hflex="1" />
+	<div style="background-color:#FFFF00" vflex="1" hflex="1"/>
+	<image src="../img/sun.jpg" vflex="1" hflex="1" />
+</cardlayout>
+</zk>

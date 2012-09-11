@@ -64,7 +64,7 @@ public class PageDefinition implements NodeInfo {
 	private final List<NodeInfo> _children = new LinkedList<NodeInfo>();
 	private final LanguageDefinition _langdef;
 	private final Locator _locator;
-	private String _id, _title, _style;
+	private String _id, _title, _style, _viewport;
 	/** The request path. */
 	private String _path = "";
 	/** The zscript language. */
@@ -214,6 +214,23 @@ public class PageDefinition implements NodeInfo {
 	 */
 	public void setStyle(String style) {
 		_style = style != null && style.length() > 0 ? style: null;
+	}
+	
+	/** Returns the viewport that will be assigned to pages created from
+	 * this definition, or "auto" if no viewport is assigned at the beginning.
+	 * <p>Note: the returned value might contain EL expressions.
+	 * @since 6.5.0
+	 */
+	public String getViewport() {
+		return _viewport;
+	}
+	/** Sets the viewport that will be assigned to pages created from
+	 * this definition, or "auto" if no viewport is assigned at the beginning.
+	 * @param viewport the viewport setting. If empty, "auto" is assumed.
+	 * @since 6.5.0
+	 */
+	public void setViewport(String viewport) {
+		_viewport = viewport != null && viewport.length() > 0 ? viewport: "auto";
 	}
 
 	/** Returns the widget class of the given page, or null if the default is used.
@@ -917,6 +934,7 @@ public class PageDefinition implements NodeInfo {
 				public String getUuid() {return null;}
 				public String getTitle() {return _title;}
 				public String getStyle() {return _style;}
+				public String getViewport() {return _viewport;}
 				public String getBeforeHeadTags() {
 					return evalHeaders ?
 						PageDefinition.this.getBeforeHeadTags(page): "";

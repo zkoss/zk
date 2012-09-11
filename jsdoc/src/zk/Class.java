@@ -43,7 +43,7 @@ MyClass.find('abc');
 MyClass = zk.$extends(zk.Object, {}, {
  static0: function () {}
 });
-MyDerive = zk.$extends(zk.Object, {}, {
+MyDerive = zk.$extends(MyClass, {}, {
  static1: function () {}
 });
 MyDerive.static0(); //OK
@@ -72,7 +72,7 @@ MyDerive.static0(); //OK
     MyClass = zk.$extends(zk.Object, {}, {
      static0: function () {}
     });
-    MyDerive = zk.$extends(zk.Object, {}, {
+    MyDerive = zk.$extends(MyClass, {}, {
      static0: function () {}
     });
     var mc = new MyClass(), md = new MyDerive();

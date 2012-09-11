@@ -489,7 +489,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 		if (btn = this.$n('btn')) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
-			this.domListen_(btn, 'onClick', '_doBtnClick');
+			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
 		zWatch.listen({onSize: this});
@@ -503,7 +503,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (btn = this.$n('btn')) {
 			this._auxb.cleanup();
 			this._auxb = null;
-			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
+			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
 		zWatch.unlisten({onSize: this});
@@ -788,7 +788,8 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 });
 
 
-/** @class DateboxCtrl
+/** @class zk.DateboxCtrl
+ * @import zk.Widget
  * The extra control for the Datebox.
  * It is designed to be overriden
  * @since 6.5.0
@@ -796,7 +797,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 zul.db.DateboxCtrl = {
 	/**
 	 * Returns whether to preserve the focus state.
-	 * @param Widget wgt a widget
+	 * @param zk.Widget wgt a widget
 	 * @return boolean
 	 */
 	isPreservedFocus: function (wgt) {

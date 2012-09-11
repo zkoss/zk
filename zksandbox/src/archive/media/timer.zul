@@ -17,14 +17,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
 		<h4>Timer</h4>
 		<p>Timer is a non-visible component that is used to periodically 
 		refresh information constantly (e.g. show the newest stock index, etc.).</p>
 	]]></html>
 	<separator />
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo"/>
 			<tab id="srcView" label="View Source"/>
@@ -36,10 +36,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 			
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
-			<attribute name="value"><![CDATA[
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
 <zk>
 	<label id="now" />
 	<timer id="timer" delay="1000" repeats="true">
@@ -54,7 +54,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="Stops timer" onClick="timer.stop()" />
 	<button label="Starts timer" onClick="timer.start()" />
 </zk>
-			]]></attribute>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

@@ -2792,6 +2792,7 @@ bind_: function (desktop, skipper, after) {
 			});
 		}
 		this.bindSwipe_();
+		this.bindDoubleTap_();
 	},
 	/** Binds the children of this widget.
 	 * It is called by {@link #bind_} to invoke child's {@link #bind_} one-by-one.
@@ -2844,6 +2845,7 @@ unbind_: function (skipper, after) {
 		this.unbindChildren_(skipper, after);
 		this.cleanDrag_(); //ok to invoke even if not init
 		this.unbindSwipe_();
+		this.unbindDoubleTap_();
 
 		if (this.isListen('onUnbind')) {
 			var self = this;
@@ -3186,7 +3188,72 @@ unbind_: function (skipper, after) {
 			swipe.destroy(this.$n());
 		}
 	} : zk.$void,
-
+	/** Bind double click event to the widget on tablet device.
+	 * It is called if the widget is listen to onDoubleClick event.
+	 * <p>You rarely need to override this method, unless you want to implement double click behavior differently.
+	 * @see #doDoubleClick_
+	 * @since 6.5.0
+	 */
+	bindDoubleTap_: zk.mobile ? function () {
+		if (this.isListen('onDoubleClick')) {
+			var doubleClickTime = 500;
+			this._startTap = function (wgt) {
+				wgt._lastTap = wgt.$n();  //Holds last tapped element (so we can compare for double tap)
+				wgt._tapValid = true;     //Are we still in the .5 second window where a double tap can occur
+				wgt._tapTimeout = setTimeout(function() {
+					wgt._tapValid = false;
+				}, doubleClickTime);
+			};
+			jq(this.$n()).bind('touchstart', this.proxy(this._dblTapStart))
+				.bind('touchend', this.proxy(this._dblTapEnd));
+		}
+	} : zk.$void,
+	/** Unbind double click event to the widget on tablet device.
+	 * It is called if the widget is listen to onDoubleClick event.
+	 * <p>You rarely need to override this method, unless you want to implement double click behavior differently.
+	 * @see #doDoubleClick_
+	 * @since 6.5.0
+	 */
+	unbindDoubleTap_: zk.mobile ? function () {
+		if (this.isListen('onDoubleClick')) {
+			this._startTap = null;
+			jq(this.$n()).unbind('touchstart', this.proxy(this._dblTapStart))
+				.unbind('touchend', this.proxy(this._dblTapEnd));
+		}
+	} : zk.$void,
+	_dblTapStart: zk.mobile ? function(evt) {
+		var tevt = evt.originalEvent;
+		if (tevt.touches.length > 1) return;
+		var	changedTouch = tevt.changedTouches[0];
+		if (!this._tapValid) {
+			this._startTap(this);
+		} else {
+			clearTimeout(this._tapTimeout);
+			this._tapTimeout = null;
+			if (this.$n() == this._lastTap) {
+				this._dbTap = true;
+			} else {
+				this._startTap(this);
+			}
+		}
+		tevt.stopPropagation();
+	} : zk.$void,
+	_dblTapEnd: zk.mobile ? function(evt) {
+		var tevt = evt.originalEvent;
+		if (tevt.touches.length > 1) return;
+		if (this._dbTap) {
+			this._dbTap = this._tapValid = this._lastTap = null;
+			var wevt = new zk.Event(this, 'onDoubleClick', {pageX: tevt.pageX, pageY: tevt.pageY}, {}, evt);
+			if (!this.$weave) {
+				if (!wevt.stopped) {
+					this['doDoubleClick_'].call(this, wevt);
+				}
+				if (wevt.domStopped)
+					wevt.domEvent.stop();
+			}
+			tevt.preventDefault(); //stop ios zoom
+		}
+	} : zk.$void,
 	/** Sets the focus to this widget.
 	 * This method will check if this widget can be activated by invoking {@link #canActivate} first.
 	 * <p>Notice: don't override this method. Rather, override {@link #focus_},
