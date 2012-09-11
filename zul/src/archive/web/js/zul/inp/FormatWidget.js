@@ -18,10 +18,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 	$define: { //zk.def
 		/** Returns the format.
+		 * Always return null when input type is number (including Intbox, Spinner, Doublebox, Doublespinner, Longbox and Decimalbox) on tablet device.
 		 * <p>Default: null (used what is defined in the format sheet).
 		 * @return String
 		 */
 		/** Sets the format.
+		 * Unsupported for tablet device when input type is number (including Intbox, Spinner, Doublebox, Doublespinner, Longbox and Decimalbox).
 		 * @param String format
 		 */
 		format: function () {
@@ -42,3 +44,12 @@ zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 		return upd;
 	}
 });
+
+(function () {
+if (zk.mobile) {
+	var _xFormatWidget = {};
+	zk.override(zul.inp.FormatWidget.prototype, _xFormatWidget, {
+		setFormat: zk.$void
+	});
+}
+})();

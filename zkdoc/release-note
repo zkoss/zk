@@ -57,6 +57,12 @@ ZK 6.5.0
   + Unsupported attribute for Tablet devices:
     *. Combobox's autodrop attribute
     *. Menubar's autodrop attribute
+	*. Intbox's format attribute
+	*. Doublebox's format attribute
+	*. Spinner's format attribute
+	*. Doublespinner's format attribute
+	*. Longbox's format attribute
+	*. Decimalbox's format attribute
   + Change Checkbox#setValue(String) to Checkbox#setValue(Object)
 
   --------
