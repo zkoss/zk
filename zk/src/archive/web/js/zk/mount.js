@@ -184,15 +184,15 @@ function zkamn(pkg, fn) {
 			if (!inf)
 				break; //done
 
-			if (breathe(mtBL)) 
-				return; //mtBL has been scheduled for later execution
-
 			_crInfBL1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
 				//inf[3]: owner passed from zkx
 				//inf[2]: bindOnly
 				//inf[4]: aucmds (if BL)
 				//true: don't update DOM
+
+			if (breathe(mtBL)) 
+				return; //mtBL has been scheduled for later execution
 		}
 
 		mtBL0();
@@ -259,9 +259,6 @@ function zkamn(pkg, fn) {
 			if (!inf)
 				break; //done
 
-			if (breathe(mtAU))
-				return; //mtAU has been scheduled for later execution
-
 			if (filter = inf[4][1]) //inf[4] is extra if AU
 				Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
 			try {
@@ -270,6 +267,9 @@ function zkamn(pkg, fn) {
 				if (filter) Widget.$ = _wgt_$;
 			}
 			inf[4][0](wgt); //invoke stub
+
+			if (breathe(mtAU))
+				return; //mtAU has been scheduled for later execution
 		}
 		mtAU0();
 	}
@@ -353,7 +353,7 @@ function zkamn(pkg, fn) {
 	 */
 	function breathe(fn) {
 		var t = jq.now(), dt = t - _t0;
-		if (!zk.android && dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
+		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
 			_t0 = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
@@ -591,6 +591,7 @@ jq(function() {
 		return wgt.afterKeyDown_(wevt,true);
 	}
 
+	var lastTimestamp, lastTarget;
 	jq(document)
 	.keydown(function (evt) {
 		var wgt = Widget.$(evt, {child:true}),
@@ -639,6 +640,10 @@ jq(function() {
 		return !zk.ie || evt.returnValue;
 	})
 	.bind('zmousedown', function(evt){
+		if (zk.mobile) {
+			zk.currentPointer[0] = evt.pageX;
+			zk.currentPointer[1] = evt.pageY;
+		}
 		var wgt = Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
@@ -673,7 +678,7 @@ jq(function() {
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
-		if (zk.ios && zk.Draggable.ignoreClick()) return;
+		if (zk.mobile) return; // unsupported on touch device for better performance
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -684,13 +689,22 @@ jq(function() {
 	})
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
-
-		zjq._fixClick(evt);
-
-		if (evt.which == 1)
-			_doEvt(new zk.Event(Widget.$(evt, {child:true}),
-				'onClick', evt.mouseData(), {}, evt));
+		
+		if (zk.android 
+				&& (lastTimestamp && lastTimestamp + 50 < jq.now()) 
+				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice or more
+			return;
+		} else {
+			lastTimestamp = evt.timeStamp;
+			lastTarget = evt.target;
+			
+			zjq._fixClick(evt);
+			
+			if (evt.which == 1)
+				_doEvt(new zk.Event(Widget.$(evt, {child:true}),
+					'onClick', evt.mouseData(), {}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+		}
 	})
 	.bind('zdblclick', function (evt) {
 		if (zk.Draggable.ignoreClick()) return;

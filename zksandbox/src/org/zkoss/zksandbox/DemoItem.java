@@ -21,6 +21,7 @@ package org.zkoss.zksandbox;
 /**
  * @author jumperchen
  */
+@SuppressWarnings("serial")
 public class DemoItem implements java.io.Serializable {
 	private String _id;
 	private String _cateId;
@@ -49,6 +50,7 @@ public class DemoItem implements java.io.Serializable {
 	public String getLabel() {
 		return _label;
 	}	
+	@Override
 	public String toString() {
 		return "[DemoItem:" + _id +", "+_file+']';
 	}

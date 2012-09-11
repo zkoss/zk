@@ -483,17 +483,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
  	}
 
 	private String nextUuid(Desktop desktop) {
-		Set<String> gened = null;
-		for (;;) {
+		for (int count = 0;;) {
 			String uuid = ((DesktopCtrl)desktop).getNextUuid(this);
 			if (desktop.getComponentByUuidIfAny(uuid) == null)
 				return uuid;
 
-			if (gened == null)
-				gened = new HashSet<String>();
-			if (!gened.add(uuid))
-				throw new UiException("UUID, "+uuid+", was generated repeatedly (cycle: "+gened.size()
-					+"), and still replicates with existent components. Please have a better ID generator.");
+			if (++count > 10000)
+				throw new UiException("It took too much time to look for unique UUID. Please check the implementation of IdGenerator.");
 		}
 	}
 	public String getId() {

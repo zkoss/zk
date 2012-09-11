@@ -544,6 +544,7 @@
 			<xs:element ref="button" />
 			<xs:element ref="calendar" />
 			<xs:element ref="calendars" />
+			<xs:element ref="cardlayout" />
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
 			<xs:element ref="checkbox" />
@@ -627,6 +628,7 @@
 				<xs:element ref="button" />
 				<xs:element ref="calendar" />
 				<xs:element ref="calendars" />
+				<xs:element ref="cardlayout" />
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
 				<xs:element ref="checkbox" />
@@ -873,6 +875,7 @@
 			<xs:element ref="east" minOccurs="0" maxOccurs="1" />
 		</xs:all>
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="animationDisabled" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- box -->

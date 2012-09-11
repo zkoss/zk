@@ -17,13 +17,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
   		<h4>Trees</h4>
 		<p>provides a tree structure that users can traverse and pick an option from. Tree children can be collapsed or expanded by clicking on the small button before labels.</p>
 	]]></html>
 	<separator/>
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo"/>
 			<tab id="srcView" label="View Source"/>
@@ -35,14 +35,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 			
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
-			<attribute name="value"><![CDATA[
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
 <hlayout width="100%">
-<vlayout width="120px">
+<vlayout width="120px" if="${zk.mobile == null }">
 	Four style of trees :
-	<radiogroup
+	<radiogroup 
 		onCheck='tree.setZclass("z-"+self.selectedItem.value)'>
 		<vlayout>
 			<radio label="Default" value="tree" selected="true"/>
@@ -105,7 +105,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</treechildren>
 </tree>
 </hlayout>
-					]]></attribute>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

@@ -17,13 +17,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
 	<html><![CDATA[
 		<h4>Tabboxes</h4>
 		<p>Tabbox can be used to display information on seperate panels and show only one panel a time.</p>	
 	]]></html>
 	<separator/>
-	<tabbox width="100%" tabscroll="false">
+	<tabbox width="100%" tabscroll="false" vflex="1">
 		<tabs>
 			<tab id="demoView" label="Demo"/>
 			<tab id="srcView" label="View Source"/>
@@ -35,11 +35,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 			
 			<tabpanel>
-				<panel>
+				<panel vflex="1">
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
-			<attribute name="value"><![CDATA[
-<hbox>
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
+<hbox hflex="1">
 	<tabbox width="250px">
 		<tabs>
 			<tab label="Tab 1" closable="true"/>
@@ -64,8 +64,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<tabpanel>This is panel 5</tabpanel>
 		</tabpanels>
 	</tabbox>
-	<vbox>
-		<tabbox id="tb" width="400px" mold="accordion">
+	<vbox hflex="1">
+		<tabbox id="tb" hflex="1" mold="accordion">
 			<tabs>
 				<tab label="Tab 1"/>
 				<tab label="Tab 2"/>
@@ -96,10 +96,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
-		<checkbox label="Use light mold" onCheck='tb.mold=self.checked?"accordion-lite":"accordion"'/>
+		<checkbox label="Use light mold" if="${zk.mobile == null}" 
+		 onCheck='tb.mold=self.checked?"accordion-lite":"accordion"'/>
 	</vbox>
 </hbox>
-			]]></attribute>
+]]></attribute>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">

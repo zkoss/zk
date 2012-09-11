@@ -27,6 +27,6 @@ import org.zkoss.zul.ListitemRenderer;
  */
 public interface MainLayoutAPI {
 	public Category[] getCategories();
-	public ListModel getSelectedModel();
-	public ListitemRenderer getItemRenderer();
+	public ListModel<DemoItem> getSelectedModel();
+	public ListitemRenderer<DemoItem> getItemRenderer();
 }

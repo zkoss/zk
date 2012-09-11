@@ -1,6 +1,6 @@
 <zk>
 	<div>
-	Should not see popup candidates.
+	Type 'a' in both combobox, should not see popup candidates.
 	</div>
 	<combobox id="combo1" autodrop="true" />
 	<div height="400px"></div>

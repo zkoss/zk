@@ -1,0 +1,36 @@
+<!-- F01231AfterComposeVM.zul -->
+<zk xmlns:n="native">
+	
+	
+	
+	<window id="myWin" border="normal" width="600px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') 
+		@init('org.zkoss.zktest.bind.issue.F01231AfterComposeVM', 
+		label='This is a label', name='admin', desc='this is desc')">
+		
+		<n:span style="font-weight:bold;" >myLbl:( </n:span>
+			<!-- manually configuring ZUL Annotation in VM. -->
+			<label id="headerLb" style="color:green; font-weight:bold;" />
+		<n:span style="font-weight:bold;">)</n:span>
+			
+		<grid width="600px" >
+			<rows>
+				<row>
+					NameLb: 
+					<textbox id="nameLb" value="@bind(vm.name)" />
+					<label value="@load(vm.name)"/>
+				</row>
+				<row>
+					DescTxb: 
+					<textbox id="descTxb" value="@bind(vm.desc)" />
+					<label value="@load(vm.desc)"/>
+				</row>
+			</rows>
+		</grid>
+	</window>
+
+
+
+
+</zk>

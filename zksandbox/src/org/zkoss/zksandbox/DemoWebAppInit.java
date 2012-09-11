@@ -43,22 +43,43 @@ public class DemoWebAppInit implements WebAppInit {
 	final static String CATEGORY_TYPE = "CATEGORY";
 	final static String LINK_TYPE = "LINK";
 	
-	private static Map _cateMap = new LinkedHashMap () {
-		 public Object remove(Object key) {
-			 throw new UnsupportedOperationException();
-		 }
-		 public void clear() {
-			 throw new UnsupportedOperationException();			 
-		 }
+	@SuppressWarnings("serial")
+	private static Map<String, Category> _cateMap = new LinkedHashMap<String, Category> () {
+		@Override
+		public Category remove(Object key) {
+			throw new UnsupportedOperationException();
+		}
+		@Override
+		public void clear() {
+			throw new UnsupportedOperationException();
+		}
+	};
+
+	@SuppressWarnings("serial")
+	private static Map<String, Category> _mobileCateMap = new LinkedHashMap<String, Category> () {
+		@Override
+		public Category remove(Object key) {
+			throw new UnsupportedOperationException();
+		}
+		@Override
+		public void clear() {
+			throw new UnsupportedOperationException();
+		}
 	};
 	
+	@Override
 	public void init(WebApp wapp) throws Exception {
 		loadProperites(wapp.getServletContext());
 	}
 	
-	static Map getCateMap() {
+	static Map<String, Category> getCateMap() {
 		return _cateMap;
 	}
+	
+	static Map<String, Category> getMobilCateMap() {
+		return _mobileCateMap;
+	}
+	
 	private void loadProperites(ServletContext context) {
 		try {
 			BufferedReader bufReader = new BufferedReader(
@@ -80,17 +101,17 @@ public class DemoWebAppInit implements WebAppInit {
 						log.error("This category has no enough argument: size less than 3, for example, CATEGORY,IconURL,Label");
 						continue;
 					}
-					Category cate = new Category(key, vals[1].trim(), vals[2].trim(), null);
-					_cateMap.put(key, cate);
+					_cateMap.put(key, new Category(key, vals[1].trim(), vals[2].trim(), null));
+					_mobileCateMap.put(key, new Category(key, vals[1].trim(), vals[2].trim(), null));
 				} else if (LINK_TYPE.equals(arg0) ) {
 					if (vals.length < 4) {
 						log.error("This category has no enough argument: size less than 4, for example, LINK,IconURL,Label,Href");
 						continue;
 					}
-					Category cate = new Category(key, vals[1].trim(), vals[2].trim(), vals[3].trim());
-					_cateMap.put(key, cate);
+					_cateMap.put(key, new Category(key, vals[1].trim(), vals[2].trim(), vals[3].trim()));
+					_mobileCateMap.put(key, new Category(key, vals[1].trim(), vals[2].trim(), vals[3].trim()));
 				} else {
-					Category cate = (Category) _cateMap.get(arg0);
+					Category cate = _cateMap.get(arg0);
 					if (cate == null) {
 						log.error("This category is undefined: " + arg0);
 						continue;
@@ -102,13 +123,18 @@ public class DemoWebAppInit implements WebAppInit {
 					// [ItemId=CategoryId, Demo File URL, Icon URL, Label]
 					DemoItem item = new DemoItem(key, arg0, vals[1].trim(), vals[2].trim(), vals[3].trim());
 					cate.addItem(item);
+					
+					//since ZK 6.5
+					//if item has the fifth val, ignore it on tablet
+					if (vals.length == 4 || !"ignoreMobile".equals(vals[4].trim())) {
+						_mobileCateMap.get(arg0).addItem(item);
+					}
 				}
-			}
+			}			
 			bufReader.close();
 		} catch (IOException e) {
 			log.error("Ingored: failed to load a properties file, \nCause: "
 					+ e.getMessage());
 		}
-	}
-	
+	}	
 }

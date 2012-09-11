@@ -19,6 +19,7 @@ package org.zkoss.zul.impl;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
@@ -78,9 +79,15 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
 					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
-					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
-					+ "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n"
-					+ "<title>");
+					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n");
+			
+			String viewport = page.getViewport();
+			if (!"auto".equals(viewport))
+				out.write("<meta name=\"viewport\" content=\"" + viewport + "\" > \n");
+			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
+				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n");
+			
+			out.write("<title>");
 		}
 		write(out, page.getTitle());
 		out.write("</title>\n");

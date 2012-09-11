@@ -3,6 +3,6 @@
 	1. click button on first timebox, should see a popup contains 3 spin wheels of hour, minute and second, and hour is 00-23.<separator />
 	2. click button on second timebox, should see a popup contains 4 spin wheels of hour, minute, second and APM, and hour is 01-12.
 	</div>
-	<timebox width="250px" format="a HH:mm:ss" /><separator />
+	<timebox width="250px" format="HH:mm:ss" /><separator />
 	<timebox width="250px" format="a hh:mm:ss" />
 </zk>

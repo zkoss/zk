@@ -28,7 +28,7 @@
 				onChanging="pm.setValue(Integer.parseInt(event.value))"
 				onChange="pm.value = sp.value" cols="2" mold="rounded"/>				
 		</hbox>
-		<checkbox label="Use rounded spinner" checked="true"
+		<checkbox label="Use rounded spinner" checked="true" if="${zk.mobile == null}"
 			onCheck='sp.mold=self.checked? "rounded": "default"'/>
 	</vbox>
 </groupbox>

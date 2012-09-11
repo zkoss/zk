@@ -134,8 +134,12 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 			item.setChecked(true);
 			
 		var col = zk.Widget.$(item._col);
-		if (col && col.parent == this)
+		if (col && col.parent == this) {
+			var mesh = this.getMeshWidget();
+			if (mesh && mesh.isSizedByContent())
+				mesh.clearCachedSize_(); //Bug ZK-1315: clear cached size before column show/hide
 			col.setVisible(item.isChecked());
+		}
 	},
 	_onGroup: function (evt) {
 		var ungroup;

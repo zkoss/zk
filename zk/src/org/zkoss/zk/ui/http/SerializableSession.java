@@ -44,7 +44,7 @@ implements HttpSessionActivationListener, java.io.Serializable {
 
 	/** Constructs a ZK session with either a HTTP session or a Portlet session.
 	 *
-	 * @param navsess the original session, either an instance of
+	 * @param hsess the original session, either an instance of
 	 * HttpSession or PortletSession.
 	 * Notice: we don't declare PortletSession in API
 	 * to avoid this class failed to be loaded in some system (without
