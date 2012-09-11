@@ -62,7 +62,7 @@ String nextPrice() {
 	return nf.format(Math.random() * 50 + 40);
 }
 </zscript>
-<grid vflex="1">
+<grid vflex="&#36;{zk.mobile}">
 	<columns>
 		<column width="40px" />
 		<column label="Stock Name"/>
