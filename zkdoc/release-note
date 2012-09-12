@@ -1,6 +1,6 @@
   --------
 ZK 6.5.0
-
+Sep 12, 2012
 * Features
   ZK-447: The file upload allows users to drag and drop local files (HTML5)
   ZK-1241: ZK Client Widget support swipe event for tablet/mobile device
