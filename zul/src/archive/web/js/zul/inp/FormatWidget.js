@@ -44,12 +44,3 @@ zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 		return upd;
 	}
 });
-
-(function () {
-if (zk.mobile) {
-	var _xFormatWidget = {};
-	zk.override(zul.inp.FormatWidget.prototype, _xFormatWidget, {
-		setFormat: zk.$void
-	});
-}
-})();

@@ -88,3 +88,12 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 	}
 });
 })();
+
+(function () { // disable format for number input element on tablet
+if (zk.mobile) {
+	var _xFormatWidget = {};
+	zk.override(zul.inp.NumberInputWidget.prototype, _xFormatWidget, {
+		setFormat: zk.$void
+	});
+}
+})();
