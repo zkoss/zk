@@ -22,8 +22,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			var en = wevt.name;
 			if (!wevt.stopped)
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
-			if (wevt.domStopped)
-				wevt.domEvent.stop();
+//	disable for onclick issue
+//			if (wevt.domStopped)
+//				wevt.domEvent.stop();
 		}
 	}
 /** 
