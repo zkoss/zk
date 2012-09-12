@@ -17,6 +17,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 package org.zkoss.zksandbox;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -75,7 +76,11 @@ public class ThemeSelectionCtrl extends GenericForwardComposer<Component> {
 	
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		
+		Double version = execution.getBrowser("mobile");
+		if (version != null && version > 1) {
+			comp.setVisible(false);
+			return;
+		}
 		themeSelectListbox.setItemRenderer(new ListitemRenderer() {
 			public void render(Listitem item, Object obj, int index) throws Exception {
 				String name = (String) obj;

@@ -196,7 +196,7 @@ div.z-log button {
 	position: absolute; right: 10px; bottom: 10px;
 	z-index: 32000;
 	background: transparent no-repeat center;
-	background-image: url(${c:encodeURL('~./zk/img/zkpowered.png')});
+	background-image: url('http://www.zkoss.org/zk/img/zkpowered.png');
 }
 .z-loading, .z-apply-loading {
 	position: absolute;
