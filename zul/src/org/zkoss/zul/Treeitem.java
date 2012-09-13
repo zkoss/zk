@@ -599,10 +599,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 				TreeModel model = tree.getModel();
 				if (model instanceof TreeOpenableModel) {
 					if (open)
-						((TreeOpenableModel)model).addOpenPath(tree.getTreeitemPath(tree, this));
+						hasOpenableModel = ((TreeOpenableModel)model).addOpenPath(tree.getTreeitemPath(tree, this));
 					else
-						((TreeOpenableModel)model).removeOpenPath(tree.getTreeitemPath(tree, this));
-					hasOpenableModel = true;// skip to count again.
+						hasOpenableModel = ((TreeOpenableModel)model).removeOpenPath(tree.getTreeitemPath(tree, this));
 				}
 			}
 			

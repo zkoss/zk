@@ -1,4 +1,13 @@
   --------
+ZK 6.5.1
+* Features
+
+* Bugs
+  ZK-1348: First child tree node can't unfold sometimes
+
+* Upgrade Notes
+
+  --------
 ZK 6.5.0
 Sep 12, 2012
 * Features
@@ -85,6 +94,7 @@ ZK 6.0.3
   ZK-1289: Servlets.browser() causes null exception on Viewpad
   ZK-1322: Issue on timebox with null value
   ZK-1313: combobox dropdown changes document scroll height on iPad
+  ZK-1348: First child tree node can't unfold sometimes
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.

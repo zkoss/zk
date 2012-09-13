@@ -94,11 +94,22 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
 	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		if (this._clearCache) { // B60-ZK-1348
+			this._clearCache = false;
+			var p;
+			if (p = this.parent) {
+				p.clearCache(); //$n('open')
+			}
+		}
+	},
 	_syncIcon: function () {
 		this.rerender();
 		var p;
-		if (p = this.parent)
-			p.clearCache(); //$n('open')
+		if (p = this.parent) {
+			this._clearCache = true;
+		}
 	},
 	_colHtmlPre: function () {
 		if (this.parent.firstChild == this) {
