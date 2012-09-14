@@ -4,6 +4,7 @@ ZK 6.5.1
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes
+  ZK-1350: Listbox multiple choice demo example does not work
 
 * Upgrade Notes
 

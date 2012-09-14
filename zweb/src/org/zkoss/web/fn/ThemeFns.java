@@ -53,6 +53,10 @@ public class ThemeFns {
 		}
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "webkit");
 		if (number != null) {
+			Double android = Servlets.getBrowser(ServletFns.getCurrentRequest(), "android");
+			if (android != null && android < 3) {
+				return Browser.Old_WebKit;
+			}
 			Double version = Servlets.getBrowser(
 					ServletFns.getCurrentRequest(), "chrome");
 			if (version != null) {
@@ -131,7 +135,7 @@ public class ThemeFns {
 				boolean hex = color.startsWith("#");
 
 				int end = hex ? color.indexOf(" ") + 1 : color.indexOf(")") + 1;
-				if (end == 0)
+				if (end == 0 && !color.toLowerCase().contains("transparent"))
 					if (hex)
 						throw new IllegalArgumentException(
 								"The format of hexadecimal is wrong! [" + color
