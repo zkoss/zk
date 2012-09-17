@@ -1,5 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 
 <c:if test="${empty fontSizeM}">
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeM')}"/>
@@ -196,7 +197,7 @@ div.z-log button {
 	position: absolute; right: 10px; bottom: 10px;
 	z-index: 32000;
 	background: transparent no-repeat center;
-	background-image: url('http://www.zkoss.org/zk/img/zkpowered.png');
+	background-image: url('http://www.zkoss.org/zk/img/zkpowered.png?v=${z:getVersion()}&e=${z:getEdition()}&b=${z:getBuild()}');
 }
 .z-loading, .z-apply-loading {
 	position: absolute;
