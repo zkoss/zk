@@ -39,23 +39,23 @@ zksandbox.Categorybar = zk.$extends(zul.wgt.Div, {
 	_addScollEvent:function(){
 		//update the animiation distance every time it called
 		this.$n("cave").distance = jq(this.$n("body")).width() - this.childWidth;
-
 		if(this.scrollEvent == false){	//only do at first time
 			var cave = this.$n("cave"),
 				$cave = jq(cave),
+				categoryWidth = 90,
 				stop = function () {
 					$cave.stop(true);
 				};
-			jq(this.$n("left")).mouseover(function () {
-				$cave.animate({
-					marginLeft: "0px"
-				}, Math.abs(zk.parseInt($cave.css('marginLeft'))/80) * 400);
-			}).mouseout(stop);
-			jq(this.$n("right")).mouseover(function () {
-				$cave.animate({
-					marginLeft: cave.distance + "px"
-				}, Math.abs((cave.distance - zk.parseInt($cave.css('marginLeft')))/80) * 400);
-			}).mouseout(stop);
+			jq(this.$n("left")).click(function() {
+					var value = zk.parseInt($cave.css('marginLeft')) + categoryWidth;
+					if (value > 0) value = 0;
+					$cave.animate({marginLeft: value + "px"});}
+				);
+			jq(this.$n("right")).click(function() {
+					var value = zk.parseInt($cave.css('marginLeft')) - categoryWidth;
+					if (value < cave.distance) value = cave.distance;
+					$cave.animate({marginLeft: value + "px"});}
+				);
 			this.scrollEvent = true;
 		}
 	},
