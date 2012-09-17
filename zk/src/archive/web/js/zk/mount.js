@@ -738,7 +738,7 @@ jq(function() {
 		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
-		var delay = zk.ie ? 250: 50;
+		var delay = zk.ie || zk.android ? 250: 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
 
