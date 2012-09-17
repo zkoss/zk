@@ -23,6 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <?meta name="keywords" content="ZK, Ajax, Mobile, Framework, Ajax framekwork, RIA, Direct RIA, Java, JSP, JSF, Open Source, Comet" ?>
 <?component name="category" extends="button" widgetClass="zksandbox.Category" mold="default"?>
 <?component name="categorybar" extends="div" widgetClass="zksandbox.Categorybar"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <zk>
 <zscript><![CDATA[
 	String themeSClass = org.zkoss.zkplus.theme.Themes.getCurrentTheme();
@@ -30,6 +31,41 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <style>
 .z-html {
 	display: block;
+}
+</style>
+<style if="${zk.mobile != null}">
+/* mobile device only, let arrow button bigger for better UX */ 
+.breeze .demo-categorybar-left-scroll,
+.breeze .demo-categorybar-right-scroll,
+.silvertail .demo-categorybar-left-scroll,
+.silvertail .demo-categorybar-right-scroll {
+	border: 0;
+	width: 23px;
+	height: 38px;
+	top: 36px;
+}
+.breeze .demo-categorybar-body-scroll,
+.silvertail .demo-categorybar-body-scroll {
+	margin-left: 30px;
+	margin-right: 30px;
+}
+.breeze .demo-categorybar-left-scroll,
+.silvertail .demo-categorybar-left-scroll {
+	background-image: url(${c:encodeURL('/img/tablet-arrow-left.png')});
+	background-position: 0 0;
+}
+.breeze .demo-categorybar-left-scroll:hover,
+.silvertail .demo-categorybar-left-scroll:hover {
+	background-position: -24px 0;
+}
+.breeze .demo-categorybar-right-scroll,
+.silvertail .demo-categorybar-right-scroll {
+	background-image: url(${c:encodeURL('/img/tablet-arrow-right.png')});
+	background-position: right 0;
+}
+.breeze .demo-categorybar-right-scroll:hover,
+.silvertail .demo-categorybar-right-scroll:hover {
+	background-position: 0 0;
 }
 </style>
 <borderlayout id="main" sclass="${themeSClass}" apply="org.zkoss.zksandbox.MainLayoutComposer">
