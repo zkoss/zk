@@ -22,7 +22,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			var en = wevt.name;
 			if (!wevt.stopped)
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
-//	disable for onclick issue
+//	no need to stop the event for domtouch.js
 //			if (wevt.domStopped)
 //				wevt.domEvent.stop();
 		}

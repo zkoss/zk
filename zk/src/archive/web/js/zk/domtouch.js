@@ -138,16 +138,6 @@ function doRightClick() {
 	var evt = rightClickEvent,
 		changedTouch = evt.originalEvent.changedTouches[0];
 
-/* orignal implement	
- 	simulatedMouseEvent('mouseup', 0, changedTouch);// We need to mouse up (as we were down)
-	simulatedMouseEvent('mousedown', 2, changedTouch);// emulate a right click
-
-	simulatedEvent.initMouseEvent("contextmenu", true, true, window, 1, 
-		changedTouch.screenX + 20, changedTouch.screenY - 20, 
-		changedTouch.clientX + 20, changedTouch.clientY - 20,
-      	false, false, false, false, 2, null);
-	changedTouch.target.dispatchEvent(simulatedEvent);// Show a context menu
-*/
 	_doEvt('iosHold', evt, 
 		_createJQEvent(changedTouch.target, 
 			'contextmenu', 0, changedTouch, {sx: 20,sy: -20,cx: 20,cy: -20}));
