@@ -238,7 +238,8 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		}
 	},
 	_syncSize: function () {
-		this._shallSize = true;
+		if (this.desktop)
+			this._shallSize = true;
 	},
 	//super//
 	removeChildHTML_: function (child) {

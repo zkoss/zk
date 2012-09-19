@@ -87,11 +87,13 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	},
 	onChildAdded_: function () {
 		this.$supers('onChildAdded_', arguments);
-		this._shallSize = true;
+		if (this.desktop)
+			this._shallSize = true;
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		this._shallSize = true;
+		if (this.desktop)
+			this._shallSize = true;
 	},
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
