@@ -1,0 +1,16 @@
+<zk>
+	<window border="normal" title="hello"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01259HaskMapInFx')">
+		<vbox form="@id('fx') @load(vm)">
+
+			<!-- WORK -->
+			<label id="l1" value="@load(fx.hash[vm.key])"></label>
+
+			<!-- WORK TO -->
+			<label id="l2" value="@load(vm.hash[vm.key])"></label>
+
+			<!-- NOT WORK -->
+			<label id="l3" value="@load(fx.hash[fx.key])"></label>
+		</vbox>
+	</window>
+</zk>
