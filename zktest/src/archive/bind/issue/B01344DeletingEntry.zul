@@ -1,0 +1,20 @@
+<zk>
+<label multiline="true">
+1.click the button, you should see the data become 2 item without any exception
+</label>
+<vlayout apply="org.zkoss.bind.BindComposer" 
+ viewModel='@id("vm") @init("org.zkoss.zktest.bind.issue.B01344DeletingEntry")'>
+ 	<button onClick='@command("delete")'>Delete first item</button>
+	<listbox model="@load(vm.list)" width="300px">
+		<template name="model" var="foo">
+			<listitem>
+				<listcell>
+					<label visible="@load(foo.flag)">don't care</label>
+					<label value="Item" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<button label="dump" onClick="binder.tracker.dump()"/>
+</vlayout>
+</zk>
