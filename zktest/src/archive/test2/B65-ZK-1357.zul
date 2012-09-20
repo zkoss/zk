@@ -1,0 +1,33 @@
+<zk>
+	<label multiline="true">
+		iPad/Android only 
+		1. Click on menu1, you should see a alert.
+		2. Click on arrow icon of menu1, you should see menupopup showed.
+	</label>
+	<menubar>
+		<menu label="Menu1" onClick='alert("alert")'>
+			<menupopup>
+				<menu label="New">
+					<menupopup>
+						<menuitem label="Small Car" />
+						<menuitem label="Mediem Car" />
+						<menuitem label="Large Car" />
+					</menupopup>
+				</menu>
+				<menuitem label="Search" />
+			</menupopup>
+		</menu>
+		<menu label="Menu2">
+			<menupopup>
+				<menu label="New">
+					<menupopup>
+						<menuitem label="Small Car" />
+						<menuitem label="Mediem Car" />
+						<menuitem label="Large Car" />
+					</menupopup>
+				</menu>
+				<menuitem label="Search" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>
