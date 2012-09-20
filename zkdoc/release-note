@@ -1,6 +1,7 @@
   --------
 ZK 6.5.1
 * Features
+  ZK-1351: Messagebox with no button
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes

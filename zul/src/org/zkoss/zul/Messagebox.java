@@ -157,7 +157,7 @@ public class Messagebox {
 			Executions.getCurrent().getDesktop().getWebApp().getAppName());
 		arg.put("icon", icon);
 
-		if (buttons == null || buttons.length == 0)
+		if (buttons == null)
 			buttons = DEFAULT_BUTTONS;
 
 		int btnmask = 0;
