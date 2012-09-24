@@ -19,6 +19,7 @@ ZK 6.0.3
   ZK-1313: combobox dropdown changes document scroll height on iPad
   ZK-1348: First child tree node can't unfold sometimes
   ZK-1341: Datebox in zh_TW locale with 'Long + Medium' format failed to assign correct value
+  ZK-1353: Datebox not work in Hebrew
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.

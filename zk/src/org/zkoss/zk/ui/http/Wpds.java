@@ -142,7 +142,11 @@ public class Wpds {
 			}
 		}
 		df = new SimpleDateFormat("G", locale);
-		sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");
+		final boolean helang = locale.getLanguage().equals("iw");
+		if (helang) //Bug ZK-1353: Era designator contains double quote in Hebrew language
+			sb.append("zk.ERA='").append(df.format(new java.util.Date())).append("';\n");
+		else
+			sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");
 		
 
 		Calendar ec = Calendar.getInstance(Locale.ENGLISH);

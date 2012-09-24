@@ -1,0 +1,7 @@
+<zk>
+	<label multiline="true">
+	1. Change default language of browser to Hebrew(he).
+	2. Should see a datebox loaded correctly.
+	</label>
+	<datebox width="300px" />
+</zk>
