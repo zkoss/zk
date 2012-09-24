@@ -9,6 +9,7 @@ ZK 6.5.1
   ZK-1356: Spinner doesn't update it's value in ipad
   ZK-1357: Popupmenu doesn't show up when listening to onClick
   ZK-1341: Datebox in zh_TW locale with 'Long + Medium' format failed to assign correct value
+  ZK-1353: Datebox not work in Hebrew
 
 * Upgrade Notes
 
@@ -101,6 +102,7 @@ ZK 6.0.3
   ZK-1313: combobox dropdown changes document scroll height on iPad
   ZK-1348: First child tree node can't unfold sometimes
   ZK-1341: Datebox in zh_TW locale with 'Long + Medium' format failed to assign correct value
+  ZK-1353: Datebox not work in Hebrew
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
