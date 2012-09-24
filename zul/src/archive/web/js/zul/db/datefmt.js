@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	function _parseTextToArray(txt, fmt) {
+		if (fmt.indexOf('\'') > -1) //Bug ZK-1341: 'long+medium' format with single quote in zh_TW locale failed to parse AM/PM
+			fmt = fmt.replace(/'/g, '');
 		var ts = [], mindex = fmt.indexOf("MMM"), eindex = fmt.indexOf("EE"),
 			fmtlen = fmt.length, ary = [],
 			//mmindex = mindex + 3,
