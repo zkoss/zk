@@ -1,0 +1,25 @@
+<zk>
+<label multiline="true">
+1.If you can see this words, then it is passed.
+</label>
+<vlayout apply="org.zkoss.bind.BindComposer" 
+ viewModel='@id("vm") @init("org.zkoss.zktest.bind.issue.B01347CheckboxCrash")'>
+	<listbox model="@load(vm.list)" width="300px" selectedItem="@bind(vm.selected)">
+		<template name="model">
+			<listitem>
+				<listcell>
+					<label value="@load(each.name)" />
+					<label value="@load(each.flag)" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<div form="@id('fx') @load(vm.selected) @save(vm.selected,after='save')">
+		<vlayout>
+			<hlayout>Name : <textbox value="@bind(fx.name)"/></hlayout>
+			<hlayout>Flag : <checkbox checked="@bind(fx.flag)"/></hlayout>
+			<button label="save" onClick="@command('save')" />
+		</vlayout>
+	</div>
+</vlayout>
+</zk>
