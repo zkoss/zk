@@ -15,6 +15,7 @@ package org.zkoss.bind;
 import java.util.Map;
 
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventQueues;
 
@@ -49,6 +50,6 @@ public class DefaultBinder extends BinderImpl {
 	public void init(Component comp, Object vm,Map<String, Object> initArgs){
 		super.init(comp, vm, initArgs);
 		//mark this component was handled by binder after init
-		comp.setAttribute(BINDER, this);
+		BinderUtil.markHandling(comp, this);
 	}
 }
