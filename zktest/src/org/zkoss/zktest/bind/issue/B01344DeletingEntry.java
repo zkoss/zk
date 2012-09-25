@@ -12,7 +12,7 @@ public class B01344DeletingEntry {
 
 	@Init
 	public void init() {
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 10; i++) {
 			productList.add(mock());
 		}
 	}

@@ -1,16 +1,18 @@
 <zk>
 <label multiline="true">
-1.click the button, you should see the data become 2 item without any exception
+1.click the button, you should see the first item is removed without any error
+2.continue click the button until all items are removed.
 </label>
 <vlayout apply="org.zkoss.bind.BindComposer" 
  viewModel='@id("vm") @init("org.zkoss.zktest.bind.issue.B01344DeletingEntry")'>
- 	<button onClick='@command("delete")'>Delete first item</button>
-	<listbox model="@load(vm.list)" width="300px">
+ 	<button id="btn1" onClick='@command("delete")'>Delete first item</button>
+ 	<label id="lb1" value="@load(vm.list.size())"/>
+	<listbox id="listbox" model="@load(vm.list)" width="300px">
 		<template name="model" var="foo">
 			<listitem>
 				<listcell>
 					<label visible="@load(foo.flag)">don't care</label>
-					<label value="Item" />
+					<label value="@load(foo.name)" />
 				</listcell>
 			</listitem>
 		</template>
