@@ -41,9 +41,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 		final Template tm = resoloveTemplate(radiogroup,item,data,index,size,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
-			if(data instanceof String){//the value of radio will pass to client, (meaningful in html submit case)
-				item.setValue((String)data);
-			}
+			item.setValue(data);
 		} else {
 			final ForEachStatus iterStatus = new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
@@ -89,8 +87,8 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			//add template dependency
 			addTemplateTracking(radiogroup, nr, data, index, size);
 			
-			if (nr.getValue() == null && data instanceof String) //template might set it
-				nr.setValue((String)data);
+			if (nr.getValue() == null) //template might set it
+				nr.setValue(data);
 
 			item.setAttribute("org.zkoss.zul.model.renderAs", nr);
 			//indicate a new item is created to replace the existent one

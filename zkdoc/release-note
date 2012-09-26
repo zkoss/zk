@@ -12,6 +12,7 @@ ZK 6.5.1
   ZK-1353: Datebox not work in Hebrew
   ZK-1347: Including Checkbox inside MVVM Form causes Error writing 'checked' on type org.zkoss.zul.Checkbox crash
   ZK-1344: Collection binding will occur error when deleting entry
+  ZK-1366: When binding Radio's "selectedItem" with a non-String object, zk throws ClassCastException
 
 * Upgrade Notes
 

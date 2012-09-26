@@ -1,0 +1,84 @@
+<zk>
+	<label multiline="true">
+		1.If you can see this words, then it is passed.
+	</label>
+	<vlayout>
+		<vlayout apply="org.zkoss.bind.BindComposer"
+			viewModel='@id("vm") @init("org.zkoss.zktest.bind.issue.B01366RadioSelectedItem")'>
+			<hlayout>
+				Selection  : <label id="lb1" value="@bind(vm.selected.name)"/>
+			</hlayout>
+			Group1:
+			<radiogroup id="radiogroup1" model="@bind(vm.list)"
+				selectedItem="@bind(vm.selected)">
+				<template name="model">
+					<radio label="@load(each.name)"/>
+				</template>
+			</radiogroup>
+			Group2:
+			<radiogroup id="radiogroup2" selectedItem="@bind(vm.selected)">
+				<vlayout id="vlayout1" children="@load(vm.list)">
+					<template name="children">
+						<radio label="@load(each.name)" value="@load(each)" />
+					</template>
+				</vlayout>
+			</radiogroup>
+		</vlayout>
+		--------------don't care below test---------------
+		<vlayout>
+		<!-- test pure zk because it doesn't handle string to object as well -->
+			<zscript><![CDATA[
+				org.zkoss.zktest.bind.issue.B01366RadioSelectedItem obj = new org.zkoss.zktest.bind.issue.B01366RadioSelectedItem();
+				obj.init();
+				org.zkoss.zul.ListModelList list = new org.zkoss.zul.ListModelList(obj.getList());
+			]]></zscript>
+			<radiogroup id="rg1" model="${list}">
+			</radiogroup>
+			<button label="alert 1" onClick="showAlert1()"/>
+			<zscript><![CDATA[
+				public void showAlert1(){
+					if(rg1.getSelectedItem()!=null){
+						alert("selected "+rg1.getSelectedItem().getValue().getName());
+					}else{
+						alert("selected nothing");
+					}
+				}
+			]]></zscript>
+		</vlayout>
+		<vlayout>
+			<radiogroup id="rg2" model="${list}">
+			<template name="model">
+				<radio label="${each.name}"/>
+			</template>
+			</radiogroup>
+			<button label="alert 2" onClick="showAlert2()"/>
+			<zscript><![CDATA[
+				public void showAlert2(){
+					if(rg2.getSelectedItem()!=null){
+						alert("selected "+rg2.getSelectedItem().getValue().getName());
+					}else{
+						alert("selected nothing");
+					}
+				}
+			]]></zscript>
+		</vlayout>
+		<vlayout>
+			<radiogroup id="rg3" model="${list}">
+			<template name="model">
+				<radio label="${each.name}" value="AA:${each.name}:BB" />
+			</template>
+			</radiogroup>
+			<button label="alert 3" onClick="showAlert3()"/>
+			<zscript><![CDATA[
+				public void showAlert3(){
+					if(rg2.getSelectedItem()!=null){
+						alert("selected "+rg3.getSelectedItem().getValue());
+					}else{
+						alert("selected nothing");
+					}
+				}
+			]]></zscript>
+		</vlayout>
+	</vlayout>
+
+</zk>
