@@ -442,7 +442,7 @@ public class ELSupport {
             return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToCharacter(obj);
         }
         if (Boolean.class.equals(type) || Boolean.TYPE == type) {
-            return (obj == null || "".equals(obj)) && COERCE_NULL_TO_NULL ? null : coerceToBoolean(obj);
+            return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToBoolean(obj);
         }
         if (type.isEnum()) {
             return coerceToEnum(obj, type);

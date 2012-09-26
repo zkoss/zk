@@ -70,7 +70,7 @@ public class AnnotateBinderHelper {
 	
 	
 	private void processAllComponentsBindings(Component comp) {
-		final Binder selfBinder = (Binder) comp.getAttribute(BinderImpl.BINDER);
+		final Binder selfBinder = BinderUtil.getBinder(comp);
 		//check if a component was binded already(by any binder)
 		if (selfBinder != null) //this component already binded ! skip all of its children
 			return;
@@ -102,6 +102,9 @@ public class AnnotateBinderHelper {
 			}else{
 				processPropertyBindings(comp, propName);
 			}
+		}
+		if(!BinderUtil.isHandling(comp)){
+			BinderUtil.markHandling(comp, _binder);
 		}
 	}
 	
