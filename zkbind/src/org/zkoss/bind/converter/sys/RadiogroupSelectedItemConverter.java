@@ -55,9 +55,8 @@ public class RadiogroupSelectedItemConverter implements Converter, java.io.Seria
 	  		}else{
 	  			//no model case
 			  	for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
-			  		final Radio radio = (Radio) it.next();			  		
-			  		String value = radio.getValue();
-			  		if (val.equals(value)) {
+			  		final Radio radio = (Radio) it.next();
+			  		if (val.equals(radio.getValue())) {
 			  			return radio;
 			  		}
 			  	}

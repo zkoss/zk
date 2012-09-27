@@ -18,7 +18,6 @@
 		<n:li><n:b>vm.innerVm.desc</n:b> and <n:b>vms.desc</n:b> pointed to the same instance:
 			<n:ul>
 				<n:li>Label myLbl </n:li>
-				<n:li>Textbox vmsNameTxb</n:li>
 				<n:li>Textbox vmsDescTxb</n:li>
 				<n:li>Textbox vmInnerVmDescTxb</n:li>
 				<n:li>Label vmInnerVmDescLb</n:li>
@@ -29,11 +28,12 @@
 </n:p>
 <div apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01194NestedVMInit', type='admin')">
-	<n:span style="font-weight:bold;" >myLbl:( </n:span>
+	myLbl:( 
 		<!-- manually configuring ZUL Annotation in VM. -->
-		<label id="headerNameLb" 
-			style="color:green; font-weight:bold;" />
-	<n:span style="font-weight:bold;">)</n:span>
+		<span id="headerNameLbOuter">
+		
+		</span>
+	)
 	
 	<grid width="600px" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vms') @init(vm.innerVm)">
@@ -61,7 +61,7 @@
 		<rows>
 			<row>
 				outerNameLb: 
-				<textbox id="outerNameLb" value="@load(vm.innerVm.name)" />
+				<textbox id="outerNameLb" value="@bind(vm.innerVm.name)" />
 			</row>
 			<row>
 				outerDescTxb: 

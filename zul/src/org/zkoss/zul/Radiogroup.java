@@ -548,7 +548,7 @@ public class Radiogroup extends XulElement {
 			final Template tm = cb.getTemplate("model");
 			if (tm == null) {
 				item.setLabel(Objects.toString(data));
-				item.setValue(Objects.toString(data));
+				item.setValue(data);
 			} else {
 				final Component[] items = tm.create(item.getParent(), item,
 					new VariableResolver() {
@@ -583,7 +583,7 @@ public class Radiogroup extends XulElement {
 
 				final Radio nci = (Radio)items[0];
 				if (nci.getValue() == null) //template might set it
-					item.setValue(Objects.toString(data));
+					nci.setValue(data);
 				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
 					//indicate a new item is created to replace the existent one
 				item.detach();

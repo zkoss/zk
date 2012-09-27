@@ -17,6 +17,7 @@ import java.util.Map;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -71,6 +72,6 @@ public class AnnotateBinder extends BinderImpl {
 		
 		new AnnotateBinderHelper(this).initComponentBindings(this.getView());
 		//mark this component was handled by binder after init
-		this.getView().setAttribute(BINDER, this);
+		BinderUtil.markHandling(this.getView(), this);
 	}
 }

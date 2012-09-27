@@ -33,7 +33,9 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Span;
 
 /**
  * @author Ian Y.T Tsai(zanyking)
@@ -69,7 +71,7 @@ public class B01194NestedVMInit {
 	}
 
 	@Wire
-	private Label headerNameLb;
+	private Span headerNameLbOuter;
 	private VM2 innerVm;
 
 	@Init
@@ -93,6 +95,9 @@ public class B01194NestedVMInit {
 		Selectors.wireComponents(self, this, false);
 		HashMap<String, String[]> annotAttrs = new HashMap<String, String[]>();
 		annotAttrs.put("value", new String[]{"vm.innerVm.name"});
+		Label headerNameLb = new Label();
+		headerNameLb.setParent(headerNameLbOuter);
+		headerNameLb.setId("headerNameLb");
 		headerNameLb.addAnnotation("value", "load", annotAttrs);
 		new AnnotateBinderHelper(binder).initComponentBindings(headerNameLb);
 	}
