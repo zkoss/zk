@@ -1559,7 +1559,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_adjMinWd(this);
 	}
 });
-/** 
+/** @class zul.mesh.Scrollbar
+ * @import zk.Widget
  * The extra Scrollbar for the MeshWidget.
  * It is designed to be overriden
  * @since 6.5.0
