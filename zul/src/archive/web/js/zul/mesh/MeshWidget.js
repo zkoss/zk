@@ -1430,7 +1430,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// B50-ZK-1038: in IE, when body has 0 height, it has 0 client width
 		var useOffset = zk.ie && (bdtable.parentNode.offsetHeight == 0 || 
 			(zk.ie < 8 && !this.getHeight() && !this.$n().style.height));
-		//**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		//Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
 		var	total = bdtable.parentNode[useOffset ? 'offsetWidth' : 'clientWidth'] - (zk.ie < 8 ? 1 : 0), 
 			extSum = total - width;
 		
@@ -1559,22 +1559,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_adjMinWd(this);
 	}
 });
-/** @class zk.Scrollbar
- * @import zk.Widget
+/** 
  * The extra Scrollbar for the MeshWidget.
  * It is designed to be overriden
  * @since 6.5.0
  */
 zul.mesh.Scrollbar = {
 	/**
-	 * Initialize the scrollbar.
+	 * Initialize the scrollbar of MeshWidget.
 	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
 		return;
 	},
 	/**
-	 * Return the vertical scroll position of the given DOM elements.
+	 * Return the vertical scroll position of the body element of given MeshWidget.
 	 * @param zk.Widget wgt the widget
 	 * @return int
 	 */
