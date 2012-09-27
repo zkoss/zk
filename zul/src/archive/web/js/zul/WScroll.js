@@ -375,12 +375,12 @@ zul.WScroll = zk.$extends(zk.Object, {
 			jq(self.control).mousewheel(self.proxy(self._mousewheelX));
 		}
 
-		var $drag = jq(self.edrag);		
+		var $drag = jq(self.edrag);
 		$drag.children('div')
 			.mouseover(self.proxy(self._mouseOver))
 			.mouseout(self.proxy(self._mouseOut))
-			.mouseup(self.proxy(self._mouseUp))
-			.mousedown(self.proxy(self._mouseDown));
+			.bind(zk.mobile ? 'touchend' : 'mouseup', self.proxy(self._mouseUp))
+			.bind(zk.mobile ? 'touchstart' : 'mousedown', self.proxy(self._mouseDown)); //bind for touch device
 		$drag.click(zk.$void);
 	},
 	_unlistenMouseEvent: function () {
@@ -390,12 +390,12 @@ zul.WScroll = zk.$extends(zk.Object, {
 		else if (!zk.ie || !zk.opera) // ie and opera unsupported
 			jq(self.control).unmousewheel(self.proxy(self._mousewheelX));
 		
-		var $drag = jq(self.edrag);		
+		var $drag = jq(self.edrag);
 		$drag.children('div')
 			.unbind('mouseover', self.proxy(self._mouseOver))
 			.unbind('mouseout', self.proxy(self._mouseOut))
-			.unbind('mouseup', self.proxy(self._mouseUp))
-			.unbind('mousedown', self.proxy(self._mouseDown));
+			.unbind(zk.mobile ? 'touchend' : 'mouseup', self.proxy(self._mouseUp))
+			.unbind(zk.mobile ? 'touchstart' : 'mousedown', self.proxy(self._mouseDown)); //bind for touch device
 		$drag.unbind('click', zk.$void);
 	},
 	_mouseOver: function (evt) {
@@ -437,7 +437,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index+1),
 			$drag = jq(this.edrag);
-		if (!$drag.hasClass(cls + '-over'))
+		if (!$drag.hasClass(cls + '-over') && !zk.mobile) //no mouse over for mobile
 			return;// disable
 		
 		$drag.addClass(cls + '-clk');
