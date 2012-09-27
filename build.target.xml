@@ -106,30 +106,15 @@ if="deploy.tomcat.required">
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
-<target name="build.jar" depends="gentime, compile" if="build.jar.required">
+<target name="zipjs">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
-	<!--<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/zipjs"/>
-		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
-		<arg value="${dist.lib.ext.dir}/bsh.jar"/>
-		<arg value="${bin.dir}/rmcomment.java"/>
-		<arg value="${src.archive.dir}/${zipjs}"/>
-		<arg value="${codegen.archive.dir}/${zipjs}"/>
-	</exec>
-	
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/zipcss"/>
-		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
-		<arg value="${src.archive.dir}/${zipcss}"/>
-		<arg value="${codegen.archive.dir}/${zipcss}"/>
-	</exec>
-	-->
 	<java classname="ZipJS"
            	fork="true">
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
+		<arg value="true"/>
     	<jvmarg value="-Xss1024k"/>
 		<classpath>
 		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
@@ -149,7 +134,8 @@ if="deploy.tomcat.required">
 		   <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 		</classpath>
 	</java>
-	
+</target>
+<target name="build.jar" depends="zipjs, gentime, compile" if="build.jar.required">
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
