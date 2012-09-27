@@ -214,7 +214,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	getMenubar: zul.menu.Menu.prototype.getMenubar,
+	getMenubar: function () {
+		for (var p = this.parent; p; p = p.parent)
+			if (p.$instanceof(zul.menu.Menubar))
+				return p;
+		return null;
+	},
 	bind_: function () {
 		this.$supers(zul.menu.Menuitem, 'bind_', arguments);
 

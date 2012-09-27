@@ -30,8 +30,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_stamps = [],
 		_t0 = jq.now();
 
-	function newClass() {
-		return function () {
+	function newClass(copy) {
+		var init = function () {
+			if (!init.$copied) {
+				init.$copied = true;
+				var cf = init.$copyf;
+				delete init.$copyf;
+				cf();
+			}
 			this.$oid = ++_oid;
 			this.$init.apply(this, arguments);
 
@@ -42,6 +48,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					ais[j].call(this);
 			}
 		};
+		init.$copyf = copy;
+		init.$copied = !init.$copyf;
+		return init;
 	}
 	function regClass(jclass, superclass) {
 		var oid = jclass.$oid = ++_oid;
@@ -81,7 +90,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function defSet11(nm, before, after) {
 		return function (v, opts) {
 			var o = this[nm];
-			this[nm] = v = before.apply(this, arguments);;
+			this[nm] = v = before.apply(this, arguments);
 			if (o !== v || (opts && opts.force))
 				after.apply(this, arguments);
 			return this;
@@ -668,17 +677,34 @@ foo.Widget = zk.$extends(zk.Widget, {
 		if (!superclass)
 			throw 'unknown superclass';
 
-		var jclass = newClass(),
-			thispt = jclass.prototype,
-			superpt = superclass.prototype,
-			define = members['$define'];
-		delete members['$define'];
-		zk.copy(thispt, superpt); //inherit non-static
-		zk.define(jclass, define);
-		zk.copy(thispt, members);
+		var superpt = superclass.prototype,
+			jclass = newClass(function () {
+				if (superclass.$copyf && !superclass.$copied) {
+					superclass.$copyf();
+					superclass.$copied = true;
+				}
+				var define = members['$define'],
+					superpt = superclass.prototype,
+					thispt = jclass.prototype;
 
+				delete members['$define'];
+				for (var p in superpt) //inherit non-static
+					if ('|_$super|_$subs|className|$class|_$extds|superclass|widgetName|'.indexOf('|'+p+'|') < 0)
+						thispt[p] = superpt[p];
+				
+				zk.define(jclass, define);
+				zk.copy(thispt, members);
+			}),
+			thispt = jclass.prototype;
+		
+		var zf;
+		if (!(zf = zk.feature) || !zf.ee) {
+			jclass.$copyf();
+			jclass.$copied = true;
+		}
+		
 		for (var p in superclass) //inherit static
-			if (p != 'prototype')
+			if ('|prototype|$copyf|$copied|'.indexOf('|'+p+'|') < 0)
 				jclass[p] = superclass[p];
 
 		zk.copy(jclass, staticMembers);
@@ -781,6 +807,15 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 	 * @see #override(Object, Map, Map)
 	 */
 	override: function (dst, backup, src) {
+		if (dst.$class && dst.$class.$copied === false) {
+			var f = dst.$class.$copyf;
+			dst.$class.$copyf = function () {
+				f();
+				zk.override(dst, backup, src);
+			};
+			return dst;
+		}
+		
 		switch (typeof backup) {
 		case "function":
 			var old = dst;
@@ -791,7 +826,6 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 			_overrideSub(dst, backup, dst['$'+backup] = dst[backup], dst[backup] = src, true);
 			return dst;
 		}
-
 		for (var nm in src)
 			_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
 		return dst;

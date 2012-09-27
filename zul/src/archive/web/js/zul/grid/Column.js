@@ -28,7 +28,9 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	/** Returns the grid that contains this column. 
 	 * @return zul.grid.Grid
 	 */
-	getGrid: zul.mesh.HeaderWidget.prototype.getMeshWidget,
+	getGrid: function () {
+		return this.parent ? this.parent.parent : null;
+	},
 
 	$init: function () {
 		this.$supers('$init', arguments);

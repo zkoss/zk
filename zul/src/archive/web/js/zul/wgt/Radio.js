@@ -127,7 +127,9 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * <p>Don't override this. Override {@link #isChecked} instead.
 	 * @return boolean
 	 */
-	isSelected: zul.wgt.Checkbox.prototype.isChecked,
+	isSelected: function () {
+		return this.$supers('isChecked', arguments);
+	},
 	/** Returns the name of this radio button.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.

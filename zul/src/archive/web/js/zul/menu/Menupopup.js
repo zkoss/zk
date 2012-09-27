@@ -382,7 +382,12 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	 * @return zul.menu.Menubar
 	 * @since 5.0.5
 	 */
-	getMenubar: zul.menu.Menu.prototype.getMenubar,
+	getMenubar: function () {
+		for (var p = this.parent; p; p = p.parent)
+			if (p.$instanceof(zul.menu.Menubar))
+				return p;
+		return null;
+	},
 	doMouseOver_: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = true;

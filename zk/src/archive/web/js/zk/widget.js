@@ -2898,7 +2898,7 @@ unbind_: function (skipper, after) {
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
-			else if (sz.height != '' || sz.height === 0) //bug #2943174, #2979776, ZK-1159
+			else if (sz.height != '' || (sz.height === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
 				this.setFlexSizeH_(n, zkn, sz.height, isFlexMin);
 			else
 				n.style.height = this._height || '';
@@ -2906,7 +2906,7 @@ unbind_: function (skipper, after) {
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto')
 				n.style.width = '';
-			else if (sz.width != '' || sz.width === 0) //bug #2943174, #2979776, ZK-1159
+			else if (sz.width != '' || (sz.width === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
 				this.setFlexSizeW_(n, zkn, sz.width, isFlexMin);
 			else
 				n.style.width = this._width || '';
@@ -4815,13 +4815,14 @@ zk.Page = zk.$extends(zk.Widget, {
 	 * of all child widgets.
 	 * @param Array out an array of HTML fragments.
 	 */
-	redraw: function (out) {
+	redraw: _zkf = function (out) {
 		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div>');
 	}
 },{
+	$redraw: _zkf,
 	/** An array of contained pages (i.e., a standalone ZK page but included by other technology).
 	 * For example, a ZUL age that is included by a JSP page.
 	 * A contained page usually covers a portion of the browser window. 
@@ -4865,7 +4866,7 @@ zk.Native = zk.$extends(zk.Widget, {
 		return !subId && this.id ? jq('#' + this.id):
 			this.$supers('$n', arguments); // Bug ZK-606/607
 	},
-	redraw: function (out) {
+	redraw: _zkf = function (out) {
 		var s = this.prolog, p;
 		if (s) {
 			//Bug ZK-606/607: hflex/vflex and many components need to know
@@ -4902,6 +4903,8 @@ zk.Native = zk.$extends(zk.Widget, {
 		s = this.epilog;
 		if (s) out.push(s);
 	}
+}, {
+	$redraw: _zkf
 });
 
 /** A macro widget.

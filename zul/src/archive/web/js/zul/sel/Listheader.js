@@ -28,7 +28,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox: zul.mesh.HeaderWidget.prototype.getMeshWidget,
+	getListbox: _zkf = function () {
+		return this.parent ? this.parent.parent : null;
+	},
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -37,7 +39,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	/** Returns the mesh body that this belongs to.
 	 * @return Listbox
 	 */
-	getMeshBody: zul.mesh.HeaderWidget.prototype.getMeshWidget,
+	getMeshBody: _zkf,
 	checkClientSort_: function (ascending) {
 		var body;
 		return !(!(body = this.getMeshBody()) || body.hasGroup()) && 

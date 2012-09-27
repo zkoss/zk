@@ -27,7 +27,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		 * Returns the URI of an external style sheet.
 		 * <p>
 		 * Default: null.
-		 * 
+		 *
 		 * @return String
 		 */
 		/**
@@ -69,10 +69,8 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 			var n = this.$n('real');
 			if (n) n.media = v;
 		}
-	}
-});
-if (zk.ie < 9)
-	zul.utl.Style.prototype.bind_ = function () {
+	},
+	bind_: zk.ie < 9 ? function () {
 		this.$supers(zul.utl.Style, 'bind_', arguments);
 
 		//test2/Z5-style.zul: we have to re-assign href (setOuter might work well)
@@ -83,4 +81,7 @@ if (zk.ie < 9)
 				if (n) n.href = self._src;
 			});
 		}
-	};
+	} : function () {
+		this.$supers(zul.utl.Style, 'bind_', arguments);
+	}
+});

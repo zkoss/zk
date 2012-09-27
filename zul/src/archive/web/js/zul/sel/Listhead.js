@@ -21,7 +21,9 @@ zul.sel.Listhead = zk.$extends(zul.mesh.ColumnMenuWidget, {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox: zul.mesh.HeadWidget.prototype.getMeshWidget,
+	getListbox: function () {
+		return this.parent;
+	},
 	getGroupPackage_: function () {
 		return 'zkex.sel';
 	}

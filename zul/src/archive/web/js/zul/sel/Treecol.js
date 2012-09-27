@@ -57,7 +57,9 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree: zul.mesh.HeaderWidget.prototype.getMeshWidget,
+	getTree: function () {
+		return this.parent ? this.parent.parent : null;
+	},
 	/** Returns the mesh body that this belongs to.
 	 * @since 5.0.6
 	 * @return Tree

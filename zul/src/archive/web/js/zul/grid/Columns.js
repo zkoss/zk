@@ -22,7 +22,9 @@ zul.grid.Columns = zk.$extends(zul.mesh.ColumnMenuWidget, {
 	/** Returns the grid that contains this columns. 
 	 * @return zul.grid.Grid
 	 */
-	getGrid: zul.mesh.HeadWidget.prototype.getMeshWidget,
+	getGrid: function () {
+		return this.parent;
+	},
 	rerender: function () {
 		if (this.desktop) {
 			if (this.parent)

@@ -14,4 +14,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zul.inp.ComboWidget.prototype.redraw_
+zul.inp.ComboWidget.$redraw

@@ -36,7 +36,9 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	getListbox: zul.sel.ItemWidget.prototype.getMeshWidget,
+	getListbox: function () {
+		return this.parent;
+	},
 	/**
 	 * Returns the listgroup that this item belongs to, or null.
 	 * @return zkex.sel.Listgroup

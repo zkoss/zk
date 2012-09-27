@@ -46,13 +46,17 @@ zul.layout.East = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 * {@link #getWidth()}.
 	 * @return String
 	 */
-	getSize: _zkf.prototype.getWidth,
+	getSize: function () {
+		return this.$supers('getWidth', arguments);
+	},
 	/**
 	 * Sets the size of this region. This method is shortcut for
 	 * {@link #setWidth(String)}.
 	 * @param String size
 	 */
-	setSize: _zkf.prototype.setWidth,
+	setSize: function () {
+		return this.$supers('setWidth', arguments);
+	},
 
 	_ambit2: function (ambit, mars, split) {
 		ambit.w += split.offsetWidth;

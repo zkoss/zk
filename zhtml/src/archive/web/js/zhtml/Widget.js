@@ -103,5 +103,5 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 		this.domUnlisten_(this.$n(), 'onChange');
 		this.$supers(zhtml.Widget, 'unbind_', arguments);
 	},
-	redraw: zk.Native.prototype.redraw
+	redraw: zk.Native.$redraw
 });
