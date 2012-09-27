@@ -788,7 +788,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 });
 
 
-/** @class zk.DateboxCtrl
+/** @class zul.db.DateboxCtrl
  * @import zk.Widget
  * The extra control for the Datebox.
  * It is designed to be overriden

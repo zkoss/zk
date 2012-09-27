@@ -920,7 +920,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	onChangingForced: true
 });
 
-/** @class zk.InputCtrl
+/** @class zul.inp.InputCtrl
  * @import zk.Widget
  * @import jq.Event
  * @import zk.Draggable

@@ -4425,7 +4425,7 @@ _doFooSelect: function (evt) {
 	},
 
 	//uuid//
-	/** Converts Converts an ID of a DOM element to UUID.
+	/** Converts an ID of a DOM element to UUID.
 	 * It actually removes '-*'. For example, zk.Widget.uuid('z_aa-box') returns 'z_aa'. 
 	 * @param String subId the ID of a DOM element
 	 * @return String the uuid of the widget (notice that the widget might not exist)
