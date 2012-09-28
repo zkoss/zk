@@ -131,15 +131,17 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	isVertical_: zk.$void,
 	_resetBoxSize: function () {
 		var vert = this.isVertical_();
-		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-			if (vert ? (kid._nvflex && kid.getVflex() != 'min')
-					 : (kid._nhflex && kid.getHflex() != 'min')) {
-				
-				kid.setFlexSize_({height:'', width:''});
-				var chdex = kid.$n('chdex');
-				if (chdex) {
-					chdex.style.height = '';
-					chdex.style.width = '';
+		if (!zk.mounting) { // ignore for the first time
+			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+				if (vert ? (kid._nvflex && kid.getVflex() != 'min')
+						 : (kid._nhflex && kid.getHflex() != 'min')) {
+					
+					kid.setFlexSize_({height:'', width:''});
+					var chdex = kid.$n('chdex');
+					if (chdex) {
+						chdex.style.height = '';
+						chdex.style.width = '';
+					}
 				}
 			}
 		}
@@ -209,29 +211,27 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			vflexsz = vert ? 0 : 1,
 			hflexs = [],
 			hflexsz = !vert ? 0 : 1,
-			p = child.$n('chdex').parentNode,
 			psz = this._resetBoxSize(),
 			hgh = psz.height,
 			wdh = psz.width,
-			xc = p.firstChild;
+			xc = this.firstChild;
 		
 		for (; xc; xc = xc.nextSibling) {
-			var c = xc.id && xc.id.endsWith('-chdex') ? xc.firstChild : xc,
-				zkc = zk(c);
-			if (zkc.isVisible()) {
-				var j = c.id ? c.id.indexOf('-') : 1,
-					cwgt = j < 0 ? zk.Widget.$(c.id) : null,
-					zkxc = zk(xc);
-				
+			if (xc.isVisible()) {
+				var cwgt = xc,
+					c = cwgt.$n(),
+					zkc = zk(c),
+					cp = c.parentNode,
+					zkxc = zk(cp);
 				//vertical size
-				if (cwgt && cwgt._nvflex) {
+				if (xc && xc._nvflex) {
 					if (cwgt !== child)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-						xc.style.height = jq.px0(zkxc.revisedHeight(c.offsetHeight + zkc.sumStyles("tb", jq.margins)));
+						cp.style.height = jq.px0(zkxc.revisedHeight(c.offsetHeight + zkc.sumStyles("tb", jq.margins)));
 						if (vert) 
-							hgh -= xc.offsetHeight + zkxc.sumStyles("tb", jq.margins);
+							hgh -= cp.offsetHeight + zkxc.sumStyles("tb", jq.margins);
 					} else {
 						vflexs.push(cwgt);
 						if (vert) {
@@ -240,7 +240,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						}
 					}
 				} else if (vert)
-					hgh -= xc.offsetHeight + zkxc.sumStyles("tb", jq.margins);
+					hgh -= cp.offsetHeight + zkxc.sumStyles("tb", jq.margins);
 				
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
@@ -248,9 +248,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-						xc.style.width = jq.px0(zkxc.revisedWidth(c.offsetWidth + zkc.sumStyles("lr", jq.margins)));
+						cp.style.width = jq.px0(zkxc.revisedWidth(c.offsetWidth + zkc.sumStyles("lr", jq.margins)));
 						if (!vert)
-							wdh -= xc.offsetWidth + zkxc.sumStyles("lr", jq.margins);
+							wdh -= cp.offsetWidth + zkxc.sumStyles("lr", jq.margins);
 					} else {
 						hflexs.push(cwgt);
 						if (!vert) {
@@ -259,14 +259,14 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						}
 					}
 				} else if (!vert)
-					wdh -= xc.offsetWidth + zkxc.sumStyles("lr", jq.margins);
+					wdh -= cp.offsetWidth + zkxc.sumStyles("lr", jq.margins);
 			}
 		}
 
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		var lastsz = hgh > 0 ? hgh : 0;
-		for (var j = vflexs.length; --j > 0;) {
+		while (vflexs.length > 1) {
 			var cwgt = vflexs.shift(), 
 				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) | 0, //cast to integer
 				offtop = cwgt.$n().offsetTop,
@@ -294,7 +294,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		lastsz = wdh > 0 ? wdh : 0;
-		for (var j = hflexs.length; --j > 0;) {
+		while (hflexs.length > 1) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) | 0; //cast to integer
 			cwgt.setFlexSize_({width:hsz});
