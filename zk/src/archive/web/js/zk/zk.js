@@ -688,9 +688,14 @@ foo.Widget = zk.$extends(zk.Widget, {
 					thispt = jclass.prototype;
 
 				delete members['$define'];
-				for (var p in superpt) //inherit non-static
-					if ('|_$super|_$subs|className|$class|_$extds|superclass|widgetName|'.indexOf('|'+p+'|') < 0)
-						thispt[p] = superpt[p];
+				for (var p in superpt) {//inherit non-static
+					var $p = '|'+p+'|';
+					if ('|_$super|_$subs|$class|_$extds|superclass|className|widgetName|blankPreserved|'.indexOf($p) < 0) {
+						thispt[p] = superpt[p];	
+					} else if (thispt[p] == undefined && '|className|widgetName|blankPreserved|'.indexOf($p) >= 0) {
+						thispt[p] = superpt[p]; // have to inherit from its parent.
+					}
+				}
 				
 				zk.define(jclass, define);
 				zk.copy(thispt, members);
