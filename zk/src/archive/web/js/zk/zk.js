@@ -807,10 +807,12 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 	 * @see #override(Object, Map, Map)
 	 */
 	override: function (dst, backup, src) {
-		if (dst.$class && dst.$class.$copied === false) {
-			var f = dst.$class.$copyf;
-			dst.$class.$copyf = function () {
+		var $class = dst.$class;
+		if ($class && $class.$copied === false) {
+			var f = $class.$copyf;
+			$class.$copyf = function () {
 				f();
+				$class.$copied = true;
 				zk.override(dst, backup, src);
 			};
 			return dst;
