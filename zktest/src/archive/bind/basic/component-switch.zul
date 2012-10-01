@@ -1,0 +1,61 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<zscript>
+	void doDrop1(org.zkoss.zk.ui.event.DropEvent evt) {
+		org.zkoss.zk.ui.Component p = evt.getDragged();
+		p.detach();
+		evt.getTarget().appendChild(p);
+	}
+	void doDrop2(org.zkoss.zk.ui.event.DropEvent evt) {
+		org.zkoss.zk.ui.Component p = evt.getDragged();
+		//if you doesn't detach it, it will not cause re-init and re-load.
+		//
+		//p.detach(); 
+		evt.getTarget().appendChild(p);
+	}
+</zscript>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ComponentSwitch')"
+		width="500px">
+		<hlayout>
+			Name 1:
+			<textbox value="@bind(vm.item1.name)" />
+			, Name 2:
+			<textbox value="@bind(vm.item2.name)" />
+		</hlayout>
+		<hlayout>
+			<vlayout item="@ref(vm.item1)" width="200px" height="200px"
+				style="background:orange" droppable="true" onDrop="doDrop1(event)">
+				<label value="@bind(item.name)" style="color:green"
+					draggable="true" />
+			</vlayout>
+			<vlayout item="@ref(vm.item2)" width="200px" height="200px"
+				style="background:yellow" droppable="true" onDrop="doDrop1(event)">
+				<label value="@bind(item.name)" style="color:red"
+					draggable="true" />
+			</vlayout>
+		</hlayout>
+	</window>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ComponentSwitch')"
+		width="500px">
+		<hlayout>
+			Name 1:
+			<textbox value="@bind(vm.item1.name)" />
+			, Name 2:
+			<textbox value="@bind(vm.item2.name)" />
+		</hlayout>
+		<hlayout>
+			<vlayout item="@ref(vm.item1)" width="200px" height="200px"
+				style="background:orange" droppable="true" onDrop="doDrop2(event)">
+				<label value="@bind(item.name)" style="color:green"
+					draggable="true" />
+			</vlayout>
+			<vlayout item="@ref(vm.item2)" width="200px" height="200px"
+				style="background:yellow" droppable="true" onDrop="doDrop2(event)">
+				<label value="@bind(item.name)" style="color:red"
+					draggable="true" />
+			</vlayout>
+		</hlayout>
+	</window>
+</zk>

@@ -75,7 +75,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					new zul.box.Box({
 						mold: 'horizontal',
 						children: [
-							new zul.wgt.Div({sclass: icons[(opts.icon||'').toUpperCase()]||icons.INFORMATION}),
+							new zul.wgt.Div({sclass: icons[(opts.icon||'').toUpperCase()]||opts.icon||icons.INFORMATION}),
 							new zul.wgt.Div({
 								sclass: 'z-messagebox',
 								width: '210pt',

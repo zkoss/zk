@@ -199,6 +199,9 @@ div.z-log button {
 	background: transparent no-repeat center;
 	background-image: url('http://www.zkoss.org/zk/img/zkpowered.png?v=${z:getVersion()}&e=${z:getEdition()}&b=${z:getBuild()}');
 }
+.z-uptime {
+	background-image: url('http://www.zkoss.org/zk/img/stop-btn.png?v=${z:getVersion()}&e=${z:getEdition()}&b=${z:getBuild()}');
+}
 .z-loading, .z-apply-loading {
 	position: absolute;
 	cursor: wait;

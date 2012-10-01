@@ -53,14 +53,14 @@ public class ZkFns {
 	/** Returns the build identifier, such as 2007121316.
 	 *
 	 * <p>Each time ZK is built, a different build identifier is assigned.
-	 * @since 6.5.1
+	 * @since 6.0.3
 	 */
 	public static String getBuild() {
 		return WebApps.getCurrent().getBuild();
 	}
 
 	/** Returns the ZK version, such as "1.1.0" and "2.0.0".
-	 * @since 6.5.1
+	 * @since 6.0.3
 	 */
 	public static String getVersion() {
 		return WebApps.getCurrent().getVersion();
@@ -69,7 +69,7 @@ public class ZkFns {
 	/** Returns the edition, such as EE, PE and CE.
 	 * Notice that prior to 5.0.1, the return value is one of
 	 * Enterprise, Professional and Standard.
-	 * @since 6.5.1
+	 * @since 6.0.3
 	 */
 	public static String getEdition() {
 		return WebApps.getEdition();

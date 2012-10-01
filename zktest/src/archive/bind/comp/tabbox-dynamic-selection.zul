@@ -1,0 +1,56 @@
+<zk>
+	<window border="none">
+		<hbox>
+			<vbox apply="org.zkoss.bind.BindComposer"   width="300px" height="300px"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.TabboxDynamicSelectionVM')" >
+				<hbox>
+					<button label="select tab 1" onClick="@command('selectTabByIndex',index=1)"/>
+					<button label="select tab 3" onClick="@command('selectTabByIndex',index=3)"/>
+					<label value="@bind(vm.selectedIndex)"/>
+				</hbox>
+					
+				<tabbox selectedIndex="@save(vm.selectedIndex)" >
+					<tabs children="@load(vm.tabs)">
+						<template name="children">
+							<tab label="@load(each.name)"
+								selected="@load(vm.selectedIndex eq forEachStatus.index)"/>
+						</template>
+					</tabs>
+					<tabpanels children="@load(vm.tabs)">
+					
+						<template name="children">
+							<tabpanel height="200px">
+								<label value="@load(each.name)"/>
+							</tabpanel>
+						</template>
+					</tabpanels>
+				</tabbox>
+			</vbox>
+			<vbox apply="org.zkoss.bind.BindComposer"   width="300px" height="300px"
+				viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.TabboxSelectedVM')" >
+				<hbox>
+					<button label="select tab 1" onClick="@command('selectTabByItem',item=vm.tabs[1])"/>
+					<button label="select tab 3" onClick="@command('selectTabByItem',item=vm.tabs[3])"/>
+					<label value="@bind(vm.selectedItem.name)"/>
+				</hbox>
+					
+				<tabbox>
+					<tabs children="@load(vm.tabs)">
+						<template name="children">
+							<tab label="@load(each.name)"
+								selected="@load(vm.selectedItem eq each)"
+								onSelect="@command('selectTabByItem',item=each)"/>
+						</template>
+					</tabs>
+					<tabpanels children="@load(vm.tabs)">					
+						<template name="children">
+							<tabpanel height="200px">
+								<label value="@load(each.name)"/>
+							</tabpanel>
+						</template>
+					</tabpanels>
+				</tabbox>
+			</vbox>
+		</hbox> 
+	</window>
+</zk>
