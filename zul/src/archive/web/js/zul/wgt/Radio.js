@@ -128,7 +128,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * @return boolean
 	 */
 	isSelected: function () {
-		return this.$supers('isChecked', arguments);
+		return this.isChecked();
 	},
 	/** Returns the name of this radio button.
 	 * <p>Don't use this method if your application is purely based
