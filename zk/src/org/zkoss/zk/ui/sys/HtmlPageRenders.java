@@ -738,13 +738,16 @@ public class HtmlPageRenders {
 		//output ZK ICON
 		final Session sess = Sessions.getCurrent();
 		if (sess != null) {
-			final PI pi = (PI)sess.getAttribute(ATTR_PI);
-			boolean show = pi == null;
-			if (show) sess.setAttribute(ATTR_PI, new PI());
-			else show = pi.show();
-
-			if (show)
-				sb.append("zk.pi=1;");
+			WebApp wapp = desktop.getWebApp();
+			if (wapp == null || "CE".equals(WebApps.getEdition())
+					|| wapp.getAttribute("org.zkoss.zk.ui.notice") != null) {
+				final PI pi = (PI)sess.getAttribute(ATTR_PI);
+				boolean show = pi == null;
+				if (show) sess.setAttribute(ATTR_PI, new PI());
+				else show = pi.show();
+				if (show)
+					sb.append("zk.pi=1;");
+			}
 		}
 		return sb.toString();
 	}

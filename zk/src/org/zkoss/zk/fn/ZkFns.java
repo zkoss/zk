@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.fn;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApps;
 
 /**
  * Utilities for using XEL in ZUL.
@@ -47,5 +48,30 @@ public class ZkFns {
 		return toAbsoluteURI(uri, true);
 	//we preserve this method for backward compatibility (since some developers
 	//might have old version core.dsp.tld
+	}
+
+	/** Returns the build identifier, such as 2007121316.
+	 *
+	 * <p>Each time ZK is built, a different build identifier is assigned.
+	 * @since 6.0.3
+	 */
+	public static String getBuild() {
+		return WebApps.getCurrent().getBuild();
+	}
+
+	/** Returns the ZK version, such as "1.1.0" and "2.0.0".
+	 * @since 6.0.3
+	 */
+	public static String getVersion() {
+		return WebApps.getCurrent().getVersion();
+	}
+
+	/** Returns the edition, such as EE, PE and CE.
+	 * Notice that prior to 5.0.1, the return value is one of
+	 * Enterprise, Professional and Standard.
+	 * @since 6.0.3
+	 */
+	public static String getEdition() {
+		return WebApps.getEdition();
 	}
 }
