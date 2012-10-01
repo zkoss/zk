@@ -23,6 +23,7 @@ ZK 6.0.3
   ZK-1358: When I try to show a window with doOverlapped, doModal or doHighlighted my window don't appears
   ZK-1347: Including Checkbox inside MVVM Form causes Error writing 'checked' on type org.zkoss.zul.Checkbox crash
   ZK-1344: Collection binding will occur error when deleting entry
+  ZK-1372: zk.stackUp not work with Firefox
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
