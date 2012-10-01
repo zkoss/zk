@@ -1,12 +1,19 @@
 package org.zkoss.zktest.bind.issue;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
 public class B01259HaskMapInFx {
 	private Map<String, String> hash = new HashMap<String, String>();
-	private String key = "key";
+	private String key = "mykey";
+	private String key2 = "mykey2";
+	private String key3 = "mykey3";
 
 	public B01259HaskMapInFx() {
-		this.hash.put("key", "Hello Word!!!");
+		this.hash.put(key, "Hello World");
+		this.hash.put(key2, "Hi Dennis");
+		this.hash.put(key3, key2);
 	}
 
 	public Map<String, String> getHash() {
@@ -16,12 +23,15 @@ public class B01259HaskMapInFx {
 	public String getKey() {
 		return this.key;
 	}
-
-	public void setHash(final Map<String, String> hash) {
-		this.hash = hash;
+	public String getKey2() {
+		return this.key2;
 	}
-
-	public void setKey(final String key) {
-		this.key = key;
+	public String getKey3() {
+		return this.key3;
+	}
+	
+	@Command({"save","save2"}) @NotifyChange(".")
+	public void save(){
+		
 	}
 }

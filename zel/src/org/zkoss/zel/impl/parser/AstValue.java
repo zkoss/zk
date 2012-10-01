@@ -213,18 +213,19 @@ public final class AstValue extends SimpleNode {
         	//for ZK-1178: check t.property(method name) of t.base has polymorphism?
         	boolean flag = false;
         	Class<?> baseClass = t.base.getClass();
+        	
+    		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
+    		//XXX the same in BeanELResolver#setValue()
+    		String propertySetterName = t.property.toString();
+    		if(propertySetterName != null && propertySetterName.length()>0){
+    			propertySetterName = 
+    				"set"+ 
+    				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
+    				propertySetterName.substring(1);
+    		}
+    		////
+    		
         	for (Method m : baseClass.getMethods()) {
-        		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
-        		//XXX the same in BeanELResolver#setValue()
-        		String propertySetterName = t.property.toString();
-        		if(propertySetterName != null && propertySetterName.length()>0){
-        			propertySetterName = 
-        				"set"+ 
-        				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
-        				propertySetterName.substring(1);
-        		}
-        		////
-        		
         		//method name must the same as t.property (setter)
         		if (m.getName().equals(propertySetterName)) {
         			Class<?>[] clazzes = m.getParameterTypes();

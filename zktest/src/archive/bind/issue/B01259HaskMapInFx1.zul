@@ -1,0 +1,51 @@
+<zk>
+	<window border="normal" title="hello"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01259HaskMapInFx')">
+		<label multiline="true" >
+			1.the left text value should equal to left side value 
+		</label>
+		<vbox form="@id('fx') @load(vm)">
+			<hbox>
+				<label id="l11" value="@load(fx.hash[vm.key])"/> = Hello World
+			</hbox>
+			<hbox>
+				<label id="l12" value="@load(vm.hash[vm.key])"/> = Hello World
+			</hbox>
+			<hbox>
+				<label id="l13" value="@load(fx.hash[fx.key])"/> = Hello World
+			</hbox>
+			<hbox>
+				<label id="l14" value="@load(fx.hash[fx.hash[fx.key3]])"/> = Hi Dennis
+			</hbox>
+			<hbox>
+				<label id="l15" value="@load(vm.hash[vm.hash[vm.key3]])"/> = Hi Dennis
+			</hbox>			
+		</vbox>
+		<label multiline="true" >
+			2.check the value to 'A' and 'B' then click save
+			3.the value above label should change to 'A' , 'A', 'A', 'B','B'
+		</label>
+		<vbox form="@id('fx') @load(vm) @save(vm,before='save')">
+			<hbox>
+				<textbox id="t21" value="@bind(fx.hash[fx.key])"/>
+			</hbox>
+			<hbox>
+				<textbox id="t22" value="@bind(fx.hash[fx.hash[fx.key3]])"/>
+			</hbox>
+			<button id="btn2" label="save" onClick="@command('save')" />
+		</vbox>
+		<label multiline="true" >
+			2.check the value to 'C' and 'D' then click save
+			3.the value label text should change to 'C' , 'C', 'C', 'D','D'
+		</label>
+		<vbox form="@id('fx') @load(vm) @save(vm,before='save2')">
+			<hbox>
+				<textbox id="t31" value="@bind(vm.hash[fx.key])"/>
+			</hbox>
+			<hbox>
+				<textbox id="t32" value="@bind(vm.hash[fx.hash[fx.key3]])"/>
+			</hbox>
+			<button id="btn3" label="save" onClick="@command('save2')" />
+		</vbox>
+	</window>
+</zk>

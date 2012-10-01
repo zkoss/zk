@@ -1,0 +1,25 @@
+<zk>
+	<window border="normal" title="hello"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01259HaskMapInFx')">
+		<label multiline="true" >
+			1.the left text value should equal to left side value 
+		</label>
+		<vbox form="@id('fx') @init(vm)">
+			<hbox>
+				<label id="l11" value="@load(fx.hash[vm.key])"/> = Hello World
+			</hbox>
+			<hbox>
+				<label id="l12" value="@load(vm.hash[vm.key])"/> = Hello World
+			</hbox>
+			<hbox>
+				<label id="l13" value="@load(fx.hash[fx.key])"/> = Hello World
+			</hbox>
+			<hbox>
+				<label id="l14" value="@load(fx.hash[fx.hash[fx.key3]])"/> = Hi Dennis
+			</hbox>
+			<hbox>
+				<label id="l15" value="@load(vm.hash[vm.hash[vm.key3]])"/> = Hi Dennis
+			</hbox>			
+		</vbox>
+	</window>
+</zk>
