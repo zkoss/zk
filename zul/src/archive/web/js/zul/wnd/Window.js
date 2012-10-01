@@ -81,6 +81,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
 
 		document.body.style.cursor = "";
+		zWatch.fire('onMove'); //Bug ZK-1372: hide applet when overlapped
 	}
 	function _ignoremove(dg, pointer, evt) {
 		var el = dg.node,

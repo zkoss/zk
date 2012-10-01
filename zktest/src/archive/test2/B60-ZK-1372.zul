@@ -1,0 +1,16 @@
+<?script content="zk.useStackup='auto/gecko'"?>
+<zk>
+	<window title="Hello ZK!!" border="normal" width="500px">
+		<label multiline="true">
+		1. Click "Pop it" button.
+		2. Move the messagebox on "ZK is Simple and Rich!" applet and drop, the applet should hide.
+		</label>
+		<button label="Pop it" width="100px">
+			<attribute name="onClick"><![CDATA[
+		    	Messagebox.show("A loooong ZK Messagebox is required to be visible from behind the applet.", "Hello", Messagebox.OK, Messagebox.EXCLAMATION);
+			]]></attribute>
+		</button>
+		<separator/>
+		<applet codebase="classes" code="ticker" msg="ZK is Simple and Rich!" id="ticker" width="350px" height="200px" />
+	</window>
+</zk>
