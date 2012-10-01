@@ -642,7 +642,7 @@ public class HtmlPageRenders {
 	throws IOException {
 		out.write("<div");
 		writeAttr(out, "id", uuid);
-		out.write(" class=\"z-temp\">");
+		out.write(" class=\"z-temp\"><div id=\"zk_proc\" class=\"z-loading\"><div class=\"z-loading-indicator\"><span class=\"z-loading-icon\"></span>Processing...</div></div>");
 	}
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
