@@ -2890,7 +2890,7 @@ unbind_: function (skipper, after) {
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
-			else if (sz.height != '' || sz.height === 0) //bug #2943174, #2979776, ZK-1159
+			else if (sz.height != '' || (sz.height === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
 				this.setFlexSizeH_(n, zkn, sz.height, isFlexMin);
 			else
 				n.style.height = this._height || '';
@@ -2898,7 +2898,7 @@ unbind_: function (skipper, after) {
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto')
 				n.style.width = '';
-			else if (sz.width != '' || sz.width === 0) //bug #2943174, #2979776, ZK-1159
+			else if (sz.width != '' || (sz.width === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
 				this.setFlexSizeW_(n, zkn, sz.width, isFlexMin);
 			else
 				n.style.width = this._width || '';

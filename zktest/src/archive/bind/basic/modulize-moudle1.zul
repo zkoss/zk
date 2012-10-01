@@ -1,0 +1,22 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" border="normal"
+		viewModel="@id('vm') @init(module)" title="@load(c:cat('Module 1 - ',vm.name))">
+		<hlayout>
+			Local Amount : 
+			<label value="@load(vm.amount)" />
+		</hlayout>
+		<vlayout>
+		<hlayout>
+			Edit Name : 
+			<textbox value="@bind(vm.name)" />
+		</hlayout>
+		
+		<hlayout>
+			Edit Amount : 
+			<intbox value="@bind(vm.amount)" onChange="@global-command('updateAmount')"/>
+		</hlayout>
+		</vlayout>
+	</window>
+
+</zk>

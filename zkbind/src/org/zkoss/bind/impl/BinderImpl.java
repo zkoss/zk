@@ -1663,7 +1663,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		TrackerImpl tracker = (TrackerImpl) getTracker();
 		tracker.removeTrackings(comp);
 
-		comp.removeAttribute(BINDER);
+		BinderUtil.unmarkHandling(comp);
 	}
 
 	/**
@@ -1735,8 +1735,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		bindings.add(binding);
 		
 		//associate component with this binder, which means, one component can only bind by one binder
-		comp.setAttribute(BINDER, this);
+		BinderUtil.markHandling(comp,this);
 	}
+	
+	
 	
 	@Override
 	public void setTemplate(Component comp, String attr, String templateExpr, Map<String,Object> templateArgs){

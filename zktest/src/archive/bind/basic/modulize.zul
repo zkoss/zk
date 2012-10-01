@@ -1,0 +1,43 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.Modulize')"
+		width="500px">
+		<vlayout>
+			<hlayout>
+				Total sub modules :
+				<label value="@load(vm.modules.size())" />
+			</hlayout>
+			<hlayout>
+				Total sub module value amount :
+				<label value="@load(vm.modulesAmount)" />
+			</hlayout>
+		</vlayout>
+		<hlayout>
+			<button label="add Module 1"
+				onClick="@command('addModule',type=1)" />
+			<button label="add Module 2"
+				onClick="@command('addModule',type=2)" />
+		</hlayout>
+		---sub module--
+		<tabbox>
+			<tabs children="@load(vm.modules)">
+				<template name="children">
+					<tab label="@load(each.name)"
+						selected="@load(vm.selected eq each)"
+						onSelect="@command('selectModule',module=each)" closable="true"
+						onClose="@command('removeModule',module=each)" />
+				</template>
+			</tabs>
+			<tabpanels children="@load(vm.modules)">
+				<template name="children">
+					<tabpanel module="@ref(each)">
+						<include
+							src="@load(c:cat('/bind/basic/', each.uri))" />
+					</tabpanel>
+
+				</template>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>
