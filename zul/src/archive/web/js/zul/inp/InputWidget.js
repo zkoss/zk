@@ -101,6 +101,8 @@ zul.inp.RoundUtl = {
 			rightElemWidth = rightElem ? rightElem.offsetWidth - 
 					zk(rightElem).sumStyles('l', jq.borders) : 0, 
 			rev = zk(inp).revisedWidth(width - rightElemWidth);
+		if (rightElem && !zk.safari_ && !zk.opera)
+			rev -= 1; //Bug ZK-1368: reduce 1px for right edge element
 		inp.style.width = jq.px0(rev);
 	},
 	getOuterWidth: function(wgt, rmInplace) {

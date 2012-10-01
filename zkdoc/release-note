@@ -24,6 +24,7 @@ ZK 6.0.3
   ZK-1347: Including Checkbox inside MVVM Form causes Error writing 'checked' on type org.zkoss.zul.Checkbox crash
   ZK-1344: Collection binding will occur error when deleting entry
   ZK-1372: zk.stackUp not work with Firefox
+  ZK-1368: the right edge of the textboxes split over to a new line when you specify a percentage width and set the mold to rounded
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
