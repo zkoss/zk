@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -120,6 +121,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	/**
 	 * Returns the entry (Map.Entry) at the specified index.
 	 */
+	@SuppressWarnings("unchecked")
 	public Map.Entry<K, V> getElementAt(int j) {
 		if (j < 0 || j >= _map.size())
 			throw new IndexOutOfBoundsException(""+j);
@@ -127,8 +129,60 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		for (Iterator<Map.Entry<K, V>> it = _map.entrySet().iterator();;) {
 			final Map.Entry<K, V> o = it.next();
 			if (--j < 0)
-				return o;
+				return new Entry0(o.getKey(), o.getValue());
 		}
+	}
+	
+	private static class Entry0<K, V> implements Map.Entry<K, V>, Serializable {
+		private K _key;
+		private V _value;
+		Entry0(K key, V value) {
+			_key = key;
+			_value = value;
+		}
+		@Override
+		public K getKey() {
+			return _key;
+		}
+
+		@Override
+		public V getValue() {
+			return _value;
+		}
+
+		@Override
+		public V setValue(V value) {
+			V oldValue = _value;
+            _value = value;
+            return oldValue;
+		}
+		
+		@Override
+		public final boolean equals(Object o) {
+            if (!(o instanceof Map.Entry))
+                return false;
+            Map.Entry e = (Map.Entry)o;
+            Object k1 = getKey();
+            Object k2 = e.getKey();
+            if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+                Object v1 = getValue();
+                Object v2 = e.getValue();
+                if (v1 == v2 || (v1 != null && v1.equals(v2)))
+                    return true;
+            }
+            return false;
+        }
+		
+		@Override
+        public final int hashCode() {
+            return (_key == null   ? 0 : _key.hashCode()) ^
+                   (_value == null ? 0 : _value.hashCode());
+        }
+		
+		@Override
+		public final String toString() {
+            return getKey() + "=" + getValue();
+        }		
 	}
 
 	//-- Map --//
