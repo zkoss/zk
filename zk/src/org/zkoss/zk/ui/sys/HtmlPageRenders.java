@@ -99,6 +99,8 @@ public class HtmlPageRenders {
 	/** Whether is allowed to generate content directly. */
 	private static final String ATTR_DIRECT_CONTENT
 		= "org.zkoss.zk.ui.directContent";
+	/** Enabled client info */
+	private static final String ATTR_DESKTOP_CLIENTINFO = "org.zkoss.desktop.clientinfo.enabled";
 
 	/** Sets the content type to the specified execution for the given page.
 	 * @param exec the execution (never null)
@@ -646,6 +648,14 @@ public class HtmlPageRenders {
 	}
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
+		final Desktop dt;
+		if (page != null
+				&& (dt = page.getDesktop()).getAttribute(ATTR_DESKTOP_CLIENTINFO) != null) {
+			dt.removeAttribute(ATTR_DESKTOP_CLIENTINFO);
+			if (!"CE".equals(WebApps.getEdition())) {
+				out.write("<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
+			}
+		}
 		outSEOContent(page, out);
 		out.write("</div>");
 	}

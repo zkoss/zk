@@ -567,7 +567,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 5.0.8
 	 */
 	fireSized: function (wgt, bfsz) {
-		if (zUtl.isImageLoading()) {
+		if (zUtl.isImageLoading() || zk.clientinfo) {
 			var f = arguments.callee;
 			setTimeout(function () {
 				return f(wgt, bfsz);

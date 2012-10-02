@@ -2111,6 +2111,7 @@ w:use="foo.MyWindow"&gt;
 		final Desktop desktop;
 		if (!found && (desktop = getDesktop()) != null) {
 			if (Events.ON_CLIENT_INFO.equals(evtnm)) {
+				desktop.setAttribute("org.zkoss.desktop.clientinfo.enabled", true);
 				response(new AuClientInfo(desktop));
 			} else if (Events.ON_PIGGYBACK.equals(evtnm)) {
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
@@ -2359,10 +2360,12 @@ w:use="foo.MyWindow"&gt;
 	}
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
-			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
+			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) {//asap+deferrable
 				response(new AuClientInfo(desktop));
+				getDesktop().setAttribute("org.zkoss.desktop.clientinfo.enabled", true);
 				//We always fire event not a root, since we don't like to
 				//check when setParent or setPage is called
+			}
 			if (Events.isListened(this, Events.ON_PIGGYBACK, false))
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 		} else {

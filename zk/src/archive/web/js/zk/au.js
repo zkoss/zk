@@ -342,8 +342,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
 				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
-				if (zk.mobile && rtags.onClientInfo) {
-					setTimeout(zk.endProcessing, 150);
+				if (rtags.onClientInfo) {
+					if (zk.mobile)
+						setTimeout(zk.endProcessing, 150);
+					delete zk.clientinfo;
 				}
 					
 			}

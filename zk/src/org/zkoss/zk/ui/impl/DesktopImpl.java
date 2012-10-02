@@ -1223,6 +1223,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				for (Component root = page.getFirstRoot();
 				root != null; root = root.getNextSibling())
 					if (Events.isListened(root, Events.ON_CLIENT_INFO, false)) {
+						setAttribute("org.zkoss.desktop.clientinfo.enabled", true);
 						addResponse(new AuClientInfo(this));
 						break l_out;
 					}

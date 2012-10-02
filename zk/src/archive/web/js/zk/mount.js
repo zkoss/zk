@@ -214,8 +214,17 @@ function zkamn(pkg, fn) {
 			var wgt = inf[1];
 			if (inf[2])
 				wgt.bind(inf[0]); //bindOnly
-			else
+			else {
+				var $jq;
+				if (zk.processing
+						&& ($jq = jq("#zk_proc")).length) {
+					if ($jq.hasClass('z-loading') && $jq.parent().hasClass('z-temp')) {
+						$jq[0].id = 'zna';
+						zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+					}
+				}
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
+			}
 
 			doAuCmds(inf[3]); //aucmds
 		}
@@ -398,10 +407,23 @@ function zkamn(pkg, fn) {
 
 			if (wi) {
 				if (wi[0] === 0) { //page
-					var props = wi[2];
-					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"));
+					var props = wi[2],
+						dt = zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"));
 					if (owner = zk.cut(props, "ow"))
 						owner = Widget.$(owner);
+					var zf;
+					if ((zf = zk.feature) && (zf.pe || zf.ee) && zk.clientinfo !== undefined) {
+						zAu.cmd0.clientInfo(dt.uuid);
+						if (extra) {
+							var newExtra = [];
+							for (var j = 0; j < extra.length; j += 2) {
+								if (extra[j] != 'clientInfo')
+									newExtra.push(extra[j], extra[j + 1]);
+							}
+							extra = newExtra;
+						}
+					} else
+						delete zk.clientinfo;
 				}
 
 				infs.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
