@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -129,38 +130,47 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		for (Iterator<Map.Entry<K, V>> it = _map.entrySet().iterator();;) {
 			final Map.Entry<K, V> o = it.next();
 			if (--j < 0)
-				return new Entry0(o.getKey(), o.getValue());
+				return new Entry0(o);
 		}
 	}
 	
 	private static class Entry0<K, V> implements Map.Entry<K, V>, Serializable {
 		private K _key;
 		private V _value;
-		Entry0(K key, V value) {
-			_key = key;
-			_value = value;
+		private transient Map.Entry<K, V> _entry;
+		
+		Entry0(Map.Entry<K, V> entry) {
+			_entry = entry;
 		}
 		@Override
 		public K getKey() {
-			return _key;
+			return _entry != null ? _entry.getKey() : _key;
 		}
 
 		@Override
 		public V getValue() {
-			return _value;
+			return _entry != null ? _entry.getValue() : _value;
 		}
 
 		@Override
 		public V setValue(V value) {
 			V oldValue = _value;
-            _value = value;
+			if (_entry != null) {
+				oldValue = _entry.getValue();
+				_entry.setValue(value);
+			} else
+				_value = value;
             return oldValue;
 		}
 		
 		@Override
 		public final boolean equals(Object o) {
+            if (_entry != null)
+            	return _entry.equals(o);
+            
             if (!(o instanceof Map.Entry))
                 return false;
+            
             Map.Entry e = (Map.Entry)o;
             Object k1 = getKey();
             Object k2 = e.getKey();
@@ -175,14 +185,38 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		
 		@Override
         public final int hashCode() {
+			if (_entry != null)
+				return _entry.hashCode();
             return (_key == null   ? 0 : _key.hashCode()) ^
                    (_value == null ? 0 : _value.hashCode());
         }
 		
 		@Override
 		public final String toString() {
+			if (_entry != null)
+				return _entry.toString();
             return getKey() + "=" + getValue();
-        }		
+        }
+
+		private void writeObject(java.io.ObjectOutputStream s)
+				throws IOException {
+			s.defaultWriteObject();
+			if (_entry != null) {
+				s.writeObject(_entry.getKey());
+				s.writeObject(_entry.getValue());
+			} else {
+				s.writeObject(_key);
+				s.writeObject(_value);
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		private void readObject(java.io.ObjectInputStream s)
+				throws IOException, ClassNotFoundException {
+			s.defaultReadObject();
+			_key = (K)s.readObject();
+			_value = (V)s.readObject();
+		}
 	}
 
 	//-- Map --//
