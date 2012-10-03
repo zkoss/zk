@@ -48,10 +48,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<servlet-name>DHtmlLayoutServlet</servlet-name>
 		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping><!-- richlet -->
+	<!--<servlet-mapping> Bug ZK-1380: disabled richlet mapping since Tomcat 7.0.29 will load this setting by default
 		<servlet-name>DHtmlLayoutServlet</servlet-name>
 		<url-pattern>/zk/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<mime-mapping>
 		<extension>zhtml</extension>
