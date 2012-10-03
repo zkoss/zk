@@ -377,9 +377,9 @@ zFlex = { //static methods
 		var wgt = this, p;
 		if (cleanup)
 			wgt.clearCachedSize_();
-
+		
 		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
-		if (wgt.isRealVisible()) {
+		if (!zk.mounting && wgt.isRealVisible()) {
 			if (wgt._hflex && wgt._hflex != 'min') {
 				wgt.resetSize_('w');
 				// Bug ZK-597
@@ -438,11 +438,8 @@ zFlex = { //static methods
 			
 		for (; c; c = c.nextSibling)
 			if (c.nodeType != 3) break; //until not a text node
-		
-		
-		var zkpOffset = zkp.cmOffset();
 
-		for (; c; c = c.nextSibling) {
+		for (var zkpOffset; c; c = c.nextSibling) {
 			//In ZK, we assume all text node is space (otherwise, it will be span enclosed)
 			if (c.nodeType === 3) { //a text node
 				pretxt = true;
@@ -463,6 +460,8 @@ zFlex = { //static methods
 						wdh -= zFlex.fixMinFlex(cwgt, c, 'w');
 					} else {
 						if (pretxt) {
+							if (!zkpOffset)
+								zkpOffset = zkp.cmOffset();
 							wdh -= _getTextWidth(zkc, zkp, zkpOffset);
 						}
 						hflexs.push(cwgt);
@@ -481,6 +480,8 @@ zFlex = { //static methods
 						hgh -= zFlex.fixMinFlex(cwgt, c, 'h');
 					} else {
 						if (pretxt) {
+							if (!zkpOffset)
+								zkpOffset = zkp.cmOffset();
 							hgh -= _getTextHeight(zkc, zkp, zkpOffset);
 						}
 						vflexs.push(cwgt);

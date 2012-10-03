@@ -131,7 +131,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	isVertical_: zk.$void,
 	_resetBoxSize: function () {
 		var vert = this.isVertical_();
-		if (!zk.mounting) { // ignore for the first time
+		if (!zk.mounting) { // ignore for the loading time
 			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 				if (vert ? (kid._nvflex && kid.getVflex() != 'min')
 						 : (kid._nhflex && kid.getHflex() != 'min')) {

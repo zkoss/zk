@@ -382,33 +382,37 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var	vert = this.isVertical(),
 			k = -1,
 			szes = this._sizes;
-		if (vert) {
-			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
-					++k;
-				if (kid._nvflex && kid.getVflex() != 'min') {
-					kid.setFlexSize_({height:'', width:''});
-					var chdex = kid.$n('chdex');
-					if (chdex) {
-						chdex.style.height = szes && k < szes.length ? szes[k] : '';
-						chdex.style.width = '';
+		
+		if (!zk.mounting) {// ignore for the loading time
+			if (vert) {
+				for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+						++k;
+					if (kid._nvflex && kid.getVflex() != 'min') {
+						kid.setFlexSize_({height:'', width:''});
+						var chdex = kid.$n('chdex');
+						if (chdex) {
+							chdex.style.height = szes && k < szes.length ? szes[k] : '';
+							chdex.style.width = '';
+						}
 					}
 				}
-			}
-		} else {
-			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
-					++k;
-				if (kid._nhflex && kid.getHflex() != 'min') {
-					kid.setFlexSize_({height:'', width:''});
-					var chdex = kid.$n('chdex');
-					if (chdex) {
-						chdex.style.width = szes && k < szes.length ? szes[k] : '';
-						chdex.style.height = '';
+			} else {
+				for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+						++k;
+					if (kid._nhflex && kid.getHflex() != 'min') {
+						kid.setFlexSize_({height:'', width:''});
+						var chdex = kid.$n('chdex');
+						if (chdex) {
+							chdex.style.width = szes && k < szes.length ? szes[k] : '';
+							chdex.style.height = '';
+						}
 					}
 				}
 			}
 		}
+		
 		//bug 3010663: boxes do not resize when browser window is resized
 		var p = this.$n(),
 			zkp = zk(p),
