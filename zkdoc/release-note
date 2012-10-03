@@ -18,6 +18,7 @@ ZK 6.5.1
   ZK-1368: the right edge of the textboxes split over to a new line when you specify a percentage width and set the mold to rounded
   ZK-1383: The value of Map.Entry returned from ListModelMap.getElementAt() don't support Serializable
   ZK-1336: Liferay 6.1 + JBoss 7.1 + ZK 6 : Cannot encode relative URLs
+  ZK-1259: zul with hashmap not load key from a fx
 
 * Upgrade Notes
 
