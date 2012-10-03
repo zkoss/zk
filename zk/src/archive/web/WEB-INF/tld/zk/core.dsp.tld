@@ -71,6 +71,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
+		<name>encodeWithZK</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String encodeWithZK(java.lang.String)
+		</function-signature>
+		<description>
+	Returns the string encoded with ZK
+		</description>
+	</function>
+
+	<function>
 		<name>outDeviceStyleSheets</name>
 		<function-class>org.zkoss.zk.fn.DspFns</function-class>
 		<function-signature>
