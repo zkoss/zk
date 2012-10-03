@@ -74,4 +74,13 @@ public class ZkFns {
 	public static String getEdition() {
 		return WebApps.getEdition();
 	}
+
+	/** Returns the string encoded with ZK.
+	 * @since 6.0.3
+	 */
+	public static String encodeWithZK(String name) {
+		if (name.startsWith("zk"))
+			return "zk" + (WebApps.getEdition().toLowerCase()) + name.substring(2);
+		return "zk" + (WebApps.getEdition().toLowerCase()) + name;
+	}
 }
