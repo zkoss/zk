@@ -12,7 +12,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +71,25 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			//sets the last loaded bean express of the form
 			comp.setAttribute(BinderImpl.LOAD_FORM_EXPRESSION, getPropertyString());
 			
-			for (String field : fex.getLoadFieldNames()) {
+			
+			//ZK-1259, for the case of nested form expression in same loading, e.g. @load(fx.hash[fx.key]),
+			//it will produce 2 loadField name, 'hash[fx.key]' & 'key', 
+			//and fx + 'hash[fx.key]' will get null if fx + 'key' is not loaded yet and throw exception
+			//i sort the field name to let inner value be loaded into form first.
+			final String fomrid = getFormId();
+			List<String> fields = new LinkedList<String>(fex.getLoadFieldNames());
+			Collections.sort(fields, new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					o1 = BindELContext.appendFields(fomrid, o1);
+					o2 = BindELContext.appendFields(fomrid, o2);
+					if(o1.indexOf(o2)>0) return 1;
+					if(o2.indexOf(o1)>0) return -1;
+					return 0;
+				}
+			});
+			
+			for (String field : fields) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final Object value = eval.getValue(ctx, comp, expr);
