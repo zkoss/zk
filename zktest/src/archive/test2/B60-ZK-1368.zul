@@ -1,0 +1,81 @@
+<zk>
+	<label multiline="true">
+	1. All textbox should not break.
+	2. Try resize browser size, all textbox should not break.
+	</label>
+	<div width="300px">
+		<textbox value="60% in div" width="60%" mold="rounded" />
+		<textbox value="100% in div" width="100%" mold="rounded" />
+	</div>
+	
+	<separator bar="true" spacing="30px" />
+	
+	<listbox width="300px">
+		<listitem>
+			<listcell>
+				<textbox value="30% in listbox" width="30%" mold="rounded" />
+				<textbox value="100% in listbox" width="100%" mold="rounded" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<textbox value="60% in listbox" width="60%" mold="rounded" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<textbox value="100% in listbox" width="100%" mold="rounded" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<textbox value="60% in listbox" width="60%" mold="rounded" />
+			</listcell>
+			<listcell>
+				<textbox value="100% in listbox" width="100%" mold="rounded" />
+			</listcell>
+		</listitem>	
+	</listbox>
+	
+	<separator bar="true" spacing="30px" />
+	
+	<listbox>
+		<listitem>
+			<listcell>
+				<textbox value="30% in listbox" width="30%" mold="rounded" />
+				<textbox value="100% in listbox" width="100%" mold="rounded" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<textbox value="60% in listbox" width="60%" mold="rounded" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<textbox value="100% in listbox" width="100%" mold="rounded" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<textbox value="60% in listbox" width="60%" mold="rounded" />
+			</listcell>
+			<listcell>
+				<textbox value="100% in listbox" width="100%" mold="rounded" />
+			</listcell>
+		</listitem>	
+	</listbox>
+	
+	<separator bar="true" spacing="30px" />
+	
+	<grid width="300px">
+		<rows>
+			<row>
+				<textbox value="60% in grid" width="60%" mold="rounded" />
+			</row>
+			<row>
+				<textbox value="100% in grid" width="100%" mold="rounded" />
+			</row>
+		</rows>
+	</grid>
+</zk>

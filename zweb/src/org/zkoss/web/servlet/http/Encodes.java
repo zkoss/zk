@@ -34,6 +34,8 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.web.portlet.RenderHttpServletRequest;
+import org.zkoss.web.portlet.RenderHttpServletResponse;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.util.resource.ExtendletContext;
@@ -507,6 +509,14 @@ public class Encodes {
 			uri = encodeURI(uri);
 		} else {
 			uri = encodeURI(uri.substring(0, j)) + uri.substring(j);
+		}
+		// B60-ZK-1336: Liferay required uri to begin with '/' or '://'
+		if (response instanceof RenderHttpServletResponse) {
+			if (!uri.startsWith("/") && !uri.startsWith("://")) {
+				if (request instanceof RenderHttpServletRequest) {
+					uri = ((RenderHttpServletRequest)request).getContextPath() + "/" + uri;
+				}
+			}
 		}
 		//encode
 		if (response instanceof HttpServletResponse)
