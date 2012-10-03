@@ -26,6 +26,7 @@ ZK 6.0.3
   ZK-1372: zk.stackUp not work with Firefox
   ZK-1368: the right edge of the textboxes split over to a new line when you specify a percentage width and set the mold to rounded
   ZK-1383: The value of Map.Entry returned from ListModelMap.getElementAt() don't support Serializable
+  ZK-1259: zul with hashmap not load key from a fx
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
