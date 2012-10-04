@@ -831,7 +831,7 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 			};
 			return dst;
 		}
-		
+		var fe = !(zk.feature && zk.feature.ee);
 		switch (typeof backup) {
 		case "function":
 			var old = dst;
@@ -839,11 +839,23 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 			return old;
 		case "string":
 			// B50-ZK-493: shall update subclasses
-			_overrideSub(dst, backup, dst['$'+backup] = dst[backup], dst[backup] = src, true);
+			if (fe)
+				_overrideSub(dst, backup, dst['$'+backup] = dst[backup], dst[backup] = src, true);
+			else {
+				dst['$'+backup] = dst[backup];
+				dst[backup] = src;
+			}
 			return dst;
 		}
-		for (var nm in src)
-			_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
+		if (fe) {
+			for (var nm in src)
+				_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
+		} else {
+			for (var nm in src) {
+				backup[nm] = dst[nm];
+				dst[nm] = src[nm];
+			}
+		}
 		return dst;
 	},
 
