@@ -25,6 +25,8 @@ window.$eval=function(s){return eval(s);};
 		-->
 	<script src="ext/jquery.js"/>
 	<script src="zk.js" jsdoc="true"/>
+	<function class="org.zkoss.zul.impl.Utils"
+        signature="java.lang.String outFeature()"/>
 	<script src="js.js"/>
 	<script src="dom.js" jsdoc="true"/>
 	<script src="domie.js" browser="ie"/>

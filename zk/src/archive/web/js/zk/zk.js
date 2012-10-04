@@ -677,7 +677,8 @@ foo.Widget = zk.$extends(zk.Widget, {
 		if (!superclass)
 			throw 'unknown superclass';
 
-		var superpt = superclass.prototype,
+		var fe = !(zk.feature && zk.feature.ee),
+			superpt = superclass.prototype,
 			jclass = newClass(function () {
 				if (superclass.$copyf && !superclass.$copied) {
 					superclass.$copyf();
@@ -686,14 +687,18 @@ foo.Widget = zk.$extends(zk.Widget, {
 				var define = members['$define'],
 					superpt = superclass.prototype,
 					thispt = jclass.prototype;
-
-				delete members['$define'];
-				for (var p in superpt) {//inherit non-static
-					var $p = '|'+p+'|';
-					if ('|_$super|_$subs|$class|_$extds|superclass|className|widgetName|blankPreserved|'.indexOf($p) < 0) {
-						thispt[p] = superpt[p];	
-					} else if (thispt[p] == undefined && '|className|widgetName|blankPreserved|'.indexOf($p) >= 0) {
-						thispt[p] = superpt[p]; // have to inherit from its parent.
+				
+				if (define)	delete members['$define'];
+				
+				var zf = zk.feature;
+				if (!(zf && zf.ee)) {
+					for (var p in superpt) {//inherit non-static
+						var $p = '|'+p+'|';
+						if ('|_$super|_$subs|$class|_$extds|superclass|className|widgetName|blankPreserved|'.indexOf($p) < 0) {
+							thispt[p] = superpt[p];	
+						} else if (thispt[p] == undefined && '|className|widgetName|blankPreserved|'.indexOf($p) >= 0) {
+							thispt[p] = superpt[p]; // have to inherit from its parent.
+						}
 					}
 				}
 				
@@ -702,10 +707,14 @@ foo.Widget = zk.$extends(zk.Widget, {
 			}),
 			thispt = jclass.prototype;
 		
-		var zf;
-		if (!(zf = zk.feature) || !zf.ee) {
+		if (fe) {
 			jclass.$copyf();
 			jclass.$copied = true;
+		} else {
+			function _init() { this.constructor = jclass; };
+		    _init.prototype = superclass.prototype;
+		    jclass.prototype = new _init();
+			thispt = jclass.prototype;
 		}
 		
 		for (var p in superclass) //inherit static

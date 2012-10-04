@@ -36,7 +36,8 @@ function zkver(ver, build, ctxURI, updURI, modVers, opts) {
 	for (var nm in modVers)
 		zk.setVersion(nm, modVers[nm]);
 
-	zk.feature = {standard: true};
+	if (!zk.feature)
+		zk.feature = {standard: true};
 	zkopt(opts);
 }
 

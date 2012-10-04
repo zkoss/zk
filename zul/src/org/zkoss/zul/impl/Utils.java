@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
@@ -182,6 +183,21 @@ public class Utils {
 		return desktop.getDynamicMediaURI(comp, sb.toString()); //already encoded
 	}
 
+	/**
+	 * Generates the ZK feature information
+	 * @since 6.5.1
+	 */
+	public static final String outFeature() {
+		final StringBuffer sb = new StringBuffer(32);
+		sb.append("if(!zk.feature)zk.feature = {standard:true");
+		if (WebApps.getFeature("ee"))
+			sb.append(",ee:true");
+		else if (WebApps.getFeature("pe"))
+			sb.append(",pe:true");
+		sb.append("};");
+		return sb.toString();
+	}
+	
 	/** Generates the locale-dependent JavaScript codes, such as messages
 	 * (msgzul).
 	 * <p>It is called by zul/lang/zk.wpd.

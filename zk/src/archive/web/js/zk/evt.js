@@ -255,8 +255,15 @@ zWatch = (function () {
 			var f = _fn(infs[j++], o, name);
 			if (fns)
 				fns.push([f, o]); //store it fns first
-			else
+			else {
+//				var t;
+//				if (name == 'onSize') {
+//					t = jq.now();
+//				}
 				f.apply(o, args);
+//				if (t)
+//					zk.log(o.className, jq.now() - t);
+			}
 		}
 	}
 	//Returns if c is visible
@@ -352,6 +359,7 @@ zWatch = (function () {
 	}
 	function _fire(name, org, opts, vararg) {
 		var wts = _watches[name];
+		var t = jq.now();
 		if (wts && wts.length) {
 			var down = opts && opts.down && org.bindLevel != null;
 			if (down) _sync();
@@ -370,14 +378,19 @@ zWatch = (function () {
 					gun.fire();
 					_reversefns(fns, args);
 					zk._zsyncFns(name, org);
+					zk.log('in timeout', name, jq.now() - t);
 				}, opts.timeout);
 			else {
+				zk.log(1, name, jq.now() - t);
 				gun.fire();
 				_reversefns(fns, args);
 				zk._zsyncFns(name, org);
+				zk.log(2, name, jq.now() - t);
 			}
-		} else
+		} else {
 			zk._zsyncFns(name, org);
+			zk.log(3, name, jq.now() - t);
+		}
 	}
 
 /** @class zWatch
