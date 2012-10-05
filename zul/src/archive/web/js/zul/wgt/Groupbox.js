@@ -223,7 +223,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 		zWatch.listen({onSize: this});
 		var tt;
-		if (tt = this.$n('title'))
+		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
 	},
 	unbind_: function () {

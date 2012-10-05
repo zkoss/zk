@@ -462,18 +462,18 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixHgh: function () {
-		var tabs = this.$n(),
-			tabbox = this.getTabbox(),
-			tbx = tabbox.$n(),
-			head = this.$n("header"),
-			u = this.$n("up"),
-			d = this.$n("down"),
-			cave =  this.$n("cave"),
-			btnsize = u && d ? isNaN(u.offsetHeight + d.offsetHeight) ? 0 : u.offsetHeight + d.offsetHeight : 0;
+		var tabbox = this.getTabbox(),
+			head = this.$n("header");
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
-			var child = jq(tbx).children('div'),
+			var tabs = this.$n(),
+				tbx = tabbox.$n(),
+				u = this.$n("up"),
+				d = this.$n("down"),
+				cave =  this.$n("cave"),
+				btnsize = u && d ? isNaN(u.offsetHeight + d.offsetHeight) ? 0 : u.offsetHeight + d.offsetHeight : 0,
+				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
 				var tabsHgh = allTab.length * 35, // default height

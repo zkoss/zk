@@ -242,7 +242,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
-		var closebtn = this.$n('close'),
+		var closebtn = this.isClosable() ? this.$n('close') : null,
 			tab = this;
 		if (closebtn) {
 			this.domListen_(closebtn, "onClick", '_doCloseClick');
@@ -251,10 +251,11 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 					.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
 
-		after.push(function () {tab.parent._fixHgh();});
+		after.push(function () {
+			tab.parent._fixHgh();
 			//Bug 3022274: required so it is is called before, say, panel's slideDown
 			//_sel will invoke _fixWidth but it is too late since it uses afterMount
-		after.push(function () {
+			
 			zk.afterMount(function () {
 				if (tab.isSelected()) {
 					if (tab.getTabbox().inAccordionMold()) {
