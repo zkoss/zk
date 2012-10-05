@@ -2400,7 +2400,16 @@ function () {
 	 * @return String the HTML fragment
 	 */
 	redrawHTML_: function (skipper, trim) {
-		var out = [];
+		var out = zk.chrome ? new (function() {
+				var result = "";
+				this.push = function () {
+					for (var i = 0, j = arguments.length; i<j;i++)
+						result += arguments[i];
+				};
+				this.join = function () {
+					return result;
+				};
+			}) : [];
 		this.redraw(out, skipper);
 		out = out.join('');
 		return trim ? out.trim(): out;
@@ -2793,8 +2802,15 @@ bind_: function (desktop, skipper, after) {
 					self.fire('onBind');
 			});
 		}
-		this.bindSwipe_();
-		this.bindDoubleTap_();
+		var self = this;
+		if (zk.mobile) {
+			after.push(function (){
+				setTimeout(function () {// lazy init
+					self.bindSwipe_();
+					self.bindDoubleTap_();			
+				}, 300);
+			});
+		}
 	},
 	/** Binds the children of this widget.
 	 * It is called by {@link #bind_} to invoke child's {@link #bind_} one-by-one.
@@ -3594,14 +3610,16 @@ wgt.unlisten({
 	isListen: function (evt, opts) {
 		var v = this._asaps[evt];
 		if (v) return true;
-		if (opts && opts.asapOnly) {
-			v = this.$class._importantEvts;
-			return v && v[evt];
-		}
-		if (opts && opts.any) {
-			if (v != null) return true;
-			v = this.$class._importantEvts;
-			if (v && v[evt] != null) return true;
+		if (opts) {
+			if (opts.asapOnly) {
+				v = this.$class._importantEvts;
+				return v && v[evt];
+			}
+			if (opts.any) {
+				if (v != null) return true;
+				v = this.$class._importantEvts;
+				if (v && v[evt] != null) return true;
+			}
 		}
 
 		var lsns = this._lsns[evt];

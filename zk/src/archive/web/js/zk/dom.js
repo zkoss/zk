@@ -595,8 +595,8 @@ zjq.prototype = {
 	 * @since 5.0.8
 	 */
 	hasVScroll: function () {
-		var n, v;
-		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 11 ? v: 0;
+		var n;
+		return (n = this.jq[0]) && (n.scrollWidth > n.clientWidth);
 	},
 	/** Tests if the first matched DOM element has the horizontal scrollbar
 	 * @return int the difference of offsetHeight and clientHeight if the element has the horizontal scrollbar,
@@ -604,8 +604,8 @@ zjq.prototype = {
 	 * @since 5.0.8
 	 */
 	hasHScroll: function () {
-		var n, v;
-		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v: 0;
+		var n;
+		return (n = this.jq[0]) && (n.scrollHeight > n.clientHeight);
 	},
 
 	/** Tests if the first matched element is overlapped with the specified
@@ -1761,7 +1761,7 @@ zk.copy(jq, {
 			_sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
 			document.body.appendChild(_sbwDiv);
 		}
-		return _sbwDiv.offsetWidth - _sbwDiv.clientWidth;
+		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
 	},
 	/** Returns if the specified rectangles are overlapped with each other.
 	 * @param Offset ofs1 the offset of the first rectangle
