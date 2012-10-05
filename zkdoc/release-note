@@ -19,6 +19,9 @@ ZK 6.5.1
   ZK-1383: The value of Map.Entry returned from ListModelMap.getElementAt() don't support Serializable
   ZK-1259: zul with hashmap not load key from a fx
   ZK-1380: Forward uri can't be "zk/*" on Tomcat 7
+  ZK-1381: Show busy on panel with borderlayout is not working
+  ZK-1337: RenderHttpServletRequest/RenderHttpServletResponse's getInstance() cause ServletException when passed to RequestDispather on Liferay 6.1 + JBoss 7.1
+  ZK-1377: Focus lost when tapping & change title value insides a window
 
 * Upgrade Notes
 
@@ -120,6 +123,9 @@ ZK 6.0.3
   ZK-1383: The value of Map.Entry returned from ListModelMap.getElementAt() don't support Serializable
   ZK-1380: Forward uri can't be "zk/*" on Tomcat 7
   ZK-1259: zul with hashmap not load key from a fx
+  ZK-1381: Show busy on panel with borderlayout is not working
+  ZK-1337: RenderHttpServletRequest/RenderHttpServletResponse's getInstance() cause ServletException when passed to RequestDispather on Liferay 6.1 + JBoss 7.1
+  ZK-1377: Focus lost when tapping & change title value insides a window
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.

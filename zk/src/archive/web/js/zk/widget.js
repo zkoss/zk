@@ -256,6 +256,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _bkRange(wgt) {
+		if (zk.ie && zk.cfrg) { //Bug ZK-1377
+			var cfrg = zk.cfrg;
+			delete zk.cfrg;
+			return cfrg;
+		}
 		return wgt.getInputNode && (wgt = wgt.getInputNode())
 			&& zk(wgt).getSelectionRange();
 	}
@@ -5043,8 +5048,18 @@ Object skip(zk.Widget wgt);
 	skip: function (wgt, skipId) {
 		var skip = jq(skipId || wgt.getCaveNode(), zk)[0];
 		if (skip && skip.firstChild) {
+			var cf = zk.currentFocus,
+				iscf = cf && cf.getInputNode();
+			
+			if (iscf && zk.ie) //Bug ZK-1377 IE will lost input selection range after remove node
+				zk.cfrg = zk(cf.getInputNode()).getSelectionRange();
+			
 			skip.parentNode.removeChild(skip);
 				//don't use jq to remove, since it unlisten events
+			
+			if (iscf && zk.chrome) //Bug ZK-1377 chrome will lost focus target after remove node
+				zk.currentFocus = cf;
+			
 			return skip;
 		}
 	},
