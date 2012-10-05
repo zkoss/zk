@@ -1,0 +1,15 @@
+<zk>
+	<label multiline="true">
+	Focus lost when tapping and change title value insides a window . (only firefox does well, chrom and IE all has issue.)
+	1. in Chrome, edit textbox1 and tab, it should focus on textbox2 and select all of textbox2 and the window title should change to the value you editied.
+	2. in IE9, edit textbox1 and tab, it should focus on textbox2 and select all of textbox2 and the window title should change to the value you editied.
+	</label>
+	<window id="win" title="no title" border="normal">
+		<vlayout>
+			<label id="lb" value="no value"/>
+			<textbox id="tb1" onChange='win.title = self.value' value="Title 1" />
+			<textbox id="tb2" onChange='lb.value = self.value' value="Label 1" />
+			<textbox id="tb3" onChange='win.title = self.value' value="Title 3" />
+		</vlayout>
+	</window>
+</zk>

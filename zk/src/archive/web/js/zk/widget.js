@@ -4879,8 +4879,11 @@ Object skip(zk.Widget wgt);
 	skip: function (wgt, skipId) {
 		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
 		if (skip && skip.firstChild) {
+			var cf = zk.currentFocus;
 			skip.parentNode.removeChild(skip);
 				//don't use jq to remove, since it unlisten events
+			if (cf && cf.getInputNode() && zk.chrome)
+				zk.currentFocus = cf;  //Bug ZK-1377 chrome will lost focus target after remove node
 			return skip;
 		}
 	},
