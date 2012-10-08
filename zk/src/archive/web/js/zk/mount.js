@@ -240,14 +240,7 @@ function zkamn(pkg, fn) {
 		zk.mounting = false;
 		doAfterMount(mtBL1);
 		_paci && ++_paci.s;
-		if (zk.mobile) {
-			setTimeout(function () {
-			// close it when no ClientInfo event registered,
-			// otherwise the onResponse event will take care that.
-			if (!zAu._cInfoReg)
-				zk.endProcessing();
-			}, 500);
-		} else {
+		if (!zk.clientinfo) {// if existed, the endProcessing() will be invoked after onResponse()
 			zk.endProcessing();
 		}
 
