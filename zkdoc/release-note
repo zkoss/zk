@@ -22,6 +22,7 @@ ZK 6.5.1
   ZK-1381: Show busy on panel with borderlayout is not working
   ZK-1337: RenderHttpServletRequest/RenderHttpServletResponse's getInstance() cause ServletException when passed to RequestDispather on Liferay 6.1 + JBoss 7.1
   ZK-1377: Focus lost when tapping & change title value insides a window
+  ZK-1386: Server failed to load scrollview.css.dsp while using zk6.5 ee and setting theme to sapphire
 
 * Upgrade Notes
 
