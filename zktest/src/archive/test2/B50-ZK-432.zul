@@ -11,7 +11,7 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
-	<div>IE 8 only.</div>
+	<div>IE 8/9 only.</div>
 	<div>There should be no vertical scroll bar in the Listbox.</div>
 	<tabbox>
 		<tabs>
