@@ -2409,7 +2409,8 @@ function () {
 				var result = "";
 				this.push = function () {
 					for (var i = 0, j = arguments.length; i<j;i++)
-						result += arguments[i];
+						if (arguments[i]) //skip null or undefined arguments
+							result += arguments[i];
 				};
 				this.join = function () {
 					return result;
