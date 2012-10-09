@@ -596,7 +596,7 @@ zjq.prototype = {
 	 */
 	hasVScroll: function () {
 		var n;
-		return (n = this.jq[0]) && (n.scrollWidth > n.clientWidth);
+		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 11 ? v: 0;
 	},
 	/** Tests if the first matched DOM element has the horizontal scrollbar
 	 * @return int the difference of offsetHeight and clientHeight if the element has the horizontal scrollbar,
@@ -605,7 +605,7 @@ zjq.prototype = {
 	 */
 	hasHScroll: function () {
 		var n;
-		return (n = this.jq[0]) && (n.scrollHeight > n.clientHeight);
+		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v: 0;
 	},
 
 	/** Tests if the first matched element is overlapped with the specified
