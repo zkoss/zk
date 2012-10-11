@@ -3,6 +3,7 @@ ZK 5.0.12
 * Features
   ZK-1002: Remove script carrying ZK initialization code after mounted
   ZK-1301: The buttons in the Messagebox shall use autodisable
+  ZK-1397: DefaultTreeNode support empty children mean leaf node
 * Bugs
   ZK-998: Uploading mp3 fails in 5.0.11
   ZK-1011: drag and drop in mobile safari throwing exceptions
