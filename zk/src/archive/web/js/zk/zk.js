@@ -108,9 +108,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_showprgb();
 	}
 	function _showprgb(mask, icon) {
+		var $jq;
 		if (zk.processing
-		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
+		&& !($jq = jq("#zk_proc")).length && !jq("#zk_showBusy").length) {
 			zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
+		} else if (icon == 'z-initing') {
+			var $jq = $jq || jq("#zk_proc");
+			if ($jq.length && $jq.hasClass('z-loading') && ($jq = $jq.parent()).hasClass('z-temp')) {
+				$jq.append('<div class="z-initing"></div>');
+			}
+		}
 	}
 	function wgt2s(w) {
 		var s = w.widgetName;
