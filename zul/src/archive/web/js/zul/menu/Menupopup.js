@@ -126,6 +126,26 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_hideShadow: function () {
 		if (this._shadow) this._shadow.hide();
 	},
+	_syncPos: function () {
+		var menu = _getMenu(this);
+		if (menu) {
+			var $menu = jq(menu.$n()),
+				$this = jq(this.$n()),
+				ofs1 = $menu.offset().left,
+				ofs2 = $this.offset().left,
+				width1 = $menu.outerWidth(),
+				width2 = $this.outerWidth(),
+				mp = menu.parent;
+			
+			while(mp && !mp.$instanceof(zul.menu.Menupopup))
+				mp = mp.parent;
+			
+			if (ofs2 < ofs1 + width1 / 2 || (mp && mp._shallSync)) {
+				this._shallSync = true;
+				$this.css('left', jq.px(ofs1 - width2));
+			}
+		}
+	},
 	close: function () {
 		if (this.isOpen())
 			zul.menu._nOpen--;
@@ -141,6 +161,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
 		this.$class._rmActive(this);
+		
+		this._shallSync = null;
 	},
 	open: function (ref, offset, position, opts) {
 		if (!this.isOpen())
@@ -158,6 +180,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
+		this._syncPos(); //ZK-1248: re-sync position if sub-menu is overlapped on parent menu
 
 		var mb;
 		// adjust only for topmost menu in horizontal.
