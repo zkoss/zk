@@ -137,10 +137,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				width2 = $this.outerWidth(),
 				mp = menu.parent;
 			
-			while(!mp.$instanceof(zul.menu.Menupopup))
+			while(mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
 			
-			if (ofs2 < ofs1 + width1 / 2 || mp._shallSync) {
+			if (ofs2 < ofs1 + width1 / 2 || (mp && mp._shallSync)) {
 				this._shallSync = true;
 				$this.css('left', jq.px(ofs1 - width2));
 			}
