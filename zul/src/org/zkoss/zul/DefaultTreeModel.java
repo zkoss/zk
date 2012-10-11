@@ -51,23 +51,36 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 
 	private Comparator<TreeNode<E>> _sorting;
 	private boolean _sortDir;
-
-
+	/** Whether to treat the zero size of children node as a leaf node. */
+	private boolean _emptyleaf;
+	
 	/** Creates a tree with the specified note as the root.
 	 * @param root the root (cannot be null).
 	 */
 	public DefaultTreeModel(TreeNode<E> root) {
-		super(root);
+		this(root, false);
+	}
 
+	/** Creates a tree with the specified note as the root.
+	 * @param root the root (cannot be null).
+	 * @param emptyChildAsLeaf whether to treat the zero size of children node as a leaf node.
+	 * @since 6.0.3
+	 */
+	public DefaultTreeModel(TreeNode<E> root, boolean emptyChildAsLeaf) {
+		super(root);
 		TreeNode<E> parent = root.getParent();
 		if (parent != null)
 			parent.remove(root);
 		root.setModel(this);
+		_emptyleaf = emptyChildAsLeaf;
 	}
 
 	@Override
 	public boolean isLeaf(TreeNode<E> node) {
-		return node.isLeaf();
+		boolean isLeaf = node.isLeaf();
+		if (!isLeaf && _emptyleaf)
+			return node.getChildCount() == 0;
+		return isLeaf;
 	}
 	@Override
 	public TreeNode<E> getChild(TreeNode<E> parent, int index) {
