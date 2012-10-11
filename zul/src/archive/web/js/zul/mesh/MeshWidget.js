@@ -37,7 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn) {
-			if (zk.ie8_)
+			if (zk.ie8_ || zk.ie9)
 				wgt._wsbak = ws; // B50-ZK-432
 			if (zk.ie < 8)
 				jq(wgtn).addClass('z-word-nowrap'); // B50-ZK-333
@@ -191,7 +191,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgtn) {
 			if (zk.ie < 8)
 				jq(wgtn).removeClass('z-word-nowrap'); // B50-ZK-333
-			else if (!zk.ie8_) // B50-ZK-432: restore later for IE 8
+			else if (!(zk.ie8_ || zk.ie9)) // B50-ZK-432: restore later for IE 8
 				wgtn.style.whiteSpace = ws;
 		}
 		return {width: width, wds: wds};
@@ -908,7 +908,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (_fixPageSize(this, rows))
 				return; //need to reload with new page size
 		
-		if (zk.ie8_ && (this._wsbak !== undefined)) { // B50-ZK-432
+		if ((zk.ie8_ || zk.ie9) && (this._wsbak !== undefined)) { // B50-ZK-432
 			this.$n().style.whiteSpace = this._wsbak;
 			delete this._wsbak;
 		}

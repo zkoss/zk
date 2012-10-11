@@ -2409,7 +2409,8 @@ function () {
 				var result = "";
 				this.push = function () {
 					for (var i = 0, j = arguments.length; i<j;i++)
-						result += arguments[i];
+						if (arguments[i]) //skip null or undefined arguments
+							result += arguments[i];
 				};
 				this.join = function () {
 					return result;
@@ -5049,7 +5050,7 @@ Object skip(zk.Widget wgt);
 		var skip = jq(skipId || wgt.getCaveNode(), zk)[0];
 		if (skip && skip.firstChild) {
 			var cf = zk.currentFocus,
-				iscf = cf && cf.getInputNode();
+				iscf = cf && cf.getInputNode;
 			
 			if (iscf && zk.ie) //Bug ZK-1377 IE will lost input selection range after remove node
 				zk.cfrg = zk(cf.getInputNode()).getSelectionRange();
