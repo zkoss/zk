@@ -126,6 +126,28 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_hideShadow: function () {
 		if (this._shadow) this._shadow.hide();
 	},
+	_syncPos: function () {
+		var menu = _getMenu(this);
+		if (menu) {
+			var n = this.$n(),
+				m = menu.$n(),
+				$n = jq(n),
+				$m = jq(m),
+				nol = $n.offset().left,
+				mol = $m.offset().left,
+				nwd = $n.outerWidth(),
+				mwd = $m.outerWidth(),
+				mp = menu.parent;
+			
+			while(mp && !mp.$instanceof(zul.menu.Menupopup))
+				mp = mp.parent;
+			
+			if ((zk(n).isOverlapped(m) && nol < mol + mwd / 2) || (mp && mp._shallSync)) {
+				this._shallSync = true;
+				n.style.left = jq.px0(mol - nwd);
+			}
+		}
+	},
 	close: function () {
 		if (this.isOpen())
 			zul.menu._nOpen--;
@@ -141,6 +163,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
 		this.$class._rmActive(this);
+		
+		this._shallSync = null;
 	},
 	open: function (ref, offset, position, opts) {
 		if (!this.isOpen())
@@ -167,6 +191,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				n.style.top = jq.px0(zk.parseInt(n.style.top) + 
 					zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
 		}
+		
+		this._syncPos(); //ZK-1248: re-sync position if sub-menu is overlapped on parent menu
 	},
 	shallStackup_: function () {
 		return false;
