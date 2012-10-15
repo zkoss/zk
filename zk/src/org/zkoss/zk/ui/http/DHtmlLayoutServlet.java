@@ -190,7 +190,6 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				final RequestInfo ri = new RequestInfoImpl(
 					wapp, sess, desktop, request,
 					PageDefinitions.getLocator(wapp, path));
-				sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
 				((SessionCtrl)sess).notifyClientRequest(true);
 
 				final UiFactory uf = wappc.getUiFactory();
