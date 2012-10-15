@@ -235,6 +235,23 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 					height: jq.px0($colled.revisedHeight(ambit.h))
 				});
 			}
+			//Bug ZK-1406: resize body after onSize if it is visible but is not open
+			var real = wgt.$n('real');
+			if (real && zk(real).isVisible()) {
+				var isSouch = wgt.$instanceof(zul.layout.South),
+					isEast = wgt.$instanceof(zul.layout.East);
+				if (isSouch || wgt.$instanceof(zul.layout.North)) {
+					ambit.h = real.offsetHeight;
+					if (isSouch)
+						real.style.top = jq.px(ambit.y - ambit.h);
+				}
+				if (isEast || wgt.$instanceof(zul.layout.West)) {
+					ambit.w = real.offsetWidth;
+					if (isEast)
+						real.style.left = jq.px(ambit.x - ambit.w);
+				}
+				this._resizeBody(wgt, ambit);
+			}
 		}
 	},
 	_resizeBody: function (wgt, ambit) {

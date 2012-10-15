@@ -26,6 +26,7 @@ ZK 6.5.1
   ZK-1377: Focus lost when tapping & change title value insides a window
   ZK-1386: Server failed to load scrollview.css.dsp while using zk6.5 ee and setting theme to sapphire
   ZK-1398: Set open attribute to the tree templeate is not work
+  ZK-1406: BorderLayout IPad2 rotating, North area size
 
 * Upgrade Notes
 
