@@ -3,6 +3,7 @@ ZK 5.0.12
 * Features
   ZK-1002: Remove script carrying ZK initialization code after mounted
   ZK-1301: The buttons in the Messagebox shall use autodisable
+  
 * Bugs
   ZK-998: Uploading mp3 fails in 5.0.11
   ZK-1011: drag and drop in mobile safari throwing exceptions
@@ -34,6 +35,7 @@ ZK 5.0.12
   ZK-1298: Can not set composer name with <custom-attributes>
   ZK-1322: Issue on timebox with null value
   ZK-1256: Combobox onSelect not working properly
+  ZK-1400: Focus issue when Listbox in select mold after invalidate
   
 	--------
 ZK 5.0.11

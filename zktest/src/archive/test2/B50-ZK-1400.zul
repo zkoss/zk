@@ -1,0 +1,31 @@
+<zk>
+	<window border="normal" title="hello">
+		<label multiline="true">
+		Only on Firefox, IE 6/7/8
+		1. press tab key several times to focus first listbox.
+		2. select other item by press down key.
+		3. press tab to focus second listbox.
+		4. press down key, should be able to choose items.
+		</label>
+		<separator />
+		<listbox mold="select" id="listbox1">
+			<attribute name="onSelect"><![CDATA[
+	  			listbox2.getItems().clear();
+	  			listbox2.appendChild(new Listitem("banana")); 
+	  			listbox2.appendChild(new Listitem("banana2")); 
+	  			listbox2.invalidate();
+  			]]></attribute>
+  			<listitem label="abc" selected="true" />
+  			<listitem label="sse" />
+			<listitem label="test" />
+			<listitem label="test2" />
+			<listitem label="test3" />
+			<listitem label="test4" />
+		</listbox>
+		<listbox id="listbox2" mold="select">
+			<listitem label="test1" selected="true" />
+			<listitem label="test2" />
+			<listitem label="test3" />
+		</listbox>
+	</window>
+</zk>
