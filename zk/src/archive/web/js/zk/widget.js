@@ -1530,6 +1530,14 @@ wgt.$f().main.setTitle("foo");
 			p.onChildReplaced_(this, newwgt);
 
 		this.parent = this.nextSibling = this.previousSibling = null;
+		
+		if (cf) { //Bug ZK-1400: restore focus
+			cf = zk.Widget.$(cf.uuid);
+			if (!cf)
+				_rsFocus(newwgt);
+			else if (zUtl.isAncestor(newwgt, cf))
+				_rsFocus(cf);
+		}
 	},
 	/** Replaced the child widgets with the specified widgets.
 	 * It is usefull if you want to replace a part of children whose
