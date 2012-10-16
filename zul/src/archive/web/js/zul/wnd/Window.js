@@ -118,8 +118,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$n = zk(n);
 		if (!pos && (!n.style.top || !n.style.left)) {
 			var xy = $n.revisedOffset();
-			n.style.left = jq.px(xy[0]);
-			n.style.top = jq.px(xy[1]);
+			//ZK-1391: use revisedOffset() only if style doesn't specify left/top value
+			if (!n.style.left) {
+				n.style.left = jq.px(xy[0]);
+			}
+			if (!n.style.top) {
+				n.style.top = jq.px(xy[1]);
+			}			
 		} else if (pos == "parent")
 			_posByParent(wgt);
 
