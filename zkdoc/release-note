@@ -35,6 +35,7 @@ ZK 6.0.3
   ZK-1398: Set open attribute to the tree templeate is not work
   ZK-1337: RenderHttpServletRequest/RenderHttpServletResponse's getInstance() cause ServletException when passed to RequestDispather on Liferay 6.1 + JBoss 7.1
   ZK-1377: Focus lost when tapping & change title value insides a window
+  ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
@@ -469,6 +470,7 @@ ZK 5.0.12
   ZK-1092: IE 8 - Scrollbar Bug in Tree
   ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
   ZK-1298: Can not set composer name with <custom-attributes>
+  ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
   
 	--------
 ZK 5.0.11
