@@ -1665,7 +1665,7 @@ public class Tree extends MeshElement {
 						ti.setOpen(model.isPathOpened(path));
 					}
 				} else if (isOpen && !isLeaf) {
-					ti.setOpen(isOpen); //Bug ZK-1398: set open status if model does not have open info
+					model.addOpenPath(_model.getPath(childNode)); //Bug ZK-1398: set open status if model does not have open info
 				}
 			}
 			if (!isLeaf && ti.getTreechildren() == null) {
