@@ -4885,7 +4885,7 @@ Object skip(zk.Widget wgt);
 		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
 		if (skip && skip.firstChild) {
 			var cf = zk.currentFocus,
-				iscf = cf && cf.getInputNode();
+				iscf = cf && cf.getInputNode;
 			
 			if (iscf && zk.ie) //Bug ZK-1377 IE will lost input selection range after remove node
 				zk.cfrg = zk(cf.getInputNode()).getSelectionRange();
