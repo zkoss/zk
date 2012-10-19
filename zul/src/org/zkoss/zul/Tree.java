@@ -1640,12 +1640,8 @@ public class Tree extends MeshElement {
 			Object childNode = _model.getChild(node, i);
 			renderer.render(ti, childNode, i);
 			Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
-			boolean isOpen = false;
-			if (v != null) {//a new item is created to replace the existent one
-				//Bug ZK-1398: store open status since model may not have open info when using template
-				isOpen = ((Treeitem) v).isOpen();
+			if (v != null) //a new item is created to replace the existent one
 				(ti = (Treeitem) v).setOpen(false);
-			}
 			// B60-ZK-767: handle selected/open state here, as it might be replaced
 			int[] path = null;
 			boolean isLeaf = childNode != null && _model.isLeaf(childNode);
@@ -1664,8 +1660,6 @@ public class Tree extends MeshElement {
 							path = _model.getPath(childNode);
 						ti.setOpen(model.isPathOpened(path));
 					}
-				} else if (isOpen && !isLeaf) {
-					model.addOpenPath(_model.getPath(childNode)); //Bug ZK-1398: set open status if model does not have open info
 				}
 			}
 			if (!isLeaf && ti.getTreechildren() == null) {
