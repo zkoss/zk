@@ -2539,9 +2539,10 @@ w:use="foo.MyWindow"&gt;
 	 * @param c a collection of objects. Ignored if null.
 	 * @since 3.6.4
 	 */
+	@SuppressWarnings("unchecked")
 	protected void willPassivate(Collection<?> c) {
 		if (c != null)
-			for (Iterator it = c.iterator(); it.hasNext();)
+			for (Iterator it = new ArrayList(c).iterator(); it.hasNext();)
 				willPassivate(it.next());
 	}
 	/** Utility to invoke {@link ComponentActivationListener#willPassivate}
@@ -2559,9 +2560,10 @@ w:use="foo.MyWindow"&gt;
 	 * @param c a collection of objects. Ignored if null.
 	 * @since 3.6.4
 	 */
+	@SuppressWarnings("unchecked")
 	protected void didActivate(Collection<?> c) {
 		if (c != null)
-			for (Iterator it = c.iterator(); it.hasNext();)
+			for (Iterator it = new ArrayList(c).iterator(); it.hasNext();)
 				didActivate(it.next());
 	}
 	/** Utility to invoke {@link ComponentActivationListener#didActivate}
