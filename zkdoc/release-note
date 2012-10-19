@@ -4,6 +4,7 @@ ZK 6.5.1
   ZK-1351: Messagebox with no button
   ZK-1397: DefaultTreeNode support empty children mean leaf node
   ZK-1248: Sub menu should not overlap its parent in menupopup
+  ZK-1416: Support default Command and GlobalCommand handling
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes
