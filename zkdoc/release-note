@@ -29,6 +29,7 @@ ZK 6.5.1
   ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
   ZK-1403: Combobutton has a missing image icon when displayed on tablets
   ZK-1400: Focus issue when Listbox in select mold after invalidate
+  ZK-1192: SelectorComposer ConcurrentModificationException in GAE
 
 * Upgrade Notes
 
@@ -138,6 +139,7 @@ ZK 6.0.3
   ZK-1377: Focus lost when tapping & change title value insides a window
   ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
   ZK-1400: Focus issue when Listbox in select mold after invalidate
+  ZK-1192: SelectorComposer ConcurrentModificationException in GAE
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
