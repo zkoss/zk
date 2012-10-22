@@ -32,6 +32,7 @@ ZK 6.5.1
   ZK-1400: Focus issue when Listbox in select mold after invalidate
   ZK-1192: SelectorComposer ConcurrentModificationException in GAE
   ZK-1420: Textbox can't be load on android 2.x
+  ZK-1404: Combining hbox/vbox/splitter may cause problems on tablets
 
 * Upgrade Notes
 
