@@ -25,6 +25,7 @@ ZK 6.5.1
   ZK-1337: RenderHttpServletRequest/RenderHttpServletResponse's getInstance() cause ServletException when passed to RequestDispather on Liferay 6.1 + JBoss 7.1
   ZK-1377: Focus lost when tapping & change title value insides a window
   ZK-1386: Server failed to load scrollview.css.dsp while using zk6.5 ee and setting theme to sapphire
+  ZK-1402: Borderlayout inside a window may not display properly on tablets
 
 * Upgrade Notes
 
