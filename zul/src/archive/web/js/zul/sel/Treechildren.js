@@ -73,7 +73,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	insertChildHTML_: function (child, before, desktop) {
 		var ben, isTopmost = this.isTopmost();
 		if (before)
-			before = before.getFirstNode_();
+			before = before.$n() ? before.getFirstNode_() : null; //Bug ZK-1424: fine tune performance when open with rod
 		if (!before && !isTopmost)
 			ben = this.getCaveNode() || this.parent.getCaveNode();
 

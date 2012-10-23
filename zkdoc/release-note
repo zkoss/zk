@@ -33,6 +33,7 @@ ZK 6.5.1
   ZK-1192: SelectorComposer ConcurrentModificationException in GAE
   ZK-1420: Textbox can't be load on android 2.x
   ZK-1404: Combining hbox/vbox/splitter may cause problems on tablets
+  ZK-1424: Treeitem with a lot of childrens takes too long to open
 
 * Upgrade Notes
 
@@ -143,6 +144,7 @@ ZK 6.0.3
   ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
   ZK-1400: Focus issue when Listbox in select mold after invalidate
   ZK-1192: SelectorComposer ConcurrentModificationException in GAE
+  ZK-1424: Treeitem with a lot of childrens takes too long to open
 
 * Upgrade Notes
   + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
