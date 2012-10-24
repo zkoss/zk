@@ -34,6 +34,7 @@ ZK 6.5.1
   ZK-1420: Textbox can't be load on android 2.x
   ZK-1404: Combining hbox/vbox/splitter may cause problems on tablets
   ZK-1424: Treeitem with a lot of childrens takes too long to open
+  ZK-1418: Selectbox: Changing selection after changing a new model
 
 * Upgrade Notes
 

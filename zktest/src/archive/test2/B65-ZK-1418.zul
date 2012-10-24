@@ -1,0 +1,21 @@
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.ListModelList;
+		String[] userNamesA = { "Tony", "Ryan", "SELECT ME", "Wing", "Sam" };
+		ListModelList modelA = new ListModelList(userNamesA);
+		String[] userNamesB = { "Peter", "Paul" };
+		ListModelList modelB = new ListModelList(userNamesB);
+		void b1Click() {
+			sel1.setModel(modelB);
+			modelB.addToSelection(modelB.getElementAt(1));
+		}
+	]]></zscript>
+	<label multiline="true">
+	1. Select "SELECT ME" in the selectbox.
+	2. Click "Change Model" button, if you see a error messagebox, it is a bug.
+	</label>
+	<selectbox id="sel1" model="${modelA}">
+		<template name="modelA">Name is ${each}</template>
+	</selectbox>
+	<button label="Change Model" onClick="b1Click()" />
+</zk>
