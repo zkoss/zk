@@ -1,0 +1,33 @@
+<!-- F01231AfterComposeVM.zul -->
+<zk xmlns:n="native">
+	<label multiline="true">
+		1.click command buttons, label should be changed to corresponding value
+		2.click global-command buttons, label should be changed to corresponding value
+	</label>
+	<window id="myWin1" border="normal" width="600px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01416DefaultCommand')">
+		<vlayout>
+			<label id="lb1" value="@bind(vm.value)" />
+			<hlayout>
+				<button id="btn1" label="command 1" onClick="@command('cmd1')"/>
+				<button id="btn2" label="command 2" onClick="@command('cmd2')"/>
+				<button id="btng1" label="global command 1" onClick="@global-command('gcmd1')"/>
+				<button id="btng2" label="global command 2" onClick="@global-command('gcmd2')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+	<window id="myWin2" border="normal" width="600px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01416DefaultCommand')">
+		<vlayout>
+			<label id="lb2" value="@bind(vm.value)" />
+			<hlayout>
+				<button id="btn3" label="command 3" onClick="@command('cmd3')"/>
+				<button id="btn4" label="command 4" onClick="@command('cmd4')"/>
+				<button id="btng3" label="global command 3" onClick="@global-command('gcmd3')"/>
+				<button id="btng4" label="global command 4" onClick="@global-command('gcmd4')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>
