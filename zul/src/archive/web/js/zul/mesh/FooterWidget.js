@@ -80,9 +80,12 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	//super
 	domStyle_: function (no) {
-		var style = '';
+		var style = '',
+			header = this.getHeaderWidget();
 		if (zk.ie8 && this._align)
 			style += 'text-align:' + this._align + ';';
+		if (header && !header.isVisible()) //Bug ZK-1425
+			style += 'display: none;';
 		
 		return style + this.$super('domStyle_', no);
 	},
