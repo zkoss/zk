@@ -1,0 +1,20 @@
+<zk>
+	<style>
+	.buggy .z-combobox-inp {
+		background-color: yellow;
+	}
+	
+	.buggy.z-combobox.z-combobox-focus .z-combobox-inp {
+		background-color: green;
+	}
+	</style>
+	<label multiline="true">
+	1. Combobox's initial background color is yellow.
+	2. Click button to open dorp-down list, and Combobox's background color will transform to green.
+	3. Select a item, and then Combobox's background color must be still green.
+	</label>
+	<combobox sclass="buggy">
+		<comboitem label="item 1"></comboitem>
+		<comboitem label="item 2"></comboitem>
+	</combobox>
+</zk>

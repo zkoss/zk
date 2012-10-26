@@ -37,6 +37,7 @@ ZK 6.5.1
   ZK-1425: Setting visible false on Listheader doesn't hide corresponding listfooter
   ZK-1419: Constraint hover text is confusing
   ZK-1433: InputElement width not set when component is built by macro
+  ZK-1407: Combobox focus style is lost after item selection
 
 * Upgrade Notes
 

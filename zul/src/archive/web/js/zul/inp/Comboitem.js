@@ -104,7 +104,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			var cb = this.parent;
 			cb._select(this, {sendOnSelect:true, sendOnChange: true});
 			this._updateHoverImage();
-			cb.close({sendOnOpen:true});
+			cb.close({sendOnOpen:true, focus:true});
 			
 			// Fixed the onFocus event is triggered too late in IE.
 			cb._shallClose = true;
