@@ -204,7 +204,7 @@ function zkamn(pkg, fn) {
 				return; //another page started
 
 			if (zk.loading)
-				return zk.afterLoad(mtBL0);
+				return zk.afterLoad(mtBL0);	
 
 			if (zk.ie && !jq.isReady) //3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
 				return jq(mtBL0);
@@ -221,7 +221,8 @@ function zkamn(pkg, fn) {
 						&& ($jq = jq("#zk_proc")).length) {
 					if ($jq.hasClass('z-loading') && $jq.parent().hasClass('z-temp')) {
 						$jq[0].id = 'zna';
-						zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+						if (!jq("#zk_proc").length) //B65-ZK-1431: check if progressbox exists
+							zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
 					}
 				}
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);

@@ -33,7 +33,8 @@ ZK 6.5.1
   ZK-1192: SelectorComposer ConcurrentModificationException in GAE
   ZK-1420: Textbox can't be load on android 2.x
   ZK-1404: Combining hbox/vbox/splitter may cause problems on tablets
-  ZK-1424: Treeitem with a lot of childrens takes too long to open
+  ZK-1424: Treeitem with a lot of childrens takes too long to 
+  ZK-1431: Some components block loading while being included by another page with defer mode
 
 * Upgrade Notes
 
