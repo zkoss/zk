@@ -35,6 +35,7 @@ ZK 6.5.1
   ZK-1424: Treeitem with a lot of childrens takes too long to open
   ZK-1418: Selectbox: Changing selection after changing a new model
   ZK-1425: Setting visible false on Listheader doesn't hide corresponding listfooter
+  ZK-1433: InputElement width not set when component is built by macro
 
 * Upgrade Notes
 

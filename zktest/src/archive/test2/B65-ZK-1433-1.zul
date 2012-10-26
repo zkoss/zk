@@ -1,0 +1,38 @@
+<zk>
+	<zscript><![CDATA[
+	String x = arg.get("posx") != null ? (String) arg.get("posx") : "40px";
+	String y = arg.get("posy") != null ? (String) arg.get("posy") : "40px";
+	String title = arg.get("title") != null ? (String) arg.get("title") : "default title";
+]]></zscript>
+	<window title="${title}" mode="overlapped" border="normal" top="${y}" left="${x}"
+		sizable="false" closable="true" maximizable="false" width="800px">
+		<grid fixedLayout="true" vflex="true">
+			<columns>
+				<column width="100px" />
+				<column />
+				<column width="100px" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label value="Combo1" />
+					<combobox width="250px">
+						<comboitem label="Item 1.1" />
+						<comboitem label="Item 1.2" />
+						<comboitem label="Item 1.3" />
+						<comboitem label="Item 1.4" />
+						<comboitem label="Item 1.5" />
+					</combobox>
+					<label value="Combo2" />
+					<combobox width="250px">
+						<comboitem label="Item 2.1" />
+						<comboitem label="Item 2.2" />
+						<comboitem label="Item 2.3" />
+						<comboitem label="Item 2.4" />
+						<comboitem label="Item 2.5" />
+					</combobox>
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>

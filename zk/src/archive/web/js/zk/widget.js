@@ -4973,7 +4973,8 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @param Array out an array of HTML fragments (String).
 	 */
 	redraw: function (out) {
-		out.push('<', this._enclosingTag, this.domAttrs_(), '>');
+		var style = ' style="display: inline-block; min-width: 1px;"';
+		out.push('<', this._enclosingTag, this.domAttrs_(), style, '>'); //Bug ZK-1433: add style to pass isWatchable_
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</', this._enclosingTag, '>');
