@@ -1,0 +1,29 @@
+<?component name="testwindow" macroURI="B65-ZK-1433-1.zul"?>
+<zk>
+	<window title="Test Case" width="100%" height="100%" mode="embedded" closable="false" onCreate="test(60,180)">
+		<label multiline="true">
+		1. Click "Test" button.
+		2. Should see combobox width in third window is equal to other window.
+		</label>
+		<button label="Test" onClick="test(60,280)" />
+	</window>
+	<testwindow title="created by zul code" posx="60px" posy="80px"/>
+	<zscript><![CDATA[
+	import org.zkoss.zk.ui.HtmlMacroComponent;
+	import org.zkoss.zul.Combobox;
+	private void test(int posx, int posy) {
+		try {
+			HtmlMacroComponent comp = (HtmlMacroComponent) page.getComponentDefinition("testwindow", false).newInstance(page, null);
+			comp.setParent(page.getFirstRoot());
+			comp.applyProperties();
+			comp.setDynamicProperty("title", "created by java code");
+			comp.setDynamicProperty("posx", posx + "px");
+			comp.setDynamicProperty("posy", posy + "px");
+			comp.afterCompose();
+		} catch( Exception ex ) {
+			alert(ex.getLocalizedMessage());
+			ex.printStackTrace();
+		}
+	}
+]]></zscript>
+</zk>
