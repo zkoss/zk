@@ -21,7 +21,7 @@ TRY_AGAIN: "Would you like to try again?",
 UNSUPPORTED_BROWSER: "Unsupported browser: ",
 ILLEGAL_RESPONSE: "Unknown response sent from the server. Please reload and try again.\n",
 FAILED_TO_PROCESS: "Failed to process ",
-GOTO_ERROR_FIELD: "Go to the wrong field",
+GOTO_ERROR_FIELD: "Click to re-enter data",
 PLEASE_WAIT: "Processing...",
 
 FILE_SIZE: "File size: ",

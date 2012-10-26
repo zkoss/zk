@@ -1,0 +1,8 @@
+<zk>
+	<label multiline="true">
+	1. Change browser language to English.
+	2. Type anything in the textbox to show errorbox.
+	3. Mouseover on the errorbox to show the tooltip text and should be "Click to re-enter data".
+	</label>
+	<textbox id="emailTextbox" width="175px" constraint="/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9_\-.+]+/: invalid e-mail" maxlength="255" />
+</zk>
