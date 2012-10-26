@@ -27,16 +27,13 @@ ZK 6.5.1
   ZK-1377: Focus lost when tapping & change title value insides a window
   ZK-1386: Server failed to load scrollview.css.dsp while using zk6.5 ee and setting theme to sapphire
   ZK-1406: BorderLayout IPad2 rotating, North area size
-  ZK-1402: Borderlayout inside a window may not display properly on tablets
   ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
   ZK-1403: Combobutton has a missing image icon when displayed on tablets
   ZK-1400: Focus issue when Listbox in select mold after invalidate
   ZK-1192: SelectorComposer ConcurrentModificationException in GAE
   ZK-1420: Textbox can't be load on android 2.x
-  ZK-1404: Combining hbox/vbox/splitter may cause problems on tablets
   ZK-1424: Treeitem with a lot of childrens takes too long to open
   ZK-1418: Selectbox: Changing selection after changing a new model
-  ZK-1431: Some components block loading while being included by another page with defer mode
   ZK-1425: Setting visible false on Listheader doesn't hide corresponding listfooter
 
 * Upgrade Notes
