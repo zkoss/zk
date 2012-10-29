@@ -215,7 +215,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				if (realIndex < cols.nChildren) {
 					var col = cols.getChildAt(realIndex);
 					colattrs = col.getColAttrs();
-					visible = col.isVisible() ? '' : 'display:none';
+					visible = col.isVisible() ? '' : 'display:none;';
 					hgh = col.getHeight();
 				}
 			}

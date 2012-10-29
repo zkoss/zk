@@ -1,0 +1,27 @@
+<zk>
+	<label multiline="true">
+	1. Click "show" button.
+	2. Should see a blue background cell.
+	</label>
+	<grid width="60ex">
+		<columns>
+			<column label="Arabic numeral" />
+			<column id="col2" label="Capital letter" visible="false" />
+			<column label="Roman numeral" />
+		</columns>
+		<rows>
+			<row>
+				<cell>
+					<label value="1" />
+				</cell>
+				<cell style="white-space: nowrap; background-color: cyan;">
+					<label value="A" />
+				</cell>
+				<cell>
+					<label value="I" />
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	<button label="show" onClick="col2.setVisible(true)" />
+</zk>

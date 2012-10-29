@@ -38,6 +38,7 @@ ZK 6.5.1
   ZK-1419: Constraint hover text is confusing
   ZK-1433: InputElement width not set when component is built by macro
   ZK-1407: Combobox focus style is lost after item selection
+  ZK-1349: If Cell style is specified, it overrides any previous component style setting
 
 * Upgrade Notes
 

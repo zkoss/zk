@@ -120,7 +120,21 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 			m1 = zUtl.parseMap(this._getBoxAttrs(), ' ', '"');
 			break;
 		}
-		if (m1) zk.copy(m1, m2);
+		if (m1) {
+			//Bug ZK-1349: merge user style and row style instead of override
+			var s1 = m1.style,
+				s2 = m2.style,
+				style;
+			if (s1 && s2) {
+				s1 = zUtl.parseMap(s1.replace(/"/g, '').replace(/:/g, '='), ';');
+				s2 = zUtl.parseMap(s2.replace(/"/g, '').replace(/:/g, '='), ';');
+				zk.copy(s1, s2);
+				style = zUtl.mapToString(s1, ':', ';');
+			}
+			zk.copy(m1, m2);
+			if (style)
+				m1.style = '"' + style + '"';
+		}
 		return ' ' + zUtl.mapToString(m1);
 	},
 	deferRedrawHTML_: function (out) {
