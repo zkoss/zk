@@ -6,7 +6,7 @@
 	<groupId>org.zkoss.common</groupId>
 	<artifactId>zel</artifactId>
 	<packaging>jar</packaging>
-	<version>6.0.3</version>
+	<version>6.0.4-SNAPSHOT</version>
 	<name>The ZK EL Library</name>
 	<url>http://www.zkoss.org/common</url>
 	<description>The ZK EL library</description>
