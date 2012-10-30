@@ -245,8 +245,8 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
-				_it.remove();
 				removeFromSelection(_current);
+				_it.remove();
 				--_nextIndex;
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, _nextIndex, _nextIndex);
 			}
@@ -273,8 +273,8 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
-				_it.remove();
 				removeFromSelection(_current);
+				_it.remove();
 				final int index = _it.nextIndex();
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			}
@@ -305,8 +305,11 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	}
 	
 	public E remove(int index) {
-		E ret = _list.remove(index);
+		E ret = _list.get(index);
 		removeFromSelection(ret);
+		//Bug ZK-1428: should remove the object after removeFromSelection
+		//since Listbox.doSelectionChanged will try to get the object again
+		_list.remove(index);
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 		return ret;
 	}
