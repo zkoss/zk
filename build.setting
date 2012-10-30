@@ -8,4 +8,4 @@ optimize=true
 	#Invoke the shell script directly
 #start.service=Apache Tomcat 6
 	#Used if Tomcat is installed as a Windows service
-version=6.0.3-FL
+version=6.0.3
