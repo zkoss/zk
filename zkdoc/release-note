@@ -1,5 +1,6 @@
   --------
 ZK 6.0.3
+Oct 30, 2012
 * Features
   ZK-1301: The buttons in the Messagebox shall use autodisable
   ZK-1312: formattedNumber & formattedDate should use proper Locale & Timezone
