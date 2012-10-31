@@ -69,10 +69,8 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 				//TODO refactory ComboWidget.open()
 				var pp = this.getPopupNode_();
 				if (pp) pp.style.visibility = "";
-				zWatch.fireDown('onFitSize', bp, {reverse: true});
-			} else {
-				zWatch.fireDown('onFitSize', bp, {reverse: true});	
 			}
+			zWatch.fireDown('onFitSize', bp, {reverse: true});	
 			return true;
 		}
 	},
