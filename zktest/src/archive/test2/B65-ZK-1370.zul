@@ -1,0 +1,10 @@
+<zk>
+	Click "Test" button, should not see error message box.<separator />
+	<datebox id="dbx" />
+	<button label="Test" onClick='dbx.setDisplayedTimeZones("GMT+12");'>
+		<attribute name="onClick"><![CDATA[
+			dbx.setDisplayedTimeZones("GMT+12");
+			dbx.setDisplayedTimeZones(Collections.emptyList());
+		]]></attribute>
+	</button>
+</zk>

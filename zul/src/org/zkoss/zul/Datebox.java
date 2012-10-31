@@ -449,10 +449,12 @@ the short time styling.
 		if (_dtzones != dtzones) {
 			_dtzones = dtzones;
 			StringBuffer sb = new StringBuffer();
-			int i = 0;
-			for (Iterator<TimeZone> it = dtzones.iterator(); it.hasNext(); i++) {
-				if(i != 0) sb.append(',');
-				sb.append(it.next().getID());
+			if (dtzones != null) {
+				int i = 0;
+				for (Iterator<TimeZone> it = dtzones.iterator(); it.hasNext(); i++) {
+					if(i != 0) sb.append(',');
+					sb.append(it.next().getID());
+				}
 			}
 			smartUpdate("displayedTimeZones", sb.toString());
 			if (_tzone == null && _dtzones != null && _dtzones.get(0) != null)
