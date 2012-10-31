@@ -40,6 +40,8 @@ ZK 6.5.1
   ZK-1407: Combobox focus style is lost after item selection
   ZK-1349: If Cell style is specified, it overrides any previous component style setting
   ZK-1427: Toolbarbutton with autodisable active upload function not work at second click
+  ZK-1428: Wrong order for item removed from ListModelList model
+  ZK-1430: Listbox in Bandpopup of a Bandbox is not size correctly - "rows" is ignored.
 
 * Upgrade Notes
 

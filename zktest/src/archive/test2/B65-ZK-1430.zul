@@ -1,0 +1,51 @@
+<zk>
+<label multiline="true">
+Click the button, listbox will display and show 5 rowsm. 
+The bandpopup size must be the same as listbox's size.
+
+IE6 / IE7 only.
+</label>
+<separator />
+<bandbox width="150px" autodrop="true" buttonVisible="true" mold="rounded">
+	<bandpopup hflex="min" vflex="min">
+		<listbox width="200px" rows="5">
+			<listitem>
+				<listcell label="0" />
+			</listitem>
+			<listitem>
+				<listcell label="1" />
+			</listitem>
+			<listitem>
+				<listcell label="2" />
+			</listitem>
+			<listitem>
+				<listcell label="3" />
+			</listitem>
+			<listitem>
+				<listcell label="4" />
+			</listitem>
+			<listitem>
+				<listcell label="5" />
+			</listitem>
+			<listitem>
+				<listcell label="6" />
+			</listitem>
+			<listitem>
+				<listcell label="7" />
+			</listitem>
+			<listitem>
+				<listcell label="8" />
+			</listitem>
+			<listitem>
+				<listcell label="9" />
+			</listitem>
+			<listitem>
+				<listcell label="10" />
+			</listitem>
+			<listitem>
+				<listcell label="11" />
+			</listitem>
+		</listbox>
+	</bandpopup>
+</bandbox>
+</zk>
