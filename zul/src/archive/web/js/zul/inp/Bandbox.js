@@ -61,7 +61,18 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	presize_: function () {
 		var bp = this.firstChild;
 		if (bp && (bp._hflex == 'min' || bp._vflex == 'min')) {
-			zWatch.fireDown('onFitSize', bp, {reverse: true});
+			if (zk.ie < 8) {
+				//for ZK-1430
+				//pp.style.visibility can't be "none" or "hidden". 
+				//If pp.style.visibility is "hidden", fireDown("onFitSize") will not work,
+				//because pp is not visible. (reference: isRealVisible() in domie.js)
+				var pp = this.getPopupNode_();
+				pp.style.visibility = "";
+				zWatch.fireDown('onFitSize', bp, {reverse: true});
+				pp.style.visibility = "hidden";				
+			} else {
+				zWatch.fireDown('onFitSize', bp, {reverse: true});	
+			}
 			return true;
 		}
 	},
