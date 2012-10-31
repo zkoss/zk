@@ -67,7 +67,8 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 				//If pp.style.visibility is "hidden", fireDown("onFitSize") will not work,
 				//because pp is not visible. (reference: isRealVisible() in domie.js)
 				//TODO refactory ComboWidget.open()
-				if (pp = this.getPopupNode_()) pp.style.visibility = "";
+				var pp = this.getPopupNode_();
+				if (pp) pp.style.visibility = "";
 				zWatch.fireDown('onFitSize', bp, {reverse: true});
 			} else {
 				zWatch.fireDown('onFitSize', bp, {reverse: true});	
