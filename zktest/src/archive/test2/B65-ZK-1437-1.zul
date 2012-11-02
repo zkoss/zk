@@ -1,0 +1,8 @@
+<window>
+	<zscript>
+	java.util.Date time = new java.util.Date();
+	</zscript>
+	<window id="win" title="Hello World!! ${time}" border="normal" width="500px">
+		<button label="detach" onClick='win.detach()' />
+	</window>
+</window>

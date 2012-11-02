@@ -346,6 +346,9 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 		else if(_src == null && !getChildren().isEmpty())
 			// !getChildren().isEmpty() is for performance.
 			getChildren().clear();
+		else if (!_instantMode && "auto".equals(getMode()) && !getChildren().isEmpty())
+			//Bug ZK-1437: auto mode has no chance to clear the content if src is changed (_instantMode become false)
+			getChildren().clear();
 	}
 	
 	/** Returns whether the source depends on the current Locale.

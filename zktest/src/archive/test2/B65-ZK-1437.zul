@@ -1,0 +1,9 @@
+<zk>
+	<label multiline="true">
+		Click on "reload" button, you will see window3's title was changed to current time without error. 
+	</label>
+	<window>
+		<include id="inc" src="B65-ZK-1437-1.zul" mode="auto" />
+		<button label="reload" onClick='inc.src = "B65-ZK-1437-1.zul?ts=1"'/>
+	</window>
+</zk>
