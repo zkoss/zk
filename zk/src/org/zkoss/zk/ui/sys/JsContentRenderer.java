@@ -390,14 +390,14 @@ public class JsContentRenderer implements ContentRenderer {
 				//so we only check the most common illegal case
 				final String v = value.trim();
 				char cc;
-				if (v.length() == 0 
-				|| (cc=v.charAt(v.length() - 1)) == ';' || cc == ','
-				|| (v.indexOf("function") < 0 && v.indexOf(';') >= 0))
+				if (v.length() != 0
+				&& ((cc=v.charAt(v.length() - 1)) == ';' || cc == ','
+				|| (v.indexOf("function") < 0 && v.indexOf(';') >= 0)))
 					throw new UiException("Illegal client override: "+v+
 						(name.startsWith("on") ? "\nTo listen an event, remember to captalize the third letter, such as onClick":
 							"\nIt must be a legal JavaScript expression (not statement)"));
 			}
-			_buf.append(name).append(":\n").append(value).append("\n,");
+			_buf.append(name).append(":\n").append(value.length() == 0 ? "''" : value).append("\n,");
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
