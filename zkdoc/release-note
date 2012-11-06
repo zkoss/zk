@@ -1,5 +1,6 @@
 	--------
 ZK 5.0.12
+Nov 06, 2012
 * Features
   ZK-1002: Remove script carrying ZK initialization code after mounted
   ZK-1301: The buttons in the Messagebox shall use autodisable
