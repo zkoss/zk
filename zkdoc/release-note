@@ -40,6 +40,12 @@ Nov 06, 2012
   ZK-1256: Combobox onSelect not working properly
   ZK-1400: Focus issue when Listbox in select mold after invalidate
   
+* Upgrade Notes
+  + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
+   SWF vulnerability in YUI 2 that the SWF files in question contain a cross-site JavaScript injection
+   vulnerability which allows for the execution of arbitrary third-party code within the domain from which
+   the files are served. Please download the flashchart.jar from the link instead - https://github.com/zkoss/flashchart
+  
 	--------
 ZK 5.0.11
 Mar 27, 2012
