@@ -44,6 +44,7 @@ ZK 6.5.1
   ZK-1430: Listbox in Bandpopup of a Bandbox is not size correctly - "rows" is ignored.
   ZK-1370: org.zkoss.zul.Datebox.setDisplayedTimeZones(List dtzones) NPE if emptied
   ZK-1437: javascript error when use include with auto mode
+  ZK-1442: ZK Bind command doesn't work with cluster env
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential

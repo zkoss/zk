@@ -226,7 +226,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//flag to keep info that binder is in activating state
 	private boolean _activating = false;
 	//to help deferred activation when first execution
-	private DeferredActivator _deferredActivator;
+	private transient DeferredActivator _deferredActivator;
 	
 	private final ImplicitObjectContributor _implicitContributor;
 	
@@ -1871,6 +1871,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
+	private boolean isSubscribed(String quename, String quescope, EventListener<Event> listener) {
+		EventQueue<Event> que = EventQueues.lookup(quename, quescope, false);
+		return que==null?false:que.isSubscribed(listener);
+	}
+	
 	protected EventQueue<Event> getEventQueue() {
 		return EventQueues.lookup(_quename, _quescope, true);
 	}
@@ -2007,23 +2012,18 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		@Override
 		public void didActivate(Component comp) {
 			if(_rootComp.equals(comp)){
-				if(_deferredActivator==null){
+				//zk 1442, don't do multiple subscribed if didActivate is called every request (e.x. jboss5)
+				if(!isSubscribed(_quename, _quescope, _queueListener))
 					subscribeQueue(_quename, _quescope, _queueListener);
+				if(_deferredActivator==null){
+					//defer activation to execution only for the first didActivate when failover
 					comp.getDesktop().addListener(_deferredActivator = new DeferredActivator());
 				}
 			}
 		}
 		@Override
 		public void willPassivate(Component comp) {
-			if(_rootComp.equals(comp)){
-				_log.debug("willPassivate : [%s]",comp);
-				//for the case there is no execution come into.
-				if(_deferredActivator!=null){
-					comp.getDesktop().removeListener(_deferredActivator);
-					_deferredActivator = null;
-				}
-				unsubscribeQueue(_quename, _quescope, _queueListener);
-			}
+			//zk 1442, do nothing
 		}
 	}
 	
@@ -2036,8 +2036,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		@Override
 		public void init(Execution exec, Execution parent) throws Exception {
 			Desktop desktop = exec.getDesktop();
-			desktop.removeListener(this);
-			_deferredActivator = null;
+			desktop.removeListener(_deferredActivator);
 			BinderImpl.this.didActivate();
 		}	
 	}
