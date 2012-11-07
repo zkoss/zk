@@ -1,4 +1,13 @@
   --------
+ZK 6.0.4
+* Features
+  
+* Bugs
+  ZK-1442 ZK Bind command doesn't work with cluster env
+
+* Upgrade Notes
+  
+  --------
 ZK 6.0.3
 Oct 30, 2012
 * Features
