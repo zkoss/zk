@@ -1990,7 +1990,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		@Override
 		public void didActivate(Component comp) {
 			if(_rootComp.equals(comp)){
-				//zk 1142, don't do multiple subscribed if didActivate is called every request (e.x. jboss5)
+				//zk 1442, don't do multiple subscribed if didActivate is called every request (e.x. jboss5)
 				if(!isSubscribed(_quename, _quescope, _queueListener))
 					subscribeQueue(_quename, _quescope, _queueListener);
 				if(_deferredActivator==null){
@@ -2001,7 +2001,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		@Override
 		public void willPassivate(Component comp) {
-			//zk 1141, do nothing
+			//zk 1442, do nothing
 		}
 	}
 	
