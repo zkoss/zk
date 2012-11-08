@@ -46,6 +46,7 @@ ZK 6.5.1
   ZK-1437: javascript error when use include with auto mode
   ZK-1442: ZK Bind command doesn't work with cluster env
   ZK-1446: get NotSerializableException when using @Subscribe in tomcat cluster env.
+  ZK-1434: When use native tag to render row's cells, it doesn't works fine with zkmax.jar
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential

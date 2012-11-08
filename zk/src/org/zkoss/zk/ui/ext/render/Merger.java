@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Component;
  * 
  * @author tomyeh
  * @since 5.0.4
+ * @deprecated deprecated since 6.5.1, please use stubonly instead.
  */
 public interface Merger {
 	/** Merges the next sibling into one component, if possible.

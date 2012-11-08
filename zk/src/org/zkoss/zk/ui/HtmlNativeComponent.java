@@ -219,7 +219,6 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 					head = -1, //index of <head>
 					heade = -1, //index of </head>
 					html = -1; //index of <html>
-				boolean unavailDone = false;
 				for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
 					++j;
 					if (jhead < 0 && startsWith(sb, "zkhead", j)) {
@@ -328,12 +327,6 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 			sb.append(_postfix);
 		return sb.toString();
 	}
-	/** Return the full content, getPrologHalf() + getFullLast().
-	 * It assumes it has no children.
-	 */
-	private final String getFullContent() {
-		return getPrologHalf() + getEpilogHalf();
-	}
 
 	//DynamicTag//
 	/** Sets the tag name.
@@ -402,113 +395,17 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 			sb.append(text); //don't encode (bug 2689443)
 		}
 	}
-	private final Component mergeNext() {
-		final AbstractComponent parent = (AbstractComponent)getParent();
-		if (parent != null) {
-			final AbstractComponent n = (AbstractComponent)getNextSibling();
-			if (n instanceof HtmlNativeComponent) {
-				final DesktopCtrl desktopCtrl = _page != null ?
-					(DesktopCtrl)_page.getDesktop(): null;
-			 	if (n.getFirstChild() == null) {
-			 		//remove n
-			 		final AbstractComponent n2 = (AbstractComponent)n.getNextSibling();
-			 		parent.setNext(this, n2);
-			 		parent.setPrev(n2, this);
-			 		parent.incNChild(-1);
-
-					final String s = ((HtmlNativeComponent)n).getFullContent();
-			 		_postfix = _postfix != null ? _postfix + s: s;
-					if (desktopCtrl != null)
-						desktopCtrl.removeComponent(n, false); //don't recycle since client might hold it
-					return this;
-			 	}
-			 	if (getFirstChild() == null) {
-			 		//remove this
-			 		final AbstractComponent p = (AbstractComponent)getPreviousSibling();
-			 		parent.setNext(p, n);
-			 		parent.setPrev(n, p);
-			 		parent.incNChild(-1);
-
-			 		final String s = getFullContent(),
-			 			prefix = ((HtmlNativeComponent)n)._prefix;
-			 		((HtmlNativeComponent)n)._prefix = prefix != null ? s + prefix: s;
-					if (desktopCtrl != null)
-						desktopCtrl.removeComponent(this, false); //don't recycle since client might hold it
-					return n;
-			 	}
-			}
-		}
-		return null;
-	}
-	private final Component mergeChild() {
-		Component child = getFirstChild();
-		if (child != null) {
-			HtmlNativeComponent childWithChild = null;
-			for (; child != null; child = child.getNextSibling()) {
-				if (!(child instanceof HtmlNativeComponent))
-					return null;
-				final Component cc = child.getFirstChild();
-				if (cc != null) {
-					if (childWithChild != null)
-						return null; //only one child-with-child is allowed
-					childWithChild = (HtmlNativeComponent)child;
-				}
-			}
-
-			final DesktopCtrl desktopCtrl = _page != null ?
-				(DesktopCtrl)_page.getDesktop(): null;
-			boolean bEpilog = false;
-			final StringBuffer prolog = new StringBuffer(_prolog),
-				epilog = new StringBuffer();
-			for (child = getFirstChild(); child != null;
-			child = child.getNextSibling()) {
-				final HtmlNativeComponent nc = (HtmlNativeComponent)child;
-				if (bEpilog) { //after childWithChild
-					epilog.append(nc.getFullContent());
-				} else if (child != childWithChild) { //in front of childWithChild
-					prolog.append(nc.getFullContent());
-				} else { //childWithChild
-					prolog.append(nc.getPrologHalf());
-					epilog.append(nc.getEpilogHalf());
-					bEpilog = true;
-				}
-				if (desktopCtrl != null)
-					desktopCtrl.removeComponent(nc, false); //don't recycle since client might hold it
-			}
-
-			_prolog = prolog.toString();
-			_epilog = epilog.append(_epilog).toString();
-
-			if (childWithChild == null) {
-				nChild(null, null, 0);
-			} else {
-				nChild(
-					(AbstractComponent)(child = childWithChild.getFirstChild()),
-					(AbstractComponent)childWithChild.getLastChild(),
-					childWithChild.nChild());
-			}
-			return this;
-		}
-		return null;
-	}
 
 	//@Override
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	protected class ExtraCtrl implements DirectContent, PrologAllowed, Merger {
+	protected class ExtraCtrl implements DirectContent, PrologAllowed {
 		//-- PrologAware --//
 		public void setPrologContent(String prolog) {
 			_prefix = prolog;
 				//Notice: it is used as prefix (shown before the tag and children)
 				//while _prolog is the text shown after the tag and before the children
-		}
-		//Merger//
-		public Component mergeNextSibling() {
-			return mergeNext();
-		}
-		public Component mergeChildren() {
-			return mergeChild();
 		}
 	}
 }
