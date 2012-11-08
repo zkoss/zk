@@ -154,6 +154,7 @@ public class ContentTypes {
 				_fmt2ct.put(format, ctype);
 				_ct2fmt.put(ctype, format);
 			}
+			in.close();
 		} catch (IOException ex) {
 			log.warning("Ingored error: Unable to read "+flnm, ex);
 		} finally {

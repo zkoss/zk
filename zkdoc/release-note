@@ -45,6 +45,7 @@ ZK 6.5.1
   ZK-1370: org.zkoss.zul.Datebox.setDisplayedTimeZones(List dtzones) NPE if emptied
   ZK-1437: javascript error when use include with auto mode
   ZK-1442: ZK Bind command doesn't work with cluster env
+  ZK-1374: Unclosed BufferedReader for org.zkoss.util.media.ContentTypes
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
