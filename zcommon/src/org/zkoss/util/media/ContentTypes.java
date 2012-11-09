@@ -128,12 +128,11 @@ public class ContentTypes {
 		if (strm == null)
 			return false;
 
+		BufferedReader in = null;
 		//NOTE: we cannot use Properties.load because there might be replicated
 		//mapping (e.g., jpg=images/jpg, jpg=images/pjpeg)
 		try {
-			final BufferedReader in =
-				new BufferedReader(new InputStreamReader(strm));
-
+			in = new BufferedReader(new InputStreamReader(strm));
 			String line;
 			while ((line = in.readLine()) != null) {
 				final int j = line.indexOf('=');
@@ -157,6 +156,9 @@ public class ContentTypes {
 		} catch (IOException ex) {
 			log.warning("Ingored error: Unable to read "+flnm, ex);
 		} finally {
+			if (in != null) {
+				try {in.close();} catch (IOException e) {}
+			}
 			try {strm.close();} catch (Throwable ex) {}
 		}
 		return true;
