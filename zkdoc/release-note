@@ -47,6 +47,7 @@ ZK 6.5.1
   ZK-1442: ZK Bind command doesn't work with cluster env
   ZK-1446: get NotSerializableException when using @Subscribe in tomcat cluster env.
   ZK-1374: Unclosed BufferedReader for org.zkoss.util.media.ContentTypes
+  ZK-1441: Accordion Tabbox after rapid clicking on tabs start displaying content at fixed wrong hight.
   ZK-1434: When use native tag to render row's cells, it doesn't works fine with zkmax.jar
   ZK-1354: ZK generated page cannot pass W3C validator while checking as XHTML 1.0 Transitional
   

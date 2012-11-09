@@ -132,7 +132,11 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_sel: function(notify, init) {
 		var tabbox = this.getTabbox();
-		if (!tabbox) return;
+		
+		/* ZK-1441
+		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
+		 */
+		if (!tabbox || tabbox._animating) return;
 
 		var	tabs = this.parent,
 			oldtab = tabbox._selTab;

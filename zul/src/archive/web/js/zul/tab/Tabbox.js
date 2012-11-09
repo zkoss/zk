@@ -44,6 +44,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_tabscroll: true,
+	/* ZK-1441
+	 * Reference: _sel() in Tab.js, Tabpanel.js
+	 */
+	_animating: false,
 
 	$define: {
     	/**
