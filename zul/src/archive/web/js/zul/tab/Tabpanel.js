@@ -211,6 +211,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
+		this._lastScrollTop = null;
 		this.$supers(zul.tab.Tabpanel, 'unbind_', arguments);
 	}
 });
