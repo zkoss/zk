@@ -195,7 +195,7 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(256);
 		if (!directJS)
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkac(");
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
@@ -215,7 +215,7 @@ public class HtmlPageRenders {
 		}
 
 		if (!directJS)
-			sb.append(");\n</script>");
+			sb.append(");//]]>\n</script>");
 		return sb.toString();
 	}
 
@@ -302,7 +302,7 @@ public class HtmlPageRenders {
 			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">zkopt({");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -315,14 +315,13 @@ public class HtmlPageRenders {
 
 			if (sb.charAt(sb.length() - 1) == ',')
 				sb.setLength(sb.length() - 1);
-			sb.append("});</script>");
+			sb.append("});//]]>\n</script>");
 		}
 
 		final Device device = Devices.getDevice(deviceType);
 		String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
-
 		return sb.toString();
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
@@ -468,9 +467,9 @@ public class HtmlPageRenders {
 				sb.append(" charset=\"").append(charset).append('"');
 			sb.append('>');
 		} else {
-			sb.append(" class=\"z-runonce\">\n").append(js.getContent());
+			sb.append(" class=\"z-runonce\">//<![CDATA[\n").append(js.getContent()).append("//>]]\n");
 		}
-		sb.append("\n</script>");
+		sb.append("</script>");
 	}
 
 	/** Returns the render context, or null if not available.
@@ -492,7 +491,7 @@ public class HtmlPageRenders {
 	}
 
 	/** Returns the HTML content representing a page.
-	 * @param au whether it is caused by aynchrous update
+	 * @param au whether it is caused by asynchronous update
 	 * @param exec the execution (never null)
 	 */
 	public static final
@@ -563,7 +562,7 @@ public class HtmlPageRenders {
 			out = new StringWriter();
 		} else if (divRequired) {
 			//generate JS second
-			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">");
+			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\n");
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
@@ -637,7 +636,7 @@ public class HtmlPageRenders {
 		if (includedAndPart) {
 			((Includer)owner).setRenderingResult(((StringWriter)out).toString());
 		} else if (divRequired) {
-			out.write("</script>\n");
+			out.write("//]]>\n</script>\n");
 		}
 	}
 	private static void outDivTemplateBegin(Writer out, String uuid)
@@ -830,7 +829,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(comp.getPage(), out);
 			}
 
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\nzkmx(");
+			out.write("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkmx(");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -842,7 +841,7 @@ public class HtmlPageRenders {
 
 		outEndJavaScriptFunc(exec, out, extra, false);
 			//generate extra, responses and ");"
-		out.write("\n</script>\n");
+		out.write("//]]>\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {
@@ -941,13 +940,13 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">zkdt('")
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkdt('")
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))
 				.append("','").append(desktop.getRequestPath())
 				.append("');").append(outSpecialJS(desktop))
-				.append("</script>\n");
+				.append("//]]>\n</script>\n");
 		}
 
 		return sb.toString();
