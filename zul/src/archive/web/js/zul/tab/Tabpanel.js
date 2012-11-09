@@ -81,10 +81,16 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			if (toSel) {
 				if (!vis) {
 					$pl.show();
+					// Bug ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
+					if (zk.ie >= 8 || zk.safari)
+						$pl.scrollTop(this._lastScrollTop);
 					zUtl.fireShown(this);
 				}
 			} else if (vis) {
 				zWatch.fireDown('onHide', this);
+				// Bug ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
+				if (zk.ie >= 8 || zk.safari)
+					this._lastScrollTop = $pl.scrollTop();
 				$pl.hide();
 			}
 		}
