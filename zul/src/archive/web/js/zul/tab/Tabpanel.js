@@ -71,10 +71,26 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		}
 	},
 	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
-		var accd = this.getTabbox().inAccordionMold();
+		var tabbox = this.getTabbox(),
+			accd = tabbox.inAccordionMold();
+
 		if (accd && animation) {
-			var p = this.$n("cave");
-			zk(p)[toSel ? "slideDown" : "slideUp"](this);
+			var zkp = zk(this.$n("cave"));
+			if (toSel) {
+				/* ZK-1441
+				 * When a tabpanel is animating, set tabbox.animating
+				 * to block other tabpanels enter _sel().
+				 * Reference: _sel() in Tab.js
+				 */
+				tabbox._animating = true;
+				zkp.slideDown(
+					this, 
+					{"afterAnima": function(){delete tabbox._animating;}}
+				);
+			} else {
+				zkp.slideUp(this);
+			}
+			//zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
 			var $pl = jq(accd ? this.$n("cave") : this.$n()),
 				vis = $pl.zk.isVisible();

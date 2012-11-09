@@ -47,6 +47,7 @@ ZK 6.5.1
   ZK-1442: ZK Bind command doesn't work with cluster env
   ZK-1446: get NotSerializableException when using @Subscribe in tomcat cluster env.
   ZK-1374: Unclosed BufferedReader for org.zkoss.util.media.ContentTypes
+  ZK-1441: Accordion Tabbox after rapid clicking on tabs start displaying content at fixed wrong hight.
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
