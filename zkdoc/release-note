@@ -50,6 +50,7 @@ ZK 6.5.1
   ZK-1441: Accordion Tabbox after rapid clicking on tabs start displaying content at fixed wrong hight.
   ZK-1434: When use native tag to render row's cells, it doesn't works fine with zkmax.jar
   ZK-1354: ZK generated page cannot pass W3C validator while checking as XHTML 1.0 Transitional
+  ZK-1448: Scrollable Menubar does not show left/right arrows on mobile devices
   ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
   
 * Upgrade Notes
