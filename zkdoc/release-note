@@ -54,6 +54,7 @@ ZK 6.5.1
   ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
   ZK-1297: Listbox has wrong height when using "rows" and auxhead
   ZK-1324: Trendy buttons inside bandbox popup does not lose focus when popup is closed (FF and Opera only)
+  ZK-1295: Disabled buttons cannot regain focus by re-enabling and then setting focus
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
