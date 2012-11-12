@@ -1419,10 +1419,8 @@ jq(el).zk.center(); //same as 'center'
 						jq(cf.getInputNode()).trigger('blur');
 					
 					// ZK-1324: Trendy button inside bandbox popup doesn't lose focus when popup is closed
-					if (cf.$instanceof(zul.wgt.Button)) {
-						var btn = cf.isTableLayout_() ? cf.$n('btn') : cf.$n();
-						jq(btn).trigger('blur');
-					}
+					if (cf.$instanceof(zul.wgt.Button))
+						jq(cf.$n('btn') || cf.$n()).trigger('blur');
 				}
 			}
 		}
