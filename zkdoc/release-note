@@ -55,6 +55,7 @@ ZK 6.5.1
   ZK-1297: Listbox has wrong height when using "rows" and auxhead
   ZK-1324: Trendy buttons inside bandbox popup does not lose focus when popup is closed (FF and Opera only)
   ZK-1295: Disabled buttons cannot regain focus by re-enabling and then setting focus
+  ZK-1458: Right click on iPad does not work if there are both double click event handler and right click event handler
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential

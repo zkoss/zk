@@ -2813,7 +2813,8 @@ bind_: function (desktop, skipper, after) {
 			after.push(function (){
 				setTimeout(function () {// lazy init
 					self.bindSwipe_();
-					self.bindDoubleTap_();			
+					self.bindDoubleTap_();
+					self.bindTapHold_();
 				}, 300);
 			});
 		}
@@ -2870,6 +2871,7 @@ unbind_: function (skipper, after) {
 		this.cleanDrag_(); //ok to invoke even if not init
 		this.unbindSwipe_();
 		this.unbindDoubleTap_();
+		this.unbindTapHold_();
 
 		if (this.isListen('onUnbind')) {
 			var self = this;
@@ -3194,90 +3196,42 @@ unbind_: function (skipper, after) {
 	 * @see #doSwipe_
 	 * @since 6.5.0
 	 */
-	bindSwipe_: zk.mobile ? function () {
-		var node = this.$n();
-		if (this.isListen('onSwipe') || jq(node).data('swipeable'))
-			this._swipe = new zk.Swipe(this, node);
-	} : zk.$void,
+	bindSwipe_: zk.$void,
 	/** Unbind swipe event to the widget on tablet device.
 	 * It is called if swipe event is unbound.
 	 * <p>You rarely need to override this method, unless you want to unbind swipe event differently.
 	 * @see #doSwipe_
 	 * @since 6.5.0
 	 */
-	unbindSwipe_: zk.mobile ? function () {
-		var swipe = this._swipe;
-		if (swipe) {
-			this._swipe = null;
-			swipe.destroy(this.$n());
-		}
-	} : zk.$void,
+	unbindSwipe_: zk.$void,
 	/** Bind double click event to the widget on tablet device.
 	 * It is called if the widget is listen to onDoubleClick event.
 	 * <p>You rarely need to override this method, unless you want to implement double click behavior differently.
 	 * @see #doDoubleClick_
 	 * @since 6.5.0
 	 */
-	bindDoubleTap_: zk.mobile ? function () {
-		if (this.isListen('onDoubleClick')) {
-			var doubleClickTime = 500;
-			this._startTap = function (wgt) {
-				wgt._lastTap = wgt.$n();  //Holds last tapped element (so we can compare for double tap)
-				wgt._tapValid = true;     //Are we still in the .5 second window where a double tap can occur
-				wgt._tapTimeout = setTimeout(function() {
-					wgt._tapValid = false;
-				}, doubleClickTime);
-			};
-			jq(this.$n()).bind('touchstart', this.proxy(this._dblTapStart))
-				.bind('touchend', this.proxy(this._dblTapEnd));
-		}
-	} : zk.$void,
+	bindDoubleTap_: zk.$void,
 	/** Unbind double click event to the widget on tablet device.
 	 * It is called if the widget is listen to onDoubleClick event.
 	 * <p>You rarely need to override this method, unless you want to implement double click behavior differently.
 	 * @see #doDoubleClick_
 	 * @since 6.5.0
 	 */
-	unbindDoubleTap_: zk.mobile ? function () {
-		if (this.isListen('onDoubleClick')) {
-			this._startTap = null;
-			jq(this.$n()).unbind('touchstart', this.proxy(this._dblTapStart))
-				.unbind('touchend', this.proxy(this._dblTapEnd));
-		}
-	} : zk.$void,
-	_dblTapStart: zk.mobile ? function(evt) {
-		var tevt = evt.originalEvent;
-		if (tevt.touches.length > 1) return;
-		var	changedTouch = tevt.changedTouches[0];
-		if (!this._tapValid) {
-			this._startTap(this);
-		} else {
-			clearTimeout(this._tapTimeout);
-			this._tapTimeout = null;
-			if (this.$n() == this._lastTap) {
-				this._dbTap = true;
-			} else {
-				this._startTap(this);
-			}
-		}
-		tevt.stopPropagation();
-	} : zk.$void,
-	_dblTapEnd: zk.mobile ? function(evt) {
-		var tevt = evt.originalEvent;
-		if (tevt.touches.length > 1) return;
-		if (this._dbTap) {
-			this._dbTap = this._tapValid = this._lastTap = null;
-			var wevt = new zk.Event(this, 'onDoubleClick', {pageX: tevt.pageX, pageY: tevt.pageY}, {}, evt);
-			if (!this.$weave) {
-				if (!wevt.stopped) {
-					this['doDoubleClick_'].call(this, wevt);
-				}
-				if (wevt.domStopped)
-					wevt.domEvent.stop();
-			}
-			tevt.preventDefault(); //stop ios zoom
-		}
-	} : zk.$void,
+	unbindDoubleTap_: zk.$void,
+	/** Bind right click event to the widget on tablet device.
+	 * It is called if the widget is listen to onRightClick event.
+	 * <p>You rarely need to override this method, unless you want to implement right click behavior differently.
+	 * @see #doRightClick_
+	 * @since 6.5.1
+	 */
+	bindTapHold_: zk.$void,
+	/** Unbind right click event to the widget on tablet device.
+	 * It is called if the widget is listen to onRightClick event.
+	 * <p>You rarely need to override this method, unless you want to implement right click behavior differently.
+	 * @see #doRightClick_
+	 * @since 6.5.1
+	 */
+	unbindTapHold_: zk.$void,
 	/** Sets the focus to this widget.
 	 * This method will check if this widget can be activated by invoking {@link #canActivate} first.
 	 * <p>Notice: don't override this method. Rather, override {@link #focus_},

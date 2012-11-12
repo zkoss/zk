@@ -1,0 +1,22 @@
+<zk>
+	<label multiline="true">
+	iPad/Andorid Only
+	1. Click on the Listbox, should see "clicked!" message showed.
+	2. Double Click on the Listbox, should see "double clicked!" message showed.
+	3. Tap Hold around 1 second on the Listbox, should see "right clicked!" message showed.
+	4. Swipe on the Listbox, should see "swiped!" message showed.
+	</label>
+	<listbox onClick='c.value="clicked!"' onDoubleClick='dc.value="double clicked!"' onRightClick='rc.value="right clicked!"' onSwipe='sw.value="swiped!"'>
+		<listhead>
+			<listheader label="Item" />
+		</listhead>
+		<listitem label="item 0" />
+		<listitem label="item 1" />
+		<listitem label="item 2" />
+		<listitem label="item 3" />
+	</listbox>
+	<label id="c" /><separator />
+	<label id="dc" /><separator />
+	<label id="rc" /><separator />
+	<label id="sw" />
+</zk>
