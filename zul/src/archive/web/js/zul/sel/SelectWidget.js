@@ -537,9 +537,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		} else
 			return this.getRows() || this._visiRows || 0;
 	},
-	/* Height of the head row. If now header, defval is returned. */
+	/* Height of the head row. If no header, defval is returned. */
 	_headHgh: function (defVal) {
-		var hgh = this.ehead ? this.ehead.offsetHeight : 0;
+		var headWidget = this.getHeadWidget(), //Bug ZK-1297: should get head height without auxhead
+			hgh = headWidget ? headWidget.$n().offsetHeight : 0;
 		if (this.paging) {
 			var pgit = this.$n('pgit'),
 				pgib = this.$n('pgib');

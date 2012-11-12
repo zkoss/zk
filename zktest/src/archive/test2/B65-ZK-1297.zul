@@ -1,0 +1,22 @@
+<zk>
+	<window border="normal" vflex="1" hflex="1">
+		The height of Listbox should be smaller than Tabbox
+		<listbox id="listBoxAccounts" rows="5" emptyMessage="The content is Empty">
+			<auxhead>
+				<auxheader colspan="2" label="Auxheader" />
+			</auxhead>
+			<listhead>
+				<listheader label="Listheader 1" />
+				<listheader label="Listheader 2" />
+			</listhead>
+		</listbox>
+		<tabbox vflex="1">
+			<tabs>
+				<tab label="tab 1" closable="false" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>tabpanel 1</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>
