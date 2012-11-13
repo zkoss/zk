@@ -635,6 +635,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._bindDomNode();
 		if (this._hflex != 'min')
 			this._fixHeaders();
+		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign 
+		if (this.ehead)
+			this.domListen_(this.ehead, 'onScroll');
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflow = ''; // clear
@@ -647,6 +650,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			zk(paging).redoCSS();
 	},
 	unbind_: function () {
+		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
+		if (this.ehead)
+			this.domUnlisten_(this.ehead, 'onScroll');
+		
 		if (this.ebody)
 			this.domUnlisten_(this.ebody, 'onScroll');
 
@@ -836,6 +843,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//ignore it here to keep the _currentTop/_currentLeft intact!
 		if (zk.safari && this._ignoreDoScroll) 
 			return;
+		
+		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
+		if (!(this.fire('onScroll', this.ehead.scrollLeft).stopped)) {
+			if (this._currentLeft != this.ehead.scrollLeft) {
+				if (this.ebody)
+					this.ebody.scrollLeft = this.ehead.scrollLeft;
+				if (this.efoot) 
+					this.efoot.scrollLeft = this.ehead.scrollLeft;
+			}
+		}
 		
 		if (!(this.fire('onScroll', this.ebody.scrollLeft).stopped)) {
 			if (this._currentLeft != this.ebody.scrollLeft) { //care about horizontal scrolling only
