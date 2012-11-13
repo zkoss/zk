@@ -80,6 +80,9 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		return this._allowKeys || _allowKeys;
 	},
 	doKeyPress_: function(evt){
+		//Bug ZK-1373: ALTGR + 3 key in Spanish keyboard is a combination of Ctrl + Alt + 3 for £á sign.
+		if (evt.ctrlKey && evt.altKey)
+			evt.stop();
 		if (!this._shallIgnore(evt, this.getAllowedKeys_()))
 			this.$supers('doKeyPress_', arguments);
 	},

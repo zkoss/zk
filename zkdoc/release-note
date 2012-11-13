@@ -56,6 +56,7 @@ ZK 6.5.1
   ZK-1324: Trendy buttons inside bandbox popup does not lose focus when popup is closed (FF and Opera only)
   ZK-1295: Disabled buttons cannot regain focus by re-enabling and then setting focus
   ZK-1458: Right click on iPad does not work if there are both double click event handler and right click event handler
+  ZK-1373: Doublebox should not allow the typing of non-numeric characteres achieved by alt-combinations such as @,# and £á
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
