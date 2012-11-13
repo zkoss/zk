@@ -28,10 +28,9 @@ import org.zkoss.zk.ui.metainfo.MessageLoader;
  * @since 5.0.11
  */
 public class ZulMessageLoader implements MessageLoader {
-	
+	@Override
 	public void load(StringBuffer out, Execution exec) throws IOException {
 		out.append(Devices.loadJavaScript(exec, "~./js/zul/lang/msgzul*.js"));
 		out.append(Utils.outLocaleJavaScript());
-	}
-	
+	}	
 }
