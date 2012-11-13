@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -424,7 +425,12 @@ public class Https extends Servlets {
 
 			if (download) {
 				String value = "attachment";
-				final String flnm = media.getName();
+				
+				// Bug ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
+				StringBuffer temp = request.getRequestURL();
+				final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
+				
+				final String flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
 				if (flnm != null && flnm.length() > 0)
 					value += ";filename=" + encodeFilename(flnm);
 				response.setHeader("Content-Disposition", value);
