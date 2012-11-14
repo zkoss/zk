@@ -59,6 +59,16 @@ public class Doublespinner extends NumberInputElement {
 		return (Double)getTargetValue();
 	}
 
+	@Override
+	protected Object getTargetValue() throws WrongValueException {
+		Object val = super.getTargetValue();
+		if (val instanceof Double) {
+			return val;
+		}
+		throw showCustomError(new WrongValueException(this,
+				MZul.NUMBER_REQUIRED, val));
+	}
+
 	/** Returns the value in double. If null, zero is returned.
 	 */
 	public double doubleValue() throws WrongValueException {

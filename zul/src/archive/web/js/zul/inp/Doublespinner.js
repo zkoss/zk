@@ -46,7 +46,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.6
  */
 zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
-	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
 	$define: {

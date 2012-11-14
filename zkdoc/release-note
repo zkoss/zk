@@ -62,6 +62,7 @@ ZK 6.5.1
   ZK-1308: WireVariable does not wire a superclass field if a field with the same name is declared in a subclass
   ZK-1150: nbsp gets added to menuitem label in Firefox
   ZK-1217: Groupbox calculate a wrong hight after the groupbox be hide then show
+  ZK-1117: some wrong behavior in spinner and double spinner
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
