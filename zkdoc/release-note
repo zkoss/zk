@@ -64,6 +64,7 @@ ZK 6.5.1
   ZK-1150: nbsp gets added to menuitem label in Firefox
   ZK-1217: Groupbox calculate a wrong hight after the groupbox be hide then show
   ZK-1117: some wrong behavior in spinner and double spinner
+  ZK-1234: Nested grids does not properly display alternating odd/even rows
   ZK-1187: Setting an sClass on a selected tab results in tab losing z-tab-seld class
   
 * Upgrade Notes
