@@ -68,6 +68,12 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		Double number = exec.getBrowser("mobile");
 		if (number == null || number.intValue() == 0) {
 			out.write("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
+
+			Double ie = exec.getBrowser("ie");
+			// let ie <= 8 support VML on javascript
+			if (ie != null && ie < 9)
+				out.write(" xmlns:v=\"urn:schemas-microsft.com:vml\"");
+			
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
 					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
