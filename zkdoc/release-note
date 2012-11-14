@@ -60,6 +60,7 @@ ZK 6.5.1
   ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
   ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
   ZK-1308: WireVariable does not wire a superclass field if a field with the same name is declared in a subclass
+  ZK-1452: Unknown stub error
   ZK-1150: nbsp gets added to menuitem label in Firefox
   ZK-1217: Groupbox calculate a wrong hight after the groupbox be hide then show
   ZK-1117: some wrong behavior in spinner and double spinner
