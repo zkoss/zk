@@ -127,7 +127,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
-		if (hgh && hgh != "auto") {
+		if (hgh && hgh != "auto" && this.isOpen()) {
 			var n;
 			if (n = this.$n('cave')) {
 				if (zk.ie6_) n.style.height = "";
