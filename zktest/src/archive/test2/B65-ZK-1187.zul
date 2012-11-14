@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1187.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 14, 2012  4:14:59 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please click the button, and then the style of the tab is the same as selected.
+<button  label="Click Me" onClick='tab.sclass="def"'/>
+	<tabbox width="250px">
+		<tabs>
+			<tab id="tab" label="Tab 1" sclass="abc" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>This is panel 1</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
