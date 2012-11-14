@@ -59,6 +59,7 @@ ZK 6.5.1
   ZK-1373: Doublebox should not allow the typing of non-numeric characteres achieved by alt-combinations such as @,# and £á
   ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
   ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
+  ZK-1452: Unknown stub error
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential

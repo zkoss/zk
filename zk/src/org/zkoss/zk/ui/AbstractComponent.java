@@ -86,6 +86,7 @@ import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.sys.StubsComponent;
+import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
@@ -450,7 +451,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_page != null) {
 			if (bRoot) ((AbstractPage)_page).removeRoot(this);
 			if (page == null
-			&& ((DesktopCtrl)_page.getDesktop()).removeComponent(this, true))
+			&& ((DesktopCtrl)_page.getDesktop()).removeComponent(this, true)
+			&& !(this instanceof StubComponent)) //Bug ZK-1452: don't need to reset StubComponent's uuid
 				resetUuid = true; //recycled (so reset it -- refer to DesktopImpl for reason)
 		}
 
