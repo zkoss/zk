@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1150.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 14, 2012 11:42:35 AM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	You should not see any space ("nbsp") after "Help", please use browser "inspector" tool to see its HTML for the result.
+	<menubar id="menubar" width="100%">
+		<menu label="Project" >
+			<menupopup>
+				<menuitem  label="New"  />
+				<menuitem  label="Open"  />
+			</menupopup>
+		</menu>
+		<menuitem label="Help" style="text-decoration:underline;"/>
+		<menu>
+			<menupopup>
+				<menuitem label="Index"  />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

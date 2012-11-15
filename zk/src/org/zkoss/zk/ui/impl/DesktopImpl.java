@@ -81,6 +81,7 @@ import org.zkoss.zk.ui.sys.RequestQueue;
 import org.zkoss.zk.ui.sys.Scheduler;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -541,7 +542,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public boolean removeComponent(Component comp, boolean recycleAllowed) {
 		final String uuid = comp.getUuid();
-		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled())
+		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled()
+				|| (comp instanceof StubComponent)) //Bug ZK-1452: don't need to recycle StubComponent's uuid since it's never reset
 			return false; //not recycled
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will

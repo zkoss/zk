@@ -25,21 +25,18 @@ public class Reflections {
 	// field scanner //
 	/**
 	 * Traverse through all fields with a certain annotation in a class and 
-	 * it super classes. Subclass first. If a field is re-declared in subclass, 
-	 * it will be skipped at the superclass.
+	 * it super classes. Subclass first.
+	 * <p> All the fields with the same name will be scanned too. (since 6.5.1),
+	 * before 6.5.1 release, only the subclass will be scanned.
 	 */
 	public static <A extends Annotation> void forFields(Class<?> clazz, 
 			Class<A> annotationClass, FieldRunner<A> runner){
-		final Set<String> handled = new HashSet<String>();
 		for(Class<?> c = clazz; c != null; c = c.getSuperclass()) {
 			for(Field f : c.getDeclaredFields()){
 				A anno = f.getAnnotation(annotationClass);
 				if(anno == null) continue;
-				// skip if handled in subclass
-				if(handled.contains(f.getName())) continue;
 				f.setAccessible(true);
 				runner.onField(c, f, anno);
-				handled.add(f.getName());
 			}
 		}
 	}

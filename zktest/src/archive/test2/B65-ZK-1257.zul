@@ -1,0 +1,57 @@
+<zk>
+	<zscript><![CDATA[
+	import java.io.IOException;
+	import org.zkoss.util.media.Media;
+	import org.zkoss.zhtml.Filedownload;
+	import org.zkoss.zk.ui.Component;
+	import org.zkoss.zk.ui.event.Event;
+	import org.zkoss.zk.ui.event.Events;
+	import org.zkoss.zk.ui.event.EventListener;
+	import org.zkoss.zk.ui.event.UploadEvent;
+	import org.zkoss.zk.ui.util.GenericForwardComposer;
+	import org.zkoss.zul.Button;
+	
+	public class TestController extends GenericForwardComposer {
+		private Media media;
+
+		protected Button uploadBtn;
+		
+		public void doAfterCompose(Component comp) throws Exception {
+			super.doAfterCompose(comp);
+	
+			uploadBtn.addEventListener(Events.ON_UPLOAD, new EventListener() {
+				public void onEvent(Event evt) throws InterruptedException, IOException {
+					uploadHandler(((UploadEvent) evt).getMedia());
+				}
+			});
+		}
+	
+		private void uploadHandler(Media media) throws InterruptedException, IOException {
+			this.media = media;
+		}
+	
+		public void onClick$download() {
+			Filedownload.save(media, "B65-ZK-1257.png");
+		}
+	}]]>
+	</zscript>
+	
+	<html>
+		Test instructions:
+		<ol>
+			<li>Click on "Upload Image" button</li>
+			<li>Upload an image</li>
+			<li>Click on "Download" button to download the uploaded file</li>
+		</ol>
+		
+		Expected results:
+		<ul>
+			<li>The downloaded image should be named 'B65-ZK-1257.png'.</li>
+		</ul>
+	</html>
+
+	<window width="100%" apply="TestController">
+		<button id="uploadBtn" label="Upload Image" upload="true,maxsize=300" />
+		<button id="download" label="Download" />
+	</window>
+</zk>

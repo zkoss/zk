@@ -40,7 +40,7 @@ function (out) {
 		if (img)
 			out.push(' style="background-image:url(', img, ')"');
 
-		out.push('>', zUtl.encodeXML(this.getLabel()), '&nbsp;</', btn, '></div></td><td class="',
+		out.push('>', zUtl.encodeXML(this.getLabel()), '</', btn, '></div></td><td class="',
 					zcls, '-inner-r"><span class="', zcls, '-space"></span></td></tr></tbody></table></a></td>');
 	} else {
 		out.push('<li', this.domAttrs_(), '><div class="', zcls, '-cl"><div class="', zcls, '-cr"><div class="', zcls, '-cm">');

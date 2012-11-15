@@ -221,7 +221,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var added = this.isDisabled() ? this.getZclass() + '-disd' : '';
+			var zcls = this.getZclass(),
+				added = this.isDisabled() ? zcls + '-disd' : '';
+			if (this.isSelected())
+				added += ' ' + zcls + '-seld';
 			if (added) scls += (scls ? ' ': '') + added;
 		}
 		return scls;

@@ -1,0 +1,8 @@
+<zk>
+	<label multiline="true">
+	1. Add Spanish keyboard layout in your system.
+	2. Press AltGr(right Alt key) + 3 in the doublebox.
+	3. Should not see any characters showed.
+	</label>
+	<doublebox format="0.00" width="150px" />
+</zk>

@@ -18,7 +18,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-spinner.
  */
 zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
-	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
 	$define: {

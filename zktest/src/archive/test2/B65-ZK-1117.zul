@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1117.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 14, 2012  3:50:50 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="My First Window" border="normal">
+<label multiline="true">
+1.click button, you should get the spinner error message. 
+2.change the spinner value to 1,then click button, you should get alert : spinner value is 1
+3.clear the spinner value to empty,then click button, you should get the spinner error messag.
+4. please check the behavior with double spinner, the result should be the same
+</label>
+<spinner id="s"/>
+<button label="click1" onClick='alert("spinner value "+s.getValue())'/>
+<doublespinner id="sd"/>
+<button label="click2" onClick='alert("dsoublespinner value "+sd.getValue())'/>
+</window>

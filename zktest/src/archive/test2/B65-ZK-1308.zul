@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1308.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 14, 2012 10:25:38 AM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<window apply="org.zkoss.zktest.test2.B65_ZK_1308_1">
+You should see Super and Subclass without <label value="null" style="font-weight:bold"/> value.
+<separator/>
+</window>
