@@ -33,7 +33,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 	function _newDate(year, month, day, bFix) {
 		var v = new Date(year, month, day);
-		return bFix && v.getMonth() != month ?
+		return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
 			new Date(year, month + 1, 0)/*last day of month*/: v;
 	}
 

@@ -69,6 +69,7 @@ ZK 6.5.1
   ZK-1187: Setting an sClass on a selected tab results in tab losing z-tab-seld class
   ZK-1463: Button is disabled and clickable if windows is from visible=false to true
   ZK-1464: Console has Exception log when change src of include if bind to a textbox
+  ZK-1213: Calendar and datebox showing the wrong day number
   ZK-1220: Instant textbox doesn't preserve the focus at position
 
 * Upgrade Notes
