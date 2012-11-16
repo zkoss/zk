@@ -845,7 +845,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			return;
 		
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
-		if ((zk.chrome || zk.ie || zk.safari) && !(this.fire('onScroll', this.ehead.scrollLeft).stopped)) {
+		if ((zk.chrome || zk.ie || zk.safari) && this.ehead && !(this.fire('onScroll', this.ehead.scrollLeft).stopped)) {
 			if (this._currentLeft != this.ehead.scrollLeft) {
 				if (this.ebody)
 					this.ebody.scrollLeft = this.ehead.scrollLeft;
