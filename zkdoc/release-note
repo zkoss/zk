@@ -66,6 +66,7 @@ ZK 6.5.1
   ZK-1117: some wrong behavior in spinner and double spinner
   ZK-1234: Nested grids does not properly display alternating odd/even rows
   ZK-1187: Setting an sClass on a selected tab results in tab losing z-tab-seld class
+  ZK-1464: Console has Exception log when change src of include if bind to a textbox  
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
