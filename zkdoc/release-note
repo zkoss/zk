@@ -5,6 +5,7 @@ ZK 6.5.1
   ZK-1397: DefaultTreeNode support empty children mean leaf node
   ZK-1248: Sub menu should not overlap its parent in menupopup
   ZK-1416: Support default Command and GlobalCommand handling
+  ZK-1465: Comet server push support HTML5 page-visibility API to reduce the server loading
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes
@@ -73,6 +74,14 @@ ZK 6.5.1
    SWF vulnerability in YUI 2 that the SWF files in question contain a cross-site JavaScript injection
    vulnerability which allows for the execution of arbitrary third-party code within the domain from which
    the files are served. Please download the flashchart.jar from the link instead - https://github.com/zkoss/flashchart
+  + To support this feature ZK-1465 for reducing server loading, the comet server push will enable the smart connection setting
+  by default, if you want to disable it as the previous version, please specify the following setting in the zk.xml.
+   <library-property>
+    <name>org.zkoss.zkex.ui.comet.smartconnection.disabled</name>
+    <value>true</value>
+  </library-property>
+  Note: the smart connection is based on HTML5's page-visibility API, which is described - http://www.w3.org/TR/page-visibility/
+  and it can only support on HTML5 browsers.
 
   --------
 ZK 6.5.0
