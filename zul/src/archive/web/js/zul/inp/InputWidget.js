@@ -740,7 +740,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (vi.rawValue != null) { //coerce failed
 				data = {rawValue: vi.rawValue};
 			} else if (!vi.error) {
-				inp.value = value = this.coerceToString_(vi.value);
+				/*
+				 * ZK-1220: with instant="true", inp.value = value will occur position error when change position.
+				 * Datebox, Timebox and FormatWidget which assign format can't avoid this issue.
+				 * Because they will change the "value" all the time.
+				 */
+				value = this.coerceToString_(vi.value);
+				if (inp.value !== value) {
+					inp.value = value;					
+				}
 				this._reVald = false;
 
 				//reason to use this._defRawVal rather than this._value is
