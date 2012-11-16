@@ -202,6 +202,9 @@ import org.zkoss.zk.au.out.*;
 		|| !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
+		//relative fix for BUG ZK-1464
+		if(_ending && _pgRemoved!=null && _pgRemoved.contains(page)) return;
+				
 		if (_pgInvalid == null)
 			_pgInvalid = new LinkedHashSet<Page>(4);
 		_pgInvalid.add(page);
@@ -214,6 +217,10 @@ import org.zkoss.zk.au.out.*;
 		if (_recovering || _disabled || page == null || page instanceof VolatilePage
 		|| !_exec.isAsyncUpdate(page) || isCUDisabled(comp))
 			return; //nothing to do
+		
+		//relative fix BUG ZK-1464
+		if(_ending && _pgRemoved!=null && _pgRemoved.contains(page)) return;
+		
 		if (_ending) throw new IllegalStateException("UI can't be modified in the rendering phase");
 
 		checkDesktop(comp);
@@ -251,6 +258,12 @@ import org.zkoss.zk.au.out.*;
 	boolean append, int priority) {
 		if (comp == null)
 			throw new IllegalArgumentException();
+		//main fix for BUG ZK-1464
+		if(_ending && 
+				(comp.getPage()==null || (_pgRemoved!=null &&  _pgRemoved.contains(comp.getPage())))){
+			return;
+		}
+		
 		final Map<String, TimedValue> respmap = getAttrRespMap(comp);
 		if (respmap != null)
 			respmap.put(append ? attr + ":" + _cntMultSU++: attr,
@@ -393,6 +406,22 @@ import org.zkoss.zk.au.out.*;
 		if (response == null)
 			throw new IllegalArgumentException();
 
+		//relative fix BUG ZK-1464
+		if(_ending){
+			Object dps = response.getDepends();
+			if(dps==null) return;
+			if(dps instanceof Page && _pgRemoved!=null && _pgRemoved.contains((Page)dps)){
+				return;
+			}
+			if(dps instanceof Component){
+				Component p = (Component)dps; 
+				if(p.getPage()==null || 
+						(_pgRemoved!=null && _pgRemoved.contains(p.getPage()))){
+					return;
+				}
+			}
+		}
+				
 		final Object depends = response.getDepends(); //Page or Component
 		if (depends instanceof Component && isCUDisabled((Component)depends))
 			return; //nothing to do

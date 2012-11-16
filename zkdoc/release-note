@@ -57,7 +57,7 @@ ZK 6.5.1
   ZK-1324: Trendy buttons inside bandbox popup does not lose focus when popup is closed (FF and Opera only)
   ZK-1295: Disabled buttons cannot regain focus by re-enabling and then setting focus
   ZK-1458: Right click on iPad does not work if there are both double click event handler and right click event handler
-  ZK-1373: Doublebox should not allow the typing of non-numeric characteres achieved by alt-combinations such as @,# and £á
+  ZK-1373: Doublebox should not allow the typing of non-numeric characteres achieved by alt-combinations such as @ and #
   ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
   ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
   ZK-1308: WireVariable does not wire a superclass field if a field with the same name is declared in a subclass
@@ -68,7 +68,9 @@ ZK 6.5.1
   ZK-1234: Nested grids does not properly display alternating odd/even rows
   ZK-1187: Setting an sClass on a selected tab results in tab losing z-tab-seld class
   ZK-1463: Button is disabled and clickable if windows is from visible=false to true
-  
+  ZK-1464: Console has Exception log when change src of include if bind to a textbox
+  ZK-1220: Instant textbox doesn't preserve the focus at position
+
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
    SWF vulnerability in YUI 2 that the SWF files in question contain a cross-site JavaScript injection
