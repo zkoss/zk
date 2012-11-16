@@ -71,6 +71,7 @@ ZK 6.5.1
   ZK-1464: Console has Exception log when change src of include if bind to a textbox
   ZK-1213: Calendar and datebox showing the wrong day number
   ZK-1220: Instant textbox doesn't preserve the focus at position
+  ZK-1467: Resizable panels inside portallayout loses resizability after move
 
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential

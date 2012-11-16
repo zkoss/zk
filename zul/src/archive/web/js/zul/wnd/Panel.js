@@ -872,6 +872,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
+		// Bug ZK-1467: Resizable panels inside portallayout loses resizability after move
+		if (this._sizer) {
+			this._sizer.destroy();
+			this._sizer = null;
+		}
 		this.domUnlisten_(this.$n(), 'onMouseMove');
 		this.domUnlisten_(this.$n(), 'onMouseOut');
 		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
