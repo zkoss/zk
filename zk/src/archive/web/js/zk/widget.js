@@ -480,10 +480,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.rerender(-1);
 		}
 	}
-	function _rerenderDone(wgt) {
+	function _rerenderDone(wgt, skipper /* Bug ZK-1463 */) {
 		for (var j = _rdque.length; j--;)
-			if (zUtl.isAncestor(wgt, _rdque[j]))
-				_rdque.splice(j, 1);
+			if (zUtl.isAncestor(wgt, _rdque[j])) {
+				if (!skipper || !skipper.skipped(wgt, _rdque[j]))
+					_rdque.splice(j, 1);
+			}
 	}
 
 	function _markCache(cache, visited, visible) {
@@ -2718,7 +2720,7 @@ function () {
 	bind: function (desktop, skipper) {
 		this._binding = true;
 
-		_rerenderDone(this); //cancel pending async rerender
+		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod) 
 			_bindrod(this);
 		else {
@@ -2747,7 +2749,7 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	unbind: function (skipper) {
-		_rerenderDone(this); //cancel pending async rerender
+		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
 			_unbindrod(this);
 		else {
