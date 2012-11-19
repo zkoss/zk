@@ -1,0 +1,24 @@
+<zk>
+	<label multiline="true">
+		1.change the dynamic value to XYZ and tab out.
+		2.all Dynamic Value should change to XYZ (however, dValue in inner window2 is not if the bug isn't fixed)
+	</label>
+	<window 
+		title = "Outter Window"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01468RefInclude')" >
+		<button label="dump outer" onClick="binder.tracker.dump()"/>
+		<vlayout>
+			<hlayout>
+				Dynamic Value : <textbox id="tb1" value="@bind(vm.dynamicValue)"/> 
+				<label id="lb1" value="@load(vm.dynamicValue)"/> 
+			</hlayout>
+		</vlayout>
+		<div dValue="@ref(vm.dynamicValue)">
+			<hlayout>
+				dValue : <label id="lb2"  value="@load(dValue)"/> 
+			</hlayout>
+		
+			<include src="B01468RefIncludeInner.zul" />
+		</div>
+	</window>
+</zk>
