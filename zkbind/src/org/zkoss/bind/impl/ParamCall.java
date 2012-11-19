@@ -28,6 +28,8 @@ import org.zkoss.bind.annotation.HeaderParam;
 import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.bind.annotation.Scope;
 import org.zkoss.bind.annotation.ScopeParam;
+import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
@@ -180,25 +182,34 @@ public class ParamCall {
 				final String name = ((ScopeParam)anno).value();
 				final Scope[] ss = ((ScopeParam)anno).scopes();
 				
+				Object val = null;
+				
 				for(Scope s:ss){
 					switch(s){
 					case AUTO:
 						if(ss.length==1){
-							return _component.getAttribute(name,true);
+							val = _component.getAttribute(name,true);
+						}else{
+							throw new UiException("don't use "+s+" with other scopes "+Arrays.toString(ss));
 						}
-						throw new UiException("don't use "+s+" with other scopes "+Arrays.toString(ss));
 					}
 				}
-				Object val = null;
-				for(Scope scope:ss){
-					final String scopeName = scope.getName();
-					Object scopeObj = Components.getImplicit(_component, scopeName);
-					if(scopeObj instanceof Map){
-						val = ((Map<?,?>)scopeObj).get(name);
-						if(val!=null) break;
-					}else if(scopeObj !=null){
-						_log.error("the scope of "+scopeName+" is not a Map, is "+scopeObj);
+				if(val==null){
+					for(Scope scope:ss){
+						final String scopeName = scope.getName();
+						Object scopeObj = Components.getImplicit(_component, scopeName);
+						if(scopeObj instanceof Map){
+							val = ((Map<?,?>)scopeObj).get(name);
+							if(val!=null) break;
+						}else if(scopeObj !=null){
+							_log.error("the scope of "+scopeName+" is not a Map, is "+scopeObj);
+						}
 					}
+				}
+				
+				//zk-1469, 
+				if(val instanceof ReferenceBinding){
+					val = resolveReferenceBinding(name,(ReferenceBinding)val,returnType);
 				}
 				return val==null?null:Classes.coerce(returnType, val);
 			}
@@ -220,6 +231,17 @@ public class ParamCall {
 			}
 		});
 	}
+	
+	private Object resolveReferenceBinding(String name, ReferenceBinding rbinding,Class<?> returnType){
+		BindEvaluatorX evalx = rbinding.getBinder().getEvaluatorX();
+		//resolve by name or by rbinding.propertyString directly?
+		Object val = BindEvaluatorXUtil.eval(evalx, rbinding.getComponent(), name, returnType, null);
+		//following is quick but not safe because of the null arg
+//		val = ((ReferenceBinding)val).getValue(null);
+		
+		return val;
+	}
+	
 	public void setExecution(Execution exec) {
 		_execution = exec;
 		//http param
