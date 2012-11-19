@@ -74,6 +74,7 @@ ZK 6.5.1
   ZK-1467: Resizable panels inside portallayout loses resizability after move
   ZK-1462: Portalchildren and Renderdeferer cause a Javascript error
   ZK-1469: argument type mismatch when try to get @ScopeParam with @ref value
+  ZK-1218: Doublebox says "not a number" when significant length extends beyond 15
 
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
