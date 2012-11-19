@@ -72,6 +72,7 @@ ZK 6.5.1
   ZK-1213: Calendar and datebox showing the wrong day number
   ZK-1220: Instant textbox doesn't preserve the focus at position
   ZK-1467: Resizable panels inside portallayout loses resizability after move
+  ZK-1462: Portalchildren and Renderdeferer cause a Javascript error
   ZK-1469: argument type mismatch when try to get @ScopeParam with @ref value
 
 * Upgrade Notes
