@@ -49,6 +49,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			 el.style.top = el.offsetTop + "px";
 		if(el.style.left && el.style.left.indexOf("%") >= 0)
 			 el.style.left = el.offsetLeft + "px";
+		
+		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
+		dg.control._isDragging = true;
 		zWatch.fire('onFloatUp', dg.control); //notify all
 	}
 	function _ghostmove(dg, ofs, evt) {
@@ -107,6 +110,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _aftermove(dg, evt) {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
+
+		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
+		delete wgt._isDragging;
 		
 		// Bug for ZK-385 clear position value after move
         if (wgt._position && wgt._position != "parent") {
@@ -860,7 +866,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.zsync();
 	},
 	onFloatUp: function (ctl) {
-		if (!this._visible || this._mode == 'embedded')
+		/*
+		 * ZK-1309: If window is dragging, ignore onFloatUp routine.
+		 * The reason is prevent zindex of window change(in `setTopmost()`) when dragging,
+		 * it will let full-mask is not visible.
+		 */
+		if (!this._visible || this._mode == 'embedded' || this._isDragging) 
 			return; //just in case
 
 		var wgt = ctl.origin;
