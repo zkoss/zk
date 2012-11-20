@@ -3,7 +3,6 @@
  */
 package org.zkoss.zk.ui.select;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.List;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -76,6 +76,8 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	
 	private static final long serialVersionUID = 5022810317492589463L;
 	private static final String ON_WIRE_CLONE = "onWireCloneSelectorComposer";
+	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
+	
 	
 	private T _self;
 	/** A list of resolvers (never null). A variable resolver is added automatically if
@@ -83,7 +85,8 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 */
 	protected final List<VariableResolver> _resolvers;
 	
-	private List<SubscriptionInfo> _subsInfo;
+	//subscription information, for sharing between doBeforeCompose & doAfterCompose
+	private Object _subsInfo;
 	
 	public SelectorComposer() {
 		_resolvers = Selectors.newVariableResolvers(getClass(), SelectorComposer.class);
@@ -107,8 +110,9 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		Selectors.wireComponents(comp, this, false);
 		Selectors.wireEventListeners(comp, this); // first event listener wiring
 		
-		if(_subsInfo!=null && _subsInfo.size()>0){
+		if(_subsInfo!=null){
 			getUtilityHandler().postSubscriptionHandling(_subsInfo,_self);
+			_subsInfo = null;//will not use in further lifetime
 		}
 		
 		// register event to wire variables just before component onCreate
@@ -184,12 +188,27 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	@Override
 	public Object willClone(Component comp) {
 		try {
-			Composer<?> composerClone = getClass().newInstance();
+			//following code refers to GenericAutowireComposer.
+			final Execution exec = Executions.getCurrent();
+			final int idcode = System.identityHashCode(comp);
+
+			Composer composerClone = (Composer) exec.getAttribute(COMPOSER_CLONE+idcode);
+			if (composerClone == null) {
+				composerClone = (Composer) Classes.newInstance(getClass(), null);
+				exec.setAttribute(COMPOSER_CLONE+idcode, composerClone);
 				
-			//cannot wire directly because the clone 
-			//component might not be attach to Page yet
-			comp.addEventListener(ON_WIRE_CLONE, new CloneDoAfterCompose());
-			Events.postEvent(new Event(ON_WIRE_CLONE, comp, composerClone));
+				//cannot call doAfterCompose directly because the clone 
+				//component might not be attach to Page yet
+				Component post = new AbstractComponent();
+				EventListener<Event> l = new CloneDoAfterCompose();
+				Event evt = new Event(ON_WIRE_CLONE, post, new Object[]{comp,composerClone});
+				
+				//unlike GenericAutowireComposer, 
+				//don't add listener to component when cloning, it cause problem/bugs.
+				//use a fake component to handle event;
+				post.addEventListener(ON_WIRE_CLONE, l);
+				Events.postEvent(evt);
+			}
 			return composerClone;
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
@@ -197,26 +216,27 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	}
 	
 	//wire, called once after clone
-	private static class CloneDoAfterCompose
+	private class CloneDoAfterCompose
 	implements SerializableEventListener<Event>, java.io.Serializable {
 		private static final long serialVersionUID = 1L;
 		// brought from GenericAutowireComposer
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
-			final Component clone = event.getTarget();
+			//we don't need to remove it actually, since target are not at anywhere after event. 
+			event.getTarget().removeEventListener(ON_WIRE_CLONE, this);
+			
+			final Component clone = (Component)((Object[])event.getData())[0];
 			final SelectorComposer<Component> composerClone = 
-				(SelectorComposer<Component>) event.getData(); 
+				(SelectorComposer<Component>) ((Object[])event.getData())[1];; 
 			ConventionWires.wireController(clone, composerClone);
 			Selectors.wireVariables(clone.getPage(), this, composerClone._resolvers);
 			Selectors.wireComponents(clone, this, false);
 			Selectors.wireEventListeners(clone, this);
 			
-			composerClone._subsInfo = getUtilityHandler().subscribeEventQueues(this);
-			if(composerClone._subsInfo!=null && composerClone._subsInfo.size()>0){
-				getUtilityHandler().postSubscriptionHandling(composerClone._subsInfo,clone);
+			Object subsInfo = getUtilityHandler().subscribeEventQueues(composerClone);
+			if(subsInfo!=null){
+				getUtilityHandler().postSubscriptionHandling(subsInfo,clone);
 			}
-			
-			clone.removeEventListener(ON_WIRE_CLONE, this);
 		}
 	}
 	
@@ -228,8 +248,8 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
 		Selectors.rewireEventListeners(comp, this);
 		
-		List<SubscriptionInfo> subsInfo = getUtilityHandler().resubscribeEventQueues(this);
-		if(subsInfo!=null && subsInfo.size()>0){
+		Object subsInfo = getUtilityHandler().resubscribeEventQueues(this);
+		if(subsInfo!=null){
 			getUtilityHandler().postSubscriptionHandling(subsInfo,comp);
 		}
 	}
@@ -256,54 +276,18 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		
 		/** Subscribes annotated methods to the EventQueues.
 		 */
-		public List<SubscriptionInfo> subscribeEventQueues(Object controller);
+		public Object subscribeEventQueues(Object controller);
 
 		/** Re-subscribes annotated methods to the EventQueues, used in clustering
 		 * environment.
 		 */
-		public List<SubscriptionInfo> resubscribeEventQueues(Object controller);
+		public Object resubscribeEventQueues(Object controller);
 		
 		/**
 		 * Handling the subscription after a target(e.x. component) attached to this controller
 		 * @since 6.5.1
 		 */
-		public void postSubscriptionHandling(List<SubscriptionInfo> subsInfo,Object target);
-	}
-	
-	/**
-	 * An information bean for {@link UtilityHandler}
-	 * @author dennis
-	 * @since 6.5.1
-	 */
-	public static class SubscriptionInfo implements Serializable {
-		private static final long serialVersionUID = 1L;
-		private EventListener<Event> _listener;
-		private String _qname;
-		private String _scope;
-		private boolean _autoUnsubscribe;
-
-		public SubscriptionInfo(String qname, String scope, boolean autoUnsubscribe, EventListener<Event> listener) {
-			this._listener = listener;
-			this._qname = qname;
-			this._scope = scope;
-			this._autoUnsubscribe = autoUnsubscribe;
-		}
-
-		public EventListener<Event> getListener() {
-			return _listener;
-		}
-
-		public String getQueueName() {
-			return _qname;
-		}
-
-		public String getScope() {
-			return _scope;
-		}
-
-		public boolean isAutoUnsubscribe() {
-			return _autoUnsubscribe;
-		}
+		public void postSubscriptionHandling(Object subsInfo,Object target);
 	}
 	
 	/** Default skeletal implementation of {@link UtilityHandler}.
@@ -312,9 +296,9 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 */
 	public static class UtilityHandlerImpl implements UtilityHandler {
 		private static final long serialVersionUID = 1L;
-		public List<SubscriptionInfo> subscribeEventQueues(Object controller) {return null;}
-		public List<SubscriptionInfo> resubscribeEventQueues(Object controller) {return null;}
-		public void postSubscriptionHandling(List<SubscriptionInfo> subsInfo,Object target) {}
+		public Object subscribeEventQueues(Object controller) {return null;}
+		public Object resubscribeEventQueues(Object controller) {return null;}
+		public void postSubscriptionHandling(Object subsInfo,Object target) {}
 	}
 	
 	private static final String UTILITY_HANDLER_KEY = 
@@ -351,5 +335,4 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			}
 		}
 	}
-	
 }

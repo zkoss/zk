@@ -4,17 +4,26 @@
 	2.then use reload1 or reload 2 to reload the window, then clicking send event, you should see only one message shows in listbox1 and one in listbox2
 	3.then, detach the window then clicking send event, you should see no message shows in listbox1 and 2
 	</label>
-	<window>
+	<window id="win">
 		<zscript>
 			int count = 0;
 		</zscript>
-		<include id="inc" src="/test2/B65-ZK-1438-inner.zul" mode="instant" />
+		<vlayout id="container">
+			<window>
+				<include id="inc" src="/test2/B65-ZK-1438-inner.zul" mode="instant" />
+			</window>
+		</vlayout>
 		
-		<button label="reload 1" onClick='inc.invalidate()'/>
-		<button label="reload 2" onClick='inc.src = "/test2/B65-ZK-1438-inner.zul?ts="+count++'/>
+		<hlayout>
+		<button label="reload 1" onClick='container.firstChild.firstChild.invalidate()'/>
+		<button label="reload 2" onClick='container.firstChild.firstChild.src = "/test2/B65-ZK-1438-inner.zul?ts="+count++'/>
 		<button label="sendEvent" onClick="sendEvent()"/>
+		</hlayout>
+		<hlayout>
+			<button label="test clone" onClick='doClone()'/>
+		</hlayout>
 		
-	</window>
+	
 			<zscript><![CDATA[
 			void sendEvent(){
 				listbox1.getItems().clear();
@@ -22,9 +31,18 @@
 				org.zkoss.zk.ui.event.EventQueues.lookup("myqueue").publish(new org.zkoss.zk.ui.event.Event("onMyEvent"));
 			}
 			
+			void doClone(){
+				org.zkoss.zk.ui.Component p2 = container.firstChild.clone();
+				p2.title = p2.title +" "+count++; 
+				container.appendChild(p2);
+			}
+			
+			
 	]]></zscript>
 	<vlayout>
+	
 	<listbox width="600px" id="listbox1"></listbox>
 	<listbox width="600px" id="listbox2"></listbox>
 	</vlayout>
+	</window>
 </zk>
