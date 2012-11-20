@@ -454,6 +454,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			delete wgt._z$rd;
 			wgt._norenderdefer = true;
 			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null, null, true);
+			if (wgt.parent)
+				wgt.parent.onChildRenderDefer_(wgt);
 		}
 	}
 
@@ -1874,6 +1876,13 @@ wgt.$f().main.setTitle("foo");
 	 * @param zk.Widget child the child whose visiblity is changed
 	 */
 	onChildVisible_: function () {
+	},
+	/** A callback called after a child has been delay rendered.
+	 * @param zk.Widget child the child being rendered
+	 * @see #deferRedraw_
+	 * @since 6.5.1
+	 */
+	onChildRenderDefer_: function (/*child*/) {
 	},
 	/** Makes this widget as topmost.
 	 * <p>If this widget is not floating, this method will look for its ancestors for the first ancestor who is floating. In other words, this method makes the floating containing this widget as topmost.

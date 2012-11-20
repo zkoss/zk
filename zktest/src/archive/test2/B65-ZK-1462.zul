@@ -1,0 +1,27 @@
+<zk>	
+	<label>
+	Wait around 1 seconds, should see two panels showed and they are draggable and droppable.
+	</label>
+	<portallayout id="myptl" maximizedMode="whole">
+		<portalchildren renderdefer="1000">
+			<panel id="paneltables" border="normal" title="test" height="352px"
+				collapsible="true" maximizable="true" style="margin-bottom:10px">
+				<panelchildren>
+					<hlayout height="100%">
+						<label>Panel 1</label>
+					</hlayout>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren>
+			<panel border="normal" title="test" height="352px"
+				collapsible="true" maximizable="true" style="margin-bottom:10px" renderdefer="1000">
+				<panelchildren>
+					<hlayout height="100%">
+						<label>Panel 2</label>
+					</hlayout>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
