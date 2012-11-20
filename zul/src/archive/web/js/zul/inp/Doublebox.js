@@ -67,8 +67,11 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 					valstr += '0';
 			}
 
-			if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) //1e2: assumes OK
+			if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
+				if (!isNaN(val) && raw != valstr) //Bug ZK-1218: show Illegal value instead if input is number but too long
+					return {error: zk.fmt.Text.format(msgzul.ILLEGAL_VALUE)};
 				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
+			}
 		}
 
 		if(this._rounding == 7 && (this._errmsg/*server has to clean up*/ ||

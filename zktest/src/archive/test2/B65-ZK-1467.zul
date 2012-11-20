@@ -1,0 +1,35 @@
+<zk>
+	<html>
+		Testing instructions:
+		<ol>
+			<li>Move any panel to another location.</li>
+			<li>Hover over the panel title border</li>
+		</ol>
+		
+		Expected results:
+		<ul>
+			<li>The mouse cursor should change to resizing symbol.</li>
+		</ul>
+	</html>
+	<portallayout>
+	    <portalchildren width="30%">
+	        <panel id="p1" height="150px" title="Panel 1" sizable="true" border="normal">
+	            <panelchildren>
+	                <div width="100%" height="100%" style="background-color: blue"/>
+	            </panelchildren>
+	        </panel>
+	        <panel id="p2" height="300px" title="Panel 2" sizable="true" border="normal">
+	            <panelchildren>
+	                <div width="100%" height="100%" style="background-color: green"/>
+	            </panelchildren>
+	        </panel>
+	    </portalchildren>
+	    <portalchildren width="70%">
+	        <panel id="p3" height="150px" title="Panel 3" sizable="true">
+	            <panelchildren>
+	                <div width="100%" height="100%" style="background-color: red"/>
+	            </panelchildren>
+	        </panel>
+	    </portalchildren>
+	</portallayout>
+</zk>

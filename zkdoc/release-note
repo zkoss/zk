@@ -5,6 +5,7 @@ ZK 6.5.1
   ZK-1397: DefaultTreeNode support empty children mean leaf node
   ZK-1248: Sub menu should not overlap its parent in menupopup
   ZK-1416: Support default Command and GlobalCommand handling
+  ZK-1465: Comet server push support HTML5 page-visibility API to reduce the server loading
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes
@@ -56,7 +57,7 @@ ZK 6.5.1
   ZK-1324: Trendy buttons inside bandbox popup does not lose focus when popup is closed (FF and Opera only)
   ZK-1295: Disabled buttons cannot regain focus by re-enabling and then setting focus
   ZK-1458: Right click on iPad does not work if there are both double click event handler and right click event handler
-  ZK-1373: Doublebox should not allow the typing of non-numeric characteres achieved by alt-combinations such as @,# and £á
+  ZK-1373: Doublebox should not allow the typing of non-numeric characteres achieved by alt-combinations such as @ and #
   ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
   ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
   ZK-1308: WireVariable does not wire a superclass field if a field with the same name is declared in a subclass
@@ -66,12 +67,32 @@ ZK 6.5.1
   ZK-1117: some wrong behavior in spinner and double spinner
   ZK-1234: Nested grids does not properly display alternating odd/even rows
   ZK-1187: Setting an sClass on a selected tab results in tab losing z-tab-seld class
-  
+  ZK-1463: Button is disabled and clickable if windows is from visible=false to true
+  ZK-1464: Console has Exception log when change src of include if bind to a textbox
+  ZK-1213: Calendar and datebox showing the wrong day number
+  ZK-1220: Instant textbox doesn't preserve the focus at position
+  ZK-1467: Resizable panels inside portallayout loses resizability after move
+  ZK-1462: Portalchildren and Renderdeferer cause a Javascript error
+  ZK-1469: argument type mismatch when try to get @ScopeParam with @ref value
+  ZK-1218: Doublebox says "not a number" when significant length extends beyond 15
+  ZK-978: dynamic hflex on listboxes doesn't work
+  ZK-1468: Value doesn't be reload if it binds to @ref and in include
+  ZK-1309: Modal window loses it's modality in certain situation
+  ZK-1472: Cannot bind to include arg
+
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
    SWF vulnerability in YUI 2 that the SWF files in question contain a cross-site JavaScript injection
    vulnerability which allows for the execution of arbitrary third-party code within the domain from which
    the files are served. Please download the flashchart.jar from the link instead - https://github.com/zkoss/flashchart
+  + To support this feature ZK-1465 for reducing server loading, the comet server push will enable the smart connection setting
+  by default, if you want to disable it as the previous version, please specify the following setting in the zk.xml.
+   <library-property>
+    <name>org.zkoss.zkex.ui.comet.smartconnection.disabled</name>
+    <value>true</value>
+  </library-property>
+  Note: the smart connection is based on HTML5's page-visibility API, which is described - http://www.w3.org/TR/page-visibility/
+  and it can only support on HTML5 browsers.
 
   --------
 ZK 6.5.0

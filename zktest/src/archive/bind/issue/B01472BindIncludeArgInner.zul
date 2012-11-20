@@ -1,0 +1,11 @@
+<zk>
+	<window 
+		title = "Inner Window"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01472BindIncludeArgInner')" >
+		<vlayout>
+			<hlayout>
+				Static Value : <label id="lb2" value="@load(vm.staticValue)"/> 
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

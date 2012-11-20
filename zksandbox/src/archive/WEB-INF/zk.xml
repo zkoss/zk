@@ -69,6 +69,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
 	-->
+	
+	<!-- F65-ZK 1465 
+		Turn off smart connection for the comet server push.
+		By default is enable and only HTML5 browser support
+	<library-property>
+		<name>org.zkoss.zkex.ui.comet.smartconnection.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
 
 	<!-- Turn on the following if you want to use the trendy mold as default
 		for all buttons.

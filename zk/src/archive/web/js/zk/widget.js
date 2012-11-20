@@ -454,6 +454,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			delete wgt._z$rd;
 			wgt._norenderdefer = true;
 			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null, null, true);
+			if (wgt.parent)
+				wgt.parent.onChildRenderDefer_(wgt);
 		}
 	}
 
@@ -480,10 +482,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.rerender(-1);
 		}
 	}
-	function _rerenderDone(wgt) {
+	function _rerenderDone(wgt, skipper /* Bug ZK-1463 */) {
 		for (var j = _rdque.length; j--;)
-			if (zUtl.isAncestor(wgt, _rdque[j]))
-				_rdque.splice(j, 1);
+			if (zUtl.isAncestor(wgt, _rdque[j])) {
+				if (!skipper || !skipper.skipped(wgt, _rdque[j]))
+					_rdque.splice(j, 1);
+			}
 	}
 
 	function _markCache(cache, visited, visible) {
@@ -1873,6 +1877,13 @@ wgt.$f().main.setTitle("foo");
 	 */
 	onChildVisible_: function () {
 	},
+	/** A callback called after a child has been delay rendered.
+	 * @param zk.Widget child the child being rendered
+	 * @see #deferRedraw_
+	 * @since 6.5.1
+	 */
+	onChildRenderDefer_: function (/*child*/) {
+	},
 	/** Makes this widget as topmost.
 	 * <p>If this widget is not floating, this method will look for its ancestors for the first ancestor who is floating. In other words, this method makes the floating containing this widget as topmost.
 	 * To make a widget floating, use {@link #setFloating_}.
@@ -2718,7 +2729,7 @@ function () {
 	bind: function (desktop, skipper) {
 		this._binding = true;
 
-		_rerenderDone(this); //cancel pending async rerender
+		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod) 
 			_bindrod(this);
 		else {
@@ -2747,7 +2758,7 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	unbind: function (skipper) {
-		_rerenderDone(this); //cancel pending async rerender
+		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
 			_unbindrod(this);
 		else {

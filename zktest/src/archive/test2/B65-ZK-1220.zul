@@ -1,0 +1,13 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true"><![CDATA[
+	Input some characters and quickly(<350ms) change cursor position 
+	(use keyboard arrow or mouse click), the cursor position can't return to the end.
+			
+	Notice: Datebox, Timebox and FormatWidget which assign format can't avoid this issue.
+	]]></label>
+	<vlayout>
+		Textbox: <textbox instant="true" width="300px" />
+		Doublebox: <doublebox instant="true" width="300px" />
+	</vlayout>
+</zk>
