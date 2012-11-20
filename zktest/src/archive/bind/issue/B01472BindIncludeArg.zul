@@ -1,0 +1,21 @@
+<zk>
+<label multiline="true">
+1.you should see all static values are ABC
+</label>
+	<window 
+		title = "Outter Window"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01472BindIncludeArg')" >
+		<vlayout>
+			<hlayout>
+				Static Value : <textbox id="tb1" value="@bind(vm.staticValue)"/> 
+			</hlayout>
+			<hlayout>
+				Static Value : <label id="lb1" value="@load(vm.staticValue)"/> 
+			</hlayout>
+		</vlayout>
+		<button id="btn1" label="reload" onClick="@command('reload')" />
+		<div>
+			<include sValue="@load(vm.staticValue)" src="@load(vm.zul)" mode="instant" />
+		</div>
+	</window>
+</zk>
