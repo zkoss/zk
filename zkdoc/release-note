@@ -75,6 +75,7 @@ ZK 6.5.1
   ZK-1462: Portalchildren and Renderdeferer cause a Javascript error
   ZK-1469: argument type mismatch when try to get @ScopeParam with @ref value
   ZK-1218: Doublebox says "not a number" when significant length extends beyond 15
+  ZK-978: dynamic hflex on listboxes doesn't work
 
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
