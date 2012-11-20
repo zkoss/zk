@@ -3,6 +3,7 @@
  */
 package org.zkoss.zk.ui.select;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
@@ -81,6 +83,8 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 */
 	protected final List<VariableResolver> _resolvers;
 	
+	private List<SubscriptionInfo> _subsInfo;
+	
 	public SelectorComposer() {
 		_resolvers = Selectors.newVariableResolvers(getClass(), SelectorComposer.class);
 	}
@@ -89,7 +93,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) {
 		Selectors.wireVariables(page, this, _resolvers);
-		getUtilityHandler().subscribeEventQueues(this);
+		_subsInfo = getUtilityHandler().subscribeEventQueues(this);
 		return compInfo;
 	}
 	@Override
@@ -102,6 +106,10 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		_self = comp; // just in case
 		Selectors.wireComponents(comp, this, false);
 		Selectors.wireEventListeners(comp, this); // first event listener wiring
+		
+		if(_subsInfo!=null && _subsInfo.size()>0){
+			getUtilityHandler().postSubscriptionHandling(_subsInfo,_self);
+		}
 		
 		// register event to wire variables just before component onCreate
 		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
@@ -202,7 +210,12 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			Selectors.wireVariables(clone.getPage(), this, composerClone._resolvers);
 			Selectors.wireComponents(clone, this, false);
 			Selectors.wireEventListeners(clone, this);
-			composerClone.getUtilityHandler().subscribeEventQueues(this);
+			
+			composerClone._subsInfo = getUtilityHandler().subscribeEventQueues(this);
+			if(composerClone._subsInfo!=null && composerClone._subsInfo.size()>0){
+				getUtilityHandler().postSubscriptionHandling(composerClone._subsInfo,clone);
+			}
+			
 			clone.removeEventListener(ON_WIRE_CLONE, this);
 		}
 	}
@@ -214,7 +227,11 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		Selectors.rewireComponentsOnActivate(comp, this);
 		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
 		Selectors.rewireEventListeners(comp, this);
-		getUtilityHandler().resubscribeEventQueues(this);
+		
+		List<SubscriptionInfo> subsInfo = getUtilityHandler().resubscribeEventQueues(this);
+		if(subsInfo!=null && subsInfo.size()>0){
+			getUtilityHandler().postSubscriptionHandling(subsInfo,comp);
+		}
 	}
 	
 	@Override
@@ -239,12 +256,54 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		
 		/** Subscribes annotated methods to the EventQueues.
 		 */
-		public void subscribeEventQueues(Object controller);
-		
+		public List<SubscriptionInfo> subscribeEventQueues(Object controller);
+
 		/** Re-subscribes annotated methods to the EventQueues, used in clustering
 		 * environment.
 		 */
-		public void resubscribeEventQueues(Object controller);
+		public List<SubscriptionInfo> resubscribeEventQueues(Object controller);
+		
+		/**
+		 * Handling the subscription after a target(e.x. component) attached to this controller
+		 * @since 6.5.1
+		 */
+		public void postSubscriptionHandling(List<SubscriptionInfo> subsInfo,Object target);
+	}
+	
+	/**
+	 * An information bean for {@link UtilityHandler}
+	 * @author dennis
+	 * @since 6.5.1
+	 */
+	public static class SubscriptionInfo implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private EventListener<Event> _listener;
+		private String _qname;
+		private String _scope;
+		private boolean _autoUnsubscribe;
+
+		public SubscriptionInfo(String qname, String scope, boolean autoUnsubscribe, EventListener<Event> listener) {
+			this._listener = listener;
+			this._qname = qname;
+			this._scope = scope;
+			this._autoUnsubscribe = autoUnsubscribe;
+		}
+
+		public EventListener<Event> getListener() {
+			return _listener;
+		}
+
+		public String getQueueName() {
+			return _qname;
+		}
+
+		public String getScope() {
+			return _scope;
+		}
+
+		public boolean isAutoUnsubscribe() {
+			return _autoUnsubscribe;
+		}
 	}
 	
 	/** Default skeletal implementation of {@link UtilityHandler}.
@@ -253,38 +312,44 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 */
 	public static class UtilityHandlerImpl implements UtilityHandler {
 		private static final long serialVersionUID = 1L;
-		public void subscribeEventQueues(Object controller) {}
-		public void resubscribeEventQueues(Object controller) {}
+		public List<SubscriptionInfo> subscribeEventQueues(Object controller) {return null;}
+		public List<SubscriptionInfo> resubscribeEventQueues(Object controller) {return null;}
+		public void postSubscriptionHandling(List<SubscriptionInfo> subsInfo,Object target) {}
 	}
 	
 	private static final String UTILITY_HANDLER_KEY = 
 		"org.zkoss.zk.ui.select.SelectorComposer.UtilityHandler.class";
 	private static UtilityHandler _handler;
 	
-	protected UtilityHandler getUtilityHandler() {
+	protected static UtilityHandler getUtilityHandler() {
 		loadUtilityHandler();
 		return _handler;
 	}
 	
-	private final void loadUtilityHandler() {
+	private static final void loadUtilityHandler() {
 		if (_handler != null)
 			return;
-		String clsName = Library.getProperty(UTILITY_HANDLER_KEY);
-		if (clsName != null) {
-			try {
-				final Object o = Classes.newInstanceByThread(clsName);
-				if (!(o instanceof UtilityHandler)) {
+		synchronized(SelectorComposer.class){
+			if (_handler != null)
+				return;
+			String clsName = Library.getProperty(UTILITY_HANDLER_KEY);
+			if (clsName != null) {
+				try {
+					final Object o = Classes.newInstanceByThread(clsName);
+					if (!(o instanceof UtilityHandler)) {
+						_handler = new UtilityHandlerImpl();
+						throw new UiException(o.getClass().getName() + 
+								" must implement " + UtilityHandler.class.getName());
+					}
+					_handler = (UtilityHandler) o;
+				} catch (Exception ex) {
 					_handler = new UtilityHandlerImpl();
-					throw new UiException(o.getClass().getName() + 
-							" must implement " + UtilityHandler.class.getName());
+					throw UiException.Aide.wrap(ex, "Unable to construct " + clsName);
 				}
-				_handler = (UtilityHandler) o;
-			} catch (Exception ex) {
+			} else {
 				_handler = new UtilityHandlerImpl();
-				throw UiException.Aide.wrap(ex, "Unable to construct " + clsName);
 			}
-		} else
-			_handler = new UtilityHandlerImpl();
+		}
 	}
 	
 }

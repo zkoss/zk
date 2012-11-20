@@ -1,0 +1,30 @@
+<zk>
+	<label multiline="true">
+	1.when clicking send event, you should see only one message shows in listbox
+	2.then use reload1 or reload 2 to reload the window, then clicking send event, you should see only one message shows in listbox1 and one in listbox2
+	3.then, detach the window then clicking send event, you should see no message shows in listbox1 and 2
+	</label>
+	<window>
+		<zscript>
+			int count = 0;
+		</zscript>
+		<include id="inc" src="/test2/B65-ZK-1438-inner.zul" mode="instant" />
+		
+		<button label="reload 1" onClick='inc.invalidate()'/>
+		<button label="reload 2" onClick='inc.src = "/test2/B65-ZK-1438-inner.zul?ts="+count++'/>
+		<button label="sendEvent" onClick="sendEvent()"/>
+		
+	</window>
+			<zscript><![CDATA[
+			void sendEvent(){
+				listbox1.getItems().clear();
+				listbox2.getItems().clear();
+				org.zkoss.zk.ui.event.EventQueues.lookup("myqueue").publish(new org.zkoss.zk.ui.event.Event("onMyEvent"));
+			}
+			
+	]]></zscript>
+	<vlayout>
+	<listbox width="600px" id="listbox1"></listbox>
+	<listbox width="600px" id="listbox2"></listbox>
+	</vlayout>
+</zk>
