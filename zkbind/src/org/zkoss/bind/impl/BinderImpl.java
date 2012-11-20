@@ -55,6 +55,7 @@ import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.PropertyBinding;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
@@ -334,6 +335,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(_log.debugable()){
 			_log.debug("loadOnPropertyChange:base=[%s],prop=[%s]",base,prop);
 		}
+		
+		//zk-1468, 
+		//ignore a coming ref-binding if the binder is the same since it was loaded already.
+		if(base instanceof ReferenceBinding && ((ReferenceBinding)base).getBinder()==this){
+			return;
+		}
+		
 		final Tracker tracker = getTracker();
 		final Set<LoadBinding> bindings = tracker.getLoadBindings(base, prop);
 		for(LoadBinding binding : bindings) {
@@ -350,6 +358,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_log.debug("loadOnPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
 			}
 			binding.load(ctx);
+			
+			//zk-1468, 
+			//notify the ref-binding changed since other nested binder might use it
+			if(binding instanceof ReferenceBinding && binding!=base){
+				notifyChange(binding,".");
+			}
 			
 			if(_validationMessages!=null){
 				String attr = null;

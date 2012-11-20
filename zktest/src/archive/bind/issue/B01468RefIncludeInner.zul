@@ -1,0 +1,26 @@
+<zk>
+	<window 
+		title = "Inner Window 1">
+		<vlayout>
+			<hlayout>
+				dValue : <label id="lb3" value="@load(dValue)"/> 
+			</hlayout>
+			<hlayout>
+				Outer VM Dynamic Value : <label id="lb4"  value="@load(vm.dynamicValue)"/> 
+			</hlayout>
+		</vlayout>
+	</window>
+	<window 
+		title = "Inner Window 2"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vmi') @init('org.zkoss.zktest.bind.issue.B01468RefIncludeInner')" >
+		<button label="dump inner" onClick="binder.tracker.dump()"/>
+		<vlayout>
+			<hlayout>
+				dValue : <label id="lb5"  value="@load(dValue)"/> 
+			</hlayout>
+			<hlayout>
+				Outer VM Dynamic Value : <label id="lb6" value="@load(vm.dynamicValue)"/> 
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>
