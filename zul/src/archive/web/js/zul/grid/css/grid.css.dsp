@@ -318,7 +318,7 @@ tr.z-grid-odd tr:not(.z-grid-odd) td.z-row-inner {
 	background-color: #FFF;
 }
 
-<c:if test="${zk.ie || zk.opera}">
+<c:if test="${zk.ie > 0 || zk.opera > 0}">
 tr.z-grid-odd tr.z-grid-odd td.z-row-inner {
 	background-color: #F7F7F7;
 }
