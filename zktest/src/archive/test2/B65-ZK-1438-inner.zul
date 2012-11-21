@@ -1,0 +1,9 @@
+<window>
+	<zscript>
+	java.util.Date time = new java.util.Date();
+	</zscript>
+	<window id="win" title="Hello World!! ${time}" border="normal" width="500px"
+	apply="org.zkoss.zktest.test2.B65_ZK_1438_Inner">
+	<button label="detach" onClick='win.detach()' />
+	</window>
+</window>
