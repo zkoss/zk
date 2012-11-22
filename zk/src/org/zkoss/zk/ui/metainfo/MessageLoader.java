@@ -19,6 +19,8 @@ package org.zkoss.zk.ui.metainfo;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.http.Wpds;
+import org.zkoss.zk.ui.util.Clients;
 
 /**
  * The interface for loading messages as String output.
@@ -28,10 +30,17 @@ import org.zkoss.zk.ui.Execution;
 public interface MessageLoader {
 	
 	/**
-	 * Load the message to output StringBuffer
+	 * Load the message to output StringBuffer.
+	 * <p>There are two timing the ZK system will scan the <code>MessageLoader</code> setting and call this mehtod of corresponding instance.
+	 * <ol>
+	 * <li>{@link Wpds#outLocaleJavaScript(javax.servlet.ServletRequest, javax.servlet.ServletResponse)} (define in zul/lang/zk.wpd)</li>
+	 * <li>{@link Clients#reloadMessages(java.util.Locale)}</li>
+	 * </ol>
+	 * At first timing, execution will not have Desktop and Page instance, 
+	 * so programmer must notice that many Execution's method can't use.
+	 * </p>
 	 * @param out StringBuffer to output
 	 * @param exec current Execution
 	 */
 	public void load(StringBuffer out, Execution exec) throws IOException;
-	
 }

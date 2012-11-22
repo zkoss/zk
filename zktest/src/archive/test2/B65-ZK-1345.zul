@@ -1,0 +1,14 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:c="client">
+<label multiline="true">
+Click "show message" will alert :
+	load by B65_ZK_1345.java and locale is FOO_LOCALE
+
+1. FOO_LOCALE will be the default locale initially.
+2. After click "change to Locale.TAIWAN", FOO_LOCALE will be "zh_TW"
+3. After click "change to Locale.JAPAN", FOO_LOCALE will be "" 
+</label>
+<button c:onClick="alert(B65_ZK_1345)">show message</button>
+<button onClick="Clients.reloadMessages(Locale.TAIWAN)">change to Locale.TAIWAN</button>
+<button onClick="Clients.reloadMessages(Locale.JAPAN)">change to Locale.JAPAN</button>
+</zk>

@@ -33,6 +33,7 @@ import org.zkoss.io.Files;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 
 /**
  * A manager of devices ({@link Device}).
@@ -409,7 +410,8 @@ public class Devices {
 	public static String loadJavaScript(Execution exec, String path)
 	throws IOException {
 		path = exec.locate(path);
-		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);
+		//ZK-1345: use WebApps.getCurrent() instead of exec.getDesktop().getWebApp()
+		InputStream is = WebApps.getCurrent().getResourceAsStream(path);
 		if (is == null)
 			throw new UiException("Unable to load "+path);
 		final byte[] bs = Files.readAll(is);

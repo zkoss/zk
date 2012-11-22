@@ -118,6 +118,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
 	 -->
+	<language-config>
+		<addon-uri>/WEB-INF/ZK-1345.xml</addon-uri>
+	</language-config>
 
 	<!-- Turn on if the processing time is longer than 9000 miliseconds.
 		Default: -1 (turned off)

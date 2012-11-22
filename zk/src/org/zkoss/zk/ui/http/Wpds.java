@@ -14,18 +14,41 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.text.DecimalFormatSymbols;
+import java.util.Map;
 
-import org.zkoss.lang.Strings;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.zkoss.idom.Document;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Locales;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.MessageLoader;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.xel.Evaluator;
 
 /**
  * Utilities to used with WPD files.
@@ -232,5 +255,99 @@ public class Wpds {
 	static {
 		_datejs = new CacheMap<String, String>(8);
 		_datejs.setLifetime(24*60*60*1000);
+	}
+	
+	/**
+	 * Generates Locale-dependent strings in JavaScript syntax.
+	 * @since 6.5.1
+	 */
+	public static final String outLocaleJavaScript(ServletRequest request, ServletResponse response) 
+	throws IOException {	
+		final StringBuffer result = new StringBuffer(4096);
+		final WebApp webApp = WebApps.getCurrent();
+		final Execution exec = new FakeExecution(
+			webApp.getServletContext(), request, response, null, null
+		);
+
+		//the same as AjaxDevice.reloadMessages()
+		result.append(Devices.loadJavaScript(exec, "~./js/zk/lang/msgzk*.js"));
+		result.append(Wpds.outLocaleJavaScript());
+		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType("ajax"))
+			//WpdExtendlet.getDeviceType() also return "ajax" directly...
+			for (MessageLoader loader : langdef.getMessageLoaders())
+				loader.load(result, exec);
+
+		return result.toString();
+	}
+	
+	private final static class FakeExecution extends ExecutionImpl {		
+		FakeExecution(ServletContext ctx, ServletRequest request, ServletResponse response,
+		Desktop desktop, Page creating) {
+			super(ctx, (HttpServletRequest)request, (HttpServletResponse)response, desktop, creating);
+		}
+				
+		//use AbstractExecution
+		@Override public void onActivate() {}
+		@Override public void onDeactivate() {}
+		
+		//use PhantomExecution		
+		@Override public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
+			return null;
+		}
+		
+		@Override public Evaluator getEvaluator(Component page, Class expfcls) {
+			return null;
+		}
+		
+		@Override public Object evaluate(Component comp, String expr, Class expectedType) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public Object evaluate(Page page, String expr, Class expectedType) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public void include(Writer out, String page, Map<String, ?> params, int mode)
+		throws IOException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public void include(String page) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public void forward(Writer out, String page, Map<String, ?> params, int mode)
+		throws IOException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public void forward(String page) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public PageDefinition getPageDefinition(String uri) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public PageDefinition getPageDefinitionDirectly(String content, String ext) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public PageDefinition getPageDefinitionDirectly(Document content, String ext) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public PageDefinition getPageDefinitionDirectly(Reader reader, String ext)
+		throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override public boolean addScopeListener(ScopeListener listener) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override public boolean removeScopeListener(ScopeListener listener) {
+			throw new UnsupportedOperationException();
+		}
 	}
 }
