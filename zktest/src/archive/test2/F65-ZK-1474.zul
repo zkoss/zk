@@ -1,0 +1,8 @@
+<zk>
+	<label>
+	Open/Change to another tab in the browser and go back this tab, you should see "visible" inside window component
+	</label>
+	<window title="window" border="normal" onVisibilityChange='lbl.setValue(event.getVisibilityState());'>
+		<label id="lbl" />
+	</window>
+</zk>

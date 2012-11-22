@@ -6,6 +6,7 @@ ZK 6.5.1
   ZK-1248: Sub menu should not overlap its parent in menupopup
   ZK-1416: Support default Command and GlobalCommand handling
   ZK-1465: Comet server push support HTML5 page-visibility API to reduce the server loading
+  ZK-1474: Add onVisibilityChange event based on HTML5 page-visibility API
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes
@@ -79,6 +80,7 @@ ZK 6.5.1
   ZK-1468: Value doesn't be reload if it binds to @ref and in include
   ZK-1309: Modal window loses it's modality in certain situation
   ZK-1472: Cannot bind to include arg
+  ZK-1438: Composer doesn't be released when using @Subscribe
 
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential

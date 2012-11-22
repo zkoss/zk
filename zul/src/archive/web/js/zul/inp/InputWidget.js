@@ -101,7 +101,10 @@ zul.inp.RoundUtl = {
 			rightElemWidth = rightElem ? rightElem.offsetWidth -
 					zk(rightElem).sumStyles('l', jq.borders) : 0,
 			rev = zk(inp).revisedWidth(width - rightElemWidth);
-		if (rightElem && !zk.safari_ && !zk.opera)
+		// Fix bug discovered by B50-3032892.ztl
+		// * inplace input widget's width reduced by one pixel each time 
+		//   it received focus then blurred
+		if (rightElem && !zk.safari_ && !zk.opera && !wgt._inplace)
 			rev -= 1; //Bug ZK-1368: reduce 1px for right edge element
 		inp.style.width = jq.px0(rev);
 	},

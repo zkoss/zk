@@ -74,6 +74,8 @@ public class ClientInfoEvent extends Event {
 	 * @param dthgh the desktop's height
 	 * @param dtx the desktop's the left offset
 	 * @param dty the desktop's the top offset
+	 * @param dpr the device's devicePixelRatio
+	 * @param orient the device's orientation
 	 */
 	public ClientInfoEvent(String name, int timeZoneOfs,
 	int scrnwd, int scrnhgh, int colorDepth,

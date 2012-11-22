@@ -434,6 +434,9 @@ zAu = {
 			_wgt2map(wgt, map);
 		return map[uuid];
 	},
+	_onVisibilityChange: function () { //Called by mount.js when page visibility changed
+		zAu.cmd0.visibilityChange();
+	},
 
 	//Error Handling//
 	/** Register a listener that will be called when the Ajax request failed.
@@ -1062,6 +1065,13 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			screen.width, screen.height, screen.colorDepth,
 			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
 			{implicit:true, rtags: {onClientInfo: 1}}));
+	},
+	visibilityChange: function (dtid) {
+		var hidden = document.hidden || document[zk.vendor_ + 'Hidden'],
+			visibilityState = document.visibilityState || document[zk.vendor_ + 'VisibilityState'];
+		
+		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onVisibilityChange",
+			{hidden: hidden, visibilityState: visibilityState}, {implicit: true}));
 	},
 	/** Asks the client to download the resource at the specified URL.
 	 * @param String url the URL to download from
