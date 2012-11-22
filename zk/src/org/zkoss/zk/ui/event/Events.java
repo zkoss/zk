@@ -171,6 +171,11 @@ public class Events {
 	/** The onClientInfo event (used with {@link ClientInfoEvent}).
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";
+	/** The onVisibilityChange event (used with {@link VisibilityChangeEvent}).
+	 * Only for browsers that support HTML 5 Page Visibility API
+	 * @since 6.5.1
+	 */
+	public static final String ON_VISIBILITY_CHANGE = "onVisibilityChange";
 	/** The onCreate event (used with {@link CreateEvent}) to notify a compoent
 	 * that it (and its children) has been created by ZK's evaluating a ZUML page.
 	 */

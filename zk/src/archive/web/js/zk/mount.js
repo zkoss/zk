@@ -733,6 +733,9 @@ jq(function() {
 			if (wevt.domStopped)
 				return false;
 		}
+	})
+	.bind((document.hidden !== undefined ? '' : zk.vendor_) + 'visibilitychange', function (evt) {
+		zAu._onVisibilityChange();
 	});
 
 	zjq.fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
