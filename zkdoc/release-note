@@ -6,6 +6,7 @@ ZK 6.5.1
   ZK-1248: Sub menu should not overlap its parent in menupopup
   ZK-1416: Support default Command and GlobalCommand handling
   ZK-1465: Comet server push support HTML5 page-visibility API to reduce the server loading
+  ZK-1474: Add onVisibilityChange event based on HTML5 page-visibility API
 
 * Bugs
   ZK-1348: First child tree node can't unfold sometimes
