@@ -522,7 +522,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			$node.removeClass(zcls + "-over")
 				.toggleClass(zcls + "-over-seld");
 		} else {
-			$node.toggleClass(zcls + "-over");
+			//ZK-1215: onMouseOver and onMouseOut use the same function,
+			//	do different behavior separately
+			if (evt.name == "onMouseOver") {
+				$node.toggleClass(zcls + "-over");
+			} else {
+				$node.removeClass(zcls + "-over");
+			}
 		}
 	},
 	/** Returns the Date that is assigned to this component.
@@ -675,8 +681,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								$cell.addClass(zcls+"-seld");
 								if ($cell.hasClass(zcls + "-over"))
 									$cell.addClass(zcls + "-over-seld");
-							} else
+							} else {
 								$cell.removeClass(zcls+"-seld");
+								
+								//ZK-1215: use mouse and keyboard to operate calendar at the same time
+								//	must check and remove "-over-seld" css.
+								if ($cell.hasClass(zcls + "-over-seld")) {
+									$cell.removeClass(zcls + "-over")
+										.removeClass(zcls + "-over-seld");
+								}
+							}
+								
 								
 							//not same month
 							$cell[monofs ? 'addClass': 'removeClass'](zcls+"-outside")
