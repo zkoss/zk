@@ -440,7 +440,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (nRows) {
 			if (!hgh) {
-				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
+				if (!nVisiRows) hgh = this._headHgh(20, true) * nRows;
 				else if (nRows <= nVisiRows) {
 					var $midVisiRow = zk(midVisiRow);
 					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
@@ -538,9 +538,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			return this.getRows() || this._visiRows || 0;
 	},
 	/* Height of the head row. If no header, defval is returned. */
-	_headHgh: function (defVal) {
-		var headWidget = this.getHeadWidget(), //Bug ZK-1297: should get head height without auxhead
-			hgh = headWidget ? headWidget.$n().offsetHeight : 0;
+	_headHgh: function (defVal, isExcludeAuxhead) {
+		var headWidget = this.getHeadWidget(), //Bug ZK-1297: get head height exclude auxhead
+			head = this.ehead,
+			hgh = isExcludeAuxhead ? (headWidget ? headWidget.$n().offsetHeight : 0) : (head ? head.offsetHeight : 0);
 		if (this.paging) {
 			var pgit = this.$n('pgit'),
 				pgib = this.$n('pgib');
