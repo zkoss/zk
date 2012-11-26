@@ -30,7 +30,7 @@ If the bottom side of the content is not chopped half way, it is OK
 			</rows>
 			</grid>
 		</west>
-		<east hflex="min" vflex="min">
+		<east hflex="min">
 			<grid hflex="min" vflex="min">
 				<columns>
 					<column hflex="min"/>
