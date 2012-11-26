@@ -727,13 +727,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					delete w._nhflexbak;
 				}
 			}
-			//Bug ZK-978: sizedByContent should be true if all header has hflex="min"
-			var hdrmin = 0, old = this.isSizedByContent();
-			for (var w = this.head.firstChild; w; w = w.nextSibling)
-				if (w._hflex == 'min')
-					++hdrmin;
-			this.setSizedByContent(hdrmin == this.head.nChildren ? true : old);
-			
 			return old != this.ehead.style.display;
 		}
 	},
