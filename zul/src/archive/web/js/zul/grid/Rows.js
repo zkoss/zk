@@ -83,7 +83,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (this.desktop){
 			if (this._shallStripe) { //since bind_(...after)
 				this.stripe();
-				this.getGrid().syncSize(); //Bug ZK-978: should call syncSize instead of onSize
+				this.getGrid().onSize();
 			}
 		}
 	},
