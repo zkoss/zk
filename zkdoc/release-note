@@ -83,6 +83,7 @@ ZK 6.5.1
   ZK-1438: Composer doesn't be released when using @Subscribe
   ZK-1345: ZK MessageLoader doesn't load customize MessageLoader
   ZK-1215: Mouseless selection not working properly in datebox and calendar
+  ZK-1480: zkmax bandbox issue
 
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
