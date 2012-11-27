@@ -13,32 +13,38 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
-*/
+ */
 package org.zkoss.zk.ui.metainfo;
 
 import java.io.IOException;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.http.Wpds;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
  * The interface for loading messages as String output.
+ * 
  * @author simonpai
  * @since 5.0.11
  */
 public interface MessageLoader {
-	
+
 	/**
 	 * Load the message to output StringBuffer.
-	 * <p>There are two timing the ZK system will scan the <code>MessageLoader</code> setting and call this mehtod of corresponding instance.
+	 * <p>ZK will scan the <code>MessageLoader</code> setting and invoke this
+	 * method to load the system messages in the following two circumstances.
 	 * <ol>
-	 * <li>{@link Wpds#outLocaleJavaScript(javax.servlet.ServletRequest, javax.servlet.ServletResponse)} (define in zul/lang/zk.wpd)</li>
+	 * <li>{@link Wpds#outLocaleJavaScript(javax.servlet.ServletRequest, javax.servlet.ServletResponse)} (defined in zul/lang/zk.wpd)</li>
 	 * <li>{@link Clients#reloadMessages(java.util.Locale)}</li>
 	 * </ol>
-	 * At first timing, execution will not have Desktop and Page instance, 
-	 * so programmer must notice that many Execution's method can't use.
+	 * For the first circumstances, current Execution does not have access to
+	 * {@link Desktop} and {@link Page} instance. Hence, programmer must notice
+	 * that they cannot use many of Execution's API.
 	 * </p>
+	 * 
 	 * @param out StringBuffer to output
 	 * @param exec current Execution
 	 */
