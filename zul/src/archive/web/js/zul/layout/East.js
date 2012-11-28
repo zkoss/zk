@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * 
  * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
  */
+var East =
 zul.layout.East = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
 	_maxFlexHeight: true, //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
@@ -47,7 +48,8 @@ zul.layout.East = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 * @return String
 	 */
 	getSize: function () {
-		return this.$supers('getWidth', arguments);
+		// Bug ZK-1490: Cannot find 'getWidth' method in widget.js
+		return this.$supers(East, 'getWidth', arguments);
 	},
 	/**
 	 * Sets the size of this region. This method is shortcut for
@@ -55,7 +57,7 @@ zul.layout.East = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 * @param String size
 	 */
 	setSize: function () {
-		return this.$supers('setWidth', arguments);
+		return this.$supers(East, 'setWidth', arguments);
 	},
 
 	_ambit2: function (ambit, mars, split) {
