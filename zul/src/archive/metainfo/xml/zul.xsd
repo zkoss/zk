@@ -477,6 +477,7 @@
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="placeholder" type="xs:string" use="optional" />
 		<xs:attribute name="inplace" type="booleanType" use="optional" />
+		<xs:attribute name="instant" type="booleanType" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="cols" type="intType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
@@ -527,6 +528,8 @@
 			<xs:element ref="attribute" />
 			<xs:element ref="custom-attributes" />
 			<xs:element ref="variables" />
+			<xs:element ref="template" />
+			<xs:element ref="zk" />
 			<xs:any namespace="##other" processContents="lax" />
 		</xs:choice>
 	</xs:group>
@@ -600,7 +603,6 @@
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
 			<xs:element ref="tablelayout" />
-			<xs:element ref="template" />
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
 			<xs:element ref="timebox" />
@@ -610,7 +612,6 @@
 			<xs:element ref="vbox" />
 			<xs:element ref="vlayout" />
 			<xs:element ref="window" />
-			<xs:element ref="zk" />
 			<xs:element ref="zscript" />
 		</xs:choice>
 	</xs:group>
@@ -683,7 +684,6 @@
 				<xs:element ref="spinner" />
 				<xs:element ref="style" />
 				<xs:element ref="tabbox" />
-				<xs:element ref="template" />
 				<xs:element ref="textbox" />
 				<xs:element ref="timer" />
 				<xs:element ref="timebox" />
@@ -693,7 +693,6 @@
 				<xs:element ref="vbox" />
 				<xs:element ref="vlayout" />
 				<xs:element ref="window" />
-				<xs:element ref="zk" />
 				<xs:element ref="zscript" />
 			</xs:choice>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
@@ -2422,7 +2421,8 @@
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="mode" type="xs:string" use="optional" />
-		<xs:attribute name="checked" type="booleanType" use="optional" />		
+		<xs:attribute name="checked" type="booleanType" use="optional" />
+		<xs:attribute name="upload" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- tree -->
@@ -2803,6 +2803,7 @@
 					<xs:enumeration value="modal" />
 					<xs:enumeration value="overlapped" />
 					<xs:enumeration value="popup" />
+					<xs:enumeration value="highlighted" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
