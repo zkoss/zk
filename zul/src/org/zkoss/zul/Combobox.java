@@ -773,6 +773,10 @@ public class Combobox extends Textbox {
 
 			syncSelectionToModel();
 			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_CHANGE)) {
+			super.service(request, everError);
+			//Bug ZK-1492: synchronize the input value to selection
+			syncValueToSelection();
 		} else
 			super.service(request, everError);
 	}
