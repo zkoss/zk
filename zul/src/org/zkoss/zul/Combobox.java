@@ -168,7 +168,7 @@ public class Combobox extends Textbox {
 				// Bug B60-ZK-1202.zul
 				// Remove current items anyway, when changing models
 				if (!getItems().isEmpty()) { 
-				  getItems().clear();
+				    getItems().clear();  
 				}
 				
 				_model = model;
