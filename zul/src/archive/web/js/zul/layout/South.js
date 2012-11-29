@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A south region of a border layout.
  * <p>Default {@link #getZclass}: z-south.
  */
+var South =
 zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_sumFlexHeight: true, //indicate shall add this flex height for borderlayout. @See _fixMinFlex in widget.js
 	/**
@@ -43,7 +44,8 @@ zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 * @return String
 	 */
 	getSize: function () {
-		return this.$supers('getHeight', arguments);
+		// Bug ZK-1490: Cannot find 'getHeight' method in widget.js
+		return this.$supers(South, 'getHeight', arguments);
 	},
 	/**
 	 * Sets the size of this region. This method is shortcut for
@@ -51,7 +53,7 @@ zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 * @param String size
 	 */
 	setSize: function () {
-		return this.$supers('setHeight', arguments);
+		return this.$supers(South, 'setHeight', arguments);
 	},
 
 	_ambit2: function (ambit, mars, split) {

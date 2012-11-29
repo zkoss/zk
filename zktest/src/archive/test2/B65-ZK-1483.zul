@@ -1,0 +1,23 @@
+<zk>
+	<html>
+		Testing instructions:
+		<ol>
+			<li>Click 'Select All' button.</li>
+			<li>Scroll the listbox up and down a few times.</li>
+		</ol>
+		
+		Expected results:
+		<ul>
+			<li>The scrollbar position should not vibrate when released.</li>
+		</ul>
+	</html>
+	<window apply="org.zkoss.zktest.test2.B65_ZK_1483">
+		<listbox id="listbox" width="100%" rows="10">
+			<listhead>
+				<listheader	label="Label" sort="auto" />
+			</listhead>
+		</listbox>
+		
+		<button	id="btnSelectAll" label="Select All" />
+	</window>
+</zk>

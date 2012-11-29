@@ -274,7 +274,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.clearSelection();
 		else {
 			this._selectOne(item, true);
-			zk(item).scrollIntoView(this.ebody);
+			
+			// Bug ZK-1483: Jumpy scrollbar for listbox with rod when items are selected
+			if (!this._listbox$rod)
+				zk(item).scrollIntoView(this.ebody);
+			
 			if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop; 
