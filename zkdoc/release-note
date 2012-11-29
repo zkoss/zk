@@ -86,6 +86,7 @@ ZK 6.5.1
   ZK-1483: Jumpy scrollbar for listbox with rod when items are selected
   ZK-1490: Invoking getSize() throws JS exception for North, South, East and West
   ZK-1492: Wrong model selection in onChange of combobox
+  ZK-1491: Tag template is not valid by zul.xsd
 
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
