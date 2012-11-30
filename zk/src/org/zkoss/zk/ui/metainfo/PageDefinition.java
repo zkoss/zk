@@ -359,6 +359,9 @@ public class PageDefinition implements NodeInfo {
 	 */
 	public void addImportedClass(String clsptn) throws ClassNotFoundException {
 		_clsresolver.addImportedClass(clsptn);
+		//Bug ZK-1498: also add <?import ?> directive to zscript
+		if ("Java".equals(_zslang))
+			_langdef.addInitScript(_zslang, "import " + clsptn);
 	}
 	/** Returns a readonly list of the imported class names.
 	 * @since 6.0.0
