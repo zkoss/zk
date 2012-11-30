@@ -282,6 +282,16 @@
 					<warSourceDirectory>${project.basedir}/src/archive/</warSourceDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>7.0.0.pre5</version>
+				<configuration>
+					<webApp>${project.build.directory}/${project.artifactId}-${project.version}</webApp>
+					<reload>automatic</reload>
+					<scanIntervalSeconds>5</scanIntervalSeconds>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

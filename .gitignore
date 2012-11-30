@@ -16,3 +16,4 @@ dist/lib/osgi
 */.settings/*.prefs
 */.settings/*.component
 */.settings/*.xml
+*/nbactions.xml
