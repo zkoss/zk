@@ -50,15 +50,12 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 	
 	private static final Log _log = 
 		Log.lookup(AbstractAnnotatedMethodInvoker.class);
-	
-	private final Map<Class<?>, List<Method>> annoMethodCache;
 
 	private Class<T> annoClass;
 
-	public AbstractAnnotatedMethodInvoker(Class<T> annoClass, 
-			Map<Class<?>, List<Method>>  annoMethodCache){
+	
+	public AbstractAnnotatedMethodInvoker(Class<T> annoClass){
 		this.annoClass = annoClass;  
-		this.annoMethodCache = annoMethodCache;
 	}
 	
 
@@ -86,66 +83,55 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				}
 				parCall.call(viewModel, m);
 			} catch (Exception e) {
-				synchronized(annoMethodCache){//remove it for the hot deploy case if getting any error
-					annoMethodCache.remove(vmClz);
-				}
 				throw new UiException(e.getMessage(),e);
 			}
 		}
 	}
 	private List<Method> getAnnotateMethods(Class<T> annotationClass, Class<?> vmClass){
-		List<Method> methods = null;
-		synchronized(annoMethodCache){
-			//have to synchronized cache, because it calls expunge when get.
-			methods = annoMethodCache.get(vmClass);//check again
-			if(methods!=null) return methods;
+		List<Method> methods = new ArrayList<Method>();
+		
+		Class<?> curr = vmClass;
+		
+		String sign = null;
+		Set<String> signs = new HashSet<String>();
+		
+		while(curr!=null && !curr.equals(Object.class)){
+			Method currm = null;
+			//Annotation should supports to annotate on Type
+			T annotation = curr.getAnnotation(annotationClass);
+			//Allow only one annotated method in a class.
+			for(Method m : curr.getDeclaredMethods()){
+				final T i = m.getAnnotation(annotationClass);
+				if(i==null) continue;
+				if(annotation!=null){
+					throw new UiException("more than one [@" + annotationClass.getSimpleName()+
+							"] in the class "+curr);
+				}
+				annotation = i;
+				currm = m;
+				//don't break, we need to check all annotated methods, we allow only one per class.
+			}
 			
-			methods = new ArrayList<Method>(); //if still null in synchronized, scan it
-			
-			Class<?> curr = vmClass;
-			
-			String sign = null;
-			Set<String> signs = new HashSet<String>();
-			
-			while(curr!=null && !curr.equals(Object.class)){
-				Method currm = null;
-				//Annotation should supports to annotate on Type
-				T annotation = curr.getAnnotation(annotationClass);
-				//Allow only one annotated method in a class.
-				for(Method m : curr.getDeclaredMethods()){
-					final T i = m.getAnnotation(annotationClass);
-					if(i==null) continue;
-					if(annotation!=null){
-						throw new UiException("more than one [@" + annotationClass.getSimpleName()+
-								"] in the class "+curr);
-					}
-					annotation = i;
-					currm = m;
-					//don't break, we need to check all annotated methods, we allow only one per class.
+			if(currm!=null){
+				//check if overrode the same annotated method
+				sign = MiscUtil.toSimpleMethodSignature(currm);
+				if(signs.contains(sign)){
+					_log.warning("more than one %s method that has same signature '%s' " +
+							"in the hierarchy of '%s', the method in extended class will be call " +
+							"more than once ", annotationClass.getSimpleName(), sign, vmClass);
+				}else{
+					signs.add(sign);
 				}
 				
-				if(currm!=null){
-					//check if overrode the same annotated method
-					sign = MiscUtil.toSimpleMethodSignature(currm);
-					if(signs.contains(sign)){
-						_log.warning("more than one %s method that has same signature '%s' " +
-								"in the hierarchy of '%s', the method in extended class will be call " +
-								"more than once ", annotationClass.getSimpleName(), sign, vmClass);
-					}else{
-						signs.add(sign);
-					}
-					
-					//super first
-					methods.add(0,currm);
-				}
-				//check if we should take care super's annotated methods also.
-				curr = (annotation!=null && 
-						shouldLookupSuperclass(annotation))?
-						curr.getSuperclass() : null;
+				//super first
+				methods.add(0,currm);
 			}
-			methods = Collections.unmodifiableList(methods);
-			annoMethodCache.put(vmClass, methods);
+			//check if we should take care super's annotated methods also.
+			curr = (annotation!=null && 
+				shouldLookupSuperclass(annotation))?
+				curr.getSuperclass() : null;
 		}
+
 		return methods;
 	}
 	

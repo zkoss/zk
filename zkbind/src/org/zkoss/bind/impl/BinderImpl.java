@@ -39,7 +39,6 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.PropertyChangeEvent;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
-import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DefaultCommand;
 import org.zkoss.bind.annotation.DefaultGlobalCommand;
@@ -67,7 +66,6 @@ import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
-import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -139,20 +137,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private static final int COMMAND_SUCCESS = 0;
 	private static final int COMMAND_FAIL_VALIDATE = 1;
 	
-	
-	//TODO make it configurable
-	private final static Map<Class<?>, List<Method>> _initMethodCache = 
-		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
-
-	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _commandMethodCache = 
-		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
-	
-	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _globalCommandMethodCache = 
-		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
+	private transient Map<String,CachedItem<Method>> _commandMethods; //map<command, null-able command method>
+	private transient Map<String,CachedItem<Method>> _globalCommandMethods; //map<command, null-able command method>
 	
 	//command and default command method parsing and caching 
 	private static final CachedItem<Method> NULL_METHOD = new CachedItem<Method>(null);
-	private static final String COMMAND_METHOD_MAP_INIT = "$INIT_FLAG$";
 	private static final String COMMAND_METHOD_DEFAULT = "$DEFAULT_FLAG$";
 	private static final CommandMethodInfoProvider _commandMethodInfoProvider = new CommandMethodInfoProvider() {
 		public String getAnnotationName() {
@@ -299,10 +288,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		init(comp,viewModel,null);
 	}
 	
+	
 	/**
-	 * 
-	 * 
-	 * 
 	 * @since 6.0.1
 	 */
 	public void init(Component comp, Object viewModel, Map<String, Object> initArgs){
@@ -321,7 +308,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			//show a warn only
 			_log.warning("you are using a composer [%s] as a view model",viewModel);
 		}
-		new AbstractAnnotatedMethodInvoker<Init>(Init.class, _initMethodCache){
+		new AbstractAnnotatedMethodInvoker<Init>(Init.class){
 			protected boolean shouldLookupSuperclass(Init annotation) {
 				return annotation.superclass();
 			}}.invokeMethod(this, initArgs);
@@ -1352,7 +1339,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final Object viewModel = getViewModel();
 			
-			Method method = getCommandMethod(viewModel.getClass(), command, _globalCommandMethodInfoProvider,_globalCommandMethodCache);
+			Method method = getGlobalCommandMethod(viewModel.getClass(), command, _globalCommandMethodInfoProvider);
 			
 			if (method != null) {
 				
@@ -1508,7 +1495,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final Object viewModel = getViewModel();
 			
-			Method method = getCommandMethod(viewModel.getClass(), command, _commandMethodInfoProvider, _commandMethodCache);
+			Method method = getCommandMethod(viewModel.getClass(), command, _commandMethodInfoProvider);
 			
 			if (method != null) {
 				
@@ -1542,62 +1529,50 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 	}
 	
-	private Method getCommandMethod(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo,Map<Class<?>, Map<String,CachedItem<Method>>> cache) {
-		Map<String,CachedItem<Method>> methods = cache.get(clz);
-		synchronized(cache){
-			methods = cache.get(clz);//check again
-			if(methods==null){
-				methods = new HashMap<String,CachedItem<Method>>();
-				cache.put(clz, methods);
-			}
+	private Method getCommandMethod(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo) {
+		if(_commandMethods==null){
+			_commandMethods = new HashMap<String,CachedItem<Method>>(20);
+			scan0(clz,command,cmdInfo,_commandMethods);
 		}
+		return getMethod0(command,_commandMethods);
+	}
+	private Method getGlobalCommandMethod(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo) {
+		if(_globalCommandMethods==null){
+			_globalCommandMethods = new HashMap<String,CachedItem<Method>>(20);
+			scan0(clz,command,cmdInfo,_globalCommandMethods);
+		}
+		return getMethod0(command,_globalCommandMethods);
+	}
+	private Method getMethod0(String command,Map<String,CachedItem<Method>> cache){
 		CachedItem<Method> method = null;
-		synchronized(methods){
-			//check again.
-			method = methods.get(command);
-			if(method!=null){//quick check and return
-				return method.value;
-			}else if(methods.get(COMMAND_METHOD_MAP_INIT)!=null){
-				//map is already initialized, check default method.
-				method = methods.get(COMMAND_METHOD_DEFAULT);//get default
-				if(method!=null){
-					return method.value;
-				}
-				return null;
-			}
-			methods.clear();
-			//scan
-			for(Method m : clz.getMethods()){
-				if(cmdInfo.isDefaultMethod(m)){
-					if(methods.get(COMMAND_METHOD_DEFAULT)!=null){
-						throw new UiException("there are more than one "+cmdInfo.getDefaultAnnotationName()+" method in "+clz+", "+methods.get(COMMAND_METHOD_DEFAULT).value+" and "+m);
-					}
-					methods.put(COMMAND_METHOD_DEFAULT, new CachedItem<Method>(m));
-				}
-
-				String[] vals = cmdInfo.getCommandName(m);
-				if(vals==null) continue;
-				if(vals.length==0){
-					vals = new String[]{m.getName()};//command name from method.
-				}
-				for(String val:vals){
-					val = val.trim();
-					if(methods.get(val)!=null){
-						throw new UiException("there are more than one "+cmdInfo.getAnnotationName()+" method "+val+" in "+clz+", "+methods.get(val).value+" and "+m);
-					}
-					methods.put(val, new CachedItem<Method>(m));
-				}
-			}
-			
-			methods.put(COMMAND_METHOD_MAP_INIT, NULL_METHOD);//mark this map has been initialized.
-		}
-		
-		method = methods.get(command);
+		method = cache.get(command);
 		if(method!=null){
 			return method.value;
 		}
-		method = methods.get(COMMAND_METHOD_DEFAULT);//get default
+		method = cache.get(COMMAND_METHOD_DEFAULT);//get default
 		return method==null?null:method.value;
+	}
+	private void scan0(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo, Map<String,CachedItem<Method>> cache) {
+		for(Method m : clz.getMethods()){
+			if(cmdInfo.isDefaultMethod(m)){
+				if(cache.get(COMMAND_METHOD_DEFAULT)!=null){
+					throw new UiException("there are more than one "+cmdInfo.getDefaultAnnotationName()+" method in "+clz+", "+cache.get(COMMAND_METHOD_DEFAULT).value+" and "+m);
+				}
+				cache.put(COMMAND_METHOD_DEFAULT, new CachedItem<Method>(m));
+			}
+			String[] vals = cmdInfo.getCommandName(m);
+			if(vals==null) continue;
+			if(vals.length==0){
+				vals = new String[]{m.getName()};//command name from method.
+			}
+			for(String val:vals){
+				val = val.trim();
+				if(cache.get(val)!=null){
+					throw new UiException("there are more than one "+cmdInfo.getAnnotationName()+" method "+val+" in "+clz+", "+cache.get(val).value+" and "+m);
+				}
+				cache.put(val, new CachedItem<Method>(m));
+			}
+		}
 	}
 
 	//doCommand -> doSaveBefore
