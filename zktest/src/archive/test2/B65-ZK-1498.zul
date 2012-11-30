@@ -4,7 +4,7 @@
 	<window title="import directive test" border="normal" width="200px">
 		<label id="msg" />
 		<zscript><![CDATA[
-			B65_ZK_1498_Bean myBean = new B65_ZK_1498_Bean(); // but throws exception here
+			B65_ZK_1498_Bean myBean = new B65_ZK_1498_Bean();
 			msg.setValue(myBean.getHello());
 		]]></zscript>
 	</window>
