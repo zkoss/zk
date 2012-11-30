@@ -128,6 +128,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	onSize: function () {
 		if (!this._columns) return;
 		var self = this;
+		self._syncFrozen(); // B65-ZK-1133
 		// Bug 3218078, to do the sizing after the 'setAttr' command
 		setTimeout(function () {
 			_onSizeLater(self);

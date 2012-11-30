@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1133.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 30 14:33:53 TST 2012, Created by 
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html>
+<![CDATA[
+<p>1. Move horizontal scrollbar to right.</p>
+<p>2. Resize the browser window.</p>
+<p>3. The grid's scroll position and layout should not be changed.</p>
+]]>
+</html>
+<grid id="grid" sizedByContent="true" width="400px" vflex="1">
+
+<frozen columns="1" ></frozen>
+
+<columns sizable="true">
+	<column label="A"/>
+	<column label="B"/>
+	<column label="C"/>
+	<column label="D"/>
+	<column label="E"/>
+</columns>
+
+<rows id="rws">
+	<row>
+	<label>Aaaaaaaaaaaaa</label>
+	<label>Bbbbbbbbbbbbb</label>
+	<label>Ccccccccccccc</label>
+	<label>Ddddddddddddd</label>
+	<label>Eeeeeeeeeeeee</label>
+	</row>
+</rows>
+</grid>
+<button label="outer rows" onClick="rws.invalidate()"/>
+<button label="outer grid" onClick="grid.invalidate()"/>
+</zk>
