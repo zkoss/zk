@@ -4,6 +4,7 @@ ZK 6.0.4
   
 * Bugs
   ZK-1442 ZK Bind command doesn't work with cluster env
+  ZK-1497 org.zkoss.bind.impl.BinderImpl cause ConcurrentModificationException
 
 * Upgrade Notes
   
