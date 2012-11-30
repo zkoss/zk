@@ -151,6 +151,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** Whether _clsresolver is shared with other pages. */
 	private boolean _clsresolverShared;
 	private boolean _complete;
+	private List<String> _impclss;
 
 	/** Constructs a page by giving the page definition.
 	 *
@@ -172,6 +173,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_compdefs = pgdef.getComponentDefinitionMap();
 		_clsresolver = pgdef.getImportedClassResolver();
 		_clsresolverShared = true;
+		_impclss = pgdef.getImportedClasses();
 
 		//NOTE: don't store pgdef since it is not serializable
 	}
@@ -885,9 +887,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			_ips.put(zslang, ip);
 				//set first to avoid dead loop if script calls interpret again
 
-			final String script = _langdef.getInitScript(zslang);
-			if (script != null)
+			String script = _langdef.getInitScript(zslang);
+			if (script != null) {
+				//Bug ZK-1498: also add <?import ?> directive to zscript
+				if (!_impclss.isEmpty() && "java".equals(zslang)) {
+					StringBuilder sb = new StringBuilder();
+					for (String name : _impclss)
+						sb.append("\nimport ").append(name);
+					script += sb.toString();
+					sb = null;
+				}
 				ip.interpret(script, this);
+			}
 		}
 
 		//evaluate deferred zscripts, if any
