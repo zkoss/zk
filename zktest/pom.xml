@@ -352,9 +352,10 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>7.6.8.v20121106</version>
 				<configuration>
-					<webApp>
-						<contextPath>${project.artifactId}</contextPath>
-					</webApp>
+					<web>${project.build.directory}/${project.build.finalName}</web>
+					<webAppConfig>
+						<contextPath>/${project.artifactId}</contextPath>
+					</webAppConfig>
 					<scanIntervalSeconds>5</scanIntervalSeconds>
 				</configuration>
 			</plugin>
