@@ -893,7 +893,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				if (!_impclss.isEmpty() && "java".equals(zslang)) {
 					StringBuilder sb = new StringBuilder();
 					for (String name : _impclss)
-						sb.append("\nimport ").append(name);
+						sb.append("\nimport ").append(name).append(";");
 					script += sb.toString();
 					sb = null;
 				}

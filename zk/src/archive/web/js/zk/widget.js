@@ -427,10 +427,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else if (!wgt.isVisible()) break;
 		return false;
 	}
+	
+	function _fullScreenZIndex(zi) {
+		var pseudoFullscreen = null;
+		if (document.fullscreenElement) {
+			pseudoFullscreen = ":fullscreen";
+		} else if (document.mozFullScreen) {
+			//pseudoFullscreen = ":-moz-full-screen";
+			//Firefox return zindex by scientific notation "2.14748e+9"
+			//use zk.parseFloat() will get 2147480000, so return magic number directly.
+			return 2147483648;
+		} else if (document.webkitIsFullScreen) {
+			pseudoFullscreen = ":-webkit-full-screen";
+		}
+		if (pseudoFullscreen) {
+			var fsZI = jq.css(jq(pseudoFullscreen)[0],"zIndex");
+			return fsZI == "auto" ? 2147483648 : ++fsZI;
+		}
+		return zi;
+	}
 
 	//Returns the topmost z-index for this widget
 	function _topZIndex(wgt) {
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
+		
+		//ZK-1226: Full Screen API will make element's ZIndex bigger than 1800
+		//	so set a higher zindex if browser is in full screen mode.
+		zi = _fullScreenZIndex();
+		//
+		
 		for (var j = _floatings.length; j--;) {
 			var w = _floatings[j].widget,
 				wzi = zk.parseInt(w.getFloatZIndex_(_floatings[j].node));

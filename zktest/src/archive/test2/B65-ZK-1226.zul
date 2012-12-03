@@ -1,0 +1,37 @@
+<zk xmlns:w="client">
+	<label multiline="true">
+	1. Click the image, menupopup will show at (50,50)
+	2. Right click the image, menupopup will show at mouse position.
+	3. Click "full screen" button then redo step 1 and step 2, the menupopup's behavior will be the same.
+
+	Notice: 
+	1. The full screen behavior is difference between browsers.
+	2. Can't support IE9(and older version).
+	3. Can support Chrome 23, Firefox 16, Safari 5.1, Opera 12.1
+	</label>
+	<div id="div">
+		<image src="/img/inet.png" width="100px" height="100px" context="mpp">
+			<attribute name="onClick">
+			mpp.open("50", "50");
+			</attribute>
+		</image>
+	</div>
+	<button label="full screen">
+		<attribute w:name="doClick_">
+			function (evt) { 
+				var i=1, j=1;
+				var div = jq('$div')[0];
+				var func = div.requestFullscreen || div.webkitRequestFullScreen || div.mozRequestFullScreen;
+				func.call(div);
+				this.$doClick_(evt); 
+			}
+		</attribute>
+	</button>
+	<menupopup id="mpp">
+		<menuitem label="New" />
+		<menuitem label="Open" />
+		<menuitem label="Save" />
+		<menuseparator />
+		<menuitem label="Exit" />
+	</menupopup>
+</zk>
