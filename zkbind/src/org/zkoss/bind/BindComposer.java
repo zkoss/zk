@@ -77,13 +77,16 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private static final String VALUE_ANNO_ATTR = "value";
 	
-//	private static final String COMPOSER_NAME_ATTR = "composerName";
+	private static final String COMPOSER_NAME_ATTR = "composerName";
 	private static final String VIEW_MODEL_ATTR = "viewModel";
 	private static final String BINDER_ATTR = "binder";
 	private static final String VALIDATION_MESSAGES_ATTR = "validationMessages";
 	
 	private static final String QUEUE_NAME_ANNO_ATTR = "queueName";
 	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
+	
+	private final static Map<Class<?>, List<Method>> _afterComposeMethodCache = 
+		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME);
 	
 	public BindComposer() {
 		setViewModel(this);
@@ -160,7 +163,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		_binder.initAnnotatedBindings();
 		
 		// trigger ViewModel's @AfterCompose method.
-		new AbstractAnnotatedMethodInvoker<AfterCompose>(AfterCompose.class){
+		new AbstractAnnotatedMethodInvoker<AfterCompose>(AfterCompose.class, _afterComposeMethodCache){
 			protected boolean shouldLookupSuperclass(AfterCompose annotation) {
 				return annotation.superclass();
 			}}.invokeMethod(_binder, getViewModelInitArgs(evalx,comp));
