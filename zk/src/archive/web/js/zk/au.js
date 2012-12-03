@@ -1071,7 +1071,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			visibilityState = document.visibilityState || document[zk.vendor_ + 'VisibilityState'];
 		
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onVisibilityChange",
-			{hidden: hidden, visibilityState: visibilityState}, {implicit: true}));
+			{hidden: hidden, visibilityState: visibilityState}, {implicit: true, ignorable: true}));
 	},
 	/** Asks the client to download the resource at the specified URL.
 	 * @param String url the URL to download from
