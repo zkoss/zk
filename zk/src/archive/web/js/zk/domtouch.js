@@ -70,7 +70,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		if (tevt.touches.length > 1) return;
 		if (this._dbTap) {
 			this._dbTap = this._tapValid = this._lastTap = null;
-			var wevt = new zk.Event(this, 'onDoubleClick', {pageX: tevt.pageX, pageY: tevt.pageY}, {}, evt);
+			var	changedTouch = tevt.changedTouches[0],
+				wevt = new zk.Event(this, 'onDoubleClick', {pageX: changedTouch.clientX, pageY: changedTouch.clientY}, {}, evt);
 			if (!this.$weave) {
 				if (!wevt.stopped)
 					this['doDoubleClick_'].call(this, wevt);
@@ -81,7 +82,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		}
 	},
 	bindTapHold_: function () {
-		if (this.isListen('onRightClick')) {
+		if (this.isListen('onRightClick') || this.getContext()) { //also register context menu to tapHold event
 			this._holdTime = 800;
 			this._startHold = function (evt) {
 				if (!this._rightClickPending) {
@@ -91,7 +92,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 					self._holdTimeout = setTimeout(function () {
 						self._rightClickPending = false;
 						var evt = self._rightClickEvent,
-							wevt = new zk.Event(self, 'onRightClick', {pageX: evt.pageX, pageY: evt.pageY}, {}, evt);
+							wevt = new zk.Event(self, 'onRightClick', {pageX: self._pt[0], pageY: self._pt[1]}, {}, evt);
 						
 						if (!self.$weave) {
 							if (!wevt.stopped)
@@ -121,7 +122,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		}
 	},
 	unbindTapHold_: function () {
-		if (this.isListen('onRightClick')) {
+		if (this.isListen('onRightClick') || this.getContext()) { //also register context menu to tapHold event
 			this._startHold = this._cancelHold = null
 			jq(this.$n()).unbind('touchstart', this.proxy(this._tapHoldStart))
 				.unbind('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
