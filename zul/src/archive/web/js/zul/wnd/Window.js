@@ -225,7 +225,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt._notSendMaximize = !opts || !opts.sendOnMaximize;
 		wgt._updDOFocus = false; //it might be set by unbind_
 		try {
+			var last = wgt._lastSize;
 			wgt.rerender(wgt._skipper);
+			if (last)
+				wgt._lastSize = last;
 			var cf;
 			if (cf = wgt._updDOFocus) //asked by unbind_
 				cf.focus(10);
