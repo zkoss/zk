@@ -97,7 +97,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		List<Method> methods = null;
 		synchronized(annoMethodCache){
 			//have to synchronized cache, because it calls expunge when get.
-			methods = annoMethodCache.get(vmClass);//check again
+			methods = annoMethodCache.get(vmClass);
 			if(methods!=null) return methods;
 			
 			methods = new ArrayList<Method>(); //if still null in synchronized, scan it
