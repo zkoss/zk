@@ -453,7 +453,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		//ZK-1226: Full Screen API will make element's ZIndex bigger than 1800
 		//	so set a higher zindex if browser is in full screen mode.
-		zi = _fullScreenZIndex();
+		zi = _fullScreenZIndex(zi);
 		//
 		
 		for (var j = _floatings.length; j--;) {
