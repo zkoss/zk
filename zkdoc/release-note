@@ -91,6 +91,7 @@ ZK 6.5.1
   ZK-1498: The "import Classes" directive doesn't work for zscript
   ZK-1497: org.zkoss.bind.impl.BinderImpl cause ConcurrentModificationException
   ZK-1226: Problem With Parent of the Menupopup in Fullscreen
+  ZK-1500: Change Panel button settings during maximize event will cause Panel not resize properly
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
