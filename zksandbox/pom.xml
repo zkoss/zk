@@ -287,11 +287,15 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>7.6.8.v20121106</version>
 				<configuration>
-					<web>${project.build.directory}/${project.build.finalName}</web>
+					<webAppSourceDirectory>${project.basedir}/src/archive/</webAppSourceDirectory>
 					<webAppConfig>
 						<contextPath>/${project.artifactId}</contextPath>
+						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
 					</webAppConfig>
 					<scanIntervalSeconds>5</scanIntervalSeconds>
+					<scanTargets>
+						<scanTarget>${project.basedir}/src/archive/</scanTarget>
+					</scanTargets>
 				</configuration>
 			</plugin>
 		</plugins>
