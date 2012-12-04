@@ -93,7 +93,8 @@ ZK 6.5.1
   ZK-1226: Problem With Parent of the Menupopup in Fullscreen
   ZK-1500: Change Panel button settings during maximize event will cause Panel not resize properly
   ZK-1501: Grid Footer cannot scroll horizontally in tablets
-  ZK-1499: When Panel contains Caption, it dose not display icon in tablets.
+  ZK-1499: When Panel contains Caption, it dose not display icon in tablets
+  ZK-1505: "Processing..." progress bar not appears in 6.5.1
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
