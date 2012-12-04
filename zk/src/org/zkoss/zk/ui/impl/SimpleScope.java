@@ -56,7 +56,7 @@ public class SimpleScope implements Scope {
 	}
 
 	/*package*/ Map<String, Object> newInitMap() {
-		return new Attrs();
+		return new Attrs(2);
 	}
 
 	//Scope//
@@ -162,6 +162,10 @@ public class SimpleScope implements Scope {
 
 	//Helper Class//
 	private class Attrs extends HashMap<String, Object> {
+		public Attrs(int initialCapacity) {
+			super(initialCapacity);
+		}
+		
 		public Object remove(Object key) {
 			final Object o = super.remove(key);
 			if (o != null) _listeners.notifyRemoved((String)key);
