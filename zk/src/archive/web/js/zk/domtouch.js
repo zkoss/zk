@@ -82,7 +82,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		}
 	},
 	bindTapHold_: function () {
-		if (this.isListen('onRightClick') || this.getContext()) { //also register context menu to tapHold event
+		if (this.isListen('onRightClick') || (this.getContext && this.getContext())) { //also register context menu to tapHold event
 			this._holdTime = 800;
 			this._startHold = function (evt) {
 				if (!this._rightClickPending) {
@@ -122,7 +122,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		}
 	},
 	unbindTapHold_: function () {
-		if (this.isListen('onRightClick') || this.getContext()) { //also register context menu to tapHold event
+		if (this.isListen('onRightClick') || (this.getContext && this.getContext())) { //also register context menu to tapHold event
 			this._startHold = this._cancelHold = null
 			jq(this.$n()).unbind('touchstart', this.proxy(this._tapHoldStart))
 				.unbind('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
