@@ -287,10 +287,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			if (uri) req.send(null);
 			else req.send(reqInf.content);
 
-			if (!reqInf.implicit)
-				setTimeout(function () { //Bug ZK-1505: setTimeout to wait checkProgressing()
+			if (!reqInf.implicit) {
+				if (!zk.clientinfo) {
+					setTimeout(function () { //Bug ZK-1505: setTimeout to wait checkProgressing()
+						zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
+					}, 55);
+				} else {
 					zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
-				}, !zk.clientinfo ? 55 : 0);
+				}
+			}
 		} catch (e) {
 			//handle error
 			try {
