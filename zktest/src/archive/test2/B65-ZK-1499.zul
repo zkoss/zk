@@ -1,0 +1,41 @@
+<zk>
+	<label multiline="true">
+	iPad/Android only
+	
+	1. click collapse/extend, maximize/minimize button for each panel/window.
+	
+	All of the buttons on title bar must show correct image.
+	
+	</label>
+	<separator />
+	<hlayout>
+		<div>
+			<panel title="Title" border="normal" width="300px" height="100px"
+				closable="true" collapsible="true" maximizable="true" minimizable="true">
+				<panelchildren />
+			</panel>
+			<panel title="Title and Caption" border="normal" width="300px" height="100px"
+				closable="true" collapsible="true" maximizable="true" minimizable="true">
+				<caption />
+				<panelchildren />
+			</panel>
+			<panel title="Caption" border="normal" width="300px" height="200px"
+				closable="true" collapsible="true" maximizable="true" minimizable="true">
+				<caption />
+				<panelchildren />
+			</panel>
+		</div>
+		<div>
+			<window title="Title" border="normal" width="300px" height="100px" 
+				closable="true" maximizable="true" minimizable="true" />
+			<window title="Title and Caption" border="normal" width="300px" height="100px" 
+				closable="true" maximizable="true" minimizable="true">
+				<caption />
+			</window>
+			<window title="Caption" border="normal" width="300px" height="100px" 
+				closable="true" maximizable="true" minimizable="true">
+				<caption />
+			</window>
+		</div>
+	</hlayout>
+</zk>

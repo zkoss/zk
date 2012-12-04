@@ -20,6 +20,6 @@
 	</panel>
 	<window title="window" border="normal" width="300px"
 		height="200px" minimizable="true" closable="true"
-		maximizable="true" onMaximize="onMaximize(self)">
+		maximizable="true" onMaximize="onMaximize(self)" maximized="true">
 	</window>
 </zk>
