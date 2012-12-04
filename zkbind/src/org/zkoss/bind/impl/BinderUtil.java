@@ -30,7 +30,7 @@ public class BinderUtil {
 		return comp.hasAttribute(BinderImpl.BINDER);
 	}
 	public static Binder getBinder(Component comp){
-		return getBinder(comp,false);
+		return (Binder)comp.getAttribute(BinderImpl.BINDER);
 	}
 	public static Binder getBinder(Component comp, boolean recurse){
 		return (Binder)comp.getAttribute(BinderImpl.BINDER,recurse);
