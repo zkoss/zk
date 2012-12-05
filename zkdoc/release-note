@@ -1,5 +1,6 @@
   --------
 ZK 6.5.1
+Dec 05, 2012
 * Features
   ZK-1351: Messagebox with no button
   ZK-1397: DefaultTreeNode support empty children mean leaf node
