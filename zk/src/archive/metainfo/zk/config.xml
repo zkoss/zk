@@ -58,6 +58,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</device-config>
 	
 	<listener>
+	    <listener-class>org.zkoss.zk.ui.theme.StandardThemeWebAppInit</listener-class>
+	</listener>
+	
+	<listener>
 		<listener-class>org.zkoss.zk.au.http.UploadInfoService$DesktopInit</listener-class>
 	</listener>
 </config>

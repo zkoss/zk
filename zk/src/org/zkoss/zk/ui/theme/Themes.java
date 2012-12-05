@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkplus.theme;
+package org.zkoss.zk.ui.theme;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
