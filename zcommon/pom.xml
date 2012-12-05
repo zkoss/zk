@@ -5,7 +5,7 @@
 	<groupId>org.zkoss.common</groupId>
 	<artifactId>zcommon</artifactId>
 	<packaging>jar</packaging>
-	<version>6.5.1-SNAPSHOT</version>
+	<version>6.5.1</version>
 	<name>The ZKoss Common Library</name>
 	<url>http://www.zkoss.org/common</url>
 	<description>The ZKoss common library</description>
