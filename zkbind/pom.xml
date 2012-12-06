@@ -5,7 +5,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zkbind</artifactId>
 	<packaging>jar</packaging>
-	<version>6.5.1-SNAPSHOT</version>
+	<version>6.5.2-SNAPSHOT</version>
 	<name>ZK Bind</name>
 	<url>http://www.zkoss.org/zkbind</url>
 	<description>ZK Bind</description>

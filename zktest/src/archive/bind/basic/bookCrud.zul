@@ -1,0 +1,70 @@
+<zk>
+	<window title="ZK MVVM Book CRUD" border="normal" width="500px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.BookCrudViewModel')">
+		<vlayout>
+			<listbox selectedItem="@bind(vm.selectedBook)" rows="10"
+				model="@bind(vm.bookList)">
+				<listhead>
+					<listheader label="Name" />
+					<listheader label="Author" width="100px" align="center"/>
+					<listheader label="ISBN" width="100px" align="center"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@bind(each.name)" />
+						<listcell label="@bind(each.author)" />
+						<listcell label="@bind(each.isbn)" >
+							<div>
+								<div></div>
+							</div>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<div height="100px">
+				<grid visible="@bind(not empty vm.selectedBook)"
+					form="@id('fx') @load(vm.selectedBook) @save(vm.selectedBook,before='save')">
+					<columns>
+						<column width="150px" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							Name:
+							<textbox
+								value="@bind(fx.name)" hflex="1" />
+						</row>
+						<row>
+							Author:
+							<textbox
+								value="@bind(fx.author)" />
+						</row>
+						<row>
+							ISBN :
+							<textbox
+								value="@bind(fx.isbn)" />
+						</row>
+					</rows>
+				</grid>
+			</div>
+			<hlayout>
+				<button label="Create" onClick="@command('create')"/>
+				<button label="Save" onClick="@command('save')" visible="@bind(not empty vm.selectedBook)" />
+				<button label="Delete" onClick="@command('delete')" visible="@bind(not empty vm.selectedBook)" />
+			</hlayout>
+			<hlayout>
+				<label value="@bind(vm.message)"/>
+			</hlayout>
+		</vlayout>
+		<window title="Confirm" border="normal" visible="@load(vm.confirmWindowVisible)" width="300px" height="150px" mode="modal">
+			<vlayout vflex="1" style="padding:5px">
+				<label multiline="true" value="@load(vm.confirmMessage)"/>
+			</vlayout>
+			<hbox vflex="min" width="100%" style="padding:5px" pack="center">
+				<button label="No" onClick="@command('confirmDelete',confirm=false)"/>
+				<button label="Yes" onClick="@command('confirmDelete',confirm=true)"/>
+			</hbox>
+		</window>
+	</window>
+</zk>

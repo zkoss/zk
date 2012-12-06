@@ -103,9 +103,11 @@ public class AnnotateBinderHelper {
 				processPropertyBindings(comp, propName);
 			}
 		}
-		if(!BinderUtil.isHandling(comp)){
-			BinderUtil.markHandling(comp, _binder);
-		}
+		//don't mark the component is controlled, if we do this, it will always create a attribute map for a component.
+		//and consume more memory, make performance worse.
+		//if(!BinderUtil.isHandling(comp)){
+		//	BinderUtil.markHandling(comp, _binder);
+		//}
 	}
 	
 	private boolean isEventProperty(String propName) {
