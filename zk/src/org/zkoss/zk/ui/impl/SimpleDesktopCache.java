@@ -202,7 +202,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		protected boolean shallExpunge() {
 			return !_expungeDisabled
 				&& (super.shallExpunge()
-					|| sizeWithoutExpunge() > (getMaxSize() << 2));
+					|| sizeWithoutExpunge() > (getMaxSize() / 2));
+			//2012-12-07 Ian: expunge should been triggered often  
 				//1) disable expunge if serialization/activation
 				//2) to minimize memory use, expunge even if no GC
 		}
