@@ -1524,7 +1524,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private Method getCommandMethod(Class<?> clz, String command) {
 		Map<String,CachedItem<Method>> methods ;
 		synchronized(_commandMethodCache){
-			methods = _commandMethodCache.get(clz);//check again
+			methods = _commandMethodCache.get(clz);
 			if(methods==null){
 				methods = new HashMap<String,CachedItem<Method>>();
 				_commandMethodCache.put(clz, methods);
