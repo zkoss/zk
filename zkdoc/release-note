@@ -97,6 +97,7 @@ Dec 05, 2012
   ZK-1488: UUID implementation change cause the context popup not work correctly
   ZK-1499: When Panel contains Caption, it dose not display icon in tablets
   ZK-1505: "Processing..." progress bar not appears in 6.5.1
+  ZK-1511: Progressbox not show with long operation
   
 * Upgrade Notes
   + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
