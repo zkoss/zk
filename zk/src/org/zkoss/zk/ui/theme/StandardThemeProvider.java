@@ -48,6 +48,11 @@ public class StandardThemeProvider implements ThemeProvider {
 		return (number != null && number.doubleValue() > 0); 
 	}
 	
+	private boolean isTabletThemeSupported(Execution exec) {
+		return isMobile(exec) && "EE".equals(WebApps.getEdition()) &&
+				!"true".equals(Library.getProperty(TABLET_THEME_DISABLED_KEY, "false"));
+	}
+	
 	private static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
 		return Themes.BREEZE_NAME.equals(suffix) ? null : suffix;
@@ -73,8 +78,7 @@ public class StandardThemeProvider implements ThemeProvider {
 		if (!Strings.isEmpty(suffix))
 			bypassURI(uris, suffix);
 		
-		if (isMobile(exec) && "EE".equals(WebApps.getEdition()) &&
-			!"true".equals(Library.getProperty(TABLET_THEME_DISABLED_KEY, "false")))
+		if (isTabletThemeSupported(exec))
 			uris.add(ServletFns.resolveThemeURL(DEFAULT_TABLET_CSS));
 		
 		return uris;
@@ -87,8 +91,7 @@ public class StandardThemeProvider implements ThemeProvider {
 	
 	@Override
 	public String beforeWCS(Execution exec, String uri) {
-		if (isMobile(exec) && "EE".equals(WebApps.getEdition()) &&
-			!"true".equals(Library.getProperty(TABLET_THEME_DISABLED_KEY, "false"))) {
+		if (isTabletThemeSupported(exec)) {
 			exec.setAttribute("fontSizeM", "18px");
 			exec.setAttribute("fontSizeMS", "16px");
 			exec.setAttribute("fontSizeS", "14px");
@@ -134,8 +137,7 @@ public class StandardThemeProvider implements ThemeProvider {
 	
 	@Override
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		if (isMobile(exec) && "EE".equals(WebApps.getEdition()) &&
-			!"true".equals(Library.getProperty(TABLET_THEME_DISABLED_KEY, "false"))	&&
+		if (isTabletThemeSupported(exec) &&
 			_ignoreTheme != null && _ignoreTheme.containsKey(uri))
 			return null;
 		
