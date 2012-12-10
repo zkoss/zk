@@ -109,7 +109,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (!tchs || tchs.parent == this)
 			return; //the rest is already being processed by insertBefore
 
-		//main the selected status
+		//maintain the selected status
 		for (var j = 0, items = tchs.getItems(), k = items.length; j < k; ++j)
 			if (items[j]) this._fixNewChild(items[j]);
 	},
@@ -117,7 +117,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (tchs == null || tchs.parent == this)
 			return; //already being processed by onChildRemoved
 
-		//main the selected status
+		//maintain the selected status
 		var item, fixSel;
 		for (var j = 0, items = tchs.getItems(), k = items.length; j < k; ++j) {
 			item = items[j];

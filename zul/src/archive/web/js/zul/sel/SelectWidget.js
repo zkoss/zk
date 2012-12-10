@@ -953,8 +953,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_doRight: zk.$void,
 	/* maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
-		var focusEl = this.$n('a'),
-			focusElStyle = focusEl.style,
+		var focusEl = this.$n('a');
+		if (!focusEl) //Bug ZK-1480: widget may not rendered when ROD enabled
+			return;
+		
+		var focusElStyle = focusEl.style,
 			oldTop = this._anchorTop,
 			oldLeft = this._anchorLeft,
 			offs, n;

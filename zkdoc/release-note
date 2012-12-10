@@ -3,8 +3,9 @@ ZK 6.0.4
 * Features
   
 * Bugs
-  ZK-1442 ZK Bind command doesn't work with cluster env
-  ZK-1497 org.zkoss.bind.impl.BinderImpl cause ConcurrentModificationException
+  ZK-1442: ZK Bind command doesn't work with cluster env
+  ZK-1497: org.zkoss.bind.impl.BinderImpl cause ConcurrentModificationException
+  ZK-1480: zkmax bandbox issue
 
 * Upgrade Notes
   
