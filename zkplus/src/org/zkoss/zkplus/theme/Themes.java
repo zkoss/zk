@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.theme;
+package org.zkoss.zkplus.theme;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +39,12 @@ public class Themes {
 	private final static String THEME_DEFAULT_KEY = "org.zkoss.theme.default";
 	private final static String THEME_PRIORITY_PREFIX = "org.zkoss.theme.priority.";
 	private final static String THEME_DISPLAY_NAME_PREFIX = "org.zkoss.theme.display.";
+	
+	private final static String THEME_ORIGIN_PREFIX = "org.zkoss.theme.origin.";
+	
+	public static enum ThemeOrigin {
+		JAR, FOLDER
+	}
 	
 	public final static String BREEZE_NAME = "breeze";
 	public final static String BREEZE_DISPLAY = "Breeze";
@@ -117,11 +123,17 @@ public class Themes {
 	 * Register the theme, so it becomes available in the theme list
 	 */
 	public static void register(String theme) {
+		register(theme, ThemeOrigin.JAR);
+	}
+	
+	public static void register(String theme, ThemeOrigin origin) {
 		String themes = getThemeString();
 		if (Strings.isEmpty(themes))
 			Library.setProperty(THEME_NAMES_KEY, theme);
 		else if (!contains(themes, theme))
 			Library.setProperty(THEME_NAMES_KEY, themes + ";" + theme);
+		
+		Library.setProperty(THEME_ORIGIN_PREFIX + theme, "" + origin);
 	}
 	
 	/**
@@ -130,7 +142,11 @@ public class Themes {
 	 * @param priority Priority is higher if the value the smaller
 	 */
 	public static void register(String theme, String displayName, int priority) {
-		register(theme);
+		register(theme, displayName, priority, ThemeOrigin.JAR);
+	}
+	
+	public static void register(String theme, String displayName, int priority, ThemeOrigin origin) {
+		register(theme, origin);
 		setDisplayName(theme, displayName);
 		setPriority(theme, priority);
 	}

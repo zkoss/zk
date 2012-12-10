@@ -67,7 +67,6 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.WebAppFactory;
 import org.zkoss.zk.ui.sys.WebAppsCtrl;
-import org.zkoss.zk.ui.theme.StandardThemeProvider;
 import org.zkoss.zk.ui.util.Configuration;
 
 /**
@@ -159,10 +158,6 @@ public class WebManager {
 		} catch (Throwable ex) {
 			log.realCauseBriefly("Unable to load " + XML, ex);
 		}
-
-		// Default ThemeProvider, if user does not specify one in config
-		if (config.getThemeProvider() == null)
-			config.setThemeProvider(new StandardThemeProvider());
 
 		LogConfigurer.configure();
 

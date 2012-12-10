@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.theme;
+package org.zkoss.zkplus.theme;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,6 +42,10 @@ public class StandardThemeProvider implements ThemeProvider {
 
 	public final static String TABLET_THEME_DISABLED_KEY = "org.zkoss.zkmax.tablet.theme.disabled";
 	public final static String DEFAULT_TABLET_CSS = "~./zkmax/css/tablet.css.dsp";
+	
+	public StandardThemeProvider() {
+		Themes.register(Themes.BREEZE_NAME, Themes.BREEZE_DISPLAY, Themes.BREEZE_PRIORITY);
+	}
 	
 	private boolean isMobile(Execution exec) {
 		Double number = exec.getBrowser("mobile");

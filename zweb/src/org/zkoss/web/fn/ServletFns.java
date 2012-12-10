@@ -84,6 +84,7 @@ public class ServletFns {
 	}
 	
 	private final static String DEFAULT_THEME_NAME = "breeze";
+	private final static String THEME_ORIGIN_PREFIX = "org.zkoss.theme.origin.";
 	/**
 	 * Resolves a URL to point to resource served by the current theme. 
 	 * @param s the default theme url to resolve
@@ -103,12 +104,10 @@ public class ServletFns {
 		
 		if (Strings.isBlank(theme) || DEFAULT_THEME_NAME.equals(theme))
 			resolved = url;
-		else if (!theme.startsWith(prefix + "-"))
+		else if ("JAR".equals(Library.getProperty(THEME_ORIGIN_PREFIX + theme, "JAR")))
 			resolved = url.replaceFirst("~./", "~./" + theme + "/");
-		else {
-			theme = theme.replaceFirst(prefix + "-", "");
+		else
 			resolved = url.replaceFirst("~./", "/" + prefix + "/" + theme +"/");
-		}
 		return resolved;
 	}
 
