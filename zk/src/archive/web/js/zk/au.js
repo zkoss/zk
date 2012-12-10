@@ -34,8 +34,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (!zAu.processing()) {
 			_detached = []; //clean up
 			if (!zk.clientinfo)
-				setTimeout(zk.endProcessing, 50);
+				zk.endProcessing();
+				//setTimeout(zk.endProcessing, 50);
 				// using a timeout to stop the processing after doing onSize in the fireSized() method of the Utl.js
+				//Bug ZK-1505: using timeout cause progress bar disapper such as Thread.sleep(1000) case, so revert it back
 
 			zAu.doneTime = jq.now();
 		}
@@ -287,15 +289,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			if (uri) req.send(null);
 			else req.send(reqInf.content);
 
-			if (!reqInf.implicit) {
-				if (!zk.clientinfo) {
-					setTimeout(function () { //Bug ZK-1505: setTimeout to wait checkProgressing()
-						zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
-					}, 45);
-				} else {
-					zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
-				}
-			}
+			if (!reqInf.implicit)
+				zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
 		} catch (e) {
 			//handle error
 			try {
