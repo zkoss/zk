@@ -38,7 +38,6 @@ import java.util.Set;
 import org.zkoss.io.Serializables;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
@@ -85,8 +84,8 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
-import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.StubComponent;
+import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
@@ -2117,6 +2116,8 @@ w:use="foo.MyWindow"&gt;
 				response(new AuClientInfo(desktop));
 			} else if (Events.ON_PIGGYBACK.equals(evtnm)) {
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
+			} else if (Events.ON_VISIBILITY_CHANGE.equals(evtnm)) {
+				desktop.setAttribute("org.zkoss.desktop.visibilitychange.enabled", true);
 			} else if (getClientEvents().containsKey(evtnm)) {
 				final boolean asap = Events.isListened(this, evtnm, true);
 				if (lis.size() == 1 || oldasap != asap)
@@ -2370,6 +2371,8 @@ w:use="foo.MyWindow"&gt;
 			}
 			if (Events.isListened(this, Events.ON_PIGGYBACK, false))
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
+			if (Events.isListened(this, Events.ON_VISIBILITY_CHANGE, false))
+				getDesktop().setAttribute("org.zkoss.desktop.visibilitychange.enabled", true);
 		} else {
 			if (!Events.isListened(this, Events.ON_PIGGYBACK, false))
 				((DesktopCtrl)desktop).onPiggybackListened(this, false);

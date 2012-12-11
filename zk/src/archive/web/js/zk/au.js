@@ -438,7 +438,7 @@ zAu = {
 		return map[uuid];
 	},
 	_onVisibilityChange: function () { //Called by mount.js when page visibility changed
-		zAu.cmd0.visibilityChange();
+		if (zk.visibilitychange) zAu.cmd0.visibilityChange();
 	},
 
 	//Error Handling//

@@ -101,6 +101,8 @@ public class HtmlPageRenders {
 		= "org.zkoss.zk.ui.directContent";
 	/** Enabled client info */
 	private static final String ATTR_DESKTOP_CLIENTINFO = "org.zkoss.desktop.clientinfo.enabled";
+	/** Enabled visibility change */
+	private static final String ATTR_DESKTOP_VISIBILITYCHANGE = "org.zkoss.desktop.visibilitychange.enabled";
 
 	/** Sets the content type to the specified execution for the given page.
 	 * @param exec the execution (never null)
@@ -648,11 +650,15 @@ public class HtmlPageRenders {
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
 		final Desktop dt;
-		if (page != null
-				&& (dt = page.getDesktop()).getAttribute(ATTR_DESKTOP_CLIENTINFO) != null) {
-			dt.removeAttribute(ATTR_DESKTOP_CLIENTINFO);
-			if (!"CE".equals(WebApps.getEdition())) {
-				out.write("<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
+		if (page != null && (dt = page.getDesktop()) != null) {
+			if (dt.getAttribute(ATTR_DESKTOP_CLIENTINFO) != null) {
+				dt.removeAttribute(ATTR_DESKTOP_CLIENTINFO);
+				if (!"CE".equals(WebApps.getEdition()))
+					out.write("<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
+			}
+			if (dt.getAttribute(ATTR_DESKTOP_VISIBILITYCHANGE) != null) {
+				dt.removeAttribute(ATTR_DESKTOP_VISIBILITYCHANGE);
+				out.write("<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
 			}
 		}
 		outSEOContent(page, out);

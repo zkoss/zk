@@ -1232,6 +1232,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 						addResponse(new AuClientInfo(this));
 						break l_out;
 					}
+			l_out:
+				for (Page page: _pages)
+					for (Component root = page.getFirstRoot();
+					root != null; root = root.getNextSibling())
+						if (Events.isListened(root, Events.ON_VISIBILITY_CHANGE, false)) {
+							setAttribute("org.zkoss.desktop.visibilitychange.enabled", true);
+							break l_out;
+						}
 		}
 	}
 
