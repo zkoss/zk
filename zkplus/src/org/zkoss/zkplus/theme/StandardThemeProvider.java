@@ -83,7 +83,7 @@ public class StandardThemeProvider implements ThemeProvider {
 			bypassURI(uris, suffix);
 		
 		if (isTabletThemeSupported(exec))
-			uris.add(ServletFns.resolveThemeURL(DEFAULT_TABLET_CSS));
+			uris.add(1, ServletFns.resolveThemeURL(DEFAULT_TABLET_CSS));
 		
 		return uris;
 	}
