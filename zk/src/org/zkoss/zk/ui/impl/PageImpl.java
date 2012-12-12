@@ -890,7 +890,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			String script = _langdef.getInitScript(zslang);
 			if (script != null) {
 				//Bug ZK-1498: also add <?import ?> directive to zscript
-				if (!_impclss.isEmpty() && "java".equals(zslang)) {
+				//Bug ZK-1514: _impclss may be null
+				if (_impclss != null && !_impclss.isEmpty() && "java".equals(zslang)) {
 					StringBuilder sb = new StringBuilder();
 					for (String name : _impclss)
 						sb.append("\nimport ").append(name).append(";");
