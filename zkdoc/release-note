@@ -1,4 +1,25 @@
   --------
+ZK 6.5.2
+
+* Features
+  ZK-1515: Loading themes from a folder
+
+* Bugs
+
+* Upgrade Notes
+  + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
+  + org.zkoss.zkmax.init.TabletThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider intead.
+  + org.zkoss.zkplus.theme.Themes is deprecated, please use org.zkoss.zul.theme.Themes instead.
+  + To support ZK-1515, by default, folder-supplied themes are placed under <context-root>/theme/<theme-name>.
+    Folder-supplied themes also need to be registered using Themes.register(themeName, Themes.ThemeOrigin.FOLDER) API. 
+    If you want to change the default location, please specify the following setting in WEB-INF/zk.xml
+    <library-property>
+      <name>org.zkoss.theme.folder.root</name>
+      <value>other/themes</value>
+      <value>
+    </library-property>
+
+  --------
 ZK 6.5.1
 Dec 05, 2012
 * Features
