@@ -29,56 +29,8 @@ import org.zkoss.zk.ui.Execution;
  * A standard implementation of ThemeProvider, which works with the Breeze series
  * themes.
  * @author simonpai
+ * @deprecated Please use org.zkoss.zul.theme.StandardThemeProvider instead after 6.5.2
  */
-public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
-	
-	public final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
-	
-	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
-		String suffix = getThemeFileSuffix();
-		
-		if (!Strings.isEmpty(suffix))
-			bypassURI(uris, suffix);
-		
-		return uris;
-	}
-	
-	private static String getThemeFileSuffix() {
-		String suffix = Themes.getCurrentTheme();
-		return Themes.BREEZE_NAME.equals(suffix) ? null : suffix;
-	}
-	
-	private void bypassURI(List<Object> uris, String suffix) {
-		for (ListIterator<Object> it = uris.listIterator(); it.hasNext();) {
-			Object o = it.next();
-			if (o instanceof String) {
-				final String uri = (String)o;
-				if (uri.startsWith(DEFAULT_WCS)) {
-					it.set(Aide.injectURI(uri, suffix));
-					break;
-				}
-			}
-		}
-	}
-	
-	public int getWCSCacheControl(Execution exec, String uri) {
-		return 8760; // a year. (JVM will utilize it, don't have to count the answer)
-	}
-	
-	public String beforeWCS(Execution exec, String uri) {
-		return uri;
-	}
-	
-	public String beforeWidgetCSS(Execution exec, String uri) {
-		String suffix = getThemeFileSuffix();
-		if (Strings.isEmpty(suffix)) return uri;
-		
-		if(uri.startsWith("~./zul/css/") ||
-				uri.startsWith("~./js/zul/") || 
-				uri.startsWith("~./js/zkex/") || 
-				uri.startsWith("~./js/zkmax/")){
-			return uri.replaceFirst("~./", "~./" + suffix + "/");
-		}
-		return uri;
-	}
+@Deprecated
+public class StandardThemeProvider extends org.zkoss.zul.theme.StandardThemeProvider {
 }

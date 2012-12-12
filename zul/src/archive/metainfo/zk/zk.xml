@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+	<desktop-config>
+		<!-- 
+		Default theme provider
+		Users may replace the default with their own custom theme provider in WEB-INF/zk.xml.
+		-->
+		<theme-provider-class>org.zkoss.zul.theme.StandardThemeProvider</theme-provider-class>
+	</desktop-config>
+</zk>

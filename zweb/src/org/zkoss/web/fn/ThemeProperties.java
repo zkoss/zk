@@ -25,19 +25,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Maps;
 import org.zkoss.util.resource.Locators;
+import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.zel.ELFactory;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.util.SimpleResolver;
 import org.zkoss.xel.util.SimpleXelContext;
+import org.zkoss.xel.zel.ELFactory;
 
 /**
  * A utility theme properties loader
@@ -58,9 +61,17 @@ public class ThemeProperties {
 		final Locators.StreamLocation loc =
 			Locators.locateAsStream(bundleName, 
 					null, Locators.getDefault());
-		if (loc == null)
-			return false;
-		return loadProperties(req, loc.stream);
+		if (loc != null)
+			return loadProperties(req, loc.stream);
+		else {
+			// add ability to load theme properties from a folder
+			// @since 6.5.2
+			String root = ((HttpServletRequest)req).getContextPath();
+			ServletContext context = ServletFns.getCurrentServletContext();
+			bundleName = bundleName.replace(root, "");
+			
+			return loadProperties(req, new ServletContextLocator(context).getResourceAsStream(bundleName));
+		}
 	}
 	
 	/**

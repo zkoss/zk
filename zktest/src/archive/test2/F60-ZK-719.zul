@@ -23,19 +23,19 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	</div>
 	<button label="change to breeze">
 		<attribute name="onClick">
-			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
 			Executions.sendRedirect(null);
 		</attribute>
 	</button>
 	<button label="change to sapphire">
 		<attribute name="onClick">
-			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
 			Executions.sendRedirect(null);
 		</attribute>
 	</button>
 	<button label="change to silvertail">
 		<attribute name="onClick">
-			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
 			Executions.sendRedirect(null);
 		</attribute>
 	</button>
