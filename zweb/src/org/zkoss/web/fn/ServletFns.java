@@ -85,6 +85,7 @@ public class ServletFns {
 	
 	private final static String DEFAULT_THEME_NAME = "breeze";
 	private final static String THEME_ORIGIN_PREFIX = "org.zkoss.theme.origin.";
+	private final static String THEME_FOLDER_ROOT = "org.zkoss.theme.folder.root";
 	/**
 	 * Resolves a URL to point to resource served by the current theme. 
 	 * @param s the default theme url to resolve
@@ -98,7 +99,7 @@ public class ServletFns {
 		String theme = 
 			ThemeFns.getCurrentTheme();
 		String prefix =
-			Library.getProperty("org.zkoss.theme.folder.root", "theme");
+			Library.getProperty(THEME_FOLDER_ROOT, "theme");
 		
 		String resolved = null;
 		

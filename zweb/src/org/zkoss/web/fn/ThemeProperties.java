@@ -64,6 +64,8 @@ public class ThemeProperties {
 		if (loc != null)
 			return loadProperties(req, loc.stream);
 		else {
+			// add ability to load theme properties from a folder
+			// @since 6.5.2
 			String root = ((HttpServletRequest)req).getContextPath();
 			ServletContext context = ServletFns.getCurrentServletContext();
 			bundleName = bundleName.replace(root, "");

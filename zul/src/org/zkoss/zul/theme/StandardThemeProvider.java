@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkplus.theme;
+package org.zkoss.zul.theme;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,32 +26,41 @@ import java.util.Map;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
- * A standard implementation of ThemeProvider, which works with the Breeze series
- * themes.
+ * A standard implementation of ThemeProvider, which not only works with the Breeze series
+ * themes, but also works with tablet-enhanced theme (ZK EE only).
  * @author simonpai
+ * @author jumperchen
+ * @author leeyt
  */
 public class StandardThemeProvider implements ThemeProvider {
 	
+	/**
+	 * Default theme css file
+	 */
 	public final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
 
+	/**
+	 * Use this library property to disable tablet-enhanced theme (ZK EE only)
+	 */
 	public final static String TABLET_THEME_DISABLED_KEY = "org.zkoss.zkmax.tablet.theme.disabled";
+	/**
+	 * Default tablet-enhanced theme css file (ZK EE only)
+	 */
 	public final static String DEFAULT_TABLET_CSS = "~./zkmax/css/tablet.css.dsp";
-	
-	public StandardThemeProvider() {
-		Themes.register(Themes.BREEZE_NAME, Themes.BREEZE_DISPLAY, Themes.BREEZE_PRIORITY);
-	}
 	
 	private boolean isMobile(Execution exec) {
 		Double number = exec.getBrowser("mobile");
 		return (number != null && number.doubleValue() > 0); 
 	}
 	
+	// @since 6.5.2
 	private boolean isTabletThemeSupported(Execution exec) {
 		return isMobile(exec) && "EE".equals(WebApps.getEdition()) &&
 				!"true".equals(Library.getProperty(TABLET_THEME_DISABLED_KEY, "false"));
@@ -82,8 +91,13 @@ public class StandardThemeProvider implements ThemeProvider {
 		if (!Strings.isEmpty(suffix))
 			bypassURI(uris, suffix);
 		
-		if (isTabletThemeSupported(exec))
+		// @since 6.5.2
+		if (isTabletThemeSupported(exec)) {
+			// uris is a list of original stylesheets, such as [zk.wcs, theme-uri...].
+			// Inserting tablet-specific css after zk.wcs would allow theme-uri... to 
+			// override tablet-enhanced theme
 			uris.add(1, ServletFns.resolveThemeURL(DEFAULT_TABLET_CSS));
+		}
 		
 		return uris;
 	}

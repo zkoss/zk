@@ -369,6 +369,8 @@ public class ThemeFns {
 	 * @param path a file path
 	 */
 	public static void loadProperties(String path) {
+		// add ability to load theme properties from a folder
+		// @since 6.5.2
 		if (!ThemeProperties.loadProperties(ServletFns.getCurrentRequest(), 
 				locate(ServletFns.resolveThemeURL(path)))) {
 			log("The properties file is not loaded correctly! [" + path + "]");
@@ -455,6 +457,7 @@ public class ThemeFns {
 	
 	/**
 	 * Returns the current theme name
+	 * @since 6.5.2
 	 */
 	public static String getCurrentTheme() {
 		String themes = getThemeString();
@@ -493,10 +496,18 @@ public class ThemeFns {
 		return "";
 	}
 	
+	/**
+	 * @return the theme names delimited by semicolons or "" if no themes are registered
+	 */
 	private static String getThemeString() {
 		return Library.getProperty(THEME_NAMES_KEY, "");
 	}
-	
+
+	/**
+	 * @param themes the theme names delimited by semicolons
+	 * @param target the target theme name
+	 * @return true if the target theme name is contained in themes
+	 */
 	private static boolean contains(String themes, String target) {
 		return !Strings.isEmpty(target) && (";" + themes + ";").indexOf(";" + target + ";") != -1;
 	}

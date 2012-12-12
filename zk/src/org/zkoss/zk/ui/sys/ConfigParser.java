@@ -529,8 +529,10 @@ public class ConfigParser {
 		//theme-provider-class
 		Class cls = parseClass(conf, "theme-provider-class",
 			ThemeProvider.class);
-		if (cls != null)
+		if (cls != null) {
+			if (log.debugable()) log.debug("Current ThemeProvider: " + cls.getName());
 			config.setThemeProvider((ThemeProvider)cls.newInstance());
+		}
 
 		//desktop-timeout
 		Integer v = parseInteger(conf, "desktop-timeout", ANY_VALUE);

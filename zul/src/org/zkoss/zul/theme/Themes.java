@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkplus.theme;
+package org.zkoss.zul.theme;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +42,10 @@ public class Themes {
 	
 	private final static String THEME_ORIGIN_PREFIX = "org.zkoss.theme.origin.";
 	
+	/**
+	 * Used to specify the origin of theme resources (e.g. CSS, Images)
+	 * @since 6.5.2
+	 */
 	public static enum ThemeOrigin {
 		JAR, FOLDER
 	}
@@ -49,6 +53,13 @@ public class Themes {
 	public final static String BREEZE_NAME = "breeze";
 	public final static String BREEZE_DISPLAY = "Breeze";
 	public final static int BREEZE_PRIORITY = 500;
+	
+	// Register the default theme when this class is loaded, which implies extra themes are needed.
+	// This is done to make default theme appear in the theme selection list
+	// @since 6.5.2
+	static {
+		Themes.register(BREEZE_NAME, BREEZE_DISPLAY, BREEZE_PRIORITY);
+	}
 	
 	/**
 	 * Sets the theme name in cookie
@@ -126,6 +137,14 @@ public class Themes {
 		register(theme, ThemeOrigin.JAR);
 	}
 	
+	/**
+	 * Register the theme, and specifies its origin (e.g. from JAR or from FOLDER)
+	 * Please use <code>Themes.register("custom", Themes.ThemeOrigin.FOLDER)</code> to make your custom theme available
+	 * if the theme resource is inside a folder
+	 * @param theme theme name
+	 * @param origin origin of the theme resource
+	 * @since 6.5.2
+	 */
 	public static void register(String theme, ThemeOrigin origin) {
 		String themes = getThemeString();
 		if (Strings.isEmpty(themes))
@@ -144,7 +163,17 @@ public class Themes {
 	public static void register(String theme, String displayName, int priority) {
 		register(theme, displayName, priority, ThemeOrigin.JAR);
 	}
-	
+
+	/**
+	 * Register the theme, its display name, its priority; and also specifies its origin (e.g. from JAR or from FOLDER)
+	 * Please use <code>Themes.register("custom", "Custom Theme", 100, Themes.ThemeOrigin.FOLDER)</code> to make your 
+	 * custom theme available if the theme resource is inside a folder
+	 * @param theme theme name
+	 * @param displayName a more descriptive name for the theme, for display purpose
+	 * @param priority priority of the theme
+	 * @param origin origin of the theme resource
+	 * @since 6.5.2
+	 */
 	public static void register(String theme, String displayName, int priority, ThemeOrigin origin) {
 		register(theme, origin);
 		setDisplayName(theme, displayName);
