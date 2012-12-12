@@ -1,4 +1,14 @@
   --------
+ZK 6.5.1.1
+Dec 13, 2012
+* Features
+
+* Bugs
+  ZK-1514: Problem with jsp page and version 6.5.1
+
+* Upgrade Notes
+
+  --------
 ZK 6.5.1
 Dec 05, 2012
 * Features
