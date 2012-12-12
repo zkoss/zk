@@ -20,13 +20,13 @@
 	</div>
 	<button label="change to breeze">
 		<attribute name="onClick">
-			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
 			Executions.sendRedirect(null);
 		</attribute>
 	</button>
 	<button label="change to sapphire">
 		<attribute name="onClick">
-			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
 			Executions.sendRedirect(null);
 		</attribute>
 	</button>

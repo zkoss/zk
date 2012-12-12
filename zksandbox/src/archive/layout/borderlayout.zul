@@ -44,7 +44,7 @@ Rights Reserved.
 <attribute name="value"><![CDATA[
 <zk>
 <zscript deferred="true">
-	String tname = org.zkoss.zkplus.theme.Themes.getCurrentTheme();
+	String tname = org.zkoss.zul.theme.Themes.getCurrentTheme();
 	String bgStyle = "background: " + ("sapphire".equals(tname) ? "#C5E6EF" : "#F7F7F7");
 	b.setStyle(bgStyle);
 	n.setStyle(bgStyle);
