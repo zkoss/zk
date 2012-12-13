@@ -25,10 +25,10 @@ package org.zkoss.zk;
 public class Version {
 	/** The version UID used to identify the resources.
 	 */
-	public static final String UID = "6.5.1";
+	public static final String UID = "6.5.1.1";
 	/** The release version. The official version.
 	 * It is the same as {@link org.zkoss.zk.ui.WebApp#getVersion}.
 	 * @since 3.0.0
 	 */
-	public static final String RELEASE = "6.5.1";
+	public static final String RELEASE = "6.5.1.1-FL";
 }
