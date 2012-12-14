@@ -108,6 +108,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.utl.Timer, 'bind_', arguments);
+		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		if (this._running) this._play();
 	},
 	unbind_: function () {

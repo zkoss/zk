@@ -101,6 +101,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.utl.Script, 'bind_', arguments);
+		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		this._exec();
 	}
 });

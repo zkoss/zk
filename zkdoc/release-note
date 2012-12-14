@@ -6,6 +6,7 @@ ZK 6.5.2
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
+  ZK-1516: Using timer together with hflex makes browser hang
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
@@ -19,6 +20,16 @@ ZK 6.5.2
       <value>other/themes</value>
       <value>
     </library-property>
+
+  --------
+ZK 6.5.1.1
+Dec 13, 2012
+* Features
+
+* Bugs
+  ZK-1514: Problem with jsp page and version 6.5.1
+
+* Upgrade Notes
 
   --------
 ZK 6.5.1
