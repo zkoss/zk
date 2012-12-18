@@ -2240,13 +2240,13 @@ public class Listbox extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					/* Bug ZK-1512: should clear listitem anyway
 					if (_model instanceof GroupsListModel)
-						getItems().clear();
+						getItems().clear();*/
 
 					resetDataLoader(); // Bug 3357641
-				} else {
-					getItems().clear(); // Bug 1807414
 				}
+				getItems().clear(); // Bug 1807414, ZK-1512
 				
 				if (!inSelectMold()) {
 					smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
