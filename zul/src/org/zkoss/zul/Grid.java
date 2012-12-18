@@ -643,14 +643,15 @@ public class Grid extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					/* Bug ZK-1512: should clear row anyway
 					if (_model instanceof GroupsListModel)
-						_rows.getChildren().clear();
+						_rows.getChildren().clear();*/
 					
 					resetDataLoader(); // Bug 3357641
 				} else {
-					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
 					smartUpdate("model", true);
 				}
+				if (_rows != null) _rows.getChildren().clear(); //Bug 1807414, ZK-1512
 
 				_model = model;
 				initDataListener();

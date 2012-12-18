@@ -2240,20 +2240,20 @@ public class Listbox extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					/* Bug ZK-1512: should clear listitem anyway
 					if (_model instanceof GroupsListModel)
-						getItems().clear();
+						getItems().clear();*/
 					
 					resetDataLoader(); // Bug 3357641
 				} else {
-					getItems().clear(); // Bug 1807414
 					if (!inSelectMold())
 						smartUpdate("model", true);
 				}
-
+				getItems().clear(); // Bug 1807414, ZK-1512
+				
 				_model = model;
 				initDataListener();
 			}
-
 			final Execution exec = Executions.getCurrent();
 			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Listbox.deferInitModel_"+getUuid()) != null;
 			final boolean rod = evalRod();

@@ -1,0 +1,32 @@
+<zk>
+<label multiline="true">
+1. Click "Set Data" (setModel).
+2. Click Listbox "Select All" Checkbox. No Scroll.
+3. Click "Set Data".
+4. Scroll to bottom, if the 51 - 100 data has checkbox selected, it is a bug.
+</label>
+<window id="win" apply="org.zkoss.zktest.test2.B60_ZK_1512_Composer">
+	<button id="btn1" label="Set Data" />
+	<button id="btn2" label="Clear Data" />
+	<button id="btn4" label="Show Select Number" />
+	<listbox id="lb" multiple="true" checkmark="true" height="500px" width="500px">
+		<custom-attributes org.zkoss.zul.listbox.rod="false" />
+		<listhead>
+			<listheader width="30px" />
+			<listheader label="1" />
+			<listheader label="2" />
+			<listheader label="3" />
+			<listheader label="4" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="" />
+				<listcell label="${each}-1" />
+				<listcell label="${each}-2" />
+				<listcell label="${each}-3" />
+				<listcell label="${each}-4" />
+			</listitem>
+		</template>
+	</listbox>
+</window>
+</zk>
