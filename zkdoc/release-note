@@ -7,6 +7,7 @@ ZK 6.5.2
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
   ZK-1516: Using timer together with hflex makes browser hang
+  ZK-1512: ListBox Select All
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
@@ -214,12 +215,14 @@ Sep 12, 2012
   + Change Checkbox#setValue(String) to Checkbox#setValue(Object)
   --------
 ZK 6.0.4
+
 * Features
   
 * Bugs
   ZK-1442: ZK Bind command doesn't work with cluster env
   ZK-1497: org.zkoss.bind.impl.BinderImpl cause ConcurrentModificationException
   ZK-1480: zkmax bandbox issue
+  ZK-1512: ListBox Select All
 
 * Upgrade Notes
 
