@@ -8,6 +8,7 @@ ZK 6.5.2
   ZK-1514: Problem with jsp page and version 6.5.1
   ZK-1516: Using timer together with hflex makes browser hang
   ZK-1512: ListBox Select All
+  ZK-1473: Listbox - Live Data broken with keyboard navigation
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
