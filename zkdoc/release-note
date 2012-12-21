@@ -1,6 +1,16 @@
   --------
-ZK 6.0.4
+ZK 6.0.5
 
+* Features
+  
+* Bugs
+  ZK-1531: Button with an image attribute will fire both click and rightClick events when right click the mouse in Chrome
+
+* Upgrade Notes
+
+  --------
+ZK 6.0.4
+Dec 19, 2012
 * Features
   
 * Bugs
