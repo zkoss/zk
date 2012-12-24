@@ -158,7 +158,7 @@ public class Events {
 	 * to notify that user pressed BACK, FORWARD or specified URL directly
 	 * that causes the bookmark is changed (but still in the same desktop).
 	 * <p>All root components of all pages of the desktop will
-	 * recieve this event.
+	 * receive this event.
 	 * @since 3.0.8
 	 */
 	public static final String ON_BOOKMARK_CHANGE = "onBookmarkChange";
@@ -232,7 +232,7 @@ public class Events {
 	public static final String ON_STUB = "onStub";
 
 	/** The onDesktopRecycle event (used with {@link Event})
-	 * to notify that a desktp has been recycled.
+	 * to notify that a desktop has been recycled.
 	 * All top-level components will receive this event when
 	 * recycled.
 	 * <p>Refer to {@link org.zkoss.zk.ui.util.DesktopRecycle} for desktop
@@ -343,7 +343,7 @@ public class Events {
 	public static void sendEvent(Event event) {
 		sendEvent(event.getTarget(), event);
 	}
-	/** Sends the event to the target, and processes it immedately.
+	/** Sends the event to the target, and processes it immediately.
 	 * @param target the target of the event (never null)
 	 * @since 5.0.4
 	 */
@@ -385,7 +385,7 @@ public class Events {
 	 * the earlier the event being posted is processed earlier
 	 * (first-in-first-out).
 	 *
-	 * @param priority the priority of the event. The higher the priority is, the ealier it
+	 * @param priority the priority of the event. The higher the priority is, the earlier it
 	 * is handled.<br/>
 	 * The priority posted by {@link #postEvent(Event)} is 0.
 	 * Applications shall not use the priority higher than 10,000 and
@@ -453,7 +453,7 @@ public class Events {
 	 * and then echoes back the event back.
 	 *
 	 * <p>It is usually if you want to prompt the user before doing a long
-	 * operartion. A typical case is to open a hightlighted window to
+	 * operation. A typical case is to open a hightlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
 	 * <p>It is the same as <code>echoEvent(name, target, (Object)data)</code>.
@@ -478,7 +478,7 @@ public class Events {
 	 * and then echoes back the event back.
 	 *
 	 * <p>It is usually if you want to prompt the user before doing a long
-	 * operartion. A typical case is to open a hightlighted window to
+	 * operation. A typical case is to open a hightlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
 	 * @since 5.0.4
@@ -495,7 +495,7 @@ public class Events {
 	 * and then echoes back the event back.
 	 *
 	 * <p>It is usually if you want to prompt the user before doing a long
-	 * operartion. A typical case is to open a hightlighted window to
+	 * operation. A typical case is to open a hightlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
 	 * @since 5.0.4
