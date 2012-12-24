@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.impl.Attributes;
  * @since 3.0.0
  */
 public class AuEcho extends AuResponse {
-	/** Contructs an echo response with the specified desktop.
+	/** Constructs an echo response with the specified desktop.
 	 *
 	 * @param desktop the desktop to send the echo response to.
 	 * If null, the echo response is sent to each desktop in the
@@ -53,7 +53,7 @@ public class AuEcho extends AuResponse {
 	public AuEcho(Desktop desktop) {
 		super("echo", desktop != null ? desktop.getId(): null);
 	}
-	/** Contructs an echo response for each desktop in the same browser
+	/** Constructs an echo response for each desktop in the same browser
 	 * window
 	 */
 	public AuEcho() {
@@ -73,7 +73,7 @@ public class AuEcho extends AuResponse {
 	 * @since 5.0.4
 	 * @param comp the component to echo the event to (never null).
 	 * @param evtnm the event name
-	 * @param data the extra infor, or null if not available
+	 * @param data the extra information, or null if not available
 	 */
 	public AuEcho(Component comp, String evtnm, Object data) {
 		super("echo2", comp,
