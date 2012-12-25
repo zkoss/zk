@@ -248,6 +248,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 	function ajaxSend(dt, aureq, timeout) {
+		//ZK-1523: dt(desktop) could be null, so search the desktop from target's parent.
+		//call stack: echo2() -> send() 
+		if (!dt) {
+			//original dt is decided by aureq.target.desktop, so start by it's parent.
+			var wgt = aureq.target.parent;
+			while(!wgt.desktop){
+				wgt = wgt.parent;
+			}
+			dt = wgt.desktop;			
+		}
+		////
+		
 		dt._aureqs.push(aureq);
 
 		ajaxSend2(dt, timeout);

@@ -2,9 +2,10 @@
 ZK 6.0.5
 
 * Features
-  
+
 * Bugs
   ZK-1531: Button with an image attribute will fire both click and rightClick events when right click the mouse in Chrome
+  ZK-1523: JS Error if echoEvent to the component under unselected tab
 
 * Upgrade Notes
 
