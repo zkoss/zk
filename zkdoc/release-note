@@ -1,3 +1,7 @@
+ZK 5.0.13
+* Bugs
+  ZK-1523: JS Error if echoEvent to the component under unselected tab
+  
 	--------
 ZK 5.0.12
 Nov 06, 2012
