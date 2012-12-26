@@ -21,7 +21,6 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
-import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.Path;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
@@ -46,7 +45,6 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public class BindELResolver extends XelELResolver {
-	private static final String VALIDATION_MESSAGES_RESOLVER_CLASS_PROP = "org.zkoss.bind.ValidationMessagesELResolver.class";
 	private final CompositeELResolver _resolver;
 	
 	public BindELResolver(XelContext ctx) {
@@ -56,16 +54,11 @@ public class BindELResolver extends XelELResolver {
 		_resolver.add(new FormELResolver());
 		_resolver.add(new ListModelELResolver());
 		_resolver.add(new TreeModelELResolver());
-		_resolver.add(newValidationMessagesELResolver());
+		_resolver.add(new ValidationMessagesELResolver());
 		_resolver.add(new ImplicitObjectELResolver());//ZK-1032 Able to wire Event to command method
 		_resolver.add(new DynamicPropertiedELResolver());//ZK-1472 Bind Include Arg
 		
 		_resolver.add(super.getELResolver());
-	}
-	private ELResolver newValidationMessagesELResolver() {
-		ELResolver resolver = MiscUtil.newInstanceFromProperty(VALIDATION_MESSAGES_RESOLVER_CLASS_PROP,
-				ValidationMessagesELResolver.class.getName(), ELResolver.class);
-		return resolver;
 	}
 	protected ELResolver getELResolver() {
 		return _resolver;

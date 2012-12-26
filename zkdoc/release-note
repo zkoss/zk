@@ -3,6 +3,7 @@ ZK 6.5.2
 
 * Features
   ZK-1515: Loading themes from a folder
+  ZK-1548: Move some zkbind fundamental features to community edition.
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1

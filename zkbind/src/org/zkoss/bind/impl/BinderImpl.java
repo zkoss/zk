@@ -232,7 +232,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private final ImplicitObjectContributor _implicitContributor;
 	
 	private static final String REF_HANDLER_CLASS_PROP = "org.zkoss.bind.ReferenceBindingHandler.class";
-	private static final String IMPLICIT_CONTRIBUTOR_CLASS_PROP = "org.zkoss.bind.ImplicitObjectContributor.class";
 	
 	public BinderImpl() {
 		this(null,null);
@@ -253,7 +252,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_refBindingHandler.setBinder(this);
 		}
 		
-		_implicitContributor = MiscUtil.newInstanceFromProperty(IMPLICIT_CONTRIBUTOR_CLASS_PROP, null, ImplicitObjectContributor.class);
+		//zk-1548
+		_implicitContributor = new ImplicitObjectContributorImpl();
+		
 
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();

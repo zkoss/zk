@@ -19,6 +19,7 @@ import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
+import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.UiException;
@@ -46,6 +47,10 @@ public class SystemConverters {
 			set0("formattedNumber", new FormatedNumberConverter());
 			
 			set0("uri", new UriConverter());
+			
+			//zk 1548
+			set0("childrenBinding", new ChildrenBindingConverter());
+			
 			_init = true;
 		}
 	}
@@ -73,7 +78,10 @@ public class SystemConverters {
 	
 	public static Converter get(String name) {
 		init();
-		Converter c = _converters.get(name);
+		Converter c;
+		synchronized(_converters){
+			c = _converters.get(name);
+		}
 		if (c == null && name.indexOf('.') > 0) { //might be a class path
 			try {
 				c = (Converter) Classes.newInstanceByThread(name);

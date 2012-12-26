@@ -71,12 +71,6 @@ public class ValidationMessagesELResolver extends ELResolver {
 
         return null;
     }
-    
-    protected Object handleTexts(ValidationMessages base,int numOfKids) {
-    	return null;
-	}
-
-
 
 	@Override
     public Class<?> getType(ELContext context, Object base, Object property)
@@ -142,6 +136,67 @@ public class ValidationMessagesELResolver extends ELResolver {
 			}else{
 				throw new PropertyNotFoundException("uknow property "+property+" for validation-messages[comp][*]");
 			}
+    	}
+    }
+    
+    
+    protected Object handleTexts(ValidationMessages base,int numOfKids) {
+    	if(numOfKids==0){//case vmsgs.texts
+    		return base.getMessages();
+    	}else {//case vmsgs.texts[*]
+    		return new TextsResolver((ValidationMessages) base); 
+    	}
+	}
+    
+    //vmsgs.texts.*
+    private static class TextsResolver extends AbstractValueResolver{
+		private static final long serialVersionUID = 1L;
+
+		TextsResolver(ValidationMessages vms) {
+			super(vms);
+		}
+
+		public Object getValue(ELContext context,Object property, int numOfKids) {
+			String[] msgs = null;
+			if(property instanceof Component){
+				context.setPropertyResolved(true);
+        		if(numOfKids==0){//case vmsgs.texts[tb1]
+        			return _vms.getMessages((Component)property);
+        		}else{//case vmsgs.texts[tb1]*
+        			return new TextsComponentResolver(_vms,(Component)property);
+        		}
+        	}else if(property instanceof String){//case vmsgs.texts['key']
+        		context.setPropertyResolved(true);
+        		return _vms.getKeyMessages((String)property);
+        	}else if(property instanceof Number){//case vmsgs.texts[index]
+        		context.setPropertyResolved(true);
+        		msgs = _vms.getMessages();
+        		return msgs==null?null:msgs[((Number)property).intValue()];
+        	}
+			return null;
+		}
+    }
+    
+    //vmsgs.texts[tb1]*
+    private static class TextsComponentResolver extends AbstractValueResolver{
+    	private static final long serialVersionUID = 1L;
+    	final protected Component _comp;
+    	TextsComponentResolver(ValidationMessages vms,Component comp) {
+			super(vms);
+			this._comp = comp;
+		}
+
+		public Object getValue(ELContext context,Object property,int numOfKids){
+			String[] msgs = null;
+			if(property instanceof String){//vmsgs.texts[tb1]['attr']
+				context.setPropertyResolved(true);
+				return _vms.getMessages(_comp,(String)property);
+			}else if(property instanceof Number){//vmsgs.texts[tb1][index]
+				context.setPropertyResolved(true);
+				msgs = _vms.getMessages(_comp);
+        		return msgs==null?null:msgs[((Number)property).intValue()];
+			}
+			return null;
     	}
     }
 }
