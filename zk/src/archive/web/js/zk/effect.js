@@ -237,7 +237,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
 		jq(n).replaceWith(
-		'<div id="'+maskId+'" style="visibility:hidden">' 
+		'<div id="'+maskId+'" style="display:none">'  //$anchor size changed if using visibility: hidden
 		+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 		+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 		+ '<div id="'+maskId+'-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
@@ -305,17 +305,22 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 				rleaf = offp[0];
 			}
 		// grab the maximum along the chain of nodes
-		for (var n = rleaf[0]; n && n.style; n = n.parentNode)
-			if ((zic = jq(n).css('z-index')) && zic != 'auto') {
+		for (var n = rleaf[0]; n && n.style; n = n.parentNode) {
+			//Chrome and Safari only, HTML tag's zIndex value is empty
+			if (n.tagName == 'HTML' && (zk.chrome || zk.safari))
+				n.style.zIndex = 'auto';
+			var zic = n.style.zIndex || jq(n).css('z-index');
+			if (zic && zic != 'auto') {
 				zicv = zk.parseInt(zic);
 				if (zi == 'auto' || zicv > zi)
 					zi = zicv;
 			}
+		}
 		
 		// IE bug
 		if (zk.ie && !zk.ie8)
 			zi = zi == 0 ? 1 : zi;
-			
+		
 		if (zi != 'auto') { //Bug ZK-1381: only apply z-index when it is not auto
 			st.zIndex = zi;
 			this.mask.lastChild.style.zIndex = zi;
