@@ -145,7 +145,8 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		var ungroup;
 		if ((ungroup = evt.target.parent._ungroup))
 			ungroup.setVisible(true);
-		this._mref.fire('onGroup', "ascending" != this._mref.getSortDirection(), {toServer: !this.getMeshWidget().getModel()});
+		//since 6.5.0 onGroup is not listened anymore, always fire event to server
+		this._mref.fire('onGroup', "ascending" != this._mref.getSortDirection(), {toServer: true});
 	},
 	_onUngroup: zk.$void,
 	_onAsc: function (evt) {
