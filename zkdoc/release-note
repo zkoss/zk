@@ -11,6 +11,8 @@ ZK 6.5.2
   ZK-1512: ListBox Select All
   ZK-1473: Listbox - Live Data broken with keyboard navigation
   ZK-1523: JS Error if echoEvent to the component under unselected tab
+  ZK-1381: Show busy on panel with borderlayout is not working
+  ZK-910 : Cannot use the menupopup option of the grid to change the grouping
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
