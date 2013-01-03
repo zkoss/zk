@@ -14,6 +14,7 @@ ZK 6.5.2
   ZK-1381: Show busy on panel with borderlayout is not working
   ZK-910 : Cannot use the menupopup option of the grid to change the grouping
   ZK-1551: When using a composer as a ViewModel to init a binder, the server shows warning message for loading the ZUL that applies the composer every time
+  ZK-1529: Ordering Issue in "selectedItems" in listbox component
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

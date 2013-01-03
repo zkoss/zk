@@ -1,0 +1,23 @@
+<zk>
+<label multiline="true">
+1.select the listitem, the selection should follow the older you make 
+</label>
+
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01529SelectedItemsIndex')">
+	
+	<listbox id="listbox"  selectedItems="@bind(vm.selected)" multiple="true"
+		model="@load(vm.model)" width="200px" checkmark="true">
+		<listhead sizable="true">
+			<listheader id="header" label="Value"  sort="auto" />
+		</listhead>
+		<template name="model" var="entry">
+			<listitem>
+				<listcell label="@load(entry)" />
+			</listitem>
+		</template>
+	</listbox>
+	<label id="lb" value="@load(vm.selected)"/>
+</window>
+</zk>
