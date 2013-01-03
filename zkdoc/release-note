@@ -13,6 +13,7 @@ ZK 6.5.2
   ZK-1523: JS Error if echoEvent to the component under unselected tab
   ZK-1381: Show busy on panel with borderlayout is not working
   ZK-910 : Cannot use the menupopup option of the grid to change the grouping
+  ZK-1551: When using a composer as a ViewModel to init a binder, the server shows warning message for loading the ZUL that applies the composer every time
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
