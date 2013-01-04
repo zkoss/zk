@@ -74,15 +74,17 @@ public abstract class AbstractListModelConverter<C extends Component> implements
 			BindELContext.addModel(comp, val); //ZK-758. @see AbstractRenderer#addItemReference
 			return val;
 		} else if (val instanceof Set) {
-			model =  new ListModelSet((Set)val, true);
+			model =  new ListModelSet((Set)val, false);//ZK-1528, doesn't use live
 		} else if (val instanceof List) {
-			model =  new ListModelList((List)val, true);
+			//ZK-1528, doesn't use live, 
+			//user should use ListModel if he want to dynamically change inside element.
+			model =  new ListModelList((List)val, false); 
 		} else if (val instanceof Map) {
-			model =  new ListModelMap((Map)val, true);
+			model =  new ListModelMap((Map)val, false);//ZK-1528, doesn't use live
 		} else if (val instanceof Object[]) {
-			model =  new ListModelArray((Object[]) val, true);
+			model =  new ListModelArray((Object[]) val, false);//ZK-1528, doesn't use live
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
-			model =  new ListModelArray((Object[]) ((Class)val).getEnumConstants(), true);
+			model =  new ListModelArray((Object[]) ((Class)val).getEnumConstants(), false);//ZK-1528, doesn't use live
 		} else if (val instanceof GroupsModel) { //feature#2866506: Data Binding shall support GroupsModel with Listbox/Grid
 			model =  GroupsListModel.toListModel((GroupsModel) val);
 		} else {

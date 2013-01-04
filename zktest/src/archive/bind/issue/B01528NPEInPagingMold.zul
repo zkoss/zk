@@ -1,0 +1,38 @@
+<zk>
+	<label multiline="true">
+	1.when in CE, type 'A' in textbox then click Add, you should see 2nd page has a new Item A
+	1.1 if bug doesn't be fixed, you will see a NPE
+	2.in CE/EE, any mold, select last item and click delete, the last item should be delete
+	2.1 if bug doens't be fixed, you will see a IndexOutOfBoundsException
+	</label>
+	<window title="${desktop.webApp.version}" border="normal" >
+	
+	<div width="400px" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01528NPEInPagingMold')">
+		Demonstrate the limitation of using a Java List as a component's model:
+		Lose scroll position when model's size changes, e.g. add, delete
+		
+		<listbox id="listbox" model="@bind(vm.itemList)" selectedItem="@bind(vm.pickedItem)" mold="paging" pageSize="10">
+			<listhead>
+				<listheader label="name" />
+			</listhead>
+			<template name="model" var="item" status="s">
+				<listitem>
+					<listcell label="@bind(item.name)" />
+				</listitem>
+			</template>
+		</listbox>
+		<grid form="@id('fx') @load(vm.pickedItem) @save(vm.pickedItem, before={'update','add'})">
+			<rows>
+				<row >
+					name: <textbox id="tb" value="@bind(fx.name)" />
+				</row>
+				<row>
+					<button id="add" label="Add" onClick="@command('add')"/>
+					<button id="delete" label="Delete" onClick="@command('delete')"/>
+				</row>
+			</rows>
+		</grid>
+	</div>
+	</window>
+</zk>
