@@ -14,11 +14,11 @@ package org.zkoss.bind.converter.sys;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -45,8 +45,8 @@ public class TreeSelectedItemsConverter implements Converter, java.io.Serializab
   		}
   		final TreeSelectableModel smodel = (TreeSelectableModel)model;
   		
-  		final Set<Treeitem> items = new HashSet<Treeitem>();
-		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(HashSet.class, val);
+  		final Set<Treeitem> items = new LinkedHashSet<Treeitem>();
+		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(LinkedHashSet.class, val);
 		
 		if(smodel!=null && !smodel.isSelectionEmpty()){//clear the selection first
 	  		smodel.clearSelection();
@@ -82,7 +82,7 @@ public class TreeSelectedItemsConverter implements Converter, java.io.Serializab
 
 	@SuppressWarnings("unchecked")
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
-		Set<Object> vals = new HashSet<Object>();
+		Set<Object> vals = new LinkedHashSet<Object>();
 		if (val != null) {
 			final Tree tree = (Tree) comp;
 	  		final TreeModel<?> model = tree.getModel();
@@ -98,7 +98,7 @@ public class TreeSelectedItemsConverter implements Converter, java.io.Serializab
 	  				}
 	  			}
 	  		}else{
-	  			final Set<Treeitem> items = (Set<Treeitem>)Classes.coerce(HashSet.class, val);
+	  			final Set<Treeitem> items = (Set<Treeitem>)Classes.coerce(LinkedHashSet.class, val);
 		  		for(Treeitem item : items){
 			  		vals.add(item.getValue());
 		  		}
