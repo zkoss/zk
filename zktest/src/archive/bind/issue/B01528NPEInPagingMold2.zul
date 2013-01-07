@@ -1,0 +1,28 @@
+<zk>
+	<label multiline="true">
+	1.click each notifyItemChange, corresponding listitem should be append a 'Updated'
+	</label>
+	<window title="${desktop.webApp.version}" border="normal" >
+	
+	<div width="800px" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01528NPEInPagingMold2')">
+		Demonstrate the limitation of using a Java List as a component's model:
+		Lose scroll position when model's size changes, e.g. add, delete
+		
+		<listbox id="listbox" model="@bind(vm.itemList)" mold="paging" pageSize="10">
+			<listhead>
+				<listheader label="name" />
+			</listhead>
+			<template name="model" var="item" status="s">
+				<listitem>
+					<listcell label="@bind(item.name)" />
+				</listitem>
+			</template>
+		</listbox>
+		<button id="btn1" label="notifyItemChange 0" onClick="@command('notifyItemChange',index=0)"/>
+		<button id="btn2" label="notifyItemChange 2" onClick="@command('notifyItemChange',index=2)"/>
+		<button id="btn3" label="notifyItemChange 5" onClick="@command('notifyItemChange',index=5)"/>
+		<button id="btn4" label="notifyItemChange 9" onClick="@command('notifyItemChange',index=9)"/>
+	</div>
+	</window>
+</zk>
