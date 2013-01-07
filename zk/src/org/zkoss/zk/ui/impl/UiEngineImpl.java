@@ -1797,7 +1797,7 @@ public class UiEngineImpl implements UiEngine {
 					if (timeout >= 0)
 						return null; //failed
 					if (_abortSpecified)
-						throw new UiException("Aborted activation because of timeout, " + tmout + "ms.");
+						throw new ActivationTimeoutException("Aborted activation because of timeout, " + tmout + "ms.");
 				}
 
 				if (seqId != null) {
