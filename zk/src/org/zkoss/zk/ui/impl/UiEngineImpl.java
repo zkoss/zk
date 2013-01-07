@@ -1793,8 +1793,12 @@ public class UiEngineImpl implements UiEngine {
 			for (boolean tried = false;;) {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
-				if (tried && timeout >= 0)
-					return null; //failed
+				if (tried) {
+					if (timeout >= 0)
+						return null; //failed
+					if (_abortSpecified)
+						throw new UiException("Aborted activation because of timeout, " + tmout + "ms.");
+				}
 
 				if (seqId != null) {
 					final String oldSeqId =
@@ -1857,6 +1861,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	private static volatile Integer _retryTimeout, _destroyTimeout;
+	private static boolean _abortSpecified;
 	private static final int getRetryTimeout() {
 		if (_retryTimeout == null) {
 			int v = 0;
@@ -1864,6 +1869,8 @@ public class UiEngineImpl implements UiEngine {
 			if (s != null) {
 				try {
 					v = Integer.parseInt(s);
+					if (v > 0 && "true".equals(Library.getProperty(Attributes.ACTIVATE_RETRY_ABORT)))
+						_abortSpecified = true;
 				} catch (Throwable t) {
 				}
 			}
