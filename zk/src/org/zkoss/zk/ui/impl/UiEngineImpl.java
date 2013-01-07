@@ -1793,8 +1793,12 @@ public class UiEngineImpl implements UiEngine {
 			for (boolean tried = false;;) {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
-				if (tried && (timeout >= 0 || _abortSpecified))
-					return null; //failed
+				if (tried) {
+					if (timeout >= 0)
+						return null; //failed
+					if (_abortSpecified)
+						throw new UiException("Aborted activation because of timeout, " + tmout + "ms.");
+				}
 
 				if (seqId != null) {
 					final String oldSeqId =
