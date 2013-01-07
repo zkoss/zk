@@ -156,6 +156,7 @@ public class Attributes {
 	/** A library property used with {@link ACTIVATE_RETRY_DELAY} to indicate if
 	 * the time waiting for activation is longer than {@link ACTIVATE_RETRY_DELAY},
 	 * the activation will be aborted and the thread will end.
+	 * <P>Default: false.
 	 * <p>It has no function if {@link ACTIVATE_RETRY_DELAY} is not specified (with a positive value).
 	 * @since 6.5.2
 	 */
