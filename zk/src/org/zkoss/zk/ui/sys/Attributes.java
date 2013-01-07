@@ -146,10 +146,20 @@ public class Attributes {
 	 * It is designed to avoid the annoying warning messages found in some JVM.
 	 * For example, IBM JVM shows a warning if wait() exceeds 10 minutes.
 	 * To prevent the warning, you can set the value to less than 10 minutes.
+	 * <p>If you'd like to aborting the activation (and then stops the pending thread),
+	 * you can specify {@link ACTIVATE_RETRY_ABORT} to "true". Then, after timeout,
+	 * the activation will be aborted.
 	 * <p>Default: 120000 (unit: milliseconds)
 	 * @since 5.0.3
 	 */
 	public static final String ACTIVATE_RETRY_DELAY = "org.zkoss.zk.ui.activate.wait.retry.timeout";
+	/** A library property used with {@link ACTIVATE_RETRY_DELAY} to indicate if
+	 * the time waiting for activation is longer than {@link ACTIVATE_RETRY_DELAY},
+	 * the activation will be aborted and the thread will end.
+	 * <p>It has no function if {@link ACTIVATE_RETRY_DELAY} is not specified (with a positive value).
+	 * @since 6.5.2
+	 */
+	public static final String ACTIVATE_RETRY_ABORT = "org.zkoss.zk.ui.activate.wait.retry.abort";
 
 	//URI//
 	/** A special prefix that is used if you want to inject a special

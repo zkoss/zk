@@ -1793,7 +1793,7 @@ public class UiEngineImpl implements UiEngine {
 			for (boolean tried = false;;) {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
-				if (tried && timeout >= 0)
+				if (tried && (timeout >= 0 || _abortSpecified))
 					return null; //failed
 
 				if (seqId != null) {
@@ -1857,6 +1857,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	private static volatile Integer _retryTimeout, _destroyTimeout;
+	private static boolean _abortSpecified;
 	private static final int getRetryTimeout() {
 		if (_retryTimeout == null) {
 			int v = 0;
@@ -1864,6 +1865,8 @@ public class UiEngineImpl implements UiEngine {
 			if (s != null) {
 				try {
 					v = Integer.parseInt(s);
+					if (v > 0 && "true".equals(Library.getProperty(Attributes.ACTIVATE_RETRY_ABORT)))
+						_abortSpecified = true;
 				} catch (Throwable t) {
 				}
 			}
