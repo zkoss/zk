@@ -31,6 +31,24 @@ public interface ValidationMessages{
 	void clearMessages(Component comp);
 	
 	/**
+	 * clear validation message of component and a special message key
+	 * @since 6.5.2
+	 */
+	void clearKeyMessages(Component comp,String key);
+	
+	/**
+	 * clear validation message of a special message key
+	 * @since 6.5.2
+	 */
+	void clearKeyMessages(String key);
+	
+	/**
+	 * clear all validation message
+	 * @since 6.5.2
+	 */
+	void clearAllMessages();
+	
+	/**
 	 * get validation messages of a component and special attribute
 	 * @return null if no message in component and attribute
 	 */

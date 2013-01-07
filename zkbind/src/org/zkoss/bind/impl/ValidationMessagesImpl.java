@@ -19,12 +19,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 /**
- * Map base implementation of {@link ValidationMessages}
+ * Collection base implementation of {@link ValidationMessages}
  * @author dennis
  * @since 6.0.0
  */
@@ -32,177 +32,144 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 	//this class implement collection to support empty expression in EL
 	private static final long serialVersionUID = 1L;
 	
-	//
-	private final Map<Component, Map<String, List<Message>>> _attrMessageMap; //<component, <attr,messages>>
-	private final Map<Component, Map<String, List<Message>>> _keyMessageMap; //<component, <key,messages>>
-	private final Map<String, List<Message>> _globalKeyMessageMap; //<component, <key,messages>>
 	
-	private final List<Message> _messages;//contains all the messages
+	private final List<Message> _messages;//all the messages
+	
+	//messages for special comp and key
+	private final Map<Component, List<Message>> _compMsgsMap; //component, <messages>
+	private final Map<String, List<Message>> _keyMsgsMap; //key,<messages>
+	
+	
 	
 	public ValidationMessagesImpl(){
 		_messages = new LinkedList<Message>();
-		_attrMessageMap = new LinkedHashMap<Component,Map<String,List<Message>>>();
-		_keyMessageMap = new LinkedHashMap<Component,Map<String,List<Message>>>();
-		_globalKeyMessageMap = new LinkedHashMap<String,List<Message>>();
+		_compMsgsMap = new LinkedHashMap<Component,List<Message>>();
+		_keyMsgsMap = new LinkedHashMap<String,List<Message>>();
 	}
 	
 	//a message that related to a attr and key
 	static class Message implements Serializable{
 		private static final long serialVersionUID = 1L;
+		final Component comp;
 		final String attr;
 		final String key;
 		final String msg;
-		public Message(String attr, String key, String msg) {
+		public Message(Component comp,String attr, String key, String msg) {
+			this.comp = comp;
 			this.attr = attr;
 			this.key = key;
 			this.msg = msg;
 		}
 	}
 	
-	//get messages of a attr of a special component
-	private List<Message> getAttrMessages(Component comp,String attr,boolean create){
-		Map<String,List<Message>> attrMap = getAttrMap(comp,create);
-		if(attrMap==null){
-			return null;
-		}
-		List<Message> msgs = attrMap.get(attr);
-		if(msgs==null && create){
-			msgs = new ArrayList<Message>(1);
-			attrMap.put(attr, msgs);
-		}
-		return msgs;
-	}
-	
-	//get attr messages of a special component
-	private Map<String,List<Message>> getAttrMap(Component comp,boolean create){
-		Map<String,List<Message>> msgs = _attrMessageMap.get(comp);
-		if(msgs==null && create){
-			msgs = new LinkedHashMap<String, List<Message>>();
-			_attrMessageMap.put(comp, msgs);
-		}
-		return msgs;
-	}
-	
-	//get messages of a key of a special component.
-	private List<Message> getKeyMessages(Component comp,String key,boolean create){
-		Map<String,List<Message>> keyMap = getKeyMap(comp,create);
-		if(keyMap==null){
-			return null;
-		}
-		List<Message> msgs = keyMap.get(key);
-		if(msgs==null && create){
-			msgs = new ArrayList<Message>(1);
-			keyMap.put(key, msgs);
-		}
-		return msgs;
-	}
-	
-	//get key messages of a special component.
-	private Map<String,List<Message>> getKeyMap(Component comp,boolean create){
-		Map<String,List<Message>> msgs = _keyMessageMap.get(comp);
-		if(msgs==null && create){
-			msgs = new LinkedHashMap<String, List<Message>>();
-			_keyMessageMap.put(comp, msgs);
-		}
-		return msgs;
-	}
-	
-	private List<Message> getGlobalKeyMessages(String key,boolean create){
-		List<Message> msgs = _globalKeyMessageMap.get(key);
-		if(msgs==null && create){
-			msgs = new ArrayList<Message>(1);
-			_globalKeyMessageMap.put(key, msgs);
-		}
-		return msgs;
-	}
-	
 	@Override
 	public void clearMessages(Component comp) {
-		Map<String,List<Message>> attrMap = getAttrMap(comp,false);
-		if(attrMap != null){
-			for(List<Message> remove:attrMap.values()){
-				_messages.removeAll(remove);
-			}
-			_attrMessageMap.remove(comp);
+		List<Message> remove = _compMsgsMap.get(comp);
+		if(remove==null || remove.size()==0){
+			return;
 		}
-
-		//comp, <key,messages>
-		Map<String,List<Message>> keyMap = getKeyMap(comp,false);
-		if(keyMap!=null){
-			for(Entry<String,List<Message>> entry:keyMap.entrySet()){
-				List<Message> gmsgs = _globalKeyMessageMap.get(entry.getKey());
-				if(gmsgs!=null && gmsgs.size()>0){
-					gmsgs.removeAll(entry.getValue());
-				}
-				if(gmsgs!=null && gmsgs.size()==0){
-					_globalKeyMessageMap.remove(entry.getKey());
-				}
-			}
+		_messages.removeAll(remove);
+		for(List<Message> keyMsgs:_keyMsgsMap.values()){
+			keyMsgs.removeAll(remove);
 		}
-		_keyMessageMap.remove(comp);
+		_compMsgsMap.remove(comp);
 	}
 	
 	@Override
 	public void clearMessages(Component comp,String attr) {
-		Map<String,List<Message>> attrMap = getAttrMap(comp,false);
-		List<Message> remove = null;
-		if(attrMap != null){
-			remove = attrMap.remove(attr);
-			if(attrMap.size()==0){
-				_attrMessageMap.remove(comp);
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null || compMsgs.size()==0){
+			return;
+		}
+		List<Message> remove = new ArrayList<Message>();
+		for(Message msg:compMsgs){
+			if(Objects.equals(msg.attr, attr)){
+				remove.add(msg);
 			}
 		}
-		if(remove!=null && remove.size()>0){
-			_messages.removeAll(remove);
-			for(Message m:remove){
-				if(m.key==null) continue;
-				List<Message> msgs = getKeyMessages(comp, m.key, false);
-				if(msgs!=null){
-					msgs.remove(m);
-					if(msgs.size()==0){
-						Map<String,List<Message>> keyMap = getKeyMap(comp,false);
-						if(keyMap!=null){
-							keyMap.remove(m.key);
-						}
-					}
-				}
-				msgs = _globalKeyMessageMap.get(m.key);
-				if(msgs!=null){
-					msgs.remove(m);
-					if(msgs.size()==0){
-						_globalKeyMessageMap.remove(m.key);
-					}
-				}
+		if(remove.size()==0) return;
+		
+		_messages.removeAll(remove);
+		for(List<Message> keyMsgs:_keyMsgsMap.values()){
+			keyMsgs.removeAll(remove);
+		}
+		compMsgs.removeAll(remove);
+	}
+	
+	
+	@Override
+	public void clearKeyMessages(Component comp,String key) {
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null || compMsgs.size()==0){
+			return;
+		}
+		List<Message> remove = new ArrayList<Message>();
+		for(Message msg:compMsgs){
+			if(Objects.equals(msg.key, key)){
+				remove.add(msg);
 			}
 		}
+		if(remove.size()==0) return;
+		
+		_messages.removeAll(remove);
+		for(List<Message> keyMsgs:_keyMsgsMap.values()){
+			keyMsgs.removeAll(remove);
+		}
+		compMsgs.removeAll(remove);
+	}
+	
+	@Override
+	public void clearKeyMessages(String key) {
+		List<Message> keyMsgs = _keyMsgsMap.get(key);
+		if(keyMsgs==null || keyMsgs.size()==0){
+			return;
+		}
+		List<Message> remove = new ArrayList<Message>();
+		for(Message msg:keyMsgs){
+			if(Objects.equals(msg.key, key)){
+				remove.add(msg);
+			}
+		}
+		if(remove.size()==0) return;
+		
+		_messages.removeAll(remove);
+		for(List<Message> compMsgs:_compMsgsMap.values()){
+			compMsgs.removeAll(remove);
+		}
+		keyMsgs.removeAll(remove);
+	}
+	
+	public void clearAllMessages(){
+		_messages.clear();
+		_compMsgsMap.clear();
+		_keyMsgsMap.clear();
 	}
 
 	@Override
 	public String[] getMessages(Component comp,String attr) {
-		List<Message> msgs = getAttrMessages(comp, attr, false);
-		if(msgs==null||msgs.size()==0) 
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null || compMsgs.size()==0){
 			return null;
-		String[] smsgs = new String[msgs.size()];
-		for(int i=0;i<smsgs.length;i++){
-			smsgs[i] = msgs.get(i).msg;
 		}
-		return smsgs;
+		List<String> msgs = new ArrayList<String>();
+		for(Message msg:compMsgs){
+			if(Objects.equals(msg.attr, attr))
+			msgs.add(msg.msg);
+		}
+		return msgs.size()==0?null:msgs.toArray(new String[msgs.size()]);
 	}
 	
 	@Override
 	public String[] getMessages(Component comp) {
-		Map<String,List<Message>> m = getAttrMap(comp,false);
-		if(m==null || m.size()==0){
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null || compMsgs.size()==0){
 			return null;
 		}
 		List<String> msgs = new ArrayList<String>();
-		
-		for(Entry<String, List<Message>> e:m.entrySet()){
-			for(Message mm:e.getValue()){
-				msgs.add(mm.msg);
-			}
+		for(Message msg:compMsgs){
+			msgs.add(msg.msg);
 		}
-		return msgs.size()==0?null:msgs.toArray(new String[msgs.size()]);
+		return msgs.toArray(new String[msgs.size()]);
 	}
 	
 	@Override
@@ -219,26 +186,29 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 
 	@Override
 	public String[] getKeyMessages(Component comp, String key) {
-		List<Message> msgs = getKeyMessages(comp, key, false);
-		if(msgs==null||msgs.size()==0) 
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null || compMsgs.size()==0){
 			return null;
-		String[] smsgs = new String[msgs.size()];
-		for(int i=0;i<smsgs.length;i++){
-			smsgs[i] = msgs.get(i).msg;
 		}
-		return smsgs;
+		List<String> msgs = new ArrayList<String>();
+		for(Message msg:compMsgs){
+			if(Objects.equals(msg.key, key))
+			msgs.add(msg.msg);
+		}
+		return msgs.size()==0?null:msgs.toArray(new String[msgs.size()]);
 	}
 
 	@Override
 	public String[] getKeyMessages(String key) {
-		List<Message> msgs = _globalKeyMessageMap.get(key);
-		if(msgs==null||msgs.size()==0) 
+		List<Message> keyMsgs = _keyMsgsMap.get(key);
+		if(keyMsgs==null || keyMsgs.size()==0){
 			return null;
-		String[] smsgs = new String[msgs.size()];
-		for(int i=0;i<smsgs.length;i++){
-			smsgs[i] = msgs.get(i).msg;
 		}
-		return smsgs;
+		List<String> msgs = new ArrayList<String>();
+		for(Message msg:keyMsgs){
+			msgs.add(msg.msg);
+		}
+		return msgs.toArray(new String[msgs.size()]);
 	}
 
 	@Override
@@ -249,20 +219,21 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 	
 	@Override
 	public void addMessages(Component comp, String attr, String key, String[] messages) {
-		List<Message> attrMsgs = getAttrMessages(comp, attr, true);
-		List<Message> keyMsgs = null;
-		List<Message> globalMsgs = null;
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null){
+			_compMsgsMap.put(comp, compMsgs = new ArrayList<Message>());
+		}
+		
 		for(String s:messages){
-			Message msg = new Message(attr,key,s);
+			Message msg = new Message(comp,attr,key,s);
 			_messages.add(msg);
-			attrMsgs.add(msg);
+			compMsgs.add(msg);
 			if(key!=null){
+				List<Message> keyMsgs = _keyMsgsMap.get(key);
 				if(keyMsgs==null){
-					keyMsgs = getKeyMessages(comp, key, true);//key messages on a special component 
-					globalMsgs = getGlobalKeyMessages(key,true);//
+					_keyMsgsMap.put(key, keyMsgs = new ArrayList<Message>());
 				}
 				keyMsgs.add(msg);
-				globalMsgs.add(msg);
 			}
 		}
 	}
