@@ -31,7 +31,6 @@ import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -39,7 +38,6 @@ import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
-import org.zkoss.zk.ui.ext.render.Merger;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 
 /**
@@ -51,7 +49,7 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
  * The prolog ({@link #getPrologContent}) and epilog ({@link #getEpilogContent})
  * are both {@link String}.
  *
- * <p>When this component is renderred ({@link #redraw}), it generates
+ * <p>When this component is rendered ({@link #redraw}), it generates
  * the prolog first, the children and then the epilog.
  *
  * @author tomyeh
@@ -74,7 +72,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 	/** Declared namespaces ({@link Namespace}). */
 	private List<Namespace> _dns;
 
-	/** Contructs a {@link HtmlNativeComponent} component.
+	/** Constructs a {@link HtmlNativeComponent} component.
 	 * 
 	 */
 	public HtmlNativeComponent() {
@@ -87,7 +85,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 		setTag(tag);
 	}
 
-	/** Contructs a {@link HtmlNativeComponent} component with the specified
+	/** Constructs a {@link HtmlNativeComponent} component with the specified
 	 * prolog and epilog.
 	 * @param tag the tag name. If null or empty, plain text is assumed.
 	 * @param prolog the content right before the children, if any.

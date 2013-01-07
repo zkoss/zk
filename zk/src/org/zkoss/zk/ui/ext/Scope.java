@@ -32,7 +32,7 @@ public interface Scope {
 	public Object getAttribute(String name);
 	/** Returns if a custom attribute is associated with this object (scope).
 	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is assoicated by examining the return value
+	 * tell if an attribute is associated by examining the return value
 	 * of {@link #getAttribute}.
 	 * @since 5.0.0
 	 */
@@ -59,7 +59,7 @@ public interface Scope {
 	public Object getAttribute(String name, boolean recurse);
 	/** Returns if a custom attribute is associated with this object.
 	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is assoicated by examining the return value
+	 * tell if an attribute is associated by examining the return value
 	 * of {@link #getAttribute}.
 	 *
 	 * @param recurse whether to search its ancestor scope.
@@ -93,7 +93,7 @@ public interface Scope {
 	 * The listener is called when a custom attribute is added, removed, or
 	 * the parent is changed.
 	 *
-	 * @return wether the listener is added successfully.
+	 * @return weather the listener is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
 	 * @since 5.0.0
