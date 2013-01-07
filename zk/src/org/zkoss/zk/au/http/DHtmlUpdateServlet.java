@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ActivationTimeoutException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.URIInfo;
@@ -581,6 +582,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.open(request, response);
 		try {
 			wappc.getUiEngine().execUpdate(exec, aureqs, out);
+		} catch (ActivationTimeoutException ex) {
+			log.warning(ex.getMessage());
+			response.setHeader("ZK-SID", sid);
+			response.setIntHeader("ZK-Error", AuResponse.SC_ACTIVATION_TIMEOUT);
 		} catch (RequestOutOfSequenceException ex) {
 			log.warning(ex.getMessage());
 			response.setHeader("ZK-SID", sid);
