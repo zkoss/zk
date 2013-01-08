@@ -25,6 +25,8 @@ import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SavePropertyBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -119,6 +121,11 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		//get data from component attribute
 		Object value = getComponentValue(ctx);
 		if(value == Converter.IGNORED_VALUE){
+			BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+			if(collector!=null){
+				collector.addExecutionInfo(this,"save-property",
+						getPureExpressionString(_fieldExpr),"converter-handled",value,getArgs());
+			}
 			return;
 		}
 		
@@ -126,6 +133,12 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
+		
+		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		if(collector!=null){
+			collector.addExecutionInfo(this,"save-property",
+					getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),value,getArgs());
+		}
 	}
 	
 	//get and cache value reference of this binding

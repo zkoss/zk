@@ -61,6 +61,8 @@ import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
@@ -1123,6 +1125,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 
+	//utility class, remove ${ and }
+	private String getPureExpressionString(ExpressionX expr) {
+		if (expr == null) {
+			return null;
+		}
+		final String evalstr = expr.getExpressionString(); 
+		return evalstr.substring(2, evalstr.length() - 1);
+	}
+	
 	private class CommandEventListener implements EventListener<Event>, Serializable{
 		private static final long serialVersionUID = 1L;
 	//event used to trigger command
@@ -1192,6 +1203,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					
 					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs(),implicit);
 					cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
+					
+					BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+					if(collector!=null){
+						collector.addExecutionInfo(_commandBinding,"command",
+								getPureExpressionString(((CommandBindingImpl)_commandBinding).getCommand()),"", command, args);
+					}
 				}
 			}
 

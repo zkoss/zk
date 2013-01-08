@@ -27,8 +27,8 @@ public abstract class BindingExecutionInfoCollectorFactory {
 	static private BindingExecutionInfoCollectorFactory factory;
 	static private boolean instanceSet;
 	//TODO check zk naming pattern
-	static public final String ENABLE_KEY = BindingExecutionInfoCollectorFactory.class.getName()+".enable";
-	static public final String FACTORY_CLASS_KEY = BindingExecutionInfoCollectorFactory.class.getName()+".class";
+	static public final String ENABLE_PROP = "org.zkoss.bind.BindingExecutionInfoCollector.enable";
+	static public final String FACTORY_CLASS_PROP = "org.zkoss.bind.BindingExecutionInfoCollectorFactory.class";
 	
 	/**
 	 * get the collector, the sub-class should consider the thread-safe issue when implementing.
@@ -50,8 +50,8 @@ public abstract class BindingExecutionInfoCollectorFactory {
 			}
 			instanceSet = true;
 			
-			if("true".equals(Library.getProperty(ENABLE_KEY))){
-				String clz = Library.getProperty(FACTORY_CLASS_KEY);
+			if("true".equals(Library.getProperty(ENABLE_PROP))){
+				String clz = Library.getProperty(FACTORY_CLASS_PROP);
 				if(!Strings.isEmpty(clz)){
 					try {
 						factory = (BindingExecutionInfoCollectorFactory)Classes.forNameByThread(clz).newInstance();

@@ -25,6 +25,8 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadChildrenBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -69,7 +71,14 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			if(activating) return;//don't load to component if activating
 			
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) return;
+			if(value == Converter.IGNORED_VALUE) {
+				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				if(collector!=null){
+					collector.addExecutionInfo(this,"load-children",
+							getPureExpressionString(_accessInfo.getProperty()),"converter-handled",value,getArgs());
+				}
+				return;
+			}
 		}
 		if(activating) return;//don't load to component if activating
 		
@@ -88,6 +97,12 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			for(int i=0;i<size;i++){
 				renderer.render(comp, data.get(i),i,size);
 			}
+		}
+		
+		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		if(collector!=null){
+			collector.addExecutionInfo(this,"load-children",
+					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs());
 		}
 	}
 	

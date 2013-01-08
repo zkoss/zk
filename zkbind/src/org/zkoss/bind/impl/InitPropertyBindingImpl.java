@@ -20,6 +20,8 @@ import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitPropertyBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
@@ -60,10 +62,23 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		final Converter<Object, Object, Component> conv = getConverter();
 		if (conv != null) {
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) return;
+			if(value == Converter.IGNORED_VALUE) {
+				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				if(collector!=null){
+					collector.addExecutionInfo(this,"init-property",
+							getPureExpressionString(_accessInfo.getProperty()),"converter handled",value,getArgs());
+				}
+				return;
+			}
 		}
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
+		
+		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		if(collector!=null){
+			collector.addExecutionInfo(this,"init-property",
+					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs());
+		}
 	}
 }

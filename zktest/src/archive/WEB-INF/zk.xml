@@ -17,6 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zk.ui.WebApp.name</name>
 		<value>ZK Test</value>
 	</preference>
+	<library-property>
+		<name>org.zkoss.bind.BindingExecutionInfoCollector.enable</name>
+		<value>true</value>
+	</library-property>
 
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.
@@ -476,7 +480,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	("user.dir").
 	<library-property>
 		<name>org.zkoss.util.logging.config.file</name>
-		<value>conf/zk-log.properties</value>
+		<value>zk-log.properties</value>
 	</library-property>
 	-->
 	<!-- Uncommet to control the number of lines to log an error message.
@@ -599,4 +603,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
 	</xel-config>
 	-->
+		<session-config>
+		<max-desktops-per-session>5</max-desktops-per-session>
+	</session-config>
 </zk>

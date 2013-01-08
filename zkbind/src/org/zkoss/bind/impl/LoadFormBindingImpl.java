@@ -28,6 +28,8 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -109,6 +111,12 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		binder.notifyChange(form, "."); //notify change of fx and fx.*
 		if(form instanceof FormExt){
 			binder.notifyChange(((FormExt)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
+		}
+		
+		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		if(collector!=null){
+			collector.addExecutionInfo(this,"load-form",
+					getPureExpressionString(_accessInfo.getProperty()),getFormId(),bean,getArgs());
 		}
 	}
 	

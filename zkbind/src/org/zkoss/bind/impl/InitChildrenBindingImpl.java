@@ -21,6 +21,8 @@ import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitChildrenBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -57,7 +59,14 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		final Converter conv = getConverter();
 		if (conv != null) {			
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) return;
+			if(value == Converter.IGNORED_VALUE) {
+				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				if(collector!=null){
+					collector.addExecutionInfo(this,"init-children",
+							getPureExpressionString(_accessInfo.getProperty()),"[converter handled]",value,getArgs());
+				}
+				return;
+			}
 		}
 		
 		comp.getChildren().clear();
@@ -75,6 +84,12 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			for(int i=0;i<size;i++){
 				renderer.render(comp, data.get(i),i,size);
 			}
+		}
+		
+		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		if(collector!=null){
+			collector.addExecutionInfo(this,"init-children",
+					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs());
 		}
 	}
 }

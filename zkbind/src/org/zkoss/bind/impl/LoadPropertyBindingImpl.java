@@ -25,6 +25,8 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
@@ -72,13 +74,27 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			if(activating) return;//don't load to component if activating
 			
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) return;
+			if(value == Converter.IGNORED_VALUE) {
+				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				if(collector!=null){
+					collector.addExecutionInfo(this,"load-property",
+							getPureExpressionString(_accessInfo.getProperty()),"converter-handled",value,getArgs());
+				}
+				return;
+			}
 		}
 		if(activating) return;//don't load to component if activating
 		
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
+		
+		
+		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		if(collector!=null){
+			collector.addExecutionInfo(this,"load-property",
+					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs());
+		}
 	}
 	
 //	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {
