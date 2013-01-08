@@ -27,7 +27,8 @@ public class DefaultCollectorFactory extends BindingExecutionInfoCollectorFactor
 		
 		BindingExecutionInfoCollector collector = (BindingExecutionInfoCollector)exec.getAttribute(COLLECTOR_KEY);
 		if(collector==null){
-			exec.setAttribute(COLLECTOR_KEY,collector = new SystemoutCollector());
+//			exec.setAttribute(COLLECTOR_KEY,collector = new SystemoutCollector());
+			exec.setAttribute(COLLECTOR_KEY,collector = new ClientCollector());
 		}
 		return collector;
 	}

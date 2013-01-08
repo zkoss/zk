@@ -22,7 +22,7 @@ import org.zkoss.bind.sys.Binding;
  */
 public interface BindingExecutionInfoCollector {
 
-	void addExecutionInfo(Binding bindingImpl, String type, String fromExpr, String toExpr,
+	void addExecutionInfo(Binding binding, String type, String fromExpr, String toExpr,
 			Object value, Map<String,Object> args);
 
 }

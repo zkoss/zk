@@ -1,4 +1,4 @@
-/* SystemoutCollector.java
+/* ClientCollector.java
 
 	Purpose:
 		
@@ -18,16 +18,18 @@ import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.Clients;
 /**
  * 
  * @author dennis
  *
  */
-public class SystemoutCollector implements BindingExecutionInfoCollector{
+public class ClientCollector implements BindingExecutionInfoCollector{
 
 	@Override
 	public void addExecutionInfo(Binding binding, String type, String fromExpr, String toExpr, Object value,
 			Map<String, Object> args) {
+		//TODO too early to output info here, since the component might be detached.
 		JSONObject json = new JSONObject();
 		if(binding!=null && binding.getComponent()!=null){
 			json.put("widget", binding.getComponent().getDefinition().getName());
@@ -45,9 +47,16 @@ public class SystemoutCollector implements BindingExecutionInfoCollector{
 		Execution exec = Executions.getCurrent();
 		json.put("sid", exec.getHeader("ZK-SID"));
 		
-		System.out.println("["+json.get("sid")+"]\t["+json.get("widget")+"]\t[$"+json.get("uuid") + 
-			"]\t["+json.get("type")+"]\t"+json.get("fromExpr")+" > "+json.get("toExpr")+"\t= "+
-			json.get("value"));
+		String jsonstr = json.toJSONString();
+		
+		String jscript = 
+				"var info = " + jsonstr+";" +
+				"if(typeof zkBindInformer !== 'undefined'){" +
+				"zkBindInformer.addExecutionInfo(info);" +
+				"}else if(console && typeof console.log == 'function'){" +
+				"console.log('['+info.sid+']\t['+info.widget+']\t[$'+info.uuid+']\t['+info.type+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value);" +
+				"}";
+		Clients.evalJavaScript(jscript);
 	}
 
 }
