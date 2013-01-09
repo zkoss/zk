@@ -18,6 +18,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
@@ -61,12 +62,13 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		@SuppressWarnings("unchecked")
 		final Converter<Object, Object, Component> conv = getConverter();
 		if (conv != null) {
-			value = conv.coerceToUi(value, comp, ctx);
+			Object old;
+			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
-				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 				if(collector!=null){
 					collector.addExecutionInfo(this,"init-property",
-							getPureExpressionString(_accessInfo.getProperty()),"converter handled",value,getArgs());
+							getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr)+"[ByConverter]",old,getArgs());
 				}
 				return;
 			}
@@ -75,7 +77,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"init-property",
 					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs());

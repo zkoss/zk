@@ -113,7 +113,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			binder.notifyChange(((FormExt)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
 		}
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"load-form",
 					getPureExpressionString(_accessInfo.getProperty()),getFormId(),bean,getArgs());

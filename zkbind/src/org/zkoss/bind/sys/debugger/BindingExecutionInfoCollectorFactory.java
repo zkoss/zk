@@ -11,7 +11,8 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys.debugger;
 
-import org.zkoss.bind.sys.debugger.impl.DefaultCollectorFactory;
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.sys.debugger.impl.DefaultExecutionInfoCollectorFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
@@ -24,56 +25,45 @@ import org.zkoss.zk.ui.UiException;
  */
 public abstract class BindingExecutionInfoCollectorFactory {
 
-	static private BindingExecutionInfoCollectorFactory factory;
-	static private boolean instanceSet;
-	//TODO check zk naming pattern
-	static public final String ENABLE_PROP = "org.zkoss.bind.BindingExecutionInfoCollector.enable";
-	static public final String FACTORY_CLASS_PROP = "org.zkoss.bind.BindingExecutionInfoCollectorFactory.class";
+	private static BindingExecutionInfoCollectorFactory _factory;
+	private static boolean _instanceSet;
+	
+	public static final String ENABLE_PROP = "org.zkoss.bind.BindingExecutionInfoCollector.enable";
+	public static final String FACTORY_CLASS_PROP = "org.zkoss.bind.BindingExecutionInfoCollectorFactory.class";
 	
 	/**
-	 * get the collector, the sub-class should consider the thread-safe issue when implementing.
-	 * @return
+	 * Get the collector of binder, the sub-class have to consider the thread-safe issue when implementing.
+	 * @return the BindingExecutionInfoCollector or null if isn't existed
 	 */
-	abstract public BindingExecutionInfoCollector getCollector();
+	abstract public BindingExecutionInfoCollector getCollector(Binder binder);
 
 	/**  
-	 * thread safe method to get default factory
-	 * @return default factory, null if there is no factory
+	 * Thread safe method to get the factory instance
+	 * @return default factory, null if there is no factory existed
 	 */
-	public static BindingExecutionInfoCollectorFactory getDefaultFactory(){
-		if(instanceSet){
-			return factory;
+	public static BindingExecutionInfoCollectorFactory getInstance(){
+		if(_instanceSet){
+			return _factory;
 		}
 		synchronized(BindingExecutionInfoCollectorFactory.class){
-			if(instanceSet){//check again
-				return factory;
+			if(_instanceSet){//check again
+				return _factory;
 			}
-			instanceSet = true;
+			_instanceSet = true;
 			
 			if("true".equals(Library.getProperty(ENABLE_PROP))){
 				String clz = Library.getProperty(FACTORY_CLASS_PROP);
 				if(!Strings.isEmpty(clz)){
 					try {
-						factory = (BindingExecutionInfoCollectorFactory)Classes.forNameByThread(clz).newInstance();
+						_factory = (BindingExecutionInfoCollectorFactory)Classes.forNameByThread(clz).newInstance();
 					} catch (Exception e) {
 						throw new UiException(e.getMessage(),e);
 					}
-					//TODO check zk naming pattern
 				}else{ 
-					factory = new DefaultCollectorFactory();
+					_factory = new DefaultExecutionInfoCollectorFactory();
 				}
 			}
-			return factory;
+			return _factory;
 		}
 	}
-	
-	/**  
-	 * thread safe method to get default collector
-	 * @return default collector, null if there is no factory or no collector
-	 */
-	public static BindingExecutionInfoCollector getDefaultCollector(){
-		BindingExecutionInfoCollectorFactory factory = getDefaultFactory();
-		return factory==null?null:factory.getCollector();
-	}
-
 }

@@ -19,6 +19,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitChildrenBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
@@ -57,13 +58,14 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		
 		//use _converter to convert type if any
 		final Converter conv = getConverter();
-		if (conv != null) {			
-			value = conv.coerceToUi(value, comp, ctx);
+		if (conv != null) {
+			Object old;
+			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
-				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 				if(collector!=null){
 					collector.addExecutionInfo(this,"init-children",
-							getPureExpressionString(_accessInfo.getProperty()),"[converter handled]",value,getArgs());
+							getPureExpressionString(_accessInfo.getProperty()),"[ByConverter]",old,getArgs());
 				}
 				return;
 			}
@@ -86,7 +88,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			}
 		}
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"init-children",
 					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs());

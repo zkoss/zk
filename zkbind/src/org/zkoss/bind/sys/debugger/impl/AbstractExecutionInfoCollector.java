@@ -1,4 +1,4 @@
-/* SystemoutCollector.java
+/* AbstractExecutionInfoCollector.java
 
 	Purpose:
 		
@@ -19,12 +19,14 @@ import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 /**
- * 
+ * abstract implementation
  * @author dennis
  *
  */
-public class SystemoutCollector implements BindingExecutionInfoCollector{
+public abstract class AbstractExecutionInfoCollector implements BindingExecutionInfoCollector{
 
+	public abstract void addExecutionInfo(JSONObject info);
+	
 	@Override
 	public void addExecutionInfo(Binding binding, String type, String fromExpr, String toExpr, Object value,
 			Map<String, Object> args) {
@@ -32,6 +34,7 @@ public class SystemoutCollector implements BindingExecutionInfoCollector{
 		if(binding!=null && binding.getComponent()!=null){
 			json.put("widget", binding.getComponent().getDefinition().getName());
 			json.put("uuid", binding.getComponent().getUuid());
+			json.put("id", binding.getComponent().getId());
 		}
 		json.put("type", type);
 		json.put("fromExpr", fromExpr);
@@ -45,9 +48,6 @@ public class SystemoutCollector implements BindingExecutionInfoCollector{
 		Execution exec = Executions.getCurrent();
 		json.put("sid", exec.getHeader("ZK-SID"));
 		
-		System.out.println("["+json.get("sid")+"]\t["+json.get("widget")+"]\t[$"+json.get("uuid") + 
-			"]\t["+json.get("type")+"]\t"+json.get("fromExpr")+" > "+json.get("toExpr")+"\t= "+
-			json.get("value"));
+		addExecutionInfo(json);
 	}
-
 }

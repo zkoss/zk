@@ -25,6 +25,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
@@ -110,7 +111,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 		//TODO should we clear form dirty and notify formStatus?
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"save-form",
 					getFormId(),getPureExpressionString(_accessInfo.getProperty()),form,getArgs());

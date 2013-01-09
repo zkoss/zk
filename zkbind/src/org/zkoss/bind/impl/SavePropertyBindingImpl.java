@@ -23,6 +23,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
@@ -93,6 +94,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	
 
 	private static final String $COMPVALUE$ = "$COMPVALUE$";
+	private static final String $COMPVALUENOCONVERT$ = "$COMPVALUENOCONVERT$";
 	private static final String $VALUEREF$ = "$VALUEREF$";
 	private Object getComponentValue(BindContext ctx) {
 		if (!containsAttribute(ctx, $COMPVALUE$)) {
@@ -101,7 +103,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 			
 			//get data from component attribute
 			Object value = eval.getValue(null, comp, _fieldExpr);
-			
+			setAttribute(ctx, $COMPVALUENOCONVERT$, value);
 			//use converter to convert type if any
 			@SuppressWarnings("unchecked")
 			final Converter<Object, Object, Component> conv = getConverter();
@@ -121,10 +123,11 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		//get data from component attribute
 		Object value = getComponentValue(ctx);
 		if(value == Converter.IGNORED_VALUE){
-			BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
+				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
 				collector.addExecutionInfo(this,"save-property",
-						getPureExpressionString(_fieldExpr),"converter-handled",value,getArgs());
+						getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty())+"[ByConverter]",old,getArgs());
 			}
 			return;
 		}
@@ -134,7 +137,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"save-property",
 					getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),value,getArgs());

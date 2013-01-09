@@ -72,13 +72,13 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 //			addConverterDependsOnTrackings(conv, ctx);
 			
 			if(activating) return;//don't load to component if activating
-			
-			value = conv.coerceToUi(value, comp, ctx);
+			Object old;
+			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
-				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 				if(collector!=null){
 					collector.addExecutionInfo(this,"load-property",
-							getPureExpressionString(_accessInfo.getProperty()),"converter-handled",value,getArgs());
+							getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr)+"[ByConverter]",old,getArgs());
 				}
 				return;
 			}
@@ -90,7 +90,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		eval.setValue(null, comp, _fieldExpr, value);
 		
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"load-property",
 					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs());

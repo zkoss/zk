@@ -69,13 +69,13 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 //			addConverterDependsOnTrackings(conv, ctx);
 			
 			if(activating) return;//don't load to component if activating
-			
-			value = conv.coerceToUi(value, comp, ctx);
+			Object old;
+			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
-				BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+				BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 				if(collector!=null){
 					collector.addExecutionInfo(this,"load-children",
-							getPureExpressionString(_accessInfo.getProperty()),"converter-handled",value,getArgs());
+							getPureExpressionString(_accessInfo.getProperty()),"[ByConverter]",old,getArgs());
 				}
 				return;
 			}
@@ -99,7 +99,7 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			}
 		}
 		
-		BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addExecutionInfo(this,"load-children",
 					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs());

@@ -1204,7 +1204,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs(),implicit);
 					cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
 					
-					BindingExecutionInfoCollector collector = BindingExecutionInfoCollectorFactory.getDefaultCollector();
+					BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 					if(collector!=null){
 						collector.addExecutionInfo(_commandBinding,"command",
 								getPureExpressionString(((CommandBindingImpl)_commandBinding).getCommand()),"", command, args);
@@ -2068,4 +2068,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}	
 	}
 
+	
+	public BindingExecutionInfoCollector getBindingExecutionInfoCollector(){
+		BindingExecutionInfoCollectorFactory factory = BindingExecutionInfoCollectorFactory.getInstance();
+		return factory==null?null:factory.getCollector(this);
+	}
+	
 }
