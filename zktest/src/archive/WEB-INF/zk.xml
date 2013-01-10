@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zk.ui.WebApp.name</name>
 		<value>ZK Test</value>
 	</preference>
+	<!-- 
 	<library-property>
 		<name>org.zkoss.bind.BindingExecutionInfoCollector.enable</name>
 		<value>true</value>
@@ -25,6 +26,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.bind.DefaultExecutionInfoCollectorFactory.type</name>
 		<value>client</value>
 	</library-property>
+	 -->
 
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.

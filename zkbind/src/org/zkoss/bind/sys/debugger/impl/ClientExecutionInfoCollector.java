@@ -22,8 +22,10 @@ import org.zkoss.zk.ui.util.Clients;
  */
 public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector{
 
+	private boolean _start = false;
 	@Override
 	public void addExecutionInfo(JSONObject info) {
+		
 		String jsonstr = info.toJSONString();
 		StringBuilder sb = new StringBuilder();
 		Object type = info.get("type");
@@ -31,6 +33,9 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 		sb.append("if(typeof zkBindInformer != 'undefined'){");
 		sb.append("zkBindInformer.addExecutionInfo(info);");
 		sb.append("}else if(console && typeof console.log == 'function'){");
+		if(!_start){
+			sb.append("console.log('=======================================');");
+		}
 		sb.append("console.log('['+info.sid+']");
 		int stack = (Integer)info.get("stack");
 		for (int i = 0; i < stack; i++) {
@@ -62,6 +67,9 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 		}
 		sb.append(");}");
 		Clients.evalJavaScript(sb.toString());
+		if(!_start){
+			_start = true;
+		}
 	}
 
 
