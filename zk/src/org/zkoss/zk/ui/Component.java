@@ -245,7 +245,7 @@ w:use="foo.MyWindow"&gt;
 	public String getUuid();
 
 	/** Returns a component of the specified ID in the same ID space.
-	 * Components in the same ID space assinged with ID are called fellows.
+	 * Components in the same ID space assigned with ID are called fellows.
 	 *
 	 * <p>Unlike {@link #getFellowIfAny}, it throws an exception if not found.
 	 *
@@ -374,7 +374,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktops this one's.
 	 *
 	 * @param scope one of {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
@@ -530,7 +530,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>Default: "inherit" (i.e., the same as the parent's stub-only,
 	 * and "false" is assumed if none of parents is specified with stub-only).
 	 * <p>If a component is set to stub-only, the application running at
-	 * the server shall not access it anymore after renderred to the client.
+	 * the server shall not access it anymore after rendered to the client.
 	 * The ZK loader will try to minimize the memory footprint by merging
 	 * stub-only components and replacing with light-weight components.
 	 * <p>However, the event listeners and handlers are preserved, so
@@ -688,7 +688,7 @@ w:use="foo.MyWindow"&gt;
 	 * a library property called "org.zkoss.zk.ui.EventListener.duplicateIgnored"
 	 * to true.
 	 *
-	 * @param priority the priority of the event. The higher the priority is, the ealier it
+	 * @param priority the priority of the event. The higher the priority is, the earlier it
 	 * is invoked.<br/>
 	 * <b>Notice:</b>
 	 * <ul>
@@ -917,7 +917,7 @@ w:use="foo.MyWindow"&gt;
 	 *
 	 * <p>Notice that, since 5.0.7, custom-attributes are applied automatically
 	 * in the constructor of {@link AbstractComponent}, so they are always
-	 * available no mather this method is called or not.
+	 * available no matter this method is called or not.
 	 */
 	public void applyProperties();
 
@@ -1079,7 +1079,7 @@ w:use="foo.MyWindow"&gt;
 	public String getAutag();
 	/** Sets the AU tag for this widget.
 	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
-	 * @param tag the AU tag. Both an empty string and null are consisered as null,
+	 * @param tag the AU tag. Both an empty string and null are considered as null,
 	 * i.e., no AU tag for this widget.
 	 * @since 6.0.0
 	 * @see #getAutag

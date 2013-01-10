@@ -5,6 +5,7 @@ ZK 6.5.2
   ZK-1515: Loading themes from a folder
   ZK-1548: Move some zkbind fundamental features to community edition.
   ZK-1560: Configuration: allow user to abort the waiting thread if it takes too long to execute (activation)
+  ZK-1048: Form Binding and binding validationMessages to components' errorMessage (error popup)
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
@@ -15,7 +16,6 @@ ZK 6.5.2
   ZK-1381: Show busy on panel with borderlayout is not working
   ZK-910 : Cannot use the menupopup option of the grid to change the grouping
   ZK-868 : The image of the file upload button broke in the liferay
-  ZK-1551: When using a composer as a ViewModel to init a binder, the server shows warning message for loading the ZUL that applies the composer every time
   ZK-1529: Ordering Issue in "selectedItems" in listbox component
   ZK-1528: When binding a Java List as a listbox's model in paging mold, add and delete will throw exceptions
 
