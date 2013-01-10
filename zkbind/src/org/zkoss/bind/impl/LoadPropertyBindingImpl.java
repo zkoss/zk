@@ -56,6 +56,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	public void load(BindContext ctx) {
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
@@ -75,10 +77,9 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			Object old;
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
-				BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 				if(collector!=null){
-					collector.addExecutionInfo(this,"load-property",
-							getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr)+"[ByConverter]",old,getArgs());
+					collector.addLoadInfo(this,"load-property",getConditionString(ctx),
+							getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),old,getArgs(),"By converter");
 				}
 				return;
 			}
@@ -88,13 +89,21 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
-		
-		
-		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+
 		if(collector!=null){
-			collector.addExecutionInfo(this,"load-property",
-					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs());
+			collector.addLoadInfo(this,"load-property",getConditionString(ctx),
+					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs(),"");
 		}
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before=").append(getCommandName()); 
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after=").append(getCommandName()); 
+		}
+		return condition.toString();
 	}
 	
 //	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {

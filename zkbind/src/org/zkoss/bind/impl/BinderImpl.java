@@ -343,6 +343,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final Tracker tracker = getTracker();
 		final Set<LoadBinding> bindings = tracker.getLoadBindings(base, prop);
+		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		try{
+			if(collector != null){
+				collector.pushStack("NOTIFY_CHANGE");
+				collector.addNotifyInfo("notify-change", base, prop,"Size="+bindings.size());
+			}
+			loadOnPropertyChange0(base, prop, bindings);
+		}finally{
+			if(collector != null){
+				collector.popStack();
+			}
+		}
+	}
+	private void loadOnPropertyChange0(Object base, String prop,Set<LoadBinding> bindings) {
 		for(LoadBinding binding : bindings) {
 			//BUG 828, the sub-sequence binding might be removed after the previous loading.
 			final Component comp = binding.getComponent();
@@ -353,10 +367,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				BindContextUtil.setConverterArgs(this, comp, ctx, (PropertyBinding)binding);
 			}
 			
-			if(_log.debugable()){
-				_log.debug("loadOnPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
+			try { 
+				if(_log.debugable()){
+					_log.debug("loadOnPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
+				}
+				doPrePhase(Phase.LOAD_BINDING, ctx);
+				binding.load(ctx);
+			} finally {
+				doPostPhase(Phase.LOAD_BINDING, ctx);
 			}
-			binding.load(ctx);
+			
 			
 			//zk-1468, 
 			//notify the ref-binding changed since other nested binder might use it
@@ -1159,11 +1179,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		
 		public void onEvent(Event event) throws Exception {
+			BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 			try{
+				if(collector!=null){
+					collector.pushStack("ON_EVENT");
+					collector.addEnterInfo(event.getTarget(),"on-event",event.getName(),"");
+				}
 				onEvent0(event);
 			}catch(Exception x){
 				_log.error(x.getMessage(),x);
 				throw x;
+			}finally{
+				if(collector!=null){
+					collector.popStack();
+				}
 			}
 		}
 		
@@ -1176,6 +1205,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			final Component comp = _target;//_target is always equals _commandBinding.getComponent();
 			final String evtnm = event.getName();
 			final Set<Property> notifys = new LinkedHashSet<Property>();
+			
 			int cmdResult = COMMAND_SUCCESS; //command execution result, default to success
 			boolean promptResult = true;
 			String command = null;
@@ -1202,13 +1232,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					}
 					
 					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs(),implicit);
-					cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
 					
-					BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
-					if(collector!=null){
-						collector.addExecutionInfo(_commandBinding,"command",
-								getPureExpressionString(((CommandBindingImpl)_commandBinding).getCommand()),"", command, args);
-					}
+					cmdResult = BinderImpl.this.doCommand(comp, _commandBinding, command, event, args, notifys);
 				}
 			}
 
@@ -1275,7 +1300,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		checkInit();
 		final Set<Property> notifys = new HashSet<Property>();
 		//args come from user, we don't eval it. 
-		doCommand(_rootComp, command, null, args, notifys);
+		doCommand(_rootComp, null, command, null, args, notifys);
 		fireNotifyChanges(notifys);
 	}
 
@@ -1294,22 +1319,29 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	/**
 	 * @param comp the component that trigger the command, major life cycle of binding (on event trigger)
+	 * @param commandBinding the command binding, nullable
 	 * @param command command is the command name after evaluation
-	 * @param evt event that fire this command
+	 * @param evt event that fire this command, nullable
 	 * @param commandArgs the passed in argument for executing command
 	 * @param notifys container for properties that is to be notifyChange
 	 * @return the result of the doCommand, COMMAND_SUCCESS or COMMAND_FAIL_VALIDATE 
 	 */
-	private int doCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs, Set<Property> notifys) {
+	private int doCommand(Component comp, CommandBinding commandBinding, String command, Event evt, Map<String, Object> commandArgs, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
 		if(_log.debugable()){
 			_log.debug("Start doCommand comp=[%s],command=[%s],evtnm=[%s]",comp,command,evtnm);
 		}
-		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, evt);
+		BindContext ctx = BindContextUtil.newBindContext(this, commandBinding, false, command, comp, evt);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
 		try {
 			doPrePhase(Phase.COMMAND, ctx); //begin of Command
 			boolean success = true;
+			
+			final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+			if(collector!=null){
+				collector.addCommandInfo(commandBinding,"on-command", evt.getName(),
+						getPureExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, commandArgs,"");
+			}
 			
 			//validate
 			success = doValidate(comp, command, evt, ctx, notifys);
@@ -1397,11 +1429,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if (_phaseListener != null) {
 			_phaseListener.prePhase(phase, ctx);
 		}
+		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.pushStack(phase.name());
+		}
+		
 	}
 	
 	/*package*/ void doPostPhase(Phase phase, BindContext ctx) {
 		if (_phaseListener != null) {
 			_phaseListener.postPhase(phase, ctx);
+		}
+		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.popStack();
 		}
 	}
 
@@ -1525,6 +1566,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			Method method = getCommandMethod(viewModel.getClass(), command, _commandMethodInfoProvider, _commandMethodCache);
 			
 			if (method != null) {
+				
+				BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+				if(collector!=null){
+					collector.addCommandInfo(ctx.getBinding(),"execute-command","",
+							"'"+command+"'",method, commandArgs,"");
+				}
 				
 				ParamCall parCall = createParamCall(ctx);
 				if(commandArgs != null){
@@ -1827,14 +1874,29 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	 * Internal Use only. init and load the component
 	 */
 	public void loadComponent(Component comp,boolean loadinit) {
-		loadComponentProperties(comp,loadinit);
-		
-		for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
-			loadComponent(kid,loadinit); //recursive
+		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		try{
+			if(collector!=null){
+				collector.pushStack("LOAD_COMPONENT");
+				collector.addEnterInfo(comp,"binder-api","loadComponent","");
+			}
+			loadComponent0(comp,loadinit);
+		}finally{
+			if(collector!=null){
+				collector.popStack();
+			}
 		}
 	}
 	
-	private void loadComponentProperties(Component comp,boolean loadinit) {
+	private void loadComponent0(Component comp,boolean loadinit) {
+		loadComponentProperties0(comp,loadinit);
+		
+		for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
+			loadComponent0(kid,loadinit); //recursive
+		}
+	}
+	
+	private void loadComponentProperties0(Component comp,boolean loadinit) {
 		
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
 		if (compBindings != null) {// if component is not registered in this binder, do nothing.

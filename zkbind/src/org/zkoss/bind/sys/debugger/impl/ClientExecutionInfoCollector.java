@@ -12,6 +12,8 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys.debugger.impl;
 
 import org.zkoss.json.JSONObject;
+import org.zkoss.lang.Strings;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
 /**
  * 
@@ -23,15 +25,45 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 	@Override
 	public void addExecutionInfo(JSONObject info) {
 		String jsonstr = info.toJSONString();
+		StringBuilder sb = new StringBuilder();
+		Object type = info.get("type");
+		sb.append("var info = ").append(jsonstr).append(";");
+		sb.append("if(typeof zkBindInformer != 'undefined'){");
+		sb.append("zkBindInformer.addExecutionInfo(info);");
+		sb.append("}else if(console && typeof console.log == 'function'){");
+		sb.append("console.log('['+info.sid+']");
+		int stack = (Integer)info.get("stack");
+		for (int i = 0; i < stack; i++) {
+			sb.append(" ");
+			if(i==stack-1){
+				sb.append("+");
+			}else{
+				sb.append(" ");
+			}
+		}
+		sb.append("['+info.subject+']\t'+");
+		if("enter-info".equals(type)){
+			sb.append("'['+info.entry +']'");
+		}else if("command-info".equals(type)){
+			sb.append("'['+info.event +']\t'+ info.commandExpr +'\t= '+info.value");
+		}else if("validation-info".equals(type)){
+			sb.append("info.validatorExpr +'\t= '+info.validator +'\t result = '+info.result");
+		}else if("save-info".equals(type)){
+			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
+		}else if("notify-info".equals(type)){
+			sb.append("'['+info.base +']['+ info.prop+']'");
+		}else{
+			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
+		}
 		
-		String jscript = 
-				"var info = " + jsonstr+";" +
-				"if(typeof zkBindInformer != 'undefined'){" +
-				"zkBindInformer.addExecutionInfo(info);" +
-				"}else if(console && typeof console.log == 'function'){" +
-				"console.log('['+info.sid+']\t['+info.widget+']\t[$'+info.uuid+']\t['+info.id+']\t['+info.type+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value);" +
-				"}";
-		Clients.evalJavaScript(jscript);
+		sb.append("+' / on component ['+info.widget+','+info.uuid+','+info.id+']'");
+		if(!Strings.isEmpty((String)info.get("note"))){
+			sb.append("+'\t*'+info.note");
+		}
+		sb.append(");}");
+		Clients.evalJavaScript(sb.toString());
 	}
+
+
 
 }

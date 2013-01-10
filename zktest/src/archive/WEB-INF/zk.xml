@@ -21,6 +21,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.bind.BindingExecutionInfoCollector.enable</name>
 		<value>true</value>
 	</library-property>
+	<library-property>
+		<name>org.zkoss.bind.DefaultExecutionInfoCollectorFactory.type</name>
+		<value>client</value>
+	</library-property>
 
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.

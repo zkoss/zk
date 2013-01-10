@@ -120,14 +120,16 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	}
 	
 	public void save(BindContext ctx) {
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		
 		//get data from component attribute
 		Object value = getComponentValue(ctx);
+		
 		if(value == Converter.IGNORED_VALUE){
-			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
 				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
-				collector.addExecutionInfo(this,"save-property",
-						getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty())+"[ByConverter]",old,getArgs());
+				collector.addSaveInfo(this,"save-property",getConditionString(ctx),
+						getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),old,getArgs(),"By converter");
 			}
 			return;
 		}
@@ -137,11 +139,22 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
 		
-		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addExecutionInfo(this,"save-property",
-					getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),value,getArgs());
+			collector.addSaveInfo(this,"save-property",getConditionString(ctx),
+					getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),value,getArgs(),"");
 		}
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before=").append(getCommandName()); 
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after=").append(getCommandName()); 
+		}else{
+			condition = condition.append(ctx.getTriggerEvent()==null?"":ctx.getTriggerEvent().getName()); 
+		}
+		return condition.toString();
 	}
 	
 	//get and cache value reference of this binding
@@ -215,6 +228,14 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		}
 		
 		validator.validate(vctx);
+		
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addValidationInfo(this,"validate-property",
+					getPureExpressionString(_validator),validator, Boolean.valueOf(vctx.isValid()),
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
+		}
+		
 //		//collect notify change
 //		collectNotifyChange(validator,vctx);
 	}

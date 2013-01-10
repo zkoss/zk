@@ -113,9 +113,21 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addExecutionInfo(this,"save-form",
-					getFormId(),getPureExpressionString(_accessInfo.getProperty()),form,getArgs());
+			collector.addSaveInfo(this,"save-form",getConditionString(ctx),
+					getFormId(),getPureExpressionString(_accessInfo.getProperty()),form,getArgs(),"");
 		}
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before=").append(getCommandName()); 
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after=").append(getCommandName()); 
+		}else{
+			condition = condition.append(ctx.getTriggerEvent()==null?"":ctx.getTriggerEvent().getName()); 
+		}
+		return condition.toString();
 	}
 
 	//--SaveBinding--//
@@ -175,6 +187,12 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 		validator.validate(vctx);
 		
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addValidationInfo(this,"validate-form",
+					getPureExpressionString(_validator),validator, Boolean.valueOf(vctx.isValid()),
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
+		}
 //		//collect notify change
 //		collectNotifyChange(validator,vctx);
 	}

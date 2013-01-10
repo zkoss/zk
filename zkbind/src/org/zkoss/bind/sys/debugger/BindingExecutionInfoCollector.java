@@ -13,7 +13,9 @@ package org.zkoss.bind.sys.debugger;
 
 import java.util.Map;
 
+import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.zk.ui.Component;
 
 /**
  * the collector to collect runtime binding execution information
@@ -22,15 +24,18 @@ import org.zkoss.bind.sys.Binding;
  */
 public interface BindingExecutionInfoCollector {
 
-	/**
-	 * add binding execution info to this collector
-	 * @param binding the binding 
-	 * @param type the binding type
-	 * @param fromExpr the from expression
-	 * @param toExpr the to expression
-	 * @param value the value
-	 * @param args the args of binding
-	 */
-	void addExecutionInfo(Binding binding, String type, String fromExpr, String toExpr,
-			Object value, Map<String,Object> args);
+	
+	void pushStack(String name);
+	String popStack();
+	
+	void addLoadInfo(Binding binding, String subject, String condition, String fromExpr, String toExpr,
+			Object value, Map<String,Object> args,String note);
+	void addSaveInfo(Binding binding, String subject, String condition, String fromExpr, String toExpr,
+			Object value, Map<String,Object> args,String note);
+	void addCommandInfo(Binding binding, String subject, String event,String commandExpr,
+			Object value, Map<String,Object> args,String note);
+	void addValidationInfo(Binding binding, String subject, String validatorExpr, Validator validator,
+			Object result, Map<String,Object> args,String note);
+	void addNotifyInfo(String subject, Object base,Object prop,String note);
+	void addEnterInfo(Component comp, String subject,String entry,String note);
 }

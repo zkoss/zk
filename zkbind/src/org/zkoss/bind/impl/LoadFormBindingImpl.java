@@ -55,6 +55,8 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		
 		final Object bean = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		//ZK-1016 Nested form binding doesn't work.
 		final ValueReference valref = eval.getValueReference(ctx, comp,  _accessInfo.getProperty());
@@ -113,11 +115,20 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			binder.notifyChange(((FormExt)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
 		}
 		
-		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addExecutionInfo(this,"load-form",
-					getPureExpressionString(_accessInfo.getProperty()),getFormId(),bean,getArgs());
+			collector.addLoadInfo(this,"load-form",getConditionString(ctx),
+					getPureExpressionString(_accessInfo.getProperty()),getFormId(),bean,getArgs(),"");
 		}
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before=").append(getCommandName()); 
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after=").append(getCommandName()); 
+		}
+		return condition.toString();
 	}
 	
 	public void setSeriesLength(int len) {

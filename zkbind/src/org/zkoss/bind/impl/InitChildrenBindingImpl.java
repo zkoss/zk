@@ -52,6 +52,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 	public void load(BindContext ctx) {
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
@@ -62,10 +63,9 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			Object old;
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
-				BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 				if(collector!=null){
-					collector.addExecutionInfo(this,"init-children",
-							getPureExpressionString(_accessInfo.getProperty()),"[ByConverter]",old,getArgs());
+					collector.addLoadInfo(this,"init-children","",
+							getPureExpressionString(_accessInfo.getProperty()),"",old,getArgs(),"By converter");
 				}
 				return;
 			}
@@ -88,10 +88,9 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			}
 		}
 		
-		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addExecutionInfo(this,"init-children",
-					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs());
+			collector.addLoadInfo(this,"init-children","",
+					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs(),null);
 		}
 	}
 }

@@ -22,12 +22,13 @@ public class SystemOutExecutionInfoCollector extends AbstractExecutionInfoCollec
 
 	@Override
 	public void addExecutionInfo(JSONObject info) {
-		System.out.println("[" + info.get("sid") + "]\t[" + info.get("widget") + "]\t[$" + info.get("uuid") + "]\t["
-				+ info.get("id") + "]\t["
-				+ info.get("type") + "]\t[" 
-				+ info.get("fromExpr") + " > " 
-				+ info.get("toExpr") + "\t= "
-				+ info.get("value"));
+		System.out.println(info.toJSONString());
+//		System.out.println("[" + info.get("sid") + "]\t[" + info.get("widget") + "]\t[$" + info.get("uuid") + "]\t["
+//				+ info.get("id") + "]\t["
+//				+ info.get("type") + "]\t[" 
+//				+ info.get("fromExpr") + " > " 
+//				+ info.get("toExpr") + "\t= "
+//				+ info.get("value"));
 	}
 
 }
