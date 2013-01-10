@@ -46,6 +46,12 @@ public class AuResponse {
 	 * @since 5.0.4
 	 */
 	public static final int SC_OUT_OF_SEQUENCE = 5501;
+	/** ZK-Error (5502) indicating the request is aborted, because it
+	 * is waiting too long for the completion of the previous request.
+	 * ZK-Error is returned as the response header of a failed AU request.
+	 * @since 6.5.2
+	 */
+	public static final int SC_ACTIVATION_TIMEOUT = 5502;
 
 	protected String _cmd;
 	private final Object _depends;

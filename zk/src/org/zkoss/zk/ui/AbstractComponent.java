@@ -165,7 +165,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Constructs a dummy component that is not associated
 	 * with any component definition.
 	 * @param useless an useless argument (it is ignored but used
-	 * to distinquish the default constructor)
+	 * to distinguish the default constructor)
 	 * @since 6.0.0
 	 */
 	protected AbstractComponent(boolean useless) {
@@ -317,7 +317,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Bind comp to this ID space (owned by this component).
 	 * Called only if IdSpace is implemented.
-	 * comp's ID must be unquie (and not auto id)
+	 * comp's ID must be unique (and not auto id)
 	 */
 	private void bindToIdSpace(Component comp) {
 		_auxinf.spaceInfo.fellows.put(comp.getId(), comp);
@@ -437,7 +437,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			.getUiEngine().addMoved(this, oldparent, oldpg, newpg);
 	}
 
-	/** Ses the page without fixing IdSpace
+	/** Set the page without fixing IdSpace
 	 */
 	private void setPage0(Page page) {
 		if (page == _page)
@@ -1151,7 +1151,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (comp != null) comp._next = next;
 		else _chdinf.first = next;
 	}
-	/** Set the prev sibling of the given child. (this is a parent of comp). */
+	/** Set the previous sibling of the given child. (this is a parent of comp). */
 	/*package*/ final
 	void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
@@ -1395,7 +1395,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * It is the same as <code>response(response.getOverrideKey(), response)</code>
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the componet returned by
+	 * depends on the existence of the component returned by
 	 * {@link AuResponse#getDepends}.
 	 * In other words, the response is removed if the component is removed.
 	 * If it is null, the response is component-independent and it is
@@ -1857,7 +1857,7 @@ w:use="foo.MyWindow"&gt;
 		return exec != null && exec.isAsyncUpdate(_page);
 	}
 
-	/** Redraws childrens (and then recursively descandants).
+	/** Redraws children (and then recursively descendants).
 	 * <p>Default: it invokes {@link #redraw} for all its children.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
@@ -1999,7 +1999,7 @@ w:use="foo.MyWindow"&gt;
 		return Collections.emptyMap();
 	}
 	/** Adds an event that the client might send to the server.
-	 * {@link #addClientEvent} is usally called in the <code>static</code> clause
+	 * {@link #addClientEvent} is usually called in the <code>static</code> clause
 	 * when the class is loaded. For example,
 	 * <pre><code>public class MyWidget extends HtmlBasedComponent {
 	 *  static {
@@ -2010,13 +2010,13 @@ w:use="foo.MyWindow"&gt;
 	 * <p>For a programming language not easy to have the <code>static</code>
 	 * clause (such as Scala), {@link #addClientEvent} can be called in
 	 * the constructors. Notice that it is better not to add the client event
-	 * later than the contructor, since the derived classes will copy
+	 * later than the constructor, since the derived classes will copy
 	 * the client events defined in the base class, when the first time
 	 * {@link #addClientEvent} is called with the class.
 	 *
 	 * <h3>Version History</h3>
-	 * <p>Since 5.0.4, it can be called in contructors
-	 * (in additions to the static clause). On othe thand, it can only
+	 * <p>Since 5.0.4, it can be called in constructors
+	 * (in additions to the static clause). On other hand, it can only
 	 * be called in the static clause (executed when the class is loaded)
 	 * in the prior version.
 	 * @param cls the component's class (implementation class).
@@ -2625,7 +2625,7 @@ w:use="foo.MyWindow"&gt;
 
 	/** Handles an AU request. It is invoked internally.
 	 *
-	 * <p>Default: it handles echo and setAttr, and it convests other request
+	 * <p>Default: it handles echo and setAttr, and it converts other request
 	 * to an event (by {@link Event#getEvent}) and then posts the event
 	 * (by {@link Events#postEvent}).
 	 *
@@ -2753,7 +2753,7 @@ w:use="foo.MyWindow"&gt;
 	 * (by invoking zk.Widget's smartUpdate at client).
 	 *
 	 * <p>By default, it does nothing but log a warning message, since
-	 * it is not safe to allow the client to update a field arbitary.
+	 * it is not safe to allow the client to update a field arbitrary.
 	 * <p>However, if you'd like to allow the update for a particular component
 	 * you could do one of the following
 	 * <ol>
@@ -2772,7 +2772,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>Notice: this method will invoke {@link #disableClientUpdate} to
 	 * disable any update to the client, when calling the setter.
 	 *
-	 * <p>If you wanto enable the client update for all instances of a given
+	 * <p>If you want to enable the client update for all instances of a given
 	 * component (though not recommended for the security reason), you could
 	 * refer to <a href="http://books.zkoss.org/wiki/Small_Talks/2011/May/New_Features_of_ZK_5.0.7#Client-side_smartUpdate_now_disabled_by_default">here</a>.
 	 *
@@ -3247,7 +3247,7 @@ w:use="foo.MyWindow"&gt;
 		return Selectors.iterable(this, selector);
 	}
 
-	/** Merge multiple memembers into an single object (and create on demand)
+	/** Merge multiple members into an single object (and create on demand)
 	 * to minimize the footprint
 	 * @since 5.0.4
 	 */
@@ -3278,7 +3278,7 @@ w:use="foo.MyWindow"&gt;
 
 		/** The widget class. */
 		private String wgtcls;
-		/** A map of client event hanlders, Map(String evtnm, String script). */
+		/** A map of client event handlers, Map(String evtnm, String script). */
 		private Map<String, String> wgtlsns;
 		/** A map of client properties to override, Map(String name, String script). */
 		private Map<String, String> wgtovds;
@@ -3290,7 +3290,7 @@ w:use="foo.MyWindow"&gt;
 		/** The templates. */
 		private Map<String, Template> templates;
 
-		/** Whether this component is stub-only (0: inheirt, -1: false, 1: true). */
+		/** Whether this component is stub-only (0: inherit, -1: false, 1: true). */
 		private byte stubonly;
 
 		/** Whether annots is shared with other components. */

@@ -41,6 +41,8 @@ public interface ComposerExt<T extends Component> {
 	 * @param page the page for composing this component.
 	 * @param parent the parent component, or null if it is the root component.
 	 * @param compInfo the component info used to instantiate the component.
+	 * Notice that it is null if the page is rendered as ZK JSP, since
+	 * {@link ComponentInfo} is not available under ZK JSP.
 	 * @return the component info used to instantiate the component.
 	 * In most case, it shall return compInfo.
 	 * If null is returned, the component won't be instantiated.
