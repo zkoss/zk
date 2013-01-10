@@ -318,6 +318,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		//subscribe queue 
 		subscribeQueue(_quename, _quescope, _queueListener);
 		
+		if(viewModel instanceof Composer<?> && !(viewModel instanceof BindComposer<?>)){//do we need to warn this?
+			//show a warn only
+			_log.warning("you are using a composer [%s] as a view model",viewModel);
+		}
 		new AbstractAnnotatedMethodInvoker<Init>(Init.class, _initMethodCache){
 			protected boolean shouldLookupSuperclass(Init annotation) {
 				return annotation.superclass();
