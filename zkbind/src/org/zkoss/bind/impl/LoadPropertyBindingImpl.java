@@ -99,9 +99,9 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	private String getConditionString(BindContext ctx){
 		StringBuilder condition = new StringBuilder();
 		if(getConditionType()==ConditionType.BEFORE_COMMAND){
-			condition.append("before=").append(getCommandName()); 
+			condition.append("before='").append(getCommandName()).append("'");
 		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
-			condition.append("after=").append(getCommandName()); 
+			condition.append("after='").append(getCommandName()).append("'");
 		}
 		return condition.toString();
 	}

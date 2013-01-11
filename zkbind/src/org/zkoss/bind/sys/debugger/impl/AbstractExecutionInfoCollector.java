@@ -15,13 +15,11 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.zkoss.bind.Validator;
-import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.Clients;
 /**
  * abstract implementation
  * @author dennis
@@ -35,11 +33,9 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	
 	public void pushStack(String name){
 		_infoStack.push(name);
-//		Clients.evalJavaScript("console.log('>push "+name+"')");
 	}
 	public String popStack(){
 		String name = _infoStack.pop();
-//		Clients.evalJavaScript("console.log('>pop "+name+"')");
 		return name;
 	}
 	
@@ -138,6 +134,37 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 		
 		json.put("base", toString(base,100));
 		json.put("prop", toString(prop,100));
+
+		addExecutionInfo(json);
+	}
+	
+	
+	@Override
+	public void addLoadBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note){
+		JSONObject json = createJSON(comp,"add-load-binding",subject,note);
+		
+		json.put("condition", condition);
+		json.put("fromExpr", fromExpr);
+		json.put("toExpr", toExpr);
+		
+		addExecutionInfo(json);
+	}
+
+	@Override
+	public void addSaveBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note){
+		JSONObject json = createJSON(comp,"add-save-binding",subject,note);
+		json.put("condition", condition);
+		json.put("fromExpr", fromExpr);
+		json.put("toExpr", toExpr);
+
+		addExecutionInfo(json);
+	}
+
+	@Override
+	public void addCommandBinding(Component comp, String subject, String event, String commandExpr, String note){
+		JSONObject json = createJSON(comp,"add-command-binding",subject,note);
+		json.put("event", event);
+		json.put("commandExpr", commandExpr);
 
 		addExecutionInfo(json);
 	}

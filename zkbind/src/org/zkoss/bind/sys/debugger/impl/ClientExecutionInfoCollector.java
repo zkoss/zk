@@ -13,7 +13,6 @@ package org.zkoss.bind.sys.debugger.impl;
 
 import org.zkoss.json.JSONObject;
 import org.zkoss.lang.Strings;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
 /**
  * 
@@ -46,9 +45,16 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 				sb.append(" ");
 			}
 		}
-		sb.append("['+info.subject+']\t'+");
+		
+		if("add-load-binding".equals(type) || "add-command-binding".equals(type) || "add-save-binding".equals(type)){
+			sb.append("ADD-BINDING['+info.subject+']\t'+");
+		}else{
+			sb.append("['+info.subject+']\t'+");
+		}
 		if("enter-info".equals(type)){
 			sb.append("'['+info.entry +']'");
+		}else if("load-info".equals(type)){
+			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
 		}else if("command-info".equals(type)){
 			sb.append("'['+info.event +']\t'+ info.commandExpr +'\t= '+info.value");
 		}else if("validation-info".equals(type)){
@@ -57,8 +63,12 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
 		}else if("notify-info".equals(type)){
 			sb.append("'['+info.base +']['+ info.prop+']'");
-		}else{
-			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
+		}else if("add-load-binding".equals(type)){
+			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr");
+		}else if("add-command-binding".equals(type)){
+			sb.append("'['+info.event +']\t'+ info.commandExpr");
+		}else if("add-save-binding".equals(type)){
+			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr");
 		}
 		
 		sb.append("+' / component ['+info.widget+','+info.uuid+','+info.id+']'");

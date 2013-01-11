@@ -17,7 +17,9 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Property;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ReferenceBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -33,11 +35,13 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	private final static Object NULL_VALUE = new Object();
 	private final ExpressionX _exprX;
 	private transient Object _cacheValue; //null means invalid
-
-	public ReferenceBindingImpl(Binder binder, String expression, Component comp) {
+	private final String _attr;
+	
+	public ReferenceBindingImpl(Binder binder, Component comp, String attr,String expression) {
 		super(binder, comp, null);
 		final BindContext ctx = newBindContext();
 		_exprX = binder.getEvaluatorX().parseExpressionX(ctx, expression, Object.class);
+		_attr = attr;
 	}
 
 	@Override
@@ -51,6 +55,13 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		invalidateCache();
 		final BindContext bctx = newBindContext();
 		getBinder().getEvaluatorX().setValue(bctx, getComponent(), _exprX, val);
+		
+		
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addSaveInfo(getComponent(), "save-reference", "", "self."+_attr, getPropertyString(), val, null, "");
+		}
+		
 		//copy notifies back
 		final Set<Property> notifies = BindELContext.getNotifys(bctx);
 		if(notifies!=null){
@@ -68,6 +79,11 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 			final BindContext bctx = newBindContext();
 			final Object val = getBinder().getEvaluatorX().getValue(bctx, getComponent(), _exprX);
 			_cacheValue = val == null ? NULL_VALUE : val;
+			
+			final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+			if(collector!=null){
+				collector.addLoadInfo(getComponent(), "load-reference", "", getPropertyString(), "self."+_attr, _cacheValue, null, "");
+			}
 		}
 	}
 

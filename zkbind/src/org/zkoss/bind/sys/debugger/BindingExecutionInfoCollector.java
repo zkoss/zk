@@ -45,9 +45,9 @@ public interface BindingExecutionInfoCollector {
 
 	void addEnterInfo(Component comp, String subject, String entry, String note);
 
-//	void addLoadBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note);
-//
-//	void addSaveBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note);
-//
-//	void addCommandBinding(Component comp, String subject, String event, String commandExpr, String note);
+	void addLoadBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note);
+
+	void addSaveBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note);
+
+	void addCommandBinding(Component comp, String subject, String event, String commandExpr, String note);
 }

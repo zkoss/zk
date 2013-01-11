@@ -565,6 +565,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		addBinding(comp, attr, binding);
 		final BindingKey bkey = getBindingKey(comp, attr);
 		_formBindingHandler.addInitBinding(bkey, binding);
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addLoadBinding(comp, "from-init-binding", "", binding.getPropertyString(), formId, "");
+		}
 	}
 	
 	@Override
@@ -611,12 +616,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void addFormLoadBindings0(Component comp, String formId, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		final String attr = formId;
-		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(prompt){
 			final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.PROMPT,null, bindingArgs);
 			addBinding(comp, attr, binding);
 			final BindingKey bkey = getBindingKey(comp, attr);
 			_formBindingHandler.addLoadPromptBinding(bkey, binding);
+			
+			if(collector!=null){
+				collector.addLoadBinding(comp, "from-load-binding", "", binding.getPropertyString(), "", "");
+			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -626,6 +635,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						_log.debug("add before command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
 					}
 					_formBindingHandler.addLoadBeforeBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addLoadBinding(comp, "from-load-binding", "before='"+cmd+"'", binding.getPropertyString(), formId, "");
+					}
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
@@ -636,41 +649,53 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						_log.debug("add after command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
 					}
 					_formBindingHandler.addLoadAfterBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addLoadBinding(comp, "from-load-binding", "after='"+cmd+"'", binding.getPropertyString(), formId, "");
+					}
 				}
 			}
 		}
 	}
 
-	private void addFormSaveBindings0(Component comp, String formid, String saveExpr, 
+	private void addFormSaveBindings0(Component comp, String formId, String saveExpr, 
 			String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String validatorExpr,Map<String, Object> validatorArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		if(prompt){
 			throw new IllegalArgumentException("a save-form-binding have to set with a before|after command condition");
 		}
-		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(beforeCmds!=null && beforeCmds.length>0){
 			for(String cmd:beforeCmds){
-				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
-				addBinding(comp, formid, binding);
+				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formId, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				addBinding(comp, formId, binding);
 				if(_log.debugable()){
-					_log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formid,saveExpr,cmd);
+					_log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formId,saveExpr,cmd);
 				}
 				_formBindingHandler.addSaveBeforeBinding(cmd, binding);
+				
+				if(collector!=null){
+					collector.addSaveBinding(comp, "form-save-binding", "before='"+cmd+"'", formId ,binding.getPropertyString(), "");
+				}
 			}
 		}
 		if(afterCmds!=null && afterCmds.length>0){
 			for(String cmd:afterCmds){
-				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
-				addBinding(comp, formid, binding);
+				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formId, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				addBinding(comp, formId, binding);
 				if(_log.debugable()){
-					_log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formid,saveExpr,cmd);
+					_log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formId,saveExpr,cmd);
 				}
 				_formBindingHandler.addSaveAfterBinding(cmd, binding);
+				
+				if(collector!=null){
+					collector.addSaveBinding(comp, "form-save-binding", "after='"+cmd+"'", formId ,binding.getPropertyString(), "");
+				}
 			}
 		}
 		if(validatorExpr!=null){
-			BindingKey bkey = getBindingKey(comp, formid);
+			BindingKey bkey = getBindingKey(comp, formId);
 			if(!_hasValidators.contains(bkey)){
 				_hasValidators.add(bkey);
 			}
@@ -776,6 +801,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		addBinding(comp, attr, binding); 
 		final BindingKey bkey = getBindingKey(comp, attr);
 		_propertyBindingHandler.addInitBinding(bkey, binding);
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addLoadBinding(comp, "property-init-binding", "", binding.getPropertyString(), binding.getFieldString(), "");
+		}
 	}
 
 	private String getSystemConverter(Component comp, String attr) {
@@ -850,7 +880,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
-		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		//check attribute _accessInfo natural characteristics to register Command event listener
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
@@ -899,6 +929,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding 
 			final BindingKey bkey = getBindingKey(comp, attr);
 			_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
+			
+			if(collector!=null){
+				collector.addLoadBinding(comp, "property-load-binding", evtnm==null?"":evtnm, binding.getPropertyString(), binding.getFieldString(), "");
+			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -908,6 +942,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
 					}
 					_propertyBindingHandler.addLoadBeforeBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addLoadBinding(comp, "property-load-binding", "before='"+cmd+"'", binding.getPropertyString(), binding.getFieldString(), "");
+					}
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
@@ -917,7 +955,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					if(_log.debugable()){
 						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
 					}
-					_propertyBindingHandler.addLoadAfterBinding(cmd, binding);	
+					_propertyBindingHandler.addLoadAfterBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addLoadBinding(comp, "property-load-binding", "after='"+cmd+"'", binding.getPropertyString(), binding.getFieldString(), "");
+					}
 				}
 			}
 		}
@@ -926,6 +968,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void addPropertySaveBindings0(Component comp, String attr, String saveExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		//check attribute _accessInfo natural characteristics to register Command event listener 
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
@@ -960,6 +1003,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			addBinding(comp, evtnm, binding);//to mark evtnm has a this binding, so we can remove it in removeComponent
 			final BindingKey bkey = getBindingKey(comp, evtnm);
 			_propertyBindingHandler.addSavePromptBinding(comp, bkey, binding);
+			
+			if(collector!=null){
+				collector.addSaveBinding(comp, "property-save-binding", "", binding.getFieldString(),binding.getPropertyString(), "");
+			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -969,6 +1016,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						_log.debug("add before command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
 					}
 					_propertyBindingHandler.addSaveBeforeBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addSaveBinding(comp, "property-save-binding", "before='"+cmd+"'", binding.getFieldString(),binding.getPropertyString(), "");
+					}
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
@@ -978,7 +1029,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					if(_log.debugable()){
 						_log.debug("add after command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
 					}
-					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);	
+					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addSaveBinding(comp, "property-save-binding", "after='"+cmd+"'", binding.getFieldString(),binding.getPropertyString(), "");
+					}
 				}
 			}
 		}
@@ -1033,12 +1088,18 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		addBinding(comp, CHILDREN_ATTR, binding); 
 		final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
 		_childrenBindingHandler.addInitBinding(bkey, binding);
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addLoadBinding(comp, "children-init-binding", "", binding.getPropertyString(), "", "");
+		}
+		
 	}
 	
 	private void addChildrenLoadBindings0(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
-
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(prompt){
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-children-load-binding: comp=[%s],expr=[%s]", comp,loadExpr);
@@ -1048,6 +1109,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
 			_childrenBindingHandler.addLoadPromptBinding(comp, bkey, binding);
+			
+			if(collector!=null){
+				collector.addLoadBinding(comp, "children-load-binding", "", binding.getPropertyString(), "", "");
+			}
+			
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -1057,6 +1123,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						_log.debug("add before command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
 					}
 					_childrenBindingHandler.addLoadBeforeBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addLoadBinding(comp, "children-load-binding", "before='"+cmd+"'", binding.getPropertyString(), "", "");
+					}
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
@@ -1066,7 +1136,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					if(_log.debugable()){
 						_log.debug("add after command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
 					}
-					_childrenBindingHandler.addLoadAfterBinding(cmd, binding);	
+					_childrenBindingHandler.addLoadAfterBinding(cmd, binding);
+					
+					if(collector!=null){
+						collector.addLoadBinding(comp, "children-load-binding", "after='"+cmd+"'", binding.getPropertyString(), "", "");
+					}
 				}
 			}
 		}
@@ -1085,7 +1159,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(_log.debugable()){
 			_log.debug("add reference-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
 		}
-		ReferenceBindingImpl binding = new ReferenceBindingImpl(this, loadExpr, comp);
+		ReferenceBindingImpl binding = new ReferenceBindingImpl(this, comp, attr, loadExpr);
 		
 		if(_refBindingHandler!=null){
 			_refBindingHandler.addReferenceBinding(comp, attr, binding);
@@ -1094,6 +1168,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		
 		addBinding(comp, attr, binding);
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addLoadBinding(comp, "add-reference-binding", "", binding.getPropertyString(), "self."+attr, "");
+		}
 	}
 
 	private boolean isPrompt(String[] beforeCmds, String[] afterCmds){
@@ -1105,6 +1184,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
 		addBinding(comp, evtnm, binding);
 		registerCommandEventListener(comp, evtnm, binding, false);
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addCommandBinding(comp, "command-binding", evtnm, binding.getCommandString(), "");
+		}
 	}
 	
 	public void addGlobalCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> args) {
@@ -1112,6 +1196,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
 		addBinding(comp, evtnm, binding);
 		registerCommandEventListener(comp, evtnm, binding, true);
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addCommandBinding(comp, "global-command-binding", evtnm, binding.getCommandString(), "");
+		}
 	}
 	
 	//associate event to CommandBinding
@@ -1334,8 +1423,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 			if(collector!=null){
-				collector.addCommandInfo(comp,"on-command", evt.getName(),
-						BindEvaluatorXUtil.getExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, commandArgs,"");
+				collector.addCommandInfo(comp,"on-command", evtnm,
+						commandBinding==null?null:BindEvaluatorXUtil.getExpressionString(((CommandBindingImpl)commandBinding).getCommand()),
+								command, commandArgs,"");
 			}
 			
 			//validate
@@ -1434,14 +1524,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	/*package*/ void doPrePhase(Phase phase, BindContext ctx) {
-		if (_phaseListener != null) {
-			_phaseListener.prePhase(phase, ctx);
-		}
 		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.pushStack(phase.name());
 		}
-		
+		if (_phaseListener != null) {
+			_phaseListener.prePhase(phase, ctx);
+		}
 	}
 	
 	/*package*/ void doPostPhase(Phase phase, BindContext ctx) {
@@ -1950,7 +2039,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		try{
 			if(collector!=null){
 				collector.pushStack("POST_GLOBAL_COMMAND");
-				collector.addCommandInfo(comp,"post-global-command", evt.getName(),
+				collector.addCommandInfo(comp,"post-global-command", evt==null?null:evt.getName(),
 						BindEvaluatorXUtil.getExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, args,"");
 			}
 		
