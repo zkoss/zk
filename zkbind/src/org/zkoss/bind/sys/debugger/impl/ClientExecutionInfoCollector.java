@@ -61,7 +61,7 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
 		}
 		
-		sb.append("+' / on component ['+info.widget+','+info.uuid+','+info.id+']'");
+		sb.append("+' / component ['+info.widget+','+info.uuid+','+info.id+']'");
 		if(!Strings.isEmpty((String)info.get("note"))){
 			sb.append("+'\t*'+info.note");
 		}

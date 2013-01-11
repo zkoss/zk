@@ -73,7 +73,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 
 	@Override
 	public String getPropertyString() {
-		return getPureExpressionString(_exprX);
+		return BindEvaluatorXUtil.getExpressionString(_exprX);
 	}
 
 	@Override

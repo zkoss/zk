@@ -62,7 +62,7 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	}
 
 	public String getPropertyString() {
-		return getPureExpressionString(this._accessInfo.getProperty());
+		return BindEvaluatorXUtil.getExpressionString(this._accessInfo.getProperty());
 	}
 	
 	public ConditionType getConditionType() {

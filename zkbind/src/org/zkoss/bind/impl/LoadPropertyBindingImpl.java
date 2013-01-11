@@ -79,7 +79,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
 					collector.addLoadInfo(comp,"load-property",getConditionString(ctx),
-							getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),old,getArgs(),"By converter");
+							getPropertyString(),getFieldString(),old,getArgs(),"By converter");
 				}
 				return;
 			}
@@ -92,7 +92,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 
 		if(collector!=null){
 			collector.addLoadInfo(comp,"load-property",getConditionString(ctx),
-					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs(),"");
+					getPropertyString(),getFieldString(),value,getArgs(),"");
 		}
 	}
 	

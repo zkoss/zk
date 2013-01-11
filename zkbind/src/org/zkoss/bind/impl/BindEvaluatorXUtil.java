@@ -103,4 +103,13 @@ public class BindEvaluatorXUtil {
 		Object obj = evalx.getValue(ctx, comp, expr);
 		return (T)obj;
 	}
+	
+	//remove ${ and }
+	public static String getExpressionString(ExpressionX expr) {
+		if (expr == null) {
+			return null;
+		}
+		final String evalstr = expr.getExpressionString(); 
+		return evalstr.substring(2, evalstr.length() - 1);
+	}
 }

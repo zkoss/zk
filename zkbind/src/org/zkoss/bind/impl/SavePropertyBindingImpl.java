@@ -119,6 +119,10 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		return getAttribute(ctx, $COMPVALUE$);
 	}
 	
+	public String getValidatorExpressionString(){
+		return _validator==null?null:BindEvaluatorXUtil.getExpressionString(_validator);
+	}
+	
 	public void save(BindContext ctx) {
 		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		final Component comp = getComponent();
@@ -129,7 +133,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 			if(collector!=null){
 				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
 				collector.addSaveInfo(comp,"save-property",getConditionString(ctx),
-						getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),old,getArgs(),"By converter");
+						getFieldString(),getPropertyString(),old,getArgs(),"By converter");
 			}
 			return;
 		}
@@ -140,7 +144,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		
 		if(collector!=null){
 			collector.addSaveInfo(comp,"save-property",getConditionString(ctx),
-					getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),value,getArgs(),"");
+					getFieldString(),getPropertyString(),value,getArgs(),"");
 		}
 	}
 	
@@ -231,7 +235,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addValidationInfo(getComponent(),"validate-property",
-					getPureExpressionString(_validator),validator, Boolean.valueOf(vctx.isValid()),
+					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
 					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
 		}
 		

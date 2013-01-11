@@ -278,7 +278,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			//only when a event in queue is our event
 			if(event instanceof PropertyChangeEvent){
 				final PropertyChangeEvent evt = (PropertyChangeEvent) event;
-				BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getProperty());
+				BinderImpl.this.doPropertyChange(evt.getBase(), evt.getProperty());
 			}else if(event instanceof GlobalCommandEvent){
 				final GlobalCommandEvent evt = (GlobalCommandEvent) event;
 				final Set<Property> notifys = new LinkedHashSet<Property>();
@@ -334,9 +334,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	
 	//called when onPropertyChange is fired to the subscribed event queue
-	private void loadOnPropertyChange(Object base, String prop) {
+	private void doPropertyChange(Object base, String prop) {
 		if(_log.debugable()){
-			_log.debug("loadOnPropertyChange:base=[%s],prop=[%s]",base,prop);
+			_log.debug("doPropertyChange:base=[%s],prop=[%s]",base,prop);
 		}
 		
 		//zk-1468, 
@@ -347,20 +347,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final Tracker tracker = getTracker();
 		final Set<LoadBinding> bindings = tracker.getLoadBindings(base, prop);
-		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		try{
 			if(collector != null){
 				collector.pushStack("NOTIFY_CHANGE");
 				collector.addNotifyInfo(_rootComp,"notify-change", base, prop,"Size="+bindings.size());
 			}
-			loadOnPropertyChange0(base, prop, bindings);
+			doPropertyChange0(base, prop, bindings);
 		}finally{
 			if(collector != null){
 				collector.popStack();
 			}
 		}
 	}
-	private void loadOnPropertyChange0(Object base, String prop,Set<LoadBinding> bindings) {
+	private void doPropertyChange0(Object base, String prop,Set<LoadBinding> bindings) {
 		for(LoadBinding binding : bindings) {
 			//BUG 828, the sub-sequence binding might be removed after the previous loading.
 			final Component comp = binding.getComponent();
@@ -373,7 +373,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			try { 
 				if(_log.debugable()){
-					_log.debug("loadOnPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
+					_log.debug("doPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
 				}
 				doPrePhase(Phase.LOAD_BINDING, ctx);
 				binding.load(ctx);
@@ -896,7 +896,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 			//if no command , always add to prompt binding, a prompt binding will be load when , 
 			//1.load a component property binding
-			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in loadOnPropertyChange, not by prompt-binding 
+			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding 
 			final BindingKey bkey = getBindingKey(comp, attr);
 			_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
 		}else{
@@ -1148,15 +1148,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			comp.removeEventListener(evtnm, listener);
 		}
 	}
-
-	//utility class, remove ${ and }
-	private String getPureExpressionString(ExpressionX expr) {
-		if (expr == null) {
-			return null;
-		}
-		final String evalstr = expr.getExpressionString(); 
-		return evalstr.substring(2, evalstr.length() - 1);
-	}
 	
 	private class CommandEventListener implements EventListener<Event>, Serializable{
 		private static final long serialVersionUID = 1L;
@@ -1344,7 +1335,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 			if(collector!=null){
 				collector.addCommandInfo(comp,"on-command", evt.getName(),
-						getPureExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, commandArgs,"");
+						BindEvaluatorXUtil.getExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, commandArgs,"");
 			}
 			
 			//validate
@@ -1891,10 +1882,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	 * Internal Use only. init and load the component
 	 */
 	public void loadComponent(Component comp,boolean loadinit) {
-		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		try{
 			if(collector!=null){
-				collector.pushStack("LOAD_COMPONENT");
+				collector.pushStack("BINDER_API");
 				collector.addEnterInfo(comp,"binder-api","loadComponent","");
 			}
 			loadComponent0(comp,loadinit);
@@ -1960,7 +1951,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			if(collector!=null){
 				collector.pushStack("POST_GLOBAL_COMMAND");
 				collector.addCommandInfo(comp,"post-global-command", evt.getName(),
-						getPureExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, args,"");
+						BindEvaluatorXUtil.getExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, args,"");
 			}
 		
 			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args));

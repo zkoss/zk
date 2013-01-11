@@ -114,7 +114,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addSaveInfo(comp,"save-form",getConditionString(ctx),
-					getFormId(),getPureExpressionString(_accessInfo.getProperty()),form,getArgs(),"");
+					getFormId(),getPropertyString(),form,getArgs(),"");
 		}
 	}
 	
@@ -179,6 +179,10 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	public boolean hasValidator() {
 		return _validator == null ? false : true;
 	}
+	
+	public String getValidatorExpressionString(){
+		return _validator==null?null:BindEvaluatorXUtil.getExpressionString(_validator);
+	}
 
 	public void validate(ValidationContext vctx) {
 		Validator validator = getValidator();
@@ -190,7 +194,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addValidationInfo(getComponent(),"validate-form",
-					getPureExpressionString(_validator),validator, Boolean.valueOf(vctx.isValid()),
+					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
 					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
 		}
 //		//collect notify change

@@ -101,7 +101,11 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	}
 	
 	public String getPropertyString() {
-		return getPureExpressionString(this._accessInfo.getProperty());
+		return BindEvaluatorXUtil.getExpressionString(_accessInfo.getProperty());
+	}
+	
+	public String getFieldString(){
+		return BindEvaluatorXUtil.getExpressionString(_fieldExpr);
 	}
 	
 	public ConditionType getConditionType() {
