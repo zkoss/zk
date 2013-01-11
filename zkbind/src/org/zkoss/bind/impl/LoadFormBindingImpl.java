@@ -116,7 +116,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		}
 		
 		if(collector!=null){
-			collector.addLoadInfo(this,"load-form",getConditionString(ctx),
+			collector.addLoadInfo(comp,"load-form",getConditionString(ctx),
 					getPureExpressionString(_accessInfo.getProperty()),getFormId(),bean,getArgs(),"");
 		}
 	}

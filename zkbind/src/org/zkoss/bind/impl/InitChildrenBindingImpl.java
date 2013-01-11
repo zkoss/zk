@@ -64,7 +64,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addLoadInfo(this,"init-children","",
+					collector.addLoadInfo(comp,"init-children","",
 							getPureExpressionString(_accessInfo.getProperty()),"",old,getArgs(),"By converter");
 				}
 				return;
@@ -89,7 +89,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		}
 		
 		if(collector!=null){
-			collector.addLoadInfo(this,"init-children","",
+			collector.addLoadInfo(comp,"init-children","",
 					getPureExpressionString(_accessInfo.getProperty()),"",value,getArgs(),null);
 		}
 	}

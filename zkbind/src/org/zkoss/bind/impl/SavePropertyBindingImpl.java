@@ -121,26 +121,25 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	
 	public void save(BindContext ctx) {
 		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-		
+		final Component comp = getComponent();
 		//get data from component attribute
 		Object value = getComponentValue(ctx);
 		
 		if(value == Converter.IGNORED_VALUE){
 			if(collector!=null){
 				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
-				collector.addSaveInfo(this,"save-property",getConditionString(ctx),
+				collector.addSaveInfo(comp,"save-property",getConditionString(ctx),
 						getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),old,getArgs(),"By converter");
 			}
 			return;
 		}
 		
 		//set data into bean property
-		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
 		
 		if(collector!=null){
-			collector.addSaveInfo(this,"save-property",getConditionString(ctx),
+			collector.addSaveInfo(comp,"save-property",getConditionString(ctx),
 					getPureExpressionString(_fieldExpr),getPureExpressionString(_accessInfo.getProperty()),value,getArgs(),"");
 		}
 	}
@@ -231,7 +230,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addValidationInfo(this,"validate-property",
+			collector.addValidationInfo(getComponent(),"validate-property",
 					getPureExpressionString(_validator),validator, Boolean.valueOf(vctx.isValid()),
 					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
 		}

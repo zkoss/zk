@@ -67,7 +67,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addLoadInfo(this,"init-property","",
+					collector.addLoadInfo(comp,"init-property","",
 							getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),old,getArgs(),"By converter");
 				}
 				return;
@@ -78,7 +78,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		eval.setValue(null, comp, _fieldExpr, value);
 		
 		if(collector!=null){
-			collector.addLoadInfo(this,"init-property","",
+			collector.addLoadInfo(comp,"init-property","",
 					getPureExpressionString(_accessInfo.getProperty()),getPureExpressionString(_fieldExpr),value,getArgs(),"");
 		}
 	}

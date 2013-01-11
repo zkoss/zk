@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 /**
  * The default implementation of {@link BindingExecutionInfoCollectorFactory}
- * it provides client-log and system-out implementation
+ * it is execution scope implementation and provides client-log and system-out implementation
  * @author dennis
  * @since 6.5.2
  */
@@ -35,7 +35,7 @@ public class DefaultExecutionInfoCollectorFactory extends BindingExecutionInfoCo
 	String _type;
 	
 	@Override
-	public BindingExecutionInfoCollector getCollector(Binder binder) {
+	public BindingExecutionInfoCollector getCollector(Binder binder,Object viewModel) {
 		
 		Execution exec = Executions.getCurrent();
 		if(exec==null) return null;

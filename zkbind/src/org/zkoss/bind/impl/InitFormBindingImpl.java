@@ -99,7 +99,7 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 			
 			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
-				collector.addLoadInfo(this,"init-form","",
+				collector.addLoadInfo(comp,"init-form","",
 						getPureExpressionString(_accessInfo.getProperty()),getFormId(),value,getArgs(),"");
 			}
 		}else{

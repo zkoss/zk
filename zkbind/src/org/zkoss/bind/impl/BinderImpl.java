@@ -351,7 +351,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		try{
 			if(collector != null){
 				collector.pushStack("NOTIFY_CHANGE");
-				collector.addNotifyInfo("notify-change", base, prop,"Size="+bindings.size());
+				collector.addNotifyInfo(_rootComp,"notify-change", base, prop,"Size="+bindings.size());
 			}
 			loadOnPropertyChange0(base, prop, bindings);
 		}finally{
@@ -1263,7 +1263,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
 					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
 					//post global command
-					postGlobalCommand(command,args);
+					postGlobalCommand(comp, _globalCommandBinding ,command ,event, args);
 				}
 			}
 			
@@ -1343,7 +1343,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 			if(collector!=null){
-				collector.addCommandInfo(commandBinding,"on-command", evt.getName(),
+				collector.addCommandInfo(comp,"on-command", evt.getName(),
 						getPureExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, commandArgs,"");
 			}
 			
@@ -1382,10 +1382,17 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_log.debug("Start doGlobalCommand comp=[%s],command=[%s]",comp,command);
 		}
 		
+		
 		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, null);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
 		try {
 			doPrePhase(Phase.GLOBAL_COMMAND, ctx); //begin of Command
+			
+			final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+			if(collector!=null){
+				collector.addCommandInfo(comp,"on-global-command", "","", command, commandArgs,"");
+			}
+			
 			//execute command
 			doGlobalCommandExecute(comp, command, commandArgs, ctx, notifys);
 		} finally {
@@ -1405,6 +1412,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			Method method = getCommandMethod(viewModel.getClass(), command, _globalCommandMethodInfoProvider,_globalCommandMethodCache);
 			
 			if (method != null) {
+				
+				BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+				if(collector!=null){
+					collector.addCommandInfo(comp,"execute-global-command","",
+							"'"+command+"'",method, commandArgs,"on "+viewModel);
+				}
 				
 				ParamCall parCall = createParamCall(ctx);
 				if(commandArgs != null){
@@ -1573,8 +1586,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				
 				BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 				if(collector!=null){
-					collector.addCommandInfo(ctx.getBinding(),"execute-command","",
-							"'"+command+"'",method, commandArgs,"");
+					collector.addCommandInfo(comp,"execute-command","",
+							"'"+command+"'",method, commandArgs,"on "+viewModel);
 				}
 				
 				ParamCall parCall = createParamCall(ctx);
@@ -1937,11 +1950,25 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		getEventQueue().publish(new PropertyChangeEvent(_rootComp, base, attr));
 	}
 	
-	private void postGlobalCommand(String command, Map<String, Object> args) {
+	private void postGlobalCommand(Component comp, CommandBinding commandBinding, String command, Event evt, Map<String, Object> args) {
 		if(_log.debugable()){
 			_log.debug("postGlobalCommand command=[%s], args=[%s]",command,args);
 		}
-		getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args));
+		
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		try{
+			if(collector!=null){
+				collector.pushStack("POST_GLOBAL_COMMAND");
+				collector.addCommandInfo(comp,"post-global-command", evt.getName(),
+						getPureExpressionString(((CommandBindingImpl)commandBinding).getCommand()), command, args,"");
+			}
+		
+			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args));
+		}finally{
+			if(collector!=null){
+				collector.popStack();
+			}
+		}
 	}
 	
 	public void setPhaseListener(PhaseListener listener) {
@@ -2137,7 +2164,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	public BindingExecutionInfoCollector getBindingExecutionInfoCollector(){
 		BindingExecutionInfoCollectorFactory factory = BindingExecutionInfoCollectorFactory.getInstance();
-		return factory==null?null:factory.getCollector(this);
+		return factory==null?null:factory.getCollector(this,getViewModel());
 	}
 	
 }

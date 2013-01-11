@@ -113,7 +113,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addSaveInfo(this,"save-form",getConditionString(ctx),
+			collector.addSaveInfo(comp,"save-form",getConditionString(ctx),
 					getFormId(),getPureExpressionString(_accessInfo.getProperty()),form,getArgs(),"");
 		}
 	}
@@ -189,7 +189,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addValidationInfo(this,"validate-form",
+			collector.addValidationInfo(getComponent(),"validate-form",
 					getPureExpressionString(_validator),validator, Boolean.valueOf(vctx.isValid()),
 					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
 		}

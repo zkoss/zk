@@ -27,15 +27,15 @@ public interface BindingExecutionInfoCollector {
 	
 	void pushStack(String name);
 	String popStack();
-	
-	void addLoadInfo(Binding binding, String subject, String condition, String fromExpr, String toExpr,
+	void addLoadInfo(Component comp, String subject, String condition, String fromExpr, String toExpr,
 			Object value, Map<String,Object> args,String note);
-	void addSaveInfo(Binding binding, String subject, String condition, String fromExpr, String toExpr,
+	void addSaveInfo(Component comp, String subject, String condition, String fromExpr, String toExpr,
 			Object value, Map<String,Object> args,String note);
-	void addCommandInfo(Binding binding, String subject, String event,String commandExpr,
+	void addCommandInfo(Component comp, String subject, String event,String commandExpr,
 			Object value, Map<String,Object> args,String note);
-	void addValidationInfo(Binding binding, String subject, String validatorExpr, Validator validator,
+	void addValidationInfo(Component comp, String subject, String validatorExpr, Validator validator,
 			Object result, Map<String,Object> args,String note);
-	void addNotifyInfo(String subject, Object base,Object prop,String note);
+	void addNotifyInfo(Component comp, String subject, Object base,Object prop,String note);
 	void addEnterInfo(Component comp, String subject,String entry,String note);
+	
 }

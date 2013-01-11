@@ -33,9 +33,10 @@ public abstract class BindingExecutionInfoCollectorFactory {
 	
 	/**
 	 * Get the collector of binder, the sub-class have to consider the thread-safe issue when implementing.
+	 * @param viewModel 
 	 * @return the BindingExecutionInfoCollector or null if isn't existed
 	 */
-	abstract public BindingExecutionInfoCollector getCollector(Binder binder);
+	abstract public BindingExecutionInfoCollector getCollector(Binder binder, Object viewModel);
 
 	/**  
 	 * Thread safe method to get the factory instance

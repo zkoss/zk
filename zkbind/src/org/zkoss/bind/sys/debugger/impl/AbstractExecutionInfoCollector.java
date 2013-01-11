@@ -43,14 +43,14 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 		return name;
 	}
 	
-	private JSONObject createJSON(Binding binding, String type,String subject, String note){
+	private JSONObject createJSON(Component comp, String type,String subject, String note){
 		JSONObject json = new JSONObject();
 		json.put("stack", _infoStack.size());
 		json.put("type", type);
-		if(binding!=null && binding.getComponent()!=null){
-			json.put("widget", binding.getComponent().getDefinition().getName());
-			json.put("uuid", binding.getComponent().getUuid());
-			json.put("id", binding.getComponent().getId());
+		if(comp!=null){
+			json.put("widget", comp.getDefinition().getName());
+			json.put("uuid", comp.getUuid());
+			json.put("id", comp.getId());
 		}else{
 			json.put("widget", "");
 			json.put("uuid", "");
@@ -85,9 +85,9 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	}
 	
 	@Override
-	public void addLoadInfo(Binding binding, String subject, String condition,String fromExpr, String toExpr, Object value,
+	public void addLoadInfo(Component comp, String subject, String condition,String fromExpr, String toExpr, Object value,
 			Map<String, Object> args,String note) {
-		JSONObject json = createJSON(binding,"load-info",subject,note);
+		JSONObject json = createJSON(comp,"load-info",subject,note);
 		json.put("condition", condition);
 		json.put("fromExpr", fromExpr);
 		json.put("toExpr", toExpr);
@@ -97,9 +97,9 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	}
 
 	@Override
-	public void addSaveInfo(Binding binding, String subject, String condition,String fromExpr, String toExpr, Object value,
+	public void addSaveInfo(Component comp, String subject, String condition,String fromExpr, String toExpr, Object value,
 			Map<String, Object> args,String note) {
-		JSONObject json = createJSON(binding,"save-info",subject,note);
+		JSONObject json = createJSON(comp,"save-info",subject,note);
 		json.put("condition", condition);
 		json.put("fromExpr", fromExpr);
 		json.put("toExpr", toExpr);
@@ -109,9 +109,9 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	}
 
 	@Override
-	public void addCommandInfo(Binding binding,String subject, String event,String commandExpr, Object value,
+	public void addCommandInfo(Component comp,String subject, String event,String commandExpr, Object value,
 			Map<String, Object> args,String note) {
-		JSONObject json = createJSON(binding,"command-info",subject,note);
+		JSONObject json = createJSON(comp,"command-info",subject,note);
 		json.put("event", event);
 		json.put("commandExpr", commandExpr);
 		json.put("value", toString(value,100));
@@ -120,9 +120,9 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	}
 
 	@Override
-	public void addValidationInfo(Binding binding, String subject, String validatorExpr, Validator validator,
+	public void addValidationInfo(Component comp,String subject, String validatorExpr, Validator validator,
 			Object result,Map<String, Object> args,String note) {
-		JSONObject json = createJSON(binding,"validation-info",subject,note);
+		JSONObject json = createJSON(comp,"validation-info",subject,note);
 		
 		json.put("validatorExpr", validatorExpr);
 		json.put("validator", toString(validator,100));
@@ -133,8 +133,8 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	
 
 	@Override
-	public void addNotifyInfo(String subject, Object base, Object prop, String note) {
-		JSONObject json = createJSON(null,"notify-info",subject,note);
+	public void addNotifyInfo(Component comp,String subject, Object base, Object prop, String note) {
+		JSONObject json = createJSON(comp,"notify-info",subject,note);
 		
 		json.put("base", toString(base,100));
 		json.put("prop", toString(prop,100));
