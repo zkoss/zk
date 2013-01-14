@@ -47,7 +47,7 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 		}
 		
 		if("add-load-binding".equals(type) || "add-command-binding".equals(type) || "add-save-binding".equals(type)){
-			sb.append("ADD-BINDING['+info.subject+']\t'+");
+			sb.append("ADD-BINDING ['+info.subject+']\t'+");
 		}else{
 			sb.append("['+info.subject+']\t'+");
 		}

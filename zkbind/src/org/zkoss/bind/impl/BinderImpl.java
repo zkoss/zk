@@ -1975,7 +1975,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		try{
 			if(collector!=null){
 				collector.pushStack("BINDER_API");
-				collector.addEnterInfo(comp,"binder-api","loadComponent","");
+				collector.addEnterInfo(comp,"binder-api","loadComponent","ViewModel is "+getViewModel());
 			}
 			loadComponent0(comp,loadinit);
 		}finally{

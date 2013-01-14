@@ -55,7 +55,12 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 		json.put("subject", subject);
 		json.put("note", note);
 		Execution exec = Executions.getCurrent();
-		json.put("sid", exec.getHeader("ZK-SID"));
+		String sid = exec.getHeader("ZK-SID");
+		int sid0 = 0;
+		try{
+			sid0 = sid==null?sid0:Integer.parseInt(sid);
+		}catch(Exception x){}
+		json.put("sid", Integer.valueOf(sid0));
 		return json;
 	}
 	
