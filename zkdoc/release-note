@@ -18,6 +18,7 @@ ZK 6.5.2
   ZK-868 : The image of the file upload button broke in the liferay
   ZK-1529: Ordering Issue in "selectedItems" in listbox component
   ZK-1528: When binding a Java List as a listbox's model in paging mold, add and delete will throw exceptions
+  ZK-1524: use caption in window will cause hflex="min" doesn't work
   ZK-1574: window vflex="min" calculate wrong height in tablet
 
 * Upgrade Notes
