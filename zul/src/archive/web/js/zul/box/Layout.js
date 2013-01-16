@@ -192,7 +192,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		}
 	},
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
-		var el = wgt.$n().parentNode;
+		var el = wgt.$n(); //Bug ZK-1578: should get child size instead of chdex size
 		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
 	},
 	beforeChildrenFlex_: function(child) {
