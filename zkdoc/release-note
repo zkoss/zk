@@ -7,6 +7,7 @@ ZK 6.0.5
   ZK-1531: Button with an image attribute will fire both click and rightClick events when right click the mouse in Chrome
   ZK-1523: JS Error if echoEvent to the component under unselected tab
   ZK-1381: Show busy on panel with borderlayout is not working
+  ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
 
 * Upgrade Notes
 

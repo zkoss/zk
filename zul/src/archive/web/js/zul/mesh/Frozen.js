@@ -327,8 +327,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 		mesh._restoreFocus();
 		
-		// Bug ZK-601
-		if (zk.ie == 8)
+		// Bug ZK-601, Bug ZK-1572
+		if (zk.ie == 8 || zk.ie == 9)
 			zk(mesh).redoCSS();
 	}
 });
