@@ -926,7 +926,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					zk(n).redoCSS();
 			}
 		} else if (zk.ie == 7) {
-			// B50-ZK-589: Window in Hlayout the title bar is goen in IE7
+			// B50-ZK-589: Window in Hlayout the title bar is gone in IE7
 			// call width() to let browser recalculate
 			var $n = jq(this.$n()),
 				$tl = $n.find('>div:first'),
@@ -1262,6 +1262,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('afterChildrenFlex_', arguments);
 		if (_isModal(this._mode))
 			_updDomPos(this, true); //force re-position since window width might changed.
+	},
+	//@Override, Bug ZK-1524: caption children should not considered.
+	getChildMinSize_: function (attr, wgt) {
+		if (!wgt.$instanceof(zul.wgt.Caption))
+			return this.$supers('getChildMinSize_', arguments);
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
