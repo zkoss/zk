@@ -505,6 +505,9 @@ public class Servlets {
 		return false;
 	}
 	private static boolean browser(String userAgent, String type) {
+		if (userAgent == null) //Bug ZK-1582: userAgent could be null if it is robot.
+			return false;
+		
 		int last = (type = type.trim()).length();
 		if (last == 0)
 			return false;
