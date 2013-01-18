@@ -108,7 +108,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _getContentEdgeHeight(cwgt) {
 		var p = cwgt.$n(),
 			fc = cwgt.firstChild,
-			fc = fc && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
+			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
 			c = fc ? fc.$n() : p.firstChild,
 			zkp = zk(p),
 			h = zkp.padBorderHeight();
@@ -127,7 +127,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _getContentEdgeWidth(cwgt) {
 		var p = cwgt.$n(),
 			fc = cwgt.firstChild,
-			fc = fc && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
+			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
 			c = fc ? fc.$n() : p.firstChild,
 			zkp = zk(p),
 			w = zkp.padBorderWidth();
