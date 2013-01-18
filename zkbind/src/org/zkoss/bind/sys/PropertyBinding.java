@@ -47,12 +47,6 @@ public interface PropertyBinding extends Binding {
 	public String getPropertyString();
 	
 	/**
-	 * Returns the filed expression script of this binding
-	 * @return the filed expression script of this binding
-	 */
-	public String getFieldString();
-	
-	/**
 	 * Returns the condition type of this binding
 	 */
 	public ConditionType getConditionType();

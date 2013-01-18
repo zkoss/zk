@@ -27,6 +27,7 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.impl.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
@@ -78,8 +79,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addLoadInfo(comp,"load-property",getConditionString(ctx),
-							getPropertyString(),getFieldString(),old,getArgs(),"By converter");
+					collector.addInfo(new LoadInfo(comp,"load-property",getConditionString(ctx),
+							getPropertyString(),getFieldName(),old,getArgs(),"By converter"));
 				}
 				return;
 			}
@@ -91,8 +92,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		eval.setValue(null, comp, _fieldExpr, value);
 
 		if(collector!=null){
-			collector.addLoadInfo(comp,"load-property",getConditionString(ctx),
-					getPropertyString(),getFieldString(),value,getArgs(),"");
+			collector.addInfo(new LoadInfo(comp,"load-property",getConditionString(ctx),
+					getPropertyString(),getFieldName(),value,getArgs(),""));
 		}
 	}
 	

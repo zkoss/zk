@@ -11,13 +11,11 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys.debugger.impl;
 
-import java.util.Map;
 import java.util.Stack;
 
-import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.ExecutionInfo;
 import org.zkoss.json.JSONObject;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 /**
@@ -27,7 +25,7 @@ import org.zkoss.zk.ui.Executions;
  */
 public abstract class AbstractExecutionInfoCollector implements BindingExecutionInfoCollector{
 
-	public abstract void addExecutionInfo(JSONObject info);
+	public abstract void addInfo(JSONObject info);
 	
 	Stack<String> _infoStack = new Stack<String>();
 	
@@ -39,21 +37,10 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 		return name;
 	}
 	
-	private JSONObject createJSON(Component comp, String type,String subject, String note){
-		JSONObject json = new JSONObject();
+	
+	public void addInfo(ExecutionInfo info){
+		JSONObject json = ((ExecutionInfoBase)info).toJSON();
 		json.put("stack", _infoStack.size());
-		json.put("type", type);
-		if(comp!=null){
-			json.put("widget", comp.getDefinition().getName());
-			json.put("uuid", comp.getUuid());
-			json.put("id", comp.getId());
-		}else{
-			json.put("widget", "");
-			json.put("uuid", "");
-			json.put("id", "");
-		}
-		json.put("subject", subject);
-		json.put("note", note);
 		Execution exec = Executions.getCurrent();
 		String sid = exec.getHeader("ZK-SID");
 		int sid0 = 0;
@@ -61,116 +48,9 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 			sid0 = sid==null?sid0:Integer.parseInt(sid);
 		}catch(Exception x){}
 		json.put("sid", Integer.valueOf(sid0));
-		return json;
-	}
-	
-
-	@Override
-	public void addEnterInfo(Component comp, String subject,String entry,String note) {
-		JSONObject json = createJSON(null,"enter-info",subject,note);
-		if(comp!=null){
-			json.put("widget", comp.getDefinition().getName());
-			json.put("uuid", comp.getUuid());
-			json.put("id", comp.getId());
-		}
-		json.put("entry", entry);
-		addExecutionInfo(json);
-	}
-	
-	private String toString(Object value, int len){
-		String valstr = value==null?null:value.toString();
-		if(valstr!=null && valstr.length()>len){
-			valstr = valstr.substring(0, len-4)+"...";
-		}
-		return valstr;
-	}
-	
-	@Override
-	public void addLoadInfo(Component comp, String subject, String condition,String fromExpr, String toExpr, Object value,
-			Map<String, Object> args,String note) {
-		JSONObject json = createJSON(comp,"load-info",subject,note);
-		json.put("condition", condition);
-		json.put("fromExpr", fromExpr);
-		json.put("toExpr", toExpr);
-		json.put("value", toString(value,100));
-
-		addExecutionInfo(json);
-	}
-
-	@Override
-	public void addSaveInfo(Component comp, String subject, String condition,String fromExpr, String toExpr, Object value,
-			Map<String, Object> args,String note) {
-		JSONObject json = createJSON(comp,"save-info",subject,note);
-		json.put("condition", condition);
-		json.put("fromExpr", fromExpr);
-		json.put("toExpr", toExpr);
-		json.put("value", toString(value,100));
-
-		addExecutionInfo(json);
-	}
-
-	@Override
-	public void addCommandInfo(Component comp,String subject, String event,String commandExpr, Object value,
-			Map<String, Object> args,String note) {
-		JSONObject json = createJSON(comp,"command-info",subject,note);
-		json.put("event", event);
-		json.put("commandExpr", commandExpr);
-		json.put("value", toString(value,100));
-
-		addExecutionInfo(json);
-	}
-
-	@Override
-	public void addValidationInfo(Component comp,String subject, String validatorExpr, Validator validator,
-			Object result,Map<String, Object> args,String note) {
-		JSONObject json = createJSON(comp,"validation-info",subject,note);
 		
-		json.put("validatorExpr", validatorExpr);
-		json.put("validator", toString(validator,100));
-		json.put("result", toString(result,100));
-
-		addExecutionInfo(json);
-	}
-	
-
-	@Override
-	public void addNotifyInfo(Component comp,String subject, Object base, Object prop, String note) {
-		JSONObject json = createJSON(comp,"notify-info",subject,note);
-		
-		json.put("base", toString(base,100));
-		json.put("prop", toString(prop,100));
-
-		addExecutionInfo(json);
+		addInfo(json);
 	}
 	
 	
-	@Override
-	public void addLoadBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note){
-		JSONObject json = createJSON(comp,"add-load-binding",subject,note);
-		
-		json.put("condition", condition);
-		json.put("fromExpr", fromExpr);
-		json.put("toExpr", toExpr);
-		
-		addExecutionInfo(json);
-	}
-
-	@Override
-	public void addSaveBinding(Component comp, String subject, String condition, String fromExpr, String toExpr, String note){
-		JSONObject json = createJSON(comp,"add-save-binding",subject,note);
-		json.put("condition", condition);
-		json.put("fromExpr", fromExpr);
-		json.put("toExpr", toExpr);
-
-		addExecutionInfo(json);
-	}
-
-	@Override
-	public void addCommandBinding(Component comp, String subject, String event, String commandExpr, String note){
-		JSONObject json = createJSON(comp,"add-command-binding",subject,note);
-		json.put("event", event);
-		json.put("commandExpr", commandExpr);
-
-		addExecutionInfo(json);
-	}
 }

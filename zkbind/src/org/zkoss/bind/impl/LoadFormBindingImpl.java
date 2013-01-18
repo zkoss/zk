@@ -30,6 +30,7 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.impl.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -116,8 +117,8 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		}
 		
 		if(collector!=null){
-			collector.addLoadInfo(comp,"load-form",getConditionString(ctx),
-					getPropertyString(),getFormId(),bean,getArgs(),"");
+			collector.addInfo(new LoadInfo(comp,"load-form",getConditionString(ctx),
+					getPropertyString(),getFormId(),bean,getArgs(),""));
 		}
 	}
 	

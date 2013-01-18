@@ -30,6 +30,8 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.impl.SaveInfo;
+import org.zkoss.bind.sys.debugger.impl.ValidationInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -113,8 +115,8 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addSaveInfo(comp,"save-form",getConditionString(ctx),
-					getFormId(),getPropertyString(),form,getArgs(),"");
+			collector.addInfo(new SaveInfo(comp,"save-form",getConditionString(ctx),
+					getFormId(),getPropertyString(),form,getArgs(),""));
 		}
 	}
 	
@@ -193,9 +195,9 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addValidationInfo(getComponent(),"validate-form",
+			collector.addInfo(new ValidationInfo(getComponent(),"validate-form",
 					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
-					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),""));
 		}
 //		//collect notify change
 //		collectNotifyChange(validator,vctx);

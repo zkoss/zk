@@ -23,7 +23,7 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 
 	private boolean _start = false;
 	@Override
-	public void addExecutionInfo(JSONObject info) {
+	public void addInfo(JSONObject info) {
 		
 		String jsonstr = info.toJSONString();
 		StringBuilder sb = new StringBuilder();
@@ -51,8 +51,10 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 		}else{
 			sb.append("['+info.subject+']\t'+");
 		}
-		if("enter-info".equals(type)){
-			sb.append("'['+info.entry +']'");
+		if("api-info".equals(type)){
+			sb.append("'['+info.api +'] on ['+info.value+']'");
+		}else if("event-info".equals(type)){
+			sb.append("'['+info.event +']'");
 		}else if("load-info".equals(type)){
 			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
 		}else if("command-info".equals(type)){

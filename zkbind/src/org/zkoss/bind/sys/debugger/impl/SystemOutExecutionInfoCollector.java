@@ -21,7 +21,7 @@ import org.zkoss.json.JSONObject;
 public class SystemOutExecutionInfoCollector extends AbstractExecutionInfoCollector {
 
 	@Override
-	public void addExecutionInfo(JSONObject info) {
+	public void addInfo(JSONObject info) {
 		System.out.println(info.toJSONString());
 	}
 

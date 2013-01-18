@@ -20,6 +20,8 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.impl.LoadInfo;
+import org.zkoss.bind.sys.debugger.impl.SaveInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -59,7 +61,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		
 		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addSaveInfo(getComponent(), "save-reference", "", "self."+_attr, getPropertyString(), val, null, "");
+			collector.addInfo(new SaveInfo(getComponent(), "save-reference", "", "self."+_attr, getPropertyString(), val, null, ""));
 		}
 		
 		//copy notifies back
@@ -82,7 +84,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 			
 			final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
-				collector.addLoadInfo(getComponent(), "load-reference", "", getPropertyString(), "self."+_attr, _cacheValue, null, "");
+				collector.addInfo(new LoadInfo(getComponent(), "load-reference", "", getPropertyString(), "self."+_attr, _cacheValue, null, ""));
 			}
 		}
 	}

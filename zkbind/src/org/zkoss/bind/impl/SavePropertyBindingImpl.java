@@ -28,6 +28,8 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.impl.SaveInfo;
+import org.zkoss.bind.sys.debugger.impl.ValidationInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -132,8 +134,8 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		if(value == Converter.IGNORED_VALUE){
 			if(collector!=null){
 				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
-				collector.addSaveInfo(comp,"save-property",getConditionString(ctx),
-						getFieldString(),getPropertyString(),old,getArgs(),"By converter");
+				collector.addInfo(new SaveInfo(comp,"save-property",getConditionString(ctx),
+						getFieldName(),getPropertyString(),old,getArgs(),"By converter"));
 			}
 			return;
 		}
@@ -143,8 +145,8 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
 		
 		if(collector!=null){
-			collector.addSaveInfo(comp,"save-property",getConditionString(ctx),
-					getFieldString(),getPropertyString(),value,getArgs(),"");
+			collector.addInfo(new SaveInfo(comp,"save-property",getConditionString(ctx),
+					getFieldName(),getPropertyString(),value,getArgs(),""));
 		}
 	}
 	
@@ -234,9 +236,9 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addValidationInfo(getComponent(),"validate-property",
+			collector.addInfo(new ValidationInfo(getComponent(),"validate-property",
 					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
-					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),"");
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),""));
 		}
 		
 //		//collect notify change

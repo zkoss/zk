@@ -27,6 +27,7 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.impl.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -74,8 +75,8 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addLoadInfo(comp,"load-children",getConditionString(ctx),
-							getPropertyString(),"",old,getArgs(),"By converter");
+					collector.addInfo(new LoadInfo(comp,"load-children",getConditionString(ctx),
+							getPropertyString(),"",old,getArgs(),"By converter"));
 				}
 				return;
 			}
@@ -100,8 +101,8 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		}
 		
 		if(collector!=null){
-			collector.addLoadInfo(comp,"load-children",getConditionString(ctx),
-					getPropertyString(),"",value,getArgs(),"");
+			collector.addInfo(new LoadInfo(comp,"load-children",getConditionString(ctx),
+					getPropertyString(),"",value,getArgs(),""));
 		}
 	}
 	
