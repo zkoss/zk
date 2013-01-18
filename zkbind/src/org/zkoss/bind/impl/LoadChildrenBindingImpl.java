@@ -111,6 +111,8 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			condition.append("before='").append(getCommandName()).append("'");
 		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
 			condition.append("after='").append(getCommandName()).append("'");
+		}else{
+			condition = condition.append(ctx.getTriggerEvent()==null?"":"event="+ctx.getTriggerEvent().getName()); 
 		}
 		return condition.toString();
 	}

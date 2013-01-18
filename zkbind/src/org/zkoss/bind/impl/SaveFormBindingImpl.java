@@ -125,7 +125,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
 			condition.append("after='").append(getCommandName()).append("'"); 
 		}else{
-			condition = condition.append(ctx.getTriggerEvent()==null?"":ctx.getTriggerEvent().getName()); 
+			condition = condition.append(ctx.getTriggerEvent()==null?"":"event="+ctx.getTriggerEvent().getName()); 
 		}
 		return condition.toString();
 	}
