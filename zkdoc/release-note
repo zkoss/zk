@@ -21,6 +21,7 @@ ZK 6.5.2
   ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
   ZK-1524: use caption in window will cause hflex="min" doesn't work
   ZK-1574: window vflex="min" calculate wrong height in tablet
+  ZK-460 : Click the arrow of the timebox/spinner that in a listbox will trigger onChange event.
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
