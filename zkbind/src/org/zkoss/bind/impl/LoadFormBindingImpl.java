@@ -29,7 +29,6 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.sys.debugger.impl.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
@@ -117,7 +116,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		}
 		
 		if(collector!=null){
-			collector.addInfo(new LoadInfo(comp,"load-form",getConditionString(ctx),
+			collector.addInfo(new LoadInfo(comp,"load-form",true,getConditionString(ctx),
 					getPropertyString(),getFormId(),bean,getArgs(),""));
 		}
 	}
@@ -125,11 +124,11 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	private String getConditionString(BindContext ctx){
 		StringBuilder condition = new StringBuilder();
 		if(getConditionType()==ConditionType.BEFORE_COMMAND){
-			condition.append("before='").append(getCommandName()).append("'");
+			condition.append("before = '").append(getCommandName()).append("'");
 		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
-			condition.append("after='").append(getCommandName()).append("'");
+			condition.append("after = '").append(getCommandName()).append("'");
 		}else{
-			condition = condition.append(ctx.getTriggerEvent()==null?"":"event="+ctx.getTriggerEvent().getName()); 
+			condition = condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
 		}
 		return condition.toString();
 	}

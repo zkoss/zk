@@ -61,8 +61,9 @@ import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.DebuggerFactory;
 import org.zkoss.bind.sys.debugger.impl.AddCommandBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.AddLoadBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.AddSaveBindingInfo;
@@ -575,7 +576,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddLoadBindingInfo(comp,"from-init-binding", "", binding.getPropertyString(), formId,bindingArgs, ""));
+			collector.addInfo(new AddLoadBindingInfo(comp,"from-init-binding",true, "", binding.getPropertyString(), formId,bindingArgs, ""));
 		}
 	}
 	
@@ -631,7 +632,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_formBindingHandler.addLoadPromptBinding(bkey, binding);
 			
 			if(collector!=null){
-				collector.addInfo(new AddLoadBindingInfo(comp, "form-load-binding", "", binding.getPropertyString(), "", bindingArgs,""));
+				collector.addInfo(new AddLoadBindingInfo(comp, "form-load-binding", true,"", binding.getPropertyString(), formId, bindingArgs,""));
 			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
@@ -644,7 +645,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_formBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddLoadBindingInfo(comp, "form-load-binding", "before='"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,""));
+						collector.addInfo(new AddLoadBindingInfo(comp, "form-load-binding",  true,"before = '"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,""));
 					}
 				}
 			}
@@ -658,7 +659,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_formBindingHandler.addLoadAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddLoadBindingInfo(comp, "form-load-binding", "after='"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,""));
+						collector.addInfo(new AddLoadBindingInfo(comp, "form-load-binding",  true,"after = '"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,""));
 					}
 				}
 			}
@@ -683,7 +684,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_formBindingHandler.addSaveBeforeBinding(cmd, binding);
 				
 				if(collector!=null){
-					collector.addInfo(new AddSaveBindingInfo(comp, "form-save-binding", "before='"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,""));
+					collector.addInfo(new AddSaveBindingInfo(comp, "form-save-binding", true,"before = '"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,""));
 				}
 			}
 		}
@@ -697,7 +698,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_formBindingHandler.addSaveAfterBinding(cmd, binding);
 				
 				if(collector!=null){
-					collector.addInfo(new AddSaveBindingInfo(comp, "form-save-binding", "after='"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,""));
+					collector.addInfo(new AddSaveBindingInfo(comp, "form-save-binding", true,"after = '"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,""));
 				}
 			}
 		}
@@ -951,7 +952,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddLoadBindingInfo(comp, "property-load-binding", "before='"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
+						collector.addInfo(new AddLoadBindingInfo(comp, "property-load-binding", "before = '"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
 					}
 				}
 			}
@@ -965,7 +966,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addLoadAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddLoadBindingInfo(comp, "property-load-binding", "after='"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
+						collector.addInfo(new AddLoadBindingInfo(comp, "property-load-binding", "after = '"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
 					}
 				}
 			}
@@ -1025,7 +1026,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addSaveBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddSaveBindingInfo(comp, "property-save-binding", "before='"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
+						collector.addInfo(new AddSaveBindingInfo(comp, "property-save-binding", "before = '"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
 					}
 				}
 			}
@@ -1039,7 +1040,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddSaveBindingInfo(comp, "property-save-binding", "after='"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
+						collector.addInfo(new AddSaveBindingInfo(comp, "property-save-binding", "after = '"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
 					}
 				}
 			}
@@ -1132,7 +1133,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_childrenBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddLoadBindingInfo(comp, "children-load-binding", "before='"+cmd+"'", binding.getPropertyString(), "", bindingArgs,""));
+						collector.addInfo(new AddLoadBindingInfo(comp, "children-load-binding", "before = '"+cmd+"'", binding.getPropertyString(), "", bindingArgs,""));
 					}
 				}
 			}
@@ -1146,7 +1147,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_childrenBindingHandler.addLoadAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddLoadBindingInfo(comp, "children-load-binding", "after='"+cmd+"'", binding.getPropertyString(), "", bindingArgs,""));
+						collector.addInfo(new AddLoadBindingInfo(comp, "children-load-binding", "after = '"+cmd+"'", binding.getPropertyString(), "", bindingArgs,""));
 					}
 				}
 			}
@@ -1982,7 +1983,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		try{
 			if(collector!=null){
 				collector.pushStack("BINDER_API");
-				collector.addInfo(new ApiInfo(comp,"binder-api","loadComponent",this,"ViewModel is "+getViewModel()));
+				//TODO check if call is not inside ZK;
+				if(false){
+					collector.addInfo(new ApiInfo(comp,"binder-api","loadComponent",this,"ViewModel is "+getViewModel()));
+				}
 			}
 			loadComponent0(comp,loadinit);
 		}finally{
@@ -2250,8 +2254,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	
 	public BindingExecutionInfoCollector getBindingExecutionInfoCollector(){
-		BindingExecutionInfoCollectorFactory factory = BindingExecutionInfoCollectorFactory.getInstance();
-		return factory==null?null:factory.getCollector(this,getViewModel());
+		DebuggerFactory factory = DebuggerFactory.getInstance();
+		return factory==null?null:factory.getExecutionInfoCollector(this);
 	}
 	
+	public BindingAnnotationInfoChecker getBindingAnnotationInfoChecker(){
+		DebuggerFactory factory = DebuggerFactory.getInstance();
+		return factory==null?null:factory.getAnnotationInfoChecker(this);
+	}
 }

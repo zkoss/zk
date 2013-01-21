@@ -12,30 +12,32 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys.debugger.impl;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.DebuggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 /**
- * The default implementation of {@link BindingExecutionInfoCollectorFactory}
+ * The default implementation of {@link DebuggerFactory}
  * it is execution scope implementation and provides client-log and system-out implementation
  * @author dennis
  * @since 6.5.2
  */
-public class DefaultExecutionInfoCollectorFactory extends BindingExecutionInfoCollectorFactory {
+public class DefaultDebuggerFactory extends DebuggerFactory {
 
 	
-	public static final String COLLECTOR_TYPE_PROP = "org.zkoss.bind.DefaultExecutionInfoCollectorFactory.type";
+	public static final String COLLECTOR_TYPE_PROP = "org.zkoss.bind.DefaultDefaultDebuggerFactory.collector-type";
 	
-	private static final String COLLECTOR_KEY = DefaultExecutionInfoCollectorFactory.class.getName()+".collector";
-	private static final Log _log = Log.lookup(DefaultExecutionInfoCollectorFactory.class);
+	private static final String COLLECTOR_KEY = DefaultDebuggerFactory.class.getName()+".collector";
+	private static final String CHECKER_KEY = DefaultDebuggerFactory.class.getName()+".checker";
+	private static final Log _log = Log.lookup(DefaultDebuggerFactory.class);
 	
 	String _type;
 	
 	@Override
-	public BindingExecutionInfoCollector getCollector(Binder binder,Object viewModel) {
+	public BindingExecutionInfoCollector getExecutionInfoCollector(Object target) {
 		
 		Execution exec = Executions.getCurrent();
 		if(exec==null) return null;
@@ -61,6 +63,21 @@ public class DefaultExecutionInfoCollectorFactory extends BindingExecutionInfoCo
 			exec.setAttribute(COLLECTOR_KEY,collector);
 		}
 		return collector;
+	}
+
+	@Override
+	public BindingAnnotationInfoChecker getAnnotationInfoChecker(Object target) {
+		Execution exec = Executions.getCurrent();
+		if(exec==null) return null;
+		BindingExecutionInfoCollector collector = getExecutionInfoCollector(target);
+		if(collector==null) return null;
+		
+		BindingAnnotationInfoChecker checker = (BindingAnnotationInfoChecker)exec.getAttribute(CHECKER_KEY);
+		if(checker==null){
+			checker = new DefaultAnnotationInfoChecker(collector);
+			exec.setAttribute(CHECKER_KEY,checker);
+		}
+		return checker;
 	}
 
 }

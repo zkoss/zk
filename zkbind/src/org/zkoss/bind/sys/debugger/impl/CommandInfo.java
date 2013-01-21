@@ -20,25 +20,22 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class CommandInfo extends ExecutionInfoBase{
+public class CommandInfo extends ValueInfo{
 
 	String _event;
 	String _commandExpr;
-	Object _value;
 	
 	public CommandInfo(Component comp,String subject, String event,String commandExpr, Object value,
 			Map<String, Object> args,String note) {
-		super("command-info", comp, subject, note);
+		super("command-info", comp, subject, value,note);
 		_event = event;
 		_commandExpr = commandExpr;
-		_value = value;
 	}
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
 		json.put("event", _event);
 		json.put("commandExpr", _commandExpr);
-		json.put("value", toString(_value,200));
 		return json;
 	}
 

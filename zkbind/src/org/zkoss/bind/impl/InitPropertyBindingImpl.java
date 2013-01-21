@@ -22,7 +22,6 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.sys.debugger.impl.LoadInfo;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;

@@ -31,6 +31,9 @@ import org.zkoss.bind.impl.AbstractAnnotatedMethodInvoker;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.DebuggerFactory;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
@@ -207,6 +210,11 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		String vmname = null;
 		Object vm = null;
 		
+		BindingAnnotationInfoChecker checker = getBindingAnnotationInfoChecker();
+		if(checker!=null){
+			checker.checkViewModel(comp);
+		}
+		
 		if(idanno==null && initanno==null){
 			return _viewModel;
 		}else if(idanno==null){
@@ -251,6 +259,12 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		final Annotation initanno = compCtrl.getAnnotation(BINDER_ATTR, INIT_ANNO);
 		Object binder = null;
 		String bname = null;
+		
+		
+		BindingAnnotationInfoChecker checker = getBindingAnnotationInfoChecker();
+		if(checker!=null){
+			checker.checkBinder(comp);
+		}
 		
 		if(idanno!=null){
 			bname = BindEvaluatorXUtil.eval(evalx, 
@@ -328,6 +342,11 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		final Annotation initanno = compCtrl.getAnnotation(VALIDATION_MESSAGES_ATTR, INIT_ANNO);
 		Object vmessages = null;
 		String vname = null;
+		
+		BindingAnnotationInfoChecker checker = getBindingAnnotationInfoChecker();
+		if(checker!=null){
+			checker.checkValidationMessages(comp);
+		}
 		
 		if(idanno!=null){
 			vname = BindEvaluatorXUtil.eval(evalx,comp,AnnotationUtil.testString(idanno.getAttributeValues(VALUE_ANNO_ATTR),
@@ -469,6 +488,11 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			}
 		}//end of class...
 	}//end of class...
+	
+	private BindingAnnotationInfoChecker getBindingAnnotationInfoChecker(){
+		DebuggerFactory factory = DebuggerFactory.getInstance();
+		return factory==null?null:factory.getAnnotationInfoChecker(this);
+	}
 	
 }//end of class...
 

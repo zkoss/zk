@@ -19,13 +19,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</preference>
 	<!-- 
 	<library-property>
-		<name>org.zkoss.bind.BindingExecutionInfoCollector.enable</name>
+		<name>org.zkoss.bind.DebuggerFactory.enable</name>
 		<value>true</value>
 	</library-property>
 	<library-property>
-		<name>org.zkoss.bind.DefaultExecutionInfoCollectorFactory.type</name>
+		<name>org.zkoss.bind.DefaultDefaultDebuggerFactory.collector-type</name>
 		<value>client</value>
 	</library-property>
+	
 	 -->
 
 	<!-- Turn on if you want to debug JavaScript.

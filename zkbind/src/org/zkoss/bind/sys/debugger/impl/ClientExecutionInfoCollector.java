@@ -26,6 +26,7 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 	public void addInfo(JSONObject info) {
 		
 		String jsonstr = info.toJSONString();
+//		System.out.println(">>"+jsonstr);
 		StringBuilder sb = new StringBuilder();
 		Object type = info.get("type");
 		sb.append("var info = ").append(jsonstr).append(";");
@@ -71,6 +72,8 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 			sb.append("'['+info.event +']\t'+ info.commandExpr");
 		}else if("add-save-binding".equals(type)){
 			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr");
+		}else{
+			sb.append("''");
 		}
 		
 		sb.append("+' / component ['+info.widget+','+info.uuid+','+info.id+']'");

@@ -23,6 +23,8 @@ import java.util.Map.Entry;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.ui.Component;
@@ -74,6 +76,11 @@ public class AnnotateBinderHelper {
 		//check if a component was binded already(by any binder)
 		if (selfBinder != null) //this component already binded ! skip all of its children
 			return;
+		
+		BindingAnnotationInfoChecker checker = ((BinderCtrl)_binder).getBindingAnnotationInfoChecker();
+		if(checker!=null){
+			checker.checkBinding(_binder, comp);
+		}
 		
 		processComponentBindings0(comp);
 		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {

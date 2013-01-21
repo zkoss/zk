@@ -26,13 +26,11 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
-import org.zkoss.bind.sys.ConditionType;
+import org.zkoss.bind.sys.ConditionType; 
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollectorFactory;
 import org.zkoss.bind.sys.debugger.impl.SaveInfo;
 import org.zkoss.bind.sys.debugger.impl.ValidationInfo;
-import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
@@ -115,7 +113,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new SaveInfo(comp,"save-form",getConditionString(ctx),
+			collector.addInfo(new SaveInfo(comp,"save-form",true,getConditionString(ctx),
 					getFormId(),getPropertyString(),form,getArgs(),""));
 		}
 	}
@@ -123,11 +121,11 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	private String getConditionString(BindContext ctx){
 		StringBuilder condition = new StringBuilder();
 		if(getConditionType()==ConditionType.BEFORE_COMMAND){
-			condition.append("before='").append(getCommandName()).append("'"); 
+			condition.append("before = '").append(getCommandName()).append("'"); 
 		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
-			condition.append("after='").append(getCommandName()).append("'"); 
+			condition.append("after = '").append(getCommandName()).append("'"); 
 		}else{
-			condition = condition.append(ctx.getTriggerEvent()==null?"":"event="+ctx.getTriggerEvent().getName()); 
+			condition = condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
 		}
 		return condition.toString();
 	}

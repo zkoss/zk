@@ -12,7 +12,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys.debugger;
 
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.sys.debugger.impl.DefaultExecutionInfoCollectorFactory;
+import org.zkoss.bind.sys.debugger.impl.DefaultDebuggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
@@ -23,30 +23,33 @@ import org.zkoss.zk.ui.UiException;
  * @author dennis
  * @since 6.5.2
  */
-public abstract class BindingExecutionInfoCollectorFactory {
+public abstract class DebuggerFactory {
 
-	private static BindingExecutionInfoCollectorFactory _factory;
+	private static DebuggerFactory _factory;
 	private static boolean _instanceSet;
 	
-	public static final String ENABLE_PROP = "org.zkoss.bind.BindingExecutionInfoCollector.enable";
-	public static final String FACTORY_CLASS_PROP = "org.zkoss.bind.BindingExecutionInfoCollectorFactory.class";
+	public static final String ENABLE_PROP = "org.zkoss.bind.DebuggerFactory.enable";
+	public static final String FACTORY_CLASS_PROP = "org.zkoss.bind.DebuggerFactory.class";
 	
 	/**
 	 * Get the collector of binder, the sub-class have to consider the thread-safe issue when implementing.
 	 * @param viewModel 
 	 * @return the BindingExecutionInfoCollector or null if isn't existed
 	 */
-	abstract public BindingExecutionInfoCollector getCollector(Binder binder, Object viewModel);
+	abstract public BindingExecutionInfoCollector getExecutionInfoCollector(Object target);
+	
+	
+	abstract public BindingAnnotationInfoChecker getAnnotationInfoChecker(Object target);
 
 	/**  
 	 * Thread safe method to get the factory instance
 	 * @return default factory, null if there is no factory existed
 	 */
-	public static BindingExecutionInfoCollectorFactory getInstance(){
+	public static DebuggerFactory getInstance(){
 		if(_instanceSet){
 			return _factory;
 		}
-		synchronized(BindingExecutionInfoCollectorFactory.class){
+		synchronized(DebuggerFactory.class){
 			if(_instanceSet){//check again
 				return _factory;
 			}
@@ -56,12 +59,12 @@ public abstract class BindingExecutionInfoCollectorFactory {
 				String clz = Library.getProperty(FACTORY_CLASS_PROP);
 				if(!Strings.isEmpty(clz)){
 					try {
-						_factory = (BindingExecutionInfoCollectorFactory)Classes.forNameByThread(clz).newInstance();
+						_factory = (DebuggerFactory)Classes.forNameByThread(clz).newInstance();
 					} catch (Exception e) {
 						throw new UiException(e.getMessage(),e);
 					}
 				}else{ 
-					_factory = new DefaultExecutionInfoCollectorFactory();
+					_factory = new DefaultDebuggerFactory();
 				}
 			}
 			return _factory;

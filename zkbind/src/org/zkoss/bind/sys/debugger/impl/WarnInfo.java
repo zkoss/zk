@@ -1,4 +1,4 @@
-/* EnterInfo.java
+/* WarnInfo.java
 
 	Purpose:
 		
@@ -18,21 +18,22 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class ApiInfo extends ExecutionInfoBase{
+public class WarnInfo extends ExecutionInfoBase{
 
-	String _api;
-	Object _obj;
+	String _attr;
+	String _anno;
 	
-	public ApiInfo(Component comp, String subject,String api, Object obj,String note) {
-		super("api-info", comp, subject, note);
-		_api = api;
-		_obj = obj;
+	public WarnInfo(Component comp,String subject, String attr,String anno,String note) {
+		super("warn-info", comp, subject, note);
+		_attr = attr;
+		_anno = anno;
 	}
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		json.put("api", _api);
-		json.put("obj", toString(_obj,200));
+		json.put("attr", _attr);
+		json.put("anno", _anno);
 		return json;
 	}
+
 }

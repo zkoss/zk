@@ -20,20 +20,24 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class SaveInfo extends ExecutionInfoBase{
+public class SaveInfo extends ValueInfo{
 
 	String _condition;
 	String _fromExpr;
 	String _toExpr;
-	Object _value;
+	boolean _formBinding;
 	
-	public SaveInfo(Component comp, String subject, String condition,String fromExpr, String toExpr, Object value,
+	public SaveInfo(Component comp, String subject,boolean formBinding, String condition,String fromExpr, String toExpr, Object value,
 			Map<String, Object> args,String note) {
-		super("save-info", comp, subject, note);
+		super("save-info", comp, subject,value,note);
 		_condition = condition;
 		_fromExpr = fromExpr;
 		_toExpr = toExpr;
-		_value = value;
+		_formBinding = formBinding;
+	}
+	public SaveInfo(Component comp, String subject, String condition,String fromExpr, String toExpr, Object value,
+			Map<String, Object> args,String note) {
+		this(comp, subject, false, condition, fromExpr, toExpr, value, args, note);
 	}
 	
 	public JSONObject toJSON(){
@@ -41,7 +45,9 @@ public class SaveInfo extends ExecutionInfoBase{
 		json.put("condition", _condition);
 		json.put("fromExpr", _fromExpr);
 		json.put("toExpr", _toExpr);
-		json.put("value", toString(_value,200));
+		if(_formBinding){
+			json.put("formBinding", true);
+		}
 		return json;
 	}
 

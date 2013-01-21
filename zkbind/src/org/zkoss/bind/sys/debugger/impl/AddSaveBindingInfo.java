@@ -25,20 +25,30 @@ public class AddSaveBindingInfo extends ExecutionInfoBase{
 	String _condition;
 	String _fromExpr;
 	String _toExpr;
+	boolean _formBinding;
 	
-	public AddSaveBindingInfo(Component comp, String subject, String condition,String fromExpr, String toExpr,
+	public AddSaveBindingInfo(Component comp, String subject,boolean formBinding, String condition,String fromExpr, String toExpr,
 			Map<String, Object> args,String note) {
 		super("add-save-binding", comp, subject, note);
 		_condition = condition;
 		_fromExpr = fromExpr;
 		_toExpr = toExpr;
+		_formBinding = formBinding;
 	}
+	public AddSaveBindingInfo(Component comp, String subject, String condition,String fromExpr, String toExpr,
+			Map<String, Object> args,String note) {
+		this(comp, subject, false, condition, fromExpr, toExpr, args, note);
+	}
+	
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
 		json.put("condition", _condition);
 		json.put("fromExpr", _fromExpr);
 		json.put("toExpr", _toExpr);
+		if(_formBinding){
+			json.put("formBinding", true);
+		}
 		return json;
 	}
 
