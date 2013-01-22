@@ -105,45 +105,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
 	}
 	
-	function _getContentEdgeHeight(cwgt) {
-		var p = cwgt.$n(),
-			fc = cwgt.firstChild,
-			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
-			c = fc ? fc.$n() : p.firstChild,
-			zkp = zk(p),
-			h = zkp.padBorderHeight();
-		
-		if (c) {
-			c = c.parentNode;
-			while (c && p != c) {
-				var zkc = zk(c);
-				h += zkc.padBorderHeight() + zkc.sumStyles("tb", jq.margins);
-				c = c.parentNode;
-			}
-			return h;
-		}
-		return 0;
-	}
-	function _getContentEdgeWidth(cwgt) {
-		var p = cwgt.$n(),
-			fc = cwgt.firstChild,
-			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
-			c = fc ? fc.$n() : p.firstChild,
-			zkp = zk(p),
-			w = zkp.padBorderWidth();
-		
-		if (c) {
-			c = c.parentNode;
-			while (c && p != c) {
-				var zkc = zk(c);
-				w += zkc.padBorderWidth() + zkc.sumStyles("lr", jq.margins);
-				c = c.parentNode;
-			}
-			return w;
-		}
-		return 0;
-	}
-	
 	// check whether the two elements are the same baseline, if so, we need to
 	// sum them together.
 	function _isSameBaseline(ref, cur, vertical) {
@@ -259,8 +220,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var margin = wgt.getMarginSize_(o);
 			if (zk.safari && margin < 0) 
 				margin = 0;
-
-			sz = wgt.setFlexSize_({height:(max + _getContentEdgeHeight(wgt) + margin)}, true);
+			sz = wgt.setFlexSize_({height:(max + wgt.getContentEdgeHeight_() + margin)}, true);
 			if (sz && sz.height >= 0)
 				wgt._vflexsz = sz.height + margin;
 			wgt.afterChildrenMinFlex_('h');
@@ -365,7 +325,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var margin = wgt.getMarginSize_(o);
 			if (zk.safari && margin < 0)
 				margin = 0;
-			var sz = wgt.setFlexSize_({width:(max + _getContentEdgeWidth(wgt) + margin)}, true);
+			var sz = wgt.setFlexSize_({width:(max + wgt.getContentEdgeWidth_() + margin)}, true);
 			if (sz && sz.width >= 0)
 				wgt._hflexsz = sz.width + margin;
 			wgt.afterChildrenMinFlex_('w');

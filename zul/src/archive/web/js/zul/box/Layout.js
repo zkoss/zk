@@ -201,6 +201,22 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var el = wgt.$n(); //Bug ZK-1578: should get child size instead of chdex size
 		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
 	},
+	//Bug ZK-1577: should consider spacing size of all chdex node
+	getContentEdgeHeight_: function () {
+		var h = 0;
+		for (var kid = this.firstChild; kid; kid = kid.nextSibling)
+			h += zk(kid.$n('chdex')).paddingHeight();
+		
+		return h;
+	},
+	//Bug ZK-1577: should consider spacing size of all chdex node
+	getContentEdgeWidth_: function () {
+		var w = 0;
+		for (var kid = this.firstChild; kid; kid = kid.nextSibling)
+			w += zk(kid.$n('chdex')).paddingWidth();
+		
+		return w;
+	},
 	beforeChildrenFlex_: function(child) {
 		// optimized for performance
 		this._shallSize = false;
@@ -235,7 +251,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-						cp.style.height = jq.px0(zkxc.revisedHeight(c.offsetHeight + zkc.sumStyles("tb", jq.margins)));
+						var h = c.offsetHeight + zkc.sumStyles("tb", jq.margins) + zkxc.paddingHeight(); //Bug ZK-1577: should consider padding size
+						cp.style.height = jq.px0(zkxc.revisedHeight(h));
 						if (vert) 
 							hgh -= cp.offsetHeight + zkxc.sumStyles("tb", jq.margins);
 					} else {
@@ -254,7 +271,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-						cp.style.width = jq.px0(zkxc.revisedWidth(c.offsetWidth + zkc.sumStyles("lr", jq.margins)));
+						var w = c.offsetWidth + zkc.sumStyles("lr", jq.margins) + zkxc.paddingWidth(); //Bug ZK-1577: should consider padding size
+						cp.style.width = jq.px0(zkxc.revisedWidth(w));
 						if (!vert)
 							wdh -= cp.offsetWidth + zkxc.sumStyles("lr", jq.margins);
 					} else {
