@@ -19,6 +19,7 @@ ZK 6.5.2
   ZK-1529: Ordering Issue in "selectedItems" in listbox component
   ZK-1528: When binding a Java List as a listbox's model in paging mold, add and delete will throw exceptions
   ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
+  ZK-1578: window hflex="min" not work
   ZK-1524: use caption in window will cause hflex="min" doesn't work
   ZK-1574: window vflex="min" calculate wrong height in tablet
   ZK-460 : Click the arrow of the timebox/spinner that in a listbox will trigger onChange event.

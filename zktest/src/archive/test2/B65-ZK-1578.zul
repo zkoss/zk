@@ -1,0 +1,19 @@
+<zk>
+	Should see window width is around 200px.
+	<window title="Window" border="normal" hflex="min">
+		<vlayout hflex="min">
+			<grid hflex="min">
+				<columns>
+					<column hflex="min" />
+				</columns>
+				<rows>
+					<row>
+						<textbox width="157px" />
+					</row>
+				</rows>
+			</grid>
+			<button label="Login" width="100px" />
+		</vlayout>
+	</window>
+	<div style="width:200px; background: blue; color: white">200px</div>
+</zk>
