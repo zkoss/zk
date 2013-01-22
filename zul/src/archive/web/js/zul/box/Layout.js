@@ -85,6 +85,12 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (this._shallSize)
 			this.syncSize();
 	},
+	//Bug ZK-1579: should resize if child's visible state changed.
+	onChildVisible_: function () {
+		this.$supers('onChildVisible_', arguments);
+		if (this.desktop) 
+			this._shallSize = true;
+	},
 	onChildAdded_: function () {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop)
