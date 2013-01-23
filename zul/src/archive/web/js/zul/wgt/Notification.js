@@ -128,7 +128,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		
 		var pzcls = this.getZclass() + '-pointer',
 			n = this.$n(),
-			refn = ref.$n()
+			refn = ref.$n(),
 			dir = this._dir,
 			zkp = zk(p),
 			pw = zkp.borderWidth(),
