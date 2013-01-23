@@ -1360,8 +1360,8 @@ jq(el).zk.center(); //same as 'center'
 					p.appendChild(el);
 				
 				var cf, p;
-				// ZK-851, ZK-1587: also trigger blur in IE to make sure fire onChange ASAP
-				if ((zk.ff || zk.opera || zk.ie) && (cf = zk._prevFocus) && 
+				// ZK-851
+				if ((zk.ff || zk.opera) && (cf = zk._prevFocus) && 
 					(p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf) && 
 					cf.getInputNode)
 					jq(cf.getInputNode()).trigger('blur');
