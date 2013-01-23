@@ -1,0 +1,13 @@
+<zk>
+	<window border="normal" title="hello">
+		<vlayout>
+			<button popup="pop" label="1: Click to open popup" />
+			<label value="3: value should be changed:" />
+			<label id="textlabel" value="" />
+		</vlayout>
+		<popup id="pop" onOpen="textlabel.value = tbx.value">
+			<textbox id="tbx" value="edit text here" /><separator />
+			<label value="2: close popup by clicking outside the popup area"/>
+		</popup>
+	</window>
+</zk>
