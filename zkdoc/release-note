@@ -25,6 +25,7 @@ ZK 6.5.2
   ZK-460 : Click the arrow of the timebox/spinner that in a listbox will trigger onChange event.
   ZK-1582: NullPointerException in Servlets.browser
   ZK-1579: hflex="1" not work after changing visible state
+  ZK-1535: Bug in ZK 6.5.1 :: Calendar component does not display the 6th week
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

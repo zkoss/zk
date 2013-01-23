@@ -2445,7 +2445,7 @@ function () {
 				var result = "";
 				this.push = function () {
 					for (var i = 0, j = arguments.length; i<j;i++)
-						if (arguments[i]) //skip null or undefined arguments
+						if (arguments[i] != null || arguments[i] != undefined ) //skip null or undefined arguments, bug ZK-1535: don't skip 0
 							result += arguments[i];
 				};
 				this.join = function () {
