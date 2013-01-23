@@ -6,6 +6,7 @@ ZK 6.5.2
   ZK-1548: Move some zkbind fundamental features to community edition.
   ZK-1560: Configuration: allow user to abort the waiting thread if it takes too long to execute (activation)
   ZK-1048: Form Binding and binding validationMessages to components' errorMessage (error popup)
+  ZK-1583: notification arrow position shall align in the center of reference widget
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
@@ -27,6 +28,11 @@ ZK 6.5.2
   ZK-1579: hflex="1" not work after changing visible state
   ZK-1535: Bug in ZK 6.5.1 :: Calendar component does not display the 6th week
   ZK-1577: vlayout default spacing missing when groupbox has hflex="1"
+  ZK-1531: Button with an image attribute will fire both click and rightClick events when right click the mouse in Chrome
+  ZK-1523: JS Error if echoEvent to the component under unselected tab
+  ZK-1381: Show busy on panel with borderlayout is not working
+  ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
+  ZK-1587: Textbox value is wrong when popup close, IE only
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
@@ -234,7 +240,7 @@ Sep 12, 2012
   + Change Checkbox#setValue(String) to Checkbox#setValue(Object)
   --------
 ZK 6.0.4
-
+Dec 19, 2012
 * Features
   
 * Bugs
@@ -247,6 +253,7 @@ ZK 6.0.4
 
   --------
 ZK 6.0.3
+Oct 30, 2012
 * Features
   ZK-1301: The buttons in the Messagebox shall use autodisable
   ZK-1312: formattedNumber & formattedDate should use proper Locale & Timezone

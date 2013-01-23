@@ -237,7 +237,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
 		jq(n).replaceWith(
-		'<div id="'+maskId+'" style="display:none">'  //$anchor size changed if using visibility: hidden
+		'<div id="'+maskId+'" style="display:none">' //$anchor size changed if using visibility: hidden
 		+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 		+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 		+ '<div id="'+maskId+'-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
