@@ -2,6 +2,7 @@
 ZK 6.0.5
 
 * Features
+  ZK-1583: notification arrow position shall align in the center of reference widget
 
 * Bugs
   ZK-1531: Button with an image attribute will fire both click and rightClick events when right click the mouse in Chrome
