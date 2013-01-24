@@ -24,7 +24,7 @@ import org.zkoss.zk.au.AuResponse;
 
 /**
  * A response to ask client to 'outer' the widgets and all its
- * descendants of the associatethe specified component or page.
+ * descendants of the associate specified component or page.
  *
  * <p>data[0]: the component or UUID of page to outer
  * data[1]: the new content
