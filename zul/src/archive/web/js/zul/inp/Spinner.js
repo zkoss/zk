@@ -282,6 +282,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		}
 	},
 	doBlur_: function (evt) {
+		var btn = this.$n('btn');
+		if (zk.ie <= 8 && btn && !this._instant && jq(btn).hasClass(this.getZclass()+'-btn-over'))
+			return; //Bug ZK-460: IE 6-8 only. If still focus on spinner, should not fire onChange.  
 		var n = this.$n();
 		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));

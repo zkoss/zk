@@ -595,7 +595,7 @@ zjq.prototype = {
 	 * @since 5.0.8
 	 */
 	hasVScroll: function () {
-		var n;
+		var n, v;
 		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 11 ? v: 0;
 	},
 	/** Tests if the first matched DOM element has the horizontal scrollbar
@@ -604,7 +604,7 @@ zjq.prototype = {
 	 * @since 5.0.8
 	 */
 	hasHScroll: function () {
-		var n;
+		var n, v;
 		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v: 0;
 	},
 

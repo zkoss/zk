@@ -1,0 +1,14 @@
+<zk>
+	<label multiline="true">
+	iPad/Android Only
+	Should see the two window in the same height.
+	</label>
+	<hlayout>
+		<window vflex="min" hflex="min" title="window" border="normal">
+			<div width="200px" height="100px" />
+		</window>
+		<window hflex="min" title="window" border="normal">
+			<div width="200px" height="100px" />
+		</window>
+	</hlayout>
+</zk>

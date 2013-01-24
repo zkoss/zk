@@ -2445,7 +2445,7 @@ function () {
 				var result = "";
 				this.push = function () {
 					for (var i = 0, j = arguments.length; i<j;i++)
-						if (arguments[i]) //skip null or undefined arguments
+						if (arguments[i] != null || arguments[i] != undefined ) //skip null or undefined arguments, bug ZK-1535: don't skip 0
 							result += arguments[i];
 				};
 				this.join = function () {
@@ -3072,6 +3072,44 @@ unbind_: function (skipper, after) {
 	},
 	getMarginSize_: function (attr) { //'w' for width or 'h' for height
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
+	},
+	getContentEdgeHeight_: function () {
+		var p = this.$n(),
+			fc = this.firstChild,
+			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
+			c = fc ? fc.$n() : p.firstChild,
+			zkp = zk(p),
+			h = zkp.padBorderHeight();
+		
+		if (c) {
+			c = c.parentNode;
+			while (c && p != c) {
+				var zkc = zk(c);
+				h += zkc.padBorderHeight() + zkc.sumStyles("tb", jq.margins);
+				c = c.parentNode;
+			}
+			return h;
+		}
+		return 0;
+	},
+	getContentEdgeWidth_: function () {
+		var p = this.$n(),
+			fc = this.firstChild,
+			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
+			c = fc ? fc.$n() : p.firstChild,
+			zkp = zk(p),
+			w = zkp.padBorderWidth();
+		
+		if (c) {
+			c = c.parentNode;
+			while (c && p != c) {
+				var zkc = zk(c);
+				w += zkc.padBorderWidth() + zkc.sumStyles("lr", jq.margins);
+				c = c.parentNode;
+			}
+			return w;
+		}
+		return 0;
 	},
 	fixFlex_: function() {
 		zFlex.fixFlex(this);

@@ -252,6 +252,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
+	//@Override, Bug ZK-1524: caption children should not considered.
+	getChildMinSize_: function (attr, wgt) {
+		if (!wgt.$instanceof(zul.wgt.Caption))
+			return this.$supers('getChildMinSize_', arguments);
+	},
 
 	domClass_: function () {
 		var html = this.$supers('domClass_', arguments);

@@ -1,0 +1,11 @@
+<zk>
+	<label multiline="true">
+	1. Open datebox calendar.
+	2. Change to December 2012 or March 2013, should see 6 weeks showed.
+	3. check calendar also.
+	</label>
+	<hlayout>
+		<datebox />
+		<calendar />
+	</hlayout>
+</zk>

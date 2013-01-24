@@ -1044,6 +1044,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers('onChildVisible_', arguments);
 		if((child == this.tbar || child == this.bbar || child == this.fbar) && this.$n())
 			this._fixHgh();
+	},
+	//@Override, Bug ZK-1524: caption children should not considered.
+	getChildMinSize_: function (attr, wgt) {
+		if (!wgt.$instanceof(zul.wgt.Caption))
+			return this.$supers('getChildMinSize_', arguments);
 	}
 }, { //static
 	//drag

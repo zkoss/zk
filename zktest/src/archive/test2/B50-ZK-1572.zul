@@ -1,0 +1,36 @@
+<zk>
+	<label multiline="true">
+		IE9 only
+		1. Scroll to right
+		2. Should not see the Text of the columns piled up in the first column after the freezed columns. 
+	</label>
+	<window id="testWindow" visible="true">
+		<hbox width="600px">
+			<listbox width="100%" height="400px" style="background-image: none; background-color: rgb(255, 255, 255);" mold="paging" >
+				<frozen style="background: #DFDED8" columns="2">
+					<div style="padding: 0 10px;" />
+				</frozen>
+				<listhead sizable="true">
+					<listheader align="center" width="100px" label="Col1" />
+					<listheader align="center" width="100px" label="Col2" />
+					<listheader align="center" width="100px" label="Col3" />
+					<listheader label="Subject" width="100px" sort="auto"/>
+					<listheader label="Received" width="100px" sort="auto"/>
+					<listheader align="center" width="100px" label="Col6" />
+					<listheader align="center" width="100px" label="Col7" />
+					<listheader align="center" width="100px" label="Col8" />
+				</listhead>
+				<listitem>
+					<listcell label="Line 1" />
+					<listcell label="Line 1 col 2" />
+					<listcell label="Line 1 test" />
+					<listcell label="ZK Jet 0.8.0 is released" />
+					<listcell label="2008/11/17 17:41:29" />
+					<listcell label="2008/11/17 17:41:29" />
+					<listcell label="2008/11/17 17:41:29" />
+					<listcell label="2008/11/17 17:41:29" />
+				</listitem>
+			</listbox>
+		</hbox>
+	</window>
+</zk>
