@@ -74,16 +74,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return _tt_tip = _tt_ref = null;
 
 			var params = inf.params,
-				// B60-ZK-1222
-				//
-				// If the tooltip appears exactly at mouse pointer, a tooltipout event 
-				// will be triggered that closes the tooltip immediately, then another 
-				// tooltipover event will open the tooltip again...
-				//
-				// This bug has been reported to appear in firefox only.
 			    currentPointer = zk.currentPointer,
-				xy = params.x !== undefined ? [params.x, params.y]
-							: zk.ff ? [currentPointer[0]+1, currentPointer[1]+1] : currentPointer;
+				xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
 			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
 		}
 	}
@@ -93,6 +85,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var tip = _tt_tip;
 		if (tip) {
+			// Bug ZK-1222, ZK-1594
+			//
+			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event 
+			// will be triggered again that closes the tooltip immediately, then another 
+			// TooltipOver event will open the tooltip again...
+			// 
+			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
+	    	if (zk.ff) {
+				var $tip = jq(tip.$n()),
+					$tipOff = $tip.offset(),
+					pointer = zk.currentPointer;
+				if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width())) &&
+					(pointer[1] >= $tipOff.top  && pointer[1] <= ($tipOff.top + $tip.height())))
+					return;
+			}
 			_tt_tip = _tt_ref = null;
 			tip.close({sendOnOpen:true});
 		}
