@@ -33,6 +33,7 @@ ZK 6.5.2
   ZK-1381: Show busy on panel with borderlayout is not working
   ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
   ZK-1589: Components inside HtmlNativeComponent doesn't unbind when invoke invalidate, with zkmax only
+  ZK-1569: vbox content disappear after browser resizing
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
