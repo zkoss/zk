@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.impl.BinderUtil.UtilContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
@@ -148,8 +149,13 @@ public class AnnotateBinderHelper {
 		}
 		
 		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		for(String cmd : cmdExprs) {
-			_binder.addCommandBinding(comp, propName, cmd, parsedArgs);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			for(String cmd : cmdExprs) {
+				_binder.addCommandBinding(comp, propName, cmd, parsedArgs);
+			}
+		}finally{
+			BinderUtil.popContext();
 		}
 	}
 	
@@ -180,8 +186,13 @@ public class AnnotateBinderHelper {
 		}
 		
 		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		for(String cmd : cmdExprs) {
-			_binder.addGlobalCommandBinding(comp, propName, cmd, parsedArgs);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			for(String cmd : cmdExprs) {
+				_binder.addGlobalCommandBinding(comp, propName, cmd, parsedArgs);
+			}
+		}finally{
+			BinderUtil.popContext();
 		}
 	}
 	
@@ -238,7 +249,13 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addReferenceBinding(comp, propName, loadExpr, parsedArgs);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addReferenceBinding(comp, propName, loadExpr, parsedArgs);
+		}finally{
+			BinderUtil.popContext();
+		}
+		
 	}
 	
 	private void processPropertyInit(Component comp, String propName, Annotation ann,ExpressionAnnoInfo converterInfo) {
@@ -259,8 +276,13 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addPropertyInitBinding(comp, propName, initExpr, parsedArgs, converterInfo == null ? null : converterInfo.expr, 
-				converterInfo == null ? null : converterInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addPropertyInitBinding(comp, propName, initExpr, parsedArgs, converterInfo == null ? null : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	//process @bind(expr) 
@@ -288,7 +310,9 @@ public class AnnotateBinderHelper {
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 
 		try{
-			BinderUtil.pushContext().setIgnoreAccessCreationWarn(true);
+			UtilContext ctx = BinderUtil.pushContext();
+			ctx.setIgnoreAccessCreationWarn(true);
+			ctx.setCurrentLocation(ann.getLocation());
 			
 			_binder.addPropertyLoadBindings(comp, propName,
 					expr, null, null, parsedArgs, 
@@ -339,12 +363,17 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addPropertyLoadBindings(comp, propName,
-			loadExpr, 
-			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
-			converterInfo == null ? null : converterInfo.expr, 
-			converterInfo == null ? null : converterInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addPropertyLoadBindings(comp, propName,
+					loadExpr, 
+					beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
+					afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
+					converterInfo == null ? null : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 
 	private void processPropertySaveBindings(Component comp, String propName, Annotation ann, ExpressionAnnoInfo converterInfo, ExpressionAnnoInfo validatorInfo) {
@@ -371,13 +400,18 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addPropertySaveBindings(comp, propName,saveExpr, 
-			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
-			converterInfo == null ? null : converterInfo.expr, 
-			converterInfo == null ? null : converterInfo.args,
-			validatorInfo == null ? null : validatorInfo.expr, 
-			validatorInfo == null ? null : validatorInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addPropertySaveBindings(comp, propName,saveExpr, 
+					beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
+					afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
+					converterInfo == null ? null : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args,
+					validatorInfo == null ? null : validatorInfo.expr, 
+					validatorInfo == null ? null : validatorInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	private void processFormBindings(Component comp) {
@@ -442,7 +476,12 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addFormInitBinding(comp, formId,initExpr, parsedArgs);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addFormInitBinding(comp, formId,initExpr, parsedArgs);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	private void processFormLoadBindings(Component comp, String formId,Annotation ann) {
@@ -469,10 +508,15 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addFormLoadBindings(comp, formId,
-			loadExpr, 
-			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addFormLoadBindings(comp, formId,
+					loadExpr, 
+					beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
+					afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs);
+		}finally{
+			BinderUtil.popContext();
+		}		
 	}
 	
 	private void processFormSaveBindings(Component comp, String formId, Annotation ann, ExpressionAnnoInfo validatorInfo) {
@@ -499,11 +543,16 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addFormSaveBindings(comp, formId, saveExpr, 
-			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
-			validatorInfo == null ? null : validatorInfo.expr, 
-			validatorInfo == null ? null : validatorInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addFormSaveBindings(comp, formId, saveExpr, 
+					beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
+					afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
+					validatorInfo == null ? null : validatorInfo.expr, 
+					validatorInfo == null ? null : validatorInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	
@@ -553,9 +602,14 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addChildrenInitBinding(comp, initExpr, parsedArgs,
-				converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
-				converterInfo == null ? null : converterInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addChildrenInitBinding(comp, initExpr, parsedArgs,
+					converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	private String getDefaultChildBindingConverter(){
@@ -587,10 +641,14 @@ public class AnnotateBinderHelper {
 		}
 			
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-
-		_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs,
-				converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
-				converterInfo == null ? null : converterInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs,
+					converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	private void processChildrenLoadBindings(Component comp, Annotation ann, ExpressionAnnoInfo converterInfo){
@@ -617,11 +675,16 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
-		_binder.addChildrenLoadBindings(comp, loadExpr, 
-			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs,
-			converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
-			converterInfo == null ? null : converterInfo.args);
+		try{
+			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
+			_binder.addChildrenLoadBindings(comp, loadExpr, 
+					beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
+					afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs,
+					converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	

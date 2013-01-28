@@ -13,6 +13,7 @@ package org.zkoss.bind.sys.debugger.impl;
 
 import java.util.Map;
 
+import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Component;
 
@@ -20,22 +21,20 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class AddCommandBindingInfo extends AddBindingInfoBase{
+public class AddBindingInfoBase extends ExecutionInfoBase{
 
-	String _event;
-	String _commandExpr;
+	String _location;
 	
-	public AddCommandBindingInfo(Component comp,String subject, String event,String commandExpr,
-			Map<String, Object> args,String note) {
-		super("add-command-binding", comp, subject, note);
-		_event = event;
-		_commandExpr = commandExpr;
+	protected AddBindingInfoBase(String type,Component comp,String subject,String note){
+		super(type,comp,subject,note);
+		_location = BinderUtil.hasContext()?BinderUtil.getContext().getCurrentLocationMessage():null;
 	}
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		json.put("event", _event);
-		json.put("commandExpr", _commandExpr);
+		if(_location!=null){
+			json.put("location", _location);
+		}
 		return json;
 	}
 
