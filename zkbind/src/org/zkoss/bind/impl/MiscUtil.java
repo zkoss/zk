@@ -17,7 +17,12 @@ import java.lang.reflect.Modifier;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.util.resource.Location;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * internal use only misc util
@@ -80,5 +85,62 @@ public class MiscUtil {
 			return (T)v;
 		}
 		return null;
+	}
+	
+	
+	public static String formatLocationMessage(String message,Object obj){
+		if(obj==null) return message;
+		if(obj instanceof Component){
+			return formatLocationMessage(message,(Component)obj);
+		}else if(obj instanceof Annotation){
+			return formatLocationMessage(message,(Annotation)obj);
+		}else if(obj instanceof Location){
+			return formatLocationMessage(message,(Location)obj);
+		}else{
+			return formatLocationMessage(message,(Location)null);
+		}
+	}
+	
+	public static String formatLocationMessage(String message,Component comp){
+		if(comp==null) return message;
+		return formatLocationMessage(message,toComponentLocation(comp));
+	}
+
+	private static Location toComponentLocation(Component comp) {
+		//TODO a better way to get it without break any compatibility (use getLocation in Component/ComponentCtrl is too strong
+		if(comp instanceof AbstractComponent){
+			try {
+				//this implement is very easy to be break in future version.
+				Field field = AbstractComponent.class.getField("_loc");
+				field.setAccessible(true);
+				return (Location)field.get(comp);
+			} catch (Exception x) {}
+		}
+		return null;
+	}
+
+	public static String formatLocationMessage(String message,Annotation anno){
+		if(anno==null) return message;
+		return formatLocationMessage(message,anno.getLocation());
+	}
+
+	public static String formatLocationMessage(String message,Location loc){
+		if(loc==null) return message;
+		String path = loc.getPath();
+		int ln = loc.getLineNumber();
+		int cn = loc.getColumnNumber();
+		StringBuilder sb = new StringBuilder();
+		if(message!=null){
+			sb.append(message);
+		}
+		sb.append(" at [").append(path);
+		if(ln>=0){
+			sb.append(", line:").append(ln);
+			if(cn>=0){
+				sb.append(", col: ").append(cn);
+			}
+		}
+		sb.append("]");
+		return sb.toString();
 	}
 }

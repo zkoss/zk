@@ -124,7 +124,7 @@ public abstract class AbstractListModelConverter<C extends Component> implements
 	@SuppressWarnings("rawtypes")
 	public Object coerceToBean(Object val, C comp, BindContext ctx) {
 		if (val == null) {
-			throw new NullPointerException("val");
+			throw new NullPointerException("value");
 		}
 		if (val instanceof ListModelSet) {
 			return ((ListModelSet)val).getInnerSet();
