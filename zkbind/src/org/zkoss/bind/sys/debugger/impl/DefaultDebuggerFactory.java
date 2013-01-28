@@ -53,6 +53,8 @@ public class DefaultDebuggerFactory extends DebuggerFactory {
 			}
 			if("client".equals(_type)){
 				collector = new ClientExecutionInfoCollector();
+			}else if("client-informer".equals(_type)){
+				collector = new ClientInformerExecutionInfoCollector();
 			}else if("system-out".equals(_type)){
 				collector = new SystemOutExecutionInfoCollector();
 			}else{

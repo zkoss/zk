@@ -1,4 +1,4 @@
-/* AddSaveBindingInfo.java
+/* AddBindingInfoBase.java
 
 	Purpose:
 		
@@ -11,8 +11,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys.debugger.impl;
 
-import java.util.Map;
-
 import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Component;
@@ -21,11 +19,11 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class AddBindingInfoBase extends ExecutionInfoBase{
+public class LocationInfoBase extends ExecutionInfoBase{
 
 	String _location;
 	
-	protected AddBindingInfoBase(String type,Component comp,String subject,String note){
+	protected LocationInfoBase(String type,Component comp,String subject,String note){
 		super(type,comp,subject,note);
 		_location = BinderUtil.hasContext()?BinderUtil.getContext().getCurrentLocationMessage():null;
 	}

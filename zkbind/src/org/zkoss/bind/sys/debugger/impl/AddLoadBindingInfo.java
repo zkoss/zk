@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class AddLoadBindingInfo extends AddBindingInfoBase{
+public class AddLoadBindingInfo extends LocationInfoBase{
 
 	String _condition;
 	String _fromExpr;

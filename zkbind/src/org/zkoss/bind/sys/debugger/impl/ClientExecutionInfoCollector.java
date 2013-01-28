@@ -30,9 +30,7 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 		StringBuilder sb = new StringBuilder();
 		Object type = info.get("type");
 		sb.append("var info = ").append(jsonstr).append(";");
-		sb.append("if(typeof zkBindInformer != 'undefined'){");
-		sb.append("zkBindInformer.addExecutionInfo(info);");
-		sb.append("}else if(console && typeof console.log == 'function'){");
+		sb.append("if(console && typeof console.log == 'function'){");
 		if(!_start){
 			sb.append("console.log('=======================================');");
 		}
@@ -48,39 +46,37 @@ public class ClientExecutionInfoCollector extends AbstractExecutionInfoCollector
 		}
 		
 		if("add-load-binding".equals(type) || "add-command-binding".equals(type) || "add-save-binding".equals(type)){
-			sb.append("ADD-BINDING ['+info.subject+']\t'+");
+			sb.append("ADD-BINDING ['+info.subject+']\t' +");
 		}else{
-			sb.append("['+info.subject+']\t'+");
+			sb.append("['+info.subject+']\t' +");
 		}
 		if("api-info".equals(type)){
-			sb.append("'['+info.api +'] on ['+info.value+']'");
+			sb.append("'['+info.api +'] on ['+info.value+']' +");
 		}else if("event-info".equals(type)){
-			sb.append("'['+info.event +']'");
+			sb.append("'['+info.event +']' +");
 		}else if("load-info".equals(type)){
-			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
+			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+'\t= '+info.value +");
 		}else if("command-info".equals(type)){
-			sb.append("'['+info.event +']\t'+ info.commandExpr +'\t= '+info.value");
+			sb.append("'['+info.event +']\t'+ info.commandExpr +'\t= '+info.value+");
 		}else if("validation-info".equals(type)){
-			sb.append("info.validatorExpr +'\t= '+info.validator +'\t result = '+info.result");
+			sb.append("info.validatorExpr +'\t= '+info.validator +'\t result = '+info.result +");
 		}else if("save-info".equals(type)){
-			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr+'\t= '+info.value");
+			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr+'\t= '+info.value +");
 		}else if("notify-info".equals(type)){
-			sb.append("'['+info.base +']['+ info.prop+']'");
+			sb.append("'['+info.base +']['+ info.prop+']'+");
 		}else if("add-load-binding".equals(type)){
-			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr");
+			sb.append("'['+info.condition+']\t'+info.fromExpr+' > '+info.toExpr+' ' + info.location +");
 		}else if("add-command-binding".equals(type)){
-			sb.append("'['+info.event +']\t'+ info.commandExpr");
+			sb.append("'['+info.event +']\t'+ info.commandExpr+' ' + info.location + ");
 		}else if("add-save-binding".equals(type)){
-			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr");
-		}else{
-			sb.append("''");
+			sb.append("'['+info.condition+']\t'+ info.fromExpr+' > '+info.toExpr+' ' + info.location +");
 		}
 		
-		sb.append("+' / component ['+info.widget+','+info.uuid+','+info.id+']'");
+		sb.append("' / component ['+info.widget+','+info.uuid+','+info.id+']' + ");
 		if(!Strings.isEmpty((String)info.get("note"))){
-			sb.append("+'\t*'+info.note");
+			sb.append("'\t*'+info.note + ");
 		}
-		sb.append(");}");
+		sb.append("'');}");
 		Clients.evalJavaScript(sb.toString());
 		if(!_start){
 			_start = true;

@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-class ValueInfo extends ExecutionInfoBase{
+class ValueInfo extends LocationInfoBase{
 
 	Object _value;
 	

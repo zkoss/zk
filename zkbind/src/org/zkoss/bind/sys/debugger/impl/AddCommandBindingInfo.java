@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class AddCommandBindingInfo extends AddBindingInfoBase{
+public class AddCommandBindingInfo extends LocationInfoBase{
 
 	String _event;
 	String _commandExpr;
