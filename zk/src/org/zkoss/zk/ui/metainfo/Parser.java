@@ -49,6 +49,7 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.xel.util.MethodFunction;
+import org.zkoss.xml.Locators;
 import org.zkoss.web.servlet.Servlets;
 	
 import org.zkoss.zk.ui.WebApp;
@@ -830,6 +831,10 @@ public class Parser {
 						compInfo.setImplementation(use);
 						//Resolve later since might defined in zscript
 				}
+			}
+
+			if(el.getLocator()!=null){
+				compInfo.setLocation(Locators.toLocation(el.getLocator()));
 			}
 
 			String ifc = null, unless = null,
