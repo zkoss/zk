@@ -29,9 +29,9 @@ import org.zkoss.zk.au.AuRequest;
  * <p>Application isn't really aware the existence of a stub component.
  * Rather, it is used by ZK Loader to minimize the footprint, if
  * it found a component doesn't have to maintain the states at the server
- * after renderred.
+ * after rendered.
  * For example, {@link org.zkoss.zk.ui.HtmlNativeComponent} and stub-only components
- * will degenerate to {@link StubComponent} or {@link StubsComponent} after renderred.
+ * will degenerate to {@link StubComponent} or {@link StubsComponent} after rendered.
  * Refer {@link Component#setStubonly} for details about a stub-only component.
  *
  * <p>A component that wants to degenerate to a stub component usually

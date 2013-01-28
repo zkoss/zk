@@ -270,7 +270,9 @@ public class AnnotationHelper {
 				//Note: we don't decode \x. Rather, we perserve it such
 				//that the data binder can use them
 		}
-		add(annotName, attrs);
+
+		//TODO pass loc only in some condition, e.g. debug or non-production
+		add(annotName, attrs, loc);
 	}
 	/** Parses the attribute value.
 	 * If the value starts with { and ends with }, an array of String is returned.

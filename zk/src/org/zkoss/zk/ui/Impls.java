@@ -208,6 +208,9 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		public int getLineNumber() {
 			return -1;
 		}
+		public int getColumnNumber() {
+			return -1;
+		}
 		public String format(String message) {
 			return org.zkoss.xml.Locators.format(message, _path, null, -1, -1);
 		}

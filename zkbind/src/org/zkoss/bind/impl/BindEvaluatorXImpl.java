@@ -40,7 +40,11 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 
 	public Object getValue(BindContext ctx, Component comp, ExpressionX expression)
 	throws XelException {
-		return expression.evaluate(newXelContext(ctx, comp));
+		try{
+			return expression.evaluate(newXelContext(ctx, comp));
+		}catch(RuntimeException x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when getValue "+expression.getExpressionString(),comp),x);
+		}
 	}
 
 	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value)
@@ -48,7 +52,12 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		//ZK-1063 No exception if binding to a non-existed property
 		//Dennis, Removed the try-catch PropertyNotFoundException, we don't have history to check why we did try-catch before
 		//However, it should throw the property-not-found to let user be aware it. 
-		expression.setValue(newXelContext(ctx, comp), value);
+		try{
+			expression.setValue(newXelContext(ctx, comp), value);
+			
+		}catch(RuntimeException x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when setValue "+expression.getExpressionString(),comp),x);
+		}
 	}
 
 	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
