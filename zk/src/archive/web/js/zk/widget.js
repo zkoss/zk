@@ -2871,7 +2871,11 @@ unbind_: function (skipper, after) {
 			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
 			if (!skipper || !skipper.skipped(this, child))
 				if (child.z_rod) _unbindrod(child);
-				else if (child.desktop) child.unbind_(null, after); //don't pass skipper
+				else if (child.desktop) {
+					child.unbind_(null, after); //don't pass skipper
+					if (zk.feature.ee && child.$instanceof(zk.Native))
+						zAu._storeStub(child); //Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
+				}
 		}
 	},
 

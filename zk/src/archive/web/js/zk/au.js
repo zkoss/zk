@@ -435,7 +435,11 @@ zAu = {
 			_wgt2map(wgt, map);
 		return map[uuid];
 	},
-
+	//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
+	_storeStub: function (wgt) {
+		if (wgt)
+			_detached.push(wgt);
+	},
 	//Error Handling//
 	/** Register a listener that will be called when the Ajax request failed.
 	 * The listener shall be
