@@ -1,0 +1,5 @@
+<zk>
+	<groupbox title="groupbox" mold="3d" vflex="min" open="false">
+		<div height="100px">test</div>
+	</groupbox>
+</zk>
