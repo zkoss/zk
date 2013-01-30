@@ -377,6 +377,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (atg >= _pgi.getPageCount())
 				atg = _pgi.getPageCount() - 1;
 			_pgi.setActivePage(atg);
+			if (_pgi.getTotalSize() != newsz)
+				_pgi.setTotalSize(newsz); //Bug ZK-1601: reset total size since model size may changed.
 		}
 	}
 	
