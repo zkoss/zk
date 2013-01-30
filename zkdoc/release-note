@@ -36,6 +36,7 @@ ZK 6.5.2
   ZK-1594: Blinking popup in Firefox
   ZK-1596: Invalidate component with native component inside cause JS error, zkmax only
   ZK-1575: js error occured when vflex="min" and open="false" used in groupbox
+  ZK-1569: vbox content disappear after browser resizing
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
