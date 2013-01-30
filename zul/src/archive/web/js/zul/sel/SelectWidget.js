@@ -1225,19 +1225,23 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && child.isSelected())
 			this._syncFocus(child);
+		//Bug ZK-1473: when using template to render listbox,
+		//   this._focusItem still remain the removed one, 
+		//   set it with the newly rendered one to prevent keyboard navigation jump back to top
+		var n, offs;
+		if (this._focusItem != child && (n = child.$n())) {
+			offs = zk(n).revisedOffset();
+			offs = this._toStyleOffset(this.$n('a'), offs[0] + this.ebody.scrollLeft, offs[1]);
+			if (offs[0] == this._anchorLeft && offs[1] == this._anchorTop)
+				this._focusItem = child;
+		}
 	},
 	//@Override
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		var selItems = this._selItems, len;
-		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && (len = selItems.length)) {
+		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && (len = selItems.length))
 			this._syncFocus(selItems[len - 1]);
-			//Bug ZK-1473: when using template to render listbox,
-			//   the item will be remove but current this._focusItem still remain, 
-			//   disable it to prevent keyboard navigation jump back to top
-			if (this._focusItem == child)
-				this._focusItem = null;
-		}
 	},
 	//@Override
 	replaceWidget: function (newwgt) {
