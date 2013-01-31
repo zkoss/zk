@@ -349,6 +349,7 @@ public class ConfigParser {
 			//	tooltip-delay
 			//  resend-delay
 			//  debug-js
+			//  auto-resend-timeout
 				parseClientConfig(config, el);
 
 			} else if ("session-config".equals(elnm)) {
@@ -650,6 +651,9 @@ public class ConfigParser {
 		v = parseInteger(conf, "tooltip-delay", POSITIVE_ONLY);
 		if (v != null) config.setTooltipDelay(v.intValue());
 
+		v = parseInteger(conf, "auto-resend-timeout", POSITIVE_ONLY);
+		if (v != null) config.setAutoResendTimeout(v.intValue());
+		
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)
 			config.setKeepDesktopAcrossVisits(!"false".equals(s));

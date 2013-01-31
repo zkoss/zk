@@ -142,7 +142,7 @@ public class Configuration {
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800;
+		_promptDelay = 900, _tooltipDelay = 800, _autoResendTimeout = 200;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -1568,6 +1568,22 @@ public class Configuration {
 	 */
 	public int getTooltipDelay() {
 		return _tooltipDelay;
+	}
+	/** Specifies the timeout, in milliseconds, to re-send the AU request when
+	 * the server's service unavailable or timeout.
+	 * <p>Default: 200
+	 * @since 6.5.2
+	 */
+	public void setAutoResendTimeout(int minisecs) {
+		_autoResendTimeout = minisecs;
+	}
+	/** Returns the timeout, in milliseconds, for re-sending the AU request when
+	 * the server's service unavailable or timeout.
+	 * @since 6.5.2
+	 * <p>Default: 200
+	 */
+	public int getAutoResendTimeout() {
+		return _autoResendTimeout;
 	}
 	/** @deprecated As of release 6.0.0, it is removed without replacement, since
 	 * it is rarely applicable and over complicated.

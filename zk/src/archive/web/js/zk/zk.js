@@ -230,6 +230,12 @@ zk.copy(zk, {
 	 * @type int
 	 */
 	tipDelay: 800,
+    /** The timeout for re-sending AU request (unit: milliseconds).
+     * Default: 200 (depending on the server's configuration)
+	 * @since 6.5.2
+     * @type int
+     */
+    resendTimeout: 200,
 	/** The last position that the mouse was clicked (including left and right clicks).
 	 * @type Offset
 	 */

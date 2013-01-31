@@ -195,7 +195,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					case 503: //service unavailable
 						if (!ajaxReqTries) ajaxReqTries = 3; //two more try
 						if (--ajaxReqTries) {
-							ajaxReqResend(reqInf, 200);
+							ajaxReqResend(reqInf, zk.resendTimeout);
 							return;
 						}
 					}
