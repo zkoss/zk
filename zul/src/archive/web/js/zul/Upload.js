@@ -446,7 +446,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 		var wgt, upload, aded, parent;
 		if ((wgt = this._wgt) && (upload = this._upload) && 
 			(aded = upload._aded)) {
-			wgt._uplder = null; // prevent destory
+			wgt._uplder = null; // prevent destory during onResponse(sync disabled status by rerender will destory _uplder) 
 			aded.onResponse();
 			upload._aded = null;
 			

@@ -96,8 +96,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		    	}
 		    	return v;
 			}, 
-			function () {
-				this.rerender(); //bind and unbind
+			function (v, opts) {
+				this.rerender(opts.skip ? -1 : 0); //bind and unbind
 			}
 		],
 		/** Returns the href that the browser shall jump to, if an user clicks
