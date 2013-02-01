@@ -458,6 +458,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
+		if (zk.chrome || zk.safari)
+			zk(inp).focus(); //Bug ZK-1527: chrome and safari will trigger focus if executing setSelectionRange, focus it early here
 		if (isOverUpBtn) { //up
 			this._doUp();
 			this._startAutoIncProc(true);

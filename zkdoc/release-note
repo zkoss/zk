@@ -39,6 +39,7 @@ ZK 6.5.2
   ZK-1575: js error occured when vflex="min" and open="false" used in groupbox
   ZK-1601: Listbox in paging mold doesn't change pages count
   ZK-1569: vbox content disappear after browser resizing
+  ZK-1527: Bug in Datebox Popup (Chrome)
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
