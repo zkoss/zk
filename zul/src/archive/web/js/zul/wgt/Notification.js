@@ -29,8 +29,10 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	redraw: function (out) {
 		var uuid = this.uuid,
 			zcls = this.getZclass();
-		out.push('<div', this.domAttrs_(), '><div id=', uuid, '-p class="', 
-				zcls, '-pointer"></div><div id="', uuid, '-body" class="', 
+		out.push('<div', this.domAttrs_(), '>');
+		if (this._ref) //output arrow if reference exist
+			out.push('<div id=', uuid, '-p class="', zcls, '-pointer"></div>');
+		out.push('<div id="', uuid, '-body" class="', 
 				zcls, '-cl"><div id="', uuid, '-cave" class="', zcls, 
 				'-cnt">', this._msg, '</div></div></div>'); // not encoded to support HTML
 	},
