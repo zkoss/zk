@@ -43,7 +43,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		try{
 			return expression.evaluate(newXelContext(ctx, comp));
 		}catch(RuntimeException x){
-			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when getValue "+expression.getExpressionString(),comp),x);
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when getValue from "+expression.getExpressionString(),comp),x);
 		}
 	}
 
@@ -56,7 +56,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			expression.setValue(newXelContext(ctx, comp), value);
 			
 		}catch(RuntimeException x){
-			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when setValue "+expression.getExpressionString(),comp),x);
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when setValue to "+expression.getExpressionString(),comp),x);
 		}
 	}
 
@@ -72,8 +72,12 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 				}
 			}
 		}
-		return (ExpressionX) getExpressionFactory()
-			.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
+		try{
+			return (ExpressionX) getExpressionFactory()
+				.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
+		}catch(Exception x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when parseExpression",comp),x);
+		}
 	}
 	
 	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression)

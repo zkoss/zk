@@ -103,7 +103,7 @@ public class MiscUtil {
 	
 	public static String formatLocationMessage(String message,Component comp){
 		if(comp==null) return message;
-		return formatLocationMessage(message,toComponentLocation(comp));
+		return formatLocationMessage(message,toComponentLocation(comp),false);
 	}
 
 	private static Location toComponentLocation(Component comp) {
@@ -111,7 +111,7 @@ public class MiscUtil {
 		if(comp instanceof AbstractComponent){
 			try {
 				//this implement is very easy to be break in future version.
-				Field field = AbstractComponent.class.getField("_loc");
+				Field field = AbstractComponent.class.getDeclaredField("_loc");
 				field.setAccessible(true);
 				return (Location)field.get(comp);
 			} catch (Exception x) {}
@@ -121,10 +121,14 @@ public class MiscUtil {
 
 	public static String formatLocationMessage(String message,Annotation anno){
 		if(anno==null) return message;
-		return formatLocationMessage(message,anno.getLocation());
+		return formatLocationMessage(message,anno.getLocation(),true);
 	}
 
 	public static String formatLocationMessage(String message,Location loc){
+		return formatLocationMessage(message,loc,true);
+	}
+	
+	private static String formatLocationMessage(String message,Location loc, boolean showColumn){
 		if(loc==null) return message;
 		String path = loc.getPath();
 		int ln = loc.getLineNumber();
@@ -136,8 +140,8 @@ public class MiscUtil {
 		sb.append(" at [").append(path);
 		if(ln>=0){
 			sb.append(", line:").append(ln);
-			if(cn>=0){
-				sb.append(", col: ").append(cn);
+			if(showColumn && cn>=0){
+				sb.append(", near by column: ").append(cn);
 			}
 		}
 		sb.append("]");

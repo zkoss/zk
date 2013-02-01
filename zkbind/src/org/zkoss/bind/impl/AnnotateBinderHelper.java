@@ -188,7 +188,7 @@ public class AnnotateBinderHelper {
 		//scan init
 		Collection<Annotation> initannos = compCtrl.getAnnotations(propName, INIT_ANNO);
 		if(initannos.size()>1){
-			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+propName+" of "+comp,comp));
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+propName+" of "+comp,initannos.iterator().next()));
 		}else if(initannos.size()==1){
 			processPropertyInit(comp,propName,initannos.iterator().next(),converterInfo);
 		}
@@ -307,7 +307,7 @@ public class AnnotateBinderHelper {
 	private void addCommand(Component comp, List<String> cmds, String cmdExpr){
 		String cmd = BindEvaluatorXUtil.eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class);
 		if(Strings.isEmpty(cmd)){
-			throw new IllegalSyntaxException("command of expression "+cmdExpr+" is empty");
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("command of expression "+cmdExpr+" is empty",comp));
 		}
 		cmds.add(cmd);
 	}
@@ -389,7 +389,7 @@ public class AnnotateBinderHelper {
 		if(idannos.size()==0){
 			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("@id is not found for a form binding of "+comp,comp));
 		}else if(idannos.size()>1){
-			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @id for a form binding of "+comp,comp));
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @id for a form binding of "+comp,idannos.iterator().next()));
 		}
 		
 		final Annotation idanno = idannos.iterator().next();
@@ -399,13 +399,13 @@ public class AnnotateBinderHelper {
 			formId = BindEvaluatorXUtil.eval(eval, comp, idExpr, String.class);
 		}
 		if(formId==null){
-			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("value of @id is not found for a form binding of "+compCtrl+", exprssion is "+idExpr,comp));
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("value of @id is not found for a form binding of "+compCtrl+", exprssion is "+idExpr,idanno));
 		}
 		
 		//scan init first
 		Collection<Annotation> initannos = compCtrl.getAnnotations(FORM_ATTR, INIT_ANNO);
 		if(initannos.size()>1){
-			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+FORM_ATTR+" of "+comp,comp));
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+FORM_ATTR+" of "+comp,initannos.iterator().next()));
 		}else if(initannos.size()==1){
 			processFormInit(comp,formId,initannos.iterator().next());
 		}
@@ -510,7 +510,7 @@ public class AnnotateBinderHelper {
 		//scan init first
 		Collection<Annotation> initannos = compCtrl.getAnnotations(CHILDREN_ATTR, INIT_ANNO);
 		if(initannos.size()>1){
-			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+CHILDREN_ATTR+" of "+comp,comp));
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+CHILDREN_ATTR+" of "+comp,initannos.iterator().next()));
 		}else if(initannos.size()==1){
 			processChildrenInit(comp,initannos.iterator().next(),converterInfo);
 		}
