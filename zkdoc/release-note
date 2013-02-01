@@ -7,6 +7,7 @@ ZK 6.5.2
   ZK-1560: Configuration: allow user to abort the waiting thread if it takes too long to execute (activation)
   ZK-1048: Form Binding and binding validationMessages to components' errorMessage (error popup)
   ZK-1583: notification arrow position shall align in the center of reference widget
+  ZK-1545: Make "request auto-send" timeout and number of times a retry is made configurable
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
@@ -33,6 +34,12 @@ ZK 6.5.2
   ZK-1381: Show busy on panel with borderlayout is not working
   ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
   ZK-1589: Components inside HtmlNativeComponent doesn't unbind when invoke invalidate, with zkmax only
+  ZK-1594: Blinking popup in Firefox
+  ZK-1596: Invalidate component with native component inside cause JS error, zkmax only
+  ZK-1575: js error occured when vflex="min" and open="false" used in groupbox
+  ZK-1601: Listbox in paging mold doesn't change pages count
+  ZK-1569: vbox content disappear after browser resizing
+  ZK-1606: Should throw exception or show warning when a before|after command get a null or empty value
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
@@ -46,7 +53,7 @@ ZK 6.5.2
       <value>other/themes</value>
       <value>
     </library-property>
-
+  + In zkbind, an empty before|after command condition will get exception since this version, you should always provide a non-empty value for it or it means no-one can trigger it.
   --------
 ZK 6.5.1.1
 Dec 13, 2012

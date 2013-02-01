@@ -305,7 +305,11 @@ public class AnnotateBinderHelper {
 		}
 	}
 	private void addCommand(Component comp, List<String> cmds, String cmdExpr){
-		cmds.add(BindEvaluatorXUtil.eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class));
+		String cmd = BindEvaluatorXUtil.eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class);
+		if(Strings.isEmpty(cmd)){
+			throw new IllegalSyntaxException("command of expression "+cmdExpr+" is empty");
+		}
+		cmds.add(cmd);
 	}
 	
 	private void processPropertyLoadBindings(Component comp, String propName, Annotation ann, ExpressionAnnoInfo converterInfo) {
