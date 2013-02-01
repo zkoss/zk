@@ -19,6 +19,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ConditionType;
+import org.zkoss.lang.Strings;
 import org.zkoss.xel.ExpressionX;
 
 /**
@@ -56,8 +57,8 @@ public class AccessInfo implements Serializable{
 
 	public static AccessInfo create(Binding binding, String accessExpr, Class<?> expectedType, ConditionType type, String command,boolean ignoreTracker) {
 		final Binder binder = binding.getBinder();
-		if(ConditionType.PROMPT != type && command==null){
-			throw new IllegalArgumentException("condition type is "+type+", but command is null");
+		if(ConditionType.PROMPT != type && Strings.isEmpty(command)){
+			throw new IllegalArgumentException("condition type is "+type+", but command is empty");
 		}
 
 		final BindEvaluatorX eval = binder.getEvaluatorX();
