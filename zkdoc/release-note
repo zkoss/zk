@@ -39,6 +39,7 @@ ZK 6.5.2
   ZK-1575: js error occured when vflex="min" and open="false" used in groupbox
   ZK-1601: Listbox in paging mold doesn't change pages count
   ZK-1569: vbox content disappear after browser resizing
+  ZK-1602: Button with both autodisable and upload attributes set causes a javascript error
   ZK-1606: Should throw exception or show warning when a before|after command get a null or empty value
 
 * Upgrade Notes
