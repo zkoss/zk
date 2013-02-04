@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import org.zkoss.lang.Objects;
 
 /**
- * A {@link CacheMap} that the possiblity to have cache hit is much more than
- * not. It maintains a reaonly cache (so no need to synchronize), and then
+ * A {@link CacheMap} that the possibility to have cache hit is much more than
+ * not. It maintains a readonly cache (so no need to synchronize), and then
  * clone and replace it if there is a miss.
  * Thus, as time goes, most access can go directly to the readonly cache
  * without any synchronization or cloning.
@@ -29,6 +29,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 	private InnerCache _cache;
 	private Map<K, V> _writeCache;
 	private transient short _missCnt;
+	private transient short _maxMissCnt = 100;
 	/** whether _writeCache is different from _cache. */
 	private boolean _moreInWriteCache;
 
@@ -43,6 +44,16 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		_cache = new InnerCache(maxSize, lifetime);
 	}
 
+	/** Constructor.
+	 * @param maxMissCount a short value from 0 to this for sync the read cache,
+	 * default is 100.  
+	 * @since 6.5.2
+	 */
+	public FastReadCache(int maxSize, int lifetime, short maxMissCount) {
+		_cache = new InnerCache(maxSize, lifetime);
+		_maxMissCnt = maxMissCount;
+	}
+	
 	@Override
 	public boolean containsKey(Object key) {
 		boolean found = _cache.containsKey(key);
@@ -104,7 +115,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		//Note: we don't count it a miss if both _writeCache and _cache don't have
 		//because it implies the same thread (i.e., only  a few thread,
 		//so synchronized(this) overhead is small)
-		if (++_missCnt == 100)
+		if (++_missCnt == _maxMissCnt)
 			syncToReadCache();
 	}
 	/** Synchronizes _writeCache to _cache.
