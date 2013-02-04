@@ -905,6 +905,8 @@ public class Listbox extends MeshElement {
 					final int offset = _jsel - _jsel % getPageSize();
 					final int limit = getPageSize();
 					getDataLoader().syncModel(offset, limit); // force reloading
+					if (_jsel != jsel) //Bug ZK-1537: _jsel changed after syncModel if model is never synchronized
+						_jsel = jsel;
 				} else {
 					smartUpdate("selInView_", _jsel);
 				}
