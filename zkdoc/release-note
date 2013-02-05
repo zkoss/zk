@@ -46,6 +46,7 @@ ZK 6.5.2
   ZK-1537: NPE when listbox add to selection in paging mold (CE)
   ZK-1540: Inputwidget: html-input-element 1px too short
   ZK-1534: Spinner no longer supports null value (JavaDoc Issue)
+  ZK-1557: Groupbox fails to open if it has non-visible children
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
