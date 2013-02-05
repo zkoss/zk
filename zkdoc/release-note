@@ -8,6 +8,7 @@ ZK 6.5.2
   ZK-1048: Form Binding and binding validationMessages to components' errorMessage (error popup)
   ZK-1583: notification arrow position shall align in the center of reference widget
   ZK-1545: Make "request auto-send" timeout and number of times a retry is made configurable
+  ZK-1507: Client-side API to register a callback function that can be invoked after all widgets finish resize
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1

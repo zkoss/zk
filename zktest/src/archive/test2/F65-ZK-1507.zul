@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F65-ZK-1507.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 05, 2013 10:13:25 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<script>
+zk.afterMount(function () {zk.log('afterMount');});
+var once;
+zk.afterResize(function () {
+	zk.log('afterResize');
+	if (!once){
+		setTimeout(function(){
+	 		zk.afterResize(function(){zk.log('afterResize');});
+	 	});
+	 	once = true;
+	}
+});
+</script>
+	<label multiline="true">
+		1. You should see the log in order with "afterMount" and then "afterResize"
+		2. Please resize the browser, and then one more "afterResize" will be added.
+	</label>
+</zk>
