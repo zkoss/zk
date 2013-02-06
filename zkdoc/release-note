@@ -14,6 +14,7 @@ ZK 6.0.5
   ZK-1596: Invalidate component with native component inside cause JS error, zkmax only
   ZK-1601: Listbox in paging mold doesn't change pages count
   ZK-1602: Button with both autodisable and upload attributes set causes a javascript error
+  ZK-1613: Invoke response.sendError in Weblogic server, the server will render the message as a response body
 
 * Upgrade Notes
 

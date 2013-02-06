@@ -38,6 +38,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.io.Files;
 import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.Servlets;
@@ -122,7 +123,7 @@ public class InterpreterServlet extends HttpServlet {
 			if (cnt == null) {
 				if (Https.isIncluded(request)) log.error("Not found: "+path);
 					//It might be eaten, so log the error
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(path));
 				return;
 			}
 
