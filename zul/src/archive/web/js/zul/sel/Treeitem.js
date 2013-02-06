@@ -83,10 +83,15 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
     	 */
 		open: function (open, fromServer) {
 			var img = this.$n('open');
-			if (!img || _closed(this.parent))
+			if (!img || _closed(this.parent)) {
+                if (img) {// B65-ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
+                    var cn = img.className;
+                    img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
+                }
 				return;
-
-			var cn = img.className,
+			}
+            
+            var cn = img.className,
 				tree = this.getTree(),
 				ebodytbl = tree ? tree.ebodytbl: null,
 				oldwd = ebodytbl ? ebodytbl.clientWidth: 0; //ebodytbl shall not be null (just in case)
