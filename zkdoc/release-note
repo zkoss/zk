@@ -52,6 +52,7 @@ ZK 6.5.2
   ZK-1567: Menuitems not aligned below Menu
   ZK-1614: Full Screen iPad Web Apps Missing Component Buttons
   ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
+  ZK-1608: Tree node become leaf node after update
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

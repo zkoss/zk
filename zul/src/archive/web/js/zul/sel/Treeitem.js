@@ -336,8 +336,11 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true);
-		if (this.desktop && child.$instanceof(zul.sel.Treerow))
+		else if (this.desktop)
+            this._fixOnAdd(child, true); // fixed dynamically change treerow. B65-ZK-1608
+		if (this.desktop && child.$instanceof(zul.sel.Treerow)) {
 			_syncTreeBodyHeight(this);
+		}
 		//else was handled by insertBefore/appendChild
 	},
 	removeHTML_: function (n) {
@@ -374,7 +377,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (w)
 				jq(w.treerow.$n()).before(childHTML);
 		} else if (w = this.getParentItem()) {
-			w._renderChildHTML(childHTML);
+			// B65-ZK-1608 add new treerow after parent node.
+			var n = w.$n();
+			if (n)
+			    jq(n).after(childHTML);
+			else
+				w._renderChildHTML(childHTML);
 		} else if ((w = this.getTree())) {
 			jq(w.$n('rows')).append(childHTML);
 		}

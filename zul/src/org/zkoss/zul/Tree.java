@@ -35,6 +35,8 @@ import java.util.Comparator;
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Exceptions;
 import static org.zkoss.lang.Generics.*;
+
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
@@ -1568,6 +1570,20 @@ public class Tree extends MeshElement {
 		}
 	}
 
+	/**
+	 * Sets the renderer by use of a class name. It creates an instance
+	 * automatically.
+	 * @since 6.5.2
+	 */
+	public void setItemRenderer(String clsnm) throws ClassNotFoundException,
+			NoSuchMethodException, IllegalAccessException,
+			InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null)
+			setItemRenderer((TreeitemRenderer) Classes
+					.newInstanceByThread(clsnm));
+	}
+
+
 	/** Returns the renderer to render each item, or null if the default
 	 * renderer is used.
 	 * @return the renderer to render each item, or null if the default
@@ -1750,6 +1766,46 @@ public class Tree extends MeshElement {
 			_renderer = getRealRenderer();
 		}
 
+		// B65-ZK-1608: Tree node become leaf node after update
+		@SuppressWarnings("unchecked")
+		private void renderChangedItem(Treeitem item, Object node, int index) throws Throwable {
+			if (!_rendered && (_renderer instanceof RendererCtrl)) {
+				((RendererCtrl)_renderer).doTry();
+				_ctrled = true;
+			}
+			try {
+				try {
+					if (_renderer == _defRend) { // template
+						Treechildren tc = item.getTreechildren();
+						_renderer.render(item, node, index);
+						Object newTreeitem = item.getAttribute("org.zkoss.zul.model.renderAs");
+						if (newTreeitem instanceof Treeitem) {
+							((Treeitem)newTreeitem).appendChild(tc);
+						}
+					} else {
+						Treeitem faker = new Treeitem();
+						_renderer.render(faker, node, index);
+						Treerow newRow = faker.getTreerow();
+						item.getTreerow().detach();
+						item.appendChild(newRow);
+					}
+				} catch (AbstractMethodError ex) {
+					final Method m = _renderer.getClass()
+						.getMethod("render", new Class<?>[] {Treeitem.class, Object.class});
+					m.setAccessible(true);
+					m.invoke(_renderer, new Object[] {item, node});
+				}
+			} catch (Throwable ex) {
+				try {
+					item.setLabel(Exceptions.getMessage(ex));
+				} catch (Throwable t) {
+					log.error(t);
+				}
+				throw ex;
+			}
+			_rendered = true;
+		}
+
 		@SuppressWarnings("unchecked")
 		private void render(Treeitem item, Object node, int index) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
@@ -1897,7 +1953,7 @@ public class Tree extends MeshElement {
 
 			final Renderer renderer = new Renderer();
 			try {
-				renderer.render(item, node, item.getIndex()); //re-render
+				renderer.renderChangedItem(item, node, item.getIndex()); //re-render
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
 			} finally {
