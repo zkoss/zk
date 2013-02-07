@@ -120,7 +120,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			spc = this._spacing;
 		
 		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"');
-		if(spc && spc != 'auto' && child.nextSibling)
+		var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
+		if(spc && spc != 'auto' && next && !next.$instanceof(zul.wgt.Popup))
 			oo.push(' style="padding-' + (vert ? 'bottom:' : 'right:') + spc + '"');
 		oo.push('>');
 		child.redraw(oo);

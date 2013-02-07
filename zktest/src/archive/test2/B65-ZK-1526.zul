@@ -1,0 +1,30 @@
+<zk>
+	Should not see any gray background showed.
+	<vlayout style="background:gray;" hflex="min" vflex="min">
+		<label style="background:cyan;" value="bottom padding due to menupopup" context="someMenuPopup1" />
+		<menupopup id="someMenuPopup1">
+			<menuitem label="Some Action" />
+		</menupopup>
+	</vlayout>
+	<separator />
+	<hlayout style="background:gray;" hflex="min" vflex="min">
+		<label style="background:cyan;" value="bottom padding due to menupopup" context="someMenuPopup2" />
+		<menupopup id="someMenuPopup2">
+			<menuitem label="Some Action" />
+		</menupopup>
+	</hlayout>
+	<separator />
+	<vbox style="background:gray;" hflex="min" vflex="min">
+		<label style="background:cyan;" value="bottom padding due to menupopup" context="someMenuPopup3" />
+		<menupopup id="someMenuPopup3">
+			<menuitem label="Some Action" />
+		</menupopup>
+	</vbox>
+	<separator />
+	<hbox style="background:gray;" hflex="min" vflex="min">
+		<label style="background:cyan;" value="bottom padding due to menupopup" context="someMenuPopup4" />
+		<menupopup id="someMenuPopup4">
+			<menuitem label="Some Action" />
+		</menupopup>
+	</hbox>
+</zk>

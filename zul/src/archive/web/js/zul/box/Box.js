@@ -365,8 +365,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (!isCell)
 				oo.push('</td>');
 		}
-		
-		if (child.nextSibling)
+		var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
+		if (next && !next.$instanceof(zul.wgt.Popup))
 			oo.push(_spacingHTML(this, child));
 		else if (prefixSpace) {
 			var pre = child.previousSibling;
