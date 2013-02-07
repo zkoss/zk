@@ -898,7 +898,7 @@ public class Parser {
 			//only provide if there already has other annotation
 			if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
 				//provide component location info as a annotation wiht it's location.
-				compInfo.addAnnotation(null, "$LOC$", null, Locators.toLocation(el.getLocator()));
+				compInfo.addAnnotation(null, "ZKLOC", null, Locators.toLocation(el.getLocator()));
 			}
 
 			final Collection<Item> items = el.getChildren();

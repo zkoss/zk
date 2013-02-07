@@ -107,14 +107,9 @@ public class MiscUtil {
 	}
 
 	private static Location toComponentLocation(Component comp) {
-		//TODO a better way to get it without break any compatibility (use getLocation in Component/ComponentCtrl is too strong
 		if(comp instanceof AbstractComponent){
-			try {
-				//this implement is very easy to be break in future version.
-				Field field = AbstractComponent.class.getDeclaredField("_loc");
-				field.setAccessible(true);
-				return (Location)field.get(comp);
-			} catch (Exception x) {}
+			Annotation anno = ((AbstractComponent)comp).getAnnotation(null, "ZKLOC");
+			return anno==null?null:anno.getLocation();
 		}
 		return null;
 	}
