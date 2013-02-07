@@ -248,6 +248,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	public boolean isCompress() {
 		return _compress;
 	}
+	/* Set whether to compress the output or not.
+	 * @since 6.5.2
+	 */
+	public void setCompress(boolean compress) {
+		_compress = compress;
+	}
 
 	/** Returns the AU extension that is associated the specified prefix.
 	 * @since 5.0.0
@@ -460,14 +466,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//AU
 		if (sess == null) {
-			response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); //denote timeout
-
-			//Bug 1849088: rmDesktop might be sent after invalidate
-			//Bug 1859776: need send response to client for redirect or others
 			final WebApp wapp = WebManager.getWebAppIfAny(ctx);
-			final String dtid = getAuDecoder(wapp).getDesktopId(request);
-			if (dtid != null)
-				sessionTimeout(request, response, wapp, dtid);
+			denoteSessionTimeout(wapp, request, response);
 			return;
 		}
 
@@ -484,6 +484,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			I18Ns.cleanup(request, old);
 		}
 	}
+	
 	protected
 	void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -493,12 +494,27 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null || (pi != null && pi.indexOf('*') >= 0) ;
 		//Optimize the access of static resources (for GAE)
 	}
+	
+	/**
+	 * Denote HTTP 410 Session timeout response
+	 * @since 6.5.2
+	 */
+	public void denoteSessionTimeout(WebApp wapp, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); // denote timeout
+		
+		// Bug 1849088: rmDesktop might be sent after invalidate
+		// Bug 1859776: need send response to client for redirect or others
+		final String dtid = getAuDecoder(wapp).getDesktopId(request);
+		if (dtid != null)
+			sessionTimeout(request, response, wapp, dtid);
+	}
 
 	//-- ASYNC-UPDATE --//
 	/** Process asynchronous update requests from the client.
 	 * @since 3.0.0
 	 */
-	protected void process(Session sess,
+	public void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final String errClient = request.getHeader("ZK-Error-Report");
@@ -571,7 +587,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
-		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Execution exec = 
 			new ExecutionImpl(getServletContext(), request, response, desktop, null);
 		if (sid != null)
@@ -614,9 +629,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (sid != null)
 			response.setHeader("ZK-SID", sid);
 
-		final AuWriter out =
-			AuWriters.newInstance().open(request, response);
-
+		final AuWriter out = AuWriters.newInstance();
+		out.setCompress(_compress);
+		out.open(request, response);
 		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			final String deviceType = getDeviceType(request);
 			URIInfo ui = wapp != null ? wapp.getConfiguration()

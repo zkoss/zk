@@ -103,6 +103,8 @@ public class HtmlPageRenders {
 	private static final String ATTR_DESKTOP_CLIENTINFO = "org.zkoss.desktop.clientinfo.enabled";
 	/** Enabled visibility change */
 	private static final String ATTR_DESKTOP_VISIBILITYCHANGE = "org.zkoss.desktop.visibilitychange.enabled";
+	/** Support Portlet 2 */
+	private static final String ATTR_PORTLET2_RESOURCEURL = "org.zkoss.portlet2.resourceURL";
 
 	/** Sets the content type to the specified execution for the given page.
 	 * @param exec the execution (never null)
@@ -659,6 +661,13 @@ public class HtmlPageRenders {
 			if (dt.getAttribute(ATTR_DESKTOP_VISIBILITYCHANGE) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_VISIBILITYCHANGE);
 				out.write("<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
+			}
+			String resourceURL = (String) page.getAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
+			if(resourceURL != null) {
+				page.removeAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
+				out.write("<script type=\"text/javascript\">zk.portlet2AjaxURI = '");
+				out.write(resourceURL);
+				out.write("';</script>");
 			}
 		}
 		outSEOContent(page, out);

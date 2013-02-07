@@ -16,10 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.RequestDispatcher;
@@ -100,5 +103,13 @@ public class ServletPortletDispatcher implements PortletRequestDispatcher {
 			    throw new PortletException(ex);
 			}
 		}
+	}
+	
+	public void include(PortletRequest request, PortletResponse response)
+			throws PortletException, IOException {
+	}
+	
+	public void forward(PortletRequest request, PortletResponse response)
+			throws PortletException, IOException {
 	}
 }

@@ -31,7 +31,7 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.web.Attributes;
 
 /**
- * A facade of RenderRequest that implements HttpServletRespose.
+ * A facade of RenderRequest that implements HttpServletRequest.
  * 
  * @author tomyeh
  */
@@ -60,7 +60,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		_attrs.put(Attributes.INCLUDE_QUERY_STRING, "");
 		_attrs.put(Attributes.INCLUDE_REQUEST_URI, ctxpath);
 	}
-	/** Returns the HTTP servlet rquest associated with the render request,
+	/** Returns the HTTP servlet request associated with the render request,
 	 * or null if not found.
 	 * @since 5.0.6
 	 */

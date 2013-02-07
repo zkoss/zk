@@ -853,7 +853,6 @@ zAu.beforeSend = function (uri, req, dt) {
 			|| !(ignorable = ignorable && opts.ignorable)) //all ignorable
 				break;
 		}
-
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "", rtags = {},
 			requri = uri || zk.ajaxURI(null, {desktop:dt,au:true});
@@ -868,7 +867,8 @@ zAu.beforeSend = function (uri, req, dt) {
 			content += zAu.encode(j, aureq, dt);
 			zk.copy(rtags, (aureq.opts||{}).rtags);
 		}
-
+		if (zk.portlet2AjaxURI)
+			requri = zk.portlet2AjaxURI;
 		if (content)
 			ajaxSendNow({
 				sid: seqId, uri: requri, dt: dt, content: content,
