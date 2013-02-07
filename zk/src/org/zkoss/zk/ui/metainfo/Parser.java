@@ -834,7 +834,7 @@ public class Parser {
 			}
 
 			if(el.getLocator()!=null){
-				compInfo.setLocation(Locators.toLocation(el.getLocator()));
+//				compInfo.setLocation(Locators.toLocation(el.getLocator()));
 			}
 
 			String ifc = null, unless = null,

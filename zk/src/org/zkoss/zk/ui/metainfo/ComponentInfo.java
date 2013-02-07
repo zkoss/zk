@@ -88,8 +88,8 @@ public class ComponentInfo extends ForEachBranchInfo {
 	private ExValue _wgtcls;
 	private String _replaceableText;
 	
-	/** the location of this component-info of a document, e.g zul. null if not available **/
-	private Location _loc;
+//	/** the location of this component-info of a document, e.g zul. null if not available **/
+//	private Location _loc;
 
 	/** Constructs the information about how to create component.
 	 * @param parent the parent; never null.
@@ -292,25 +292,25 @@ public class ComponentInfo extends ForEachBranchInfo {
 	}
 	
 	
-	/** 
-	 * Returns the location information of the component-info in the document or null if not available.
-	 * It is useful for displaying the error message.
-	 *
-	 *@since 6.5.2
-	 */
-	public Location getLocation(){
-		return _loc;
-	}
-	
-	/**
-	 * Sets the location information of the component-info.
-	 * It is useful for displaying the error message.
-	 *
-	 *@since 6.5.2
-	 */
-	public void setLocation(Location loc){
-		_loc = loc;
-	}
+//	/** 
+//	 * Returns the location information of the component-info in the document or null if not available.
+//	 * It is useful for displaying the error message.
+//	 *
+//	 *@since 6.5.2
+//	 */
+//	public Location getLocation(){
+//		return _loc;
+//	}
+//	
+//	/**
+//	 * Sets the location information of the component-info.
+//	 * It is useful for displaying the error message.
+//	 *
+//	 *@since 6.5.2
+//	 */
+//	public void setLocation(Location loc){
+//		_loc = loc;
+//	}
 
 	/** Returns the composer for this info, or nuull if not available.
 	 *
