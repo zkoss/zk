@@ -601,7 +601,11 @@ public class Window extends XulElement implements Framable, IdSpace {
 				smartUpdate("mode", modeToString(_mode));
 			}
 		}
-		setVisible(true);
+		// B65-ZK-1568: Window is always visible when switching to non-modal mode
+		// It should maintain the original visibility so that setting
+		// visibility to false and changing non-modal mode would exhibit
+		// the same behavior regardless of their ordering.
+		// setVisible(true);
 	}
 
 	/** Set mode to MODAL and suspend this thread. */
