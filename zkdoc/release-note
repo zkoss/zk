@@ -9,6 +9,7 @@ ZK 6.5.2
   ZK-1583: notification arrow position shall align in the center of reference widget
   ZK-1545: Make "request auto-send" timeout and number of times a retry is made configurable
   ZK-1507: Client-side API to register a callback function that can be invoked after all widgets finish resize
+  ZK-1616: AU response error can be handle by user
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
