@@ -81,19 +81,19 @@ zul.inp.RoundUtl = {
 	/** Synchronizes the input element's width of this component
 	*/
 	syncWidth: function (wgt, rightElem) {
-		var node = wgt.$n();
-		if (!zk(node).isRealVisible() || (!wgt._inplace && !node.style.width))
+		var node = wgt.$n(), ns = node.style;
+		if (!zk(node).isRealVisible() || (!wgt._inplace && !ns.width))
 			return;
 
 		var inp = wgt.getInputNode();
 		
-		if (!node.style.width && wgt._inplace &&
+		if (!ns.width && wgt._inplace &&
 			(wgt._buttonVisible == undefined
 				|| wgt._buttonVisible)) {
-			node.style.width = jq.px0(this.getOuterWidth(wgt, true));
+			ns.width = jq.px0(this.getOuterWidth(wgt, true));
 		}
 		
-		if (zk.ie6_ && node.style.width)
+		if (zk.ie6_ && ns.width)
 			inp.style.width = '0px';
 	
 		var width = this.getOuterWidth(wgt, wgt.inRoundedMold()),
@@ -104,8 +104,8 @@ zul.inp.RoundUtl = {
 		// Fix bug discovered by B50-3032892.ztl
 		// * inplace input widget's width reduced by one pixel each time 
 		//   it received focus then blurred
-		if (rightElem && !zk.safari_ && !zk.opera && !wgt._inplace)
-			rev -= 1; //Bug ZK-1368: reduce 1px for right edge element
+		if (rightElem && !zk.safari_ && !zk.opera && !wgt._inplace && ns.width.indexOf('%') >= 0)
+			rev -= 1; //Bug ZK-1368: reduce 1px for right edge element, Bug ZK-1540: ZK-1368 only affect on percentage width
 		inp.style.width = jq.px0(rev);
 	},
 	getOuterWidth: function(wgt, rmInplace) {

@@ -51,6 +51,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.xml.XMLs;
 
 /**
  * Used to access resources located in class path and under /web.
@@ -633,7 +634,7 @@ public class ClassWebResource {
 					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
-				response.sendError(response.SC_NOT_FOUND, pi);
+				response.sendError(response.SC_NOT_FOUND, XMLs.escapeXML(pi));
 				return;
 			}
 		} else {

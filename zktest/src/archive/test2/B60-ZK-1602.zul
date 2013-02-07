@@ -1,0 +1,14 @@
+<zk>
+	<label>
+	Click the three button and upload some file, should not see any JS error message showed.
+	</label>
+	<div>
+		<button label="Button Upload" upload="true" onUpload="" autodisable="self"/>
+	</div>
+	<toolbar>
+		<toolbarbutton label="Toolbarbutton Upload" upload="true" onUpload="" autodisable="self"/>
+	</toolbar>
+	<menubar>
+		<menuitem label="Menuitem Upload" upload="true" onUpload="" autodisable="self"/>
+	</menubar>
+</zk>

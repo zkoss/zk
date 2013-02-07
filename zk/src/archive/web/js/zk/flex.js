@@ -131,7 +131,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.setFlexSize_({height:'auto'}, true);
 				var totalsz = 0,
 					vmax = 0;
-				if (cwgt){ //try child widgets
+				if (cwgt && cwgt.desktop){ //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
 					var first = cwgt,
 						refDim = zk(cwgt).dimension(true);
 					for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout

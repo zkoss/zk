@@ -55,11 +55,11 @@ public class Spinner extends NumberInputElement {
 	public Integer getValue() throws WrongValueException {
 		return (Integer)getTargetValue();
 	}
-	/** Returns the value in int. If null, zero is returned.
+	/** Returns the value in int.
+	 * @exception WrongValueException if user entered a wrong value or null value
 	 */
 	public int intValue() throws WrongValueException {
-		final Object val = getTargetValue();
-		return val != null ? ((Integer)val).intValue(): 0;
+		return (Integer) getTargetValue();
 	}
 	protected Object getTargetValue() throws WrongValueException {
 		Object val = super.getTargetValue();
@@ -67,7 +67,7 @@ public class Spinner extends NumberInputElement {
 			return val;
 		}
 		throw showCustomError(new WrongValueException(this,
-				MZul.INTEGER_REQUIRED, val));
+				MZul.INTEGER_REQUIRED, val == null ? "null" : val));
 	}
 	/** Sets the value (in Integer).
 	 * @exception WrongValueException if value is wrong

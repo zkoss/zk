@@ -68,6 +68,13 @@ public class ThemeFns {
 				if (version >= 1)
 					return Browser.Old_WebKit;
 			}
+
+			// B65-ZK-1614: Full Screen iPad Web Apps Missing Component Buttons
+			version = Servlets.getBrowser(ServletFns.getCurrentRequest(),
+					"ios");
+			if (version != null && version >= 500)
+				return Browser.WebKit;
+			
 			version = Servlets.getBrowser(ServletFns.getCurrentRequest(),
 					"safari");
 			if (version != null) {
