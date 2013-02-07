@@ -611,14 +611,15 @@ zjq.prototype = {
 	/** Tests if the first matched element is overlapped with the specified
 	 * element.
 	 * @param DOMElement el the element to check with
+	 * @param int the tolerant value for the calculation
 	 * @return boolean true if they are overlapped.
 	 */
-	isOverlapped: function (el) {
+	isOverlapped: function (el, tolerant) {
 		var n;
 		if (n = this.jq[0])
 			return jq.isOverlapped(
-				this.cmOffset(), [n.offsetWidth, n.offsetHeight],
-				zk(el).cmOffset(), [el.offsetWidth, el.offsetHeight]);
+				this.cmOffset(), [n.offsetWidth, n.offsetHeight], zk(el).cmOffset(),
+				    [el.offsetWidth, el.offsetHeight], tolerant);
 	},
 
 	/** Returns the summation of the specified styles.
@@ -1768,19 +1769,32 @@ zk.copy(jq, {
 		}
 		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
 	},
+    /** Returns if the specified rectangles are overlapped with each other.
+     * @param Offset ofs1 the offset of the first rectangle
+     * @param Offset dim1 the dimension (size) of the first rectangle
+     * @param Offset ofs2 the offset of the second rectangle
+     * @param Offset dim2 the dimension (size) of the second rectangle
+     * @return boolean
+     */
 	/** Returns if the specified rectangles are overlapped with each other.
 	 * @param Offset ofs1 the offset of the first rectangle
 	 * @param Offset dim1 the dimension (size) of the first rectangle
 	 * @param Offset ofs2 the offset of the second rectangle
 	 * @param Offset dim2 the dimension (size) of the second rectangle
+	 * @param int the tolerant value for the calculation
 	 * @return boolean
 	 */
-	isOverlapped: function (ofs1, dim1, ofs2, dim2) {
+	isOverlapped: function (ofs1, dim1, ofs2, dim2, tolerant) {
 		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
 			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1;
 		var o2x1 = ofs2[0], o2x2 = dim2[0] + o2x1,
 			o2y1 = ofs2[1], o2y2 = dim2[1] + o2y1;
-		return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
+		if (tolerant) {
+		  return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1
+                 && o1x2 - o2x1 > tolerant && o2x2 - o1x1 > tolerant
+                 && o1y2 - o2y1 > tolerant && o2y2 - o1y1 > tolerant;
+		} else
+		  return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
 	},
 
 	/** Clears the current selection in the browser window.

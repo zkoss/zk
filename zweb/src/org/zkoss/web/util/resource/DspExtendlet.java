@@ -36,6 +36,7 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.Interpreter;
 import org.zkoss.web.servlet.http.Https;
+import org.zkoss.xml.XMLs;
 
 /**
  * The DSP resource processor ({@link Extendlet}) used to parse
@@ -82,7 +83,7 @@ public class DspExtendlet implements Extendlet {
 				throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
 					//have the includer to handle it
 			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(path));
 			return;
 		}
 

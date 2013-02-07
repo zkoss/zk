@@ -3087,7 +3087,7 @@ unbind_: function (skipper, after) {
 		
 		if (c) {
 			c = c.parentNode;
-			while (c && p != c) {
+			while (c && c.nodeType == 1 && p != c) {
 				var zkc = zk(c);
 				h += zkc.padBorderHeight() + zkc.sumStyles("tb", jq.margins);
 				c = c.parentNode;
@@ -3106,7 +3106,7 @@ unbind_: function (skipper, after) {
 		
 		if (c) {
 			c = c.parentNode;
-			while (c && p != c) {
+			while (c && c.nodeType == 1 && p != c) {
 				var zkc = zk(c);
 				w += zkc.padBorderWidth() + zkc.sumStyles("lr", jq.margins);
 				c = c.parentNode;

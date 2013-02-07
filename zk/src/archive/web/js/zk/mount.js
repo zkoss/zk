@@ -70,6 +70,7 @@ function zkamn(pkg, fn) {
 		_crInfBL0 = [], _crInfBL1 = [], //create info for BL
 		_crInfAU0 = [], //create info for AU
 		_aftMounts = [], //afterMount
+		_aftResizes = [], //afterResize
 		_mntctx = {}, //the context
 		_paci = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
 		_t0 = jq.now();
@@ -141,7 +142,31 @@ function zkamn(pkg, fn) {
 			} else
 				setTimeout(fn, delay);
 	};
-
+/** @partial zk
+ */
+//@{
+    /** Adds a function that will be executed after all of the onSize events are done.
+     * <p>Here lists the execution phases:
+     * <ol>
+     *     <li>After the page loaded, the function added in the afterResze() will be invoked</li>
+     *     <li>After the browser resized, the function added in the afterResze() will be invoked</li>
+     *     <li>After zWatch.fire/fireDown('onSize'), the function added in the afterResze() will be invoked</li>
+     * </ol>
+     * </p>
+     * @param Function fn the function to execute after resized
+     * @since 6.5.2
+     */
+    //afterResize: function () {}
+//@};
+    zk.afterResize = function (fn) {
+        if (fn)
+            _aftResizes.push(fn);
+    }
+    zk.doAfterResize = function () {
+        for (var fn; fn = _aftResizes.shift();) {
+            fn();
+        }
+    }
 	function _curdt() {
 		return _mntctx.curdt || (_mntctx.curdt = zk.Desktop.$());
 	}

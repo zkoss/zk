@@ -184,7 +184,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    			if (zclass)
 		    				jq(n)[(n.disabled = v) ? "addClass": "removeClass"](zclass + "-disd");
 		    		} else
-		    			this.rerender(opts.skip ? -1 : 0); //bind and unbind required (because of many CSS classes to update)
+		    			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind required (because of many CSS classes to update)
 		    	}
 		    }
 		],

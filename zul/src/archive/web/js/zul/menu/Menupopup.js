@@ -139,7 +139,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			while(mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
 			
-			if ((zk(n).isOverlapped(m) && nol < mol + mwd / 2) || (mp && mp._shallSync)) {
+			if ((zk(n).isOverlapped(m, 1) && nol < mol + mwd / 2) || (mp && mp._shallSync)) {
 				this._shallSync = true;
 				n.style.left = jq.px0(mol - nwd);
 			}
