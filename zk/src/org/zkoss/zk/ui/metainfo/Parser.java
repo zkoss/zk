@@ -833,10 +833,6 @@ public class Parser {
 				}
 			}
 
-			if(el.getLocator()!=null){
-//				compInfo.setLocation(Locators.toLocation(el.getLocator()));
-			}
-
 			String ifc = null, unless = null,
 				forEach = null, forEachBegin = null, forEachEnd = null;
 			AnnotationHelper attrAnnHelper = null;
@@ -897,6 +893,13 @@ public class Parser {
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
 			annHelper.applyAnnotations(compInfo, null, true);
+			
+
+			//only provide if there already has other annotation
+			if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
+				//provide component location info as a annotation wiht it's location.
+				compInfo.addAnnotation(null, "$LOC$", null, Locators.toLocation(el.getLocator()));
+			}
 
 			final Collection<Item> items = el.getChildren();
 			String textAs = null;

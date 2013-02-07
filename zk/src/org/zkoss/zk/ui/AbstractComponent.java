@@ -125,12 +125,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
-	
-	/** 
-	 * The location in a document, e.g zul.
-	 * It is usually for debug, so it does't need to be serialize.  
-	 **/
-//	private transient Location _loc;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -149,7 +143,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (curInfo instanceof ComponentInfo) {
 				final ComponentInfo compInfo = (ComponentInfo)curInfo;
 				_def = compInfo.getComponentDefinition();
-//				_loc = compInfo.getLocation();
 				addSharedAnnotationMap(_def.getAnnotationMap());
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
 			} else {
