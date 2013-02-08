@@ -56,6 +56,7 @@ ZK 6.5.2
   ZK-1608: Tree node become leaf node after update
   ZK-1568: Window is always visible when switching to non-modal mode
   ZK-1526: layouts and containers should not take menupopup into account when computing padding
+  ZK-1617: Panel in Portallayout not draggable after updated
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
