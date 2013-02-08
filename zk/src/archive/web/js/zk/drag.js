@@ -612,7 +612,7 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = ofs;
 		_activate(this, devt, pt);
 
-		if (!zk.ie && !zk.mobile) {
+		if ((!zk.ie || zk.ie9) && !zk.mobile) {
 			if (!zk.Draggable.ignoreStop(target))
 				devt.stop();
 			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
@@ -620,6 +620,8 @@ String scroll; //DOM Element's ID</code></pre>
 			//Opera: if not stop, 'easy' to become selecting text
 			//Chrome (Bug 3074253): unable to select the nested draggable element
 			//Mobile: if stop: onclick won't be fired (Bug ZK-1305)
+			//IE9: if not stop, the IMG cannot be dragged, (Bug ZK-1612)
+			//     and double check with a previous bug which removes the zk.ie9 condition (B50-3306835)
 			//
 			//Bug 3008328: input: if preventDefault(), not editable (both FF and Opera) => solution: stop()
 
