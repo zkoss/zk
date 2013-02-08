@@ -209,7 +209,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					max = width > max ? width : max;
 				}
 			}
-			return attr == 'h' ? zk(el).offsetHeight() : max;
+			return max;
 		}
 		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
 	},
