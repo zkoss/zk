@@ -72,10 +72,10 @@ public class UploadInfoService implements AuService, Serializable {
 			Events.postEvent(new UploadEvent(Events.ON_UPLOAD,
 					desktop.getComponentByUuid(uuid), parseResult(result)));
 
-			Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
+			Map percent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
 			Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
 			final String key = uuid + '_' + sid;
-			precent.remove(key);
+			percent.remove(key);
 			size.remove(key);
 			return true;
 		}
