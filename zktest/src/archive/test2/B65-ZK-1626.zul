@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1626.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Feb 18, 2013 12:53:22 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You should only see "Visible row" below this line. Otherwise, that's a bug.
+<separator/>
+<n:table xmlns:n="native">
+    <n:tr>
+        <n:td n:colspan="2">Visible row</n:td>      
+    </n:tr>
+    <n:tr if="false">
+        <n:td>Name</n:td>
+        <n:td>
+            <textbox value="Invisible"/>
+        </n:td>
+    </n:tr>
+</n:table></zk>

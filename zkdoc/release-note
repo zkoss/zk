@@ -61,6 +61,7 @@ ZK 6.5.2
   ZK-1603: Doesn't allow to coerce set to list when binding selectedItems
   ZK-1595: Listbox selectedItems and Hibernate collection types don't play together
   ZK-1627: datebox contraint position after_* or before_* wrongly parsed by SimpleDateConstraint
+  ZK-1626: Incorrect result for 'if' attribute when mixing native and zk components
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
