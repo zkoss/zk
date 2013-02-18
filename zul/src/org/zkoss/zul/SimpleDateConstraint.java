@@ -132,10 +132,10 @@ public class SimpleDateConstraint extends SimpleConstraint {
 				_end = d;
 			}
 			return 0;
-		} else if (constraint.startsWith("before")) {
+		} else if (constraint.startsWith("before") && !constraint.startsWith("before_")) {
 			_end = parseDate(constraint.substring(6));
 			return 0;
-		} else if (constraint.startsWith("after")) {
+		} else if (constraint.startsWith("after") && !constraint.startsWith("after_")) {
 			_beg = parseDate(constraint.substring(5));
 			return 0;
 		}

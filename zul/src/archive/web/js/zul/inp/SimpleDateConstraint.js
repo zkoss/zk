@@ -46,11 +46,11 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			this._beg.setHours(0,0,0,0);
 			this._end.setHours(0,0,0,0);
 			return;
-		} else if (constraint.startsWith("before")) {
+		} else if (constraint.startsWith("before") && !constraint.startsWith("before_")) {
 			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format);
 			this._end.setHours(0,0,0,0);
 			return;
-		} else if (constraint.startsWith("after")) {
+		} else if (constraint.startsWith("after") && !constraint.startsWith("after_")) {
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format);
 			this._beg.setHours(0,0,0,0);
 			return;
