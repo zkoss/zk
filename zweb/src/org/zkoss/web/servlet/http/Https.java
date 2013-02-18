@@ -428,9 +428,13 @@ public class Https extends Servlets {
 				
 				// Bug ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
 				StringBuffer temp = request.getRequestURL();
-				final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
-				
-				final String flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
+				final String update_uri = (String)request.getSession().getServletContext().getAttribute("org.zkoss.zk.ui.http.update-uri"); //B65-ZK-1619
+				String flnm = "";
+				if (update_uri != null && temp.toString().contains(update_uri + "/view")) {
+					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
+					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
+				} else
+					flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
 					value += ";filename=" + encodeFilename(flnm);
 				response.setHeader("Content-Disposition", value);
