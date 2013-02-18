@@ -103,7 +103,7 @@ public class HtmlPageRenders {
 	private static final String ATTR_DESKTOP_CLIENTINFO = "org.zkoss.desktop.clientinfo.enabled";
 	/** Enabled visibility change */
 	private static final String ATTR_DESKTOP_VISIBILITYCHANGE = "org.zkoss.desktop.visibilitychange.enabled";
-	/** Support Portlet 2 */
+	/** Support Portlet 2.0 */
 	private static final String ATTR_PORTLET2_RESOURCEURL = "org.zkoss.portlet2.resourceURL";
 
 	/** Sets the content type to the specified execution for the given page.

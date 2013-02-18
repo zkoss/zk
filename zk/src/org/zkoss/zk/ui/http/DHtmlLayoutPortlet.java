@@ -103,6 +103,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	private static final String ATTR_RICHLET = "zk_richlet";
 	/** The default page. */
 	private String _defpage;
+	/** Check if support JSR 286 */
 	private boolean isJSR286 = true;
 
 	public void init() throws PortletException {
@@ -168,6 +169,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 	}
 
+	/**
+	 * Process AJAX request here instead of DHtmlUpdateServlet if the Portal Container support JSR 286. 
+	 * @since 6.5.2
+	 */
 	public void serveResource(ResourceRequest request, ResourceResponse response)
 			throws PortletException, IOException {
 		final WebManager webman = getWebManager();
