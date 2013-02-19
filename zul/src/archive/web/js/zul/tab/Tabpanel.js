@@ -30,7 +30,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	setVisible: function() {
 		this.$supers('setVisible', arguments);
-		if (!this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
+		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n().style.display = 'none';
 	},
 	getZclass: function() {
