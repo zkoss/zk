@@ -1245,6 +1245,9 @@ public class Listbox extends MeshElement {
 	private class PGListener implements SerializableEventListener<PagingEvent>,
 			CloneableEventListener<PagingEvent> {
 		public void onEvent(PagingEvent event) {
+			//Bug ZK-1622: reset anchor position after changing page
+			_anchorTop = 0;
+			_anchorLeft = 0;
 			Events.postEvent(new PagingEvent(event.getName(),
 				Listbox.this, event.getPageable(), event.getActivePage()));
 		}
