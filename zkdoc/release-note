@@ -7,6 +7,7 @@ ZK 5.0.13
   ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
   ZK-1594: Blinking popup in Firefox
   ZK-1618: Tabpanel not follow the visible attribute
+  ZK-1622: Paging listbox scrollbar is wrong
   
 * Upgrade Notes
 

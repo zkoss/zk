@@ -325,6 +325,9 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
+					//Bug ZK-1622: reset anchor position after changing page
+					_anchorTop = 0;
+					_anchorLeft = 0;
 					Events.postEvent(
 						new PagingEvent(evt.getName(),
 							Tree.this, evt.getPageable(), evt.getActivePage()));
