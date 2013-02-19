@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1076.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 19, 2013  3:13:31 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="Hello World!!" border="normal" width="800px"
+		height="500px">
+                  <zscript>
+                    ListModelList model = new ListModelList();
+                    model.add("a");
+                    model.add("b");
+                    model.add("c");
+                  </zscript>
+        <label multiline="true">
+        1. Please click the button "Show Items" to see if the combobox is shown in the tab "Items"
+        2. Please click the tab "tab 1" and then click the button "Show Items" again
+        3. Check whether the combobox is shown in the tab "Items"
+        </label>
+		<tabbox hflex="1" vflex="1">
+			<tabs>
+				<tab label="tab 1" />
+				<tab label="Items" id="tabItems" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<button label="Show Items"
+						onClick='listbox.invalidate();tabItems.setSelected(true)' />
+				</tabpanel>
+				<tabpanel>
+					<borderlayout height="100%" width="100%">
+						<north size="30px" flex="true" splittable="true" minsize="30" maxsize="30" >
+							<combobox />
+						</north>
+						<center autoscroll="true">
+							<listbox id="listbox" model="${model}" >
+								<listhead>
+									<listheader label="id" />
+									<listheader label="descricao" />
+								</listhead>
+                                               <!--            <template name="model">
+                                                          <listitem >
+										<listcell
+											label="${eacn}-1" />
+										<listcell
+											label="${each}-2" />
+									</listitem>
+                                                          </template> -->
+							</listbox>
+						</center>
+					</borderlayout>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

@@ -447,8 +447,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
-		if (this.parent && this.desktop)
-			this.parent.resize();
+		if (this.parent && this.desktop) {
+			if (this.parent.isRealVisible({dom: true})) // B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
+				this.parent.resize();
+		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
@@ -464,8 +466,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
-		if (this.parent && this.desktop && !this.childReplacing_)
-			this.parent.resize();
+		if (this.parent && this.desktop && !this.childReplacing_) {
+			if (this.parent.isRealVisible({dom: true})) // B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
+				this.parent.resize();
+		}
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
