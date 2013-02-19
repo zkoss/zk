@@ -467,7 +467,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//AU
 		if (sess == null) {
 			final WebApp wapp = WebManager.getWebAppIfAny(ctx);
-			denoteSessionTimeout(wapp, request, response);
+			denoteSessionTimeout(wapp, request, response, _compress);
 			return;
 		}
 
@@ -479,7 +479,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
-			process(sess, request, response);
+			process(sess, request, response, _compress);
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
@@ -500,14 +500,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @since 6.5.2
 	 */
 	public void denoteSessionTimeout(WebApp wapp, HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+			HttpServletResponse response, boolean compress) throws ServletException, IOException {
 		response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); // denote timeout
 		
 		// Bug 1849088: rmDesktop might be sent after invalidate
 		// Bug 1859776: need send response to client for redirect or others
 		final String dtid = getAuDecoder(wapp).getDesktopId(request);
 		if (dtid != null)
-			sessionTimeout(request, response, wapp, dtid);
+			sessionTimeout(request, response, wapp, dtid, compress);
 	}
 
 	//-- ASYNC-UPDATE --//
@@ -515,7 +515,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @since 3.0.0
 	 */
 	public void process(Session sess,
-	HttpServletRequest request, HttpServletResponse response)
+	HttpServletRequest request, HttpServletResponse response, boolean compress)
 	throws ServletException, IOException {
 		final String errClient = request.getHeader("ZK-Error-Report");
 		if (errClient != null)
@@ -526,6 +526,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		final AuDecoder audec = getAuDecoder(wapp);
 		final String dtid = audec.getDesktopId(request);
+		
 		if (dtid == null) {
 			//Bug 1929139: incomplete request (IE only)
 			if (log.debugable()) {
@@ -545,7 +546,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 			if (desktop == null) {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); //denote timeout
-				sessionTimeout(request, response, wapp, dtid);
+				sessionTimeout(request, response, wapp, dtid, compress);
 				return;
 			}
 		}
@@ -593,7 +594,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			((ExecutionCtrl)exec).setRequestId(sid);
 
 		final AuWriter out = AuWriters.newInstance();
-		out.setCompress(_compress);
+		out.setCompress(compress);
 		out.open(request, response);
 		try {
 			wappc.getUiEngine().execUpdate(exec, aureqs, out);
@@ -623,14 +624,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @param wapp the Web application (or null if not available yet)
 	 */
 	private void sessionTimeout(HttpServletRequest request,
-	HttpServletResponse response, WebApp wapp, String dtid)
+	HttpServletResponse response, WebApp wapp, String dtid, boolean compress)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null)
 			response.setHeader("ZK-SID", sid);
 
 		final AuWriter out = AuWriters.newInstance();
-		out.setCompress(_compress);
+		out.setCompress(compress);
 		out.open(request, response);
 		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			final String deviceType = getDeviceType(request);

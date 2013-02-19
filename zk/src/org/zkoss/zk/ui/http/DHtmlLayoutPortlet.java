@@ -183,13 +183,13 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final Session sess = getSession(request, false);
 		
 		final DHtmlUpdateServlet updateServlet = DHtmlUpdateServlet.getUpdateServlet(wapp);
-		updateServlet.setCompress(false); //Some portal container (a.k.a GateIn) doesn't work with gzipped output stream.
+		boolean compress = false; //Some portal container (a.k.a GateIn) doesn't work with gzipped output stream.
 		final String sid = httpreq.getHeader("ZK-SID");
 		if (sid != null)
 			response.setProperty("ZK-SID", sid);
 		if (sess == null) {
 			try {
-				updateServlet.denoteSessionTimeout(wapp, httpreq, httpres);
+				updateServlet.denoteSessionTimeout(wapp, httpreq, httpres, compress);
 			} catch (ServletException e) {
 				e.printStackTrace();
 			}
@@ -202,7 +202,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			response.setProperty("Cache-Control", "no-store");
 			response.setProperty("Expires", "-1");
 			
-			updateServlet.process(sess, httpreq, httpres);
+			updateServlet.process(sess, httpreq, httpres, compress);
 		} catch (ServletException e) {
 			e.printStackTrace();
 		} finally {
