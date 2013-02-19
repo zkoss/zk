@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 
 /**
- * Internatization utilities.
+ * Internationalization utilities.
  *
  * <p>Typical use:
  * <pre><code>
@@ -53,7 +53,7 @@ public class I18Ns {
 	private static final Log log = Log.lookup(I18Ns.class);
 	private static final String ATTR_SETUP = "org.zkoss.zk.ui.http.charset.setup";
 
-	/** Sets up the internationalization attributes, inclluding locale
+	/** Sets up the internationalization attributes, including locale
 	 * and time zone.
 	 *
 	 * @param sess the session. It cannot be null.
@@ -65,7 +65,7 @@ public class I18Ns {
 	ServletRequest request, ServletResponse response, String charset) {
 		return setup((Object)sess, request, response, charset);
 	}
-	/** Sets up the internationalization attributes, inclluding locale
+	/** Sets up the internationalization attributes, including locale
 	 * and time zone.
 	 *
 	 * <p>This method is used only for requests that don't
@@ -206,7 +206,7 @@ public class I18Ns {
 		return null;
 	}
 
-	/* Cleans up the inernationalization attributes.
+	/* Cleans up the internationalization attributes.
 	 *
 	 * @param old which must be the value returned by setup.
 	 */

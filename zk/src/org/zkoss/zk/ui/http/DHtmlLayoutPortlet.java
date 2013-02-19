@@ -16,52 +16,55 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.portlet.GenericPortlet;
-import javax.portlet.PortletSession;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.PortletPreferences;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.portlet.ResourceURL;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
-
-import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.portlet.Portlets;
 import org.zkoss.web.portlet.RenderHttpServletRequest;
 import org.zkoss.web.portlet.RenderHttpServletResponse;
-
+import org.zkoss.web.portlet.ResourceHttpServletRequest;
+import org.zkoss.web.portlet.ResourceHttpServletResponse;
+import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.DesktopRecycle;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.sys.PageRenderPatch;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.sys.PageRenderPatch;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 
 /**
  * The portlet used to process the request for a ZUML page.
@@ -100,9 +103,16 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	private static final String ATTR_RICHLET = "zk_richlet";
 	/** The default page. */
 	private String _defpage;
+	/** Check if support JSR 286 */
+	private boolean isJSR286 = true;
 
 	public void init() throws PortletException {
 		_defpage = getPortletConfig().getInitParameter(ATTR_PAGE);
+		try {
+			Class.forName("javax.portlet.ResourceURL");
+		} catch (ClassNotFoundException e) {
+			isJSR286 = false;
+		}
 	}
 
 	protected void doView(RenderRequest request, RenderResponse response)
@@ -132,7 +142,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			}
 		}
 
-		final Session sess = getSession(request);
+		final Session sess = getSession(request, true);
 		if (!SessionsCtrl.requestEnter(sess)) {
 			handleError(sess, request, response, path, null,
 				Messages.get(MZk.TOO_MANY_REQUESTS));
@@ -159,14 +169,63 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 	}
 
+	/**
+	 * Process AJAX request here instead of DHtmlUpdateServlet if the Portal Container support JSR 286. 
+	 * @since 6.5.2
+	 */
+	public void serveResource(ResourceRequest request, ResourceResponse response)
+			throws PortletException, IOException {
+		final WebManager webman = getWebManager();
+		final WebApp wapp = webman.getWebApp();
+		
+		final HttpServletRequest httpreq = ResourceHttpServletRequest.getInstance(request);
+		final HttpServletResponse httpres = ResourceHttpServletResponse.getInstance(response);
+		final Session sess = getSession(request, false);
+		
+		final DHtmlUpdateServlet updateServlet = DHtmlUpdateServlet.getUpdateServlet(wapp);
+		boolean compress = false; //Some portal container (a.k.a GateIn) doesn't work with gzipped output stream.
+		final String sid = httpreq.getHeader("ZK-SID");
+		if (sid != null)
+			response.setProperty("ZK-SID", sid);
+		if (sess == null) {
+			try {
+				updateServlet.denoteSessionTimeout(wapp, httpreq, httpres, compress);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+		final Object old = I18Ns.setup(httpreq.getSession(), httpreq, httpres, "UTF-8");
+		try {
+			response.setProperty("Pragma", "no-cache");
+			response.setProperty("Cache-Control", "no-cache");
+			response.setProperty("Cache-Control", "no-store");
+			response.setProperty("Expires", "-1");
+			
+			updateServlet.process(sess, httpreq, httpres, compress);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} finally {
+			I18Ns.cleanup(httpreq, old);
+		}
+	}
+	
 	/** Returns the session. */
-	private Session getSession(RenderRequest request)
+	private Session getSession(Object request, boolean create)
 	throws PortletException {
 		final WebApp wapp = getWebManager().getWebApp();
-		final PortletSession psess = request.getPortletSession();
-		final Session sess = SessionsCtrl.getSession(wapp, psess);
-		return sess != null ? sess:
-			SessionsCtrl.newSession(wapp, psess, request);
+		
+		PortletSession psess = null;
+		if (request instanceof RenderRequest)
+			psess = ((RenderRequest) request).getPortletSession();
+		else if (request instanceof ResourceRequest)
+			psess = ((ResourceRequest) request).getPortletSession();
+		
+		Session sess = SessionsCtrl.getSession(wapp, psess);
+		if (sess == null && create)
+			sess = SessionsCtrl.newSession(wapp, psess, request);
+		
+		return sess;
 	}
 
 	/** Process a portlet request.
@@ -225,6 +284,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					final Execution exec =
 						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
+					if (isJSR286) {
+						ResourceURL url = response.createResourceURL();
+						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
+					}
 					wappc.getUiEngine().execNewPage(exec, richlet, page,
 						out != null ? out: response.getWriter());
 				} else if (path != null) {
@@ -236,6 +299,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					final Execution exec =
 						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
+					if (isJSR286) {
+						ResourceURL url = response.createResourceURL();
+						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
+					}
 					wappc.getUiEngine().execNewPage(exec, pagedef, page,
 						out != null ? out: response.getWriter());
 				} else
