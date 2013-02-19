@@ -45,6 +45,7 @@ ZK 6.5.2
   ZK-1527: Bug in Datebox Popup (Chrome)
   ZK-1613: Invoke response.sendError in Weblogic server, the server will render the message as a response body
   ZK-1606: Should throw exception or show warning when a before|after command get a null or empty value
+  ZK-1618: Tabpanel not follow the visible attribute
   ZK-1537: NPE when listbox add to selection in paging mold (CE)
   ZK-1540: Inputwidget: html-input-element 1px too short
   ZK-1534: Spinner no longer supports null value (JavaDoc Issue)
