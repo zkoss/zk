@@ -16,6 +16,7 @@ ZK 6.0.5
   ZK-1602: Button with both autodisable and upload attributes set causes a javascript error
   ZK-1613: Invoke response.sendError in Weblogic server, the server will render the message as a response body
   ZK-1618: Tabpanel not follow the visible attribute
+  ZK-1622: Paging listbox scrollbar is wrong
 
 * Upgrade Notes
 
