@@ -1,0 +1,18 @@
+<zk>
+	<zscript><![CDATA[
+		class MyVM2 {
+			public String val = "A";
+			public String getValue(){
+				return val;
+			}
+			public void setValue(String value){
+				this.val = value;
+			}
+		}
+	]]></zscript>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('MyVM2')">
+		<label value="@bind(vm.value)"/>
+		<textbox value="@bind(vm.value)"/>
+	</window>
+</zk>
