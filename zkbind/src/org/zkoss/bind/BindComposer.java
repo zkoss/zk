@@ -227,7 +227,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			if(vm instanceof String){
 				Page page = comp.getPage();
 				if(page==null){
-					throw new UiException(MiscUtil.formatLocationMessage("can't find Page to resolve a view model class :'"+vm+"'",initanno));
+					throw new UiException("can't find Page to resolve a view model class :'"+vm+"'");
 				}else{
 					vm = comp.getPage().resolveClass((String)vm);
 				}
