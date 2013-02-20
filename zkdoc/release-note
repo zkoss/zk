@@ -17,6 +17,7 @@ ZK 6.0.5
   ZK-1613: Invoke response.sendError in Weblogic server, the server will render the message as a response body
   ZK-1618: Tabpanel not follow the visible attribute
   ZK-1622: Paging listbox scrollbar is wrong
+  ZK-1519: Popup disappear when mouse over on the corner where the two scrollbars meet, IE 10 only
 
 * Upgrade Notes
 
