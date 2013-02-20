@@ -49,6 +49,7 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.xel.util.MethodFunction;
+import org.zkoss.xml.Locators;
 import org.zkoss.web.servlet.Servlets;
 	
 import org.zkoss.zk.ui.WebApp;
@@ -892,6 +893,13 @@ public class Parser {
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
 			annHelper.applyAnnotations(compInfo, null, true);
+			
+
+			//only provide if there already has other annotation
+			if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
+				//provide component location info as a annotation wiht it's location.
+				compInfo.addAnnotation(null, "ZKLOC", null, Locators.toLocation(el.getLocator()));
+			}
 
 			final Collection<Item> items = el.getChildren();
 			String textAs = null;
