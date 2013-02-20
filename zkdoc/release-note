@@ -68,6 +68,7 @@ ZK 6.5.2
   ZK-1599: Component not found when using combobox with dynamic image
   ZK-1619: Jsp trick to avoid IE 6/7/8 warning popup upon downloading fails to correctly set up the filename
   ZK-1076: North hides when i refresh databind
+  ZK-1628: argument of zk.Widget.redraw() is not a array on Chrome
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

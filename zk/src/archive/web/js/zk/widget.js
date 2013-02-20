@@ -2441,17 +2441,7 @@ function () {
 	 * @return String the HTML fragment
 	 */
 	redrawHTML_: function (skipper, trim) {
-		var out = zk.chrome ? new (function() {
-				var result = "";
-				this.push = function () {
-					for (var i = 0, j = arguments.length; i<j;i++)
-						if (arguments[i] != null || arguments[i] != undefined ) //skip null or undefined arguments, bug ZK-1535: don't skip 0
-							result += arguments[i];
-				};
-				this.join = function () {
-					return result;
-				};
-			}) : [];
+		var out = []; // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
 		this.redraw(out, skipper);
 		out = out.join('');
 		return trim ? out.trim(): out;
