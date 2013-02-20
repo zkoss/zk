@@ -1,0 +1,44 @@
+<zk>
+	<window id="w1" apply="org.zkoss.bind.BindComposer" title="Children Binding Init"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01615ChildrenBindingInForm')">
+		<groupbox form="@id('prn') @load(vm.myData1)">
+			<grid id="grid">
+				<rows children="@init(prn.list)">
+					<template name="children" var="item">
+						<row>
+							<label value="@bind(item)" />
+						</row>
+					</template>
+				</rows>
+			</grid>
+		</groupbox>
+	</window>
+	<window id="w2" apply="org.zkoss.bind.BindComposer" title="Children Binding Load"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01615ChildrenBindingInForm')">
+		<groupbox form="@id('prn') @load(vm.myData2)">
+			<grid id="grid">
+				<rows children="@load(prn.list)">
+					<template name="children" var="item">
+						<row>
+							<label value="@bind(item)" />
+						</row>
+					</template>
+				</rows>
+			</grid>
+		</groupbox>
+	</window>
+	<window id="w3" apply="org.zkoss.bind.BindComposer"  title="Ref Binding"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01615ChildrenBindingInForm')">
+		<groupbox form="@id('prn') @load(vm.myData3)">
+			<div list="@ref(prn.list)">
+				<grid id="grid" model="@load(list)" >
+					<template name="model" var="item">
+						<row>
+							<label value="@bind(item)" />
+						</row>
+					</template>
+				</grid>
+			</div>
+		</groupbox>
+	</window>
+</zk>

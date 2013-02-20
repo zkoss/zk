@@ -24,7 +24,9 @@ import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.util.logging.Log;
@@ -102,15 +104,16 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 				if (fieldName != null) {
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
 						if(_log.debugable()){
-							_log.debug("add save-filed '%s' to form '%s'", fieldName,formBean);
+							_log.debug("add save-field '%s' to form '%s'", fieldName,formBean);
 						}
 						if(formBean instanceof FormExt ){
 							((FormExt)formBean).addSaveFieldName(fieldName);
 						}
 						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding)binding, fieldName);
-					} else if (binding instanceof LoadPropertyBinding) {
+					} else if (binding instanceof LoadPropertyBinding 
+							|| binding instanceof LoadChildrenBinding || binding instanceof ReferenceBinding) {
 						if(_log.debugable()){
-							_log.debug("add load-filed '%s' to form '%s'", fieldName,formBean);
+							_log.debug("add load-field '%s' to form '%s'", fieldName,formBean);
 						}
 						if(formBean instanceof FormExt){
 							((FormExt)formBean).addLoadFieldName(fieldName);

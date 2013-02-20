@@ -72,6 +72,7 @@ ZK 6.5.2
   ZK-1076: North hides when i refresh databind
   ZK-1628: argument of zk.Widget.redraw() is not a array on Chrome
   ZK-1597: The tab was selected cann't be selected while drag & drop
+  ZK-1615: Use children in a form binding doesn't work
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
