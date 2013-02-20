@@ -40,7 +40,11 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 
 	public Object getValue(BindContext ctx, Component comp, ExpressionX expression)
 	throws XelException {
-		return expression.evaluate(newXelContext(ctx, comp));
+		try{
+			return expression.evaluate(newXelContext(ctx, comp));
+		}catch(RuntimeException x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when getValue from "+expression.getExpressionString(),comp),x);
+		}
 	}
 
 	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value)
@@ -48,7 +52,12 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		//ZK-1063 No exception if binding to a non-existed property
 		//Dennis, Removed the try-catch PropertyNotFoundException, we don't have history to check why we did try-catch before
 		//However, it should throw the property-not-found to let user be aware it. 
-		expression.setValue(newXelContext(ctx, comp), value);
+		try{
+			expression.setValue(newXelContext(ctx, comp), value);
+			
+		}catch(RuntimeException x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when setValue to "+expression.getExpressionString(),comp),x);
+		}
 	}
 
 	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
@@ -63,8 +72,12 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 				}
 			}
 		}
-		return (ExpressionX) getExpressionFactory()
-			.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
+		try{
+			return (ExpressionX) getExpressionFactory()
+				.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
+		}catch(Exception x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage(),comp),x);
+		}
 	}
 	
 	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression)
@@ -74,18 +87,22 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 	
 	public ValueReference getValueReference(BindContext ctx, Component comp, ExpressionX expression)
 	throws XelException {
-		ValueReference ref = expression.getValueReference(newXelContext(ctx, comp));
-		//bug 1129-ref NPE, no value reference if it is a SimpleNode
-		if(ref==null){
-			XelContext xctx = newXelContext(ctx, comp);
-			//Dennis, a special control flag to ignore ref-binding getValue in BindELResolver
-			xctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.TRUE);
-			Object val = expression.evaluate(xctx);
-			if(val instanceof ReferenceBindingImpl){//get value-reference from ref-binding
-				ref = ((ReferenceBindingImpl)val).getValueReference();
+		try{
+			ValueReference ref = expression.getValueReference(newXelContext(ctx, comp));
+			//bug 1129-ref NPE, no value reference if it is a SimpleNode
+			if(ref==null){
+				XelContext xctx = newXelContext(ctx, comp);
+				//Dennis, a special control flag to ignore ref-binding getValue in BindELResolver
+				xctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.TRUE);
+				Object val = expression.evaluate(xctx);
+				if(val instanceof ReferenceBindingImpl){//get value-reference from ref-binding
+					ref = ((ReferenceBindingImpl)val).getValueReference();
+				}
 			}
+			return ref;
+		}catch(Exception x){
+			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage(),comp),x);
 		}
-		return ref;
 	}
 
 	//utility to create an XelContext associated to the reference
