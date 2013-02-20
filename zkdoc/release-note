@@ -50,6 +50,7 @@ ZK 6.5.2
   ZK-1537: NPE when listbox add to selection in paging mold (CE)
   ZK-1622: Paging listbox scrollbar is wrong
   ZK-1540: Inputwidget: html-input-element 1px too short
+  ZK-1519: Popup disappear when mouse over on the corner where the two scrollbars meet, IE 10 only
   ZK-1534: Spinner no longer supports null value (JavaDoc Issue)
   ZK-1557: Groupbox fails to open if it has non-visible children
   ZK-1593: JS bug - Failed to mount: Cannot read property 'defaultView' of null
