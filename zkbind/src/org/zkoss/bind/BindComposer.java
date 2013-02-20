@@ -152,7 +152,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		
 			_binder.init(comp, _viewModel, getViewModelInitArgs(evalx,comp));
 		}catch(Exception x){
-			throw new UiException(MiscUtil.formatLocationMessage(x.getClass().getName()+":"+x.getMessage(), comp));
+			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 		
 		//to apply composer-name
@@ -227,7 +227,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			if(vm instanceof String){
 				Page page = comp.getPage();
 				if(page==null){
-					throw new UiException("can't find Page to resolve a view model class :'"+vm+"'");
+					throw new UiException(MiscUtil.formatLocationMessage("can't find Page to resolve a view model class :'"+vm+"'",initanno));
 				}else{
 					vm = comp.getPage().resolveClass((String)vm);
 				}
@@ -236,7 +236,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 				vm = ((Class<?>)vm).newInstance();
 			}
 		} catch (Exception e) {
-			throw new UiException(MiscUtil.formatLocationMessage(e.getMessage(),initanno),e);
+			throw MiscUtil.mergeExceptionInfo(e, initanno);
 		}
 		if(vm == null){
 			throw new UiException(MiscUtil.formatLocationMessage("view model of '"+vmname+"' is null",initanno));

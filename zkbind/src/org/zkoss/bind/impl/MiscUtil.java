@@ -11,18 +11,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.bind.impl;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.resource.Location;
+import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.Annotation;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * internal use only misc util
@@ -141,5 +140,43 @@ public class MiscUtil {
 		}
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	//utility to prevent nested location info in exception
+	public static RuntimeException mergeExceptionInfo(Exception ex,Object loc){
+		Location location = null;
+		boolean showColumn = true;
+		if(loc instanceof Component){
+			location = toComponentLocation((Component)loc);
+			showColumn = false;
+		}else if(loc instanceof Annotation){
+			location = ((Annotation)loc).getLocation();
+		}else if(loc instanceof Location){
+			location = (Location)loc;
+		}
+		
+		if(location==null){
+			if(ex instanceof RuntimeException){
+				return (RuntimeException) ex;
+			}else{
+				return new UiException(ex.getMessage(),ex);
+			}
+		}else{
+			String orgMsg = ex.getMessage();
+			String msg = formatLocationMessage(null,location,showColumn);
+			if(orgMsg.endsWith(msg)){
+				//don't append if the location info is the same.
+				if(ex instanceof RuntimeException){
+					return (RuntimeException) ex;
+				}else{
+					return new UiException(ex.getMessage(),ex);
+				}
+			}else{
+				msg = formatLocationMessage(orgMsg,location,showColumn);
+				//no way to change exception's message, so use the most common UiException
+				return new UiException(msg,ex);
+			}
+			
+		}
 	}
 }

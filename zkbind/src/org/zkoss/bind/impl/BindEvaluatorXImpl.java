@@ -42,8 +42,8 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 	throws XelException {
 		try{
 			return expression.evaluate(newXelContext(ctx, comp));
-		}catch(RuntimeException x){
-			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when getValue from "+expression.getExpressionString(),comp),x);
+		}catch(Exception x){
+			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 
@@ -55,8 +55,8 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		try{
 			expression.setValue(newXelContext(ctx, comp), value);
 			
-		}catch(RuntimeException x){
-			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage()+" when setValue to "+expression.getExpressionString(),comp),x);
+		}catch(Exception x){
+			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			return (ExpressionX) getExpressionFactory()
 				.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
 		}catch(Exception x){
-			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage(),comp),x);
+			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 	
@@ -101,7 +101,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			}
 			return ref;
 		}catch(Exception x){
-			throw new XelException(MiscUtil.formatLocationMessage(x.getMessage(),comp),x);
+			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 
