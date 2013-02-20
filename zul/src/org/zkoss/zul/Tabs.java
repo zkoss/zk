@@ -100,7 +100,10 @@ public class Tabs extends XulElement {
 		boolean sel = getChildren().isEmpty(), desel = false;
 		final Tab newtab = (Tab)child;
 		if (!sel && newtab.isSelected()) {
-			newtab.setSelectedDirectly(false);	//turn off first
+			if (newtab.getTabbox() != null) // B65-ZK-1597
+				newtab.setSelected(false); //reset it
+			else
+				newtab.setSelectedDirectly(false);	//turn off first
 			sel = desel = true;					//trun on later
 		}
 
