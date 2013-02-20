@@ -91,7 +91,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			// TooltipOver event will open the tooltip again...
 			// 
 			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
-	    	if (zk.ff) {
+			// IE 10: Bug ZK-1519
+	    	if (zk.ie > 9 || zk.ff) {
 				var $tip = jq(tip.$n()),
 					$tipOff = $tip.offset(),
 					pointer = zk.currentPointer;
@@ -523,6 +524,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		this.$supers('doRightClick_', arguments);
 	},
 	doTooltipOver_: function (evt) {
+		zk.log('doTooltipOver_');
 		if (!evt.tooltipped && _tt_beforeBegin(this)) {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
 				tip = this._smartFellow(params.id);
@@ -536,6 +538,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doTooltipOut_: function (evt) {
 		_tt_end(this);
+		zk.log('doTooltipOut');
 		this.$supers('doTooltipOut_', arguments);
 	},
 	_smartFellow: function (id) {
