@@ -214,11 +214,14 @@ abstract public class NumberInputElement extends FormatInputElement {
 
 		String fmt = getFormat();
 		if (fmt == null) fmt = defaultFormat;
-		if (fmt != null) 
-			if (_locale != null)
-				df.applyLocalizedPattern(fmt); //Bug ZK-1227: apply localized pattern for decimalbox
-			else
-				df.applyPattern(fmt);
+		if (fmt != null) {
+			try {
+				df.applyPattern(fmt); //Bug ZK-1518: should try apply pattern first
+			} catch (IllegalArgumentException e) {
+				if (_locale != null)
+					df.applyLocalizedPattern(fmt); //Bug ZK-1227: apply localized pattern for decimalbox
+			}
+		}
 		return df.format(value);
 	}
 	/** Filters out non digit characters, such comma and whitespace,
