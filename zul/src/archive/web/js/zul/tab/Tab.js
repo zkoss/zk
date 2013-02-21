@@ -175,7 +175,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		else
 			jq(tab).removeClass(zcls + "-seld");
 
-		if (panel)
+		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
 			panel._sel(toSel, !init);
 
 		if (!tabbox.inAccordionMold()) {

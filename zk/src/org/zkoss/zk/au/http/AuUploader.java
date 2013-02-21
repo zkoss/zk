@@ -104,17 +104,17 @@ public class AuUploader implements AuExtension {
 					uuid = request.getParameter("wid");
 					sid = request.getParameter("sid");
 					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(request.getParameter("dtid"));
-					Map<String, Integer> precent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
-					Map<String, Object> size = cast((Map)desktop.getAttribute(Attributes.UPLOAD_SIZE));
+					Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+					Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
 					final String key = uuid + '_' + sid;
 					Object sinfo = size.get(key);
 					if (sinfo instanceof String) {
 						response.getWriter().write("error:" + sinfo);
 						size.remove(key);
-						precent.remove(key);
+						percent.remove(key);
 						return;
 					}
-					final Integer p = precent.get(key);
+					final Integer p = percent.get(key);
 					final Long cb = (Long)sinfo;
 					response.getWriter().write((p != null ? p.intValue(): -1)+ ","
 								+(cb != null ? cb.longValue(): -1));
@@ -163,11 +163,11 @@ public class AuUploader implements AuExtension {
 			}
 
 			if (desktop != null) {
-				Map<String, Integer> precent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+				Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
 				Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
 				final String key = uuid + '_' + sid;
-				if (precent != null) {
-					precent.remove(key);
+				if (percent != null) {
+					percent.remove(key);
 					size.remove(key);
 				}
 			}
@@ -180,11 +180,11 @@ public class AuUploader implements AuExtension {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
-			Map<String, Integer> precent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+			Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
 			Map<String, Object> size = cast((Map)desktop.getAttribute(Attributes.UPLOAD_SIZE));
 			final String key = uuid + '_' + sid;
-			if (precent != null) {
-				precent.remove(key); 
+			if (percent != null) {
+				percent.remove(key);
 				size.put(key, alert);
 			}
 		}

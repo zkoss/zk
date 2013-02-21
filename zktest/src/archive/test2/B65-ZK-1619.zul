@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1619.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Feb 18, 2013  6:46:39 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="My First Window" border="normal" width="600px" xmlns:w="client">
+	1. Please upload an image file.
+	<separator/>
+	2. Click the Button "Download via jsp" and you should see the filename is the same as the upload one.
+    <button label="Upload" upload="true" onUpload='sessionScope.put( "media", event.getMedia() );' />
+    <button label="Download via jsp" w:onClick='window.open( "B65-ZK-1619_1.jsp" );' />
+</window>
+

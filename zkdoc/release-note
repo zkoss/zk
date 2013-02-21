@@ -2,6 +2,7 @@
 ZK 6.5.2
 
 * Features
+  ZK-315:  DHtmlLayoutPortlet support Portlet 2.0
   ZK-1515: Loading themes from a folder
   ZK-1548: Move some zkbind fundamental features to community edition.
   ZK-1560: Configuration: allow user to abort the waiting thread if it takes too long to execute (activation)
@@ -9,6 +10,8 @@ ZK 6.5.2
   ZK-1583: notification arrow position shall align in the center of reference widget
   ZK-1545: Make "request auto-send" timeout and number of times a retry is made configurable
   ZK-1507: Client-side API to register a callback function that can be invoked after all widgets finish resize
+  ZK-1616: AU response error can be handle by user
+  ZK-1630: Provides line information when throwing exception in binder
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
@@ -44,13 +47,32 @@ ZK 6.5.2
   ZK-1527: Bug in Datebox Popup (Chrome)
   ZK-1613: Invoke response.sendError in Weblogic server, the server will render the message as a response body
   ZK-1606: Should throw exception or show warning when a before|after command get a null or empty value
+  ZK-1618: Tabpanel not follow the visible attribute
   ZK-1537: NPE when listbox add to selection in paging mold (CE)
+  ZK-1622: Paging listbox scrollbar is wrong
   ZK-1540: Inputwidget: html-input-element 1px too short
+  ZK-1519: Popup disappear when mouse over on the corner where the two scrollbars meet, IE 10 only
   ZK-1534: Spinner no longer supports null value (JavaDoc Issue)
   ZK-1557: Groupbox fails to open if it has non-visible children
   ZK-1593: JS bug - Failed to mount: Cannot read property 'defaultView' of null
   ZK-1567: Menuitems not aligned below Menu
   ZK-1614: Full Screen iPad Web Apps Missing Component Buttons
+  ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
+  ZK-1608: Tree node become leaf node after update
+  ZK-1568: Window is always visible when switching to non-modal mode
+  ZK-1526: layouts and containers should not take menupopup into account when computing padding
+  ZK-1617: Panel in Portallayout not draggable after updated
+  ZK-1612: Drag drop on IE9, does not work right with an Image
+  ZK-1603: Doesn't allow to coerce set to list when binding selectedItems
+  ZK-1595: Listbox selectedItems and Hibernate collection types don't play together
+  ZK-1627: datebox contraint position after_* or before_* wrongly parsed by SimpleDateConstraint
+  ZK-1626: Incorrect result for 'if' attribute when mixing native and zk components
+  ZK-1599: Component not found when using combobox with dynamic image
+  ZK-1619: Jsp trick to avoid IE 6/7/8 warning popup upon downloading fails to correctly set up the filename
+  ZK-1076: North hides when i refresh databind
+  ZK-1628: argument of zk.Widget.redraw() is not a array on Chrome
+  ZK-1597: The tab was selected cann't be selected while drag & drop
+  ZK-1615: Use children in a form binding doesn't work
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

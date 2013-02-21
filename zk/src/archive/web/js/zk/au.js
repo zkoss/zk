@@ -179,34 +179,43 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						zUtl.go(eru);
 						return;
 					}
-
-					//handle MSIE's buggy HTTP status codes
-					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
-					switch (rstatus) { //auto-retry for certain case
-					default:
-						if (!ajaxReqTries) break;
-						//fall thru
-					case 12002: //server timeout
-					case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
-					case 12031:
-					case 12152: // Connection closed by server.
-					case 12159:
-					case 13030:
-					case 503: //service unavailable
-						if (!ajaxReqTries) ajaxReqTries = 3; //two more try
-						if (--ajaxReqTries) {
-							ajaxReqResend(reqInf, zk.resendTimeout);
-							return;
-						}
-					}
-
-					if (!reqInf.ignorable && !zk.unloading) {
-						var msg = req.statusText;
-						if (zAu.confirmRetry("FAILED_TO_RESPONSE", rstatus+(msg?": "+msg:""))) {
-							ajaxReqTries = 2; //one more try
-							ajaxReqResend(reqInf);
-							return;
-						}
+                    
+                    if (typeof zAu.ajaxErrorHandler == 'function') {
+                        ajaxReqTries = zAu.ajaxErrorHandler(req, rstatus, req.statusText, ajaxReqTries);
+                        if (ajaxReqTries > 0) {
+                            ajaxReqTries--;
+                            ajaxReqResend(reqInf, zk.resendTimeout);
+                            return;
+                        }
+                    } else {
+    					//handle MSIE's buggy HTTP status codes
+    					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
+    					switch (rstatus) { //auto-retry for certain case
+    					default:
+    						if (!ajaxReqTries) break;
+    						//fall thru
+    					case 12002: //server timeout
+    					case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+    					case 12031:
+    					case 12152: // Connection closed by server.
+    					case 12159:
+    					case 13030:
+    					case 503: //service unavailable
+    						if (!ajaxReqTries) ajaxReqTries = 3; //two more try
+    						if (--ajaxReqTries) {
+    							ajaxReqResend(reqInf, zk.resendTimeout);
+    							return;
+    						}
+    					}
+    
+    					if (!reqInf.ignorable && !zk.unloading) {
+    						var msg = req.statusText;
+    						if (zAu.confirmRetry("FAILED_TO_RESPONSE", rstatus+(msg?": "+msg:""))) {
+    							ajaxReqTries = 2; //one more try
+    							ajaxReqResend(reqInf);
+    							return;
+    						}
+					   }
 					}
 				}
 			}
@@ -853,7 +862,6 @@ zAu.beforeSend = function (uri, req, dt) {
 			|| !(ignorable = ignorable && opts.ignorable)) //all ignorable
 				break;
 		}
-
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "", rtags = {},
 			requri = uri || zk.ajaxURI(null, {desktop:dt,au:true});
@@ -868,7 +876,8 @@ zAu.beforeSend = function (uri, req, dt) {
 			content += zAu.encode(j, aureq, dt);
 			zk.copy(rtags, (aureq.opts||{}).rtags);
 		}
-
+		if (zk.portlet2AjaxURI)
+			requri = zk.portlet2AjaxURI;
 		if (content)
 			ajaxSendNow({
 				sid: seqId, uri: requri, dt: dt, content: content,
@@ -964,6 +973,39 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	//cmd1: null, //jsdoc
 };
+
+/** @partial zAu
+ */
+//@{
+    /** Implements this function to be called if the request fails.
+     * The function receives four arguments: The XHR (XMLHttpRequest) object,
+     * a number describing the status of the request, a string describing the text
+     * of the status, and a number describing the retry value to re-send.
+     * 
+     * <p>For example,
+<pre><code>
+zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
+    if (ajaxReqTries == null)
+        ajaxReqTries = 3; // retry 3 times
+        
+    // reset the resendTimeout, for more detail, please refer to 
+    // http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element/The_auto-resend-timeout_Element 
+    zk.resendTimeout = 2000;//wait 2 seconds to resend.
+    
+    if (!zAu.confirmRetry("FAILED_TO_RESPONSE", status+(statusText?": "+statusText:"")))
+        return 0; // no retry;
+    return ajaxReqTries;
+}
+</code></p>
+     * @param Object req the object of XMLHttpRequest
+     * @param int status the status of the request
+     * @param String statusText the text of the status from the request
+     * @param int ajaxReqTries the retry value for re-sending the request, if undefined
+     *      means the function is invoked first time.
+     * @since 6.5.2
+     */
+    //ajaxErrorHandler: function () {}
+//@};
 
 //Commands//
 /** @class zk.AuCmd0

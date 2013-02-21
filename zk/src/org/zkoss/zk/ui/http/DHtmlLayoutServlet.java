@@ -96,6 +96,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		_webman = WebManager.getWebManagerIfAny(ctx);
 		String updateURI = Utils.checkUpdateURI(
 				config.getInitParameter("update-uri"), "The update-uri parameter");
+		ctx.setAttribute("org.zkoss.zk.ui.http.update-uri", updateURI); //B65-ZK-1619
 		if (_webman == null) {
 			log.warning("WebManager not initialized. Please check if HttpSessionListener is configured properly.");
 			_webman = new WebManager(ctx, updateURI);

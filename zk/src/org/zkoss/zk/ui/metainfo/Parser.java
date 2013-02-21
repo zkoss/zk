@@ -1471,7 +1471,7 @@ public class Parser {
 			if (o instanceof NativeInfo) {
 				final NativeInfo childInfo = (NativeInfo)o;
 				//FUTURE: enhance UiEngineImpl to handle split's forEach
-				if (!childInfo.withForEach()) {
+				if (!childInfo.withForEach() && !childInfo.withCondition()) {// B65-ZK-1626
 					childInfo.setParentDirectly(null);
 					compInfo.setSplitChild(childInfo);
 					it.remove();

@@ -43,7 +43,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
 import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.Location;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;

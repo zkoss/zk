@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1597.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Feb 20, 2013 11:22:11 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="Hello World!!" border="normal" width="800px"
+	height="500px">
+		<zscript>ListModelList model = new ListModelList();
+			model.add("a");
+			model.add("b");
+			model.add("c");</zscript>
+		<tabbox hflex="1" vflex="1">
+			<tabs>
+				<tab id="tab" label="tab 1" droppable="true" draggable="true">
+					<attribute name="onDrop">
+						DropEvent evt = (DropEvent) event;
+				Component dragged = evt.getDragged();
+				Component target = evt.getTarget();
+				dragged.getParent().insertBefore(dragged, target);
+				dragged.selected= true;
+					</attribute>
+				</tab>
+				<tab label="Items" draggable="true" droppable="true" id="tabItems">
+					<attribute name="onDrop">
+						DropEvent evt = (DropEvent) event;
+				Component dragged = evt.getDragged();
+				Component target = evt.getTarget();
+				dragged.getParent().insertBefore(dragged, target);
+				dragged.selected= true;
+					</attribute>	
+				</tab>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+				<label multiline="true">
+				1, Please select the tab "Items".
+				2, Drag the tab "Items" to prev of "tab 1" and drop it.
+				3, The tab "Items" should be selected and the content displays the first tabpanel.
+				</label>
+				</tabpanel>
+				<tabpanel>
+					<borderlayout height="100%" width="100%">
+						<north size="30px" flex="true" splittable="true" minsize="30" maxsize="30" >
+							<combobox />
+						</north>
+						<center autoscroll="true">
+							<listbox id="listbox" model="${model}" >
+								<listhead>
+									<listheader label="id" />
+									<listheader label="descricao" />
+								</listhead>
+							</listbox>
+						</center>
+					</borderlayout>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

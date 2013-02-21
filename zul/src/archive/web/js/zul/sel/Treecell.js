@@ -188,9 +188,9 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			sb.push(iconScls + "-ico ", iconScls, '-', name, '"');
 		}
 		if (button) {
-			var item = this.parent.parent;
-			if (item && item.treerow)
-				sb.push(' id="', item.treerow.uuid, '-open"');
+			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd() 
+			if (item)
+				sb.push(' id="', item.uuid, '-open"');
 		}
 
 		sb.push('></span>');

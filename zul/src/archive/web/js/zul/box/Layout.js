@@ -120,7 +120,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			spc = this._spacing;
 		
 		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"');
-		if(spc && spc != 'auto' && child.nextSibling)
+		var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
+		if(spc && spc != 'auto' && next && !next.$instanceof(zul.wgt.Popup))
 			oo.push(' style="padding-' + (vert ? 'bottom:' : 'right:') + spc + '"');
 		oo.push('>');
 		child.redraw(oo);
@@ -199,6 +200,17 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	},
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
 		var el = wgt.$n(); //Bug ZK-1578: should get child size instead of chdex size
+		//If child uses hflex="1" when parent has hflex="min"
+		//   Find max sibling width and apply on the child
+		if (wgt._hflex && this.isVertical_() && attr == 'w') {
+			for (var w = wgt.nextSibling, max = 0, width; w; w = w.nextSibling) {
+				if (!wgt._hflex) {
+					width = zjq.minWidth(w.$n());
+					max = width > max ? width : max;
+				}
+			}
+			return max;
+		}
 		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
 	},
 	//Bug ZK-1577: should consider spacing size of all chdex node

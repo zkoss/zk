@@ -20,13 +20,24 @@ package org.zkoss.zel.impl.lang;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Vector;
 
 
 import org.zkoss.zel.ELException;
+import org.zkoss.zel.impl.util.Classes;
 import org.zkoss.zel.impl.util.MessageFactory;
 
 
@@ -451,6 +462,14 @@ public class ELSupport {
         if (isDateTimeType(type)) {
         	return coerceToDateTime(obj, type);
         }
+        
+        //ZK-1595: Cannot coerce Set to List
+        //Dennis, do the last effort to convert to List or Set
+        //sometimes, if user's bean doesn't allow the List/Set we converted, it will still get error 
+        //but, if we don't do this, user will still get error from last line of this method.
+        if (isCollectionType(type)) {
+        	return coerceToCollection(obj, type);
+        }
 
         // new to spec
         if (obj == null)
@@ -494,6 +513,12 @@ public class ELSupport {
         if (isDateTimeType(type)) {
         	return coerceToDateTime(obj, type);
         }
+        
+        //ZK-1595: Cannot coerce Set to List
+        if (isCollectionType(type)) {
+        	return coerceToCollection(obj, type);
+        }
+        
 
         // new to spec
         if (obj == null)
@@ -512,7 +537,49 @@ public class ELSupport {
                 obj, obj.getClass(), type));
     }
 
-    public static final boolean isBigDecimalOp(final Object obj0,
+	private static boolean isCollectionType(Class<?> type) {
+		//support set and list only
+		return Collection.class.isAssignableFrom(type);
+	}
+	
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private static Object coerceToCollection(Object obj, Class<?> type) {
+		if(obj==null) return null;
+		if(obj instanceof Collection){
+			//try the construct first
+			try {
+				return Classes.newInstance(type, new Object[]{obj});
+			} catch (Throwable e) {/*eat*/}			
+			
+			//try the common java.lang collections
+			if(Set.class.isAssignableFrom(type)){
+				if(Set.class.equals(type) || LinkedHashSet.class.isAssignableFrom(type)){
+					return new LinkedHashSet((Collection)obj);
+				}else if(HashSet.class.isAssignableFrom(type)){
+					return new HashSet((Collection)obj);
+				}else if(TreeSet.class.isAssignableFrom(type)){
+					return new TreeSet((Collection)obj);
+				}
+				//give it a default one
+				return new LinkedHashSet((Collection)obj);
+			}else if(List.class.isAssignableFrom(type)){
+				if(List.class.equals(type) || LinkedList.class.isAssignableFrom(type)){
+					return new LinkedList((Collection)obj);
+				}else if(ArrayList.class.isAssignableFrom(type)){
+					return new ArrayList((Collection)obj);
+				}else if(Vector.class.isAssignableFrom(type)){
+					return new Vector((Collection)obj);
+				}
+				//give it a default
+				return new LinkedList((Collection)obj);
+			}
+		}
+		throw new ELException(MessageFactory.get("error.convert",
+                obj, obj.getClass(), type));
+	}
+
+
+	public static final boolean isBigDecimalOp(final Object obj0,
             final Object obj1) {
         return (obj0 instanceof BigDecimal || obj1 instanceof BigDecimal);
     }

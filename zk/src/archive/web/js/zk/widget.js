@@ -1698,7 +1698,7 @@ wgt.$f().main.setTitle("foo");
 			//Alertinative is to introduce another isVisibleXxx but not worth
 				if (!zk(wgt.$n()).isVisible(opts.strict))
 					return _markCache(cache, visited, false);
-			} else if (!wgt._visible)
+			} else if (!wgt._visible) // TODO: wgt._visible is not accurate, if tabpanel is not selected, we should fix in ZK 7.(B65-ZK-1076)
 				return _markCache(cache, visited, false);
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
@@ -2441,17 +2441,7 @@ function () {
 	 * @return String the HTML fragment
 	 */
 	redrawHTML_: function (skipper, trim) {
-		var out = zk.chrome ? new (function() {
-				var result = "";
-				this.push = function () {
-					for (var i = 0, j = arguments.length; i<j;i++)
-						if (arguments[i] != null || arguments[i] != undefined ) //skip null or undefined arguments, bug ZK-1535: don't skip 0
-							result += arguments[i];
-				};
-				this.join = function () {
-					return result;
-				};
-			}) : [];
+		var out = []; // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
 		this.redraw(out, skipper);
 		out = out.join('');
 		return trim ? out.trim(): out;

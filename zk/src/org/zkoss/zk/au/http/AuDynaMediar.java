@@ -112,7 +112,12 @@ public class AuDynaMediar implements AuExtension {
 				if (media != null) {
 					download = true; //yes, it is for download
 				} else {
-					final Component comp = desktop.getComponentByUuid(uuid);
+					final Component comp = desktop.getComponentByUuidIfAny(uuid);
+					if (comp == null) { // B65-ZK-1599
+						response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+uuid));
+						log.debug("Failed to load media, "+pi);
+						return;
+					}
 					final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
 					if (!(cc instanceof DynamicMedia))
 						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
