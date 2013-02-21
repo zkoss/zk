@@ -95,8 +95,12 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
-			this.position(this.parent, null, "end_before", {overflow:true});
-			this._fixarrow();
+			if (zk(this.parent).isScrollIntoView()) {// B65-ZK-1632
+				this.position(this.parent, null, "end_before", {overflow:true});
+				this._fixarrow();
+			} else {
+				this.close();
+			}
 		}
 	},
 	setDomVisible_: function (node, visible) {

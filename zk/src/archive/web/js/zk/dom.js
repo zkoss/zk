@@ -589,6 +589,51 @@ zjq.prototype = {
 		}
 		return this;
 	},
+	/**
+	 * Checks whether the element is shown in the current viewport.
+	 * @return boolean if false, it means the element is not shown.
+	 * @since 6.5.2
+	 */
+	isScrollIntoView: (function () {
+		function _overflowElement(self) {
+			var el = self.jq[0],
+				te, le;
+			do {
+				if (!te) {
+					if (el.style.overflow == 'auto' || el.style.overflowY == 'auto')
+						te = el;
+				}
+				if (!le) {
+					if (el.style.overflow == 'auto' || el.style.overflowX == 'auto')
+						le = el;
+				}
+				if (te && le)
+					break;
+				el = el.parentNode;
+			} while (el);
+			return [le, te];
+		}
+		return function () {
+			var vOffset = this.viewportOffset(),
+				x = vOffset[0],
+				y = vOffset[1],
+				w = this.jq[0].offsetWidth,
+				h = this.jq[0].offsetHeight,
+				x1 = x + w,
+				y1 = y + h;
+			
+			// browser's viewport
+			if (x >= 0 && y >= 0 && x1 <= jq.innerWidth() && y1 <= jq.innerHeight()) {
+				var oel = _overflowElement(this),
+				lex = zk(oel[0].parentNode).viewportOffset()[0],
+				tey = zk(oel[1].parentNode).viewportOffset()[1];
+				
+				// scrollbar's viewport
+				return (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
+			}
+			return false;		
+		};
+	})(),
 	/** Tests if the first matched DOM element has the vertical scrollbar
 	 * @return int the difference of offsetWidth and clientWidth if the element has the vertical scrollbar,
 	 * or 0 if no scrollbar
