@@ -94,12 +94,12 @@ public class BindEvaluatorXUtil {
 	@SuppressWarnings("unchecked")
 	public static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType,Map<String, Object> implicit){
 		BindContext ctx = null;
+		ctx = new BindContextImpl(null,null,false,null,comp,null);
 		if(implicit!=null){
-			ctx = new BindContextImpl(null,null,false,null,null,null);
 			ctx.setAttribute(ImplicitObjectELResolver.IMPLICIT_OBJECTS, implicit);
 		}
 		
-		ExpressionX expr = evalx.parseExpressionX(null, expression, expectedType);
+		ExpressionX expr = evalx.parseExpressionX(ctx, expression, expectedType);
 		Object obj = evalx.getValue(ctx, comp, expr);
 		return (T)obj;
 	}

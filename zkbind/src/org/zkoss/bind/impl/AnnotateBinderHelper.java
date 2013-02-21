@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,6 +24,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.resource.Location;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.Annotation;
@@ -119,7 +119,7 @@ public class AnnotateBinderHelper {
 		final Collection<Annotation> anncol = compCtrl.getAnnotations(propName, COMMAND_ANNO);
 		if(anncol.size()==0) return;
 		if(anncol.size()>1) {
-			throw new IllegalSyntaxException("Allow only one command binding for event "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one command binding for event "+propName+" of "+comp,comp));
 		}
 		final Annotation ann = anncol.iterator().next();
 		
@@ -131,7 +131,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				cmdExprs.add(AnnotationUtil.testString(tagExpr,comp,propName,tag));
+				cmdExprs.add(AnnotationUtil.testString(tagExpr,ann));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -151,7 +151,7 @@ public class AnnotateBinderHelper {
 		final Collection<Annotation> anncol = compCtrl.getAnnotations(propName, GLOBAL_COMMAND_ANNO);
 		if(anncol.size()==0) return;
 		if(anncol.size()>1) {
-			throw new IllegalSyntaxException("Allow only one global-command binding for event "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one global-command binding for event "+propName+" of "+comp,comp));
 		}
 		final Annotation ann = anncol.iterator().next();
 		
@@ -163,7 +163,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				cmdExprs.add(AnnotationUtil.testString(tagExpr,comp,propName,tag));
+				cmdExprs.add(AnnotationUtil.testString(tagExpr,ann));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -182,13 +182,13 @@ public class AnnotateBinderHelper {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		
 		//validator and converter information
-		ExpressionAnnoInfo validatorInfo = parseValidator(compCtrl,propName);
-		ExpressionAnnoInfo converterInfo = parseConverter(compCtrl,propName);
+		ExpressionAnnoInfo validatorInfo = parseValidator(comp,propName);
+		ExpressionAnnoInfo converterInfo = parseConverter(comp,propName);
 
 		//scan init
 		Collection<Annotation> initannos = compCtrl.getAnnotations(propName, INIT_ANNO);
 		if(initannos.size()>1){
-			throw new IllegalSyntaxException("Allow only one @init for "+propName+" of "+comp);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+propName+" of "+comp,initannos.iterator().next()));
 		}else if(initannos.size()==1){
 			processPropertyInit(comp,propName,initannos.iterator().next(),converterInfo);
 		}
@@ -207,22 +207,22 @@ public class AnnotateBinderHelper {
 			}
 		}
 
-		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,propName);
+		ExpressionAnnoInfo templateInfo = parseTemplate(comp,propName);
 		if(templateInfo!=null){
 			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
 		}
 	}
 	
-	private void processReferenceBinding(Component comp, String propName, Annotation anno) {
+	private void processReferenceBinding(Component comp, String propName, Annotation ann) {
 		String loadExpr = null;
 			
 		Map<String, String[]> args = null;
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = AnnotationUtil.testString(tagExpr, comp, propName, tag);
+				loadExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -234,16 +234,16 @@ public class AnnotateBinderHelper {
 		_binder.addReferenceBinding(comp, propName, loadExpr, parsedArgs);
 	}
 	
-	private void processPropertyInit(Component comp, String propName, Annotation anno,ExpressionAnnoInfo converterInfo) {
+	private void processPropertyInit(Component comp, String propName, Annotation ann,ExpressionAnnoInfo converterInfo) {
 		String initExpr = null;
 			
 		Map<String, String[]> args = null;
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				initExpr = AnnotationUtil.testString(tagExpr, comp, propName, tag);
+				initExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -265,11 +265,11 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				expr = AnnotationUtil.testString(tagExpr,comp,propName,tag);
+				expr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
-				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support before commands, check property "+propName+" of "+comp);
+				throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("@bind is for prompt binding only, doesn't support before commands, check property "+propName+" of "+comp,ann));
 			} else if ("after".equals(tag)) {
-				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support after commands, check property "+propName+" of "+comp);
+				throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("@bind is for prompt binding only, doesn't support after commands, check property "+propName+" of "+comp,ann));
 			}  else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -280,17 +280,23 @@ public class AnnotateBinderHelper {
 			
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 
-		_binder.addPropertyLoadBindings(comp, propName,
-				expr, null, null, parsedArgs, 
-				converterInfo == null ? null : converterInfo.expr, 
-				converterInfo == null ? null : converterInfo.args);
-		
-		_binder.addPropertySaveBindings(comp, propName, expr,
-				null, null, parsedArgs, 
-				converterInfo == null ? null : converterInfo.expr, 
-				converterInfo == null ? null : converterInfo.args, 
-				validatorInfo == null ? null : validatorInfo.expr, 
-				validatorInfo == null ? null : validatorInfo.args);
+		try{
+			BinderUtil.pushContext().setIgnoreAccessCreationWarn(true);
+			
+			_binder.addPropertyLoadBindings(comp, propName,
+					expr, null, null, parsedArgs, 
+					converterInfo == null ? null : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args);
+			
+			_binder.addPropertySaveBindings(comp, propName, expr,
+					null, null, parsedArgs, 
+					converterInfo == null ? null : converterInfo.expr, 
+					converterInfo == null ? null : converterInfo.args, 
+					validatorInfo == null ? null : validatorInfo.expr, 
+					validatorInfo == null ? null : validatorInfo.args);
+		}finally{
+			BinderUtil.popContext();
+		}
 	}
 	
 	private void addCommand(Component comp, List<String> cmds, String[] cmdExprs){
@@ -301,7 +307,7 @@ public class AnnotateBinderHelper {
 	private void addCommand(Component comp, List<String> cmds, String cmdExpr){
 		String cmd = BindEvaluatorXUtil.eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class);
 		if(Strings.isEmpty(cmd)){
-			throw new IllegalSyntaxException("command of expression "+cmdExpr+" is empty");
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("command of expression "+cmdExpr+" is empty",comp));
 		}
 		cmds.add(cmd);
 	}
@@ -317,7 +323,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = AnnotationUtil.testString(tagExpr,comp,propName,tag);
+				loadExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -349,7 +355,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				saveExpr = AnnotationUtil.testString(tagExpr,comp,propName,tag);
+				saveExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -375,15 +381,15 @@ public class AnnotateBinderHelper {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final BindEvaluatorX eval = _binder.getEvaluatorX();
 		//validator information
-		ExpressionAnnoInfo validatorInfo = parseValidator(compCtrl,FORM_ATTR);
+		ExpressionAnnoInfo validatorInfo = parseValidator(comp,FORM_ATTR);
 		
 		String formId = null;
 		
 		Collection<Annotation> idannos = compCtrl.getAnnotations(FORM_ATTR, ID_ANNO);
 		if(idannos.size()==0){
-			throw new IllegalSyntaxException("@id is not found for a form binding of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("@id is not found for a form binding of "+comp,comp));
 		}else if(idannos.size()>1){
-			throw new IllegalSyntaxException("Allow only one @id for a form binding of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @id for a form binding of "+comp,idannos.iterator().next()));
 		}
 		
 		final Annotation idanno = idannos.iterator().next();
@@ -393,13 +399,13 @@ public class AnnotateBinderHelper {
 			formId = BindEvaluatorXUtil.eval(eval, comp, idExpr, String.class);
 		}
 		if(formId==null){
-			throw new UiException("value of @id is not found for a form binding of "+compCtrl+", exprssion is "+idExpr);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("value of @id is not found for a form binding of "+compCtrl+", exprssion is "+idExpr,idanno));
 		}
 		
 		//scan init first
 		Collection<Annotation> initannos = compCtrl.getAnnotations(FORM_ATTR, INIT_ANNO);
 		if(initannos.size()>1){
-			throw new IllegalSyntaxException("Allow only one @init for "+FORM_ATTR+" of "+comp);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+FORM_ATTR+" of "+comp,initannos.iterator().next()));
 		}else if(initannos.size()==1){
 			processFormInit(comp,formId,initannos.iterator().next());
 		}
@@ -424,7 +430,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				initExpr = AnnotationUtil.testString(tagExpr,comp, formId, tag);
+				initExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -447,7 +453,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = AnnotationUtil.testString(tagExpr,comp,formId,tag);
+				loadExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds, tagExpr);
 			} else if ("after".equals(tag)) {
@@ -477,7 +483,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				saveExpr = AnnotationUtil.testString(tagExpr,comp,formId,tag);
+				saveExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -500,11 +506,11 @@ public class AnnotateBinderHelper {
 	
 	private void processChildrenBindings(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		ExpressionAnnoInfo converterInfo = parseConverter(compCtrl,CHILDREN_ATTR);
+		ExpressionAnnoInfo converterInfo = parseConverter(comp,CHILDREN_ATTR);
 		//scan init first
 		Collection<Annotation> initannos = compCtrl.getAnnotations(CHILDREN_ATTR, INIT_ANNO);
 		if(initannos.size()>1){
-			throw new IllegalSyntaxException("Allow only one @init for "+CHILDREN_ATTR+" of "+comp);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+CHILDREN_ATTR+" of "+comp,initannos.iterator().next()));
 		}else if(initannos.size()==1){
 			processChildrenInit(comp,initannos.iterator().next(),converterInfo);
 		}
@@ -519,23 +525,23 @@ public class AnnotateBinderHelper {
 			}
 		}
 
-		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,CHILDREN_ATTR);
+		ExpressionAnnoInfo templateInfo = parseTemplate(comp,CHILDREN_ATTR);
 		if(templateInfo!=null){
 			//use special CHILDREN_KEY to avoid conflict 
 			_binder.setTemplate(comp, CHILDREN_KEY, templateInfo.expr, templateInfo.args);
 		}
 	}
 	
-	private void processChildrenInit(Component comp, Annotation anno,ExpressionAnnoInfo converterInfo) {
+	private void processChildrenInit(Component comp, Annotation ann,ExpressionAnnoInfo converterInfo) {
 		String initExpr = null;
 			
 		Map<String, String[]> args = null;
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				initExpr = AnnotationUtil.testString(tagExpr,comp, CHILDREN_ATTR, tag);
+				initExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -564,11 +570,11 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				expr = AnnotationUtil.testString(tagExpr,comp,CHILDREN_ATTR,tag);
+				expr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
-				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support before commands, check property "+CHILDREN_ATTR+" of "+comp);
+				throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("@bind is for prompt binding only, doesn't support before commands, check property "+CHILDREN_ATTR+" of "+comp,comp));
 			} else if ("after".equals(tag)) {
-				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support after commands, check property "+CHILDREN_ATTR+" of "+comp);
+				throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("@bind is for prompt binding only, doesn't support after commands, check property "+CHILDREN_ATTR+" of "+comp,comp));
 			}  else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -595,7 +601,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = AnnotationUtil.testString(tagExpr,comp,CHILDREN_ATTR,tag);
+				loadExpr = AnnotationUtil.testString(tagExpr,ann);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -617,23 +623,23 @@ public class AnnotateBinderHelper {
 	
 	
 
-	private ExpressionAnnoInfo parseConverter(ComponentCtrl compCtrl, String propName) {
-		final Collection<Annotation> annos = compCtrl.getAnnotations(propName, CONVERTER_ANNO);
+	private ExpressionAnnoInfo parseConverter(Component comp, String propName) {
+		final Collection<Annotation> annos = ((ComponentCtrl)comp).getAnnotations(propName, CONVERTER_ANNO);
 		if(annos.size()==0) return null;
 		if(annos.size()>1) {
-			throw new IllegalSyntaxException("Allow only one converter for "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one converter for "+propName+" of "+comp,comp));
 		}
-		final Annotation anno = annos.iterator().next();
+		final Annotation ann = annos.iterator().next();
 		
 		ExpressionAnnoInfo info = new ExpressionAnnoInfo();
 		Map<String,String[]> args = null;
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it
 				.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				info.expr = AnnotationUtil.testString(tagExpr,(Component)compCtrl,propName,tag);
+				info.expr = AnnotationUtil.testString(tagExpr,ann);
 			} else { // other unknown tag, keep as arguments
 				if (args== null) {
 					args = new HashMap<String, String[]>();
@@ -642,27 +648,27 @@ public class AnnotateBinderHelper {
 			}
 		}
 		if (Strings.isBlank(info.expr)) {
-			throw new IllegalSyntaxException("Must specify a converter for "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("value of converter is empty, check "+propName+" of "+comp,comp));
 		}
 		info.args = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		return info;
 	}
 
-	private ExpressionAnnoInfo parseValidator(ComponentCtrl compCtrl, String propName) {
-		final Collection<Annotation> annos = compCtrl.getAnnotations(propName, VALIDATOR_ANNO);
+	private ExpressionAnnoInfo parseValidator(Component comp, String propName) {
+		final Collection<Annotation> annos = ((ComponentCtrl)comp).getAnnotations(propName, VALIDATOR_ANNO);
 		if(annos.size()==0) return null;
 		if(annos.size()>1) {
-			throw new IllegalSyntaxException("Allow only one validator for "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one validator for "+propName+" of "+comp,comp));
 		}
-		final Annotation anno = annos.iterator().next();
+		final Annotation ann = annos.iterator().next();
 		ExpressionAnnoInfo info = new ExpressionAnnoInfo();
 		Map<String,String[]> args = null;
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				info.expr = AnnotationUtil.testString(tagExpr,(Component)compCtrl,propName,tag);
+				info.expr = AnnotationUtil.testString(tagExpr,ann);
 			} else { // other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -671,27 +677,27 @@ public class AnnotateBinderHelper {
 			}
 		}
 		if (Strings.isBlank(info.expr)) {
-			throw new IllegalSyntaxException("Must specify a validator for "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("value of validator is empty, check "+propName+" of "+comp,comp));
 		}
 		info.args = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		return info;
 	}
 	
-	private ExpressionAnnoInfo parseTemplate(ComponentCtrl compCtrl, String propName) {
-		final Collection<Annotation> annos = compCtrl.getAnnotations(propName, TEMPLATE_ANNO);
+	private ExpressionAnnoInfo parseTemplate(Component comp, String propName) {
+		final Collection<Annotation> annos = ((ComponentCtrl)comp).getAnnotations(propName, TEMPLATE_ANNO);
 		if(annos.size()==0) return null;
 		if(annos.size()>1) {
-			throw new IllegalSyntaxException("Allow only one template for "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one template for "+propName+" of "+comp,comp));
 		}
-		final Annotation anno = annos.iterator().next();
+		final Annotation ann = annos.iterator().next();
 		ExpressionAnnoInfo info = new ExpressionAnnoInfo();
 		Map<String,String[]> args = null;
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				info.expr = AnnotationUtil.testString(tagExpr,(Component)compCtrl,propName,tag);
+				info.expr = AnnotationUtil.testString(tagExpr,ann);
 			} else { // other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -700,7 +706,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		if (Strings.isBlank(info.expr)) {
-			throw new IllegalSyntaxException("Must specify a template for "+propName+" of "+compCtrl);
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Must specify a template for "+propName+" of "+comp,comp));
 		}
 		info.args = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		return info;

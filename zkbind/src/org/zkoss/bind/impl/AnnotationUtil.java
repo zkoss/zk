@@ -45,13 +45,17 @@ public class AnnotationUtil {
 		return anno;
 	}
 	
-	public static String testString(String[] string, Component comp,String propName, String tag){
+//	public static String testString(String[] string, Component comp,String propName, String tag){
+//		return testString(string, comp, propName, tag);
+//	}
+	public static String testString(String[] string,Annotation anno){
 		if(string==null || string.length==0){
 			return null;
 		}else if(string.length==1){
 			return string[0];
 		}else{
-			throw new IllegalSyntaxException("only allow one string of "+tag +" attribute="+propName+" on comp= "+comp+", but contains "+Arrays.toString(string));
+			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage(
+					"only allow one string of @" + anno.getName() + ",but contains " + Arrays.toString(string),anno));
 		}
 	}
 }

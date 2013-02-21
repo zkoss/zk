@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +40,6 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.PropertyChangeEvent;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
-import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DefaultCommand;
 import org.zkoss.bind.annotation.DefaultGlobalCommand;
@@ -69,7 +69,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -399,14 +398,32 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		checkInit();
 		Converter converter = null;
 		if(_hasGetConverterMethod){
-			final BindEvaluatorX eval = getEvaluatorX();
-			final ExpressionX vmc = eval.parseExpressionX(null, 
-				new StringBuilder().append(BinderImpl.VM).append(".getConverter('").append(name).append("')").toString(),
-				Converter.class);
-			try{
-				converter = (Converter)eval.getValue(null, _rootComp, vmc);
-			}catch(org.zkoss.zel.MethodNotFoundException x){
+			Object vm = getViewModel();
+			Class<? extends Object> clz = vm.getClass();
+			Method m = null;
+			Object result = null;
+			try {
+				m = clz.getMethod("getConverter", String.class);
+			} catch (SecurityException x) {
 				_hasGetConverterMethod = false;
+			} catch (NoSuchMethodException e) {
+				_hasGetConverterMethod = false;
+			}
+			if(m!=null){
+				try {
+					result = m.invoke(vm,name);
+				} catch (IllegalArgumentException e) {
+					throw new RuntimeException(e.getMessage(),e);
+				} catch (IllegalAccessException e) {
+					_hasGetConverterMethod = false;
+				} catch (InvocationTargetException e) {
+					throw new RuntimeException(e.getMessage(),e);
+				}
+				if(result != null && !(result instanceof Converter)){
+					_hasGetConverterMethod = false;
+				}else{
+					converter = (Converter)result;
+				}
 			}
 		}
 		if(converter == null){
@@ -423,14 +440,32 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		checkInit();
 		Validator validator = null;
 		if(_hasGetValidatorMethod){
-			final BindEvaluatorX eval = getEvaluatorX();
-			final ExpressionX vmv = eval.parseExpressionX(null, 
-				new StringBuilder().append(BinderImpl.VM).append(".getValidator('").append(name).append("')").toString(),
-				Validator.class);
-			try{
-				validator = (Validator)eval.getValue(null, _rootComp, vmv);
-			}catch(org.zkoss.zel.MethodNotFoundException x){
+			Object vm = getViewModel();
+			Class<? extends Object> clz = vm.getClass();
+			Method m = null;
+			Object result = null;
+			try {
+				m = clz.getMethod("getValidator", String.class);
+			} catch (SecurityException x) {
 				_hasGetValidatorMethod = false;
+			} catch (NoSuchMethodException e) {
+				_hasGetValidatorMethod = false;
+			}
+			if(m!=null){
+				try {
+					result = m.invoke(vm,name);
+				} catch (IllegalArgumentException e) {
+					throw new RuntimeException(e.getMessage(),e);
+				} catch (IllegalAccessException e) {
+					_hasGetValidatorMethod = false;
+				} catch (InvocationTargetException e) {
+					throw new RuntimeException(e.getMessage(),e);
+				}
+				if(result != null && !(result instanceof Validator)){
+					_hasGetValidatorMethod = false;
+				}else{
+					validator = (Validator)result;
+				}
 			}
 		}
 		if(validator == null){
@@ -450,7 +485,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				renderer = Classes.newInstanceByThread(name);
 				RENDERERS.put(name, renderer); //assume renderer is state-less
 			} catch (IllegalAccessException e) {
-				throw UiException.Aide.wrap(e);
+				throw new UiException(e.getMessage(),e);
 			} catch (Exception e) {
 				//ignore
 			}
@@ -515,10 +550,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public void addFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
 		checkInit();
 		if(Strings.isBlank(id)){
-			throw new IllegalArgumentException("form id is blank");
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("form id is blank",comp));
 		}
 		if(initExpr==null){
-			throw new IllegalArgumentException("initExpr is null for component "+comp+", form "+id);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("initExpr is null for component "+comp+", form "+id,comp));
 		}
 		
 		
@@ -551,10 +586,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			Map<String, Object> bindingArgs) {
 		checkInit();
 		if(Strings.isBlank(id)){
-			throw new IllegalArgumentException("form id is blank");
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("form id is blank",comp));
 		}
 		if(loadExpr==null){
-			throw new IllegalArgumentException("loadExpr is null for component "+comp+", form "+id);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("loadExpr is null for component "+comp+", form "+id,comp));
 		}
 		
 		Form form = getForm(comp,id);
@@ -572,10 +607,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			Map<String, Object> validatorArgs) {
 		checkInit();
 		if(Strings.isBlank(id)){
-			throw new IllegalArgumentException("form id is blank");
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("form id is blank",comp));
 		}
 		if(saveExpr==null){
-			throw new IllegalArgumentException("saveExpr is null for component "+comp+", form "+id);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("saveExpr is null for component "+comp+", form "+id,comp));
 		}
 		
 		Form form = getForm(comp,id);
@@ -624,7 +659,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String validatorExpr,Map<String, Object> validatorArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		if(prompt){
-			throw new IllegalArgumentException("a save-form-binding have to set with a before|after command condition");
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("a save-form-binding have to set with a before|after command condition",comp));
 		}
 		
 		if(beforeCmds!=null && beforeCmds.length>0){
@@ -661,7 +696,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
 		if(initExpr==null){
-			throw new IllegalArgumentException("initExpr is null for "+attr+" of "+comp);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("initExpr is null for "+attr+" of "+comp,comp));
 		}
 		if (Strings.isBlank(converterExpr)) {
 			converterExpr = getSystemConverter(comp, attr);
@@ -681,7 +716,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
 		if(loadExpr==null){
-			throw new IllegalArgumentException("loadExpr is null for component "+comp+", attr "+attr);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("loadExpr is null for component "+comp+", attr "+attr,comp));
 		}
 		if (Strings.isBlank(converterExpr)) {
 			converterExpr = getSystemConverter(comp, attr);
@@ -703,7 +738,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			Map<String, Object> validatorArgs) {
 		checkInit();
 		if(saveExpr==null){
-			throw new IllegalArgumentException("saveExpr is null for component "+comp+", attr "+attr);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("saveExpr is null for component "+comp+", attr "+attr,comp));
 		}
 		if (Strings.isBlank(converterExpr)) {
 			converterExpr = getSystemConverter(comp, attr);
@@ -732,9 +767,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			loadrep = AnnotationUtil.testString(attrs.get(Binder.LOAD_REPLACEMENT),comp,attr,Binder.LOAD_REPLACEMENT); //check replacement of attr when loading
+			loadrep = AnnotationUtil.testString(attrs.get(Binder.LOAD_REPLACEMENT),ann); //check replacement of attr when loading
 			
-			final String type = AnnotationUtil.testString(attrs.get(Binder.LOAD_TYPE),comp,attr,Binder.LOAD_TYPE); //check type of attr when loading
+			final String type = AnnotationUtil.testString(attrs.get(Binder.LOAD_TYPE),ann); //check type of attr when loading
 			if (type != null) {
 				try {
 					attrType = Classes.forNameByThread(type);
@@ -761,7 +796,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl,attr, Binder.ZKBIND);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return AnnotationUtil.testString(attrs.get(Binder.CONVERTER),comp,attr,Binder.CONVERTER); //system converter if exists
+			return AnnotationUtil.testString(attrs.get(Binder.CONVERTER),ann); //system converter if exists
 		}
 		return null;
 	}
@@ -771,7 +806,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return AnnotationUtil.testString(attrs.get(Binder.VALIDATOR),comp,attr,Binder.VALIDATOR); //system validator if exists
+			return AnnotationUtil.testString(attrs.get(Binder.VALIDATOR),ann); //system validator if exists
 		}
 		return null;
 	}
@@ -787,7 +822,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		
 		if (attrs != null) {
-			final String rendererName = AnnotationUtil.testString(attrs.get(Binder.RENDERER),comp,attr,Binder.RENDERER); //renderer if any
+			final String rendererName = AnnotationUtil.testString(attrs.get(Binder.RENDERER),ann); //renderer if any
 			//setup renderer
 			if (rendererName != null) { //there was system renderer
 				String[] values = null;
@@ -810,7 +845,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						try {
 							Fields.set(comp, values[0], renderer, false);
 						} catch (Exception  e) {
-							throw UiException.Aide.wrap(e);
+							throw new UiException(e.getMessage(),e);
 						}
 						
 						if(renderer instanceof TemplateRendererCtrl){
@@ -840,15 +875,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = (String) AnnotationUtil.testString(attrs.get(Binder.ACCESS),comp,attr,Binder.ACCESS); //_accessInfo right, "both|save|load", default to load
+			final String rw = (String) AnnotationUtil.testString(attrs.get(Binder.ACCESS),ann); //_accessInfo right, "both|save|load", default to load
 			if (rw != null && !"both".equals(rw) && !"load".equals(rw)) { //save only, skip
 				return;
 			}
-			evtnm = AnnotationUtil.testString(attrs.get(Binder.LOAD_EVENT),comp,attr,Binder.LOAD_EVENT); //check trigger event for loading
+			evtnm = AnnotationUtil.testString(attrs.get(Binder.LOAD_EVENT),ann); //check trigger event for loading
 			
-			loadRep = AnnotationUtil.testString(attrs.get(Binder.LOAD_REPLACEMENT),comp,attr,Binder.LOAD_REPLACEMENT); //check replacement of attr when loading
+			loadRep = AnnotationUtil.testString(attrs.get(Binder.LOAD_REPLACEMENT),ann); //check replacement of attr when loading
 			
-			final String type = AnnotationUtil.testString(attrs.get(Binder.LOAD_TYPE),comp,attr,Binder.LOAD_TYPE); //check type of attr when loading
+			final String type = AnnotationUtil.testString(attrs.get(Binder.LOAD_TYPE),ann); //check type of attr when loading
 			if(type!=null){
 				try {
 					attrType = Classes.forNameByThread(type);
@@ -914,16 +949,24 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		String saveRep = null;
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = AnnotationUtil.testString(attrs.get(Binder.ACCESS),comp,attr,Binder.ACCESS); //_accessInfo right, "both|save|load", default to load
+			final String rw = AnnotationUtil.testString(attrs.get(Binder.ACCESS),ann); //_accessInfo right, "both|save|load", default to load
 			if (!"both".equals(rw) && !"save".equals(rw)) { //load only, skip
+				if(BinderUtil.hasContext() && BinderUtil.getContext().isIgnoreAccessCreationWarn()){
+					return;
+				}
+				_log.warning(MiscUtil.formatLocationMessage("component "+comp+" doesn't support to save attribute "+attr,comp));
 				return;
 			}
-			evtnm = AnnotationUtil.testString(attrs.get(Binder.SAVE_EVENT),comp,attr,Binder.SAVE_EVENT); //check trigger event for saving
+			evtnm = AnnotationUtil.testString(attrs.get(Binder.SAVE_EVENT),ann); //check trigger event for saving
 			
-			saveRep = AnnotationUtil.testString(attrs.get(Binder.SAVE_REPLACEMENT),comp,attr,Binder.SAVE_REPLACEMENT); //check replacement of attr when saving
+			saveRep = AnnotationUtil.testString(attrs.get(Binder.SAVE_REPLACEMENT),ann); //check replacement of attr when saving
 		}
 		if (evtnm == null) { 
 			//no trigger event, since the value never change of component, so both prompt and command are useless
+			if(BinderUtil.hasContext() && BinderUtil.getContext().isIgnoreAccessCreationWarn()){
+				return;
+			}
+			_log.warning(MiscUtil.formatLocationMessage("component "+comp+" doesn't has event to save attribute "+attr,comp));
 			return;
 		}
 		saveRep = saveRep == null ? attr : saveRep;
@@ -979,7 +1022,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
 		if(initExpr==null){
-			throw new IllegalArgumentException("initExpr is null for children of "+comp);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("initExpr is null for children of "+comp,comp));
 		}
 		addChildrenInitBinding0(comp,initExpr,initArgs,converterExpr,converterArgs);
 	}
@@ -994,7 +1037,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
 		if(loadExpr==null){
-			throw new IllegalArgumentException("loadExpr is null for children of "+comp);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("loadExpr is null for children of "+comp,comp));
 		}
 		addChildrenLoadBindings0(comp, loadExpr, beforeCmds, afterCmds, bindingArgs,converterExpr,converterArgs);
 	}
@@ -1054,7 +1097,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public void addReferenceBinding(Component comp, String attr,  String loadExpr, Map<String, Object> bindingArgs) {
 		checkInit();
 		if(loadExpr==null){
-			throw new IllegalArgumentException("loadExpr is null for reference of "+comp);
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("loadExpr is null for reference of "+comp,comp));
 		}
 		addReferenceBinding0(comp, attr, loadExpr, bindingArgs);
 	}
@@ -1068,7 +1111,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(_refBindingHandler!=null){
 			_refBindingHandler.addReferenceBinding(comp, attr, binding);
 		}else{
-			throw new UiException("ref binding handler is not supported in current runtime.");
+			throw new UiException(MiscUtil.formatLocationMessage("ref binding handler is not supported in current runtime.",comp));
 		}
 		
 		addBinding(comp, attr, binding);
@@ -1477,7 +1520,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				return valid;
 			}
 		} catch (Exception e) {
-			throw UiException.Aide.wrap(e);
+			throw new UiException(e.getMessage(),e);
 		} finally {
 			doPostPhase(Phase.VALIDATE, ctx);
 		}
@@ -1523,7 +1566,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				notifys.addAll(BindELContext.getNotifys(method, viewModel,
 						(String) null, (Object) null, ctx)); // collect notifyChange
 			}else{
-				throw new UiException("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel);
+				throw new UiException(MiscUtil.formatLocationMessage("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel,comp));
 			}
 			if(_log.debugable()){
 				_log.debug("after doExecute notifys=[%s]", notifys);

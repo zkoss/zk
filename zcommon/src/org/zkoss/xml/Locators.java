@@ -87,7 +87,7 @@ public class Locators {
 	public static Location toLocation(Locator loc) {
 		return loc != null ?
 			new Loc(combine(loc.getPublicId(),
-				loc.getSystemId()), loc.getLineNumber()): null;
+				loc.getSystemId()), loc.getLineNumber(), loc.getColumnNumber()): null;
 	}
 	/** Converts an instance of {@link org.xml.sax.Locator} to {@link Location}.
 	 * If loc is null, this method returns null.
@@ -95,7 +95,7 @@ public class Locators {
 	public static Location toLocation(org.xml.sax.Locator loc) {
 		return loc != null ?
 			new Loc(combine(loc.getPublicId(),
-				loc.getSystemId()), loc.getLineNumber()): null;
+				loc.getSystemId()), loc.getLineNumber(), loc.getColumnNumber()): null;
 	}
 	/** Converts an instance of {@link SourceLocator} to {@link Location}.
 	 * If loc is null, this method returns null.
@@ -103,15 +103,17 @@ public class Locators {
 	public static Location toLocation(SourceLocator loc) {
 		return loc != null ?
 			new Loc(combine(loc.getPublicId(),
-				loc.getSystemId()), loc.getLineNumber()): null;
+				loc.getSystemId()), loc.getLineNumber(), loc.getColumnNumber()): null;
 	}
 	private static class Loc implements Location, java.io.Serializable {
 		private final String _path;
 		private final int _lnno;
+		private final int _colno;
 
-		private Loc(String path, int lnno) {
+		private Loc(String path, int lnno, int colno) {
 			_path = path;
 			_lnno = lnno;
+			_colno = colno;
 		}
 		@Override
 		public String getPath() {
@@ -120,6 +122,10 @@ public class Locators {
 		@Override
 		public int getLineNumber() {
 			return _lnno;
+		}
+		@Override
+		public int getColumnNumber() {
+			return _colno;
 		}
 		@Override
 		public String format(String message) {
