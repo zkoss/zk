@@ -12,9 +12,11 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys.debugger.impl;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.impl.info.AnnoWarnInfo;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -67,27 +69,31 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 			}
 			for(Annotation anno:compCtrl.getAnnotations(p)){
 				String nm = anno.getName();
-				if(p.startsWith("on")){
-					if(COMMAND_ANNO.equals(nm) || GLOBAL_COMMAND_ANNO.equals(nm)){
-						continue;
+				try{
+					BinderUtil.pushContext().setCurrentLocation(anno.getLocation());
+					if(p.startsWith("on")){
+						if(COMMAND_ANNO.equals(nm) || GLOBAL_COMMAND_ANNO.equals(nm)){
+							continue;
+						}
+						_collector.addInfo(new AnnoWarnInfo(comp,p, nm, "Unknow command annotation"));
+					}else if(p.equals("form")){
+						if(ZKBIND1_ANNO.equals(nm) || ZKBIND2_ANNO.equals(nm) || 
+								BIND_ANNO.equals(nm) || LOAD_ANNO.equals(nm) || SAVE_ANNO.equals(nm) || VALIDATOR_ANNO.equals(nm)
+								|| CONVERTER_ANNO.equals(nm) || ID_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
+							continue;
+						}
+						_collector.addInfo(new AnnoWarnInfo(comp, p, nm, "Unknow form binding annotation"));
+					}else{
+						if(ZKBIND1_ANNO.equals(nm) || ZKBIND2_ANNO.equals(nm) || 
+								BIND_ANNO.equals(nm) || LOAD_ANNO.equals(nm) || SAVE_ANNO.equals(nm) || VALIDATOR_ANNO.equals(nm)
+								|| REFERENCE_ANNO.equals(nm) || CONVERTER_ANNO.equals(nm) || TEMPLATE_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
+							continue;
+						}
+						_collector.addInfo(new AnnoWarnInfo(comp, p, nm, "Unknow binding annotation"));
 					}
-					_collector.addInfo(new WarnInfo(comp, "unknow-command-annotation", p, nm, ""));
-				}else if(p.equals("form")){
-					if(ZKBIND1_ANNO.equals(nm) || ZKBIND2_ANNO.equals(nm) || 
-							BIND_ANNO.equals(nm) || LOAD_ANNO.equals(nm) || SAVE_ANNO.equals(nm) || VALIDATOR_ANNO.equals(nm)
-							|| CONVERTER_ANNO.equals(nm) || ID_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
-						continue;
-					}
-					_collector.addInfo(new WarnInfo(comp, "unknow-binding-annotation", p, nm, ""));
-				}else{
-					if(ZKBIND1_ANNO.equals(nm) || ZKBIND2_ANNO.equals(nm) || 
-							BIND_ANNO.equals(nm) || LOAD_ANNO.equals(nm) || SAVE_ANNO.equals(nm) || VALIDATOR_ANNO.equals(nm)
-							|| REFERENCE_ANNO.equals(nm) || CONVERTER_ANNO.equals(nm) || TEMPLATE_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
-						continue;
-					}
-					_collector.addInfo(new WarnInfo(comp, "unknow-binding-annotation", p, nm, ""));
+				}finally{
+					BinderUtil.popContext();
 				}
-				
 			}
 		}
 	}
@@ -101,7 +107,12 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 			if(ID_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
 				continue;
 			}
-			_collector.addInfo(new WarnInfo(comp, "unknow-viewmodel-annotation", VIEW_MODEL_ATTR, nm, ""));
+			try{
+				BinderUtil.pushContext().setCurrentLocation(anno.getLocation());
+				_collector.addInfo(new AnnoWarnInfo(comp, VIEW_MODEL_ATTR, nm, "Unknow viewmodel annotation"));
+			}finally{
+				BinderUtil.popContext();
+			}
 		}
 		
 	}
@@ -114,7 +125,12 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 			if(ID_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
 				continue;
 			}
-			_collector.addInfo(new WarnInfo(comp, "unknow-binder-annotation", BINDER_ATTR, nm, ""));
+			try{
+				BinderUtil.pushContext().setCurrentLocation(anno.getLocation());
+				_collector.addInfo(new AnnoWarnInfo(comp, BINDER_ATTR, nm, "Unknow binder annotation"));
+			}finally{
+				BinderUtil.popContext();
+			}
 		}
 	}
 
@@ -126,7 +142,12 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 			if(ID_ANNO.equals(nm) || INIT_ANNO.equals(nm)){
 				continue;
 			}
-			_collector.addInfo(new WarnInfo(comp, "unknow-vmsgs-annotation", VALIDATION_MESSAGES_ATTR, nm, ""));
+			try{
+				BinderUtil.pushContext().setCurrentLocation(anno.getLocation());
+				_collector.addInfo(new AnnoWarnInfo(comp,VALIDATION_MESSAGES_ATTR, nm, "Unknow validation messages annotation"));
+			}finally{
+				BinderUtil.popContext();
+			}
 		}
 	}
 

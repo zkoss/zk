@@ -27,8 +27,8 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.impl.SaveInfo;
-import org.zkoss.bind.sys.debugger.impl.ValidationInfo;
+import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
+import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
@@ -132,20 +132,20 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		if(value == Converter.IGNORED_VALUE){
 			if(collector!=null){
 				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
-				collector.addInfo(new SaveInfo(comp,"save-property",getConditionString(ctx),
-						getFieldName(),getPropertyString(),old,getArgs(),"By converter"));
+				collector.addInfo(new SaveInfo(SaveInfo.PROP_SAVE,comp,getConditionString(ctx),
+						getFieldName(),getPropertyString(),old,getArgs(),"*Converter.IGNORED_VALUE"));
 			}
 			return;
+		}
+		
+		if(collector!=null){
+			collector.addInfo(new SaveInfo(SaveInfo.PROP_SAVE,comp,getConditionString(ctx),
+					getFieldName(),getPropertyString(),value,getArgs(),null));
 		}
 		
 		//set data into bean property
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
-		
-		if(collector!=null){
-			collector.addInfo(new SaveInfo(comp,"save-property",getConditionString(ctx),
-					getFieldName(),getPropertyString(),value,getArgs(),""));
-		}
 	}
 	
 	private String getConditionString(BindContext ctx){
@@ -234,9 +234,9 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new ValidationInfo(getComponent(),"validate-property",
+			collector.addInfo(new ValidationInfo(ValidationInfo.PROP,getComponent(),
 					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
-					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),""));
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),null));
 		}
 		
 //		//collect notify change

@@ -15,6 +15,8 @@ import java.util.Stack;
 
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.ExecutionInfo;
+import org.zkoss.bind.sys.debugger.impl.info.ExecutionInfoBase;
+import org.zkoss.bind.sys.debugger.impl.info.StackInfo;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -30,6 +32,7 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 	Stack<String> _infoStack = new Stack<String>();
 	
 	public void pushStack(String name){
+		addInfo(new StackInfo(name,null));
 		_infoStack.push(name);
 	}
 	public String popStack(){

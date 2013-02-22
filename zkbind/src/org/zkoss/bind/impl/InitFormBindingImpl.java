@@ -28,7 +28,7 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.impl.LoadInfo;
+import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
@@ -99,8 +99,8 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 			
 			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
-				collector.addInfo(new LoadInfo(comp,"init-form",true,"",
-						getPropertyString(),getFormId(),value,getArgs(),""));
+				collector.addInfo(new LoadInfo(LoadInfo.FORM_INIT,comp,null,
+						getPropertyString(),getFormId(),value,getArgs(),null));
 			}
 		}else{
 			((BinderCtrl)binder).storeForm(getComponent(), getFormId(), (Form)value);

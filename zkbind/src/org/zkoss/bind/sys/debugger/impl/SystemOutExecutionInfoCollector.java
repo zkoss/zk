@@ -22,7 +22,19 @@ public class SystemOutExecutionInfoCollector extends AbstractExecutionInfoCollec
 
 	@Override
 	public void addInfo(JSONObject info) {
-		System.out.println(info.toJSONString());
+		Integer stack = (Integer)info.get("stack");
+		StringBuilder sb = new StringBuilder();
+		if(stack!=null){
+			for(int i=stack;i>0;i--){
+				sb.append("  ");
+			}
+		}
+		sb.append(info.toJSONString());
+		out(sb.toString());
+	}
+
+	private void out(String string) {
+		System.out.println(string);
 	}
 
 }

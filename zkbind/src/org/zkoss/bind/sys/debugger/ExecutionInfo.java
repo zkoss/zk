@@ -21,6 +21,6 @@ public interface ExecutionInfo {
 
 	public Component getComponent();
 	public String getType();
-	public String getSubject();
+	public String getNote();
 	
 }

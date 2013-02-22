@@ -26,7 +26,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.impl.LoadInfo;
+import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -74,8 +74,8 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addInfo(new LoadInfo(comp,"load-children",getConditionString(ctx),
-							getPropertyString(),"",old,getArgs(),"By converter"));
+					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_LOAD,comp,getConditionString(ctx),
+							getPropertyString(),"",old,getArgs(),"*Converter.IGNORED_VALUE"));
 				}
 				return;
 			}
@@ -100,8 +100,8 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		}
 		
 		if(collector!=null){
-			collector.addInfo(new LoadInfo(comp,"load-children",getConditionString(ctx),
-					getPropertyString(),"",value,getArgs(),""));
+			collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_LOAD,comp,getConditionString(ctx),
+					getPropertyString(),"",value,getArgs(),null));
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		}else{
 			condition = condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
 		}
-		return condition.toString();
+		return condition.length()==0?null:condition.toString();
 	}
 	
 //	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {

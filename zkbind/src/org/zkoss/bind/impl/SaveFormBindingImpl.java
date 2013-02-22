@@ -29,8 +29,8 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType; 
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.impl.SaveInfo;
-import org.zkoss.bind.sys.debugger.impl.ValidationInfo;
+import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
+import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
@@ -97,6 +97,13 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 
+		
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addInfo(new SaveInfo(SaveInfo.FORM_SAVE,comp,getConditionString(ctx),
+					getFormId(),getPropertyString(),form,getArgs(),""));
+		}
+		
 		//update form field into backing bean
 		if(form instanceof FormExt){
 			for (String field : ((FormExt)form).getSaveFieldNames()) {
@@ -110,12 +117,6 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 			}
 		}
 		//TODO should we clear form dirty and notify formStatus?
-		
-		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-		if(collector!=null){
-			collector.addInfo(new SaveInfo(comp,"save-form",true,getConditionString(ctx),
-					getFormId(),getPropertyString(),form,getArgs(),""));
-		}
 	}
 	
 	private String getConditionString(BindContext ctx){
@@ -127,7 +128,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}else{
 			condition = condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
 		}
-		return condition.toString();
+		return condition.length()==0?null:condition.toString();
 	}
 
 	//--SaveBinding--//
@@ -193,9 +194,9 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new ValidationInfo(getComponent(),"validate-form",
+			collector.addInfo(new ValidationInfo(ValidationInfo.PROP,getComponent(),
 					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
-					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),""));
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),null));
 		}
 //		//collect notify change
 //		collectNotifyChange(validator,vctx);

@@ -9,8 +9,9 @@
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind.sys.debugger.impl;
+package org.zkoss.bind.sys.debugger.impl.info;
 
+import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.sys.debugger.ExecutionInfo;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Component;
@@ -23,16 +24,18 @@ public class ExecutionInfoBase implements ExecutionInfo{
 
 	Component _comp;
 	String _type;
-	String _subject;
+	String _subtype;
 	String _note;
+	String _location;
 
-	protected ExecutionInfoBase(String type,Component comp,String subject,String note){
+	protected ExecutionInfoBase(String type,String subtype,Component comp,String note){
 		_type = type;
+		_subtype = subtype;
 		_comp = comp;
-		_subject = subject;
 		_note = note;
+		
+		_location = BinderUtil.hasContext()?BinderUtil.getContext().getCurrentLocationMessage():null;
 	}
-	
 	
 	@Override
 	public Component getComponent() {
@@ -45,34 +48,44 @@ public class ExecutionInfoBase implements ExecutionInfo{
 	}
 
 	@Override
-	public String getSubject() {
-		return _subject;
+	public String getNote() {
+		return _note;
+	}
+
+	public String getSubtype() {
+		return _subtype;
 	}
 	
 	public JSONObject toJSON(){
 		JSONObject json = new JSONObject();
-		json.put("type", _type);
+		putJSON(json,"type", _type);
 		if(_comp!=null){
-			json.put("widget", _comp.getDefinition().getName());
-			json.put("uuid", _comp.getUuid());
-			json.put("id", _comp.getId());
-		}else{
-			json.put("widget", "");
+			putJSON(json,"widget", _comp.getDefinition().getName());
+			putJSON(json,"uuid", _comp.getUuid());
+			putJSON(json,"id", _comp.getId());
+		}/*else{
+			json.put("widget","");
 			json.put("uuid", "");
 			json.put("id", "");
-		}
-		json.put("subject", _subject);
-		json.put("note", _note);
+		}*/
+		putJSON(json,"subtype", _subtype);
+		putJSON(json,"note", toString(_note, 300));
+		putJSON(json,"location", _location);
 		return json;
 	}
 
-	
+	protected static void putJSON(JSONObject json,String prop,Object val){
+		if(val!=null){
+			json.put(prop, val);
+		}
+	}
 	//util method
-	protected String toString(Object value, int len){
+	protected static String toString(Object value, int len){
 		String valstr = value==null?null:value.toString();
 		if(valstr!=null && valstr.length()>len){
 			valstr = valstr.substring(0, len-4)+"...";
 		}
 		return valstr;
 	}
+
 }

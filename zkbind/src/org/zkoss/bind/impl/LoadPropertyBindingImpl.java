@@ -26,7 +26,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.impl.LoadInfo;
+import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
@@ -78,8 +78,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addInfo(new LoadInfo(comp,"load-property",getConditionString(ctx),
-							getPropertyString(),getFieldName(),old,getArgs(),"By converter"));
+					collector.addInfo(new LoadInfo(LoadInfo.PROP_LOAD,comp,getConditionString(ctx),
+							getPropertyString(),getFieldName(),old,getArgs(),"*Converter.IGNORED_VALUE"));
 				}
 				return;
 			}
@@ -91,8 +91,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		eval.setValue(null, comp, _fieldExpr, value);
 
 		if(collector!=null){
-			collector.addInfo(new LoadInfo(comp,"load-property",getConditionString(ctx),
-					getPropertyString(),getFieldName(),value,getArgs(),""));
+			collector.addInfo(new LoadInfo(LoadInfo.PROP_LOAD,comp,getConditionString(ctx),
+					getPropertyString(),getFieldName(),value,getArgs(),null));
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		}else{
 			condition = condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
 		}
-		return condition.toString();
+		return condition.length()==0?null:condition.toString();
 	}
 	
 //	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {

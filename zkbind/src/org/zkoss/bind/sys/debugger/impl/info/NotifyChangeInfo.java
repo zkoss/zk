@@ -9,7 +9,7 @@
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind.sys.debugger.impl;
+package org.zkoss.bind.sys.debugger.impl.info;
 
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Component;
@@ -18,21 +18,23 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class NotifyInfo extends ExecutionInfoBase{
+public class NotifyChangeInfo extends ExecutionInfoBase{
 
+	public static final String TYPE = "notify-change";
+	
 	Object _base;
 	Object _prop;
 	
-	public NotifyInfo(Component comp,String subject, Object base, Object prop, String note) {
-		super("notify-info", comp, subject, note);
+	public NotifyChangeInfo(Component comp, Object base, Object prop, String note) {
+		super(TYPE, null,comp, note);
 		_base = base;
 		_prop = prop;
 	}
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		json.put("base", toString(_base,100));
-		json.put("prop", toString(_prop,200));
+		putJSON(json,"base", toString(_base,100));
+		putJSON(json,"prop", toString(_prop,200));
 		return json;
 	}
 

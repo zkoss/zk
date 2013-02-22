@@ -9,7 +9,7 @@
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind.sys.debugger.impl;
+package org.zkoss.bind.sys.debugger.impl.info;
 
 import java.util.Map;
 
@@ -23,13 +23,18 @@ import org.zkoss.zk.ui.Component;
  */
 public class ValidationInfo extends ExecutionInfoBase{
 
+	public static final String TYPE = "validation";
+	
+	public static final String FORM="form";
+	public static final String PROP="prop";
+	
 	String _validatorExpr;
 	Validator _validator;
 	Object _result;
 	
-	public ValidationInfo(Component comp,String subject, String validatorExpr, Validator validator,
+	public ValidationInfo(String subtype,Component comp,String validatorExpr, Validator validator,
 			Object result,Map<String, Object> args,String note) {
-		super("validation-info", comp, subject, note);
+		super(TYPE, subtype,comp,note);
 		_validatorExpr = validatorExpr;
 		_validator = validator;
 		_result = result;
@@ -37,12 +42,12 @@ public class ValidationInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		json.put("validatorExpr", _validatorExpr);
-		json.put("validator", toString(_validator,200));
+		putJSON(json,"validatorExpr", _validatorExpr);
+		putJSON(json,"validator", toString(_validator,200));
 		if(_result instanceof Boolean){
-			json.put("result", _result);
+			putJSON(json,"result", _result);
 		}else{
-			json.put("result", toString(_result,200));
+			putJSON(json,"result", toString(_result,200));
 		}
 		return json;
 	}

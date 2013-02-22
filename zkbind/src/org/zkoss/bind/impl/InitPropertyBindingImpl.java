@@ -22,7 +22,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
-import org.zkoss.bind.sys.debugger.impl.LoadInfo;
+import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
@@ -67,8 +67,8 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
-					collector.addInfo(new LoadInfo(comp,"init-property","",
-							getPropertyString(),getFieldName(),old,getArgs(),"By converter"));
+					collector.addInfo(new LoadInfo(LoadInfo.PROP_INIT,comp,null,
+							getPropertyString(),getFieldName(),old,getArgs(),"*Converter.IGNORED_VALUE"));
 				}
 				return;
 			}
@@ -78,8 +78,8 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		eval.setValue(null, comp, _fieldExpr, value);
 		
 		if(collector!=null){
-			collector.addInfo(new LoadInfo(comp,"init-property","",
-					getPropertyString(),getFieldName(),value,getArgs(),""));
+			collector.addInfo(new LoadInfo(LoadInfo.PROP_INIT,comp,null,
+					getPropertyString(),getFieldName(),value,getArgs(),null));
 		}
 	}
 }
