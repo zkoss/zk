@@ -1,0 +1,37 @@
+<zk>
+	<label multiline="true">
+	After resize browser, all yellow block should no be disappeared.
+	</label>
+	<separator height="20px" />
+	<div width="400px" height="100px">
+		<cardlayout hflex="1" vflex="1"
+			style="background-color:yellow" selectedIndex="0">
+			<div width="100%" height="100%">Cardlayout in Div</div>
+		</cardlayout>
+	</div>
+
+	<separator />
+
+	<div width="400px" height="100px">
+		<div hflex="1" vflex="1" style="background-color:yellow">
+			Div in Div
+		</div>
+	</div>
+
+	<separator bar="true" height="20px" />
+	
+	<hlayout width="400px" height="100px">
+		<cardlayout hflex="1" vflex="1"
+			style="background-color:yellow" selectedIndex="0">
+			<div width="100%" height="100%">Cardlayout in Hlayout</div>
+		</cardlayout>
+	</hlayout>
+
+	<separator />
+
+	<hlayout width="400px" height="100px">
+		<div hflex="1" vflex="1" style="background-color:yellow">
+			Div in Hlayout
+		</div>
+	</hlayout>
+</zk>

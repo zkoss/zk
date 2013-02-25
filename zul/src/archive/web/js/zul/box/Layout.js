@@ -171,7 +171,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	//bug#3296056
 	afterResetChildSize_: function(orient) {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {				
-			var chdex = kid.$n('chdex');
+			var chdex = kid.$n();  //ZK-1509: use kid.$n() instead of kid.$n('chdex')
 			if (chdex) {
 				if (orient == 'h')
 					chdex.style.height = '';
