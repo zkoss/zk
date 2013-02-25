@@ -524,7 +524,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 		this.$supers('doRightClick_', arguments);
 	},
 	doTooltipOver_: function (evt) {
-		zk.log('doTooltipOver_');
 		if (!evt.tooltipped && _tt_beforeBegin(this)) {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
 				tip = this._smartFellow(params.id);
@@ -538,7 +537,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doTooltipOut_: function (evt) {
 		_tt_end(this);
-		zk.log('doTooltipOut');
 		this.$supers('doTooltipOut_', arguments);
 	},
 	_smartFellow: function (id) {
