@@ -76,6 +76,7 @@ ZK 6.5.2
   ZK-1615: Use children in a form binding doesn't work
   ZK-1518: Decimalbox throws error when setting Locale and value together
   ZK-1509: Cardlayout (with v/hflex="1") in hlayout will disappear when browser's size changed
+  ZK-1604: Listbox Data Refresh throws errors within certain layout elements
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
