@@ -1778,19 +1778,13 @@ public class Tree extends MeshElement {
 			}
 			try {
 				try {
-					if (_renderer == _defRend) { // template
-						Treechildren tc = item.getTreechildren();
-						_renderer.render(item, node, index);
-						Object newTreeitem = item.getAttribute("org.zkoss.zul.model.renderAs");
-						if (newTreeitem instanceof Treeitem) {
-							((Treeitem)newTreeitem).appendChild(tc);
-						}
-					} else {
-						Treeitem faker = new Treeitem();
-						_renderer.render(faker, node, index);
-						Treerow newRow = faker.getTreerow();
+					if (item.getTreerow() != null) // just in case
 						item.getTreerow().detach();
-						item.appendChild(newRow);
+					Treechildren tc = item.getTreechildren();
+					_renderer.render(item, node, index);
+					Object newTreeitem = item.getAttribute("org.zkoss.zul.model.renderAs");
+					if (newTreeitem instanceof Treeitem) {
+						((Treeitem)newTreeitem).appendChild(tc);
 					}
 				} catch (AbstractMethodError ex) {
 					final Method m = _renderer.getClass()
