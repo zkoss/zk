@@ -51,12 +51,12 @@ public class LoadInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"condition", _condition);
-		putJSON(json,"fromExpr", _fromExpr);
-		putJSON(json,"toExpr", _toExpr);
-		putJSON(json,"value", toString(_value,200));
+		put(json,"condition", _condition);
+		putEssential(json,"fromExpr", _fromExpr);
+		putEssential(json,"toExpr", _toExpr);
+		put(json,"value", toString(_value,200));
 		if(_value==null){
-			putJSON(json,"nullval", true);
+			put(json,"nullval", true);
 		}
 		return json;
 	}

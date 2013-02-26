@@ -61,7 +61,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		
 		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new SaveInfo(SaveInfo.REFERENCE,getComponent(), null, "self."+_attr, getPropertyString(), val, null, null));
+			collector.addInfo(new SaveInfo(SaveInfo.REFERENCE,getComponent(), null, _attr, getPropertyString(), val, null, null));
 		}
 		
 		//copy notifies back
@@ -84,7 +84,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 			
 			final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
-				collector.addInfo(new LoadInfo(LoadInfo.REFERENCE,getComponent(), null, getPropertyString(), "self."+_attr, _cacheValue, null, null));
+				collector.addInfo(new LoadInfo(LoadInfo.REFERENCE,getComponent(), null, getPropertyString(), _attr, _cacheValue, null, null));
 			}
 		}
 	}

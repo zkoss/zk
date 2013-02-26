@@ -26,7 +26,6 @@ import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.ValidationMessages;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 /**
@@ -126,7 +125,7 @@ import org.zkoss.zk.ui.event.Event;
 	private boolean validateSavePropertyBefore(Component comp,String command, Map<String,Property[]> validates,boolean valid, Set<Property> notifys) {
 		final List<SavePropertyBinding> bindings = _infoProvider.getSaveBeforeBindings().get(command);//_saveBeforeBindings.get(command);
 		boolean r = valid;
-		if (bindings != null && bindings.size()>0) {
+		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
 				r &= validateSavePropertyBinding(comp, binding, command, validates, r, notifys);
 			}

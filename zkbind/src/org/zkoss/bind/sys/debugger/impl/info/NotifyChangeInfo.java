@@ -33,8 +33,8 @@ public class NotifyChangeInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"base", toString(_base,100));
-		putJSON(json,"prop", toString(_prop,200));
+		putEssential(json,"base", toString(_base,100));
+		putEssential(json,"prop", toString(_prop,200));
 		return json;
 	}
 

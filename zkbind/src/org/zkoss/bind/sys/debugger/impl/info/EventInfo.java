@@ -30,7 +30,7 @@ public class EventInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"event", _event);
+		putEssential(json,"event", _event);
 		
 		return json;
 	}

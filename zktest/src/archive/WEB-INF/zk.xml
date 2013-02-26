@@ -23,10 +23,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	<library-property>
-		<name>org.zkoss.bind.DefaultDefaultDebuggerFactory.collector-type</name>
-		<value>client</value>
-	</library-property>
-	
+		<name>org.zkoss.bind.DefaultDebuggerFactory.collector-type</name>
+		<value>client-console</value>
+	</library-property>	
 	 -->
 
 	<!-- Turn on if you want to debug JavaScript.

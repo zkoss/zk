@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.util.Clients;
  * @author dennis
  * @since 6.5.2
  */
-public class ClientInformerExecutionInfoCollector extends AbstractExecutionInfoCollector {
+public class ClientExtensionExecutionInfoCollector extends AbstractExecutionInfoCollector {
 
 	@Override
 	public void addInfo(JSONObject info) {

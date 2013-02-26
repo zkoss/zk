@@ -11,7 +11,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys.debugger.impl;
 
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
@@ -28,7 +27,7 @@ import org.zkoss.zk.ui.Executions;
 public class DefaultDebuggerFactory extends DebuggerFactory {
 
 	
-	public static final String COLLECTOR_TYPE_PROP = "org.zkoss.bind.DefaultDefaultDebuggerFactory.collector-type";
+	public static final String COLLECTOR_TYPE_PROP = "org.zkoss.bind.DefaultDebuggerFactory.collector-type";
 	
 	private static final String COLLECTOR_KEY = DefaultDebuggerFactory.class.getName()+".collector";
 	private static final String CHECKER_KEY = DefaultDebuggerFactory.class.getName()+".checker";
@@ -47,20 +46,20 @@ public class DefaultDebuggerFactory extends DebuggerFactory {
 			if(_type==null){
 				synchronized(this){
 					if(_type==null){
-						_type = Library.getProperty(COLLECTOR_TYPE_PROP,"system-out");
+						_type = Library.getProperty(COLLECTOR_TYPE_PROP,"server-console");
 					}
 				}
 			}
-			if("client".equals(_type)){
-				collector = new ClientExecutionInfoCollector();
-			}else if("client-informer".equals(_type)){
-				collector = new ClientInformerExecutionInfoCollector();
-			}else if("system-out".equals(_type)){
-				collector = new SystemOutExecutionInfoCollector();
+			if("client-console".equals(_type)){
+				collector = new ClientConsoleExecutionInfoCollector();
+			}else if("client-extension".equals(_type)){
+				collector = new ClientExtensionExecutionInfoCollector();
+			}else if("server-console".equals(_type)){
+				collector = new ServerConsoleExecutionInfoCollector();
 			}else{
 				//default client
-				_log.warning("unknow type :"+_type+", use default system-out implementation");
-				collector = new SystemOutExecutionInfoCollector();
+				_log.warning("unknow type :"+_type+", use default server-console implementation");
+				collector = new ServerConsoleExecutionInfoCollector();
 			}
 			exec.setAttribute(COLLECTOR_KEY,collector);
 		}

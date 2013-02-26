@@ -47,9 +47,9 @@ public class CommandInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"event", _event);
-		putJSON(json,"commandExpr", _commandExpr);
-		putJSON(json,"command", _command);
+		put(json,"event", _event);
+		put(json,"commandExpr", _commandExpr);
+		put(json,"command", _command);
 		return json;
 	}
 

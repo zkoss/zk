@@ -65,7 +65,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
 					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT,comp,null,
-							getPropertyString(),"",old,getArgs(),"*Converter.IGNORED_VALUE"));
+							getPropertyString(),null,old,getArgs(),"*Converter.IGNORED_VALUE"));
 				}
 				return;
 			}
@@ -90,7 +90,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		
 		if(collector!=null){
 			collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT,comp,null,
-					getPropertyString(),"",value,getArgs(),null));
+					getPropertyString(),null,value,getArgs(),null));
 		}
 	}
 }

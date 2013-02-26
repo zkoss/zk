@@ -235,7 +235,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addInfo(new ValidationInfo(ValidationInfo.PROP,getComponent(),
-					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
+					getValidatorExpressionString(),validator.toString(), Boolean.valueOf(vctx.isValid()),
 					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),null));
 		}
 		

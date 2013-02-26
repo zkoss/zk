@@ -40,6 +40,8 @@
 					onClick="@command('cmd1') @global-command('gcmd1')" />
 				<button label="save2" onClick="@command('cmd2')" />
 			</hbox>
+			<label value="@bind(vm.escValue1)"/>
+			<label value="@bind(vm.escValue2)"/>
 		</window>
 	</div>
 	<div if="${'form' eq param['case']}">
@@ -50,6 +52,8 @@
 					value="@bind(fx.name)" />
 				/
 				<label value="@load(fx.name)" />
+				/
+				<label value="@load(vm.element.name)" />
 				/
 				<button label="save3" onClick="@command('cmd3')" />
 			</hbox>
@@ -75,7 +79,7 @@
 		</window>
 	</div>
 	<div if="${'col' eq param['case']}">
-		Reference
+		Collection
 		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">
 			<hbox>
 				<listbox model="@load(vm.elements)" selectedItem="@bind(vm.selected)" width="400px">

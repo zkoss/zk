@@ -75,7 +75,7 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
 					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_LOAD,comp,getConditionString(ctx),
-							getPropertyString(),"",old,getArgs(),"*Converter.IGNORED_VALUE"));
+							getPropertyString(),null,old,getArgs(),"*Converter.IGNORED_VALUE"));
 				}
 				return;
 			}

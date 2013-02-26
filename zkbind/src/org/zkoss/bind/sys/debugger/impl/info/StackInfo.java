@@ -31,7 +31,7 @@ public class StackInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"name", _name);
+		putEssential(json,"name", _name);
 		return json;
 	}
 }

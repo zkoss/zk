@@ -609,7 +609,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_INIT,comp,"", binding.getPropertyString(), formId,bindingArgs, ""));
+			collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_INIT,comp,null, binding.getPropertyString(), formId,bindingArgs, null));
 		}
 	}
 	
@@ -665,7 +665,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_formBindingHandler.addLoadPromptBinding(bkey, binding);
 			
 			if(collector!=null){
-				collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp,"", binding.getPropertyString(), formId, bindingArgs,""));
+				collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp,null, binding.getPropertyString(), formId, bindingArgs,null));
 			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
@@ -678,7 +678,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_formBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp,"before = '"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp,"before = '"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,null));
 					}
 				}
 			}
@@ -692,7 +692,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_formBindingHandler.addLoadAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp,"after = '"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp,"after = '"+cmd+"'", binding.getPropertyString(), formId, bindingArgs,null));
 					}
 				}
 			}
@@ -717,7 +717,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_formBindingHandler.addSaveBeforeBinding(cmd, binding);
 				
 				if(collector!=null){
-					collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_SAVE, comp, "before = '"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,""));
+					collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_SAVE, comp, "before = '"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,null));
 				}
 			}
 		}
@@ -731,7 +731,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_formBindingHandler.addSaveAfterBinding(cmd, binding);
 				
 				if(collector!=null){
-					collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_LOAD,comp, "after = '"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,""));
+					collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_SAVE,comp, "after = '"+cmd+"'", formId ,binding.getPropertyString(), bindingArgs,null));
 				}
 			}
 		}
@@ -845,7 +845,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_INIT, comp, "", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
+			collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_INIT, comp, null, binding.getPropertyString(), binding.getFieldName(), bindingArgs,null));
 		}
 	}
 
@@ -972,7 +972,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
 			
 			if(collector!=null){
-				collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, evtnm==null?"":evtnm, binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
+				collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, evtnm, binding.getPropertyString(), binding.getFieldName(), bindingArgs,null));
 			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
@@ -985,7 +985,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, "before = '"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, "before = '"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,null));
 					}
 				}
 			}
@@ -999,7 +999,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addLoadAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, "after = '"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, "after = '"+cmd+"'", binding.getPropertyString(), binding.getFieldName(), bindingArgs,null));
 					}
 				}
 			}
@@ -1054,7 +1054,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_propertyBindingHandler.addSavePromptBinding(comp, bkey, binding);
 			
 			if(collector!=null){
-				collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_SAVE, comp, "", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
+				collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_SAVE, comp, null, binding.getFieldName(),binding.getPropertyString(), bindingArgs,null));
 			}
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
@@ -1067,7 +1067,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addSaveBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_SAVE, comp, "before = '"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_SAVE, comp, "before = '"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,null));
 					}
 				}
 			}
@@ -1081,7 +1081,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_SAVE, comp, "after = '"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_SAVE, comp, "after = '"+cmd+"'", binding.getFieldName(),binding.getPropertyString(), bindingArgs,null));
 					}
 				}
 			}
@@ -1140,7 +1140,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_INIT, comp, "", binding.getPropertyString(), "", bindingArgs,""));
+			collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_INIT, comp, null, binding.getPropertyString(), null, bindingArgs,null));
 		}
 		
 	}
@@ -1160,7 +1160,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_childrenBindingHandler.addLoadPromptBinding(comp, bkey, binding);
 			
 			if(collector!=null){
-				collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_LOAD,comp, "", binding.getPropertyString(), "", bindingArgs,""));
+				collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_LOAD,comp, null, binding.getPropertyString(), null, bindingArgs,null));
 			}
 			
 		}else{
@@ -1174,7 +1174,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_childrenBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_LOAD, comp, "before = '"+cmd+"'", binding.getPropertyString(), "", bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_LOAD, comp, "before = '"+cmd+"'", binding.getPropertyString(), null, bindingArgs,null));
 					}
 				}
 			}
@@ -1188,7 +1188,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_childrenBindingHandler.addLoadAfterBinding(cmd, binding);
 					
 					if(collector!=null){
-						collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_LOAD, comp, "after = '"+cmd+"'", binding.getPropertyString(), "", bindingArgs,""));
+						collector.addInfo(new AddBindingInfo(AddBindingInfo.CHILDREN_LOAD, comp, "after = '"+cmd+"'", binding.getPropertyString(), null, bindingArgs,null));
 					}
 				}
 			}
@@ -1220,7 +1220,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddBindingInfo(AddBindingInfo.REFERENCE,comp, "", binding.getPropertyString(), "self."+attr, bindingArgs,""));
+			collector.addInfo(new AddBindingInfo(AddBindingInfo.REFERENCE,comp, null, binding.getPropertyString(), "self."+attr, bindingArgs,null));
 		}
 	}
 
@@ -1236,7 +1236,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddCommandBindingInfo(AddCommandBindingInfo.VIEWMODEL,comp, evtnm, binding.getCommandString(), args,""));
+			collector.addInfo(new AddCommandBindingInfo(AddCommandBindingInfo.VIEWMODEL,comp, evtnm, binding.getCommandString(), args,null));
 		}
 	}
 	
@@ -1248,7 +1248,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
-			collector.addInfo(new AddCommandBindingInfo(AddCommandBindingInfo.GLOBAL,comp, evtnm, binding.getCommandString(), args,""));
+			collector.addInfo(new AddCommandBindingInfo(AddCommandBindingInfo.GLOBAL,comp, evtnm, binding.getCommandString(), args,null));
 		}
 	}
 	
@@ -1316,7 +1316,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			try{
 				if(collector!=null){
 					collector.pushStack("ON_EVENT");
-					collector.addInfo(new EventInfo(event.getTarget(),event.getName(),""));
+					collector.addInfo(new EventInfo(event.getTarget(),event.getName(),null));
 				}
 				onEvent0(event);
 			}catch(Exception x){
@@ -1474,7 +1474,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			if(collector!=null){
 				collector.addInfo(new CommandInfo(CommandInfo.ON_COMMAND,comp,evtnm,
 						commandBinding==null?null:BindEvaluatorXUtil.getExpressionString(((CommandBindingImpl)commandBinding).getCommand()),
-								command, commandArgs,""));
+								command, commandArgs,null));
 			}
 			
 			//validate

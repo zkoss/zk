@@ -13,7 +13,6 @@ package org.zkoss.bind.sys.debugger.impl;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.BinderUtil;
-import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.AnnoWarnInfo;

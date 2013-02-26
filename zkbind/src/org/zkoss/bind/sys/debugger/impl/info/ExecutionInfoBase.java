@@ -58,27 +58,27 @@ public class ExecutionInfoBase implements ExecutionInfo{
 	
 	public JSONObject toJSON(){
 		JSONObject json = new JSONObject();
-		putJSON(json,"type", _type);
+		putEssential(json,"type", _type);
 		if(_comp!=null){
-			putJSON(json,"widget", _comp.getDefinition().getName());
-			putJSON(json,"uuid", _comp.getUuid());
-			putJSON(json,"id", _comp.getId());
-		}/*else{
-			json.put("widget","");
-			json.put("uuid", "");
-			json.put("id", "");
-		}*/
-		putJSON(json,"subtype", _subtype);
-		putJSON(json,"note", toString(_note, 300));
-		putJSON(json,"location", _location);
+			put(json,"widget", _comp.getDefinition().getName());
+			put(json,"uuid", _comp.getUuid());
+			put(json,"id", _comp.getId());
+		}
+		put(json,"subtype", _subtype);
+		put(json,"note", toString(_note, 300));
+		put(json,"location", _location);
 		return json;
 	}
 
-	protected static void putJSON(JSONObject json,String prop,Object val){
+	protected static void put(JSONObject json,String prop,Object val){
 		if(val!=null){
 			json.put(prop, val);
 		}
 	}
+	protected static void putEssential(JSONObject json,String prop,Object val){
+		json.put(prop, val);
+	}
+	
 	//util method
 	protected static String toString(Object value, int len){
 		String valstr = value==null?null:value.toString();

@@ -101,7 +101,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addInfo(new SaveInfo(SaveInfo.FORM_SAVE,comp,getConditionString(ctx),
-					getFormId(),getPropertyString(),form,getArgs(),""));
+					getFormId(),getPropertyString(),form,getArgs(),null));
 		}
 		
 		//update form field into backing bean
@@ -195,7 +195,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		if(collector!=null){
 			collector.addInfo(new ValidationInfo(ValidationInfo.PROP,getComponent(),
-					getValidatorExpressionString(),validator, Boolean.valueOf(vctx.isValid()),
+					getValidatorExpressionString(),validator.toString(), Boolean.valueOf(vctx.isValid()),
 					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),null));
 		}
 //		//collect notify change

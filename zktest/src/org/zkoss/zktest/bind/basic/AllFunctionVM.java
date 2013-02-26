@@ -15,6 +15,9 @@ import org.zkoss.zk.ui.util.Clients;
 
 public class AllFunctionVM {
 
+	String escValue1 = "'";
+	String escValue2 = "\"";
+
 	Element element;
 
 	Element selected;
@@ -27,6 +30,22 @@ public class AllFunctionVM {
 		elements.add(element = selected = new Element("item 1"));
 		elements.add(new Element("item 2"));
 		elements.add(new Element("item 3"));
+	}
+
+	public String getEscValue1() {
+		return escValue1;
+	}
+
+	public void setEscValue1(String escValue1) {
+		this.escValue1 = escValue1;
+	}
+
+	public String getEscValue2() {
+		return escValue2;
+	}
+
+	public void setEscValue2(String escValue2) {
+		this.escValue2 = escValue2;
 	}
 
 	public Element getElement() {
@@ -44,8 +63,6 @@ public class AllFunctionVM {
 	public List<Element> getElements() {
 		return elements;
 	}
-	
-	
 
 	public Element getSelected() {
 		return selected;
@@ -54,8 +71,6 @@ public class AllFunctionVM {
 	public void setSelected(Element selected) {
 		this.selected = selected;
 	}
-
-
 
 	static public class Element {
 		String name;
@@ -72,58 +87,58 @@ public class AllFunctionVM {
 			this.name = name;
 		}
 	}
-	
-	public Validator getValidator1(){
-		return new AbstractValidator(){
+
+	public Validator getValidator1() {
+		return new AbstractValidator() {
 
 			@Override
 			public void validate(ValidationContext ctx) {
-				if(!"A".equals(ctx.getProperty().getValue())){
+				if (!"A".equals(ctx.getProperty().getValue())) {
 					ctx.setInvalid();
 					Clients.showNotification("value must be 'A'");
 				}
 			}
 		};
 	}
-	
-	public Validator getValidator2(){
-		return new AbstractValidator(){
+
+	public Validator getValidator2() {
+		return new AbstractValidator() {
 
 			@Override
 			public void validate(ValidationContext ctx) {
-				Form fx = (Form)ctx.getProperty().getValue();
-				if(!"B".equals(fx.getField("name"))){
+				Form fx = (Form) ctx.getProperty().getValue();
+				if (!"B".equals(fx.getField("name"))) {
 					ctx.setInvalid();
 					Clients.showNotification("value must be 'B'");
 				}
 			}
 		};
 	}
-	
+
 	@DefaultCommand
-	public void cmd(){
-		
+	public void cmd() {
+
 	}
 
 	@Command
-	public void cmd1(){
-		
+	public void cmd1() {
+
 	}
-	
+
 	@GlobalCommand
-	public void gcmd1(){
-		element.setName(element.getName()+"-GCMD1");
+	public void gcmd1() {
+		element.setName(element.getName() + "-GCMD1");
 		BindUtils.postNotifyChange(null, null, element, "*");
 	}
-	
+
 	@Command
-	public void cmd2(){
+	public void cmd2() {
 		BindUtils.postGlobalCommand(null, null, "gcmd2", null);
 	}
-	
+
 	@GlobalCommand
-	public void gcmd2(){
-		element.setName(element.getName()+"-GCMD2");
+	public void gcmd2() {
+		element.setName(element.getName() + "-GCMD2");
 		BindUtils.postNotifyChange(null, null, element, "*");
 	}
 }

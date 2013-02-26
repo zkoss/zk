@@ -33,8 +33,8 @@ public class AnnoWarnInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"attr", _attr);
-		putJSON(json,"anno", _anno);
+		putEssential(json,"attr", _attr);
+		putEssential(json,"anno", _anno);
 		return json;
 	}
 

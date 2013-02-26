@@ -39,8 +39,8 @@ public class AddCommandBindingInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"event", _event);
-		putJSON(json,"commandExpr", _commandExpr);
+		put(json,"event", _event);
+		put(json,"commandExpr", _commandExpr);
 		return json;
 	}
 

@@ -52,9 +52,9 @@ public class AddBindingInfo extends ExecutionInfoBase{
 	
 	public JSONObject toJSON(){
 		JSONObject json = super.toJSON();
-		putJSON(json,"fromExpr", _fromExpr);
-		putJSON(json,"toExpr", _toExpr);
-		putJSON(json,"condition", _condition);
+		putEssential(json,"fromExpr", _fromExpr);
+		putEssential(json,"toExpr", _toExpr);
+		put(json,"condition", _condition);
 		return json;
 	}
 
