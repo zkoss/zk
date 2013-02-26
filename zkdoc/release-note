@@ -77,6 +77,7 @@ ZK 6.5.2
   ZK-1518: Decimalbox throws error when setting Locale and value together
   ZK-1509: Cardlayout (with v/hflex="1") in hlayout will disappear when browser's size changed
   ZK-1604: Listbox Data Refresh throws errors within certain layout elements
+  ZK-1639: Tree display is not correct after move and modify
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

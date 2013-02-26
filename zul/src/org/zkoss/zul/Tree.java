@@ -1784,7 +1784,17 @@ public class Tree extends MeshElement {
 					_renderer.render(item, node, index);
 					Object newTreeitem = item.getAttribute("org.zkoss.zul.model.renderAs");
 					if (newTreeitem instanceof Treeitem) {
-						((Treeitem)newTreeitem).appendChild(tc);
+						Treeitem newItem = ((Treeitem)newTreeitem);
+						newItem.appendChild(tc);
+						if (_model instanceof TreeOpenableModel) {
+							TreeOpenableModel model = (TreeOpenableModel) _model;
+
+							// reset open status - B65-ZK-1639
+							newItem.setOpen(!(model.isOpenEmpty() || !model.isPathOpened(_model.getPath(node))));
+							if (!item.isLoaded() && newItem.isOpen())
+								Tree.this.renderChildren(this, tc, node);
+							newItem.setLoaded(item.isLoaded());
+						}
 					}
 				} catch (AbstractMethodError ex) {
 					final Method m = _renderer.getClass()
