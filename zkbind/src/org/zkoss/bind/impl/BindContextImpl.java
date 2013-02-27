@@ -87,6 +87,23 @@ public class BindContextImpl implements BindContext {
 		Map<?, ?> m = (Map<?, ?>)getAttribute(VALIDATOR_ARGS);
 		return m==null?null:m.get(key);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getCommandArgs(){
+		return (Map<String, Object>)getAttribute(COMMAND_ARGS);
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getBindingArgs(){
+		return (Map<String, Object>)getAttribute(BINDING_ARGS);
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getConverterArgs(){
+		return (Map<String, Object>)getAttribute(CONVERTER_ARGS);
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getValidatorArgs(){
+		return (Map<String, Object>)getAttribute(VALIDATOR_ARGS);
+	}
 
 	public boolean isSave() {
 		return this._save;

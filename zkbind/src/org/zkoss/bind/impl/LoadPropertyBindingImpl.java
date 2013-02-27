@@ -25,6 +25,8 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
@@ -54,6 +56,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	public void load(BindContext ctx) {
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
@@ -70,15 +74,38 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 //			addConverterDependsOnTrackings(conv, ctx);
 			
 			if(activating) return;//don't load to component if activating
-			
-			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) return;
+			Object old;
+			value = conv.coerceToUi(old = value, comp, ctx);
+			if(value == Converter.IGNORED_VALUE) {
+				if(collector!=null){
+					collector.addInfo(new LoadInfo(LoadInfo.PROP_LOAD,comp,getConditionString(ctx),
+							getPropertyString(),getFieldName(),old,getArgs(),"*Converter.IGNORED_VALUE"));
+				}
+				return;
+			}
 		}
 		if(activating) return;//don't load to component if activating
 		
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
+
+		if(collector!=null){
+			collector.addInfo(new LoadInfo(LoadInfo.PROP_LOAD,comp,getConditionString(ctx),
+					getPropertyString(),getFieldName(),value,getArgs(),null));
+		}
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before = '").append(getCommandName()).append("'");
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after = '").append(getCommandName()).append("'");
+		}else{
+			condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
+		}
+		return condition.length()==0?null:condition.toString();
 	}
 	
 //	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {

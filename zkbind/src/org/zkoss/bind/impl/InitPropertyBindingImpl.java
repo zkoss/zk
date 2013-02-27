@@ -18,8 +18,11 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitPropertyBinding;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
@@ -51,6 +54,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 	public void load(BindContext ctx) {
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 		
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
@@ -59,11 +63,23 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		@SuppressWarnings("unchecked")
 		final Converter<Object, Object, Component> conv = getConverter();
 		if (conv != null) {
-			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) return;
+			Object old;
+			value = conv.coerceToUi(old = value, comp, ctx);
+			if(value == Converter.IGNORED_VALUE) {
+				if(collector!=null){
+					collector.addInfo(new LoadInfo(LoadInfo.PROP_INIT,comp,null,
+							getPropertyString(),getFieldName(),old,getArgs(),"*Converter.IGNORED_VALUE"));
+				}
+				return;
+			}
 		}
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
+		
+		if(collector!=null){
+			collector.addInfo(new LoadInfo(LoadInfo.PROP_INIT,comp,null,
+					getPropertyString(),getFieldName(),value,getArgs(),null));
+		}
 	}
 }

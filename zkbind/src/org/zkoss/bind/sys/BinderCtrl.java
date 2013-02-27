@@ -17,6 +17,8 @@ import java.util.Set;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.PhaseListener;
+import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -127,5 +129,18 @@ public interface BinderCtrl {
 	 * @since 6.0.1
 	 */
 	public boolean isActivating();
+
+	/** 
+	 * get binding execution info collector
+	 * @return the collector instance or null if no collector is existed
+	 * @since 6.5.2 
+	 */
+	public BindingExecutionInfoCollector getBindingExecutionInfoCollector();
 	
+	/** 
+	 * get binding annotation info checker
+	 * @return the collector instance or null if no collector is existed
+	 * @since 6.5.2 
+	 */
+	public BindingAnnotationInfoChecker getBindingAnnotationInfoChecker();
 }

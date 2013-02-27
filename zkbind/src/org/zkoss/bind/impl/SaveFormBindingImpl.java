@@ -25,9 +25,12 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
-import org.zkoss.bind.sys.ConditionType;
+import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.sys.ConditionType; 
 import org.zkoss.bind.sys.SaveFormBinding;
-import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
+import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
@@ -94,6 +97,13 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 
+		
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addInfo(new SaveInfo(SaveInfo.FORM_SAVE,comp,getConditionString(ctx),
+					getFormId(),getPropertyString(),form,getArgs(),null));
+		}
+		
 		//update form field into backing bean
 		if(form instanceof FormExt){
 			for (String field : ((FormExt)form).getSaveFieldNames()) {
@@ -107,6 +117,18 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 			}
 		}
 		//TODO should we clear form dirty and notify formStatus?
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before = '").append(getCommandName()).append("'"); 
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after = '").append(getCommandName()).append("'"); 
+		}else{
+			condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
+		}
+		return condition.length()==0?null:condition.toString();
 	}
 
 	//--SaveBinding--//
@@ -158,6 +180,10 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	public boolean hasValidator() {
 		return _validator == null ? false : true;
 	}
+	
+	public String getValidatorExpressionString(){
+		return _validator==null?null:BindEvaluatorXUtil.getExpressionString(_validator);
+	}
 
 	public void validate(ValidationContext vctx) {
 		Validator validator = getValidator();
@@ -166,6 +192,12 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 		validator.validate(vctx);
 		
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addInfo(new ValidationInfo(ValidationInfo.PROP,getComponent(),
+					getValidatorExpressionString(),validator.toString(), Boolean.valueOf(vctx.isValid()),
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),null));
+		}
 //		//collect notify change
 //		collectNotifyChange(validator,vctx);
 	}

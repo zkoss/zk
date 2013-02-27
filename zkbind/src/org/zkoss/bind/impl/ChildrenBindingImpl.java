@@ -85,7 +85,7 @@ public abstract class ChildrenBindingImpl extends BindingImpl implements Childre
 	}
 	
 	public String getPropertyString() {
-		return getPureExpressionString(this._accessInfo.getProperty());
+		return BindEvaluatorXUtil.getExpressionString(this._accessInfo.getProperty());
 	}
 	
 	public ConditionType getConditionType() {

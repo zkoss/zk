@@ -17,7 +17,6 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
-import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
@@ -38,17 +37,11 @@ public abstract class AbstractBindingHandler implements Serializable {
 	}
 	
 	protected void doPrePhase(Phase phase, BindContext ctx) {
-		final PhaseListener l = ((BinderCtrl)_binder).getPhaseListener(); 
-		if ( l != null) {
-			l.prePhase(phase, ctx);
-		}
+		((BinderImpl)_binder).doPrePhase(phase, ctx);
 	}
 	
 	protected void doPostPhase(Phase phase, BindContext ctx) {
-		final PhaseListener l = ((BinderCtrl)_binder).getPhaseListener();
-		if (l != null) {
-			l.postPhase(phase, ctx);
-		}
+		((BinderImpl)_binder).doPostPhase(phase, ctx);
 	}
 	
 	@SuppressWarnings("unchecked")
