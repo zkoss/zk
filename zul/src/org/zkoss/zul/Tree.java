@@ -1811,7 +1811,7 @@ public class Tree extends MeshElement {
 							TreeOpenableModel model = (TreeOpenableModel) _model;
 
 							// reset open status - B65-ZK-1639
-							newItem.setOpen(!(model.isOpenEmpty() || !model.isPathOpened(_model.getPath(node))));
+							newItem.setOpen(!(model.isOpenEmpty() || !model.isPathOpened(getPath0((Treechildren)newItem.getParent(), index))));
 							if (!item.isLoaded() && newItem.isOpen())
 								Tree.this.renderChildren(this, tc, node);
 							newItem.setLoaded(item.isLoaded());
