@@ -50,8 +50,8 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 	final static public String FORM_ATTR = "form";
 	final static public String CHILDREN_ATTR = "children";
 	
-	private static final String QUEUE_NAME_ANNO_ATTR = "queueName";
-	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
+//	private static final String QUEUE_NAME_ANNO_ATTR = "queueName";
+//	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 	
 	BindingExecutionInfoCollector _collector;
 	

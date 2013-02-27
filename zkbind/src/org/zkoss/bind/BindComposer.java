@@ -491,7 +491,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private BindingAnnotationInfoChecker getBindingAnnotationInfoChecker(){
 		DebuggerFactory factory = DebuggerFactory.getInstance();
-		return factory==null?null:factory.getAnnotationInfoChecker(this);
+		return factory==null?null:factory.getAnnotationInfoChecker();
 	}
 	
 }//end of class...

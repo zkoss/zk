@@ -20,9 +20,18 @@ package org.zkoss.bind.sys.debugger;
  */
 public interface BindingExecutionInfoCollector {
 
+	/**
+	 * push the execution stack
+	 */
 	void pushStack(String name);
 
+	/**
+	 * pop the execution stack
+	 */
 	String popStack();
 	
+	/**
+	 * add an execution information
+	 */
 	void addInfo(ExecutionInfo info);
 }

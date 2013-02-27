@@ -14,8 +14,6 @@ package org.zkoss.bind.sys.debugger.impl;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
-import org.zkoss.lang.Library;
-import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 /**
@@ -25,60 +23,46 @@ import org.zkoss.zk.ui.Executions;
  * @since 6.5.2
  */
 public class DefaultDebuggerFactory extends DebuggerFactory {
-
-	
-	public static final String COLLECTOR_TYPE_PROP = "org.zkoss.bind.DefaultDebuggerFactory.collector-type";
 	
 	private static final String COLLECTOR_KEY = DefaultDebuggerFactory.class.getName()+".collector";
 	private static final String CHECKER_KEY = DefaultDebuggerFactory.class.getName()+".checker";
-	private static final Log _log = Log.lookup(DefaultDebuggerFactory.class);
+//	private static final Log _log = Log.lookup(DefaultDebuggerFactory.class);
 	
 	String _type;
 	
 	@Override
-	public BindingExecutionInfoCollector getExecutionInfoCollector(Object target) {
+	public BindingExecutionInfoCollector getExecutionInfoCollector() {
 		
 		Execution exec = Executions.getCurrent();
 		if(exec==null) return null;
 		
 		BindingExecutionInfoCollector collector = (BindingExecutionInfoCollector)exec.getAttribute(COLLECTOR_KEY);
 		if(collector==null){
-			if(_type==null){
-				synchronized(this){
-					if(_type==null){
-						_type = Library.getProperty(COLLECTOR_TYPE_PROP,"server-console");
-					}
-				}
-			}
-			if("client-console".equals(_type)){
-				collector = new ClientConsoleExecutionInfoCollector();
-			}else if("client-extension".equals(_type)){
-				collector = new ClientExtensionExecutionInfoCollector();
-			}else if("server-console".equals(_type)){
-				collector = new ServerConsoleExecutionInfoCollector();
-			}else{
-				//default client
-				_log.warning("unknow type :"+_type+", use default server-console implementation");
-				collector = new ServerConsoleExecutionInfoCollector();
-			}
+			collector = createBindingExecutionInfoCollector();
 			exec.setAttribute(COLLECTOR_KEY,collector);
 		}
 		return collector;
 	}
 
+	protected BindingExecutionInfoCollector createBindingExecutionInfoCollector() {
+		return new DefaultExecutionInfoCollector();
+	}
+
 	@Override
-	public BindingAnnotationInfoChecker getAnnotationInfoChecker(Object target) {
+	public BindingAnnotationInfoChecker getAnnotationInfoChecker() {
 		Execution exec = Executions.getCurrent();
 		if(exec==null) return null;
-		BindingExecutionInfoCollector collector = getExecutionInfoCollector(target);
-		if(collector==null) return null;
 		
 		BindingAnnotationInfoChecker checker = (BindingAnnotationInfoChecker)exec.getAttribute(CHECKER_KEY);
 		if(checker==null){
-			checker = new DefaultAnnotationInfoChecker(collector);
+			checker = createDefaultAnnotationInfoChecker();
 			exec.setAttribute(CHECKER_KEY,checker);
 		}
 		return checker;
+	}
+
+	protected BindingAnnotationInfoChecker createDefaultAnnotationInfoChecker() {
+		return new DefaultAnnotationInfoChecker(getExecutionInfoCollector());
 	}
 
 }

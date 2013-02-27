@@ -2291,11 +2291,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	public BindingExecutionInfoCollector getBindingExecutionInfoCollector(){
 		DebuggerFactory factory = DebuggerFactory.getInstance();
-		return factory==null?null:factory.getExecutionInfoCollector(this);
+		return factory==null?null:factory.getExecutionInfoCollector();
 	}
 	
 	public BindingAnnotationInfoChecker getBindingAnnotationInfoChecker(){
 		DebuggerFactory factory = DebuggerFactory.getInstance();
-		return factory==null?null:factory.getAnnotationInfoChecker(this);
+		return factory==null?null:factory.getAnnotationInfoChecker();
 	}
 }
