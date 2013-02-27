@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -1648,6 +1649,26 @@ public class Tree extends MeshElement {
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tree when items have been rendered.
 	}
 
+	private int[] getPath0(Treechildren parent, int index) {
+		List<Integer> path = new LinkedList<Integer>();
+		path.add(index);
+		Component p = parent;
+		while(true) {
+			p = p.getParent();
+			if (p instanceof Treeitem) {
+				Component treechildren = p.getParent();
+				if (treechildren != null) {
+					path.add(0, treechildren.getChildren().indexOf(p));
+					p = treechildren;
+				}
+			} else
+				break;
+		}
+		final int[] ipath = new int[path.size()];
+		for (int j = 0; j < ipath.length; j++)
+			ipath[j] = path.get(j);
+		return ipath;
+	}
 	/*
 	 * Renders the direct children for the specified parent
 	 */
@@ -1668,7 +1689,7 @@ public class Tree extends MeshElement {
 				TreeSelectableModel model = (TreeSelectableModel) _model;
 				if (!model.isSelectionEmpty() && 
 						getSelectedCount() != model.getSelectionCount() &&
-						model.isPathSelected(path = _model.getPath(childNode)))
+						model.isPathSelected(path = getPath0(parent, i)))
 					addItemToSelection(ti);
 			}
 			if (_model instanceof TreeOpenableModel) {
@@ -1676,7 +1697,7 @@ public class Tree extends MeshElement {
 				if (!model.isOpenEmpty()) {
 					if (!isLeaf) {
 						if (path == null)
-							path = _model.getPath(childNode);
+							path = getPath0(parent, i);
 						ti.setOpen(model.isPathOpened(path));
 					}
 				}
