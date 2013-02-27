@@ -266,8 +266,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				if (scroll > 11)
 					w -= scroll;
 
-				if (zk.ie){ //Related bugs: ZK-890 and ZK-242
-					if (scroll > 11 || !mw.ebody.clientWidth) {
+				if (zk.ie) { //Related bugs: ZK-890 and ZK-242
+					//Bug ZK-1642: only IE 6/7 has horizontal scrollbar issue
+					if (zk.ie < 8 && (scroll > 11 || !mw.ebody.clientWidth)) {
 						// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.
 						var hdflex = jq(mw.ehead).find('table>tbody>tr>th:last-child')[0];
 						hdflex.style.width = '';
