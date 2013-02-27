@@ -78,6 +78,10 @@ ZK 6.5.2
   ZK-1518: Decimalbox throws error when setting Locale and value together
   ZK-1509: Cardlayout (with v/hflex="1") in hlayout will disappear when browser's size changed
   ZK-1604: Listbox Data Refresh throws errors within certain layout elements
+  ZK-1639: Tree display is not correct after move and modify
+  ZK-1510: Creating a dynamic tree; treemode v6.5 has totally unexpected and unpredictable behavior while working as expected in v.5.0.11
+  ZK-1642: Tree columns width not expanding if scrollbar without hflex
+  ZK-1278: Unexpected callbacks of AbstractTreeModel
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
