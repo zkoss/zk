@@ -844,37 +844,42 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (zk.safari && this._ignoreDoScroll) 
 			return;
 		
+		var ehead = this.ehead,
+			ebody = this.ebody,
+			efoot = this.efoot;
+		
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
-		if ((zk.chrome || zk.ie || zk.safari) && this.ehead && !(this.fire('onScroll', this.ehead.scrollLeft).stopped)) {
-			if (this._currentLeft != this.ehead.scrollLeft) {
-				if (this.ebody)
-					this.ebody.scrollLeft = this.ehead.scrollLeft;
-				if (this.efoot) 
-					this.efoot.scrollLeft = this.ehead.scrollLeft;
+		if ((zk.chrome || zk.ie || zk.safari) && ehead && zk(ehead).isVisible() && //Bug ZK-1649: should check if ehead is visible or not
+				!(this.fire('onScroll', ehead.scrollLeft).stopped)) {
+			if (this._currentLeft != ehead.scrollLeft) {
+				if (ebody)
+					ebody.scrollLeft = ehead.scrollLeft;
+				if (efoot) 
+					efoot.scrollLeft = ehead.scrollLeft;
 			}
 		}
 		
-		if (!(this.fire('onScroll', this.ebody.scrollLeft).stopped)) {
-			if (this._currentLeft != this.ebody.scrollLeft) { //care about horizontal scrolling only
-				if (this.ehead) {
-					this.ehead.scrollLeft = this.ebody.scrollLeft;
+		if (!(this.fire('onScroll', ebody.scrollLeft).stopped)) {
+			if (this._currentLeft != ebody.scrollLeft) { //care about horizontal scrolling only
+				if (ehead) {
+					ehead.scrollLeft = ebody.scrollLeft;
 					//bug# 3039339: Column is not aligned in some special combination of dimension
-					var diff = this.ebody.scrollLeft - this.ehead.scrollLeft;
-					var hdflex = jq(this.ehead).find('table>tbody>tr>th:last-child')[0];
+					var diff = ebody.scrollLeft - ehead.scrollLeft;
+					var hdflex = jq(ehead).find('table>tbody>tr>th:last-child')[0];
 					if (diff) { //use the hdfakerflex to compensate
 						hdflex.style.width = (hdflex.offsetWidth + diff) + 'px';
-						this.ehead.scrollLeft = this.ebody.scrollLeft;
-					} else if (parseInt(hdflex.style.width) != 0 && this.ebody.scrollLeft == 0) {
+						ehead.scrollLeft = ebody.scrollLeft;
+					} else if (parseInt(hdflex.style.width) != 0 && ebody.scrollLeft == 0) {
 						hdflex.style.width = '';
 					}
 				}
-				if (this.efoot) 
-					this.efoot.scrollLeft = this.ebody.scrollLeft;
+				if (efoot) 
+					efoot.scrollLeft = ebody.scrollLeft;
 			}
 		}
 		
 		var t = zul.mesh.Scrollbar.getScrollPosV(this),
-			l = this.ebody.scrollLeft,
+			l = ebody.scrollLeft,
 			scrolled = (t != this._currentTop || l != this._currentLeft);
 		if (scrolled && 
 				// Bug ZK-353 ignore in rod
