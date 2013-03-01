@@ -203,6 +203,16 @@ public class JsContentRenderer implements ContentRenderer {
 			_buf.append(']');
 			return;
 		}
+		if (value instanceof float[]) {
+			_buf.append('[');
+			final float[] ary = (float[])value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0) _buf.append(',');
+				renderValue(ary[j]);
+			}
+			_buf.append(']');
+			return;
+		}
 		if (value instanceof double[]) {
 			_buf.append('[');
 			final double[] ary = (double[])value;
