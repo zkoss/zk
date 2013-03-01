@@ -599,4 +599,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
 	</xel-config>
 	-->
+	
+	<!-- Turn on if you want to enable zkbind debug info
+	<library-property>
+		<name>org.zkoss.bind.DebuggerFactory.enable</name>
+		<value>true</value>
+	</library-property>
+	 -->
 </zk>

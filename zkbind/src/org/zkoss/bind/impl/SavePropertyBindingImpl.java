@@ -23,9 +23,12 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SavePropertyBinding;
-import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
+import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
+import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
@@ -91,6 +94,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	
 
 	private static final String $COMPVALUE$ = "$COMPVALUE$";
+	private static final String $COMPVALUENOCONVERT$ = "$COMPVALUENOCONVERT$";
 	private static final String $VALUEREF$ = "$VALUEREF$";
 	private Object getComponentValue(BindContext ctx) {
 		if (!containsAttribute(ctx, $COMPVALUE$)) {
@@ -99,7 +103,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 			
 			//get data from component attribute
 			Object value = eval.getValue(null, comp, _fieldExpr);
-			
+			setAttribute(ctx, $COMPVALUENOCONVERT$, value);
 			//use converter to convert type if any
 			@SuppressWarnings("unchecked")
 			final Converter<Object, Object, Component> conv = getConverter();
@@ -115,17 +119,45 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		return getAttribute(ctx, $COMPVALUE$);
 	}
 	
+	public String getValidatorExpressionString(){
+		return _validator==null?null:BindEvaluatorXUtil.getExpressionString(_validator);
+	}
+	
 	public void save(BindContext ctx) {
+		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		final Component comp = getComponent();
 		//get data from component attribute
 		Object value = getComponentValue(ctx);
+		
 		if(value == Converter.IGNORED_VALUE){
+			if(collector!=null){
+				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
+				collector.addInfo(new SaveInfo(SaveInfo.PROP_SAVE,comp,getConditionString(ctx),
+						getFieldName(),getPropertyString(),old,getArgs(),"*Converter.IGNORED_VALUE"));
+			}
 			return;
 		}
 		
+		if(collector!=null){
+			collector.addInfo(new SaveInfo(SaveInfo.PROP_SAVE,comp,getConditionString(ctx),
+					getFieldName(),getPropertyString(),value,getArgs(),null));
+		}
+		
 		//set data into bean property
-		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
+	}
+	
+	private String getConditionString(BindContext ctx){
+		StringBuilder condition = new StringBuilder();
+		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+			condition.append("before = '").append(getCommandName()).append("'");
+		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+			condition.append("after = '").append(getCommandName()).append("'");
+		}else{
+			condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
+		}
+		return condition.toString();
 	}
 	
 	//get and cache value reference of this binding
@@ -199,6 +231,14 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		}
 		
 		validator.validate(vctx);
+		
+		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
+		if(collector!=null){
+			collector.addInfo(new ValidationInfo(ValidationInfo.PROP,getComponent(),
+					getValidatorExpressionString(),validator.toString(), Boolean.valueOf(vctx.isValid()),
+					((BindContextImpl)vctx.getBindContext()).getValidatorArgs(),null));
+		}
+		
 //		//collect notify change
 //		collectNotifyChange(validator,vctx);
 	}

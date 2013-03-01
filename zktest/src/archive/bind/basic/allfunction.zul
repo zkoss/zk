@@ -1,0 +1,94 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.AllFunctionVM')">
+
+	<hbox>
+		<button label="warn" onClick='Executions.sendRedirect("allfunction.zul?case=warn")'/>
+		<button label="basic" onClick='Executions.sendRedirect("allfunction.zul?case=basic")'/>
+		<button label="form" onClick='Executions.sendRedirect("allfunction.zul?case=form")'/>
+		<button label="reference" onClick='Executions.sendRedirect("allfunction.zul?case=ref")'/>
+		<button label="collection" onClick='Executions.sendRedirect("allfunction.zul?case=col")'/>
+	</hbox>
+	<div if="${'warn' eq param['case']}">
+			Warn
+			<window title="Warn" border="normal" 
+			apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.AllFunctionVM') @aaa()" binder="@id('binder') @bbb(b)" validationMessages="@id('vmsgs') @ccc(c)">
+				<hbox>
+					<label form="@id('fx') @xxx(vm.element.name)" value="@zzz(vm.element.name)" />
+					<button label="save1"
+						onClick="@yyy('cmd1')" />
+				</hbox>
+			</window>
+		</div>
+	<div if="${'basic' eq param['case']}">
+		Basic
+		<window title="Basic" border="normal">
+			<hbox>
+				<label value="@init(vm.element.name)" />
+				/
+				<textbox value="@bind(vm.element.name)" />
+				/
+				<label value="@bind(vm.element.name)" />
+			</hbox>
+			<hbox>
+				<textbox
+					value="@save(vm.element.name, before={'cmd1','cmd2'}) @validator(vm.validator1)" />
+				/
+				<label value="@load(vm.element.name, after='cmd1')" />
+				/
+				<button label="save1"
+					onClick="@command('cmd1') @global-command('gcmd1')" />
+				<button label="save2" onClick="@command('cmd2')" />
+			</hbox>
+			<label value="@bind(vm.escValue1)"/>
+			<label value="@bind(vm.escValue2)"/>
+		</window>
+	</div>
+	<div if="${'form' eq param['case']}">
+		Form
+		<window title="Form" border="normal">
+			<hbox form="@id('fx') @load(vm.element) @save(vm.element,before={'cmd3'}) @validator(vm.validator2)">
+				<textbox
+					value="@bind(fx.name)" />
+				/
+				<label value="@load(fx.name)" />
+				/
+				<label value="@load(vm.element.name)" />
+				/
+				<button label="save3" onClick="@command('cmd3')" />
+			</hbox>
+		</window>
+	</div>
+	<div if="${'ref' eq param['case']}">
+		Reference
+		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">
+			<hbox>
+				<label value="@init(element.name)" />
+				/
+				<textbox value="@bind(element.name)" />
+				/
+				<label value="@bind(element.name)" />
+			</hbox>
+			<hbox>
+				<label value="@init(elementNm)" />
+				/
+				<textbox value="@bind(elementNm)" />
+				/
+				<label value="@bind(elementNm)" />
+			</hbox>
+		</window>
+	</div>
+	<div if="${'col' eq param['case']}">
+		Collection
+		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">
+			<hbox>
+				<listbox model="@load(vm.elements)" selectedItem="@bind(vm.selected)" width="400px">
+					<template name="model">
+						<listitem label="@load(each.name)"/>
+					</template>
+				</listbox>
+				<label value="@bind(vm.selected.name)" />
+			</hbox>
+		</window>
+	</div>
+</window>

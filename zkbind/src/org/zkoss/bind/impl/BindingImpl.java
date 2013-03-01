@@ -52,16 +52,6 @@ public class BindingImpl implements Binding,Serializable{
 	public Map<String, Object> getArgs() {
 		return _args;
 	}
-
-	//utility class, remove ${ and }
-	protected String getPureExpressionString(ExpressionX expr) {
-		if (expr == null) {
-			return null;
-		}
-		final String evalstr = expr.getExpressionString(); 
-		return evalstr.substring(2, evalstr.length() - 1);
-	}
-
 	
 	protected Object setAttribute(BindContext ctx, Object key, Object value) {
 		Map<Object, Object> bindingBag = getBindingAttribute(ctx);

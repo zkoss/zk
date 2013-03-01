@@ -46,7 +46,7 @@ public class CommandBindingImpl extends BindingImpl implements CommandBinding {
 		return _command;
 	}
 	public String getCommandString() {
-		return getPureExpressionString(_command);
+		return BindEvaluatorXUtil.getExpressionString(_command);
 	}
 	
 	//TODO, DENNIS, Nobody call this

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.util.resource.Location;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -81,19 +82,32 @@ public class BinderUtil {
 				_ctxStack.set(null);
 			}
 		}else{
-			throw new IllegalStateException("not thing to popup");
+			throw new IllegalStateException("nothing to popup");
 		}
 	}
 	
 	static public class UtilContext {
 		boolean _ignoreAccessCreationWarn;
+		Location _location;
 
 		public boolean isIgnoreAccessCreationWarn() {
 			return _ignoreAccessCreationWarn;
 		}
 
-		public void setIgnoreAccessCreationWarn(boolean _ignoreAccessCreationWarn) {
-			this._ignoreAccessCreationWarn = _ignoreAccessCreationWarn;
+		public void setIgnoreAccessCreationWarn(boolean ignoreAccessCreationWarn) {
+			_ignoreAccessCreationWarn = ignoreAccessCreationWarn;
+		}
+
+		public void setCurrentLocation(Location location) {
+			_location = location;
+		}
+		
+		public Location getCurrentLocation(){
+			return _location;
+		}
+		
+		public String getCurrentLocationMessage(){
+			return MiscUtil.formatLocationMessage(null, _location);
 		}
 	}
 	
