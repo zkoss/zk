@@ -85,6 +85,7 @@ ZK 6.5.2
   ZK-1647: Tree with hflex'ed and width'ed treecols doesn't work properly
   ZK-1649: Listbox content blinking when scrolling horizontal
   ZK-1650: In vlayout, any child component even if has visible="false" occupies space
+  ZK-1653: Invoke client side API, Menuitem.setDisabled(true) cause javascript error
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
