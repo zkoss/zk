@@ -80,7 +80,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		    	return v;
 			}, 
 			function (v, opts) {
-				this.rerender(opts.skip ? -1 : 0); //bind and unbind
+				this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
 			}
 		],
 		/** Returns the href.
