@@ -417,7 +417,7 @@ zFlex = { //static methods
 					cwgt = zk.Widget.$(c, {exact: 1});
 				
 				//Bug ZK-1647: should consider header width
-				if (zk.isLoaded('zul.mesh') && cwgt.$instanceof(zul.mesh.HeaderWidget))
+				if (zk.isLoaded('zul.mesh') && cwgt && cwgt.$instanceof(zul.mesh.HeaderWidget))
 					offwdh = jq(c).width();
 				
 				//horizontal size
