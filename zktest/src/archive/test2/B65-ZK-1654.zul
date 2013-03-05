@@ -1,0 +1,7 @@
+<zk>
+	<label multiline="true">
+		1. Click on color input and try to enter character 'A' or 'a', should see 'A' or 'a' showed.
+		2. Change to colorpicker and try again.
+	</label>
+	<colorbox width="30px" height="25px" />
+</zk>
