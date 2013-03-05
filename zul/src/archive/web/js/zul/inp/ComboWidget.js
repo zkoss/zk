@@ -180,10 +180,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// throw in
 		pp.style.left = "";
 		this._fixsz(ppofs);//fix size
+		
+		// given init position
 		$pp.position(inp, "after_start");
+		
+		if(jq(pp).position().top < jq(inp).position().top + zk(inp).offsetHeight()) {
+			$pp.position(inp, "before_start");
+		} else {
+			$pp.position(inp, "after_start");
+		}
+		
 		pp.style.display = "none";
 		pp.style.visibility = "";
-
 		this.slideDown_(pp);
 
 		//FF issue:
