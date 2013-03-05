@@ -26,9 +26,9 @@ ${c:render(arg.actionContext)}
 <c:if test="${arg.shadow}">
 <table border="0" cellpadding="0" cellspacing="0" width="${arg.width}">
 <tr>
- <td width="6"><img width="6" height="6" src="${c:encodeURL('~./img/shdlf.gif')}"/></td>
- <td background="${c:encodeURL('~./img/shdmd.gif')}"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td>
- <td width="6"><img width="6" height="6" src="${c:encodeURL('~./img/shdrg.gif')}"/></td>
+ <td width="6"><img width="6" height="6" src="${c:encodeThemeURL('~./img/shdlf.gif')}"/></td>
+ <td background="${c:encodeThemeURL('~./img/shdmd.gif')}"><img width="1" height="1" src="${c:encodeThemeURL('~./img/spacer.gif')}"/></td>
+ <td width="6"><img width="6" height="6" src="${c:encodeThemeURL('~./img/shdrg.gif')}"/></td>
 </tr>
 </table>
 </c:if>

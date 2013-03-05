@@ -8,10 +8,10 @@
 	width: 10px; overflow: hidden;
 }
 .z-separator-hor-bar {
-	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-image: url(${c:encodeThemeURL('~./img/dot.gif')});
 	background-position: center left; background-repeat: repeat-x;
 }
 .z-separator-ver-bar {
-	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-image: url(${c:encodeThemeURL('~./img/dot.gif')});
 	background-position: top center; background-repeat: repeat-y;
 }
