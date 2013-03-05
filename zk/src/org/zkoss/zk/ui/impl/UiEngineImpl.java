@@ -389,7 +389,14 @@ public class UiEngineImpl implements UiEngine {
 					final String uri = pagedef.getForwardURI(page);
 					if (uri != null) {
 						comps = new Component[0];
-						exec.forward(uri);
+						try {
+							exec.forward(uri);
+						} finally { //ZK-1584: should cleanup after forward
+							final List<Throwable> errs = new LinkedList<Throwable>();
+							
+							desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
+							config.invokeExecutionCleanups(exec, oldexec, errs);
+						}
 					} else {
 						comps = uv.isAborting() || exec.isVoided() ?
 							new Component[0]:
