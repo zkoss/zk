@@ -30,12 +30,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (overTip) _tt_clearClosing_(); //not close tip if over tip
 		return !overTip;//disable tip in tip
 	}
-	function _tt_begin(tip, ref, params) {
+	function _tt_begin(tip, ref, params, event) {
 		if (_tt_tip != tip || _tt_ref != ref) {
 			_tt_close_();
 			_tt_inf = {
 				tip: tip, ref: ref, params: params,
-				timer: setTimeout(_tt_open_, params.delay !== undefined ? params.delay : zk.tipDelay)
+				timer: setTimeout(function() {_tt_open_(event);}, params.delay !== undefined ? params.delay : zk.tipDelay)
 			};
 		} else
 			_tt_clearClosing_();
@@ -62,7 +62,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			clearTimeout(tmClosing);
 		}
 	}
-	function _tt_open_() {
+	function _tt_open_(event) {
 		var inf = _tt_inf;
 		if (inf) {
 			_tt_tip = inf.tip,
@@ -74,8 +74,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return _tt_tip = _tt_ref = null;
 
 			var params = inf.params,
-			    currentPointer = zk.currentPointer,
-				xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
+				x = params.x, y = params.y;
+			if (x)
+				params.x = _parseParamFunc(event, x);
+			if (y)
+				params.y = _parseParamFunc(event, y);
+			
+			var xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
 			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
 		}
 	}
@@ -107,6 +112,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _setCtrlKeysErr(msg) {
 		zk.error("setCtrlKeys: " + msg);
+	}
+	function _parseParamFunc(event, funcBody) {
+		if (funcBody.indexOf('(') != -1 && funcBody.indexOf(')') != -1) {
+			var func = new Function('event', 'return ' + funcBody + ';');
+			return func(event);
+		} else {
+			return zk.parseInt(funcBody);
+		}
 	}
 
 /** The base class for ZUL widget.
@@ -172,6 +185,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * For example,
 	 * <pre>
 	 * wgt.setContext('an_id', 'start_before');
+	 * </pre>
+	 * Since 6.5.2, the context menu can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
+	 * <pre>
+	 * wgt.setContext('an_id', 'x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)');
 	 * </pre>
 	 * @param zul.wgt.Popup context the popup widget.
 	 * @return zul.Widget
@@ -241,6 +258,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * For example,
 	 * <pre>
 	 * wgt.setPopup('an_id', 'start_before');
+	 * </pre>
+	 * Since 6.5.2, the popup can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
+	 * <pre>
+	 * wgt.setPopup('an_id', 'x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)');
 	 * </pre>
 	 * @param zul.wgt.Popup popup the popup widget.
 	 * @return zul.Widget
@@ -313,6 +334,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * For example,
 	 * <pre>
 	 * wgt.setTooltip('an_id', 'start_before');
+	 * </pre>
+	 * Since 6.5.2, the tooltip can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
+	 * <pre>
+	 * wgt.setPopup('an_id', 'x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)');
 	 * </pre>
 	 * @param zul.wgt.Popup popup the popup widget.
 	 * @return zul.Widget
@@ -458,7 +483,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		return this;
 	},
 
-	_parsePopParams: function (txt) {
+	_parsePopParams: function (txt, event) {
 		var params = {},
 			index = txt.indexOf(','),
 			start = txt.indexOf('='),
@@ -470,16 +495,19 @@ zul.Widget = zk.$extends(zk.Widget, {
 			params.id = t.substring(0, index).trim();
 			var t2 = t.substring(index + 1, t.length);
 			if (t2)
-				params.position = t2.trim();				
+				params.position = t2.trim();
 			
 			zk.copy(params, zUtl.parseMap(txt.substring(t.length, txt.length)));
 		} else
 			params.id = txt.trim();
 		
-		if (params.x)
-			params.x = zk.parseInt(params.x);
-		if (params.y)
-			params.y = zk.parseInt(params.y);
+		if (this._popup || this._context) { //should prepare tooltip in _tt_open_ 
+			var x = params.x, y = params.y;
+			if (x)
+				params.x = _parseParamFunc(event, x);
+			if (y)
+				params.y = _parseParamFunc(event, y);
+		}
 		if (params.delay)
 			params.delay = zk.parseInt(params.delay);
 		return params;
@@ -487,7 +515,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	//super//
 	doClick_: function (evt, popupOnly) {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
-			var params = this._popup ? this._parsePopParams(this._popup) : {},
+			var params = this._popup ? this._parsePopParams(this._popup, evt) : {},
 				popup = this._smartFellow(params.id);
 			if (popup) {
 				evt.contextSelected = true;
@@ -507,7 +535,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doRightClick_: function (evt) {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
-			var params = this._context ? this._parsePopParams(this._context) : {},
+			var params = this._context ? this._parsePopParams(this._context, evt) : {},
 				ctx = this._smartFellow(params.id);
 			if (ctx) {
 				evt.contextSelected = true;
@@ -531,7 +559,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (tip) {
 				evt.tooltipped = true;
 					//still call parent's doTooltipOver_ for better extensibility (though not necessary)
-				_tt_begin(tip, this, params);
+				_tt_begin(tip, this, params, evt);
 			}
 		}
 		this.$supers('doTooltipOver_', arguments);

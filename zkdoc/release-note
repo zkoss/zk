@@ -13,6 +13,7 @@ ZK 6.5.2
   ZK-1616: AU response error can be handle by user
   ZK-1630: Provides line information when throwing exception in binder
   ZK-1646: Provide zkbind execution info for debugging
+  ZK-1655: The popup position of Popup, Tooltip and ContextMenu should be more customizable
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1

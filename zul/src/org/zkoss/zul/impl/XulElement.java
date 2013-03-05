@@ -153,6 +153,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * <pre>
 	 * &lt;button label="show" context="id, start_before"/>
 	 * </pre>
+	 * <p> (since 6.5.2) the context menu can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
+	 * <pre>
+	 * &lt;button label="show" context="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
+	 * </pre>
 	 * @see #setContext(Popup)
 	 */
 	public void setContext(String context) {
@@ -214,6 +218,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * For example,
 	 * <pre>
 	 * &lt;button label="show" popup="id, start_before"/>
+	 * </pre>
+	 * <p> (since 6.5.2) the popup can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
+	 * <pre>
+	 * &lt;button label="show" context="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
 	 * </pre>
 	 * @see #setPopup(Popup)
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
@@ -280,6 +288,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * For example,
 	 * <pre>
 	 * &lt;button label="show" tooltip="id, start_before"/>
+	 * </pre>
+	 * <p> (since 6.5.2) the tooltip can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
+	 * <pre>
+	 * &lt;button label="show" context="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
 	 * </pre>
 	 * 
 	 * @see #setTooltip(Popup)
