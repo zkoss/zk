@@ -611,6 +611,10 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 .z-treerow-seld td.z-treecell {
 	border-color: #E8F6FD #E8F6FD #E8F6FD #FFFFFF;
 }
+<%-- Bug ZK-1645: IE7 zoom problem --%>
+.z-treecell-cnt {
+	word-spacing: 0px;
+}
 </c:if>
 .z-treerow-img {
 	background:transparent no-repeat scroll center center;

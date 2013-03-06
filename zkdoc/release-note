@@ -55,6 +55,7 @@ ZK 6.5.2
   ZK-1540: Inputwidget: html-input-element 1px too short
   ZK-1519: Popup disappear when mouse over on the corner where the two scrollbars meet, IE 10 only
   ZK-1534: Spinner no longer supports null value (JavaDoc Issue)
+  ZK-1645: Incorrect display in IE 7 for tree component if user zoom to greater than 100%
   ZK-1557: Groupbox fails to open if it has non-visible children
   ZK-1593: JS bug - Failed to mount: Cannot read property 'defaultView' of null
   ZK-1567: Menuitems not aligned below Menu

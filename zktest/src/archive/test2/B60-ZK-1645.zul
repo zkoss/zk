@@ -1,0 +1,26 @@
+<zk>
+	<label multiline="true">
+		IE 7 only
+		1. Try zoom in, should see the image and text does not overlapped.
+	</label>
+	<window title="new page title" border="normal">
+		<tree id="tree" width="99%" rows="3">
+			<treecols sizable="true">
+				<treecol label="Name" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell image="/img/m1.gif" label="Item 1" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell image="/img/m1.gif" label="Item 2" />
+					</treerow>
+				</treeitem>
+				<treeitem image="/img/m1.gif" label="Item 3" />
+			</treechildren>
+		</tree>
+	</window>
+</zk>
