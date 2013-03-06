@@ -1,0 +1,12 @@
+<zk>
+<div>
+ type '123' in datebox, then click outside, you should see the err msg 'Vous devez spécifier une date. Format:' 
+</div>
+<datebox locale="fr">
+<zscript>
+import org.zkoss.zul.*;
+import java.util.*;
+Sessions.getCurrent().setAttribute("px_preferred_locale", new Locale("fr","FR"));
+</zscript>
+</datebox>
+</zk>
