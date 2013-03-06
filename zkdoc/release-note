@@ -89,6 +89,7 @@ ZK 6.5.2
   ZK-1653: Invoke client side API, Menuitem.setDisabled(true) cause javascript error
   ZK-1584: Execution Cleanup.cleanup didn't call when Execution is forwarded
   ZK-1654: Color picker doesn't allow 'A' or 'a' character as an input
+  ZK-1588: Problem with bandbox
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
