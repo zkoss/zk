@@ -90,6 +90,7 @@ ZK 6.5.2
   ZK-1584: Execution Cleanup.cleanup didn't call when Execution is forwarded
   ZK-1654: Color picker doesn't allow 'A' or 'a' character as an input
   ZK-1588: Problem with bandbox
+  ZK-1600: Bad french translation, for error message on the Datebox component
 
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
