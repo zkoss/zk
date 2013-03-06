@@ -184,10 +184,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// given init position
 		$pp.position(inp, "after_start");
 		
-		if(jq(pp).position().top < jq(inp).position().top + zk(inp).offsetHeight()) {
+		// B65-ZK-1588
+		if(jq(pp).position().top <= jq(inp).position().top + zk(inp).offsetHeight()) {
 			$pp.position(inp, "before_start");
-		} else {
-			$pp.position(inp, "after_start");
 		}
 		
 		pp.style.display = "none";
