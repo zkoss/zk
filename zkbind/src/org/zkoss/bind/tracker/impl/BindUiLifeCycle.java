@@ -38,12 +38,13 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	public void afterComponentAttached(Component comp, Page page) {
 		if (comp.getDesktop() != null) {
 			//check if this component already binded
-			final Binder selfBinder = BinderUtil.getBinder(comp);
+			Binder selfBinder = BinderUtil.getBinder(comp);
 			if (selfBinder == null) {
 				//check if parent exists any binder
-				final Binder binder = BinderUtil.getBinder(comp,true);
+				Binder parentBinder = BinderUtil.getBinder(comp,true);
 				
-				if (binder != null && (binder instanceof BinderImpl)) {
+				//post event to let the binder to handle binding later
+				if (parentBinder != null && (parentBinder instanceof BinderImpl)) {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
 					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
@@ -59,6 +60,13 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							
 							final Binder innerBinder = BinderUtil.getBinder(comp);
 							if(innerBinder!=null){//it was already handled by innerBinder, ignore it								
+								return;
+							}
+							
+							//ZK-1640 command send 2 wrong ViewModel
+							//check if there any parent binder again, don't use out-side parentBinder, it is not correct
+							Binder binder = BinderUtil.getBinder(comp,true);
+							if(binder == null){
 								return;
 							}
 							
