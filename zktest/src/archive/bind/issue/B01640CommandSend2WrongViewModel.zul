@@ -1,0 +1,15 @@
+<zk xmlns="http://www.zkoss.org/2005/zul">
+<label multiline="true">
+in zk EE env.
+1.child show child.
+2.click out gird, the label should change to 'do outerGridCommand'
+3.chick in grid, the label should change to 'do innerGridCommand A' 
+(you will get exception on step 3 if bug is not fixed.)
+</label>
+	<window title="Parent" border="normal" id="mainWin"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01640CommandSend2WrongViewModel')">
+		<button label="show child" id="showChildBtn" onClick="@command('showChild')" />
+		<div id="workContent" />
+	</window>
+</zk>
