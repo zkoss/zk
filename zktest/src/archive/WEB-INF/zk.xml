@@ -606,4 +606,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	 -->
+	
+	<!-- Turn on if you want to pre-load image by default
+	<library-property>
+		<name>org.zkoss.zul.image.preload</name>
+		<value>true</value>
+	</library-property>
+	 -->
 </zk>

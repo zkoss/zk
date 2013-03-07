@@ -30,24 +30,32 @@ import org.zkoss.zul.impl.Utils;
 
 /**
  * An image.
- * 
+ * <p>
  * [Since 6.0.0]
  * <p>To turn on the preload image function for this component, you have to specify the component's
  * attribute map with key "org.zkoss.zul.image.preload" to true. That is, for
  * example, if in a zul file, you shall specify &lt;custom-attributes> of the
  * component like this:</p>
  *
- * <pre><code>&lt;image ...&gt;
- *	&lt;custom-attributes org.zkoss.zul.image.preload='true'/&gt;
- *&lt;/image&gt;
+ * <pre><code> &lt;image ...&gt;
+ *     &lt;custom-attributes org.zkoss.zul.image.preload='true'/&gt;
+ * &lt;/image&gt;
  * </code></pre>
  * 
  * Or specify it onto the root component.
  * For example,
- * <pre><code>&lt;window ...&gt;
- * 	&lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
- *  &lt;image .../&gt;
+ * <pre><code> &lt;window ...&gt;
+ *     &lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
+ *     &lt;image .../&gt;
  * &lt;/window&gt;
+ * </code></pre>
+ * [Since 6.5.2]
+ * <p>Preload image function is also configurable from zk.xml by setting library properties.
+ * For example,
+ * <pre><code> &lt;library-property/&gt;
+ *     &lt;name&gt;org.zkoss.zul.image.preload&lt;/name/&gt;
+ *     &lt;value&gt;ture&lt;/value/&gt;
+ * &lt;/library-property/&gt;
  * </code></pre>
  * 
  * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Alphafix_for_IE6">how to fix the alpha transparency problem of PNG files found in IE6?</a>
@@ -306,8 +314,8 @@ public class Image extends XulElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		render(renderer, "_preloadImage", getAttribute("org.zkoss.zul.image.preload", true));
+		//ZK-1638: preload image can also defined in zk.xml by library property
+		render(renderer, "_preloadImage", Utils.testAttribute(this, "org.zkoss.zul.image.preload", false, true));
 		render(renderer, "src", getEncodedURL());
 		if (_hoversrc != null || _hoverimg != null)
 			render(renderer, "hover", getEncodedHoverURL());

@@ -29,24 +29,32 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
 /**
  * A XUL element with a label ({@link #getLabel}) 
  * and an image ({@link #getImage}).
- * 
+ * <p>
  * [Since 6.0.0]
  * <p>To turn on the preload image function for this component, you have to specify the component's
  * attribute map with key "org.zkoss.zul.image.preload" to true. That is, for
  * example, if in a zul file, you shall specify &lt;custom-attributes> of the
  * component like this:</p>
  *
- * <pre><code>&lt;button ...&gt;
- *	&lt;custom-attributes org.zkoss.zul.image.preload='true'/&gt;
- *&lt;/button&gt;
+ * <pre><code> &lt;button ...&gt;
+ *     &lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
+ * &lt;/button&gt;
  * </code></pre>
  * 
  * Or specify it onto the root component.
  * For example,
- * <pre><code>&lt;window ...&gt;
- * 	&lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
- *  &lt;button .../&gt;
+ * <pre><code> &lt;window ...&gt;
+ *     &lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
+ *     &lt;button .../&gt;
  * &lt;/window&gt;
+ * </code></pre>
+ * [Since 6.5.2]
+ * <p>Preload image function is also configurable from zk.xml by setting library properties.
+ * For example,
+ * <pre><code> &lt;library-property/&gt;
+ *     &lt;name&gt;org.zkoss.zul.image.preload&lt;/name/&gt;
+ *     &lt;value&gt;ture&lt;/value/&gt;
+ * &lt;/library-property/&gt;
  * </code></pre>
  * 
  * @author tomyeh
@@ -88,13 +96,13 @@ abstract public class LabelImageElement extends LabelElement {
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
-	/** @deprecated As of release 3.5.0, it is redudant since
+	/** @deprecated As of release 3.5.0, it is redundant since
 	 * it is the same as {@link #getImage}
 	 */
 	public String getSrc() {
 		return getImage();
 	}
-	/** @deprecated As of release 3.5.0, it is redudant since
+	/** @deprecated As of release 3.5.0, it is redundant since
 	 * it is the same as {@link #setImage}
 	 */
 	public void setSrc(String src) {
@@ -226,7 +234,7 @@ abstract public class LabelImageElement extends LabelElement {
 	}
 	/** Returns the encoded URL for the image ({@link #getImage}
 	 * or {@link #getImageContent}), or null if no image.
-	 * <p>Used only for component developements; not by app developers.
+	 * <p>Used only for component development; not by application developers.
 	 * <p>Note: this method can be invoked only if execution is not null.
 	 */
 	private String getEncodedImageURL() {
@@ -259,8 +267,8 @@ abstract public class LabelImageElement extends LabelElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		render(renderer, "_preloadImage", getAttribute("org.zkoss.zul.image.preload", true));
+		//ZK-1638: preload image can also defined in zk.xml by library property
+		render(renderer, "_preloadImage", Utils.testAttribute(this, "org.zkoss.zul.image.preload", false, true));
 		render(renderer, "image", getEncodedImageURL());
 		render(renderer, "hoverImage", getEncodedHoverURL());
 	}
