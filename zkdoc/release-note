@@ -95,6 +95,7 @@ ZK 6.5.2
   ZK-1600: Bad french translation, for error message on the Datebox component
   ZK-1658: chosenbox disappears after user select a value
   ZK-1640: Command send to wrong viewModel in nested case
+  ZK-1662: Overlapped window z-index inconsistent behavior
   
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
