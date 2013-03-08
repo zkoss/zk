@@ -1192,21 +1192,24 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var n = evt.domTarget;
 		if (!n.id)
 			n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			this.fire('onClose');
-			break;
-		case this.$n('max'):
-			this.setMaximized(!this._maximized);
-			break;
-		case this.$n('min'):
-			this.setMinimized(!this._minimized);
-			break;
-		default:
-			this.$supers('doClick_', arguments);
-			return;
+		if (n) { //If node does not exist, should propagation event directly
+			switch (n) {
+			case this.$n('close'):
+				this.fire('onClose');
+				break;
+			case this.$n('max'):
+				this.setMaximized(!this._maximized);
+				break;
+			case this.$n('min'):
+				this.setMinimized(!this._minimized);
+				break;
+			default:
+				this.$supers('doClick_', arguments);
+				return;
+			}
+			evt.stop();
 		}
-		evt.stop();
+		this.$supers('doClick_', arguments);
 	},
 	doMouseOver_: function (evt) {
 		var zcls = this.getZclass(),
