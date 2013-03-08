@@ -1651,12 +1651,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					_log.debug("doValidate validates=[%s]",validates);
 				}
 				boolean valid = true;
-				Map<String,Property[]> properties = _propertyBindingHandler.toCollectedProperties(validates);
-				valid &= vHelper.validateSaveBefore(comp, command, properties,valid,notifys);
-				valid &= vHelper.validateSaveAfter(comp, command, properties,valid,notifys);
 				
-				 //ZK-878 Exception if binding a form with errorMessage
-				 //To handle wrong value exception when getting a component value.
+				//ZK-878 Exception if binding a form with errorMessage
+				//To handle wrong value exception when getting a component value.
 				for(Property p :validates){
 					if(p instanceof WrongValuePropertyImpl){
 						for(WrongValueException wve:((WrongValuePropertyImpl)p).getWrongValueExceptions()){
@@ -1674,6 +1671,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						valid = false;
 					}
 				}
+				
+				Map<String,Property[]> properties = _propertyBindingHandler.toCollectedProperties(validates);
+				valid &= vHelper.validateSaveBefore(comp, command, properties,valid,notifys);
+				valid &= vHelper.validateSaveAfter(comp, command, properties,valid,notifys);
+				
+				
 				return valid;
 			}
 		} catch (Exception e) {
