@@ -19,6 +19,7 @@ ZK 6.0.5
   ZK-1622: Paging listbox scrollbar is wrong
   ZK-1519: Popup disappear when mouse over on the corner where the two scrollbars meet, IE 10 only
   ZK-1645: Incorrect display in IE 7 for tree component if user zoom to greater than 100%
+  ZK-1658: chosenbox disappears after user select a value
 
 * Upgrade Notes
 
