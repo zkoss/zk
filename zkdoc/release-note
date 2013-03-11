@@ -97,6 +97,7 @@ ZK 6.5.2
   ZK-1640: Command send to wrong viewModel in nested case
   ZK-1662: Overlapped window z-index inconsistent behavior
   ZK-1661: Popup list of chosenbox do not scroll when navigate with keyboard
+  ZK-1666: Can't toolbarbutton check state
   
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

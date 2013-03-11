@@ -1290,10 +1290,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>toolbar</component-name>
 		<extends>toolbar</extends>
 	</component-->
-	<!--component>
+	<component>
 		<component-name>toolbarbutton</component-name>
 		<extends>toolbarbutton</extends>
-	</component-->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>checked</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onCheck</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<component>
 		<component-name>tree</component-name>
 		<extends>tree</extends>
