@@ -271,10 +271,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$super(zul.layout.LayoutRegion, 'setHflex', v);
 	},
 	// B50-ZK-236: add header height
-	getChildMinSize_: function (o, cwgt) {
-		return (o == 'h' && this.$n('cap') ? this.$n('cap').offsetHeight : 0) + 
-				this.$supers('getChildMinSize_', arguments);
-	},
+	//     header height should consider in setFlexSize_
+//	getChildMinSize_: function (o, cwgt) {
+//		return (o == 'h' && this.$n('cap') ? this.$n('cap').offsetHeight : 0) + 
+//				this.$supers('getChildMinSize_', arguments);
+//	},
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
 	 * 
@@ -396,7 +397,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				n.style.height = this._height ? this._height : '';
 			else {
 				var cave = this.$n('cave'),
-					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
+					cap = this.$n('cap'),
+					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);
+				if (cap) // B50-ZK-236: add header height
+					hgh +=  cap.offsetHeight;
 				if (zk.ie) n.style.height = '';
 				n.style.height = jq.px0(hgh);
 			}
