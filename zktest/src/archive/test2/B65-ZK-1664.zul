@@ -1,0 +1,20 @@
+<zk>
+<zscript><![CDATA[
+import java.util.ArrayList;
+import org.zkoss.zul.*;
+ArrayList list = new ArrayList();
+for (int i = 0; i < 10; i++) {
+	list.add("row " + i);
+}
+ListSubModel model = ListModels.toListSubModel(new ListModelList(list));
+]]></zscript>
+	<label multiline="true">
+	1. Type 'r' in the input chosenbox, and select any one from drop down list.
+	2. Type 'r' again, if you don't see the drop down list, it is a bug.
+	</label>
+    <chosenbox id="lbxThree" width="300px" model="${model}"
+    	emptyMessage=" Please select some items." 
+    	noResultsText=" No such item - {0} - and it is already in the model."
+    	createMessage=" No such item -{0} - but it is not in model either, you can try to create it.">
+    </chosenbox>
+</zk>
