@@ -102,6 +102,10 @@ public class Events {
 	/** The onSize event (used with {@link SizeEvent}).
 	 */
 	public static final String ON_SIZE = "onSize";
+	/** The onAfterSize event (used with {@link AfterSizeEvent}).
+	 * @since 6.5.2
+	 */
+	public static final String ON_AFTER_SIZE = "onAfterSize";
 	/** The onZIndex event (used with {@link ZIndexEvent}).
 	 */
 	public static final String ON_Z_INDEX = "onZIndex";
