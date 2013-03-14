@@ -2113,7 +2113,7 @@ out.push('</div>');
 			if ((f = this.$class.molds) && (f = f[this._mold]))
 				return f.apply(this, arguments);
 
-			zk.error("Mold "+mold+" not found in "+this.className);
+			zk.error("Mold "+this._mold+" not found in "+this.className);
 		}
 	},
 	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
