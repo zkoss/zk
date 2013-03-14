@@ -16,44 +16,46 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
-import java.net.URL;
-import java.io.InputStream;
-
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Classes;
 import static org.zkoss.lang.Generics.cast;
-import org.zkoss.lang.Strings;
-import org.zkoss.util.Cache;
-import org.zkoss.util.Utils;
-import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.XMLResourcesLocator;
-import org.zkoss.util.logging.Log;
+
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.Cache;
+import org.zkoss.util.Utils;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.XMLResourcesLocator;
+import org.zkoss.web.fn.ThemeFns;
+import org.zkoss.web.theme.ThemeRegistry;
+import org.zkoss.web.theme.ThemeResolver;
 import org.zkoss.xel.ExpressionFactory;
-import org.zkoss.web.servlet.http.Encodes;
-
 import org.zkoss.zk.Version;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.URIInfo;
-import org.zkoss.zk.ui.util.CharsetFinder;
-import org.zkoss.zk.ui.util.ThemeProvider;
-import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
-import org.zkoss.zk.scripting.Interpreters;
-import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuDecoder;
-import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.scripting.Interpreters;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
+import org.zkoss.zk.ui.util.CharsetFinder;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.util.URIInfo;
 
 /**
  * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml 
@@ -336,6 +338,8 @@ public class ConfigParser {
 			//	file-check-period
 			//	extendlet-check-period
 			//	theme-provider-class
+			//	theme-registry-class	/// since 6.5.2
+			//	theme-resolver-class	/// since 6.5.2
 			//	theme-uri
 			//	repeat-uuid
 				parseDesktopConfig(config, el);
@@ -508,6 +512,13 @@ public class ConfigParser {
 			config.setAutomaticTimeout(deviceType, !"false".equals(s));
 	}
 
+	// ZK-1671: ThemeProvider defined in metainfo/zk/zk.xml from jar file doesn't work
+	//		Depends on the jar file loading order, user-defined theme provider may be 
+	//		overridden by StandardThemeProvider
+	private static boolean _customThemeProvider = false;
+	private static boolean _customThemeRegistry = false;
+	private static boolean _customThemeResolver = false;
+	
 	/** Parses desktop-config. */
 	private static void parseDesktopConfig(Configuration config, Element conf)
 	throws Exception {
@@ -527,12 +538,40 @@ public class ConfigParser {
 			if (uri.length() != 0) config.addDisabledThemeURI(uri);
 		}
 
+		Class cls = null;
 		//theme-provider-class
-		Class cls = parseClass(conf, "theme-provider-class",
-			ThemeProvider.class);
-		if (cls != null) {
-			if (log.debugable()) log.debug("Current ThemeProvider: " + cls.getName());
-			config.setThemeProvider((ThemeProvider)cls.newInstance());
+		if (!_customThemeProvider) {
+			cls = parseClass(conf, "theme-provider-class", ThemeProvider.class);
+			if (cls != null) {
+				if (!cls.getName().startsWith("org.zkoss."))
+					_customThemeProvider = true;
+				if (log.debugable()) log.debug("ThemeProvider: " + cls.getName());
+				config.setThemeProvider((ThemeProvider)cls.newInstance());
+			}
+		}
+		
+		//theme-registry-class
+		//since 6.5.2
+		if (!_customThemeRegistry) {
+			cls = parseClass(conf, "theme-registry-class", ThemeRegistry.class);
+			if (cls != null) {
+				if (!cls.getName().startsWith("org.zkoss."))
+					_customThemeRegistry = true;
+				if (log.debugable()) log.debug("ThemeRegistry: " + cls.getName());
+				ThemeFns.setThemeRegistry((ThemeRegistry)cls.newInstance());
+			}
+		}
+		
+		//theme-resolver-class
+		//since 6.5.2
+		if (!_customThemeResolver) {
+			cls = parseClass(conf, "theme-resolver-class", ThemeResolver.class);
+			if (cls != null) {
+				if (!cls.getName().startsWith("org.zkoss."))
+					_customThemeResolver = true;
+				if (log.debugable()) log.debug("ThemeResolver: " + cls.getName());
+				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
+				}
 		}
 
 		//desktop-timeout

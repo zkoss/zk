@@ -33,6 +33,9 @@ import org.zkoss.web.servlet.dsp.action.ActionContext;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
+import org.zkoss.web.theme.StandardTheme;
+import org.zkoss.web.theme.StandardTheme.ThemeOrigin;
+import org.zkoss.web.theme.Theme;
 
 /**
  * Providing servlet relevant functions for EL.
@@ -83,8 +86,6 @@ public class ServletFns {
 		return encodeURL(resolveThemeURL(s));
 	}
 	
-	private final static String DEFAULT_THEME_NAME = "breeze";
-	private final static String THEME_ORIGIN_PREFIX = "org.zkoss.theme.origin.";
 	private final static String THEME_FOLDER_ROOT = "org.zkoss.theme.folder.root";
 	/**
 	 * Resolves a URL to point to resource served by the current theme. 
@@ -96,19 +97,24 @@ public class ServletFns {
 		if (url == null)
 			return null;
 		
-		String theme = 
+		String themeName = 
 			ThemeFns.getCurrentTheme();
 		String prefix =
 			Library.getProperty(THEME_FOLDER_ROOT, "theme");
 		
 		String resolved = null;
 		
-		if (Strings.isBlank(theme) || DEFAULT_THEME_NAME.equals(theme))
+		if (Strings.isBlank(themeName) || StandardTheme.DEFAULT_NAME.equals(themeName))
 			resolved = url;
-		else if ("JAR".equals(Library.getProperty(THEME_ORIGIN_PREFIX + theme, "JAR")))
-			resolved = url.replaceFirst("~./", "~./" + theme + "/");
-		else
-			resolved = url.replaceFirst("~./", "/" + prefix + "/" + theme +"/");
+		else {
+			Theme theme = ThemeFns.getThemeRegistry().getTheme(themeName);
+			if (theme instanceof StandardTheme) {
+				if (((StandardTheme)theme).getOrigin() == ThemeOrigin.JAR)
+					resolved = url.replaceFirst("~./", "~./" + themeName + "/");
+				else
+					resolved = url.replaceFirst("~./", "/" + prefix + "/" + themeName +"/");					
+			}
+		}
 		return resolved;
 	}
 
