@@ -66,6 +66,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		addClientEvent(HtmlBasedComponent.class, Events.ON_MOUSE_OVER, 0); //not to use CE_DUPLICATE_IGNORE since there is an order issue
 		addClientEvent(HtmlBasedComponent.class, Events.ON_MOUSE_OUT, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_SWIPE, CE_DUPLICATE_IGNORE);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_AFTER_SIZE, CE_DUPLICATE_IGNORE);
 	}
 
 	protected HtmlBasedComponent() {
@@ -621,6 +622,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			SizeEvent evt = SizeEvent.getSizeEvent(request);
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_AFTER_SIZE)) {
+			AfterSizeEvent evt = AfterSizeEvent.getAfterSizeEvent(request);
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_Z_INDEX)) {
 			ZIndexEvent evt = ZIndexEvent.getZIndexEvent(request);

@@ -258,6 +258,11 @@ zWatch = (function () {
 			else
 				f.apply(o, args);
 		}
+		if (name == 'onSize') { //Feature ZK-1672: invoke onAfterSize after onSize
+			var after = o['onAfterSize'];
+			if (after)
+				after.apply(o, args);
+		}
 	}
 	//Returns if c is visible
 	function _visible(name, c) {
@@ -381,6 +386,23 @@ zWatch = (function () {
 		} else
 			zk._zsyncFns(name, org);
 	}
+	//Feature ZK-1672: check if already listen to the same listener
+	function _isListened(wts, inf) {
+		if (wts) {
+			if (jq.isArray(inf)) {
+				var isListen = false;
+				for (var i = wts.length; i > 0; i--) {
+					if (jq.isArray(wts[i]) && wts[i].$equals(inf)) {
+						isListen = true;
+						break;
+					}
+				}
+				return isListen;
+			}
+			return wts.$contains(inf);
+		}
+		return false;
+	}
 
 /** @class zWatch
  * @import zk.Widget
@@ -429,14 +451,15 @@ zWatch.listen({
 				xinf = [o, [inf]];
 			if (wts) {
 				var bindLevel = o.bindLevel;
-				if (bindLevel != null)
+				if (bindLevel != null) {
 					for (var j = wts.length;;) {
 						if (--j < 0) {
 							wts.unshift(xinf);
 							break;
 						}
 						if (wts[j][0] == o) {
-							wts[j][1].push(inf);
+							if (!_isListened(wts[j][1], inf)) //Feature ZK-1672: check if already listened
+								wts[j][1].push(inf);
 							break;
 						}
 						if (bindLevel >= wts[j][0].bindLevel) { //parent first
@@ -444,7 +467,7 @@ zWatch.listen({
 							break;
 						}
 					}
-				else
+				} else
 					for (var j = wts.length;;) {
 						if (--j < 0) {
 							wts.push(xinf);
@@ -455,8 +478,9 @@ zWatch.listen({
 							break;
 						}
 					}
-			} else
+			} else {
 				_watches[name] = [xinf];
+			}
 		}
 	},
 	/** Removes watch listener(s).
