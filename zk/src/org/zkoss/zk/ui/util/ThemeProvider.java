@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.sys.Attributes;
  * fragment into the URI of the WCS file such that a different URI represents
  * a different theme. To inject, you can use @{link Aide#injectURI} when
  * preprocessing URIs in {@link #getThemeURIs}.
- * Therefore, we can rertrieve the injected fragment in {@link #beforeWCS}
+ * Therefore, we can retrieve the injected fragment in {@link #beforeWCS}
  * by use of {@link Aide#decodeURI}.
  * 
  * @author tomyeh
@@ -84,7 +84,7 @@ public interface ThemeProvider {
 	 * @return number of hours that the WCS file is allowed to cache.
 	 * If it is never changed until next ZK upgrade, you could return 8760
 	 * (the default if ThemeProvider is not specified).
-	 * If you don't want the client to cache, return a nonpostive number.
+	 * If you don't want the client to cache, return a non-positive number.
 	 */
 	public int getWCSCacheControl(Execution exec, String uri);
 	/** Called when a WCS (Widget CSS descriptor) file is about to be loaded.
@@ -115,8 +115,8 @@ public interface ThemeProvider {
 	 *  return uri;
 	 *}</code></pre>
 	 *
-	 * @param exec the current executioin (never null), where you can retrieve
-	 * the request ad responsne. However, unlike
+	 * @param exec the current execution (never null), where you can retrieve
+	 * the request and response. However, unlike
 	 * {@link #getThemeURIs}, the desktop might not be available when this
 	 * method is called.
 	 * @param uri the URI of the WCS file, e.g., ~./zul/css/zk.wcs
@@ -131,14 +131,14 @@ public interface ThemeProvider {
 	 * This method then returns the real URI of the WCS file to load.
 	 * If no need to change, just return the <code>uri</code> parameter.
 	 *
-	 * <p>This method is usually overriden to load the CSS files from
+	 * <p>This method is usually overridden to load the CSS files from
 	 * a different directory. For example,
 	 * <pre><code>String beforeWidgetCSS(Execution exec, String uri) {
 	 *  return uri.startsWith("~./") ? "~./foo/" + uri.substring(3): uri;
 	 *}</code></pre>
 	 *
-	 * @param exec the current executioin (never null), where you can retrieve
-	 * the request ad responsne. However, unlike
+	 * @param exec the current execution (never null), where you can retrieve
+	 * the request ad response. However, unlike
 	 * {@link #getThemeURIs}, the desktop might not be available when this
 	 * method is called.
 	 * @param uri the URI of the CSS file associated with a widget, e.g.,
@@ -149,7 +149,7 @@ public interface ThemeProvider {
 	 */
 	public String beforeWidgetCSS(Execution exec, String uri);
 
-	/** Utilties to help the implementation of {@link ThemeProvider}
+	/** Utilities to help the implementation of {@link ThemeProvider}
 	 * to manipulate the URI such that it is able to use a different URI
 	 * for a different theme.
 	 */

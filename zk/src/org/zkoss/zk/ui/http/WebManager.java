@@ -72,7 +72,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.impl.Utils;
 
 /**
- * A bridge bewteen Web server and ZK.
+ * A bridge between Web server and ZK.
  *
  * <p>Each Web application that uses ZK will have an independent instance
  * of {@link WebManager}.
@@ -431,7 +431,7 @@ public class WebManager {
 			SessionsCtrl.newSession(wapp, hsess, request);
 	}
 
-	/** Called when a HTTP session listner is notified.
+	/** Called when a HTTP session listener is notified.
 	 * <p>Once called the session is cleaned. All desktops are dropped.
 	 */
 	/*package*/ static final
