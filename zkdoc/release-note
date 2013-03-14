@@ -15,6 +15,7 @@ ZK 6.5.2
   ZK-1646: Provide zkbind execution info for debugging
   ZK-1655: The popup position of Popup, Tooltip and ContextMenu should be more customizable
   ZK-1638: Preload_Image attribute support configuration in zk.xml as a library property
+  ZK-1673: Provides encapsulation of theme-specific information
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
