@@ -118,13 +118,13 @@ div.z-error .btn {
 }
 </c:if>
 div.z-error .errnum {
-	background: url(${c:encodeThemeURL('~./zk/img/error.png')}) no-repeat scroll -31px 4px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -31px 4px transparent;
 }
 div.z-error .redraw {
-	background: url(${c:encodeThemeURL('~./zk/img/error.png')}) no-repeat scroll 0 0 transparent;
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll 0 0 transparent;
 }
 div.z-error .close {
-	background: url(${c:encodeThemeURL('~./zk/img/error.png')}) no-repeat scroll -17px 0 transparent;
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -17px 0 transparent;
 }
 </c:if>
 <%-- IE6 --%>
@@ -134,13 +134,13 @@ div.z-error .btn {
 	zoom: 1;
 }
 div.z-error .errnum {
-	background: url(${c:encodeThemeURL('~./zk/img/error.gif')}) no-repeat scroll -31px 4px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -31px 4px transparent;
 }
 div.z-error .redraw {
-	background: url(${c:encodeThemeURL('~./zk/img/error.gif')}) no-repeat scroll 0 0 transparent;
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll 0 0 transparent;
 }
 div.z-error .close {
-	background: url(${c:encodeThemeURL('~./zk/img/error.gif')}) no-repeat scroll -17px 0 transparent;
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -17px 0 transparent;
 }
 </c:if>
 div.z-log {
@@ -281,7 +281,7 @@ div.z-log button {
 	left: 0;
 	top: 0;
 	z-index: 16800;
-	background-image: url(${c:encodeThemeURL('~./img/spacer.gif')});
+	background-image: url(${c:encodeURL('~./img/spacer.gif')});
 }
 
 .z-temp * { <%-- temporary --%>
