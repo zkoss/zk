@@ -57,6 +57,7 @@ public abstract class Theme {
 	 * @param themeName new name used by the theme
 	 */
 	public void setName(String themeName) {
+		if (themeName == null) themeName = "";
 		_name = themeName;
 	}
 

@@ -33,15 +33,15 @@ public final class StandardTheme extends Theme {
 	/**
 	 * Name used to identify the default theme
 	 */
-	public final static String DEFAULT_NAME         = "breeze";
+	public final static String DEFAULT_NAME    = "breeze";
 	/**
 	 * Name used to display the default theme
 	 */
-	public final static String DEFAULT_DISPLAY_NAME = "Breeze";
+	public final static String DEFAULT_DISPLAY = "Breeze";
 	/**
 	 * Priority of the default theme
 	 */
-	public final static int DEFAULT_PRIORITY        = 500;
+	public final static int DEFAULT_PRIORITY   = 500;
 	/**
 	 * Origin of the default theme.
 	 * For default desktop theme, it is inside zul.jar/zkex.jar/zkmax.jar.
@@ -50,11 +50,11 @@ public final class StandardTheme extends Theme {
 	public final static ThemeOrigin DEFAULT_ORIGIN  = ThemeOrigin.JAR;
 	
 	// Name used to display the theme
-	private String _displayName = "";
+	private String _displayName;
 	// Used in theme selection process
-	private int _priority = DEFAULT_PRIORITY;
+	private int _priority;
 	// Location to retrieve theme resources such as CSS files and images
-	private ThemeOrigin _origin = DEFAULT_ORIGIN;
+	private ThemeOrigin _origin;
 		
 	/**
 	 * Instantiate a default theme
@@ -69,7 +69,7 @@ public final class StandardTheme extends Theme {
 	 * @param themeName name used to identify the theme
 	 */
 	public StandardTheme(String themeName) {
-		super(themeName);
+		this(themeName, themeName, DEFAULT_PRIORITY, DEFAULT_ORIGIN);
 	}
 
 	/**
