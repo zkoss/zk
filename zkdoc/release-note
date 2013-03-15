@@ -131,6 +131,7 @@ ZK 6.5.2
   + In ZK EE, Themes.register() could be used to register tablet themes.
   Registration would need to prepend the theme name with the prefix "tablet:". For example,  to register a tablet theme called "dark", one
   would call Themes.register("tablet:dark") 
+  + In previous ZK EE edition, custom themes were applied before the default tablet theme. Therefore, in order to override the default tablet theme, users may need to disable the default tablet theme first. In this version, custom tablet theme were distinguished from the custom desktop theme. Overriding default tablet themes means copying the default tablet themes in ~./zkmax/css/ to the custom tablet theme and modifying the part you want to override. Hence, the library property (org.zkoss.zkmax.tablet.theme.disabled) introduced previously for overriding default tablet theme is no longer required and is deprecated since this version.
   + In zkbind, an empty before|after command condition will get exception since this version, you should always provide a non-empty value for it or it means no-one can trigger it.
   --------
 ZK 6.5.1.1
