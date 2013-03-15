@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Datebox, rounded]" width="480px">
+        <datebox mold="rounded" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Datebox]" width="480px">
+        <datebox vflex="1"/>
+    </window>
+</hbox>
+</zk>

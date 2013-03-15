@@ -1,0 +1,27 @@
+<zk>
+	<window title="After Size Event Test" border="normal" hflex="1" vflex="1">
+		<attribute name="onAfterSize">
+			lb1.setValue("onAfterSize " + event.getTarget() + " width: " + event.getWidth() + " height: " + event.getHeight());
+		</attribute>
+		<vlayout hflex="1" vflex="1" style="border: 1px solid blue; padding: 3px">
+			<label multiline="true">
+				1. Should see onAfterSize message showed.
+				2. Try to resize browser, should see the size of Window and Vlayout changed.
+				3. Click "change size" button, should see the size of Calendar changed.
+				2. Try to resize browser again, should see the size of Window, Vlayout and Calendar changed.
+			</label>
+			<attribute name="onAfterSize">
+				lb2.setValue("onAfterSize " + event.getTarget() + " width: " + event.getWidth() + " height: " + event.getHeight());
+			</attribute>
+			<calendar id="cal" width="300px">
+				<attribute name="onAfterSize">
+					lb3.setValue("onAfterSize " + event.getTarget() + " width: " + event.getWidth() + " height: " + event.getHeight());
+				</attribute>
+			</calendar>
+			<button label="change size" onClick='cal.setHflex("1")' />
+			<label id="lb1" />
+			<label id="lb2" />
+			<label id="lb3" />
+		</vlayout>
+	</window>
+</zk>

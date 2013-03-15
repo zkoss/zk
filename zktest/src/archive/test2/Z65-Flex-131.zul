@@ -1,0 +1,33 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Slider, Hlayout]" width="480px">
+        <hlayout height="200px" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider hflex="2" vflex="1"/>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Slider, Hbox]" width="480px">
+        <hbox height="200px" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider hflex="2" vflex="1"/>
+        </hbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Slider, Hlayout, rounded]" width="480px">
+        <hlayout height="200px" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider hflex="2" vflex="1"/>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Slider, Hbox, rounded]" width="480px">
+        <hbox height="200px" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider hflex="2" vflex="1"/>
+        </hbox>
+    </window>
+</hbox>
+</zk>

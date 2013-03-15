@@ -2113,7 +2113,7 @@ out.push('</div>');
 			if ((f = this.$class.molds) && (f = f[this._mold]))
 				return f.apply(this, arguments);
 
-			zk.error("Mold "+mold+" not found in "+this.className);
+			zk.error("Mold "+this._mold+" not found in "+this.className);
 		}
 	},
 	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
@@ -2827,14 +2827,17 @@ bind_: function (desktop, skipper, after) {
 			_listenFlex(this);
 
 		this.bindChildren_(desktop, skipper, after);
+		var self = this;
 		if (this.isListen('onBind')) {
-			var self = this;
 			zk.afterMount(function () {
 				if (self.desktop) //might be unbound
 					self.fire('onBind');
 			});
 		}
-		var self = this;
+		
+		if (this.isListen('onAfterSize')) //Feature ZK-1672
+			zWatch.listen({onSize: this});
+		
 		if (zk.mobile) {
 			after.push(function (){
 				setTimeout(function () {// lazy init
@@ -2898,7 +2901,10 @@ unbind_: function (skipper, after) {
 		this.unbindSwipe_();
 		this.unbindDoubleTap_();
 		this.unbindTapHold_();
-
+		
+		if (this.isListen('onAfterSize')) //Feature ZK-1672
+			zWatch.unlisten({onSize: this});
+		
 		if (this.isListen('onUnbind')) {
 			var self = this;
 			zk.afterMount(function () {
@@ -3257,6 +3263,27 @@ unbind_: function (skipper, after) {
 
 		jq(this.getDragNode()).removeClass('z-dragged');
 	},
+	
+	//Feature ZK-1672: provide empty onSize function if the widget is listened to onAfterSize 
+	//	but the widget is never listened to onSize event
+	onSize: function() {},
+	/**
+	 * Called to fire the onAfterSize event.
+	 * @since 6.5.2
+	 */
+	onAfterSize: function () {
+		if (this.desktop && this.isListen('onAfterSize')) {
+			var n = this.$n(),
+				width = n.offsetWidth,
+				height = n.offsetHeight;
+			if (this._preWidth != width || this._preHeight != height) {
+				this._preWidth = width;
+				this._preHeight = height;
+				this.fire('onAfterSize', {width: width, height: height});
+			}
+		}
+	},
+	
 	/** Bind swipe event to the widget on tablet device.
 	 * It is called if HTML 5 data attribute (data-swipeable) is set to true.
 	 * <p>You rarely need to override this method, unless you want to bind swipe behavior differently.

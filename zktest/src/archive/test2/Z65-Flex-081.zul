@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Datebox]" width="480px">
+        <datebox hflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Datebox, rounded]" width="480px">
+        <datebox hflex="1" mold="rounded"/>
+    </window>
+</hbox>
+</zk>

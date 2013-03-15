@@ -15,6 +15,7 @@ ZK 6.5.2
   ZK-1646: Provide zkbind execution info for debugging
   ZK-1655: The popup position of Popup, Tooltip and ContextMenu should be more customizable
   ZK-1638: Preload_Image attribute support configuration in zk.xml as a library property
+  ZK-1672: Add onAfterSize event to get component size
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
@@ -99,6 +100,8 @@ ZK 6.5.2
   ZK-1662: Overlapped window z-index inconsistent behavior
   ZK-1661: Popup list of chosenbox do not scroll when navigate with keyboard
   ZK-1666: Can't toolbarbutton check state
+  ZK-1664: Chosenbox input value may discard while typing
+  ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml in jar file may not work
   
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.

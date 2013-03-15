@@ -45,7 +45,7 @@
 .z-debug .z-debug-header {
 	overflow: hidden; zoom: 1; color: #403E39; font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 5px 3px 4px 5px; border: 1px solid #999884; line-height: 15px; 
-	background:transparent url(${c:encodeThemeURL('~./zk/img/debug/hd-gray.png')}) repeat-x 0 -1px;
+	background:transparent url(${c:encodeURL('~./zk/img/debug/hd-gray.png')}) repeat-x 0 -1px;
 	font-weight:bold;
 }
 .z-debug .z-debug-body {
@@ -55,7 +55,7 @@
 .z-debug-close {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background-color : transparent;
-	background-image : url(${c:encodeThemeURL('~./zk/img/debug/tool-btn.gif')});
+	background-image : url(${c:encodeURL('~./zk/img/debug/tool-btn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	margin-left: 2px;
