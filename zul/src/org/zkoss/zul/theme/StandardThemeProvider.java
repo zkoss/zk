@@ -19,25 +19,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.theme;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
+import org.zkoss.web.theme.StandardTheme;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
- * A standard implementation of ThemeProvider, which not only works with the Breeze series
- * themes, but also works with tablet-enhanced theme (ZK EE only).
+ * A standard implementation of ThemeProvider for ZK CE, which works with the 
+ * Breeze series themes
+ * 
  * @author simonpai
  * @author jumperchen
- * @author leeyt
+ * @author neillee
  */
 public class StandardThemeProvider implements ThemeProvider {
 	
@@ -45,30 +42,10 @@ public class StandardThemeProvider implements ThemeProvider {
 	 * Default theme css file
 	 */
 	public final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
-
-	/**
-	 * Use this library property to disable tablet-enhanced theme (ZK EE only)
-	 */
-	public final static String TABLET_THEME_DISABLED_KEY = "org.zkoss.zkmax.tablet.theme.disabled";
-	/**
-	 * Default tablet-enhanced theme css file (ZK EE only)
-	 */
-	public final static String DEFAULT_TABLET_CSS = "~./zkmax/css/tablet.css.dsp";
 	
-	private boolean isMobile(Execution exec) {
-		Double number = exec.getBrowser("mobile");
-		return (number != null && number.doubleValue() > 0); 
-	}
-	
-	// @since 6.5.2
-	private boolean isTabletThemeSupported(Execution exec) {
-		return isMobile(exec) && "EE".equals(WebApps.getEdition()) &&
-				!"true".equals(Library.getProperty(TABLET_THEME_DISABLED_KEY, "false"));
-	}
-	
-	private static String getThemeFileSuffix() {
+	protected static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
-		return Themes.BREEZE_NAME.equals(suffix) ? null : suffix;
+		return StandardTheme.DEFAULT_NAME.equals(suffix) ? null : suffix;
 	}
 	
 	private void bypassURI(List<Object> uris, String suffix) {
@@ -90,15 +67,7 @@ public class StandardThemeProvider implements ThemeProvider {
 		
 		if (!Strings.isEmpty(suffix))
 			bypassURI(uris, suffix);
-		
-		// @since 6.5.2
-		if (isTabletThemeSupported(exec)) {
-			// uris is a list of original stylesheets, such as [zk.wcs, theme-uri...].
-			// Inserting tablet-specific css after zk.wcs would allow theme-uri... to 
-			// override tablet-enhanced theme
-			uris.add(1, ServletFns.resolveThemeURL(DEFAULT_TABLET_CSS));
-		}
-		
+				
 		return uris;
 	}
 	
@@ -109,64 +78,13 @@ public class StandardThemeProvider implements ThemeProvider {
 	
 	@Override
 	public String beforeWCS(Execution exec, String uri) {
-		if (isTabletThemeSupported(exec)) {
-			exec.setAttribute("fontSizeM", "18px");
-			exec.setAttribute("fontSizeMS", "16px");
-			exec.setAttribute("fontSizeS", "14px");
-			exec.setAttribute("fontSizeXS", "12px");
-			exec.setAttribute("fontFamilyT", "\"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif");
-			exec.setAttribute("fontFamilyC", "\"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif");
-		}
 		return uri;
-	}
-	
-	private static Map<String, Boolean> _ignoreTheme = null;
-	static {
-		if ("EE".equals(WebApps.getEdition())) {
-			_ignoreTheme = new HashMap<String, Boolean>();
-    		_ignoreTheme.put("~./js/zul/box/css/box.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/inp/css/combo.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/inp/css/input.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/inp/css/slider.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/db/css/calendar.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/grid/css/grid.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/mesh/css/paging.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/menu/css/menu.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/sel/css/listbox.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/sel/css/tree.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/tab/css/tabbox.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/button.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/combobutton.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/caption.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/groupbox.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/popup.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/progressmeter.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/separator.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wgt/css/toolbar.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wnd/css/panel.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/wnd/css/window.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zul/layout/css/borderlayout.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zkex/grid/css/grid.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zkex/inp/css/colorbox.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zkmax/inp/css/chosenbox.css.dsp", Boolean.TRUE);
-    		_ignoreTheme.put("~./js/zkmax/big/css/biglistbox.css.dsp", Boolean.TRUE);
-		}
 	}
 	
 	@Override
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		if (isTabletThemeSupported(exec) &&
-			_ignoreTheme != null && _ignoreTheme.containsKey(uri))
-			return null;
-		
-		String suffix = getThemeFileSuffix();
-		if (Strings.isEmpty(suffix)) return uri;
-
 		if (uri.startsWith("~./zul/css/") ||
-			uri.startsWith("~./js/zul/")  || 
-			uri.startsWith("~./js/zkex/") || 
-			uri.startsWith("~./js/zkmax/") ||
-			uri.startsWith("~./zkmax")) {
+			uri.startsWith("~./js/zul/")) {
 			
 			uri = ServletFns.resolveThemeURL(uri);
 		}

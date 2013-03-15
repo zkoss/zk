@@ -7,5 +7,15 @@
 		Users may replace the default with their own custom theme provider in WEB-INF/zk.xml.
 		-->
 		<theme-provider-class>org.zkoss.zul.theme.StandardThemeProvider</theme-provider-class>
+		<!--
+		Default theme registry
+		Users may replace the default with their own custom theme registry in WEB-INF/zk.xml. 
+		 -->
+		<theme-registry-class>org.zkoss.zul.theme.DesktopThemeRegistry</theme-registry-class>
+		<!--
+		Default theme resolver
+		Users may replace the default with their own custom theme resolver in WEB-INF/zk.xml. 
+		 -->
+		<theme-resolver-class>org.zkoss.zul.theme.CookieThemeResolver</theme-resolver-class>
 	</desktop-config>
 </zk>

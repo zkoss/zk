@@ -18,211 +18,257 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.theme;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
+import org.zkoss.web.fn.ThemeFns;
+import org.zkoss.web.theme.StandardTheme;
+import org.zkoss.web.theme.StandardTheme.ThemeOrigin;
+import org.zkoss.web.theme.Theme;
+import org.zkoss.web.theme.ThemeRegistry;
+import org.zkoss.web.theme.ThemeResolver;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 
 /**
- * Utilities for managing standard theme. 
+ * Facade for accessing internal theming subsystem
+ * In most cases, users need not use the underlying theme registry and
+ * theme resolver directly.
+ * 
  * @author sam
+ * @author neillee
  */
 public class Themes {
 	
-	private final static String THEME_COOKIE_KEY = "zktheme";
-	private final static String THEME_PREFERRED_KEY = "org.zkoss.theme.preferred";
-	private final static String THEME_NAMES_KEY = "org.zkoss.theme.names";
-	private final static String THEME_DEFAULT_KEY = "org.zkoss.theme.default";
-	private final static String THEME_PRIORITY_PREFIX = "org.zkoss.theme.priority.";
-	private final static String THEME_DISPLAY_NAME_PREFIX = "org.zkoss.theme.display.";
-	
-	private final static String THEME_ORIGIN_PREFIX = "org.zkoss.theme.origin.";
-	
 	/**
-	 * Used to specify the origin of theme resources (e.g. CSS, Images)
-	 * @since 6.5.2
+	 * Should use StandardTheme.DEFAULT_NAME
+	 * @deprecated since 6.5.2
 	 */
-	public static enum ThemeOrigin {
-		JAR, FOLDER
-	}
-	
 	public final static String BREEZE_NAME = "breeze";
+
+	/**
+	 * Should use StandardTheme.DEFAULT_DISPLAY
+	 * @deprecated since 6.5.2
+	 */
 	public final static String BREEZE_DISPLAY = "Breeze";
+
+	/**
+	 * Should use StandardTheme.DEFAULT_PRIORITY
+	 * @deprecated since 6.5.2
+	 */
 	public final static int BREEZE_PRIORITY = 500;
 	
-	// Register the default theme when this class is loaded, which implies extra themes are needed.
-	// This is done to make default theme appear in the theme selection list
-	// @since 6.5.2
-	static {
-		Themes.register(BREEZE_NAME, BREEZE_DISPLAY, BREEZE_PRIORITY);
-	}
-	
 	/**
-	 * Sets the theme name in cookie
-	 */
-	public static void setTheme (Execution exe, String theme) {
-		Cookie cookie = new Cookie(THEME_COOKIE_KEY, theme);
-		cookie.setMaxAge(60*60*24*30); //store 30 days
-		String cp = exe.getContextPath();
-		// if path is empty, cookie path will be request path, which causes problems
-		if(cp.length() == 0)
-			cp = "/";
-		cookie.setPath(cp);
-		((HttpServletResponse)exe.getNativeResponse()).addCookie(cookie);
-	}
-	
-	/**
-	 * Returns the theme specified in cookies
+	 * Sets the theme name using the current theme resolution strategy
+	 * Default strategy is to use cookies
+	 * 
 	 * @param exe Execution
-	 * @return the name of the theme or "" for default theme.
+	 * @param themeName the new intended theme name
+	 */
+	public static void setTheme (Execution exe, String themeName) {
+		ThemeResolver themeResolver = ThemeFns.getThemeResolver();
+		
+		themeResolver.setTheme(
+			(HttpServletRequest)exe.getNativeRequest(), 
+			(HttpServletResponse)exe.getNativeResponse(), 
+			themeName);
+	}
+	
+	/**
+	 * Returns the theme specified using the current theme resolution strategy
+	 * Default strategy is to use cookies
+	 * 
+	 * @param exe Execution
+	 * @return the name of the theme or a fall back theme name determined by the
+	 * theme resolution strategy used.
 	 */
 	public static String getTheme (Execution exe) {
-		Cookie[] cookies = 
-			((HttpServletRequest)exe.getNativeRequest()).getCookies();
-		if(cookies == null) 
-			return "";
-		for(int i=0; i < cookies.length; i++){
-			Cookie c = cookies[i];
-			if(THEME_COOKIE_KEY.equals(c.getName())) {
-				String theme = c.getValue();
-				if(theme != null) 
-					return theme;
-			}
-		}
-		return "";
+		ThemeResolver themeResolver = ThemeFns.getThemeResolver();
+		
+		return themeResolver.getTheme((HttpServletRequest) exe.getNativeRequest());
 	}
 	
 	/**
 	 * Returns the current theme name
+	 * @return the current theme name
 	 */
 	public static String getCurrentTheme() {
-		String themes = getThemeString();
-		
-		// 1. cookie's key
-		String t = getTheme(Executions.getCurrent());
-		if (contains(themes, t))
-			return t;
-		
-		// 2. library property
-		t = Library.getProperty(THEME_PREFERRED_KEY);
-		if (contains(themes, t))
-			return t;
-		
-		// 3. theme of highest priority
-		return Library.getProperty(THEME_DEFAULT_KEY);
+		return ThemeFns.getCurrentTheme();
 	}
 	
 	/**
 	 * Returns true if the theme is registered
+	 * @param themeName the name of the theme
+	 * @return true if the theme with the given name is registered
 	 */
-	public static boolean hasTheme(String theme) {
-		return contains(getThemeString(), theme);
+	public static boolean hasTheme(String themeName) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		return themeRegistry.hasTheme(themeName);
 	}
 	
 	/**
-	 * Return an array of all registered theme names
+	 * Returns an array of registered theme names
+	 * @return an array of registered theme names
 	 */
 	public static String[] getThemes() {
-		return getThemeString().split(";");
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		Theme[] themes = themeRegistry.getThemes();
+		String[] themeNames = new String[themes.length];
+		for (int i = 0; i < themes.length; i++) {
+			themeNames[i] = themes[i].getName();			
+		}
+		return themeNames;
 	}
 	
 	/**
 	 * Register the theme, so it becomes available in the theme list
+	 * 
+	 * @param themeName the name of the theme to be registered
+	 * Since 6.5.2, to register additional tablet themes, just prepend 
+	 * theme names with the "tablet:" prefix (ZK EE only). For example, 
+	 * <code>Themes.register("tablet:dark")</code> would register a tablet 
+	 * theme with the name "dark".
 	 */
-	public static void register(String theme) {
-		register(theme, ThemeOrigin.JAR);
+	public static void register(String themeName) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		themeRegistry.register(new StandardTheme(themeName));
 	}
 	
 	/**
 	 * Register the theme, and specifies its origin (e.g. from JAR or from FOLDER)
-	 * Please use <code>Themes.register("custom", Themes.ThemeOrigin.FOLDER)</code> to make your custom theme available
-	 * if the theme resource is inside a folder
-	 * @param theme theme name
+	 * Please use <code>Themes.register("custom", Themes.ThemeOrigin.FOLDER)</code> 
+	 * to make your custom theme available if the theme resource is inside a folder
+	 * 
+	 * @param themeName theme name
+	 * Since 6.5.2, to register additional tablet themes, just prepend 
+	 * theme names with the "tablet:" prefix (ZK EE only). For example, 
+	 * <code>Themes.register("tablet:dark")</code> would register a tablet 
+	 * theme with the name "dark".
 	 * @param origin origin of the theme resource
 	 * @since 6.5.2
 	 */
-	public static void register(String theme, ThemeOrigin origin) {
-		String themes = getThemeString();
-		if (Strings.isEmpty(themes))
-			Library.setProperty(THEME_NAMES_KEY, theme);
-		else if (!contains(themes, theme))
-			Library.setProperty(THEME_NAMES_KEY, themes + ";" + theme);
-		
-		Library.setProperty(THEME_ORIGIN_PREFIX + theme, "" + origin);
+	public static void register(String themeName, ThemeOrigin origin) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		themeRegistry.register(new StandardTheme(themeName, origin));
 	}
 	
 	/**
 	 * Register the theme with details
+	 * 
+	 * @param themeName theme name
+	 * Since 6.5.2, to register additional tablet themes, just prepend 
+	 * theme names with the "tablet:" prefix (ZK EE only). For example, 
+	 * <code>Themes.register("tablet:dark")</code> would register a tablet 
+	 * theme with the name "dark".
 	 * @param displayName The human name of the theme
 	 * @param priority Priority is higher if the value the smaller
 	 */
-	public static void register(String theme, String displayName, int priority) {
-		register(theme, displayName, priority, ThemeOrigin.JAR);
+	public static void register(String themeName, String displayName, int priority) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		themeRegistry.register(new StandardTheme(themeName, displayName, priority));
 	}
 
 	/**
-	 * Register the theme, its display name, its priority; and also specifies its origin (e.g. from JAR or from FOLDER)
-	 * Please use <code>Themes.register("custom", "Custom Theme", 100, Themes.ThemeOrigin.FOLDER)</code> to make your 
-	 * custom theme available if the theme resource is inside a folder
-	 * @param theme theme name
+	 * Register the theme, its display name, its priority; and also specifies 
+	 * its origin (e.g. from JAR or from FOLDER). Please use 
+	 * <code>Themes.register("custom", "Custom Theme", 100, Themes.ThemeOrigin.FOLDER)</code> 
+	 * to make your custom theme available if the theme resource is inside a folder.
+	 * 
+	 * @param themeName theme name
+	 * Since 6.5.2, to register additional tablet themes, just prepend 
+	 * theme names with the "tablet:" prefix (ZK EE only). For example, 
+	 * <code>Themes.register("tablet:dark")</code> would register a tablet 
+	 * theme with the name "dark".
 	 * @param displayName a more descriptive name for the theme, for display purpose
 	 * @param priority priority of the theme
 	 * @param origin origin of the theme resource
 	 * @since 6.5.2
 	 */
-	public static void register(String theme, String displayName, int priority, ThemeOrigin origin) {
-		register(theme, origin);
-		setDisplayName(theme, displayName);
-		setPriority(theme, priority);
+	public static void register(String themeName, String displayName, int priority, ThemeOrigin origin) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		themeRegistry.register(new StandardTheme(themeName, displayName, priority, origin));
 	}
 	
 	/**
 	 * Set the display name (human name) of the theme
+	 * 
+	 * @param themeName theme name
+	 * Since 6.5.2, to identify tablet themes for changing display names, 
+	 * just prepend theme names with the "tablet:" prefix (ZK EE only). 
+	 * For example, <code>Themes.setDisplayName("tablet:dark", "foo")</code> 
+	 * would change the display name for the tablet theme with the name "dark".
+	 * @param displayName the new name to be displayed
 	 */
-	public static void setDisplayName(String theme, String name) {
-		Library.setProperty(THEME_DISPLAY_NAME_PREFIX + theme, name);
+	public static void setDisplayName(String themeName, String displayName) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		Theme theme = themeRegistry.getTheme(themeName);
+		if (theme instanceof StandardTheme) {
+			((StandardTheme) theme).setDisplayName(displayName);
+		}
 	}
 	
 	/**
 	 * Return the display name (human name) of the theme
+	 *
+	 * @param themeName theme name
+	 * Since 6.5.2, to identify tablet themes for getting display names, 
+	 * just prepend theme names with the "tablet:" prefix (ZK EE only). 
+	 * For example, <code>Themes.getDisplayName("tablet:dark")</code> would 
+	 * return the display name for the tablet theme with the name "dark".
+	 * @return the display name
 	 */
-	public static String getDisplayName(String theme) {
-		String name = Library.getProperty(THEME_DISPLAY_NAME_PREFIX + theme);
-		return Strings.isEmpty(name) ? capitalize(theme) : name;
+	public static String getDisplayName(String themeName) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		Theme theme = themeRegistry.getTheme(themeName);
+		String displayName = "";
+		if (theme instanceof StandardTheme) {
+			displayName = ((StandardTheme) theme).getDisplayName();
+		}
+		return Strings.isEmpty(displayName) ? capitalize(themeName) : displayName;
 	}
 	
 	/**
 	 * Set the priority of the theme.
+	 * @param themeName theme name
+	 * Since 6.5.2, to identify tablet themes for changing priorities, 
+	 * just prepend theme names with the "tablet:" prefix (ZK EE only). 
+	 * For example, <code>Themes.setPriority("tablet:dark", 100)</code> would 
+	 * change the display name for the tablet theme with the name "dark".
 	 * @param priority Priority is higher if the value the smaller
 	 */
-	public static void setPriority(String theme, int priority) {
-		Library.setProperty(THEME_PRIORITY_PREFIX + theme, "" + priority);
-		// update default theme
-		if (getPriority(Library.getProperty(THEME_DEFAULT_KEY)) >= priority)
-			Library.setProperty(THEME_DEFAULT_KEY, theme);
+	public static void setPriority(String themeName, int priority) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		Theme theme = themeRegistry.getTheme(themeName);
+
+		if (theme instanceof StandardTheme) {
+			((StandardTheme)theme).setPriority(priority);
+		}
 	}
 	
 	/**
 	 * Return the priority of the given theme
+	 * 
+	 * @param themeName theme name
+	 * Since 6.5.2, to identify tablet themes for getting priorities, 
+	 * just prepend theme names with the "tablet:" prefix (ZK EE only). 
+	 * For example, <code>Themes.getDisplayName("tablet:dark")</code> would 
+	 * return the priority for the tablet theme with the name "dark".
+	 * @return the priority of the given theme
 	 */
-	public static int getPriority(String theme) {
-		return Library.getIntProperty(THEME_PRIORITY_PREFIX + theme, Integer.MAX_VALUE);
+	public static int getPriority(String themeName) {
+		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
+		Theme theme = themeRegistry.getTheme(themeName);
+		
+		if (theme instanceof StandardTheme) {
+			return ((StandardTheme)theme).getPriority();
+		} else {
+			return Integer.MAX_VALUE;
+		}
 	}
 	
 	
 	
 	// helper //
-	private static String getThemeString() {
-		return Library.getProperty(THEME_NAMES_KEY, "");
-	}
-	
-	private static boolean contains(String themes, String target) {
-		return !Strings.isEmpty(target) && (";" + themes + ";").indexOf(";" + target + ";") != -1;
-	}
 	
 	private static String capitalize(String str) {
 		if(Strings.isEmpty(str))

@@ -16,6 +16,9 @@ ZK 6.5.2
   ZK-1655: The popup position of Popup, Tooltip and ContextMenu should be more customizable
   ZK-1638: Preload_Image attribute support configuration in zk.xml as a library property
   ZK-1672: Add onAfterSize event to get component size
+  ZK-1673: Provides encapsulation of theme-specific information
+  ZK-1674: Modularization of the theming subsystem
+  ZK-1675: Tablet themes should be distinguished from desktop themes
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
@@ -104,8 +107,10 @@ ZK 6.5.2
   ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml in jar file may not work
   
 * Upgrade Notes
-  + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
-  + org.zkoss.zkmax.init.TabletThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider instead.
+  + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider (for ZK CE),
+  org.zkoss.zkex.theme.StandardThemeProvider (for ZK PE),
+  org.zkoss.zkmax.theme.StandardThemeProvider (for ZK EE)
+  + org.zkoss.zkmax.init.TabletThemeProvider is deprecated, please use org.zkoss.zkmax.theme.StandardThemeProvider instead.
   + org.zkoss.zkplus.theme.Themes is deprecated, please use org.zkoss.zul.theme.Themes instead.
   + To support ZK-1515, by default, folder-supplied themes are placed under <context-root>/theme/<theme-name>.
     Folder-supplied themes also need to be registered using Themes.register(themeName, Themes.ThemeOrigin.FOLDER) API. 
@@ -115,6 +120,17 @@ ZK 6.5.2
       <value>other/themes</value>
       <value>
     </library-property>
+  + ThemeRegistry and ThemeResolver interfaces are introduced. Users could 
+  implement these interfaces or extend the standard implementation to customize
+  the theme registration and resolution process. To replace the defaults with the
+  customized implementation, please add the following to WEB-INF/zk.xml.
+    <desktop-config>
+      <theme-registry-class>foo.CustomThemeRegistry</theme-registry-class>
+      <theme-resolver-class>foo.CustomThemeResolver</theme-resolver-class>
+    </desktop-config>
+  + In ZK EE, Themes.register() could be used to register tablet themes.
+  Registration would need to prepend the theme name with the prefix "tablet:". For example,  to register a tablet theme called "dark", one
+  would call Themes.register("tablet:dark") 
   + In zkbind, an empty before|after command condition will get exception since this version, you should always provide a non-empty value for it or it means no-one can trigger it.
   --------
 ZK 6.5.1.1
