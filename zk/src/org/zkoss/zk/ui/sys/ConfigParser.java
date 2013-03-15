@@ -572,7 +572,6 @@ public class ConfigParser {
 					_customThemeResolver = true;
 				if (log.debugable()) log.debug("ThemeResolver: " + cls.getName());
 				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
-				}
 			}
 		}
 		
