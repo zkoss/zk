@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Slider, rounded]" width="480px">
+        <slider vflex="1" width="207px"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Slider]" width="480px">
+        <slider vflex="1" width="207px"/>
+    </window>
+</hbox>
+</zk>

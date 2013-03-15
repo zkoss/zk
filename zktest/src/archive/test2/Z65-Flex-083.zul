@@ -1,0 +1,33 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Decimalbox, Hlayout]" width="480px">
+        <hlayout height="200px" width="200px">
+            <decimalbox hflex="1" value="1111111111111" vflex="1"/>
+            <decimalbox hflex="2" value="1111111111111" vflex="1"/>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Decimalbox, Hbox]" width="480px">
+        <hbox height="200px" width="200px">
+            <decimalbox hflex="1" value="1111111111111" vflex="1"/>
+            <decimalbox hflex="2" value="1111111111111" vflex="1"/>
+        </hbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Decimalbox, Hlayout, rounded]" width="480px">
+        <hlayout height="200px" width="200px">
+            <decimalbox hflex="1" mold="rounded" value="1111111111111" vflex="1"/>
+            <decimalbox hflex="2" mold="rounded" value="1111111111111" vflex="1"/>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Decimalbox, Hbox, rounded]" width="480px">
+        <hbox height="200px" width="200px">
+            <decimalbox hflex="1" mold="rounded" value="1111111111111" vflex="1"/>
+            <decimalbox hflex="2" mold="rounded" value="1111111111111" vflex="1"/>
+        </hbox>
+    </window>
+</hbox>
+</zk>

@@ -1,0 +1,61 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Vbox, Vlayout]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <vbox hflex="1" vflex="1">
+                <div hflex="1" style="background:cyan" vflex="1">
+                    <label value="1"/>
+                </div>
+                <div hflex="1" style="background:yellow" vflex="2">
+                    <label value="1"/>
+                </div>
+            </vbox>
+            <vbox vflex="1" width="75px">
+                <div hflex="1" style="background:cyan" vflex="1">
+                    <label value="1"/>
+                </div>
+                <div hflex="1" style="background:yellow" vflex="2">
+                    <label value="1"/>
+                </div>
+            </vbox>
+            <vbox vflex="1" width="120px">
+                <div hflex="1" style="background:cyan" vflex="1">
+                    <label value="1"/>
+                </div>
+                <div hflex="1" style="background:yellow" vflex="2">
+                    <label value="1"/>
+                </div>
+            </vbox>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Vbox, Vbox]" width="480px">
+        <vbox height="200px" hflex="min">
+            <vbox hflex="1" vflex="1">
+                <div hflex="1" style="background:cyan" vflex="1">
+                    <label value="1"/>
+                </div>
+                <div hflex="1" style="background:yellow" vflex="2">
+                    <label value="1"/>
+                </div>
+            </vbox>
+            <vbox vflex="1" width="75px">
+                <div hflex="1" style="background:cyan" vflex="1">
+                    <label value="1"/>
+                </div>
+                <div hflex="1" style="background:yellow" vflex="2">
+                    <label value="1"/>
+                </div>
+            </vbox>
+            <vbox vflex="1" width="120px">
+                <div hflex="1" style="background:cyan" vflex="1">
+                    <label value="1"/>
+                </div>
+                <div hflex="1" style="background:yellow" vflex="2">
+                    <label value="1"/>
+                </div>
+            </vbox>
+        </vbox>
+    </window>
+</hbox>
+</zk>

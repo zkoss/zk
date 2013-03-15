@@ -1,0 +1,37 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Slider, Hlayout]" width="480px">
+        <hlayout vflex="min" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider height="60px" hflex="1"/>
+            <slider height="100px" hflex="1"/>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Slider, Hbox]" width="480px">
+        <hbox vflex="min" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider height="60px" hflex="1"/>
+            <slider height="100px" hflex="1"/>
+        </hbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Slider, Hlayout, rounded]" width="480px">
+        <hlayout vflex="min" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider height="60px" hflex="1"/>
+            <slider height="100px" hflex="1"/>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Slider, Hbox, rounded]" width="480px">
+        <hbox vflex="min" width="200px">
+            <slider hflex="1" vflex="1"/>
+            <slider height="60px" hflex="1"/>
+            <slider height="100px" hflex="1"/>
+        </hbox>
+    </window>
+</hbox>
+</zk>
