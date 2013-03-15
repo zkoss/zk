@@ -25,7 +25,7 @@ package org.zkoss.web.theme;
  * </desktop-config>
  * 
  * @since 6.5.2
- * @author Neil
+ * @author neillee
  */
 public interface ThemeRegistry {
 
@@ -43,12 +43,12 @@ public interface ThemeRegistry {
 	/**
 	 * Remove a theme from web application's use
 	 * 
-	 * @param themeName name to identify the theme to be removed
+	 * @param theme the theme to be removed from the registry
 	 * @return true if the theme is removed; false if the theme cannot be found
 	 * 
 	 * @since 6.5.2
 	 */
-	public boolean deregister(String themeName);
+	public boolean deregister(Theme theme);
 
 	/**
 	 * @return a list of currently registered themes

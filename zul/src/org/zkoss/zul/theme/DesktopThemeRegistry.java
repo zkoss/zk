@@ -24,7 +24,7 @@ import org.zkoss.web.theme.ThemeRegistry;
  * A standard implementation of ThemeRegistry, used in ZK CE/PE
  * Used to keep track of a list of available desktop themes to apply
  * 
- * @author Neil
+ * @author neillee
  * @since 6.5.2
  */
 public class DesktopThemeRegistry implements ThemeRegistry {
@@ -56,16 +56,12 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	
 	/**
 	 * Remove a theme from the list of available desktop themes
-	 * @param themeName theme name to be removed
+	 * @param theme the theme to be removed
 	 * @return true if the theme is successfully removed; false if failed
 	 */
 	@Override
-	public boolean deregister(String themeName) {
-		boolean success = false;
-		if (!"".equals(themeName)) {
-			success = (_registry.remove(themeName) != null);
-		}		
-		return success;
+	public boolean deregister(Theme theme) {
+		return (_registry.remove(theme.getName()) != null);
 	}
 
 	/**
