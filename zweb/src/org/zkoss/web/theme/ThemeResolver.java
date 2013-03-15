@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  * retrieve the corresponding Theme instance, if a theme with such name is previously
  * registered.
  *
- * @author Neil
+ * @author neillee
  * @since 6.5.2
  */
 public interface ThemeResolver {
@@ -42,7 +42,7 @@ public interface ThemeResolver {
 	 * @param request request to be used for resolution
 	 * @return the current intended theme name
 	 */
-	String getTheme(HttpServletRequest request);
+	public String getTheme(HttpServletRequest request);
 	
 	/**
 	 * Set the current intended theme name to the given one.
@@ -51,5 +51,5 @@ public interface ThemeResolver {
 	 * @param response response to be used for theme name selection   
 	 * @param themeName the new intended theme name
 	 */
-	void setTheme(HttpServletRequest request, HttpServletResponse response, String themeName);
+	public void setTheme(HttpServletRequest request, HttpServletResponse response, String themeName);
 }

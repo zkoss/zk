@@ -18,12 +18,12 @@ package org.zkoss.web.fn;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.zkoss.lang.Library;
@@ -527,9 +527,17 @@ public class ThemeFns {
 			return t;
 		
 		// 3. theme of highest priority
-		StandardTheme[] themes = (StandardTheme[])_themeRegistry.getThemes();
-		Arrays.sort(themes, StandardTheme.getComparator());
-		return themes[0].getName();
+		Theme[] themes = _themeRegistry.getThemes();
+		StandardTheme highest = null;
+		Comparator<StandardTheme> comparator = StandardTheme.getComparator();
+		for (Theme theme : themes) {
+			if (theme instanceof StandardTheme) {
+				if (comparator.compare((StandardTheme)theme, highest) < 0) {
+					highest = (StandardTheme)theme;
+				}
+			}
+		}		
+		return highest.getName();
 	}
 	
 	/**

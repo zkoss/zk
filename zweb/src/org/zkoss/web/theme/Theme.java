@@ -12,9 +12,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.theme;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A Theme encapsulates theme-specific attributes. Each theme should have
  * at least a name, which helps the web application to identify it.

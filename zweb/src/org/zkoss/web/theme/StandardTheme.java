@@ -17,7 +17,7 @@ import java.util.Comparator;
 /**
  * A standard implementation of Theme.
  * 
- * @author Neil
+ * @author neillee
  * @since 6.5.2
  */
 public final class StandardTheme extends Theme {
@@ -159,9 +159,17 @@ public final class StandardTheme extends Theme {
 
 		@Override
 		public int compare(StandardTheme t1, StandardTheme t2) {
-			return t1._priority - t2._priority;
+			if (t1 == null) {
+				if (t2 == null)
+					return 0;
+				else
+					return 1;
+			} else if (t2 == null) {
+				return -1;
+			} else
+				return t1._priority - t2._priority;		
 		}
-		
+
 	};
 	
 	/**

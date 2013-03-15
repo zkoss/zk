@@ -25,7 +25,7 @@ package org.zkoss.web.theme;
  * </desktop-config>
  * 
  * @since 6.5.2
- * @author Neil
+ * @author neillee
  */
 public interface ThemeRegistry {
 
@@ -38,22 +38,22 @@ public interface ThemeRegistry {
 	 * @param theme theme-specific information
 	 * @return true if the theme is registered; false if it cannot be registered
 	 */
-	boolean register(Theme theme);
+	public boolean register(Theme theme);
 	
 	/**
 	 * Remove a theme from web application's use
 	 * 
-	 * @param themeName name to identify the theme to be removed
+	 * @param theme the theme to be removed from the registry
 	 * @return true if the theme is removed; false if the theme cannot be found
 	 * 
 	 * @since 6.5.2
 	 */
-	boolean deregister(String themeName);
+	public boolean deregister(Theme theme);
 
 	/**
 	 * @return a list of currently registered themes
 	 */
-	Theme[] getThemes();
+	public Theme[] getThemes();
 	
 	/**
 	 * Returns the theme identified by themeName
@@ -61,7 +61,7 @@ public interface ThemeRegistry {
 	 * @param themeName the name of the theme
 	 * @return the theme identified by themeName; null if the theme is not registered
 	 */
-	Theme getTheme(String themeName);
+	public Theme getTheme(String themeName);
 	
 	/**
 	 * Determine if a theme is registered
@@ -69,5 +69,5 @@ public interface ThemeRegistry {
 	 * @param themeName the name of the theme
 	 * @return true if a theme with themeName is registered; false if not
 	 */
-	boolean hasTheme(String themeName);
+	public boolean hasTheme(String themeName);
 }
