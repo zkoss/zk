@@ -1,0 +1,33 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Groupbox, Vlayout]" width="480px">
+        <vlayout height="200px" width="200px">
+            <groupbox hflex="1" vflex="1">
+                <div height="100%" style="background:cyan" width="100%">
+                    <label value="1"/>
+                </div>
+            </groupbox>
+            <groupbox hflex="1" vflex="2">
+                <div height="100%" style="background:yellow" width="100%">
+                    <label value="1"/>
+                </div>
+            </groupbox>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Groupbox, Vbox]" width="480px">
+        <vbox height="200px" width="200px">
+            <groupbox hflex="1" vflex="1">
+                <div height="100%" style="background:cyan" width="100%">
+                    <label value="1"/>
+                </div>
+            </groupbox>
+            <groupbox hflex="1" vflex="2">
+                <div height="100%" style="background:yellow" width="100%">
+                    <label value="1"/>
+                </div>
+            </groupbox>
+        </vbox>
+    </window>
+</hbox>
+</zk>

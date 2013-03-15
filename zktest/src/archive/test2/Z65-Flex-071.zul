@@ -1,0 +1,57 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Combobox, Hlayout]" width="480px">
+        <hlayout height="200px" width="200px">
+            <combobox hflex="1" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+            <combobox hflex="2" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Combobox, Hbox]" width="480px">
+        <hbox height="200px" width="200px">
+            <combobox hflex="1" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+            <combobox hflex="2" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+        </hbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Combobox, Hlayout, rounded]" width="480px">
+        <hlayout height="200px" width="200px">
+            <combobox hflex="1" mold="rounded" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+            <combobox hflex="2" mold="rounded" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Combobox, Hbox, rounded]" width="480px">
+        <hbox height="200px" width="200px">
+            <combobox hflex="1" mold="rounded" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+            <combobox hflex="2" mold="rounded" vflex="1">
+                <comboitem label="apple"/>
+                <comboitem label="banana"/>
+            </combobox>
+        </hbox>
+    </window>
+</hbox>
+</zk>
