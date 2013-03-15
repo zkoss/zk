@@ -538,6 +538,7 @@ public class ConfigParser {
 			if (uri.length() != 0) config.addDisabledThemeURI(uri);
 		}
 
+		// ZK-1671
 		Class cls = null;
 		//theme-provider-class
 		if (!_customThemeProvider) {
@@ -571,9 +572,9 @@ public class ConfigParser {
 					_customThemeResolver = true;
 				if (log.debugable()) log.debug("ThemeResolver: " + cls.getName());
 				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
-				}
+			}
 		}
-
+		
 		//desktop-timeout
 		Integer v = parseInteger(conf, "desktop-timeout", ANY_VALUE);
 		if (v != null) config.setDesktopMaxInactiveInterval(v.intValue());
