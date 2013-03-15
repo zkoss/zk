@@ -537,7 +537,7 @@ public class ThemeFns {
 				}
 			}
 		}		
-		return highest.getName();
+		return (highest != null) ? highest.getName() : StandardTheme.DEFAULT_NAME;
 	}
 	
 	/**
