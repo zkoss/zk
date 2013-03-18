@@ -1,0 +1,37 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Spinner, Vlayout]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <spinner hflex="1" value="2" vflex="1"/>
+            <spinner value="2" vflex="1" width="75px"/>
+            <spinner value="2" vflex="1" width="120px"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Spinner, Vbox]" width="480px">
+        <vbox height="200px" hflex="min">
+            <spinner hflex="1" value="2" vflex="1"/>
+            <spinner value="2" vflex="1" width="75px"/>
+            <spinner value="2" vflex="1" width="120px"/>
+        </vbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Spinner, Vlayout, rounded]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <spinner hflex="1" mold="rounded" value="2" vflex="1"/>
+            <spinner mold="rounded" value="2" vflex="1" width="75px"/>
+            <spinner mold="rounded" value="2" vflex="1" width="120px"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Spinner, Vbox, rounded]" width="480px">
+        <vbox height="200px" hflex="min">
+            <spinner hflex="1" mold="rounded" value="2" vflex="1"/>
+            <spinner mold="rounded" value="2" vflex="1" width="75px"/>
+            <spinner mold="rounded" value="2" vflex="1" width="120px"/>
+        </vbox>
+    </window>
+</hbox>
+</zk>

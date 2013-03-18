@@ -1,0 +1,33 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Colorbox, Vlayout]" width="480px">
+        <vlayout height="200px" width="200px">
+            <colorbox hflex="1" vflex="1"/>
+            <colorbox hflex="1" vflex="2"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Colorbox, Vbox]" width="480px">
+        <vbox height="200px" width="200px">
+            <colorbox hflex="1" vflex="1"/>
+            <colorbox hflex="1" vflex="2"/>
+        </vbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Colorbox, Vlayout, rounded]" width="480px">
+        <vlayout height="200px" width="200px">
+            <colorbox hflex="1" vflex="1"/>
+            <colorbox hflex="1" vflex="2"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Colorbox, Vbox, rounded]" width="480px">
+        <vbox height="200px" width="200px">
+            <colorbox hflex="1" vflex="1"/>
+            <colorbox hflex="1" vflex="2"/>
+        </vbox>
+    </window>
+</hbox>
+</zk>

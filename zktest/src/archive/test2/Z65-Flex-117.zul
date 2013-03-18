@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Timebox]" width="480px">
+        <timebox hflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Timebox, rounded]" width="480px">
+        <timebox hflex="1" mold="rounded"/>
+    </window>
+</hbox>
+</zk>

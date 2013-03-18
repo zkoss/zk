@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Spinner, rounded]" width="480px">
+        <spinner mold="rounded" value="2" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Spinner]" width="480px">
+        <spinner value="2" vflex="1"/>
+    </window>
+</hbox>
+</zk>

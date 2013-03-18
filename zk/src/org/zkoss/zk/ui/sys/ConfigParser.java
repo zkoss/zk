@@ -39,6 +39,9 @@ import org.zkoss.util.Utils;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
+import org.zkoss.web.fn.ThemeFns;
+import org.zkoss.web.theme.ThemeRegistry;
+import org.zkoss.web.theme.ThemeResolver;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.zk.Version;
 import org.zkoss.zk.au.AuDecoder;
@@ -335,6 +338,8 @@ public class ConfigParser {
 			//	file-check-period
 			//	extendlet-check-period
 			//	theme-provider-class
+			//	theme-registry-class	/// since 6.5.2
+			//	theme-resolver-class	/// since 6.5.2
 			//	theme-uri
 			//	repeat-uuid
 				parseDesktopConfig(config, el);
@@ -511,6 +516,8 @@ public class ConfigParser {
 	//		Depends on the jar file loading order, user-defined theme provider may be 
 	//		overridden by StandardThemeProvider
 	private static boolean _customThemeProvider = false;
+	private static boolean _customThemeRegistry = false;
+	private static boolean _customThemeResolver = false;
 	
 	/** Parses desktop-config. */
 	private static void parseDesktopConfig(Configuration config, Element conf)
@@ -541,6 +548,30 @@ public class ConfigParser {
 					_customThemeProvider = true;
 				if (log.debugable()) log.debug("ThemeProvider: " + cls.getName());
 				config.setThemeProvider((ThemeProvider)cls.newInstance());
+			}
+		}
+		
+		//theme-registry-class
+		//since 6.5.2
+		if (!_customThemeRegistry) {
+			cls = parseClass(conf, "theme-registry-class", ThemeRegistry.class);
+			if (cls != null) {
+				if (!cls.getName().startsWith("org.zkoss."))
+					_customThemeRegistry = true;
+				if (log.debugable()) log.debug("ThemeRegistry: " + cls.getName());
+				ThemeFns.setThemeRegistry((ThemeRegistry)cls.newInstance());
+			}
+		}
+		
+		//theme-resolver-class
+		//since 6.5.2
+		if (!_customThemeResolver) {
+			cls = parseClass(conf, "theme-resolver-class", ThemeResolver.class);
+			if (cls != null) {
+				if (!cls.getName().startsWith("org.zkoss."))
+					_customThemeResolver = true;
+				if (log.debugable()) log.debug("ThemeResolver: " + cls.getName());
+				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
 			}
 		}
 		

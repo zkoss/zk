@@ -17,11 +17,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.fn;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.zkoss.lang.Library;
@@ -29,6 +31,10 @@ import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.theme.StandardTheme;
+import org.zkoss.web.theme.Theme;
+import org.zkoss.web.theme.ThemeRegistry;
+import org.zkoss.web.theme.ThemeResolver;
 import org.zkoss.web.util.resource.ClassWebResource;
 
 /**
@@ -457,65 +463,94 @@ public class ThemeFns {
 		}
 	}
 
-	private final static String THEME_COOKIE_KEY = "zktheme";
-	private final static String THEME_NAMES_KEY = "org.zkoss.theme.names";
+	// the current theme registry
+	private static ThemeRegistry _themeRegistry = null;
+	// the current theme resolver
+	private static ThemeResolver _themeResolver = null;
+	
+	/**
+	 * Returns the current theme registry
+	 * 
+	 * @return the current theme registry
+	 * @since 6.5.2
+	 */
+	public static ThemeRegistry getThemeRegistry() {
+		return _themeRegistry;
+	}
+	
+	/**
+	 * Change the theme registry
+	 * 
+	 * @param themeRegistry the new theme registry
+	 * @since 6.5.2
+	 */
+	public static void setThemeRegistry(ThemeRegistry themeRegistry) {
+		_themeRegistry = themeRegistry;
+	}
+	
+	/**
+	 * Returns the current theme resolver
+	 * 
+	 * @return the current theme resolver
+	 * @since 6.5.2
+	 */
+	public static ThemeResolver getThemeResolver() {
+		return _themeResolver;
+	}
+	
+	/**
+	 * Change the current theme resolver
+	 * 
+	 * @param themeResolver the new theme resolver
+	 */
+	public static void setThemeResolver(ThemeResolver themeResolver) {
+		_themeResolver = themeResolver;
+	}
+	
 	private final static String THEME_PREFERRED_KEY = "org.zkoss.theme.preferred";
-	private final static String THEME_DEFAULT_KEY = "org.zkoss.theme.default";
 	
 	/**
 	 * Returns the current theme name
+	 * 
+	 * @return the current theme name
 	 * @since 6.5.2
 	 */
 	public static String getCurrentTheme() {
-		String themes = getThemeString();
-		
 		// 1. cookie's key
 		String t = getTheme();
-		if (contains(themes, t))
+		if (_themeRegistry.hasTheme(t))
 			return t;
 		
 		// 2. library property
 		t = Library.getProperty(THEME_PREFERRED_KEY);
-		if (contains(themes, t))
+		if (_themeRegistry.hasTheme(t))
 			return t;
 		
 		// 3. theme of highest priority
-		return Library.getProperty(THEME_DEFAULT_KEY);
+		Theme[] themes = _themeRegistry.getThemes();
+		StandardTheme highest = null;
+		Comparator<StandardTheme> comparator = StandardTheme.getComparator();
+		for (Theme theme : themes) {
+			if (theme instanceof StandardTheme) {
+				if (comparator.compare((StandardTheme)theme, highest) < 0) {
+					highest = (StandardTheme)theme;
+				}
+			}
+		}		
+		return (highest != null) ? highest.getName() : StandardTheme.DEFAULT_NAME;
 	}
 	
 	/**
 	 * Returns the theme specified in cookies
-	 * @return the name of the theme or "" for default theme.
+	 * @return the name of the theme or default theme.
 	 */
 	private static String getTheme() {
-		Cookie[] cookies = 
-			((HttpServletRequest) ServletFns.getCurrentRequest()).getCookies();
-		if(cookies == null) 
-			return "";
-		for(int i=0; i < cookies.length; i++){
-			Cookie c = cookies[i];
-			if(THEME_COOKIE_KEY.equals(c.getName())) {
-				String theme = c.getValue();
-				if(theme != null) 
-					return theme;
-			}
-		}
-		return "";
+		ServletRequest request = ServletFns.getCurrentRequest();
+		
+		if (!(request instanceof HttpServletRequest))
+			return StandardTheme.DEFAULT_NAME;
+		
+		return _themeResolver.getTheme((HttpServletRequest)request);
 	}
 	
-	/**
-	 * @return the theme names delimited by semicolons or "" if no themes are registered
-	 */
-	private static String getThemeString() {
-		return Library.getProperty(THEME_NAMES_KEY, "");
-	}
-
-	/**
-	 * @param themes the theme names delimited by semicolons
-	 * @param target the target theme name
-	 * @return true if the target theme name is contained in themes
-	 */
-	private static boolean contains(String themes, String target) {
-		return !Strings.isEmpty(target) && (";" + themes + ";").indexOf(";" + target + ";") != -1;
-	}
 }

@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Chosenbox]" width="480px">
+        <chosenbox hflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Chosenbox, rounded]" width="480px">
+        <chosenbox hflex="1"/>
+    </window>
+</hbox>
+</zk>

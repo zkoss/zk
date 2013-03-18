@@ -1,0 +1,16 @@
+<zk><window border="normal" height="360px"
+    title="Fit-the-Rest Flexibility: [Tabbox]" width="480px">
+    <tabbox vflex="1">
+        <tabs>
+            <tab label="case"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <div height="100%" style="background:yellow" width="100%">
+                    <label value="1"/>
+                </div>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+</window>
+</zk>

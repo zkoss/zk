@@ -1,0 +1,12 @@
+<zk><window border="normal" height="360px"
+    title="Fit-the-Rest Flexibility: [Hlayout]" width="480px">
+    <hlayout vflex="1" width="200px">
+        <div hflex="1" style="background:cyan" vflex="1">
+            <label value="1"/>
+        </div>
+        <div hflex="2" style="background:yellow" vflex="1">
+            <label value="1"/>
+        </div>
+    </hlayout>
+</window>
+</zk>
