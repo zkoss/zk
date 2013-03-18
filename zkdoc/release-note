@@ -105,6 +105,7 @@ ZK 6.5.2
   ZK-1666: Can't toolbarbutton check state
   ZK-1664: Chosenbox input value may discard while typing
   ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml in jar file may not work
+  ZK-1679: with hflex min child component will not size correctly after parent is resized
   
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider (for ZK CE),

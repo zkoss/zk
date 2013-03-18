@@ -151,11 +151,12 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						 : (kid._nhflex && kid.getHflex() != 'min')) {
 					
 					kid.setFlexSize_({height:'', width:''});
-					var chdex = kid.$n('chdex');
-					if (chdex) {
-						chdex.style.height = '';
-						chdex.style.width = '';
-					}
+					//ZK-1679: no need to clear chdex size
+					//var chdex = kid.$n();
+					//if (chdex) {
+					//	chdex.style.height = '';
+					//	chdex.style.width = '';
+					//}
 				}
 			}
 		}
