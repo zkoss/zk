@@ -211,7 +211,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//   Find max sibling width and apply on the child
 		if (wgt._hflex && this.isVertical_() && attr == 'w') {
 			for (var w = wgt.nextSibling, max = 0, width; w; w = w.nextSibling) {
-				if (!wgt._hflex) {
+				if (!w._hflex) {
 					width = zjq.minWidth(w.$n());
 					max = width > max ? width : max;
 				}
