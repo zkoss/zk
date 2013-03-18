@@ -35,12 +35,12 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * <P>Alternatives: in most cases, you can extend from one of the following skeletons.
  * <dl>
  * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
- * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * <dd>It supports the autowiring based on Java annotation and a CSS3-based selector.
  * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
  * <dt>{@link GenericForwardComposer}</dt>
  * <dd>It supports the autowiring based on naming convention.
  * You don't need to specify annotations explicitly, but it is error-prone if
- * it is used properly.</dd>
+ * it is used improperly.</dd>
  * </dl>
  *
  * <p>Notice that since this composer kept references to the components, single
@@ -87,10 +87,10 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript")),
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel")))</code>.
 	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
-	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * on the library variables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
-	 * they shall <t>not</t> be wired (i.e., shall be ignored)
+	 * they shall <tt>not</tt> be wired (i.e., shall be ignored)
 	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
 	 * explicitly, you could use
 	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
@@ -104,7 +104,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	}
 	/** Constructor with a custom separator.
 	 * The separator is used to separate the component ID and event name.
-	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * By default, it is '$'. For Groovy and other environment that '$'
 	 * is not applicable, you can specify '_'.
 	 * <p>It is a shortcut of <code>GenericForwardComposer('$',
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript")),
@@ -113,7 +113,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
-	 * they shall <t>not</t> be wired (i.e., shall be ignored)
+	 * they shall <tt>not</tt> be wired (i.e., shall be ignored)
 	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
 	 * explicitly, you could use
 	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
