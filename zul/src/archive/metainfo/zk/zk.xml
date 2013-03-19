@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <zk>
+    <config-name>zul</config-name><!-- used to resolve dependency -->
+    
 	<desktop-config>
 		<!-- 
 		Default theme provider

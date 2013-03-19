@@ -138,8 +138,14 @@ public class WebManager {
 		String XML = "metainfo/zk/zk.xml";
 		try {
 			final XMLResourcesLocator loc = Utils.getXMLResourcesLocator();
-			for (Enumeration en = loc.getResources(XML); en.hasMoreElements();) {
-				final URL cfgUrl = (URL)en.nextElement();
+			
+			// B65-ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml may get overridden by default
+			//   Also need to enforce configuration loading order (zul -> zkex -> zkmax) so that correct
+			//   versions of StandardThemeProvider, ThemeRegistry, and ThemeResolver are configured
+			final List<XMLResourcesLocator.Resource> xmls = loc.getDependentXMLResources(
+					XML, "config-name", "depends");
+			for (XMLResourcesLocator.Resource res: xmls) {		
+				final URL cfgUrl = res.url;
 				try {
 					parser.parse(cfgUrl, config, loc);
 				} catch (Throwable ex) {

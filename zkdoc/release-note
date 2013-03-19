@@ -129,6 +129,16 @@ ZK 6.5.2
       <theme-registry-class>foo.CustomThemeRegistry</theme-registry-class>
       <theme-resolver-class>foo.CustomThemeResolver</theme-resolver-class>
     </desktop-config>
+  + It is suggested to replace the default ThemeProvider, ThemeRegistry, and ThemeResolver in WEB-INF/zk.xml. Although not recommended, they could also be configured in metainfo/zk/zk.xml. Since multiple metainfo/zk/zk.xml could exist in the system, the loading order of these files makes it difficult to predict the final resulting configuration. To resolve this issue, in this version, it is now required to include <config-name> to identify the config, and an optional <depends> to specify the dependency relationship in metainfo/zk/zk.xml. Same as for metainfo/zk/config.xml in previous versions. For example,
+
+    custom.jar:metainfo/zk/zk.xml
+    <zk>
+      <config-name>custom</config-name>
+      <depends>zkmax</depends>
+      ...
+    </zk>
+
+  This would ensure metainfo/zk/zk.xml contained in custom.jar would be applied after zkmax.jar.
   + In ZK EE, Themes.register() could be used to register tablet themes.
   Registration would need to prepend the theme name with the prefix "tablet:". For example,  to register a tablet theme called "dark", one
   would call Themes.register("tablet:dark") 
