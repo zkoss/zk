@@ -19,7 +19,7 @@ package org.zkoss.io;
 /**
  * Used to decorate java.io.InputStream or java.io.Reader to denote
  * that it can be read repeatedly.
- * By repeatable-read we meaen, after close(), the next invocation of
+ * By repeatable-read we mean, after close(), the next invocation of
  * read() will re-open the input stream or reader.
  *
  * @author tomyeh

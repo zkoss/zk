@@ -36,7 +36,7 @@ import org.zkoss.util.logging.Log;
  */
 public class Serializables {
 	/** The logger called org.zkoss.io.serializable used to log serialization
-	 * information. You could set it to DEBUG, such that the not-serializable
+	 * information. You could set it to DEBUG, such that the non-serializable
 	 * and ignored values will be logged.
 	 * @since 5.0.7
 	 */
@@ -112,7 +112,7 @@ public class Serializables {
 	}
 	/** Reads serializable elements back (serialized by {@link #smartWrite(ObjectOutputStream,Collection)})
 	 *
-	 * @param col the collection to hold the data beinig read. If null and
+	 * @param col the collection to hold the data being read. If null and
 	 * and data is read, a new collection (LinkedList) is created and returned.
 	 * @return the collection being read
 	 */
@@ -130,7 +130,7 @@ public class Serializables {
 	}
 	/** Reads serializable elements back (serialized by {@link #smartWrite(ObjectOutputStream,Collection)})
 	 *
-	 * @param col the collection to hold the data beinig read. If null and
+	 * @param col the collection to hold the data being read. If null and
 	 * and data is read, a new collection (LinkedList) is created and returned.
 	 * @return the collection being read
 	 * @since 6.0.0

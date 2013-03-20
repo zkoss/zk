@@ -20,7 +20,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 /**
- * A writer that drops all output. It hehaves like Unix /dev/null.
+ * A writer that drops all output. It behaves like Unix /dev/null.
  *
  * @author tomyeh
  */
