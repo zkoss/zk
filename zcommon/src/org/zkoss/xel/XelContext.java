@@ -19,7 +19,7 @@ package org.zkoss.xel;
 import java.util.Map;
 
 /**
- * Context information for XEL evalution.
+ * Context information for XEL evaluation.
  *
  * @author tomyeh
  * @since 3.0.0
@@ -47,7 +47,7 @@ public interface XelContext {
 	public Object setAttribute(String name, Object value);
 	/** Returns if the attribute is available.
 	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is assoicated by examining the return value
+	 * tell if an attribute is associated by examining the return value
 	 * of {@link #getAttribute}.
 	 * @param name the name of the attribute to test
 	 * @since 5.0.0

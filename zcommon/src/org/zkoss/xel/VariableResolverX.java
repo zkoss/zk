@@ -17,7 +17,7 @@ package org.zkoss.xel;
  * resolve the variables.
  * <p>With {@link VariableResolver}, {@link VariableResolver#resolveVariable}
  * is called to resolve a top-level variable (for example, <code>${a.b.c}</code>
- * where <code>a</code> is a top-levelvariable).
+ * where <code>a</code> is a top-level variable).
  * <p>With {@link VariableResolverX}, {@link #resolveVariable(XelContext, Object, Object)}
  * is called to resolve not only top-level variables but also properties
  * (for example, <code>${a.b.c}</code> where <code>b</code> and <code>c</code>
@@ -35,7 +35,7 @@ public interface VariableResolverX extends VariableResolver {
 	/** Resolves the the given variable on the given base object.
 	 *
 	 * <p>It resolves not only top-level variables but also properties.
-	 * For example, when resloving <code>foo.duke</code>,
+	 * For example, when resolving <code>foo.duke</code>,
 	 * <code>resolveVariable(ctx, null, "foo")</code> is called first.
 	 * And if it returns an non-null object,
 	 * <code>resolveVariable(ctx, foo, "duke"),/code> is called then
@@ -43,7 +43,7 @@ public interface VariableResolverX extends VariableResolver {
 	 *
 	 * @param ctx the context of this evaluation
 	 * @param base the base object whose property value is to be returned,
-	 * or null to reslove a top-level variable.
+	 * or null to resolve a top-level variable.
 	 * @param name the name of the variable (or property) to resolve
 	 */
 	public Object resolveVariable(XelContext ctx, Object base, Object name)

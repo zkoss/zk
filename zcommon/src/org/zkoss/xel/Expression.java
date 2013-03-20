@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel;
 
 /**
- * Represent a prepared (aka., compiled) expression.
+ * Represent a prepared (a.k.a., compiled) expression.
  * It can be retrieved by use of {@link ExpressionFactory}.
  *
  * @author tomyeh

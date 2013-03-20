@@ -46,7 +46,7 @@ public class Expressions {
 	 */
 	public static final Expression DUMMY_EXPRESSION = new DummyExpr();
 
-	/** The implemetation of {@link ExpressionFactory}. */
+	/** The implementation of {@link ExpressionFactory}. */
 	private static Class<? extends ExpressionFactory> _expfcls;
 
 	/** Instantiates an instance of {@link ExpressionFactory}.
@@ -140,7 +140,7 @@ public class Expressions {
      * invocation.
 	 * @param expression the expression to be evaluated.
 	 * Note: the expression is enclosed
-	 * with ${ and }, regardingless what implemetnation is used.
+	 * with ${ and }, regardless of what implementation is used.
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
 	public static final Object evaluate(XelContext ctx,
@@ -160,9 +160,9 @@ public class Expressions {
 	 * which supports EL 2.2.
 	 *
 	 * <p>Note: you can only specify an implementation that is compatible
-	 * with JSP EL here, since all builtin pages depend on it.
+	 * with JSP EL here, since all built-in pages depend on it.
 	 *
-	 * @param expfcls the implemtation class, or null to use the default.
+	 * @param expfcls the implementation class, or null to use the default.
 	 * Note: expfcls must implement {@link ExpressionFactory}.
 	 * If null, the system default is used.
 	 */

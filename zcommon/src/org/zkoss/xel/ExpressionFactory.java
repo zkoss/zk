@@ -39,9 +39,9 @@ public interface ExpressionFactory {
 	 */
 	public boolean isSupported(int feature);
 
-	/** Prepares (aka., compiles) an expression.
+	/** Prepares (a.k.a., compiles) an expression.
 	 *
-     * @param ctx the context infomation to prepare the expression.
+     * @param ctx the context information to prepare the expression.
      * It can be null, in which case no functions are supported for this
      * invocation.
 	 * @param expression the expression to be evaluated.
@@ -57,7 +57,7 @@ public interface ExpressionFactory {
      * invocation.
 	 * @param expression the expression to be evaluated.
 	 * Note: the expression is enclosed
-	 * with ${ and }, regardingless what implemetnation is used.
+	 * with ${ and }, regardless of what implementation is used.
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
 	public Object evaluate(XelContext ctx, String expression,
