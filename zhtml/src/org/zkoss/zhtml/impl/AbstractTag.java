@@ -87,7 +87,7 @@ implements DynamicPropertied, RawId {
 	 *
 	 * <p>Note: if display is not specified as part of style,
 	 * the returned value of {@link #isVisible} is assumed.
-	 * In other words, if not visible and dispaly is not specified as part of style,
+	 * In other words, if not visible and display is not specified as part of style,
 	 * "display:none" is appended.
 	 *
 	 * <p>On the other hand, if display is specified, then {@link #setVisible}

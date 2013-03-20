@@ -87,7 +87,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	}
 	/** Renders the page if {@link Page#isComplete} is false.
 	 *
-	 * @param au whether it is caued by an asynchronous update
+	 * @param au whether it is caused by an asynchronous update
 	 */
 	protected void renderPage(Execution exec, Page page, Writer out, boolean au)
 	throws IOException {
