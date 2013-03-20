@@ -19,7 +19,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 	
 	/**
 	 * Convert (aka., encode) a map to JSON text. The result is a JSON object. 
-	 * If this map is also a JSONAware, JSONAware specific behaviours will be omitted at this top level.
+	 * If this map is also a JSONAware, JSONAware specific behaviors will be omitted at this top level.
 	 * 
 	 * @see JSONValue#toJSONString(Object)
 	 * 

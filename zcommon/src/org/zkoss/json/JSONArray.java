@@ -19,7 +19,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 
 	/**
 	 * Convert a list to JSON text. The result is a JSON array. 
-	 * If this list is also a JSONAware, JSONAware specific behaviours will be omitted at this top level.
+	 * If this list is also a JSONAware, JSONAware specific behaviors will be omitted at this top level.
 	 * 
 	 * @see JSONValue#toJSONString(Object)
 	 * 
