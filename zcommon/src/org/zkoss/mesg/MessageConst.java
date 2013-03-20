@@ -65,7 +65,7 @@ public interface MessageConst {
 			if (filename.indexOf('/') >= 0 || filename.indexOf('.') >= 0)
 				throw new IllegalArgumentException("Neither path nor extension is allowed: "+filename);
 
-			//The algorithm is to make id as determinstic as possible
+			//The algorithm is to make id as deterministic as possible
 			//though not really necessary
 			final BundleInfo bi = new BundleInfo(klass, "/metainfo/mesg/" + filename);
 			String sID = klass.getName();
@@ -74,7 +74,7 @@ public interface MessageConst {
 				Integer iID;
 				final Map<Integer, BundleInfo> bis = new HashMap<Integer, BundleInfo>(_bis);
 				while (bis.containsKey(iID = new Integer(id)))
-					++id; //not determinstic
+					++id; //not deterministic
 				bis.put(iID, bi);
 				_bis = bis; //_bis itself is readonly (so no sync required)
 			}

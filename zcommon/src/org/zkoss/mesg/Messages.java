@@ -44,7 +44,7 @@ public class Messages implements MessageConst {
 	}
 
 	/**
-	 * Gets a message based on the specified code without formating arugments.
+	 * Gets a message based on the specified code without formating arguments.
 	 * <p>Equivalent to get(code, null).
 	 */
 	public static final String get(int code) {
