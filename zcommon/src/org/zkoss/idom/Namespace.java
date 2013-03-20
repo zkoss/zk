@@ -54,7 +54,7 @@ public final class Namespace implements Serializable, Cloneable {
 		return null;
 	}
 		
-	/** Assigns a spacial namespace whose name starts with xml.
+	/** Assigns a special namespace whose name starts with xml.
 	 * We need it because the verifier will reject it.
 	 */
 	private static final Namespace
@@ -65,7 +65,7 @@ public final class Namespace implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Contructor.
+	 * Constructor.
 	 *
 	 * @param prefix String prefix to map to this namespace.
 	 * @param uri String URI for namespace.
@@ -126,7 +126,7 @@ public final class Namespace implements Serializable, Cloneable {
 		return false;
 	}
 
-	//-- cloneable --//
+	//-- Cloneable --//
 	public Object clone() {
 		try {
 			return super.clone();

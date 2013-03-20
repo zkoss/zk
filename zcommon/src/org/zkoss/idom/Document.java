@@ -29,7 +29,7 @@ import org.zkoss.idom.impl.*;
 
 /**
  * Represents Document which is also W3C/DOM's document,
- * ie, org.w3c.dom.Document.
+ * i.e., org.w3c.dom.Document.
  *
  * @author tomyeh
  * @see Element

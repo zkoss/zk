@@ -291,7 +291,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * null if the content is null or the child element doesn't exist.
 	 *
 	 * <p>Note that there might be more than one child with the same path
-	 * in an idom tree; this method simply picks the first one that matches and
+	 * in an iDOM tree; this method simply picks the first one that matches and
 	 * returns its content. To access certain one, you might use [n] to
 	 * [@attr = value] specify which one to access.
 	 *
@@ -338,7 +338,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 	/**
 	 * Tests whether the child element with the giving path exists. Note that
-	 * there might be more than one child with the same path in an idom tree;
+	 * there might be more than one child with the same path in an iDOM tree;
 	 * this method simply tell you that "yes", at least on such path exist.
 	 *
 	 * To get the content, use {@link #getContent(String)}.
@@ -364,7 +364,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * Sets the content of the child element with the giving path.
 	 *
 	 * <p>Note that there might be more than one child with the same path
-	 * in an idom tree; this method simply pick one that matches and set
+	 * in an iDOM tree; this method simply pick one that matches and set
 	 * its content (see {@link #setContent(Object)}).
 	 *
 	 * <p>The content of an element is a special feature of iDOM.

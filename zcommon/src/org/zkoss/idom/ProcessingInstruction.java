@@ -112,7 +112,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * <p>Most of characters are considered as ordinary (like 'a'),
 	 * exception '"', '='
 	 *
-	 * <p>Example, the string wil cause ("a12", Intger(12)),
+	 * <p>For example, the string will cause ("a12", Intger(12)),
 	 * ("b+3", null), ("345", null), ("c6", "abc=125&3?5"):<br>
 	 * a12 =12 b+3 345 c6=\t'abc=125&3?5'
 	 *

@@ -22,7 +22,7 @@ package org.zkoss.idom;
  * <p>A "text" is usually a string (e.g., Text, Comment and CDATA) but
  * could be any object (e.g., Binary).
  *
- * <p>The getText method of some parent, e.g., Element, catenates
+ * <p>The getText method of some parent, e.g., Element, concatenates
  * the text of its children if they implement this interface and
  * Textual.isPartOfParentText returns true.
  *
