@@ -52,7 +52,7 @@ public class Transformer {
 	private boolean _outDocType = true;
 
 	/**
-	 * Transfomer constructor without stylesheet.
+	 * Transformer constructor without stylesheet.
 	 */
 	public Transformer()
 	throws TransformerConfigurationException {
@@ -171,7 +171,7 @@ public class Transformer {
 		_tfmr.transform(new DOMSource(elm), result);
 	}
 	/**
-	 * Trasforms a source and returns the transformed result as
+	 * Transforms a source and returns the transformed result as
 	 * an iDOM Document.
 	 *
 	 * @param source the source
@@ -184,7 +184,7 @@ public class Transformer {
 		return hdl.getDocument();
 	}
 	/**
-	 * Trasforms an iDOM document and returns the transformed result as
+	 * Transforms an iDOM document and returns the transformed result as
 	 * another iDOM Document.
 	 *
 	 * @param doc the source document
@@ -195,7 +195,7 @@ public class Transformer {
 		return transform(new DOMSource(processDocType(doc)));
 	}
 	/**
-	 * Trasforms an iDOM element and returns the transformed result as
+	 * Transforms an iDOM element and returns the transformed result as
 	 * another iDOM Document.
 	 *
 	 * @param elm the source element
