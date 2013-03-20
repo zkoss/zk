@@ -62,7 +62,7 @@ public class MessageFormats {
 	 * {@link Locales#getCurrent}.
 	 *
 	 * <p>Note: java.text.MessageFormat.format uses Locale.getDefault,
-	 * which might not be corrent in a multi-user environment.
+	 * which might not be correct in a multi-user environment.
 	 */
 	public static final String format(String pattern, Object[] args) {
 		return format(pattern, args, null);
@@ -70,7 +70,7 @@ public class MessageFormats {
 	/** Creates a MessageFormat with the given pattern and uses it to
 	 * format the given arguments, by use of StringBuffer.
 	 *
-	 * <p>If you want to catenate a sequence of formated string, use
+	 * <p>If you want to concatenate a sequence of formated string, use
 	 * this method.
 	 */
 	public static final StringBuffer format(
