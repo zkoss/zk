@@ -29,7 +29,7 @@ public class TaglibDefinition {
 	 */
 	public final Map<String, Function> functions = new HashMap<String, Function>();
 	/** A map of classes.
-	 * The key is the name associated with the impled class.
+	 * The key is the name associated with the implied class.
 	 */
 	public final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
 }
