@@ -37,7 +37,7 @@ import org.zkoss.util.resource.Locators;
 import org.zkoss.idom.*;
 
 /**
- * The SAX Hanlder.
+ * The SAX Handler.
  * It implements ContentHandler, LexicalHandler and DeclHandler.
  * It is the caller's job to set up this handler properly if required.
  *
@@ -108,7 +108,7 @@ implements LexicalHandler, DeclHandler {
 		return _ignoreWhitespaces;
 	}
 	/**
-	 * Sets whether the parser should elminate whitespace in 
+	 * Sets whether the parser should eliminate whitespace in 
 	 * element content. They are known as "ignorable whitespace". 
 	 * Only whitespace which is contained within element content that has
 	 * an element only content model will be eliminated (see XML Rec 2.10).
@@ -190,7 +190,7 @@ implements LexicalHandler, DeclHandler {
 	/**
 	 * Specifies the org.xml.sax.ErrorHandler to be used to report errors
 	 * present in the XML document to be parsed.
-	 * <p>Default: null -- to use the default imple-mentation and behavior.
+	 * <p>Default: null -- to use the default implementation and behavior.
 	 */
 	public final void setErrorHandler(ErrorHandler eh) {
 		_errHandler = eh;
@@ -206,7 +206,7 @@ implements LexicalHandler, DeclHandler {
 
 	/**
 	 * Specifies the org.xml.sax.EntityResolver to be used to resolve
-	 * entities present in the XML docu-ment to be parsed.
+	 * entities present in the XML document to be parsed.
 	 * <p>Default: null -- to use the default implementation and behavior.
 	 */
 	public final void setEntityResolver(org.xml.sax.EntityResolver er) {
@@ -215,7 +215,7 @@ implements LexicalHandler, DeclHandler {
 	/**
 	 * Gets the org.xml.sax.EntityResolver.
 	 *
-	 * @return the enity resolverr; null to use the default implementation
+	 * @return the entity resolver; null to use the default implementation
 	 */
 	public final EntityResolver getEntityResolver() {
 		return _resolver;

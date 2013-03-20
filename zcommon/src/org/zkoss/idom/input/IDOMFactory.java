@@ -18,7 +18,7 @@ package org.zkoss.idom.input;
 import org.zkoss.idom.*;
 
 /**
- * A dom factory. It is the interface used by SaxBuild to create
+ * A DOM factory. It is the interface used by SaxBuild to create
  * corresponding vertices. By implementing this interface or
  * overriding DefaultDomFactory, caller could create a set of
  * vertices other than the default ones.
@@ -73,7 +73,7 @@ public interface IDOMFactory {
 	public ProcessingInstruction
 	newProcessingInstruction(String target, String data);
 	/**
-	 * Creates a Entityref.
+	 * Creates an EntityReference.
 	 *
 	 * @param name the entity reference's name
 	 */

@@ -283,7 +283,7 @@ public class SAXBuilder {
 	}
 
 	/**
-	 * Gets the sax parser.
+	 * Gets the SAX parser.
 	 */
 	public final SAXParser getParser() {
 		return _parser;
@@ -344,7 +344,7 @@ public class SAXBuilder {
 		return handler.getDocument();
 	}
 	/**
-	 * Creates a Sax Handler.
+	 * Creates a SAX Handler.
 	 * Deriving class might override to provide a subclass of SAXHandler.
 	 */
 	protected SAXHandler newHandler() throws SAXException {
