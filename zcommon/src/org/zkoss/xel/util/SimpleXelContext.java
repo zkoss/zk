@@ -44,7 +44,7 @@ public class SimpleXelContext implements XelContext {
 	public SimpleXelContext() {
 	}
 
-	/** Sete the variable resovler, or null if not available.
+	/** Sets the variable resolver, or null if not available.
 	 */
 	public void setVariableResolver(VariableResolver resolver) {
 		_resolver = resolver;
