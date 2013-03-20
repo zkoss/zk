@@ -19,6 +19,7 @@ ZK 6.5.2
   ZK-1673: Provides encapsulation of theme-specific information
   ZK-1674: Modularization of the theming subsystem
   ZK-1675: Tablet themes should be distinguished from desktop themes
+  ZK-1681: A way to set PhaseListener by zk library property
 
 * Bugs
   ZK-1514: Problem with jsp page and version 6.5.1
