@@ -110,7 +110,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 			return this.access;
 		}
 
-		//-- cloneable --//
+		//-- Cloneable --//
 		public Object clone() {
 			try {
 				return super.clone();
@@ -170,7 +170,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * <p>Deriving classes might override this method to return different
 	 * value for different criteria.
 	 *
-	 * <p>The return value coulde be a combination of EXPUNGE_xxx.
+	 * <p>The return value could be a combination of EXPUNGE_xxx.
 	 * One of EXPUNGE_YES and EXPUNGE_NO is returned to denote
 	 * whether to expunge the mapping. One of EXPUNGE_CONTINUE and
 	 * EXPUNGE_STOP is returned to denote whether to continue the
@@ -311,7 +311,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		_map = new LinkedHashMap<K, Value<V>>(cap, load, accessOrder);
 		init();
 	}
-	/** Initialization for contructor and de-serialized. */
+	/** Initialization for constructor and de-serialized. */
 	private void init() {
 		_que = new ReferenceQueue<X>();
 		newRef();
@@ -331,14 +331,14 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * Sets the minimal lifetime. Default: {@link #DEFAULT_LIFETIME}.
 	 *
 	 * @param lifetime the lifetime, unit=milliseconds;
-	 * if non-posive, they will be removed immediately.
+	 * if non-positive, they will be removed immediately.
 	 * @see #getLifetime
 	 */
 	public void setLifetime(int lifetime) {
 		_lifetime = lifetime;
 	}
 	/**
-	 * Gets the maximal allowed size. Defalut: {@link #DEFAULT_MAX_SIZE}.
+	 * Gets the maximal allowed size. Default: {@link #DEFAULT_MAX_SIZE}.
 	 * An mapping won't be removed by GC unless the minimal lifetime
 	 * or the maximal allowed size exceeds.
 	 * <p>Notice: getMaxSize() is only a soft limit. It takes effect only if
@@ -388,7 +388,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	}
 	public V get(Object key) {
 		final V v = getWithoutExpunge(key);
-		tryExpunge(); //expung later to increase the hit rate
+		tryExpunge(); //expunge later to increase the hit rate
 		return v;
 	}
 	/** Returns the value without trying to expunge for more
@@ -449,7 +449,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 			return _me.getValue().value;
 		}
 		public V setValue(V o) {
-			//we don't re-order it to avoid comodification error
+			//we don't re-order it to avoid co-modification error
 			final Value<V> v = _me.getValue();
 			final V old = v.value;
 			v.value = o;

@@ -37,9 +37,9 @@ public class Utils {
 	 * Moreover, beta3 is -497 (= -500 + 3) and rc5 -95 (-100 + 5)
 	 *
 	 * @param version the version. The version is assumed to
-	 * a series of integer separated by a non-alphanemric separator.
+	 * a series of integer separated by a non-alphanumeric separator.
 	 * @param portion which portion of the version; starting from 0.
-	 * If you want to retrieve the major verion, specify 0.
+	 * If you want to retrieve the major version, specify 0.
 	 * @since 3.0.0
 	 */
 	public static final int getSubversion(String version, int portion) {

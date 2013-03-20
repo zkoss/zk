@@ -46,7 +46,7 @@ implements List<E>, Cloneable, java.io.Serializable {
 	 * And, throws exception if failure and nothing will be affected.
 	 *
 	 * @param newElement the element to be added
-	 * @param followingElement the elment that will 'follow' the new element.
+	 * @param followingElement the element that will 'follow' the new element.
 	 * In other words, newElement will be inserted <b>before</b>
 	 * followingElement. If null, it means newElement is appended at the end
 	 */

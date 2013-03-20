@@ -23,7 +23,7 @@ import org.zkoss.lang.Objects;
  * the performance.
  * It creates multiple instances of {@link CacheMap}, called
  * the internal caches, and then distributes the access across them.
- * Thus, the performance is porportional to the number of internal caches.
+ * Thus, the performance is proportional to the number of internal caches.
  *
  * <p>Thread safe.
  *
@@ -34,15 +34,15 @@ public class MultiCache<K, V> implements Cache<K, V>, java.io.Serializable, Clon
 	private final CacheMap<K, V>[] _caches;
 	private int _maxsize, _lifetime;
 
-	/** Constructs a multi cache with 17 inital caches.
+	/** Constructs a multi cache with 17 initial caches.
 	 */
 	public MultiCache() {
 		this(17);
 	}
-	/** Constucts a multi cache with the specified number of internal caches,
+	/** Constructs a multi cache with the specified number of internal caches,
 	 * the max size and the lifetime.
 	 *
-	 * @param nCache the postive number of the internal caches.
+	 * @param nCache the positive number of the internal caches.
 	 * The large the number the fast the performance.
 	 * @param maxSize the maximal allowed size of each cache
 	 */
@@ -60,7 +60,7 @@ public class MultiCache<K, V> implements Cache<K, V>, java.io.Serializable, Clon
 	 * the default maximal allowed size of each cache is
 	 * ({@link #DEFAULT_MAX_SIZE} / 10).
 	 *
-	 * @param nCache the postive number of the internal caches.
+	 * @param nCache the positive number of the internal caches.
 	 * The large the number the fast the performance.
 	 */
 	public MultiCache(int nCache) {
