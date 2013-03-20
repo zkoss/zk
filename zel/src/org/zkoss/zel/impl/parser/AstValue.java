@@ -105,7 +105,7 @@ public final class AstValue extends SimpleNode {
         
         if (propCount > 2 &&
                 this.jjtGetChild(propCount - 1) instanceof AstMethodParameters) {
-            // Method call with paramaters. 
+            // Method call with parameters. 
             propCount-=2;
         } else {
             propCount--;
