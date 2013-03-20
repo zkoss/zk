@@ -70,7 +70,7 @@ public class AImage implements Image, java.io.Serializable {
 	public AImage(String name, byte[] data) throws IOException {
 		init(name, data);
 	}
-	/** Contructs an image with an input stream.
+	/** Constructs an image with an input stream.
 	 *
 	 * <p>Note that this method automatically closes the input stream
 	 * (since ZK 3.0.0).
