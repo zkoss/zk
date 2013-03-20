@@ -27,7 +27,7 @@ import org.zkoss.lang.Classes;
  * handler is used to facade an object with a set of interfaces.
  *
  * <p>This Invocation handler assumes the object being facaded
- * (aka, the target) has all methods of these interfaces, but it might not
+ * (a.k.a, the target) has all methods of these interfaces, but it might not
  * implement all of these interfaces directly.
  *
  * <p>It happens when you need to provide interfaces to classes that
@@ -51,7 +51,7 @@ public class FacadeInvoker implements InvocationHandler {
 
 	/**
 	 * Creates an object that implements the giving interfaces by
-	 * wrapping a giving object, traget.
+	 * wrapping a giving object, target.
 	 *
 	 * <p>The target must have all methods in all given interfaces,
 	 * but might not implement all these interfaces.
@@ -63,7 +63,7 @@ public class FacadeInvoker implements InvocationHandler {
 	}
 	/**
 	 * Creates an object that implements the giving interfaces by
-	 * wrapping a giving object, traget.
+	 * wrapping a giving object, target.
 	 * <p>A shortcut: newInstance(
 	 * target, interfaces, Thread.currentThread().getContextClassLoader()).
 	 */
