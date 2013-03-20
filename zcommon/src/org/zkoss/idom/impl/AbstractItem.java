@@ -39,18 +39,18 @@ import org.zkoss.idom.*;
  *
  * <dl>
  *  <dt>Item.getName</dt>
- *  <dd>It must be overrided to provide a local name.</dd>
+ *  <dd>It must be overridden to provide a local name.</dd>
  *  <dt>Item.setName</dt>
- *  <dd>Overrid it if it allows to change the name.
+ *  <dd>Override it if it allows to change the name.
  *  Default: throws an exception.</dd>
  *  <dt>Item.getText</dt>
  *  <dd>Override it if it has a text representation.
  *  Default: returns null.</dd>
  *  <dt>Item.setText</dt>
- *  <dd>Overrid it if it allows to change the text.
+ *  <dd>Override it if it allows to change the text.
  *  Default: throws an exception.</dd>
  *  <dt>Node.getNodeType</dt>
- *  <dd>It must be overrided to provide the type.</dd>
+ *  <dd>It must be overridden to provide the type.</dd>
  *  <dt>Item.clone</dt>
  *  <dd>Override it if any other members to handle specially.
  *  Note: by definition, we do deep clone only.</dd>

@@ -36,7 +36,7 @@ import org.zkoss.idom.*;
 /**
  * A semi-implemented item for group. A group is a item that has child items.
  *
- * <p>The default implementation of newChildren is for the sematic of
+ * <p>The default implementation of newChildren is for the semantic of
  * Element. A deriving class has to re-implement it, if it is not applicable.
  * Example, Document.
  *
@@ -65,7 +65,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	 * Note: the list must be able to protect itself from adding
 	 * unexpected child -- read-only, wrong type, undetached...
 	 *
-	 * <p>The default implementation obeys the sematic of Element,
+	 * <p>The default implementation obeys the semantic of Element,
 	 * i.e., it doen't allow any child that cannot be a child of Element.
 	 *
 	 * <p>For performance issue, we introduced a map to improve the search 
@@ -354,7 +354,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			valueList.add(e);	//add into list
 		}
 		/**
-		 * Get the element with name. If you have many values associalted with
+		 * Get the element with name. If you have many values associated with
 		 * the same key, it returned the head for you.
 		 */
 		public final Element get(String name) {

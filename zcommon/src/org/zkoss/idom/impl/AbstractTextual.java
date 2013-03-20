@@ -29,7 +29,7 @@ import org.zkoss.idom.*;
  * <p>Note: any deriving class's getText shall not return null.
  *
  * <p>Element.getText uses this class's isPartOfParentText to know
- * whether a child's text shall be catenated.
+ * whether a child's text shall be concatenated.
  *
  * @author tomyeh
  * @see Element
