@@ -20,7 +20,7 @@ import org.zkoss.mesg.MCommon;
 import org.zkoss.util.IllegalSyntaxException;
 
 /**
- * String utilties and constants
+ * String utilities and constants
  *
  * @author tomyeh
  */
@@ -81,7 +81,7 @@ public class Strings {
 		return buf;
 	}
 	/** Returns an encoded string buffer, faster and shorter than
-	 * Integer.toHexString. It uses numbers and lower-case leters only.
+	 * Integer.toHexString. It uses numbers and lower-case letters only.
 	 * Thus it is a valid variable name if prefix with an alphabet.
 	 * At least one character is generated.
 	 *
@@ -176,7 +176,7 @@ public class Strings {
 	 * occurrence of <i>any</i> character in the delimiters.
 	 *
 	 * <p>This method is optimized to use String.indexOf(char, int)
-	 * if it found the length of dilimiter is 1.
+	 * if it found the length of delimiter is 1.
 	 *
 	 * @param src the source string to search
 	 * @param from the index to start the search from
@@ -204,7 +204,7 @@ public class Strings {
 	 * The backward version of {@link #anyOf}.
 	 *
 	 * <p>This method is optimized to use String.indexOf(char, int)
-	 * if it found the length of dilimiter is 1.
+	 * if it found the length of delimiter is 1.
 	 *
 	 * @return the previous index that is one of delimiter.
 	 * If it is negative, it means no delimiter in front of
@@ -258,8 +258,8 @@ public class Strings {
 		return from;
 	}
 
-	/** Escapes (aka, quote) the special characters with backslash.
-	 * It prefix a backslash to any characters specfied in the specials
+	/** Escapes (a.k.a, quote) the special characters with backslash.
+	 * It prefix a backslash to any characters specified in the specials
 	 * argument.
 	 *
 	 * <p>Note: specials usually contains '\\'.	
@@ -340,7 +340,7 @@ public class Strings {
 		}
 		return cc;
 	}
-	/** Escapes (aka. quote) the special characters with backslash
+	/** Escapes (a.k.a. quote) the special characters with backslash
 	 * and appends it the specified string buffer.
 	 *
 	 * @param dst the destination buffer to append to.
@@ -387,7 +387,7 @@ public class Strings {
 		return ESCAPE_JAVASCRIPT.equals(specials) && cc > (char)255
 			&& !Character.isLetterOrDigit(cc);
 			//don't check isSpaceChar since \u2028 will return true and it
-			//is not recoginized by firefox
+			//is not recognized by Firefox
 	}
 	/** Return "u????". */
 	private static final String encodeUnicode(int cc) {
@@ -496,7 +496,7 @@ public class Strings {
 	/** Returns the next token with additional options.
 	 * It is the same as nextToken(src, from, separators, escBackslash, quotAsToken, false);
 	 * Refer to {@link #nextToken(String, int, char[], boolean, boolean, boolean)}
-	 * for more infomation.
+	 * for more information.
 	 *
 	 * @exception IllegalSyntaxException if the quoted string is unclosed.
 	 * @see #nextToken(String, int, char[], boolean, boolean, boolean)
@@ -512,7 +512,7 @@ public class Strings {
 	 * <li>It trims whitespaces before and after the token.</li>
 	 * <li>If quotAsToken is true, all characters between quotations
 	 * ('\'' or '"') are considered as a token.</li>
-	 * <li>If parenthesis is true, the separators and quots inside
+	 * <li>If parenthesis is true, the separators and quotes inside
 	 * a pair of parenthesis won't be treated specially.
 	 * It is useful if EL expressions might be contained.</li>
 	 * <li>Consider '\\' as the escape char if escBackslash is true.</li>
@@ -525,9 +525,9 @@ public class Strings {
 	 * @param escBackslash whether to treat '\\' specially (as escape char)
 	 * It doesn't handle u and x yet.
 	 * @param quotAsToken whether to treat characters inside '\'' or '"'
-	 * as a token. Note: the quots are excluded from the token.
-	 * @param parenthesis whether to ignore separators and quots in side
-	 * a pair of parenthesises. Recognized parentheseses include
+	 * as a token. Note: the quotes are excluded from the token.
+	 * @param parenthesis whether to ignore separators and quotes inside
+	 * a pair of parentheses. Recognized parentheses include
 	 * {}, [] or ().
 	 * @exception IllegalSyntaxException if the quoted string is unclosed.
 	 * @since 3.0.6
@@ -579,7 +579,7 @@ public class Strings {
 			//if the token is nothing but spaces, k < from
 	}
 	
-	/** Returns the next seperator index in the src string.
+	/** Returns the next separator index in the src string.
 	 *
 	 * @param escQuot whether to escape characters inside quotations
 	 * ('\'' or '"'). In other words, ignore separators inside quotations
@@ -592,7 +592,7 @@ public class Strings {
 		return nextSeparator(src, from, separators, escBackslash, escQuot,
 			quotAsSeparator, false);
 	}
-	/** Returns the next seperator index in the src string.
+	/** Returns the next separator index in the src string.
 	 *
 	 * @param escQuot whether to escape characters inside quotations
 	 * ('\'' or '"'). In other words, it specifies whether to ignore
@@ -600,8 +600,8 @@ public class Strings {
 	 * @param quotAsSeparator whether to consider quotations as one of
 	 * the separators.
 	 * If escQuot is true, quotAsSeparator is ignored.
-	 * @param parenthesis whether to ignore separators and quots in side
-	 * a pair of parenthesises. Recognized parentheseses include
+	 * @param parenthesis whether to ignore separators and quotes in side
+	 * a pair of parentheses. Recognized parentheses include
 	 * {}, [] or ().
 	 * @since 3.0.6
 	 */
@@ -636,7 +636,7 @@ public class Strings {
 		return from;
 	}
 	/** Returns the ending parenthesis (such as }),
-	 * or (char)0 if cc is not the beginning parenthsis (such as {).
+	 * or (char)0 if cc is not the beginning parenthesis (such as {).
 	 */
 	private static final char getEndingParenthesis(char cc) {
 		return cc == '{' ? '}': cc == '(' ? ')': cc == '[' ? ']': (char)0;

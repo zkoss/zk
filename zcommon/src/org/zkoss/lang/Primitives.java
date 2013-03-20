@@ -138,7 +138,7 @@ public class Primitives {
 		return new Short(obj);
 	}
 	
-	/** The infomation about a primitive. */
+	/** The information about a primitive. */
 	private static class PrimInfo {
 		private final Class cls;
 		private final Object defVal;

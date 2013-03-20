@@ -19,7 +19,7 @@ import java.util.LinkedList;
 
 /**
  * The class resolve that allows to import classes and packages, like Java's
- * import statment does.
+ * import statement does.
  * <p>For example,
  * <pre><code>
  * ImportedClassResolver resolver = new ImportedClassResolver();
@@ -42,8 +42,8 @@ public class ImportedClassResolver implements ClassResolver, java.io.Serializabl
 	 * that it simplifies the use of the apply attribute, the init directive
 	 * and others.
 	 * 
-	 * @param clsptn the class's full-qualitified name, e.g., <code>com.foo.FooComposer</code>,
-	 * a wildcard representing all classes of the give pacakge, e.g., <code>com.foo.*</code>.
+	 * @param clsptn the class's fully-qualified name, e.g., <code>com.foo.FooComposer</code>,
+	 * a wildcard representing all classes of the give package, e.g., <code>com.foo.*</code>.
 	 */
 	public void addImportedClass(String clsptn)
 	throws ClassNotFoundException {

@@ -95,7 +95,7 @@ public class Library {
 			return def;
 		}
 	}
-	/** Sets the libary property indicated by the specified key.
+	/** Sets the library property indicated by the specified key.
 	 * @see #getProperty
 	 * @exception NullPointerException if key is null
 	 * @exception IllegalArumentException if key is empty

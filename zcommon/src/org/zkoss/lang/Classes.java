@@ -55,7 +55,7 @@ public class Classes {
 	 * <p>Note only public constructors are searched.
 	 *
 	 * @param cls the class of the instance to create
-	 * @param argTypes the argument types of the constructor to inovke
+	 * @param argTypes the argument types of the constructor to invoke
 	 * @param args the arguments to initialize the instance
 	 * @return the new instance
 	 *
@@ -76,7 +76,7 @@ public class Classes {
 	 * Instantiates a new instance of the specified class with the
 	 * specified argument.
 	 *
-	 * <p>It searches all contructor for the first one that matches
+	 * <p>It searches all constructors for the first one that matches
 	 * the specified arguments.
 	 * @since 3.0.1
 	 */
@@ -191,7 +191,7 @@ public class Classes {
 	 * <p>It uses Class.forName to get the class.
 	 *
 	 * @param clsName the class name of the instance to create
-	 * @param argTypes the argument types of the constructor to inovke
+	 * @param argTypes the argument types of the constructor to invoke
 	 * @param args the arguments to initialize the instance
 	 * @return the new instance
 	 *
@@ -216,7 +216,7 @@ public class Classes {
 	 * <p>It uses {@link #forNameByThread} to get the class.
 	 *
 	 * @param clsName the class name of the instance to create
-	 * @param argTypes the argument types of the constructor to inovke
+	 * @param argTypes the argument types of the constructor to invoke
 	 * @param args the arguments to initialize the instance
 	 * @return the new instance
 	 *
@@ -543,7 +543,7 @@ public class Classes {
 	 *
 	 * @param signature the method signature.
 	 * @return MethodInfo The method information including return type, method name
-	 *			and two collections for argument type annd arguments name.
+	 *			and two collections for argument type and arguments name.
 	 */
 	public static final MethodInfo parseMethod(String signature) 
 	throws IllegalSyntaxException {
@@ -621,7 +621,7 @@ public class Classes {
 	 *
 	 * <p>For example, "find(java.lang.String name)" will return
 	 * the method with one String-typed argument and params will hold "name".
-	 * The return type is optional (actualy ignored).
+	 * The return type is optional (actually ignored).
 	 *
 	 * <p>If params is null, the parameter names are not returned and
 	 * the signature could be simplified as "find(java.lang.String)".
@@ -665,7 +665,7 @@ public class Classes {
 	 *
 	 * <p>For example, "find(java.lang.String name)" will return
 	 * the method with one String-typed argument and params will hold "name".
-	 * The return type is optional (actualy ignored).
+	 * The return type is optional (actually ignored).
 	 *
 	 * <p>If params is null, the parameter names are not returned and
 	 * the signature could be simplified as "find(java.lang.String)".
@@ -766,14 +766,14 @@ public class Classes {
 	/**
 	 * Gets one of the close methods -- a close method is a method
 	 * with the same name and the compatible argument type.
-	 * By compatiable we mean the real method's argument type is
+	 * By compatible we mean the real method's argument type is
 	 * the same as or a superclass of the specified one.
 	 *
 	 * <p>It might not be the best fit one, unless there is a method
 	 * whose argument types are exactly argTypes.
 	 *
 	 * <p>You might specify the exact number in argTypes. If any of them is
-	 * unknwon, use null. Example, in the following, the first argument could
+	 * unknown, use null. Example, in the following, the first argument could
 	 * be anything and the second is anything deriving from MyClass:<br>
 	 * <code>new Class[] {null, MyClass.class}</code>
 	 *
@@ -816,7 +816,7 @@ public class Classes {
 	}
 	/**
 	 * Like {@link #getCloseMethod} to get a 'close' method, but
-	 * it look for subclass of the arguement (instead of superclass).
+	 * it look for subclass of the argument (instead of superclass).
 	 * In other words, it looks for the method whose argument type is
 	 * the same as or a subclass of the specified one.
 	 */
@@ -859,7 +859,7 @@ public class Classes {
 					break;
 				}
 			}
-			if (argTypes[j] == null) //specil handling required
+			if (argTypes[j] == null) //special handling required
 				break;
 		}
 
@@ -918,7 +918,7 @@ public class Classes {
 	}
 	/**
 	 * Like {@link #getCloseMethods} to get all 'close' methods, but
-	 * it look for subclass of the arguement (instead of superclass).
+	 * it look for subclass of the argument (instead of superclass).
 	 * In other words, it looks for the method whose argument type is
 	 * the same as or a subclass of the specified one.
 	 */
@@ -989,7 +989,7 @@ public class Classes {
 	 */
 	public static final int B_METHOD_ONLY=0x0004;
 
-	/** Used by {@link #getCloseMethodBySubclass} to distiquish
+	/** Used by {@link #getCloseMethodBySubclass} to distinguish
 	 * {@link #getCloseMethod}.
 	 */
 	private static final int B_BY_SUBCLASS = 0x1000;
@@ -1107,7 +1107,7 @@ public class Classes {
 			throw newNoSuchMethodException(cls, name, argTypes);
 		}
 	}
-	/** The infomation of the access object. */
+	/** The information of the access object. */
 	private static class AOInfo {
 		private Class<?> cls;
 		private String name;
@@ -1147,7 +1147,7 @@ public class Classes {
 	/**
 	 * Gets the specified method by searching all methods including
 	 * <i>any</i> access control and any base class.
-	 * Note: you rarely need to call this metod. In most cases,
+	 * Note: you rarely need to call this method. In most cases,
 	 * Class.getMethod, {@link #getCloseMethod}, and
 	 * {@link #getMethodInPublic} are what you need.
 	 *
@@ -1221,7 +1221,7 @@ public class Classes {
 	/**
 	 * Searches thru each element of the specified array of classes, and
 	 * returns classes that are super-classes (or equal) of
-	 * the sepcified class.
+	 * the specified class.
 	 *
 	 * @param cls the specified class; null is not allowed
 	 * @param clsToCheck the class array to check; null is acceptable
