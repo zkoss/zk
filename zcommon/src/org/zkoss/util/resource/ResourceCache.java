@@ -25,14 +25,14 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.util.WaitLock;
 
 /**
- * Used to cache resouces.
+ * Used to cache resources.
  * To use this class, you have to implement {@link Loader} and then
  * ResourceCache will use it to check whether a resource is gone,
  * modified and load the resource.
  *
  * <p>Unlike {@link CacheMap}, it is thread-safe.
  *
- * <p>The default check period depends on the libary propety called
+ * <p>The default check period depends on the library property called
  * org.zkoss.util.resource.checkPeriod (unit: second). If not specified, 5 seconds are assumed
  *
  * @author tomyeh

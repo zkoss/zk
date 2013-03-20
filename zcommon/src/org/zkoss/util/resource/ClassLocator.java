@@ -84,7 +84,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			//We overwrite because the order is the parent class loader first
 			//so WEB-INF/lib is placed after
 		}
-//		if (rcmap.isEmpty() && log.debugable()) log.debug("No resouce is found for "+name);
+//		if (rcmap.isEmpty() && log.debugable()) log.debug("No resource is found for "+name);
 
 		final List<Resource> rcs = new LinkedList<Resource>(); //a list of Document
 		final Set<String> resolving = new LinkedHashSet<String>();
@@ -106,7 +106,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		for (String nm: xr.depends) {
 			final XMLResource dep = rcmap.remove(nm);
 			if (dep != null) //not resolved yet
-				resolveDependency(dep, rcs, rcmap, resolving); //recusrively
+				resolveDependency(dep, rcs, rcmap, resolving); //recursively
 		}
 
 		rcs.add(new Resource(xr.url, xr.document));

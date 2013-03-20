@@ -114,7 +114,7 @@ public class LabelLoader {
 	}
 	/** Returns a map of segmented labels for the current locale (never null).
 	 * Unlike {@link #getLabel}, if a key of the label contains dot, it will
-	 * be splitted into multiple keys and then grouped into map. It is so-called
+	 * be split into multiple keys and then grouped into map. It is so-called
 	 * segmented.
 	 * <p>For example, the following property file will parsed into a couple of maps,
 	 * and <code>getSegmentedLabels()</code> returns a map containing
