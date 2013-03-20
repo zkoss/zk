@@ -59,12 +59,12 @@ public interface Cache<K,V> {
 	 * Sets the minimal lifetime. Default: {@link #DEFAULT_LIFETIME}.
 	 *
 	 * @param lifetime the lifetime, unit=milliseconds;
-	 * if non-posive, they will be removed immediately.
+	 * if non-positive, they will be removed immediately.
 	 * @see #getLifetime
 	 */
 	public void setLifetime(int lifetime);
 	/**
-	 * Returns the maximal allowed size. Defalut: {@link #DEFAULT_MAX_SIZE}.
+	 * Returns the maximal allowed size. Default: {@link #DEFAULT_MAX_SIZE}.
 	 * An mapping won't be removed by GC unless the minimal lifetime
 	 * or the maximal allowed size exceeds.
 	 * @see #getLifetime
