@@ -138,7 +138,7 @@ public class BeanELResolver extends ELResolver {
         Method m = this.property(context, base, property).write(context);
 
         //for ZK-1178: check type of mehtod's parameter is the same as type of value
-        //XXX refactory into write() ?
+        //XXX refactored into write() ?
         if (!checkType(m, value)) {
         	Class<?> baseClass = base.getClass();
         	for (Method method : baseClass.getMethods()) {
