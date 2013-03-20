@@ -130,7 +130,7 @@ public class ContentTypes {
 
 		BufferedReader in = null;
 		//NOTE: we cannot use Properties.load because there might be replicated
-		//mapping (e.g., jpg=images/jpg, jpg=images/pjpeg)
+		//mapping (e.g., jpg=images/jpg, jpg=images/jpeg)
 		try {
 			in = new BufferedReader(new InputStreamReader(strm));
 			String line;
