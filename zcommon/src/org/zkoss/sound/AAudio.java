@@ -47,7 +47,7 @@ import org.zkoss.io.NullInputStream;
  * @author tomyeh
  */
 public class AAudio implements Audio, java.io.Serializable {
-	/** Used if you want to implement a meida whose input stream is created
+	/** Used if you want to implement a media whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AAudio(String,,InputStream)
 	 */
@@ -87,7 +87,7 @@ public class AAudio implements Audio, java.io.Serializable {
 	/**
 	 * Creates an instance of an audio with an input stream.
 	 * If the stream shall be created each time {@link #getStreamData} is called,
-	 * you can pass {@link #DYNAMIC_STREAM} to the dat argument, and then
+	 * you can pass {@link #DYNAMIC_STREAM} to the data argument, and then
 	 * override {@link #getStreamData}.
 	 *
 	 * <p>Note: the caller of {@link #getStreamData} has to close
@@ -132,7 +132,7 @@ public class AAudio implements Audio, java.io.Serializable {
 	/**
 	 * Creates an instance of an audio with an input stream.
 	 * If the stream shall be created each time {@link #getStreamData} is called,
-	 * you can pass {@link #DYNAMIC_STREAM} to the dat argument, and then
+	 * you can pass {@link #DYNAMIC_STREAM} to the data argument, and then
 	 * override {@link #getStreamData}.
 	 *
 	 * <p>Note: the caller of {@link #getStreamData} has to close
