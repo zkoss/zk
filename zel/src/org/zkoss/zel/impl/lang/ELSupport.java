@@ -20,7 +20,6 @@ package org.zkoss.zel.impl.lang;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.AccessController;
@@ -34,7 +33,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
-
 
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.util.Classes;
@@ -58,7 +56,7 @@ public class ELSupport {
      *and can set unexpected coerced value into java lang object. So we provide a system property 
      *"org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL" to switch this behavior when doing setValue(). 
      *By default we will set org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL to true to allow set null value 
-     *though this is not compliant to the EL 2.2 spec.. Shall you need to make ZEL to follow EL 2.2 
+     *though this is not compliant to the EL 2.2 spec. Shall you need to make ZEL to follow EL 2.2 
      *spec. when doing setValue, please set "org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL" system property
      *to false.
      *Ref. https://services.brics.dk/java/courseadmin/SWP2011/documents/getDocument/expression_language-2_2-mrel-spec.pdf?d=41976
