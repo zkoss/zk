@@ -15,7 +15,8 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<zscript><![CDATA[
-	
+	import org.zkoss.zul.*;
+	import java.util.ArrayList;
 	DefaultTreeNode r = new DefaultTreeNode("root",new ArrayList());
 	DefaultTreeNode n1 = new DefaultTreeNode("Node 1",new ArrayList());
 	DefaultTreeNode n2 = new DefaultTreeNode("Node 2",new ArrayList());
@@ -47,7 +48,7 @@ public class TestTreeRenderer implements TreeitemRenderer{
 		treeRow.appendChild(new Treecell(node.getData().toString()));
 	}
 }
-trr = new TestTreeRenderer();
+TestTreeRenderer trr = new TestTreeRenderer();
 ]]></zscript>
 	<label multiline="true">
 		1.click on set Node2 Data, the node 2 label should change to New Node 2, and still has child Node3
