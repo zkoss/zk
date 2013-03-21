@@ -76,23 +76,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return function (v, opts) {
 			var o = this[nm];
 			this[nm] = v;
-			if (o !== v || (opts && opts.force))
+			if (o !== v || (opts && opts.force)) {
+				this.__fname__ = nm.substring(1);
 				after.apply(this, arguments);
+				delete this.__fname__;
+			}
 			return this;
 		};
 	}
 	function defSet10(nm, before) {
 		return function (/*v, opts*/) {
+			this.__fname__ = nm.substring(1);
 			this[nm] = before.apply(this, arguments);
+			delete this.__fname__;
 			return this;
 		};
 	}
 	function defSet11(nm, before, after) {
 		return function (v, opts) {
 			var o = this[nm];
+			this.__fname__ = nm.substring(1);
 			this[nm] = v = before.apply(this, arguments);
 			if (o !== v || (opts && opts.force))
 				after.apply(this, arguments);
+			delete this.__fname__;
 			return this;
 		};
 	}
