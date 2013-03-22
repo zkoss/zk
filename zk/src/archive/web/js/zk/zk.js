@@ -1237,7 +1237,8 @@ zk.log('value is", value);
 				uri = '/' + uri; //non-au supports relative path
 		}
 
-		var j = ctx.lastIndexOf(';'), k = ctx.lastIndexOf('?');
+		var j = ctx.indexOf(';'), //ZK-1668: may have multiple semicolon in the URL
+			k = ctx.lastIndexOf('?');
 		if (j < 0 && k < 0) return abs ? ctx + uri: uri;
 
 		if (k >= 0 && (j < 0 || k < j)) j = k;
