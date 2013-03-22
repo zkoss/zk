@@ -73,6 +73,7 @@ import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
@@ -196,6 +197,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
 	private PhaseListener _phaseListener;
+	private boolean _phaseListenerSet = false;
+	private static PhaseListener _sharedPhaseListener;
+	private static boolean _sharedPhaseListenerSet = false;
 	private Tracker _tracker;
 	private final Component _dummyTarget = new AbstractComponent();//a dummy target for post command
 	
@@ -1577,14 +1581,17 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(collector!=null){
 			collector.pushStack(phase.name());
 		}
-		if (_phaseListener != null) {
-			_phaseListener.prePhase(phase, ctx);
+		final PhaseListener listener = getPhaseListener();
+		if (listener != null) {
+			listener.prePhase(phase, ctx);
 		}
 	}
 	
 	/*package*/ void doPostPhase(Phase phase, BindContext ctx) {
-		if (_phaseListener != null) {
-			_phaseListener.postPhase(phase, ctx);
+		final PhaseListener listener = getPhaseListener();
+		
+		if (listener != null) {
+			listener.postPhase(phase, ctx);
 		}
 		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
@@ -2100,13 +2107,34 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 		}
 	}
-	
+
+	@Override
 	public void setPhaseListener(PhaseListener listener) {
 		_phaseListener = listener;
+		_phaseListenerSet = true;
 	}
 	
+	@Override
 	public PhaseListener getPhaseListener(){
-		return _phaseListener;
+		if(_phaseListenerSet){
+			//return local phase listener if it was set by setPahseListener
+			return _phaseListener;
+		}
+		//otherwise, check if there is a shared default phase listener.
+		if (!_sharedPhaseListenerSet) {
+			synchronized (BinderImpl.class) {
+				_sharedPhaseListenerSet = true;
+				String clz = Library.getProperty(PHASE_LISTENER_CLASS_KEY);
+				if (!Strings.isEmpty(clz)) {
+					try {
+						_sharedPhaseListener = (PhaseListener) Classes.forNameByThread(clz).newInstance();
+					} catch (Exception e) {
+						_log.error("Error when initial phase listener:"+clz , e);
+					}
+				}
+			}
+		}
+		return _sharedPhaseListener;
 	}
 
 	private void subscribeQueue(String quename, String quescope, EventListener<Event> listener) {
