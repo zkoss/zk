@@ -56,7 +56,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	setFlexSize_: function (sz) {
-		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == '' 
+		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == ''
+			if (zk.ie > 9) //IE 10 width is not enough to put text that will cause nowrap issue
+				sz.width += 1;
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
 			//updated: need to concern inner padding due to _getContentEdgeWidth
