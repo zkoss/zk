@@ -60,7 +60,7 @@ public interface AuWriter {
 	 * <p>Unlike {@link #close}, this method must be called
 	 * in an activated execution.
 	 * <p>Once this method is called, the caller shall not invoke
-	 * ay other write method. It shall invoke only {@link #close}
+	 * any other write method. It shall invoke only {@link #close}
 	 * to end the writer.
 	 * @since 5.0.4
 	 */
@@ -71,7 +71,7 @@ public interface AuWriter {
 	 * and retrieved by {@link org.zkoss.zk.ui.sys.DesktopCtrl#getLastResponse}.
 	 *
 	 * <p>Once this method is called, the caller shall not invoke
-	 * ay other write method nor {@link #complete}.
+	 * any other write method nor {@link #complete}.
 	 * It shall invoke only {@link #close} to end the writer.
 	 *
 	 * @param prevContent the previous content returned by

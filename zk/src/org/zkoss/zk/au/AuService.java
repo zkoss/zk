@@ -31,10 +31,10 @@ public interface AuService {
 	/** Handles an AU request.
 	 *
 	 * @param request the request sent from the client.
-	 * @param everError whether any error ever occured before
+	 * @param everError whether any error ever occurred before
 	 * processing this request.
 	 * @return whether the request has been processed.
-	 * If false is returned, the defult process (handled by the component)
+	 * If false is returned, the default process (handled by the component)
 	 * will take place.
 	 * @since 5.0.0
 	 */
