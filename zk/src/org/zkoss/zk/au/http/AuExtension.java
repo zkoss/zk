@@ -37,7 +37,7 @@ public interface AuExtension {
 	 */
 	public void init(DHtmlUpdateServlet servlet)
 	throws ServletException;
-	/** Destroyes the AU extension.
+	/** Destroys the AU extension.
 	 * It is called when an extension is removed from {@link DHtmlUpdateServlet},
 	 * or when {@link DHtmlUpdateServlet} is being destroyed.
 	 */
@@ -53,7 +53,7 @@ public interface AuExtension {
 	 * @param response the response (never null).
 	 * @param pi the path info. It includes the prefix when the Au processor
 	 * is associated (see {@link DHtmlUpdateServlet#addAuExtension}.
-	 * For example, if an AU processor is assoicated with "/upload", then
+	 * For example, if an AU processor is associated with "/upload", then
 	 * pi must start with "/upload". Note: it might end with other string
 	 * depending on the URI you generated to the client.
 	 */
