@@ -133,17 +133,17 @@ public interface Device {
 	 */
 	public void init(String deviceType, DeviceConfig config);
 	/** Notification that the desktop, which owns this device,
-	 * is about to be passivated (aka., serialized) by the Web container.
+	 * is about to be passivated (a.k.a., serialized) by the Web container.
 	 * @since 2.4.0
 	 */
 	public void sessionWillPassivate(Desktop desktop);
 	/** Notification that the desktop, which owns this device,
-	 * has just been activated (aka., deserialized) by the Web container.
+	 * has just been activated (a.k.a., deserialized) by the Web container.
 	 * @since 2.4.0
 	 */
 	public void sessionDidActivate(Desktop desktop);
 
-	/** Returns the name and version of th client if the givent user agent
+	/** Returns the name and version of the client if the given user agent
 	 * matches this client, or null if not matched or it is a standard
 	 * browser request.
 	 * @param userAgent represents a client (i.e., HTTP's user-agent).

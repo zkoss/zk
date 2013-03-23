@@ -82,7 +82,7 @@ abstract public class GenericDevice implements Device {
 		return _embed;
 	}
 
-	/** Returns the name and version of th client if the givent user agent
+	/** Returns the name and version of the client if the given user agent
 	 * matches this client, or null if not matched or it is a standard
 	 * browser request.
 	 * <p>This implementation always returns null. That is, it assumes
