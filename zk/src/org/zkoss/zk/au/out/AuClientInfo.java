@@ -27,7 +27,7 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuClientInfo extends AuResponse {
-	/** Contructs a client-info response with the specified desktop.
+	/** Constructs a client-info response with the specified desktop.
 	 *
 	 * @param desktop the desktop to get the client info back.
 	 * If null, the client info is sent back for each desktop in the

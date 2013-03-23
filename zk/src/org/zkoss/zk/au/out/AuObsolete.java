@@ -19,7 +19,7 @@ package org.zkoss.zk.au.out;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * A response to denote the desktop might become obsolte.
+ * A response to denote the desktop might become obsolete.
  * <p>data[0]: the desktop ID.<br/>
  * data[1]: the message
  *

@@ -31,7 +31,7 @@ import org.zkoss.zk.au.AuResponse;
  * the specified component at the client.
  *
  * <p>data[0]: the uuid of the component/page as the parent<br>
- * data[1]: the unparsed HTML (aka., content)
+ * data[1]: the unparsed HTML (a.k.a., content)
  * 
  * @author tomyeh
  * @since 3.0.0
@@ -53,14 +53,14 @@ public class AuAppendChild extends AuResponse {
 	public AuAppendChild(Page page, Collection<String> contents) {
 		super("addChd", page, toArray(page.getUuid(), contents));
 	}
-	/** Converts the contents (a collection of strings) to an arry of JavaScriptValue. */
+	/** Converts the contents (a collection of strings) to an array of JavaScriptValue. */
 	/*package*/ static Object[] toArray(String uuid, Collection<String> contents) {
 		final List<Object> list = new LinkedList<Object>();
 		list.add(uuid);
 		stringToJS(contents, list);
 		return list.toArray(new Object[list.size()]);
 	}
-	/** Converts the contents (a collection of strings) to an arry of JavaScriptValue. */
+	/** Converts the contents (a collection of strings) to an array of JavaScriptValue. */
 	private static void stringToJS(Collection<String> contents, Collection<Object> result) {
 		for (String content: contents)
 			result.add(new JavaScriptValue(content));

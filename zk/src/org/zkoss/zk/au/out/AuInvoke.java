@@ -181,7 +181,7 @@ public class AuInvoke extends AuResponse {
 	public AuInvoke(Component comp, String function, String... args) {
 		super("invoke", comp, toData(comp, function, args));
 	}
-	/** Constuct AuInvoke to call a global function at the client with
+	/** Construct AuInvoke to call a global function at the client with
 	 * the given arguments.
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,

@@ -42,7 +42,7 @@ public class AuScript extends AuResponse {
 	public AuScript(Component depends, String script) {
 		super("script", depends, script);
 	}
-	/** Construsts a AuScript response that doesn't depend on any component.
+	/** Constructs a AuScript response that doesn't depend on any component.
 	 * @since 6.0.0
 	 */
 	public AuScript(String script) {
