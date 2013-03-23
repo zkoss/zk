@@ -19,7 +19,7 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 
 /**
- * A composite validator that contains mulitple validator and forward the validation to them.   
+ * A composite validator that contains multiple validators and forward the validation to them.   
  * @author dennis
  * @since 6.0.0
  */

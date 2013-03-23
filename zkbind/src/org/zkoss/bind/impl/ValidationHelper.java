@@ -215,7 +215,7 @@ import org.zkoss.zk.ui.event.Event;
 	private boolean validateSavePropertyBinding(Component comp,SavePropertyBinding binding,String command, Map<String,Property[]> validates, boolean valid, Set<Property> notifys) {
 		if(!binding.hasValidator()) return true;
 		
-		//clear previous message before balidation
+		//clear previous message before validation
 		if(((BinderImpl)binding.getBinder()).hasValidator(binding.getComponent(), binding.getFieldName())){
 			clearValidationMessage(binding.getBinder(),binding.getComponent(),binding.getFieldName());
 		}

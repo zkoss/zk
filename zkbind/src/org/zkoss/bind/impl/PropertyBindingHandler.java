@@ -170,7 +170,7 @@ import org.zkoss.zk.ui.event.Event;
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
 			
-			//if there is a valodator, clear the validation message after load
+			//if there is a validator, clear the validation message after load
 			if(((BinderImpl)binding.getBinder()).hasValidator(binding.getComponent(), binding.getFieldName())){
 				clearValidationMessages(binding.getBinder(),binding.getComponent(),binding.getFieldName());
 			}

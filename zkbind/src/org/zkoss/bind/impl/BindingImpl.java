@@ -19,7 +19,6 @@ import java.util.Map;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 
 /**

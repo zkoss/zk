@@ -16,11 +16,10 @@ import java.util.Iterator;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.ext.TreeSelectableModel;
 
@@ -38,7 +37,7 @@ public class TreeSelectedItemConverter implements Converter, java.io.Serializabl
 		final TreeModel<Object> model = tree.getModel();
 
   		if(model !=null && !(model instanceof TreeSelectableModel)){
-			//model has to imple TreeSelectableModel if binding to selectedItem
+			//model has to implement TreeSelectableModel if binding to selectedItem
   			throw new UiException("model doesn't implement TreeSelectableModel");
   		}
   		final TreeSelectableModel smodel = (TreeSelectableModel)model;

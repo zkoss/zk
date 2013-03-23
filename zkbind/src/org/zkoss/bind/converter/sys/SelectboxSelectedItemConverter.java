@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;

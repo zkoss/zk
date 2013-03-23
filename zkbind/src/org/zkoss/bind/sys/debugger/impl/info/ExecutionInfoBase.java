@@ -79,7 +79,7 @@ public class ExecutionInfoBase implements ExecutionInfo{
 		json.put(prop, val);
 	}
 	
-	//util method
+	//utility method
 	protected static String toString(Object value, int len){
 		String valstr = value==null?null:value.toString();
 		if(valstr!=null && valstr.length()>len){

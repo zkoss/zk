@@ -14,7 +14,6 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.util.resource.Location;
@@ -43,8 +42,8 @@ public class BinderUtil {
 	}
 	
 	/**
-	 * The context for wrapping a api call for a binder, 
-	 * to keep api compatibility and prevent tedious parameter passing of the sugar/debug implementation.
+	 * The context for wrapping an API call for a binder, 
+	 * to keep API compatibility and prevent tedious parameter passing of the sugar/debug implementation.
 	 * I use List to implement the stack cause I don't need to care the synchronized
 	 */
 	static ThreadLocal<LiteStack<UtilContext>> _ctxStack = new ThreadLocal<LiteStack<UtilContext>>();

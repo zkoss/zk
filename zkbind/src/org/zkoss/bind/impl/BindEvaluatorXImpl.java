@@ -15,7 +15,6 @@ package org.zkoss.bind.impl;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;

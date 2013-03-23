@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
@@ -44,7 +43,7 @@ public class RadiogroupSelectedItemConverter implements Converter, java.io.Seria
 		final ListModel<?> model = radiogroup.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
 		if(model !=null && !(model instanceof Selectable)){
-			//model has to imple Selectable if binding to selectedItem
+			//model has to implement Selectable if binding to selectedItem
   			throw new UiException("model doesn't implement Selectable");
   		}
 		

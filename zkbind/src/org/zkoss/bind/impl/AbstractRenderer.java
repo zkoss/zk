@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Template;
 
 /**
- * to handle the common task of resolver a template fo a renderer
+ * to handle the common task of resolver a template of a renderer
  * @author dennis
  * @since 6.0.0
  */
@@ -51,8 +51,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	}
 	
 	protected Template resoloveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName) {
-		//a detached component(ex,grid.onInitRender) will still calling the render, see test case collection-template-grid.zul
-		//TODO need to check is this a zk bug and repor it
+		//a detached component(ex,grid.onInitRender) will still call the render, see test case collection-template-grid.zul
+		//TODO need to check is this a zk bug and report it
 		if(comp.getPage()==null) return null;//no template
 		
 		final Binder binder = BinderUtil.getBinder(comp, true);

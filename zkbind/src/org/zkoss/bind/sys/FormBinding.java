@@ -32,8 +32,8 @@ public interface FormBinding extends Binding {
 	public String getFormId();
 	
 	/**
-	 * Returns the associated command name of this binding; null if not speicified.
-	 * @return the associated command name of this binding; null if not speicified.
+	 * Returns the associated command name of this binding; null if not specified.
+	 * @return the associated command name of this binding; null if not specified.
 	 */
 	public String getCommandName();
 	

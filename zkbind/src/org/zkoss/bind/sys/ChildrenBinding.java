@@ -21,8 +21,8 @@ package org.zkoss.bind.sys;
 public interface ChildrenBinding extends Binding {
 		
 	/**
-	 * Returns the associated command name of this binding; null if not speicified.
-	 * @return the associated command name of this binding; null if not speicified.
+	 * Returns the associated command name of this binding; null if not specified.
+	 * @return the associated command name of this binding; null if not specified.
 	 */
 	public String getCommandName();
 	

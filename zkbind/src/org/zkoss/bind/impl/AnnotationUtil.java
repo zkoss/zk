@@ -17,12 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
- * A internal util to help processing component annotation, for internal using only.
+ * An internal utility to help processing component annotation, for internal using only.
  * 
  * @author dennis
  * @since 6.0.1
