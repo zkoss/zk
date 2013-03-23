@@ -43,7 +43,7 @@ public class JndiVariableResolver implements VariableResolver {
 	private Map<String, Object> _jndiMapping = new HashMap<String, Object>();
 	
 	/**
-	 * This constructor take agruments to initialize JNDI names. 
+	 * This constructor take arguments to initialize JNDI names. 
 	 * <ul>
 	 * <li>prepend - The prepended part of JNDI name</li>
 	 * <li>mapping - The key-value pairs for JNDI name and its corresponding variable name</li>
@@ -68,7 +68,7 @@ public class JndiVariableResolver implements VariableResolver {
 	 * </p>
 	 * </br>
 	 * <p>
-	 * If you define your own jdni binding, the string should be in key-value pairs format as</br>
+	 * If you define your own jndi binding, the string should be in key-value pairs format as</br>
 	 * "a=custom/MySession,b=custom/MySession2,emf=java:/EntityManagerFactory"
 	 * </p>
 	 *

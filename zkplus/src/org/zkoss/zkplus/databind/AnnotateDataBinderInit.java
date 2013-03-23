@@ -86,7 +86,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 	/** The AnnotateDataBinder created in doAfterCompose() */
 	protected AnnotateDataBinder _binder; 
 	
-	//-- Initator --//
+	//-- Initiator --//
  	public boolean doCatch(java.lang.Throwable ex) {
  		return false; // do nothing
  	}

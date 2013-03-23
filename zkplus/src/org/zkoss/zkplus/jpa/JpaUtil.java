@@ -143,7 +143,7 @@ public class JpaUtil {
 
 	/**
 	 * Returns or create an EntityManager for the specified persistence unit name. </br>*Notice:If
-	 * the EntityManagerFactory with specified presistence unit is not created
+	 * the EntityManagerFactory with specified persistence unit is not created
 	 * before, a new one will be created automatically.
 	 * <p>The EntityManager get by this method is guaranteed to be the same within one Execution for the
 	 * specified persistence unit name.</p>

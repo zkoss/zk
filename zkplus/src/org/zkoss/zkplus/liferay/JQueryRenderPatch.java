@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.sys.PageRenderPatch;
  * When using ZK portlets with Liferay under Internet Explorer, we have
  * to delay the processing at the client a bit.
  *
- * <p>To use it, you have to specify a library proeprty called
+ * <p>To use it, you have to specify a library property called
  * ""org.zkoss.zk.portlet.PageRenderPatch.class" with this class's name
  * ("org.zkoss.zkplus.liferay.JQueryRenderPatch").
  *

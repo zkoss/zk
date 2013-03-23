@@ -23,7 +23,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.lang.reflect.Fields;
 
 /**
- * ThreadLocal related utilties. 
+ * ThreadLocal related utilities. 
  *
  * @author henrichen
  * @since 3.0.6

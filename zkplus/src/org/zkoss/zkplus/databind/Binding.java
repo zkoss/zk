@@ -62,7 +62,7 @@ public class Binding implements java.io.Serializable {
 	private String[] _paths; //bean reference path (a.b.c)
 	private Map<Object, Object> _args; //generic arguments
 	
-	/** Constrcutor to form a binding between UI component and backend data bean.
+	/** Constructor to form a binding between UI component and backend data bean.
 	 * @param binder the associated Data Binder.
 	 * @param comp The concerned component
 	 * @param attr The component attribute
@@ -80,7 +80,7 @@ public class Binding implements java.io.Serializable {
 		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null, null, null);
 	}
 	
-	/** Constrcutor to form a binding between UI component and backend data bean.
+	/** Constructor to form a binding between UI component and backend data bean.
 	 * @param binder the associated Data Binder.
 	 * @param comp The concerned component
 	 * @param attr The component attribute
@@ -100,7 +100,7 @@ public class Binding implements java.io.Serializable {
 		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, args, null, null);
 	}
 	
-	/** Constrcutor to form a binding between UI component and backend data bean.
+	/** Constructor to form a binding between UI component and backend data bean.
 	 * @param binder the associated Data Binder.
 	 * @param comp The concerned component
 	 * @param attr The component attribute

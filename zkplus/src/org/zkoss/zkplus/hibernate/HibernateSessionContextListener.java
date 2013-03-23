@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 /**
- * <p>Listener to make sure each ZK thread got the same hibernat session context; 
+ * <p>Listener to make sure each ZK thread got the same hibernate session context; 
  * used with Hibernate's "thread" session context (org.hibernate.context.ThreadLocalSessionContext).
  * </p>
  * <p>

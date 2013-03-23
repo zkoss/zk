@@ -83,7 +83,7 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 	 * during the conversation, and finally restart business conversation... 
 	 * what can be done here depends on the applications design.</p>
 	 * 
-	 * @param exec the exection to clean up.
+	 * @param exec the execution to clean up.
 	 * @param ex the Throwable which is not handled during the execution
 	 */
 	protected void handleException(Execution exec, Throwable ex) {
@@ -95,7 +95,7 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 	/**
 	 * rollback the current entityManager.
 	 *
-	 * @param exec the exection to clean up.
+	 * @param exec the execution to clean up.
 	 * @param ex the Exception being thrown (and not handled) during the execution
 	 */	
 	private void rollback(Execution exec, Throwable ex) {
