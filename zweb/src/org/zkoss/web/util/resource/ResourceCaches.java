@@ -61,7 +61,7 @@ public class ResourceCaches {
 	V get(ResourceCache<V> cache, ServletContext ctx, String path, Object extra) {
 	//20050905: Tom Yeh
 	//We don't need to handle the default name if user specifies only a dir
-	//because it is handled by the container directlys
+	//because it is handled by the container directly
 	//And, web  developer has to specify <welcome-file> in web.xml
 		URL url = null;
 		if (path == null || path.length() == 0) path = "/";

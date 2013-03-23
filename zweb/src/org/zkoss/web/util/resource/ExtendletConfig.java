@@ -18,7 +18,7 @@ package org.zkoss.web.util.resource;
 
 /**
  * The configuration information used to initialize an Extendlet
- * (aka., a resource processor).
+ * (a.k.a., a resource processor).
  *
  * @author tomyeh
  * @since 2.4.1

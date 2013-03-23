@@ -146,7 +146,7 @@ public class Parser {
 		addText(parent, sb);
 	}
 	/** Parses a control (e.g., &lt;% page %&gt;) starting at from,
-	 * and returns the postion of '&gt' (in %&gt;).
+	 * and returns the position of '&gt' (in %&gt;).
 	 */
 	private static int parseControl(Context ctx, Node parent,
 	int from, int to)
@@ -230,7 +230,7 @@ public class Parser {
 
 	/** Parses an action (e.g., &lt;c:forEach...&gt;...&lt;/c:forEach&gt;).
 	 * @param from the position of ':'
-	 * @return the postion of the last '&gt'.
+	 * @return the position of the last '&gt'.
 	 */
 	private static int parseAction(Context ctx, Node parent,
 	String prefix, int from, int to)

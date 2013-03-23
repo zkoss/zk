@@ -268,7 +268,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 		};
 	}
 
-	/** An implemnetation of PageContext. */
+	/** An implementation of PageContext. */
 	private class PageContextImpl implements PageContext {
 		public ServletRequest getRequest() {
 			return _request;

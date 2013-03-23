@@ -28,7 +28,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 
 /**
- * Used by Lables to load labels from a servlet context.
+ * Used by Labels to load labels from a servlet context.
  *
  * @author tomyeh
  */

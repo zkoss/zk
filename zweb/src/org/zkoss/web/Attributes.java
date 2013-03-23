@@ -19,7 +19,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.web;
 
 /**
- * Definition of contstants used as attributes and parameters acrossing
+ * Definition of constants used as attributes and parameters across
  * requests.
  *
  * @author tomyeh
@@ -60,7 +60,7 @@ public class Attributes {
 
 	/** The attribute name that contains the alert passed from
 	 * another request {@link org.zkoss.web.servlet.http.Https#sendRedirect}.
-	 * It is automatically reset after the next request is responsed.
+	 * It is automatically reset after the next request is responded.
 	 * In JSP, web authors use
 	 * &lt;c:object name="i.alert" scope="request"&gt; to access it.
 	 */

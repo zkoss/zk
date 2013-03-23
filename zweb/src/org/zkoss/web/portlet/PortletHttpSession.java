@@ -23,7 +23,7 @@ import javax.portlet.PortletSession;
  * A facade of PortletSession for implementing HttpSession.
  *
  * <p>Note: all attributes set and get thru this class are in
- * the applicatiop scope (PortletSession.APPLICATION_SCOPE).
+ * the application scope (PortletSession.APPLICATION_SCOPE).
  *
  * @author tomyeh
  */

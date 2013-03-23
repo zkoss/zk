@@ -46,7 +46,7 @@ public class BufferedResponse extends ServletResponseWrapper {
 
 	/** Returns a buffered response with a writer, if writer is not null;
 	 * or the original response if writer is null.
-	 * If reponse is HttpServletResponse, {@link HttpBufferedResponse#getInstance}
+	 * If response is HttpServletResponse, {@link HttpBufferedResponse#getInstance}
 	 * is returned.
 	 * It is smart enough not to wrap the same writer twice.
 	 */
@@ -64,7 +64,7 @@ public class BufferedResponse extends ServletResponseWrapper {
 	}
 	/** Returns a buffered response with a output stream, if stream is not null;
 	 * or the original response if stream is null.
-	 * If reponse is HttpServletResponse, {@link HttpBufferedResponse#getInstance}
+	 * If response is HttpServletResponse, {@link HttpBufferedResponse#getInstance}
 	 * is returned.
 	 * It is smart enough not to wrap the same stream twice.
 	 */

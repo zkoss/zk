@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Enumeration;
 
 /**
- * A sketetal implementation for Map to wrap something with enumeration of
+ * A skeletal implementation for Map to wrap something with enumeration of
  * keys, which must be String.
  *
  * @author tomyeh

@@ -67,7 +67,7 @@ abstract public class AbstractAction implements Action {
 		_unless = unless;
 	}
 
-	/** Returns whether this tag is effecive. If false, this tag does nothing
+	/** Returns whether this tag is effective. If false, this tag does nothing
 	 * (as if not specified at all).
 	 */
 	public boolean isEffective() {

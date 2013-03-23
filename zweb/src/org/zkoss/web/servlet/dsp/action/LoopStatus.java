@@ -26,7 +26,7 @@ public interface LoopStatus {
 	/** Retrieves the index of the current round of the iteration (0-based).
 	 */
 	public int getIndex();
-	/** Retrieves the current item in the interation.
+	/** Retrieves the current item in the iteration.
 	 */
 	public Object getCurrent();
 }

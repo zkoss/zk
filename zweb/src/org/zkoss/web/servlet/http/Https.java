@@ -281,7 +281,7 @@ public class Https extends Servlets {
 		return sb.toString();
 	}
 	/** Returns the request uri + query string.
-	 * Unlik {@link #getOriginFullServlet}, this is in the encoded form
+	 * Unlike {@link #getOriginFullServlet}, this is in the encoded form
 	 * (e.g., %nn still exists, if any).
 	 * Note: request uri = context path + servlet path + path info.
 	 */
@@ -365,7 +365,7 @@ public class Https extends Servlets {
 	/**
 	 * Converts a date string to a Date instance.
 	 * The format of the giving date string must be complaint
-	 * to HTTP proptocol.
+	 * to HTTP protocol.
 	 *
 	 * @exception ParseException if the string is not valid
 	 */
@@ -396,7 +396,7 @@ public class Https extends Servlets {
 	/** Write the specified media to HTTP response.
 	 *
 	 * @param response the HTTP response to write to
-	 * @param media the content to be writeen
+	 * @param media the content to be written
 	 * @param download whether to cause the download to show at the client.
 	 * If true, it sets the Content-Disposition header.
 	 * @param repeatable whether to use {@link RepeatableInputStream}
@@ -417,7 +417,7 @@ public class Https extends Servlets {
 		final boolean headOnly = "HEAD".equalsIgnoreCase(request.getMethod());
 		final byte[] data;
 		int from = -1, to = -1;
-		synchronized (media) { //Bug 1896797: media might be access concurr.
+		synchronized (media) { //Bug 1896797: media might be accessed concurrently.
 			//reading an image and send it back to client
 			final String ctype = media.getContentType();
 			if (ctype != null)

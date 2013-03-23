@@ -18,7 +18,7 @@ package org.zkoss.web.theme;
  * 
  * User could define their own theme registry by implementing ThemeRegistry
  * interface, and specifying the following configuration in metainfo/zk/zk.xml
- * or WEB-INF/zk/zk.xml.
+ * or WEB-INF/zk.xml.
  * 
  * <desktop-config>
  *   <theme-registry-class>foo.CustomThemeRegistry</theme-registry>

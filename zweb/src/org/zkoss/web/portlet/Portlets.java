@@ -47,7 +47,7 @@ public class Portlets {
 	/**
 	 * Includes the resource at the specified URI.
 	 * It enhances RequestDispatcher to allow the inclusion with
-	 * a parameter map -- acutually converting parameters to a query string
+	 * a parameter map -- actually converting parameters to a query string
 	 * and appending it to uri.
 	 *
 	 * <p>NOTE: don't include query parameters in uri.
@@ -186,7 +186,7 @@ public class Portlets {
 	 */
 	public static final int APPEND_PARAM = Servlets.APPEND_PARAM;
 	/** Generates URI by appending the parameters.
-	 * @param params the parameters to apend to the query string
+	 * @param params the parameters to append to the query string
 	 * @param mode one of {@link #OVERWRITE_URI}, {@link #IGNORE_PARAM},
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
