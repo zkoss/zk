@@ -145,7 +145,7 @@ public class Captcha extends org.zkoss.zul.Image {
 
 	/**
 	 * Set the background color of the chart.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setBgColor(String color) {
 		if (Objects.equals(color, _bgColor)) {
@@ -379,7 +379,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	 * It is called, if {@link #setEngine} is not called with non-null
 	 * engine.
 	 *
-	 * <p>By default, it looks up the libarry property called
+	 * <p>By default, it looks up the library property called
 	 * org.zkoss.zul.captcha.engine.class.
 	 * If found, the value is assumed to be
 	 * the class name of the captcha engine (it must implement

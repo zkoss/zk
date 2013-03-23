@@ -43,7 +43,7 @@ public class DialModel extends AbstractChartModel {
 	private String _bgColor2 = "#AAAADC";
 	private int[] _bgRGB2 = new int[] {0xAA,0xAA,0xDC}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background ending color
 	
-	//DialFrame forgournd
+	//DialFrame foreground
 	private String _fgColor;
 	private int[] _fgRGB = new int[] {0x80,0x80,0x80}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	
@@ -167,7 +167,7 @@ public class DialModel extends AbstractChartModel {
 
 	/**
 	 * Set the background color of the dial frame.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setFrameBgColor(String color) {
 		if (Objects.equals(color, _bgColor)) {
@@ -201,7 +201,7 @@ public class DialModel extends AbstractChartModel {
 	
 	/**
 	 * Set the foreground color of the dial frame.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setFrameFgColor(String color) {
 		if (Objects.equals(color, _fgColor)) {
@@ -235,7 +235,7 @@ public class DialModel extends AbstractChartModel {
 	
 	/**
 	 * Set the 1st background color of the dial frame (for gradient starting color).
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setFrameBgColor1(String color) {
 		if (Objects.equals(color, _bgColor1)) {
@@ -269,7 +269,7 @@ public class DialModel extends AbstractChartModel {
 
 	/**
 	 * Set the 2nd background color of the dial frame (for gradient ending color).
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setFrameBgColor2(String color) {
 		if (Objects.equals(color, _bgColor2)) {

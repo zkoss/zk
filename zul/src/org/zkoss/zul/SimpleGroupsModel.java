@@ -69,7 +69,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	protected List<F> _foots;
 	
 	/**
-	 * memeber field to store group close status
+	 * meMber field to store group close status
 	 */
 	protected boolean[] _opens;
 	

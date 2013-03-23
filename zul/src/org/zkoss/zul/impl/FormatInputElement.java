@@ -41,7 +41,7 @@ abstract public class FormatInputElement extends InputElement {
 			_format = format;
 			smartUpdate("format", getRealFormat());
 			smartUpdate("_value", marshall(_value));
-				//Technically, it shall be indepedent of format, but it is
+				//Technically, it shall be independent of format, but it is
 				//safer to send again (since some implementation might not good)
 				//See also bug 2998196.
 		}

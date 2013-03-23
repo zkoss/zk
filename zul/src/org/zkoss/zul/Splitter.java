@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  * ({@link Box}, {@link Vbox} and {@link Hbox}).
  *
  * <p>When the splitter is dragged, the sibling elements of the splitter are
- * resized. If {@link #getCollapse} is true, a grippy in placed
+ * resized. If {@link #getCollapse} is true, a grippy is placed
  * inside the splitter, and one sibling element of the splitter is collapsed
  * when the grippy is clicked.
  *
@@ -81,11 +81,11 @@ public class Splitter extends XulElement {
 	 *
 	 * <p>Default: none.
 	 *
-	 * <p>The returned value can be one ofthe following.
+	 * <p>The returned value can be one of the following.
 	 *
 	 * <dl>
 	 * <dt>none</dt>
-	 * <dd>No collpasing occurs.</dd>
+	 * <dd>No collapsing occurs.</dd>
 	 * <dt>before</dt>
 	 * <dd>When the grippy is clicked, the element immediately
 	 * before the splitter in the same parent is collapsed so that
@@ -97,7 +97,7 @@ public class Splitter extends XulElement {
 	 * </dl>
 	 *
 	 * <p>Unlike XUL, you don't have to put a so-called grippy component
-	 * as a child of the spiltter.
+	 * as a child of the splitter.
 	 */
 	public String getCollapse() {
 		return _collapse;

@@ -72,7 +72,7 @@ import org.zkoss.zul.mesg.MZul;
  * <ul>
  * <li>The instant mode is supported automatically if the include component
  * is created by a ZUML page.
- * If you want to create it programmingly, you have to invoke {@link #afterCompose}
+ * If you want to create it programmatically, you have to invoke {@link #afterCompose}
  * after assigning the source ({@link #setSrc}).</li>
  * <li>The instant mode doesn't support {@link #setProgressing} nor
  * {@link #setLocalized}</li>
@@ -280,7 +280,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			fixMode();
 			if (!_instantMode) invalidate();
 			else super.invalidate();
-				//invalidate is redudant in instant mode, but less memory leak in IE
+				//invalidate is redundant in instant mode, but less memory leak in IE
 		}
 	}
 	
@@ -372,7 +372,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				fixMode(); //becomes defer mode if auto
 			if (!_instantMode) invalidate();
 			else super.invalidate();
-				//invalidate is redudant in instant mode, but less memory leak in IE
+				//invalidate is redundant in instant mode, but less memory leak in IE
 		}
 	}
 
@@ -485,7 +485,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	 * via the request's attribute.
 	 *
 	 * <p>For example, if setDynamicProperty("abc", new Integer(4)) is called,
-	 * then the included page can retrived the abc property
+	 * then the included page can retrieved the abc property
 	 * by use of <code>${reqestScope.abc}</code>
 	 *
 	 * @since 3.0.4
@@ -510,7 +510,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	 */
 	public void invalidate() {
 		super.invalidate();
-			//invalidate is redudant in instant mode, but less memory leak in IE
+			//invalidate is redundant in instant mode, but less memory leak in IE
 		
 		// see the comment inside applyChangesToContent();
 		applyChangesToContent();

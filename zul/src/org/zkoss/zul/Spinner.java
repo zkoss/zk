@@ -28,10 +28,10 @@ import org.zkoss.zul.mesg.MZul;
  * <p>Default {@link #getZclass}: z-spinner.
  *
  * <p>spinner supports below key events.
- * <lu>
+ * <ul>
  *  <li>0-9 : set the value on the inner text box.
  * 	<li>delete : clear the value to empty (null)
- * </lu>
+ * </ul>
  * @author gracelin
  * @since 3.5.0
  */

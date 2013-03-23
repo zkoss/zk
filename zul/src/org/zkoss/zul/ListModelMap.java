@@ -64,7 +64,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	 *
 	 * However, it is not a good idea to modify <code>map</code>
 	 * if it is passed to this method with live is true,
-	 * since {@link Listbox} is not smart enough to hanle it.
+	 * since {@link Listbox} is not smart enough to handle it.
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
@@ -81,7 +81,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	
 	/**
 	 * Constructor.
-	 * It mades a copy of the specified map (i.e., not live).
+	 * It makes a copy of the specified map (i.e., not live).
 	 *
 	 * <p>Notice that if the data is static or not shared, it is better to
 	 * use <code>ListModelMap(map, true)</code> instead, since
@@ -406,7 +406,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	 *
 	 * @param cmpr the comparator.
 	 * @param ascending whether to sort in the ascending order.
-	 * It is ignored since this implementation uses cmprt to compare.
+	 * It is ignored since this implementation uses cmpr to compare.
 	 */
 	public void sort(Comparator<Map.Entry<K, V>> cmpr, final boolean ascending) {
 		final List<Map.Entry<K, V>> copy = new ArrayList<Map.Entry<K, V>>(_map.entrySet());

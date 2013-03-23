@@ -46,7 +46,7 @@ return item;
 	/** Create an instance of {@link Listcell} that will be attached to the
 	 * <b>unloaded</b> listitem.
 	 * By unloaded we mean the listitem that is not loaded with the data
-	 * retreived from the model. That is, {@link ListitemRenderer#render}
+	 * retrieved from the model. That is, {@link ListitemRenderer#render}
 	 * is not called yet.
 	 *
 	 * <p>Notice that this callback shall generate an empty cell,

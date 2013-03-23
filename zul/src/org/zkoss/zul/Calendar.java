@@ -57,7 +57,7 @@ public class Calendar extends XulElement {
 	/** The name. */
 	private String _name;
 
-	/** Contructs a calendar whose value is default to today.
+	/** Constructs a calendar whose value is default to today.
 	 */
 	static {
 		addClientEvent(Calendar.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);

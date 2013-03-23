@@ -387,7 +387,7 @@ public class Radiogroup extends XulElement {
 			//such that we won't render the same set of data twice
 			//--
 			//For better performance, we shall load the first few row now
-			//(to save a roundtrip)
+			//(to save a round trip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
@@ -432,7 +432,7 @@ public class Radiogroup extends XulElement {
 				return;
 			}
 		}
-		setSelectedItem(null); //somthing wrong but be self-protected
+		setSelectedItem(null); //something wrong but be self-protected
 	}
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
@@ -449,7 +449,7 @@ public class Radiogroup extends XulElement {
 	}
 	
 	/**
-	 * For model renderering
+	 * For model rendering
 	 * @param data
 	 */
 	@SuppressWarnings("rawtypes")

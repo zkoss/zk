@@ -46,7 +46,7 @@ public interface DataLoader {
 	
 	/**
 	 * Returns the requested <b>visible</b> offset of the current loaded data chunk.
-	 * @return the requested <b>viaible</b> offset of the current loaded data chunk.
+	 * @return the requested <b>visible</b> offset of the current loaded data chunk.
 	 */
 	public int getOffset();
 

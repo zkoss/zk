@@ -44,7 +44,7 @@ public class DialModelRange implements Serializable {
 	 * Setup the DailModel range.
 	 * @param lower the lower bound of the range in the scale.
 	 * @param upper the upper bound of the range in the scale.
-	 * @param color the color in #RRGGBB format (hexdecimal); default to blue.
+	 * @param color the color in #RRGGBB format (hexadecimal); default to blue.
 	 * @param innerRadius the inner radius percentage(0 ~ 1) of the range; default to 0.7.
 	 * @param outerRadius the outer radius percentage(0 ~ 1) of the range; default to 0.8;
 	 */
@@ -58,7 +58,7 @@ public class DialModelRange implements Serializable {
 	
 	/**
 	 * Set the range color of the dial range.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setRangeColor(String color) {
 		if (Objects.equals(color, _color)) {

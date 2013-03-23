@@ -77,7 +77,7 @@ public class Iframe extends HtmlBasedComponent {
 	
 	/**
 	 * Return the scroll bars.
-	 * <p>Defalut: "auto"
+	 * <p>Default: "auto"
 	 * @since 3.0.4
 	 */
 	public String getScrolling() {
@@ -122,7 +122,7 @@ public class Iframe extends HtmlBasedComponent {
 	 * <p>Default: false.
 	 *
 	 * <p>If an iframe contains PDF or other non-HTML resource,
-	 * it is possible that it obscues the popup that shall be shown
+	 * it is possible that it obscures the popup that shall be shown
 	 * above it. To resolve this, you have to specify autohide="true"
 	 * to this component, and specify the following in the page:
 	 * <pre><code>&lt;?script content="zk.useStack='auto';"?>

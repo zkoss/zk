@@ -111,7 +111,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	public Date getBeginDate() {
 		return _beg;
 	}
-	/** Returns the ending date, or null if therer is no constraint of
+	/** Returns the ending date, or null if there is no constraint of
 	 * the ending date.
 	 */
 	public Date getEndDate() {

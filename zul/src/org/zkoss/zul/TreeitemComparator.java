@@ -26,7 +26,7 @@ import java.util.Comparator;
  * @author jimmy
  */
 public class TreeitemComparator implements Comparator, java.io.Serializable {
-	/** The Treecol (optinal). */
+	/** The Treecol (optional). */
 	private final Treecol _treecol;
 	/** Column index. */
 	private int _index;

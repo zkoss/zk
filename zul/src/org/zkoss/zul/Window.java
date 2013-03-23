@@ -369,7 +369,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 
 	/** Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
-	 * a more sophiscated caption (aka., title).
+	 * a more sophisticated caption (a.k.a., title).
 	 * <p>If a window has a caption whose label ({@link Caption#getLabel})
 	 * is not empty, then this attribute is ignored.
 	 * <p>Default: empty.
@@ -553,7 +553,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 		try {
 			if (Executions.getCurrent()
 			.getAttribute("javax.servlet.error.exception") != null) {
-				//handle it specially if it is used for dispalying err
+				//handle it specially if it is used for displaying err
 				setMode(HIGHLIGHTED);
 			} else {
 				setMode(oldmode); //restore
@@ -571,13 +571,13 @@ public class Window extends XulElement implements Framable, IdSpace {
 		setNonModalMode(OVERLAPPED);
 	}
 	/** Makes this window as popup, which is overlapped with other component
-	 * and auto-hiden when user clicks outside of the window.
+	 * and auto-hidden when user clicks outside of the window.
 	 */
 	public void doPopup() {
 		checkOverlappable(POPUP);
 		setNonModalMode(POPUP);
 	}
-	/** Makes this window as highlited. The visual effect is
+	/** Makes this window as highlighted. The visual effect is
 	 * the similar to the modal window, but, like overlapped,
 	 * it doesn't suspend (block) the execution at the server.
 	 * In other words, it is more like an overlapped window from the
@@ -587,7 +587,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 		checkOverlappable(HIGHLIGHTED);
 		setNonModalMode(HIGHLIGHTED);
 	}
-	/** Makes this window as embeded with other components (Default).
+	/** Makes this window as embedded with other components (Default).
 	 */
 	public void doEmbedded() {
 		setNonModalMode(EMBEDDED);
@@ -620,7 +620,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
+	/** Resumes the suspended thread and set mode to OVERLAPPED. */
 	private void leaveModal(int mode) {
 		_mode = mode;
 		smartUpdate("mode", modeToString(_mode));

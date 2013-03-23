@@ -63,13 +63,13 @@ public class Timer extends HtmlBasedComponent {
 			smartUpdate("delay", _delay);
 		}
 	}
-	/** Returns whether the timer shall send Event repeatly.
+	/** Returns whether the timer shall send Event repeatedly.
 	 * <p>Default: false.
 	 */
 	public boolean isRepeats() {
 		return _repeats;
 	}
-	/** Sets whether the timer shall send Event repeatly.
+	/** Sets whether the timer shall send Event repeatedly.
 	 */
 	public void setRepeats(boolean repeats) {
 		if (_repeats != repeats) {

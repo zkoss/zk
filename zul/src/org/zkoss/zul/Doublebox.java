@@ -93,7 +93,7 @@ public class Doublebox extends NumberInputElement {
 		return _zclass == null ? "z-doublebox" : _zclass;
 	}
 	public Object unmarshall(Object value) {
-		return value instanceof Number ? //sometimes Json might interpret value to Integer
+		return value instanceof Number ? //sometimes JSON might interpret value to Integer
 			new Double(((Number)value).doubleValue()) : value;
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {

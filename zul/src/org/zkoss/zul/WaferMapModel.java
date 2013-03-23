@@ -25,7 +25,7 @@ import org.zkoss.zul.event.ChartDataEvent;
 
 /**
  * A semiconductor wafer map data model to be used with wafermap chart.
- * A value of a spcified (x,y) on a wafter matrix.
+ * A value of a specified (x,y) on a wafter matrix.
  *
  * @author henrichen
  * @see Chart

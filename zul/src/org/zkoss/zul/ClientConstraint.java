@@ -39,7 +39,7 @@ public interface ClientConstraint {
 	 *}</code></pre>
 	 *
 	 * <p>Instead of return the snippet of JavaScript codes, it can return
-	 * an instance of JavaScript string (enclosed with quotatio),
+	 * an instance of JavaScript string (enclosed with quotation),
 	 * if the validator is zul.inp.SimpleConstraint.
 	 *
 	 * <p>For example,

@@ -179,7 +179,7 @@ public class Style extends AbstractComponent {
 	}
 
 	//Component//
-	/** Not allowd. */
+	/** Not allowed. */
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("style is always invisible");
 	}

@@ -60,7 +60,7 @@ public class Filedownload {
 	 * with the suggested file name.
 	 *
 	 * @param content the content
-	 * @param contentType the content type (aka., MIME type),
+	 * @param contentType the content type (a.k.a., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -72,7 +72,7 @@ public class Filedownload {
 	 * with the suggested file name.
 	 *
 	 * @param content the content
-	 * @param contentType the content type (aka., MIME type),
+	 * @param contentType the content type (a.k.a., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -84,7 +84,7 @@ public class Filedownload {
 	 * with the suggested file name.<br/>
 	 * Note: You don't need to close the content (a InputStream), it will be closed automatically after download. 
 	 * @param content the content
-	 * @param contentType the content type (aka., MIME type),
+	 * @param contentType the content type (a.k.a., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -96,7 +96,7 @@ public class Filedownload {
 	 * with the suggested file name.<br/>
 	 * Note: You don't need to close the content (a Reader), it will be closed automatically after download.
 	 * @param content the content
-	 * @param contentType the content type (aka., MIME type),
+	 * @param contentType the content type (a.k.a., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -119,7 +119,7 @@ public class Filedownload {
 	}
 	/** Open a download dialog to save the resource of the specified URL
 	 * at the client.
-	 * The path must be retrieveable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
+	 * The path must be retrievable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
 	 *
 	 * @param url the URL to get the resource
 	 * @param contentType the content type, e.g., application/pdf.
@@ -140,7 +140,7 @@ public class Filedownload {
 	 * at the client.
 	 *
 	 * @param path the path of the resource.
-	 * It must be retrieveable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
+	 * It must be retrievable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
 	 * @param contentType the content type, e.g., application/pdf.
 	 * Unlike other save methods, it is optional. If null, the path's
 	 * extension is used to determine the content type.

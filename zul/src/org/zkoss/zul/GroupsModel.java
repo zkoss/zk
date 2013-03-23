@@ -54,7 +54,7 @@ public interface GroupsModel<D, H, F> {
 	 */
 	public D getChild(int groupIndex, int index);
 	/** Returns the number of children of the specified group.
-	 * <p>Note: it does <i>not</i> include the groot foot ({@link #getGroupfoot}).
+	 * <p>Note: it does <i>not</i> include the group foot ({@link #getGroupfoot}).
 	 * @param groupIndex the index of the group.
 	 */
 	public int getChildCount(int groupIndex);

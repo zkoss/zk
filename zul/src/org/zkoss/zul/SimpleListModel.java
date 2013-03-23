@@ -65,7 +65,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 *
 	 * However, it is not a good idea to modify <code>data</code>
 	 * once it is passed to this method with live is true,
-	 * since {@link Listbox} is not smart enough to hanle it.
+	 * since {@link Listbox} is not smart enough to handle it.
 	 * @since 2.4.1
 	 */
 	public SimpleListModel(E[] data, boolean live) {
@@ -106,7 +106,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 *
 	 * @param cmpr the comparator.
 	 * @param ascending whether to sort in the ascending order.
-	 * It is ignored since this implementation uses cmprt to compare.
+	 * It is ignored since this implementation uses cmpr to compare.
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {

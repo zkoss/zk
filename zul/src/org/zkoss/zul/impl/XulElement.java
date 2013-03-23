@@ -103,7 +103,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	}
 
 	/** Returns the ID of the popup ({@link Popup}) that should appear
-	 * when the user right-clicks on the element (aka., context menu).
+	 * when the user right-clicks on the element (a.k.a., context menu).
 	 *
 	 * <p>Default: null (no context menu).
 	 */
@@ -111,7 +111,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 		return _auxinf != null && _auxinf.context != null ? (String) _auxinf.context.getValue() : null;
 	}
 	/** Sets the ID of the popup ({@link Popup}) that should appear
-	 * when the user right-clicks on the element (aka., context menu).
+	 * when the user right-clicks on the element (a.k.a., context menu).
 	 *
 	 * <p>An onOpen event is sent to the context menu if it is going to
 	 * appear. Therefore, developers can manipulate it dynamically
@@ -166,7 +166,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 		}
 	}
 	/** Sets the UUID of the popup that should appear 
-	 * when the user right-clicks on the element (aka., context menu).
+	 * when the user right-clicks on the element (a.k.a., context menu).
 	 *
 	 * <p>Note: it actually invokes
 	 * <code>setContext("uuid(" + popup.getUuid() + ")")</code>
@@ -345,7 +345,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	/** Merge multiple memembers into an single object (and create on demand)
+	/** Merge multiple members into an single object (and create on demand)
 	 * to minimize the footprint
 	 * @since 5.0.4
 	 */

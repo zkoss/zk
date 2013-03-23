@@ -53,7 +53,7 @@ public class Paging extends XulElement implements Paginal {
 	public Paging() {
 	}
 
-	/** Contructor.
+	/** Constructor.
 	 *
 	 * @param totalsz the total # of items
 	 * @param pagesz the # of items per page

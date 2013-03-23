@@ -24,7 +24,7 @@ import org.zkoss.zul.GroupsModel;
  * @since 6.0.0
  */
 public interface GroupingInfo {
-	/** Indicates the data is a group (aka., the head of the group). */
+	/** Indicates the data is a group (a.k.a., the head of the group). */
 	public static final byte GROUP = 0;
 	/** Indicates the data is a group foot. */
 	public static final byte GROUPFOOT = 1;

@@ -62,7 +62,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	 *
 	 * However, it is not a good idea to modify <code>set</code>
 	 * if it is passed to this method with live is true,
-	 * since {@link Listbox} is not smart enough to hanle it.
+	 * since {@link Listbox} is not smart enough to handle it.
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
@@ -79,7 +79,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 
 	/**
 	 * Constructor.
-	 * It mades a copy of the specified collection (i.e., not live).
+	 * It makes a copy of the specified collection (i.e., not live).
 	 *
 	 * <p>Notice that if the data is static or not shared, it is better to
 	 * use <code>ListModelSet(set, true)</code> instead, since
@@ -90,7 +90,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	}
 	/**
 	 * Constructor.
-	 * It mades a copy of the specified array (i.e., not live).
+	 * It makes a copy of the specified array (i.e., not live).
 	 * @since 2.4.1
 	 */
 	public ListModelSet(E[] array) {
@@ -141,8 +141,8 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 
 	//-- Set --//
 	/**
-	 * This implementation optimized on the LinkedHashSet(which guaratee the sequence of the added item). 
-	 * Other implementation needs one more linier search.
+	 * This implementation optimized on the LinkedHashSet(which guarantees the sequence of the added item). 
+	 * Other implementation needs one more linear search.
 	 */
  	public boolean add(E o) {
  		if (!_set.contains(o)) {
@@ -169,8 +169,8 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 
 	/**
 	 * This implementation optimized on the LinkedHashSet(which 
-	 * guaratee the sequence of the added item). 
-	 * Other implementation needs one more linier search.
+	 * guarantees the sequence of the added item). 
+	 * Other implementation needs one more linear search.
 	 */
 	public boolean addAll(Collection<? extends E> c) {
 		if (_set instanceof LinkedHashSet) {
@@ -386,7 +386,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	 *
 	 * @param cmpr the comparator.
 	 * @param ascending whether to sort in the ascending order.
-	 * It is ignored since this implementation uses cmprt to compare.
+	 * It is ignored since this implementation uses cmpr to compare.
 	 */
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		final List<E> copy = new ArrayList<E>(_set);

@@ -264,7 +264,7 @@ by a plus. For example, "medium+short" means
 {@link DateFormats#getDateTimeFormat} with the medium date styling and
 the short time styling.
 
-<p>In additions, the format could be a cominbation of the following pattern letters:
+<p>In additions, the format could be a combination of the following pattern letters:
 <table border=0 cellspacing=3 cellpadding=0>
 
      <tr bgcolor="#ccccff">
@@ -462,10 +462,10 @@ the short time styling.
 		}
 	}
 	/**
-	 * Sets a catenation of a list of the time zones' ID, separated by comma,
+	 * Sets a concatenation of a list of the time zones' ID, separated by comma,
 	 * that will be displayed at the client and allow user to select.
 	 * <p>The time zone is retrieved by calling TimeZone.getTimeZone().
-	 * @param dtzones a catenation of a list of the timezones' ID, such as
+	 * @param dtzones a concatenation of a list of the timezones' ID, such as
 	 * <code>"America/Los_Angeles,GMT+8"</code>
 	 * @see #setDisplayedTimeZones(List)
 	 * @since 3.6.3

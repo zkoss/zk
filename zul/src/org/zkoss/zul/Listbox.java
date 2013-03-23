@@ -91,7 +91,7 @@ import org.zkoss.zul.impl.XulElement;
  * </p>
  *
  * <p>
- * Besides creating {@link Listitem} programmingly, you could assign a data
+ * Besides creating {@link Listitem} programmatically, you could assign a data
  * model (a {@link ListModel} or {@link GroupsModel} instance) to a listbox via
  * {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)} and then the
  * listbox will retrieve data via {@link ListModel#getElementAt} when necessary.
@@ -587,7 +587,7 @@ public class Listbox extends MeshElement {
 
 	/**
 	 * Returns whether to grow and shrink vertical to fit their given space, so
-	 * called vertial flexibility.
+	 * called vertical flexibility.
 	 *
 	 * <p>
 	 * Note: this attribute is ignored if {@link #setRows} is specified
@@ -608,7 +608,7 @@ public class Listbox extends MeshElement {
 
 	/**
 	 * Sets whether to grow and shrink vertical to fit their given space, so
-	 * called vertial flexibility.
+	 * called vertical flexibility.
 	 *
 	 * <p>
 	 * Note: this attribute is ignored if {@link #setRows} is specified
@@ -1174,7 +1174,7 @@ public class Listbox extends MeshElement {
 	 *
 	 * <p>
 	 * If mold is "paging", this method never returns null, because a child
-	 * paging controller is created automcatically (if not specified by
+	 * paging controller is created automatically (if not specified by
 	 * developers with {@link #setPaginal}).
 	 *
 	 * <p>

@@ -53,12 +53,12 @@ public class Audio extends XulElement {
 	public void play() {
 		response("ctrl", new AuInvoke(this, "play"));
 	}
-	/** Stops the audio at the cient.
+	/** Stops the audio at the client.
 	 */
 	public void stop() {
 		response("ctrl", new AuInvoke(this, "stop"));
 	}
-	/** Pauses the audio at the cient.
+	/** Pauses the audio at the client.
 	 */
 	public void pause() {
 		response("ctrl", new AuInvoke(this, "pause"));

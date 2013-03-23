@@ -16,14 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.LinkedHashSet;
 
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;

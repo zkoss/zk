@@ -85,7 +85,7 @@ public interface HiLoModel extends ChartModel {
 	 * @param high the high value in the date.
 	 * @param low the low value in the date.
 	 * @param close the close value in the date.
-	 * @param volumn the trading volumn in the date.
+	 * @param volumn the trading volume in the date.
 	 * 
 	 */	
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volumn);
