@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.Desktop;
  * @since 5.0.0
  */
 public interface DesktopRecycle {
-	/** Called when the client asks the server to remove a deskdop 
+	/** Called when the client asks the server to remove a desktop 
 	 * because of the user's navigating to other URL or refreshing the page.
 	 *
 	 * <p>The implementation can retrieve the request path by calling
@@ -53,7 +53,7 @@ public interface DesktopRecycle {
 	 */
 	public boolean beforeRemove(Execution exec, Desktop desktop, int cause);
 	/** Called after a desktop is removed.
-	 * A desktop is removed for different reasons, such as a sesstion timeout,
+	 * A desktop is removed for different reasons, such as a session timeout,
 	 * and too many desktops (when the memory is running low).
 	 * In other words, some desktops are removed directly and only
 	 * {@link #afterRemove} is called.

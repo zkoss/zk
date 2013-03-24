@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.Component;
  * thread.</li>
  * </ol>
  *
- * <p>Thus, the typical use is to cleaup un-closed transactions
+ * <p>Thus, the typical use is to cleanup un-closed transactions
  * when {@link #cleanup} is called.
  * 
  * @author tomyeh
@@ -48,7 +48,7 @@ public interface EventThreadCleanup {
 	 * <p>Note: {@link #cleanup} is called first in the event processing thread,
 	 * and then {@link #complete} is called in the servlet thread.
 	 * Note: {@link #complete} of an {@link EventThreadCleanup} instance is called
-	 * only if {@link #cleanup} called against the same instnce
+	 * only if {@link #cleanup} called against the same instance
 	 * didn't throw any exception.
 	 *
 	 * <p>If the use of the event thread is disabled
@@ -56,7 +56,7 @@ public interface EventThreadCleanup {
 	 * returns false), this method is also invoked in the Servlet thread.
 	 *
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
-	 * occured before this method is called, or null if no exeption at all.
+	 * occurred before this method is called, or null if no exception at all.
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.

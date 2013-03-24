@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.WebApp;
  * <li>First, you specify a class that implements this interface
  * in WEB-INF/zk.xml as a listener.
  * </li>
- * <li>Then, even time a ZK application is going to detroy, an instnace of
+ * <li>Then, every time a ZK application is going to be destroyed, an instance of
  * the specified class is instantiated and {@link #cleanup} is called.</li>
  * </ol>
  * 

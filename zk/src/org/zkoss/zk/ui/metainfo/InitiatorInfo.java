@@ -27,7 +27,7 @@ import org.zkoss.zk.xel.Evaluator;
 /**
  * The init directive in the ZUML page.
  *
- * <p>Note: we resolve the class by use fo Classes.forNameByThread.
+ * <p>Note: we resolve the class by using Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
  * Why not? Since there is no way to run zscript before the init directive
  * (and better performance).
@@ -119,7 +119,7 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 		if (_init instanceof ExValue) {
 			clsnm = (String)((ExValue)_init).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
+//				if (log.debugable()) log.debug("Ignore "+_init+" due to empty");
 				return null; //ignore it!!
 			}
 		} else if (_init instanceof String) {

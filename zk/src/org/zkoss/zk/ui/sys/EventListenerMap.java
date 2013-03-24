@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.ext.Scope;
  * @since 6.0.0
  */
 public interface EventListenerMap {
-	/** Services the event under thegiven page and scope.
+	/** Services the event under the given page and scope.
 	 * @param scope the scope used to evaluate ZSCRIPT if any
 	 * @param comp the component used to serve the event.
 	 * @param cmd the real name of the event,

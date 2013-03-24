@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * Rather, you can extend from one of the following skeletons.
  * <dl>
  * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
- * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * <dd>It supports the autowiring based on Java annotation and a CSS3-based selector.
  * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
  * <dt>{@link GenericForwardComposer}</dt>
  * <dd>It supports the autowiring based on naming convention.

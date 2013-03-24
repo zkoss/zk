@@ -58,7 +58,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * 
  * public class MyComposer extends GenericForwardComposer {
  *     private Textbox mytextbox;
- *     private Window self; //embeded object, the supervised window "mywin"
+ *     private Window self; //embedded object, the supervised window "mywin"
  *     private Page page; //the ZK zuml page
  *     private Label mylabel;
  *     
@@ -110,7 +110,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript")),
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel")))</code>.
 	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
-	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * on the library variables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
 	 * they shall <tt>not</tt> be wired (i.e., shall be ignored)
@@ -150,7 +150,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
 		
-		//add forward condtions to the components as defined in this composer
+		//add forward conditions to the components as defined in this composer
 		//onXxx$myid
 		ConventionWires.addForwards(comp, this, _separator);
 	}

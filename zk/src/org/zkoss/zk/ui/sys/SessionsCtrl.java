@@ -41,7 +41,7 @@ public class SessionsCtrl extends Sessions {
 		_sess.set(sess);
 	}
 	/** Sets the session for the current thread.
-	 * Unlike {@link #setCurrent(Session)}, the session is resovled
+	 * Unlike {@link #setCurrent(Session)}, the session is resolved
 	 * later (when {@link #getCurrent} is called).
 	 * @since 5.0.0
 	 */
@@ -143,7 +143,7 @@ public class SessionsCtrl extends Sessions {
 			((SessionCtrl)sess).recover(navsess);
 		return sess;
 	}
-	/** Instantiates a ZK session that is assoicated witht the specified
+	/** Instantiates a ZK session that is associated with the specified
 	 * native session and request.
 	 *
 	 * @param navsess the native session (never null).

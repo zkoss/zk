@@ -102,7 +102,7 @@ implements SerializableEventListener<T> {
 	 * to the specified target component.
 	 *
 	 * <p>All public methods whose names start with "on" are considered
-	 * as event handlers and the correponding event is listened.
+	 * as event handlers and the corresponding event is listened.
 	 * For example, if the derived class has a method named onOK,
 	 * then the onOK event is listened and the onOK method is called
 	 * when the event is received.

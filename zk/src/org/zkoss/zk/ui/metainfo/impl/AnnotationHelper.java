@@ -16,17 +16,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo.impl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Maps;
 import org.zkoss.util.resource.Location;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
@@ -66,7 +64,7 @@ public class AnnotationHelper {
 					if (val.charAt(len - 1) == '}') //format 1
 						return true;
 				} else if (val.charAt(len - 1) == ')') {
-					//we have to be conserative since a non-annotation value might carry @
+					//we have to be conservative since a non-annotation value might carry @
 					int j = Strings.skipWhitespaces(val, 1);
 					char cc = val.charAt(j);
 					//annotation must start with the above characters
@@ -169,17 +167,17 @@ public class AnnotationHelper {
 						addByRawValueInV6(annotName, sb.toString().trim(), loc);
 						break; //next @name(value)
 					} else if (cc == '\'' || cc == '"') {
-						quot = cc; //begin-of-quot
+						quot = cc; //begin-of-quote
 					}
 				} else if (cc == quot) {
-					quot = (char)0; //end-of-quot
+					quot = (char)0; //end-of-quote
 				}
 
 				sb.append(cc);
 
 				if (cc == '\\' && j < len - 1)
 					sb.append(cval.charAt(++j));
-					//Note: we don't decode \x. Rather, we perserve it such
+					//Note: we don't decode \x. Rather, we preserve it such
 					//that the data binder can use them
 			}
 		}
@@ -201,7 +199,7 @@ public class AnnotationHelper {
 					throw wrongAnnotationException(rval, "')' expected", loc);
 
 				final String val = sb.toString().trim();
-				if (nm != null || val.length() > 0) //skip empty one (iincluding after last , )
+				if (nm != null || val.length() > 0) //skip empty one (including after last , )
 					attrs.put(nm, new String[] {val}); //found
 				break; //done
 			}
@@ -267,7 +265,7 @@ public class AnnotationHelper {
 
 			if (cc == '\\' && j < len - 1)
 				sb.append(rval.charAt(++j));
-				//Note: we don't decode \x. Rather, we perserve it such
+				//Note: we don't decode \x. Rather, we preserve it such
 				//that the data binder can use them
 		}
 
@@ -331,7 +329,7 @@ public class AnnotationHelper {
 
 			if (cc == '\\' && j < len - 1)
 				sb.append(rval.charAt(++j));
-				//Note: we don't decode \x. Rather, we perserve it such
+				//Note: we don't decode \x. Rather, we preserve it such
 				//that the data binder can use them
 		}
 
@@ -424,7 +422,7 @@ public class AnnotationHelper {
 	/** Applies the annotations defined in this helper to the specified
 	 * annotation map.
 	 *
-	 * @param annots the annotation map where the annotaions are added.
+	 * @param annots the annotation map where the annotations are added.
 	 * @param propName the property name
 	 * @param clear whether to clear all definitions before returning
 	 * @see #clear

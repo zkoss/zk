@@ -772,7 +772,7 @@ public class UiEngineImpl implements UiEngine {
 					return new Component[0];
 				//Note: replaceableText is one-shot only
 				//So, replaceable text might not be generated
-				//and it is ok since it is onl blank string
+				//and it is ok since it is only blank string
 			}
 
 			Component child =
@@ -837,7 +837,7 @@ public class UiEngineImpl implements UiEngine {
 				//1) we did it after all child created, so it may reference
 				//to it child (thought rarely happens)
 				//2) we did it after afterCompose, so what specified
-				//here has higher priority than class defined by app dev
+				//here has higher priority than class defined by application developers
 
 			//Bug ZK-504: even might be listened later (in parent's composer)
 			//See also ZK-759
@@ -1201,7 +1201,7 @@ public class UiEngineImpl implements UiEngine {
 					((DesktopCtrl)desktop).service(request, !errs.isEmpty());
 				} catch (Throwable ex) {
 					handleError(ex, uv, errs);
-					//we don't skip request to avoid mis-match between c/s
+					//we don't skip request to avoid mismatch between c/s
 				}
 
 				//Cycle 2: Process any pending events posted by components
@@ -1345,7 +1345,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 
-	/** Handles each error. The erros will be queued to the errs list
+	/** Handles each error. The errors will be queued to the errs list
 	 * and processed later by {@link #visualizeErrors}.
 	 */
 	private static final
@@ -1846,7 +1846,7 @@ public class UiEngineImpl implements UiEngine {
 			synchronized (uvlock) {
 				desktopCtrl.setVisualizer(null);
 				desktopCtrl.setExecution(null);
-				uvlock.notify(); //wakeup pending threads
+				uvlock.notify(); //wake up pending threads
 			}
 			if (execmon != null)
 				execmon.executionAbort(exec, desktop, ex);
@@ -1919,7 +1919,7 @@ public class UiEngineImpl implements UiEngine {
 			synchronized (uvlock) {
 				desktopCtrl.setVisualizer(null);
 				desktopCtrl.setExecution(null);
-				uvlock.notify(); //wakeup doActivate's wait
+				uvlock.notify(); //wake up doActivate's wait
 			}
 		} finally {
 			try {
@@ -2423,7 +2423,7 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private static String meterLoadStart(PerformanceMeter pfmeter,
 	Execution exec, long startTime) {
-		//Future: handle the zkClientStart paramter
+		//Future: handle the zkClientStart parameter
 		final String pfReqId = exec.getDesktop().getId();
 		try {
 			pfmeter.requestStartAtServer(pfReqId, exec, startTime);
@@ -2473,7 +2473,7 @@ public class UiEngineImpl implements UiEngine {
 		 */
 		public void afterRenderNewPage(Page page);
 		/** Called when this engine renders the given components.
-		 * It is designed to be overriden if you'd like to alter the component
+		 * It is designed to be overridden if you'd like to alter the component
 		 * and its children after they are rendered.
 		 * @param comps the collection of components that have been redrawn.
 		 * @since 6.0.0

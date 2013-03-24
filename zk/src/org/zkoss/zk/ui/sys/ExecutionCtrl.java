@@ -42,7 +42,7 @@ public interface ExecutionCtrl {
 	 * with a page.
 	 *
 	 * <p>Design decision: we put it here because user need not to know
-	 * about the conccept of the current page.
+	 * about the concept of the current page.
 	 *
 	 * <p>Since 3.6.0, this method returns the first page if
 	 * {@link #setCurrentPage} was not called (such as Server Push).
@@ -184,7 +184,7 @@ public interface ExecutionCtrl {
 	 * in {@link org.zkoss.zk.ui.Execution#addVariableResolver}. To get a variable an EL expression
 	 * can reference, please use {@link org.zkoss.zk.ui.Execution#getVariableResolver} instead.
 	 * <p>Unlike {@link #getExtraXelVariable(String)}, this method
-	 * can utilitize {@link org.zkoss.xel.VariableResolverX} if you'd like
+	 * can utilize {@link org.zkoss.xel.VariableResolverX} if you'd like
 	 * to retrieve a property of another object.
 	 * @param ctx the XEL context
 	 * @param base the base object. If null, it looks for a top-level variable.

@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Scope;
 
 /**
- * Represents an interpter that can interpret the scripting codes.
+ * Represents an interpreter that can interpret the scripting codes.
  *
  * <p>It is easier to implement by extending
  * from {@link org.zkoss.zk.scripting.util.GenericInterpreter}.
@@ -63,7 +63,7 @@ public interface Interpreter {
 	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getEachTimeScript}
 	 * if not null.</li>
 	 * <li>The implementation must use {@link org.zkoss.zk.ui.ext.Scopes#getCurrent}
-	 * to retrieve the current namesace if the comp argument is null.
+	 * to retrieve the current namespace if the comp argument is null.
 	 *
 	 * @param scope the scope as the context to interpret the script.
 	 * If null, the current scope is assumed.
@@ -81,7 +81,7 @@ public interface Interpreter {
 	/** Returns the method of the specified name defined in this interpreter,
 	 * or null if not defined.
 	 *
-	 * @param argTypes the list of argument (aka., parameter) types.
+	 * @param argTypes the list of argument (a.k.a., parameter) types.
 	 * If null, Class[0] is assumed.
 	 * @since 3.0.0
 	 */
@@ -100,7 +100,7 @@ public interface Interpreter {
 	/** Sets the value of a variable to this interpreter, as if
 	 * they are defined in the interpreter.
 	 *
-	 * <p>Note: it is not part of any namespace and it has higher prioerty
+	 * <p>Note: it is not part of any namespace and it has higher priority
 	 * if its name conflicts with any variable defined in the namespaces.
 	 */
 	public void setVariable(String name, Object value);

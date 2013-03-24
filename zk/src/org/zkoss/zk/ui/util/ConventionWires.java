@@ -200,7 +200,7 @@ public class ConventionWires {
 	 * @param separator the separator used to separate the component ID and event name.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
-	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * @param ignoreXel whether to ignore variables defined in variable resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 */
 	public static final
@@ -280,7 +280,7 @@ public class ConventionWires {
 	 * If the source component cannot be looked up or the object looked up is 
 	 * not a component, this method will log the error and ignore it.
 	 * </p>
-	 * <p>Cascaded '$' will add Forwards cascadely. E.g. define method 
+	 * <p>Cascaded '$' will add Forwards cascadedly. E.g. define method 
 	 * onClick$btn$w1 in window w2. This method will add a forward on the button 
 	 * "btn.onClick=w1.onClick$btn" and add another forward on the window w1
 	 * "w1.onClick$btn=w2.onClick$btn$w1"</p>

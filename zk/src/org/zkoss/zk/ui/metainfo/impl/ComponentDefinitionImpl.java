@@ -58,7 +58,7 @@ implements ComponentDefinition, java.io.Serializable {
 	private Map<String, ExValue> _molds;
 	/** The default widget class. */
 	private ExValue _defWgtClass;
-	/** A map of custom attributs (String name, ExValue value). */
+	/** A map of custom attributes (String name, ExValue value). */
 	private Map<String, ExValue> _custAttrs;
 	/** A list of {@link Property}. */
 	private List<Property> _props;
@@ -68,7 +68,7 @@ implements ComponentDefinition, java.io.Serializable {
 	private String _textAs;
 	private AnnotationMap _annots;
 	private URL _declURL;
-	/** The parsed expessions of the apply attribute. */
+	/** The parsed expressions of the apply attribute. */
 	private ExValue[] _apply;
 	/** Whether to preserve the blank text. */
 	private boolean _blankpresv;
@@ -168,7 +168,7 @@ implements ComponentDefinition, java.io.Serializable {
 		_custAttrs.put(name, ev);
 	}
 
-	/** Adds an annotation to the specified proeprty of this component
+	/** Adds an annotation to the specified property of this component
 	 * definition.
 	 *
 	 * @param propName the property name.

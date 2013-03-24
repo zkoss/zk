@@ -90,7 +90,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 		super.destroy();
 	}
 
-	/**TODO: need to digg out a solution from groovy's manual
+	/**TODO: need to dig out a solution from groovy's manual
 	public Class getClass(String clsnm) {
 	}
 	*/

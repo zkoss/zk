@@ -137,7 +137,7 @@ public class ConfigParser {
 
 	/** Parses metainfo/zk/config.xml placed in class-path.
 	 *
-	 * <p>Note: the application-independent configurations (aka.,
+	 * <p>Note: the application-independent configurations (a.k.a.,
 	 * the system default configurations) are loaded only once,
 	 * no matter how many times this method is called.
 	 *
@@ -701,7 +701,7 @@ public class ConfigParser {
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));
 
-		//client (JS) pacakges
+		//client (JS) packages
 		for (Iterator it = conf.getElements("package").iterator();
 		it.hasNext();) {
 			config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));

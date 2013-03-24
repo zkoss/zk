@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 /**
- * Used to intercept the loading of ZUML pages associated with the specfied URI.
+ * Used to intercept the loading of ZUML pages associated with the specified URI.
  * Developers usually use it to do the security check.
  *
  * <p>How this interface is used.
@@ -55,7 +55,7 @@ public interface URIInterceptor {
 	 *
 	 * <p>To deny the access, the class shall throw an exception.
 	 * If you want to redirect to another page, you can configure it
-	 * with  &lt;error-page&gt; by speciying the corresponding page and exception
+	 * with  &lt;error-page&gt; by specifying the corresponding page and exception
 	 * in WEB-INF/zk.xml.
 	 */
 	public void request(String uri) throws Exception;

@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 /**
- * Denotes the value passed to a setter (aka., mutator) of a component
+ * Denotes the value passed to a setter (a.k.a., mutator) of a component
  * is wrong.
  *
  * @author tomyeh
@@ -25,28 +25,28 @@ package org.zkoss.zk.ui;
 public class WrongValueException extends OperationException {
 	private Component _comp;
 
-	/** Contructs a wrong value exception to show an error box at the client.
+	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
 	public WrongValueException(Component comp, String msg) {
 		super(msg);
 		_comp = comp;
 	}
-	/** Contructs a wrong value exception to show an error box at the client.
+	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
 	public WrongValueException(Component comp, int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 		_comp = comp;
 	}
-	/** Contructs a wrong value exception to show an error box at the client.
+	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
 	public WrongValueException(Component comp, int code, Object fmtArg) {
 		super(code, fmtArg);
 		_comp = comp;
 	}
-	/** Contructs a wrong value exception to show an error box at the client.
+	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
 	public WrongValueException(Component comp, int code) {

@@ -44,9 +44,9 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.util.Composer;
 
 /**
- * The sketetal implementation of {@link UiFactory}.
+ * The skeletal implementation of {@link UiFactory}.
  *
- * <p>Derived class must immplement {@link UiFactory#newSession}, which
+ * <p>Derived class must implement {@link UiFactory#newSession}, which
  * depends on the Web container.
  *
  * @author tomyeh

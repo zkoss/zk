@@ -25,7 +25,7 @@ package org.zkoss.zk.ui.event;
  * for the listener will NOT be sent to the server immediately (when it
  * is fired at the client). It is called the deferrable event listener.
  * It helps to improve the performance since the deferred events will
- * be 'packed' together and sent to the server at once. It is usully used
+ * be 'packed' together and sent to the server at once. It is usually used
  * for event listeners that maintains the application states, rather
  * than generating visual responses.
  *

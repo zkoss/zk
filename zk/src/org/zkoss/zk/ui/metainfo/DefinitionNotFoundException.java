@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.metainfo;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Dentoes a definition cannot be found.
+ * Denotes a definition cannot be found.
  *
  * @author tomyeh
  */

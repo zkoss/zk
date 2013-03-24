@@ -56,10 +56,10 @@ import org.zkoss.zk.scripting.HierachicalAware;
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
  *
- * <p>Unlike many other implementations, it supports the hierachical
+ * <p>Unlike many other implementations, it supports the hierarchical
  * scopes ({@link HierachicalAware}).
  * That is, it uses an independent BeanShell NameSpace
- * (aka. interpreter's scope) to store the variables/classes/methods
+ * (a.k.a. interpreter's scope) to store the variables/classes/methods
  * defined in BeanShell script for each ZK scope ({@link Scope}).
  * Since one-to-one relationship between BeanShell's scope and ZK scope,
  * the invocation of BeanShell methods can execute correctly without knowing
@@ -75,7 +75,7 @@ import org.zkoss.zk.scripting.HierachicalAware;
  * <p>First, all NameSpace objects have to serialize. Second,
  * the top-level namespace (GlobalNS) is wrapped with NSWrap, which
  * is not serializable. It is serialized when {@link SerializableAware#write}
- * is called (trigged by PageImpl's write).
+ * is called (triggered by PageImpl's write).
  *
  * <p>On the other hand, all non-top-level namespaces (NS) are wrapped with
  * NSWrapSR which is serializable, so they are serialized with
@@ -425,7 +425,7 @@ implements SerializableAware, HierachicalAware {
 			return var;
 		}
 		public void loadDefaultImports() {
-			 //to speed up the formance
+			 //to speed up the performance
 		}
 	}
 	/** The global NameSpace. */

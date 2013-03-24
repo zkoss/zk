@@ -72,7 +72,7 @@ public class ZScript implements java.io.Serializable {
 	 * content.
 	 *
 	 * @param content the content of zscript codes
-	 * @param lineno the linenumber of the first line. Ignored if
+	 * @param lineno the line number of the first line. Ignored if
 	 * zero (or negative).
 	 * @since 3.6.1
 	 */
@@ -169,14 +169,14 @@ public class ZScript implements java.io.Serializable {
 		_zslang = zslang;
 	}
 	/** Returns the raw content.
-	 * It is the content specified in the contructor
+	 * It is the content specified in the constructor
 	 * ({@link #ZScript(String, String)}.
-	 * If URL is specified in the contructor, null is returned.
+	 * If URL is specified in the constructor, null is returned.
 	 *
 	 * <p>On the other hand, {@link #getContent} will load the content
 	 * automatically if URL is specified.
 	 *
-	 * @return the raw content specified in the contructor, or null
+	 * @return the raw content specified in the constructor, or null
 	 * if URL is specified instead.
 	 */
 	public String getRawContent() {
@@ -187,10 +187,10 @@ public class ZScript implements java.io.Serializable {
 	 * If URL is an EL expression, it will be evaluated first.
 	 *
 	 * @param page the page when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScript(EvaluatorRef, String, String, Locator)}.
+	 * Used only if this object is constructed with {@link #ZScript(EvaluatorRef, String, String, Locator)}.
 	 * @param comp the component when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScript(EvaluatorRef, String, String, Locator)}.
-	 * @exception UiException if faied to load the content
+	 * Used only if this object is constructed with {@link #ZScript(EvaluatorRef, String, String, Locator)}.
+	 * @exception UiException if failed to load the content
 	 */
 	public String getContent(Page page, Component comp) {
 		if (_cnt != null)
@@ -223,7 +223,7 @@ public class ZScript implements java.io.Serializable {
 
 	/** Sets the evaluator reference.
 	 */
-	/*pacakge*/ void setEvaluatorRef(EvaluatorRef evalr) {
+	/*package*/ void setEvaluatorRef(EvaluatorRef evalr) {
 		_evalr = evalr;
 	}
 

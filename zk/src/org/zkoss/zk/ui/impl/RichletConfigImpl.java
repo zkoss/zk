@@ -34,7 +34,7 @@ public class RichletConfigImpl implements RichletConfig {
 
 	/**
 	 * @param wapp the {@link WebApp} that this config belongs to (never null).
-	 * @param params the initail parameters. Empty is assumed if null.
+	 * @param params the initial parameters. Empty is assumed if null.
 	 */
 	public RichletConfigImpl(WebApp wapp, Map<String, String> params) {
 		if (wapp == null)

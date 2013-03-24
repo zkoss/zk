@@ -62,14 +62,14 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public void init(PageConfig config);
-	/** Called when this page is about to be detroyed.
+	/** Called when this page is about to be destroyed.
 	 * It is called by desktop, after removing it from the desktop.
 	 */
 	public void destroy();
 
 	/** Returns the tags that shall be generated inside the head element
 	 * and before ZK's default tags (never null).
-	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
 	 *
 	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
 	 * it cannot override ZK's default behaviors.
@@ -80,7 +80,7 @@ public interface PageCtrl {
 	public String getBeforeHeadTags();
 	/** Returns the tags that shall be generated inside the head element
 	 * and after ZK's default tags (never null).
-	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
 	 *
 	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
 	 * it could override ZK's default behaviors.
@@ -249,11 +249,11 @@ public interface PageCtrl {
 	public void addDeferredZScript(Component parent, ZScript zscript);
 
 	/** Notification that the session, which owns this page,
-	 * is about to be passivated (aka., serialized).
+	 * is about to be passivated (a.k.a., serialized).
 	 */
 	public void sessionWillPassivate(Desktop desktop);
 	/** Notification that the session, which owns this page,
-	 * has just been activated (aka., deserialized).
+	 * has just been activated (a.k.a., deserialized).
 	 */
 	public void sessionDidActivate(Desktop desktop);
 }

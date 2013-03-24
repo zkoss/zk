@@ -17,7 +17,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 /**
- * Dentoes a component cannot be found.
+ * Denotes a component cannot be found.
  *
  * @author tomyeh
  */

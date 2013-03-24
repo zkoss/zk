@@ -29,7 +29,7 @@ public interface SessionCtrl {
 	 *
 	 * <p>It is called by the desktop when {@link Desktop#setDeviceType}
 	 * is called.
-	 * Don't call this method directly. Otherwise, the result is inpredictable.
+	 * Don't call this method directly. Otherwise, the result is unpredictable.
 	 *
 	 * @since 2.4.1
 	 */
@@ -61,8 +61,8 @@ public interface SessionCtrl {
 	 * is not initialized properly.
 	 *
 	 * <p>It is actually a workaround to solve the issue that some Web
-	 * contrainer fails to call
-	 * HttpSessionActivationListener.sessionDidActivate() unpon failover.
+	 * container fails to call
+	 * HttpSessionActivationListener.sessionDidActivate() upon failover.
 	 *
 	 * <p>It can be used to solve the issue that the mapping between
 	 * the native session and the ZK session is changed.

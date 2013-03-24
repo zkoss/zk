@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.WebApp;
  * <li>First, you specify a class that implements this interface
  * in WEB-INF/zk.xml as a listener.
  * </li>
- * <li>Then, even time a ZK application is created, an instnace of
+ * <li>Then, even time a ZK application is created, an instance of
  * the specified class is instantiated and {@link #init} is called.</li>
  * </ol>
  * 

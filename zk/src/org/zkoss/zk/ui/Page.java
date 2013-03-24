@@ -39,10 +39,10 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
  * A page. A desktop consists of a set of pages.
 
  * <p>When a ZK request is asking to render a new page, a new page is
- * created and components that are created duing this request all belong to
+ * created and components that are created during this request all belong to
  * this page.
  *
- * <p>If a ZK requst is asking an update, it must have at lease one UUID of
+ * <p>If a ZK request is asking an update, it must have at lease one UUID of
  * a component ({@link Component#getUuid}.
  * From this UUID, we know which page it belongs and activate it
  * to process the update.
@@ -57,7 +57,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
  * While each ZK request might ask to create an independent page,
  * all these pages are grouped as a desktop, such that they are activated
  * and removed at the same time.
- * Moreover, pages in the same desktop could communicate to eath other
+ * Moreover, pages in the same desktop could communicate to each other
  * (see <a href="#inter-page">Inter-page communication</a>).
  *
  * <p>A session, {@link Session}, might have multiple desktops of pages,
@@ -69,7 +69,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
  * if a page become 'obsolete'.
  *
  * <p>During each execution (${link Execution}), exactly one desktop of
- * pages are locked (aka., activated). Though an execution serves
+ * pages are locked (a.k.a., activated). Though an execution serves
  * a client request (e.g., ServletRequest), a client request might consist
  * of multiple ZK request ({@link org.zkoss.zk.au.AuRequest}).
  * Each ZK request might target to a different page (of the same desktop).
@@ -111,7 +111,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 */
 	public void setId(String id);
 
-	/** Returns UUID (universal unique ID) which is unquie in the whole
+	/** Returns UUID (universal unique ID) which is unique in the whole
 	 * session. The UUID is generated automatically and immutable.
 	 *
 	 * <p>It is mainly used for communication between client and server
@@ -230,7 +230,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktops as this one's.
 	 * @param scope one of {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
@@ -240,14 +240,14 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktops as this one's.
 	 * @param scope one of {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object getAttribute(String name, int scope);
 	/** Returns if an attribute exists.
 	 * <p>Notice that <code>null</code> is a valid value, so you need this
-	 * method to really know if an atribute is defined.
+	 * method to really know if an attribute is defined.
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name, int scope);
@@ -256,7 +256,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktops as this one's.
 	 * @param scope one of {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
@@ -266,7 +266,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktops as this one's.
 	 * @param scope one of {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
@@ -280,7 +280,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	public Object getAttribute(String name);
 	/** Returns if an attribute exists.
 	 * <p>Notice that <code>null</code> is a valid value, so you need this
-	 * method to really know if an atribute is defined.
+	 * method to really know if an attribute is defined.
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name);
@@ -403,9 +403,9 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.0
 	 */
 	public Object getXelVariable(String name);
-	/** Returns a vairable that is visible to XEL expressions.
+	/** Returns a variable that is visible to XEL expressions.
 	 * <p>Unlike {@link #getXelVariable(String)}, this method
-	 * can utilitize {@link org.zkoss.xel.VariableResolverX} if you'd like
+	 * can utilize {@link org.zkoss.xel.VariableResolverX} if you'd like
 	 * to retrieve a property of another object.
 	 * @param ctx the XEL context
 	 * @param base the base object. If null, it looks for a top-level variable.
@@ -430,7 +430,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <p>Note: the variables resolver by the specified resolver are
 	 * accessible to both zscript and EL expressions.
 	 *
-	 * @return wether the resolver is added successfully.
+	 * @return whether the resolver is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
 	 */
@@ -499,7 +499,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 */
 	public void invalidate();
 
-	/** Interprets a script in the sepcified scripting language in
+	/** Interprets a script in the specified scripting language in
 	 * the context of the specified scope.
 	 *
 	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
@@ -532,7 +532,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @return the default scripting language, say, Java. Never null.
 	 */
 	public String getZScriptLanguage();
-	/** Sets the defafult scripting language which will be assumed
+	/** Sets the default scripting language which will be assumed
 	 * if a zscript element doesn't specify any language.
 	 *
 	 * @exception InterpreterNotFoundException if no such language

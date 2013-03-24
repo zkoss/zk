@@ -52,7 +52,7 @@ public class Attributes {
 </code></pre>
 	 *
 	 * <p>If you prefer to draw the desktop with the page, you can set the
-	 * vallue to <code>desktop</code>. By drawing the desktop, it means HTML and BODY
+	 * value to <code>desktop</code>. By drawing the desktop, it means HTML and BODY
 	 * tags will be generated, too.
 	 *
 	 * <p>If you prefer to draw the page only (such as being included),
@@ -93,7 +93,7 @@ public class Attributes {
 	 * However, if a ZUML page is included by other servlet (such as
 	 * JSP and DSP), this attribute won't be set.
 	 * If you set Cache-Control manually, you might also set
-	 * this attribute to save the use of memroy.
+	 * this attribute to save the use of memory.
 	 *
 	 * <pre><code>request.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);</code></pre>
 	 *
@@ -164,7 +164,7 @@ public class Attributes {
 
 	//URI//
 	/** A special prefix that is used if you want to inject a special
-	 * fragment into the URI of a clss Web resource (CWR).
+	 * fragment into the URI of a class Web resource (CWR).
 	 * The fragment is ignored with retrieving the file, so it can be anything
 	 * to make the browser consider it as a different URI.
 	 *
@@ -181,21 +181,21 @@ public class Attributes {
 	 */
 	public static final String PAGE_RENDERING = "org.zkoss.zk.ui.page.rendering";
 
-	/** A component attribute used to indicate whether to enable the stubing of
+	/** A component attribute used to indicate whether to enable the stubbing of
 	 * the native components.
 	 * <p>By default, the native component will be stub-ized, i.e., replaced
 	 * with a stateless component called {@link org.zkoss.zk.ui.sys.StubComponent},
 	 * such that the memory footprint will be minimized.
 	 * To stub-ize non-native, please use {@link org.zkoss.zk.ui.Component#setStubonly}.
-	 * <p>Default: true. Though rarely, you could disable the stubing by
+	 * <p>Default: true. Though rarely, you could disable the stubbing by
 	 * setting this attribute to false. For example, if you have a component that
-	 * has native childs, and you'd like to detach it and re-attach later.
+	 * has native children, and you'd like to detach it and re-attach later.
 	 * Since the server does not maintain the states, it cannot be restored when
 	 * attached back.
 	 * <p>It shall be set to a component's attribute, and it affects
 	 * all descendant components unless it was set explicitly.
 	 * <p>Default: true
-	 * <p>Avaialbe in ZK EE only.
+	 * <p>Available in ZK EE only.
 	 * @since 5.0.6
 	 */
 	public static final String STUB_NATIVE = "org.zkoss.zk.ui.stub.native";

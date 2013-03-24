@@ -26,7 +26,7 @@ import bsh.BshMethod;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.ext.Scope;
 
-/** Serializabe Namespace wrapper.
+/** Serializable Namespace wrapper.
  * Used to prevent to serialize NameSpace directly.
  * 
  * @author tomyeh
@@ -126,7 +126,7 @@ import org.zkoss.zk.ui.ext.Scope;
 					_pkgs.add(name);
 				}
 				public void loadDefaultImports() {
-					 //to speed up the formance
+					 //to speed up the performance
 				}
 			}, s);
 		}

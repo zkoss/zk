@@ -85,7 +85,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 		super.destroy();
 	}
 
-	/**TODO: need to digg out a solution from jruby's manual
+	/**TODO: need to dig out a solution from jruby's manual
 	public Class getClass(String clsnm) {
 	}
 	public Function getFunction(String name, Class[] argTypes) {

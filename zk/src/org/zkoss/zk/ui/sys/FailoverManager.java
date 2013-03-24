@@ -103,7 +103,7 @@ public interface FailoverManager {
 	 * <p><b>Recover Page</b></p>
 	 * <ul>
 	 * <li>[Must] Invoke {@link org.zkoss.zk.ui.impl.PageImpl#PageImpl(org.zkoss.zk.ui.metainfo.LanguageDefinition, org.zkoss.zk.ui.metainfo.ComponentDefinitionMap, String, String)}
-	 * (or your own implementaton) to create an instance of {@link org.zkoss.zk.ui.Page}.</li>
+	 * (or your own implementation) to create an instance of {@link org.zkoss.zk.ui.Page}.</li>
 	 * <li>[Must] Then, invoke {@link org.zkoss.zk.ui.sys.PageCtrl#init} to initialized the page.</li>
 	 * <li>[Optional] Recover page's attributes.</li>
 	 * </ul>

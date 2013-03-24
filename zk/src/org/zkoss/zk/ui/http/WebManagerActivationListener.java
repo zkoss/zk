@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 /**
- * A listener that will be invoked when the Web manager is created (aka.,
+ * A listener that will be invoked when the Web manager is created (a.k.a.,
  * activated).
  *
  * <p>To register a listener, use {@link WebManager#addActivationListener}.

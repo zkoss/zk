@@ -59,7 +59,7 @@ import org.zkoss.zk.au.AuService;
  * @author tomyeh
  */
 public interface Component extends Scope, java.io.Serializable, Cloneable {
-	/** Returns the widget class (aka., the widget type), or null
+	/** Returns the widget class (a.k.a., the widget type), or null
 	 * if not available.
 	 * The widget class is a JavaScript class, including the package name.
 	 * For example, "zul.wnd.Window".
@@ -77,7 +77,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see #setWidgetClass
 	 */
 	public String getWidgetClass();
-	/** Sets the widget class (aka., the widget type).
+	/** Sets the widget class (a.k.a., the widget type).
 	 * The widget class is a JavaScript class, including the package name.
 	 * For example, "zul.wnd.Window".
 	 * @param clsnm the widget's class name at the client side.
@@ -170,7 +170,7 @@ w:use="foo.MyWindow"&gt;
 	/** Returns the page that this component belongs to, or null if
 	 * it doesn't belong to any page.
 	 *
-	 * <p>When a component is created (aka., constructed), it doesn't
+	 * <p>When a component is created (a.k.a., constructed), it doesn't
 	 * belong to any page. And, if a component doesn't belong to
 	 * any page, they won't be displayed at the client.
 	 *
@@ -901,7 +901,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public void invalidate();
 
-	/** Initializes the properties (aka. members) 
+	/** Initializes the properties (a.k.a. members) 
 	 * based on what are defined in the component definition.
 	 *
 	 * <p>This method is invoked automatically if a component is created

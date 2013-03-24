@@ -180,7 +180,7 @@ public class Events {
 	 * @since 6.5.1
 	 */
 	public static final String ON_VISIBILITY_CHANGE = "onVisibilityChange";
-	/** The onCreate event (used with {@link CreateEvent}) to notify a compoent
+	/** The onCreate event (used with {@link CreateEvent}) to notify a component
 	 * that it (and its children) has been created by ZK's evaluating a ZUML page.
 	 */
 	public static final String ON_CREATE = "onCreate";
@@ -340,7 +340,7 @@ public class Events {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/** Sends the event to the target specified in the event, and processes it immedately.
+	/** Sends the event to the target specified in the event, and processes it immediately.
 	 *
 	 * <p>Note: {@link Event#getTarget} cannot be null.
 	 */
@@ -457,7 +457,7 @@ public class Events {
 	 * and then echoes back the event back.
 	 *
 	 * <p>It is usually if you want to prompt the user before doing a long
-	 * operation. A typical case is to open a hightlighted window to
+	 * operation. A typical case is to open a highlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
 	 * <p>It is the same as <code>echoEvent(name, target, (Object)data)</code>.
@@ -482,7 +482,7 @@ public class Events {
 	 * and then echoes back the event back.
 	 *
 	 * <p>It is usually if you want to prompt the user before doing a long
-	 * operation. A typical case is to open a hightlighted window to
+	 * operation. A typical case is to open a highlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
 	 * @since 5.0.4
@@ -499,7 +499,7 @@ public class Events {
 	 * and then echoes back the event back.
 	 *
 	 * <p>It is usually if you want to prompt the user before doing a long
-	 * operation. A typical case is to open a hightlighted window to
+	 * operation. A typical case is to open a highlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
 	 * @since 5.0.4

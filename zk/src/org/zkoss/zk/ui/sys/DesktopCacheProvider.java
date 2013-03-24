@@ -40,13 +40,13 @@ public interface DesktopCacheProvider {
 	public void sessionDestroyed(Session session);
 
 	/** Notification that the session is about to be passivated
-	 * (aka., serialized).
+	 * (a.k.a., serialized).
 	 *
 	 * <p>It is called when {@link org.zkoss.zk.ui.sys.WebAppCtrl#sessionWillPassivate} is called.
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session has just been activated
-	 * (aka., deserialized).
+	 * (a.k.a., deserialized).
 	 *
 	 * <p>It is called when {@link org.zkoss.zk.ui.sys.WebAppCtrl#sessionDidActivate} is called.
 	 */

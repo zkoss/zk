@@ -47,7 +47,7 @@ public interface EventQueue<T extends Event> {
 	/** Publishes an event to the queue.
 	 *
 	 * <p>If the scope of a event queue is desktop or group,
-	 * this method must be called within an activated exection
+	 * this method must be called within an activated execution
 	 * (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null),
 	 * or in an asynchronous listener (see {@link EventQueue}).
 	 *
@@ -71,7 +71,7 @@ public interface EventQueue<T extends Event> {
 	 * ({@link #subscribe(EventListener,boolean)}. In other words,
 	 * it subscribes a synchronous listener.
 	 *
-	 * <p>Note: this method must be called within an activated exection
+	 * <p>Note: this method must be called within an activated execution
 	 * (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null),
 	 * no matter what scope the event queue is.
 	 *
@@ -96,7 +96,7 @@ public interface EventQueue<T extends Event> {
 	
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
-	 * while an asynchronous listener is executed asynchrously in an working thread.
+	 * while an asynchronous listener is executed asynchronously in an working thread.
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>Here is an example,
 <pre><code>
@@ -159,7 +159,7 @@ public interface EventQueue<T extends Event> {
 
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
-	 * while an asynchronous listener is executed asynchrously in an working thread.
+	 * while an asynchronous listener is executed asynchronously in an working thread.
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>The use of synchronous listeners is straightforward -- they
 	 * are just the same a normal event listener.
@@ -197,7 +197,7 @@ public interface EventQueue<T extends Event> {
      }
    }, true); //asynchronous
 
-   //subscribe a normal listener to show the resul to the browser
+   //subscribe a normal listener to show the result to the browser
    eq.subscribe(new EventListener() {
      public void onEvent(Event evt) {
        if ("endLongOp".equals(evt.getName())) {
@@ -214,11 +214,11 @@ public interface EventQueue<T extends Event> {
   &lt;vbox id="inf"/&gt;
 &lt;/window&gt;
 </code></pre>
-	 * <p>The asynchornous event listener requires Server Push
+	 * <p>The asynchronous event listener requires Server Push
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}).
 	 * <p>If you want to show a busy message to cover a portion of the desktop,
 	 * use {@link org.zkoss.zk.ui.util.Clients#showBusy(org.zkoss.zk.ui.Component,String)}
-	 * <p>Note: this method must be called within an activated exection,
+	 * <p>Note: this method must be called within an activated execution,
 	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
 	 * <p>An event listener can be subscribed multiple times, and
 	 * it will be invoked multiple times if an event is published.
@@ -236,7 +236,7 @@ public interface EventQueue<T extends Event> {
 	public void subscribe(EventListener<T> listener, boolean async);
 	/** Unsubscribes a listener from the queue.
 	 *
-	 * <p>Note: this method must be called within an activated exection,
+	 * <p>Note: this method must be called within an activated execution,
 	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
 	 *
 	 * <p>Notice that this method only unsubscribes the listener

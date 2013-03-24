@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 public class Scopes {
 	private static final Log log = Log.lookup(Scopes.class);
 
-	/** A stack of implict objects ({@link Implicit}). */
+	/** A stack of implicit objects ({@link Implicit}). */
 	private static final ThreadLocal<List<Implicit>> _implicits = new ThreadLocal<List<Implicit>>();
 	/** A stack of current scope. */
 	private static final ThreadLocal<List<Scope>> _scopes = new ThreadLocal<List<Scope>>();

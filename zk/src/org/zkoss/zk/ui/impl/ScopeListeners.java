@@ -41,7 +41,7 @@ public class ScopeListeners {
 		_owner = owner;
 	}
 
-	/** Adds a scope listner.
+	/** Adds a scope listener.
 	 */
 	public boolean addScopeListener(ScopeListener listener) {
 		if (listener == null)
@@ -55,12 +55,12 @@ public class ScopeListeners {
 		_listeners.add(listener);
 		return true;
 	}
-	/** Adds a scope listner.
+	/** Adds a scope listener.
 	 */
 	public boolean removeScopeListener(ScopeListener listener) {
 		return _listeners != null && _listeners.remove(listener);
 	}
-	/** Returns a ist of all scope listners (never null).
+	/** Returns a list of all scope listeners (never null).
 	 */
 	public List<ScopeListener> getListeners() {
 		if (_listeners == null) _listeners = new LinkedList<ScopeListener>();

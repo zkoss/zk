@@ -35,7 +35,7 @@ public interface WebAppCtrl {
 	 * @param config the configuration (never null)
 	 */
 	public void init(Object context, Configuration config);
-	/** Destroys this Web applicaiton.
+	/** Destroys this Web application.
 	 * <p>Note; once destroyed, this instance cannot be used anymore.
 	 */
 	public void destroy();
@@ -123,11 +123,11 @@ public interface WebAppCtrl {
 	public void setAuDecoder(AuDecoder audec);
 
 	/** Notification that the session is about to be passivated
-	 * (aka., serialized).
+	 * (a.k.a., serialized).
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session has just been activated
-	 * (aka., deserialized).
+	 * (a.k.a., deserialized).
 	 */
 	public void sessionDidActivate(Session sess);
 

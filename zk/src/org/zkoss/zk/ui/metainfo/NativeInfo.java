@@ -102,7 +102,7 @@ public class NativeInfo extends ComponentInfo {
 	 *
 	 * <p>Note: if child belong to other {@link ComponentInfo},
 	 * you have to remove them first before calling this method.
-	 * Otherwise, the result is unpreditable.
+	 * Otherwise, the result is unpredictable.
 	 *
 	 * @param child the prolog child.
 	 * @see #getPrologChildren

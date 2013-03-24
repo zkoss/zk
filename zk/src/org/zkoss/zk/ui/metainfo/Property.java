@@ -37,9 +37,9 @@ import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
- * Information about how to initialize a property (aka., a field of a component).
+ * Information about how to initialize a property (a.k.a., a field of a component).
  * There are two kind of properties: one is a String instance (either
- * a string vaue or an expression), and the other is
+ * a string value or an expression), and the other is
  * a {@link NativeInfo} instance. The later is also called the native content.
  *
  * @author tomyeh
@@ -77,7 +77,7 @@ public class Property extends ConditionValue {
 	}
 	/** Constructs a property with the native content.
 	 * The native content is represented by {@link NativeInfo},
-	 * i.e., a XML fragment (aka., a tree of {@link ComponentInfo}.
+	 * i.e., a XML fragment (a.k.a., a tree of {@link ComponentInfo}.
 	 * @since 3.5.0
 	 */
 	public Property(EvaluatorRef evalr, String name, NativeInfo value,
@@ -159,7 +159,7 @@ public class Property extends ConditionValue {
 			throw new UnsupportedOperationException("native content");
 		return _value.getValue(_evalr, page);
 	}
-	/** Assigns the value of this memeber to the specified component.
+	/** Assigns the value of this member to the specified component.
 	 *
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
@@ -212,7 +212,7 @@ public class Property extends ConditionValue {
 		if (_lastcls == cls) {
 			mtd = _mtd;
 			mtds = _mtds;
-		} else { //two or more diff comp classes (use="${x?a:b}")
+		} else { //two or more different compopent classes (use="${x?a:b}")
 			//We don't cache methods for 2nd class (only cache 1st)
 			final Object[] mi = resolve(cls);
 			mtd = (Method)mi[0];
@@ -332,7 +332,7 @@ public class Property extends ConditionValue {
 	}
 
 	//static utilities//
-	/** Resloves the method for the specified property, or null
+	/** Resolves the method for the specified property, or null
 	 * if {@link DynamicPropertied#setDynamicProperty} shall be used instead.
 	 *
 	 * <p>Use this method to retrieve the method when you want to assign a value
@@ -343,7 +343,7 @@ public class Property extends ConditionValue {
 	 * @param name the property name, such as "title".
 	 * @exception PropertyNotFoundException if the property is not found,
 	 * i.e., no corresponding method and {@link DynamicPropertied} not
-	 * implmented.
+	 * implemented.
 	 * @since 3.5.0
 	 */
 	public static final Method resolveMethod(Class cls, String name)
@@ -368,12 +368,12 @@ public class Property extends ConditionValue {
 	}
 	/** Assigns a property.
 	 *
-	 * <p>Don't use the refelction directly since this method searches
+	 * <p>Don't use the reflection directly since this method searches
 	 * more signatures.
 	 *
 	 * @exception PropertyNotFoundException if the property is not found,
 	 * i.e., no corresponding method and {@link DynamicPropertied} not
-	 * implmented.
+	 * implemented.
 	 * @exception UiException if fail to assign
 	 * @since 3.5.0
 	 */

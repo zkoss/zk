@@ -47,7 +47,7 @@ public class AbortByRemoveDesktop implements AbortingReason {
 	public void finish() {
 		final Execution exec = Executions.getCurrent();
 
-		//Bug 1753712: disable visualizer since responses were gen.
+		//Bug 1753712: disable visualizer since responses were generated.
 		((ExecutionCtrl)exec).getVisualizer().disable();
 
 		//Bug 1868371: we shall postpone the cleanup to the last step

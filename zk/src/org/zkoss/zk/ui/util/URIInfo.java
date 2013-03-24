@@ -50,7 +50,7 @@ public class URIInfo {
 		this.uri = uri;
 		this.type = type;
 	}
-	/** Contructor.
+	/** Constructor.
 	 * It is equivalent to URIInfo(uri, SEND_REDIRECT).
 	 */
 	public URIInfo(String uri) {

@@ -19,7 +19,7 @@ package org.zkoss.zk.ui;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
 /**
- * Defines a genric richlet. Developers can use it as a skeleton to implement
+ * Defines a generic richlet. Developers can use it as a skeleton to implement
  * an application-specific richlet.
  *
  * @author tomyeh
@@ -39,7 +39,7 @@ abstract public class GenericRichlet implements Richlet {
 	 */
 	public void destroy() {
 	}
-	/** Returns the language defintion that this richlet belongs to.
+	/** Returns the language definition that this richlet belongs to.
 	 * Don't return null.
 	 *
 	 * <p> It is called when creating a new page for this richlet to serve.

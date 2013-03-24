@@ -91,7 +91,7 @@ public class AttributesInfo extends ConditionLeafInfo {
 		this(parent, attrs, scope, null, cond);
 	}
 
-	/** Returns the scope, or null if it is not assoicated with a scope.
+	/** Returns the scope, or null if it is not associated with a scope.
 	 * <p>Notice that, prior to 5.0.8, "component" is returned if
 	 * it is not associated with a scope (which is not correct since
 	 * this info might be associated with a page).

@@ -65,7 +65,7 @@ public class RequestInfoImpl implements RequestInfo {
 	public RequestInfoImpl(Desktop desktop, Object request, Locator locator) {
 		this(desktop.getWebApp(), desktop.getSession(), desktop, request, locator);
 	}
-	/** Construcotr.
+	/** Constructor.
 	 *
 	 * @param exec the current execution, never null
 	 * @param locator the locator used to locate taglib and other resources.

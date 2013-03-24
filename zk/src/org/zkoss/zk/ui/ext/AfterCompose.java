@@ -39,7 +39,7 @@ package org.zkoss.zk.ui.ext;
  *
  * <p>{@link AfterCompose} has to be implemented as part of
  * a component. On the other hand, {@link org.zkoss.zk.ui.util.Composer} is
- * an controller used to intiailize a component.
+ * an controller used to initialize a component.
  *
  * @author tomyeh
  * @see org.zkoss.zk.ui.util.Composer

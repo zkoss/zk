@@ -79,7 +79,7 @@ public class Executions {
 		return getCurrent().getEvaluator(comp, expfcls);
 	}
 
-	/** Evluates the specified expression by use of the current context
+	/** Evaluates the specified expression by use of the current context
 	 * ({@link #getCurrent}).
 	 *
 	 * <p>The function mapper is retrieved from component's page's function
@@ -98,7 +98,7 @@ public class Executions {
 	String expr, Class expectedType) {
 		return getCurrent().evaluate(comp, expr, expectedType);
 	}
-	/** Evluates the specified expression with the resolver of the current
+	/** Evaluates the specified expression with the resolver of the current
 	 * execution ({@link #getCurrent}).
 	 *
 	 * <p>The function mapper is retrieved from page's function
@@ -294,7 +294,7 @@ public class Executions {
 	 * from the specified page definition.
 	 *
 	 * <p>Unlike {@link #createComponents(PageDefinition,Component,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -327,7 +327,7 @@ public class Executions {
 	 * to create components.
 	 *
 	 * <p>Unlike {@link #createComponents(String,Component,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -356,13 +356,13 @@ public class Executions {
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(WebApp,String,String)}, and then
 	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * <p>Unlike {@link #createComponentsDirectly(String,String,Component,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -400,13 +400,13 @@ public class Executions {
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a DOM tree.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(WebApp,Document, String)}, and then
 	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * <p>Unlike {@link #createComponentsDirectly(Document,String,Component,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -446,13 +446,13 @@ public class Executions {
 	 *
 	 * <p>Unl
 	 *
-	 * <p>The raw content is loaded and parsed to a page defintion by use of
+	 * <p>The raw content is loaded and parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(WebApp,Reader,String)}, and then
 	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * <p>Unlike {@link #createComponentsDirectly(Reader,String,Component,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -490,7 +490,7 @@ public class Executions {
 	/** Returns the page definition from the page file specified by an URI.
 	 *
 	 * <p>Like {@link #createComponents(WebApp,PageDefinition,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -516,7 +516,7 @@ public class Executions {
 	/** Converts the specified page content to a page definition.
 	 *
 	 * <p>Like {@link #createComponents(WebApp,PageDefinition,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -548,7 +548,7 @@ public class Executions {
 	/** Converts the specified page content, in DOM, to a page definition.
 	 *
 	 * <p>Like {@link #createComponentsDirectly(WebApp,Document,String,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -581,7 +581,7 @@ public class Executions {
 	 * a page definition.
 	 *
 	 * <p>Like {@link #createComponentsDirectly(WebApp,Reader,String,Map)},
-	 * this method can be inovked without the current execution, such as
+	 * this method can be invoked without the current execution, such as
 	 * a working thread. In this case, the wapp argument must be specified.
 	 *
 	 * @param wapp the Web application. It is optional and used only if
@@ -788,7 +788,7 @@ public void run() {
 	public static final void notify(Desktop desktop, Object mutex) {
 		getUiEngine(desktop).notify(desktop, mutex);
 	}
-	/** Wakes up all event processing theads for the specified desktop
+	/** Wakes up all event processing threads for the specified desktop
 	 * that are waiting on the specified object.
 	 *
 	 * <p>Unlike {@link #notifyAll(Object)}, this method can be called any time.
@@ -854,11 +854,11 @@ public void run() {
 	 * if there is no current execution.
 	 *
 	 * <p>Alternative to {@link #schedule}, you could use {@link #activate}/{@link #deactivate}
-	 * if you prefer something to be done synchrnously.
+	 * if you prefer something to be done synchronously.
 	 *
 	 * <p>The server-push is disabled by default. To use it, you have to enable
 	 * it first with {@link Desktop#enableServerPush} for the given desktop.
-	 * Once enabled, you can use as many as sevrer-push threads you like
+	 * Once enabled, you can use as many as server-push threads you like
 	 * (for the desktop with the server-push feature enabled).
 	 *
 	 * @param task the task to execute
@@ -887,7 +887,7 @@ public void run() {
 	 *
 	 * <p>The server-push is disabled by default. To use it, you have to enable
 	 * it first with {@link Desktop#enableServerPush} for the given desktop.
-	 * Once enabled, you can use as many as sevrer-push threads you like
+	 * Once enabled, you can use as many as server-push threads you like
 	 * (for the desktop with the server-push feature enabled).
 	 *
 	 * <p>Before a thread, not running in the event listener of the given desktop,
@@ -921,7 +921,7 @@ public void run() {
 	 *
 	 * <p>Note: the access of components is sequentialized. That is,
 	 * at most one thread is activated. All others, including
-	 * the event listeners, have to wait util it is deactivated
+	 * the event listeners, have to wait until it is deactivated
 	 * (i.e., until {@link #deactivate} is called).
 	 * Thus, it is better to minimize the time remaining activated.
 	 * A typical practice is to create new components and manipulate them
@@ -955,7 +955,7 @@ public void run() {
 	 * or a certain amount of real time has elapsed.
 	 *
 	 * @param timeout the maximum time to wait in milliseconds.
-	 * Ingored (i.e., never timeout) if non-positive.
+	 * Ignored (i.e., never timeout) if non-positive.
 	 * @return whether it is activated or it is timeout.
 	 * The only reason it returns false is timeout.
 	 * @exception InterruptedException if it is interrupted by other thread

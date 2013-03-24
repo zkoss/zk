@@ -63,7 +63,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * Rather, you can extend from one of the following skeletons.
  * <dl>
  * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
- * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * <dd>It supports the autowiring based on Java annotation and a CSS3-based selector.
  * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
  * <dt>{@link GenericForwardComposer}</dt>
  * <dd>It supports the autowiring based on naming convention.
@@ -188,7 +188,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	protected transient Map<String, String[]> param;
 	
 	/** The separator used to separate the component ID and event name.
-	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * By default, it is '$'. For Groovy and other environment that '$'
 	 * is not applicable, you can specify '_'.
 	 */
 	protected /*final*/ char _separator;
@@ -196,7 +196,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * a member.
 	 */
 	private /*final*/ boolean _ignoreZScript; //don't make it final ZK Grails depends on it
-	/** Indicates whether to ignore variables defined in varible resolver
+	/** Indicates whether to ignore variables defined in variable resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 */
 	private /*final*/ boolean _ignoreXel;
@@ -206,7 +206,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript")),
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel")))</code>.
 	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
-	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * on the library variables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
 	 * they shall <t>not</t> be wired (i.e., shall be ignored)
@@ -224,13 +224,13 @@ implements ComponentCloneListener, ComponentActivationListener {
 	}
 	/** Constructor with a custom separator.
 	 * The separator is used to separate the component ID and event name.
-	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * By default, it is '$'. For Groovy and other environment that '$'
 	 * is not applicable, you can specify '_'.
 	 * <p>It is a shortcut of <code>GenericAutowireComposer('$',
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript")),
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel")))</code>.
 	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
-	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * on the library variables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
 	 * they shall <t>not</t> be wired (i.e., shall be ignored)
@@ -258,7 +258,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * Refer to {@link #_separator} for details.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
-	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * @param ignoreXel whether to ignore variables defined in variable resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 * @since 5.0.3
 	 */

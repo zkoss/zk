@@ -71,7 +71,7 @@ public class DefinitionLoaders {
 	private static volatile boolean _loaded, _loading;
 
 	//CONSIDER:
-	//Sotre language definitions per WebApp, since diff app may add its
+	//Store language definitions per WebApp, since different app may add its
 	//own definitions thru WEB-INF's lang-addon, or a JAR in WEB-INF/lib.
 	//
 	//CONSEQUENCE:

@@ -21,15 +21,15 @@ import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * An extra interface implemented by an interpreter ({@link Interpreter})
- * if it supports the hierachical scopes.
+ * if it supports the hierarchical scopes.
  *
- * <p>By supporting the hierachical scopes we mean the interpreter
+ * <p>By supporting the hierarchical scopes we mean the interpreter
  * associates one interpreter-dependent scope with each ZK's
  * {@link org.zkoss.zk.ui.IdSpace}. And, variables, classes and methods defined
  * in zscript are then stored in an individual scope depending on
  * the scope when calling {@link Interpreter#interpret}.
  *
- * <p>On the other hand, if the interpreter doesn't support the hierachical
+ * <p>On the other hand, if the interpreter doesn't support the hierarchical
  * scopes, it maintains only one global scope and all variables, classes
  * and functions are defined in the global scope.
  *
@@ -102,7 +102,7 @@ public interface HierachicalAware {
 	 * @param scope the scope used as a reference to identify the
 	 * correct scope for searching the method.
 	 * Note: this method doesn't look for any variable stored in scope.
-	 * @param argTypes the list of argument (aka., parameter) types.
+	 * @param argTypes the list of argument (a.k.a., parameter) types.
 	 * If null, Class[0] is assumed.
 	 * @since 5.0.0
 	 */

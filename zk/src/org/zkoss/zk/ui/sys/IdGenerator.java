@@ -80,7 +80,7 @@ public interface IdGenerator {
 	 *
 	 * <p>Default (if null is returned): ID is generated randomly.
 	 * In other words, the desktop's ID, by default, is not deterministic.
-	 * To have a deterministric value, you have to implement this method.
+	 * To have a deterministic value, you have to implement this method.
 	 *
 	 * <p>Notice that UUID cannot be empty and can only have alphanumeric characters or underscore
 	 * (i.e., a-z, A-Z, 0-9, and _).

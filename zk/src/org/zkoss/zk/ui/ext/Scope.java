@@ -37,7 +37,7 @@ public interface Scope {
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name);
-	/** Sets (aka., associates) the value for a custom attribute with this object (scope).
+	/** Sets (a.k.a., associates) the value for a custom attribute with this object (scope).
 	 * @return the previous value associated with the attribute, if any
 	 * @since 5.0.0
 	 */

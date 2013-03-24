@@ -83,7 +83,7 @@ public class ComponentRedraws {
 	public static final Writer getScriptBuffer() {
 		return _ctx.get().out;
 	}
-	/** Called after finsishing the redrawing.
+	/** Called after finishing the redrawing.
 	 * It must be called in the finally clause if {@link #beforeRedraw}
 	 * is called.
 	 * @return the snippet that shall be written to the HTML output.

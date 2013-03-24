@@ -33,7 +33,7 @@ public class UiException extends SystemException {
 	 */
 	public static class Aide {
 		/** Converts an exception to UiException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static UiException wrap(Throwable t) {
@@ -45,7 +45,7 @@ public class UiException extends SystemException {
 				Exceptions.wrap(t, UiException.class);
 		}
 		/** Converts an exception to UiException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static UiException wrap(Throwable t, String msg) {
@@ -57,7 +57,7 @@ public class UiException extends SystemException {
 				Exceptions.wrap(t, UiException.class, msg);
 		}
 		/** Converts an exception to UiException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static UiException wrap(Throwable t, int code, Object[] fmtArgs) {
@@ -69,7 +69,7 @@ public class UiException extends SystemException {
 				Exceptions.wrap(t, UiException.class, code, fmtArgs);
 		}
 		/** Converts an exception to UiException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static UiException wrap(Throwable t, int code, Object fmtArg) {
@@ -81,7 +81,7 @@ public class UiException extends SystemException {
 				Exceptions.wrap(t, UiException.class, code, fmtArg);
 		}
 		/** Converts an exception to UiException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static UiException wrap(Throwable t, int code) {

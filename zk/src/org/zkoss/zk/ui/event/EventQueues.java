@@ -110,7 +110,7 @@ public class EventQueues {
 	 * </ul>
 	 *
 	 * @param name the queue name.
-	 * @param scope the scope fo the event queue. Currently,
+	 * @param scope the scope of the event queue. Currently,
 	 * it supports {@link #DESKTOP}, {@link #GROUP},
 	 * {@link #SESSION}, and {@link #APPLICATION}.
 	 * Note: {@link #GROUP} requires ZK EE.
@@ -193,7 +193,7 @@ public class EventQueues {
 	}
 	/** Removes the event queue of the specified scope.
 	 * @param name the queue name.
-	 * @param scope the scope fo the event queue. Currently,
+	 * @param scope the scope of the event queue. Currently,
 	 * it supports {@link #DESKTOP}, {@link #GROUP},
 	 * {@link #SESSION}, and {@link #APPLICATION}.
 	 * Note: {@link #GROUP} requires ZK EE.

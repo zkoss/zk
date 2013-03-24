@@ -47,7 +47,7 @@ import org.zkoss.zk.fn.JspFns;
 /**
  * The extendlet to handle WCS (widget CSS).
  * Each language (such as zul) must have exactly one of WCS file to
- * generate all CSS for all widgets of a langauge.
+ * generate all CSS for all widgets of a language.
  *
  * @author tomyeh
  * @since 5.0.0

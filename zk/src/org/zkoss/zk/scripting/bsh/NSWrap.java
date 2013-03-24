@@ -15,7 +15,7 @@ package org.zkoss.zk.scripting.bsh;
 import bsh.NameSpace;
 import org.zkoss.zk.ui.ext.Scope;
 
-/** Non-serializabe Namespace wrapper.
+/** Non-serializable Namespace wrapper.
  * Used to prevent to serialize NameSpace directly.
  * 
  * @author tomyeh

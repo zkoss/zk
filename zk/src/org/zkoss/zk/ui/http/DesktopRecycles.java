@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.util.DesktopRecycle;
 
 /**
- * Utilties to handle {@link DesktopRecycle}.
+ * Utilities to handle {@link DesktopRecycle}.
  * @author tomyeh
  * @since 5.0.7
  */
