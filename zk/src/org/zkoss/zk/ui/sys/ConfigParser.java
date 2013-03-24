@@ -290,7 +290,17 @@ public class ConfigParser {
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
-			if ("listener".equals(elnm)) {
+			// B65-ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml may get overridden by default
+			//   config-name/depends elements were introduced to enforce that default configurations are  
+			//   loaded in the sequence of zul -> zkex -> zkmax. User-supplied ThemeProvider, ThemeRegistry,
+			//   and ThemeResolver will not get overridden by using flag variables. But multiple such
+			//   configurations in different metainfo/zk/zk.xml still needs to be resolved by the assistance
+			//   of config-name/depends.
+			if ("config-name".equals(elnm) ||
+				"depends".equals(elnm))
+				// known elements; not actual config items
+				continue;
+			else if ("listener".equals(elnm)) {
 				parseListener(config, el);
 			} else if ("richlet".equals(elnm)) {
 				final String clsnm =
