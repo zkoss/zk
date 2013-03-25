@@ -63,7 +63,7 @@ public interface EventQueueProvider {
 	 */
 	public <T extends Event> EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate);
 
-	/** Removes the event qeueue.
+	/** Removes the event queue.
 	 * @param name the name of the event queue.
 	 * @param scope the scope of the event queue.
 	 * It must support {@link EventQueues#DESKTOP} and {@link EventQueues#APPLICATION}.

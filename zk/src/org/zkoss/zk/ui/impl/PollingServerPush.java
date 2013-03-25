@@ -47,7 +47,7 @@ import org.zkoss.zk.au.out.AuScript;
  * for <code>1 x factor</code> seconds. Default: 5.
  * The larger the factor is, the longer delay it tends to be.</dd>
  *
- * <p>Another way to control the frequency is to instatiate an instance
+ * <p>Another way to control the frequency is to instantiate an instance
  * with {@link #PollingServerPush(int, int, int)}, and then assign it
  * with {@link org.zkoss.zk.ui.sys.DesktopCtrl#enableServerPush(ServerPush)}.
  *
@@ -66,7 +66,7 @@ public class PollingServerPush implements ServerPush {
 	private final List<ThreadInfo> _pending = new LinkedList<ThreadInfo>();
 	/** The active thread. */
 	private ThreadInfo _active;
-	/** The info to carray over from onPiggyback to the server-push thread. */
+	/** The info to carry over from onPiggyback to the server-push thread. */
 	private ExecutionCarryOver _carryOver;
 	private final int _min, _max, _factor;
 	/** A mutex that is used by this object to wait for the server-push thread
@@ -79,10 +79,10 @@ public class PollingServerPush implements ServerPush {
 	}
 	/**
 	 * @param min the minimal delay before sending the second polling request
-	 * (unit: miniseconds).
+	 * (unit: milliseconds).
 	 * If negative, the default is used (see {@link PollingServerPush}).
 	 * @param max the maximal delay before sending the second polling request
-	 * (unit: miniseconds).
+	 * (unit: milliseconds).
 	 * If negative, the default is used (see {@link PollingServerPush}).
 	 * @param factor the delay factor.
 	 * If negative, the default is used (see {@link PollingServerPush}).
@@ -117,7 +117,7 @@ public class PollingServerPush implements ServerPush {
 	protected void stopClientPush() {
 		Clients.response("zk.clientpush", new AuScript(null, getStopScript()));
 	}
-	/** Returns the JavaScript codes to enable (aka., start) the server push.
+	/** Returns the JavaScript codes to enable (a.k.a., start) the server push.
 	 * It is called by {@link #startClientPush} to prepare the script
 	 * of {@link AuScript} that will be sent to the client.
 	 */
@@ -153,7 +153,7 @@ public class PollingServerPush implements ServerPush {
 		return -1;
 	}
 			
-	/** Returns the JavaScript codes to disable (aka., stop) the server push.
+	/** Returns the JavaScript codes to disable (a.k.a., stop) the server push.
 	 * It is called by {@link #stopClientPush} to prepare the script
 	 * of {@link AuScript} that will be sent to the client.
 	 */

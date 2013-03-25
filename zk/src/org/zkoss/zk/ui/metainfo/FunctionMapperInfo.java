@@ -29,7 +29,7 @@ import org.zkoss.zk.xel.Evaluator;
 /**
  * A definition of the function mapper ({@link FunctionMapper}).
  *
- * <p>Note: we resolve the class by use fo Classes.forNameByThread.
+ * <p>Note: we resolve the class by using Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
  * Why not? Since there is no way to run zscript before the function-mapper
  * directive (and better performance).

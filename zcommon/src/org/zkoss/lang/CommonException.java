@@ -24,7 +24,7 @@ import org.zkoss.mesg.Messageable;
  * SystemException or CommonException.
  *
  * <p>SystemException indicates programming bugs, while
- * CommonException indicates exceptinal cases.
+ * CommonException indicates exceptional cases.
  *
  * @author tomyeh
  * @see SystemException

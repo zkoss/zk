@@ -96,7 +96,7 @@ public class InputEvent extends Event {
 		return _oldVal;
 	}
 	/** Returns whether this event is <code>onChanging</code>, and caused by
-	 * user's selecting a list of predefined values (aka., items).
+	 * user's selecting a list of predefined values (a.k.a., items).
 	 *
 	 * <p>It is always false if it is caused by the <code>onChange</code> event.
 	 *

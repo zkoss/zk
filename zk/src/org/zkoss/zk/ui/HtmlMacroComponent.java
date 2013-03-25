@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
- * The implemetation of a macro component for HTML-based clients.
+ * The implementation of a macro component for HTML-based clients.
  *
  * <p>Generally, a macro component is created automatically by ZK loader.
  * If a developer wants to create it manually, it has to instantiate from
@@ -95,7 +95,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		_props.put("includer", this);
 	}
 
-	/** Returns the component class (aka., widget type), "zk.Macro".
+	/** Returns the component class (a.k.a., widget type), "zk.Macro".
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {

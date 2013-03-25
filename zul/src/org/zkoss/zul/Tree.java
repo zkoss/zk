@@ -268,7 +268,7 @@ public class Tree extends MeshElement {
 		}
 	}
 	/**
-	 * Returens a map of current visible item.
+	 * Returns a map of current visible item.
 	 * @since 3.0.7
 	 */
 	Map<Treeitem, Boolean> getVisibleItems() {
@@ -473,7 +473,7 @@ public class Tree extends MeshElement {
 	public Paging getPagingChild() {
 		return _paging;
 	}
-	/** Returns the page size, aka., the number items per page.
+	/** Returns the page size, a.k.a., the number items per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 * @since 2.4.1
@@ -481,7 +481,7 @@ public class Tree extends MeshElement {
 	public int getPageSize() {
 		return inPagingMold() ? pgi().getPageSize(): 0;
 	}
-	/** Sets the page size, aka., the number items per page.
+	/** Sets the page size, a.k.a., the number items per page.
 	 * <p>Note: mold is "paging" and no external controller is specified.
 	 * @since 2.4.1
 	 */
@@ -639,7 +639,7 @@ public class Tree extends MeshElement {
 	}
 
 	/** Returns whether to grow and shrink vertical to fit their given space,
-	 * so called vertial flexibility.
+	 * so called vertical flexibility.
 	 *
 	 * <p>Note: this attribute is ignored if {@link #setRows} is specified
 	 *
@@ -649,7 +649,7 @@ public class Tree extends MeshElement {
 		return _vflex;
 	}
 	/** Sets whether to grow and shrink vertical to fit their given space,
-	 * so called vertial flexibility.
+	 * so called vertical flexibility.
 	 *
 	 * <p>Note: this attribute is ignored if {@link #setRows} is specified
 	 */
@@ -1475,7 +1475,7 @@ public class Tree extends MeshElement {
 	 * If you want it to re-render, you could assign the same model again
 	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 *
-	 * @param model the tree model to associate, or null to dis-associate
+	 * @param model the tree model to associate, or null to dissociate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0

@@ -17,7 +17,7 @@ package org.zkoss.zk.ui.ext.render;
 /**
  * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
  * if the component is able to generate the content directly.
- * In other words, it recogizes {@link org.zkoss.zk.ui.sys.HtmlPageRenders#isDirectContent}.
+ * In other words, it recognizes {@link org.zkoss.zk.ui.sys.HtmlPageRenders#isDirectContent}.
  * 
  * @author tomyeh
  * @since 5.0.0

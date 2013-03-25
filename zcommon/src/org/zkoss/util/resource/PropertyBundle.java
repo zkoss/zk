@@ -63,7 +63,7 @@ public class PropertyBundle {
 
 	/** The map of properties. */
 	private final Map<String, String> _map;
-	/** The locale of the boundle. */
+	/** The locale of the bundle. */
 	private final Locale _locale;
 
 	/** The key used to look up the cache. */
@@ -203,7 +203,7 @@ public class PropertyBundle {
 	}
 	/** Returns the locale of the bundle, or null if it is the default.
 	 * Note: it is value might not be the same as the locale being passed
-	 * to the constructor, because the contructor will do some fallback.
+	 * to the constructor, because the constructor will do some fallback.
 	 */
 	public final Locale getLocale() {
 		return _locale;

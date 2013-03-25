@@ -27,12 +27,12 @@ import org.zkoss.zk.ui.Execution;
  * minimize the overhead when calculating the performance data.
  *
  * <p>There are two kind of requests: loading a page (regular HTTP requests)
- * and AU updates (aka., Ajax requests).
+ * and AU updates (a.k.a., Ajax requests).
  * When loading a page, {@link #requestStartAtClient} might not be called
  * (since the browser doesn't carry the initial time in the request),
  * and the request ID will be the desktop's ID.
  * For AU updates, {@link #requestStartAtClient} must be called
- * and the request ID a desktop-wide uique ID to identify a request.
+ * and the request ID a desktop-wide unique ID to identify a request.
  *
  * <p>To monitor the performance of each event and execution, you
  * can also implement {@link ExecutionMonitor}.
@@ -66,7 +66,7 @@ public interface PerformanceMeter {
 	 * <p>Note to version prior to 3.0.8:<br/>
 	 * This method is introduced since 3.0.8.
 	 * Prior to 3.0.8, {@link #requestCompleteAtClient} is actually
-	 * the time when the client recieved the response rather than
+	 * the time when the client received the response rather than
 	 * when the response has been processed.
 	 *
 	 * @param requestId a desktop-wide unique ID to identify a request.

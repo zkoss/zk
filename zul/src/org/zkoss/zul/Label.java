@@ -72,13 +72,13 @@ public class Label extends XulElement {
 		}
 	}
 	/** Returns whether to preserve the new line and the white spaces at the
-	 * begining of each line.
+	 * beginning of each line.
 	 */
 	public boolean isMultiline() {
 		return _auxinf != null && _auxinf.multiline;
 	}
 	/** Sets whether to preserve the new line and the white spaces at the
-	 * begining of each line.
+	 * beginning of each line.
 	 */
 	public void setMultiline(boolean multiline) {
 		if ((_auxinf != null && _auxinf.multiline) != multiline) {

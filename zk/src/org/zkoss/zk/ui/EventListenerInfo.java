@@ -42,7 +42,7 @@ java.io.Serializable {
 		this.listener = listener;
 	}
 
-	//Utilties//
+	//Utilities//
 	/**
 	 * @param comp the component used to invoke ComponentSerializationListener.
 	 * Ignored if null.

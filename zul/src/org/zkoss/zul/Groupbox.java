@@ -16,13 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
-
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -137,7 +135,7 @@ public class Groupbox extends XulElement {
 	}
 	/** Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
-	 * a more sophisticated caption (aka., title).
+	 * a more sophisticated caption (a.k.a., title).
 	 * <p> It will be displayed before caption.
 	 * <p>Default: empty.
 	 * @since 6.0.0

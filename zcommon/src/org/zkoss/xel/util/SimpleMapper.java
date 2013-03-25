@@ -24,7 +24,7 @@ import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.FunctionMapperExt;
 
 /**
- * A simmple function mapper.
+ * A simple function mapper.
  *
  * @author tomyeh
  * @since 3.0.0

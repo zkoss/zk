@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * Represents a component is used to represent a broad range of tags.
  *
  * <p>For example, org.zkoss.zhtml.Raw is used to generate any HTML tags
- * that doesn't have the ZK counterpart. Rason: there are too many
+ * that doesn't have the ZK counterpart. Reason: there are too many
  * HTML extended tags available and developers might choose to use them.
  *
  * <p>How to use:

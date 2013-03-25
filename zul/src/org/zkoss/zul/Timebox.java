@@ -46,12 +46,12 @@ import org.zkoss.zul.mesg.MZul;
  * <p>Default {@link #getZclass}: z-timebox. (since 3.5.0)
  * 
  * <p>timebox supports below key events.
- * <lu>
+ * <ul>
  *  <li>0-9 : set the time digit depend on the position on the inner text box.
  * 	<li>up : increase time digit depend on the position on the inner text box.
  *  <li>down : decrease time digit depend on the position on the inner text box.
  * 	<li>delete : clear the time to empty (null)
- * </lu>
+ * </ul>
  *
  * <p>Like {@link Combobox} and {@link Datebox},
  * the value of a read-only time box ({@link #isReadonly}) can be changed
@@ -64,7 +64,7 @@ import org.zkoss.zul.mesg.MZul;
 public class Timebox extends FormatInputElement {
 	/*package*/ static final String DEFAULT_FORMAT = "HH:mm";
 	private TimeZone _tzone;
-	/** The locale assoicated with this timebox. */
+	/** The locale associated with this timebox. */
 	private Locale _locale;
 	private boolean _btnVisible = true;
 	private static Date _dummyDate = new Date();
@@ -181,7 +181,7 @@ will be used to retrieve the real format.
 	}
 
 	/** Returns the value (in Date), might be null unless
-	 *  a constraint stops it. And, only Hour and Mintue field is effective.
+	 *  a constraint stops it. And, only Hour and Minute field is effective.
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Date getValue() throws WrongValueException {
@@ -189,7 +189,7 @@ will be used to retrieve the real format.
 	}
 	/** Sets the value (in Date).
 	 * If value is null, then an empty will be sent(render) to client.
-	 * If else, only the Hour and Mintue field will be sent(render) to client. 
+	 * If else, only the Hour and Minute field will be sent(render) to client. 
 	 * 
 	 * @exception WrongValueException if value is wrong
 	 */

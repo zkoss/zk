@@ -20,7 +20,7 @@ import java.io.Reader;
 import java.io.InputStream;
 
 /**
- * Represents any multi-medai, such as a voice, a pdf file, an excel file,
+ * Represents any multi-media, such as a voice, a pdf file, an excel file,
  * an image and so on.
  *
  * <p>By implementing this interface, objects can be processed generically
@@ -29,7 +29,7 @@ import java.io.InputStream;
  * @author tomyeh
  */
 public interface Media {
-	/** Returns whether the format of tis content is binary or text-based.
+	/** Returns whether the format of this content is binary or text-based.
 	 * If true, use {@link #getByteData} or {@link #getStreamData}
 	 * to retrieve its content.
 	 * If false, use {@link #getStringData} or {@link #getReaderData}

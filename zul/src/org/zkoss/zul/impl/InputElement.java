@@ -334,7 +334,7 @@ implements Constrainted, Readonly, Disable {
 	protected void validate(Object value) throws WrongValueException {
 		final Constraint constr = getConstraint();
 		if (constr != null) { //then _auxinf must be non-null
-			//Bug 1698190: contructor might be zscript
+			//Bug 1698190: constructor might be zscript
 			Scopes.beforeInterpret(this);
 			try {
 				constr.validate(this, value);
@@ -594,7 +594,7 @@ implements Constrainted, Readonly, Disable {
 	}
 
 	/** Returns the current content of this input is correct.
-	 * If the content is not correct, next call to the getvalue method will
+	 * If the content is not correct, next call to the getValue method will
 	 * throws WrongValueException.
 	 */
 	public boolean isValid() {
@@ -664,7 +664,7 @@ implements Constrainted, Readonly, Disable {
 	
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
-	 * this methid is called when {@link #getText} or {@link #getTargetValue} is
+	 * this method is called when {@link #getText} or {@link #getTargetValue} is
 	 * called.
 	 *
 	 * <p>Derives rarely need to access this method if they use only

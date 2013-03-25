@@ -327,13 +327,13 @@ public interface ComponentCtrl {
 		String propName, String annotName, Map<String, String[]> annotAttrs);
 
 	/** Notification that the session, which owns this component,
-	 * is about to be passivated (aka., serialized).
+	 * is about to be passivated (a.k.a., serialized).
 	 *
 	 * <p>Note: only root components are notified by this method.
 	 */
 	public void sessionWillPassivate(Page page);
 	/** Notification that the session, which owns this component,
-	 * has just been activated (aka., deserialized).
+	 * has just been activated (a.k.a., deserialized).
 	 *
 	 * <p>Note: only root components are notified by this method.
 	 */
@@ -376,7 +376,7 @@ public interface ComponentCtrl {
 	 */
 	public WrongValueException onWrongValue(WrongValueException ex);
 
-	/** Render (aka., redraw) this component and all its descendants.
+	/** Render (a.k.a., redraw) this component and all its descendants.
 	 *
 	 * <p>It is called in the redrawing phase by the kernel, so it is too late
 	 * to call {@link Component#invalidate()},

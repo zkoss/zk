@@ -97,7 +97,7 @@ public class InterpreterNotFoundException extends UiException {
 		_lang = lang;
 	}
 
-	/** Returns the lanaugage that is not found.
+	/** Returns the language that is not found.
 	 */
 	public String getLanguage() {
 		return _lang;

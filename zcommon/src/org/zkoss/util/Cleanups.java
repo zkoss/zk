@@ -19,7 +19,7 @@ import org.zkoss.util.logging.Log;
 
 /**
  * Utilities to clean up resources when the application is stopping.
- * Currenly, when a ZK application is stopping, ZK will invoke {@link #cleanup}.
+ * Currently, when a ZK application is stopping, ZK will invoke {@link #cleanup}.
  * Thus you can register an implementation of {@link Cleanup}
  * to release the resources.
  * <p>Notice that this utility is introduced mainly to resolve
@@ -39,7 +39,7 @@ public class Cleanups {
 
 	/** Registers a cleanup.
 	 * @return true if it is added successfully, or false if the cleanup
-	 * has been regsitered before.
+	 * has been registered before.
 	 */
 	public static boolean add(Cleanup cleanup) {
 		if (cleanup == null)

@@ -176,7 +176,7 @@ public class Script extends AbstractComponent {
 	 * <p>Default: null.
 	 *
 	 * <p>Deriving class can override this method to return whatever
-	 * it prefers (ingored if null).
+	 * it prefers (ignored if null).
 	 * @since 3.0.0
 	 */
 	public String getContent() {

@@ -179,7 +179,7 @@ import org.zkoss.zk.au.out.*;
 	 * <p>Note:
 	 * <ol>
 	 * <li>It always returns true if the current execution is not an
-	 * asynchroous update.</li>
+	 * asynchronous update.</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
 	 * too, but this method returns false since {@link #addInvalidate(Compnent)}
 	 * was not called against this component.</li>
@@ -270,7 +270,7 @@ import org.zkoss.zk.au.out.*;
 				new TimedValue(_timed++, comp, attr, value, priority));
 	}
 	/** Sets whether to disable the update of the client widget.
-	 * By default, if a component is attached to a page, modications that
+	 * By default, if a component is attached to a page, modifications that
 	 * change the visual representation will be sent to the client to
 	 * ensure the consistency.
 	 *
@@ -605,16 +605,16 @@ import org.zkoss.zk.au.out.*;
 			_idChgd = null; //just in case
 		}
 
-		//1. process dead comonents, cropping and the removed page
+		//1. process dead components, cropping and the removed page
 		final Map<Component, Set<? extends Component>> croppingInfos;
 		{
-			//1a. handle _detached to remove unncessary detach
+			//1a. handle _detached to remove unnecessary detach
 			doDetached();
 				//after call, _detached is merged to _moved
 
 			//1b. handle _moved
 			//The reason to remove first: some insertion might fail if the old
-			//componetns are not removed yet
+			//components are not removed yet
 			//Also, we have to remove both parent and child because, at
 			//the client, they might not be parent-child relationship
 			Set<Component> removed = doMoved(responses);
@@ -622,7 +622,7 @@ import org.zkoss.zk.au.out.*;
 				//And, AuRemove is generated (we have to generate AuRemove first,
 				//since UUID might be reused)
 
-			//1c. remove reduntant
+			//1c. remove redundant
 			removeRedundant();
 
 			//1d. process Cropper
@@ -642,7 +642,7 @@ import org.zkoss.zk.au.out.*;
 			clearInInvalidPage(_smartUpdated.keySet());
 		}
 
-		//2b. remove pages. Note: we don't need to generate rm, becausee they
+		//2b. remove pages. Note: we don't need to generate rm, because they
 		//are included pages.
 		if (_pgRemoved != null) {
 			final DesktopCtrl dtctl = (DesktopCtrl)_exec.getDesktop();
@@ -660,7 +660,7 @@ import org.zkoss.zk.au.out.*;
 		}
 
 /*		if (log.finerable())
-			log.finer("After removing redudant: invalidated: "+_invalidated
+			log.finer("After removing redundant: invalidated: "+_invalidated
 			+"\nAttached: "+_attached+"\nSmartUpd:"+_smartUpdated);
 */
 		//4. process special interfaces
@@ -752,7 +752,7 @@ import org.zkoss.zk.au.out.*;
 		return responses;
 	}
 
-	/** Porcess detached components.
+	/** Process detached components.
 	 * After called, _detached is merged backed to _moved if it is required
 	 */
 	private void doDetached() {
@@ -762,7 +762,7 @@ import org.zkoss.zk.au.out.*;
 			for (;p != null; p = p.getParent())
 				if (_moved.contains(p) || _detached.containsKey(p)
 				|| _invalidated.contains(p) || _attached.contains(p))
-					continue l_out; //don't merge (ingore it)
+					continue l_out; //don't merge (ignore it)
 
 			_moved.add(me.getKey()); //merge
 		}
@@ -771,7 +771,7 @@ import org.zkoss.zk.au.out.*;
 	/** process moved components.
 	 *
 	 * <p>After called, _moved becomes empty.
-	 * If they are removed, correponding AuRemove are generated.
+	 * If they are removed, corresponding AuRemove are generated.
 	 * If not, they are added to _attached.
 	 *
 	 * @return the dead components (i.e., not belong to any page)
@@ -865,7 +865,7 @@ import org.zkoss.zk.au.out.*;
 				|| (sibs != null && !sibs.contains(prv))) //prv is not available
 					throw new UiException("Inserting a component before a native one not allowed: "+nxt);
 
-				//prv is avaiable, so use AuInsertAfter prv instead
+				//prv is available, so use AuInsertAfter prv instead
 				responses.add(new AuInsertAfter(prv, contents));
 			} else {
 				//use AuInsertBefore nxt

@@ -167,7 +167,7 @@ public interface Binder {
 	/**
 	 * Add new property-save-bindings. 
 	 * It creates a prompt|conditional property-save-binding depends on beforeCmds and afterCmds.
-	 * If both beforeCmds and afterCmds are null or mepty, it create a prompt binding.
+	 * If both beforeCmds and afterCmds are null or empty, it create a prompt binding.
 	 * 
 	 * @param comp the associated component, must not null
 	 * @param attr the associated attribute of the component; ex value, check, must not null
@@ -337,14 +337,14 @@ public interface Binder {
 	/**
 	 * send command fired to this binder and process the command immediately
 	 * @param command command name
-	 * @param args , arguments when notifing this command, it will be passed as a arguments of execution method of vm
+	 * @param args , arguments when notifying this command, it will be passed as a arguments of execution method of vm
 	 */
 	public void sendCommand(String command, Map<String, Object> args);
 	
 	/**
 	 * post command this binder, binder will queue the command, and fired later.
 	 * @param command command name
-	 * @param args , arguments when notifing this command, it will be passed as a arguments of execution method of vm
+	 * @param args , arguments when notifying this command, it will be passed as a arguments of execution method of vm
 	 */
 	public void postCommand(String command, Map<String, Object> args);
 	

@@ -78,7 +78,7 @@ public interface UiFactory {
 	 * the page definition from a ZUML page.
 	 *
 	 * @param bRichlet the default value that this method shall return.
-	 * It is a suggetion. If you don't know what to do, just return bRichlet.
+	 * It is a suggestion. If you don't know what to do, just return bRichlet.
 	 * @return true if it is a richlet, or false if it is a ZUML page.
 	 */
 	public boolean isRichlet(RequestInfo ri, boolean bRichlet);
@@ -126,7 +126,7 @@ public interface UiFactory {
 	 * applied to the new component.
 	 *
 	 * @param page the page that the new component belongs to (never null).
-	 * @param parent the parent compoent, or null if the new component is root.
+	 * @param parent the parent component, or null if the new component is root.
 	 * @param compInfo the component information
 	 * @since 6.0.0
 	 */
@@ -142,7 +142,7 @@ public interface UiFactory {
 	 * applied to the new component.
 	 *
 	 * @param page the page that the new component belongs to (never null).
-	 * @param parent the parent compoent, or null if the new component is root.
+	 * @param parent the parent component, or null if the new component is root.
 	 * @param clsnm the implementation class of the component.
 	 * If null, {@link ComponentDefinition#getImplementationClass} will
 	 * be used.

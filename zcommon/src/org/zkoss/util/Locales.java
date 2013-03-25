@@ -176,7 +176,7 @@ public class Locales {
 			_founds.put(ls[j], ls[j]);
 	}
 
-	/** Returns any occurence of the specified Locale or any its fallback
+	/** Returns any occurrence of the specified Locale or any its fallback
 	 * in the value collection, or null if not found.
 	 * By fallback, we mean will try without variant and country.
 	 * Example, if locale is zh_TW, it will try zh_TW and then zh.

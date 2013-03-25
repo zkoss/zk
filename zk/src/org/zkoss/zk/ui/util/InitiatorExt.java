@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Component;
  * @since 3.0.0
  */
 public interface InitiatorExt {
-	/** Called after all components are created (aka., composed),
+	/** Called after all components are created (a.k.a., composed),
 	 * and before any event is processed.
 	 *
 	 * <p>It won't be called if an un-caught exception occurs when creating

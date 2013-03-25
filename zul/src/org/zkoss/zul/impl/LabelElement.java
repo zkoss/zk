@@ -55,7 +55,7 @@ abstract public class LabelElement extends XulElement {
 	}
 	/** Renders the crawlable information.
 	 * It is called by {@link #renderProperties},
-	 * and designed to be overriden if the deriving class wants to generate
+	 * and designed to be overridden if the deriving class wants to generate
 	 * it differently.
 	 * <p>Default: <code>org.zkoss.zul.impl.Utils.renderCrawlableText(label)</code>
 	 * @since 5.0.5

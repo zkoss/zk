@@ -44,7 +44,7 @@ import org.zkoss.zkplus.spring.SpringUtil;
 
 /**
  * <p>Listener to copy servlet thread ThreadLocal, securityContext, over to 
- * event thread ThreadLocal and handle Acegi Authentication Exception occured in
+ * event thread ThreadLocal and handle Acegi Authentication Exception occurred in
  * Event handling (e.g. Acegi's MethodInterceptor).
  * </p>
  * <p>
@@ -93,7 +93,7 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 			
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 
-		//handle Acegi Exception occured within Event handling
+		//handle Acegi Exception occurred within Event handling
 		final Execution exec = Executions.getCurrent();
 		if (errs != null && !errs.isEmpty() && errs.size() == 1) {
 			Throwable ex = (Throwable) errs.get(0);
@@ -105,7 +105,7 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 					//to rethrow the exception so Acegi's ExcepitonTranslationFilter can
 					//catch that and show login window.
 
-					//to avoid show the massaged visula message
+					//to avoid show the massaged visual message
 					errs.clear();
 
 					exec.setAttribute(ZkEventExceptionFilter.EXCEPTION, ex);

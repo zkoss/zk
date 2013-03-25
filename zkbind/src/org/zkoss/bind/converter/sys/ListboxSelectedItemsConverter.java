@@ -40,7 +40,7 @@ public class ListboxSelectedItemsConverter implements Converter, java.io.Seriali
 		Listbox lbx = (Listbox) comp;
 		final ListModel<?> model = lbx.getModel();
 		if(model !=null && !(model instanceof Selectable)){
-			//model has to imple Selectable if binding to selectedItems
+			//model has to implement Selectable if binding to selectedItems
   			throw new UiException("model doesn't implement Selectable");
   		}
 		

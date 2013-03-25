@@ -59,7 +59,7 @@ public interface ServerPush {
 	 */
 	public boolean isActive();
 
-	/** Stats and initializes the server-push controller.
+	/** Starts and initializes the server-push controller.
 	 * One server-push controller is associated with exactly one desktop.
 	 *
 	 * <p>{@link #start} is called when {@link Desktop#enableServerPush}
@@ -108,7 +108,7 @@ public interface ServerPush {
 	 * Rather, it is called in the thread of a server-push thread.
 	 *
 	 * @param timeout the maximum time to wait in milliseconds.
-	 * Ingored (i.e., never timeout) if non-positive.
+	 * Ignored (i.e., never timeout) if non-positive.
 	 * @exception InterruptedException if it is interrupted by other thread
 	 * @exception DesktopUnavailableException if the desktop is removed
 	 * (when activating).
@@ -117,7 +117,7 @@ public interface ServerPush {
 	 */
 	public boolean activate(long timeout)
 	throws InterruptedException, DesktopUnavailableException;
-	/** Deactvates the current thread (which must be a server-push thread).
+	/** Deactivates the current thread (which must be a server-push thread).
 	 *
 	 * @param stop whether to stop after deactivate
 	 * @return true if it is stopped

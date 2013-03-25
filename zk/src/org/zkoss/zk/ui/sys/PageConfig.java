@@ -27,7 +27,7 @@ import java.util.Collection;
  */
 public interface PageConfig {
 	/** Returns the page identifier, or null if auto-generation is required.
-	 * It is the identifier set by the appplication developer.
+	 * It is the identifier set by the application developer.
 	 * If null, the implementation of {@link PageCtrl#init} shall generate
 	 * one automatically.
 	 *
@@ -64,7 +64,7 @@ public interface PageConfig {
 
 	/** Returns the content that shall be generated inside the head element
 	 * and before ZK's default tags (never null).
-	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
 	 *
 	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
 	 * it cannot override ZK's default behaviors.
@@ -75,7 +75,7 @@ public interface PageConfig {
 	public String getBeforeHeadTags();
 	/** Returns the content that shall be generated inside the head element
 	 * and after ZK's default tags (never null).
-	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
 	 *
 	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
 	 * it could override ZK's default behaviors.
@@ -91,7 +91,7 @@ public interface PageConfig {
 	 * The second element of the array is the value which is an instance of
 	 * {@link java.util.Date} or {@link String} (and never null).
 	 * The third element indicates whether to add (rather than set)
-	 * theader. It is an instance of Boolean (and never null).
+	 * header. It is an instance of Boolean (and never null).
 	 * @since 5.0.2
 	 */
 	public Collection<Object[]> getResponseHeaders();

@@ -58,7 +58,7 @@ public interface ExtendletContext {
 	 * @param uri it must be empty or starts with "/". It might contain
 	 * "*" for current browser code and Locale.
 	 * @return the complete URL (excluding the machine name).
-	 * It includes the context path and the servelt to interpret
+	 * It includes the context path and the servlet to interpret
 	 * this extended resource.
 	 */
 	public String encodeURL(ServletRequest request,
@@ -107,7 +107,7 @@ public interface ExtendletContext {
 	/** Returns the servlet context.
 	 */
 	public ServletContext getServletContext();
-	/** Returns the locator of this context used to locate resorces.
+	/** Returns the locator of this context used to locate resources.
 	 *
 	 * <p>Unlike {@link #getResource} and {@link #getResourceAsStream},
 	 * {@link #getLocator} doesn't handle the JavaScript debugging.
@@ -116,7 +116,7 @@ public interface ExtendletContext {
 	/** Tests whether to compress the specified extension, e.g, "js" and
 	 * "css".
 	 *
-	 * <p>It returns false if the request is included by other Serlets.
+	 * <p>It returns false if the request is included by other Servlets.
 	 */
 	public boolean shallCompress(ServletRequest request, String ext);
 }

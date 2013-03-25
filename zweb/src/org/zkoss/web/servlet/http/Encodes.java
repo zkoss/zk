@@ -69,7 +69,7 @@ public class Encodes {
 		int j = 0, k = 0;
 		for (; j < in.length; ++j) {
 			//Though it is ok to use '+' for ' ', Jetty has problem to
-			//handle space between chinese characters.
+			//handle space between Chinese characters.
 			final char cc = (char)(((int)in[j]) & 0xff);
 			if (cc >= 0x80 || cc <= ' '
 			|| Arrays.binarySearch(unsafes, cc) >= 0) {
@@ -469,7 +469,7 @@ public class Encodes {
 				}
 				ctxpathSpecified = true;
 			} else if (Https.isIncluded(request) || Https.isForwarded(request)) {
-				//if reletive URI and being included/forwarded,
+				//if relative URI and being included/forwarded,
 				//converts to absolute
 				String pgpath = Https.getThisServletPath(request);
 				if (pgpath != null) {

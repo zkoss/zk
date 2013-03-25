@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.Component;
  * </ol>
  *
  * <p>In addition to resuming normally, a suspended event thread might be aborted
- * (usually caused by detroying the desktop owning the event thread).
+ * (usually caused by destroying the desktop owning the event thread).
  * In this case, {@link #abortResume} is called instead of {@link #beforeResume}
  * and {@link #afterResume}.
  *

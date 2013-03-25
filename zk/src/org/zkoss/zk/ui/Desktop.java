@@ -87,8 +87,8 @@ public interface Desktop extends Scope {
 	 * It is unique in the whole session.
 	 */
 	public String getId();
-	/** Returns the execution, or null if this desktop is not under
-	 * seving any execution (aka., not locked).
+	/** Returns the execution, or null if this desktop is not 
+	 * serving any execution (a.k.a., not locked).
 	 */
 	public Execution getExecution();
 	/** Returns the session of this desktop.

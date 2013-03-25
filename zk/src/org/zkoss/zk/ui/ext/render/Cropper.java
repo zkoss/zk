@@ -60,7 +60,7 @@ public interface Cropper {
 	public Set<? extends Component> getAvailableAtClient();
 	/** Returns the owner of the cropping scope.
 	 * In most cases, {@link #getAvailableAtClient} returns only the
-	 * available direct children of this compnent,
+	 * available direct children of this component,
 	 * and this method returns this component.
 	 * It is so-called a single-level cropping, such as listbox and tree.
 	 *

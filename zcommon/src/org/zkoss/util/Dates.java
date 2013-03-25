@@ -32,9 +32,9 @@ public class Dates {
 	/**
 	 * Truncates date to the nearest precision milliseconds. MS SQLServer2000
 	 * with only the maximum accuracy of 1/300 seconds would not be able to
-	 * store up to one millisecond accurarcy. That is, User must round the
+	 * store up to one millisecond accuracy. That is, User must round the
 	 * millisecond to some less precisions; or the data in that db would be
-	 * inconsistence with that in memory.
+	 * inconsistent with that in memory.
 	 * It is useful to store a Date object in a database.
 	 * Without rounding, if you want to get it back and compare with the
 	 * one in the memory. See {@link #now} for details.
@@ -72,7 +72,7 @@ public class Dates {
 	 * which will be stored in the database and want to compare it with
 	 * something with what you store in the database. Otherwise, that you
 	 * get back the one you store might be different, because the resolution
-	 * of database timestamp is usually less than one milisecond,
+	 * of database timestamp is usually less than one millisecond,
 	 * e.g., MS SQL: 0.003 second.
 	 *
 	 * <p>If you don't cache it in the memory (remember entity beans
@@ -96,7 +96,7 @@ public class Dates {
 	}
 
 	/**
-	 * Given a date, return the previouse date of the given date (24 hrs before).
+	 * Given a date, return the previous date of the given date (24 hrs before).
 	 */
 	final public static Date previousDate(Date when) {
 		long time = when.getTime() - 24*60*60*1000;
@@ -184,7 +184,7 @@ public class Dates {
 	}
 	/**
 	 * Given a date, a proper TimeZone, return the beginning date of 
-	 * the specified date and TimeZone. If TimeZone is null, meaning use Defult
+	 * the specified date and TimeZone. If TimeZone is null, meaning use Default
 	 * TimeZone of the JVM.
 	 */
 	final public static Date beginOfDate(Date when, TimeZone tz) {
@@ -204,7 +204,7 @@ public class Dates {
 
 	/**
 	 * Given a date, a proper TimeZone, return the last millisecond date of 
-	 * the specified date and TimeZone. If TimeZone is null, meaning use Defult
+	 * the specified date and TimeZone. If TimeZone is null, meaning use Default
 	 * TimeZone of the JVM.
 	 */
 	final public static Date endOfDate(Date when, TimeZone tz) {
@@ -276,7 +276,7 @@ public class Dates {
 		return twoMonthShort(new Date(), null);
 	}
 	/**
-	 * Given a date, a proper TimeZone, return the two month int. eg. 1, 3, 5, 7, 9, 11.
+	 * Given a date, a proper TimeZone, return the two month int. e.g. 1, 3, 5, 7, 9, 11.
 	 * If TimeZone is null, meaning use default TimeZone of the JVM.
 	 */
 	final public static short twoMonthShort(Date when, TimeZone tz) {
@@ -307,7 +307,7 @@ public class Dates {
 	/**
 	 * Get the year of a date in the specified locale.
 	 *
-	 * <p>Currenty, only Locale.ZH_TW is supported, i.e.,
+	 * <p>Currently, only Locale.ZH_TW is supported, i.e.,
 	 * "year - 1911" and it's may be less than 0. Otherwise, it is the same
 	 * as {@link #yearOfDate}.
 	 *

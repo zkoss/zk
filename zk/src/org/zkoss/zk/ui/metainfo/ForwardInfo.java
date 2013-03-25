@@ -45,7 +45,7 @@ public class ForwardInfo { //directive
 	public String getURI() {
 		return _uri.getRawValue();
 	}
-	/** Evaluates and returns the URI, or null if not to foward.
+	/** Evaluates and returns the URI, or null if not to forward.
 	 *
 	 * <p>Note: if URI contains EL expressions and is evaluated to an empty
 	 * string, this method returns null to indicate no need to forward.

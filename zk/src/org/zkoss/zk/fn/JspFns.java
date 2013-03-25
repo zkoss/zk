@@ -153,7 +153,7 @@ public class JspFns {
 	 * instead.
 	 * 
 	 * @param response the servlet response (never null)
-	 * @param prop the name of the propery to check if the headers
+	 * @param prop the name of the property to check if the headers
 	 * shall be generated. If null, it is always generated.
 	 * If "false" is specified with this property, this method won't
 	 * generate anything. In other words, "false" means to disable the cache.
@@ -235,7 +235,7 @@ public class JspFns {
 	 * <p>It first check if <tt>org.zkoss.web.classWebResource.cache</tt>
 	 * is turned off, and then check how many hours specified in
 	 * <tt>org.zkoss.web.classWebResource.cache.CSS.hours</tt>.
-	 * If it is turned off or the value of hours is non-postive, nothing is generated
+	 * If it is turned off or the value of hours is non-positive, nothing is generated
 	 * Otherwise, it generates the header with the specified hours
 	 * (default: 8760).
 	 * @see #setCWRCacheControl
@@ -251,7 +251,7 @@ public class JspFns {
 	 * <p>It first check if <tt>org.zkoss.web.classWebResource.cache</tt>
 	 * is turned off, and then check how many hours specified in
 	 * <tt>org.zkoss.web.classWebResource.cache.CSS.hours</tt>.
-	 * If it is turned off or the value of hours is non-postive, nothing is generated
+	 * If it is turned off or the value of hours is non-positive, nothing is generated
 	 * Otherwise, it generates the header with the specified hours
 	 * (default: 8760).
 	 * @return whether HttpServletResponse.SC_NOT_MODIFIED is set.

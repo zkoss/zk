@@ -23,7 +23,7 @@ import java.util.AbstractSet;
  * filtering).
  * For example, if you allow the value to have EL expressions and want to
  * evaluate it before returning, then
- * you could implemnent {@link Filter} to evaluate the value when the value
+ * you could implement {@link Filter} to evaluate the value when the value
  * is retrieved. Then, encapsulate the original map with this class. For example,
  * <pre><code>
  return new FilterMap(map,
@@ -35,7 +35,7 @@ import java.util.AbstractSet;
 </code></pre>
  *
  * <p>Notice that this map is readonly, and it is thread-safe if
- * the give map and the fitler are both thread safe.
+ * the give map and the filter are both thread safe.
  *
  * @author tomyeh
  * @since 5.0.7

@@ -58,7 +58,7 @@ public class Messagebox {
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
 	public static final String EXCLAMATION  = "z-msgbox z-msgbox-exclamation";
-	/** A symbol of a lowercase letter i in a circle.
+	/** A symbol of a lower case letter i in a circle.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
 	public static final String INFORMATION = "z-msgbox z-msgbox-information";
@@ -323,7 +323,7 @@ public class Messagebox {
 	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
 	 * in the following table. Alternatively, you can examine the value
 	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
-	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * integer representing the button, such as {@link #OK}, {@link #YES}
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button Name</td><td>Event Name</td></tr>
@@ -393,7 +393,7 @@ public class Messagebox {
 	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
 	 * in the following table. Alternatively, you can examine the value
 	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
-	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * integer representing the button, such as {@link #OK}, {@link #YES}
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
@@ -513,7 +513,7 @@ public class Messagebox {
 	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
 	 * in the following table. Alternatively, you can examine the value
 	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
-	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * integer representing the button, such as {@link #OK}, {@link #YES}
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
@@ -592,7 +592,7 @@ public class Messagebox {
 	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
 	 * in the following table. Alternatively, you can examine the value
 	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
-	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * integer representing the button, such as {@link #OK}, {@link #YES}
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
@@ -661,7 +661,7 @@ public class Messagebox {
 	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
 	 * in the following table. Alternatively, you can examine the value
 	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
-	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * integer representing the button, such as {@link #OK}, {@link #YES}
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>

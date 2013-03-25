@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.http.HttpAuWriter;
 
 /**
- * Utilities to instantiate an implmentation of {@link AuWriter}.
+ * Utilities to instantiate an implementation of {@link AuWriter}.
  *
  * @author tomyeh
  * @since 3.0.1

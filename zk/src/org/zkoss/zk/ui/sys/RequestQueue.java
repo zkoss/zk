@@ -37,7 +37,7 @@ public interface RequestQueue {
 	 */
 	public boolean isEmpty();
 	/** Returns the next request, or null if no more request.
-	 * Onced returned, the request is removed from the queue.
+	 * Once returned, the request is removed from the queue.
 	 */
 	public AuRequest nextRequest();
 
@@ -50,7 +50,7 @@ public interface RequestQueue {
 	public void addRequests(Collection<AuRequest> requests);
 
 	/** Adds a request ID that uniquely identifies a request for
-	 * performance measuarement {@link org.zkoss.zk.ui.util.PerformanceMeter}.
+	 * performance measurement {@link org.zkoss.zk.ui.util.PerformanceMeter}.
 	 *
 	 * @param requestId the request ID (never null)
 	 * @since 3.0.5

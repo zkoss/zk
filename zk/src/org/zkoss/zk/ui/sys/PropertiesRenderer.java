@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * A renderer used to render custom properties for particular components.
- * It is a listener (aka., a plugin) that an application can register
+ * It is a listener (a.k.a., a plugin) that an application can register
  * in zk.xml (or {@link org.zkoss.zk.ui.util.Configuration#addListener}),
  * and then used to customize component's behaviors.
  *

@@ -60,7 +60,7 @@ import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
 
 /**
- * The AU extension to upload files withd HTML5 feature.
+ * The AU extension to upload files with HTML5 feature.
  * It is based on Apache Commons File Upload.
  * @since 6.5.0
  */

@@ -111,7 +111,7 @@ public interface Execution extends Scope {
 	 */
 	public Evaluator getEvaluator(Component comp, Class<? extends ExpressionFactory> expfcls);
 
-	/** Evluates the specified expression with ${link #getVariableResolver}
+	/** Evaluates the specified expression with ${link #getVariableResolver}
 	 * and {@link Page#getFunctionMapper} of the page of the specified
 	 * component.
 	 *
@@ -131,7 +131,7 @@ public interface Execution extends Scope {
 	 * @see #getEvaluator
 	 */
 	public Object evaluate(Component comp, String expr, Class<?> expectedType);
-	/** Evluates the specified expression with ${link #getVariableResolver}
+	/** Evaluates the specified expression with ${link #getVariableResolver}
 	 * and {@link Page#getFunctionMapper} of the specified
 	 * page.
 	 *
@@ -177,7 +177,7 @@ public interface Execution extends Scope {
 	 * resolves all builtin names and all custom variable resolvers.
 	 * It is not any variable resolver added by this method.
 	 *
-	 * @return wether the resolver is added successfully.
+	 * @return whether the resolver is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
 	 * @since 6.0.0
@@ -210,7 +210,7 @@ public interface Execution extends Scope {
 	public void postEvent(Event evt);
 	/** Queues an event with the specified priority to this execution.
 	 * In other words, the event is placed to the event queue
-	 * with the specified prority.
+	 * with the specified priority.
 	 *
 	 * <p>The event will be sent to the component specified in {@link Event#getTarget}.
 	 * If {@link Event#getTarget} is null, it means broadcast, i.e.,
@@ -344,7 +344,7 @@ public interface Execution extends Scope {
 	 * since the request will be taken charged by other servlet
 	 * or redirect to another page.
 	 * The execution shall not do anything more. In other words,
-	 * the execution is avoided and won't generate any ouput.
+	 * the execution is avoided and won't generate any output.
 	 *
 	 * <p>The common cause of being voided is the invocation of
 	 * {@link #forward}.
@@ -380,12 +380,12 @@ public interface Execution extends Scope {
 	/** Converts the specified URI to an absolute URI, if uri is related
 	 * and the current execution is not included ({@link #isIncluded}).
 	 *
-	 * <p>Note: an asynchrous update is processed by the update servlet.
+	 * <p>Note: an asynchronous update is processed by the update servlet.
 	 * It is different from the servlet for rendering the ZUML page.
 	 * In other words, a relative URI won't be interpreted correctly,
 	 * so you have to invoke this method to convert them if necessary.
 	 *
-	 * <p>In addtions, RequestDispatcher.include doesn't handle related URI
+	 * <p>In additions, RequestDispatcher.include doesn't handle related URI
 	 * well.
 	 *
 	 * @param skipInclude whether not to convert to an absolute URI if
@@ -489,7 +489,7 @@ public interface Execution extends Scope {
 	//-- page utilities --//
 	/** Returns the page definition from the page file specified by an URI.
 	 *
-	 * <p>Implemetation Notes: this method must invoke
+	 * <p>Implementation Notes: this method must invoke
 	 * {@link org.zkoss.zk.ui.sys.UiFactory#getPageDefinition(org.zkoss.zk.ui.sys.RequestInfo, String)}
 	 *
 	 * @param uri the URI of the page file.
@@ -501,7 +501,7 @@ public interface Execution extends Scope {
 	public PageDefinition getPageDefinition(String uri);
 	/** Converts the specified page content to a page definition.
 	 *
-	 * <p>Implemetation Notes: this method must invoke
+	 * <p>Implementation Notes: this method must invoke
 	 * {@link org.zkoss.zk.ui.sys.UiFactory#getPageDefinitionDirectly(org.zkoss.zk.ui.sys.RequestInfo, String, String)}
 	 *
 	 * @param content the raw content of the page. It must be in ZUML.
@@ -596,7 +596,7 @@ public interface Execution extends Scope {
 	 * or become the root components of the current page if parent is specified
 	 * as null.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(String, String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
@@ -628,7 +628,7 @@ public interface Execution extends Scope {
 	 * or become the root components of the current page if parent is specified
 	 * as null.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
@@ -660,7 +660,7 @@ public interface Execution extends Scope {
 	 * or become the root components of the current page if parent is specified
 	 * as null.
 	 *
-	 * <p>The raw content is loaded and parsed to a page defintion by use of
+	 * <p>The raw content is loaded and parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
@@ -744,7 +744,7 @@ public interface Execution extends Scope {
 	 * or become the root components of the current page if parent is specified
 	 * as null.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(String, String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
@@ -778,7 +778,7 @@ public interface Execution extends Scope {
 	 * or become the root components of the current page if parent is specified
 	 * as null.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
@@ -813,7 +813,7 @@ public interface Execution extends Scope {
 	 * or become the root components of the current page if parent is specified
 	 * as null.
 	 *
-	 * <p>The raw content is loaded and parsed to a page defintion by use of
+	 * <p>The raw content is loaded and parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
 	 * to create components.
@@ -877,7 +877,7 @@ public interface Execution extends Scope {
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(String, String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Map)}
 	 * to create components.
@@ -903,7 +903,7 @@ public interface Execution extends Scope {
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a DOM tree.
 	 *
-	 * <p>The raw content is parsed to a page defintion by use of
+	 * <p>The raw content is parsed to a page definition by use of
 	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
 	 * invokes {@link #createComponents(PageDefinition,Map)}
 	 * to create components.

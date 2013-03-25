@@ -41,7 +41,7 @@ public interface Namespaceable {
 
 	/**
 	 * Gets the tag name of this item.
-	 * The tag name is also called the full qualitifed name -- the name
+	 * The tag name is also called the fully qualified name -- the name
 	 * <i>with</i> the namespace prefix, e.g., prefix:name.
 	 *
 	 * <p>To get the local name (the name without prefix),

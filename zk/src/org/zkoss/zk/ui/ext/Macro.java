@@ -43,7 +43,7 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	public String getMacroURI();
 	/** Detaches all child components and then recreate them.
 	 *
-	 * <p>It is used if you have assigned new values to dynamical properties
+	 * <p>It is used if you have assigned new values to dynamic properties
 	 * and want to re-create child components to reflect the new values.
 	 * Note: it is convenient but the performance is better if you can manipulate
 	 * only the child components that need to be changed.

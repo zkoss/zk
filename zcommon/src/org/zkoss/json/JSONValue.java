@@ -20,7 +20,7 @@ import org.zkoss.json.parser.JSONParser;
  */
 public class JSONValue {
 	/**
-	 * Parse (aka., decode) JSON text into java object from the input source. 
+	 * Parse (a.k.a., decode) JSON text into java object from the input source. 
 	 * 
 	 * @param in the input to parse.
 	 * @return Instance of the following:
@@ -40,7 +40,7 @@ public class JSONValue {
 	}
 	
 	/**
-	 * Parse (aka., decode) JSON text into java object from the string.
+	 * Parse (a.k.a., decode) JSON text into java object from the string.
 	 * @return the decoded object.
 	 * If s is null, null is returned.
 	 */
@@ -55,7 +55,7 @@ public class JSONValue {
 	}
 		
 	/**
-	 * Convert (aka., encode) an object to JSON text.
+	 * Convert (a.k.a., encode) an object to JSON text.
 	 * <p>
 	 * If this object is a Map or a List, and it's also a JSONAware, JSONAware will be considered firstly.
 	 * <p>

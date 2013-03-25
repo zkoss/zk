@@ -30,7 +30,7 @@ import org.zkoss.util.logging.Log;
 public class StringFns {
 	private static Log log = Log.lookup(StringFns.class);
 
-	/** Catenates two strings.
+	/** Concatenates two strings.
 	 * Note: null is considered as empty.
 	 */
 	public static String cat(String s1, String s2) {
@@ -38,19 +38,19 @@ public class StringFns {
 			return s2 != null ? s2: "";
 		return s2 != null ? s1 + s2: s1;
 	}
-	/** Catenates three strings.
+	/** Concatenates three strings.
 	 * Note: null is considered as empty.
 	 */
 	public static String cat3(String s1, String s2, String s3) {
 		return cat(cat(s1, s2), s3);
 	}
-	/** Catenates four strings.
+	/** Concatenates four strings.
 	 * Note: null is considered as empty.
 	 */
 	public static String cat4(String s1, String s2, String s3, String s4) {
 		return cat(cat(cat(s1, s2), s3), s4);
 	}
-	/** Catenates four strings.
+	/** Concatenates four strings.
 	 * Note: null is considered as empty.
 	 */
 	public static String cat5(String s1, String s2, String s3, String s4, String s5) {
@@ -115,7 +115,7 @@ public class StringFns {
 	public static String substring(String s, int from, int to) {
 		return s != null ? s.substring(from, to): null;
 	}
-	/** Replaces all occurrances of 'from' in 'src' with 'to'
+	/** Replaces all occurrences of 'from' in 'src' with 'to'
 	 */
 	public static String replace(String src, String from, String to) {
 		if (Objects.equals(from, to))
@@ -145,7 +145,7 @@ public class StringFns {
 	 * shall NOT contain any quotations.
 	 *
 	 * <p>It is used to avoid JavaScript injection.
-	 * For exmple, in DSP or JSP pages, the following codes is better
+	 * For example, in DSP or JSP pages, the following codes is better
 	 * to escape with this method.
 	 * <code><input value="${c:eatQuot(param.some)}"/></code>
 	 *

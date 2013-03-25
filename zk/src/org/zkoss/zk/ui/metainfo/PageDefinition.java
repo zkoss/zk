@@ -169,7 +169,7 @@ public class PageDefinition implements NodeInfo {
 		_zslang = zslang;
 	}
 
-	/** Returns the identitifer that will be assigned to pages created from
+	/** Returns the identifier that will be assigned to pages created from
 	 * this definition, or null if the identifier shall be generated automatically.
 	 * <p>Note: the returned value might contain EL expressions.
 	 */
@@ -180,7 +180,7 @@ public class PageDefinition implements NodeInfo {
 	 * definition.
 	 * @param id the identifier. It might contain EL expressions.
 	 * If null or empty (null is assumed), page's ID is generated automatically.
-	 * If not empty, ID (after evaluated) must be unquie in the same request.
+	 * If not empty, ID (after evaluated) must be unique in the same request.
 	 */
 	public void setId(String id) {
 		_id = id != null && id.length() > 0 ? id: null;
@@ -353,8 +353,8 @@ public class PageDefinition implements NodeInfo {
 	 * that it simplifies the use of the apply attribute, the init directive
 	 * and others.
 	 * 
-	 * @param clsptn the class's full-qualitified name, e.g., <code>com.foo.FooComposer</code>,
-	 * a wildcard representing all classes of the give pacakge, e.g., <code>com.foo.*</code>.
+	 * @param clsptn the class's fully-qualified name, e.g., <code>com.foo.FooComposer</code>,
+	 * a wildcard representing all classes of the give package, e.g., <code>com.foo.*</code>.
 	 * @since 6.0.0
 	 */
 	public void addImportedClass(String clsptn) throws ClassNotFoundException {
@@ -373,7 +373,7 @@ public class PageDefinition implements NodeInfo {
 		return _clsresolver;
 	}
 
-	/** Adds a defintion of {@link Initiator}. */
+	/** Adds a definition of {@link Initiator}. */
 	public void addInitiatorInfo(InitiatorInfo init) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
@@ -402,7 +402,7 @@ public class PageDefinition implements NodeInfo {
 		return inits;
 	}
 
-	/** Adds a defintion of {@link VariableResolver}.
+	/** Adds a definition of {@link VariableResolver}.
 	 */
 	public void addVariableResolverInfo(VariableResolverInfo resolver) {
 		if (resolver == null)
@@ -412,7 +412,7 @@ public class PageDefinition implements NodeInfo {
 			_resolvdefs = new LinkedList<VariableResolverInfo>();
 		_resolvdefs.add(resolver);
 	}
-	/** Adds a defintion of {@link FunctionMapper}.
+	/** Adds a definition of {@link FunctionMapper}.
 	 * @since 3.5.0
 	 */
 	public void addFunctionMapperInfo(FunctionMapperInfo mapper) {
@@ -454,7 +454,7 @@ public class PageDefinition implements NodeInfo {
 	 * first element of the array is the value which is an instance of {@link java.util.Date}
 	 * or {@link String} (and never null).
 	 * The second element indicates whether to add (rather than set)
-	 * theader. It is an instance of Boolean (and never null).
+	 * header. It is an instance of Boolean (and never null).
 	 */
 	public Collection<Object[]> getResponseHeaders(Page page) {
 		final List<Object[]> headers = new LinkedList<Object[]>();
@@ -495,7 +495,7 @@ public class PageDefinition implements NodeInfo {
 	}
 	/** Returns the content that shall be generated inside the head element
 	 * and before ZK's default tags (never null).
-	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
 	 *
 	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
 	 * it cannot override ZK's default behaviors.
@@ -508,7 +508,7 @@ public class PageDefinition implements NodeInfo {
 	}
 	/** Returns the content that shall be generated inside the head element
 	 * and after ZK's default tags (never null).
-	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
 	 *
 	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
 	 * it could override ZK's default behaviors.
@@ -542,9 +542,9 @@ public class PageDefinition implements NodeInfo {
 			_forwdefs = new LinkedList<ForwardInfo>();
 		_forwdefs.add(forward);
 	}
-	/** Returns the URI to forward to, or null if not to foward.
+	/** Returns the URI to forward to, or null if not to forward.
 	 * It evaluates the forward definition (added by {@link #addForwardInfo})
-	 * one-by-one, if any, to see whether to foward.
+	 * one-by-one, if any, to see whether to forward.
 	 * Returns null if no forward definition, or no forward definition's
 	 * condition is satisfied.
 	 */
@@ -574,7 +574,7 @@ public class PageDefinition implements NodeInfo {
 	 *
 	 * <p>Default: null (use the device default).
 	 *
-	 * @param contentType the content type. It may coontain EL expressions.
+	 * @param contentType the content type. It may contain EL expressions.
 	 * @since 3.0.0
 	 */
 	public void setContentType(String contentType) {
@@ -594,7 +594,7 @@ public class PageDefinition implements NodeInfo {
 	 *
 	 * <p>Default: null (use the device default).
 	 *
-	 * @param docType the doc type. It may coontain EL expressions.
+	 * @param docType the doc type. It may contain EL expressions.
 	 * If null, it means device's default will be used.
 	 * If empty, it means no doc type will be generated.
 	 * @since 3.0.0
@@ -692,7 +692,7 @@ public class PageDefinition implements NodeInfo {
 		_complete = complete;
 	}
 	/** Adds a root attribute.
-	 * The previous attributee of the same will be replaced.
+	 * The previous attribute of the same name will be replaced.
 	 *
 	 * @param value the value. If null, the attribute is removed.
 	 * It can be an EL expression.
@@ -824,7 +824,7 @@ public class PageDefinition implements NodeInfo {
 	 *
 	 * <p>Default: null (use the default).
 	 *
-	 * @param expfcls the implemtation class, or null to use the default.
+	 * @param expfcls the implementation class, or null to use the default.
 	 * Note: expfcls must implement {@link ExpressionFactory}.
 	 * If null is specified, the class defined in
 	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}

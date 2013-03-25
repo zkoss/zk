@@ -29,7 +29,7 @@ import org.zkoss.bind.ValidationContext;
  * Here is a article <a href="http://books.zkoss.org/wiki/Small_Talks/2011/May/Integrate_ZK_with_JSR_303:_Bean_Validation#How_to_use_Bean_Validation_in_your_ZK_application">Integrate ZK with JSR 303: Bean Validation</a> 
  * talks about how to set up JSR 303 in ZK with Hibernate implementation.
  * <p/> 
- * It validates a single propertie of a bean and sets the invalid message by 
+ * It validates a single property of a bean and sets the invalid message by 
  * {@link AbstractValidator#addInvalidMessage(ValidationContext, String)}. <p/>
  * 
  * To use this class, you have to add <code>@validator('beanValidator')</code> or <code>@validator('org.zkoss.bind.validator.BeanValidator')</code> to the property-binding
@@ -69,7 +69,7 @@ public class BeanValidator extends AbstractValidator {
 	
 	
 	/**
-	 * Sort the viloations, make multiple violation order more predictable.
+	 * Sort the violations, make multiple violation order more predictable.
 	 * By default, sort it by the constraint name. 
 	 * @param viloations
 	 */

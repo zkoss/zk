@@ -194,7 +194,7 @@ public class Utils {
 		if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
 			throw new ServletException(info+" cannot contain ';' or '?'");
 			//Jetty will encode URL by appending ';jsess..' and we have to
-			//remove it under certain situations, so not alow it
+			//remove it under certain situations, so not allow it
 		if (updateURI.charAt(updateURI.length() - 1) == '\\') {
 			if (updateURI.length() == 1)
 				throw new ServletException(info+" cannot contain only '/'");

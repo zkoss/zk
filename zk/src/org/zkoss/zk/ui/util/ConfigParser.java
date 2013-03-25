@@ -18,7 +18,7 @@ import org.zkoss.idom.Element;
 
 /**
  * A configuration parser is an application-specific parser
- * to parse the confingurations in zk.xml.
+ * to parse the configurations in zk.xml.
  *
  * <p>You can specify it in /metainfo/config.xml or WEB-INF/zk.xml
  * as follows:
@@ -38,7 +38,7 @@ public interface ConfigParser {
 	 * The info can be stored with {@link Configuration#setAttribute}.
 	 * @param el the element in zk.xml to be parsed
 	 * @return whether the specified element is parsed by this parser.
-	 * Return false if this parser doesn't recoginize it.
+	 * Return false if this parser doesn't recognize it.
 	 */
 	public boolean parse(Configuration config, Element el);
 }

@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 3.5.1
  */
 public interface Filter {
-	/** Initializes the resouorce processor.
+	/** Initializes the resource processor.
 	 */
 	public void init(FilterConfig config);
 	/** Causes the next filter in the chain to be invoked, or

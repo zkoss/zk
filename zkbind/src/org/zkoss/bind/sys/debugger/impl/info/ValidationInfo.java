@@ -13,7 +13,6 @@ package org.zkoss.bind.sys.debugger.impl.info;
 
 import java.util.Map;
 
-import org.zkoss.bind.Validator;
 import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Component;
 

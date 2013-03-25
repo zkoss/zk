@@ -45,7 +45,7 @@ public interface WebApp extends Scope, Locator {
 	 * <p>Default: ZK
 	 */
 	public String getAppName();
-	/** Sets the applicationname.
+	/** Sets the application name.
 	 * Developer can set it to any name that describes his application.
 	 */
 	public void setAppName(String name); 
@@ -70,7 +70,7 @@ public interface WebApp extends Scope, Locator {
 	 * return 0.
 	 *
 	 * @param portion which portion of the version; starting from 0.
-	 * If you want to retrieve the major verion, specify 0.
+	 * If you want to retrieve the major version, specify 0.
 	 * @since 3.0.0
 	 * @see #getVersion
 	 */
@@ -100,7 +100,7 @@ public interface WebApp extends Scope, Locator {
 
 	/** Returns a URL to the resource that is mapped to a specified path.
 	 *
-	 * <p>Notice that, since 3.6.3, this method can retreive the resource
+	 * <p>Notice that, since 3.6.3, this method can retrieve the resource
 	 * starting with "~./". If the path contains the wildcard ('*'),
 	 * you can use {@link Execution#locate} to convert it to a proper
 	 * string first.
@@ -109,7 +109,7 @@ public interface WebApp extends Scope, Locator {
 	/** Returns the resource located at the named path as
 	 * an InputStream object.
 	 *
-	 * <p>Notice that, since 3.6.3, this method can retreive the resource
+	 * <p>Notice that, since 3.6.3, this method can retrieve the resource
 	 * starting with "~./". If the path contains the wildcard ('*'),
 	 * you can use {@link Execution#locate} to convert it to a proper
 	 * string first.

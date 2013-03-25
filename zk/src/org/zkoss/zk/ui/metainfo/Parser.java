@@ -67,7 +67,7 @@ import org.zkoss.zk.ui.impl.ZScriptInitiator;
 import org.zkoss.zk.ui.metainfo.impl.*;
 
 /**
- * Used to prase the ZUL file
+ * Used to parse the ZUL file
  * @author tomyeh
  */
 public class Parser {
@@ -129,7 +129,7 @@ public class Parser {
 		//if (log.debugable()) log.debug("Parsing "+reader);
 		return parse(new SAXBuilder(true, false, true).build(reader), extension);
 	}
-	/** Parss the raw content directly from a DOM tree.
+	/** Parse the raw content directly from a DOM tree.
 	 *
 	 * @param extension the default extension if doc doesn't specify
 	 * an language. Ignored if null.
@@ -213,7 +213,7 @@ public class Parser {
 				}
 			}
 		}
-		//3b. resolve impclses
+		//3b. resolve imported classes
 		for (String impcls: impclses)
 			pgdef.addImportedClass(impcls);
 
@@ -426,7 +426,7 @@ public class Parser {
 			noEL("inline", inline, pi);
 			noEL("macroURI", macroURI, pi);
 				//no EL because pagedef must be loaded to resolve
-				//the impl class before creating an instance of macro
+				//the implementing class before creating an instance of macro
 
 			final boolean bInline = "true".equals(inline);
 			compdef = langdef.getMacroDefinition(
@@ -517,7 +517,7 @@ public class Parser {
 			noELnorEmpty("class", clsnm, pi);
 			pgdef.setExpressionFactoryClass(
 				pgdef.getImportedClassResolver().resolveClass(clsnm));
-		} else { //name has the lower priorty
+		} else { //name has the lower priority
 			final String nm = params.remove("name");
 			if (nm != null)
 				pgdef.setExpressionFactoryClass(Evaluators.getEvaluatorClass(nm));
@@ -648,7 +648,7 @@ public class Parser {
 					throw new UiException(message("Only <zk> can be used in <zk switch>", (Item)o));
 				}
 
-				//Ingore blank text if no need to preserved
+				//Ignore blank text if no need to preserved
 				if (trimLabel.length() == 0
 				&& pi != null && !pi.isBlankPreserved() && !isNativeText(pi))
 					continue;
@@ -686,7 +686,7 @@ public class Parser {
 				pi.addProperty(textAs, trimLabel, null);
 		}
 	}
-	/*pacakge*/ static boolean isNativeText(ComponentInfo pi) { //also called by ComponentInfo
+	/*package*/ static boolean isNativeText(ComponentInfo pi) { //also called by ComponentInfo
 		if (pi instanceof NativeInfo)
 			return true;
 
@@ -703,7 +703,7 @@ public class Parser {
 	 * of labels.
 	 * <p>Default: false since 3.0.4.
 	 *
-	 * <p>If you want to trim like 3.0.4 and ealier did, you can specify
+	 * <p>If you want to trim like 3.0.4 and earlier did, you can specify
 	 * the system property called "org.zkoss.zk.ui.parser.trimLabel"
 	 * with a non-empty value.
 	 */
@@ -897,7 +897,7 @@ public class Parser {
 
 			//only provide if there already has other annotation
 			if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
-				//provide component location info as a annotation wiht it's location.
+				//provide component location info as a annotation with it's location.
 				compInfo.addAnnotation(null, "ZKLOC", null, Locators.toLocation(el.getLocator()));
 			}
 
@@ -1463,7 +1463,7 @@ public class Parser {
 
 		//Optimize 3: merge to split child
 		//If there is only one native child, we make it a split child and
-		//make all its children (grand-chidren) up one level
+		//make all its children (grand-children) up one level
 		if (compInfo.getChildren().size() == 1
 		&& compInfo.getSplitChild() == null /*just in case*/) {
 			Iterator it = compInfo.getChildren().iterator();

@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * Used to notify a window that all its children are created and initialized.
- * {@link org.zkoss.zk.ui.sys.UiEngine} post this event to compoents that
+ * {@link org.zkoss.zk.ui.sys.UiEngine} post this event to components that
  * declares the onCreate handler (either as a method or as in instance definition).
  *
  * @author tomyeh

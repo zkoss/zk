@@ -672,7 +672,7 @@ public class DataBinder implements java.io.Serializable {
 				}
 
 				if (bindings != null) {
-					//construct the path dependant tree
+					//construct the path dependent tree
 					setupPathTree(bindings, varnameSet);
 				
 					//register save-when event
@@ -683,7 +683,7 @@ public class DataBinder implements java.io.Serializable {
 				}
 			}
             
-			//detach template components so they will not interfer the visual part
+			//detach template components so they will not interfere the visual part
 			for(Component comp: toBeDetached) {
 				comp.detach();
 			}
@@ -882,7 +882,7 @@ public class DataBinder implements java.io.Serializable {
 	}
 	
 	/**
-	 * Sets up the specified comp and its decendents to be as template (or not)
+	 * Sets up the specified comp and its descendants to be as template (or not)
 	 */
 	public void setupTemplateComponent(Component comp, Object owner) {
 		mySetupTemplateComponent(comp, owner, comp);
@@ -1206,7 +1206,7 @@ public class DataBinder implements java.io.Serializable {
 	 * @return whether it is set to the interpreter
 	 */
 	private boolean setZScriptVariable(Component comp, String beanid, Object val) {
-		//for all loaded interperter, assign val to beanid
+		//for all loaded interpreters, assign val to beanid
 		boolean found = false;
 		for(final Iterator it = comp.getPage().getLoadedInterpreters().iterator();
 		it.hasNext();) {
@@ -1354,7 +1354,7 @@ public class DataBinder implements java.io.Serializable {
 			if (currentNode != null) {
 				if (!currentNode.isVar()) {
 					assocateSameNodes.add(currentNode);
-				} else { //a var node, specialcase, find the var root
+				} else { //a var node, special case, find the var root
 					Component varRootComp = getVarRootComponent(currentNode);
 					assocateSameNodes.add(new Object[] {currentNode, varRootComp});
 				}
@@ -1459,7 +1459,7 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 		
-		//since 3.1, 20080416, Henri Chen: suppport one object multiple collection items of ListModel
+		//since 3.1, 20080416, Henri Chen: support one object multiple collection items of ListModel
 		private void myLoadAllNodes(Object bean, BindingNode node, Component[] collectionComps,
 		Set<BindingNode> walkedNodes, Binding savebinding, Set<Dual> loadedComps, boolean refChanged) {
 			if (walkedNodes.contains(node)) {
@@ -1474,7 +1474,7 @@ public class DataBinder implements java.io.Serializable {
 			}
 			
 			//loading component associated with the node, return related collection items
-			//since 3.1, 20080416, Henri Chen: suppport one object multiple collection items of ListModel
+			//since 3.1, 20080416, Henri Chen: support one object multiple collection items of ListModel
 			final int sz = collectionComps.length;
 			Component[][] kidCollectionCompsArray = new Component[sz][];
 			for (int j = 0; j < sz; ++j) {

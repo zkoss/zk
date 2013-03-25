@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.LinkedList;
 
 /**
- * A comodifiable itnerator. Used internally.
+ * A co-modifiable iterator. Used internally.
  * @author tomyeh
  */
 /*package*/ class ComodifiableIterator<F, T> implements Iterator<T> {
@@ -85,7 +85,7 @@ import java.util.LinkedList;
 	private boolean removeFromLastVisited(F o) {
 		if (_lastVisited != null)
 			for (Iterator<F> it = _lastVisited.iterator(); it.hasNext();) {
-				if (it.next() == o) { //not equals (more retricted)
+				if (it.next() == o) { //not equals (more restricted)
 					it.remove();
 					return true;
 				}

@@ -302,7 +302,7 @@ public class Files {
 		}
 	}
 
-	/** Normalizes the catenation of two paths.
+	/** Normalizes the concatenation of two paths.
 	 *
 	 * @param parentPath the parent's path
 	 * @param childPath the child's path
@@ -321,8 +321,8 @@ public class Files {
 	}
 	/**
 	 * Normalizes the specified path.
-	 * It removes consecutive slahses, ending slahes,
-	 * redudant . and ...
+	 * It removes consecutive slashes, ending slashes,
+	 * redundant . and ...
 	 * <p>Unlike {@link File}, {@link #normalize} always assumes
 	 * the separator to be '/', and it cannot handle the device prefix
 	 * (e.g., c:). However, it handles //.

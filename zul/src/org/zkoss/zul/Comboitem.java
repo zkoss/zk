@@ -17,10 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.Serializable;
-import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -87,7 +85,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (desc == null) desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
-			smartUpdate("description", getDescription()); //alow overriding
+			smartUpdate("description", getDescription()); //allow overriding
 		}
 	}
 
@@ -233,7 +231,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			_value = s.readObject();
 	}
 	
-	//Clone//
+	//Cloneable//
 	public Object clone() {
 		final Comboitem clone = (Comboitem)super.clone();
 		clone._index = 0;

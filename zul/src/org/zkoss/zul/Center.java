@@ -124,7 +124,7 @@ public class Center extends LayoutRegion {
 		throw new UnsupportedOperationException("readonly");
 	}
 
-	/** Returns the defaul collapsed margin ([3, 3, 3, 3]).
+	/** Returns the default collapsed margin ([3, 3, 3, 3]).
 	 * @since 5.0.5
 	 */
 	//@Override

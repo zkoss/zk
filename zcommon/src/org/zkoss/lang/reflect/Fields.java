@@ -38,7 +38,7 @@ public class Fields {
 		} catch (Throwable t) {
 		}
 	}
-	/** Returnst the value of the specfied public field or public
+	/** Returns the value of the specified public field or public
 	 * method of the object.
 	 *
 	 * <p>If getByCompound(obj, "a.b.c") is called and obj.getA() or
@@ -84,7 +84,7 @@ public class Fields {
 			name = name.substring(j + 1);
 		}
 	}
-	/** Sets the value of the specfied public field  or public method
+	/** Sets the value of the specified public field  or public method
 	 * in the object, without converting the specified val.
 	 *
 	 * <p>It is a shortcut of setByCompound(obj, name, val, false).

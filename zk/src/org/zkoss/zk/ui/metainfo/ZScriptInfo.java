@@ -80,14 +80,14 @@ public class ZScriptInfo extends ConditionLeafInfo {
 	}
 
 	/** Returns the raw content.
-	 * It is the content specified in the contructor
+	 * It is the content specified in the constructor
 	 * ({@link #ZScriptInfo(NodeInfo, String, String, ConditionImpl)}.
-	 * If URL is specified in the contructor, null is returned.
+	 * If URL is specified in the constructor, null is returned.
 	 *
 	 * <p>On the other hand, {@link #getContent} will load the content
 	 * automatically if URL is specified.
 	 *
-	 * @return the raw content specified in the contructor, or null
+	 * @return the raw content specified in the constructor, or null
 	 * if URL is specified instead.
 	 */
 	public String getRawContent() {
@@ -101,10 +101,10 @@ public class ZScriptInfo extends ConditionLeafInfo {
 	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
 	 *
 	 * @param page the page when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScriptInfo(NodeInfo, String, String, Locator, ConditionImpl)}.
+	 * Used only if this object is constructed with {@link #ZScriptInfo(NodeInfo, String, String, Locator, ConditionImpl)}.
 	 * @param comp the component when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScriptInfo(NodeInfo, String, String, Locator, ConditionImpl)}.
-	 * @exception org.zkoss.zk.ui.UiException if faied to load the content
+	 * Used only if this object is constructed with {@link #ZScriptInfo(NodeInfo, String, String, Locator, ConditionImpl)}.
+	 * @exception org.zkoss.zk.ui.UiException if failed to load the content
 	 */
 	public String getContent(Page page, Component comp) {
 		_zs.setEvaluatorRef(_evalr); //in case that this info has been moved

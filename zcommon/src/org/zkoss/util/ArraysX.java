@@ -234,7 +234,7 @@ public class ArraysX {
 	/**
 	 * Duplicates the specified generic array.
 	 *
-	 * <p>The array could be an array of objects or primiitives.
+	 * <p>The array could be an array of objects or primitives.
 	 *
 	 * @param ary the array
 	 * @param jb the beginning index (included)
@@ -271,13 +271,13 @@ public class ArraysX {
 	}
 
 	/**
-	 * Concat the two specified array.
+	 * Concatenates the two specified array.
 	 *
-	 * <p>The array could be an array of objects or primiitives.
+	 * <p>The array could be an array of objects or primitives.
 	 *
 	 * @param ary the array
 	 * @param ary1 the array
-	 * @return an array concat the ary and ary1
+	 * @return an array concatenating the ary and ary1
 	 * @exception IllegalArgumentException if ary and ary1 component types are not compatible
 	 */
 	public static final Object concat(Object ary, Object ary1) {
@@ -292,13 +292,13 @@ public class ArraysX {
 		return dst;
 	}
 	/**
-	 * Concat the two specified generic array.
+	 * Concatenates the two specified generic array.
 	 *
-	 * <p>The array could be an array of objects or primiitives.
+	 * <p>The array could be an array of objects or primitives.
 	 *
 	 * @param ary the array
 	 * @param ary1 the array
-	 * @return an array concat the ary and ary1
+	 * @return an array concatenating the ary and ary1
 	 * @exception IllegalArgumentException if ary and ary1 component types are not compatible
 	 * @since 6.0.0
 	 */

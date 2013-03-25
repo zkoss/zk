@@ -34,7 +34,7 @@ public interface PageRenderPatch {
 	/** Called before rendering to test if the patch shall be applied.
 	 * @param reqInfo the request information
 	 * @return null if no need of patch, or a writer if the patch is required.
-	 * The writer will be used to hold the rendering result of the porlet.
+	 * The writer will be used to hold the rendering result of the portlet.
 	 * Thus, you can process it later in {@link #patchRender} (so the writer
 	 * is usually an instance of StringWriter).
 	 */

@@ -257,7 +257,7 @@ implements EventProcessingThread {
 			_proc.getDesktop().getWebApp().getConfiguration()
 				.invokeEventThreadResumes(
 					resumes, getComponent(), getEvent());
-				//FUTURE: how to propogate errors to the client
+				//FUTURE: how to propagate errors to the client
 		}
 	}
 	private Execution getExecution() {
@@ -484,7 +484,7 @@ implements EventProcessingThread {
 						TimeZones.setThreadLocal(_timeZone = null);
 
 						if (_ex != null && _ceased != null)
-							_ex = null; //avoid anoying message (Bug 2819521)
+							_ex = null; //avoid annoying message (Bug 2819521)
 					}
 				}
 
@@ -523,7 +523,7 @@ implements EventProcessingThread {
 		_evtThdCleanups =
 			config.newEventThreadCleanups(getComponent(), getEvent(), errs, _ceased != null);
 		_ex = errs.isEmpty() ? null: errs.get(0);
-			//propogate back the first exception
+			//propagate back the first exception
 	}
 
 	/** Processes the component and event.

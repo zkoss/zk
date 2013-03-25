@@ -45,7 +45,7 @@ public interface Richlet {
 	 */
 	public void service(Page page) throws Exception;
 
-	/** Returns the default language defintion that this richlet belongs to.
+	/** Returns the default language definition that this richlet belongs to.
 	 * Don't return null.
 	 *
 	 * <p>The default language definition is used to initialize

@@ -16,19 +16,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.zkoss.html.HTMLs;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represents a header element, such as &lt;?link&gt; and &lt;?meta&gt;

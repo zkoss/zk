@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.Desktop;
  * <li>Specify a class that implements this interface
  * in WEB-INF/zk.xml as a listener.
  * </li>
- * <li>Then, each time ZK loader is destroying a desktop, an instnace of
+ * <li>Then, each time ZK loader is destroying a desktop, an instance of
  * the specified class is instantiated and {@link #cleanup} is called.</li>
  * </ol>
  * 

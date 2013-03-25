@@ -17,7 +17,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 /**
- * Indicates the activation of an exceution is taking too long.
+ * Indicates the activation of an execution is taking too long.
  *
  * @author tomyeh
  * @since 6.5.2

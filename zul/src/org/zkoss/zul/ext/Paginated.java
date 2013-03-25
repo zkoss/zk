@@ -22,7 +22,7 @@ package org.zkoss.zul.ext;
  *
  * <ul>
  * <li>{@link Paginated}: a multi-page component whose pagination
- * is controlled by an external page controlle ({@link Paginal}).</li>
+ * is controlled by an external page controller ({@link Paginal}).</li>
  * <li>{@link Paginal}: the paging controller used to control
  * the pagination of {@link Paginated}.</li>
  * <li>{@link Pageable}: a multi-page component that handles pagination

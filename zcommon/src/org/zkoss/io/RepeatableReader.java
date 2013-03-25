@@ -32,12 +32,12 @@ import org.zkoss.util.logging.Log;
 /**
  * {@link RepeatableReader} adds functionality to another reader,
  * the ability to read repeatedly.
- * By repeatable-read we meaen, after {@link #close}, the next invocation of
+ * By repeatable-read we mean, after {@link #close}, the next invocation of
  * {@link #read} will re-open the reader.
  *
  * <p>{@link RepeatableInputStream} actually creates a temporary space
  * to buffer the content, so it can be re-opened again after closed.
- * Notice that the temporary space (aka., the buffered reader)
+ * Notice that the temporary space (a.k.a., the buffered reader)
  * is never closed until garbage-collected.
  *
  * <p>If the content size of the given reader is smaller than
@@ -82,10 +82,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * Returns a reader that can be read repeatedly, or null if the given
 	 * reader is null.
 	 * Note: the returned reader encapsulates the given reader, rd
-	 * (aka., the buffered reader) to adds the functionality to
+	 * (a.k.a., the buffered reader) to adds the functionality to
 	 * re-opens the reader once {@link #close} is called.
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
 	 * <p>Use this method instead of instantiating {@link RepeatableReader}
@@ -104,10 +104,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * Returns a reader to read a file that can be read repeatedly.
 	 * Note: it assumes the file is text (rather than binary).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @param charset the charset. If null, "UTF-8" is assumed.
@@ -129,10 +129,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * that can be read repeatedly.
 	 * Note: it assumes the file is text (rather than binary).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @exception IllegalArgumentException if file is null.
@@ -147,10 +147,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * Returns a reader to read a file that can be read repeatedly.
 	 * Note: it assumes the file is text (rather than binary).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @param filename the file name
@@ -170,10 +170,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * that can be read repeatedly.
 	 * Note: it assumes the file is text (rather than binary).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @param filename the file name
@@ -191,10 +191,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * The reader can be read repeatedly.
 	 * Note: it assumes the resource is text (rather than binary).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @param charset the charset. If null, "UTF-8" is assumed.
@@ -310,7 +310,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 				if (_f == null)
 					_in = new StringReader(
 						((StringWriter)_out).toString());
-					//we don't initilize _in if _f is not null
+					//we don't initialize _in if _f is not null
 					//to reduce memory use (after all, read might not be called)
 				_out = null;
 				_org = null;

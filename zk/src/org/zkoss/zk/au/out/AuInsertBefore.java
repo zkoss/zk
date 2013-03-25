@@ -28,7 +28,7 @@ import org.zkoss.zk.au.AuResponse;
  * A response to insert an unparsed HTML before the specified component
  * at the client.
  * <p>data[0]: the uuid of the component before which the HTML will insert<br>
- * data[1]: the unparsed HTML (aka., content)
+ * data[1]: the unparsed HTML (a.k.a., content)
  * 
  * @author tomyeh
  * @since 3.0.0

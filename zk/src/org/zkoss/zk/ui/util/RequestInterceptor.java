@@ -71,10 +71,10 @@ public interface RequestInterceptor {
 	 *
 	 * @param sess the session (never null)
 	 * @param request the request (never null).
-	 * It is javax.servlet.http.HttpServletRequest, if the applicaiton is
+	 * It is javax.servlet.http.HttpServletRequest, if the application is
 	 * HTTP based. A common use is to look for the cookies.
 	 * @param response the response (never null).
-	 * It is javax.servlet.http.HttpServletResponse, if the applicaiton is
+	 * It is javax.servlet.http.HttpServletResponse, if the application is
 	 * HTTP based. A common use is to store the cookies.
 	 */
 	public void request(Session sess, Object request, Object response);

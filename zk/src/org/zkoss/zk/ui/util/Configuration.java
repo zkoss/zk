@@ -595,7 +595,7 @@ public class Configuration {
 	/** Invokes {@link EventThreadSuspend#afterSuspend} for each relevant
 	 * listener registered by {@link #addListener}.
 	 * Unlike {@link #invokeEventThreadSuspends}, caller shall execute in
-	 * the main thread (aka, servlet thread).
+	 * the main thread (a.k.a., servlet thread).
 	 *
  	 * <p>Used only internally.
 	 *
@@ -912,7 +912,7 @@ public class Configuration {
 		}
 	}
 
-	/** Invokes {@link URIInterceptor#request} for each relevant listner
+	/** Invokes {@link URIInterceptor#request} for each relevant listener
 	 * registered by {@link #addListener}.
 	 *
  	 * <p>Used only internally.
@@ -976,7 +976,7 @@ public class Configuration {
 	}
 
 	/** Returns the system-level composer or null if none is registered.
-	 * To register a system-levelcomposer, use {@link #addListener}.
+	 * To register a system-level composer, use {@link #addListener}.
 	 * <p>Notice that any number of composers can be registered,
 	 * and a single composer is returned to represent them all.
 	 * @since 5.0.1
@@ -1049,7 +1049,7 @@ public class Configuration {
 	/** Returns a readonly list of the system-level properties renders.
 	 * It is empty if none is registered.
 	 * To register a system-level properties renders, use {@link #addListener}.
-	 * <p>Notice that, once registered, it is instantiated immeidately,
+	 * <p>Notice that, once registered, it is instantiated immediately,
 	 * and the same instance is shared for rendering the properties of every component.
 	 * @since 5.0.7
 	 */
@@ -1085,7 +1085,7 @@ public class Configuration {
 		}
 	}
 	/** Invokes {@link UiLifeCycle#afterComponentMoved}
-	 * when a component is moved (aka., page changed).
+	 * when a component is moved (a.k.a., page changed).
 	 * @since 3.0.6
 	 */
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
@@ -1602,7 +1602,7 @@ public class Configuration {
 	 * @since 3.0.1
 	 *
 	 * @param minisecs the timeout in milliseconds.
-	 * Since 3.0.3, you can specify a nonpositive number to disable the resend.
+	 * Since 3.0.3, you can specify a non-positive number to disable the resend.
 	 */
 	public void setResendDelay(int minisecs) {
 	}
@@ -1616,7 +1616,7 @@ public class Configuration {
 		return -1;
 	}
 
-	/** Returns whether this Web application can be crawled by search engies.
+	/** Returns whether this Web application can be crawled by search engines.
 	 * Notice that there is some performance loss for huge web pages.
 	 * <p>Default: false.
 	 * @since 5.0.0
@@ -1886,7 +1886,7 @@ public class Configuration {
 	/** Specifies the maximal allowed number of desktop
 	 * per session.
 	 *
-	 * <p>Defafult: 15.
+	 * <p>Default: 15.
 	 *
 	 * <p>A negative value indicates there is no limit.
 	 * @since 3.0.1
@@ -1905,7 +1905,7 @@ public class Configuration {
 	/** Specifies the maximal allowed number of concurrent requests
 	 * per session.
 	 *
-	 * <p>Defafult: 5.
+	 * <p>Default: 5.
 	 *
 	 * <p>A negative value indicates there is no limit, but it is
 	 * not recommended due to the possibility of the DoS attacks.

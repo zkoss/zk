@@ -35,17 +35,17 @@ import org.zkoss.io.RepeatableReader;
  *
  * <p>AMedia is serializable, but, if you are using InputStream or Reader,
  * you have to extend this class, and provide the implementation to
- * serlialize and deserialize {@link #_isdata} or {@link #_rddata}
+ * serialize and deserialize {@link #_isdata} or {@link #_rddata}
  * (they are both transient).
  * @author tomyeh
  */
 public class AMedia implements Media, java.io.Serializable {
-	/** Used if you want to implement a meida whose input stream is created
+	/** Used if you want to implement a media whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AMedia(String,String,String,InputStream)
 	 */
 	protected static final InputStream DYNAMIC_STREAM = new NullInputStream();
-	/** Used if you want to implement a meida whose reader is created
+	/** Used if you want to implement a media whose reader is created
 	 * dynamically each time {@link #getReaderData} is called.
 	 * @see #AMedia(String,String,String,Reader)
 	 */
@@ -105,7 +105,7 @@ public class AMedia implements Media, java.io.Serializable {
 	 * @param format the format; might be null.
 	 * @param ctype the content type; might be null.
 	 * @param data the binary data; never null.
-	 * If the input stream is created dyanmically each time {@link #getStreamData}
+	 * If the input stream is created dynamically each time {@link #getStreamData}
 	 * is called, you shall pass {@link #DYNAMIC_STREAM}
 	 * as the data argument. Then, override {@link #getStreamData} to return
 	 * the correct stream.
@@ -126,7 +126,7 @@ public class AMedia implements Media, java.io.Serializable {
 	 * @param format the format; might be null.
 	 * @param ctype the content type; might be null.
 	 * @param data the string data; never null
-	 * If the reader is created dyanmically each tiime {@link #getReaderData}
+	 * If the reader is created dynamically each time {@link #getReaderData}
 	 * is called, you shall pass {@link #DYNAMIC_READER}
 	 * as the data argument. Then, override {@link #getReaderData} to return
 	 * the correct reader.
@@ -139,7 +139,7 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	/** Construct with name, format, content type and a file.
 	 *
-	 * <p>Unlike others, it uses the so-called repetable input
+	 * <p>Unlike others, it uses the so-called repeatable input
 	 * stream or reader (depending on binary or not) to represent the file,
 	 * so the input stream ({@link #getStreamData})
 	 * or the reader ({@link #getReaderData}) will be re-opened
@@ -161,7 +161,7 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	/** Construct with name, format, content type and a file.
 	 *
-	 * <p>Unlike others, it uses the so-called repetable input
+	 * <p>Unlike others, it uses the so-called repeatable input
 	 * stream or reader (depending on charset is null or not)
 	 * to represent the file, so the input stream ({@link #getStreamData})
 	 * or the reader ({@link #getReaderData}) will be re-opened
@@ -202,7 +202,7 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	/** Construct with name, format, content type and URL.
 	 *
-	 * <p>Unlike others, it uses the so-called repetable input
+	 * <p>Unlike others, it uses the so-called repeatable input
 	 * stream or reader (depending on charset is null or not) to represent the
 	 * resource, so the input stream ({@link #getStreamData})
 	 * or the reader ({@link #getReaderData}) will be re-opened

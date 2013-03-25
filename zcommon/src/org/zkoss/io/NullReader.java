@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.io;
 
 /**
- * A reader that returns nothing, aka, an empty reader.
+ * A reader that returns nothing, a.k.a, an empty reader.
  *
  * @author tomyeh
  * @see NullWriter

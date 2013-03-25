@@ -83,7 +83,7 @@ public class Columns extends HeadersElement {
 	/** Returns the ID of the Menupopup ({@link Menupopup}) that should appear
 	 * when the user clicks on the element.
 	 *
-	 * <p>Default: none (a default menupoppup).
+	 * <p>Default: none (a default menupopup).
 	 * @since 3.5.0
 	 */
 	public String getMenupopup() {

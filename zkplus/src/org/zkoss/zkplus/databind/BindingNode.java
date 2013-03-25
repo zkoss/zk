@@ -28,7 +28,7 @@ import java.util.Set;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * BindingNode that forms a databinding bean path dependant tree.
+ * BindingNode that forms a databinding bean path dependent tree.
  *
  * @author Henri
  */
@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.UiException;
 	private boolean _innerCollectionNode; //whether a collection in collection item node
 	
 	/** Constructor.
-	 * @param path the path of this node in the expression dependant tree.
+	 * @param path the path of this node in the expression dependent tree.
 	 * @param var whether a _var variable binding node.
 	 */
 	public BindingNode(String path, boolean var, String id, boolean root) {
@@ -60,7 +60,7 @@ import org.zkoss.zk.ui.UiException;
 		return _bindingSet;
 	}
 	
-	/** Get all Bindings below the given nodes (deepth first traverse).
+	/** Get all Bindings below the given nodes (depth first traverse).
 	 */
 	public LinkedHashSet<Binding> getAllBindings() {
 		Set<BindingNode> walkedNodes = new HashSet<BindingNode>(23);

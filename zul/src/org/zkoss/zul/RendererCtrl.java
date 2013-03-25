@@ -23,7 +23,7 @@ package org.zkoss.zul;
  * <p>Though {@link ListitemRenderer#render} is called one item a timer,
  * a request might have several items to render. And, if the renderer
  * implements this interface, {@link #doTry} will be called before
- * any redering, and {@link #doFinally} will be caleld after all rendering.
+ * any rendering, and {@link #doFinally} will be called after all rendering.
  * If any exception occurs, {@link #doCatch} will be called.
  *
  * <p>A typical use is to start a transaction and use it for rendering

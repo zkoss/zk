@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * A comonent used to embed the browser native content (i.e., HTML tags)
+ * A component used to embed the browser native content (i.e., HTML tags)
  * into the output sent to the browser.
  * The browser native content is specified by {@link #setContent}.
  *
@@ -75,11 +75,11 @@ import org.zkoss.zul.impl.XulElement;
 public class Html extends XulElement {
 	private String _content = "";
 
-	/** Contructs a {@link Html} component to embed HTML tags.
+	/** Constructs a {@link Html} component to embed HTML tags.
 	 */
 	public Html() {
 	}
-	/** Contructs a {@link Html} component to embed HTML tags
+	/** Constructs a {@link Html} component to embed HTML tags
 	 * with the specified content.
 	 */
 	public Html(String content) {

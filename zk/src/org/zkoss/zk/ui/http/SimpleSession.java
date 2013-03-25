@@ -89,7 +89,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	private DesktopCache _cache;
 	/** Next available component uuid. */
 	private int _nextUuid;
-	/** When the last client request is recieved.
+	/** When the last client request is received.
 	 */
 	private long _tmLastReq = System.currentTimeMillis();
 	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
@@ -171,7 +171,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 */
 	private final void cleanSessAttrs() {
 		final Object names = getAttribute(ATTR_PRIVATE);
-		if (names instanceof Set) { //Bug 1954655: bakward-compatible
+		if (names instanceof Set) { //Bug 1954655: backward-compatible
 			for (Iterator it = ((Set)names).iterator(); it.hasNext();)
 				rmAttr((String)it.next());
 		}
@@ -194,7 +194,7 @@ public class SimpleSession implements Session, SessionCtrl {
 			throw new IllegalArgumentException();
 
 		//Note: we don't check whether any conflict (e.g., two desktops
-		//have diff device types).
+		//have different device types).
 		//The existence and others are checked by DesktopImpl
 		//and this method is called when Desktop.setDeviceType is called
 		_devType = deviceType;
@@ -440,7 +440,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
 			final String nm = en.nextElement();
 			
-			// Skip to write ZK Session for weblogic to avoid an infinite loop
+			// Skip to write ZK Session for Weblogic to avoid an infinite loop
 			if (!Attributes.ZK_SESSION.equals(nm)) {
 				willSerialize(getAttribute(nm));
 			}

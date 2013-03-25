@@ -445,7 +445,7 @@ public class Chart extends Imagemap {
 
 	/**
 	 * Set the pane color of the chart.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setPaneColor(String color) {
 		if (Objects.equals(color, _paneColor)) {
@@ -494,7 +494,7 @@ public class Chart extends Imagemap {
 	}
 
 	/**
-	 * Get the foreground alpha (transparency, 0 ~ 255, opacue).
+	 * Get the foreground alpha (transparency, 0 ~ 255, opaque).
 	 */
 	public int getFgAlpha() {
 		return _fgAlpha;
@@ -516,7 +516,7 @@ public class Chart extends Imagemap {
 	}
 	
 	/**
-	 * Get the background alpha (transparency, 0 ~ 255, opacue).
+	 * Get the background alpha (transparency, 0 ~ 255, opaque).
 	 */
 	public int getBgAlpha() {
 		return _bgAlpha;
@@ -524,7 +524,7 @@ public class Chart extends Imagemap {
 
 	/**
 	 * Set the background color of the chart.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setBgColor(String color) {
 		if (Objects.equals(color, _bgColor)) {
@@ -644,7 +644,7 @@ public class Chart extends Imagemap {
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
 	 *
-	 * @param model the chart model to associate, or null to dis-associate
+	 * @param model the chart model to associate, or null to dissociate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
 	 */

@@ -41,8 +41,8 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 
 /**
- * UI engine is reponsible to process requests from the client,
- * sends the response back to the client with the assistent of
+ * UI engine is responsible to process requests from the client,
+ * sends the response back to the client with the assistance of
  * {@link ExecutionCtrl}.
  *
  * <p>{@link ExecutionCtrl} encapsulates protocol-dependent codes,
@@ -92,7 +92,7 @@ public interface UiEngine {
 	 * <p>Note:
 	 * <ol>
 	 * <li>It always returns true if the current execution is not an
-	 * asynchroous update.</li>
+	 * asynchronous update.</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
 	 * too, but this method returns false since {@link #addInvalidate(Component)}
 	 * was not called against this component.</li>
@@ -123,7 +123,7 @@ public interface UiEngine {
 	 *
 	 * <p>If the priority is the same, the update is executed in the order
 	 * of first-in-first out. You rarely need to control the sequence, unless
-	 * the update is used to instantiate client-sidte widgets that other
+	 * the update is used to instantiate client-side widgets that other
 	 * updates might depend on. In this case, it is suggested to
 	 * specify the priority as 10000 (and not to use priority higher than
 	 * 10000 for other situation).
@@ -149,7 +149,7 @@ public interface UiEngine {
 	 * and it is used by application developers.
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the returned componet. In other words, the response
+	 * depends on the returned component. In other words, the response
 	 * is removed if the component is removed.
 	 * If it is null, the response is component-independent.
 	 *
@@ -195,13 +195,13 @@ public interface UiEngine {
 	public void execNewPage(Execution exec, Richlet richlet, Page page,
 	Writer out) throws IOException;
 
-	/** Reuse the desktop and generate the outout.
+	/** Reuse the desktop and generate the output.
 	 * @since 5.0.0
 	 */
 	public void recycleDesktop(Execution exec, Page page, Writer out)
 	throws IOException;
 
-	/** Executs an asynchronous update to a component (or page).
+	/** Executes an asynchronous update to a component (or page).
 	 * It is the same as execUpdate(exec, requests, null, out).
 	 *
 	 * <p>Note: the output must be XML and UTF-8.
@@ -258,7 +258,7 @@ public interface UiEngine {
 	 * parent's page is not null (parent's page will be used).
 	 * If both page and parent are null, the created components won't belong
 	 * to any page.
-	 * @param parent the parent component, or null if no parent compoent.
+	 * @param parent the parent component, or null if no parent component.
 	 * If parent is specified, page is ignored.
 	 * @param insertBefore the sibling component that new components will be
 	 * inserted before. Ignored if null (i.e., append as last children).
@@ -369,7 +369,7 @@ public interface UiEngine {
 	 * @see #notifyAll(Desktop, Object)
 	 */
 	public void notify(Desktop desktop, Object obj);
-	/** Wakes up all event processing theads for the specified desktop
+	/** Wakes up all event processing threads for the specified desktop
 	 * that are waiting on the specified object.
 	 *
 	 * <p>Unlike {@link #notifyAll(Object)}, this method can be called any time.
@@ -422,7 +422,7 @@ public interface UiEngine {
 	 * @since 3.5.0
 	 */
 	public void beginUpdate(Execution exec);
-	/** Executes posted events, deactive and ends the asynchronous update.
+	/** Executes posted events, deactivate and ends the asynchronous update.
 	 *
 	 * @since 5.0.0
 	 */
@@ -481,7 +481,7 @@ public interface UiEngine {
 		Desktop desktop, EventProcessingThread evtthd, String cause);
 
 	/** Sets whether to disable the update of the client widget.
-	 * By default, if a component is attached to a page, modications that
+	 * By default, if a component is attached to a page, modifications that
 	 * change the visual representation will be sent to the client to
 	 * ensure the consistency.
 	 *

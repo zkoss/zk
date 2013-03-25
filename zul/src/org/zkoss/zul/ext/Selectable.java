@@ -61,7 +61,7 @@ public interface Selectable<E> {
 	 * <p>If this represents a change to the
 	 * current selection then notify each ListDataListener, including UI.
 	 * @param obj the object to be as selection.
-	 * @return true if it is added successfully; fasle if <code>obj</code>
+	 * @return true if it is added successfully; false if <code>obj</code>
 	 * is not part of the data, or was already selected.
 	 * @since 6.0.0
 	 */

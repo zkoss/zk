@@ -20,11 +20,11 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.lang.PotentialDeadLockException;
 
 /**
- * A simple lock used to implement load-on-deman mechanism.
+ * A simple lock used to implement load-on-demand mechanism.
  * Typical use: a thread, say A, checks whether a resource is loaded, and
  * put a WaitLock instance if not loaded yet. Then, another thread, say B,
  * if find WaitLock, it simply calls {@link #waitUntilUnlock} to wait.
- * Meanwhile, once A completes the loading, it put back the resouce
+ * Meanwhile, once A completes the loading, it put back the resource
  * and calls {@link #unlock}.
  *
  * <pre><code>WaitLock lock = null;

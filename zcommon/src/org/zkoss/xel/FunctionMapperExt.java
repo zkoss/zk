@@ -17,7 +17,7 @@ import java.util.Collection;
 /**
  * Implemented with {@link FunctionMapper} to resolve the class.
  * The default evaluator ignores this interface. It is used only with
- * special evaulators such as MVEL and OGNL.
+ * special evaluators such as MVEL and OGNL.
  * In other words, you rarely need to implement this interface.
  * @author tomyeh
  * @since 6.0.0

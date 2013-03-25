@@ -37,7 +37,7 @@ import org.zkoss.zul.ext.GroupsSortableModel;
 import org.zkoss.zul.ext.Selectable;
 
 /**
- * Encapulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
+ * Encapsulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
  * such that it is easier to handle by {@link org.zkoss.zul.Listbox} and 
  * {@link org.zkoss.zul.Group}.
  *
@@ -359,10 +359,10 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			fireEvent(type, j0, j1);
 		}
 	}
-	/** The group infomation returned by {@link GroupsListModel#getDataInfo}.
+	/** The group information returned by {@link GroupsListModel#getDataInfo}.
 	 */
 	public static class GroupDataInfo implements GroupingInfo {
-		/** Indicates the data is a group (aka., the head of the group). */
+		/** Indicates the data is a group (a.k.a., the head of the group). */
 		public static final byte GROUP = 0;
 		/** Indicates the data is a group foot. */
 		public static final byte GROUPFOOT = 1;

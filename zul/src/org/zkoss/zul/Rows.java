@@ -534,7 +534,7 @@ public class Rows extends XulElement {
 		//No need to invalidate if
 		//1) act == last and child in act
 		//2) act != last and child after act
-		//Except removing last elem which in act and act has only one elem
+		//Except removing last element which in act and act has only one element
 		final Grid grid = getGrid();
 		if (grid != null && grid.inPagingMold() && !isInvalidated()) {
 			final List<Component> children = getChildren();
@@ -543,12 +543,12 @@ public class Rows extends XulElement {
 			int n = sz - (grid.getActivePage() + 1) * pgsz;
 			if (n <= 0) {//must be last page
 				n += pgsz; //check in-act (otherwise, check after-act)
-				if (bRemove && n <= 1) { //last elem, in act and remove
+				if (bRemove && n <= 1) { //last element, in act and remove
 					invalidate();
 					return;
 				}
 			} else if (n > 50)
-				n = 50; //check at most 50 items (for better perf)
+				n = 50; //check at most 50 items (for better performance)
 
 			for (ListIterator<Component> it = children.listIterator(sz);
 			--n >= 0 && it.hasPrevious();)

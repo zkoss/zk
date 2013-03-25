@@ -99,7 +99,7 @@ public class StubsComponent extends StubComponent {
 					evtmap.add(new Object[] {uuid, em});
 			}
 
-			mapChildren(desktopCtrl, uuids, idmap, evtmap, p); //recusrive
+			mapChildren(desktopCtrl, uuids, idmap, evtmap, p); //recursive
 		}
 	}
 

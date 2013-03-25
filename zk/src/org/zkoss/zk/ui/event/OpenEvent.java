@@ -23,7 +23,7 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 
 /**
- * Represents an event cause by user's openning or closing
+ * Represents an event cause by user's opening or closing
  * something at the client.
  *
  * <p>Note: it is a bit confusing but {@link Events#ON_CLOSE} is sent when

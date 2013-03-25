@@ -36,7 +36,7 @@ public class Exceptions {
 
 	/**
 	 * Finds the causes of an exception, ex, to see whether
-	 * any of them is the givinge type.
+	 * any of them is the given type.
 	 *
 	 * @return the cause if found; null if not found
 	 */
@@ -99,7 +99,7 @@ public class Exceptions {
 		}
 	}
 	/**
-	 * Converts an exception to the sepecified class. If any of causes
+	 * Converts an exception to the specified class. If any of causes
 	 * is the specified class, the cause is returned. If the giving exception
 	 * is RuntimeException or error, it is re-thrown directly. In other words,
 	 * Unlike {@link #findCause}, it is designed to be used in the
@@ -188,7 +188,7 @@ public class Exceptions {
 		return ex;
 	}
 	/**
-	 * Converts an exception to the sepecified class plus a message.
+	 * Converts an exception to the specified class plus a message.
 	 * It is similar to {@link #wrap(Throwable, Class)} but with
 	 * an additional message. Thus, the target exception class must has
 	 * the constructor: <code>MyException(String msg, Throwable cause);</code>
@@ -210,7 +210,7 @@ public class Exceptions {
 		}
 	}
 	/**
-	 * Converts an exception to the sepecified class plus a message.
+	 * Converts an exception to the specified class plus a message.
 	 * It is similar to {@link #wrap(Throwable, Class)} but with
 	 * an additional message code. Thus, the target exception class must has
 	 * the constructor:
@@ -233,7 +233,7 @@ public class Exceptions {
 		}
 	}
 	/**
-	 * Converts an exception to the sepecified class plus a message.
+	 * Converts an exception to the specified class plus a message.
 	 * It is similar to {@link #wrap(Throwable, Class)} but with
 	 * an additional message code. Thus, the target exception class must has
 	 * the constructor:
@@ -256,7 +256,7 @@ public class Exceptions {
 		}
 	}
 	/**
-	 * Converts an exception to the sepecified class plus a message.
+	 * Converts an exception to the specified class plus a message.
 	 * It is similar to {@link #wrap(Throwable, Class)} but with
 	 * an additional message code. Thus, the target exception class must has
 	 * the constructor:
@@ -371,7 +371,7 @@ public class Exceptions {
 	}
 
 	/** Returns the first few lines of the stack trace.
-	 * It is useful to make the cause exception's stacktrace to be
+	 * It is useful to make the cause exception's stack trace to be
 	 * part of the message of the exception thrown to the user.
 	 */
 	public static final String getBriefStackTrace(Throwable t) {

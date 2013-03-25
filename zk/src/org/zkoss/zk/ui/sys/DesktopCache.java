@@ -52,11 +52,11 @@ public interface DesktopCache {
 	public void removeDesktop(Desktop desktop);
 
 	/** Notification that the session is about to be passivated
-	 * (aka., serialized).
+	 * (a.k.a., serialized).
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session has just been activated
-	 * (aka., deserialized).
+	 * (a.k.a., deserialized).
 	 */
 	public void sessionDidActivate(Session sess);
 

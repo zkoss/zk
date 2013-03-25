@@ -18,7 +18,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * A skeletal implementation that provides does-nothing for all methods,
- * such that the derving class needs only to implement the required method.
+ * such that the deriving class needs only to implement the required method.
  * @author tomyeh
  * @since 5.0.5
  */

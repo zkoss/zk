@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Execution;
  * <li>First, you specify a class that implements this interface
  * in WEB-INF/zk.xml as a listener.
  * </li>
- * <li>Then, even time ZK loader is destroying an exection, an instnace of
+ * <li>Then, even time ZK loader is destroying an execution, an instance of
  * the specified class is instantiated and {@link #cleanup} is called.</li>
  * </ol>
  * 
@@ -42,10 +42,10 @@ public interface ExecutionCleanup {
 	 * <p>When this method is invoked, the execution is still activated,
 	 * so you can create components here.
 	 *
-	 * @param exec the exection to clean up.
+	 * @param exec the execution to clean up.
 	 * @param parent the previous execution, or null if no previous at all
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
-	 * occured before this method is called, or null if no exeption at all.
+	 * occurred before this method is called, or null if no exception at all.
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.

@@ -82,7 +82,7 @@ public class Threads {
 	}
 
 	/** A dummy function that is used to avoid compiler from optimizing
-	 * statments around it.
+	 * statements around it.
 	 */
 	public static final void dummy(Object o) {
 		new Integer(Objects.hashCode(o));

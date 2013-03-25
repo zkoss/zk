@@ -52,7 +52,7 @@ public interface DspContext extends RequestContext {
 	 * @param uri it must be empty or starts with "/". It might contain
 	 * "*" for current browser code and Locale.
 	 * @return the complete URL (excluding the machine name).
-	 * It includes the context path and the servelt to interpret
+	 * It includes the context path and the servlet to interpret
 	 * this extended resource.
 	 * @since 3.5.2
 	 */

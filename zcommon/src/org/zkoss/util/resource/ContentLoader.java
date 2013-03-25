@@ -27,7 +27,7 @@ import org.zkoss.io.Files;
 /**
  * A {@link Loader} that loads the resource by use URL.getContent()
  * if the source is URL, or loads into a String if the source is a File
- * (and assumging UTF-8).
+ * (and assuming UTF-8).
  *
  * @author tomyeh
  */

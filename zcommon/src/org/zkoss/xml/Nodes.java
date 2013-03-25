@@ -41,7 +41,7 @@ public class Nodes {
 	 * Get the text value of a node.
 	 *
 	 * <p>If the node is <i>not</i> an element, Node.getNodeValue is called.
-	 * If the node is an element, the returned string is a catenation of
+	 * If the node is an element, the returned string is a concatenation of
 	 * all values of TEXT_NODE and CDATA_SECTION_NODE.
 	 *
 	 * <p>Textual nodes include Text, CDATA and Binary (iDOM's extension).

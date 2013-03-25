@@ -63,9 +63,9 @@ public class BigDecimals {
 
 	/** Converts a double to a big decimal with a scale.
 	 *
-	 * <p>It is strongly deprecated to use new Dicimal(double) since
+	 * <p>It is strongly deprecated to use new Decimal(double) since
 	 * the scale is unpredictable and usually surprising.
-	 * Example, BigDecimal(.1) will becomes
+	 * For example, BigDecimal(.1) will becomes
 	 * .1000000000000000055511151231257827021181583404541015625.
 	 * On the other hand, BigDecimal("0.1") will be 0.1 correctly.
 	 *

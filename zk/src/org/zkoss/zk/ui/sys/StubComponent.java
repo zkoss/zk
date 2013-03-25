@@ -48,7 +48,7 @@ public class StubComponent extends AbstractComponent {
 	/** Returns ID of the given UUID, or null if not found or no ID assigned.
 	 * It assumes the given UUID belonged to one of the component being
 	 * merged into this component.
-	 * <p>Notice that it searches all descendants of this componet.
+	 * <p>Notice that it searches all descendants of this component.
 	 */
 	public String getId(String uuid) {
 		if (uuid.equals(getUuid()))
@@ -59,7 +59,7 @@ public class StubComponent extends AbstractComponent {
 		for (Component child = comp.getFirstChild(); child != null;
 		child = child.getNextSibling()) {
 			if (child instanceof StubComponent) {
-				String id = ((StubComponent)child).getId(uuid); //recurive
+				String id = ((StubComponent)child).getId(uuid); //recursive
 				if (id != null)
 					return id;
 			} else {

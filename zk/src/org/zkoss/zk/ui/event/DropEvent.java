@@ -60,7 +60,7 @@ public class DropEvent extends MouseEvent {
 	public final Component getDragged() {
 		return _dragged;
 	}
-	/** Inheirted from {@link MouseEvent}, but not appliable to {@link DropEvent}.
+	/** Inherited from {@link MouseEvent}, but not applicable to {@link DropEvent}.
 	 * It always returns null.
 	 */
 	public String getArea() {

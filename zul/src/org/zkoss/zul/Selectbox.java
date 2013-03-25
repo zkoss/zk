@@ -258,7 +258,7 @@ public class Selectbox extends HtmlBasedComponent {
 	 * always cause re-render.
 	 * 
 	 * @param model
-	 *            the list model to associate, or null to dis-associate any
+	 *            the list model to associate, or null to dissociate any
 	 *            previous model.
 	 * @exception UiException
 	 *                if failed to initialize with the model

@@ -46,7 +46,7 @@ public interface Extendlet {
 	 */
 	public static final int ALLOW_DIRECT_INCLUDE = 0x0001;
 
-	/** Initializes the resouorce processor.
+	/** Initializes the resource processor.
 	 */
 	public void init(ExtendletConfig config);
 	/** Returns if the specified feature is supported.

@@ -81,7 +81,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
  * Multiple definition is allowed and would be called one by one. Note that binding is executed BEFORE other event
  * listeners you defined. (If you want the loading to be executed AFTER your event listener, use load-after).
- * For example, the following code snip tells DataBinder that the attribute "value" of Label "fullName" will load 
+ * For example, the following code snippet tells DataBinder that the attribute "value" of Label "fullName" will load 
  * from "person.fullName" when the Textbox "firstName" or "lastName" fire "onChange" event.
  *
  * <p>The @{...} way that specify directly on the Component's attribute:</p>
@@ -114,7 +114,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * one event). The events specified, if fired, will trigger
  * this DataBinder to save the attribute of the component into the specified bean. Note that binding is executed BEFORE other event
  * listeners you defined. (If you want the saving to be executed AFTER your event listener, use save-after).
- * For example, the following code snip tells 
+ * For example, the following code snippet tells 
  * DataBinder that the property "value" of Textbox "firstName" will 
  * save into "person.firstName" when the Textbox itself fire "onChange" event.
  *
@@ -195,7 +195,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  *
  * </li>
  *
- * <li>converter. You can specify the class name of the converter that implments the {@link TypeConverter} interface.
+ * <li>converter. You can specify the class name of the converter that implements the {@link TypeConverter} interface.
  * It is used to convert the value between component attribute and bean field.  Multiple definition is NOT allowed 
  * and the later defined would override the previous defined one.
  * Most of the time you don't have to specify this since this DataBinder supports converting most commonly 
@@ -261,7 +261,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * 
  * @since 2.4.0 Supporting @{...} annotations.
  * @since 3.0.0 Supporting multiple events of save-when tag and validation phase.
- * @since 3.1.0 Supporting bidningArgs; suport "distinct" on collection data binding. 
+ * @since 3.1.0 Supporting bidningArgs; support "distinct" on collection data binding. 
  * @since 3.6.1 Support load-after, save-after
  * @since 3.6.2 Support Xxx_bindingArgs
  * @author Henri Chen
@@ -276,7 +276,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @since 3.6.2
 	 */
 	public AnnotateDataBinder() {
-		//no argument contructor
+		//no argument constructor
 	}
 	
 	/**

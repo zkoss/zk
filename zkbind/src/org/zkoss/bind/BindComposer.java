@@ -30,7 +30,6 @@ import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
-import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;

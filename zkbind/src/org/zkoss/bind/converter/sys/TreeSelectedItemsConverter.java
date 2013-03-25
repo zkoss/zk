@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.converter.sys;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class TreeSelectedItemsConverter implements Converter, java.io.Serializab
 		Tree tree = (Tree) comp;
 		final TreeModel<Object> model = tree.getModel();
 		if(model !=null && !(model instanceof TreeSelectableModel)){
-			//model has to imple TreeSelectableModel if binding to selectedItem
+			//model has to implement TreeSelectableModel if binding to selectedItem
   			throw new UiException("model doesn't implement "+TreeSelectableModel.class);
   		}
   		final TreeSelectableModel smodel = (TreeSelectableModel)model;

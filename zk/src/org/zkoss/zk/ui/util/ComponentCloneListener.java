@@ -39,9 +39,9 @@ public interface ComponentCloneListener {
 	 * If the object is OK to be shared by the cloned and original components,
 	 * it can return itself.
 	 * If an independent instance must be created for the cloned component,
-	 * it can clone itesef and return the cloned object.
+	 * it can clone itself and return the cloned object.
 	 *
-	 * @param comp the cloned component (not the orginal one)
+	 * @param comp the cloned component (not the original one)
 	 * @return the object to be used in the cloned component.
 	 * If this object is returned, the same object is shared by the
 	 * cloned and original components.

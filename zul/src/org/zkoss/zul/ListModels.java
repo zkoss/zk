@@ -40,7 +40,7 @@ public class ListModels {
 	
 	/**
 	 * A comparator for {@link ListSubModel#getSubModel} to check if
-	 * a value retrived from the model matches the user typed.
+	 * a value retrieved from the model matches the user typed.
 	 * To compare, it will convert them to String instances, and
 	 * return 0 (i.e., matched), when the value starts with
 	 * the user typed, and both of them are not empty.
@@ -54,8 +54,8 @@ public class ListModels {
 	};
 
 	/**
-	 * A comparator for {@link ListSubModel#getSubModel} to checkif
-	 * a value retrived from the model matches the user typed.
+	 * A comparator for {@link ListSubModel#getSubModel} to check if
+	 * a value retrieved from the model matches the user typed.
 	 * It assumes the model is {@link Map}, and the value is
 	 * Map.Entry.
 	 * To compare, it will convert them to String instances, and

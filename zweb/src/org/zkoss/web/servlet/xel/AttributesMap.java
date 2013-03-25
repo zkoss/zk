@@ -25,7 +25,7 @@ import java.util.Enumeration;
 import static org.zkoss.lang.Generics.cast;
 
 /**
- * A sketetal implementation for Map to wrap something with enumeration of
+ * A skeletal implementation for Map to wrap something with enumeration of
  * attributes, which must be String.
  *
  * <p>It is mainly used to implement sessionScope and requestScope in EL.

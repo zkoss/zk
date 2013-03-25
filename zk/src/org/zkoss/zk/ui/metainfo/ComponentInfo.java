@@ -46,7 +46,7 @@ import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.Utils;
 
 /**
- * Represents a componennt instance defined in a ZUML page.
+ * Represents a component instance defined in a ZUML page.
  *
  * <p>Though serializable, we can restore {@link #getPageDefinition}
  * correctly after deserialized.
@@ -59,7 +59,7 @@ import org.zkoss.zk.xel.impl.Utils;
  */
 public class ComponentInfo extends ForEachBranchInfo {
 	private transient ComponentDefinition _compdef;
-	/** The implemetation class/component (use). */
+	/** The implementation class/component (use). */
 	private ExValue _impl;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List<Property> _props;
@@ -73,7 +73,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	private List<WidgetAttribute> _wgtattrs;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
-	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
+	/** The tag name for the dynamic tag. Used only if this implements {@link DynamicTag}*/
 	private String _tag;
 	/** The fulfill condition.
 	 */
@@ -104,7 +104,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 		_compdef = compdef;
 		_tag = tag;
 	}
-	/** Constructs the info without a prent.
+	/** Constructs the info without a parent.
 	 * Used only by {@link NativeInfo}.
 	 */
 	/*package*/ ComponentInfo(EvaluatorRef evalr, ComponentDefinition compdef,
@@ -190,7 +190,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	}
 	/** Returns if a child is allowed in the text-as area.
 	 * It is meaningful only if {@link #getTextAs} is not null.
-	 * If true, the text encosed within the element is considered as
+	 * If true, the text enclosed within the element is considered as
 	 * text only if there is no other XML element.
 	 * <p>For example, &lt;div&gt; in the following example won't
 	 * be considered as text. Rather, a div component will be created.
@@ -219,7 +219,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * with a text.
 	 *
 	 * <p>By replaceable text we mean the component can be replaced by
-	 * a text (aka., string).
+	 * a text (a.k.a., string).
 	 * ZK uses it to optimize the output by generating some content
 	 * directly.
 	 *
@@ -257,7 +257,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * "id1.event1, id2/id3.event2"
 	 *
 	 * <p>If not null, the child components specified in
-	 * {@link #getChildren} are created, when the event sepcified in
+	 * {@link #getChildren} are created, when the event specified in
 	 * the fulfill condition is received at the first time.
 	 *
 	 * <p>It is the value specified in the fulfill attribute.
@@ -271,7 +271,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * the child components.
 	 *
 	 * <p>If not null, the child components specified in
-	 * {@link #getChildren} are created, when the event sepcified in
+	 * {@link #getChildren} are created, when the event specified in
 	 * the fulfill condition is received at the first time.
 	 *
 	 * @param fulfill the fulfill condition. There are several forms:<br/>
@@ -288,7 +288,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 		_fulfill = fulfill != null && fulfill.length() > 0 ? fulfill: null;
 	}
 
-	/** Returns the composer for this info, or nuull if not available.
+	/** Returns the composer for this info, or null if not available.
 	 *
 	 * @param comp the component used as the self variable to resolve
 	 * EL expressions, if any.
@@ -633,7 +633,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 			((DynamicTag)comp).setTag(_tag);
 		return comp;
 	}
-	/** Evaluates the implementation claas, and rerturn either a class (Class),
+	/** Evaluates the implementation class, and return either a class (Class),
 	 * a class name (String), or null.
 	 */
 	private Object evalImpl(Page page, Component parent) {
@@ -646,8 +646,8 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * It is the same as newInstance(page, null).
 	 *
 	 * <p>If the implementation class ({@link #getImplementation})
-	 * doesn't have any EL expression, or its EL expresson doesn't
-	 * referece to the self variable, the result is the same.
+	 * doesn't have any EL expression, or its EL expression doesn't
+	 * have reference to the self variable, the result is the same.
 	 *
 	 * <p>This method is preserved for backward compatibility.
 	 * It is better to use {@link #newInstance(Page, Component)}.
@@ -666,7 +666,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * @param page the page to check whether the class is defined
 	 * in the page (such as interpreters). Ignored if null.
 	 * This method will search the class loader of the current thread.
-	 * If not found, it will search the interpreters of the specifed
+	 * If not found, it will search the interpreters of the specified
 	 * page ({@link Page#getLoadedInterpreters}).
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
@@ -684,8 +684,8 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * It is the same as resolveImplementationClass(page, null).
 	 *
 	 * <p>If the implementation class ({@link #getImplementation})
-	 * doesn't have any EL expression, or its EL expresson doesn't
-	 * referece to the self variable, the result is the same.
+	 * doesn't have any EL expression, or its EL expression doesn't
+	 * have reference to the self variable, the result is the same.
 	 *
 	 * <p>This method is preserved for backward compatibility.
 	 * It is better to use {@link #resolveImplementationClass(Page, Component)}.
@@ -774,7 +774,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 		return propmap;
 	}
 
-	/** Adds an annotation to the specified proeprty of this component
+	/** Adds an annotation to the specified property of this component
 	 * info.
 	 *
 	 * @param propName the property name.

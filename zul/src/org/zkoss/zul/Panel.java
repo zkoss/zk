@@ -437,7 +437,7 @@ public class Panel extends XulElement implements Framable {
 	/** 
 	 * Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
-	 * a more sophisticated caption (aka., title).
+	 * a more sophisticated caption (a.k.a., title).
 	 * <p>If a panel has a caption whose label ({@link Caption#getLabel})
 	 * is not empty, then this attribute is ignored.
 	 * <p>Default: empty.

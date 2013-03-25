@@ -43,7 +43,7 @@ public class SimpleConstraint
 implements Constraint, ClientConstraint, java.io.Serializable {
     private static final long serialVersionUID = 20070411L;
 
-	/** Postive numbers are not allowed. */
+	/** Positive numbers are not allowed. */
 	public static final int NO_POSITIVE = 0x0001;
 	/** Negative numbers are not allowed. */
 	public static final int NO_NEGATIVE = 0x0002;
@@ -57,12 +57,12 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * The value must match inside the data from ListModel only.
 	 */
 	public static final int STRICT = 0x0200;
-	/** Indicates this contraint requires the server validation.
+	/** Indicates this constraint requires the server validation.
 	 * It means, after the client validates the value successfully, it
 	 * will send the value to the server for further validation (by calling
 	 * {@link #validate}.
 	 * It is useful if the result of the regular expressions is different
-	 * at the client (with JavaScript) and the server 9with ava).
+	 * at the client (with JavaScript) and the server with ava).
 	 */
 	public static final int SERVER = 0x0400;
 	/** Date in the future is not allowed. (Only date part is compared)

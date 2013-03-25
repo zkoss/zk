@@ -56,7 +56,7 @@ public class Taglibs {
 	//Loading of TLD files//
 	private static final ResourceCache<URL, TaglibDefinition> _reces;
 
-	/** Retursn the function mapper representing a list of {@link Taglib}
+	/** Returns the function mapper representing a list of {@link Taglib}
 	 * and imports, or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
@@ -72,7 +72,7 @@ public class Taglibs {
 	FunctionMapper getFunctionMapper(List<Taglib> taglibs, Map<String, Class<?>> imports, Locator loc) {
 		return getFunctionMapper((Collection<Taglib>)taglibs, imports, null, loc);
 	}
-	/** Retursn the function mapper representing a collection of {@link Taglib}
+	/** Returns the function mapper representing a collection of {@link Taglib}
 	 * and imports, or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
@@ -88,7 +88,7 @@ public class Taglibs {
 	FunctionMapper getFunctionMapper(Collection<Taglib> taglibs, Map<String, Class<?>> imports, Locator loc) {
 		return getFunctionMapper(taglibs, imports, null, loc);
 	}
-	/** Retursn the function mapper representing a list of {@link Taglib},
+	/** Returns the function mapper representing a list of {@link Taglib},
 	 * imports and functions, or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
@@ -108,7 +108,7 @@ public class Taglibs {
 	Map<String, Class<?>> imports, List<FunctionDefinition> funcs, Locator loc) {
 		return getFunctionMapper((Collection<Taglib>)taglibs, imports, funcs, loc);
 	}
-	/** Retursn the function mapper representing a collection of {@link Taglib},
+	/** Returns the function mapper representing a collection of {@link Taglib},
 	 * imports and functions, or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
@@ -152,8 +152,8 @@ public class Taglibs {
 		}
 		return mapper;
 	}
-	/** Retursn the function mapper representing a list of {@link Taglib},
-	 * or null if nothin is loaded.
+	/** Returns the function mapper representing a list of {@link Taglib},
+	 * or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
 	 *
@@ -164,8 +164,8 @@ public class Taglibs {
 	FunctionMapper getFunctionMapper(List<Taglib> taglibs, Locator loc) {
 		return getFunctionMapper((Collection<Taglib>)taglibs, null, loc);
 	}
-	/** Retursn the function mapper representing a collection of {@link Taglib},
-	 * or null if nothin is loaded.
+	/** Returns the function mapper representing a collection of {@link Taglib},
+	 * or null if nothing is loaded.
 	 *
 	 * <p>The returned mapper is serializable.
 	 *

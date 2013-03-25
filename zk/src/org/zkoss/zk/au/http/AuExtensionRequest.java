@@ -42,7 +42,7 @@ public interface AuExtensionRequest {
 	/** Returns the path info of the request.
 	 * It includes the prefix when the Au extension
 	 * is associated (see {@link DHtmlUpdateServlet#addAuExtension}.
-	 * For example, if an AU processor is assoicated with "/upload", then
+	 * For example, if an AU processor is associated with "/upload", then
 	 * it must start with "/upload". Note: it might end with other string
 	 * depending on the URI you generated to the client.
 	 */

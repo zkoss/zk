@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.ext.Scope;
  * <p>For sake of description, we also call the ID space as space X, if
  * the owner is component X (or page X).
  * If component Y is a child of X and also implements {@link IdSpace}
- * (aka., another owner), then space X includes component Y, but
+ * (a.k.a., another owner), then space X includes component Y, but
  * EXCLUDES descendants of Y. In other words, Y belongs to space X and space Y.
  * Thus, to get a child Z in the Y space, you shall X.getFellow('Y').getFellow('Z').
  *

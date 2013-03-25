@@ -52,7 +52,7 @@ public interface UiLifeCycle {
 	public void afterComponentDetached(Component comp, Page prevpage);
 	/** Called after the parent/children relation is changed.
 	 *
-	 * <p>If a tree of components has become children of the othe component,
+	 * <p>If a tree of components has become children of the other component,
 	 * this method called only against the root one.
 	 * For example, if component A
 	 * has a child B and A becomes a child of component C, then

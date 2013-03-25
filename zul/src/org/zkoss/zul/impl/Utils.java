@@ -132,7 +132,7 @@ public class Utils {
 
 		return list.toArray(new String[list.size()]);
 	}
-	/** Converts an array of objects to a string, by catenating them
+	/** Converts an array of objects to a string, by concatenating them
 	 * together and separated with comma.
 	 */
 	public static final String arrayToString(Object[] ary) {
@@ -313,7 +313,7 @@ public class Utils {
 
 	/** Returns the component of the specified ID or UUID.
 	 * ID could be the component's ID or UUID.
-	 * To specify an UUID, it must be the fortmat: <code>uuid(comp_uuid)</code>.
+	 * To specify an UUID, it must be the format: <code>uuid(comp_uuid)</code>.
 	 * @return the component, or null if not found
 	 * @since 5.0.4
 	 */

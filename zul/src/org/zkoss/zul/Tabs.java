@@ -104,7 +104,7 @@ public class Tabs extends XulElement {
 				newtab.setSelected(false); //reset it
 			else
 				newtab.setSelectedDirectly(false);	//turn off first
-			sel = desel = true;					//trun on later
+			sel = desel = true;					//turn on later
 		}
 
 		if (super.insertBefore(child, refChild)) {

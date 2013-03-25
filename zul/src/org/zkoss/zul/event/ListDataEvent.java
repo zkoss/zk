@@ -47,7 +47,7 @@ public class ListDataEvent {
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
 
-	/** Contructor.
+	/** Constructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}.

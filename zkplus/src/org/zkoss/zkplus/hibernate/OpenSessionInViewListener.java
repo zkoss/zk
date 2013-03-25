@@ -91,7 +91,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	 * work with fresh data... what can be done here depends on the applications 
 	 * design.</p>
 	 *
-	 * @param exec the exection to clean up.
+	 * @param exec the execution to clean up.
 	 * @param ex the StaleObjectStateException being thrown (and not handled) during the execution
 	 */			
 	protected void handleStaleObjectStateException(Execution exec, StaleObjectStateException ex) {
@@ -108,7 +108,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	 * during the conversation, and finally restart business conversation... 
 	 * what can be done here depends on the applications design.</p>
 	 *
-	 * @param exec the exection to clean up.
+	 * @param exec the execution to clean up.
 	 * @param ex the Throwable other than StaleObjectStateException being thrown (and not handled) during the execution
 	 */			
 	protected void handleOtherException(Execution exec, Throwable ex) {
@@ -120,7 +120,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	/**
 	 * rollback the current session.
 	 *
-	 * @param exec the exection to clean up.
+	 * @param exec the execution to clean up.
 	 * @param ex the StaleObjectStateException being thrown (and not handled) during the execution
 	 */	
 	private void rollback(Execution exec, Throwable ex) {

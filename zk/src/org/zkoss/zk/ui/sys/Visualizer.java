@@ -41,7 +41,7 @@ public interface Visualizer {
 	 */
 	public Component getOwner();
 	/** Whether the execution associated with this visualizer
-	 * is caued by an async-update.
+	 * is caused by an async-update.
 	 *
 	 * <p>Note: There might be a chain of executions.
 	 * {@link Execution#isAsyncUpdate} returns whether a page is
@@ -53,8 +53,8 @@ public interface Visualizer {
 	public boolean isEverAsyncUpdate();
 	/** Adds the responses to the first {@link Visualizer} if it is
 	 * caused by async-update.
-	 * @return true if respones are added; false if the first {@link Visualizer}
-	 * is NOT caused by assync responses.
+	 * @return true if responses are added; false if the first {@link Visualizer}
+	 * is NOT caused by async responses.
 	 */
 	public boolean addToFirstAsyncUpdate(List<AuResponse> responses);
 
@@ -65,7 +65,7 @@ public interface Visualizer {
 	public boolean isRecovering();
 
 	/** Disables this visualizer.
-	 * Once disabled, any update of components won't be synchroized to
+	 * Once disabled, any update of components won't be synchronized to
 	 * the client. In other words, it ignores any updates to components.
 	 *
 	 * <p>Currently, it is called only when removing a desktop.

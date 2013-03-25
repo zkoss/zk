@@ -48,7 +48,7 @@ public class TreeDataEvent {
 	private final int _indexTo;
 	private final int[] _nodePath;
 
-	/** Contructor.
+	/** Constructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #SELECTION_CHANGED},

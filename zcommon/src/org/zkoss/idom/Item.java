@@ -18,7 +18,7 @@ package org.zkoss.idom;
 import org.zkoss.xml.Locator;
 
 /**
- * Represents an item (aka., node) of a iDOM tree. A iDOM tree is not necessary
+ * Represents an item (a.k.a., node) of a iDOM tree. A iDOM tree is not necessary
  * also a W3C/DOM tree. However, in iDOM's implement, it is
  * because all Vertices also implement related interface, such as Node.
  *
@@ -26,7 +26,7 @@ import org.zkoss.xml.Locator;
  * by implementing Attributable.
  *
  * <p>Due to the implementation of both Item and W3C/DOM's interfaces,
- * many methods seem redudant (e.g., parent vs. getParentNode, and
+ * many methods seem redundant (e.g., parent vs. getParentNode, and
  * children vs. getChildNodes).
  * Caller could use them interchangeably . However, it is
  * suggested to use Item's API instead of Node's, because, like JDOM,
@@ -34,7 +34,7 @@ import org.zkoss.xml.Locator;
  * (from my point of view). The W3C/DOM API is used to work with utilities
  * that work only with W3C/DOM.
  *
- * <p>Be carefult that some methods look similar, but behave different.
+ * <p>Be careful that some methods look similar, but behave different.
  * Refer to package.html.
  *
  * @author tomyeh
@@ -88,7 +88,7 @@ public interface Item extends Cloneable {
 	/**
 	 * Gets the text of this item, or null if it is neither {@link Textual}
 	 * nor {@link Element}.
-	 * For Element, the text is the catenation of all its textual
+	 * For Element, the text is the concatenation of all its textual
 	 * children, including Text, CDATA, and Binary.
 	 *
 	 * <p>Besides String-type value, some item, e.g., Binary, allows

@@ -29,7 +29,7 @@ import org.zkoss.zk.xel.Evaluator;
 /**
  * A definition of the variable resolver ({@link VariableResolver}).
  *
- * <p>Note: we resolve the class by use fo Classes.forNameByThread.
+ * <p>Note: we resolve the class by using Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
  * Why not? Since there is no way to run zscript before
  * the variable-resolver directive (and better performance).
@@ -130,7 +130,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 		if (_resolver instanceof ExValue) {
 			clsnm = (String)((ExValue)_resolver).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
+//				if (log.debugable()) log.debug("Ignore "+_resolver+" due to empty");
 				return null; //ignore it!!
 			}
 		} else if (_resolver instanceof String) {

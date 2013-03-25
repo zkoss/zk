@@ -87,12 +87,12 @@ import org.zkoss.zk.au.out.AuSetTitle;
 import org.zkoss.zk.scripting.*;
 
 /**
- * An implmentation of {@link Page} and {@link PageCtrl}.
+ * An implementation of {@link Page} and {@link PageCtrl}.
  * Refer to them for more details.
  *
  * <p>Note: though {@link PageImpl} is serializable, it is designed
  * to work with Web container to enable the serialization of sessions.
- * It is not suggested to serialize and desrialize it directly since
+ * It is not suggested to serialize and deserialize it directly since
  * many fields might be lost.
  *
  * <p>On the other hand, it is OK to serialize and deserialize
@@ -110,7 +110,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
-	/** Used to retore _owner. */
+	/** Used to restore _owner. */
 	private transient String _ownerUuid;
 	private transient Desktop _desktop;
 	private String _id = "", _uuid;
@@ -158,7 +158,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
 	 * yet. Caller has to invoke {@link #init} to complete
 	 * the creation of a page.
-	 * Why two phase? Contructor could be called before execution
+	 * Why two phase? Constructor could be called before execution
 	 * is activated, but {@link #init} must be called in an execution.
 	 *
 	 * <p>Also note that {@link #getId} and {@link #getTitle}
@@ -226,7 +226,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_path = path != null ? path: "";
 		_zslang = zslang != null ? zslang: "Java";
 	}
-	/** Initialized the page when contructed or deserialized.
+	/** Initialized the page when constructed or deserialized.
 	 */
 	protected void init() {
 		_ips = new LinkedHashMap<String, Interpreter>(2);
@@ -714,7 +714,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			log.warning("Failed to clean up interpreters of "+this, ex);
 		}
 
-		//theorectically, the following is not necessary, but, to be safe...
+		//theoretically, the following is not necessary, but, to be safe...
 		_desktop = null;
 		_owner = null;
 		_listeners = null;
@@ -879,7 +879,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
 		Interpreter ip = _ips.get(zslang);
 		if (ip == null) {
-			if (_desktop != null //mmight be null, if deserialization
+			if (_desktop != null //might be null, if deserialized
 			&& !_desktop.getWebApp().getConfiguration().isZScriptEnabled())
 				throw new UiException("zscript is not allowed since <disable-zscript> is configured");
 

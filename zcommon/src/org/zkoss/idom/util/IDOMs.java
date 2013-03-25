@@ -265,7 +265,7 @@ public class IDOMs {
 		}
 	}
 
-	/** Returnss whether the loaded document's version is correct.
+	/** Returns whether the loaded document's version is correct.
 	 *
 	 * <p>It assumes the version info is specified in the document in
 	 * the following format:

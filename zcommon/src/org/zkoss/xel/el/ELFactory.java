@@ -28,7 +28,7 @@ import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
 /**
  * An implementation based on ZK Commons EL (zcommons-el.jar: 
  * org.zkforge.apache.commons.el.ExpressionEvaluatorImpl).
- * ZK commons-EL is a peformance enhancement version of Apache Commons EL.
+ * ZK commons-EL is a performance enhancement version of Apache Commons EL.
  * It is also independent of JSP 2.0.
  *
  * @author tomyeh

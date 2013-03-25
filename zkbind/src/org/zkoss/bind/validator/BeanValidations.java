@@ -19,7 +19,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- * A util class to help jsr 303 validation.
+ * A utility class to help jsr 303 validation.
  * @author dennis
  * @since 6.0.0
  */

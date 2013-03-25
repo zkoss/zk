@@ -72,9 +72,9 @@ public class XMLs {
 		return sb != null ? sb.toString(): value;
 	}
 
-	/** Encodes a value such that it could be enclosed by a XML elemnt.
+	/** Encodes a value such that it could be enclosed by an XML element.
 	 *
-	 * <p>Note: It is sometime inproper to use CDATA if the text contains
+	 * <p>Note: It is sometime improper to use CDATA if the text contains
 	 * CDATA, too. The simplest way is NOT to use CDATA but encoding
 	 * the string by this method.
 	 */
@@ -102,9 +102,9 @@ public class XMLs {
 		return sb != null ? sb.toString(): value;
 	}
 	/** Encodes a value and appends it to a string buffer,
-	 * such that it could be enclosed by a XML elemnt.
+	 * such that it could be enclosed by an XML element.
 	 *
-	 * <p>Note: It is sometime inproper to use CDATA if the text contains
+	 * <p>Note: It is sometime improper to use CDATA if the text contains
 	 * CDATA, too. The simplest way is NOT to use CDATA but encoding
 	 * the string by this method.
 	 */
@@ -127,14 +127,14 @@ public class XMLs {
 	}
 	/** Encodes a value of the specified range,
 	 * and appends it to a string buffer,
-	 * such that it could be enclosed by a XML elemnt.
+	 * such that it could be enclosed by an XML element.
 	 *
-	 * <p>Note: It is sometime inproper to use CDATA if the text contains
+	 * <p>Note: It is sometime improper to use CDATA if the text contains
 	 * CDATA, too. The simplest way is NOT to use CDATA but encoding
 	 * the string by this method.
 	 *
 	 * @param value the string to encode
-	 * @param begin the beginning index, inclusive, of the string to encode (i.e., value), includinge
+	 * @param begin the beginning index, inclusive of the string to encode (i.e., value), included
 	 * @param end the ending index, exclusive of the string to encode (i.e., value), excluded
 	 * @since 5.0.0
 	 */
@@ -180,7 +180,7 @@ public class XMLs {
 		}
 		return s.length() == sb.length() ? s: sb.toString();
 	}
-	/** Enscapes a character into a string if it is a special XML character,
+	/** Escapes a character into a string if it is a special XML character,
 	 * returns null if not a special character.
 	 *
      *    &amp; -> &amp;amp;<br/>

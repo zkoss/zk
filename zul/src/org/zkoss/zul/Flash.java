@@ -72,15 +72,15 @@ public class Flash extends HtmlBasedComponent {
 	}
 	
 	/**
-	 * Returns true if the Flash movie plays repeatly.
+	 * Returns true if the Flash movie plays repeatedly.
 	 * <p>Default: false
-	 * @return true if the Flash movie plays repeatly 
+	 * @return true if the Flash movie plays repeatedly 
 	 */
 	public boolean isLoop() {
 		return _loop;
 	}
 	/**
-	 * Sets whether the Flash movie plays repeatly
+	 * Sets whether the Flash movie plays repeatedly
 	 * @param loop
 	 */
 	public void setLoop(boolean loop) {

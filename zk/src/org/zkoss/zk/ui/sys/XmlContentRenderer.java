@@ -122,7 +122,7 @@ public class XmlContentRenderer implements ContentRenderer {
 		render(name, Objects.toString(value));
 	}
 
-	/** Remders every entry in listeners by use of {@link #render(String, Object)}.
+	/** Renders every entry in listeners by use of {@link #render(String, Object)}.
 	 */
 	public void renderWidgetListeners(Map<String, String> listeners) {
 		for (Iterator it = listeners.entrySet().iterator(); it.hasNext();) {
@@ -130,12 +130,12 @@ public class XmlContentRenderer implements ContentRenderer {
 			render((String)me.getKey(), me.getValue());
 		}
 	}
-	/** Remders every entry in overrides by use of {@link #render(String, Object)}.
+	/** Renders every entry in overrides by use of {@link #render(String, Object)}.
 	 */
 	public void renderWidgetOverrides(Map<String, String> overrides) {
 		renderWidgetListeners(overrides);
 	}
-	/** Remders every entry in attrs by use of {@link #render(String, Object)}.
+	/** Renders every entry in attrs by use of {@link #render(String, Object)}.
 	 * @since 5.0.3
 	 */
 	public void renderWidgetAttributes(Map<String, String> attrs) {

@@ -133,7 +133,7 @@ public class Treechildren extends XulElement {
 
 	/**
 	 * Returns the number of visible descendant {@link Treeitem}.
-	 * Descendants include direct children, gran children and so on.
+	 * Descendants include direct children, grand children and so on.
 	 *
 	 * @since 3.0.7
 	 */

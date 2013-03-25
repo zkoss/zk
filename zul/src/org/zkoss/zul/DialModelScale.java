@@ -337,7 +337,7 @@ public class DialModelScale implements Serializable {
 	
 	/**
 	 * Set the tick color.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setTickColor(String color) {
 		if (Objects.equals(color, _tickColor)) {
@@ -373,7 +373,7 @@ public class DialModelScale implements Serializable {
 	 * Setup the DailModel range.
 	 * @param lower the lower bound in the scale.
 	 * @param upper the upper bound in the scale.
-	 * @param color the color in #RRGGBB format (hexdecimal); default to blue.
+	 * @param color the color in #RRGGBB format (hexadecimal); default to blue.
 	 * @param innerRadius the inner radius percentage(0 ~ 1) of the range; default to 0.7.
 	 * @param outerRadius the outer radius percentage(0 ~ 1) of the range; default to 0.8;
 	 */
@@ -385,9 +385,9 @@ public class DialModelScale implements Serializable {
 		return range;
 	}
 
-	/** Returns the number of ranges associaed with this scale.
+	/** Returns the number of ranges associated with this scale.
 	 * 
-	 * @return the number of ranges associaed with this scale.
+	 * @return the number of ranges associated with this scale.
 	 */
 	public int rangeSize() {
 		return _ranges.size();
@@ -395,7 +395,7 @@ public class DialModelScale implements Serializable {
 	
 	/** Returns the color range of the specified index.
 	 * 
-	 * @param index the spcified index.
+	 * @param index the specified index.
 	 * @return the color range of the specified index.
 	 */
 	public DialModelRange getRange(int index) {
@@ -432,7 +432,7 @@ public class DialModelScale implements Serializable {
 	
 	/**
 	 * Set the needle color.
-	 * @param color in #RRGGBB format (hexdecimal).
+	 * @param color in #RRGGBB format (hexadecimal).
 	 */
 	public void setNeedleColor(String color) {
 		if (Objects.equals(color, _needleColor)) {

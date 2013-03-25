@@ -36,7 +36,7 @@ public class Listitem extends XulElement {
 	
 	private transient Object _value;
 	/** The index in the parent (only for implementation purpose). */
-	private int _index = -1; //no parent at begining
+	private int _index = -1; //no parent at beginning
 	private boolean _selected, _disabled, _checkable = true;
 	/** whether the content of this item is loaded; used if
 	 * the listbox owning this item is using a list model.
@@ -220,7 +220,7 @@ public class Listitem extends XulElement {
 		autoFirstCell().setImage(image);
 	}
 
-	/** Returns the index of this item (aka., the order in the listbox).
+	/** Returns the index of this item (a.k.a., the order in the listbox).
 	 */
 	public int getIndex() {
 		return _index;

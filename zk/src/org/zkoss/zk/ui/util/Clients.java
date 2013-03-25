@@ -30,7 +30,7 @@ import org.zkoss.zk.au.out.*;
 /**
  * Utilities to send {@link AuResponse} to the client.
  *
- * <p>Utilities here are mainly to control how the client (aka., the browser window)
+ * <p>Utilities here are mainly to control how the client (a.k.a., the browser window)
  * behaves. To get the status, you might refer to {@link org.zkoss.zk.ui.event.ClientInfoEvent}.
  *
  * @author tomyeh
@@ -69,7 +69,7 @@ public class Clients {
 	 * method again with null.
 	 *
 	 * @param mesg the message to show when confirming users.
-	 * If null (default) or emtpy, users can close the browser window directly.
+	 * If null (default) or empty, users can close the browser window directly.
 	 */
 	public static final void confirmClose(String mesg) {
 		response(new AuConfirmClose(mesg));
@@ -138,7 +138,7 @@ public class Clients {
 	public static final void submitForm(Component form) {
 		submitForm(form.getUuid());
 	}
-	/** Asks the client to print the current desktop (aka., browser window).
+	/** Asks the client to print the current desktop (a.k.a., browser window).
 	 */
 	public static void print() {
 		response(new AuPrint());
@@ -150,7 +150,7 @@ public class Clients {
 	public static final void scrollIntoView(Component cmp) {
 		response(new AuScrollIntoView(cmp));
 	}
-	/** Scrolls the current desktop (aka., browser window) by the specified number of pixels.
+	/** Scrolls the current desktop (a.k.a., browser window) by the specified number of pixels.
 	 * If the number passed is positive, the desktop is scrolled down.
 	 * If negative, it is scrolled up.
 	 * @see #scrollTo
@@ -158,14 +158,14 @@ public class Clients {
 	public static final void scrollBy(int x, int y) {
 		response(new AuScrollBy(x, y));
 	}
-	/** Scrolls the current desktop (aka., browser window) to the specified location (in pixels).
+	/** Scrolls the current desktop (a.k.a., browser window) to the specified location (in pixels).
 	 *
 	 * @see #scrollBy
 	 */
 	public static final void scrollTo(int x, int y) {
 		response(new AuScrollTo(x, y));
 	}
-	/** Resizes the current desktop (aka., browser window) by the specified number of pixels.
+	/** Resizes the current desktop (a.k.a., browser window) by the specified number of pixels.
 	 * If the numbers passed are positive, the desktop size is increased.
 	 * Negative numbers reduce the size of the desktop.
 	 *
@@ -174,14 +174,14 @@ public class Clients {
 	public static final void resizeBy(int x, int y) {
 		response(new AuResizeBy(x, y));
 	}
-	/** Resizes the current desktop (aka., browser window) to the specified size (in pixels).
+	/** Resizes the current desktop (a.k.a., browser window) to the specified size (in pixels).
 	 *
 	 * @see #resizeBy
 	 */
 	public static final void resizeTo(int x, int y) {
 		response(new AuResizeTo(x, y));
 	}
-	/** Moves the current desktop (aka., browser window) by the specified number of pixels.
+	/** Moves the current desktop (a.k.a., browser window) by the specified number of pixels.
 	 * If the number passed is positive, the desktop is moved down.
 	 * If negative, it is moved up.
 	 * @see #moveTo
@@ -189,7 +189,7 @@ public class Clients {
 	public static final void moveBy(int x, int y) {
 		response(new AuMoveBy(x, y));
 	}
-	/** Moves the current desktop (aka., browser window) to the specified location (in pixels).
+	/** Moves the current desktop (a.k.a., browser window) to the specified location (in pixels).
 	 *
 	 * @see #moveBy
 	 */

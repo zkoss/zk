@@ -39,7 +39,7 @@ public class ListboxSelectedItemConverter implements Converter, java.io.Serializ
 		final ListModel<?> model = lbx.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
 		if(model !=null && !(model instanceof Selectable)){
-			//model has to imple Selectable if binding to selectedItem
+			//model has to implement Selectable if binding to selectedItem
   			throw new UiException("model doesn't implement Selectable");
   		}
 		

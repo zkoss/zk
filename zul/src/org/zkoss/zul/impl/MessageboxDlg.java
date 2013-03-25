@@ -37,7 +37,7 @@ public class MessageboxDlg extends Window {
 	private Messagebox.Button[] _buttons;
 	/** Which button is pressed. */
 	private Messagebox.Button _result;
-	/** The event lisetener. */
+	/** The event listener. */
 	private EventListener<ClickEvent> _listener;
 
 	public void onOK() throws Exception {
@@ -65,7 +65,7 @@ public class MessageboxDlg extends Window {
 		final Component parent = getFellowIfAny("buttons");
 		if (parent != null && parent.getFirstChild() == null) {
 		//Backward compatible to ZK 5
-		//We check if any child since user's old tempalte might create them
+		//We check if any child since user's old template might create them
 			final String sclass = (String)parent.getAttribute("button.sclass");
 			for (int j = 0; j < _buttons.length; ++j) {
 				final Button mbtn = new Button();

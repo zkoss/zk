@@ -29,9 +29,9 @@ import org.zkoss.zk.xel.impl.Utils;
  * @since 3.5.0
  */
 public class ZkInfo extends ForEachBranchInfo {
-	/** The swith condition. */
+	/** The switch condition. */
 	private ExValue _switch;
-	/** The case codition. */
+	/** The case condition. */
 	private ExValue[] _case;
 
 	/** Constructs a ZK info.
@@ -45,7 +45,7 @@ public class ZkInfo extends ForEachBranchInfo {
 	public boolean withSwitch() {
 		return _switch != null;
 	}
-	/** Sets the swith condition.
+	/** Sets the switch condition.
 	 * @param switchc the switch condition; EL allowed.
 	 * Ignored if null.
 	 * Note: if it is an empty string, the switch condition
@@ -79,7 +79,7 @@ public class ZkInfo extends ForEachBranchInfo {
 		_case = Utils.parseList(casec, Object.class, false);
 	}
 	/** Returns the case condition's value, or null if no case is
-	 * specified (i.e., {@link #withCase} is fasle.
+	 * specified (i.e., {@link #withCase} is false.
 	 * It evaluates EL expression if any.
 	 */
 	public Object[] resolveCase(Page page, Component comp) {

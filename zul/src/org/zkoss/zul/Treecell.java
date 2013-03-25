@@ -53,7 +53,7 @@ public class Treecell extends LabelImageElement {
 				return (Tree)n;
 		return null;
 	}
-	/** Returns the tree col associated with this cell, or null if not available.
+	/** Returns the tree column associated with this cell, or null if not available.
 	 */
 	public Treecol getTreecol() {
 		final Tree tree = getTree();

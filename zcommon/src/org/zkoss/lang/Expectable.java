@@ -16,10 +16,10 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 package org.zkoss.lang;
 
 /**
- * A specifial interface to denote an exception is expectable -- it means
+ * A special interface to denote an exception is expectable -- it means
  * the exception is <i>not</i> caused by programming error.
  * It also implies the exception can be resolved by user by retrying
- * (e.g, for deadlock), correcting (e.g., typro), or fixing (e.g., network
+ * (e.g, for deadlock), correcting (e.g., typo), or fixing (e.g., network
  * broken).
  *
  * <p>It is mainly used to denote no to log the message, if possible,

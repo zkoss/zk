@@ -197,7 +197,7 @@ public class Tab extends LabelImageElement {
 		final Tabbox tabbox = (Tabbox) getTabbox();
 		if (tabbox != null) {
 			// Note: we don't update it here but let its parent does the job
-			if(selected){  //Note that if already selecetd , tabbox will ignore it.
+			if(selected){  //Note that if already selected , tabbox will ignore it.
 				tabbox.setSelectedTab(this);
 			}else if(tabbox.getSelectedTab() == this){ //selected false and selected
 				

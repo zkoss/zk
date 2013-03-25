@@ -33,7 +33,7 @@ public class Checksums {
 	 *
 	 * @param skips specifies a string of characters that shall be skipped.
 	 * If null specified, "DEOX" is assumed. To skip nothing, specify "".
-	 * You can only specify upper-case leters: A-Z. And, it must be in
+	 * You can only specify upper-case letters: A-Z. And, it must be in
 	 * alphabetic order.
 	 */
 	public static final String toReadable(long val, String skips) {
@@ -70,13 +70,13 @@ public class Checksums {
 			sb.append(toReadableChar(v, skips));
 		}
 	}
-	/** Returns the character of the specified val by skiping skips.
+	/** Returns the character of the specified val by skipping skips.
 	 * Note: the caller must ensure val is in the right range:
 	 * 0 - (36 - skips.length()).
 	 *
 	 * @param skips specifies a string of characters that shall be skipped.
 	 * If null specified, "DEOX" is assumed. To skip nothing, specify "".
-	 * You can only specify upper-case leters: A-Z. And, it must be in
+	 * You can only specify upper-case letters: A-Z. And, it must be in
 	 * alphabetic order.
 	 */
 	public static final char toReadableChar(int val, String skips) {
@@ -101,7 +101,7 @@ public class Checksums {
 	 *
 	 * @param skips specifies a string of characters that shall be skipped.
 	 * If null specified, "DEOX" is assumed. To skip nothing, specify "".
-	 * You can only specify upper-case leters: A-Z. And, it must be in
+	 * You can only specify upper-case letters: A-Z. And, it must be in
 	 * alphabetic order.
 	 */
 	public static final char getChecksum(String val, String skips) {
@@ -124,7 +124,7 @@ public class Checksums {
 	 *
 	 * @param skips specifies a string of characters that shall be skipped.
 	 * If null specified, "DEOX" is assumed. To skip nothing, specify "".
-	 * You can only specify upper-case leters: A-Z. And, it must be in
+	 * You can only specify upper-case letters: A-Z. And, it must be in
 	 * alphabetic order.
 	 */
 	public static final char getChecksum(StringBuffer val, String skips) {

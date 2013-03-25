@@ -40,8 +40,8 @@ import org.zkoss.zul.event.TreeDataEvent;
  * and open states, such that {@link Tree} and other UI can interact with.
  *
  * <p>In additions, {@link AbstractTreeModel} also implements
- * {@link Selectable} and {@link Openable} to simplify the acess
- * (and provides backward compatibility to ZK 5 and ealier).
+ * {@link Selectable} and {@link Openable} to simplify the access
+ * (and provides backward compatibility to ZK 5 and earlier).
  * However, these two interfaces are optional and designed for application.
  * {@link Tree} and all ZK core don't access it at all.
  *

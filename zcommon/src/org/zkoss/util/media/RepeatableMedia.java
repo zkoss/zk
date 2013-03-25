@@ -81,7 +81,7 @@ public class RepeatableMedia implements Media, java.io.Serializable {
 	}
 
 	/**
-	 * Returs the repeatable input stream, if the original input stream is not null.
+	 * Returns the repeatable input stream, if the original input stream is not null.
 	 * @see Media#getStreamData()
 	 * @see RepeatableInputStream#getInstance(InputStream)
 	 */

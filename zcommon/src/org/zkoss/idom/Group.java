@@ -43,11 +43,11 @@ public interface Group extends Item {
 	 * a copy.
 	 *
 	 * <p>Unlike JDOM, it won't coalesce adjacent children automatically
-	 * since it might violate the caller's expection about List.
+	 * since it might violate the caller's expectation about List.
 	 * Rather, we provide coalesce to let caller do the merging
-	 * explicity.
+	 * explicitly.
 	 * Note: when building a iDOM tree from a source
-	 * (SAXBuilder.build), coalesce() will be inovked automatically.
+	 * (SAXBuilder.build), coalesce() will be invoked automatically.
 	 *
 	 * <p>Note: not all items supports children. If this item doesn't,
 	 * it returns an empty list. And, if any invocation tries to add
@@ -83,11 +83,11 @@ public interface Group extends Item {
 	 * have no name.
 	 *
 	 * @param indexFrom the index to start searching from; 0 for beginning
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
-	 * @param mode the serach mode; zero or any combination of
+	 * @param mode the search mode; zero or any combination of
 	 * Item.FIND_xxx, except FIND_RECURSIVE
 	 * @return the index if found; -1 if not found
 	 */
@@ -112,9 +112,9 @@ public interface Group extends Item {
 	 * Gets the value of the first Element-type child that matches
 	 * the giving criteria, with a trimming option.
 	 *
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
 	 * @return the value of the first Element-type child ; null if not found
 	 */
@@ -136,9 +136,9 @@ public interface Group extends Item {
 	 * <p>Note: only Element-type children are returned. Depending on
 	 * the mode, the searching is usually linear -- take O(n) to complete.
 	 *
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
 	 * @param mode the search mode; zero or any combination of FIND_xxx.
 	 * @return the found element; null if not found or not supported
@@ -161,7 +161,7 @@ public interface Group extends Item {
 	 * criteria.
 	 *
 	 * <p>Unlike {@link Element#getElementsByTagName}, this method only
-	 * returns child elements, excluding grand children and other descedants.
+	 * returns child elements, excluding grand children and other descendants.
 	 *
 	 * <p>The returned list is a 'live-facade' of the real ones, so
 	 * the performance is good, and any modification to {@link #getChildren}
@@ -170,9 +170,9 @@ public interface Group extends Item {
 	 * <p>Note: only Element-type children are returned. Depending on
 	 * the mode, the searching is usually linear -- take O(n) to complete.
 	 *
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
 	 * @param mode the search mode; zero or any combination of FIND_xxx.
 	 * @return a read-only list containing all matched children;
@@ -183,7 +183,7 @@ public interface Group extends Item {
 	 * Gets a readonly list of children with the tag name.
 	 *
 	 * <p>Unlike {@link Element#getElementsByTagName}, this method only
-	 * returns child elements, excluding grand children and other descedants.
+	 * returns child elements, excluding grand children and other descendants.
 	 *
 	 * <p>The returned list is a 'live-facade' of the real ones, so
 	 * the performance is good, and any modification to {@link #getChildren}
@@ -206,7 +206,7 @@ public interface Group extends Item {
 	 * @see #getElements()
 	 */
 	public Set<String> getElementNames();
-	/** Returns a cloned copy of all element childrens
+	/** Returns a cloned copy of all element children
 	 *
 	 * <p>Unlike {@link #getChildren} and {@link #getElementNames},
 	 * the returned list is NOT a 'live-facade' of the real ones.

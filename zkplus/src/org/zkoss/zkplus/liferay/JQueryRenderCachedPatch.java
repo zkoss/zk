@@ -24,7 +24,7 @@ import org.zkoss.util.logging.Log;
  * "/zkau/web/js/zk.wpd" has loaded by Liferay, please refer to 
  * www.liferay.com document for configuration 
  *
- * <p>To use it, you have to specify a library proeprty called
+ * <p>To use it, you have to specify a library property called
  * ""org.zkoss.zk.portlet.PageRenderPatch.class" with this class's name
  * ("org.zkoss.zkplus.liferay.JQueryRenderCachedPatch").
  *

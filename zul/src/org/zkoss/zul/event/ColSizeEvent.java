@@ -87,7 +87,7 @@ public class ColSizeEvent extends Event {
 	
 	/**
 	 * Constructs an instance of {@link ColSizeEvent}.
-	 * @param icol the index of the first colum whose width is changed.
+	 * @param icol the index of the first column whose width is changed.
 	 * @param col the component of the column
 	 * @param width the width of the column that trigger this event.
 	 * @since 5.0.0

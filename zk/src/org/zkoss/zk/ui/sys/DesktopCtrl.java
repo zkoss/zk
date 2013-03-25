@@ -87,8 +87,8 @@ public interface DesktopCtrl {
 	 * <p>Unlike {@link #addComponent} and {@link #removeComponent}, this method simply replaces
 	 * the mapping if the given UUID is already mapped to the other component.
 	 * <p>It is used internally and developers shall not invoke it
-	 * explicityly.
-	 * @param comp the component to assoicate with the given UUID.
+	 * explicitly.
+	 * @param comp the component to associate with the given UUID.
 	 * If not, the association (i.e., mapping) is removed.
 	 * @return the previous component that was associated with the given UUID.
 	 * @since 6.0.0
@@ -128,16 +128,16 @@ public interface DesktopCtrl {
 	 * @exception IllegalStateException if it is NOT in recovering.
 	 */
 	public void setId(String id);
-	/** Called when the recoving failed.
+	/** Called when the recovering failed.
 	 */
 	public void recoverDidFail(Throwable ex);
 
 	/** Notification that the session, which owns this desktop,
-	 * is about to be passivated (aka., serialized) by the Web container.
+	 * is about to be passivated (a.k.a., serialized) by the Web container.
 	 */
 	public void sessionWillPassivate(Session sess);
 	/** Notification that the session, which owns this desktop,
-	 * has just been activated (aka., deserialized) by the Web container.
+	 * has just been activated (a.k.a., deserialized) by the Web container.
 	 */
 	public void sessionDidActivate(Session sess);
 
@@ -164,7 +164,7 @@ public interface DesktopCtrl {
 	 * ({@link Collection#isEmpty}).
 	 *
 	 * <pre><code>
-//Use the following pathern IF it is not in the SAME desktop's listener
+//Use the following pattern IF it is not in the SAME desktop's listener
 Collection c = otherDesktop.getSuspendedThreads();
 if (c.isEmpty()) {
 	//do something accordingly
@@ -201,7 +201,7 @@ if (c.isEmpty()) {
 	/** Called when a component added or removed a listener for
 	 * {@link Events#ON_PIGGYBACK}.
 	 *
-	 * <p>The implementation usualy uses it to optimize whether to
+	 * <p>The implementation usually uses it to optimize whether to
 	 * call the listener when {@link #onPiggyback} is called.
 	 *
 	 * @param comp the component that adds an listener for
@@ -217,7 +217,7 @@ if (c.isEmpty()) {
 	 * The implementation could post events here. It should not process
 	 * event here (since event thread might be used).
 	 *
-	 * <p>Used only internally. Application develepers shall not call it.
+	 * <p>Used only internally. Application developers shall not call it.
 	 *
 	 * @since 3.0.0
 	 */
@@ -316,7 +316,7 @@ if (c.isEmpty()) {
 	 * @param exec the execution that is being destroyed
 	 * @param parent the previous execution, or null if no previous at all
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
-	 * occured before this method is called, or null if no exeption at all.
+	 * occurred before this method is called, or null if no exception at all.
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
@@ -344,7 +344,7 @@ if (c.isEmpty()) {
 	/** Called when ZK Update Engine has sent a response to the client.
 	 *
 	 * @param reqId the request ID that the response is generated for.
-	 * Ingore if null.
+	 * Ignore if null.
 	 * @param resInfo the response. Ignored if reqId is null.
 	 * @since 5.0.0
 	 */
@@ -424,7 +424,7 @@ if (c.isEmpty()) {
 	 * {@link Desktop#enableServerPush}).
 	 *
 	 * @param timeout the maximum time to wait in milliseconds.
-	 * Ingored (i.e., never timeout) if non-positive.
+	 * Ignored (i.e., never timeout) if non-positive.
 	 * @exception IllegalStateException if the server push is not enabled.
 	 * @since 3.5.2
 	 */
@@ -439,8 +439,8 @@ if (c.isEmpty()) {
 	public void deactivateServerPush();
 
 	/** Processes an AU request.
-	 * Notice that not only the requests for a deskop but also the requests
-	 * for any component in the deskop will go thru this method.
+	 * Notice that not only the requests for a desktop but also the requests
+	 * for any component in the desktop will go thru this method.
 	 *
 	 * <p>To override the default processing, register an AU request service
 	 * {@link org.zkoss.zk.au.AuService} by invoking {@link Desktop#addListener}.
@@ -469,7 +469,7 @@ if (c.isEmpty()) {
 	 * the request is targeting a component or a desktop.
 	 * And, it can 'intercept' or 'filter' it by returning false.
 	 *
-	 * <p>To send reponses to the client, use
+	 * <p>To send responses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
 	 * or {@link Component#invalidate()}.
@@ -477,7 +477,7 @@ if (c.isEmpty()) {
 	 * <p>If you want to intercept events, you can register a listener implementing
 	 * {@link EventInterceptor}, or overriding {@link #afterProcessEvent}.
 	 *
-	 * @param everError if any error ever occured before
+	 * @param everError if any error ever occurred before
 	 * processing this request. In other words, indicates if the previous
 	 * request causes any exception.
 	 * @since 5.0.0

@@ -86,7 +86,7 @@ public class Labels {
 
 	/** Returns the label or a map of labels associated with the key.
 	 * Unlike {@link #getLabel}, if a key of the label contains dot, it will
-	 * be splitted into multiple keys and then grouped into map.
+	 * be split into multiple keys and then grouped into map.
 	 * For example, the following property file will parsed into a couple of maps,
 	 * and <code>getSegmentedLabels()</code> returns a map containing
 	 * a single entry. The entry's key is <code>"a"</code> and the value

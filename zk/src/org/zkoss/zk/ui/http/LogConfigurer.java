@@ -22,7 +22,7 @@ import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;
 
 /**
- * Utilties for configure the logg.
+ * Utilities for configure the log.
  * @author tomyeh
  * @since 6.0.0
  */

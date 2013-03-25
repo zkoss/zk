@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.sys.RequestInfo;
  * When using ZK portlets with Liferay under non root context, we have
  * to add a JSESSIONID under root(/) path.
  *
- * <p>To use it, you have to specify a library proeprty called
+ * <p>To use it, you have to specify a library property called
  * ""org.zkoss.zk.portlet.PageRenderPatch.class" with this class's name
  * ("org.zkoss.zkplus.liferay.NonRootContextJQueryRenderPatch").
  *

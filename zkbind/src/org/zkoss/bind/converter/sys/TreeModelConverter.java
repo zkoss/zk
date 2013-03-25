@@ -15,7 +15,6 @@ import java.io.Serializable;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.TreeModel;

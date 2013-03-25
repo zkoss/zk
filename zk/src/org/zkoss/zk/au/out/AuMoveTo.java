@@ -19,7 +19,7 @@ package org.zkoss.zk.au.out;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * A response to ask the client to move the desktop (aka., the browser window)
+ * A response to ask the client to move the desktop (a.k.a., the browser window)
  * to specified location (in pixel).
  *
  * <p>data[0]: x<br/>

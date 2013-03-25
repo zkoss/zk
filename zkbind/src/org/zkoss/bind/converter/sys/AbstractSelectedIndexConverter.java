@@ -35,7 +35,7 @@ public abstract class AbstractSelectedIndexConverter<C extends Component> implem
 		final ListModel<?> model = getComponentModel(comp);
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
 		if(model !=null && !(model instanceof Selectable)){
-			//model has to imple Selectable if binding to selectedItem
+			//model has to implement Selectable if binding to selectedItem
   			throw new UiException("model doesn't implement Selectable");
   		}
 		

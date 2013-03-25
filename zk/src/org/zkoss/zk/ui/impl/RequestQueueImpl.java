@@ -104,7 +104,7 @@ public class RequestQueueImpl implements RequestQueue {
 	private void addRequest(AuRequest request) {
 		//case 1, BUSY_IGNORE: Drop any existent ignorable requests
 		//We don't need to iterate all because requests is added one-by-one
-		//In other words, if any temporty request, it must be the last
+		//In other words, if any temporary request, it must be the last
 		{
 			int last = _requests.size() - 1;
 			if (last < 0) { //optimize the most common case

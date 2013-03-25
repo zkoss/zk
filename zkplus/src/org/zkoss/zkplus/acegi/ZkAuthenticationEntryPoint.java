@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ZkAuthenticationEntryPoint extends AuthenticationProcessingFilterEntryPoint {
 	/*package*/ static final String ON_ACEGILOGIN = "onAcegiLogin";
-    /** <p>This implmentation forward request to onAcegiLogin command.</p>
+    /** <p>This implementation forward request to onAcegiLogin command.</p>
      */
 	public void commence(ServletRequest request, ServletResponse response, AuthenticationException authException)
     throws IOException, ServletException {

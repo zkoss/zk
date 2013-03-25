@@ -31,7 +31,7 @@ public class SystemException extends RuntimeException implements Messageable {
 	 */
 	public static class Aide {
 		/** Converts an exception to SystemException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static SystemException wrap(Throwable t) {
@@ -43,7 +43,7 @@ public class SystemException extends RuntimeException implements Messageable {
 				Exceptions.wrap(t, SystemException.class);
 		}
 		/** Converts an exception to SystemException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static SystemException wrap(Throwable t, String msg) {
@@ -55,7 +55,7 @@ public class SystemException extends RuntimeException implements Messageable {
 				Exceptions.wrap(t, SystemException.class, msg);
 		}
 		/** Converts an exception to SystemException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static SystemException wrap(Throwable t, int code, Object[] fmtArgs) {
@@ -67,7 +67,7 @@ public class SystemException extends RuntimeException implements Messageable {
 				Exceptions.wrap(t, SystemException.class, code, fmtArgs);
 		}
 		/** Converts an exception to SystemException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static SystemException wrap(Throwable t, int code, Object fmtArg) {
@@ -79,7 +79,7 @@ public class SystemException extends RuntimeException implements Messageable {
 				Exceptions.wrap(t, SystemException.class, code, fmtArg);
 		}
 		/** Converts an exception to SystemException or OperationException
-		 * depending on whether t implements Expetable.
+		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
 		 */
 		public static SystemException wrap(Throwable t, int code) {

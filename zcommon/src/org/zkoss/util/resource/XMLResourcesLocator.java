@@ -28,9 +28,9 @@ import org.zkoss.idom.Document;
 public interface XMLResourcesLocator extends Locator {
 	/** Returns an enumeration of resources.
 	 * Unlike {@link #getDependentXMLResources}, it doesn't resolve the dependence
-	 * among the resouces.
+	 * among the resources.
 	 *
-	 * @param name the resouce name, such as "metainfo/config.xml".
+	 * @param name the resource name, such as "metainfo/config.xml".
 	 */
 	public Enumeration<URL> getResources(String name) throws IOException;
 	/** Returns a list of resources ({@link Resource}) after resolving
@@ -44,7 +44,7 @@ public interface XMLResourcesLocator extends Locator {
 	 * that this resource depends on. If not found, it assumes it could
 	 * be loaded first.
 	 *
-	 * @param name the resouce name, such as "metainfo/config.xml".
+	 * @param name the resource name, such as "metainfo/config.xml".
 	 * @param elName the element used to specify the name.
 	 * @param elDepends the element used to specify the dependence.
 	 * @return a list of {@link Resource} of the specified name.

@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.lang;
 
 /**
- * Represents an interger that can be modified.
+ * Represents an integer that can be modified.
  *
  * <p>It is useful if you want to pass an integer to a method
  * and like to keep the result of how the method modifies the value.
@@ -25,7 +25,7 @@ package org.zkoss.lang;
  * @author tomyeh
  */
 public class MutableInteger implements Comparable {
-	/** The value of ths mutable integer. */
+	/** The value of the mutable integer. */
 	public int value;
 
 	public MutableInteger(int value) {

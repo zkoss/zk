@@ -51,8 +51,8 @@ public class Locators {
 	/** Formats the message with the location information.
 	 * @param pubId the public ID (ignored if null)
 	 * @param sysId the system ID (ignored if null)
-	 * @param lineno the line number (igored if negative)
-	 * @param colno the line number (igored if negative)
+	 * @param lineno the line number (ignored if negative)
+	 * @param colno the line number (ignored if negative)
 	 */
 	public static String format(String message, String pubId, String sysId,
 	int lineno, int colno) {

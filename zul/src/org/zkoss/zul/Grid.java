@@ -74,7 +74,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Events: onAfterRender<br/>
  * onAfterRender is sent when the model's data has been rendered.(since 5.0.4)
  * 
- * <p>Besides creating {@link Row} programmingly, you can assign
+ * <p>Besides creating {@link Row} programmatically, you can assign
  * a data model (a {@link ListModel} or {@link GroupsModel} instance) to a grid via
  * {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)}
  * and then the grid will retrieve data
@@ -632,7 +632,7 @@ public class Grid extends MeshElement {
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
 	 *
-	 * @param model the list model to associate, or null to dis-associate
+	 * @param model the list model to associate, or null to dissociate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
 	 * @see #getListModel
@@ -676,7 +676,7 @@ public class Grid extends MeshElement {
 			//such that we won't render the same set of data twice
 			//--
 			//For better performance, we shall load the first few row now
-			//(to save a roundtrip)
+			//(to save a round trip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
@@ -693,7 +693,7 @@ public class Grid extends MeshElement {
 	 * <p>The groups model is used to represent a list of data with
 	 * grouping.
 	 *
-	 * @param model the groups model to associate, or null to dis-associate
+	 * @param model the groups model to associate, or null to dissociate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.5.0
@@ -1103,7 +1103,7 @@ public class Grid extends MeshElement {
 	}
 
 	public void renderItems(Set<? extends Row> rows) {
-		if (_model == null) { //just in case that app dev might change it
+		if (_model == null) { //just in case that application developers might change it
 			if (log.debugable()) log.debug("No model no render");
 			return;
 		}

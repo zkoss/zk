@@ -27,9 +27,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.util.resource.Location;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 

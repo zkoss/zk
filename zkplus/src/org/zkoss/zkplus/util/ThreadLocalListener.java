@@ -47,7 +47,7 @@ import java.util.Collection;
  *	&lt;/listener>
  * </code></pre>
  * <p>Besides that, you have to specify what ThreadLocal variables you want to sync. They are also 
- * spcified in WEB-INF/zk.xml file in the form as below.</p>
+ * specified in WEB-INF/zk.xml file in the form as below.</p>
  * <pre><code>
  *  &lt;preference>
  *    &lt;name>ThreadLocal&lt;/name>
@@ -71,7 +71,7 @@ import java.util.Collection;
  *		&lt;/value>
  *	&lt;/preference>
  * <p>In additions to using the application preference, you can specify it
- * in the library proeperty called <code>zkplus.util.ThreadLocalListener.fieldsMap</code>.
+ * in the library property called <code>zkplus.util.ThreadLocalListener.fieldsMap</code>.
  * The preference has the higher priority.
  * <p>Another example, when you specify the Spring's bean as scope="session", you have to specify the following
  * ThreadLocal variables since Spring 2.0 use RequestContextHolder to handle the bean's scope.</p>

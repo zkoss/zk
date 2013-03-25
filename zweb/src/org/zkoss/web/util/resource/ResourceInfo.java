@@ -31,7 +31,7 @@ import java.net.URL;
 	/*package*/ final URL url;
 	/*package*/ final Object extra;
 	/**
-	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
+	 * @param extra the extra parameter passed from {@link ResourceCaches#get}.
 	 */
 	/*package*/ ResourceInfo(String path, File file, Object extra) {
 		if (file == null) throw new IllegalArgumentException("null");

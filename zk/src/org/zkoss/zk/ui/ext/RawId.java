@@ -20,7 +20,7 @@ package org.zkoss.zk.ui.ext;
  * Decorates {@link org.zkoss.zk.ui.Component} to denote that
  * the UUID ({@link org.zkoss.zk.ui.Component#getUuid} must be
  * the same as the ID ({@link org.zkoss.zk.ui.Component#getId}),
- * if the applicaion assigns an ID for it.
+ * if the application assigns an ID for it.
  * Thus, if org.zkoss.zk.ui.Component#setId} is called,
  * both UUID and ID are changed.
  *

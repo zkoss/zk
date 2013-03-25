@@ -84,7 +84,7 @@ public class JsContentRenderer implements ContentRenderer {
 		if (value == null || value.getPage() == null) _buf.append((String)null);
 		else _buf.append("{$u:'").append(value.getUuid()).append("'}");
 	}
-	/** Renders an arbitary object. */
+	/** Renders an arbitrary object. */
 	public void render(String name, Object value) {
 		renderName(name);
 		renderValue(value);
@@ -372,7 +372,7 @@ public class JsContentRenderer implements ContentRenderer {
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
-	/** Renders the JavaScript codes nippet to override the methods
+	/** Renders the JavaScript codes snippet to override the methods
 	 * and properties of the peer widget.
 	 * This method uses the widget's setOverrides method (at client),
 	 * so, if the value is a method, it will preserve the previous method

@@ -82,7 +82,7 @@ public class CommonFns {
 	public static char toChar(Object val) {
 		return ((Character)Classes.coerce(char.class, val)).charValue();
 	}
-	/** Tests whehter an object, o, is an instance of a class, c.
+	/** Tests whether an object, o, is an instance of a class, c.
 	 */
 	public static boolean isInstance(Object c, Object o) {
 		if (c instanceof Class) {

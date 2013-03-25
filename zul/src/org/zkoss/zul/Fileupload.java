@@ -113,7 +113,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
@@ -131,7 +131,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
@@ -149,7 +149,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
@@ -169,7 +169,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
@@ -184,22 +184,22 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * the default message and title.
 	 *
 	 * @param max the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
+	 * at once. If non-positive, 1 is assumed.
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
 	public static Media[] get(int max) {
 		return get(null, null, max, false);
 	}
-	/** Opens a modal dialog to upload mulitple files with
+	/** Opens a modal dialog to upload multiple files with
 	 * the default message and title.
 	 *
 	 * @param max the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
+	 * at once. If non-positive, 1 is assumed.
 	 * @param alwaysNative  whether to treat the uploaded files as binary
 	 * stream, regardless its content type.
 	 * If false (the default), it will convert to
@@ -208,7 +208,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
@@ -224,12 +224,12 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * <p>The returned format depending on the content type.
 	 *
 	 * @param max the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
+	 * at once. If non-positive, 1 is assumed.
 	 * If max is larger than 1000, 1000 is assumed.
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
@@ -240,7 +240,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * the specified message, title and options.
 	 *
 	 * @param max the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
+	 * at once. If non-positive, 1 is assumed.
 	 * If max is larger than 1000, 1000 is assumed.
 	 * @param alwaysNative  whether to treat the uploaded files as binary
 	 * stream, regardless its content type.
@@ -250,7 +250,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
@@ -263,7 +263,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * the specified message, title and options.
 	 *
 	 * @param max the maximal allowed number that an user can upload
-	 * at once. If nonpositive, 1 is assumed.
+	 * at once. If non-positive, 1 is assumed.
 	 * If max is larger than 1000, 1000 is assumed.
 	 * @param maxsize the maximal upload size of the component.
 	 * @param alwaysNative  whether to treat the uploaded files as binary
@@ -274,7 +274,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @return null if the uploaded content, or null if not uploaded.
 	 * Notice, by default, the event thread is disabled, and this
 	 * method won't suspend and always returns null.
-	 * To retrive the uploaded content, the developer
+	 * To retrieve the uploaded content, the developer
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.6.0
@@ -284,7 +284,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 		return get(new HashMap<String, Object>(8),
 			message, title, max, maxsize, alwaysNative);
 	}
-	/** The implemenation of all public get methods.
+	/** The implementation of all public get methods.
 	 * In other words, all public <code>get</code> methods will prepare
 	 * an empty map and invoke this method to retrieve the media.
 	 * It is designed to allow applications to customize the creation of 

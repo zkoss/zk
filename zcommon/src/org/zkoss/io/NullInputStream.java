@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.io;
 
 /**
- * An input stream that returns nothing, aka, an empty input stream.
+ * An input stream that returns nothing, a.k.a, an empty input stream.
  
  * @author tomyeh
  * @see NullWriter

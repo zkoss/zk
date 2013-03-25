@@ -175,7 +175,7 @@ public class Components {
 		}
 	}
 
-	/** Tests whether node1 is an ancessor of node 2.
+	/** Tests whether node1 is an ancestor of node 2.
 	 * If node1 and node2 is the same, true is returned.
 	 */
 	public static boolean isAncestor(Component node1, Component node2) {
@@ -215,7 +215,7 @@ public class Components {
 	/** Returns whether this component is real visible (all its parents
 	 * are visible).
 	 * <p>Note: true is returned if comp is null.
-	 * In other words, it can be used to examine parent's real visibity
+	 * In other words, it can be used to examine parent's real visibility
 	 * even if it is a root component,
 	 * such as <code>Components.isRealVisible(getParent())</code>.
 	 * @see Component#isVisible
@@ -305,7 +305,7 @@ public class Components {
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
 
-	/** Converts a component to a path (relavant to another component).
+	/** Converts a component to a path (relevant to another component).
 	 * It is usefully to implement a serializable component that contains
 	 * a reference to another component. In this case, we can not
 	 * serializes the reference directly (otherwise, another component will
@@ -484,7 +484,7 @@ public class Components {
 	public static boolean isImplicit(String id) {
 		return IMPLICIT_NAMES.contains(id);
 	}
-	/** Retuns a readonly collection of the names of the implicit objects.
+	/** Returns a readonly collection of the names of the implicit objects.
 	 * @since 6.0.0
 	 */
 	public static Collection<String> getImplicitNames() {
@@ -508,7 +508,7 @@ public class Components {
 			IMPLICIT_NAMES.add(names[j]);
 	}
 
-	/** Retuns the implicit object of the specified name, or null
+	/** Returns the implicit object of the specified name, or null
 	 * if not found.
 	 *
 	 * <p>Notice that it does check for the current scope
@@ -577,10 +577,10 @@ public class Components {
 			//Note that request parameter is prepared by servlet container, you shall not
 			//copy the reference to this map; rather, you shall clone the key-value pair one-by-one.
 		}
-		//20090314, Henri Chen: No way to suppport "event" with an event proxy because org.zkoss.zk.Event is not an interface
+		//20090314, Henri Chen: No way to support "event" with an event proxy because org.zkoss.zk.Event is not an interface
 		return null;
 	}
-	/** Retuns the implicit object of the specified name, or null
+	/** Returns the implicit object of the specified name, or null
 	 * if not found.
 	 * <p>It is the same as getImplicit(null, comp, name).
 	 * @since 3.6.0
@@ -588,7 +588,7 @@ public class Components {
 	public static Object getImplicit(Component comp, String name) {
 		return getImplicit(null, comp, name);
 	}
-	/** Retuns the implicit object of the specified name, or null
+	/** Returns the implicit object of the specified name, or null
 	 * if not found.
 	 * <p>It is the same as getImplicit(page, null, name).
 	 * @since 3.6.0

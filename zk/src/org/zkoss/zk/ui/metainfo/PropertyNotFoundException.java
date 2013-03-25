@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.metainfo;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Represents the a property (aka., a method of a component) is not found.
+ * Represents the a property (a.k.a., a method of a component) is not found.
  * @author tomyeh
  * @since 3.0.5
  */

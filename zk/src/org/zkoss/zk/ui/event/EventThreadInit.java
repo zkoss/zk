@@ -45,7 +45,7 @@ public interface EventThreadInit {
 	/** Prepares the initialization at the servlet thread.
 	 *
 	 * <p>It is invoked in the servlet thread (and before {@link #init}).
-	 * Thus, you can NOT manipulate the deskop in this method.
+	 * Thus, you can NOT manipulate the desktop in this method.
 	 *
 	 * <p>If this method throws an exception, it will abort the execution
 	 * and shows an error message to the end user.

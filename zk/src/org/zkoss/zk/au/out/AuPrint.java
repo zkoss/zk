@@ -19,7 +19,7 @@ package org.zkoss.zk.au.out;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * A response to ask the client to print the desktop (aka., the browser window).
+ * A response to ask the client to print the desktop (a.k.a., the browser window).
  *
  * <p>no data.
  * 

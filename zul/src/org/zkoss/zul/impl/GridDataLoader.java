@@ -133,7 +133,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 			if (max > oldsz - 1) max = oldsz - 1;
 
-			//detach from end (due to groopfoot issue)
+			//detach from end (due to groupfoot issue)
 			Component comp = rows.getChildren().get(max);
 			while (--cnt >= 0) {
 				Component p = comp.getPreviousSibling();

@@ -51,11 +51,11 @@ public interface Attributable {
 	 * the specified criteria.
 	 *
 	 * @param indexFrom the index to start searching from; 0 for beginning
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
-	 * @param mode the serach mode; zero or any combination of Item.FIND_xxx
+	 * @param mode the search mode; zero or any combination of Item.FIND_xxx
 	 * @return the index if found; -1 if not found
 	 */
 	public int
@@ -77,9 +77,9 @@ public interface Attributable {
 	 * <p>According to Section 3.3.3 of XML 1.0 spec, the value is normalized,
 	 * including trimmed.
 	 *
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
 	 * @return the value of the attribute; null if not found
 	 */
@@ -98,11 +98,11 @@ public interface Attributable {
 	 * <p>The name is a bit strange because we have to avoid name conflicts
 	 * with org.w3c.dom.Node.
 	 *
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
-	 * @param mode the serach mode; zero or any combination of Item.FIND_xxx
+	 * @param mode the search mode; zero or any combination of Item.FIND_xxx
 	 * @return the index if found; -1 if not found
 	 */
 	public Attribute getAttributeItem(String namespace, String name, int mode);
@@ -121,11 +121,11 @@ public interface Attributable {
 	/**
 	 * Gets a list of attributes of the specified criteria.
 	 *
-	 * @param namespace the namspace URI if FIND_BY_PREFIX is not specified;
-	 * the namespace prefix if FIND_BY_PREFIX specified; null to ingore
-	 * @param name the local name if FIND_BY_TAGNAME is not sepcified;
+	 * @param namespace the namespace URI if FIND_BY_PREFIX is not specified;
+	 * the namespace prefix if FIND_BY_PREFIX specified; null to ignore
+	 * @param name the local name if FIND_BY_TAGNAME is not specified;
 	 * the tag name if FIND_BY_TAGNAME specified; null to ignore
-	 * @param mode the serach mode; zero or any combination of Item.FIND_xxx
+	 * @param mode the search mode; zero or any combination of Item.FIND_xxx
 	 * @return null if not found
 	 */
 	public List<Attribute> getAttributes(String namespace, String name, int mode);

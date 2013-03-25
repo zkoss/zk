@@ -15,9 +15,7 @@ import java.lang.reflect.Method;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.resource.Location;
-import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;

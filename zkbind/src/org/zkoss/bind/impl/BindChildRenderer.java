@@ -11,9 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
-import org.zkoss.xel.VariableResolverX;
-import org.zkoss.xel.XelContext;
-import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;

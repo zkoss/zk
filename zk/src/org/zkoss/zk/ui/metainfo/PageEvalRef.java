@@ -35,11 +35,11 @@ implements java.io.Serializable {
 	/** Used only if _pagedef == null. */
 	private transient Evaluator _eval;
 	/** The implementation of the expression factory.
-	 * Used oly if _pagedef == null.
+	 * Used only if _pagedef == null.
 	 */
 	private Class<? extends ExpressionFactory> _expfcls;
 	/** The function mapper for the evaluator.
-	 * Used oly if _pagedef == null.
+	 * Used only if _pagedef == null.
 	 */
 	private FunctionMapper _mapper;
 

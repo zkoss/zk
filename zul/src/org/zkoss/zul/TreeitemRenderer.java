@@ -45,7 +45,7 @@ public interface TreeitemRenderer<T> {
 	 * at all, unless you don't return</li>
 	 * <li>Treeitem and Treerow are only components that allowed to be
 	 * <b>item</b>'s children.</li>
-	 * <li>A new treerow should be contructed and append to <b>item</b>, when
+	 * <li>A new treerow should be constructed and append to <b>item</b>, when
 	 * treerow of <b>item</b> is null.<br/> Otherwise, when treerow of <b>item</b> is not null, 
 	 * modify the content of the treerow or detach the treerow's children first, since that only one treerow is allowed</li>
 	 * <li>Do not append any treechildren to <b>item</b> in this method, a treechildren will be appended afterward.</li>

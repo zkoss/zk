@@ -23,10 +23,10 @@ import org.zkoss.util.media.Media;
  * if a component might have viewable parts other than HTML (WML, XAML
  * or any client language). A typical example is an image and an audio.
  *
- * <h3>How it woks:</h3>
+ * <h3>How it works:</h3>
  *
  * <ol>
- * <li>DynamicMedia componet first invoke {@link org.zkoss.zk.ui.Desktop#getDynamicMediaURI}
+ * <li>DynamicMedia component first invoke {@link org.zkoss.zk.ui.Desktop#getDynamicMediaURI}
  * to retrieve a URI and generate proper HTML (or any client language).<li>
  * <li>Then, client will send a request to the URI</li>
  * <li> {@link org.zkoss.zk.au.http.DHtmlUpdateServlet} interprets it

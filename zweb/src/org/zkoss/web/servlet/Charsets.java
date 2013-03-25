@@ -67,7 +67,7 @@ public class Charsets {
 	 * }
 	 *
 	 * <p>It is OK to call this method multiple time, since it is smart
-	 * enough to ignore redudant calls.
+	 * enough to ignore redundant calls.
 	 *
 	 * <p>{@link CharsetFilter} actually use this method to setup
 	 * the proper charset and locale. By mapping {@link CharsetFilter} to

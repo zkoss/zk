@@ -86,7 +86,7 @@ public class ExecutionResolver implements VariableResolverX {
 		if (name == null || name.length() == 0) //just in case
 			return null;
 
-		//Note: we have to access keyword frist (rather than component's ns)
+		//Note: we have to access keyword first (rather than component's ns)
 		//since 1) BeanShell interpreter will store back variables
 		//and page.getZScriptVariable will return the old value
 		//2) ZK 5, getAttributeOrFellow doesn't look for variable resolvers and implicit objects 

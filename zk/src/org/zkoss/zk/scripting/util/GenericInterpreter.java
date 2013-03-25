@@ -40,12 +40,12 @@ import org.zkoss.zk.scripting.Interpreter;
  * Instead, override {@link #get(String)}, {@link #contains(String)},
  * {@link #set(String,Object)} and {@link #unset(String)} instead.
  *
- * <p>If an interpreter doesn't support hierachical scopes,
+ * <p>If an interpreter doesn't support hierarchical scopes,
  * it can simply implement a global scope, and then use
  * {@link #getFromNamespace} to
- * retrieve variables from ZK's hierachical scopes.
+ * retrieve variables from ZK's hierarchical scopes.
  *
- * <p>If it supports hierachical scopes
+ * <p>If it supports hierarchical scopes
  * (example: {@link org.zkoss.zk.scripting.bsh.BSHInterpreter}), it
  * can maintain a one-to-one relationship among interpreter's scopes
  * and ZK's {@link IdSpace}. Thus, it can retrieve
@@ -53,7 +53,7 @@ import org.zkoss.zk.scripting.Interpreter;
  * It also has to implement {@link #get(Scope,String)}, {@link #contains(Scope,String)}
  * {@link #set(Scope,String,Object)} and {@link #unset(Scope,String)}.
  *
- * <p>Whether to support hierachical scopes is optional.
+ * <p>Whether to support hierarchical scopes is optional.
  *
  * @author tomyeh
  */
@@ -158,7 +158,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * a variable in the interpreter.
 	 *
 	 * <p>This method is implemented only if the interpreter that supports
-	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
 	 *
 	 * <p>Default: the same as {@link #set(String, Object)}.
 	 *
@@ -173,7 +173,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * a variable from the interpreter.
 	 *
 	 * <p>This method is implemented only if the interpreter that supports
-	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
 	 *
 	 * <p>Default: the same as {@link #unset(String)}.
 	 *
@@ -261,7 +261,7 @@ abstract public class GenericInterpreter implements Interpreter {
 		}
 		return getImplicit(name);
 	}
-	/** Returns the value of the implict variables.
+	/** Returns the value of the implicit variables.
 	 * It is called by {@link #getFromNamespace}, so you don't need to
 	 * invoke this method if you invoke {@link #getFromNamespace}.
 	 * However, you have to invoke this method as the last step, if you
@@ -279,7 +279,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * when the real interpreter failed to find a variable in its own scope.
 	 *
 	 * <p>This method is used with the interpreter that supports
-	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
 	 *
 	 * @param scope the scope to search from (never null).
 	 * Note: if {@link #getCurrent} returns null, this method simply returns
@@ -430,7 +430,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>This method is part of {@link org.zkoss.zk.scripting.HierachicalAware}.
 	 * It is defined here to simplify the implementation of the
-	 * deriving classes, if they support the hierachical scopes.
+	 * deriving classes, if they support the hierarchical scopes.
 	 * @since 5.0.0
 	 */
 	public Object getVariable(Scope scope, String name) {

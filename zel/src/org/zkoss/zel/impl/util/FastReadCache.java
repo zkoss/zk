@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 
 /**
- * A {@link CacheMap} that the possiblity to have cache hit is much more than
+ * A {@link CacheMap} that the possibility to have cache hit is much more than
  * not. It maintains a reaonly cache (so no need to synchronize), and then
  * clone and replace it if there is a miss.
  * Thus, as time goes, most access can go directly to the readonly cache

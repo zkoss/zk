@@ -29,7 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuSetAttribute extends AuResponse {
-	/** Construct an instance for miscellanous values, such as Boolean,
+	/** Construct an instance for miscellaneous values, such as Boolean,
 	 * Integer and so on.
 	 * @param val the value. It could be null, String, Date,
 	 * {@link org.zkoss.zk.au.DeferredValue},

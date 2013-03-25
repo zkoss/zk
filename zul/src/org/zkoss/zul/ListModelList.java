@@ -63,7 +63,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	 *
 	 * However, it is not a good idea to modify <code>list</code>
 	 * if it is passed to this method with live is true,
-	 * since {@link Listbox} is not smart enough to hanle it.
+	 * since {@link Listbox} is not smart enough to handle it.
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
@@ -80,7 +80,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	
 	/**
 	 * Constructor.
-	 * It mades a copy of the specified collection (i.e., not live).
+	 * It makes a copy of the specified collection (i.e., not live).
 	 *
 	 * <p>Notice that if the data is static or not shared, it is better to
 	 * use <code>ListModelList(c, true)</code> instead, since
@@ -91,7 +91,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	}
 	/**
 	 * Constructor.
-	 * It mades a copy of the specified array (i.e., not live).
+	 * It makes a copy of the specified array (i.e., not live).
 	 * @since 2.4.1
 	 */
 	public ListModelList(E[] array) {
@@ -324,7 +324,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	}
 	
 	public boolean removeAll(Collection<?> c) {
-		if (_list == c || this == c) { // sepcial case
+		if (_list == c || this == c) { // special case
 			clearSelection();
 			clear();
 			return true;

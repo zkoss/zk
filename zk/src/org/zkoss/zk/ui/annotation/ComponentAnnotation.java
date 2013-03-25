@@ -24,7 +24,7 @@ public String getValue() {
     //...
 }</code></pre>
  *
- * <p>The sytax of the value is the same as
+ * <p>The syntax of the value is the same as
  * <a href="http://books.zkoss.org/wiki/ZK%20Developer%27s%20Reference/Annotations/Annotate%20in%20ZUML">ZUML's annotations</a>.
  * Like ZUML, if you have multiple annotations, you can specify it in the same string.
  * For example,

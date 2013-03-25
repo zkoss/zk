@@ -12,7 +12,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys.debugger.impl.info;
 
 import org.zkoss.json.JSONObject;
-import org.zkoss.zk.ui.Component;
 
 /**
  * @author dennis

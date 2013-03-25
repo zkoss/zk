@@ -768,12 +768,12 @@ public class Servlets {
 	 *
 	 * <ul>
 	 *  <li>It handles "~ctx"" where ctx is the context path of the
-	 *  foreign context. It is called foriegn URI.</li>
+	 *  foreign context. It is called foreign URI.</li>
 	 *  <li>It detects whether the page calling this method
 	 * is included by another servlet/page. If so, it uses
 	 * RequestDispatcher.include() instead of RequestDispatcher.forward().</li>
 	 *  <li>The forwarded page could accept additional parameters --
-	 * acutually converting parameters to a query string
+	 * actually converting parameters to a query string
 	 * and appending it to uri.</li>
 	 * <li>In additions, it does HTTP encoding, i.e., converts '+' and other
 	 * characters to comply HTTP.</li>

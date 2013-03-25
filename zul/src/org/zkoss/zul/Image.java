@@ -54,7 +54,7 @@ import org.zkoss.zul.impl.Utils;
  * For example,
  * <pre><code> &lt;library-property/&gt;
  *     &lt;name&gt;org.zkoss.zul.image.preload&lt;/name/&gt;
- *     &lt;value&gt;ture&lt;/value/&gt;
+ *     &lt;value&gt;true&lt;/value/&gt;
  * &lt;/library-property/&gt;
  * </code></pre>
  * 

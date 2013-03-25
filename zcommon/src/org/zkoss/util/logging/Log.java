@@ -100,7 +100,7 @@ public class Log {
 	private static Logger _default;
 
 	/** The category that this log belongs.
-	 * Note: it is temporay and set to null when {@link #logger} is called.
+	 * Note: it is temporary and set to null when {@link #logger} is called.
 	 */
 	private String _name;
 	/** Used if useHierachy() is true. */
@@ -187,7 +187,7 @@ public class Log {
 	/** Returns whether the loggers support hierarchy.
 	 * If hierarchy is supported, a {@link Log} instance is mapped to
 	 * a {@link Logger} instance with the same name. Therefore, it
-	 * forms the hierarchical relatiionship among {@link Logger} instances.
+	 * forms the hierarchical relationship among {@link Logger} instances.
 	 * It has the best resolution to control which logger to enable.
 	 *
 	 * <p>On the other hand, if the loggers don't support hierarchy,
@@ -211,7 +211,7 @@ public class Log {
 	}
 
 	/** This property is deprecated in ZK 6, since it is longer required for GAE.
-	 * HOwever, we keep it here for backward compatiblity.
+	 * HOwever, we keep it here for backward compatibility.
 	 * We might remove it in the future.
 	 */
 	private static final boolean hierarchyDisabled() {
@@ -233,7 +233,7 @@ public class Log {
 	 * Gets the logger based on the giving name.
 	 * <p>Since 5.0.7, this constructor, unlike others, ignores
 	 * {@link #isHierarchy} and always assumes the hierarchy name.
-	 * Notice the heirachy is always disabled if a library property called
+	 * Notice the hierarchy is always disabled if a library property called
 	 * <code>org.zkoss.util.logging.hierarchy.disabled</code> is set to true.
 	 */
 	public static final Log lookup(String name) {
@@ -276,7 +276,7 @@ public class Log {
 	}
 
 	/**
-	 * Retruns the logging level.
+	 * Returns the logging level.
 	 */
 	public final Level getLevel() {
 		return getLogger().getLevel();
@@ -350,7 +350,7 @@ public class Log {
 	/**
 	 * Logs a message and a throwable object at the giving level.
 	 *
-	 * <p>All log methods eventaully invokes this method to log messages.
+	 * <p>All log methods eventually invokes this method to log messages.
 	 *
 	 * @param t the throwable object; null to ignore
 	 */
@@ -865,7 +865,7 @@ public class Log {
 	/** Logs only the first few lines of the real cause as an error message.
 	 * <p>To control the number of lines to log, you can specify a library
 	 * property called org.zkoss.util.logging.realCauseBriefly.lines.
-	 * If not specified, 6 is assumed. If nonpostive is specified, the full stack
+	 * If not specified, 6 is assumed. If nonpositive is specified, the full stack
 	 * traces are logged.
 	 * <p>Notice that # of lines don't include packages starting with java, javax or sun.
 	 */
@@ -874,7 +874,7 @@ public class Log {
 			Library.getIntProperty("org.zkoss.util.logging.realCauseBriefly", 6));
 	}
 
-	/** Lo only the first few lines of the real cause as an error message.
+	/** Logs only the first few lines of the real cause as an error message.
 	 */
 	public final void realCauseBriefly(Throwable ex) {
 		realCauseBriefly(null, ex);
@@ -906,7 +906,7 @@ public class Log {
 	/** Logs only the first few lines of the real cause as an warning message.
 	 * <p>To control the number of lines to log, you can specify a library
 	 * property called org.zkoss.util.logging.warningBriefly.lines.
-	 * If not specified, 3 is assumed. If nonpostive is specified, the full stack
+	 * If not specified, 3 is assumed. If nonpositive is specified, the full stack
 	 * traces are logged.
 	 * <p>Notice that # of lines don't include packages starting with java, javax or sun.
 	 */
@@ -960,7 +960,7 @@ BAR+(message != null ? "\n"+message: "")
 	}
 
 	/**
-	 * Used internally to represent a hierachical log.
+	 * Used internally to represent a hierarchical log.
 	 */
 	private static class HierLog extends Log {
 		private HierLog(String name) {

@@ -28,7 +28,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.cfg.AnnotationConfiguration;
 /**
- * <p>Utitlity to access Hibernate Session. This implemenation works with the Hibernate's 
+ * <p>Utility to access Hibernate Session. This implementation works with the Hibernate's 
  * thread session context (version 3.1+). That is, you have to specified 
  * hibernate's configuration file "hibernate.cfg.xml" to as follows:</p>
  *
@@ -88,7 +88,7 @@ public class HibernateUtil {
 	 /**
 	 * Used in {@link HibernateSessionFactoryListener} to init
 	 * Hibernate SessionFactory.
-	 * @param app web applicaton, given null will try to get it from current Execution.
+	 * @param app web application, given null will try to get it from current Execution.
 	 * @since 3.0.1
 	 */
 	/* package */ static SessionFactory initSessionFactory(WebApp app) {

@@ -40,7 +40,7 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	 *
 	 * <p>Deriving must override this method.
 	 *
-	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
+	 * @param extra the extra parameter passed from {@link ResourceCaches#get}.
 	 */
 	abstract protected V parse(String path, File file, Object extra)
 	throws Exception;
@@ -49,7 +49,7 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	 *
 	 * <p>Deriving must override this method.
 	 *
-	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
+	 * @param extra the extra parameter passed from {@link ResourceCaches#get}.
 	 */
 	abstract protected V parse(String path, URL url, Object extra)
 	throws Exception;

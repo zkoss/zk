@@ -30,7 +30,7 @@ package org.zkoss.zk.ui.event;
  *
  * <p>The deferrable events are used to improve the performance by minimizing
  * the traffic between the clients and the server.
- * It is usully used
+ * It is usually used
  * for event listeners that maintains the application states, rather
  * than generating visual responses.
  *

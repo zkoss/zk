@@ -49,13 +49,13 @@ import org.zkoss.zul.Comboitem;
 		item.getChildren().addAll(kids);
 		//item.removeAttribute(KIDS);
 			
-		//remove template mark of cloned component and its decendant
+		//remove template mark of cloned component and its descendants
 		_binder.setupTemplateComponent(item, null); 
 			
 		//setup clone id
 		BindingRendererUtil.setupCloneIds(item);
 
-		//bind bean to the associated listitem and its decendant
+		//bind bean to the associated listitem and its descendants
 		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
 		final Map<Object, Object> templatemap = cast((Map) item.getAttribute(DataBinder.TEMPLATEMAP));
 		templatemap.put(varname, bean);
@@ -78,7 +78,7 @@ import org.zkoss.zul.Comboitem;
 		}
 		
 		//link cloned component with template
-		//each Comboitem and and it decendants share the same templatemap
+		//each Comboitem and and it descendants share the same templatemap
 		Map<Object, Object> templatemap = new HashMap<Object, Object>(8);
 		BindingRendererUtil.linkTemplates(clone, _template, templatemap, _binder);
 		

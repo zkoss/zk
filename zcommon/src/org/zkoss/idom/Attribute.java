@@ -25,7 +25,7 @@ import org.zkoss.idom.impl.*;
  * The iDOM attribute.
  *
  * <p>Design decision: Attribute is also a item. The reason is
- * it simplifies the use of xpath. An xpath might return either
+ * it simplifies the use of XPath. An XPath might return either
  * elements or attributes, so...
  *
  * @author tomyeh

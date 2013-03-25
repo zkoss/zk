@@ -38,8 +38,8 @@ public class DocType extends AbstractItem implements DocumentType {
 
 	/** Constructor.
 	 *
-	 * @param publicId the public Id; null or empty if not availabl
-	 * @param systemId the system Id; null or empty if not availabl
+	 * @param publicId the public Id; null or empty if not available
+	 * @param systemId the system Id; null or empty if not available
 	 */
 	public DocType(String elementName, String publicId, String systemId) {
 		setName(elementName);
@@ -80,7 +80,7 @@ public class DocType extends AbstractItem implements DocumentType {
 	 * Sets the public ID of an externally referenced DTD, or an empty
 	 * String if none is referenced.
 	 *
-	 * @param publicId the public Id; null or empty if not availabl
+	 * @param publicId the public Id; null or empty if not available
 	 */
 	public final void setPublicId(String publicId) {
 		if (publicId == null)
@@ -101,7 +101,7 @@ public class DocType extends AbstractItem implements DocumentType {
 	 * Sets the system ID of an externally referenced DTD, or an empty
 	 * String if none is referenced.
 	 *
-	 * @param systemId the system Id; null or empty if not availabl
+	 * @param systemId the system Id; null or empty if not available
 	 */
 	public final void setSystemId(String systemId) {
 		if (systemId == null)

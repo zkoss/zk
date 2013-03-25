@@ -28,7 +28,7 @@ package org.zkoss.zul;
  */
 public interface ListSubModel<E> {
 	/** Returns the subset of list model data that the subset data is extract 
-	 * from combobox's list model data. It is ususally used for implmentation of
+	 * from combobox's list model data. It is usually used for implementation of
 	 * auto-complete.
 	 *
 	 * @param value the object is used to find that the content is consistent 
@@ -36,7 +36,7 @@ public interface ListSubModel<E> {
 	 * @param nRows the number of rows suggested to return (as the
 	 * returned ListModel instance). It's a suggestion for developer to
 	 * follow.
-	 * If nonpositive, it means the maximal allowed rows is decided by the 
+	 * If non-positive, it means the maximal allowed rows is decided by the 
 	 * implementation of ListSubmodel.
 	 * @since 3.0.2
 	 */

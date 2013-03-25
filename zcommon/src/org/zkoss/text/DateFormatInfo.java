@@ -14,7 +14,7 @@ package org.zkoss.text;
 
 import java.util.Locale;
 
-/** The format infomation for date/time.
+/** The format information for date/time.
  * It is used with {@link DateFormats#setLocalFormatInfo} to provide
  * the format information for different styling and locales.
  * @author tomyeh

@@ -49,7 +49,7 @@ public class Maps {
 	 * <ul>
 	 *  <li>It accepts any charset, not just 8859-1.</li>
 	 *  <li>It uses a different syntax to let value spread over multiple
-	 *  lines, descrubed below.</li>
+	 *  lines, described below.</li>
 	 *  <li>Whitespace is trimmed around '=' and at the beginning of
 	 * the key and the ending of the value.</li>
 	 *  <li>Illegal lines are ignored (Properties.load considers it
@@ -58,9 +58,9 @@ public class Maps {
 	 *  <li>Only '#' is accepted as comment lines.</li>
 	 * </ul>
 	 *
-	 * <p>To spead a value over multiple lines, you could,
+	 * <p>To spread a value over multiple lines, you could,
 	 * unlike java.util.Properties.load, append '{' to the end of a line.
-	 * Then, all the following lines are considerred as part of a value,
+	 * Then, all the following lines are considered as part of a value,
 	 * unless encountering a line containing only one '}'.<br>
 	 * Example:
 	 * <pre><code>abc = {
@@ -285,7 +285,7 @@ public class Maps {
 	 * @param separator the separator, e.g., ' ' or ','.
 
 	 * @param quote the quote character to surround the value.
-	 * Ingored if quote is (char)0.<br/>
+	 * Ignored if quote is (char)0.<br/>
 	 * Since 3.6.0: if quote is (char)1, then both ' and " are accepted.</br>
 	 * For example, a1='b c' will generate a map entry, ("a1", "b c") if
 	 * quote is '\''.<br/>
@@ -347,7 +347,7 @@ public class Maps {
 	 * @param separator the separator, e.g., ' ' or ','.
 
 	 * @param quote the quote character to surround the value.
-	 * Ingored if quote is (char)0.<br/>
+	 * Ignored if quote is (char)0.<br/>
 	 * Since 3.6.0: if quote is (char)1, then both ' and " are accepted.</br>
 	 * For example, a1='b c' will generate a map entry, ("a1", "b c") if
 	 * quote is '\''.<br/>
@@ -564,7 +564,7 @@ public class Maps {
 		return new Token(j, j < len ? src.charAt(j): (char)0, tksb.toString());
 	}
 	/** Returns the ending parenthesis (such as }),
-	 * or (char)0 if cc is not the beginning parenthsis (such as {).
+	 * or (char)0 if cc is not the beginning parenthesis (such as {).
 	 */
 	private static final char getEndingParenthesis(char cc) {
 		return cc == '{' ? '}': cc == '(' ? ')': cc == '[' ? ']': (char)0;
@@ -593,7 +593,7 @@ public class Maps {
 	 * Converts a map to a string.
 	 *
 	 * @param map the map to convert from
-	 * @param quote the quotation character; 0 means no quotation surrunding
+	 * @param quote the quotation character; 0 means no quotation surrounding
 	 * the value
 	 * @param separator the separator between two name=value pairs
 	 * @see #parse(Map, String, char, char)

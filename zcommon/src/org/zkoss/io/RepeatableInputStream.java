@@ -35,12 +35,12 @@ import org.zkoss.util.logging.Log;
 /**
  * {@link RepeatableInputStream} adds functionality to another input stream,
  * the ability to read repeatedly.
- * By repeatable-read we meaen, after {@link #close}, the next invocation of
+ * By repeatable-read we mean, after {@link #close}, the next invocation of
  * {@link #read} will re-open the input stream.
  *
  * <p>{@link RepeatableInputStream} actually creates a temporary space
  * to buffer the content, so it can be re-opened again after closed.
- * Notice that the temporary space (aka., the buffered input stream)
+ * Notice that the temporary space (a.k.a., the buffered input stream)
  * is never closed until garbage-collected.
  *
  * <p>If the content size of the given input stream is smaller than
@@ -87,10 +87,10 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	 * Returns an input stream that can be read repeatedly, or null if the
 	 * given input stream is null.
 	 * Note: the returned input stream encapsulates the given input stream, rd
-	 * (aka., the buffered input stream) to adds the functionality to
+	 * (a.k.a., the buffered input stream) to adds the functionality to
 	 * re-opens the input stream once {@link #close} is called.
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the input stream.
 	 *
 	 * <p>Use this method instead of instantiating {@link RepeatableInputStream}
@@ -109,10 +109,10 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	 * Returns an input stream of a file that can be read repeatedly.
 	 * Note: it assumes the file is binary (rather than text).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the input stream.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @exception IllegalArgumentException if file is null.
@@ -132,10 +132,10 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	 * Returns an input stream of a file that can be read repeatedly.
 	 * Note: it assumes the file is binary (rather than text).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the input stream.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @exception IllegalArgumentException if file is null.
@@ -151,10 +151,10 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	 * that can be read repeatedly.
 	 * Note: it assumes the resource is binary (rather than text).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the input stream.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the resource to make it repeatable-read.
 	 *
 	 * @exception IllegalArgumentException if url is null.
@@ -249,7 +249,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 				if (_f == null)
 					_in = new ByteArrayInputStream(
 						((ByteArrayOutputStream)_out).toByteArray());
-					//we don't initilize _in if _f is not null
+					//we don't initialize _in if _f is not null
 					//to reduce memory use (after all, read might not be called)
 				_out = null;
 				_org = null;
