@@ -109,6 +109,7 @@ ZK 6.5.2
   ZK-1668: Malformed url on SAP NetWeaver 7.30
   ZK-1686: Paging Tree with draggable item cause js error when changing page
   ZK-1689: Wrong left/top of parent positioned window
+  ZK-1682: Problem with formatedNumber converter in 6.5.2-FL and de_DE locale
   
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider (for ZK CE),

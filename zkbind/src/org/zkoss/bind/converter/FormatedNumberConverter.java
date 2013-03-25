@@ -66,7 +66,7 @@ public class FormatedNumberConverter implements Converter,Serializable {
 	private static DecimalFormat getLocalizedDecimalFormat(String pattern){
 		final DecimalFormat df = 
 			(DecimalFormat)NumberFormat.getInstance(Locales.getCurrent());
-		df.applyLocalizedPattern(pattern);
+		df.applyPattern(pattern);
 		return df;
 	}
 }
