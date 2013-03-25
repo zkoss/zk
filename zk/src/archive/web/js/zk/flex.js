@@ -391,7 +391,7 @@ zFlex = { //static methods
 			wdh = psz.width,
 			c = p.firstChild,
 			scrWdh;
-			
+		
 		// Bug 3185686, B50-ZK-452
 		if(zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
@@ -417,8 +417,11 @@ zFlex = { //static methods
 					cwgt = zk.Widget.$(c, {exact: 1});
 				
 				//Bug ZK-1647: should consider header width
-				if (zk.isLoaded('zul.mesh') && cwgt && cwgt.$instanceof(zul.mesh.HeaderWidget))
-					offwdh = jq(c).width();
+				if (zk.isLoaded('zul.mesh') && cwgt && cwgt.$instanceof(zul.mesh.HeaderWidget)) {
+					// Bug Flex-138: skip if wdh exists 
+					if(!offwdh)
+						offwdh = jq(c).width();
+				}	
 				
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
