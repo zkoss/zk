@@ -328,6 +328,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isModal(mode) {
 		return mode == 'modal' || mode == 'highlighted';
 	}
+	
+	//Bug ZK-1689: get relative position to parent.
+	function _getPosByParent(wgt, left, top) {
+		var pos = wgt._position,
+			left = zk.parseInt(left),
+			top = zk.parseInt(top),
+			x = 0, y = 0;
+		if (pos == 'parent') {
+			var vp = zk(wgt.$n()).vparentNode();
+			if (vp) {
+				var ofs = zk(vp).revisedOffset();
+				x = ofs[0];
+				y = ofs[1];
+			}
+		}
+		return [jq.px(left - x), jq.px(top - y)];
+	}
 
 var Window =
 /**
@@ -571,15 +588,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
 					// B50-ZK-462: Window fire unexpected onMaximize event
-					if (!this._notSendMaximize)
+					if (!this._notSendMaximize) {
+						var p = _getPosByParent(this, l, t); //Bug ZK-1689
 						this.fire('onMaximize', {
-							left: l,
-							top: t,
+							left: p[0],
+							top: p[1],
 							width: w,
 							height: h,
 							maximized: maximized,
 							fromServer: fromServer
 						});
+					}
 				}
 				if (isRealVisible)
 					zUtl.fireSized(this);
@@ -601,7 +620,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 			var node = this.$n();
 			if (node) {
-				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
+				var s = node.style;
 				if (minimized) {
 					zWatch.fireDown('onHide', this);
 					jq(node).hide();
@@ -612,9 +631,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (!fromServer) {
 					this._visible = false;
 					this.zsync();
+					var p = _getPosByParent(this, s.left, s.top); //Bug ZK-1689
 					this.fire('onMinimize', {
-						left: s.left,
-						top: s.top,
+						left: p[0],
+						top: p[1],
 						width: s.width,
 						height: s.height,
 						minimized: minimized
@@ -977,20 +997,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_fireOnMove: function (keys) {
-		var pos = this._position, node = this.$n(),
-			x = zk.parseInt(node.style.left),
-			y = zk.parseInt(node.style.top);
-		if (pos == 'parent') {
-			var vp = zk(node).vparentNode();
-			if (vp) {
-				var ofs = zk(vp).revisedOffset();
-				x -= ofs[0];
-				y -= ofs[1];
-			}
-		}
+		var s = this.$n().style,
+			p = _getPosByParent(this, s.left, s.top); //Bug ZK-1689
 		this.fire('onMove', zk.copy({
-			left: x + 'px',
-			top: y + 'px'
+			left: p[0],
+			top: p[1]
 		}, keys), {ignorable: true});
 
 	},

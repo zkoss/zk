@@ -108,6 +108,7 @@ ZK 6.5.2
   ZK-1679: with hflex min child component will not size correctly after parent is resized
   ZK-1668: Malformed url on SAP NetWeaver 7.30
   ZK-1686: Paging Tree with draggable item cause js error when changing page
+  ZK-1689: Wrong left/top of parent positioned window
   
 * Upgrade Notes
   + org.zkoss.zkplus.theme.StandardThemeProvider is deprecated, please use org.zkoss.zul.theme.StandardThemeProvider (for ZK CE),
