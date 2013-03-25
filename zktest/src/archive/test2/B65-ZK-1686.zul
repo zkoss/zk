@@ -1,0 +1,19 @@
+<zk>
+	Click next page button, should not see js error.
+	<window>
+		<tree mold="paging" pageSize="3">
+			<treecols>
+				<treecol label="Test" />
+				<treecol label="Test" />
+				<treecol label="Test" />
+				<treecol label="Test" />
+			</treecols>
+			<treechildren>
+				<treeitem draggable="true" label="Test" />
+				<treeitem draggable="true" label="Test" />
+				<treeitem draggable="true" label="Test" />
+				<treeitem draggable="true" label="Test" />
+			</treechildren>
+		</tree>
+	</window>
+</zk>

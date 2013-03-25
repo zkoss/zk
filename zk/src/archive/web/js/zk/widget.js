@@ -3133,10 +3133,12 @@ unbind_: function (skipper, after) {
 	 */
 	initDrag_: function () {
 		var n = this.getDragNode();
-		this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
-		// B50-3306835.zul
-		if (zk.ie9 && jq.nodeName(n, "img"))
-			jq(n).bind('mousedown', zk.$void);
+		if (n) { //ZK-1686: should check if DragNode exist
+			this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
+			// B50-3306835.zul
+			if (zk.ie9 && jq.nodeName(n, "img"))
+				jq(n).bind('mousedown', zk.$void);
+		}
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
 	 * is cleaned (or unbound).

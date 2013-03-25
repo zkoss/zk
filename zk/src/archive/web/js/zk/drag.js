@@ -293,7 +293,7 @@ String scroll; //DOM Element's ID</code></pre>
 	//opts: null,
 	/** Constructor.
 	 * @param Object control the control object for this draggable.
-	 * I can be anything, but it is usually a widget ({@link zk.Widget}).
+	 * It can be anything, but it is usually a widget ({@link zk.Widget}).
 	 * @param DOMElement node [optional] the DOM element that is made to be draggable.
 	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
 	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
