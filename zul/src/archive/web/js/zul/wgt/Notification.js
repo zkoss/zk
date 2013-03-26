@@ -110,8 +110,8 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		if (!p)
 			return;
 		var n = this.$n(),
-			pw = 2 + (zk(p).borderWidth() / 2) | 0,
-			ph = 2 + (zk(p).borderHeight() / 2) | 0;
+			pw = 2 + (zk(p).borderWidth() / 2) || 0,
+			ph = 2 + (zk(p).borderHeight() / 2) || 0;
 		
 		n.style.padding = '0';
 		// cache arrow direction for _fixarrow() later
@@ -186,17 +186,17 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			// positioning
 			if (dir == 'u' || dir == 'd') {
 				var b = dir == 'u',
-					l1 = (n.offsetWidth - pw) / 2 | 0,
-					l2 = refOffset[0] - nOffset[0] + arrXOffset | 0;
+					l1 = (n.offsetWidth - pw) / 2 || 0,
+					l2 = refOffset[0] - nOffset[0] + arrXOffset || 0;
 				p.style.left = (refn.offsetWidth >= n.offsetWidth ? l1 : l2) + 'px'; //ZK-1583: assign arrow position to reference widget if it is large than notification
-				p.style[b ? 'top' : 'bottom'] = ((2 - ph / 2) | 0) + 'px';
+				p.style[b ? 'top' : 'bottom'] = ((2 - ph / 2) || 0) + 'px';
 				p.style[b ? 'bottom' : 'top'] = '';
 			} else {
 				var b = dir == 'l',
-					t1 = (n.offsetHeight - ph) / 2 | 0,
-					t2 = refOffset[1] - nOffset[1] + arrYOffset | 0;
+					t1 = (n.offsetHeight - ph) / 2 || 0,
+					t2 = refOffset[1] - nOffset[1] + arrYOffset || 0;
 				p.style.top = (refn.offsetHeight >= n.offsetHeight ? t1 : t2) + 'px'; //ZK-1583: assign arrow position to reference widget if it is large than notification
-				p.style[b ? 'left' : 'right'] = ((2 - pw / 2) | 0) + 'px';
+				p.style[b ? 'left' : 'right'] = ((2 - pw / 2) || 0) + 'px';
 				p.style[b ? 'right' : 'left'] = '';
 			}
 			
