@@ -381,7 +381,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<theme-uri>/a.css</theme-uri>
 		<theme-uri>/b**.css</theme-uri>
 	</desktop-config>
-	-->
+	
 
 	<!-- Use the customized theme provider
 		
