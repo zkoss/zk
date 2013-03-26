@@ -382,12 +382,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<theme-uri>/b**.css</theme-uri>
 	</desktop-config>
 	-->
-	<desktop-config>
-		<theme-provider-class>org.zkoss.zul.theme.StandardThemeProvider</theme-provider-class>
-	</desktop-config>
 
 	<!-- Uncomment the following if you want to redirect to particular
 		page when ZK Client receives an error code.
+		
+	<desktop-config>
+		<theme-provider-class>org.zkoss.zul.theme.StandardThemeProvider</theme-provider-class>
+	</desktop-config>
+	
 	<client-config>
 		<error-reload>
 			<device-type>ajax</device-type>
