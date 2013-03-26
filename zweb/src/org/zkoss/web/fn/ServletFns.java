@@ -89,7 +89,7 @@ public class ServletFns {
 	private final static String THEME_FOLDER_ROOT = "org.zkoss.theme.folder.root";
 	/**
 	 * Resolves a URL to point to resource served by the current theme. 
-	 * @param s the default theme url to resolve
+	 * @param url the default theme url to resolve
 	 * @return the resolved url or null if url is null
 	 * @since 6.5.2
 	 */
