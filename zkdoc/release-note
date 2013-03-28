@@ -1,5 +1,13 @@
   --------
 ZK 6.5.2
+
+* Features
+
+* Bugs
+  ZK-1692: widget.isVisible API doesn't work properly
+
+  --------
+ZK 6.5.2
 Mar 26, 2013
 * Features
   ZK-315:  DHtmlLayoutPortlet support Portlet 2.0

@@ -1685,35 +1685,38 @@ wgt.$f().main.setTitle("foo");
 		var dom = opts && opts.dom,
 			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
-		while (wgt) {
-			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined)
-				return _markCache(cache, visited, ck);
-
-			if (cache)
-				visited.push(wgt);
+		if (wgt.desktop) { //ZK-1692: widget may not bind or render yet
+			while (wgt) {
+				if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined)
+					return _markCache(cache, visited, ck);
 	
-			if (dom && !wgt.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
-			//Except native, we have to assume it is invsibile if $n() is null
-			//Example, tabs in the accordion mold (case: zktest/test2 in IE)
-			//Alertinative is to introduce another isVisibleXxx but not worth
-				if (!zk(wgt.$n()).isVisible(opts.strict))
-					return _markCache(cache, visited, false);
-			} else if (!wgt._visible) // TODO: wgt._visible is not accurate, if tabpanel is not selected, we should fix in ZK 7.(B65-ZK-1076)
-				return _markCache(cache, visited, false);
-
-			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
-			var wp = wgt.parent, p, n;
-			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
-				while ((n=zk(n).vparentNode(true)) && p != n)
-					if ((n.style||{}).display == 'none') //hidden by parent
+				if (cache)
+					visited.push(wgt);
+		
+				if (dom && !wgt.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
+				//Except native, we have to assume it is invsibile if $n() is null
+				//Example, tabs in the accordion mold (case: zktest/test2 in IE)
+				//Alertinative is to introduce another isVisibleXxx but not worth
+					if (!zk(wgt.$n()).isVisible(opts.strict))
 						return _markCache(cache, visited, false);
-
-			if (opts && opts.until == wgt)
-				break;
-
-			wgt = wp;
+				} else if (!wgt._visible) // TODO: wgt._visible is not accurate, if tabpanel is not selected, we should fix in ZK 7.(B65-ZK-1076)
+					return _markCache(cache, visited, false);
+	
+				//check if it is hidden by parent, such as child of hbox/vbox or border-layout
+				var wp = wgt.parent, p, n;
+				if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
+					while ((n=zk(n).vparentNode(true)) && p != n)
+						if ((n.style||{}).display == 'none') //hidden by parent
+							return _markCache(cache, visited, false);
+	
+				if (opts && opts.until == wgt)
+					break;
+	
+				wgt = wp;
+			}
+			return _markCache(cache, visited, true);
 		}
-		return _markCache(cache, visited, true);
+		return false;
 	},
 	/** Returns if this widget is visible
 	 * @return boolean
@@ -1730,11 +1733,14 @@ wgt.$f().main.setTitle("foo");
 	 * @see #setVisible
 	 */
 	isVisible: function (strict) {
-		var visible = this._visible;
-		if (!strict || !visible)
-			return visible;
-		var n = this.$n();
-		return !n || zk(n).isVisible();
+		if (this.desktop) { //ZK-1692: widget may not bind or render yet
+			var visible = this._visible;
+			if (!strict || !visible)
+				return visible;
+			var n = this.$n();
+			return !n || zk(n).isVisible();
+		}
+		return false;
 	},
 	/** Sets whether this widget is visible.
 	 * <h3>Subclass Notes</h3>
