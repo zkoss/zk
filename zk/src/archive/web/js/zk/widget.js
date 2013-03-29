@@ -1734,7 +1734,7 @@ wgt.$f().main.setTitle("foo");
 		if (!strict || !visible)
 			return visible;
 		var n = this.$n();
-		return !n || zk(n).isVisible();
+		return n && zk(n).isVisible(); //ZK-1692: widget may not bind or render yet
 	},
 	/** Sets whether this widget is visible.
 	 * <h3>Subclass Notes</h3>

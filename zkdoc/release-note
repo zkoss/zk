@@ -1,4 +1,13 @@
   --------
+ZK 6.5.3
+
+* Features
+
+* Bugs
+  ZK-1693: Dial chart customize color issues
+  ZK-1692: widget.isVisible API doesn't work properly
+
+  --------
 ZK 6.5.2
 Mar 26, 2013
 * Features
