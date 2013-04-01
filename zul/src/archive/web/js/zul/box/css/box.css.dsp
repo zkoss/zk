@@ -1,4 +1,9 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<c:if test="${zk.ie == 8}"> <%-- IE 8 has extra padding 1px on td element by default --%>
+td {
+	padding: 0px;
+}
+</c:if>
 td.z-hbox-sep,
 tr.z-vbox-sep {
 	padding: 0; 

@@ -186,6 +186,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				h += jq(c).outerHeight();
 		} else
 			h = zkn.revisedHeight(height, true); // excluding margin for F50-3000873.zul and B50-3285635.zul
+		
+		if (zk.ie6_) //IE6 will add inner padding and border height
+			h -= zk(this.getCaveNode()).padBorderHeight();
+		
 		n.style.height = jq.px0(h);
 			
 		// fixed for B50-3317729.zul on webkit
