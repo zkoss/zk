@@ -162,7 +162,7 @@ public class MiscUtil {
 		}else{
 			String orgMsg = ex.getMessage();
 			String msg = formatLocationMessage(null,location,showColumn);
-			if(orgMsg.endsWith(msg)){
+			if(orgMsg!=null && orgMsg.endsWith(msg)){
 				//don't append if the location info is the same.
 				if(ex instanceof RuntimeException){
 					return (RuntimeException) ex;
