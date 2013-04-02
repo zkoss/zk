@@ -34,8 +34,6 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String STATUS_ATTR = TemplateResolver.STATUS_ATTR;
 	protected static final String STATUS_POST_VAR = "Status";
 	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
-
-	static private String TREE_PATH = "$TREEPATH$";//for tree model only
 	
 	private String _attributeName;
 	
@@ -111,18 +109,4 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		//it is safe that we set to comp attr here since the component is created by renderer/binder. 
 		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, comp, varnm, expression)); //reference
 	}
-	
-	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List, for tree model only
-	protected void addItemReference(Component modelOwner, final Component comp, int[] path, String varnm) {
-		final Binder binder = BinderUtil.getBinder(comp, true);
-		if (binder == null) return; //no binder
-		comp.setAttribute(TREE_PATH, path);
-		final String expression = BindELContext.getModelName(modelOwner)
-		+"["+TREE_PATH+"]";
-		//should not use binder.addReferenceBinding(comp, varnm, expression, null); here, it will mark comp bound.
-		//it is safe that we set to comp attr here since the component is created by renderer/binder.
-		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, comp, varnm, expression)); //reference
-	}
-	
-	
 }

@@ -6,6 +6,7 @@ ZK 6.5.3
 * Bugs
   ZK-1693: Dial chart customize color issues
   ZK-1692: widget.isVisible API doesn't work properly
+  ZK-1698: MVVM Tree Performance Issue
 
   --------
 ZK 6.5.2

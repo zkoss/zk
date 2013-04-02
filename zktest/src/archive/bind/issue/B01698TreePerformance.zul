@@ -1,0 +1,18 @@
+<zk>
+	<label>
+	this page load 2000 tree nodes, it shouldn't cost more than 5-10s(depends on your pc) to load
+	</label>
+	<div id="div" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01698TreePerformance')">
+		<tree model="@load(vm.model)" mold="paging" pageSize="20">
+			<template name="model" var="row">
+				<treeitem>
+					<treerow>
+						<treecell label="@load(row.data.dataOne)" />
+						<treecell label="@load(row.data.dataTwo)" />
+						<treecell label="@load(row.data.dataThree)" />
+					</treerow>
+				</treeitem>
+			</template>
+		</tree>
+	</div>
+</zk>

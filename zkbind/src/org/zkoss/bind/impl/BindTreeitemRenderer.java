@@ -86,7 +86,9 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 
 			final Treeitem ti = (Treeitem)items[0];
 			ti.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			addItemReference(tree, ti, tree.getModel().getPath(data), varnm); //kept the reference to the data, before ON_BIND_INIT
+			//zk-1698, mvvm tree performance issue, 
+			//no need to use reference binding for tree because we don't allow it to notify a path change also.
+			ti.setAttribute(varnm,data); 
 			
 			ti.setAttribute(itervarnm, iterStatus);
 			//add template dependency
