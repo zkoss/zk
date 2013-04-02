@@ -1,0 +1,16 @@
+<zk>
+	<label>
+	1.click toggle native, you will see first label become 'true'
+	2.click show natvie, you will see 2nd label become 'native is true'
+	3.repeat again, the boolean should change to false.
+	</label>
+	<vbox id="div" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01691DropuploadNative')">
+		<dropupload id="upload" maxsize="5120" detection="none" native="@bind(vm.nativeUpload)"/>
+		<label id="lab1" value="@bind(vm.nativeUpload)"/>
+		<button id="btn1" label="toggle native" onClick="@command('toggle')"/>
+		
+		<button id="btn2" label="show native" onClick='lab2.value="native is "+upload.isNative()'/>
+		<label id="lab2" value="click show native"/>
+		
+	</vbox>
+</zk>
