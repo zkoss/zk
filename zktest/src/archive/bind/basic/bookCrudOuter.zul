@@ -1,0 +1,7 @@
+<zk>
+	<window title="ZK MVVM Book CRUD" border="normal" width="500px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.BookCrudViewModelOuter')" >
+		<include src="@load(vm.src)"/>
+	</window>
+</zk>
