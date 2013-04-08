@@ -133,7 +133,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.ie < 8 && max < wd) {
 					max = wd;
 					maxj = i;
-				} else if (zk.ff > 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
+				} else if (zk.ff > 4 || zk.ie >= 9) {// firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				}
 				if (zk.ie < 8) // B50-ZK-206
@@ -153,7 +153,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (zk.ie < 8 && max < wd) {
 						max = wd;
 						maxj = i;
-					} else if (zk.ff > 4 || zk.ie == 9) // firefox4 & IE9 still cause break line in case B50-3147926 column 1
+					} else if (zk.ff > 4 || zk.ie >= 9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 						++wds[i];
 					if (zk.ie < 8) // B50-ZK-206
 						wds[i] += 2;
@@ -1029,7 +1029,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
 			}
-				
+			
 			this._calcSize();// Bug #1813722
 			
 			this.fireOnRender(155);
