@@ -11,6 +11,11 @@
 			<li>Inner grid: all rows should have alternating background color.</li>
 		</ul>
 	</html>
+	<hlayout>
+		<zscript>import org.zkoss.zul.theme.*;</zscript>
+		<button label="sapphire" onClick='Themes.setTheme(Executions.getCurrent(), self.label); Executions.sendRedirect(null);'/>
+		<button label="silvertail" onClick='Themes.setTheme(Executions.getCurrent(), self.label); Executions.sendRedirect(null);'/>
+	</hlayout>
 	<grid>
 	    <rows>
 	        <row>
