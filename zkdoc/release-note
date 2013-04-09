@@ -8,6 +8,7 @@ ZK 6.5.3
   ZK-1692: widget.isVisible API doesn't work properly
   ZK-1698: MVVM Tree Performance Issue
   ZK-1691: Dropupload has "native" property (reserved identifier in EL)
+  ZK-1701: Message for file upload is not good enough in German
 
   --------
 ZK 6.5.2
