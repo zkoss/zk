@@ -318,13 +318,43 @@ tr.z-grid-odd tr:not(.z-grid-odd) td.z-row-inner {
 	background-color: #FFF;
 }
 
-<c:if test="${zk.ie > 0 || zk.opera > 0}">
-tr.z-grid-odd tr.z-grid-odd td.z-row-inner {
-	background-color: #F7F7F7;
+<c:if test="${zk.ie > 6 || zk.opera > 0}">
+tr.z-row > td.z-row-inner {
+	background-color: #FFF;
 }
 
-tr.z-grid-odd tr.z-row td.z-row-inner {
-	background-color: #FFF;
+tr.z-grid-odd > td.z-row-inner {
+	background-color: #F7F7F7;
+}
+</c:if>
+
+<%-- 
+     Bug ZK-1234
+     Note: IE6 does not support child selector nor negation pseudo-class
+     Using * hack only provides partial workaround upto 3 level of nesting
+     Need to repeat the pattern if more level of nesting is required.
+     However, nesting too many levels of grid components is not recommended 
+     anyway so this limitation on IE6 should not cause too much trouble.
+--%>
+
+<c:if test="${zk.ie <= 6}">
+tr.z-grid-odd td.z-row-inner {
+    background-color: #F7F7F7;
+}
+tr.z-grid-odd * td.z-row-inner {
+    background-color: #FFF;
+}
+tr.z-grid-odd tr.z-grid-odd td.z-row-inner {
+    background-color: #F7F7F7;
+}
+tr.z-grid-odd tr.z-grid-odd * td.z-row-inner {
+    background-color: #FFF;
+}
+tr.z-grid-odd tr.z-grid-odd tr.z-grid-odd td.z-row-inner {
+    background-color: #F7F7F7;
+}
+tr.z-grid-odd tr.z-grid-odd tr.z-grid-odd * td.z-row-inner {
+    background-color: #FFF;
 }
 </c:if>
 
