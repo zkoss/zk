@@ -1,0 +1,12 @@
+<zk>
+	<zscript><![CDATA[
+		class Controller extends org.zkoss.zk.ui.util.GenericForwardComposer {
+			public void doAfterCompose(Component comp) throws Exception {
+				super.doAfterCompose(comp);
+				Clients.showNotification("Notification 1");
+			}
+		}
+	]]></zscript>
+	<window apply="Controller" border="normal" title="include window" height="300px" width="500px">
+	</window>
+</zk>

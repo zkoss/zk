@@ -203,7 +203,8 @@ import org.zkoss.zk.au.out.*;
 			return; //nothing to do
 
 		//relative fix for BUG ZK-1464
-		if(_ending && _pgRemoved!=null && _pgRemoved.contains(page)) return;
+		if (_ending && _pgRemoved!=null && _pgRemoved.contains(page))
+			return;
 				
 		if (_pgInvalid == null)
 			_pgInvalid = new LinkedHashSet<Page>(4);
@@ -219,7 +220,8 @@ import org.zkoss.zk.au.out.*;
 			return; //nothing to do
 		
 		//relative fix BUG ZK-1464
-		if(_ending && _pgRemoved!=null && _pgRemoved.contains(page)) return;
+		if(_ending && _pgRemoved!=null && _pgRemoved.contains(page))
+			return;
 		
 		if (_ending) throw new IllegalStateException("UI can't be modified in the rendering phase");
 
@@ -407,13 +409,14 @@ import org.zkoss.zk.au.out.*;
 			throw new IllegalArgumentException();
 
 		//relative fix BUG ZK-1464
-		if(_ending){
+		if (_ending) {
 			Object dps = response.getDepends();
-			if(dps==null) return;
-			if(dps instanceof Page && _pgRemoved!=null && _pgRemoved.contains((Page)dps)){
+			if (dps == null && _owner == null) // Bug ZK-1708: if the response is generated inside Includer, should not return
+				return;
+			if (dps instanceof Page && _pgRemoved != null && _pgRemoved.contains((Page)dps)) {
 				return;
 			}
-			if(dps instanceof Component){
+			if (dps instanceof Component) {
 				Component p = (Component)dps; 
 				if(p.getPage()==null || 
 						(_pgRemoved!=null && _pgRemoved.contains(p.getPage()))){
