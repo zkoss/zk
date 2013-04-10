@@ -40,7 +40,7 @@ public class DemoWindowComposer extends GenericForwardComposer<Window> {
 	Button reloadBtn;
 	Button tryBtn;
 	
-	@Override
+	
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 		comp.setContentSclass("demo-main-cnt");

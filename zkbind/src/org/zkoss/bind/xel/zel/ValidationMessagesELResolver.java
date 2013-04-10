@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.1
  */
 public class ValidationMessagesELResolver extends ELResolver {
-    @Override
+    
     public Object getValue(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -72,7 +72,7 @@ public class ValidationMessagesELResolver extends ELResolver {
         return null;
     }
 
-	@Override
+	
     public Class<?> getType(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	//get type is called by setValue,see AstValue#setValue, 
@@ -80,25 +80,25 @@ public class ValidationMessagesELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public void setValue(ELContext context, Object base, Object property,
             Object value) throws NullPointerException,
             PropertyNotFoundException, PropertyNotWritableException,
             ELException {
     }
 
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	return true;
     }
 
-    @Override
+    
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         return null;
     }
 
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         return null;
     }

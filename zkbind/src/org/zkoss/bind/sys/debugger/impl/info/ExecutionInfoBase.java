@@ -37,17 +37,17 @@ public class ExecutionInfoBase implements ExecutionInfo{
 		_location = BinderUtil.hasContext()?BinderUtil.getContext().getCurrentLocationMessage():null;
 	}
 	
-	@Override
+	
 	public Component getComponent() {
 		return _comp;
 	}
 
-	@Override
+	
 	public String getType() {
 		return _type;
 	}
 
-	@Override
+	
 	public String getNote() {
 		return _note;
 	}

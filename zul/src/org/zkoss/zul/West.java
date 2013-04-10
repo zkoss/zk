@@ -60,7 +60,6 @@ public class West extends LayoutRegion {
 	/** Returns the default collapsed margin ([0, 3, 3, 0]).
 	 * @since 5.0.5
 	 */
-	//@Override
 	protected int[] getDefaultCmargins() {
 		return new int[] { 0, 3, 3, 0 };
 	}

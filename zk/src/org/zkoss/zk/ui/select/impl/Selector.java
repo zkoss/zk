@@ -55,11 +55,10 @@ public class Selector extends ArrayList<SimpleSelectorSequence> {
 		
 		private final String _str;
 		Combinator(String str){ _str = str; }
-		@Override
+		
 		public String toString() { return _str; }
 	}
 	
-	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		int size = size();

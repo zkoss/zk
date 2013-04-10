@@ -334,7 +334,7 @@ public class DialModel extends AbstractChartModel {
 		return _capRadius;
 	}
 	
-	@Override
+	
 	public Object clone() {
 		DialModel clone = (DialModel) super.clone();
 		if (_bgRGB != null)

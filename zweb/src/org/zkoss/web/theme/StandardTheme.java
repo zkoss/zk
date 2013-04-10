@@ -156,8 +156,7 @@ public final class StandardTheme extends Theme {
 	}
 	
 	private static final Comparator<StandardTheme> _COMPARATOR = new Comparator<StandardTheme>() {
-
-		@Override
+		
 		public int compare(StandardTheme t1, StandardTheme t2) {
 			if (t1 == null) {
 				if (t2 == null)

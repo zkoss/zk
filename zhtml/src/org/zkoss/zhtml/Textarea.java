@@ -50,14 +50,13 @@ public class Textarea extends Input implements AfterCompose {
 		super("textarea");
 		_value = value != null ? value: "";
 	}
-
-	//@Override
+	
 	public void afterCompose() {
 		String content = PageRenderer.childrenToContent(this);
 		if (content != null)
 			setValue(content);
 	}
-	//@Override
+	
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
 		if ("value".equals(name)) {
@@ -68,17 +67,17 @@ public class Textarea extends Input implements AfterCompose {
 			super.setDynamicProperty(name, value);
 		}
 	}
-	//@Override
+	
 	public Object getDynamicProperty(String name) {
 		return "value".equals(name) ? _value: super.getDynamicProperty(name);
 	}
-	//@Override
+	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "value", _value);
 	}
-	//@Override
+	
 	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
 	java.io.Writer out) throws java.io.IOException {
 		out.write(_value);

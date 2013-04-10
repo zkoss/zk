@@ -45,11 +45,11 @@ public class DemoWebAppInit implements WebAppInit {
 	
 	@SuppressWarnings("serial")
 	private static Map<String, Category> _cateMap = new LinkedHashMap<String, Category> () {
-		@Override
+		
 		public Category remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
-		@Override
+		
 		public void clear() {
 			throw new UnsupportedOperationException();
 		}
@@ -57,17 +57,17 @@ public class DemoWebAppInit implements WebAppInit {
 
 	@SuppressWarnings("serial")
 	private static Map<String, Category> _mobileCateMap = new LinkedHashMap<String, Category> () {
-		@Override
+		
 		public Category remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
-		@Override
+		
 		public void clear() {
 			throw new UnsupportedOperationException();
 		}
 	};
 	
-	@Override
+	
 	public void init(WebApp wapp) throws Exception {
 		loadProperites(wapp.getServletContext());
 	}

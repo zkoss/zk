@@ -22,7 +22,7 @@ public class B00913ValueReload {
 	
 	public Validator getValidator(){
 		return new AbstractValidator(){
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				if(!"def".equals(ctx.getProperty().getValue())){
 					addInvalidMessage(ctx, "value has to be def");

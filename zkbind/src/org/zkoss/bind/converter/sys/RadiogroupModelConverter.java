@@ -22,7 +22,7 @@ import org.zkoss.zul.Radiogroup;
  */
 public class RadiogroupModelConverter extends AbstractListModelConverter<Radiogroup>{
 	private static final long serialVersionUID = 1463169907348730644L;
-	@Override
+	
 	protected ListModel<?> getComponentModel(Radiogroup comp) {
 		return comp.getModel();
 	}

@@ -26,14 +26,14 @@ public class B65_ZK_1483 extends SelectorComposer<Window> {
 	private List<String> elements = getRandomDummyElements(1000);
 	private ListModelList<String> lmdList;
 
-	@Override
+	
 	public final void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
 		lmdList = new ListModelList<String>(elements);
 		listbox.setModel(lmdList);
 		listbox.setItemRenderer(new ListitemRenderer<String>() {
-			@Override
+			
 			public void render(Listitem item, String data, int index) throws Exception {
 				item.setLabel(data);
 			}

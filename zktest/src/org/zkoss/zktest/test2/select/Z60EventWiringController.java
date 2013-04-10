@@ -76,7 +76,7 @@ public class Z60EventWiringController extends SelectorComposer<Component> {
 		alert(((Button) event.getTarget()).getLabel());
 	}
 	
-	@Override
+	
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		_win.appendChild(new Button("Go-2"));

@@ -46,13 +46,13 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		_attr = attr;
 	}
 
-	@Override
+	
 	public Object getValue(BindELContext ctx) {
 		load(null);
 		return _cacheValue == NULL_VALUE ? null : _cacheValue;
 	}
 	
-	@Override
+	
 	public void setValue(BindELContext ctx, Object val) {
 		invalidateCache();
 		final BindContext bctx = newBindContext();
@@ -75,7 +75,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		return BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
 	}
 
-	@Override
+	
 	public void load(BindContext ctx) {
 		if (_cacheValue == null) {
 			final BindContext bctx = newBindContext();
@@ -89,12 +89,12 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		}
 	}
 
-	@Override
+	
 	public String getPropertyString() {
 		return BindEvaluatorXUtil.getExpressionString(_exprX);
 	}
 
-	@Override
+	
 	public void invalidateCache() {
 		_cacheValue = null;
 	}

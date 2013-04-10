@@ -105,22 +105,20 @@ public class StubComponent extends AbstractComponent {
 	 * @exception IllegalStateException if this component has a parent,
 	 * sibling or child.
 	 */
-	@Override
 	public void replace(Component comp, boolean bFellow, boolean bListener,
 	boolean bChildren) {
 		super.replace(comp, bFellow, bListener, bChildren);
 	}
 	/** Returns the widget class, "#stub".
 	 */
-	@Override
 	public String getWidgetClass() {
 		return "#stub";
 	}
-	@Override
+	
 	public void service(AuRequest request, boolean everError) {
 		Events.postEvent(StubEvent.getStubEvent(request));
 	}
-	@Override
+	
 	public void service(Event event, Scope scope) throws Exception {
 		if (event instanceof StubEvent) {
 			EventListenerMap map = ((ComponentCtrl) this).getEventListenerMap();

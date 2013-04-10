@@ -25,12 +25,12 @@ public class ListboxListModelConverter extends ListModelConverter{
 
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	
 	protected ListModel<?> getComponentModel(Component comp){
 		return ((Listbox)comp).getModel();
 	}
 	
-	@Override
+	
 	protected BindingListModel<?> handleWrappedNonListModel(Component comp, BindingListModel<?> wrappedModel){
 		final Listbox listbox = (Listbox)comp;
 		if(wrappedModel instanceof Selectable){

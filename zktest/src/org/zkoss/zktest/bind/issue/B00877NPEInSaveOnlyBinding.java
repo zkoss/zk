@@ -40,7 +40,7 @@ public class B00877NPEInSaveOnlyBinding {
 
 	public Validator getValidator1(){
 		return new AbstractValidator() {
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				String name = (String)ctx.getProperties("name")[0].getValue();
 				if(!"Lin".equals(name)){

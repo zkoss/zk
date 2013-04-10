@@ -52,20 +52,19 @@ public class ContentTag extends AbstractTag {
 			smartUpdate("content", content);
 		}
 	}
-
-	//@Override
+	
 	/** No child is allowed.
 	 */
 	protected boolean isChildable() {
 		return false;
 	}
-	//@Override
+	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "content", _content);
 	}
-	//@Override
+	
 	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
 	java.io.Writer out) throws java.io.IOException {
 		out.write(_content);

@@ -36,7 +36,7 @@ public class Category {
 		_icon = icon;
 		_label = label; 
 		_items = new LinkedList<DemoItem>() {
-			@Override
+			
 			public DemoItem remove(int index) {
 				throw new UnsupportedOperationException();
 			}

@@ -28,8 +28,7 @@ public class B60_ZK_1160_TabController extends BindComposer<Component> {
 		this.persons.add("Mike");
 		this.persons.add("Jonny");
 	}
-
-	@Override
+	
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		ConventionWires.wireVariables(comp, this);

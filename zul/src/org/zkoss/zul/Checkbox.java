@@ -243,7 +243,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		} else
 			super.service(request, everError);
 	}
-	//@Override
+	
 	protected void updateByClient(String name, Object value) {
 		if ("disabled".equals(name))
 			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():

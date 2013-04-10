@@ -323,7 +323,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
-	//@Override
+	
 	protected void renderCrawlable(String label) throws java.io.IOException {
 		//does nothing since generated in renderProperties
 	}
@@ -353,7 +353,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			return getEncodedHref();
 		}
 	}
-	//@Override
+	
 	protected void updateByClient(String name, Object value) {
 		if ("disabled".equals(name))
 			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():

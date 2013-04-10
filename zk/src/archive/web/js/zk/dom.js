@@ -1283,10 +1283,11 @@ jq(el).zk.center(); //same as 'center'
 		} while (p = p.offsetParent);
 
 		do {
-			if (!zk.opera || jq.nodeName(el, 'body')) {
+			// Opera 12.15 fix this
+			// if (!zk.opera || jq.nodeName(el, 'body')) {
 				t -= el.scrollTop  || 0;
 				l -= el.scrollLeft || 0;
-			}
+			//}
 		} while (el = el.parentNode);
 		return [l, t];
 	},

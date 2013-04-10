@@ -24,7 +24,7 @@ public class SelectboxListModelConverter extends ListModelConverter{
 
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	
 	protected ListModel<?> getComponentModel(Component comp){
 		return ((Selectbox)comp).getModel();
 	}

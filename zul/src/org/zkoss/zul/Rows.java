@@ -628,7 +628,7 @@ public class Rows extends XulElement {
 				it.remove();
 			}
 		}
-		@Override
+		
 		public void clear() {
 			final boolean oldFlag = setReplacingRow(true);
 			try {

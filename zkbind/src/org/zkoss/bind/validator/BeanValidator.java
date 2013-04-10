@@ -75,7 +75,7 @@ public class BeanValidator extends AbstractValidator {
 	 */
 	protected void sort(List<ConstraintViolation<?>> viloations){
 		Collections.sort(viloations, new Comparator<ConstraintViolation<?>>() {
-			@Override
+			
 			public int compare(ConstraintViolation<?> o1, ConstraintViolation<?> o2) {
 				String s1 = o1.getConstraintDescriptor().getAnnotation().toString();
 				String s2 = o2.getConstraintDescriptor().getAnnotation().toString();
@@ -124,7 +124,7 @@ public class BeanValidator extends AbstractValidator {
 		}
 	}
 	
-	@Override
+	
 	public void validate(ValidationContext ctx) {
 		final Property p = ctx.getProperty();
 		final Object base = p.getBase();

@@ -61,7 +61,7 @@ public class Serializations {
 			super(c);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}
@@ -76,7 +76,7 @@ public class Serializations {
 			super(c);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}
@@ -91,7 +91,7 @@ public class Serializations {
 			super(e);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}
@@ -106,7 +106,7 @@ public class Serializations {
 			super(e);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}
@@ -121,7 +121,7 @@ public class Serializations {
 			super(map);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}
@@ -138,7 +138,7 @@ public class Serializations {
 			super(e);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}

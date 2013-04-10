@@ -172,11 +172,11 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public boolean isHilDevice() {
 		return false;
 	}
-	@Override
+	
 	public Double getBrowser(String name) {
 		return null;
 	}
-	@Override
+	
 	public String getBrowser() {
 		return null;
 	}

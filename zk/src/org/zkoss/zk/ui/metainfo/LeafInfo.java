@@ -49,24 +49,24 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		_evalr = from._evalr;
 	}
 
-	@Override
+	
 	public EvaluatorRef getEvaluatorRef() {
 		return _evalr;
 	}
-	@Override
+	
 	public PageDefinition getPageDefinition() {
 		return _evalr != null ? _evalr.getPageDefinition(): null;
 	}
-	@Override
+	
 	public Evaluator getEvaluator() {
 		return _evalr != null ? _evalr.getEvaluator(): null;
 	}
 
-	@Override
+	
 	public NodeInfo getParent() {
 		return _parent;
 	}
-	@Override
+	
 	public List<NodeInfo> getChildren() {
 		return Collections.emptyList();
 	}
@@ -77,11 +77,11 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		_parent = parent;
 	}
 
-	@Override
+	
 	public void appendChild(NodeInfo child) {
 		throw new UiException(this+" does not allow any children");
 	}
-	@Override
+	
 	public boolean removeChild(NodeInfo child) {
 		return false;
 	}

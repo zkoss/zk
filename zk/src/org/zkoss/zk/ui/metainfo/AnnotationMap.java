@@ -288,17 +288,17 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 				addAttributes(((AnnotImpl)an)._attrs);
 		}
 
-		@Override
+		
 		public String getName() {
 			return _name;
 		}
-		@Override
+		
 		public Map<String, String[]> getAttributes() {
 			if (_attrs != null)
 				return _attrs;
 			return Collections.emptyMap();
 		}
-		@Override
+		
 		public String getAttribute(String name) {
 			if (_attrs != null) {
 				String[] val = _attrs.get(name);
@@ -306,15 +306,15 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			}
 			return null;
 		}
-		@Override
+		
 		public String[] getAttributeValues(String name) {
 			return _attrs != null ? _attrs.get(name): null;
 		}
-		@Override
+		
 		public Location getLocation() {
 			return _loc;
 		}
-		@Override
+		
 		public String toString() {
 			final StringBuffer sb =
 				new StringBuffer().append('@').append(_name).append('(');

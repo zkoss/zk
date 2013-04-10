@@ -49,13 +49,11 @@ public class MethodExpressionLiteral extends MethodExpression implements Externa
         this.expectedType = expectedType;
         this.paramTypes = paramTypes;
     }
-
-    @Override
+    
     public MethodInfo getMethodInfo(ELContext context) throws ELException {
         return new MethodInfo(this.expr, this.expectedType, this.paramTypes);
     }
-
-    @Override
+    
     public Object invoke(ELContext context, Object[] params) throws ELException {
         if (this.expectedType != null) {
             return ELSupport.coerceToType(this.expr, this.expectedType);
@@ -63,23 +61,19 @@ public class MethodExpressionLiteral extends MethodExpression implements Externa
             return this.expr;
         }
     }
-
-    @Override
+    
     public String getExpressionString() {
         return this.expr;
     }
-
-    @Override
+    
     public boolean equals(Object obj) {
         return (obj instanceof MethodExpressionLiteral && this.hashCode() == obj.hashCode());
     }
-
-    @Override
+    
     public int hashCode() {
         return this.expr.hashCode();
     }
-
-    @Override
+    
     public boolean isLiteralText() {
         return true;
     }

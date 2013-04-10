@@ -38,8 +38,7 @@ public class ListELResolver extends ELResolver {
     public ListELResolver(boolean readOnly) {
         this.readOnly = readOnly;
     }
-
-    @Override
+    
     public Object getValue(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -58,8 +57,7 @@ public class ListELResolver extends ELResolver {
 
         return null;
     }
-
-    @Override
+    
     public Class<?> getType(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -79,8 +77,7 @@ public class ListELResolver extends ELResolver {
 
         return null;
     }
-
-    @Override
+    
     public void setValue(ELContext context, Object base, Object property,
             Object value) throws NullPointerException,
             PropertyNotFoundException, PropertyNotWritableException,
@@ -110,8 +107,7 @@ public class ListELResolver extends ELResolver {
             }
         }
     }
-
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -131,8 +127,7 @@ public class ListELResolver extends ELResolver {
 
         return this.readOnly;
     }
-
-    @Override
+    
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base instanceof List<?>) {
             FeatureDescriptor[] descs = new FeatureDescriptor[((List<?>) base).size()];
@@ -150,8 +145,7 @@ public class ListELResolver extends ELResolver {
         }
         return null;
     }
-
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof List<?>) { // implies base != null
             return Integer.class;

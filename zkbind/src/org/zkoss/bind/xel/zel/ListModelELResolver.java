@@ -29,7 +29,7 @@ import org.zkoss.zul.ListModel;
  * @since 6.0.0
  */
 public class ListModelELResolver extends ELResolver {
-    @Override
+    
     public Object getValue(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -52,7 +52,7 @@ public class ListModelELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public Class<?> getType(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -74,7 +74,7 @@ public class ListModelELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public void setValue(ELContext context, Object base, Object property,
             Object value) throws NullPointerException,
             PropertyNotFoundException, PropertyNotWritableException,
@@ -84,13 +84,13 @@ public class ListModelELResolver extends ELResolver {
         }
     }
 
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	return true;
     }
 
-    @Override
+    
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base instanceof ListModel<?>) {
             FeatureDescriptor[] descs = new FeatureDescriptor[((ListModel<?>) base).getSize()];
@@ -109,7 +109,7 @@ public class ListModelELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof ListModel<?>) { // implies base != null
             return Integer.class;

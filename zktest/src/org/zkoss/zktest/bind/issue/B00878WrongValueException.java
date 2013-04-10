@@ -69,7 +69,7 @@ public class B00878WrongValueException {
 	public Validator getValidator1(){
 		return new AbstractValidator() {
 			
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				String name = (String)ctx.getProperties("name")[0].getValue();
 				Integer age = (Integer)ctx.getProperties("age")[0].getValue();

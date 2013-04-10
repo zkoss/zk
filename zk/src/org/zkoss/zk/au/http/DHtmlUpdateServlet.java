@@ -216,9 +216,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					//still add /upload to generate exception when fileupload is used
 					addAuExtension("/dropupload",
 						new AuExtension() {
-							@Override public void init(DHtmlUpdateServlet servlet) {}
-							@Override public void destroy() {}
-							@Override
+							 public void init(DHtmlUpdateServlet servlet) {}
+							 public void destroy() {}
+							
 							public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 							throws ServletException, IOException {
 								if (Sessions.getCurrent(false) != null)

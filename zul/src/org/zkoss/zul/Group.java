@@ -110,7 +110,7 @@ public class Group extends Row {
 		return 0;
 	}
 	
-	@Override
+	
 	public Group getGroup() {
 		return this;
 	}

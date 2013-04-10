@@ -14,7 +14,7 @@ public class B60_ZK_1702_ComboboxComposer extends GenericForwardComposer<Window>
 	private Item selItem;
 	private List<Item> list;
 
-	@Override
+	
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 		binder = new AnnotateDataBinder(comp);

@@ -29,7 +29,7 @@ public class B65_ZK_1308_1 extends B65_ZK_1308{
 	 @WireVariable
 	 private Page _page;
 	 
-	 @Override
+	 
 	 public void doAfterCompose(Window comp) throws Exception {
 		 super.doAfterCompose(comp);
 		 comp.appendChild(new Label("Subclass: " + _page));

@@ -34,8 +34,7 @@ public class ArithmeticNode extends SimpleNode {
     public ArithmeticNode(int i) {
         super(i);
     }
-
-    @Override
+    
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         return Number.class;

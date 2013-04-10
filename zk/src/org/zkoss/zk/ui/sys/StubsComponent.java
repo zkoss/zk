@@ -104,7 +104,6 @@ public class StubsComponent extends StubComponent {
 	}
 
 	//--super--//
-	@Override
 	public String getId(String uuid) {
 		if (_idmap != null)
 			for (String[] idinf: _idmap)
@@ -112,7 +111,7 @@ public class StubsComponent extends StubComponent {
 					return idinf[1];
 		return super.getId(uuid);
 	}
-	@Override
+	
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 
@@ -122,7 +121,7 @@ public class StubsComponent extends StubComponent {
 				desktopCtrl.mapComponent(uuid, this);
 		}
 	}
-	@Override
+	
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
 
@@ -130,7 +129,7 @@ public class StubsComponent extends StubComponent {
 		for (String uuid: _uuids)
 			desktopCtrl.mapComponent(uuid, null);
 	}
-	@Override
+	
 	public void service(Event event, Scope scope) throws Exception {
 		final StubEvent stubevt =
 			event instanceof StubEvent ? (StubEvent)event: null;

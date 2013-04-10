@@ -1251,8 +1251,7 @@ public class Listbox extends MeshElement {
 			Events.postEvent(new PagingEvent(event.getName(),
 				Listbox.this, event.getPageable(), event.getActivePage()));
 		}
-
-		@Override
+		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}
@@ -1271,8 +1270,7 @@ public class Listbox extends MeshElement {
 			}
 			invalidate();
 		}
-
-		@Override
+		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}
@@ -3004,7 +3002,7 @@ public class Listbox extends MeshElement {
 			setModel(_model); //init the model
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}

@@ -34,7 +34,6 @@ public class ImplicitObjectELResolver extends ELResolver {
 	public static final String IMPLICIT_OBJECTS = "$IMPLICIT_OBJECTS$"; //the implicit objects
 	
     @SuppressWarnings("unchecked")
-	@Override
     public Object getValue(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -67,7 +66,7 @@ public class ImplicitObjectELResolver extends ELResolver {
 		return ctx==null?null:ctx.getBindContext();
 	}
 
-	@Override
+	
     public Class<?> getType(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	//get type is called by setValue,see AstValue#setValue, 
@@ -75,25 +74,25 @@ public class ImplicitObjectELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public void setValue(ELContext context, Object base, Object property,
             Object value) throws NullPointerException,
             PropertyNotFoundException, PropertyNotWritableException,
             ELException {
     }
 
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	return true;
     }
 
-    @Override
+    
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         return null;
     }
 
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         return null;
     }

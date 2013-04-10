@@ -142,7 +142,6 @@ public final class MethodExpressionImpl extends MethodExpression implements
      * @see java.util.Hashtable
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
     public boolean equals(Object obj) {
         return (obj instanceof MethodExpressionImpl && obj.hashCode() == this
                 .hashCode());
@@ -169,7 +168,6 @@ public final class MethodExpressionImpl extends MethodExpression implements
      * 
      * @see org.zkoss.zel.Expression#getExpressionString()
      */
-    @Override
     public String getExpressionString() {
         return this.expr;
     }
@@ -196,7 +194,6 @@ public final class MethodExpressionImpl extends MethodExpression implements
      *             the cause property of this exception, if available.
      * @see org.zkoss.zel.MethodExpression#getMethodInfo(org.zkoss.zel.ELContext)
      */
-    @Override
     public MethodInfo getMethodInfo(ELContext context)
             throws PropertyNotFoundException, MethodNotFoundException,
             ELException {
@@ -234,7 +231,6 @@ public final class MethodExpressionImpl extends MethodExpression implements
      * @see java.util.Hashtable
      * @see java.lang.Object#hashCode()
      */
-    @Override
     public int hashCode() {
         return this.expr.hashCode();
     }
@@ -269,7 +265,6 @@ public final class MethodExpressionImpl extends MethodExpression implements
      * @see org.zkoss.zel.MethodExpression#invoke(org.zkoss.zel.ELContext,
      *      java.lang.Object[])
      */
-    @Override
     public Object invoke(ELContext context, Object[] params)
             throws PropertyNotFoundException, MethodNotFoundException,
             ELException {
@@ -309,8 +304,7 @@ public final class MethodExpressionImpl extends MethodExpression implements
         out.writeObject(this.fnMapper);
         out.writeObject(this.varMapper);
     }
-
-    @Override
+    
     public boolean isLiteralText() {
         return false;
     }
@@ -321,7 +315,6 @@ public final class MethodExpressionImpl extends MethodExpression implements
      * isParmetersProvided()  - Specification definition
      * isParametersProvided() - Corrected spelling
      */
-    @Override
     public boolean isParmetersProvided() {
         return this.getNode().isParametersProvided();
     }

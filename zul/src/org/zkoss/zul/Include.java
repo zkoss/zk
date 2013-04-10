@@ -406,11 +406,10 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	}
 
 	//Includer//
-	//@Override
 	public Page getChildPage() {
 		return _childpg;
 	}
-	//@Override
+	
 	public void setChildPage(Page page) {
 		if (_childpg != null && page == null) {
 			final Desktop desktop = getDesktop();
@@ -419,12 +418,12 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 		}
 		_childpg = page;
 	}
-	//@Override
+	
 	public void setRenderingResult(String result) {
 		_renderResult = result;
 	}
 
-	//@Override
+	
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (newpage != null)
 			Events.postEvent("onAfterCompose", this, null);

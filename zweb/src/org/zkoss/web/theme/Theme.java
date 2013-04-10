@@ -61,7 +61,6 @@ public abstract class Theme {
 	/**
 	 * @return name of the theme
 	 */
-	@Override
 	public String toString() {
 		return _name;
 	}

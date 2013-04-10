@@ -42,7 +42,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		super(binder, comp, initExpr, ConditionType.PROMPT, null, bindingArgs,converterExpr,converterArgs);
 	}
 	
-	@Override
+	
 	protected boolean ignoreTracker(){
 		//init only loaded once, so it don't need to add to tracker.
 		return true;

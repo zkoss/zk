@@ -31,15 +31,13 @@ public final class AstChoice extends SimpleNode {
     public AstChoice(int id) {
         super(id);
     }
-
-    @Override
+    
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         Object val = this.getValue(ctx);
         return (val != null) ? val.getClass() : null;
     }
-
-    @Override
+    
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         Object obj0 = this.children[0].getValue(ctx);

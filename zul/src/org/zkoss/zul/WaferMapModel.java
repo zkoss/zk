@@ -203,8 +203,7 @@ public class WaferMapModel extends AbstractChartModel {
 			return o._x == _x && o._y == _y;
 		}
 	}
-
-	@Override
+	
 	public Object clone() {
 		WaferMapModel clone = (WaferMapModel) super.clone();
 		if (_values != null)

@@ -208,7 +208,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 
 	//Selectable
 	@SuppressWarnings("unchecked")
-	@Override
 	public Set<Object> getSelection() {
 		if (_model instanceof Selectable) 
 			return ((Selectable) _model).getSelection();
@@ -216,7 +215,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
-	@Override
 	public void setSelection(Collection<?> selection) {
 		if (_model instanceof Selectable) 
 			((Selectable) _model).setSelection(selection);
@@ -224,14 +222,12 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			super.setSelection(selection);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean isSelected(Object obj) {
 		if (_model instanceof Selectable) 
 			return ((Selectable) _model).isSelected(obj);
 		return super.isSelected(obj);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean isSelectionEmpty() {
 		if (_model instanceof Selectable) 
 			return ((Selectable) _model).isSelectionEmpty();
@@ -240,7 +236,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 
 	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
-	@Override
 	public boolean addToSelection(Object obj) {
 		if (_model instanceof Selectable) 
 			return ((Selectable) _model).addToSelection(obj);
@@ -248,7 +243,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			return super.addToSelection(obj);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean removeFromSelection(Object obj) {
 		if (_model instanceof Selectable) 
 			return ((Selectable) _model).removeFromSelection(obj);
@@ -256,7 +250,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 	
 	/** {@inheritDoc} */
-	@Override
 	public void clearSelection() {
 		if (_model instanceof Selectable) 
 			((Selectable) _model).clearSelection();
@@ -264,7 +257,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			super.clearSelection();
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean isMultiple() {
 		if (_model instanceof Selectable) 
 			return ((Selectable) _model).isMultiple();
@@ -272,7 +264,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 	
 	/** {@inheritDoc} */
-	@Override
 	public void setMultiple(boolean multiple) {
 		if (_model instanceof Selectable) 
 			((Selectable) _model).setMultiple(multiple);
@@ -391,22 +382,22 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			_open = open;
 		}
 
-		@Override
+		
 		public int getType() {
 			return _type;
 		}
 
-		@Override
+		
 		public int getGroupIndex() {
 			return _groupIndex;
 		}
 
-		@Override
+		
 		public int getOffset() {
 			return _offset;
 		}
 
-		@Override
+		
 		public boolean isOpen() {
 			return _open;
 		}
@@ -438,7 +429,6 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
 	public Object willClone(Component comp) {
 		if (_model instanceof ComponentCloneListener) {
 			GroupsListModelExt clone = (GroupsListModelExt) clone();

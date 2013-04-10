@@ -38,7 +38,7 @@ implements EventListenerMap, java.io.Serializable {
 		_evthds = evthds;
 	}
 
-	@Override
+	
 	public void service(Event event, Scope scope, Component comp, String cmd)
 	throws Exception {
 		((AbstractComponent)comp).service(event, scope,

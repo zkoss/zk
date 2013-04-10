@@ -46,7 +46,7 @@ public class DefaultBinder extends BinderImpl {
 		super(qname, qscope);
 	}
 	
-	@Override
+	
 	public void init(Component comp, Object vm,Map<String, Object> initArgs){
 		super.init(comp, vm, initArgs);
 		//mark this component was handled by binder after init

@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.UiException;
  */
 public class ImageContentConverter implements Serializable, Converter<Object, Object, org.zkoss.zul.Image>{
 
-	@Override
+	
 	public Object coerceToUi(Object beanProp, org.zkoss.zul.Image imgComp, BindContext ctx) {
 		if(beanProp==null){
 			return null;
@@ -50,7 +50,7 @@ public class ImageContentConverter implements Serializable, Converter<Object, Ob
 		return beanProp;
 	}
 
-	@Override
+	
 	public Object coerceToBean(Object compAttr, org.zkoss.zul.Image imgComp, BindContext ctx) {
 		return compAttr;
 	}

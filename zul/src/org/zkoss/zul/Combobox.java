@@ -394,23 +394,23 @@ public class Combobox extends Textbox {
 								return data;
 							} else if ("forEachStatus".equals(name)) {
 								return new ForEachStatus() {
-									@Override
+									
 									public ForEachStatus getPrevious() {
 										return null;
 									}
-									@Override
+									
 									public Object getEach() {
 										return data;
 									}
-									@Override
+									
 									public int getIndex() {
 										return index;
 									}
-									@Override
+									
 									public Integer getBegin() {
 										return 0;
 									}
-									@Override
+									
 									public Integer getEnd() {
 										return cb.getModel().getSize();
 									}
@@ -877,13 +877,13 @@ public class Combobox extends Textbox {
 		}
 	}
 
-	@Override
+	
 	public void sessionWillPassivate(Page page) {
 		super.sessionWillPassivate(page);
 		willPassivate(_model);
 		willPassivate(_renderer);
 	}
-	@Override
+	
 	public void sessionDidActivate(Page page) {
 		super.sessionDidActivate(page);
 		didActivate(_model);

@@ -31,7 +31,7 @@ import org.zkoss.json.JSONObject;
 public class DefaultExecutionInfoCollector extends AbstractExecutionInfoCollector {
 
 	private boolean _startLine = false;
-	@Override
+	
 	public void addInfo(JSONObject info) {
 		
 		Object type = info.get("type");

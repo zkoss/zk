@@ -31,7 +31,7 @@ import org.zkoss.zel.PropertyNotWritableException;
  * @since 6.0.0
  */
 public class FormELResolver extends ELResolver {
-    @Override
+    
     public Object getValue(ELContext ctx, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (ctx == null) {
@@ -53,7 +53,7 @@ public class FormELResolver extends ELResolver {
         return null;
     }
     
-    @Override
+    
     public Class<?> getType(ELContext ctx, Object base, Object property)
     throws NullPointerException, PropertyNotFoundException, ELException {
         if (ctx == null) {
@@ -73,7 +73,7 @@ public class FormELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public void setValue(ELContext ctx, Object base, Object property, Object value) 
     throws NullPointerException, PropertyNotFoundException, PropertyNotWritableException, ELException {
         if (ctx == null) {
@@ -92,13 +92,13 @@ public class FormELResolver extends ELResolver {
 		return (Path)ctx.getContext(Path.class);//get path, see #PathResolver
 	}
     
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	return false;
     }
 
-    @Override
+    
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base instanceof Form) {
             Iterator<?> itr = ((Form) base).getFieldNames().iterator();
@@ -122,7 +122,7 @@ public class FormELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (context == null) {
             throw new NullPointerException();

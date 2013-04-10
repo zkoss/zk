@@ -36,7 +36,6 @@ public class CookieThemeResolver implements ThemeResolver {
 	 * @return theme name stored in Cookie, or "" if not found
 	 * @since 6.5.2
 	 */
-	@Override
 	public String getTheme(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null) 
@@ -58,7 +57,6 @@ public class CookieThemeResolver implements ThemeResolver {
 	 * @param themeName theme name to be stored in Cookie
 	 * @since 6.5.2
 	 */
-	@Override
 	public void setTheme(HttpServletRequest request,
 			HttpServletResponse response, String themeName) {
 		Cookie cookie = new Cookie(THEME_COOKIE_KEY, themeName);

@@ -89,7 +89,7 @@ public abstract class SimpleNode extends ELSupport implements Node {
      * otherwise overriding toString() is probably all you need to do.
      */
 
-    @Override
+    
     public String toString() {
         if (this.image != null) {
             return ELParserTreeConstants.jjtNodeName[id] + "[" + this.image
@@ -150,7 +150,7 @@ public abstract class SimpleNode extends ELSupport implements Node {
     }
     
     
-    @Override
+    
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -160,7 +160,7 @@ public abstract class SimpleNode extends ELSupport implements Node {
         return result;
     }
 
-    @Override
+    
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

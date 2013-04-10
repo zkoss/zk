@@ -36,13 +36,11 @@ public class VariableMapperImpl extends VariableMapper implements Externalizable
     public VariableMapperImpl() {
         super();
     }
-
-    @Override
+    
     public ValueExpression resolveVariable(String variable) {
         return this.vars.get(variable);
     }
-
-    @Override
+    
     public ValueExpression setVariable(String variable,
             ValueExpression expression) {
         return this.vars.put(variable, expression);

@@ -33,12 +33,12 @@ public class ChildrenSimpleVM {
 	public Collection<Node> getNodes2(){
 		return new AbstractCollection<ChildrenSimpleVM.Node>() {
 
-			@Override
+			
 			public Iterator<Node> iterator() {
 				return nodes.iterator();
 			}
 
-			@Override
+			
 			public int size() {
 				// TODO Auto-generated method stub
 				return nodes.size();

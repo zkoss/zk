@@ -41,27 +41,27 @@ public class ValidationContextImpl implements ValidationContext{
 		this._valid = valid;
 	}
 
-	@Override
+	
 	public BindContext getBindContext() {
 		return _ctx;
 	}
 
-	@Override
+	
 	public String getCommand() {
 		return _command;
 	}
 
-	@Override
+	
 	public Map<String,Property[]> getProperties() {
 		return _properties;
 	}
 	
-	@Override
+	
 	public Property[] getProperties(String name) {
 		return _properties.get(name);
 	}
 	
-	@Override
+	
 	@SuppressWarnings("unchecked")
 	public Map<String,Property> getProperties(Object base){
 		if(base==null) throw new IllegalArgumentException("base object is null");
@@ -85,22 +85,22 @@ public class ValidationContextImpl implements ValidationContext{
 		return mp;
 	}
 	
-	@Override
+	
 	public Object getValidatorArg(String key) {
 		return _ctx.getValidatorArg(key);
 	}
 	
-	@Override
+	
 	public Property getProperty() {
 		return _property;
 	}
 
-	@Override
+	
 	public boolean isValid() {
 		return _valid;
 	}
 
-	@Override
+	
 	public void setInvalid(){
 		this._valid = false;
 	}

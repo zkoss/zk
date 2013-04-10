@@ -1,9 +1,9 @@
 <zk>
 	<label multiline="true">
-	1. Try change the color by the four colorboxs.
-	2. If the background color/foreground color of the chart didn't change, it is a bug. 
+	1. Try change the color by the six colorboxs.
+	2. If the correspond colors of the chart didn't change, it is a bug. 
 	</label>
-	<window onOK="doOK()" width="350px">
+	<window onOK="doOK()">
 		<chart id="dial" title="Dial Plot" width="300" height="300" type="dial" threeD="false" fgAlpha="128">
 			<zscript><![CDATA[
 			import java.util.ArrayList;
@@ -56,6 +56,7 @@
 				dialmodel.setFrameFgColor(fgColor.getColor());
 				int index = sbx.getSelectedIndex();
 				dialmodel.setGradientDirection((String)selModel.get(index < 0 ? 0 : index));
+				scale.setTickColor(tickColor.getColor());
 			}
 			]]></zscript>
 		</chart>
@@ -63,16 +64,24 @@
 			Scale
 			<slider id="slx" curpos="${val}" onScroll="dbx.value=self.curpos; doOK()" />
 			<intbox id="dbx" value="${val}" onChange="doOK()" />
-			Background color
-			<colorbox id="bgColor" value="#FF0000" onChange="doOK()" />
-			Gradient background color 1
-			<colorbox id="bgColor1" value="#83C783" onChange="doOK()" />
-			Gradient background color 2
-			<colorbox id="bgColor2" value="#008A00" onChange="doOK()" />
-			Gradient Direction
-			<selectbox id="sbx" model="${selModel}" onSelect="doOK()" />
-			Foreground color
-			<colorbox id="fgColor" value="#0000FF" onChange="doOK()" />
+			<hlayout>
+				Background
+				<colorbox id="bgColor" value="#FF0000" onChange="doOK()" />
+				Foreground
+				<colorbox id="fgColor" value="#0000FF" onChange="doOK()" />
+			</hlayout>
+			<hlayout>
+				Gradient background: Color 1
+				<colorbox id="bgColor1" value="#83C783" onChange="doOK()" />
+				Color 2
+				<colorbox id="bgColor2" value="#008A00" onChange="doOK()" />
+				Direction
+				<selectbox id="sbx" model="${selModel}" onSelect="doOK()" />
+			</hlayout>
+			<hlayout>
+				Tick color
+				<colorbox id="tickColor" value="#000000" onChange="doOK()" />
+			</hlayout>
 		</vlayout>
 	</window>
 </zk>

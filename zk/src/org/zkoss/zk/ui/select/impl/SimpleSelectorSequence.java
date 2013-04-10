@@ -119,7 +119,6 @@ public class SimpleSelectorSequence {
 		_currPseudoClass.addParameter(parameter);
 	}
 	
-	@Override
 	public String toString() {
 		if(_type == null && _id == null && _classes.isEmpty() && 
 				_pseudoClasses.isEmpty() && _attributes.isEmpty()) return "*";

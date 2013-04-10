@@ -55,7 +55,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
 					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
-						@Override
+						
 						public void onEvent(Event event) throws Exception {
 							final Component comp = event.getTarget();
 							comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);

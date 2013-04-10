@@ -40,7 +40,7 @@ public class PathELResolver extends ELResolver {
 		return BindELContext.toNodeString(node0, new StringBuffer());
 	}
 	
-	@Override
+	
 	public Object getValue(ELContext ctx, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
         if (ctx == null) {
@@ -70,7 +70,7 @@ public class PathELResolver extends ELResolver {
         return null;
 	}
 
-	@Override
+	
 	public Class<?> getType(ELContext ctx, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
         if (ctx == null) {
@@ -93,7 +93,7 @@ public class PathELResolver extends ELResolver {
 
 	}
 
-	@Override
+	
 	public void setValue(ELContext ctx, Object base, Object property,
 			Object value) throws NullPointerException,
 			PropertyNotFoundException, PropertyNotWritableException,
@@ -105,19 +105,19 @@ public class PathELResolver extends ELResolver {
         //#getType() will maintain number of kids and path field, just let go
 	}
 
-	@Override
+	
 	public boolean isReadOnly(ELContext context, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
 		return true;
 	}
 
-	@Override
+	
 	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
 			Object base) {
 		return null;
 	}
 
-	@Override
+	
 	public Class<?> getCommonPropertyType(ELContext context, Object base) {
 		return null;
 	}

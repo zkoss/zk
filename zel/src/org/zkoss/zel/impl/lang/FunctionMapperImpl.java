@@ -47,7 +47,6 @@ public class FunctionMapperImpl extends FunctionMapper implements
      * @see org.zkoss.zel.FunctionMapper#resolveFunction(java.lang.String,
      *      java.lang.String)
      */
-    @Override
     public Method resolveFunction(String prefix, String localName) {
         if (this.functions != null) {
             Function f = this.functions.get(prefix + ":" + localName);
@@ -168,7 +167,6 @@ public class FunctionMapperImpl extends FunctionMapper implements
         /* (non-Javadoc)
          * @see java.lang.Object#equals(java.lang.Object)
          */
-        @Override
         public boolean equals(Object obj) {
             if (obj instanceof Function) {
                 return this.hashCode() == obj.hashCode();
@@ -179,7 +177,6 @@ public class FunctionMapperImpl extends FunctionMapper implements
         /* (non-Javadoc)
          * @see java.lang.Object#hashCode()
          */
-        @Override
         public int hashCode() {
             return (this.prefix + this.localName).hashCode();
         }

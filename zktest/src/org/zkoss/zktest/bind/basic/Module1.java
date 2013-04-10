@@ -25,7 +25,7 @@ public class Module1 implements Module {
 			this.amount = amount;
 		}
 
-		@Override
+		
 		public String getUri() {
 			return "modulize-moudle1.zul";
 		}

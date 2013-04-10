@@ -124,8 +124,7 @@ public class B01528NPEInPagingMold {
 				return false;
 			return true;
 		}
-
-		@Override
+		
 		public String toString() {
 			return name;
 		}

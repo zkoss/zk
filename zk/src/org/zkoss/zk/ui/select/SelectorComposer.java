@@ -91,20 +91,19 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	public SelectorComposer() {
 		_resolvers = Selectors.newVariableResolvers(getClass(), SelectorComposer.class);
 	}
-	
-	@Override
+		
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) {
 		Selectors.wireVariables(page, this, _resolvers);
 		_subsInfo = getUtilityHandler().subscribeEventQueues(this);
 		return compInfo;
 	}
-	@Override
+	
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		_self = comp;
 		ConventionWires.wireController(comp, this);
 	}
-	@Override
+	
 	public void doAfterCompose(T comp) throws Exception {
 		_self = comp; // just in case
 		Selectors.wireComponents(comp, this, false);
@@ -185,7 +184,6 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 * @param comp the clone of the applied component
 	 * @return A clone of this Composer. 
 	 */
-	@Override
 	public Object willClone(Component comp) {
 		try {
 			//following code refers to GenericAutowireComposer.
@@ -240,7 +238,6 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		}
 	}
 	
-	@Override
 	public void didActivate(Component comp) {
 		// rewire Session, Webapp and some other variable back, depending on
 		// annotation
@@ -254,16 +251,13 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		}
 	}
 	
-	@Override
 	public void willPassivate(Component comp) { // do nothing
 	}
 	
-	@Override
 	public boolean doCatch(Throwable ex) throws Exception { //do nothing
 		return false;
 	}
 	
-	@Override
 	public void doFinally() throws Exception { //do nothing
 	}
 	

@@ -65,7 +65,7 @@ public class B01062NullIntValue {
 	 */
 	public Validator getValidator() {
 		return new AbstractValidator() {
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				Map<String, Property> beanProps = ctx.getProperties(ctx.getProperty().getBase());
 				Integer value1 = (Integer)beanProps.get("value1").getValue();

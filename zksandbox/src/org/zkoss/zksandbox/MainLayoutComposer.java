@@ -256,13 +256,13 @@ public class MainLayoutComposer extends GenericForwardComposer<Borderlayout> imp
 		return (DemoItem[]) items.toArray(new DemoItem[] {});
 	}
 
-	@Override
+	
 	public Category[] getCategories() {
 		return (Category[]) getCategoryMap().values()
 				.toArray(new Category[] {});
 	}
 
-	@Override
+	
 	public ListitemRenderer<DemoItem> getItemRenderer() {
 		return _defRend;
 	}
@@ -270,7 +270,7 @@ public class MainLayoutComposer extends GenericForwardComposer<Borderlayout> imp
 	private static final ListitemRenderer<DemoItem> _defRend = new ItemRender();
 		
 	private static class ItemRender implements ListitemRenderer<DemoItem>, java.io.Serializable {
-		@Override
+		
 		public void render(Listitem item, DemoItem data, int index) {
 			DemoItem di = (DemoItem) data;
 			Listcell lc = new Listcell();
@@ -287,7 +287,7 @@ public class MainLayoutComposer extends GenericForwardComposer<Borderlayout> imp
 		return (Category) getCategoryMap().get(cateId);
 	}
 
-	@Override
+	
 	public ListModel<DemoItem> getSelectedModel() {
 		Category cate = _selected == null ? getCategories()[0] :
 				getCategory(_selected.getId());
@@ -295,7 +295,7 @@ public class MainLayoutComposer extends GenericForwardComposer<Borderlayout> imp
 	}
 
 	// Composer Implementation
-	@Override
+	
 	public void doAfterCompose(Borderlayout comp) throws Exception {
 		super.doAfterCompose(comp);
 		Events.postEvent("onMainCreate", comp, null);

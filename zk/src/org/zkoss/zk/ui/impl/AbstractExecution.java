@@ -421,7 +421,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public boolean hasVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.contains(resolver);
 	}
-	@Override
+	
 	public boolean hasVariableResolver(Class<? extends VariableResolver> cls) {
 		if (_resolvers != null)
 			for (final VariableResolver resolver: _resolvers)
@@ -429,11 +429,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 					return true;
 		return false;
 	}
-	@Override
+	
 	public Object getExtraXelVariable(String name) {
 		return getExtraXelVariable(null, null, name);
 	}
-	@Override
+	
 	public Object getExtraXelVariable(XelContext ctx, Object base, Object name) {
 		//Note this method searches only _resolvers
 		if (_resolvers != null) {
@@ -452,14 +452,14 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return null;
 	}
 
-	@Override
+	
 	public void log(String msg) {
 		if (_desktop != null)
 			_desktop.getWebApp().log(msg);
 		else
 			_zklog.info(msg);
 	}
-	@Override
+	
 	public void log(String msg, Throwable ex) {
 		if (_desktop != null)
 			_desktop.getWebApp().log(msg, ex);

@@ -57,17 +57,15 @@ public class FilterMap<K, V> extends AbstractMap<K, V> {
 	public Map<K, V> getOrigin() {
 		return _map;
 	}
-
-	//@Override
+	
 	public V get(Object key) {
 		return _filter.filter(key, _map.get(key));
 	}
-	//@Override
+	
 	public boolean containsKey(Object key) {
 		return _map.containsKey(key);
 	}
-
-	//@Override
+	
 	public Set<Map.Entry<K,V>> entrySet() {
 		return new EntrySet();
 	}
@@ -168,16 +166,15 @@ public class FilterMap<K, V> extends AbstractMap<K, V> {
 		 */
 		public V filter(Object key, V value);
 	}
-
-	//@Override
+	
 	public String toString() {
 		return _map.toString();
 	}
-	//@Override
+	
 	public int hashCode() {
 		return _map.hashCode();
 	}
-	//@Override
+	
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		final FilterMap fm;

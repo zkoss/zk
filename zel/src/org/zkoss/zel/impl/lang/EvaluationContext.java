@@ -42,51 +42,42 @@ public final class EvaluationContext extends ELContext {
     public ELContext getELContext() {
         return this.elContext;
     }
-
-    @Override
+    
     public FunctionMapper getFunctionMapper() {
         return this.fnMapper;
     }
-
-    @Override
+    
     public VariableMapper getVariableMapper() {
         return this.varMapper;
     }
-
-    @Override
+    
     // Can't use Class<?> because API needs to match specification in superclass
     public Object getContext(@SuppressWarnings("rawtypes") Class key) {
         return this.elContext.getContext(key);
     }
-
-    @Override
+    
     public ELResolver getELResolver() {
         return this.elContext.getELResolver();
     }
-
-    @Override
+    
     public boolean isPropertyResolved() {
         return this.elContext.isPropertyResolved();
     }
-
-    @Override
+    
     // Can't use Class<?> because API needs to match specification in superclass
     public void putContext(@SuppressWarnings("rawtypes") Class key,
             Object contextObject) {
         this.elContext.putContext(key, contextObject);
     }
-
-    @Override
+    
     public void setPropertyResolved(boolean resolved) {
         this.elContext.setPropertyResolved(resolved);
     }
-
-    @Override
+    
     public Locale getLocale() {
         return this.elContext.getLocale();
         }
-
-    @Override
+    
     public void setLocale(Locale locale) {
         this.elContext.setLocale(locale);
     }

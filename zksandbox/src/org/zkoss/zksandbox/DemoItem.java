@@ -50,7 +50,7 @@ public class DemoItem implements java.io.Serializable {
 	public String getLabel() {
 		return _label;
 	}	
-	@Override
+	
 	public String toString() {
 		return "[DemoItem:" + _id +", "+_file+']';
 	}

@@ -43,7 +43,7 @@ public class TreeModels {
 			super(root);
 		}
 
-		@Override
+		
 		public Object willClone(Component comp) {
 			return clone();
 		}
@@ -99,7 +99,7 @@ public class TreeModels {
 			super(data, children);
 		}
 		
-		@Override
+		
 		public String toString() {
 			String data = getData();
 			return data == null ? "(null)" : data.toString();

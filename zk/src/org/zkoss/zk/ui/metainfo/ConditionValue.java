@@ -60,11 +60,10 @@ import org.zkoss.zk.xel.EvaluatorRef;
 	}
 
 	//Condition//
-	//@Override
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
-	//@Override
+	
 	public boolean isEffective(Page page) {
 		return _cond == null || _cond.isEffective(_evalr, page);
 	}

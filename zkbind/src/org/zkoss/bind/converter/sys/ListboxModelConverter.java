@@ -24,12 +24,12 @@ import org.zkoss.zul.ext.Selectable;
  */
 public class ListboxModelConverter extends AbstractListModelConverter<Listbox>{
 	private static final long serialVersionUID = 1463169907348730644L;
-	@Override
+	
 	protected ListModel<?> getComponentModel(Listbox comp) {
 		return comp.getListModel();
 	}
 	
-	@Override
+	
 	protected ListModel<?> handleWrappedModel(BindContext ctx, Listbox comp, ListModel<?> model){
 		if(model instanceof Selectable){
 			if(((Selectable<?>)model).isMultiple() != comp.isMultiple());

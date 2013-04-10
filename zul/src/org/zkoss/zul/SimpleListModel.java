@@ -191,7 +191,6 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public Object clone() {
 		SimpleListModel clone = (SimpleListModel) super.clone();
 		if (_data != null)
@@ -199,7 +198,6 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 		return clone;
 	}
 	
-	@Override
 	protected void fireSelectionEvent(E e) {
 		int index = -1;
 		for(int j = 0; j < _data.length; ++j) {

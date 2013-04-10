@@ -45,15 +45,15 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 		} else {
 			final ForEachStatus iterStatus = new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
-				@Override
+				
 				public int getIndex() {
 					return index;
 				}
-				@Override
+				
 				public Object getEach(){
 					return data;
 				}
-				@Override
+				
 				public Integer getEnd(){
 					return size;
 				}

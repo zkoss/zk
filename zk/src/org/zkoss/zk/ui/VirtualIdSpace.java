@@ -52,84 +52,84 @@ import org.zkoss.zk.ui.ext.NonFellow;
 	}
 
 	//IdSpace//
-	@Override
+	
 	public Component getFellow(String id) throws ComponentNotFoundException {
 		final Component comp = getFellowIfAny(id);
 		if (comp == null)
 			throw new ComponentNotFoundException(id);
 		return comp;
 	}
-	@Override
+	
 	public Component getFellowIfAny(String id) {
 		return _fellows.get(id);
 	}
-	@Override
+	
 	public Collection<Component> getFellows() {
 		return _fellows.values();
 	}
-	@Override
+	
 	public boolean hasFellow(String id) {
 		return _fellows.containsKey(id);
 	}
 
-	@Override
+	
 	public Component getFellow(String id, boolean recurse)
 	throws ComponentNotFoundException {
 		return getFellow(id);
 	}
-	@Override
+	
 	public Component getFellowIfAny(String id, boolean recurse) {
 		return getFellowIfAny(id);
 	}
-	@Override
+	
 	public boolean hasFellow(String id, boolean recurse) {
 		return hasFellow(id);
 	}
 
 	//Scope//
-	@Override
+	
 	public Map<String, Object> getAttributes() {
 		return _owner.getAttributes();
 	}
-	@Override
+	
 	public Object getAttribute(String name) {
 		return _owner.getAttribute(name);
 	}
-	@Override
+	
 	public boolean hasAttribute(String name) {
 		return _owner.hasAttribute(name);
 	}
-	@Override
+	
 	public Object setAttribute(String name, Object value) {
 		return _owner.setAttribute(name, value);
 	}
-	@Override
+	
 	public Object removeAttribute(String name) {
 		return _owner.removeAttribute(name);
 	}
 
-	@Override
+	
 	public Object getAttribute(String name, boolean recurse) {
 		return _owner.getAttribute(name, recurse);
 	}
-	@Override
+	
 	public boolean hasAttribute(String name, boolean recurse) {
 		return _owner.hasAttribute(name, recurse);
 	}
-	@Override
+	
 	public Object setAttribute(String name, Object value, boolean recurse) {
 		return _owner.setAttribute(name, value, recurse);
 	}
-	@Override
+	
 	public Object removeAttribute(String name, boolean recurse) {
 		return _owner.removeAttribute(name, recurse);
 	}
 
-	@Override
+	
 	public boolean addScopeListener(ScopeListener listener) {
 		return _owner.addScopeListener(listener);
 	}
-	@Override
+	
 	public boolean removeScopeListener(ScopeListener listener) {
 		return _owner.removeScopeListener(listener);
 	}

@@ -75,22 +75,22 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 		_emptyleaf = emptyChildAsLeaf;
 	}
 
-	@Override
+	
 	public boolean isLeaf(TreeNode<E> node) {
 		boolean isLeaf = node.isLeaf();
 		if (!isLeaf && _emptyleaf)
 			return node.getChildCount() == 0;
 		return isLeaf;
 	}
-	@Override
+	
 	public TreeNode<E> getChild(TreeNode<E> parent, int index) {
 		return parent.getChildAt(index);
 	}
-	@Override
+	
 	public int getChildCount(TreeNode<E> parent) {
 		return parent.getChildCount();
 	}
-	@Override
+	
 	public int getIndexOfChild(TreeNode<E> parent, TreeNode<E> child) {
 		return parent.getIndex(child);
 	}
@@ -101,7 +101,6 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	 * @param child the node we are interested in
 	 * @since 6.0.0
 	 */
-	@Override
 	public int[] getPath(TreeNode<E> child) {
 		final TreeNode<E> root = getRoot();
 		List<Integer> p = new ArrayList<Integer>();
@@ -125,21 +124,19 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	}
 
 	//Selectable//
-	@Override
 	public boolean isSelected(Object child) {
 		return child instanceof TreeNode && super.isSelected(child);
 	}
-	@Override
+	
 	public boolean removeFromSelection(Object child) {
 		return child instanceof TreeNode && super.removeFromSelection(child);
 	}
 
 	//Openable//
-	@Override
 	public boolean isObjectOpened(Object child) {
 		return child instanceof TreeNode && super.isObjectOpened(child);
 	}
-	@Override
+	
 	public boolean removeOpenObject(Object child) {
 		return child instanceof TreeNode && super.removeOpenObject(child);
 	}
@@ -158,7 +155,6 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	@Override
 	public void sort(Comparator<TreeNode<E>> cmpr, final boolean ascending) {
 		_sorting = cmpr;
 		_sortDir = ascending;
@@ -214,7 +210,7 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 		return isObjectOpened(child);
 	}
 
-	@Override
+	
 	public String getSortDirection(Comparator<TreeNode<E>> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
 			return _sortDir ? "ascending" : "descending";
@@ -222,7 +218,6 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public Object clone() {
 		final DefaultTreeModel clone = (DefaultTreeModel)super.clone();
 		final TreeNode cloneRoot = (TreeNode)getRoot().clone();

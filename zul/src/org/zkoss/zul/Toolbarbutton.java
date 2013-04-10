@@ -61,7 +61,7 @@ public class Toolbarbutton extends Button {
 		render(renderer, "checked", isChecked());
 	}
 	
-	@Override
+	
 	public void service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHECK)) {

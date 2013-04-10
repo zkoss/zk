@@ -25,16 +25,14 @@ public class B01464IncludeReload {
 	
 	public Converter getConverter(){
 		return new Converter() {
-			
-			@Override
+						
 			public Object coerceToUi(Object val, Component component, BindContext ctx) {
 				if(val instanceof String){
 					return val +"?tms=" + System.currentTimeMillis();
 				}
 				return val;
 			}
-			
-			@Override
+						
 			public Object coerceToBean(Object val, Component component, BindContext ctx) {
 				return null;
 			}

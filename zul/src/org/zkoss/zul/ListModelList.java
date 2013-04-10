@@ -425,7 +425,6 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
 	public Object clone() {
 		ListModelList<E> clone = (ListModelList<E>) super.clone();
 		if (_list != null)
@@ -433,7 +432,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 		return clone;
 	}
 	
-	@Override
+	
 	protected void fireSelectionEvent(E e) {
 		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
 	}

@@ -59,7 +59,7 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 		_collector = collector;
 	}
 	
-	@Override
+	
 	public void checkBinding(Binder binder, Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		for(String p:compCtrl.getAnnotatedProperties()){
@@ -97,7 +97,7 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 		}
 	}
 
-	@Override
+	
 	public void checkViewModel(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		
@@ -116,7 +116,7 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 		
 	}
 
-	@Override
+	
 	public void checkBinder(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		for(Annotation anno:compCtrl.getAnnotations(BINDER_ATTR)){
@@ -133,7 +133,7 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 		}
 	}
 
-	@Override
+	
 	public void checkValidationMessages(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		for(Annotation anno:compCtrl.getAnnotations(VALIDATION_MESSAGES_ATTR)){

@@ -79,7 +79,7 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		_delay = delay;
 	}
 
-	//@Override
+	
 	/** It returns an instance of StringWriter if {@link #getDelay} is non-negative,
 	 * or null if negative (means no patch).
 	 */
@@ -88,7 +88,7 @@ public class JQueryRenderPatch implements PageRenderPatch {
 			//we cannot retrieve HTTP request's header so no need to
 			//apply the patch for particular browsers, such as ie
 	}
-	//@Override
+	
 	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
 	throws IOException {
 		final String extid = page.getUuid() + "-ext";
