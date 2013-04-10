@@ -1,0 +1,50 @@
+<zk>
+
+
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.PerformanceVMInner1')">
+		<hbox>
+		<hbox>
+			<label value="@load(vm.switchCount)"/>
+		</hbox>
+		</hbox>
+		<div>
+			<div>
+				<div>
+					<div>
+						<div>
+							<div>
+								<label value="@load(vm.foo)" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hbox children="@load(vm.list1)">
+			<template name="children">
+				<div>
+					<div>
+						<div>
+							<label value="@load(each.name)" />
+						</div>
+					</div>
+				</div>
+			</template>
+		</hbox>
+		<listbox model="@load(vm.list2)" rows="5">
+			<template name="model">
+				<listitem>
+					<listcell>
+						<div>
+							<div>
+								<label value="@load(each.name)" />
+							</div>
+						</div>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</window>
+
+</zk>

@@ -31,6 +31,7 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
+import org.zkoss.bind.tracker.impl.BindUiLifeCycle;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
@@ -482,6 +483,9 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 				this.comp = comp;
 			}
 			public void load(){
+				//ZK-1699, mark the comp and it's children are handling, to prevent load twice in include.src case 
+				BindUiLifeCycle.markLifeCycleHandling(comp);
+				
 				//load data
 				binder.loadComponent(comp, true);//load all bindings
 			}
