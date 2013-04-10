@@ -56,7 +56,7 @@ public class B01016NestedForm {
 	public Validator getValidator1(){
 		return new AbstractValidator() {
 			
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				String value = (String)ctx.getProperty().getValue();
 				if(Strings.isEmpty(value)){

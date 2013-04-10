@@ -33,7 +33,7 @@ public class TreeModelELResolver extends ELResolver {
 	
 	private static final Class<?> INTEGER_ARRAY = new int[0].getClass();
 	
-    @Override
+    
     public Object getValue(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -53,7 +53,7 @@ public class TreeModelELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public Class<?> getType(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -70,7 +70,7 @@ public class TreeModelELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public void setValue(ELContext context, Object base, Object property,
             Object value) throws NullPointerException,
             PropertyNotFoundException, PropertyNotWritableException,
@@ -80,13 +80,13 @@ public class TreeModelELResolver extends ELResolver {
         }
     }
 
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
     	return true;
     }
 
-    @Override
+    
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 //        if (base instanceof TreeModel<?>) {
 //            FeatureDescriptor[] descs = new FeatureDescriptor[1];
@@ -103,7 +103,7 @@ public class TreeModelELResolver extends ELResolver {
         return null;
     }
 
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof TreeModel<?>) { // implies base != null
             return INTEGER_ARRAY.getClass();

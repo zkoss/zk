@@ -850,7 +850,7 @@ public class PageDefinition implements NodeInfo {
 		return _expfcls;
 	}
 
-	//@Override (NodeInfo)
+	// (NodeInfo)
 	public Evaluator getEvaluator() {
 		if (_eval == null)
 			_eval = newEvaluator();
@@ -859,7 +859,7 @@ public class PageDefinition implements NodeInfo {
 	private Evaluator newEvaluator() {
 		return new SimpleEvaluator(getTaglibMapper(), _expfcls);
 	}
-	//@Override (NodeInfo)
+	// (NodeInfo)
 	public EvaluatorRef getEvaluatorRef() {
 		if (_evalr == null)
 			_evalr = newEvaluatorRef();
@@ -982,7 +982,7 @@ public class PageDefinition implements NodeInfo {
 	public PageDefinition getPageDefinition() {
 		return this;
 	}
-	//@Override
+	
 	public void appendChild(NodeInfo child) {
 		NodeInfo oldp = child.getParent();
 		if (oldp != null)
@@ -993,7 +993,7 @@ public class PageDefinition implements NodeInfo {
 		BranchInfo.fixEvaluatorRefDown(child, getEvaluatorRef());
 			//Use getEvaluatorRef() to force _evalr being assigned
 	}
-	//@Override
+	
 	public boolean removeChild(NodeInfo child) {
 		if (child != null && _children.remove(child)) {
 			((LeafInfo)child).setParentDirectly(null); //except root, all are LeafInfo
@@ -1002,7 +1002,7 @@ public class PageDefinition implements NodeInfo {
 		}
 		return false;
 	}
-	//@Override
+	
 	public List<NodeInfo> getChildren() {
 		return _children;
 	}

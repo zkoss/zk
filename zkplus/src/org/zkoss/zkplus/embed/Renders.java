@@ -150,7 +150,7 @@ public class Renders {
 		private EmbedRichlet(Component comp) {
 			_comp = comp;
 		}
-		//@Override
+		
 		public void service(Page page) {
 			_comp.setPage(page);
 		}
@@ -186,7 +186,7 @@ public class Renders {
 			_pageDOM = pageDOM;
 		}
 
-		//@Override
+		
 		public void render(Page page, Writer out) throws IOException {
 			out.write(HtmlPageRenders.outLangStyleSheets(_exec, null, null));
 			out.write(HtmlPageRenders.outLangJavaScripts(_exec, null, null));

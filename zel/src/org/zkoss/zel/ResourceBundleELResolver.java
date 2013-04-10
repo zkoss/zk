@@ -30,8 +30,7 @@ public class ResourceBundleELResolver extends ELResolver {
     public ResourceBundleELResolver() {
         super();
     }
-
-    @Override
+    
     public Object getValue(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -53,8 +52,7 @@ public class ResourceBundleELResolver extends ELResolver {
 
         return null;
     }
-
-    @Override
+    
     public Class<?> getType(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -67,8 +65,7 @@ public class ResourceBundleELResolver extends ELResolver {
         
         return null;
     }
-
-    @Override
+    
     public void setValue(ELContext context, Object base, Object property,
             Object value) throws NullPointerException,
             PropertyNotFoundException, PropertyNotWritableException,
@@ -84,8 +81,7 @@ public class ResourceBundleELResolver extends ELResolver {
                             .getName() }));
         }
     }
-
-    @Override
+    
     public boolean isReadOnly(ELContext context, Object base, Object property)
             throws NullPointerException, PropertyNotFoundException, ELException {
         if (context == null) {
@@ -100,8 +96,7 @@ public class ResourceBundleELResolver extends ELResolver {
     }
 
     //Dennis, 201206221, the override method cannot pass the build without warn because of the override generic type
-    //and I don't know the reason they explained below, so I fix it , added the generic type. 
-    @Override
+    //and I don't know the reason they explained below, so I fix it , added the generic type.
     // Can't use Iterator<FeatureDescriptor> because API needs to match
     // specification
     //@SuppressWarnings({ "unchecked", "rawtypes" }) 
@@ -128,8 +123,7 @@ public class ResourceBundleELResolver extends ELResolver {
         }
         return null;
     }
-
-    @Override
+    
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof ResourceBundle) {
             return String.class;

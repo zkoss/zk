@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class InitFormBindingImpl extends FormBindingImpl implements InitFormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	@Override
+	
 	protected boolean ignoreTracker(){
 		//init only loaded once, so it don't need to add to tracker.
 		return true;
@@ -71,7 +71,7 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 				final String fomrid = getFormId();
 				List<String> fields = new LinkedList<String>(fex.getLoadFieldNames());
 				Collections.sort(fields, new Comparator<String>() {
-					@Override
+					
 					public int compare(String o1, String o2) {
 						o1 = BindELContext.appendFields(fomrid, o1);
 						o2 = BindELContext.appendFields(fomrid, o2);

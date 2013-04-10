@@ -48,7 +48,7 @@ public class Composite2 extends Div implements IdSpace,Composer<Div>{
 		Events.postEvent("onEdited", this, null);
 	}
 
-	@Override
+	
 	public void doAfterCompose(Div comp) throws Exception {
         Selectors.wireComponents(this, this, false);
         Selectors.wireEventListeners(this, this);

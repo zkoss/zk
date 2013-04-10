@@ -45,7 +45,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		_attrType = attrType == null ? Object.class : attrType;
 	}
 	
-	@Override
+	
 	protected boolean ignoreTracker(){
 		//init only loaded once, so it don't need to add to tracker.
 		return true;

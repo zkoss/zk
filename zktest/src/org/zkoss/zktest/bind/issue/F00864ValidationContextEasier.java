@@ -38,7 +38,7 @@ public class F00864ValidationContextEasier {
 	public Validator getValidator1(){
 		return new AbstractValidator() {
 			
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				Form form = (Form)ctx.getProperty().getValue();
 				Map<String,Property> beanProps = ctx.getProperties(ctx.getProperty().getBase());

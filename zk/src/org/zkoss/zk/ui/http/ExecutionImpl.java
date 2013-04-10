@@ -438,15 +438,15 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isHilDevice() {
 		return Servlets.isHilDevice(_request);
 	}
-	@Override
+	
 	public Double getBrowser(String name) {
 		return Servlets.getBrowser(_request, name);
 	}
-	@Override
+	
 	public String getBrowser() {
 		return Servlets.getBrowser(_request);
 	}
-	@Override
+	
 	public String getUserAgent() {
 		return Servlets.getUserAgent(_request);
 	}

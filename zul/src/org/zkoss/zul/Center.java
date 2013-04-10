@@ -127,7 +127,6 @@ public class Center extends LayoutRegion {
 	/** Returns the default collapsed margin ([3, 3, 3, 3]).
 	 * @since 5.0.5
 	 */
-	//@Override
 	protected int[] getDefaultCmargins() {
 		return new int[] { 3, 3, 3, 3 };
 	}

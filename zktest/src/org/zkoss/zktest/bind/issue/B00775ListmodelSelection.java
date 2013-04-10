@@ -49,7 +49,7 @@ public class B00775ListmodelSelection {
 	public static class Converter extends ListboxModelConverter {
 		private static final long serialVersionUID = 1L;
 
-		@Override
+		
 		public Object coerceToUi(Object val, Listbox comp, BindContext ctx) {
 			Object bean = super.coerceToUi(val, comp, ctx);
 

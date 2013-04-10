@@ -89,7 +89,7 @@ public class B00878WrongValueException2 {
 	
 	public static class TimeConstraint implements Constraint{
 
-		@Override
+		
 		public void validate(Component comp, Object value) throws WrongValueException {
 			Date date = (Date)value;
 			int h = -1;

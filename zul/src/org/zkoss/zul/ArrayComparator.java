@@ -36,7 +36,7 @@ public class ArrayComparator<E> implements Comparator<E>, java.io.Serializable {
 		_index = index;
 		_ascending = ascending;
 	}
-	@Override
+	
 	@SuppressWarnings("unchecked")
 	public int compare(E o1, E o2) {
 		int v = ((Comparable)Array.get(getCompareObject(o1), _index)).compareTo(Array.get(getCompareObject(o2), _index));

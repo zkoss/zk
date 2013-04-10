@@ -53,8 +53,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		_cache = new InnerCache(maxSize, lifetime);
 		_maxMissCnt = maxMissCount;
 	}
-	
-	@Override
+		
 	public boolean containsKey(Object key) {
 		boolean found = _cache.containsKey(key);
 		if (!found && _moreInWriteCache)
@@ -64,7 +63,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 			}
 		return found;
 	}
-	@Override
+	
 	public V get(Object key) {
 		V val = _cache.get(key);
 		if (val == null && _moreInWriteCache)
@@ -74,7 +73,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 			}
 		return val;
 	}
-	@Override
+	
 	public V put(K key, V value) {
 		V result = value;
 		synchronized (this) {
@@ -88,7 +87,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		}
 		return result;
 	}
-	@Override
+	
 	public V remove(Object key) {
 		V result = null;
 		synchronized (this) {
@@ -101,7 +100,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		}
 		return result;
 	}
-	@Override
+	
 	public void clear() {
 		synchronized (this) {
 			setReadAndClearWrite(new InnerCache(getMaxSize(), getLifetime()));
@@ -151,20 +150,19 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		_moreInWriteCache = false;
 		_cache = cache;
 	}
-
-	@Override
+	
 	public int getLifetime() {
 		return _cache.getLifetime();
 	}
-	@Override
+	
 	public void setLifetime(int lifetime) {
 		_cache.setLifetime(lifetime);
 	}
-	@Override
+	
 	public int getMaxSize() {
 		return _cache.getMaxSize();
 	}
-	@Override
+	
 	public void setMaxSize(int maxsize) {
 		_cache.setMaxSize(maxsize);
 	}
@@ -180,12 +178,12 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 			super(maxSize, lifetime, false);
 			//insertion-order since _cache be read concurrently
 		}
-		@Override /*package*/
+		 /*package*/
 		void removeInExpunge(Iterator<Map.Entry<K, Value<V>>> it, K key) {
 			_removed.add(key);
 				//don't remove it here since _cache (this) is readonly
 		}
-		@Override /*package*/
+		 /*package*/
 		void doExpunge() {
 			synchronized (FastReadCache.this) {
 				_removed = new ArrayList<K>();
@@ -203,7 +201,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 				}
 			}
 		}
-		@Override
+		
 		public Object clone() {
 			final InnerCache clone = (InnerCache)super.clone();
 			clone._removed = null;

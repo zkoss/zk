@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.event.Event;
 public class ImplicitObjectContributorImpl implements ImplicitObjectContributor,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	
 	public Map<String, Object> contirbuteCommandObject(Binder binder, CommandBinding binding, Event event) {
 		HashMap<String,Object> implicit = new HashMap<String,Object>();
 		implicit.put("event", event);

@@ -74,7 +74,7 @@ public final class AstValue extends SimpleNode {
         super(id);
     }
 
-    @Override
+    
     public Class<?> getType(EvaluationContext ctx) throws ELException {
         Target t = getTarget(ctx);
         ctx.setPropertyResolved(false);
@@ -146,7 +146,7 @@ public final class AstValue extends SimpleNode {
         return t;
     }
 
-    @Override
+    
     public Object getValue(EvaluationContext ctx) throws ELException {
     	ctx.putContext(AstValue.class, new Integer(this.jjtGetNumChildren()));
         ctx.putContext(Node.class, this.children[0]); //20110905, henrichen: bind property node
@@ -186,7 +186,7 @@ public final class AstValue extends SimpleNode {
         return base;
     }
 
-    @Override
+    
     public boolean isReadOnly(EvaluationContext ctx) throws ELException {
         Target t = getTarget(ctx);
         ctx.setPropertyResolved(false);
@@ -199,7 +199,7 @@ public final class AstValue extends SimpleNode {
         return result;
     }
 
-    @Override
+    
     public void setValue(EvaluationContext ctx, Object value)
             throws ELException {
         Target t = getTarget(ctx);
@@ -266,7 +266,7 @@ public final class AstValue extends SimpleNode {
     }
 
 
-    @Override
+    
     // Interface el.parser.Node uses raw types (and is auto-generated)
     public MethodInfo getMethodInfo(EvaluationContext ctx, 
             @SuppressWarnings("rawtypes") Class[] paramTypes)
@@ -277,7 +277,7 @@ public final class AstValue extends SimpleNode {
                 .getParameterTypes());
     }
 
-    @Override
+    
     // Interface el.parser.Node uses a raw type (and is auto-generated)
     public Object invoke(EvaluationContext ctx, 
             @SuppressWarnings("rawtypes") Class[] paramTypes,
@@ -346,7 +346,7 @@ public final class AstValue extends SimpleNode {
     /**
      * @since EL 2.2
      */
-    @Override
+    
     public ValueReference getValueReference(EvaluationContext ctx) {
         // Check this is a reference to a base and a property
         if (this.children.length > 2 &&
@@ -362,7 +362,7 @@ public final class AstValue extends SimpleNode {
     /**
      * @since EL 2.2
      */
-    @Override
+    
     public boolean isParametersProvided() {
         if (this.children.length > 2
                 && this.jjtGetChild(2) instanceof AstMethodParameters) {

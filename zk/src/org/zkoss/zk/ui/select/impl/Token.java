@@ -64,7 +64,6 @@ public class Token {
 		return mother.substring(_begin, _end);
 	}
 	
-	@Override
 	public String toString(){
 		return _type + " [" + _begin + ", " + _end + "]";
 	}

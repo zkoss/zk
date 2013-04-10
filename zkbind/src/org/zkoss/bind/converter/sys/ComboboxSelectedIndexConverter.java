@@ -23,7 +23,7 @@ import org.zkoss.zul.ListModel;
 public class ComboboxSelectedIndexConverter extends AbstractSelectedIndexConverter<Combobox> {
 	private static final long serialVersionUID = 201108171811L;
 
-	@Override
+	
 	protected ListModel<?> getComponentModel(Combobox comp) {
 		return comp.getModel();
 	}

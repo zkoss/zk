@@ -34,7 +34,6 @@ public class PseudoClass {
 		_parameters.add(parameter);
 	}
 	
-	@Override
 	public String toString() {
 		return ":"+_name + (_parameters.isEmpty()? "" : 
 			"(" + join(_parameters, ",") + ")");

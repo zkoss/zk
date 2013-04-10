@@ -28,7 +28,7 @@ public class B01299RefNPE {
 	public Validator getTextValidator(){
 		return new Validator(){
 
-			@Override
+			
 			public void validate(ValidationContext arg0) {
 				Object base = arg0.getProperty().getBase();
 				Object prop = arg0.getProperty().getProperty();
@@ -46,7 +46,7 @@ public class B01299RefNPE {
 	public Validator getAddressValidator(){
 		return new Validator(){
 
-			@Override
+			
 			public void validate(ValidationContext arg0) {
 				Object base = arg0.getProperty().getBase();
 				Object prop = arg0.getProperty().getProperty();

@@ -30,7 +30,6 @@ public class Parser {
 	private StateMachine<State, CharClass, Token> _machine = 
 		new StateMachine<State, CharClass, Token>(){
 		
-		@Override
 		protected void init() {
 			
 			getState(State.PRE_SELECTOR)
@@ -69,7 +68,6 @@ public class Parser {
 			
 		}
 		
-		@Override
 		protected CharClass getClass(Token input) {
 			switch(input.getType()){
 			case WHITESPACE:
@@ -87,8 +85,7 @@ public class Parser {
 				return CharClass.SELECTOR_LITERAL;
 			}
 		}
-
-		@Override
+		
 		protected State getLandingState(Token input, CharClass inputClass) {
 			switch(inputClass){
 			case WHITESPACE:
@@ -99,13 +96,11 @@ public class Parser {
 			return null;
 		}
 		
-		@Override
 		protected void onReset() {
 			_submachine.setSelector(_selector);
 			_submachine.setSource(_source);
 		}
 		
-		@Override
 		protected void onStop(boolean endOfInput) {
 			// TODO: check state?
 		}
@@ -183,12 +178,10 @@ public class Parser {
 		return this;
 	}
 	
-	@Override
 	protected Type getClass(Token input) {
 		return input.getType();
 	}
 	
-	@Override
 	protected SubState getLandingState(Token input, Type inputClass) {
 		
 		switch(inputClass){
@@ -208,11 +201,10 @@ public class Parser {
 		}
 	}
 	
-	@Override
 	protected void init() {
 		
 		setState(SubState.PSDOCLS_PRE_PARAM, new StateCtx<SubState, Type, Token>(){
-			@Override
+			
 			protected void onLeave(Token input, Type inputClass, SubState dest) {
 				// flush pseudo class function parameter
 				_seq.attachPseudoClassParameter(input.source(_source));
@@ -321,13 +313,11 @@ public class Parser {
 		
 	}
 	
-	@Override
 	protected void onStart(Token input, Type inputClass, SubState landing){
 		_selector.add(_seq = new SimpleSelectorSequence());
 		if(inputClass == Type.IDENTIFIER) _seq.setType(input.source(_source));
 	}
 	
-	@Override
 	protected void onStop(boolean endOfInput) {
 		switch (_current) {
 		case MAIN:
@@ -341,7 +331,6 @@ public class Parser {
 		}
 	}
 	
-	@Override
 	protected void onDebug(String message) {
 		super.onDebug("\t" + message);
 	}

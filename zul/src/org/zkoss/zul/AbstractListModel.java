@@ -61,26 +61,22 @@ Selectable<E>, java.io.Serializable {
 
 	// -- ListModel --//
 	/** {@inheritDoc} */
-	@Override
 	public void addListDataListener(ListDataListener l) {
 		if (l == null)
 			throw new NullPointerException();
 		_listeners.add(l);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void removeListDataListener(ListDataListener l) {
 		_listeners.remove(l);
 	}
 
 	//Selectable//
 	/** {@inheritDoc} */
-	@Override
 	public Set<E> getSelection() {
 		return Collections.unmodifiableSet(_selection);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void setSelection(Collection<? extends E> selection) {
 		if (isSelectionChanged(selection)) {
 			if (!_multiple && selection.size() > 1)
@@ -104,7 +100,6 @@ Selectable<E>, java.io.Serializable {
 	}
 
 	/** {@inheritDoc} */
-	@Override
 	public boolean isSelected(Object obj) {
 		return !isSelectionEmpty()
 				&& (_selection.size() == 1 ? Objects
@@ -112,13 +107,11 @@ Selectable<E>, java.io.Serializable {
 						 : _selection.contains(obj));
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean isSelectionEmpty() {
 		return _selection.isEmpty();
 	}
 
 	/** {@inheritDoc} */
-	@Override
 	public boolean addToSelection(E obj) {
 		if (_selection.add(obj)) {
 			if (!_multiple) {
@@ -131,7 +124,6 @@ Selectable<E>, java.io.Serializable {
 		return false;
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean removeFromSelection(Object obj) {
 		if (_selection.remove(obj)) {
 			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
@@ -140,7 +132,6 @@ Selectable<E>, java.io.Serializable {
 		return false;
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void clearSelection() {
 		if (!_selection.isEmpty()) {
 			_selection.clear();
@@ -182,12 +173,10 @@ Selectable<E>, java.io.Serializable {
 	}
 
 	/** {@inheritDoc} */
-	@Override
 	public boolean isMultiple() {
 		return _multiple;
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
 			_multiple = multiple;

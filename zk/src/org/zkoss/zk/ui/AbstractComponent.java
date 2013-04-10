@@ -1760,7 +1760,7 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 
-	//@override
+	
 	public boolean disableClientUpdate(boolean disable) {
 		final UiEngine uieng =
 			_page != null ? getAttachedUiEngine(): getCurrentUiEngine();
@@ -2741,7 +2741,7 @@ w:use="foo.MyWindow"&gt;
 	private static void onEvent(EventListener listener, Event event) throws Exception {
 		listener.onEvent(event);
 	}
-	@Override
+	
 	public EventListenerMap getEventListenerMap() {
 		return new EventListenerMapImpl(
 			_auxinf != null ? _auxinf.listeners: null,
@@ -3213,12 +3213,12 @@ w:use="foo.MyWindow"&gt;
 		return _auxinf;
 	}
 
-	@Override
+	
 	public Template getTemplate(String name) {
 		return _auxinf != null && _auxinf.templates != null ?
 			_auxinf.templates.get(name): null;
 	}
-	@Override
+	
 	public Template setTemplate(String name, Template template) {
 		if (template == null) {
 			return _auxinf != null && _auxinf.templates != null ?
@@ -3230,19 +3230,19 @@ w:use="foo.MyWindow"&gt;
 			return auxinf.templates.put(name, template);
 		}
 	}
-	@Override
+	
 	public Set<String> getTemplateNames() {
 		if (_auxinf != null && _auxinf.templates != null)
 			return _auxinf.templates.keySet();
 		return Collections.emptySet();
 	}
-	@Override
+	
 	public Component query(String selector) {
 		final Iterator<Component> found =
 			Selectors.iterable(this, selector).iterator();
 		return found.hasNext() ? found.next(): null;
 	}
-	@Override
+	
 	public Iterable<Component> queryAll(String selector) {
 		return Selectors.iterable(this, selector);
 	}

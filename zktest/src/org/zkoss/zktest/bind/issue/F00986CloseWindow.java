@@ -36,7 +36,7 @@ public class F00986CloseWindow {
 		
 		private static final long serialVersionUID = 1463169907348730644L;
 
-		@Override
+		
 		public Object coerceToUi(Object val, Component component, BindContext ctx) {
 			Boolean b = (Boolean)Classes.coerce(Boolean.class, val);
 			if(b!=null && b.booleanValue()){
@@ -49,7 +49,7 @@ public class F00986CloseWindow {
 		static private PostDetachListener _listener = new PostDetachListener();
 		static class PostDetachListener implements EventListener<Event>,Serializable{
 			private static final long serialVersionUID = 1L;
-			@Override
+			
 			public void onEvent(Event event) throws Exception {
 				Component comp = event.getTarget();
 				comp.removeEventListener(event.getName(), this);
@@ -57,7 +57,7 @@ public class F00986CloseWindow {
 			}
 		}
 
-		@Override
+		
 		public Object coerceToBean(Object val, Component component, BindContext ctx) {
 			return val;
 		}

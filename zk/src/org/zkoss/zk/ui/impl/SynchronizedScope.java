@@ -26,7 +26,7 @@ public class SynchronizedScope extends SimpleScope {
 		super(owner);
 	}
 
-	//@Override
+	
 	Map<String, Object> newInitMap() {
 		return Collections.synchronizedMap(super.newInitMap());
 	}

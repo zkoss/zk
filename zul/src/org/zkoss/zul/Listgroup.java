@@ -94,8 +94,7 @@ public class Listgroup extends Listitem {
 		}
 		return 0;
 	}
-	
-	@Override
+		
 	public Listgroup getListgroup() {
 		return this;
 	}

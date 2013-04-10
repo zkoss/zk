@@ -68,17 +68,14 @@ public class AuDropUploader implements AuExtension {
 	private static final Log log = Log.lookup(AuDropUploader.class);
 
 	public AuDropUploader() {}
-	
-	@Override
+		
 	public void init(DHtmlUpdateServlet servlet) {
 	}
-	
-	@Override
+		
 	public void destroy() {}
 
 	/** Processes a file uploaded from the client.
 	 */
-	@Override
 	public void service(
 	HttpServletRequest request, HttpServletResponse response, String pathInfo)
 	throws ServletException, IOException {		

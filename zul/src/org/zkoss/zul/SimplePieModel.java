@@ -75,7 +75,7 @@ public class SimplePieModel extends AbstractChartModel implements PieModel {
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
 
-	@Override
+	
 	public Object clone() {
 		SimplePieModel clone = (SimplePieModel) super.clone();
 		if (_categoryList != null)

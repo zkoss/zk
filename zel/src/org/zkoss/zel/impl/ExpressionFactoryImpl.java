@@ -41,13 +41,11 @@ public class ExpressionFactoryImpl extends ExpressionFactory {
     public ExpressionFactoryImpl() {
         super();
     }
-
-    @Override
+    
     public Object coerceToType(Object obj, Class<?> type) {
         return ELSupport.coerceToType(obj, type);
     }
-
-    @Override
+    
     public MethodExpression createMethodExpression(ELContext context,
             String expression, Class<?> expectedReturnType,
             Class<?>[] expectedParamTypes) {
@@ -55,8 +53,7 @@ public class ExpressionFactoryImpl extends ExpressionFactory {
         return builder.createMethodExpression(expectedReturnType,
                 expectedParamTypes);
     }
-
-    @Override
+    
     public ValueExpression createValueExpression(ELContext context,
             String expression, Class<?> expectedType) {
         if (expectedType == null) {
@@ -66,8 +63,7 @@ public class ExpressionFactoryImpl extends ExpressionFactory {
         ExpressionBuilder builder = newExpressionBuilder(expression, context);
         return builder.createValueExpression(expectedType);
     }
-
-    @Override
+    
     public ValueExpression createValueExpression(Object instance,
             Class<?> expectedType) {
         if (expectedType == null) {

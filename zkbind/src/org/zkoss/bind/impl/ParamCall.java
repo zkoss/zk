@@ -69,7 +69,7 @@ public class ParamCall {
 		_types = new ArrayList<Type>();
 		_mappingType = mappingType;
 		_paramResolvers.put(ContextParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = _contextObjects.get(((ContextParam) anno).value()); 
 				return val==null?null:Classes.coerce(returnType, val);
@@ -89,7 +89,7 @@ public class ParamCall {
 	
 	public void setBindingArgs(final Map<String, Object> bindingArgs){
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = bindingArgs.get(((BindingParam) anno).value()); 
 				return val==null?null:Classes.coerce(returnType, val);
@@ -177,7 +177,7 @@ public class ParamCall {
 		_component = comp;
 		//scope param
 		_paramResolvers.put(ScopeParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				final String name = ((ScopeParam)anno).value();
 				final Scope[] ss = ((ScopeParam)anno).scopes();
@@ -217,7 +217,7 @@ public class ParamCall {
 		
 		//component
 		_paramResolvers.put(SelectorParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				final String selector = ((SelectorParam) anno).value();
 				final List<Component> result = Selectors.find(_root, selector);
@@ -246,21 +246,21 @@ public class ParamCall {
 		_execution = exec;
 		//http param
 		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = _execution.getParameter(((QueryParam) anno).value());
 				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(HeaderParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = _execution.getHeader(((HeaderParam) anno).value());
 				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(CookieParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			@SuppressWarnings("unchecked")
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Map<String,Object> m = (Map<String,Object>)_execution.getAttribute(COOKIE_CACHE);
@@ -287,7 +287,7 @@ public class ParamCall {
 
 		//execution
 		_paramResolvers.put(ExecutionParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = _execution.getAttribute(((ExecutionParam) anno).value());
 				return val==null?null:Classes.coerce(returnType, val);
@@ -295,7 +295,7 @@ public class ParamCall {
 		});
 		
 		_paramResolvers.put(ExecutionArgParam.class, new ParamResolver<Annotation>() {
-			@Override
+			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = _execution.getArg().get(((ExecutionArgParam) anno).value());
 				return val==null?null:Classes.coerce(returnType, val);

@@ -216,11 +216,11 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		setOpenGroup0(groupIndex, !close);
 	}
 
-	@Override
+	
 	public boolean addOpenGroup(int groupIndex) {
 		return setOpenGroup0(groupIndex, true);
 	}
-	@Override
+	
 	public boolean removeOpenGroup(int groupIndex) {
 		return setOpenGroup0(groupIndex, false);
 	}
@@ -241,7 +241,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		return false;
 	}
 	
-	@Override
+	
 	public boolean isGroupOpened(int groupIndex) {
 		return _opens == null || _opens[groupIndex];
 	}
@@ -379,7 +379,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		return true;
 	}
 	
-	@Override
+	
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		GroupsModelArray clone = (GroupsModelArray)super.clone();
@@ -399,7 +399,6 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	 * Allows the model to clone
 	 * @since 6.0.0
 	 */
-	@Override
 	public Object willClone(Component comp) {
 		return clone();
 	}

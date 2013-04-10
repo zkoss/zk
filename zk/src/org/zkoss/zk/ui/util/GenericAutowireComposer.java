@@ -347,7 +347,6 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * @return A clone of this Composer. 
 	 * @since 3.5.2
 	 */
-	@Override
 	public Object willClone(Component comp) {
 		try {
 			final Execution exec = Executions.getCurrent();
@@ -380,7 +379,6 @@ implements ComponentCloneListener, ComponentActivationListener {
 	}
 
 	//ComponentActivationListener
-	@Override
 	public void didActivate(Component comp) {
 		//wire variables to reference fields (include implicit objects)
 

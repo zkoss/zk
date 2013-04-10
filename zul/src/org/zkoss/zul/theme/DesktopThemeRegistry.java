@@ -48,7 +48,6 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	 * @param theme an instance of StandardTheme
 	 * @return true if registration is successful; false if failed
 	 */
-	@Override
 	public boolean register(Theme theme) {
 		_registry.put(theme.getName(), theme);
 		return true;
@@ -59,7 +58,6 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	 * @param theme the theme to be removed
 	 * @return true if the theme is successfully removed; false if failed
 	 */
-	@Override
 	public boolean deregister(Theme theme) {
 		return (_registry.remove(theme.getName()) != null);
 	}
@@ -68,7 +66,6 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	 * Returns a list of currently registered desktop themes
 	 * @return the list of currently registered desktop themes
 	 */
-	@Override
 	public Theme[] getThemes() {
 		Collection<Theme> themes = _registry.values();		
 		return themes.toArray(new Theme[themes.size()]);		
@@ -78,7 +75,6 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	 * Check if a dekstop theme with the given name is available to use
 	 * @return true if theme is found; false otherwise
 	 */
-	@Override
 	public boolean hasTheme(String themeName) {		
 		return _registry.containsKey(themeName);
 	}
@@ -89,7 +85,6 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	 * @return an instance of Theme with the given name 
 	 * or null if the registry does not have a theme that goes by that name
 	 */
-	@Override
 	public Theme getTheme(String themeName) {
 		return _registry.get(themeName);
 	}

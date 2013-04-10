@@ -115,23 +115,23 @@ public class Locators {
 			_lnno = lnno;
 			_colno = colno;
 		}
-		@Override
+		
 		public String getPath() {
 			return _path;
 		}
-		@Override
+		
 		public int getLineNumber() {
 			return _lnno;
 		}
-		@Override
+		
 		public int getColumnNumber() {
 			return _colno;
 		}
-		@Override
+		
 		public String format(String message) {
 			return Locators.format(message, _path, null, _lnno, -1);
 		}
-		@Override
+		
 		public String toString() {
 			return '[' + _path + ':' + _lnno +']';
 		}

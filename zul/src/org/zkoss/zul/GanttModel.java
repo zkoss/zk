@@ -191,7 +191,7 @@ public class GanttModel extends AbstractChartModel {
 		}
 	}
 
-	@Override
+	
 	public Object clone() {
 		GanttModel clone = (GanttModel) super.clone();
 		if (_taskMap != null)

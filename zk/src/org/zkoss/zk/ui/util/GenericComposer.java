@@ -101,24 +101,22 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 		_applied = comp.getUuid();
 		bindComponent(comp);
 	}
-
-	@Override
+	
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 			ComponentInfo compInfo) { //do nothing
 		return compInfo;
 	}
-	@Override
+	
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		//assign this composer as a variable
 		//feature #2778508
 		ConventionWires.wireController(comp, this);
 	}
-
-	@Override
+	
 	public boolean doCatch(Throwable ex) throws Exception { //do nothing
 		return false;
 	}
-	@Override
+	
 	public void doFinally() throws Exception { //do nothing
 	}
 }

@@ -30,12 +30,11 @@ implements List<E>, Cloneable, java.io.Serializable {
 
 	public NotableLinkedList() {
 	}
-
-	@Override
+	
 	public int size() {
 		return _list.size();
 	}
-	@Override
+	
 	public ListIterator<E> listIterator(int index) {
 		return new ListIter(index);
 	}
@@ -78,7 +77,7 @@ implements List<E>, Cloneable, java.io.Serializable {
 		private ListIter(int index) {
 			_iter = _list.listIterator(index);
 		}
-		@Override
+		
 		public void add(E o) {
 			final E nxt;
 			if (hasNext()) {
@@ -90,42 +89,42 @@ implements List<E>, Cloneable, java.io.Serializable {
 			onAdd(o, nxt);
 			_iter.add(o);
 		}
-		@Override
+		
 		public boolean hasNext() {
 			return _iter.hasNext();
 		}
-		@Override
+		
 		public boolean hasPrevious() {
 			return _iter.hasPrevious();
 		}
-		@Override
+		
 		public E next() {
 			_last = _iter.next();
 			_lastReady = true;
 			return _last;
 		}
-		@Override
+		
 		public E previous() {
 			_last = _iter.previous();
 			_lastReady = true;
 			return _last;
 		}
-		@Override
+		
 		public int nextIndex() {
 			return _iter.nextIndex();
 		}
-		@Override
+		
 		public int previousIndex() {
 			return _iter.previousIndex();
 		}
-		@Override
+		
 		public void remove() {
 			if (_lastReady)
 				onRemove(_last);
 			_iter.remove();
 			_lastReady = false;
 		}
-		@Override
+		
 		public void set(E o) {
 			if (_lastReady)
 				onSet(o, _last);

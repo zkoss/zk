@@ -41,7 +41,6 @@ public class FunctionMapperFactory extends FunctionMapper {
     /* (non-Javadoc)
      * @see org.zkoss.zel.FunctionMapper#resolveFunction(java.lang.String, java.lang.String)
      */
-    @Override
     public Method resolveFunction(String prefix, String localName) {
         if (this.memento == null) {
             this.memento = new FunctionMapperImpl();

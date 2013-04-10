@@ -143,8 +143,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		_valueMap.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
-
-	@Override
+	
 	public Object clone() {
 		SimpleCategoryModel clone = (SimpleCategoryModel) super.clone();
 		if (_seriesMap != null)

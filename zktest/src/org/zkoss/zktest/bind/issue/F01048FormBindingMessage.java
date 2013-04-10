@@ -40,7 +40,7 @@ public class F01048FormBindingMessage {
 	 */
 	public Validator getValidator() {
 		return new AbstractValidator() {
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				Map<String, Property> formProps = ctx.getProperties(ctx.getProperty().getValue());
 				if (Strings.isEmpty((String) formProps.get("firstName").getValue())) {
@@ -58,7 +58,7 @@ public class F01048FormBindingMessage {
 	
 	public Validator getMessageClearer() {
 		return new AbstractValidator() {
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				String key = (String)ctx.getValidatorArg("key");
 				ValidationMessages vmsgs = (ValidationMessages)ctx.getValidatorArg("vmsgs");;

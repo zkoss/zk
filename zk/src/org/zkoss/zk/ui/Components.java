@@ -880,11 +880,11 @@ public class Components {
 			return exec().isAsyncUpdate(page);
 		}
 
-		@Override
+		
 		public Double getBrowser(String name) {
 			return exec().getBrowser(name);
 		}
-		@Override
+		
 		public String getBrowser() {
 			return exec().getBrowser();
 		}
@@ -1053,11 +1053,11 @@ public class Components {
 				return Objects.equals(exec(), ((Exec)o).exec());
 			return Objects.equals(exec(), o);
 		}
-		@Override
+		
 		public void log(String msg) {
 			exec().log(msg);
 		}
-		@Override
+		
 		public void log(String msg, Throwable ex) {
 			exec().log(msg, ex);
 		}

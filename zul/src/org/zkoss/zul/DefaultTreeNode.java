@@ -96,22 +96,22 @@ Cloneable, java.io.Serializable  {
 			_parent.remove(this);
 	}
 
-	@Override
+	
 	public DefaultTreeModel<E> getModel() {
 		return _parent != null ? _parent.getModel(): _model;
 	}
-	@Override
+	
 	public void setModel(DefaultTreeModel<E> model) {
 		if (model != null && _parent != null)
 			throw new IllegalStateException("Only root allowed, "+this);
 		_model = model;
 	}
 
-	@Override
+	
 	public E getData() {
 		return _data;
 	}
-	@Override
+	
 	public void setData(E data) {
 		_data = data;
 		DefaultTreeModel<E> model = getModel();
@@ -123,20 +123,20 @@ Cloneable, java.io.Serializable  {
 		}
 	}
 	
-	@Override
+	
 	public List<TreeNode<E>> getChildren(){
 		return isLeaf() ? null : _children;
 	}
-	@Override
+	
 	public TreeNode<E> getChildAt(int childIndex) {
 		return childIndex >= 0 && childIndex < getChildCount() ?
 			_children.get(childIndex): null;
 	}
-	@Override
+	
 	public int getChildCount() {
 		return isLeaf() ? 0 : _children.size();
 	}
-	@Override
+	
 	public TreeNode<E> getParent() {
 		return _parent;
 	}
@@ -149,23 +149,23 @@ Cloneable, java.io.Serializable  {
 		_parent = parent;
 	}
 
-	@Override
+	
 	public int getIndex(TreeNode<E> node) {
 		return isLeaf() ? -1 : _children.indexOf(node);
 	}
 
-	@Override
+	
 	public boolean isLeaf() {
 		return _children == null;
 	}
 
-	@Override
+	
 	public void insert(TreeNode<E> child, int index) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.add(index, child);
 	}
-	@Override
+	
 	public void add(TreeNode<E> child) {
 		insert(child, getChildCount());
 	}
@@ -178,13 +178,13 @@ Cloneable, java.io.Serializable  {
 		return false;
 	}
 
-	@Override
+	
 	public void remove(int index) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.remove(index);
 	}
-	@Override
+	
 	public void remove(TreeNode<E> child) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
@@ -201,7 +201,6 @@ Cloneable, java.io.Serializable  {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public Object clone() {
 		final DefaultTreeNode clone;
 		try {
@@ -296,7 +295,7 @@ Cloneable, java.io.Serializable  {
 		}
 	}
 	
-	@Override
+	
 	public String toString() {
 		return _data == null ? "(null)" : _data.toString();
 	}

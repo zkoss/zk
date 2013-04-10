@@ -34,7 +34,7 @@ public class DynamicPropertiedELResolver extends BeanELResolver {
 		super(false);
 	}
 	
-	@Override
+	
 	public Object getValue(ELContext context, Object base, Object property) throws NullPointerException,
 			PropertyNotFoundException, ELException {
 		if (context == null) {
@@ -58,7 +58,7 @@ public class DynamicPropertiedELResolver extends BeanELResolver {
 		return val;
 	}
 
-	@Override
+	
 	public Class<?> getType(ELContext context, Object base, Object property) throws NullPointerException,
 			PropertyNotFoundException, ELException {
 		Class<?> type = null;
@@ -76,7 +76,7 @@ public class DynamicPropertiedELResolver extends BeanELResolver {
 		return type;
 	}
 
-	@Override
+	
 	public void setValue(ELContext context, Object base, Object property, Object value) throws NullPointerException,
 			PropertyNotFoundException, PropertyNotWritableException, ELException {
 		if(base instanceof DynamicPropertied){
@@ -91,7 +91,7 @@ public class DynamicPropertiedELResolver extends BeanELResolver {
 		}
 	}
 
-	@Override
+	
 	public boolean isReadOnly(ELContext context, Object base, Object property) throws NullPointerException,
 			PropertyNotFoundException, ELException {
 		if(base instanceof DynamicPropertied){
@@ -100,12 +100,12 @@ public class DynamicPropertiedELResolver extends BeanELResolver {
 		return true;
 	}
 
-	@Override
+	
 	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 		return null;
 	}
 
-	@Override
+	
 	public Class<?> getCommonPropertyType(ELContext context, Object base) {
 		return null;
 	}

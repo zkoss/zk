@@ -158,7 +158,7 @@ java.io.Serializable {
 		return -1;
 	}
 
-	@Override
+	
 	public E getChild(int[] path) {
 		E parent = getRoot();
 		if (path.length == 0) return parent;
@@ -214,17 +214,17 @@ java.io.Serializable {
 	}
 
 	// -- TreeModel --//
-	@Override
+	
 	public void addTreeDataListener(TreeDataListener l) {
 		_listeners.add(l);
 	}
-	@Override
+	
 	public void removeTreeDataListener(TreeDataListener l) {
 		_listeners.remove(l);
 	}
 
 	//TreeSelectableModel//
-	@Override
+	
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
 			_multiple = multiple;
@@ -242,13 +242,13 @@ java.io.Serializable {
 			}
 		}
 	}
-	@Override
+	
 	public boolean isMultiple() {
 		return _multiple;
 	}
 
 	// TreeSelectableModel
-	@Override
+	
 	public boolean addSelectionPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -258,7 +258,7 @@ java.io.Serializable {
 		return false;
 	}
 
-	@Override
+	
 	public boolean addSelectionPaths(int[][] paths) {
 		boolean added = false;
 		final int len = paths != null ? paths.length : 0;
@@ -284,7 +284,7 @@ java.io.Serializable {
 		return added;
 	}
 
-	@Override
+	
 	public boolean removeSelectionPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -294,7 +294,7 @@ java.io.Serializable {
 		return false;
 	}
 
-	@Override
+	
 	public boolean removeSelectionPaths(int[][] paths) {
 		boolean found = false;
 		final int len = paths != null ? paths.length : 0;
@@ -310,17 +310,17 @@ java.io.Serializable {
 		return found;
 	}
 
-	@Override
+	
 	public boolean isPathSelected(int[] path) {
 		return path != null && _selection.contains(new Path(path));
 	}
 
-	@Override
+	
 	public int[] getSelectionPath() {
 		return _selection.isEmpty() ? null: _selection.iterator().next().path;
 	}
 
-	@Override
+	
 	public int[][] getSelectionPaths() {
 		if (_selection.isEmpty())
 			return null;
@@ -332,17 +332,17 @@ java.io.Serializable {
 		return paths;
 	}
 
-	@Override
+	
 	public int getSelectionCount() {
 		return _selection.size();
 	}
 
-	@Override
+	
 	public boolean isSelectionEmpty() {
 		return _selection.isEmpty();
 	}
 
-	@Override
+	
 	public void clearSelection() {
 		if (!_selection.isEmpty()) {
 			final int[][] paths = getSelectionPaths();
@@ -355,7 +355,7 @@ java.io.Serializable {
 	}
 
 	// TreeOpenableModel //
-	@Override
+	
 	public boolean addOpenPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -365,7 +365,7 @@ java.io.Serializable {
 		return false;
 	}
 	
-	@Override
+	
 	public boolean addOpenPaths(int[][] paths) {
 		boolean added = false;
 		final int len = paths != null ? paths.length : 0;
@@ -381,7 +381,7 @@ java.io.Serializable {
 		return added;
 	}
 
-	@Override
+	
 	public boolean removeOpenPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -391,7 +391,7 @@ java.io.Serializable {
 		return false;
 	}
 
-	@Override
+	
 	public boolean removeOpenPaths(int[][] paths) {
 		boolean found = false;
 		final int len = paths != null ? paths.length : 0;
@@ -405,17 +405,17 @@ java.io.Serializable {
 		return found;
 	}
 
-	@Override
+	
 	public boolean isPathOpened(int[] path) {
 		return path != null && _opens.contains(new Path(path));
 	}
 
-	@Override
+	
 	public int[] getOpenPath() {
 		return _opens.isEmpty() ? null: _opens.iterator().next().path;
 	}
 
-	@Override
+	
 	public int[][] getOpenPaths() {
 		if (_opens.isEmpty())
 			return null;
@@ -427,17 +427,17 @@ java.io.Serializable {
 		return paths;
 	}
 
-	@Override
+	
 	public int getOpenCount() {
 		return _opens.size();
 	}
 
-	@Override
+	
 	public boolean isOpenEmpty() {
 		return _opens.isEmpty();
 	}
 
-	@Override
+	
 	public void clearOpen() {
 		if (!_opens.isEmpty()) {
 			final int[][] paths = getOpenPaths();
@@ -482,7 +482,7 @@ java.io.Serializable {
 	}
 
 	//Selectable//
-	@Override
+	
 	public Set<E> getSelection() {
 		final Set<E> selected = new LinkedHashSet<E>();
 		int[][] paths = getSelectionPaths();
@@ -491,7 +491,7 @@ java.io.Serializable {
 				selected.add(getChild(paths[i]));
 		return selected;
 	}
-	@Override
+	
 	public void setSelection(Collection<? extends E> selection) {
 		if (isSelectionChanged(selection)) {
 			clearSelection();
@@ -510,14 +510,14 @@ java.io.Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+	
 	public boolean isSelected(Object child) {
 		final int[] path = getPath((E)child);
 		if (path != null && path.length > 0)
 			return isPathSelected(path);
 		return false;
 	}
-	@Override
+	
 	public boolean addToSelection(E child) {
 		final int[] path = getPath(child);
 		if (path != null && path.length > 0)
@@ -525,7 +525,7 @@ java.io.Serializable {
 		return false;
 	}
 	@SuppressWarnings("unchecked")
-	@Override
+	
 	public boolean removeFromSelection(Object child) {
 		final int[] path = getPath((E)child);
 		if (path != null && path.length > 0)
@@ -534,7 +534,7 @@ java.io.Serializable {
 	}
 
 	//Openable//
-	@Override
+	
 	public Set<E> getOpenObjects() {
 		final Set<E> opened = new LinkedHashSet<E>();
 		int[][] paths = getOpenPaths();
@@ -543,21 +543,21 @@ java.io.Serializable {
 				opened.add(getChild(paths[i]));
 		return opened;
 	}
-	@Override
+	
 	public void setOpenObjects(Collection<? extends E> opened) {
 		clearOpen();
 		for (final E node: opened)
 			addOpenObject(node);
 	}
 	@SuppressWarnings("unchecked")
-	@Override
+	
 	public boolean isObjectOpened(Object child) {
 		final int[] path = getPath((E)child);
 		if (path != null && path.length > 0)
 			return isPathOpened(path);
 		return false;
 	}
-	@Override
+	
 	public boolean addOpenObject(E child) {
 		final int[] path = getPath(child);
 		if (path != null && path.length > 0)
@@ -565,7 +565,7 @@ java.io.Serializable {
 		return false;
 	}
 	@SuppressWarnings("unchecked")
-	@Override
+	
 	public boolean removeOpenObject(Object child) {
 		final int[] path = getPath((E)child);
 		if (path != null && path.length > 0)
@@ -590,7 +590,7 @@ java.io.Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+	
 	public Object clone() {
 		final AbstractTreeModel clone;
 		try {
@@ -613,11 +613,11 @@ java.io.Serializable {
 		protected Path(int[] path) {
 			this.path = path;
 		}
-		@Override
+		
 		public int hashCode() {
 			return Objects.hashCode(path);
 		}
-		@Override
+		
 		public boolean equals(Object o) {
 			return o instanceof Path && Objects.equals(path, ((Path)o).path);
 		}

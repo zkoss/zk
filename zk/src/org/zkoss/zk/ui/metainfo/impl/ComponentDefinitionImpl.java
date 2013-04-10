@@ -258,7 +258,7 @@ implements ComponentDefinition, java.io.Serializable {
 	public String getTextAs() {
 		return _textAs;
 	}
-	@Override
+	
 	public boolean isChildAllowedInTextAs() {
 		return _childAllowedInTextAs;
 	}

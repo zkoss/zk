@@ -43,7 +43,7 @@ public class Module2 implements Module {
 			this.y = y;
 		}
 
-		@Override
+		
 		public String getUri() {
 			return "modulize-moudle2.zul";
 		}

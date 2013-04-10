@@ -34,19 +34,19 @@ public class MacroStateCtx<E, C, IN, E2, C2> extends StateCtx<E, C, IN> {
 	
 	
 	// event handler //
-	@Override
+	
 	protected void onLand(IN input, C inputClass, E origin) {
 		_submachine.start(input);
 	}
-	@Override
+	
 	protected void onReturn(IN input, C inputClass) {
 		_submachine.run(input);
 	}
-	@Override
+	
 	protected void onLeave(IN input, C inputClass, E destination) {
 		_submachine.terminateAt(input);
 	}
-	@Override
+	
 	protected void onStop(boolean endOfInput) {
 		_submachine.onStop(endOfInput);
 	}

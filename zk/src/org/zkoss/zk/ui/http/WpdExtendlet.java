@@ -85,7 +85,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		config.addCompressExtension("wpd");
 	}
 
-	//@Override
+	
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {

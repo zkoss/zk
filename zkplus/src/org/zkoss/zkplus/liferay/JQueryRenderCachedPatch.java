@@ -34,7 +34,7 @@ import org.zkoss.util.logging.Log;
 public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	private static final Log log = Log.lookup(JQueryRenderCachedPatch.class);
 	
-	//@Override
+	
 	protected String getBrowserDelay() {
 		return "zk.ie6_ || zk.ie7_ ? 1300 : 100"; 
 	}

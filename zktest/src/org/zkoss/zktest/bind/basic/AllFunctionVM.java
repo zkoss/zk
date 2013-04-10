@@ -91,7 +91,7 @@ public class AllFunctionVM {
 	public Validator getValidator1() {
 		return new AbstractValidator() {
 
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				if (!"A".equals(ctx.getProperty().getValue())) {
 					ctx.setInvalid();
@@ -104,7 +104,7 @@ public class AllFunctionVM {
 	public Validator getValidator2() {
 		return new AbstractValidator() {
 
-			@Override
+			
 			public void validate(ValidationContext ctx) {
 				Form fx = (Form) ctx.getProperty().getValue();
 				if (!"B".equals(fx.getField("name"))) {

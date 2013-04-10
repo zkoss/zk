@@ -152,7 +152,7 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		}
 	}
 
-	@Override
+	
 	public Object clone() {
 		SimpleXYModel clone = (SimpleXYModel) super.clone();
 		if (_seriesMap != null)

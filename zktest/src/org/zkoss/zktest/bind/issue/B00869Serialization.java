@@ -142,7 +142,7 @@ public class B00869Serialization implements Serializable{
 	}
 	public Validator getDummyValidator(){
 		return new Validator(){
-			@Override
+			
 			public void validate(ValidationContext ctx) {				
 			}
 		};
@@ -151,12 +151,12 @@ public class B00869Serialization implements Serializable{
 	public Converter getDummyConverter(){
 		return new Converter() {
 			
-			@Override
+			
 			public Object coerceToUi(Object val, Component component, BindContext ctx) {
 				return val;
 			}
 			
-			@Override
+			
 			public Object coerceToBean(Object val, Component component, BindContext ctx) {
 				return val;
 			}

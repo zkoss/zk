@@ -79,12 +79,10 @@ Selectable<E>, java.io.Serializable {
 	}
 	//Selectable//
 	/** {@inheritDoc} */
-	@Override
 	public Set<E> getSelection() {
 		return Collections.unmodifiableSet(_selection);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void setSelection(Collection<? extends E> selection) {
 		if (!_selection.equals(selection)) {
 			if (!_multiple && _selection.size() > 1)
@@ -98,18 +96,15 @@ Selectable<E>, java.io.Serializable {
 		}
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean isSelected(Object obj) {
 		return _selection.contains(obj);
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean isSelectionEmpty() {
 		return _selection.isEmpty();
 	}
 
 	/** {@inheritDoc} */
-	@Override
 	public boolean addToSelection(E obj) {
 		if (_selection.add(obj)) {
 			if (!_multiple) {
@@ -122,7 +117,6 @@ Selectable<E>, java.io.Serializable {
 		return false;
 	}
 	/** {@inheritDoc} */
-	@Override
 	public boolean removeFromSelection(Object obj) {
 		if (_selection.remove(obj)) {
 			fireEvent(GroupsDataEvent.SELECTION_CHANGED, -1, -1, -1);
@@ -131,7 +125,6 @@ Selectable<E>, java.io.Serializable {
 		return false;
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void clearSelection() {
 		if (!_selection.isEmpty()) {
 			_selection.clear();
@@ -165,12 +158,10 @@ Selectable<E>, java.io.Serializable {
 	}
 
 	/** {@inheritDoc} */
-	@Override
 	public boolean isMultiple() {
 		return _multiple;
 	}
 	/** {@inheritDoc} */
-	@Override
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
 			_multiple = multiple;

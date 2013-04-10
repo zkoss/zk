@@ -90,12 +90,12 @@ public class Frozen extends XulElement {
 		return 0;
 	}
 
-	//@Override
+	
 	public String getZclass() {
 		return _zclass == null ? "z-frozen" : _zclass;
 	}
 		
-	//@Override
+	
 	protected void updateByClient(String name, Object value) {
 		if ("start".equals(name))
 			setStart(value instanceof Number ? ((Number)value).intValue():
@@ -104,7 +104,7 @@ public class Frozen extends XulElement {
 			super.updateByClient(name, value);
 	}
 
-	//@Override
+	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);

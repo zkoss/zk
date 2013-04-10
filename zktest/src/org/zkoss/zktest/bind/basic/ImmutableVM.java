@@ -46,12 +46,12 @@ public class ImmutableVM {
 	public Converter getConverter1(){
 		return new Converter(){
 
-			@Override
+			
 			public Object coerceToUi(Object val, Component component, BindContext ctx) {
 				return ((Item)val).getName();
 			}
 
-			@Override
+			
 			public Object coerceToBean(Object val, Component component, BindContext ctx) {
 				return null;
 			}
@@ -62,12 +62,12 @@ public class ImmutableVM {
 	public Converter getConverter2(){
 		return new Converter(){
 
-			@Override
+			
 			public Object coerceToUi(Object val, Component component, BindContext ctx) {
 				return ((Option)val).getName();
 			}
 
-			@Override
+			
 			public Object coerceToBean(Object val, Component component, BindContext ctx) {
 				return null;
 			}

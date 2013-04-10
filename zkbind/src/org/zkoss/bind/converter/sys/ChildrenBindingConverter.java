@@ -30,7 +30,6 @@ public class ChildrenBindingConverter implements Converter, Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
 		if (val == null || val instanceof List) {
 			return val;
@@ -49,7 +48,7 @@ public class ChildrenBindingConverter implements Converter, Serializable{
 		return data;
 	}
 
-	@Override
+	
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
 		//no save binding in children binding
 		return val;

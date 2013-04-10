@@ -732,24 +732,23 @@ implements LexicalHandler, DeclHandler {
 			_lnno  = loc.getLineNumber();
 			_colno = loc.getColumnNumber();
 		}
-
-		@Override
+		
 		public final int getColumnNumber() {
 			return _colno;
 		}
-		@Override
+		
 		public final int getLineNumber() {
 			return _lnno;
 		}
-		@Override
+		
 		public final String getPublicId() {
 			return _pubId;
 		}
-		@Override
+		
 		public final String getSystemId() {
 			return _sysId;
 		}
-		@Override
+		
 		public final String toString() {
 			return '['+_pubId+':'+_sysId+':'+_lnno+':'+_colno+']';
 		}

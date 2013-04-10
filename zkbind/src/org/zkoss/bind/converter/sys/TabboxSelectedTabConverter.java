@@ -33,7 +33,7 @@ import org.zkoss.zul.Tabbox;
 public class TabboxSelectedTabConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 200808190445L;
 
-	@Override
+	
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
 		if (val != null) {
 			//iterate to find the selected radio via the value
@@ -49,7 +49,7 @@ public class TabboxSelectedTabConverter implements Converter, java.io.Serializab
 	  	return null;
 	}
 
-	@Override
+	
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
 		return val != null ? ((Tab)val).getLabel() : null;
 	}

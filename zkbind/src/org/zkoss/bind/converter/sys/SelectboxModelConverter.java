@@ -23,7 +23,7 @@ import org.zkoss.zul.Selectbox;
 public class SelectboxModelConverter extends AbstractListModelConverter<Selectbox>{
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	@Override
+	
 	protected ListModel<?> getComponentModel(Selectbox comp) {
 		return comp.getModel();
 	}

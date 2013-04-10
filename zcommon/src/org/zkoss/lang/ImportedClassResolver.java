@@ -100,8 +100,7 @@ public class ImportedClassResolver implements ClassResolver, java.io.Serializabl
 			_clses.putAll(resolver._clses);
 		}
 	}
-
-	//@Override
+	
 	public Class<?> resolveClass(String clsnm) throws ClassNotFoundException {
 		if (clsnm.indexOf('.') < 0) {
 			if (_clses != null) {

@@ -37,7 +37,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	
 	private String _attributeName;
 	
-	@Override
+	
 	public void setAttributeName(String name) {
 		_attributeName = name;
 	}
@@ -78,15 +78,15 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			old = eachComp.setAttribute(EACH_VAR, data); //kept the value for template resolving
 			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
-				@Override
+				
 				public int getIndex() {
 					return index;
 				}
-				@Override
+				
 				public Object getEach(){
 					return data;
 				}
-				@Override
+				
 				public Integer getEnd(){
 					if(size<0){
 						throw new UiException("end attribute is not supported");// the tree case

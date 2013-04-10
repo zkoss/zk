@@ -31,7 +31,7 @@ public class B65_ZK_1308 extends SelectorComposer<Window> {
 	 @WireVariable
 	  private Page _page;
 	 
-	 @Override
+	 
 	 public void doAfterCompose(Window comp) throws Exception {
 		 super.doAfterCompose(comp);
 		 comp.appendChild(new Label("Super: " + _page));

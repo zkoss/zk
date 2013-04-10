@@ -62,7 +62,6 @@ import org.zkoss.zk.xel.EvaluatorRef;
 	}
 
 	//NodeInfo//
-	@Override
 	public void appendChild(NodeInfo child) {
 		NodeInfo oldp = child.getParent();
 		if (oldp != null)
@@ -82,7 +81,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
 			for (NodeInfo c: children)
 				fixEvaluatorRefDown(c, evalr);
 	}
-	@Override
+	
 	public boolean removeChild(NodeInfo child) {
 		if (child != null && _children.remove(child)) {
 			((LeafInfo)child).setParentDirectly(null); //except root, all are LeafInfo
@@ -91,17 +90,16 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		}
 		return false;
 	}
-	@Override
+	
 	public List<NodeInfo> getChildren() {
 		return _children;
 	}
 
 	//Condition//
-	@Override
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
-	@Override
+	
 	public boolean isEffective(Page page) {
 		return _cond == null || _cond.isEffective(_evalr, page);
 	}

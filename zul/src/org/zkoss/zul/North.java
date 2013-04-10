@@ -61,7 +61,6 @@ public class North extends LayoutRegion {
 	/** Returns the default collapsed margin ([3, 0, 0, 3]).
 	 * @since 5.0.5
 	 */
-	//@Override
 	protected int[] getDefaultCmargins() {
 		return new int[] { 3, 0, 0, 3 };
 	}

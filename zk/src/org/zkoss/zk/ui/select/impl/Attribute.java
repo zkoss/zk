@@ -62,11 +62,10 @@ public class Attribute {
 		
 		private final String _str;
 		Operator(String str){ _str = str; }
-		@Override
+		
 		public String toString(){ return _str; }
 	}
 	
-	@Override
 	public String toString() {
 		String qt = isQuoted()? "\"" : "";
 		return "[" + _name + _operator.toString() + qt + _value + qt +"]";

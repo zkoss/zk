@@ -117,7 +117,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		return xelc;
 	}
 
-	@Override
+	
 	public boolean isReadOnly(BindContext ctx, Component comp,
 			ExpressionX expression) throws XelException {
 		return expression.isReadOnly(newXelContext(ctx, comp));

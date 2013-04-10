@@ -61,7 +61,7 @@ public class StandardThemeProvider implements ThemeProvider {
 		}
 	}
 	
-	@Override
+	
 	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
 		String suffix = getThemeFileSuffix();
 		
@@ -71,17 +71,17 @@ public class StandardThemeProvider implements ThemeProvider {
 		return uris;
 	}
 	
-	@Override
+	
 	public int getWCSCacheControl(Execution exec, String uri) {
 		return 8760; // a year. (JVM will utilize it, don't have to count the answer)
 	}
 	
-	@Override
+	
 	public String beforeWCS(Execution exec, String uri) {
 		return uri;
 	}
 	
-	@Override
+	
 	public String beforeWidgetCSS(Execution exec, String uri) {
 		if (uri.startsWith("~./zul/css/") ||
 			uri.startsWith("~./js/zul/")) {

@@ -33,7 +33,6 @@ public class Tokenizer {
 			protected boolean _escaped;
 			protected boolean _opEscaped;
 			
-			@Override
 			protected void init() {
 				getState(State.MAIN)
 					.setReturningAll(true)
@@ -41,7 +40,7 @@ public class Tokenizer {
 				
 				setState(State.IN_ATTRIBUTE, 
 						new StateCtx<State, CharClass, Character>(){
-					@Override
+					
 					protected void onReturn(Character i, CharClass cls) {
 						if(cls != CharClass.OTHER) return;
 						if(i == '"') 
@@ -56,7 +55,6 @@ public class Tokenizer {
 				
 			}
 			
-			@Override
 			protected void onReset() {
 				_inDoubleQuote = false;
 				_inSingleQuote = false;
@@ -70,7 +68,6 @@ public class Tokenizer {
 				_tokens = new ArrayList<Token>();
 			}
 			
-			@Override
 			protected void afterStep(Character input, CharClass inputClass,
 					State origin, State destination) {
 				
@@ -106,7 +103,6 @@ public class Tokenizer {
 				
 			}
 			
-			@Override
 			protected void onStop(boolean endOfInput) {
 				if(!endOfInput) return;
 				
@@ -115,7 +111,6 @@ public class Tokenizer {
 					flush(_prevChar, _prevClass, false);
 			}
 			
-			@Override
 			protected CharClass getClass(Character c) {
 				
 				if(_inDoubleQuote && (_escaped || c != '"'))
@@ -141,7 +136,6 @@ public class Tokenizer {
 				return c == '\\' ? CharClass.ESCAPE : CharClass.OTHER;
 			}
 			
-			@Override
 			protected State getLandingState(Character input,
 					CharClass inputClass) {
 				
@@ -150,7 +144,6 @@ public class Tokenizer {
 				return State.MAIN;
 			}
 			
-			@Override
 			protected void onReject(Character input) {
 				throw new ParseException(_step, _current, input);
 			}

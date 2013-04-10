@@ -31,8 +31,7 @@ public final class AstAnd extends BooleanNode {
     public AstAnd(int id) {
         super(id);
     }
-
-    @Override
+    
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         Object obj = children[0].getValue(ctx);

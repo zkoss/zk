@@ -13,7 +13,7 @@ import org.zkoss.zk.ui.Executions;
  */
 public class SimplePhaseListener implements PhaseListener{
 
-	@Override
+	
 	public void prePhase(Phase phase, BindContext ctx) {
 		if(phase == Phase.COMMAND){
 			Execution ex = Executions.getCurrent();
@@ -25,7 +25,7 @@ public class SimplePhaseListener implements PhaseListener{
 		}
 	}
 
-	@Override
+	
 	public void postPhase(Phase phase, BindContext ctx) {
 	}
 

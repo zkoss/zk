@@ -51,7 +51,6 @@ public class PackageDataUnit implements Comparable<PackageDataUnit> {
 	}
 
 	// for F60-ZK-701-Tree.zul
-	@Override
 	public int compareTo(PackageDataUnit o) {
 		return path.compareTo(o.path);
 	}

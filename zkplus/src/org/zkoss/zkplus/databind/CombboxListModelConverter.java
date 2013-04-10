@@ -24,7 +24,7 @@ public class CombboxListModelConverter extends ListModelConverter{
 
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	
 	protected ListModel<?> getComponentModel(Component comp){
 		return ((Combobox)comp).getModel();
 	}

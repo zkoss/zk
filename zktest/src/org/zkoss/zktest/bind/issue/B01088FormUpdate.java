@@ -55,12 +55,12 @@ public class B01088FormUpdate {
 	public Converter<Object, Form, Component> getConverter1(){
 		return new Converter<Object, Form, Component>() {
 
-			@Override
+			
 			public Object coerceToUi(Form val, Component component, BindContext ctx) {
 				return val.getField("firstName")+" "+((Form)val).getField("lastName");
 			}
 
-			@Override
+			
 			public Form coerceToBean(Object val, Component component, BindContext ctx) {
 				return null;
 			}
@@ -69,12 +69,12 @@ public class B01088FormUpdate {
 	public Converter<Object, FormStatus, Component> getConverter2(){
 		return new Converter<Object, FormStatus, Component>() {
 
-			@Override
+			
 			public Object coerceToUi(FormStatus val, Component component, BindContext ctx) {
 				return val.isDirty();
 			}
 
-			@Override
+			
 			public FormStatus coerceToBean(Object val, Component component, BindContext ctx) {
 				return null;
 			}

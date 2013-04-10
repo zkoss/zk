@@ -209,7 +209,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public void setActivePage(int pg) throws WrongValueException {
 		pgi().setActivePage(pg);
 	}
-	//@Override
+	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
