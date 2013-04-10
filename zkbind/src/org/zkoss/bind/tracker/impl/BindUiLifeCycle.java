@@ -192,14 +192,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		public void removeLifeCycleHandling(Component comp);
 	}
 	private static class DefaultExtension implements Extension {
-		@Override
 		public void markLifeCycleHandling(Component comp) {}
 
-		@Override
 		public boolean isLifeCycleHandling(Component comp) {
 			return false;
 		}
-		@Override
 		public void removeLifeCycleHandling(Component comp) {}
 	}
 }
