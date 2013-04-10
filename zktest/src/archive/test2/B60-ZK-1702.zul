@@ -1,0 +1,11 @@
+<zk>
+	<label multiline="true">
+	Select any item in the combobox, should not see any java error.
+	</label>
+	<window id="win" apply="org.zkoss.zktest.test2.B60_ZK_1702_ComboboxComposer">
+		<combobox id="cb" model="@{ctl.list}" selectedItem="@{ctl.selItem}"
+				forward="onChange=onSelectItem" width="300px" readonly="true">
+			<comboitem self="@{each=item}" value="@{item}" label="@{item.name}" />
+		</combobox>
+	</window>
+</zk>

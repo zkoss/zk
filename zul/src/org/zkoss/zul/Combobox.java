@@ -165,10 +165,13 @@ public class Combobox extends Textbox {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				}
-				// Bug B60-ZK-1202.zul
-				// Remove current items anyway, when changing models
-				if (!getItems().isEmpty()) { 
-				    getItems().clear();  
+				// ZK-1702: do not clear Comboitems if using Data Binding 1
+				if (_model != null && !_model.getClass().getName().equals("org.zkoss.zkplus.databind.BindingListModelList")) {
+					// Bug B60-ZK-1202.zul
+					// Remove current items anyway, when changing models
+					if (!getItems().isEmpty()) {
+						getItems().clear();
+					}
 				}
 				
 				_model = model;
