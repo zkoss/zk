@@ -50,8 +50,8 @@ public class DialModelScale implements Serializable {
 	//tick
 	private Font _tickFont; //14, 10
 	private double _tickRadius = 0.88; //0.88, 0.50
-	private String _tickColor; //FrameFgColor, 0xFF0000
-	private int[] _tickRGB; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private String _tickColor; //tick, 0xFF0000
+	private int[] _tickRGB; //tick, red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private double _tickLabelOffset = 0.20; //offset between tick and tick label
 	
 	//scale
@@ -67,8 +67,8 @@ public class DialModelScale implements Serializable {
 	
 	//needle
 	private String _needleType = "pointer"; //"pointer", "pin"
-	private String _needleColor; //FrameFgColor, 0xFF0000
-	private int[] _needleRGB; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private String _needleColor; //needle, 0xFF0000
+	private int[] _needleRGB; //needle, red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private double _needleRadius = 0.9; //0.9, 0.55
 
 	/*package*/ DialModelScale(DialModel model) {
