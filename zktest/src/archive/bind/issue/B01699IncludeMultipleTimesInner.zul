@@ -1,0 +1,26 @@
+<zk>
+	<window title="Inner" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01699IncludeMultipleTimesInner')">
+
+		<div id="d1">
+			<div id="d11">
+				<div id="d111">
+					<label id="lb1" value="@bind(vm.foo)"></label>
+				</div>
+			</div>
+		</div>
+
+		<div id="d2">
+			<div id="d21">
+				<div id="d211">
+					<div id="d2111">
+						<div id="d21111">
+							<label id="lb2" value="@bind(vm.bar)"></label>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</window>
+</zk>
