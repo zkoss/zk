@@ -271,7 +271,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 					if (zk.ie < 8 && (scroll > 11 || !mw.ebody.clientWidth)) {
 						// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.
 						var hdflex = jq(mw.ehead).find('table>tbody>tr>th:last-child')[0];
-						hdflex.style.width = '';
+						var clear = true; //Bug ZK-1642 for IE 6/7, only clear hdflex width if all headers have hflex or defined width
+						for (var c = this.parent.firstChild; c; c = c.nextSibling) {
+							if (!(c._hflex || c.$n().style.width)) {
+								clear = false;
+								break;
+							}
+						}
+						if (clear)
+							hdflex.style.width = '';
 						if (mw.ebodytbl)
 							mw.ebodytbl.width = "";
 					} else if (mw.ebodytbl && !mw.ebodytbl.width) {
