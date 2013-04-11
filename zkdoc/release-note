@@ -9,6 +9,7 @@ ZK 6.5.3
   ZK-1698: MVVM Tree Performance Issue
   ZK-1691: Dropupload has "native" property (reserved identifier in EL)
   ZK-1701: Message for file upload is not good enough in German
+  ZK-1708: Clients.showNotification doesn't work when using auto mode include component
 
   --------
 ZK 6.5.2

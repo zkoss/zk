@@ -1,0 +1,11 @@
+<zk>
+	<window hflex="1" vflex="1" border="normal" title="window">
+		Click "append" button, should see notification showed.
+		<button label="append" onClick="append()">
+			<attribute name="onClick"><![CDATA[
+				include2.setSrc("B65-ZK-1708_1.zul?a=b");
+			]]></attribute>
+		</button>
+		<include id="include2" hflex="1" vflex="1" src="" />
+	</window>
+</zk>
