@@ -59,8 +59,8 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp) { //load
 		Listbox lbx = (Listbox) comp;
+  		final ListModel xmodel = lbx.getModel();
 	  	if (val != null) {
-	  		final ListModel xmodel = lbx.getModel();
 	  		if (xmodel instanceof BindingListModel) {
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(val);
@@ -107,6 +107,10 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	  		} else {
 	  			throw new UiException("model of the databind listbox "+lbx+" must be an instanceof of org.zkoss.zkplus.databind.BindingListModel." + xmodel);
 	  		}
+	  	}
+	  	//Bug ZK-1714: clear selection if value is null
+	  	if (xmodel != null && xmodel instanceof Selectable) {
+	  		((Selectable) xmodel).clearSelection();
 	  	}
 	  	return null;
 	}

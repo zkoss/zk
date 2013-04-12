@@ -12,6 +12,7 @@ ZK 6.5.3
   ZK-1708: Clients.showNotification doesn't work when using auto mode include component
   ZK-1699: Performance issue ZK-Bind getters are called multiple times
   ZK-1711: Chosenbox's model will be set to null after invalidate the Chosenbox's parent
+  ZK-1714: Databinding 1 cannot clear selection item
 
   --------
 ZK 6.5.2
