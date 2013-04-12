@@ -1387,8 +1387,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _page == null || getAttachedUiEngine().isInvalidated(this);
 	}
 	public void invalidate() {
-		if (_page != null)
+		if (_page != null) {
 			getAttachedUiEngine().addInvalidate(this);
+			notifyParentInvalidate();
+		}
+	}
+	public void notifyParentInvalidate() {
+		for (Component comp : getChildren())
+			comp.notifyParentInvalidate();
 	}
 
 	/** Causes a response to be sent to the client.

@@ -395,6 +395,11 @@ public class Selectbox extends HtmlBasedComponent {
 
 		super.invalidate();
 	}
+	// Bug ZK-1711: re-render data if parent/ancestor component invalidate
+	public void notifyParentInvalidate() {
+		prepareDatas();
+		super.notifyParentInvalidate();
+	}
 	// ZK-948 need render data when change parent or attach to page
 	public void setParent (Component parent) {
 		super.setParent(parent);
