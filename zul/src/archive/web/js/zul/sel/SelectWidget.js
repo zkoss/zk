@@ -516,6 +516,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						(this.ebody.offsetHeight * 2 - this.ebody.clientHeight) + "px";
 			} else {
 				this.ebody.style.height = "";
+				var focusEL = this.$n('a');
+				if ((this.paging || this._paginal) && zk(this.ebody).hasVScroll() && focusEL) {
+					focusEL.style.top = '0px'; // Bug ZK-1715: focus has no chance to sync if don't select item after changing page.
+				}
 			}
 
 			//bug# 3033016: Extra empty row when shrink fixed width Listbox
@@ -897,7 +901,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		
 		if (step > 0 || (step < 0 && row)) {
-			if (row && shift)
+			if (row && shift && !row.isDisabled()) // Bug ZK-1715: not select item if disabled.
 				this._toggleSelect(row, true, evt);
 			var nrow = row ? row.$n() : null;
 			for (;;) {

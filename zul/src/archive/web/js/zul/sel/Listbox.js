@@ -414,14 +414,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return zul.sel.Listhead;
 	},
 	/**
-	 * Returns the tree item iterator.
+	 * Returns the list item iterator.
 	 * @return zul.sel.ItemIter
 	 * @disable(zkgwt)
 	 */
 	itemIterator: _zkf = function (opts) {
 		return new zul.sel.ItemIter(this, opts);
 	},
-	/**Returns the tree item iterator.
+	/**Returns the list item iterator.
 	 * @return zul.sel.ItemIter
 	 * @see #itemIterator
 	 * @disable(zkgwt)

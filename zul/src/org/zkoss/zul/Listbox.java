@@ -911,8 +911,10 @@ public class Listbox extends MeshElement {
 					smartUpdate("selInView_", _jsel);
 				}
 			} else {
-				item.setSelectedDirectly(true);
-				_selItems.add(item);
+				if (!item.isDisabled()) { // Bug ZK-1715: not select item if disabled.
+					item.setSelectedDirectly(true);
+					_selItems.add(item);
+				}
 			}
 
 			if (inSelectMold()) {
@@ -981,8 +983,10 @@ public class Listbox extends MeshElement {
 					} else if (item != null)
 						smartUpdate("selectedItem", item);
 				}
-				item.setSelectedDirectly(true);
-				_selItems.add(item);
+				if (!item.isDisabled()) { // Bug ZK-1715: not select item if disabled.
+					item.setSelectedDirectly(true);
+					_selItems.add(item);
+				}
 				if (inSelectMold()) {
 					item.smartUpdate("selected", true);
 				} else {
@@ -3498,8 +3502,11 @@ public class Listbox extends MeshElement {
 			int to = shift > 0 ? index + shift : index;
 
 			//Update UI
-			final int toUI = Math.min(to, getItemCount() - 1); // capped by size
+			final int tsz = getItemCount();
+			final int toUI = Math.min(to, tsz - 1); // capped by size
 			if (!isMultiple() || shift == 0) {
+				if (index >= tsz)
+					index = tsz - 1;
 				setSelectedIndex(index);
 				setFocusIndex(offset < 0 ? pageSize - 1 : offset);
 			} else {
