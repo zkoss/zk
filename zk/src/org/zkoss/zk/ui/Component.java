@@ -904,7 +904,7 @@ w:use="foo.MyWindow"&gt;
 	 * Notify children components that its ancestor component executes {@link #invalidate}.
 	 * @since 6.5.3
 	 */
-	public void notifyParentInvalidate();
+	public void onParentInvalidated();
 	/** Initializes the properties (a.k.a. members) 
 	 * based on what are defined in the component definition.
 	 *
