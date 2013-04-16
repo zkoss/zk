@@ -325,7 +325,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var margin = wgt.getMarginSize_(o);
 			if (zk.safari && margin < 0)
 				margin = 0;
-			var sz = wgt.setFlexSize_({width:(max + wgt.getContentEdgeWidth_() + margin)}, true);
+			var wd = max + wgt.getContentEdgeWidth_() + margin
+			if(zk.ie > 8) {
+				wd -= 1;
+			}
+			var sz = wgt.setFlexSize_({width:(wd)}, true);
 			if (sz && sz.width >= 0)
 				wgt._hflexsz = sz.width + margin;
 			wgt.afterChildrenMinFlex_('w');
