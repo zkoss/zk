@@ -43,7 +43,7 @@ ${z:outDeviceStyleSheets('ajax')}
 		parent.setTimeout(cmd, 0);
 	}
 	<c:if test="${!empty arg.contentId}">
-		exec("if(window.zul){zul.Upload.sendResult('${arg.uuid}', '${arg.contentId}', '${arg.sid}'); zul.Upload.close('${arg.uuid}', '${arg.sid}');}");
+		exec("if(window.zul){zul.Upload.sendResult('${c:escapeXML(arg.uuid)}', '${c:escapeXML(arg.contentId)}', '${c:escapeXML(arg.sid)}'); zul.Upload.close('${c:escapeXML(arg.uuid)}', '${c:escapeXML(arg.sid)}');}");
 		<%-- Bug 1920877 --%>
 	</c:if>
 // -->
