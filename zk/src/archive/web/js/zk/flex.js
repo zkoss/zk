@@ -325,13 +325,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var margin = wgt.getMarginSize_(o);
 			if (zk.safari && margin < 0)
 				margin = 0;
-			//feature #ZK-314: A way to pre-load images since many UIs depend on the size of an image. 
 			var wd = max + wgt.getContentEdgeWidth_() + margin;
+			//feature #ZK-314: IE 9/10 will add 1px automatically.
 			if(zk.ie > 8) {
 				wd -= 1;
 			}
 			
-			var sz = wgt.setFlexSize_({width:(wd)}, true);			
+			var sz = wgt.setFlexSize_({width:wd}, true);			
 			if (sz && sz.width >= 0)
 				wgt._hflexsz = sz.width + margin;
 			wgt.afterChildrenMinFlex_('w');
