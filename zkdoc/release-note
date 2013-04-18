@@ -15,6 +15,7 @@ ZK 6.5.3
   ZK-1714: Databinding 1 cannot clear selection item
   ZK-1715: The disabled listitem shall not be selected when use SHIFT + DOWN key with a paging listbox
   ZK-1720: XSS Vulnerability for fileupload
+  ZK-1695: Textbox.select() dose not works in Firefox
 
   --------
 ZK 6.5.2

@@ -309,7 +309,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * 		In other words, the text between start and (end-1) is selected.
 	 */
 	select: function (start, end) {
-		zk(this.getInputNode()).setSelectionRange(start, end);
+		// bug ZK-1695: need to focus input and set selection range in Firefox
+		var inpNode = this.getInputNode();
+		if (zk.ff && zk.currentFocus != inpNode)
+			this.focus_();
+		
+		zk(inpNode).setSelectionRange(start, end);
 	},
 	/** Returns the type.
 	 * <p>Default: text.

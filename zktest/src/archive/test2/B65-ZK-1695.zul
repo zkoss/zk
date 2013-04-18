@@ -1,0 +1,5 @@
+<zk>
+    click 'select' button and you should see the input text is selected 
+    <textbox id="input" value="test"/>
+    <button label="select" onClick="input.select()" />
+</zk>
