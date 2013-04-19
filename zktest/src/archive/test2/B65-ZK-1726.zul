@@ -1,0 +1,23 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Open "Open Row A 0" node.</li>
+			<li>Click any tree cell of column "c1". Browser should not freeze.</li>
+		</ol>
+	]]></html>
+	<tabbox vflex="1" id="myTab" apply="org.zkoss.zktest.test2.B65_ZK_1726_Composer">
+		<tabs>
+			<tab label="A" id="tab_a"/>
+		</tabs>
+		<tabpanels vflex="1">
+			<tabpanel id="tabp_a" >
+				<tree id="myTreeA"  vflex="1" hflex="1" >
+					<treecols sizable="true">
+				        <treecol label="c0" id="c0" hflex="1" />
+				        <treecol label="c1" id="c1" hflex="1" />
+					</treecols>
+				</tree>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
