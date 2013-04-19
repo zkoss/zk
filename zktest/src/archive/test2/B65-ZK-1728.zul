@@ -1,0 +1,7 @@
+<zk>
+	when you key up or down in combobox, you should not see 'test1' or 'test2'
+	<combobox>
+		<comboitem label="test1" visible="false" />
+		<comboitem label="test2" visible="false" />
+	</combobox>
+</zk>

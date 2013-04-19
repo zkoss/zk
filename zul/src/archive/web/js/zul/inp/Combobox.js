@@ -259,7 +259,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		function getVisibleItemOnly(item, bUp, including) {
 			var next = bUp ? 'previousSibling' : 'nextSibling';
 			for (var n = including ? item : item[next]; n; n = n[next])
-				if (!n.isDisabled())
+				if (!n.isDisabled() && n.isVisible()) // ZK-1728: check if the item is visible
 					return n;
 			return null;
 		}
