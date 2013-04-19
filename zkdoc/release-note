@@ -16,6 +16,7 @@ ZK 6.5.3
   ZK-1715: The disabled listitem shall not be selected when use SHIFT + DOWN key with a paging listbox
   ZK-1720: XSS Vulnerability for fileupload
   ZK-1695: Textbox.select() dose not works in Firefox
+  ZK-1712: The disabled date in the databox shall not be selected when navigate to the different month
 
   --------
 ZK 6.5.2

@@ -701,8 +701,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 		}
 		
-		db.getInputNode().value = db.coerceToString_(date);
-
+		//Bug ZK-1712: no need to set datebox input value
+		//db.getInputNode().value = db.coerceToString_(date);
+		
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			db._inplaceout = true;
