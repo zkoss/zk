@@ -1,0 +1,11 @@
+<zk>
+	Open the calendar, should see the "dates" after 2013/4/20 are disabled.
+	<zscript><![CDATA[
+		import java.util.Calendar;
+		import java.util.Date;
+		Calendar cal = Calendar.getInstance();
+		cal.set(2013, 3, 19);
+		Date date = cal.getTime();
+	]]></zscript>
+	<datebox width="150px" value="${date}" constraint="no empty, before 20130420" />
+</zk>

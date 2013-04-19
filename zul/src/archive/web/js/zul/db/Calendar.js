@@ -261,7 +261,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				format = 'yyyyMMdd',
 				len = format.length + 1;
 			for (var i = 0; i < constraints.length; i++) {
-				constraint = constraints[i]
+				constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
 				if (constraint.startsWith("between")) {
 					var j = constraint.indexOf("and", 7);
 					if (j < 0 && zk.debugJS) 
@@ -477,7 +477,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return result;
 		}
 	},
-	_clickArrow: function (evt) {		
+	_clickArrow: function (evt) {
 		var node = evt.domTarget.id.indexOf("-ly") > 0 ? this.$n("tdl") :
 				   evt.domTarget.id.indexOf("-ry") > 0 ?  this.$n("tdr") :
 				   evt.domTarget;
