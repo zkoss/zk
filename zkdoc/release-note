@@ -19,6 +19,7 @@ ZK 6.5.3
   ZK-1712: The disabled date in the databox shall not be selected when navigate to the different month
   ZK-1726: Treeitem update - infinite loop - browser freeze
   ZK-1718: Datebox's calendar does not disable the date after costraint date if the "before yyyymmdd" is not at the first place of the constraint attribute
+  ZK-1728: Invisible Comboitems are selectable with cursor keys
 
   --------
 ZK 6.5.2
