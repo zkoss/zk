@@ -17,6 +17,7 @@ ZK 6.5.3
   ZK-1720: XSS Vulnerability for fileupload
   ZK-1695: Textbox.select() dose not works in Firefox
   ZK-1712: The disabled date in the databox shall not be selected when navigate to the different month
+  ZK-1726: Treeitem update - infinite loop - browser freeze
   ZK-1718: Datebox's calendar does not disable the date after costraint date if the "before yyyymmdd" is not at the first place of the constraint attribute
 
   --------

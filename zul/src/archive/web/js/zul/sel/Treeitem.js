@@ -364,19 +364,38 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_renderChildHTML: function (childHTML) {
-		var w = this.previousSibling;
-		for (;w; w = this.previousSibling)
-			if (w.treerow) break;
-		
-		if (w) {
-			jq(w.treerow.$n()).after(childHTML);
-		} else if (w = this.nextSibling) {
-			for (;w; w = this.nextSibling)
-				if (w.treerow) break;
-				
-			if (w)
-				jq(w.treerow.$n()).before(childHTML);
-		} else if (w = this.getParentItem()) {
+		var w = this.previousSibling,
+			tarWgt;
+		//Bug ZK-1726: search siblings
+		for (;w; w = w.previousSibling)
+			if (w.treerow) {
+				tarWgt = w;
+				break;
+			}
+		if (tarWgt) {
+			var dom = tarWgt.treerow.$n();
+			if (tarWgt.isOpen()) {
+				dom = tarWgt.treechildren.lastChild.treerow.$n();
+			}
+			jq(dom).after(childHTML);
+			return;
+		}
+		if (w = this.nextSibling) {
+			for (;w; w = w.nextSibling)
+				if (w.treerow) {
+					tarWgt = w;
+					break;
+				}
+			if (tarWgt) {
+				var dom = tarWgt.treerow.$n();
+				if (this.isOpen()) {
+					dom = this.treechildren.firstChild.treerow.$n();
+				}
+				jq(dom).before(childHTML);
+				return;
+			}
+		}
+		if (w = this.getParentItem()) {
 			// B65-ZK-1608 add new treerow after parent node.
 			var n = w.$n();
 			if (n)
