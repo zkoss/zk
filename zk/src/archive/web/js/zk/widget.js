@@ -3050,7 +3050,12 @@ unbind_: function (skipper, after) {
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
-		return attr == 'h' ? zk(wgt).offsetHeight() : zjq.minWidth(wgt); //See also bug ZK-483
+		// feature #ZK-314: IE 9/10 will add 1px automatically.
+		var wd = zjq.minWidth(wgt);
+		if(zk.ie > 8 && wgt.$instanceof(zul.wgt.Image)) {
+			wd = zk(wgt).offsetWidth();
+		}
+		return attr == 'h' ? zk(wgt).offsetHeight() : wd; //See also bug ZK-483
 	},
 	getParentSize_: zk.ie6_ ? function (p) {
 		var zkp = zk(p),

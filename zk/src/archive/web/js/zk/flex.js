@@ -325,13 +325,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var margin = wgt.getMarginSize_(o);
 			if (zk.safari && margin < 0)
 				margin = 0;
-			var wd = max + wgt.getContentEdgeWidth_() + margin;
-			//feature #ZK-314: IE 9/10 will add 1px automatically.
-			if(zk.ie > 8) {
-				wd -= 1;
-			}
 			
-			var sz = wgt.setFlexSize_({width:wd}, true);			
+			var sz = wgt.setFlexSize_({width: max + wgt.getContentEdgeWidth_() + margin}, true);			
 			if (sz && sz.width >= 0)
 				wgt._hflexsz = sz.width + margin;
 			wgt.afterChildrenMinFlex_('w');
