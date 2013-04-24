@@ -422,6 +422,13 @@ zFlex = { //static methods
 				if (offwdh == 0 && zk.isLoaded('zul.mesh') && cwgt && cwgt.$instanceof(zul.mesh.HeaderWidget))
 					offwdh = jq(c).width();
 				
+				//Bug ZK-1706: should consider all text node size
+				if (pretxt) {
+					if (!zkpOffset)
+						zkpOffset = zkp.cmOffset();
+					wdh -= _getTextWidth(zkc, zkp, zkpOffset);
+					hgh -= _getTextHeight(zkc, zkp, zkpOffset);
+				}
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
 					if (cwgt !== wgt)
@@ -429,11 +436,6 @@ zFlex = { //static methods
 					if (cwgt._hflex == 'min') {
 						wdh -= zFlex.fixMinFlex(cwgt, c, 'w');
 					} else {
-						if (pretxt) {
-							if (!zkpOffset)
-								zkpOffset = zkp.cmOffset();
-							wdh -= _getTextWidth(zkc, zkp, zkpOffset);
-						}
 						hflexs.push(cwgt);
 						hflexsz += cwgt._nhflex;
 					}
@@ -449,11 +451,6 @@ zFlex = { //static methods
 					if (cwgt._vflex == 'min') {
 						hgh -= zFlex.fixMinFlex(cwgt, c, 'h');
 					} else {
-						if (pretxt) {
-							if (!zkpOffset)
-								zkpOffset = zkp.cmOffset();
-							hgh -= _getTextHeight(zkc, zkp, zkpOffset);
-						}
 						vflexs.push(cwgt);
 						vflexsz += cwgt._nvflex;
 					}

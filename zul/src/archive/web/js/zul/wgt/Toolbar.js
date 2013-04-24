@@ -49,20 +49,17 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		orient: _zkf
 	},
 	
-	// ZK-1706: cave width should be same as node width
+	// ZK-1706: cave size should be same as node width
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (this._orient == 'vertical') {
 			var cave = this.$n('cave');
-			n.style.height = jq.px(height - zkn.padBorderHeight());
-			cave.style.height = jq.px(height - zkn.padBorderHeight());
-			
+			n.style.height = cave.style.height = jq.px(height - zkn.padBorderHeight());
 		}
 	},
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
 		if (this._orient == 'horizontal') {
 			var cave = this.$n('cave');
-			n.style.width = jq.px(width - zkn.padBorderWidth());
-			cave.style.width = jq.px(width - zkn.padBorderWidth());
+			n.style.width = cave.style.width = jq.px(width - zkn.padBorderWidth());
 		}
 	},
 

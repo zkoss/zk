@@ -4,12 +4,10 @@
 	</div>
 	<panel border="normal" width="360px" height="360px" title="Panel A">
 		<toolbar hflex="1">
-			<hlayout>
-				<button label="Add" />
-				<button label="Delete" />
-				<textbox hflex="1" value="Enter something to search..." />
-				<button label="Go" hflex="1" />
-			</hlayout>
+			<button label="Add" />
+			<button label="Delete" />
+			<textbox hflex="1" value="Enter something to search..." />
+			<button label="Go" hflex="1" />
 		</toolbar>
 		<panelchildren>
 			<hlayout hflex="1">
