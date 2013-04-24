@@ -366,30 +366,36 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_renderChildHTML: function (childHTML) {
 		var w = this.previousSibling,
 			tarWgt;
-		//Bug ZK-1726: search siblings
-		for (;w; w = w.previousSibling)
+		//Bug ZK-1726: search correct siblings
+		for (;w; w = w.previousSibling) {
 			if (w.treerow) {
 				tarWgt = w;
 				break;
 			}
+		}
 		if (tarWgt) {
-			var dom = tarWgt.treerow.$n();
-			if (tarWgt.isOpen()) {
-				dom = tarWgt.treechildren.lastChild.treerow.$n();
+			var dom = tarWgt.$n();
+			if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+				var lastChild = tarWgt.treechildren.lastChild;
+				if (lastChild)
+					dom = lastChild.$n();
 			}
 			jq(dom).after(childHTML);
 			return;
 		}
 		if (w = this.nextSibling) {
-			for (;w; w = w.nextSibling)
+			for (;w; w = w.nextSibling) {
 				if (w.treerow) {
 					tarWgt = w;
 					break;
 				}
+			}
 			if (tarWgt) {
-				var dom = tarWgt.treerow.$n();
-				if (this.isOpen()) {
-					dom = this.treechildren.firstChild.treerow.$n();
+				var dom = tarWgt.$n();
+				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+					var firstChild = this.treechildren.firstChild;
+					if (firstChild)
+						dom = firstChild.$n();
 				}
 				jq(dom).before(childHTML);
 				return;
