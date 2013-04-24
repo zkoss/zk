@@ -618,7 +618,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 //			break;
 		}
 		this._value = _newDate(year, month, day, !nofix);
-		this.fire('onChange', {value: this._value, shallClose: false});
+		this.fire('onChange', {value: this._value, shallClose: false, shiftView: true});
 	},
 	_changeView : function (evt) {
 		var tm = this.$n("tm"),
