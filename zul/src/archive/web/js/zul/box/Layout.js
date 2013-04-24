@@ -182,9 +182,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {				
 			var chdex = kid.$n();  //ZK-1509: use kid.$n() instead of kid.$n('chdex')
 			if (chdex) {
-				if (orient == 'h')
+				if (orient == 'h' && !chdex.style.height) //ZK-1723: dont clear the value if the height or width exists
 					chdex.style.height = '';
-				if (orient == 'w')
+				if (orient == 'w' && !chdex.style.width)
 					chdex.style.width = '';
 			}
 		}
