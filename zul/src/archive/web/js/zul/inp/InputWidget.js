@@ -705,11 +705,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_shallIgnore: function (evt, keys) {
-		var code = (zk.ie||zk.opera) ? evt.keyCode : evt.charCode;
-		if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
-		&& keys.indexOf(String.fromCharCode(code)) < 0) {
-			evt.stop();
-			return true;
+		// ZK-1736 add metakey on mac
+		if (navigator.appVersion.indexOf('Mac')!=-1 && event.metaKey)
+			return;
+		else {
+			var code = (zk.ie||zk.opera) ? evt.keyCode : evt.charCode;
+			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
+			&& keys.indexOf(String.fromCharCode(code)) < 0) {
+				evt.stop();
+				return true;
+			}
 		}
 	},
 	/** Create a {@link zul.inp.Errorbox} widget, and show the error message
