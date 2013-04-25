@@ -1,0 +1,29 @@
+<zk>
+	after resize the browser, all div should be same height, width as before 
+	<window width="360px" height="360px">
+		<hlayout>
+			<div width="5em" align="right"
+				style="background-color: yellow">
+				<label value="Hello" />
+			</div>
+			<div hflex="true" style="background-color: red">Hi</div>
+			<div width="5em" align="left"
+				style="background-color: cyan">
+				<label value="World" />
+			</div>
+		</hlayout>
+	</window>
+	<window width="360px" height="360px">
+		<vlayout>
+			<div height="5em" align="right"
+				style="background-color: yellow">
+				<label value="Hello" />
+			</div>
+			<div vflex="true" style="background-color: red">Hi</div>
+			<div height="5em" align="left"
+				style="background-color: cyan">
+				<label value="World" />
+			</div>
+		</vlayout>
+	</window>
+</zk>

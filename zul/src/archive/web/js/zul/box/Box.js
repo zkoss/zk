@@ -424,6 +424,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
 		return zkp ? {height: hgh, width: wdh} : {};
 	},
+	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
+	afterResetChildSize_: function () {
+		for (var kid = this.firstChild, vert = this.isVertical(); kid; kid = kid.nextSibling) {				
+			var chdex = vert ? kid.$n('chdex').firstChild : kid.$n('chdex');
+			if (chdex)
+				chdex.style.minWidth = '1px';
+		}
+	},
 	//bug#3042306
 	resetSize_: function (orient) { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		this.$supers(zul.Widget, 'resetSize_', arguments);
@@ -435,7 +443,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 					++k;
 				if (kid._nvflex && kid.getVflex() != 'min') {
-					var chdex = kid.$n(); //Bug ZK-1569: should clear widget size instead of chdex
+					var chdex = kid.$n('chdex');
 					if (chdex) {
 						if (orient == 'h')
 							chdex.style.height = szes && k < szes.length ? szes[k] : '';
@@ -449,7 +457,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 					++k;
 				if (kid._nhflex && kid.getHflex() != 'min') {
-					var chdex = kid.$n(); //Bug ZK-1569: should clear widget size instead of chdex
+					var chdex = kid.$n('chdex');
 					if (chdex) {
 						if (orient == 'w')
 							chdex.style.width = szes && k < szes.length ? szes[k] : '';
