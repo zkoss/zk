@@ -24,6 +24,7 @@ ZK 6.5.3
   ZK-1732: Setting visible to true to a listbox, which is inside a hlayout, do not work after zk6.5.2
   ZK-1733: Tree item - children loosing parent after updating parent
   ZK-1723: component width not set in html when using hflex and resizing parent component
+  ZK-1736: Cannot paste into an intbox and decimalbox on Mac Safari
 
   --------
 ZK 6.5.2

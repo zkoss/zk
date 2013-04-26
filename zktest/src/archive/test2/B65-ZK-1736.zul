@@ -1,0 +1,12 @@
+<zk>
+	<label>
+		type '123' and select in intbox, then you can send 'metakey + C' key to copy,
+		when you send 'metakey + V' key to paste in decimal box, 
+		the decimal box should show '123', Firefox, Safari on Mac Only
+	</label>
+    <window>
+		Paste intbox <intbox/>
+		Paste decimalbox <decimalbox/>
+		Paste textbox <textbox/>
+    </window>
+</zk>
