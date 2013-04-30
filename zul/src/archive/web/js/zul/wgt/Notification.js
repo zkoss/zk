@@ -76,7 +76,9 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
-	onFloatUp: function(ctl) {
+	onFloatUp: function(ctl, opts) {
+		if (opts && opts.triggerByFocus) //only mouse click should close notification
+			return;
 		if (!this.isVisible())
 			return;
 		var wgt = ctl.origin;
