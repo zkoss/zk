@@ -20,11 +20,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	
-	$init: function (msg, type, ref) {
+	$init: function (msg, type, ref, dur) {
 		this.$supers(zul.wgt.Notification, '$init', arguments);
 		this._msg = msg;
 		this._type = type;
 		this._ref = ref;
+		this._dur = dur;
 	},
 	redraw: function (out) {
 		var uuid = this.uuid,
@@ -49,6 +50,25 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		if (zk.ie < 8 && type && ref) // need to provide extra class name for IE 6/7
 			s += ' ' + zcls + '-ref-' + entype;
 		return s;
+	},
+	onFloatUp: function(ctl, opts) {
+		if (opts && opts.triggerByFocus) //only mouse click can close notification
+			return;
+		if (!this.isVisible())
+			return;
+		var wgt = ctl.origin;
+		for (var floatFound; wgt; wgt = wgt.parent) {
+			if (wgt == this) {
+				if (!floatFound) 
+					this.setTopmost();
+				return;
+			}
+			if (wgt == this.parent && wgt.ignoreDescendantFloatUp_(this))
+				return;
+			floatFound = floatFound || wgt.isFloating_();
+		}
+		if (this._dur <= 0)
+			this.close({sendOnOpen:true});
 	},
 	open: function (ref, offset, position, opts) {
 		this.$supers(zul.wgt.Notification, 'open', arguments);
@@ -196,7 +216,8 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var parent = zk.Widget.$(pid),
 			ref = opts.ref,
 			pos = opts.pos,
-			ntf = new zul.wgt.Notification(msg, opts.type, ref),
+			dur = opts.dur,
+			ntf = new zul.wgt.Notification(msg, opts.type, ref, dur),
 			off = opts.off;
 		
 		// TODO: allow user to specify arrow direction?
@@ -212,11 +233,11 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		ntf.open(ref, off, pos);
 		
 		// auto dismiss
-		if (opts.dur > 0)
+		if (dur > 0)
 			setTimeout(function () {
 				if (ntf.desktop)
 					ntf.close();
-			}, opts.dur);
+			}, dur);
 	}
 	
 });
