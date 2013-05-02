@@ -18,7 +18,7 @@
 				dValue : <label id="lb2"  value="@load(dValue)"/> 
 			</hlayout>
 		
-			<include src="B01468RefIncludeInner.zul" />
+			<include src="/bind/issue/B01468RefIncludeInner.zul" />
 		</div>
 	</window>
 </zk>
