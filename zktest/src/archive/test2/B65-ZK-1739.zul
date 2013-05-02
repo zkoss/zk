@@ -1,0 +1,19 @@
+<zk>
+	<window vflex="1" hflex="1" apply="org.zkoss.zktest.test2.B65_ZK_1739_Composer">
+		<vlayout vflex="1" hflex="1">
+			<label multiline="true">
+			1. Click "start update" button, should see the data update frequently.
+			2. Try open/close any tree node, then wait for about 10 seconds, should not see the tree disappear.
+			3. Click "stop update" button to stop.
+			</label>
+			<tree id="myTreeA" height="500px" hflex="1">
+				<treecols sizable="true">
+			        <treecol label="c0" id="c0" hflex="1" />
+			        <treecol label="c1" id="c1" hflex="1" />
+				</treecols>
+			</tree>
+			<button label="start update" id="start" />
+			<button label="stop update" id="toggle" />
+		</vlayout>
+	</window>
+</zk>
