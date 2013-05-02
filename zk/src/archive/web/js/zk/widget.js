@@ -67,7 +67,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			case 'focus':
 				if (wgt.canActivate()) {
 					zk.currentFocus = wgt;
-					zWatch.fire('onFloatUp', wgt); //notify all
+					//add triggerByFocus option for notification
+					zWatch.fire('onFloatUp', wgt, {triggerByFocus: true}); //notify all
 					break;
 				}
 				return; //ignore it

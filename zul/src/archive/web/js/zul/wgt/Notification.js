@@ -55,6 +55,25 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			s += ' ' + zcls + '-ref-' + entype;
 		return s;
 	},
+	onFloatUp: function(ctl, opts) {
+		if (opts && opts.triggerByFocus) //only mouse click can close notification
+			return;
+		if (!this.isVisible())
+			return;
+		var wgt = ctl.origin;
+		for (var floatFound; wgt; wgt = wgt.parent) {
+			if (wgt == this) {
+				if (!floatFound) 
+					this.setTopmost();
+				return;
+			}
+			if (wgt == this.parent && wgt.ignoreDescendantFloatUp_(this))
+				return;
+			floatFound = floatFound || wgt.isFloating_();
+		}
+		if (this._dur <= 0)
+			this.close({sendOnOpen:true});
+	},
 	doClick_: function (evt) {
 		var p = evt.domTarget;
 		if (p == this.$n('cls'))
@@ -235,6 +254,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var parent = zk.Widget.$(pid),
 			ref = opts.ref,
 			pos = opts.pos,
+			dur = opts.dur,
 			ntf = new zul.wgt.Notification(msg, opts),
 			off = opts.off;
 		
@@ -251,11 +271,11 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		ntf.open(ref, off, pos);
 		
 		// auto dismiss
-		if (opts.dur > 0)
+		if (dur > 0)
 			setTimeout(function () {
 				if (ntf.desktop)
 					ntf.close();
-			}, opts.dur);
+			}, dur);
 	}
 	
 });
