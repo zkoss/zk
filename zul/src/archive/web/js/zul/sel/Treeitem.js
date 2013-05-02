@@ -364,24 +364,25 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_renderChildHTML: function (childHTML) {
-		var w = this.previousSibling,
-			tarWgt;
+		var w, tarWgt;
 		//Bug ZK-1726: search correct siblings
-		for (;w; w = w.previousSibling) {
-			if (w.treerow) {
-				tarWgt = w;
-				break;
+		if (w = this.previousSibling) {
+			for (;w; w = w.previousSibling) {
+				if (w.treerow) {
+					tarWgt = w;
+					break;
+				}
 			}
-		}
-		if (tarWgt) {
-			var dom = tarWgt.$n();
-			if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
-				var lastChild = tarWgt.treechildren.lastChild;
-				if (lastChild)
-					dom = lastChild.$n();
+			if (tarWgt) {
+				var dom = tarWgt.$n();
+				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+					var lastChild = tarWgt.treechildren.lastChild;
+					if (lastChild)
+						dom = lastChild.$n();
+				}
+				jq(dom).after(childHTML);
+				return;
 			}
-			jq(dom).after(childHTML);
-			return;
 		}
 		if (w = this.nextSibling) {
 			for (;w; w = w.nextSibling) {
@@ -409,7 +410,16 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			else
 				w._renderChildHTML(childHTML);
 		} else if ((w = this.getTree())) {
-			jq(w.$n('rows')).append(childHTML);
+			var dom = w.$n('rows');
+			if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+				var firstChild = this.treechildren.firstChild;
+				if (firstChild) {
+					dom = firstChild.$n();
+					jq(dom).before(childHTML);
+					return;
+				}
+			}
+			jq(dom).append(childHTML);
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -417,7 +427,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			jq(before).before(child.redrawHTML_());
 		else
 			this._renderChildHTML(child.redrawHTML_());
-				//treechild is a DOM sibling (so use after)
+		
 		child.bind(desktop);
 	},
 	getOldWidget_: function (n) {
