@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?page id="mypage" ?>
+<window id="mywindow" border="none"
+	apply="org.zkoss.zktest.test2.B65_ZK_1735_Composer">
+	<div>
+		when open and click 'Row A 0' node, then the tree should not overlap parent container. (ie6, 7 only) 
+	</div>
+	<tree id="myTreeA" vflex="1">
+		<treecols>
+			<treecol label="c0" id="c0A" />
+			<treecol label="c1" id="c1A" />
+		</treecols>
+	</tree>
+</window>
