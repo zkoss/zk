@@ -22,6 +22,7 @@ ZK 6.0.5
   ZK-1658: chosenbox disappears after user select a value
   ZK-1660: Chosenbox with ListModel issue
   ZK-1702: Invoke binder.loadAll() when the onChange event of the combobox will cause java error
+  ZK-1737: Typo in some zk.fmt.Number functions: varStr (wrong) vs valStr (right)
 
 * Upgrade Notes
 
