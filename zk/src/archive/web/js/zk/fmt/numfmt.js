@@ -115,7 +115,8 @@ zk.fmt.Number = {
 				}
 			} 
 		} else if (shift < 0) {
-			var nind = (indVal < 0 ? varStr.length : indVal) + shift;
+			// ZK-1737 varStr is not correct variable name
+			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
 			if(nind > 0) {
 				valFixed -= shift;
 			} else {
@@ -209,7 +210,8 @@ zk.fmt.Number = {
 					valStr = valStr + '0';
 			}
 		} else if (shift < 0) {
-			var nind = (indVal < 0 ? varStr.length : indVal) + shift;
+			// ZK-1737 varStr is not correct variable name
+			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
 			if(nind > 0) {
 				valStr = valStr.substring(0, nind) + '.' + 
 					(indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVar) + valStr.substring(indVar+1));
