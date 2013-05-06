@@ -26,6 +26,7 @@ ZK 6.5.3
   ZK-1723: component width not set in html when using hflex and resizing parent component
   ZK-1736: Cannot paste into an intbox and decimalbox on Mac Safari
   ZK-1739: treenodes disappearing on frequent updates
+  ZK-1737: Typo in some zk.fmt.Number functions: varStr (wrong) vs valStr (right)
 
   --------
 ZK 6.5.2
