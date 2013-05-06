@@ -11,7 +11,7 @@
 			</hlayout>
 		</vlayout>
 		<div>
-			<include src="@load('B01469ScopeParamRefInner.zul')" sValue="@ref(vm.staticValue)" />
+			<include src="@load('/bind/issue/B01469ScopeParamRefInner.zul')" sValue="@ref(vm.staticValue)" />
 		</div>
 	</window>
 </zk>
