@@ -325,7 +325,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) {
 			this.treerow = null;
-			_syncTreeBodyHeight(this);
+		//	_syncTreeBodyHeight(this); ZK-360: fixed; ZK-1735: dont need to sync
 		} else if (child == this.treechildren) {
 			this.treechildren = null;
 			if (!this.childReplacing_) //NOT called by onChildReplaced_
@@ -339,7 +339,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		else if (this.desktop)
             this._fixOnAdd(child, true); // fixed dynamically change treerow. B65-ZK-1608
 		if (this.desktop && child.$instanceof(zul.sel.Treerow)) {
-			_syncTreeBodyHeight(this);
+		//	_syncTreeBodyHeight(this); ZK-360: fixed; ZK-1735: dont need to sync
 		}
 		//else was handled by insertBefore/appendChild
 	},
