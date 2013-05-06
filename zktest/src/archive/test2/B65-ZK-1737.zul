@@ -1,0 +1,5 @@
+<window title="My First Window" border="normal" width="200px">
+    <doublebox onChange='alert( "onChange" );'  width="150px" />
+    <doublebox format="#,##0.00000000000" onChange='alert( "onChange" );'  width="150px" />
+    <decimalbox format="#,##0.00000000000" onChange='alert( "onChange" );' width="150px"  />
+</window>
