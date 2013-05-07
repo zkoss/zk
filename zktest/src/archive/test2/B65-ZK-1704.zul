@@ -1,0 +1,24 @@
+<vbox>
+	<zscript><![CDATA[
+	    String[] data = new String[3];
+	    data[0] = "c3";
+	    data[1] = "a1";
+	    data[2] = "b2";
+		ListModelList listModel = new ListModelList(data);
+	]]>
+	</zscript>
+
+	<div>Sort the list by clicking either of the buttons. No NullPointerException should appear</div>
+	<button label="Sort Values (asc)" onClick="listModel.sort(null, true)" />
+	<button label="Sort Values (desc)" onClick="listModel.sort(Collections.reverseOrder(), false)" />
+
+	<grid id="grid" model="${listModel}">
+		<rows>
+			<template name="model">
+				<row>
+					<label value="${each}" />
+				</row>
+			</template>
+		</rows>
+	</grid>
+</vbox>
