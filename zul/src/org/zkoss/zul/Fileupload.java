@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.impl.FileuploadDlg;
 
@@ -180,7 +181,42 @@ public class Fileupload extends Button { //not XulElement since not applicable
 		final Media[] result = get(message, title, 1, alwaysNative);
 		return result != null ? result[0]: null;
 	}
-	/** Opens a modal dialog to upload mulitple files with
+
+	/**
+	 * Opens a modal dialog to upload multiple files with
+	 * the default message and title.
+	 * 
+	 * @param listener The callback event listener when the event thread is disabled, the listener will be invoked, if it is not null.
+	 * Note: the target of the listener is always null.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * Set the listener parameter to retrieve the upload content when the upload has finished.
+	 * . For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
+	 */
+	public static Media[] get(EventListener<UploadEvent> listener) {
+		return get(1, listener);
+	}
+	
+	/**
+	 * Opens a modal dialog to upload multiple files with
+	 * the default message and title.
+	 * 
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If non-positive, 1 is assumed.
+	 * @param listener The callback event listener when the event thread is disabled, the listener will be invoked, if it is not null.
+	 * Note: the target of the listener is always null.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * Set the listener parameter to retrieve the upload content when the upload has finished.
+	 * . For more information, refer to
+	 */
+	public static Media[] get(int max, EventListener<UploadEvent> listener) {
+		return get(new HashMap<String, Object>(8), null, null, max, -1, false, listener);
+	}
+	/** Opens a modal dialog to upload multiple files with
 	 * the default message and title.
 	 *
 	 * @param max the maximal allowed number that an user can upload
@@ -284,15 +320,32 @@ public class Fileupload extends Button { //not XulElement since not applicable
 		return get(new HashMap<String, Object>(8),
 			message, title, max, maxsize, alwaysNative);
 	}
-	/** The implementation of all public get methods.
-	 * In other words, all public <code>get</code> methods will prepare
-	 * an empty map and invoke this method to retrieve the media.
-	 * It is designed to allow applications to customize the creation of 
-	 * the dialog, such as adding more parameters.
-	 * @since 5.0.11
+	/**
+	 * Opens a modal dialog to upload multiple files with
+	 * the specified message, title and options.
+	 *
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If non-positive, 1 is assumed.
+	 * If max is larger than 1000, 1000 is assumed.
+	 * @param maxsize the maximal upload size of the component.
+	 * @param alwaysNative  whether to treat the uploaded files as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @param listener The callback event listener when the event thread is disabled, the listener will be invoked, if it is not null.
+	 * Note: the target of the listener is always null.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrieve the uploaded content, the developer
+	 * has to listen the onUpload event or set the listener parameter to retrieve the upload content when the upload has finished.
+	 * . For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
+	 * @since 6.5.3
 	 */
 	protected static Media[] get(Map<String, Object> params,
-	String message, String title, int max, int maxsize, boolean alwaysNative) {
+			String message, String title, int max, int maxsize, boolean alwaysNative, EventListener<UploadEvent> listener) {
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
@@ -301,6 +354,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000: max < -1000 ? -1000 : max));
 		params.put("native", Boolean.valueOf(alwaysNative));
 		params.put("maxsize", String.valueOf(maxsize));
+		params.put("listener", listener);
 		
 		final FileuploadDlg dlg = (FileuploadDlg)
 			exec.createComponents(_templ, null, params);
@@ -315,6 +369,17 @@ public class Fileupload extends Button { //not XulElement since not applicable
 			throw UiException.Aide.wrap(ex);
 		}
 		return dlg.getResult();
+	}
+	/** The implementation of all public get methods.
+	 * In other words, all public <code>get</code> methods will prepare
+	 * an empty map and invoke this method to retrieve the media.
+	 * It is designed to allow applications to customize the creation of 
+	 * the dialog, such as adding more parameters.
+	 * @since 5.0.11
+	 */
+	protected static Media[] get(Map<String, Object> params,
+	String message, String title, int max, int maxsize, boolean alwaysNative) {
+		return get(params, message, title, max, maxsize, alwaysNative, null);
 	}
 
 	/** Sets the template used to create the upload modal dialog.

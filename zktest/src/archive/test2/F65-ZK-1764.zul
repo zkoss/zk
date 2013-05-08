@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F65-ZK-1764.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 08, 2013  9:56:03 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+Please test the new Fileupload API, each of the buttons should work as expected.
+	<vlayout>
+		<button label="Upload">
+			<attribute name="onClick">
+				Fileupload.get(new EventListener(){
+					public void onEvent(UploadEvent event) {
+						org.zkoss.util.media.Media media = event.getMedia();
+						if (media instanceof org.zkoss.image.Image) {
+							org.zkoss.image.Image img = (org.zkoss.image.Image) media;
+							if (img.getWidth() > img.getHeight()){
+								if (img.getHeight() > 300) {
+									pics.setHeight("300px");
+									pics.setWidth(img.getWidth() * 300 / img.getHeight() + "px");
+								}
+							}
+							if (img.getHeight() > img.getWidth()){
+								if (img.getWidth() > 400) {
+									pics.setWidth("400px");
+									pics.setHeight(img.getHeight() * 400 / img.getWidth() + "px");
+								}
+							}
+							pics.setContent(img);
+						} else {
+							Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+						}
+					}
+				})
+				
+			</attribute>
+		</button>
+		<button label="Upload Multi-files">
+			<attribute name="onClick"><![CDATA[
+				Fileupload.get(-1, new EventListener() {
+					public void onEvent(UploadEvent event) {
+						org.zkoss.util.media.Media[] medias = event.getMedias();
+						if (medias == null)
+							Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+						else {
+							for (int i = 0; i < medias.length; i++) {
+								org.zkoss.util.media.Media media = medias[i];
+								if (media instanceof org.zkoss.image.Image) {
+									org.zkoss.image.Image img = (org.zkoss.image.Image) media;
+									if (img.getWidth() > img.getHeight()){
+										if (img.getHeight() > 300) {
+											pics.setHeight("300px");
+											pics.setWidth(img.getWidth() * 300 / img.getHeight() + "px");
+										}
+									}
+									if (img.getHeight() > img.getWidth()){
+										if (img.getWidth() > 400) {
+											pics.setWidth("400px");
+											pics.setHeight(img.getHeight() * 400 / img.getWidth() + "px");
+										}
+									}
+									Image image = new Image();
+									image.setContent(img);
+									image.setParent(pics.getParent());
+								} else {
+									Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+									break;
+								}
+							}
+						}
+					}
+				});
+				]]>
+			</attribute>
+		</button>
+		<image id="pics" />
+	</vlayout>
+</zk>
+			

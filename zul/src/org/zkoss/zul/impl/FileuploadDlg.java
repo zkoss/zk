@@ -21,7 +21,9 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.UploadEvent;
@@ -37,6 +39,15 @@ import org.zkoss.zul.Window;
 public class FileuploadDlg extends Window {
 	private LinkedList<Media> _result = new LinkedList<Media>();
 	private static final String ATTR_FILEUPLOAD_TARGET = "org.zkoss.zul.Fileupload.target";
+	private EventListener<UploadEvent> _listener;
+	
+	/**
+	 * Set the upload call back event listener
+	 * @since 6.5.3
+	 */
+	public void setUploadListener(EventListener<UploadEvent> listener) {
+		_listener = listener;
+	}
 	
 	public void onClose(Event evt) {
 		if (evt.getData() == null)
@@ -44,8 +55,16 @@ public class FileuploadDlg extends Window {
 		else {
 			final Desktop desktop = Executions.getCurrent().getDesktop();
 			final Configuration config = desktop .getWebApp().getConfiguration();
-			if (!config.isEventThreadEnabled())
-				Events.postEvent(new UploadEvent(Events.ON_UPLOAD, (Component)desktop.getAttribute(ATTR_FILEUPLOAD_TARGET), getResult()));
+			if (!config.isEventThreadEnabled()) {
+				if (_listener != null)
+					try {
+						_listener.onEvent(new UploadEvent(Events.ON_UPLOAD, null, getResult()));
+					} catch (Exception e) {
+						throw new UiException(e);
+					}
+				else
+					Events.postEvent(new UploadEvent(Events.ON_UPLOAD, (Component)desktop.getAttribute(ATTR_FILEUPLOAD_TARGET), getResult()));
+			}
 		}
 		detach();
 	}

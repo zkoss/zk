@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  class="org.zkoss.zul.impl.FileuploadDlg" widgetClass="zul.fud.FileuploadDlg"?>
 <?component name="submit" extends="button" widgetClass="zul.fud.Submit"?>
 
-<uploaddlg title="${arg.title}" shadow="false" border="normal" width="360px" closable="true"
+<uploaddlg title="${arg.title}" uploadListener="${arg.listener}" shadow="false" border="normal" width="360px" closable="true"
 xmlns:w="http://www.zkoss.org/2005/zk/client"
 	w:onClose="this.cancel()" w:max="${arg.max}">
 	<label value="${arg.message}"/>
