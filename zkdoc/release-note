@@ -2,7 +2,7 @@
 ZK 6.5.3
 
 * Features
-  ZK-1764: Fileupload.get() supports to provide a callback event listner
+  ZK-1764: Fileupload.get() supports to provide a callback event listener
 
 * Bugs
   ZK-1693: Dial chart customize color issues
