@@ -28,7 +28,7 @@ ZK 6.5.3
   ZK-1739: treenodes disappearing on frequent updates
   ZK-1735: Tree overlaps parent container, after update
   ZK-1737: Typo in some zk.fmt.Number functions: varStr (wrong) vs valStr (right)
-
+  ZK-1705: NullPointerException when sorting a list model bound to a Listbox without a Listhead component
   --------
 ZK 6.5.2
 Mar 26, 2013
