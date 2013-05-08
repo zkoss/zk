@@ -2550,7 +2550,7 @@ public class Listbox extends MeshElement {
 			// when the event is fired from it, i.e. No need to sync the sorting
 			// status here.
 			if (event.getType() == ListDataEvent.STRUCTURE_CHANGED
-					&& _model instanceof Sortable) {
+					&& _model instanceof Sortable && _listhead != null) { //ZK-1705 added null check for _listhead
 				Sortable<Object> smodel = cast(_model);
 				List<Listheader> headers = cast(_listhead.getChildren());
 				boolean found = false;
