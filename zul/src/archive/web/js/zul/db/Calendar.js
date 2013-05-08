@@ -276,7 +276,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					
 					this._beg.setHours(0, 0, 0, 0);
 					this._end.setHours(0, 0, 0, 0);
-				} else if (constraint.startsWith('before_') || constraint.startsWith('after_'))) {
+				} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
 					continue; //Constraint start with 'before_' and 'after_' means errorbox position, skip it
 				} else if (constraint.startsWith("before")) {
 					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), format);
