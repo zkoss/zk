@@ -946,7 +946,7 @@ public class Grid extends MeshElement {
 			// when the event is fired from it, i.e. No need to sync the sorting
 			// status here.
 			if (event.getType() == ListDataEvent.STRUCTURE_CHANGED
-					&& _model instanceof Sortable) {
+					&& _model instanceof Sortable && _cols != null) { //ZK-1704 added null check for _cols
 				Sortable<Object> smodel = cast(_model);
 				List<Column> cols = cast(_cols.getChildren());
 				boolean found = false;
