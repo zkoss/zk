@@ -59,6 +59,42 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 	}
+	//Bug ZK-1766
+	function _searchPrevRenderedItem(wgt) {
+		var target;
+		if (wgt) {
+			if (wgt.treerow) {
+				return wgt;
+			}
+			if (wgt.isContainer()) {
+				for (var c = wgt.treechildren.lastChild; c; c = c.previousSibling) {
+					target = _searchPrevRenderedItem(c);
+					if (target)
+						return target;
+				}
+			}
+			target = _searchPrevRenderedItem(wgt.previousSibling);
+		}
+		return target;
+	}
+	//Bug ZK-1766
+	function _searchNextRenderedItem(wgt) {
+		var target;
+		if (wgt) {
+			if (wgt.treerow) {
+				return wgt;
+			}
+			if (wgt.isContainer()) {
+				for (var c = wgt.treechildren.firstChild; c; c = c.nextSibling) {
+					target = _searchNextRenderedItem(c);
+					if (target)
+						return target;
+				}
+			}
+			target = _searchNextRenderedItem(wgt.nextSibling);
+		}
+		return target;
+	}
 	
 /**
  * A treeitem.
@@ -367,15 +403,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var w, tarWgt;
 		//Bug ZK-1726: search correct siblings
 		if (w = this.previousSibling) {
-			for (;w; w = w.previousSibling) {
-				if (w.treerow) {
-					tarWgt = w;
-					break;
-				}
-			}
+			tarWgt = _searchPrevRenderedItem(w); //Bug ZK-1766: search rendered item recursively
 			if (tarWgt) {
 				var dom = tarWgt.$n();
-				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+				if (tarWgt.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
 					var lastChild = tarWgt.treechildren.lastChild;
 					for (;lastChild; lastChild = lastChild.previousSibling) {
 						var n = lastChild.$n();
@@ -390,12 +421,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 		}
 		if (w = this.nextSibling) {
-			for (;w; w = w.nextSibling) {
-				if (w.treerow) {
-					tarWgt = w;
-					break;
-				}
-			}
+			tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
 			if (tarWgt) {
 				var dom = tarWgt.$n();
 				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
