@@ -440,10 +440,10 @@ jq(function() {
 			_useSKU = false;
 		else {
 			_callback = zk.safari || zk.opera;
-			_useSKU = !_callback || zk.ie6_;
+			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)
-		_useSKU = zk.ie6_;
+		_useSKU = zk.ie; // ZK-1748 should include all ie
 
 	if (_callback) {
 		var w2hide = function (name) {

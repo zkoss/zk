@@ -32,6 +32,7 @@ ZK 6.5.3
   ZK-1704: NullPointerException when sorting a list model bound to a Grid without a Columns component
   ZK-1705: NullPointerException when sorting a list model bound to a Listbox without a Listhead component
   ZK-1766: tree bulk-update to several nodes causing errors
+  ZK-1748: Stackup and autohide not working
 
   --------
 ZK 6.5.2
