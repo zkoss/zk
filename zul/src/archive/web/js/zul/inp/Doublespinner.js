@@ -77,15 +77,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 				jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 			} else {
 				var fnm = v ? 'removeClass': 'addClass';
-				jq(n)[fnm](zcls + '-btn-right-edge');				
-				
-				if (zk.ie6_) {
-					jq(n)[fnm](zcls + 
-						(this._readonly ? '-btn-right-edge-readonly': '-btn-right-edge'));
-						
-					if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
-							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
-				}
+				jq(n)[fnm](zcls + '-btn-right-edge');
 			}
 			this.onSize();
 			return;

@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 
 	function _initUpld(wgt) {
-		zWatch.listen(zk.ie7_ ? {onSize: wgt} : {onShow: wgt});
+		zWatch.listen({onShow: wgt});
 		var v;
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, wgt._getUploadRef(), v);
@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _cleanUpld(wgt) {
 		var v;
 		if (v = wgt._uplder) {
-			zWatch.unlisten(zk.ie7_ ? {onSize: wgt} : {onShow: wgt});
+			zWatch.unlisten({onShow: wgt});
 			wgt._uplder = null;
 			v.destroy();
 		}
@@ -399,7 +399,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		jq(n).removeClass(cls);
 	}
-})).prototype[zk.ie7_ ? 'onSize': 'onShow'] = function () {
+})).prototype['onShow'] = function () {
 	if (this._uplder)
 		this._uplder.sync();
 };

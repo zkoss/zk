@@ -141,7 +141,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		var node = this.$n();
 		if (!node) return;
 		jq(node).addClass(this.getZclass() + "-scroll");
-		if (zk.ie6_) this._doFixWidth(node);
 		
 		var nodeWidth = zk(node).offsetWidth(),
 			body = this.$n('body'),
@@ -158,8 +157,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth <= nodeWidth) {
 				this._scrolling = false;
 				body.scrollLeft = 0;
-				if (zk.ie7_)
-					zk(body).redoCSS();
 			} else {
 				body.style.width = jq.px0(fixedSize);
 				this._fixScrollPos(node);
@@ -220,16 +217,9 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		jq(left)[css](zcls + "-left-scroll");
 		jq(right)[css](zcls + "-right-scroll");
 	},
-	_doFixWidth: function () {
-		var node = this.$n(),
-			width = node.style.width;
-		if (zk.ie6_ && (!width || "auto" == width))
-			this._forceStyle(node, "100%");
-	},
 	_forceStyle: function (node, value) {
 		if (zk.parseInt(value) < 0)
 			return;
-		node.style.width = zk.ie6_ ? "0px" : "";
 		node.style.width = value;
 	},
 	doMouseOver_: function (evt) {

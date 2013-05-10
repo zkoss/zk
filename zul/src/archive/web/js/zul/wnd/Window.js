@@ -28,8 +28,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			s = node.style;
 
 		// Sometimes, the clientWidth/Height in IE6 is wrong.
-		var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
-			sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+		var sw = $op[0].clientWidth,
+			sh = $op[0].clientHeight;
 		if (!floated) {
 			sw -= $op.zk.paddingWidth();
 			sw = zkn.revisedWidth(sw);
@@ -49,7 +49,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			 el.style.top = el.offsetTop + "px";
 		if(el.style.left && el.style.left.indexOf("%") >= 0)
 			 el.style.left = el.offsetLeft + "px";
-		
+
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 		//ZK-1662: refix ZK-1309
 		//dg.control._isDragging = true;
@@ -91,7 +91,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var el = dg.node,
 			wgt = dg.control,
 			tar = evt.domTarget, wtar;
-			
+
 		if (!tar.id)
 			tar = tar.parentNode;
 		switch (tar) {
@@ -115,7 +115,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 		//ZK-1662: refix ZK-1309
 		//delete wgt._isDragging;
-		
+
 		// Bug for ZK-385 clear position value after move
         if (wgt._position && wgt._position != "parent") {
 			wgt._position = null;
@@ -136,7 +136,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 			if (!n.style.top) {
 				n.style.top = jq.px(xy[1]);
-			}			
+			}
 		} else if (pos == "parent")
 			_posByParent(wgt);
 
@@ -163,7 +163,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//Note: modal must be visible
 		var realVisible = wgt.isRealVisible();
 		wgt.setTopmost();
-		
+
 		if (!wgt._mask) {
 			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement(): null;
 			wgt._mask = new zk.eff.FullMask({
@@ -187,7 +187,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_modals.unshift(wgt);
 
 		//We have to use setTimeout:
-		//1) au's focus uses wgt.focus(0), i.e., 
+		//1) au's focus uses wgt.focus(0), i.e.,
 		//   focus might have been changed to its decendant (Z30-focus.zul)
 		//2) setVisible might use animation
 		setTimeout(function () {
@@ -328,7 +328,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isModal(mode) {
 		return mode == 'modal' || mode == 'highlighted';
 	}
-	
+
 	//Bug ZK-1689: get relative position to parent.
 	function _getPosByParent(wgt, left, top) {
 		var pos = wgt._position,
@@ -356,14 +356,14 @@ var Window =
  * You could retrieve any of them in this space by calling {@link #$f}.
  *
  * <p>If a window X is a descendant of another window Y, X's descendants
- * are not visible in Y's space. To retrieve a descendant, say Z, of X, 
+ * are not visible in Y's space. To retrieve a descendant, say Z, of X,
  * you have to invoke Y.$f('X').$f('Z').
  *
  * <p>Events:<br/>
  * onMove, onOpen, onMaximize, onMinimize, and onClose.<br/>
  * Note: to have better performance, onOpen is sent only if a
  * non-deferrable event listener is registered.
- * 
+ *
  * <p><code>onClose</code> is sent when the close button is pressed
  * (if {@link #isClosable} is true). The window has to detach or hide
  * the window.
@@ -373,7 +373,7 @@ var Window =
  * (such as press ESC). This event is only a notification.
  * In other words, the popup is hidden before the event is sent to the server.
  * The application cannot prevent the window from being hidden.
- * 
+ *
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.
  */
 zul.wnd.Window = zk.$extends(zul.Widget, {
@@ -406,11 +406,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		mode: _zkf = function () {
 			_updDomOuter(this);
 		},
-		/** 
+		/**
 		 * Sets the title.
 		 * @param String title
 		 */
-		/** 
+		/**
 		 * Returns the title.
 		 * Besides this attribute, you could use {@link zul.wgt.Caption} to define
 		 * a more sophisticated caption (aka., title).
@@ -425,11 +425,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else
 				_updDomOuter(this);
 		},
-		/** 
+		/**
 		 * Sets the border (either none or normal).
 		 * @param String border the border. If null or "0", "none" is assumed.
 		 */
-		/** 
+		/**
 		 * Returns the border.
 		 * The border actually controls what the content style class is
 		 * is used. In fact, the name of the border (except "normal")
@@ -479,13 +479,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	     * change to a restore button with the appropriate behavior already built-in
 	     * that will restore the window to its previous size.
 	     * <p>Default: false.
-	     * 
+	     *
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 		 * @param boolean maximizable
 		 */
 		/**
 		 * Returns whether to display the maximizing button and allow the user to maximize
-	     * the window. 
+	     * the window.
 	     * <p>Default: false.
 	     * @return boolean
 		 */
@@ -496,26 +496,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	     * of minimizing a window is implementation-specific, so the MinimizeEvent
 	     * event must be handled and a custom minimize behavior implemented for this
 	     * option to be useful.
-	     * 
-	     * <p>Default: false. 
+	     *
+	     * <p>Default: false.
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 		 * @param boolean minimizable
 		 */
 		/**
 		 * Returns whether to display the minimizing button and allow the user to minimize
-	     * the window. 
+	     * the window.
 	     * <p>Default: false.
 	     * @return boolean
 		 */
 		minimizable: _zkf,
 		/**
-    	 * Sets whether the window is maximized, and then the size of the window will depend 
+    	 * Sets whether the window is maximized, and then the size of the window will depend
     	 * on it to show a appropriate size. In other words, if true, the size of the
     	 * window will count on the size of its offset parent node whose position is
     	 * absolute (by not {@link #doEmbedded()}) or its parent node. Otherwise, its size
     	 * will be original size. Note that the maximized effect will run at client's
     	 * sizing phase not initial phase.
-		 * 
+		 *
 		 * <p>Default: false.
 		 * @param boolean maximized
 		 */
@@ -546,8 +546,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					s.left = "-10000px";
 
 					// Sometimes, the clientWidth/Height in IE6 is wrong.
-					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
-						sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+					var sw = $op[0].clientWidth,
+						sh = $op[0].clientHeight;
 					if (!floated) {
 						sw -= $op.zk.paddingWidth();
 						sw = $n.revisedWidth(sw);
@@ -561,7 +561,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					// restore.
 					s.top = "0";
 					s.left = "0";
-					
+
 					// resync
 					w = s.width;
 					h = s.height;
@@ -642,12 +642,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 			}
 		},
-		/** 
+		/**
 		 * Sets the CSS style for the content block of the window.
 		 * <p>Default: null.
 		 * @param String contentStyle
 		 */
-		/** 
+		/**
 		 * Returns the CSS style for the content block of the window.
 		 * @return String
 		 */
@@ -656,7 +656,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * Sets the style class used for the content block.
 		 * @param String contentSclass
 		 */
-		/** 
+		/**
 		 * Returns the style class used for the content block.
 		 * @return String
 		 */
@@ -700,7 +700,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the minimum height in pixels allowed for this window.
 		 * If negative, 100 is assumed.
-		 * <p>Default: 100. 
+		 * <p>Default: 100.
 		 * <p>Note: Only applies when {@link #isSizable()} = true.
 		 * @param int minheight
 		 */
@@ -713,7 +713,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the minimum width in pixels allowed for this window. If negative,
 		 * 200 is assumed.
-		 * <p>Default: 200. 
+		 * <p>Default: 200.
 		 * <p>Note: Only applies when {@link #isSizable()} = true.
 		 * @param int minwidth
 		 */
@@ -827,28 +827,27 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var data = evt.data,
 			node = this.$n(),
 			s = node.style;
-			
+
 		_hideShadow(this);
 		if (data.width != s.width) {
 			s.width = data.width;
-			this._fixWdh();
-		}	
+		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
 		}
-				
+
 		if (data.left != s.left || data.top != s.top) {
 			s.left = data.left;
 			s.top = data.top;
 			this._fireOnMove(evt.keys);
 		}
-		
+
 		this.zsync();
 		var self = this;
 		setTimeout(function() {
 			zUtl.fireSized(self);
-		}, zk.ie6_ ? 800: 0);
+		});
 	},
 	onZIndex: _zkf = function (evt) {
 		this.zsync();
@@ -877,7 +876,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized) 
+		if (this._maximized)
 			this.$n().style.width="";
 	},
 	onSize: function() {
@@ -885,7 +884,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._maximized)
 			_syncMaximized(this);
 		this._fixHgh();
-		this._fixWdh();
 		if (this._mode != 'embedded')
 			_updDomPos(this);
 		this.zsync();
@@ -896,7 +894,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * The reason is prevent zindex of window change(in `setTopmost()`) when dragging,
 		 * it will let full-mask is not visible.
 		 */
-		if (!this._visible || this._mode == 'embedded' || this._mask) 
+		if (!this._visible || this._mode == 'embedded' || this._mask)
 			return; //just in case
 
 		var wgt = ctl.origin;
@@ -920,42 +918,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					return;
 			}
 	},
-	_fixWdh: zk.ie7_ ? function () {
-		if (this._mode != 'embedded' && this._mode != 'popup' && this.isRealVisible()) {
-			var n = this.$n(),
-				cave = this.$n('cave').parentNode,
-				wdh = n.style.width,
-				$n = jq(n),
-				$tl = $n.find('>div:first'),
-				tl = $tl[0],
-				hl = tl && this.$n("cap") ? $tl.nextAll('div:first')[0]: null,
-				bl = $n.find('>div:last')[0];
-
-			if (!wdh || wdh == "auto") {
-				var $cavp = zk(cave.parentNode),
-					diff = $cavp.padBorderWidth() + zk(cave.parentNode.parentNode).padBorderWidth();
-				if (tl) tl.firstChild.style.width = jq.px0(cave.offsetWidth + diff);
-				if (hl) hl.firstChild.firstChild.style.width = jq.px(cave.offsetWidth
-					- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff));
-				if (bl) bl.firstChild.style.width = jq.px0(cave.offsetWidth + diff);
-			} else {
-				if (tl) tl.firstChild.style.width = "";
-				if (hl) hl.firstChild.style.width = "";
-				if (bl) bl.firstChild.style.width = "";
-				
-				// for B50-3317729.zul
-				if (this._hflex == 'min')
-					zk(n).redoCSS();
-			}
-		} else if (zk.ie == 7) {
-			// B50-ZK-589: Window in Hlayout the title bar is gone in IE7
-			// call width() to let browser recalculate
-			var $n = jq(this.$n()),
-				$tl = $n.find('>div:first'),
-				$bl = $n.find('>div:last');
-			if ($tl.width() + $bl.width()) ;
-		}
-	} : zk.$void,
 	_fixHgh: function () {
 		if (this.isRealVisible()) {
 			var n = this.$n(),
@@ -963,14 +925,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
 
-			// not effect bug 1944729, check this bug with bug ZK-326 in Panel.js
-			// if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/*bug #1944729*/)
-			//	cave.style.height = "0";
-
 			if (hgh && hgh != "auto") {
 				zk(cave).setOffsetHeight(this._offsetHeight(n));
 			} else if (cvh && cvh != "auto") {
-				if (zk.ie6_) cave.style.height = "0";
 				cave.style.height = "";
 			}
 		}
@@ -1055,7 +1012,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setZIndex: _zkf = function (zIndex) {
 		var old = this._zIndex;
 		this.$supers('setZIndex', arguments);
-		if (old != zIndex) 
+		if (old != zIndex)
 			this.zsync();
 	},
 	setZindex: _zkf,
@@ -1106,10 +1063,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var mode = this._mode;
 		zWatch.listen({onSize: this, onShow: this});
 
-		// Bug 2974370
-		if (zk.ie6_)
-			zWatch.listen({beforeSize: this});
-
 		if (mode != 'embedded') {
 			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);
@@ -1117,7 +1070,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (_isModal(mode)) _doModal(this);
 			else _doOverlapped(this);
 		}
-		
+
 		if (this._sizable)
 			_makeSizer(this);
 
@@ -1168,8 +1121,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			onHide: this,
 			onResponse: this
 		});
-		if (zk.ie6_)
-			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
 
 		_unmarkModal(this);
@@ -1301,7 +1252,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
 	_snapsizing: function (dg, pos) {
-			// snap y only when dragging upper boundary/corners 
+			// snap y only when dragging upper boundary/corners
 		var px = (dg.z_dir >= 6 && dg.z_dir <= 8) ? Math.max(pos[0], 0) : pos[0],
 			// snap x only when dragging left boundary/corners
 			py = (dg.z_dir == 8 || dg.z_dir <= 2) ? Math.max(pos[1], 0) : pos[1];
@@ -1440,11 +1391,11 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
  */
 zul.wnd.WindowRenderer = {
 	/** Returns whether to check the border's height.
-	 * 
+	 *
 	 * @param zul.wnd.Window wgt the window
 	 */
 	shallCheckBorder: function (wgt) {
-		return wgt._mode != 'popup' && 
+		return wgt._mode != 'popup' &&
 			(wgt._mode != 'embedded' || wgt.getBorder() != "none");
 	}
 };

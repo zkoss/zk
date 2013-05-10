@@ -127,9 +127,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		}
 	},
-	_toggleBtnOver : function(evt) {
-		jq(evt.domTarget).toggleClass(this.getZclass() + "-close-over");
-	},
 	_sel: function(notify, init) {
 		var tabbox = this.getTabbox();
 		
@@ -253,9 +250,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			tab = this;
 		if (closebtn) {
 			this.domListen_(closebtn, "onClick", '_doCloseClick');
-			if (zk.ie6_)
-				this.domListen_(closebtn, "onMouseOver", '_toggleBtnOver')
-					.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
 
 		after.push(function () {
@@ -286,9 +280,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		_logId(this);
 		if (closebtn) {
 			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
-			if (zk.ie6_)
-				this.domUnlisten_(closebtn, "onMouseOver", '_toggleBtnOver')
-					.domUnlisten_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
 		this.$supers(zul.tab.Tab, 'unbind_', arguments);
 	},

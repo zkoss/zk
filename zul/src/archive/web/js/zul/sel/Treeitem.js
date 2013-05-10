@@ -49,16 +49,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (w._visible && w._open) // optimized, need to recurse only if open and visible
 					_showDOM(w, visible);
 	}
-	
-	function _syncTreeBodyHeight(wgt) {
-		if (zk.ie < 8) {
-			var tree = wgt.getTree();
-			if (tree) {
-				tree.ebody.style.height = '';
-				tree._syncBodyHeight();
-			}
-		}
-	}
 	//Bug ZK-1766
 	function _searchPrevRenderedItem(wgt) {
 		var target;
@@ -152,7 +142,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 						tree._fixhdoldwd = oldwd;
 					setTimeout(function () {
 						if (!--tree._fixhdwcnt && tree.$n() && 
-								(tree._fixhdoldwd != ebodytbl.clientWidth || (zk.ie < 8))) // B50-3343001: IE 6/7
+								(tree._fixhdoldwd != ebodytbl.clientWidth))
 							tree._calcSize();
 					}, 250);
 				}
@@ -361,7 +351,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) {
 			this.treerow = null;
-		//	_syncTreeBodyHeight(this); ZK-360: fixed; ZK-1735: dont need to sync
 		} else if (child == this.treechildren) {
 			this.treechildren = null;
 			if (!this.childReplacing_) //NOT called by onChildReplaced_
@@ -375,7 +364,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		else if (this.desktop)
             this._fixOnAdd(child, true); // fixed dynamically change treerow. B65-ZK-1608
 		if (this.desktop && child.$instanceof(zul.sel.Treerow)) {
-		//	_syncTreeBodyHeight(this); ZK-360: fixed; ZK-1735: dont need to sync
 		}
 		//else was handled by insertBefore/appendChild
 	},

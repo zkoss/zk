@@ -25,11 +25,6 @@ function (out) {
 	btn += '></button>';
 
 	var wd = "100%", hgh = "100%";
-	if (zk.ie && !zk.ie8) {
-		//Not to generate 100% in IE6/7 (or the width will be 100%)
-		if (!this._width) wd = "";
-		if (!this._height) hgh = "";
-	}
 	out.push('<span', this.domAttrs_(),
 			'><table id="', uuid, '-box" style="width:', wd, ';height:', hgh, '"', zUtl.cellps0,
 			(tabi && !zk.gecko && !zk.safari ? tabi : ''),

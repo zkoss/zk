@@ -39,14 +39,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';
 					jq(n)[fnm](zcls + '-btn-right-edge');
-					
-					if (zk.ie6_) {						
-						jq(n)[fnm](zcls + 
-							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
-						
-						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
-							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
-					}
 				}
 				this.onSize();
 			}
@@ -542,9 +534,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			if (!isButtonVisible)
 				out.push(' ', zcls, '-btn-right-edge');
 			if (this._readonly)
-				out.push(' ', zcls, '-btn-readonly');	
-			if (zk.ie6_ && !isButtonVisible && this._readonly)
-				out.push(' ', zcls, '-btn-right-edge-readonly');
+				out.push(' ', zcls, '-btn-readonly');
 		} else if (!isButtonVisible)
 			out.push('" style="display:none');
 

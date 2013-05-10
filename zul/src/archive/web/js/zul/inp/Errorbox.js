@@ -218,7 +218,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + "px";
 			if(dir == "d") { 
 				pointer.style.top = null;
-				pointer.style.bottom = zk.ie6_? "-14px" : "-5px"; 
+				pointer.style.bottom = "-5px";
 			} else 
 				pointer.style.top = "-5px";
 			
@@ -243,7 +243,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 				pointer.style.top = "-10px";
 			else {
 				pointer.style.top = null;
-				pointer.style.bottom = zk.ie6_? "-14px" : "-10px";
+				pointer.style.bottom = "-10px";
 			}
 		}
 		

@@ -15,20 +15,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zk.bmk = (function () { //used internally
 	var _curbk = "", _initbk = "";
 
-	/** bookmark iframe */
-	var _bkIframe = zk.ie && !zk.ie8 ? function (nm, oldnm) {
-		//Bug 2019171: we have to create iframe frist
-		var url = zk.ajaxURI("/web/js/zk/bookmark.html", {au:true,ignoreSession:true}),
-			ifr = jq('#zk_histy')[0];
-		if (!ifr)
-			ifr = jq.newFrame('zk_histy',
-				oldnm ? url + '?' +encodeURIComponent(oldnm): url);
-				//create iframe first to have a bookmark (so BACK will go to init one)
-				//side effect: # is append to the URL even if bookmark is empty
-		if (nm) url += '?' +encodeURIComponent(nm);
-		ifr.src = url;
-	}: zk.$void;
-
 	function getBookmark() {
 		var nm = location.hash,
 			j = nm.indexOf('#');
@@ -66,7 +52,6 @@ zk.bmk = (function () { //used internally
 				location.replace(location.href.replace(/#.*/, "") + _toHash(nm, true));
 			else
 				location.hash = _toHash(nm);
-			_bkIframe(nm, oldnm);
 			zk.bmk.onURLChange();
 		}
 	}

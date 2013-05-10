@@ -207,7 +207,6 @@ zk.copy(zjq, {
 	},
 
 	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
-	fixOnResize: zk.$void, //overriden in domie.js to fix the window.onresize issue
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight)
@@ -220,7 +219,6 @@ zk.copy(zjq, {
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
 	_fixIframe: zk.$void,
-	_useQS: zk.$void, //overriden in domie.js (used in zAU)
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
 	src0: "", //an empty src; overriden in domie.js

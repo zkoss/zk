@@ -282,7 +282,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// B50-ZK-391
 			// should keep openInfo, maybe used in onResponse later.
 		}
-		this._fixWdh();
 		this._fixHgh();
 	},
 	_offsetHeight: function () {
@@ -310,36 +309,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_fixHgh: function () {
 		var hgh = this.$n().style.height,
 			c = this.getCaveNode();
-		if (zk.ie6_ && ((hgh && hgh != "auto" )|| c.style.height)) c.style.height = "0px";
 		if (hgh && hgh != "auto")
 			zk(c).setOffsetHeight(this._offsetHeight());
 		else 
 			c.style.height = "auto";
 	},
-	_fixWdh: zk.ie7_ ? function () {
-		if (!zul.wgt.PopupRenderer.isFrameRequired()) return;
-		var node = this.$n(),
-			wdh = node.style.width,
-			cn = jq(node).children('div'),
-			fir = cn[0],
-			last = cn[cn.length - 1],
-			n = this.$n('cave').parentNode;
-		
-		if (!wdh || wdh == "auto") { //Popup will disappear when width is null in IE 
-			var diff = zk(n.parentNode).padBorderWidth() + zk(n.parentNode.parentNode).padBorderWidth();
-			if (fir) {
-				fir.firstChild.style.width = jq.px0(n.offsetWidth - (zk(fir).padBorderWidth()
-					+ zk(fir.firstChild).padBorderWidth() - diff));
-			}
-			if (last) {
-				last.firstChild.style.width = jq.px0(n.offsetWidth - (zk(last).padBorderWidth()
-					+ zk(last.firstChild).padBorderWidth() - diff));
-			}
-		} else {
-			if (fir) fir.firstChild.style.width = "";
-			if (last) last.firstChild.style.width = "";
-		}
-	}: zk.$void,
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop)

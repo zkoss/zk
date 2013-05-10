@@ -86,16 +86,13 @@ zul.inp.RoundUtl = {
 			return;
 
 		var inp = wgt.getInputNode();
-		
+
 		if (!ns.width && wgt._inplace &&
 			(wgt._buttonVisible == undefined
 				|| wgt._buttonVisible)) {
 			ns.width = jq.px0(this.getOuterWidth(wgt, true));
 		}
-		
-		if (zk.ie6_ && ns.width)
-			inp.style.width = '0px';
-	
+
 		var width = this.getOuterWidth(wgt, wgt.inRoundedMold()),
 			// ignore left border, as it is countered by margin-left
 			rightElemWidth = rightElem ? rightElem.offsetWidth -
@@ -114,7 +111,7 @@ zul.inp.RoundUtl = {
 			$inp = jq(wgt.getInputNode()),
 			inc = wgt.getInplaceCSS(),
 			shallClean = !node.style.width && wgt._inplace;
-		
+
 		if (rmInplace && shallClean) {
     		$n.removeClass(inc);
     		$inp.removeClass(inc);
@@ -128,7 +125,7 @@ zul.inp.RoundUtl = {
 		}
 		return width;
 	}
-	
+
 };
 var InputWidget =
 /**
@@ -213,12 +210,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				
 				var btn = this.$n('btn');
 				jq(btn)[fnm](zcls + '-btn-readonly');
-				
-				if (zk.ie6_) {
-					jq(btn)[fnm](zcls + (this._buttonVisible ? '-btn-readonly':
-													'-btn-right-edge-readonly'));
-					jq(this.$n('right-edge'))[fnm](zcls + '-right-edge-readonly');
-				}
 			}
 		},
 		/** Returns the cols.
@@ -587,10 +578,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var zcls = this.getZclass();
 			this._errmsg = null;
 			jq(this.getInputNode()).removeClass(zcls + "-text-invalid");
-			if(zk.ie6_ && this.inRoundedMold()) {
-				jq(this.$n('btn')).removeClass(zcls + "-btn-right-edge-invalid");
-				jq(this.$n('right-edge')).removeClass(zcls + "-right-edge-invalid");
-			}
 			
 		}
 		if (revalidate)
@@ -632,11 +619,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var zcls = this.getZclass();
 		if (this.desktop) { //err not visible if not attached
 			jq(this.getInputNode()).addClass(zcls + "-text-invalid");
-			if(zk.ie6_ && this.inRoundedMold()) {
-				if(!this._buttonVisible)
-					jq(this.$n('btn')).addClass(zcls + "-btn-right-edge-invalid");
-				jq(this.$n('right-edge')).addClass(zcls + "-right-edge-invalid");
-			}
 
 			var cst = this._cst, errbox;
 			if (cst != "[c") {

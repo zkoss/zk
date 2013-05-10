@@ -317,10 +317,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var lastsz = hgh > 0 ? hgh : 0;
 		while (vflexs.length > 1) {
 			var cwgt = vflexs.shift(), 
-				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) | 0, //cast to integer
+				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) || 0, //cast to integer
 				offtop = cwgt.$n().offsetTop,
-				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2)
-							: /* B50-3236331.zul */(zk.ie < 8 ? 1 : 0));
+				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 			 
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = vsz;
@@ -333,8 +332,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
 				offtop = cwgt.$n().offsetTop,
-				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2)
-							: /* B50-3236331.zul */(zk.ie < 8 ? 1 : 0));
+				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = lastsz;
 			var chdex = cwgt.$n('chdex');
@@ -345,7 +343,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		lastsz = wdh > 0 ? wdh : 0;
 		while (hflexs.length > 1) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
-				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) | 0; //cast to integer
+				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) || 0; //cast to integer
 			cwgt.setFlexSize_({width:hsz});
 			cwgt._hflexsz = hsz;
 		

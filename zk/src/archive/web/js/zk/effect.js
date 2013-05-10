@@ -317,10 +317,6 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			}
 		}
 		
-		// IE bug
-		if (zk.ie && !zk.ie8)
-			zi = zi == 0 ? 1 : zi;
-		
 		if (zi != 'auto') { //Bug ZK-1381: only apply z-index when it is not auto
 			st.zIndex = zi;
 			this.mask.lastChild.style.zIndex = zi;

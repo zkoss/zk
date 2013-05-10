@@ -36,10 +36,10 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	getZclass: function() {
 		if (this._zclass != null)
 			return this._zclass;
-			
+
 		var tabbox = this.getTabbox();
 		if (!tabbox) return 'z-tabpanel';
-		
+
 		var mold = tabbox.getMold();
 		return 'z-tabpanel' + (mold == "default" ? (tabbox.isVertical() ? '-ver' : '') : '-' + mold);
 	},
@@ -49,7 +49,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	getLinkedTab: function() {
 		var tabbox =  this.getTabbox();
 		if (!tabbox) return null;
-		
+
 		var tabs = tabbox.getTabs();
 		return tabs ? tabs.getChildAt(this.getIndex()) : null;
 	},
@@ -89,7 +89,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				 */
 				tabbox._animating = true;
 				zkp.slideDown(
-					this, 
+					this,
 					{"afterAnima": function(){delete tabbox._animating;}}
 				);
 			} else {
@@ -119,11 +119,11 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	getPanelContentHeight_: function () {
 		var node = this.$n(),
 			tabpanelsNode = this.parent && this.parent.$n(),
-			panelContentHeight = tabpanelsNode && 
+			panelContentHeight = tabpanelsNode &&
 				(tabpanelsNode.scrollHeight + zk(tabpanelsNode).padBorderHeight());
-		
+
 		return Math.max(node && node.offsetHeight,panelContentHeight) ; // B50-ZK-298: concern panel height
-	},	
+	},
 	_fixPanelHgh: function() {
 		var tabbox = this.getTabbox();
 		var tbx = tabbox.$n(),
@@ -138,26 +138,18 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				if (zk.ie8)
 					hgh -= 1; // show the bottom border
 				zk(n).setOffsetHeight(hgh);
-
-				// Bug ZK-473
-				if (zk.ie6_ && isHor) {
-					var s = this.$n('cave').style,
-					z = s.zoom;
-					s.zoom = 1;
-					s.zoom = z;
-				}
 			} else {
 				var n = this.$n(),
 					hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
 				hgh = zk(n.parentNode).revisedHeight(hgh);
-				
+
 				// fixed Opera 10.5+ bug
 				if (zk.opera) {
 					var parent;
 					if ((parent = tbx.parentNode) && tbx.style.height == '100%')
 						hgh = zk(parent).revisedHeight(parent.offsetHeight);
 				}
-				
+
 				for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
 					if (e != n)
 						hgh -= e.offsetHeight;
@@ -182,9 +174,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (tabbox.inAccordionMold() && !zk(this.$n("cave")).isVisible())
 			return;
 		this._fixPanelHgh();		//Bug 2104974
-		
-		//Bug 2526699 - (add zk.ie7)
-		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS();
+
 	},
 
 	//bug #3014664

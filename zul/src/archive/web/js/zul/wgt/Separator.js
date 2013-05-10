@@ -14,16 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 
-	var _fixStyle = zk.ie < 8 ? function (wgt) {
-			if (wgt.desktop && wgt._spacing && wgt._bar)
-				setTimeout(function () {
-					var n;
-					if ((n = wgt.$n()) && n.offsetWidth <= 2)
-						n.style.backgroundPosition = "left top"; //2088712
-				}, 500);
-		}: zk.$void,
-
-		_shallFixPercent = zk.gecko ? function (wgt) {
+	var _shallFixPercent = zk.gecko ? function (wgt) {
 			var s;
 			return (s = wgt._spacing) && s.endsWith("%");
 		}: zk.$void;
@@ -61,7 +52,6 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 */
 		bar: function () {
 			this.updateDomClass_();
-			_fixStyle(this);
 		},
 		/** Returns the spacing.
 		 * <p>Default: null (depending on CSS).
@@ -72,7 +62,6 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 */
 		spacing: function () {
 			this.updateDomStyle_();
-			_fixStyle(this);
 		}
 	},
 
@@ -86,7 +75,6 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	//super//
 	bind_: function () {
 		this.$supers(zul.wgt.Separator, 'bind_', arguments);
-		_fixStyle(this);
 	},
 
 	getZclass: function () {

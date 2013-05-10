@@ -32,8 +32,6 @@ function (out) {
 			out.push(' ', zcls, '-btn-right-edge');
 		if (this._readonly)
 			out.push(' ', zcls, '-btn-readonly');	
-		if (zk.ie6_ && !isButtonVisible && this._readonly)
-			out.push(' ', zcls, '-btn-right-edge-readonly');
 	} else if (!isButtonVisible)
 		out.push('" style="display:none');	
 	

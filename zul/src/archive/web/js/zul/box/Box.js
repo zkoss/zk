@@ -602,9 +602,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		child.parent.afterChildrenFlex_(child);
 		child._flexFixed = false;
 		
-		// Bug for B50-3014664.zul
-		if (zk.ie < 8)
-			zk(this).redoCSS();
 		return false; //to skip original _fixFlex
 	},
 	_childOuterAttrs: function (child) {
@@ -751,24 +748,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
 		
-		//Bug 1916473: with IE, we have make the whole table to fit the table
-		//since IE won't fit it even if height 100% is specified
-	
-		//20090924, Henri: the original bug fix seems fail the zkdemo/test/splitter.zul
-		//in IE7/IE8 (cannot drag splitter to left in IE7/8). I try another fix 
-		//by changing hbox chdex style(TD) to have height:100% and it works!
-/*		if (zk.ie) {
-			var p = node.parentNode;
-			if (jq.nodeName(p, "td")) {
-				var nm = vert ? "height": "width",
-					sz = vert ? p.clientHeight: p.clientWidth;
-				if ((node.style[nm] == "100%" || this._box100) && sz) {
-					node.style[nm] = sz + "px";
-					this._box100 = true;
-				}
-			}
-		}
-*/
 		//Note: we have to assign width/height first
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")

@@ -236,14 +236,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.close({sendOnOpen:true});
 	},
 	onShow: function () {
-		if (zk.ie7_) {
-			var pp = this.$n();
-			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
-				var ul = this.$n('cave');
-				if (ul.childNodes.length)
-					pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-			}
-		}
 		this.zsync();
 		var anc = this.$n('a');
 		if (anc) {
@@ -276,8 +268,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	onResponse: function () {
 		if (!this.isOpen())
 			return; // Bug 2950364
-		if (zk.ie7_) {
-			var pp = this.$n();
 		
     		// Bug 2935985
     		pp.style.width = '';

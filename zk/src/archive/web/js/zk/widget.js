@@ -3058,20 +3058,7 @@ unbind_: function (skipper, after) {
 		}
 		return attr == 'h' ? zk(wgt).offsetHeight() : wd; //See also bug ZK-483
 	},
-	getParentSize_: zk.ie6_ ? function (p) {
-		var zkp = zk(p),
-			hgh,
-			wdh,
-			s = p.style;
-		if (s.width.indexOf('px') >= 0) {
-			wdh = zk.parseInt(s.width);
-		}
-		if (s.height.indexOf('px') >= 0) {
-			hgh = zk.parseInt(s.height);
-		}
-		return {height: hgh || zkp.revisedHeight(p.offsetHeight),
-					width: wdh || zkp.revisedWidth(p.offsetWidth)};
-	} : function(p) {
+	getParentSize_: function(p) {
 		//to be overridden
 		var zkp = zk(p);
 		return {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)};

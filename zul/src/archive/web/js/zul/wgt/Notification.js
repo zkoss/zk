@@ -51,8 +51,6 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			s += ' ' + zcls + '-' + (entype = zUtl.encodeXML(type));
 		if (ref)
 			s += ' ' + zcls + '-ref';
-		if (zk.ie < 8 && type && ref) // need to provide extra class name for IE 6/7
-			s += ' ' + zcls + '-ref-' + entype;
 		return s;
 	},
 	onFloatUp: function(ctl, opts) {
@@ -186,8 +184,6 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		return '10px';
 	},
 	_fixarrow: function (ref) {
-		if (zk.ie == 6)
-			return; // CSS won't work in IE 6, fall back (not showing the triangle)
 		var p = this.$n('p');
 		if (!p)
 			return;

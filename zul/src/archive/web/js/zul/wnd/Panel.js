@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * that make it the perfect building block for application-oriented user interfaces.
  * The Panel contains bottom, top, and foot toolbars, along with separate header,
  * footer and body sections. It also provides built-in collapsible, closable,
- * maximizable, and minimizable behavior, along with a variety of pre-built tool 
+ * maximizable, and minimizable behavior, along with a variety of pre-built tool
  * buttons that can be wired up to provide other customized behavior. Panels can
  * be easily embedded into any kind of ZUL component that is allowed to have children
  * or layout component. Panels also provide specific features like float and move.
@@ -34,12 +34,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * its parent, not the whole page.
  * The second difference of {@link zul.wnd.Window} is that Panel is not an independent ID
  * space, so the ID of each child can be used throughout the panel.
- * 
+ *
  * <p>Events:<br/>
  * onMove, onOpen, onZIndex, onMaximize, onMinimize, and onClose.<br/>
- * 
+ *
  * <p>Default {@link #getZclass}: z-panel.
- * 
+ *
  */
 zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
@@ -58,7 +58,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the minimum height in pixels allowed for this panel.
 		 * If negative, 100 is assumed.
-		 * <p>Default: 100. 
+		 * <p>Default: 100.
 		 * <p>Note: Only applies when {@link #isSizable()} = true.
 		 * @param int minheight
 		 */
@@ -71,7 +71,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the minimum width in pixels allowed for this panel. If negative,
 		 * 200 is assumed.
-		 * <p>Default: 200. 
+		 * <p>Default: 200.
 		 * <p>Note: Only applies when {@link #isSizable()} = true.
 		 * @param int minwidth
 		 */
@@ -101,7 +101,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		},
 		/**
 		 * Sets whether to move the panel to display it inline where it is rendered.
-		 * 
+		 *
 		 * <p>Default: false;
 		 * <p>Note that this method only applied when {@link #isFloatable()} is true.
 		 * @param boolean movable
@@ -119,9 +119,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		},
 		/**
 		 * Sets whether to float the panel to display it inline where it is rendered.
-		 * 
+		 *
 		 * <p>Note that by default, setting floatable to true will cause the
-	     * panel to display at default offsets, which depend on the offsets of 
+	     * panel to display at default offsets, which depend on the offsets of
 	     * the embedded panel from its element to <i>document.body</i> -- because the panel
 	     * is absolute positioned, the position must be set explicitly by {@link #setTop(String)}
 	     * and {@link #setLeft(String)}. Also, when floatable a panel you should always
@@ -141,13 +141,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	     * change to a restore button with the appropriate behavior already built-in
 	     * that will restore the panel to its previous size.
 	     * <p>Default: false.
-	     * 
+	     *
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 		 * @param boolean maximizable
 		 */
 		/**
 		 * Returns whether to display the maximizing button and allow the user to maximize
-	     * the panel. 
+	     * the panel.
 	     * <p>Default: false.
 	     * @return boolean
 		 */
@@ -158,14 +158,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	     * of minimizing a panel is implementation-specific, so the MinimizeEvent
 	     * event must be handled and a custom minimize behavior implemented for this
 	     * option to be useful.
-	     * 
-	     * <p>Default: false. 
+	     *
+	     * <p>Default: false.
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 		 * @param boolean minimizable
 		 */
 		/**
 		 * Returns whether to display the minimizing button and allow the user to minimize
-	     * the panel. 
+	     * the panel.
 	     * <p>Default: false.
 	     * @return boolean
 		 */
@@ -197,7 +197,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		closable: _zkf,
-		/** 
+		/**
 		 * Sets the border.
 		 * Allowed values include <code>none</code> (default), <code>normal</code>,
 		 * <code>rounded</code> and <code>rounded+</code>.
@@ -205,7 +205,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
 		 * @param String border the border. If null or "0", "none" is assumed.
 		 */
-		/** 
+		/**
 		 * Returns the border.
 		 *
 		 * <p>Default: "none".
@@ -217,11 +217,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (last)
 				this._lastSize = last;
 		},
-		/** 
+		/**
 		 * Sets the title.
 		 * @param String title
 		 */
-		/** 
+		/**
 		 * Returns the title.
 		 * Besides this attribute, you could use {@link zul.wgt.Caption} to define
 		 * a more sophisticated caption (aka., title).
@@ -240,7 +240,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					this._lastSize = last;
 			}
 		},
-		/** 
+		/**
 		 * Opens or closes this Panel.
 		 * @param boolean open
 		 */
@@ -261,9 +261,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					} else {
 						jq(node).addClass(zcls + '-colpsd');
 						this._hideShadow();
-						// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
-						if (zk.ie6_ && !node.style.width)
-							node.runtimeStyle.width = "100%";
 						$body.zk.slideUp(this);
 					}
 					if (!fromServer) this.fire('onOpen', {open:open});
@@ -271,13 +268,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 		},
 		/**
-		 * Sets whether the panel is maximized, and then the size of the panel will depend 
+		 * Sets whether the panel is maximized, and then the size of the panel will depend
 		 * on it to show a appropriate size. In other words, if true, the size of the
 		 * panel will count on the size of its offset parent node whose position is
 		 * absolute (by {@link #isFloatable()}) or its parent node. Otherwise, its size
 		 * will be original size. Note that the maximized effect will run at client's
 		 * sizing phase not initial phase.
-		 * 
+		 *
 		 * <p>Default: false.
 		 * @param boolean maximized
 		 */
@@ -291,27 +288,27 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				var $n = zk(node),
 					isRealVisible = $n.isRealVisible();
 				if (!isRealVisible && maximized) return;
-	
+
 				var l, t, w, h, s = node.style, cls = this.getZclass();
 				if (maximized) {
 					jq(this.$n('max')).addClass(cls + '-maxd');
 					this._hideShadow();
-	
+
 					if (this._collapsible && !this._open) {
 						$n.jq.removeClass(cls + '-colpsd');
 						var body = this.$n('body');
 						if (body) body.style.display = "";
 					}
 					var floated = this.isFloatable(),
-						$op = floated ? jq(node).offsetParent() : jq(node).parent();
-					var sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
-					
+						$op = floated ? jq(node).offsetParent() : jq(node).parent(),
+						sh = $op[0].clientHeight;
+
 					if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
 						var layout = this.parent.parent;
 						if (layout.getMaximizedMode() == 'whole') {
 							this._inWholeMode = true;
 							var p = layout.$n(), ps = p.style;
-							sh = zk.ie6_ && p.clientHeight == 0 ? p.offsetHeight - jq(p).zk.borderHeight() : p.clientHeight;
+							sh = p.clientHeight;
 							var oldinfo = this._oldNodeInfo = { _scrollTop: p.parentNode.scrollTop };
 							p.parentNode.scrollTop = 0;
 							$n.makeVParent();
@@ -320,7 +317,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							oldinfo._pos = s.position;
 							oldinfo._ppos = ps.position;
 							oldinfo._zIndex = s.zIndex;
-							
+
 							s.position = 'absolute';
 							this.setFloating_(true);
 							this.setTopmost();
@@ -330,8 +327,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 								ps.height = jq.px0(sh);
 								oldinfo._pheight = true;
 							}
-							if (zk.ie7_)
-								zk(node).redoCSS();
 						}
 					}
 					var floated = this.isFloatable(),
@@ -340,14 +335,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					t = s.top;
 					w = s.width;
 					h = s.height;
-	
+
 					// prevent the scroll bar.
 					s.top = "-10000px";
 					s.left = "-10000px";
-	
+
 					// Sometimes, the clientWidth/Height in IE6 is wrong.
-					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth;
-					
+					var sw = $op[0].clientWidth;
+
 					if (!floated) {
 						sw -= $op.zk.paddingWidth();
 						sw = $n.revisedWidth(sw);
@@ -357,7 +352,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					s.width = jq.px0(sw);
 					s.height = jq.px0(sh);
 					this._lastSize = {l:l, t:t, w:w, h:h};
-	
+
 					// restore.
 					s.top = "0";
 					s.left = "0";
@@ -388,7 +383,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					var body = this.panelchildren ? this.panelchildren.$n() : null;
 					if (body)
 						body.style.width = body.style.height = "";
-						
+
 					if (this._inWholeMode) {
 						$n.undoVParent();
 						zWatch.fireDown("onVParent", this);
@@ -419,7 +414,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				}
 				if (isRealVisible) {
 					// B50-ZK-324: always counts on onSize to do the work
-					//this.__maximized = true; 
+					//this.__maximized = true;
 					zUtl.fireSized(this);
 				}
 			}
@@ -437,7 +432,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		minimized: function (minimized, fromServer) {
 			if (this._maximized)
 				this.setMaximized(false);
-				
+
 			var node = this.$n();
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
@@ -530,7 +525,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
 	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,
 	 * and "fbar" the name of foot toolbar.
-	 * 
+	 *
 	 * @param String name "tbar", "bbar", and "fbar".
 	 * @param zul.wgt.Toolbar toolbar
 	 * @return boolean
@@ -570,7 +565,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var data = evt.data,
 			node = this.$n(),
 			s = node.style;
-			
+
 		this._hideShadow();
 		if (data.width != s.width) {
 			s.width = data.width;
@@ -579,22 +574,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			s.height = data.height;
 			this._fixHgh();
 		}
-				
+
 		if (data.left != s.left || data.top != s.top) {
 			s.left = data.left;
 			s.top = data.top;
-			
+
 			this.fire('onMove', zk.copy({
 				left: node.style.left,
 				top: node.style.top
 			}, evt.data), {ignorable: true});
 		}
-		
+
 		this.zsync();
 		var self = this;
 		setTimeout(function() {
 			zUtl.fireSized(self);
-		}, zk.ie6_ ? 800: 0);
+		});
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
@@ -609,10 +604,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.$n().style.width="";
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// have to clear width here if not listen to flex
-		if (!this._flexListened) 
+		if (!this._flexListened)
 			this.$n('body').style.width="";
 	},
-	// 
 	resetSize_: function(orient) {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// also reset the size of body
@@ -628,16 +622,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
-		
+
 			// Sometimes, the clientWidth/Height in IE6 is wrong.
-			var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth;
+			var sw = $op[0].clientWidth;
 			if (!floated) {
 				sw -= $op.zk.paddingWidth();
 				sw = $n.revisedWidth(sw);
 			}
 			s.width = jq.px0(sw);
 			if (wgt._open) {
-				var sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+				var sh = $op[0].clientHeight;
 				if (!floated) {
 					sh -= $op.zk.paddingHeight();
 					sh = $n.revisedHeight(sh);
@@ -649,14 +643,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._hideShadow();
 			if (this._maximized)
 				syncMaximized(this);
-			
+
 			if (this.tbar)
 				ctl.fireDown(this.tbar);
 			if (this.bbar)
 				ctl.fireDown(this.bbar);
 			if (this.fbar)
 				ctl.fireDown(this.fbar);
-			this._syncBodyWidth();
 			this._fixHgh();
 			this._fixWdh(); // B55-ZK-328
 			this.zsync();
@@ -665,29 +658,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	onHide: function () {
 		this._hideShadow();
 	},
-	_syncBodyWidth: zk.ie6_ ? function () {
-		this.$n('body').style.width = this.$n().offsetWidth; // B50-ZK-304
-	} : zk.$void,
 	_fixHgh: function () { // TODO: should be handled by Panelchildren onSize already
 		var pc;
 		if (!(pc=this.panelchildren) || pc.z_rod || !this.isRealVisible()) return;
 		var n = this.$n(),
 			body = pc.$n(),
 			hgh = n.style.height;
-		// bug ZK-326: Panelchildren's vflex fail in a model window on IE6
-		// check this bug with bug 1944729 in Panel.js
-		// if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0";		
 		if (hgh && hgh != "auto")
 			zk(body).setOffsetHeight(this._offsetHeight(n));
-		if (zk.ie6_) zk(body).redoCSS();
 	},
 	_fixWdh: function () { // TODO: should be handled by Panelchildren onSize already
 		var pc = this.panelchildren;
-		if (!pc || pc.z_rod || !this.isRealVisible()) 
+		if (!pc || pc.z_rod || !this.isRealVisible())
 			return;
 		var body = pc.$n(), pcst, pcwd;
 		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != "auto") {
-			var w = this.$n().clientWidth, 
+			var w = this.$n().clientWidth,
 				cn = body;
 			if (this._rounded())
 				for (var i = 0; i < 3; i++)
@@ -732,8 +718,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var isFramable = this.isFramable(),
 			cap = this.$n('cap'),
 			top = isFramable || cap ? jq(n).find('> div:first-child')[0].offsetHeight : 0;
-		return cap ? (isFramable ? 
-				jq(n).find('> div:first-child').next()[0].offsetHeight : 
+		return cap ? (isFramable ?
+				jq(n).find('> div:first-child').next()[0].offsetHeight :
 					_getOuter(cap, n).offsetHeight) + top : top;
 	},
 	onFloatUp: function (ctl) {
@@ -755,7 +741,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.domListen_(this.$n(), 'onMouseOut');
 			var Panel = this.$class;
 			this._sizer = new zk.Draggable(this, null, {
-				stackup: true, 
+				stackup: true,
 				draw: Panel._drawsizing,
 				snap: Panel._snapsizing,
 				starteffect: Panel._startsizing,
@@ -805,11 +791,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		} else {
 			var body = this.$n('body');
 			if (body && zk(body).isRealVisible()) {
-				if (!this._shadow) 
+				if (!this._shadow)
 					this._shadow = new zk.eff.Shadow(this.$n(), {
 						left: -4, right: 4, top: -2, bottom: 3
 					});
-					
+
 				if (this._maximized || this._minimized || !this._visible) //since action might be applied, we have to check _visible
 					this._hideShadow();
 				else this._shadow.sync();
@@ -826,18 +812,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		zWatch.listen({onSize: this, onHide: this});
 
-		// Bug 2974370
-		if (zk.ie6_)
-			zWatch.listen({beforeSize: this});
-		else if (zk.ie7_) //Bug 3307255
-			zk(this.$n()).redoCSS();
-		
 		var uuid = this.uuid,
 			$Panel = this.$class;
 
 		if (this._sizable)
 			this._makeSizer();
-		
+
 		if (this.isFloatable()) {
 			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
@@ -845,12 +825,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (!zk.css3)
 				jq.onzsync(this); //sync shadow if it is implemented with div
 		}
-		
+
 		if (this._maximizable && this._maximized) {
 			var self = this;
 			after.push(function() {
 				self._maximized = false;
-				self.setMaximized(true, true);				
+				self.setMaximized(true, true);
 			});
 		}
 	},
@@ -868,10 +848,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._inWholeMode = false;
 		}
 		zWatch.unlisten({onSize: this, onHide: this, onFloatUp: this});
-		if (zk.ie6_)
-			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
-		
+
 		if (!zk.css3) jq.unzsync(this);
 
 		if (this._shadow) {
@@ -936,7 +914,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		case this.$n('exp'):
 			var body = this.$n('body'),
 				open = body ? zk(body).isVisible() : this._open;
-				
+
 			// force to open
 			if (!open == this._open)
 				this._open = open;
@@ -1088,7 +1066,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_ignoresizing: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-			
+
 		if (wgt._maximized || !wgt._open || (evt.target != wgt && evt.target != wgt.panelchildren)) return true;
 
 		var offs = zk(el).revisedOffset(),
@@ -1136,7 +1114,7 @@ zul.wnd.PanelSkipper = zk.$extends(zk.Skipper, {
  */
 zul.wnd.PanelRenderer = {
 	/** Check the panel whether to render the rounded frame.
-	 * 
+	 *
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	isFrameRequired: function (wgt) {

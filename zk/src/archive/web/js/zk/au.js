@@ -290,12 +290,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	function ajaxSendNow(reqInf) {
 		var setting = zAu.ajaxSettings,
-			req = setting.xhr(),
-			uri = zjq._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
+			req = setting.xhr();
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		try {
 			req.onreadystatechange = onResponseReady;
-			req.open("POST", uri ? uri: reqInf.uri, true);
+			req.open("POST", reqInf.uri, true);
 			req.setRequestHeader("Content-Type", setting.contentType);
 			req.setRequestHeader("ZK-SID", reqInf.sid);
 			if (_errCode) {
@@ -307,9 +306,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 			ajaxReq = req;
 			ajaxReqInf = reqInf;
-
-			if (uri) req.send(null);
-			else req.send(reqInf.content);
+			
+			req.send(reqInf.content);
 
 			if (!reqInf.implicit)
 				zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying

@@ -579,7 +579,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	 },
 	 syncShadow: function () {
 	 	if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(this._wgt.$n("cnt-pp"), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
+			this._shadow = new zk.eff.Shadow(this._wgt.$n("cnt-pp"), {stackup: zk.useStackup});
 		this._shadow.sync();
 	 },
 	 hideShadow: function () {
