@@ -33,6 +33,7 @@ ZK 6.5.3
   ZK-1705: NullPointerException when sorting a list model bound to a Listbox without a Listhead component
   ZK-1766: tree bulk-update to several nodes causing errors
   ZK-1748: Stackup and autohide not working
+  ZK-1769: when click menu, menuitem and menu agian, then the menuitem should not be on focus.
 
   --------
 ZK 6.5.2

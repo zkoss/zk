@@ -266,6 +266,9 @@
 	<c:if test="${zk.ie == 7}">
 		max-height: 17px;
 	</c:if>
+	<c:if test="${zk.ie == 10}"> <%-- ZK-1769: ignore background color on a tag --%>
+		background-color: transparent;
+	</c:if>	
 	outline-color: -moz-use-text-color;
 	outline-style: none;
 	outline-width: 0;
