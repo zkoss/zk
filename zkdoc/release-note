@@ -34,6 +34,7 @@ ZK 6.5.3
   ZK-1766: tree bulk-update to several nodes causing errors
   ZK-1748: Stackup and autohide not working
   ZK-1769: when click menu, menuitem and menu agian, then the menuitem should not be on focus.
+  ZK-1768: Retrieve a wrong selected index of the radiogroup, when grid model changed
 
   --------
 ZK 6.5.2

@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.impl.Utils;
@@ -255,5 +256,14 @@ public class Radio extends Checkbox {
 				Events.postEvent(rg, evt);
 		} else
 			super.service(request, everError);
+	}
+
+	@Override
+	public void onPageDetached(Page page) {
+		super.onPageDetached(page);
+		//B65-ZK-1768 remove the radio from the radiogroup in case it is an external radio
+		if(this.getRadiogroup() != null) {
+			this.getRadiogroup().removeExternal(this);
+		}
 	}
 }
