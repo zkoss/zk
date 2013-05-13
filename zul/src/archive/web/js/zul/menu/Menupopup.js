@@ -268,15 +268,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	onResponse: function () {
 		if (!this.isOpen())
 			return; // Bug 2950364
-		
-    		// Bug 2935985
-    		pp.style.width = '';
-    		
-    		// Bug 2105158 and Bug 1911129
-    		var ul = this.$n('cave');
-    		if (ul.childNodes.length) // Bug 2784736
-    			pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-		}
 		this.zsync();
 		
 		this.$supers('onResponse', arguments); //Bug #2870616
