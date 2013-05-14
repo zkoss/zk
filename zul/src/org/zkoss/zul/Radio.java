@@ -262,8 +262,9 @@ public class Radio extends Checkbox {
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
 		//B65-ZK-1768 remove the radio from the radiogroup in case it is an external radio
-		if(this.getRadiogroup() != null) {
-			this.getRadiogroup().removeExternal(this);
+		final Radiogroup rg = getRadiogroup();
+		if(rg != null) {
+			rg.removeExternal(this);
 		}
 	}
 }
