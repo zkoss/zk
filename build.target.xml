@@ -106,12 +106,35 @@ if="deploy.tomcat.required">
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
+<target name="lessc">
+	<java classname="CpLess" fork="true">
+		<arg value="${src.archive.dir}/${zipjs}"/>
+		<arg value="${codegen.archive.dir}/${zipjs}"/>
+		<classpath>
+			<pathelement path="${src.archive.dir}"/>
+			<pathelement location="${dist.lib.ext.dir}/zkless.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/lesscss-engine.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/rhino.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/commons-logging.jar"/>
+		</classpath>
+	</java>
+	<java classname="CpLess" fork="true">
+		<arg value="${src.archive.dir}/${zipcss}"/>
+		<arg value="${codegen.archive.dir}/${zipcss}"/>
+		<classpath>
+			<pathelement path="${src.archive.dir}"/>
+			<pathelement location="${dist.lib.ext.dir}/zkless.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/lesscss-engine.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/rhino.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/commons-logging.jar"/>
+		</classpath>
+	</java>
+</target>
 <target name="zipjs">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
-	<java classname="ZipJS"
-           	fork="true">
+	<java classname="ZipJS" fork="true">
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 		<arg value="true"/>
@@ -123,8 +146,7 @@ if="deploy.tomcat.required">
 		</classpath>
 	</java>
 	   
-	<java classname="ZipJS"
-           	fork="true">
+	<java classname="ZipJS" fork="true">
 		<arg value="${src.archive.dir}/${zipcss}"/>
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
     	<jvmarg value="-Xss1024k"/>
