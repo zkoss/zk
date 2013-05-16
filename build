@@ -390,6 +390,8 @@ function invoke_ant
 		zipjslist=${zipjslist#zipjs=}
 		zipcsslist=$(grep '^zipcss=' deploy)
 		zipcsslist=${zipcsslist#zipcss=}
+		lesslist=$(grep '^less=' deploy)
+		lesslist=${lesslist#less=}
 	else
 		deploy=unknown
 	fi
@@ -398,6 +400,9 @@ function invoke_ant
 	fi
 	if [ "${zipcsslist}" = "" ] ; then
 		zipcsslist=_na_dir_
+	fi
+	if [ "${lesslist}" = "" ] ; then
+		lesslist=_na_dir_
 	fi
 
 	prjver="$(head -1 version)"
@@ -466,6 +471,7 @@ function invoke_ant
 		-Dmaindir="$maindir" \
 		-Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
+		-Dless=$lesslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" \
 		-Dproject.name="$prjnm" -Dproject.title="$prjtitle" -Dproject.version="$prjver" \
