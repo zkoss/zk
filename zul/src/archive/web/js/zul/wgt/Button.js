@@ -29,41 +29,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt._uplder = null;
 			v.destroy();
 		}
-	}
-	
-	var _fixMouseupForClick = zk.safari || zk.gecko ? function (wgt, evt){
-		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
-		/*
-		 * Here we have these states :
-		 * 1.down for mouse down in the widget  (down)
-		 * 2.mouse up in the widget but click not fired (up in timeout)
-		 * 3.mouse up in the widget and click event fired (null in timeout)
-		 * 4.mouse up not in the widget (null)
-		 */
-		if ( wgt._fxcfg == 1 ) {
-			var n = wgt.$n(); // the wgt may be detached while clicking quickly to invalidate itself.
-			if (n && jq.contains(n, evt.domTarget)) {
-				wgt._fxcfg = 2;
-				if(wgt._fxctm) clearTimeout(wgt._fxctm);
-				wgt._fxctm = setTimeout(function() {
-					if (wgt._fxcfg == 2) {
-						wgt.doClick_(new zk.Event(wgt, 'onClick', {}));
-						wgt._fxctm = wgt._fxcfg = null;
-					}
-				}, 50);
-			} else
-				wgt._fxcfg = null;
-		}
-	}: zk.$void,
-
-	_fixMousedownForClick = zk.safari || zk.gecko ?  function (wgt) {
-		wgt._fxcfg = 1;
-	}: zk.$void,
-
-	_fixClick = zk.safari || zk.gecko  ? function (wgt) {
-		if(wgt._fxctm) clearTimeout(wgt._fxctm);
-		wgt._fxctm = wgt._fxcfg = null;
-	}: zk.$void; 
+	} 
 	
 var Button = 
 /**
@@ -167,13 +133,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		],
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
-			if (this.isTableLayout_()) {
-				this.rerender();
-			} else {				
-				var n = this.getImageNode();
-				if (n) 
-					n.src = v || '';
-			}
+			var n = this.getImageNode();
+			if (n) 
+				n.src = v || '';
 		},
 		/** Returns the tab order of this component.
 		 * <p>Default: -1 (means the same as browser's default).
@@ -336,7 +298,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	doClick_: function (evt) {
 		if (!evt.domEvent) // mobile will trigger doClick twice
 			return;
-		_fixClick(this);
 		
 		if (!this._disabled) {
 			if (!this._upload)
@@ -353,22 +314,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 		//Unlike DOM, we don't proprogate to parent (otherwise, onClick
 		//will fired)
-	},
-	doMouseDown_: function () {
-		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
-		//set it down to prevent the case for down in other place but up on this widget,
-		//and down in this widget and up for other place
-		
-		_fixMousedownForClick(this);
-		
-		zk.mouseCapture = this; //capture mouse up
-		this.$supers('doMouseDown_', arguments);
-	},
-	doMouseUp_: function (evt) {
-		if (!this._disabled) {
-			_fixMouseupForClick(this, evt);
-		}
-		this.$supers('doMouseUp_', arguments);
 	},
 	setFlexSize_: function(sz) { //Bug #2870652
 		var n = this.$n();
@@ -389,27 +334,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				n.style.width = this._width ? this._width : '';
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
-	},
-	/** Generates the HTML fragment at the right of the button layout.
-	 * <p>Default: do nothing, override it as need.
-	 * @param Array out an array of HTML fragments.
-	 * @since 6.0.0
-	 */
-	renderIcon_: function (out) {
-	},
-	/** Generates the HTML fragment after the button layout table.
-	 * <p>Default: do nothing, override it as need.
-	 * @param Array out an array of HTML fragments.
-	 * @since 6.0.0
-	 */
-	renderInner_: function (out) {
-	},
-	/** Returns whether have to listen to onfocus and onblur event on button element.
-	 * @return boolean
-	 * @since 6.0.0
-	 */
-	isTableLayout_: function () {
-		return this._mold == 'trendy';
 	}
 });
 //handle autodisabled buttons

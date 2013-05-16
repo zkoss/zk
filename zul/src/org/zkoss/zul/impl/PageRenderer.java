@@ -67,7 +67,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		Double number = exec.getBrowser("mobile");
 		if (number == null || number.intValue() == 0) {
-			out.write("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
+			out.write("<!DOCTYPE html>");
+			out.write("<html");
 
 			Double ie = exec.getBrowser("ie");
 			// let ie <= 8 support VML on javascript

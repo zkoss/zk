@@ -3906,6 +3906,8 @@ wgt.setListeners({
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
+	 * @see #doMouseEnter_
+	 * @see #doMouseLeave_
 	 * @see #doMouseOver_
 	 * @see #doMouseOut_
 	 * @see #doMouseDown_
@@ -3927,6 +3929,8 @@ wgt.setListeners({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @see #doMouseMove_
+	 * @see #doMouseEnter_
+	 * @see #doMouseLeave_
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
@@ -3936,6 +3940,53 @@ wgt.setListeners({
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOut_(evt);
+		}
+	},
+	/** Called when the user moves the mouse pointer on top of a widget (or one of its child widget).
+	 * A widget doesn't need to listen the mouseover DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseEnter_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doMouseMove_ 
+	 * @see #doMouseEnter_ 
+	 * @see #doMouseLeave_
+	 * @see #doMouseOver_
+	 * @see #doMouseOut_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+	 * @see #doTooltipOver_
+	 * @since 7.0.0
+     */
+	doMouseEnter_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseEnter_(evt);
+		}
+	},
+	/** Called when the user moves the mouse pointer out of a root widget.
+	 * A widget doesn't need to listen the mouseout DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseLeave_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
+	 * @see #doMouseMove_
+	 * @see #doMouseEnter_
+	 * @see #doMouseLeave_
+	 * @see #doMouseOver_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+	 * @see #doTooltipOut_
+	 * @since 7.0.0
+	 */
+	doMouseLeave_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseLeave_(evt);
 		}
 	},
 	/** Called when the user presses down the mouse button on this widget (or one of its child widget).

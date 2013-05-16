@@ -1,6 +1,7 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/theme" prefix="t" %>
 
 <c:if test="${empty fontSizeM}">
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeM')}"/>
@@ -40,6 +41,33 @@ html, body {
 	height: 100%;
 }
 
+*, *:after, *:before {
+	${t:applyCSS3('box-sizing', 'border-box')};
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input,
+input:focus,
+textarea,
+textarea:focus {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	 outline: none;
+	 -webkit-user-select: text;
+}
+*:focus {
+  outline: none;
+}
+
+<c:if test="${zk.gecko > 0}">
+button::-moz-focus-inner {
+	border: 0;
+}
+</c:if>
 <c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
 	margin: 0; padding: 0 5px;

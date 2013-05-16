@@ -1328,8 +1328,9 @@ zk.log('value is", value);
 	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf('linux') >= 0;
 	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
-	zk.chrome = zk.safari && agent.indexOf('chrome') >= 0;
+	zk.chrome = browser.chrome;
 	zk.safari_ = zk.safari && !zk.chrome; // safari only
+	zk.webkit = browser.webkit;
 	zk.css3 = true;
 	
 	zk.vendor = zk.safari ? 'webkit' : '';
