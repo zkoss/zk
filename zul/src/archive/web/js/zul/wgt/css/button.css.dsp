@@ -1,203 +1,45 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-.z-button,
-.z-button tr td {
-	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM};
-	font-weight: normal;
-	color: black;
-	cursor: pointer;
-	white-space: nowrap;
-}
-button.z-button {
-	padding:0 !important;
-	margin:0 !important;
-	border:0 !important;
-	background: transparent !important;
-	font-size: 0 !important;
-	line-height: 0 !important;
-	width: 4px !important;
-	height: ${zk.gecko > 0 ? 0 : 1}px !important;
-}
-.z-button .z-button-cr * {<%-- IE 6 --%>
-	display: block;
-	width: 4px !important;
-	overflow: hidden;
-	font-size: 0 !important;
-	line-height: 0 !important;
-}
-span.z-button {
-	display: -moz-inline-box;
-	vertical-align: bottom;
-	display: inline-block;
-	margin: 1px 1px 0 0;
-}
-<c:if test="${zk.safari > 0}"><%-- remove browser's focus effect --%>
-.z-button:focus {
-	outline: none !important;
+<%@ taglib uri="http://www.zkoss.org/dsp/web/theme" prefix="t" %>
+<c:if test="${zk.gecko > 0}">
+button::-moz-focus-inner {
+  border: 0;
 }
 </c:if>
 
-.z-button-disd {
-	color: gray;
-	opacity: .6;
-	-moz-opacity: .6;
-	filter: alpha(opacity=60);
-}
-.z-button-disd tr td {
-	cursor: default;
-}
-<%-- os mold --%>
-.z-button-os {
-	font-family: ${fontFamilyC};
+.z-button {
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	font-weight: normal;
+	padding: 3px 10px;
+	margin: 1px 1px 0 0;
+	line-height: 15px;
+	border: 1px solid #A6A6A6;
+	${t:borderRadius('4px')};
+	${t:gradient('ver', '#FEFEFE 0%; #EEEEEE 100%')};
+	text-shadow: 0 1px #FFFFFF;
+	color: black;
 }
-
-<%-- image --%>
-.z-button .z-button-tl,
-.z-button .z-button-tr,
-.z-button .z-button-bl,
-.z-button .z-button-br{
-	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-corner.gif')});
+.z-button:hover {
+	border-color: #8FB9D0;
+	${t:gradient('ver', '#E3F4FD 0%; #C7E9F9 100%')};
 }
-.z-button .z-button-tm, .z-button .z-button-bm  {
-	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-x.gif')});
+.z-button:focus {
+	border-color: #00B9FF;
+	<%--${Button_Focus_Background};--%>
+	${t:boxShadow('inset 1px 1px 1px #0CBCFF, inset -1px -1px 1px #0CBCFF')};
+	outline: none;
 }
-.z-button .z-button-cl, .z-button .z-button-cr {
-	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-y.gif')});
+.z-button:active {
+	border-color: #499EB3;
+	${t:gradient('ver', '#C3F5FE 0%; #86E2F9 100%')};
 }
-.z-button .z-button-cm {
-	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-ctr.gif')});
+.z-button:disabled,
+.z-button:disabled:hover,
+.z-button:disabled:focus,
+.z-button:disabled:active {
+	color: gray;
+	opacity: .6;
+	border: 1px solid #A6A6A6;
+	${t:gradient('ver', '#FEFEFE 0%; #EEEEEE 100%')};
+	${t:boxShadow('none')};
 }
-
-<%-- tl, tr, cl, cr --%>
-.z-button .z-button-tl,
-.z-button .z-button-cl,
-.z-button .z-button-tr,
-.z-button .z-button-cr {
-	background-repeat: no-repeat;
-	background-position: 0 0;
-	width: 4px;
-	padding: 0;
-	margin: 0;
-}
-.z-button .z-button-tr,
-.z-button .z-button-cr {
-	background-position: -4px 0;
-}
-.z-button .z-button-tl,
-.z-button .z-button-tr {
-	height: 4px;
-	<%-- ZK-868, font size will affect of inner button's td height --%>
-	font-size: 0px;
-}
-.z-button-focus .z-button-tl,
-.z-button-focus .z-button-cl {
-	background-position: -16px 0;
-}
-.z-button-focus .z-button-tr,
-.z-button-focus .z-button-cr {
-	background-position: -20px 0;
-}
-.z-button-over .z-button-tl,
-.z-button-over .z-button-cl {
-	background-position: -8px 0;
-}
-.z-button-over .z-button-tr,
-.z-button-over .z-button-cr {
-	background-position: -12px 0;
-}
-.z-button-clk .z-button-tl,
-.z-button-clk .z-button-cl {
-	background-position: -24px 0;
-}
-.z-button-clk .z-button-tr,
-.z-button-clk .z-button-cr {
-	background-position: -28px 0;
-}
-.z-button .z-button-cl {
-	text-align: right;
-}
-
-<%-- bl, br --%>
-.z-button .z-button-bl,
-.z-button .z-button-br {
-	width: 4px;
-	height: 4px;
-	padding: 0;
-	margin: 0;
-	background-repeat: no-repeat;
-	background-position: 0 -4px;
-}
-.z-button .z-button-br {
-	background-position: -4px -4px;
-}
-.z-button-focus .z-button-bl {
-	background-position: -16px -4px;
-}
-.z-button-focus .z-button-br {
-	background-position: -20px -4px;
-}
-.z-button-over .z-button-bl {
-	background-position: -8px -4px;
-}
-.z-button-over .z-button-br {
-	background-position: -12px -4px;
-}
-.z-button-clk .z-button-bl {
-	background-position: -24px -4px;
-}
-.z-button-clk .z-button-br {
-	background-position: -28px -4px;
-}
-
-<%-- tm, bm --%>
-.z-button .z-button-tm {
-	background-repeat: repeat-x;
-	background-position: 0 0;
-}
-.z-button .z-button-bm {
-	height: 4px;
-	background-repeat: repeat-x;
-	background-position: 0 -4px;
-}
-.z-button-focus .z-button-tm {
-	background-position: 0 -16px;
-}
-.z-button-focus .z-button-bm {
-	background-position: 0 -20px;
-}
-.z-button-over .z-button-tm {
-	background-position: 0 -8px;
-}
-.z-button-over .z-button-bm {
-	background-position: 0 -12px;
-}
-.z-button-clk .z-button-tm{
-	background-position: 0 -24px;
-}
-.z-button-clk .z-button-bm {
-	background-position: 0 -28px;
-}
-
-<%-- cm --%>
-.z-button .z-button-cm {
-	margin: 0; overflow: hidden;
-	vertical-align: middle;
-	text-align: center;
-	padding: 0 7px;
-	background-repeat: repeat-x;
-	background-position: 0 0;
-	white-space: nowrap;
-}
-.z-button-focus .z-button-cm {
-	background-position: 0 -1000px;
-}
-.z-button-over .z-button-cm {
-	background-position: 0 -500px;
-}
-.z-button-clk .z-button-cm {
-	background-position: 0 -1500px;
-	padding: 0 6px 0 8px;
-}
-

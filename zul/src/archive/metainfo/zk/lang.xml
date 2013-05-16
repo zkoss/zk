@@ -335,7 +335,7 @@ def alert(m):
 		<text-as>label</text-as><!-- treat text within the element as the label property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/button-os.js</mold-uri>
+			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/button.css.dsp</css-uri>
 		</mold>
 		<mold>
@@ -345,7 +345,7 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>os</mold-name>
-			<mold-uri>mold/button-os.js</mold-uri>
+			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/button.css.dsp</css-uri>
 		</mold>
 	</component>

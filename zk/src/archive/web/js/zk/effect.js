@@ -295,11 +295,12 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		// along the anchor's ancestor chain, from document body to the highest
 		// non-static node with non-auto z-index.
 		var body = document.body,
+			html = body.parentNode,
 			rleaf = $anchor.jq,
 			zi = 'auto', 
 			zic, zicv;
 		// find the highest non-static node with non-auto z-index
-		for (var offp = rleaf.offsetParent(); offp[0] != body; offp = offp.offsetParent())
+		for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != html; offp = offp.offsetParent())
 			if ((zic = offp.css('z-index')) && zic != 'auto') {
 				zi = zk.parseInt(zic);
 				rleaf = offp[0];
