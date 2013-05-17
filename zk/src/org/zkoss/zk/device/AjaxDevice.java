@@ -53,11 +53,10 @@ public class AjaxDevice extends GenericDevice {
 	public String getContentType() {
 		return "text/html";
 	}
-	/** Returns <code>&lt;!DOCTYPE html ...XHTML 1.0 Transitional...&gt;</code>.
+	/** Returns <code>&lt;!DOCTYPE html&gt;</code>.
 	 */
 	public String getDocType() {
-		return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
-			+ "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+		return "<!DOCTYPE html>";
 	}
 
 	/** Converts a package to a path that can be accessible by the class loader
