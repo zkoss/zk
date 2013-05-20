@@ -359,11 +359,16 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			$txt = jq(idtxt, zk),
 			txt = $txt[0],
 			st = txt.style;
-		if (mask)
+		if (mask) {
+			// old IE will get the auto value by default.
+			var zIndex = $txt.css('z-index');
+			if (zIndex == 'auto')
+				zIndex = 1;
 			n.z_mask = new zk.eff.FullMask({
 				mask: jq(idmsk, zk)[0],
-				zIndex: $txt.css('z-index') - 1
+				zIndex: zIndex - 1
 			});
+		}
 
 		if (mask && $txt.length) { //center
 			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
