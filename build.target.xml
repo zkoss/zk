@@ -115,6 +115,8 @@ if="deploy.tomcat.required">
 			<pathelement location="${dist.lib.ext.dir}/zkless.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/lesscss-engine.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/js.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/commons-logging.jar"/>
 		</classpath>
 	</java>
@@ -128,9 +130,9 @@ if="deploy.tomcat.required">
 		<arg value="true"/>
     	<jvmarg value="-Xss1024k"/>
 		<classpath>
-		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		   <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
-		   <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 		</classpath>
 	</java>
 	
@@ -143,9 +145,9 @@ if="deploy.tomcat.required">
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
     	<jvmarg value="-Xss1024k"/>
 		<classpath>
-		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		   <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
-		   <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		    <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 		</classpath>
 	</java>
 </target>
