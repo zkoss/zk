@@ -3,3 +3,7 @@
 .borderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size}')};
 }
+
+.buttonBackground(@start: @baseGradientStart, @end: @baseGradientEnd) {
+  ${t:gradient('ver', '@{start} 0%; @{end} 100%')};
+}

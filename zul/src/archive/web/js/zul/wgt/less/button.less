@@ -4,46 +4,42 @@
 @import "~./zul/less/_import.less";
 
 // Button Variables
-@buttonBorder:      #A6A6A6;
+@buttonBorder:		#A6A6A6;
 @buttonBorderHover: #8FB9D0;
 @buttonBorderFocus: #00B9FF;
 @buttonBorderActive: #499EB3;
 
-.buttonBackground(@start, @end) {
-  ${t:gradient('ver', '@{start} 0%; @{end} 100%')};
-}
-
 .z-button {
-  font-family: @baseTitleFontFamily;
-  font-size: @fontSizeMedium;
-  font-weight: normal;
-  padding: 4px 12px;
-  line-height: @baseLineHeight;
-  border: 1px solid @buttonBorder;
-  .borderRadius();
-  .buttonBackground(#FEFEFE, #EEEEEE);
-  text-shadow: 0 1px #FFFFFF;
-  cursor: pointer;
-  
-  &:hover {
-    border-color: @buttonBorderHover;
-    .buttonBackground(#E3F4FD, #C7E9F9);
-  }
-  &:focus {
-    border-color: @buttonBorderFocus;
-    ${t:boxShadow('inset 1px 1px 1px #0CBCFF, inset -1px -1px 1px #0CBCFF')};
-  }
-  &:active {
-    border-color: @buttonBorderActive;
-    .buttonBackground(#C3F5FE, #86E2F9);
-  }
-  &[disabled] {
-    opacity: .65;
-    border: 1px solid @buttonBorder;
-  .buttonBackground(#FEFEFE, #EEEEEE);
-    ${t:boxShadow('none')};
-  }
-  img {
-    vertical-align: text-top;
-  }
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+	padding: 4px 12px;
+	line-height: @baseLineHeight;
+	border: 1px solid @buttonBorder;
+	.borderRadius();
+	.buttonBackground();
+	text-shadow: 0 1px #FFFFFF;
+	cursor: pointer;
+	
+	&:hover {
+		border-color: @buttonBorderHover;
+		.buttonBackground(#E3F4FD, #C7E9F9);
+	}
+	&:focus {
+		border-color: @buttonBorderFocus;
+		${t:boxShadow('inset 1px 1px 1px #0CBCFF, inset -1px -1px 1px #0CBCFF')};
+	}
+	&:active {
+		border-color: @buttonBorderActive;
+		.buttonBackground(#C3F5FE, #86E2F9);
+	}
+	&[disabled] {
+		opacity: .65;
+		border: 1px solid @buttonBorder;
+		.buttonBackground();
+		${t:boxShadow('none')};
+	}
+	img {
+		vertical-align: text-top;
+	}
 }
