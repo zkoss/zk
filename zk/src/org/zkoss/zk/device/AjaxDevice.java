@@ -53,7 +53,7 @@ public class AjaxDevice extends GenericDevice {
 	public String getContentType() {
 		return "text/html";
 	}
-	/** Returns <code>&lt;!DOCTYPE html&gt;</code>.
+	/** Returns <code>&lt;!DOCTYPE html&gt;</code>. (since 7.0.0)
 	 */
 	public String getDocType() {
 		return "<!DOCTYPE html>";
