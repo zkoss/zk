@@ -133,7 +133,11 @@ if="deploy.tomcat.required">
 		   <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 		</classpath>
 	</java>
-	   
+	
+	<delete>
+		<fileset dir="${codegen.archive.dir}" includes="**/*.css.dsp.src"/>
+	</delete>
+	
 	<java classname="ZipJS" fork="true">
 		<arg value="${src.archive.dir}/${zipcss}"/>
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
