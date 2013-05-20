@@ -1806,7 +1806,10 @@ public class Tree extends MeshElement {
 					Object newTreeitem = item.getAttribute("org.zkoss.zul.model.renderAs");
 					if (newTreeitem instanceof Treeitem) {
 						Treeitem newItem = ((Treeitem)newTreeitem);
-						newItem.appendChild(tc);
+						// B65-ZK-1765 : Add new Tree node cause Null Pointer Exception (treechildren is null, in case of a leaf node)
+						if(tc != null) {
+							newItem.appendChild(tc);
+						}
 						if (_model instanceof TreeOpenableModel) {
 							TreeOpenableModel model = (TreeOpenableModel) _model;
 
