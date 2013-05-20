@@ -109,7 +109,7 @@ if="deploy.tomcat.required">
 <target name="lessc">
 	<java classname="CpLess" fork="true">
 		<arg value="${src.archive.dir}"/>
-		<arg value="${src.archive.dir}"/>
+		<arg value="${codegen.archive.dir}"/>
 		<classpath>
 			<pathelement path="${src.archive.dir}"/>
 			<pathelement location="${dist.lib.ext.dir}/zkless.jar"/>
