@@ -1,9 +1,57 @@
 // ZK Mixins Utility
 
+// EL Function
+// --------------------------------------------
+
+// web/core.dsp.tld
+//---------------------------------------------
+.encodeURL(@property, @url, @rest...) when (@property = background) {
+	background: url(${c:encodeURL('@{url}')}) @rest;
+}
+.encodeURL(@property, @url, @rest...) when (@property = background-image) {
+	background-image: url(${c:encodeURL('@{url}')}) @rest;
+}
+.encodeThemeURL(@property, @url, @rest...) when (@property = background) {
+	background: url(${c:encodeThemeURL('@{url}')}) @rest;
+}
+.encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
+	background-image: url(${c:encodeThemeURL('@{url}')}) @rest;
+}
+// theme.dsp.tld
+//---------------------------------------------
+.gradient(@direction, @value) {
+	${t:gradient('@direction', '@value')};
+}
+.gradValue(@direction, @value) {
+	${t:gradValue('@direction', '@value')};	
+}
+.gradients(@direction, @value) {
+	${t:gradients('@direction', '@value')};
+}
+.box(@name, @value) {
+	${t:box('@name', '@value')};
+}
+.box2(@name, @value, @name2, @value2) {
+	${t:box2('@name', '@value', '@name2', '@value2')};
+}
+.box3(@name, @value, @name2, @value2, @name3, @value3) {
+	${t:box3('@name', '@value', '@name2', '@value2', '@name3', '@value3')};
+}
+.boxShadow(@value) {
+	${t:boxShadow('@value')};
+}
 .borderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size}')};
 }
+.applyCSS3(@key, @value) {
+	${t:applyCSS3('@key', '@value')};
+}
+.transform(@value) {
+	${t:transform('@value')};
+}
 
+// Component Function
+//----------------------------------------------
 .buttonBackground(@start: @baseGradientStart, @end: @baseGradientEnd) {
-  ${t:gradient('ver', '@{start} 0%; @{end} 100%')};
+	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
 }

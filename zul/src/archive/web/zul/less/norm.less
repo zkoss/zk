@@ -1,9 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/web/theme" prefix="t" %>
 
-@import "~./zul/less/_import.less";
+@import "~./zul/less/_header.less";
 @import "~./zul/less/_reset.less";
 @import "~./zul/less/font/_all.less"; // Font-Awesome 3.1.1
 
@@ -12,7 +9,7 @@ html, body {
 }
 
 *, *:after, *:before {
-	${t:applyCSS3('box-sizing', 'border-box')};
+	.applyCSS3('box-sizing', 'border-box');
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -109,13 +106,13 @@ div.z-error {
 	}
 
 	.errnum {
-		background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -31px 4px transparent;
+		.encodeURL(background, '~./zk/img/error.png', no-repeat scroll -31px 4px transparent);
 	}
 	.redraw {
-		background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll 0 0 transparent;
+		.encodeURL(background, '~./zk/img/error.png', no-repeat scroll 0 0 transparent);
 	}
 	.close {
-		background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -17px 0 transparent;
+		.encodeURL(background, '~./zk/img/error.png', no-repeat scroll -17px 0 transparent);
 	}
 }
 
@@ -214,7 +211,7 @@ div.z-log {
 .z-renderdefer {
 	height: 16px; width: 16px;
 	background: transparent no-repeat center;
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/progress.gif')});
+	.encodeThemeURL(background-image, '~./zul/img/misc/progress.gif');
 }
 .z-apply-loading-icon,
 .z-loading-icon {
@@ -250,7 +247,7 @@ div.z-log {
 	left: 0;
 	top: 0;
 	z-index: 16800;
-	background-image: url(${c:encodeURL('~./img/spacer.gif')});
+	.encodeURL(background-image, '~./img/spacer.gif');
 }
 
 .z-temp * { <%-- temporary --%>
@@ -292,7 +289,7 @@ div.z-log {
 }
 .z-shadow .z-shadow-cl{
 	background: transparent repeat-y 0 0;
-	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-cl.png')});
+	.encodeThemeURL(background-image, '~./zul/img/shadow-cl.png');
 	padding-left: 6px;
 	overflow: hidden;
 	height:100%;
@@ -300,7 +297,7 @@ div.z-log {
 }
 .z-shadow .z-shadow-cr{
 	background: transparent repeat-y right;
-	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-cr.png')});
+	.encodeThemeURL(background-image, '~./zul/img/shadow-cr.png');
 	padding-right: 6px;
 	overflow: hidden;
 	height:100%;
@@ -308,7 +305,7 @@ div.z-log {
 }
 .z-shadow .z-shadow-cm {
 	background: transparent repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-m.png')});
+	.encodeThemeURL(background-image, '~./zul/img/shadow-m.png');
 	overflow: hidden;
 	height:100%;
 	zoom: 1;
@@ -333,12 +330,12 @@ div.z-log {
 }
 .z-shadow .z-shadow-tl,
 .z-shadow .z-shadow-tr{
-	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-tlr.png')});
+	.encodeThemeURL(background-image, '~./zul/img/shadow-tlr.png');
 }
 
 .z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br{
-	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-blr.png')});
+	.encodeThemeURL(background-image, '~./zul/img/shadow-blr.png');
 }
 </c:if>
 <%-- Drag-Drop --%>
@@ -381,14 +378,14 @@ span.z-drop-allow {
 	background: none no-repeat scroll 0 0 #EEFFEE;
 }
 span.z-drop-allow {
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/drag-allow.png')});
+	.encodeThemeURL(background-image, '~./zul/img/misc/drag-allow.png');
 }
 div.z-drop-disallow div.z-drop-cnt,
 span.z-drop-disallow {
 	background: none no-repeat scroll 0 0 #FFEEEE;
 }
 span.z-drop-disallow {
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/drag-disallow.png')});
+	.encodeThemeURL(background-image, '~./zul/img/misc/drag-disallow.png');
 }
 .z-drag-ghost {
 	list-style:none;
@@ -427,7 +424,7 @@ span.z-upload input {
 }
 .z-upload-icon {
 	overflow: hidden;
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/prgmeter.png')});
+	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter.png');
 }
 
 <%-- fileupload dialog --%>
@@ -438,14 +435,14 @@ span.z-upload input {
 .z-fileupload-add {
 	cursor: pointer;
 	background: transparent no-repeat 0 -23px;
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/fileupload.gif')});
+	.encodeThemeURL(background-image, '~./zul/img/misc/fileupload.gif');
 	width: 16px;
 	height: 17px;
 }
 .z-fileupload-rm {
 	cursor: pointer;
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/fileupload.gif')});
+	.encodeThemeURL(background-image, '~./zul/img/misc/fileupload.gif');
 	width: 16px;
 	height: 17px;
 }
