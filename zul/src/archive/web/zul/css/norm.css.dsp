@@ -59,6 +59,17 @@ textarea:focus {
 	 outline: none;
 	 -webkit-user-select: text;
 }
+
+input[type="radio"] {
+	-webkit-appearance: radio;
+	-moz-appearance: radio;
+}
+
+input[type="checkbox"] {
+	-webkit-appearance: checkbox;
+	-moz-appearance: checkbox;
+}
+
 *:focus {
   outline: none;
 }
