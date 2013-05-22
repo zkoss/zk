@@ -167,6 +167,9 @@ public class ThemeFns {
 			int len = colorAll.length();
 			if (len > 0)
 				colorAll.delete(len - 1, len);
+		} else if (template == Browser.Old_IE) {
+			color1 = toIEHex(colors[0]);
+			color2 = toIEHex(colors[1]);
 		} else {
 			for (String color : colors) {
 				colorAll.append(color).append(',');
@@ -357,6 +360,30 @@ public class ThemeFns {
 			colors.put(color, toHex(toColor(color)));
 		return colors.get(color);
 	}
+
+
+	@SuppressWarnings("unchecked")
+	private static String toIEHex(String color) {
+		color = color.trim();
+		if (color.startsWith("#")) {
+			int end = color.indexOf(" ");
+			if (end > 0)
+				return color.substring(0, end);
+			return color;
+		}
+		int end = color.indexOf(')') + 1;
+		if (end > 0)
+			color = color.substring(0, end);
+
+		Map<String, String> colors = (Map<String, String>) ServletFns
+				.getCurrentRequest().getAttribute("themeFns.IEcolors");
+		if (colors == null)
+			ServletFns.getCurrentRequest().setAttribute("themeFns.IEcolors",
+					colors = new HashMap<String, String>());
+		if (!colors.containsKey(color))
+			colors.put(color, toIEHex(toColor(color)));
+		return colors.get(color);
+	}
 	private static String locate(String path) {
 		try {
 			if (path.startsWith("~./")) {
@@ -389,9 +416,12 @@ public class ThemeFns {
 			log("The properties file is not loaded correctly! [" + path + "]");
 		}
 	}
-	
+
 	private static String toHex(Color color) {
 		return Colors.getHexString(color);
+	}
+	private static String toIEHex(Color color) {
+		return Colors.getIEHexString(color);
 	}
 
 	private static Color toColor(String color) {
@@ -414,7 +444,7 @@ public class ThemeFns {
 			_prefix = prefix;
 			if ("IE6-9".equals(browser)) {
 				_template = new StringBuilder(
-						"\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
+						"\tbackground-color: %2$s;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
 						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-9 */\n")
 						.toString();
 			} else if ("Chrome,Safari4+".equals(browser)) {

@@ -867,7 +867,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	toStyleOffset: function (x, y) {
 		var el = this.jq[0],
 			oldx = el.style.left, oldy = el.style.top,
-			resetFirst = zk.opera || zk.air || zk.ie8;
+			resetFirst = zk.webkit || zk.opera || zk.air || zk.ie8;
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
 		//test case: Tooltips and Popups
