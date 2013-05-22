@@ -691,6 +691,7 @@ new zul.wnd.Window({
 		this._bklsns = {}; //backup for listners by setListeners
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		this.effects_ = {};
+		this._subzcls = {}; // cache the zclass + subclass name, like zclass + '-hover'
 
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
@@ -783,7 +784,8 @@ new zul.wnd.Window({
 		 * @see #getSclass
 		 * @see #getStyle
 		 */
-		zclass: function (){
+		zclass: function () {
+			this._subzcls = {}; // reset
 			this.rerender();
 		},
 		/** Sets the width of this widget.
@@ -2692,6 +2694,25 @@ function () {
 			this._nodeSolved = true;
 		}
 		return n;
+	},
+	/**
+	 * Returns the sub zclass name that cache for this widget.
+	 * It returns the zclass if the subclass is empty or null,
+	 * since it caches the result (and clean up at the {@link #setZclass()}).
+	 * <pre><code>var subzcls = wgt.$s('hover'); // z-xxx-hover will be return</code></pre>
+	 * @return String
+	 * @see #getZclass()
+	 * @since 7.0.0
+	 */
+	$s: function (subclass) {
+		if (subclass) {
+			var subcls = this._subzcls[subclass];
+			if (!subcls) {
+				subcls = this._subzcls[subclass] = this.getZclass() + '-' + subclass;
+			}
+			return subcls;
+		}
+		return this.getZclass();
 	},
 	/** Clears the cached nodes (by {@link #$n}). */
 	clearCache: function () {
