@@ -151,7 +151,7 @@ if="deploy.tomcat.required">
 		</classpath>
 	</java>
 </target>
-<target name="build.jar" depends="zipjs, gentime, compile" if="build.jar.required">
+<target name="build.jar" depends="lessc, zipjs, gentime, compile" if="build.jar.required">
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
