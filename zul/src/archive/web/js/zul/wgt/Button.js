@@ -14,8 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	function _initUpld(wgt) {
-		if (!zk.ie && wgt._mold == 'trendy')
-			zWatch.listen({onSize: wgt});
 		var v;
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, null, v);
@@ -24,8 +22,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _cleanUpld(wgt) {
 		var v;
 		if (v = wgt._uplder) {
-			if (!zk.ie && wgt._mold == 'trendy')
-				zWatch.unlisten({onSize: wgt});
 			wgt._uplder = null;
 			v.destroy();
 		}
@@ -119,15 +115,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    	}
 		    	return v;
 		    }, 
-		    function (v, opts) {
+		    function (v) {
 		    	if (this.desktop) {
-		    		if (this._mold == "os") {
-		    			var n = this.$n(),
-							zclass = this.getZclass();
-		    			if (zclass)
-		    				jq(n)[(n.disabled = v) ? "addClass": "removeClass"](zclass + "-disd");
-		    		} else
-		    			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind required (because of many CSS classes to update)
+	    			this.$n().disabled = v;	
 		    	}
 		    }
 		],
@@ -257,18 +247,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			img = this.getImage();
 		if (!img) return label;
 
-		img = '<img src="' + img + '" align="absmiddle" />';
+		img = '<img class="', this.$s('image') , '" src="' + img + '" align="absmiddle" />';
 		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
-		if (this._disabled && (!no || !no.zclass)) {
-			var s = this.getZclass();
-			if (s) scls += (scls ? ' ': '') + s + '-disd';
-		}
-		return scls;
 	},
 	bind_: function () {
 		this.$supers(Button, 'bind_', arguments);
@@ -283,17 +265,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		_cleanUpld(this);
 
 		var n = this.$n();
-		if (n) {
-			this.domUnlisten_(n, "onFocus", "doFocus_")
-				.domUnlisten_(n, "onBlur", "doBlur_");
-		}
+		this.domUnlisten_(n, "onFocus", "doFocus_")
+			.domUnlisten_(n, "onBlur", "doBlur_");
 
 		this.$supers(Button, 'unbind_', arguments);
-	},
-
-	onSize: function () {
-		if (this._uplder)
-			this._uplder.sync();
 	},
 	doClick_: function (evt) {
 		if (!evt.domEvent) // mobile will trigger doClick twice

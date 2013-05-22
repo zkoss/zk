@@ -1483,10 +1483,10 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @since 5.0.2
 	 */
 	$super: function (arg0, arg1) {
-		var args = [], bCls = typeof arg0 != "string";
-		for (var j = arguments.length, end = bCls ? 1: 0; --j > end;)
-			args.unshift(arguments[j]);
-		return bCls ? this.$supers(arg0, arg1, args): this.$supers(arg0, args);
+		if (typeof arg0 != "string") {
+			return this.$supers(arg0, arg1, [].slice.call(arguments, 2));
+		}
+		return this.$supers(arg0, [].slice.call(arguments, 1));
 	},
 	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
 	 * <p>Example:

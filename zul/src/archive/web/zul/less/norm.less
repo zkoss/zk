@@ -402,7 +402,7 @@ span.z-drop-disallow {
 	list-style:none;
 }
 
-<%-- Focus Anchor --%>
+// Focus Anchor
 .z-focus-a {
 	position: absolute;
 	left: 0; top: 0;
@@ -417,6 +417,9 @@ span.z-drop-disallow {
 	-moz-outline:0 none; outline:0 none;
 	-moz-user-select:text; -khtml-user-select:text;
 	overflow:hidden;
+	&:focus {
+		-moz-outline:0 none; outline:0 none;
+	};
 }
 
 <%-- upload button --%>
