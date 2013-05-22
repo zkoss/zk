@@ -1,0 +1,285 @@
+@import "~./zul/less/_header.less";
+
+// Button Variables
+@buttonBorder:		#A6A6A6;
+@buttonBorderHover: #8FB9D0;
+@buttonBorderFocus: #00B9FF;
+@buttonBorderActive: #499EB3;
+
+@menuImageSize: 16px;
+@menupopupBackground: #FAFAFA;
+
+
+.hoverStyle() {
+	border-color: @buttonBorderHover;
+	.buttonBackground(rgba(227,244,253,0.0), #C7E9F9);
+}
+.activeStyle() {
+	border-color: #808080 #B6B6B6 #B6B6B6 #808080;
+	.buttonBackground(#EEEEEE, #FEFEFE);
+	.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+}
+.restUl() {
+	background: transparent none repeat 0 0;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+}
+
+// define common font property
+.z-menubar-horizontal, .z-menubar-vertical {
+	position: relative;
+	display: block;
+	padding: 3px 0;
+	border-top: 1px solid #D8D8D8;
+	border-bottom: 1px solid #D8D8D8;
+	.buttonBackground();
+
+	ul {
+		overflow: hidden;
+		.restUl();
+	}
+	li {
+		padding: 0;
+		position: relative;
+		display: block;
+	}
+}
+.z-menu-text,
+.z-menuitem-text {
+	display: inline-block;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+	text-shadow: 0 1px #FFFFFF;
+	vertical-align: middle;
+	color: #555555;
+}
+
+.z-menu-image,
+.z-menuitem-image {
+	max-width: @menuImageSize;
+	margin-right: 3px;
+}
+.z-menu,
+.z-menuitem {
+	&-hover > &-content {
+		.hoverStyle();
+	}
+}
+.z-menu-content, .z-menuitem-content {
+	cursor: pointer;
+	border: 1px solid transparent;
+	.borderRadius();
+	line-height: @baseLineHeight;
+	cursor: pointer;
+	padding: 3px 6px;
+	display: block;
+	text-decoration: none;
+	white-space: nowrap;
+
+	// the 20 is greater than menupopup-separator's z-index
+	z-index: 20;
+	position: relative;
+
+
+	&:hover {
+		.hoverStyle();
+	}
+	&:focus {
+		.hoverStyle();
+	}
+	&:active {
+		.activeStyle();
+	}
+	&[disabled] {
+		opacity: .65;
+		border: 1px solid @buttonBorder;
+		cursor: default;
+		.buttonBackground();
+		.boxShadow('none');
+	}
+}
+.z-menu-selected > .z-menu-content,
+.z-menuitem-selected > .z-menuitem-content {
+	.activeStyle();
+}
+.z-menu-content {
+	.z-menu-icon,
+	.z-menu-icon:hover,
+	.z-menu-icon:active {
+		color: #636363;
+		vertical-align: text-bottom;
+	}
+}
+.z-menubar-vertical {
+	ul {
+		display: inline-table;
+	}
+	li {
+		margin: 3px 2px 4px;
+		&:first-child {
+			margin: 2px;
+		}
+	}
+	.z-menuseparator {
+		border-top: 1px solid #808080;
+		line-height: 0;
+		height: 0;
+		min-height: 0;
+	}
+	.z-menu-content {
+		padding-right: 16px;
+	}
+	.z-menu-icon {
+		position: absolute;
+		right: 5px;
+		top: 5px;
+	}
+}
+.z-menubar-horizontal {
+	li {
+		float: left;
+	}
+	.z-menuseparator {
+		border-left: 1px solid #808080;
+	}
+}
+
+// menupopup
+.z-menupopup-shadow,
+.z-menu-palette-popup,
+.z-menu-picker-popup,
+.z-menu-content-popup {
+	.boxShadow('1px 1px 2px rgba(0, 0, 0, 0.2)');
+}
+
+.z-menupopup {
+	background: @menupopupBackground;
+	border: 1px solid #C2C2C2;
+	padding: 3px;
+	z-index: @basePopupZIndex;
+	left: 0;
+	top: 0;
+	white-space: nowrap;
+
+	ul {
+		.restUl();
+	}
+	.z-menupopup-separator {
+		height: 100%;
+		width: 2px;
+		background: #D8D7D7;
+		position: absolute;
+		top: 0;
+		left: 31px;
+		z-index: 10;
+		border-top: 3px solid @menupopupBackground;
+		border-bottom: 3px solid @menupopupBackground;
+		border-right: 1px solid #FFFFFF;
+
+	}
+	.z-menu-image,
+	.z-menuitem-image {
+		margin-right: 9px;
+		min-width:  @menuImageSize;
+		min-height:  @menuImageSize;
+	}
+	//define checked menuitem effect in menupopup
+	.z-menuitem-checkable .z-menuitem-image {
+		.buttonBackground();
+		border: 1px solid #CFCFCF;
+	}
+	.z-menuitem-content-ck .z-menuitem-image {
+		background-image: ${Menuitem_Checkmark_Checkbox_Selected_Background};
+	}
+	.z-menuseparator {
+		font-size: 1px;
+		line-height: 1px;
+		background-color: #E0E0E0;
+		border-bottom: 1px solid #FFFFFF;
+		display: block;
+		width: auto;
+		position: relative;
+		padding: 0px;
+		min-height: 2px;
+	}
+	.z-menu-content {
+		padding-right: 16px;
+	}
+	.z-menu-icon {
+		position: absolute;
+		right: 5px;
+		top: 5px;
+	}
+}
+.z-menu-content, .z-menuitem-content {
+	& > img {
+		vertical-align: text-bottom;
+	}
+}
+
+//define menubar hor scroll
+.z-menubar-horizontal {
+	&-scroll {
+		overflow: hidden;
+	}
+	&-body {
+		width: 100%;
+		position: relative;
+		overflow: hidden;
+		margin-left: 32px;
+		margin-right: 32px;
+	}
+	&-content {
+		width: 5000px;
+	}
+	&-icon {
+		color: #CCCCCC;
+		text-shadow: 1px 0 #DFDFDF;
+		opacity: 0.7;
+		position: relative;
+		top: 5px;
+		left: 12px;
+	}
+	&-right {
+		.z-menubar-horizontal-icon {
+			left: 13px;
+		}
+	}
+	&-left,
+	&-right {
+		width: 32px;
+		position: absolute;
+
+		&:active {
+			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+		}
+		&:hover {
+			> .z-menubar-horizontal-icon {
+				opacity: 1;
+				color: #91CBFD;
+				text-shadow: 1px 0 #C2E0F9;
+			};
+		};
+	}
+	&-scrollable {
+		border: 1px solid #E1E1E1;
+		.borderRadius('3px 3px 0 0');
+		.buttonBackground();
+		top: 0;
+		right: 0;
+		width: 32px;
+		height: 100%;
+		cursor: pointer;
+		position: absolute;
+		z-index: 25;
+	}
+	&-left {
+		left: 0;
+	}
+}

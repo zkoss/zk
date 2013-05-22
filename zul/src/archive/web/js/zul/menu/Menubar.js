@@ -76,7 +76,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	
 	getZclass: function () {
 		return this._zclass == null ? "z-menubar" +
-				("vertical" == this.getOrient() ? "-ver" : "-hor") : this._zclass;
+				("vertical" == this.getOrient() ? "-vertical" : "-horizontal") : this._zclass;
 	},
 	unbind_: function () {
 		if (this.checkScrollable()) {
@@ -140,7 +140,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		
 		var node = this.$n();
 		if (!node) return;
-		jq(node).addClass(this.getZclass() + "-scroll");
+		jq(node).addClass(this.$s('scroll'));
 		
 		var nodeWidth = zk(node).offsetWidth(),
 			body = this.$n('body'),
@@ -210,12 +210,11 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			body = this.$n('body'),
 			left = this.$n('left'),
 			right = this.$n('right'),
-			css = this._scrolling ? "addClass" : "removeClass";
+			css = this._scrolling ? 'addClass' : 'removeClass';
 
-		jq(node)[css](zcls + "-scroll");
-		jq(body)[css](zcls + "-body-scroll");
-		jq(left)[css](zcls + "-left-scroll");
-		jq(right)[css](zcls + "-right-scroll");
+		jq(node)[css](this.$s('scroll'));
+		jq(left)[css](this.$s('left'));
+		jq(right)[css](this.$s('right'));
 	},
 	_forceStyle: function (node, value) {
 		if (zk.parseInt(value) < 0)
@@ -234,33 +233,33 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	_onOver: function (evt) {
 		this._bOver = true;
-		if (!this.checkScrollable()) return;
-		var evtNode = evt.domTarget,
-			node = this.$n(),
-			left = this.$n('left'),
-			right = this.$n('right'),
-			zcls = this.getZclass();
+//		if (!this.checkScrollable()) return;
+//		var evtNode = evt.domTarget,
+//			node = this.$n(),
+//			left = this.$n('left'),
+//			right = this.$n('right'),
+//			zcls = this.getZclass();
 
-		if (left == evtNode) {
-			jq(left).addClass(zcls + "-left-scroll-over");
-		} else if (right == evtNode) {
-			jq(right).addClass(zcls + "-right-scroll-over");
-		}
+//		if (left == evtNode) {
+//			jq(left).addClass(zcls + "-left-scroll-over");
+//		} else if (right == evtNode) {
+//			jq(right).addClass(zcls + "-right-scroll-over");
+//		}
 	},
 	_onOut: function (evt) {
 		this._bOver = false;
-		if (!this.checkScrollable()) return;
-		var evtNode = evt.domTarget,
-			node = this.$n(),
-			left = this.$n('left'),
-			right = this.$n('right'),
-			zcls = this.getZclass();
-
-	    if (left == evtNode) {
-	    	jq(left).removeClass(zcls + "-left-scroll-over");
-		} else if (right == evtNode) {
-			jq(right).removeClass(zcls + "-right-scroll-over");
-		}
+//		if (!this.checkScrollable()) return;
+//		var evtNode = evt.domTarget,
+//			node = this.$n(),
+//			left = this.$n('left'),
+//			right = this.$n('right'),
+//			zcls = this.getZclass();
+//
+//	    if (left == evtNode) {
+//	    	jq(left).removeClass(zcls + "-left-scroll-over");
+//		} else if (right == evtNode) {
+//			jq(right).removeClass(zcls + "-right-scroll-over");
+//		}
 	},
 	_doScroll: function (evt) {
 		var target = evt.domTarget;
@@ -348,17 +347,8 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
-			child = opts.child,
-			isVert = opts.vertical;
-		if (isVert) {
-			out.push('<tr id="', child.uuid, '-chdextr"');
-			if (child.getHeight())
-				out.push(' height="', child.getHeight(), '"');
-			out.push('>');
-		}
+			child = opts.child;
 		child.redraw(out);
-		if (isVert)
-			out.push('</tr>');
 		if (!opts.out) return out.join('');
 	},
 

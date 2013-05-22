@@ -89,20 +89,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		menu.$class._addActive(menu);
 		zWatch.fire('onFloatUp', menu); //notify all
 	}
-	function _toggleMenu(w) {
-		var pp;
-		if ((pp = w.menupopup)) {
-			if (pp.isOpen())
-				pp.close();
-			else
-				pp.open();
-		} else if ((pp = w._contentHandler)) {
-			 if (pp.isOpen())
-				 pp.onHide();
-			 else
-				pp.onShow();
-		}
-	}
 
 /**
  * A container used to display menus. It should be placed inside a
@@ -154,7 +140,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._hideShadow();
 		var menu;
 		if ((menu = _getMenu(this)) && menu.isTopmost())
-			jq(menu.getAnchor_()).removeClass(menu.getZclass() + "-body-seld");
+			jq(menu.$n()).removeClass(menu.$s('selected'));
 
 		var item = _currentChild(this);
 		if (item) item.$class._rmActive(item);
@@ -314,7 +300,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			// 1. Open the descendant menupopup if any
 			// 2. jump to the next topmost menu
 			if (w && w.$instanceof(zul.menu.Menu)) {
-				_toggleMenu(w);
+				w._togglePopup();
 			} else {
 				var root = _getRootMenu(this);
 				if (root && (root = root._getNextVisibleMenu()))
@@ -331,7 +317,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				zWatch.fire('onFloatUp', w); //notify all
 				this.close({sendOnOpen:true});
 			} else if (w && w.$instanceof(zul.menu.Menu)) {
-				_toggleMenu(w);
+				w._togglePopup();
 			} else {
 				if ((menu = _getMenu(this))) {
 					this.close();

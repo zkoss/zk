@@ -217,22 +217,26 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var added = this.isDisabled() ? this.getZclass() + '-disd' : '';
+			var added = this.isDisabled() ? this.$s('disabled') : '';
+			if (added) scls += (scls ? ' ': '') + added;
+			added = (!this.getImage() && this.isCheckmark()) ? 
+						this.$s('checkable') + (this.isChecked() ? ' ' + this.$s('checked') : '') : '';
 			if (added) scls += (scls ? ' ': '') + added;
 		}
 		return scls;
 	},
 	domContent_: function () {
-		var label = zUtl.encodeXML(this.getLabel()),
-			img = '<span class="' + this.getZclass() + '-img"' +
-				(this._image ? ' style="background-image:url(' + this._image + ')"' : '')
-				+ '></span>';
-		return label ? img + ' ' + label: img;
-	},
-	domStyle_: function (no) {
-		var style = this.$supers('domStyle_', arguments);
-		return this.isTopmost() ?
-			style + 'padding-left:4px;padding-right:4px;': style;
+		var label = '<span class="' + this.$s('text') + '">' + 
+				(zUtl.encodeXML(this.getLabel())) + '</span>',
+			img = this.getImage();
+		
+		if (img)
+			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />';
+		else
+			img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
+				' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
+				this.$s('image') + '" align="absmiddle" />';
+		return img + ' ' + label;
 	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
@@ -247,22 +251,26 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.menu.Menuitem, 'bind_', arguments);
 
 		if (!this.isDisabled()) {
+			var anc = this.$n('a');
 			if (this.isTopmost()) {
-				var anc = this.$n('a');
 				this.domListen_(anc, "onFocus", "doFocus_")
 					.domListen_(anc, "onBlur", "doBlur_");
 			}
+			this.domListen_(anc, "onMouseEnter")
+				.domListen_(anc, "onMouseLeave");
 			if (this._upload) _initUpld(this);
 		}
 	},
 	unbind_: function () {
 		if (!this.isDisabled()) {
 			if (this._upload) _cleanUpld(this);
+			var anc = this.$n('a');
 			if (this.isTopmost()) {
-				var anc = this.$n('a');
 				this.domUnlisten_(anc, "onFocus", "doFocus_")
 					.domUnlisten_(anc, "onBlur", "doBlur_");
 			}
+			this.domUnlisten_(anc, "onMouseEnter")
+				.domUnlisten_(anc, "onMouseLeave");
 		}
 
 		this.$supers(zul.menu.Menuitem, 'unbind_', arguments);
@@ -278,11 +286,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
-
-			if (topmost) {
-				jq(anc).removeClass(this.getZclass() + '-body-over');
-				anc = anc.parentNode;
-			}
+			
+//			if (topmost)
+//				jq(anc).removeClass(this.getZclass() + '-body-over');
+			
 			if (anc.href.startsWith('javascript:')) {
 				if (this.isAutocheck()) {
 					this.setChecked(!this.isChecked());
@@ -318,8 +325,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (zk.safari && (menubar=this.getMenubar()) && menubar._autodrop)
 				menubar._noFloatUp = true;
 				//_noFloatUp used in Menu.js to fix Bug 1852304
-
-			this.$class._rmActive(this);
 			this.$super('doClick_', evt, true);
 		}
 	},
@@ -330,40 +335,21 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_getUploadRef: function () {
 		return this.isTopmost() ? this.$n() : this.$n('a');
 	},
-	doMouseOver_: function (evt) {
+	_doMouseEnter: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) {
 			menubar._bOver = true;
 			menubar._noFloatUp = false;
 		}
-		if (!this.$class._isActive(this) && this._canActivate(evt)) {
-			this.$class._addActive(this);
-			if (zul.menu._nOpen || !this.isTopmost())
-				zWatch.fire('onFloatUp', this); //notify all
-		}
-		this.$supers('doMouseOver_', arguments);
+		if (zul.menu._nOpen || !this.isTopmost())
+			zWatch.fire('onFloatUp', this); //notify all
 	},
-	doMouseOut_: function (evt) {
+	_doMouseLeave: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) {
 			menubar._bOver = false;
 			menubar._closeOnOut();
 		}
-		if (!this.isDisabled()) {
-			var deact = !zk.ie;
-			if (!deact) {
-				var n = this.$n('a'),
-					xy = zk(n).revisedOffset(),
-					x = evt.pageX,
-					y = evt.pageY,
-					diff = this.isTopmost() ? 1 : 0;
-				deact = x - diff <= xy[0] || x > xy[0] + n.offsetWidth
-					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight + (zk.ie ? -1 : 0);
-			}
-			if (deact)
-				this.$class._rmActive(this);
-		}
-		this.$supers('doMouseOut_', arguments);
 	},
 	deferRedrawHTML_: function (out) {
 		var tag = this.isTopmost() ? 'td' : 'li';
@@ -374,30 +360,22 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n) 
-				this._eimg = this.$n('b') || this.$n('a').firstChild;
+				this._eimg = this.$n('a').firstChild;
 		}
 		return this._eimg;
 	}
 }, {
 	_isActive: function (wgt) {
-		var top = wgt.isTopmost(),
-			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		return jq(n).hasClass(cls);
+		return jq(wgt.$n()).hasClass(wgt.$s('hover'));
 	},
 	_addActive: function (wgt) {
-		var top = wgt.isTopmost(),
-			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		jq(n).addClass(cls);
+		var top = wgt.isTopmost();
+		jq(wgt.$n()).addClass(wgt.$s('hover'));
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
 	},
 	_rmActive: function (wgt) {
-		var top = wgt.isTopmost(),
-			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		jq(n).removeClass(cls);
+		return jq(wgt.$n()).removeClass(wgt.$s('hover'));
 	}
 })).prototype['onShow'] = function () {
 	if (this._uplder)

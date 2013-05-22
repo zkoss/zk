@@ -15,24 +15,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _toggleClickableCSS(wgt, remove) {
 		if (wgt.isListen('onClick')) {
-			if (remove) 
-				jq(wgt.$n()).removeClass(wgt.getZclass() + '-body-clk-over');
-			else 
-				jq(wgt.$n()).addClass(wgt.getZclass() + '-body-clk-over');
+			jq(wgt.$n())[remove ? 'removeClass' : 'addClass'](wgt.$s('selected'));
 		}
 	}
 	function _doClick(wgt, evt) {
 		if (wgt.isListen('onClick')) {
-			var arrowWidth = wgt._getArrowWidth(), //note : /img/menu/btn-arrow.gif : width = 12
-				node = wgt.$n(),
-				clk = wgt.isTopmost() ? jq(node).find('TABLE'): jq(node),
-				offsetWidth = zk(clk).offsetWidth(),
-				clickArea = offsetWidth - arrowWidth,
-				ofs = zk(clk).revisedOffset(),
-				clickOffsetX = evt.domEvent.clientX - ofs[0];
+			var clk = jq(wgt.$n()).find('.' + wgt.$s('text')),
+				zclk = zk(clk),
+				width = zclk.offsetWidth(),
+				offsetX = zclk.revisedOffset()[0];
 
-			if (clickOffsetX > clickArea) {
-				jq(wgt.getAnchor_()).addClass(wgt.getZclass() + '-body-seld');
+			if (evt.pageX > offsetX + width - 10) { //Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
+				jq(wgt.$n()).addClass(wgt.$s('selected'));
 				wgt.menupopup._shallClose = false;
 				wgt._togglePopup();
 				evt.stop();
@@ -40,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
 				
 		} else {
-			jq(wgt.getAnchor_()).addClass(wgt.getZclass() + '-body-seld');
+			jq(wgt.$n()).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
 			wgt.menupopup._shallClose = false;
 			wgt._togglePopup();
 		}
@@ -124,7 +118,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	 */
 	open: function () {
 		if (this.desktop && this.isTopmost()) {
-			jq(this.getAnchor_()).addClass(this.getZclass() + '-body-seld');
+			jq(this.$n()).addClass(this.$s('selected'));
 			var mb = this.getMenubar();
 			if (mb._lastTarget)
 				this.$class._rmActive(mb._lastTarget);
@@ -137,16 +131,20 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	getAnchor_: function () {
 		return this.$n('a');
 	},
-	// since ZK 6.5.0 internal use only.
-	getButton_: function () {
-		return this.$n('b');
-	},
-	domContent_: function () {
-		var label = zUtl.encodeXML(this.getLabel()),
-			img = ['<span id="', this.uuid, '-img" class="', this.getZclass(), '-img"'];
-			
-		img.push(this._image ? ' style="background-image:url(' + this._image + ')"' : '', '></span>', label ? ' ' + label : '');
-		return img.join('');
+	domContent_: function () { 
+		label = '<span class="' + this.$s('text') + '">' + 
+			(zUtl.encodeXML(this.getLabel())) + '</span>',
+		img = this.getImage(),
+		icon = '<i class="' + this.$s('icon') + ' z-icon-caret-' +
+				(this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '"></i>';
+	
+		if (img)
+			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />';
+		else
+			img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
+				' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
+				this.$s('image') + '" align="absmiddle" />';
+		return img + ' ' + label + ' ' + icon;
 	},
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
@@ -158,11 +156,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	beforeParentChanged_: function (newParent) {
 		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
 		this.$supers("beforeParentChanged_", arguments);
-	},
-	domStyle_: function (no) {
-		var style = this.$supers('domStyle_', arguments);
-		return this.isTopmost() ?
-			style + 'padding-left:4px;padding-right:4px;': style;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -204,7 +197,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this._contentHandler.onHide();
 	},
 	focus_: function (timeout, ignoreActive/* used for Menupopup.js*/) {
-		if (this.isTopmost() && zk(this.getButton_()).focus(timeout)) {
+		if (this.isTopmost() && zk(this.getAnchor_()).focus(timeout)) {
 			// fixed for pressing TAB key from menupopup when the menupopup
             // is the last one, in IE it will delay to show the active effect.
 			// We have to use the ignoreActive to avoid adding the active effect
@@ -240,11 +233,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		
 		// only support for the topmost menu
 		if (this.isTopmost()) {
-			var keyCode = evt.keyCode,
-				mb = this.getMenubar();
+			var keyCode = evt.keyCode;
 			
 			// switch the navigation key when in vertical view
-			if ('vertical' == mb.getOrient()) {
+			if (this.isVertical_()) {
 				switch (keyCode) {
 				case 38: //UP
 					keyCode = 37;
@@ -266,7 +258,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				// 2. make the menu as focus effect
 				var pp = this.menupopup;
 				if (pp && pp.isOpen()) {
-					jq(this.getAnchor_()).removeClass(this.getZclass() + '-body-seld');
+					jq(this.$n()).removeClass(this.$s('hover')).removeClass(this.$s('selected'));
 					pp.close();
 				}
 				this.$class._addActive(this); // keep the focus
@@ -276,7 +268,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				// 1. open menupopup if any.
 				// 2. pass the focus control to menupopup
 				if (this.menupopup) {
-					jq(this.getAnchor_()).addClass(this.getZclass() + '-body-seld');
+					jq(this.$n()).addClass(this.$s('selected')).removeClass(this.$s('hover'));
 					this.menupopup._shallClose = false;
 					this.menupopup.open();
 				}
@@ -323,40 +315,27 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	bind_: function () {
 		this.$supers(zul.menu.Menu, 'bind_', arguments);
 
-		var anc = this.getAnchor_(),
-			type = this._contentType;
-		if (!this.isTopmost()) {
-			var	n = this.$n();
-			this.domListen_(anc, "onFocus", "doFocus_")
-				.domListen_(anc, "onBlur", "doBlur_")
-				.domListen_(n, "onMouseOver")
-				.domListen_(n, "onMouseOut");
-		} else {
-			this.domListen_(this.getButton_(), "onFocus", "doFocus_") // used to handle keystroke
-				.domListen_(anc, "onMouseOver")
-				.domListen_(anc, "onMouseOut");
-			if (this.isListen('onClick')) {
-				jq(this.$n()).addClass(this.getZclass() + '-body-clk');
-			}
+		var anc = this.getAnchor_();
+
+		this.domListen_(anc, "onFocus", "doFocus_") // used to handle keystroke
+			.domListen_(anc, "onBlur", "doBlur_")
+			.domListen_(anc, "onMouseEnter")
+			.domListen_(anc, "onMouseLeave");
+		
+		
+		if (this.isTopmost() && this.isListen('onClick')) {
+			jq(this.$n()).addClass(this.$s('clickable'));
 		}
 
 		if (this._contentHandler)
 			this._contentHandler.bind();
 	},
 	unbind_: function () {
-		if (!this.isTopmost()) {
-			var anc = this.getAnchor_(),
-				n = this.$n();
-			this.domUnlisten_(anc, "onFocus", "doFocus_")
-				.domUnlisten_(anc, "onBlur", "doBlur_")
-				.domUnlisten_(n, "onMouseOver")
-				.domUnlisten_(n, "onMouseOut");
-		} else {
-			var anc = this.getAnchor_();
-			this.domUnlisten_(anc, "onMouseOver")
-				.domUnlisten_(anc, "onMouseOut")
-				.domUnlisten_(this.getButton_(), "onFocus", "doFocus_");
-		}
+		var anc = this.getAnchor_();
+		this.domUnlisten_(anc, "onFocus", "doFocus_")
+			.domUnlisten_(anc, "onBlur", "doBlur_")
+			.domUnlisten_(anc, "onMouseEnter")
+			.domUnlisten_(anc, "onMouseLeave");
 
 		if (this._contentHandler)
 			this._contentHandler.unbind();
@@ -398,14 +377,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		else
 			zk(this.menupopup.$n('a')).focus(); // force to get a focus 
 	},
-	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
+	_doMouseEnter: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) {
 			menubar._bOver = true;
 			menubar._noFloatUp = false;
 		}
-		if (this.$class._isActive(this)) return;
-
+		
 		var	topmost = this.isTopmost();
 		if(topmost)
 			_toggleClickableCSS(this);
@@ -433,12 +411,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$class._addActive(this);
 	},
-	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
+	_doMouseLeave: function (evt) { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = false;
 		this._updateHoverImage(); // remove hover image if any
-		if (!zk.ie && jq.isAncestor(this.getAnchor_(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
-			return; // don't deactivate
 	
 		var topmost = this.isTopmost(),
 			menupopup = this.menupopup;
@@ -459,28 +435,34 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n) 
-				this._eimg = this.getButton_();
+				this._eimg = this.$n('a').firstChild;
 		}
 		return this._eimg;
 	},
 	ignoreDescendantFloatUp_: function (des) {
 		return des && des.$instanceof(zul.menu.Menupopup);
+	},
+	isVertical_: function () {
+		if (this.isTopmost()) {
+			var bar = this.getMenubar();
+			if (bar)
+				return 'vertical' == bar.getOrient();
+		}
+		return false;
 	}
 }, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.getAnchor_() : wgt.$n(),
+			n = wgt.$n(),
 			menupopup = wgt.menupopup,
-			cls = wgt.getZclass();
-		cls += top ? menupopup && menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
+			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
 		return jq(n).hasClass(cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.getAnchor_() : wgt.$n(),
+			n = wgt.$n(),
 			menupopup = wgt.menupopup,
-			cls = wgt.getZclass();
-		cls += top ? menupopup && menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
+			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
 		jq(n).addClass(cls);
 		if (top) {
 			var mb = wgt.getMenubar();
@@ -492,12 +474,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	_rmActive: function (wgt, ignoreSeld/* used for mouseout when topmost*/) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.getAnchor_() : wgt.$n(),
-			zcls = wgt.getZclass(),
-			cls = zcls + (top ? (!ignoreSeld && wgt.menupopup.isOpen()) ? '-body-seld' : '-body-over' : '-over');
-		var anode = jq(n);
-		anode.removeClass(cls);
-		if(top && !(anode.hasClass(zcls + '-body-seld') || anode.hasClass(zcls + '-body-over')))
+			n = wgt.$n(),
+			menupopup = wgt.menupopup,
+			cls = top ? (!ignoreSeld && menupopup && menupopup.isOpen()) ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
+		var anode = jq(n).removeClass(cls);
+		if(top && !(anode.hasClass(wgt.$s('selected')) || anode.hasClass(wgt.$s('hover'))))
 			_toggleClickableCSS(wgt, true);
 	}
 });
@@ -517,8 +498,8 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	 	var wgt = this._wgt,
 			zcls = wgt.getZclass();
 
-	 	out.push('<div id="', wgt.uuid, '-cnt-pp" class="', zcls,
-		'-cnt-pp" style="display:none"><div class="', zcls,'-cnt-body">', this._content, '</div></div>');
+	 	out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
+		'" style="display:none"><div class="', wgt.$s('content-body'), '">', this._content, '</div></div>');
 	 },
 	 bind: function () {
 	 	var wgt = this._wgt;
@@ -527,7 +508,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 			zWatch.listen({onFloatUp: wgt, onHide: wgt});
 		}
 		
-		this._pp = jq('#' + wgt.uuid + '-' + 'cnt-pp')[0];
+		this._pp = wgt.$n('cnt-pp');
 	 },
 	 unbind: function () {
 	 	var wgt = this._wgt;
@@ -590,16 +571,10 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	 },
 	 getPosition: function () {
 	 	var wgt = this._wgt;
-		if (wgt.isTopmost()) {
-			var bar = wgt.getMenubar();
-			if (bar)
-				return 'vertical' == bar.getOrient() ? 'end_before' : 'after_start';
-		}
-		return 'end_before';
+	 	return wgt.isVertical_() ? 'end_before' : 'after_start';
 	},
 	deferRedrawHTML_: function (out) {
-		var tag = this.isTopmost() ? 'td' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
+		out.push('<li', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></li>');
 	}
 });
 
