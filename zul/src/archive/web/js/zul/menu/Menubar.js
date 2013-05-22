@@ -84,11 +84,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				right = this.$n('right');
 			if (left && right) {
 				this.domUnlisten_(left, 'onClick', '_doScroll')
-					.domUnlisten_(left, 'onMouseover', '_onOver')
-					.domUnlisten_(left, 'onMouseout', '_onOut')
-					.domUnlisten_(right, 'onClick', '_doScroll')
-					.domUnlisten_(right, 'onMouseover', '_onOver')
-					.domUnlisten_(right, 'onMouseout', '_onOut');
+					.domUnlisten_(right, 'onClick', '_doScroll');
 			}
 			zWatch.unlisten({onSize: this});
 		}
@@ -103,11 +99,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				right = this.$n('right');
 			if (left && right) {
 				this.domListen_(left, 'onClick', '_doScroll')
-					.domListen_(left, 'onMouseover', '_onOver')
-					.domListen_(left, 'onMouseout', '_onOut')
-					.domListen_(right, 'onClick', '_doScroll')
-					.domListen_(right, 'onMouseover', '_onOver')
-					.domListen_(right, 'onMouseout', '_onOut');
+					.domListen_(right, 'onClick', '_doScroll');
 			}
 			zWatch.listen({onSize: this});
 		}
@@ -230,36 +222,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		this._bOver = false;
 		this._closeOnOut();
 		this.$supers('doMouseOut_', arguments);
-	},
-	_onOver: function (evt) {
-		this._bOver = true;
-//		if (!this.checkScrollable()) return;
-//		var evtNode = evt.domTarget,
-//			node = this.$n(),
-//			left = this.$n('left'),
-//			right = this.$n('right'),
-//			zcls = this.getZclass();
-
-//		if (left == evtNode) {
-//			jq(left).addClass(zcls + "-left-scroll-over");
-//		} else if (right == evtNode) {
-//			jq(right).addClass(zcls + "-right-scroll-over");
-//		}
-	},
-	_onOut: function (evt) {
-		this._bOver = false;
-//		if (!this.checkScrollable()) return;
-//		var evtNode = evt.domTarget,
-//			node = this.$n(),
-//			left = this.$n('left'),
-//			right = this.$n('right'),
-//			zcls = this.getZclass();
-//
-//	    if (left == evtNode) {
-//	    	jq(left).removeClass(zcls + "-left-scroll-over");
-//		} else if (right == evtNode) {
-//			jq(right).removeClass(zcls + "-right-scroll-over");
-//		}
 	},
 	_doScroll: function (evt) {
 		var target = evt.domTarget;
