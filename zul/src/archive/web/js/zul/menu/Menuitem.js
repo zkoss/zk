@@ -37,7 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-menuitem.
  */
 zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
-	_value: "",
+	_value: '',
 
 	$define: {
 		/** Returns whether the check mark shall be displayed in front
@@ -111,14 +111,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		checked: function (checked) {
 			if (checked)
 				this._checkmark = checked;
-			var n = this.$n('a');
+			var n = this.$n();
 			if (n && !this.isTopmost() && !this.getImage()) {
-				var zcls = this.getZclass(),
-					$n = jq(n);
-				$n.removeClass(zcls + '-cnt-ck')
-					.removeClass(zcls + '-cnt-unck');
+				var $n = jq(n);
+				$n[checked ? 'addClass' : 'removeClass'](this.$s('checked'));
 				if (this._checkmark)
-					$n.addClass(zcls + (checked ? '-cnt-ck' : '-cnt-unck'));
+					$n.addClass(this.$s('checkable'));
 			}
 		},
 		/** Returns whether the menuitem check mark will update each time
@@ -212,7 +210,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	beforeParentChanged_: function (newParent) {
 		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
-		this.$supers("beforeParentChanged_", arguments);
+		this.$supers('beforeParentChanged_', arguments);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
@@ -228,6 +226,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = '<span class="' + this.$s('text') + '">' + 
 				(zUtl.encodeXML(this.getLabel())) + '</span>',
+			icon = '<i class="' + this.$s('icon') + ' z-icon-ok"></i>',
 			img = this.getImage();
 		
 		if (img)
@@ -236,7 +235,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
 				' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
 				this.$s('image') + '" align="absmiddle" />';
-		return img + ' ' + label;
+		return img + (this.isCheckmark() ? icon : '') + ' ' + label;
 	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
@@ -253,11 +252,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this.isDisabled()) {
 			var anc = this.$n('a');
 			if (this.isTopmost()) {
-				this.domListen_(anc, "onFocus", "doFocus_")
-					.domListen_(anc, "onBlur", "doBlur_");
+				this.domListen_(anc, 'onFocus', 'doFocus_')
+					.domListen_(anc, 'onBlur', 'doBlur_');
 			}
-			this.domListen_(anc, "onMouseEnter")
-				.domListen_(anc, "onMouseLeave");
+			this.domListen_(anc, 'onMouseEnter');
 			if (this._upload) _initUpld(this);
 		}
 	},
@@ -266,11 +264,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (this._upload) _cleanUpld(this);
 			var anc = this.$n('a');
 			if (this.isTopmost()) {
-				this.domUnlisten_(anc, "onFocus", "doFocus_")
-					.domUnlisten_(anc, "onBlur", "doBlur_");
+				this.domUnlisten_(anc, 'onFocus', 'doFocus_')
+					.domUnlisten_(anc, 'onBlur', 'doBlur_');
 			}
-			this.domUnlisten_(anc, "onMouseEnter")
-				.domUnlisten_(anc, "onMouseLeave");
+			this.domUnlisten_(anc, 'onMouseEnter');
 		}
 
 		this.$supers(zul.menu.Menuitem, 'unbind_', arguments);
@@ -286,9 +283,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
-			
-//			if (topmost)
-//				jq(anc).removeClass(this.getZclass() + '-body-over');
 			
 			if (anc.href.startsWith('javascript:')) {
 				if (this.isAutocheck()) {
@@ -336,20 +330,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		return this.isTopmost() ? this.$n() : this.$n('a');
 	},
 	_doMouseEnter: function (evt) {
-		var menubar = this.getMenubar();
-		if (menubar) {
-			menubar._bOver = true;
-			menubar._noFloatUp = false;
-		}
-		if (zul.menu._nOpen || !this.isTopmost())
+		if (zul.menu._nOpen || this.isTopmost())
 			zWatch.fire('onFloatUp', this); //notify all
-	},
-	_doMouseLeave: function (evt) {
-		var menubar = this.getMenubar();
-		if (menubar) {
-			menubar._bOver = false;
-			menubar._closeOnOut();
-		}
 	},
 	deferRedrawHTML_: function (out) {
 		var tag = this.isTopmost() ? 'td' : 'li';

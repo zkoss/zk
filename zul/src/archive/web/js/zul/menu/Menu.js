@@ -15,17 +15,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _toggleClickableCSS(wgt, remove) {
 		if (wgt.isListen('onClick')) {
-			jq(wgt.$n())[remove ? 'removeClass' : 'addClass'](wgt.$s('selected'));
+			jq(wgt.$n())[remove ? 'removeClass' : 'addClass'](wgt.$s('hover'));
 		}
 	}
 	function _doClick(wgt, evt) {
 		if (wgt.isListen('onClick')) {
-			var clk = jq(wgt.$n()).find('.' + wgt.$s('text')),
+			var clk = jq(wgt.$n()).find('.' + wgt.$s('separator')),
 				zclk = zk(clk),
-				width = zclk.offsetWidth(),
 				offsetX = zclk.revisedOffset()[0];
 
-			if (evt.pageX > offsetX + width - 10) { //Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
+			if (evt.pageX > offsetX) { //Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
 				jq(wgt.$n()).addClass(wgt.$s('selected'));
 				wgt.menupopup._shallClose = false;
 				wgt._togglePopup();
@@ -132,19 +131,20 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		return this.$n('a');
 	},
 	domContent_: function () { 
-		label = '<span class="' + this.$s('text') + '">' + 
+		var label = '<span class="' + this.$s('text') + '">' + 
 			(zUtl.encodeXML(this.getLabel())) + '</span>',
 		img = this.getImage(),
 		icon = '<i class="' + this.$s('icon') + ' z-icon-caret-' +
-				(this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '"></i>';
+				(this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '"></i>',
+		separator = '<div class="' + this.$s('separator') + '"></div>';
 	
 		if (img)
-			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />';
+			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />';
 		else
-			img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
+			img = '<img id="'+ this.uuid  + '-img" ' + (this.isTopmost() ? 'style="display:none"' : '') +
 				' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
 				this.$s('image') + '" align="absmiddle" />';
-		return img + ' ' + label + ' ' + icon;
+		return img + ' ' + label + ' ' + separator + icon;
 	},
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
@@ -179,9 +179,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	 * @return zul.menu.Menubar
 	 */
 	getMenubar: function () {
-		for (var p = this.parent; p; p = p.parent)
+		for (var p = this.parent; p; p = p.parent) {
 			if (p.$instanceof(zul.menu.Menubar))
 				return p;
+
+			if (!p.$instanceof(zul.menu.Menupopup, zul.menu.Menu))
+				break; // not found
+		}
 		return null;
 	},
 	onShow: function () {
@@ -317,10 +321,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 		var anc = this.getAnchor_();
 
-		this.domListen_(anc, "onFocus", "doFocus_") // used to handle keystroke
-			.domListen_(anc, "onBlur", "doBlur_")
-			.domListen_(anc, "onMouseEnter")
-			.domListen_(anc, "onMouseLeave");
+		this.domListen_(anc, 'onFocus', 'doFocus_') // used to handle keystroke
+			.domListen_(anc, 'onBlur', 'doBlur_')
+			.domListen_(anc, 'onMouseEnter')
+			.domListen_(anc, 'onMouseLeave');
 		
 		
 		if (this.isTopmost() && this.isListen('onClick')) {
@@ -332,10 +336,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var anc = this.getAnchor_();
-		this.domUnlisten_(anc, "onFocus", "doFocus_")
-			.domUnlisten_(anc, "onBlur", "doBlur_")
-			.domUnlisten_(anc, "onMouseEnter")
-			.domUnlisten_(anc, "onMouseLeave");
+		this.domUnlisten_(anc, 'onFocus', 'doFocus_')
+			.domUnlisten_(anc, 'onBlur', 'doBlur_')
+			.domUnlisten_(anc, 'onMouseEnter')
+			.domUnlisten_(anc, 'onMouseLeave');
 
 		if (this._contentHandler)
 			this._contentHandler.unbind();
@@ -346,6 +350,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_getArrowWidth: function () {
 		return 20;
 	},
+	_showContentHandler: function () {
+		var content = this._contentHandler;
+		if (content && !content.isOpen())
+			content.onShow();
+	},
 	doClick_: function (evt) {
 		if (this.menupopup) {
 			if (this.isTopmost())
@@ -353,34 +362,33 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			// toggle the open/close status of menupopup/contenthandler
 			_doClick(this, evt);
 		} else {
-			var content = this._contentHandler;
-			if (content && !content.isOpen())
-				content.onShow();
+			this._showContentHandler();
 		}
-
 	},
 	doMouseOver_: function () {
 		if (!this.isTopmost()) {
-			var content = this._contentHandler;
-			if (content && !content.isOpen())
-				content.onShow();
+			this._showContentHandler();
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	_togglePopup: function () {
-		if (!this.menupopup.isOpen()){
-			if(this.isTopmost())
-				_toggleClickableCSS(this);
-			this.menupopup.open();
-		} else if (this.isTopmost()) 
-			this.menupopup.close({sendOnOpen: true});
-		else
-			zk(this.menupopup.$n('a')).focus(); // force to get a focus 
+		// show the content handler
+		if (!this.menupopup && this._contentHandler) {
+			this._showContentHandler();
+		} else {
+			if (!this.menupopup.isOpen()){
+				if(this.isTopmost())
+					_toggleClickableCSS(this);
+				this.menupopup.open();
+			} else if (this.isTopmost()) 
+				this.menupopup.close({sendOnOpen: true});
+			else
+				zk(this.menupopup.$n('a')).focus(); // force to get a focus
+		}
 	},
 	_doMouseEnter: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) {
-			menubar._bOver = true;
 			menubar._noFloatUp = false;
 		}
 		
@@ -413,7 +421,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	_doMouseLeave: function (evt) { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
-		if (menubar) menubar._bOver = false;
 		this._updateHoverImage(); // remove hover image if any
 	
 		var topmost = this.isTopmost(),
@@ -423,12 +430,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (menupopup && menubar._autodrop) {
 				if (menupopup.isOpen())
 					menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				menubar._closeOnOut();
 			}
 		} else if (!menupopup || !menupopup.isOpen())
 			this.$class._rmActive(this);
-		else if (menupopup && menubar && menubar._autodrop)
-			menubar._closeOnOut();
 	},
 	//@Override
 	getImageNode: function () {
@@ -484,24 +488,24 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 });
 
 zul.menu.ContentHandler = zk.$extends(zk.Object, {
-	 $init: function(wgt, content) {
+	$init: function(wgt, content) {
 		this._wgt = wgt;
 		this._content = content;
-	 },
-	 setContent: function (content) {
+	},
+	setContent: function (content) {
 	 	if (this._content != content || !this._pp) {
 			this._content = content;
 			this._wgt.rerender();	
 		}
-	 },
-	 redraw: function (out) {
+	},
+	redraw: function (out) {
 	 	var wgt = this._wgt,
 			zcls = wgt.getZclass();
 
 	 	out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
-		'" style="display:none"><div class="', wgt.$s('content-body'), '">', this._content, '</div></div>');
-	 },
-	 bind: function () {
+		'" style=""><div class="', wgt.$s('content-body'), '">', this._content, '</div></div>');
+	},
+	bind: function () {
 	 	var wgt = this._wgt;
 	 	if (!wgt.menupopup) {
 			wgt.domListen_(wgt.$n(), 'onClick', 'onShow');
@@ -509,8 +513,11 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		}
 		
 		this._pp = wgt.$n('cnt-pp');
-	 },
-	 unbind: function () {
+
+	 	jq(this._pp, zk).bind('mouseenter', this.proxy(this._doMouseOver))
+	 		.bind('mouseleave', this.proxy(this._doMouseOut));
+	},
+	unbind: function () {
 	 	var wgt = this._wgt;
 	 	if (!wgt.menupopup) {
 			if (this._shadow) {
@@ -521,55 +528,61 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 			zWatch.unlisten({onFloatUp: wgt, onHide: wgt});
 		}
 
+	 	jq(this._pp, zk).unbind('mouseenter', this.proxy(this._doMouseOver))
+	 		.unbind('mouseleave', this.proxy(this._doMouseOut));
 		this._pp = null;
-	 },
-	 isOpen: function () {
-		 var pp = this._pp;
-		 return (pp && zk(pp).isVisible());
-	 },
-	 onShow: function () {
+	},
+	isOpen: function () {
+		var pp = this._pp;
+		return (pp && zk(pp).isVisible());
+	},
+	_doMouseEnter: function () {
+		var menubar = this._wgt.getMenubar();
+		if (menubar) menubar._bOver = true;
+	},
+	_doMouseLeave: function () {
+		var menubar = this._wgt.getMenubar();
+		if (menubar) menubar._bOver = false;
+	},
+	onShow: function () {
 	 	var wgt = this._wgt,
 			pp = this._pp;
 		if (!pp) return;
-			
-		pp.style.width = pp.style.height = "auto";
-		pp.style.position = "absolute";
-		pp.style.overflow = "auto";
-		pp.style.display = "block";
-		pp.style.zIndex = "88000";
+		
+		pp.style.display = 'block';
 			
 		jq(pp).zk.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		zk(pp).position(wgt.$n(), this.getPosition());
 		this.syncShadow();
 	 },
-	 onHide: function () {
+	onHide: function () {
 		var pp = this._pp;
 		if (!pp || !zk(pp).isVisible()) return;
-
-		pp.style.display = "none";
+		
+		pp.style.display = 'none';
 		jq(pp).zk.undoVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		this.hideShadow();
-	 },
-	 onFloatUp: function (ctl) {
+	},
+	onFloatUp: function (ctl) {
 		if (!zUtl.isAncestor(this._wgt, ctl.origin))
 			this.onHide();
-	 },
-	 syncShadow: function () {
+	},
+	syncShadow: function () {
 	 	if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(this._wgt.$n("cnt-pp"), {stackup: zk.useStackup});
+			this._shadow = new zk.eff.Shadow(this._wgt.$n('cnt-pp'), {stackup: zk.useStackup});
 		this._shadow.sync();
-	 },
-	 hideShadow: function () {
-	 	this._shadow.hide();
-	 },
-	 destroy: function () {
+	},
+	hideShadow: function () {
+		this._shadow.hide();
+	},
+	destroy: function () {
 	 	this._wgt.rerender();
-	 },
-	 getPosition: function () {
+	},
+	getPosition: function () {
 	 	var wgt = this._wgt;
 	 	return wgt.isVertical_() ? 'end_before' : 'after_start';
 	},
