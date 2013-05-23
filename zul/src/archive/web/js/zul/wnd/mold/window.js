@@ -22,16 +22,20 @@ function (out, skipper) {
 		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this),
 		bordercls = this._border;
 
-	bordercls = "normal" == bordercls ? "":
-		"none" == bordercls ? "-noborder" : '-' + bordercls;
+	bordercls = 'normal' == bordercls ? '':
+		'none' == bordercls ? '-noborder' : '-' + bordercls;
 
 	out.push('<div', this.domAttrs_(), '>');
 
+	if(bordercls != '-noborder' && zcls != 'z-window-popup')
+		out.push('<div class="', zcls,'-outer">');
+	
 	if (caption || title) {
-		out.push('<div class="', zcls, '-tl"><div class="',
-			zcls, '-tr"></div></div><div class="',
-			zcls, '-hl"><div class="', zcls,
-			'-hr"><div class="', zcls, '-hm"><div id="',
+		if(bordercls == '-noborder' || zcls == 'z-window-popup')
+			out.push('<div id="',
+					uuid, '-cap-outer" class="', zcls, '-header-outer">');
+			
+		out.push('<div id="',
 			uuid, '-cap" class="', zcls, '-header">');
 
 		if (caption) caption.redraw(out);
@@ -40,28 +44,25 @@ function (out, skipper) {
 			if (this._closable)
 				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close">', iconInner, '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
+				out.push('<div id="', uuid, '-maximize" class="', zcls, '-icon ', zcls, '-maximize');
 				if (this._maximized)
-					out.push(' ', zcls, '-maxd');
+					out.push(' ', zcls, '-maximized');
 				out.push('">', iconInner, '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="' + uuid, '-min" class="', zcls, '-icon ', zcls, '-min">', iconInner, '</div>');
+				out.push('<div id="' + uuid, '-minimize" class="', zcls, '-icon ', zcls, '-minimize">', iconInner, '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
-		out.push('</div></div></div></div>');
-	} else if (withFrame)
-		out.push('<div class="', zcls, '-tl', bordercls,
-				'"><div class="', zcls, '-tr', bordercls, '"></div></div>');
-
-	if (withFrame)
-		out.push('<div class="', zcls, '-cl', bordercls,
-			'"><div class="', zcls, '-cr', bordercls,
-			'"><div class="', zcls, '-cm', bordercls, '">');
-
+		
+		if(bordercls == '-noborder' || zcls == 'z-window-popup')
+			out.push('</div>');
+		
+		out.push('</div>');
+	} 
+	
 	out.push('<div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
-	out.push(zcls, '-cnt', bordercls, '"');
+	out.push(zcls, '-content', bordercls, '"');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
@@ -72,9 +73,8 @@ function (out, skipper) {
 
 	out.push('</div>');
 
-	if (withFrame)
-		out.push('</div></div></div><div class="', zcls, '-bl', bordercls,
-			'"><div class="', zcls, '-br', bordercls, '"></div></div>');
+	if (bordercls != '-noborder' && zcls != 'z-window-popup')
+		out.push('</div>');
 
 	out.push('</div>');
 }

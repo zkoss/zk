@@ -1,0 +1,328 @@
+@import "~./zul/less/_header.less";
+
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
+/* original */
+
+.z-window-modal-shadow,
+.z-window-overlapped-shadow,
+.z-window-popup-shadow,
+.z-window-embedded-shadow,
+.z-window-highlighted-shadow {
+	border-radius: 5px;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+.z-window-modal-shadow,
+.z-window-highlighted-shadow {
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+}
+
+.z-window-modal-resize-faker,
+.z-window-overlapped-resize-faker,
+.z-window-popup-resize-faker,
+.z-window-embedded-resize-faker,
+.z-window-highlighted-resize-faker,
+.z-window-resize-faker {
+	position: absolute;
+	border: 1px dashed #1854C2;
+	overflow: hidden;
+	z-index: 60000;
+	left: 0;
+	top: 0;
+	background-color: #D7E6F7;
+	filter: alpha(opacity=50); /* IE */
+	opacity: .5;
+}
+.z-window-modal-move-ghost,
+.z-window-overlapped-move-ghost,
+.z-window-popup-move-ghost,
+.z-window-highlighted-move-ghost,
+.z-window-move-ghost {
+	position: absolute;
+	background: #D7E6F7;
+	overflow: hidden;
+	filter: alpha(opacity=65) !important; /* IE */
+	opacity: .65 !important;
+	cursor: move !important;
+}
+.z-window-modal-move-ghost dl,
+.z-window-overlapped-move-ghost dl,
+.z-window-popup-move-ghost dl,
+.z-window-highlighted-move-ghost dl,
+.z-window-move-ghost dl {
+	border: 1px solid #9F9F9F;
+	margin: 0; padding: 0;
+	overflow: hidden;
+	display: block;
+	background: #D7E6F7;
+	line-height: 0;
+	font-size: 0;
+}
+.z-window-embedded, 
+.z-window-modal, 
+.z-window-overlapped, 
+.z-window-popup, 
+.z-window-highlighted {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.z-window-modal-noborder,
+.z-window-highlighted-noborder,
+.z-window-overlapped-noborder,
+.z-window-popup-noborder {
+	display: none;
+}
+/* Outer */
+.z-window-modal-outer, 
+.z-window-popup-outer, 
+.z-window-highlighted-outer,
+.z-window-overlapped-outer, 
+.z-window-embedded-outer {
+	border:6px solid #D9E5EF;
+	overflow: hidden; zoom: 1;
+}
+
+/* Header */
+.z-window-modal-header, 
+.z-window-popup-header, 
+.z-window-highlighted-header,
+.z-window-overlapped-header, 
+.z-window-embedded-header {
+	overflow: hidden; zoom: 1; padding-bottom: 4px;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium; font-weight: normal;
+	cursor: default;
+	background-color: #D9E5EF;
+}
+
+.z-window-modal-header-outer, 
+.z-window-popup-header-outer, 
+.z-window-highlighted-header-outer,
+.z-window-overlapped-header-outer, 
+.z-window-embedded-header-outer {
+	border-top: 6px;
+	border-left: 6px;
+	border-right: 6px; 
+	border-style: solid;
+	border-color: #D9E5EF;
+	overflow: hidden; zoom: 1;
+}
+
+.z-window-embedded-header a, 
+.z-window-embedded-header a:visited, 
+.z-window-embedded-header a:hover {
+	color: #222222;
+}
+.z-window-modal-header-move,
+.z-window-highlighted-header-move,
+.z-window-overlapped-header-move,
+.z-window-popup-header-move {
+	cursor: move;
+} 
+/* Body Content*/
+.z-window-embedded-content {
+	overflow: hidden;
+	zoom: 1;
+}
+.z-window-overlapped-content, .z-window-popup-content {
+	margin: 0;
+	padding: 4px;
+	background: white;
+	overflow: hidden;
+	zoom: 1;
+}
+.z-window-modal-content,
+.z-window-highlighted-content,
+.z-window-modal-content-noborder,
+.z-window-highlighted-content-noborder,
+.z-window-overlapped-content-noborder {
+	margin: 0;
+	padding: 2px;
+	background: white;
+	overflow: hidden;
+	zoom: 1;
+}
+.z-window-modal-content-noborder,
+.z-window-highlighted-content-noborder,
+.z-window-embedded-content-noborder,
+.z-window-overlapped-content-noborder,
+.z-window-popup-content-noborder {
+	border: 0;
+	overflow: hidden;
+	zoom: 1;
+}
+.z-window-popup-content-noborder {
+	margin: 0;
+	padding: 1px;
+	background: white;
+}
+
+.z-messagebox-window .z-window-modal-content,
+.z-messagebox-window .z-window-highlighted-content {
+	padding: 17px;
+	padding-bottom: 15px;
+}
+.z-messagebox .z-label {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: #363636;
+}
+.z-messagebox-button {
+	min-width: 48pt;
+	width: 100%;
+}
+.z-msgbox {
+	display: -moz-inline-box;
+	display: inline-block;
+	background-repeat: no-repeat;
+	vertical-align: top;
+	cursor: pointer;
+	border: 0;
+	width: 32px;
+	height: 32px;
+}
+.z-msgbox-question {
+	.encodeThemeURL(background-image, '~./zul/img/msgbox/question-button.png');
+}
+.z-msgbox-exclamation {
+	.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-button.png');
+}
+.z-msgbox-information {
+	.encodeThemeURL(background-image, '~./zul/img/msgbox/info-button.png');
+}
+.z-msgbox-error {
+	.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-button.png');
+}
+/* end of original */
+
+
+.z-window-popup-content {
+	border: solid #ACACAC 1px;
+	padding: 6px;
+}
+.z-window-embedded-header, 
+.z-window-modal-header, 
+.z-window-popup-header, 
+.z-window-highlighted-header, 
+.z-window-overlapped-header {
+	color: #363636;
+	padding-top: 3px;
+	padding-bottom: 6px;
+}
+
+/* Embedded Mold Frame */
+
+.z-window-embedded-content {
+	margin: 0;
+	padding: 4px;
+	background: white;
+	overflow: hidden;
+	zoom: 1;
+	border: 0;
+}
+
+/* Buttons */
+
+.z-window-embedded-icon,
+.z-window-popup-icon,
+.z-window-modal-icon,
+.z-window-overlapped-icon,
+.z-window-highlighted-icon {
+	background: transparent no-repeat 0 0;
+	.encodeThemeURL(background-image, '~./zul/img/wnd/wnd-icon.png');
+	height: 17px;
+	width: 28px;
+	overflow: hidden;
+	float: right;
+	cursor: pointer;
+	margin-left: 2px;
+}
+
+/* Button Background Position */
+
+.z-window-embedded-minimize, 
+.z-window-modal-minimize, 
+.z-window-overlapped-minimize,
+.z-window-popup-minimize, 
+.z-window-highlighted-minimize {
+	background-position: 0 0;
+}
+.z-window-embedded-minimize-over, 
+.z-window-modal-minimize-over, 
+.z-window-overlapped-minimize-over,
+.z-window-popup-minimize-over, 
+.z-window-highlighted-minimize-over {
+	background-position: -28px 0;
+}
+.z-window-embedded-maximize, 
+.z-window-modal-maximize, 
+.z-window-overlapped-maximize,
+.z-window-popup-maximize, 
+.z-window-highlighted-maximize {
+	background-position: 0 -17px;
+}
+.z-window-embedded-maximize-over, 
+.z-window-modal-maximize-over, 
+.z-window-overlapped-maximize-over,
+.z-window-popup-maximize-over, 
+.z-window-highlighted-maximize-over {
+	background-position: -28px -17px;
+}
+.z-window-embedded-maximized, 
+.z-window-modal-maximized, 
+.z-window-overlapped-maximized,
+.z-window-popup-maximized, 
+.z-window-highlighted-maximized {
+	background-position: 0 -34px;
+}
+.z-window-embedded-maximized-over, 
+.z-window-modal-maximized-over, 
+.z-window-overlapped-maximized-over,
+.z-window-popup-maximized-over, 
+.z-window-highlighted-maximized-over {
+	background-position: -28px -34px;
+}
+.z-window-embedded-close, 
+.z-window-modal-close, 
+.z-window-overlapped-close,
+.z-window-popup-close, 
+.z-window-highlighted-close {
+	background-position: 0 -51px;
+}
+.z-window-embedded-close-over, 
+.z-window-modal-close-over, 
+.z-window-overlapped-close-over,
+.z-window-popup-close-over, 
+.z-window-highlighted-close-over {
+	background-position: -28px -51px;
+}
+
+/* IE */
+<c:if test="${zk.ie > 0}">
+.z-messagebox-button {
+	width: 50pt;
+	text-overflow: ellipsis;
+}
+.z-messagebox-button table {
+	width: 100%;
+}
+</c:if>
+<c:if test="${zk.gecko > 0}">
+.z-messagebox-button {
+	width: 48pt;
+}
+</c:if>
+<c:if test="${zk.opera > 0}">
+.z-messagebox-button {
+	width: 50pt;
+}
+</c:if>

@@ -62,9 +62,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var $el = jq(el),
 			$top = $el.find('>div:first'),
 			top = $top[0],
-			header = $top.nextAll('div:first')[0],
+			header = $top.find('>div:first')[0],
 			fakeT = jq(top).clone()[0],
 			fakeH = jq(header).clone()[0];
+		
 		jq(document.body).prepend(
 			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
@@ -84,7 +85,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
 		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
 
-		document.body.style.cursor = "";
+		document.body.style.cursor = '';
 		zWatch.fire('onMove'); //Bug ZK-1372: hide applet when overlapped
 	}
 	function _ignoremove(dg, pointer, evt) {
@@ -96,8 +97,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			tar = tar.parentNode;
 		switch (tar) {
 		case wgt.$n('close'):
-		case wgt.$n('max'):
-		case wgt.$n('min'):
+		case wgt.$n('maximize'):
+		case wgt.$n('minimize'):
 			return true; //ignore special buttons
 		}
 		if(wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
@@ -245,7 +246,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 
 		var n = wgt.$n(), pos = wgt._position;
-		if (pos == "parent") {
+		if (pos == 'parent') {
 			if (posParent)
 				_posByParent(wgt);
 			return;
@@ -254,18 +255,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 
 		var st = n.style;
-		st.position = "absolute"; //just in case
+		st.position = 'absolute'; //just in case
 		var ol = st.left, ot = st.top;
-		if (pos != "nocenter")
+		if (pos != 'nocenter')
 			zk(n).center(pos);
 		var sdw = wgt._shadowWgt;
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop;
-			if (pos.indexOf("left") >= 0 && opts.left < 0)
+			if (pos.indexOf('left') >= 0 && opts.left < 0)
 				st.left = jq.px(l - opts.left);
-			else if (pos.indexOf("right") >= 0 && opts.right > 0)
+			else if (pos.indexOf('right') >= 0 && opts.right > 0)
 				st.left = jq.px(l - opts.right);
-			if (pos.indexOf("top") >= 0 && opts.top < 0)
+			if (pos.indexOf('top') >= 0 && opts.top < 0)
 				st.top = jq.px(t - opts.top);
 			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
 				st.top = jq.px(t - opts.bottom);
@@ -532,7 +533,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 				var l, t, w, h, s = node.style, cls = this.getZclass();
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maxd');
+					jq(this.$n('maximize')).addClass(cls + '-maximized');
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -542,8 +543,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					h = s.height;
 
 					// prevent the scroll bar.
-					s.top = "-10000px";
-					s.left = "-10000px";
+					s.top = '-10000px';
+					s.left = '-10000px';
 
 					// Sometimes, the clientWidth/Height in IE6 is wrong.
 					var sw = $op[0].clientWidth,
@@ -566,9 +567,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n('max'),
+					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + "-maxd").removeClass(cls + "-maxd-over");
+					$max.removeClass(cls + '-maximized').removeClass(cls + '-maximized-over');
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -926,7 +927,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cvh = cave.style.height;
 
 			if (hgh && hgh != "auto") {
-				zk(cave).setOffsetHeight(this._offsetHeight(n));
+				zk(cave).setOffsetHeight(this._offsetHeight(n) + zk(cave).padBorderHeight());
 			} else if (cvh && cvh != "auto") {
 				cave.style.height = "";
 			}
@@ -935,22 +936,21 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
 		if(zul.wnd.WindowRenderer.shallCheckBorder(this)) {
-			var cave = this.$n('cave'),
-				bl = jq(n).find('>div:last')[0],
-				cap = this.$n("cap");
-			h -= bl.offsetHeight;
-			if (cave)
-				h -= zk(cave.parentNode).padBorderHeight();
-			if (cap)
-				h -= zk(cap.parentNode).padBorderHeight();
+			var outer = jq(n).find('>div:last')[0];
+			var pt = parseInt(jq(outer).css("border-top"))
+			h -= (zk(outer).padBorderHeight() - pt);
 		}
 		return h - zk(n).padBorderHeight();
 	},
 	_titleHeight: function (n) {
 		var cap = this.$n('cap'),
-			$tl = jq(n).find('>div:first'), tl = $tl[0];
-		return cap ? cap.offsetHeight + tl.offsetHeight:
-			zul.wnd.WindowRenderer.shallCheckBorder(this) ? tl.offsetHeight: 0;
+			outer = jq(n).find('>div:first')[0];
+		var pt = parseInt(jq(outer).css("border-top"))
+		
+		var val = cap ? cap.offsetHeight + pt:
+			zul.wnd.WindowRenderer.shallCheckBorder(this) ?  pt : 0
+		console.log(val)
+		return val;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1161,10 +1161,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			case this.$n('close'):
 				this.fire('onClose');
 				break;
-			case this.$n('max'):
+			case this.$n('maximize'):
 				this.setMaximized(!this._maximized);
 				break;
-			case this.$n('min'):
+			case this.$n('minimize'):
 				this.setMinimized(!this._minimized);
 				break;
 			default:
@@ -1184,12 +1184,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		case this.$n('close'):
 			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
 			break;
-		case this.$n('max'):
-			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
+		case this.$n('maximize'):
+			var added = this._maximized ? ' ' + zcls + '-maximized-over' : '';
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-maximize-over' + added);
 			break;
-		case this.$n('min'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
+		case this.$n('minimize'):
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-minimize-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -1205,14 +1205,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			jqn.removeClass(zcls + '-close-over');
 			jqn.removeClass(zcls + '-icon-over');
 			break;
-		case this.$n('max'):
+		case this.$n('maximize'):
 			if (this._maximized)
-				jqn.removeClass(zcls + '-maxd-over');
-			jqn.removeClass(zcls + '-max-over');
+				jqn.removeClass(zcls + '-maximized-over');
+			jqn.removeClass(zcls + '-maximize-over');
 			jqn.removeClass(zcls + '-icon-over');
 			break;
-		case this.$n('min'):
-			jqn.removeClass(zcls + '-min-over');
+		case this.$n('minimize'):
+			jqn.removeClass(zcls + '-minimize-over');
 			jqn.removeClass(zcls + '-icon-over');
 			break;
 		}
