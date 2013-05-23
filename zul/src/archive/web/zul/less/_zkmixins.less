@@ -51,11 +51,11 @@
 }
 // Other helpful utilities
 //---------------------------------------------
-.horizontalGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
-	${t:gradient('hor', '@{start} 0% @{end} 100%')};
+.horGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	${t:gradient('hor', '@{start} 0%; @{end} 100%')};
 }
-.verticalGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
-	${t:gradient('ver', '@{start} 0% @{end} 100%')};
+.verGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
 }
 .topBorderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size} @{size} 0 0')};
