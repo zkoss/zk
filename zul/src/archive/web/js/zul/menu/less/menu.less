@@ -31,7 +31,7 @@
 }
 
 // define common font property
-.z-menubar-horizontal, .z-menubar-vertical {
+.z-menubar {
 	position: relative;
 	display: block;
 	padding: 3px 0;
@@ -48,132 +48,138 @@
 		position: relative;
 		display: block;
 	}
+
+	&-horizontal {
+		li {
+			float: left;
+		}
+		.z-menuseparator {
+			border-left: 1px solid #808080;
+		}
+	}
+	&-vertical {
+		ul {
+			display: inline-table;
+		}
+		li {
+			margin: 3px 2px 4px;
+			&:first-child {
+				margin: 2px;
+			}
+		}
+		.z-menuseparator {
+			border-top: 1px solid #808080;
+			line-height: 0;
+			height: 0;
+			min-height: 0;
+		}
+		.z-menu {
+			&-content {
+				padding-right: 16px;
+			}
+			&-icon {
+				position: absolute;
+				right: 5px;
+				top: 5px;
+			}
+		}
+	}
 }
-.z-menu-text,
-.z-menuitem-text {
-	display: inline-block;
-	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeMedium;
-	font-weight: normal;
-	text-shadow: 0 1px #FFFFFF;
-	vertical-align: middle;
-	color: #555555;
+.z-menu-hover > .z-menu-content,
+.z-menuitem-hover > .z-menuitem-content {
+	.hoverStyle();
 }
 
-.z-menu-image,
-.z-menuitem-image {
-	max-width: @menuImageSize;
-	margin-right: 3px;
-}
 .z-menu,
 .z-menuitem {
-	&-hover > &-content {
-		.hoverStyle();
+	&-text {
+		display: inline-block;
+		font-family: @baseTitleFontFamily;
+		font-size: @fontSizeMedium;
+		font-weight: normal;
+		text-shadow: 0 1px #FFFFFF;
+		vertical-align: middle;
+		color: #555555;
 	}
-}
-.z-menu-separator {
-	display: none;
-}
-.z-menu-clickable {
-	.z-menu-separator {
-		position: absolute;
-		width: 1px;
-		height: 100%;
-		background: @buttonBorderHover;
-		top: 0;
-		right: 18px;
-	}
-	&.z-menu:hover {
-		.z-menu-separator {
-			display: block;
-		}
-	}
-	&.z-menu:active,
-	&.z-menu-selected {
-		.z-menu-separator {
-			background: #B6B6B6;
-		}
-	}
-	.z-menu-text {
+	&-image {
+		max-width: @menuImageSize;
 		margin-right: 3px;
 	}
-}
-.z-menu-content, .z-menuitem-content {
-	cursor: pointer;
-	border: 1px solid transparent;
-	.borderRadius();
-	line-height: @baseLineHeight;
-	cursor: pointer;
-	padding: 3px 6px;
-	display: block;
-	text-decoration: none;
-	white-space: nowrap;
+	&-content {
+		cursor: pointer;
+		border: 1px solid transparent;
+		.borderRadius();
+		line-height: @baseLineHeight;
+		cursor: pointer;
+		padding: 3px 6px;
+		display: block;
+		text-decoration: none;
+		white-space: nowrap;
 
-	// the 20 is greater than menupopup-separator's z-index
-	z-index: 20;
-	position: relative;
+		// the 20 is greater than menupopup-separator's z-index
+		z-index: 20;
+		position: relative;
 
 
-	&:hover {
-		.hoverStyle();
-	}
-	&:focus {
-		.hoverStyle();
-	}
-	&:active {
-		.activeStyle();
-	}
-	&[disabled] {
-		opacity: .65;
-		border: 1px solid @buttonBorder;
-		cursor: default;
-		.buttonBackground();
-		.boxShadow('none');
-	}
-}
-.z-menu-selected > .z-menu-content,
-.z-menuitem-selected > .z-menuitem-content {
-	.activeStyle();
-}
-.z-menu-content {
-	.z-menu-icon,
-	.z-menu-icon:hover,
-	.z-menu-icon:active {
-		color: #636363;
-		vertical-align: text-bottom;
-	}
-}
-.z-menubar-vertical {
-	ul {
-		display: inline-table;
-	}
-	li {
-		margin: 3px 2px 4px;
-		&:first-child {
-			margin: 2px;
+		&:hover {
+			.hoverStyle();
+		}
+		&:focus {
+			.hoverStyle();
+		}
+		&:active {
+			.activeStyle();
+		}
+		&[disabled] {
+			opacity: .65;
+			border: 1px solid @buttonBorder;
+			cursor: default;
+			.buttonBackground();
+			.boxShadow('none');
 		}
 	}
-	.z-menuseparator {
-		border-top: 1px solid #808080;
-		line-height: 0;
-		height: 0;
-		min-height: 0;
+}
+.z-menu {
+	&-separator {
+		display: none;
 	}
-	.z-menu-content {
-		padding-right: 16px;
+	&-clickable {
+		.z-menu-separator {
+			position: absolute;
+			width: 1px;
+			height: 100%;
+			background: @buttonBorderHover;
+			top: 0;
+			right: 18px;
+		}
+		&.z-menu:hover .z-menu-separator {
+			display: block;
+		}
+		&.z-menu:active,
+		&.z-menu-selected {
+			.z-menu-separator {
+				background: #B6B6B6;
+			}
+		}
+		.z-menu-text {
+			margin-right: 3px;
+		}
 	}
-	.z-menu-icon {
-		position: absolute;
-		right: 5px;
-		top: 5px;
+	&-content {
+		.z-menu-icon,
+		.z-menu-icon:hover,
+		.z-menu-icon:active {
+			color: #636363;
+			vertical-align: text-bottom;
+		}
+	}
+	&-selected > &-content {
+		.activeStyle();
 	}
 }
-.z-menubar-horizontal {
-	li {
-		float: left;
-	}
-	.z-menuseparator {
-		border-left: 1px solid #808080;
+.z-menuitem {
+	&-selected > &-content {
+		.activeStyle();
 	}
 }
 
@@ -205,7 +211,7 @@
 	ul {
 		.restUl();
 	}
-	.z-menupopup-separator {
+	&-separator {
 		height: 100%;
 		width: 2px;
 		background: #D8D7D7;
@@ -234,13 +240,13 @@
 		left: 6px;
 		top: 5px;
 	}
-	//define checked menuitem effect in menupopup
-	.z-menuitem-checkable .z-menuitem-image {
-		.buttonBackground();
-		border: 1px solid #CFCFCF;
+	.z-menu-content {
+		padding-right: 16px;
 	}
-	.z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
-		display: block;
+	.z-menu-icon {
+		position: absolute;
+		right: 5px;
+		top: 5px;
 	}
 	.z-menuseparator {
 		font-size: 1px;
@@ -253,23 +259,18 @@
 		padding: 0px;
 		min-height: 2px;
 	}
-	.z-menu-content {
-		padding-right: 16px;
-	}
-	.z-menu-icon {
-		position: absolute;
-		right: 5px;
-		top: 5px;
-	}
 }
-.z-menu-content, .z-menuitem-content {
-	& > img {
-		vertical-align: text-bottom;
-	}
+//define checked menuitem effect in menupopup
+.z-menuitem-checkable .z-menuitem-image {
+	.buttonBackground();
+	border: 1px solid #CFCFCF;
+}
+.z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
+	display: block;
 }
 
 //define menubar hor scroll
-.z-menubar-horizontal {
+.z-menubar {
 	&-scroll {
 		overflow: hidden;
 	}
@@ -289,7 +290,7 @@
 		opacity: 0.7;
 	}
 	&-right {
-		.z-menubar-horizontal-icon {
+		.z-menubar-icon {
 			left: 13px;
 		}
 	}
@@ -303,12 +304,16 @@
 			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 		}
 		&:hover {
-			> .z-menubar-horizontal-icon {
+			> .z-menubar-icon {
 				opacity: 1;
 				color: #91CBFD;
 				text-shadow: 1px 0 #C2E0F9;
 			};
 		};
+	}
+	&-left {
+		left: 0;
+		padding: 5px 12px;
 	}
 	&-scrollable {
 		border: 1px solid #E1E1E1;
@@ -321,9 +326,5 @@
 		cursor: pointer;
 		position: absolute;
 		z-index: 25;
-	}
-	&-left {
-		left: 0;
-		padding: 5px 12px;
 	}
 }

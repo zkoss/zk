@@ -29,8 +29,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getZclass}: z-menubar-horzontal, if {@link #getOrient()} == vertical,
- *  z-menubar-vertical will be added.
+ * <p>Default {@link #getZclass}: z-menubar, if {@link #getOrient()} == vertical,
+ *  z-menubar-vertical will be added. (@since 7.0.0)
  */
 zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
@@ -73,10 +73,12 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		this.$supers('setWidth', arguments);
 		this._checkScrolling();
 	},
-	
-	getZclass: function () {
-		return this._zclass == null ? "z-menubar" +
-				("vertical" == this.getOrient() ? "-vertical" : "-horizontal") : this._zclass;
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			sc += ' ' + this.$s("vertical" == this.getOrient() ? 'vertical' : 'horizontal');
+		}
+		return sc;
 	},
 	unbind_: function () {
 		if (this.checkScrollable()) {
