@@ -29,11 +29,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getZclass}: z-menubar-hor, if {@link #getOrient()} == vertical,
- *  z-menubar-ver will be added.
+ * <p>Default {@link #getZclass}: z-menubar-horzontal, if {@link #getOrient()} == vertical,
+ *  z-menubar-vertical will be added.
  */
 zul.menu.Menubar = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
+	_orient: 'horizontal',
 
 	$define: {
 		/** Returns the orient.
@@ -88,12 +88,16 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			}
 			zWatch.unlisten({onSize: this});
 		}
+		var n = this.$n();
+		this.domUnlisten_(n, 'onMouseEnter').domUnlisten_(n, 'onMouseLeave');
 
 		this._lastTarget = null;
 		this.$supers(zul.menu.Menubar, 'unbind_', arguments);
 	},
 	bind_: function () {
 		this.$supers(zul.menu.Menubar, 'bind_', arguments);
+		var n = this.$n();
+		this.domListen_(n, 'onMouseEnter').domListen_(n, 'onMouseLeave');
 		if (this.checkScrollable()) {
 			var left = this.$n('left'),
 				right = this.$n('right');
@@ -103,13 +107,12 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			}
 			zWatch.listen({onSize: this});
 		}
-		this._syncChdWidth(); //Merge breeze
 	},
 	/** Returns whether the menubar scrolling is enabled in horizontal orient.
 	 * @return boolean
 	 */
 	checkScrollable: function () {
-		return this._scrollable && ("horizontal" == this.getOrient());
+		return this._scrollable && ('horizontal' == this.getOrient());
 	},
 	onSize: function () {
 		this._checkScrolling();
@@ -118,13 +121,11 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();
-		this._syncChdWidth();	//Merge breeze
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_)
 			this._checkScrolling();
-		this._syncChdWidth(); //Merge breeze
 	},
 	
 	_checkScrolling: function () {
@@ -162,33 +163,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	/**
-	 * Sync each menu's width
-	 */
-	_syncChdWidth: function () {
-		var max = -1;
-		if (this.getOrient() == 'vertical') {
-			var menus = [];
-			for (var w = this.firstChild; w; w = w.nextSibling) {
-				if (w.$instanceof(zul.menu.Menu)) {
-					var btn = w.$n('b');
-					if (btn) {
-						menus.push(w);
-						var width = btn.clientWidth;
-						if (width > max)
-							max = width;
-					}
-				}
-			}
-			var i = menus.length;
-			while (i-- > 0) {
-				var btn = menus[i].$n('b'),
-					curWidth = btn.clientWidth;
-				if (curWidth < max)
-					jq(btn).css('width', max + 'px');
-			}
-		}
-	},
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
 			childs = jq(this.$n('cave')).children();
@@ -213,19 +187,16 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			return;
 		node.style.width = value;
 	},
-	doMouseOver_: function (evt) {
+	_doMouseEnter: function (evt) {
 		this._bOver = true;
 		this._noFloatUp = false;
-		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (evt) {
+	_doMouseLeave: function (evt) {
 		this._bOver = false;
 		this._closeOnOut();
-		this.$supers('doMouseOut_', arguments);
 	},
 	_doScroll: function (evt) {
-		var target = evt.domTarget;
-		this._scroll(target.id.endsWith("left") ? "left" : "right");
+		this._scroll(evt.domTarget == this.$n('left') ? 'left' : 'right');
 	},
 	_scroll: function (direction) {
 		if (!this.checkScrollable() || this._runId) return;
@@ -238,7 +209,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 
 		if (!childLen) return;
 		switch (direction) {
-		case "left":
+		case 'left':
 			for (var i = 0; i < childLen; i++) {
 				// B50-ZK-381: Menu scrolling bug
 				// child width may be larger than body.offsetWidth 
@@ -258,7 +229,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				}
 			}
 			break;
-		case "right":
+		case 'right':
 			var currRight = currScrollLeft + body.offsetWidth;
 			for (var i = 0; i < childLen; i++) {
 				var currChildRight =  childs[i].offsetLeft + childs[i].offsetWidth;
@@ -281,31 +252,26 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		var currPos = body.scrollLeft,
 			step = 5;
 		if (currPos == moveDest) return false;
-
-		if (currPos > moveDest) {
-			var setTo = currPos - step;
-			body.scrollLeft = setTo < moveDest ?  moveDest : setTo;
-			return true;
-		} else {
-			var setTo = currPos + step;
-			body.scrollLeft = setTo > moveDest ? moveDest : setTo;
-			return true;
-		}
-		return false;
+		
+		var delta = currPos > moveDest ? -1 : 1,
+			setTo = currPos + step * delta;
+		body.scrollLeft = setTo < moveDest ?  moveDest : setTo;
+		return true;
 	},
 	insertChildHTML_: function (child, before, desktop) {
+		var vert = 'vertical' == this.getOrient();
 		if (before)
 			jq(before.$n('chdextr') || before.$n()).before(
-				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
+				this.encloseChildHTML_({child: child, vertical: vert}));
 		else
 			jq(this.$n('cave')).append(
-				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
+				this.encloseChildHTML_({child: child, vertical: vert}));
 
 		child.bind(desktop);
 	},
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
-		jq(child.uuid + '-chdextr', zk).remove();
+		jq(child.$n('chdextr')).remove();
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],

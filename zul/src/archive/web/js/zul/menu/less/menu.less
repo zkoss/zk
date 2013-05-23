@@ -71,6 +71,33 @@
 		.hoverStyle();
 	}
 }
+.z-menu-separator {
+	display: none;
+}
+.z-menu-clickable {
+	.z-menu-separator {
+		position: absolute;
+		width: 1px;
+		height: 100%;
+		background: @buttonBorderHover;
+		top: 0;
+		right: 18px;
+	}
+	&.z-menu:hover {
+		.z-menu-separator {
+			display: block;
+		}
+	}
+	&.z-menu:active,
+	&.z-menu-selected {
+		.z-menu-separator {
+			background: #B6B6B6;
+		}
+	}
+	.z-menu-text {
+		margin-right: 3px;
+	}
+}
 .z-menu-content, .z-menuitem-content {
 	cursor: pointer;
 	border: 1px solid transparent;
@@ -158,6 +185,14 @@
 	.boxShadow('1px 1px 2px rgba(0, 0, 0, 0.2)');
 }
 
+.z-menu-content-popup {
+	display: none;
+	position: absolute;
+	overflow: auto;
+	width: auto;
+	height: auto;
+	z-index: @basePopupZIndex;
+}
 .z-menupopup {
 	background: @menupopupBackground;
 	border: 1px solid #C2C2C2;
@@ -189,13 +224,23 @@
 		min-width:  @menuImageSize;
 		min-height:  @menuImageSize;
 	}
+
+	.z-menuitem-icon {
+		position: absolute;
+		color: #0076A3;
+		text-shadow: 1px 0 rgba(0,118,163, 0.5);
+		opacity: 0.7;
+		display: none;
+		left: 6px;
+		top: 5px;
+	}
 	//define checked menuitem effect in menupopup
 	.z-menuitem-checkable .z-menuitem-image {
 		.buttonBackground();
 		border: 1px solid #CFCFCF;
 	}
-	.z-menuitem-content-ck .z-menuitem-image {
-		background-image: ${Menuitem_Checkmark_Checkbox_Selected_Background};
+	.z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
+		display: block;
 	}
 	.z-menuseparator {
 		font-size: 1px;
@@ -242,9 +287,6 @@
 		color: #CCCCCC;
 		text-shadow: 1px 0 #DFDFDF;
 		opacity: 0.7;
-		position: relative;
-		top: 5px;
-		left: 12px;
 	}
 	&-right {
 		.z-menubar-horizontal-icon {
@@ -255,6 +297,7 @@
 	&-right {
 		width: 32px;
 		position: absolute;
+		padding: 5px 11px;
 
 		&:active {
 			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
@@ -281,5 +324,6 @@
 	}
 	&-left {
 		left: 0;
+		padding: 5px 12px;
 	}
 }
