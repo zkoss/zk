@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-
+	
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
@@ -134,7 +134,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
-			
+		
 		var g = this.getGrid();
 		if (g) g._syncEmpty();
 	},

@@ -20,34 +20,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * The renderer used to render a grid.
  * It is designed to be overriden
  */
-zul.grid.Renderer = {
-	/** Update the size of the column menu button when mouse over
-	 * 
-	 * @param zul.grid.Column col the column
-	 */
-	updateColumnMenuButton: function (wgt) {
-		var n = wgt.$n(), btn;
-		if (btn = wgt.$n('btn')) 
-			btn.style.height = n.offsetHeight + "px";
-	}
-};
-
 (function () {
-	// fix for the empty message shows up or now.
+	// fix for the empty message shows up or not.
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
+			var $jq = jq(wgt.$n('empty')),
+				colspan = 0;
 			if (wgt.rows && wgt.rows.nChildren) {
-				jq(wgt.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+				$jq.hide();
 			} else {
-				var $jq = jq(wgt.$n("empty")),
-					colspan = 0;
 				if (wgt.columns) {
 					for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
 						if (w.isVisible())
 							colspan++;
 				}
-				
-				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.attr('colspan', colspan || 1);
 				$jq.show();
 			}
 		}
@@ -60,18 +47,17 @@ var Grid =
  * It is used to create a grid of elements.
  * Both the rows and columns are displayed at once although only one will
  * typically contain content, while the other may provide size information.
- *
+ * 
  * <p>Default {@link #getZclass}: z-grid.
- *
+ * 
  * <p>To have a grid without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
- *
- * 
  */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
-	$define:{
-		emptyMessage:function(msg){
-			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+	$define: {
+		emptyMessage: function(msg) {
+			if(this.desktop)
+				jq(this.$n('empty')).html(msg);
 		}
 	},
 	/** Returns the specified cell, or null if not available.
@@ -81,9 +67,12 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */	
 	getCell: function (row, col) {
 		var rows;
-		if (!(rows = this.rows)) return null;
-		if (rows.nChildren <= row) return null;
-
+		if (!(rows = this.rows))
+			return null;
+		
+		if (rows.nChildren <= row)
+			return null;
+		
 		var row = rows.getChildAt(row);
 		return row.nChildren <= col ? null: row.getChildAt(col);
 	},
@@ -92,7 +81,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * @return String
 	 */
 	getOddRowSclass: function () {
-		return this._scOddRow == null ? this.getZclass() + "-odd" : this._scOddRow;
+		return this._scOddRow == null ? this.$s('odd') : this._scOddRow;
 	},
 	/** Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
@@ -158,7 +147,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!ignoreDom)
 			this.rerender();
-		if (!_noSync)//bug#3301498: we have to sync even if child is rows
+		if (!_noSync) //bug#3301498: we have to sync even if child is rows
 			this._syncSize();  //sync-size required
 	},
 	onChildRemoved_: function (child) {
@@ -190,8 +179,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	redrawEmpty_: function (out) {
 		var uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody id="', uuid, '-empty" class="', zcls,
-				'-empty-body" style="display:none"><tr><td>',
+		out.push('<tbody class="', zcls, '-empty-body"><tr><td id="'
+				, uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {

@@ -76,7 +76,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			if (no) no.width = true;
 			else no = {width:true};
 		}
-		if (zk.ie8 && this._align)
+		if (zk.ie >= 9 && this._align)
 			style += 'text-align:' + this._align + ';';
 
 		return style + this.$super('domStyle_', no);
@@ -135,7 +135,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (n && !this._dragsz) {
 			var $Header = this.$class;
 			this._dragsz = new zk.Draggable(this, null, {
-				revert: true, constraint: "horizontal",
+				revert: true,
+				constraint: 'horizontal',
 				ghosting: $Header._ghostsizing,
 				endghosting: $Header._endghostsizing,
 				snap: $Header._snapsizing,
@@ -155,17 +156,17 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
 			faker = owner['e' + fs[i]]; // internal element
 			if (faker && !this.$n(fs[i]))
-				faker[faker.cells.length > index ? "insertBefore" : "appendChild"]
+				faker[faker.cells.length > index ? 'insertBefore' : 'appendChild']
 					(this._createFaker(n, fs[i]), faker.cells[index]);
 		}
 	},
 	_createFaker: function (n, postfix) {
-		var t = document.createElement("th"),
-			d = document.createElement("div");
-		t.id = n.id + "-" + postfix;
+		var t = document.createElement('th'),
+			d = document.createElement('div');
+		t.id = n.id + '-' + postfix;
 		t.className = n.className;
 		t.style.cssText = n.style.cssText;
-		d.style.overflow = "hidden";
+		d.style.overflow = 'hidden';
 		t.appendChild(d);
 		return t;
 	},
@@ -174,11 +175,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false;
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
-		!jq.nodeName(evt.domTarget, "input") && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
-			this.fire('onSort', "ascending" != this.getSortDirection()); // B50-ZK-266
+				!jq.nodeName(evt.domTarget, 'input') && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
+			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
 		} else {
-			if (jq.nodeName(evt.domTarget, "input"))
+			if (jq.nodeName(evt.domTarget, 'input'))
 				evt.stop({propagation: true});
 			this.$supers('doClick_', arguments);
 		}
@@ -205,15 +206,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var n = this.$n(),
 			ofs = zk(n).revisedOffset(); // Bug #1812154
 		if (this._insizer(evt.pageX - ofs[0])) {
-			jq(n).addClass(this.getZclass() + "-sizing");
+			jq(n).addClass(this.getZclass() + '-sizing');
 		} else {
-			jq(n).removeClass(this.getZclass() + "-sizing");
+			jq(n).removeClass(this.getZclass() + '-sizing');
 		}
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
 			var n = this.$n();
-			jq(n).removeClass(this.getZclass() + "-sizing");
+			jq(n).removeClass(this.getZclass() + '-sizing');
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
@@ -268,7 +269,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 				if (zk.ie) { //Related bugs: ZK-890 and ZK-242
 					if (mw.ebodytbl && !mw.ebodytbl.width) {
-						mw.ebodytbl.width = "100%";
+						mw.ebodytbl.width = '100%';
 						// reset the width for IE
 					}
 				}
@@ -284,8 +285,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		//Bug 3164504: Hflex will not recalculate when the colum without label
 		//Cause: DIV (parent of HeadWidget) is invisible if all columns have no label
 		var wp;
-		return this._visible && (wp=this.parent) && wp._visible //check this and HeadWidget
-			&& (wp=wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
+		return this._visible && (wp = this.parent) && wp._visible //check this and HeadWidget
+			&& (wp = wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
 	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;
@@ -294,7 +295,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		out.push('<th', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></th>');
 	}
 }, { //static
-	_faker: ["hdfaker", "bdfaker", "ftfaker"],
+	_faker: ['hdfaker', 'bdfaker', 'ftfaker'],
 
 	//drag
 	_ghostsizing: function (dg, ofs, evt) {
@@ -342,41 +343,25 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			head = table.tBodies[0].rows[0],
 			rwd = $n.revisedWidth(wd),
 			cidx = $n.cellIndex();
-
-
-		// start of ZK-922/ZK-1024: can remove after FF 13
-		var ff = zk.gecko,
-			ff_10_12 = ff > 9 && ff < 13,
-			meshWgt = wgt.getMeshWidget(),
-			ebody = meshWgt && meshWgt.ebody ,
-			h;
-		if (ff_10_12 && ebody) {
-			if (ebody)
-				h = ebody.style.height;
-			if (h )
-				ebody.style.height = '';
-		}
-		// end of ZK-922/ZK-1024
-
-
+		
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.
 		if (mesh.efoottbl) {
-			mesh.eftfaker.cells[cidx].style.width = wd + "px";
+			mesh.eftfaker.cells[cidx].style.width = wd + 'px';
 		}
 		var fixed, disp;
 		if (mesh.ebodytbl) {
 			if (zk.opera && !mesh.ebodytbl.style.tableLayout) {
 				fixed = 'auto';
-				mesh.ebodytbl.style.tableLayout = "fixed";
+				mesh.ebodytbl.style.tableLayout = 'fixed';
 			}
-			mesh.ebdfaker.cells[cidx].style.width = wd + "px";
+			mesh.ebdfaker.cells[cidx].style.width = wd + 'px';
 		}
 
-		head.cells[cidx].style.width = wd + "px";
-		n.style.width = rwd + "px";
+		head.cells[cidx].style.width = wd + 'px';
+		n.style.width = rwd + 'px';
 		var cell = n.firstChild;
-		cell.style.width = zk(cell).revisedWidth(rwd) + "px";
+		cell.style.width = zk(cell).revisedWidth(rwd) + 'px';
 
 		//feature#3177275: Listheader should override hflex when sized by end user
 		var hdfakercells = mesh.ehdfaker.cells,
@@ -400,8 +385,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 		//bug#3147926: auto fit.
 		//Adjust hdfakerflex/bdfakerflex
-		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
-			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0],
+		var hdflex = mesh.head.$n('hdfakerflex'),
+			bdflex = mesh.body.$n('bdfakerflex'),
 			hdflexVal = hdflex.style.width;
 
 		hdflex.style.width = '';
@@ -423,16 +408,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var redrawFix = meshn.offsetHeight;
 			meshn.style.display=olddisp;
 		}
-
-	    // start of ZK-922/ZK-1024: can remove after FF 13
-  	   if (ff_10_12 && h && ebody)
-	      ebody.style.height = h;
-  	   // end of ZK-922/ZK-1024
-
+		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd + "px",
+			width: wd + 'px',
 			widths: wds
 		}, evt.data), null, 0);
 
@@ -448,11 +428,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			zcls = this.getZclass(),
 			label = this.domContent_();
 		out.push('<th', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
-				zcls, '-cnt"', this.domTextStyleAttr_(), '><div class="', zcls, '-sort-img"></div>',
-				( (! this.firstChild && label == "" ) ? "&nbsp;" : label));// ZK-805 MenuPopup without columns issue
+				zcls, '-content"', this.domTextStyleAttr_(), '><div class="', zcls, '-sort-icon"><i id="', uuid, '-sort-icon"></i></div>',
+				( (!this.firstChild && label == '' ) ? "&nbsp;" : label));// ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
-			out.push('<a id="', uuid, '-btn"  href="javascript:;" class="', zcls, '-btn"></a>');
+			out.push('<a id="', uuid, '-menu-icon" href="javascript:;" class="', zcls, '-menu-icon"><i class="z-icon-caret-down"></i></a>');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

@@ -25,26 +25,26 @@ function (out) {
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
 		if (pgpos == 'top' || pgpos == 'both') {
-			out.push('<div id="', uuid, '-pgit" class="', zcls, '-pgi-t">');
+			out.push('<div id="', uuid, '-pgit" class="', this.$s('pgi-t'), '">');
 			this.paging.redraw(out);
 			out.push('</div>');
 		}
 	}
 
 	if (this.columns) {
-		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
-			'<table', wdAttr, zUtl.cellps0,
+		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
+			'<table id="', uuid, '-headtbl"', wdAttr, zUtl.cellps0,
 			' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker', zcls);
 		
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
-	
-		out.push('</table></div><div class="', zcls, '-header-bg"></div>');
+		
+		out.push('</table></div>');
 	}
-	out.push('<div id="', uuid, '-body" class="', zcls, '-body');
+	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
 	if (this._autopaging)
-		out.push(' ', zcls, '-autopaging');
+		out.push(' ', this.$s('autopaging'));
 	out.push('"');
 
 	var hgh = this.getHeight();
@@ -53,11 +53,12 @@ function (out) {
 	out.push('>');
 	if (this.rows && this.domPad_ && !this.inPagingMold())
 		this.domPad_(out, '-tpad');
-	out.push('<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
+	out.push('<table id="', uuid, '-cave"', wdAttr, zUtl.cellps0,
+			' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.columns)
 		this.domFaker_(out, '-bdfaker', zcls);
-
+	
 	if (this.rows)
 		this.rows.redraw(out);
 	
@@ -70,8 +71,8 @@ function (out) {
 	out.push('</div>');
 	
 	if (this.foot) {
-		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
-			'<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
+		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
+			'<table id="', uuid, '-foottbl"', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.columns) 
 			this.domFaker_(out, '-ftfaker', zcls);
 			
@@ -80,13 +81,13 @@ function (out) {
 	}
 	
 	if (this.frozen) {
-		out.push('<div id="', uuid, '-frozen" class="', zcls, '-frozen">');
+		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
 		this.frozen.redraw(out);
 		out.push('</div>');
 	}
 	
 	if (pgpos == 'bottom' || pgpos == 'both') {
-		out.push('<div id="', uuid, '-pgib" class="', zcls, '-pgi-b">');
+		out.push('<div id="', uuid, '-pgib" class="', this.$s('pgi-b'), '">');
 		this.paging.redraw(out);
 		out.push('</div>');
 	}

@@ -16,30 +16,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
-
-	function _toggleEffect(wgt, undo) {
-		var self = wgt;
-		setTimeout(function () {
-			if (!self.desktop)
-				return;// fixed for B50-3362731.zul 
-				
-			var $n = jq(self.$n()),
-				zcls = self.getZclass() + '-over';
-			if (undo) {
-   				$n.removeClass(zcls);
-			} else if (self._musin) {
-				$n.addClass(zcls);
-				
-				var musout = self.parent._musout;
-				// fixed mouse-over issue for datebox 
-				if (musout && $n[0] != musout.$n()) {
-					jq(musout.$n()).removeClass(zcls);
-					musout._musin = false;
-					self.parent._musout = null;
-				}
-			}
-		});
-	}
 /**
  * A single row in a {@link Rows} element.
  * Each child of the {@link Row} element is placed in each successive cell
@@ -152,8 +128,9 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	getSclass: function () {
 		var sclass = this.$supers('getSclass', arguments);
-		if (sclass != null) return sclass;
-
+		if (sclass != null)
+			return sclass;
+		
 		var grid = this.getGrid();
 		return grid ? grid.getSclass(): sclass;
 	},
@@ -161,15 +138,15 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		return child.$n('chdextr') || child.$n();
 	},
 	insertChildHTML_: function (child, before, desktop) {
+		var childHTML = this.encloseChildHTML_({
+				child: child,
+				index: child.getChildIndex(),
+				zclass: this.getZclass()
+			});
 		if (before)
-			jq(this._getChdextr(before)).before(
-				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
-						zclass: this.getZclass(), cls: 'z-overflow-hidden'}));
+			jq(this._getChdextr(before)).before(childHTML);
 		else
-			jq(this).append(
-				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
-						zclass: this.getZclass(), cls: 'z-overflow-hidden'}));
-		
+			jq(this).append(childHTML);
 		child.bind(desktop);
 	},
 	removeChildHTML_: function (child) {
@@ -186,13 +163,15 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			child = opts.child,
 			isCell = child.$instanceof(zul.wgt.Cell);
 		if (!isCell) {
-			out.push('<td id="', child.uuid, '-chdextr"', this._childAttrs(child, opts.index),
-				'>', '<div id="', child.uuid, '-cell" class="', opts.zclass, '-cnt ',
-				opts.cls, '">');
+			out.push('<td id="', child.uuid, '-chdextr"',
+				this._childAttrs(child, opts.index), '><div id="', child.uuid,
+				'-cell" class="', opts.zclass, '-content">');
 		}
 		child.redraw(out);
-		if (!isCell) out.push('</div></td>');
-		if (!opts.out) return out.join('');
+		if (!isCell)
+			out.push('</div></td>');
+		if (!opts.out)
+			return out.join('');
 	},
 	_childAttrs: function (child, index) {
 		var realIndex = index, span = 1;
@@ -205,10 +184,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				realIndex += this._spans[j] - 1;
 			}
 		}
-
 		var colattrs, visible, hgh,
 			grid = this.getGrid();
-		
 		if (grid) {
 			var cols = grid.columns;
 			if (cols) {
@@ -220,24 +197,20 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-
 		var style = this.domStyle_({visible:1, width:1, height:1}),
 			isDetail = zk.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Detail);
 		if (isDetail) {
 			var wd = child.getWidth();
 			if (wd) 
-				style += "width:" + wd + ";";
+				style += 'width:' + wd + ';';
 		}
-
 		if (visible || hgh) {
 			style += visible;
 			if (hgh)
 				style += 'height:' + hgh + ';';
 		}
-		
-		var clx = isDetail ? child.getZclass() + "-outer" : this.getZclass() + "-inner",
+		var clx = isDetail ? child.$s('outer') : this.$s('inner'),
 			attrs = colattrs || '';
-		
 		if (span !== 1)
 			attrs += ' colspan="' + span + '"';
 		if (this._nowrap)
@@ -259,10 +232,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if ((_isPE() && (this.$instanceof(zkex.grid.Group) || this.$instanceof(zkex.grid.Groupfoot)))
 				|| (no && no.visible))
 			return this.$supers('domStyle_', arguments);
-			
+		
 		var style = this.$supers('domStyle_', arguments),
 			group = this.getGroup();
-		return group && !group.isOpen() ? style + "display:none;" : style;
+		return group && !group.isOpen() ? style + 'display:none;' : style;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -292,15 +265,14 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		}
 	},
 	doMouseOver_: function(evt) {
-		if (this._musin) return;
+		if (this._musin)
+			return;
 		this._musin = true;
 		var n = this.$n();
-		if (n && zk.gecko && this._draggable
-		&& !jq.nodeName(evt.domTarget, "input", "textarea"))
-			n.firstChild.style.MozUserSelect = "none";
+		if (n && zk.gecko && this._draggable && 
+				!jq.nodeName(evt.domTarget, 'input', 'textarea'))
+			n.firstChild.style.MozUserSelect = 'none';
 		
-		//Merge breeze
-		_toggleEffect(this);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
@@ -313,10 +285,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		}
 		this._musin = false;
 		if (n && zk.gecko && this._draggable)
-			n.firstChild.style.MozUserSelect = "none";
+			n.firstChild.style.MozUserSelect = 'none';
 		
-		//Merge breeze
-		_toggleEffect(this, true);
 		this.$supers('doMouseOut_', arguments);
 	},
 	domAttrs_: function (no) {
