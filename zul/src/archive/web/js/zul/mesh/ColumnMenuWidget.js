@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.5.0
  */
 zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
-	_menupopup: "none",
+	_menupopup: 'none',
 	_columnshide: true,
 	_columnsgroup: true,
 
@@ -146,7 +146,7 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		if ((ungroup = evt.target.parent._ungroup))
 			ungroup.setVisible(true);
 		//since 6.5.0 onGroup is not listened anymore, always fire event to server
-		this._mref.fire('onGroup', "ascending" != this._mref.getSortDirection(), {toServer: true});
+		this._mref.fire('onGroup', 'ascending' != this._mref.getSortDirection(), {toServer: true});
 	},
 	_onUngroup: zk.$void,
 	_onAsc: function (evt) {
@@ -156,11 +156,10 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		this._mref.fire('onSort', false); // B50-ZK-266, always fire
 	},
 	_onMenuPopup: function (evt) {
-		if (this._mref) {
-			var zcls = this._mref.getZclass(),
-				n = this._mref.$n();
-			jq(n).removeClass(zcls + '-visi').removeClass(zcls + '-over');
-		}
+		var mref = this._mref;
+		if (mref)
+			jq(mref.$n()).removeClass(mref.$s('visited')).removeClass(mref.$s('hover'));
+		
 		this._mref = evt.data.reference; 
 	},
 	onChildAdded_: function (child) {
@@ -214,35 +213,38 @@ zul.mesh.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	},
 	getUngroupitem: zk.$void,
 	_init: function () {
-		var w = this._columns,
-			zcls = w.getZclass();
-
+		var w = this._columns;
+		
 		this.listen({onOpen: [w, w._onMenuPopup]});
 		
 		if (zk.feature.pe && w.isColumnsgroup()) {
 			if (!zk.isLoaded(w.getGroupPackage_()))
 				zk.load(w.getGroupPackage_());
-			var group = new zul.menu.Menuitem({label: msgzul.GRID_GROUP, visible: false});
-				group.setSclass(zcls + '-menu-grouping');
+			var group = new zul.menu.Menuitem({
+					label: msgzul.GRID_GROUP, visible: false
+				});
+				group.setSclass(w.$s('menugrouping'));
 				group.listen({onClick: [w, w._onGroup]});
 			this.appendChild(group);
 			this._group = group;
 			if (zk.feature.ee) {
-				var ungroup = new zul.menu.Menuitem({label: msgzul.GRID_UNGROUP, visible: false});
-				ungroup.setSclass(zcls + '-menu-ungrouping');
+				var ungroup = new zul.menu.Menuitem({
+						label: msgzul.GRID_UNGROUP, visible: false
+					});
+				ungroup.setSclass(w.$s('menuungrouping'));
 				ungroup.listen({onClick: [w, w._onUngroup]});
 				this.appendChild(ungroup);
 				this._ungroup = ungroup;
 			}
 		}
 		var asc = new zul.menu.Menuitem({label: msgzul.GRID_ASC});
-			asc.setSclass(zcls + '-menu-asc');
+			asc.setSclass(w.$s('menuascending'));
 			asc.listen({onClick: [w, w._onAsc]});
 		this._asc = asc;
 		this.appendChild(asc);
 		
 		var desc = new zul.menu.Menuitem({label: msgzul.GRID_DESC});
-		desc.setSclass(zcls + '-menu-dsc');
+		desc.setSclass(w.$s('menudescending'));
 		desc.listen({onClick: [w, w._onDesc]});
 		this._desc = desc;
 		this.appendChild(desc);

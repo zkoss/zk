@@ -23,19 +23,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _shallFocusBack;
 
 	function _setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn) {
-		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
+		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + 'px';
 		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 		if (headn) {
 			var cpwd = zk(headn.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
-			headn.cells[i].style.width = cpwd + "px";
+			headn.cells[i].style.width = cpwd + 'px';
 			var cell = headn.cells[i].firstChild;
-			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+			cell.style.width = zk(cell).revisedWidth(cpwd) + 'px';
 		}
 	}
 	function _calcMinWd(wgt) {
 		var wgtn = wgt.$n(),
-			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
+			ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn) {
 			if (zk.ie8)
 				wgt._wsbak = ws; // B50-ZK-432
@@ -172,7 +172,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					bdfaker.cells[i].style.width = bdfakerws[i];
 		}
 
-		if (wgtn && zk.ie8) // B50-ZK-432: restore later for IE 8
+		if (wgtn)
 			wgtn.style.whiteSpace = ws;
 		return {width: width, wds: wds};
 	}
@@ -191,7 +191,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
 				return; // no first tr
 			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
-				c.style.width = (zk.safari_ ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
+				c.style.width = (zk.safari_ ? wds[i++] : zk(c).revisedWidth(wds[i++])) + 'px';
 			if (sbc && !meshmin) {
 				// add flex <td> if absent
 				var bdfx = tr.lastChild,
@@ -320,18 +320,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var fakeRow = !src;
 		if (fakeRow) { //the longest row containing colspan
-			src = document.createElement("TR");
-			src.style.height = "0px";
+			src = document.createElement('TR');
+			src.style.height = '0px';
 				//Note: we cannot use display="none" (offsetWidth won't be right)
 			for (var j = 0; j < maxnc; ++j)
-				src.appendChild(document.createElement("TD"));
+				src.appendChild(document.createElement('TD'));
 			srcrows[0].parentNode.appendChild(src);
 		}
 
 		//we have to clean up first, since, in FF, if dst contains %
 		//the copy might not be correct
 		for (var j = maxnc; j--;)
-			dst.cells[j].style.width = "";
+			dst.cells[j].style.width = '';
 
 		var sum = 0;
 		for (var j = maxnc; j--;) {
@@ -340,19 +340,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				sum += s.offsetWidth;
 				d.style.width = zk(s).revisedWidth(s.offsetWidth);
 			} else {
-				d.style.width = s.offsetWidth + "px";
+				d.style.width = s.offsetWidth + 'px';
 				if (maxnc > 1) { //don't handle single cell case (bug 1729739)
 					var v = s.offsetWidth - d.offsetWidth;
 					if (v != 0) {
 						v += s.offsetWidth;
 						if (v < 0) v = 0;
-						d.style.width = v + "px";
+						d.style.width = v + 'px';
 					}
 				}
 			}
 		}
 		if (zk.opera && wgt.isSizedByContent())
-			dst.parentNode.parentNode.style.width = sum + "px";
+			dst.parentNode.parentNode.style.width = sum + 'px';
 		if (fakeRow)
 			src.parentNode.removeChild(src);
 	}
@@ -364,7 +364,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *  @see zul.sel.Listbox
  */
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
-	_pagingPosition: "bottom",
+	_pagingPosition: 'bottom',
 	_prehgh: -1,
 	_minWd: null, //minimum width for each column
 	$init: function () {
@@ -372,7 +372,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.heads = [];
 	},
 
-	_innerWidth: "100%",
+	_innerWidth: '100%',
 	_currentTop: 0,
 	_currentLeft: 0,
 
@@ -496,7 +496,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @param String innerWidth the inner width. If null, "100%" is assumed.
 		 */
 		innerWidth: function (v) {
-			if (v == null) this._innerWidth = v = "100%";
+			if (v == null) this._innerWidth = v = '100%';
 			if (this.eheadtbl) this.eheadtbl.style.width = v;
 			if (this.ebodytbl) this.ebodytbl.style.width = v;
 			if (this.efoottbl) this.efoottbl.style.width = v;
@@ -543,7 +543,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	inPagingMold: function () {
-		return "paging" == this.getMold();
+		return 'paging' == this.getMold();
 	},
 
 	setHeight: function (height) {
@@ -555,8 +555,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		if (this.eheadtbl) this.eheadtbl.style.width = "";
-		if (this.efoottbl) this.efoottbl.style.width = "";
+		if (this.eheadtbl) this.eheadtbl.style.width = '';
+		if (this.efoottbl) this.efoottbl.style.width = '';
 		if (this.desktop)
 			this.onSize();
 	},
@@ -699,18 +699,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_adjFlexWd: function () { //used by HeadWidget
-		// start of ZK-922/ZK-1024: can remove after FF 13
-		var ff = zk.gecko,
-			ff_10_12 = ff > 9 && ff < 13,
-			ebody = this.ebody,
-			h;
-		if (ff_10_12) {
-			if (ebody)
-				h = ebody.style.height;
-			if (h)
-				ebody.style.height = '';
-		}
-		// end of ZK-922/ZK-1024
 		var head = this.head;
 		if (head) {
 			var hdfaker = this.ehdfaker,
@@ -725,33 +713,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			_adjMinWd(this);
 		}
-		// start of ZK-922/ZK-1024: can remove after FF 13
-		if (ff_10_12 && h)
-			ebody.style.height = h;
-		// end of ZK-922/ZK-1024
 	},
-	_bindDomNode: function () { //called by Treecell
-		for (var n = this.$n().firstChild; n; n = n.nextSibling)
-			switch(n.id) {
-			case this.uuid + '-head':
-				this.ehead = n;
-				this.eheadtbl = jq(n).find('>table:first')[0];
-				break;
-			case this.uuid + '-body':
-				this.ebody = n;
-				this.ebodytbl = jq(n).find('>table:first')[0];
-				break;
-			case this.uuid + '-foot':
-				this.efoot = n;
-				this.efoottbl = jq(n).find('>table:first')[0];
-				break;
-			case this.uuid + '-frozen':
-				this.efrozen = n;
-				break;
-			}
-
+	_bindDomNode: function () {
+		this.ehead = this.$n('head');
+		this.eheadtbl = this.$n('headtbl');
+		this.ebody = this.$n('body');
+		this.ebodytbl = this.$n('cave');
+		this.efoot = this.$n('foot');
+		this.efoottbl = this.$n('foottbl');
+		this.efrozen = this.$n('frozen');
+		
 		if (this.ebody) {
-			//ie7 will auto generate an empty <tbody> which confuse the if statements
+			//ie7 will auto generate an empty <tbody> which confuse the if statements 
 			var bds = this.ebodytbl.tBodies;
 			if (!bds || !bds.length || (this.ehead && bds.length < 2)) {
 				var out = [];
@@ -762,6 +735,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			_syncbodyrows(this);
 		}
+		
 		if (this.ehead) {
 			this.ehdfaker = this.eheadtbl.tBodies[0].rows[0];
 			this.ebdfaker = this.ebodytbl.tBodies[0].rows[0];
@@ -829,8 +803,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (ehead) {
 					ehead.scrollLeft = ebody.scrollLeft;
 					//bug# 3039339: Column is not aligned in some special combination of dimension
-					var diff = ebody.scrollLeft - ehead.scrollLeft;
-					var hdflex = jq(ehead).find('table>tbody>tr>th:last-child')[0];
+					var diff = ebody.scrollLeft - ehead.scrollLeft,
+						hdflex = this.head.$n('hdfakerflex');
 					if (diff) { //use the hdfakerflex to compensate
 						hdflex.style.width = (hdflex.offsetWidth + diff) + 'px';
 						ehead.scrollLeft = ebody.scrollLeft;
@@ -867,7 +841,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_fireOnScrollPos: function (time) { //overriden in zkmax
 		clearTimeout(this._timeoutId);
 		//IE6 caused issue if the time too short, test case  http://www.zkoss.org/zksandbox/#g8
-		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time :  (zk.gecko) ? 200 : 60);
+		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : (zk.gecko) ? 200 : 60);
 	},
 	_onScrollPos: function () {
 		// Bug ZK-414
@@ -930,7 +904,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		// fixed for B30-1919180.zul and B30-1822564.zul,
 		//  and a side effect for B50-3188023.zul
-		if (ebody.style.height == "0px")
+		if (ebody.style.height == '0px')
 			ebody.style.height = '';
 		// no scroll bar, but extra height on ebody
 		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
@@ -945,20 +919,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	beforeSize: function () {
 		// IE6 needs to reset the width of each sub node if the width is a percentage
 		var wd = this.$n().style.width;
-		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+		if (!wd || wd == 'auto') {
 			var n = this.$n();
 
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
 				return; //do nothing.
 
 			if (this.ebody)
-				this.ebody.style.width = "";
+				this.ebody.style.width = '';
 			if (this.ehead)
-				this.ehead.style.width = "";
+				this.ehead.style.width = '';
 			if (this.efoot)
-				this.efoot.style.width = "";
+				this.efoot.style.width = '';
 
-			n._lastsz = null;// Bug #3013683: ie6 will do onSize twice
+			//n._lastsz = null;// Bug #3013683: ie6 will do onSize twice
 		}
 	},
 	onSize: function () {
@@ -1031,36 +1005,28 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_setHgh: function (hgh) {
 		var ebody = this.ebody,
 			ebodyStyle = ebody.style;
-		if (this.isVflex() || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
-			if (zk.safari // Bug ZK-417, ignore to set the same size
-			&& ebodyStyle.height == jq.px(this._vflexSize(hgh)))
-				return;
-
+		if (this.isVflex() || (hgh && hgh != 'auto' && hgh.indexOf('%') < 0)) {
+			if (zk.safari && ebodyStyle.height == jq.px(this._vflexSize(hgh)))
+				return; // Bug ZK-417, ignore to set the same size
+			
 			ebodyStyle.height = ''; //allow browser adjusting to default size
 			var h = this._vflexSize(hgh);
-			if (h < 0) h = 0;
-
-			if (this._vflex != "min")
-				ebodyStyle.height = h + "px";
-			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
-			if (zk.ie && ebody.offsetHeight) // bug #1812001.
-				;
-			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
-			// and IE7 at initializing phase.
+			if (h < 0)
+				h = 0;
+			if (this._vflex != 'min')
+				ebodyStyle.height = h + 'px';
 		} else {
 			//Bug 1556099
 			var n = this.$n();
-			ebodyStyle.height = "";
+			ebodyStyle.height = '';
 			n.style.height = hgh;
 			// B50-ZK-599: Grid has no vertical scrollbar when height is set by percentage
 			// have to assign a height to ebody or it will sized by content automatically.
 			if (hgh && hgh.indexOf('%') > 0) {
 				var h = this._vflexSize(n.offsetHeight + 'px');
 				if (h < 0) h = 0;
-				if (this._vflex != "min")
+				if (this._vflex != 'min')
 					ebodyStyle.height = h + "px";
-				if (zk.ie && ebody.offsetHeight) // bug #1812001
-					;
 			}
 		}
 	},
@@ -1077,10 +1043,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//note: we don't solve this bug for paging yet
 		var n = this.$n(),
 			wd = n.style.width;
-		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+		if (!wd || wd == 'auto' || wd.indexOf('%') >= 0) {
 			wd = zk(n).revisedWidth(n.offsetWidth);
 			if (wd)
-				wd += "px";
+				wd += 'px';
 		}
 		if (wd) {
 			this.ebody.style.width = wd;
@@ -1096,7 +1062,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			sizedByContent = this.isSizedByContent();
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl && this.eheadtbl.offsetWidth != this.ebodytbl.offsetWidth)
-				this.ebodytbl.style.width = ""; //reset
+				this.ebodytbl.style.width = ''; //reset
 
 			if (tblwd &&
 					// fixed column's sizing issue in B30-1895907.zul
@@ -1135,7 +1101,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// B50-ZK-543, B50-ZK-773
 		// should re-calculate height because
 		// the string height maybe changed after width changed.
-		if (sizedByContent && this.getRows && this.getRows() > 1 && (typeof this._calcHgh == "function")
+		if (sizedByContent && this.getRows && this.getRows() > 1 && (typeof this._calcHgh == 'function')
 				&& this.ebody.style.height) // check only if height exists for F50-3000339.zul
 			this._calcHgh(); // recalculate height again ZK-796
 
@@ -1170,7 +1136,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				// 20120216 TonyQ: Bug fux for paging will disappear in B35-2096807.zul.
 				// It's happening when setVflex in borderlayout , onSize is trigger earlier before setvflex.
 				// We set the body height in async way and it's invoked too late,
-				// so we just ignore the restoring actiion when vflex is set.
+				// so we just ignore the restoring action when vflex is set.
 				// Here we assume if dom set a vflex after _removeHorScrollbar but before the restoring action,
 				// it's already be handled the height in vflex.
 				if(!wgt._vflex)
@@ -1210,7 +1176,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		return allwidths;
 	},
-	domFaker_: function (out, fakeId, zcls) { //used by mold
+	domFaker_: function (out, fakeId, zcls) { //used by redraw
 		var head = this.head;
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
@@ -1219,9 +1185,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
-			if (allwidths && w._width === undefined && w._hflex === undefined && w.isVisible()) {
+			
+			if (allwidths && w._width === undefined && w._hflex === undefined && w.isVisible())
 				allwidths = false;
-			}
 		}
 
 		//feature #3025419: flex column to compensate widget width and summation of column widths
@@ -1265,7 +1231,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.isSizedByContent())
 				this._calcSize();
 			if (this.head) {
-				this._fixHeaders(true/* B50-3315594.zul */);
+				this._fixHeaders(true);/* B50-3315594.zul */
 				for(var w = this.head.firstChild; w; w = w.nextSibling)
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
 						return null;
@@ -1323,9 +1289,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var head = this.head.$n();
 		if (!head) return;
 		this._calcMinWds();
-		var hdtable = this.eheadtbl,
-			bdtable = this.ebodytbl,
-			wd,
+		var wd,
 			wds = [],
 			width = 0,
 			fakerflex = this.head.$n('hdfakerflex'),
@@ -1341,97 +1305,104 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		//ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
 		// B50-ZK-1038: in IE, when body has 0 height, it has 0 client width
-		var useOffset = zk.ie && (bdtable.parentNode.offsetHeight == 0);
+		//var useOffset = zk.ie && (bdtable.parentNode.offsetHeight == 0);
 		//Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
-		var	total = bdtable.parentNode[useOffset ? 'offsetWidth' : 'clientWidth'],
+		var	total = this.ebody.clientWidth,
 			extSum = total - width;
 
 		var count = total,
 			visj = -1;
 		if (this._nspan < 0) { //span to all columns
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-				if (!zk(hdfaker.cells[i]).isVisible()) continue;
+				if (!zk(hdfaker.cells[i]).isVisible())
+					continue;
+				
 				wds[i] = wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) | 0);
+				
 				var rwd = zk(bdfaker.cells[i]).revisedWidth(wd),
 					stylew = jq.px0(rwd);
 				count -= wd;
 				visj = i;
+				
 				if (bdfaker.cells[i].style.width == stylew)
 					continue;
+				
 				bdfaker.cells[i].style.width = stylew;
 				hdfaker.cells[i].style.width = stylew;
-				if (ftfaker) ftfaker.cells[i].style.width = stylew;
+				
+				if (ftfaker)
+					ftfaker.cells[i].style.width = stylew;
+				
 				var cpwd = zk(head.cells[i]).revisedWidth(rwd);
 				head.cells[i].style.width = jq.px0(cpwd);
 				var cell = head.cells[i].firstChild;
-				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+				cell.style.width = zk(cell).revisedWidth(cpwd) + 'px';
 			}
 			//compensate calc error
 			if (extSum > 0 && count != 0 && visj >= 0) {
 				wd = wds[visj] + count;
 				var rwd = zk(bdfaker.cells[visj]).revisedWidth(wd),
 					stylew = jq.px0(rwd);
+				
 				bdfaker.cells[visj].style.width = stylew;
 				hdfaker.cells[visj].style.width = stylew;
-				if (ftfaker) ftfaker.cells[visj].style.width = stylew;
+				
+				if (ftfaker)
+					ftfaker.cells[visj].style.width = stylew;
+				
 				var cpwd = zk(head.cells[visj]).revisedWidth(rwd);
 				head.cells[visj].style.width = jq.px0(cpwd);
+				
 				var cell = head.cells[visj].firstChild;
-				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+				cell.style.width = zk(cell).revisedWidth(cpwd) + 'px';
 			}
 		} else { //feature#3184415: span to a specific column
-			// start of ZK-1043: can remove after FF 13
-			var ff = zk.gecko,
-				ff_10_12 = ff > 9 && ff < 13,
-				ebody = this.ebody,
-				h;
-			if (ff_10_12) {
-				if (ebody)
-					h = ebody.style.height;
-				if (h)
-					ebody.style.height = '';
-			}
-			// end of ZK-1043
 			visj = this._nspan - 1;
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-				if (!zk(hdfaker.cells[i]).isVisible()) continue;
+				if (!zk(hdfaker.cells[i]).isVisible())
+					continue;
+				
 				wd = visj == i && extSum > 0 ? (wds[visj] + extSum) : wds[i];
+				
 				var rwd = zk(bdfaker.cells[i]).revisedWidth(wd),
 					stylew = jq.px0(rwd);
+				
 				if (bdfaker.cells[i].style.width == stylew)
 					continue;
+				
 				bdfaker.cells[i].style.width = stylew;
 				hdfaker.cells[i].style.width = stylew;
-				if (ftfaker) ftfaker.cells[i].style.width = stylew;
+				
+				if (ftfaker)
+					ftfaker.cells[i].style.width = stylew;
+				
 				var cpwd = zk(head.cells[i]).revisedWidth(rwd);
 				head.cells[i].style.width = jq.px0(cpwd);
 				var cell = head.cells[i].firstChild;
-				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+				cell.style.width = zk(cell).revisedWidth(cpwd) + 'px';
 			}
-			// start of ZK-1043: can remove after FF 13
-			if (ff_10_12 && h)
-				ebody.style.height = h;
-			// end of ZK-1043
 		}
 		//bug 3188738: Opera only. Grid/Listbox/Tree span="x" not working
 		if (zk.opera)
 			zk(this.$n()).redoCSS();
-
 	},
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
 			ftfaker = this.eftfaker,
 			fakerflex = this.head ? this.head.$n('hdfakerflex') : null;
+		
 		if (!hdfaker || !bdfaker || !hdfaker.cells.length
-		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
-		|| !this.getBodyWidgetIterator().hasNext()) return;
+				|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
+				|| !this.getBodyWidgetIterator().hasNext())
+			return;
 
 		var hdtable = this.ehead.firstChild, head = this.head.$n();
-		if (!head) return;
+		if (!head)
+			return;
 
 		// Bug #1886788 the size of these table must be specified a fixed size.
-		var bdtable = this.ebody.firstChild;
+		var bdtable = this.ebodytbl;
 
 		var	total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth),
 			tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
@@ -1446,17 +1417,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0),
 				hwgt = this.head.lastChild; i--; hwgt = hwgt.previousSibling) {
 			// sizedByContent shall not override column width
-			if (!zk(hdfaker.cells[i]).isVisible() || hwgt._width) continue;
+			if (!zk(hdfaker.cells[i]).isVisible() || hwgt._width)
+				continue;
+			
 			var wd = wds[i],
 				rwd = zk(bdfaker.cells[i]).revisedWidth(wd),
-				wdpx = rwd + "px";
+				wdpx = rwd + 'px';
 			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width = wdpx;
+			
 			if (ftfaker)
 				ftfaker.cells[i].style.width = wdpx;
+			
 			var cpwd = zk(head.cells[i]).revisedWidth(rwd);
-			head.cells[i].style.width = cpwd + "px";
+			head.cells[i].style.width = cpwd + 'px';
 			var cell = head.cells[i].firstChild;
-			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+			cell.style.width = zk(cell).revisedWidth(cpwd) + 'px';
 		}
 
 		// in some case, the total width of this table may be changed.
