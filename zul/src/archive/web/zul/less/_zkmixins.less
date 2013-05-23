@@ -49,7 +49,26 @@
 .transform(@value) {
 	${t:transform('@{value}')};
 }
-
+// Other helpful utilities
+//---------------------------------------------
+.horizontalGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	${t:gradient('hor', '@{start} 0% @{end} 100%')};
+}
+.verticalGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	${t:gradient('ver', '@{start} 0% @{end} 100%')};
+}
+.topBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('@{size} @{size} 0 0')};
+}
+.rightBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('0 @{size} @{size} 0')};
+}
+.bottomBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('0 0 @{size} @{size}')};
+}
+.leftBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('@{size} 0 0 @{size}')};
+}
 // Component Function
 //----------------------------------------------
 .buttonBackground(@start: @baseGradientStart, @end: @baseGradientEnd) {
