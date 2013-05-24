@@ -1,0 +1,123 @@
+@import "~./zul/less/_header.less";
+
+@splitterSize: 8px;
+
+.z-hbox-separator,
+.z-vbox-separator {
+	padding: 0;
+	margin: 0;
+}
+.z-hbox-separator {
+	width: 0.3em;
+}
+.z-vbox-separator {
+	height: 0.3em;
+}
+
+<%-- Splitter --%>
+.z-splitter-button {
+	color: #959595;
+	vertical-align: top;// vertical-align: make it looks same in diff browsers
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	border: 1px solid #C5C5C5;
+}
+.z-icon-caret-up,
+.z-icon-caret-down,
+.z-icon-caret-left,
+.z-icon-caret-right {
+	.z-splitter-button & {
+		opacity: 0.5;
+	}
+	.z-splitter-button:hover & {
+		opacity: 1;
+	}
+}
+.z-splitter-horizontal {
+	width: @splitterSize - 2;
+	cursor: e-resize;
+	.horGradient(#FDFDFD, #F1F1F1);
+	& > .z-splitter-button {
+		width: @splitterSize;
+		height: 30px;
+	}
+}
+td.z-splitter-outer {
+	max-width: @splitterSize;
+	width: @splitterSize;
+	padding:0px;
+}
+.z-splitter-vertical {
+	max-height: @splitterSize;
+	height: @splitterSize;
+	border-width: 1px 0;
+	cursor: s-resize;
+}
+tr.z-splitter-outer > td {
+	max-height: @splitterSize;
+	height: @splitterSize;
+}
+.z-splitter-nospliter {
+	cursor: default;
+}
+
+td.z-splitter-outer,
+.z-splitter-vertical {
+	border: 1px solid #C5C5C5;
+	overflow: hidden;
+
+	& > .z-splitter-button {
+		width: 30px;
+		height: @splitterSize;
+	}
+}
+.z-splitter-vertical, {
+	border-width: 1px 0;
+	.verGradient(#FDFDFD, #F1F1F1);
+}
+.z-splitter-horizontal > .z-splitter-button {
+	border-width: 1px 0;
+}
+td.z-splitter-outer,
+.z-splitter-vertical > .z-splitter-button {
+	border-width: 0 1px;
+}
+.z-splitter-icon.z-icon-ellipsis-vertical,
+.z-splitter-icon.z-icon-ellipsis-horizontal {
+	opacity: 0.5;
+}
+.z-splitter-horizontal {
+	.z-splitter-icon {
+		position: absolute;
+		font-size: @fontSizeXSmall;
+		top: 8px;
+		left: 1px;
+	}
+	.z-splitter-icon.z-icon-ellipsis-vertical {
+		top: -21px;
+		left: 2px;
+		cursor: e-resize;
+	}
+	.z-splitter-icon.z-icon-ellipsis-vertical ~
+	.z-splitter-icon.z-icon-ellipsis-vertical {
+		top: 39px;
+	}
+}
+.z-splitter-vertical {
+	.z-splitter-icon {
+		position: absolute;
+		font-size: @fontSizeXSmall;
+		top: -3px;
+		left: 11px;
+	}
+	.z-splitter-icon.z-icon-ellipsis-horizontal {
+		top: -2px;
+		left: -20px;
+		cursor: s-resize;
+	}
+	.z-splitter-icon.z-icon-ellipsis-horizontal ~
+	.z-splitter-icon.z-icon-ellipsis-horizontal {
+		left: 40px;
+	}
+}

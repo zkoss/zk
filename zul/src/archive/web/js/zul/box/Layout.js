@@ -1,9 +1,9 @@
 /* Layout.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Aug  6 16:13:00 TST 2010, Created by jumperchen
 
@@ -22,7 +22,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		/** Sets the spacing between adjacent children.
 	 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
 	 	 * or null to use the default spacing. If the spacing is set to "auto",
-	 	 * the DOM style is left intact, so the spacing can be customized from 
+	 	 * the DOM style is left intact, so the spacing can be customized from
 	 	 * CSS.
 	 	 * @see #getSpacing
 	 	 */
@@ -114,7 +114,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if(this._spacing != 'auto' && this.lastChild == child)
 			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	},
-	/** Enclose child with HTML tag such as DIV, 
+	/** Enclose child with HTML tag such as DIV,
 	 * and return a HTML code or add HTML fragments in out array.
 	 * @param zk.Widget child the child which will be enclosed
 	 * @param Array out an array of HTML fragments.
@@ -124,8 +124,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var oo = [],
 			vert = this.isVertical_(),
 			spc = this._spacing;
-		
-		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"');
+
+		oo.push('<div id="', child.uuid, '-chdex" class="', this.$s('inner'), '"');
 		if (spc && spc != 'auto') {
 			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
 			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
@@ -182,7 +182,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	},
 	//bug#3296056
 	afterResetChildSize_: function(orient) {
-		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {				
+		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			var chdex = kid.$n('chdex');
 			if (chdex) {
 				if (orient == 'h')
@@ -200,7 +200,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			if (vert ? (kid._nvflex && kid.getVflex() != 'min')
 					 : (kid._nhflex && kid.getHflex() != 'min')) {
-				
+
 				var chdex = kid.$n('chdex');
 				if (chdex) {
 					if (orient == 'h')
@@ -231,7 +231,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var h = 0;
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling)
 			h += zk(kid.$n('chdex')).paddingHeight();
-		
+
 		return h;
 	},
 	//Bug ZK-1577: should consider spacing size of all chdex node
@@ -239,20 +239,20 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var w = 0;
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling)
 			w += zk(kid.$n('chdex')).paddingWidth();
-		
+
 		return w;
 	},
 	beforeChildrenFlex_: function(child) {
 		// optimized for performance
 		this._shallSize = false;
-		
+
 		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete child._flexFixed;
 			return false;
 		}
-		
+
 		child._flexFixed = true;
-		
+
 		var	vert = this.isVertical_(),
 			vflexs = [],
 			vflexsz = vert ? 0 : 1,
@@ -262,7 +262,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			hgh = psz.height,
 			wdh = psz.width,
 			xc = this.firstChild;
-		
+
 		for (; xc; xc = xc.nextSibling) {
 			if (xc.isVisible()) {
 				var cwgt = xc,
@@ -276,10 +276,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-						var h = c.offsetHeight + zkc.sumStyles("tb", jq.margins) + zkxc.paddingHeight(); //Bug ZK-1577: should consider padding size
+						var h = c.offsetHeight + zkc.sumStyles('tb', jq.margins) + zkxc.paddingHeight(); //Bug ZK-1577: should consider padding size
 						cp.style.height = jq.px0(zkxc.revisedHeight(h));
-						if (vert) 
-							hgh -= cp.offsetHeight + zkxc.sumStyles("tb", jq.margins);
+						if (vert)
+							hgh -= cp.offsetHeight + zkxc.sumStyles('tb', jq.margins);
 					} else {
 						vflexs.push(cwgt);
 						if (vert) {
@@ -288,18 +288,18 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						}
 					}
 				} else if (vert)
-					hgh -= cp.offsetHeight + zkxc.sumStyles("tb", jq.margins);
-				
+					hgh -= cp.offsetHeight + zkxc.sumStyles('tb', jq.margins);
+
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
 					if (cwgt !== child)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-						var w = c.offsetWidth + zkc.sumStyles("lr", jq.margins) + zkxc.paddingWidth(); //Bug ZK-1577: should consider padding size
+						var w = c.offsetWidth + zkc.sumStyles('lr', jq.margins) + zkxc.paddingWidth(); //Bug ZK-1577: should consider padding size
 						cp.style.width = jq.px0(zkxc.revisedWidth(w));
 						if (!vert)
-							wdh -= cp.offsetWidth + zkxc.sumStyles("lr", jq.margins);
+							wdh -= cp.offsetWidth + zkxc.sumStyles('lr', jq.margins);
 					} else {
 						hflexs.push(cwgt);
 						if (!vert) {
@@ -308,7 +308,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						}
 					}
 				} else if (!vert)
-					wdh -= cp.offsetWidth + zkxc.sumStyles("lr", jq.margins);
+					wdh -= cp.offsetWidth + zkxc.sumStyles('lr', jq.margins);
 			}
 		}
 
@@ -316,14 +316,14 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		var lastsz = hgh > 0 ? hgh : 0;
 		while (vflexs.length > 1) {
-			var cwgt = vflexs.shift(), 
+			var cwgt = vflexs.shift(),
 				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) || 0, //cast to integer
 				offtop = cwgt.$n().offsetTop,
 				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
-			 
+
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = vsz;
-			
+
 			var chdex = cwgt.$n('chdex');
 			chdex.style.height = jq.px0(vsz);
 			if (vert) lastsz -= vsz;
@@ -342,14 +342,14 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		lastsz = wdh > 0 ? wdh : 0;
 		while (hflexs.length > 1) {
-			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
+			var cwgt = hflexs.shift(), //{n: node, f: hflex}
 				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) || 0; //cast to integer
 			cwgt.setFlexSize_({width:hsz});
 			cwgt._hflexsz = hsz;
-		
+
 			var chdex = cwgt.$n('chdex');
 			chdex.style.width = jq.px0(hsz);
-			
+
 			if (!vert) lastsz -= hsz;
 		}
 		//last one with hflex
@@ -357,15 +357,15 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var cwgt = hflexs.shift();
 			cwgt.setFlexSize_({width:lastsz});
 			cwgt._hflexsz = lastsz;
-			
+
 			var chdex = cwgt.$n('chdex');
 			chdex.style.width = jq.px0(lastsz);
 		}
-		
+
 		//notify all of children with xflex is done.
 		child.parent.afterChildrenFlex_(child);
 		child._flexFixed = false;
-		
+
 		return false; //to skip original _fixFlex
 	},
 	afterChildrenMinFlex_: function (opts) {
@@ -375,7 +375,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				if (w.firstChild.style.height) {
-    					w.style.height = jq.px0(w.firstChild.offsetHeight + zk(w.firstChild).sumStyles("tb", jq.margins));
+    					w.style.height = jq.px0(w.firstChild.offsetHeight + zk(w.firstChild).sumStyles('tb', jq.margins));
     				}
     				total += w.offsetHeight;
     			}
@@ -394,15 +394,15 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				if (w.firstChild.style.width) {
-    					w.style.width = jq.px0(w.firstChild.offsetWidth + zk(w.firstChild).sumStyles("lr", jq.margins));
+    					w.style.width = jq.px0(w.firstChild.offsetWidth + zk(w.firstChild).sumStyles('lr', jq.margins));
     				}
     				total += w.offsetWidth;
     			}
-				
+
 				// IE9+ bug ZK-483
 				if (zk.ie9 && this._hflexsz)
 					total = Math.max(this._hflexsz, total);
-					
+
     			n.style.width = jq.px0(total);
 			} else {
     			var max = 0;
