@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.4
  */
 zul.box.Hlayout = zk.$extends(zul.box.Layout, {
-	_valign: "top",
+	_valign: 'top',
 	$define: { //zk.def
 		/** Sets the vertical-align to top or bottom.
 		 *
@@ -42,10 +42,10 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	domClass_: function () {
 		var clsnm = this.$supers('domClass_', arguments),
 			v;
-		if ((v = this._valign) == "middle")
-			clsnm += " z-valign-middle";
-		else if (v == "bottom")
-			clsnm += " z-valign-bottom";
+		if ((v = this._valign) == 'middle')
+			clsnm += ' z-valign-middle';
+		else if (v == 'bottom')
+			clsnm += ' z-valign-bottom';
 		return clsnm;
 	}
 });

@@ -30,7 +30,7 @@ function (out) {
 	out.push('><td id="', this.uuid, '-frame" style="width:100%;height:100%"');
 	
 	if (!this._isStretchPack() && this._pack2) out.push(' align="', zul.box.Box._toHalign(this._pack2), '"');
-	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
+	out.push('><table id="', this.uuid, '-real" height="100%" ', zUtl.cellps0, 'style="text-align:left');
 	if (!this.isSizedByContent()) out.push(';table-layout:fixed');
 	if (v == 'stretch') out.push(';height:100%');
 	if (this._isStretchPack()) out.push(';width:100%');

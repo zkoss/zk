@@ -31,7 +31,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			spstyle = spacing && spacing != 'auto' ? (vert?'height:':'width:') + spacing: '';
 
 		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
-			'-chdex2" class="', box.getZclass(), '-sep"');
+			'-chdex2" class="', box.$s('separator'), '"');
 
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
@@ -269,7 +269,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	//super//
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: this.isVertical() ? "z-vbox" : "z-hbox";
+		return zcs != null ? zcs: this.isVertical() ? 'z-vbox' : 'z-hbox';
 	},
 
 	onChildVisible_: function (child) {
@@ -282,8 +282,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (child.$instanceof(zul.box.Splitter)) {
 			var n = this._chdextr(child);
 			if (n) {
-				n.style.height = "";
-				n.style.width = "";
+				n.style.height = '';
+				n.style.width = '';
 			}
 			zUtl.fireSized(this, -1); //no beforeSize
 		}
@@ -311,7 +311,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		} else {
 			var n = this.$n('real'), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
-				n.appendChild(document.createElement("tbody"));
+				n.appendChild(document.createElement('tbody'));
 			jq(this.isVertical() ? tbs[0]: tbs[0].rows[0]).append(
 				this.encloseChildHTML_(child, true));
 		}
@@ -418,8 +418,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zkp = zk(p),
 			offhgh = p.offsetHeight,
 			offwdh = p.offsetWidth,
-			curhgh = this._vflexsz !== undefined ? this._vflexsz - zkp.sumStyles("tb", jq.margins) : offhgh,
-			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles("lr", jq.margins) : offwdh,
+			curhgh = this._vflexsz !== undefined ? this._vflexsz - zkp.sumStyles('tb', jq.margins) : offhgh,
+			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles('lr', jq.margins) : offwdh,
 			hgh = zkp.revisedHeight(curhgh < offhgh ? curhgh : offhgh),
 			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
 		return zkp ? {height: hgh, width: wdh} : {};
@@ -512,8 +512,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						zk.ie && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
 						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
 					offwdh = fixedSize && !vert ? zk.parseInt(szes[k]) : zkc.offsetWidth(),
-					cwdh = offwdh + zkc.sumStyles("lr", jq.margins),
-					chgh = offhgh + zkc.sumStyles("tb", jq.margins);
+					cwdh = offwdh + zkc.sumStyles('lr', jq.margins),
+					chgh = offhgh + zkc.sumStyles('tb', jq.margins);
 				
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
@@ -607,7 +607,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_childOuterAttrs: function (child) {
 		var html = '';
 		if (child.$instanceof(zul.box.Splitter))
-			html = ' class="' + child.getZclass() + '-outer"';
+			html = ' class="' + child.$s('outer') + '"';
 		else if (this.isVertical()) {
 			if (this._isStretchPack()) {
 				var v = this._pack2; 
@@ -624,7 +624,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			vert = this.isVertical(),
 			$Splitter = zul.box.Splitter;
 		if (child.$instanceof($Splitter))
-			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
+			return '';
 				//spliter's display handled in _childOuterAttrs
 
 		if (this._isStretchPack()) {
@@ -762,14 +762,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (zk(d).isVisible())
 				if (vert) {
 					var diff = d.offsetHeight;
-					if(d.id && !d.id.endsWith("-chdex2")) { //TR
+					if(d.id && !d.id.endsWith('-chdex2')) { //TR
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
-							c.style.height = zk(c).revisedHeight(i ? diff: total) + "px";
-							d.style.height = ""; //just-in-case
+							c.style.height = zk(c).revisedHeight(i ? diff: total) + 'px';
+							d.style.height = ''; //just-in-case
 						} else {
-							d.style.height = zk(d).revisedHeight(i ? diff: total) + "px";
+							d.style.height = zk(d).revisedHeight(i ? diff: total) + 'px';
 						}
 					}
 					total -= diff;
@@ -777,8 +777,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					var diff = d.offsetWidth;
 					//!sizes  B50-ZK-887: hbox's widths properties specified in Chrome is not precise
 					//if user set the widths , we freeze the with directly 
-					if(!sizes && d.id && !d.id.endsWith("-chdex2")) //TD
-						d.style.width = zk(d).revisedWidth(i ? diff: total) + "px";
+					if(!sizes && d.id && !d.id.endsWith('-chdex2')) //TD
+						d.style.width = zk(d).revisedWidth(i ? diff: total) + 'px';
 					total -= diff;
 				}
 		}
@@ -786,11 +786,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	onHide: _zkf
 },{ //static
 	_toValign: function (v) {
-		return v ? "start" == v ? "top": "center" == v ? "middle":
-			"end" == v ? "bottom": v: null;
+		return v ? 'start' == v ? 'top': 'center' == v ? 'middle':
+			'end' == v ? 'bottom': v: null;
 	},
 	_toHalign: function (v) {
-		return v ? "start" == v ? "left": "end" == v ? "right": v: null;
+		return v ? 'start' == v ? 'left': 'end' == v ? 'right': v: null;
 	}
 });
 
