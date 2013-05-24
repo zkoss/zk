@@ -33,24 +33,29 @@ function (out, skipper) {
 	if (caption || title) {
 		if(bordercls == '-noborder' || zcls == 'z-window-popup')
 			out.push('<div id="',
-					uuid, '-cap-outer" class="', zcls, '-header-outer">');
+					uuid, '-caption-outer" class="', zcls, '-header-outer">');
 			
 		out.push('<div id="',
-			uuid, '-cap" class="', zcls, '-header">');
+			uuid, '-caption" class="', zcls, '-header">');
 
 		if (caption) caption.redraw(out);
 		else {
 			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
+			
+			var getIcon = function(iconClass) {
+				return '<button style="height: 100%; width: 100%;"><i class="' + zcls + '-icon z-' + iconClass + '"></i></button>';
+			}
+			
 			if (this._closable)
-				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close">', iconInner, '</div>');
+				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
 				out.push('<div id="', uuid, '-maximize" class="', zcls, '-icon ', zcls, '-maximize');
 				if (this._maximized)
 					out.push(' ', zcls, '-maximized');
-				out.push('">', iconInner, '</div>');
+				out.push('">', this._maximized ? getIcon('icon-chevron-down') : getIcon('icon-chevron-up') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="' + uuid, '-minimize" class="', zcls, '-icon ', zcls, '-minimize">', iconInner, '</div>');
+				out.push('<div id="' + uuid, '-minimize" class="', zcls, '-icon ', zcls, '-minimize">', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		

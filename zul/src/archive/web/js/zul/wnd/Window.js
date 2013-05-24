@@ -59,12 +59,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wnd = dg.control,
 			el = dg.node;
 		_hideShadow(wnd);
+		
+		var getAttrs = function(e) {
+			var attrs = {}; 
+	        if( e.length ) {
+	            $.each( e[0].attributes, function( index, attr ) {
+	            	attrs[ attr.name ] = attr.value;
+	            } ); 
+	        }
+	        return attrs;
+		}
+		
 		var $el = jq(el),
-			$top = $el.find('>div:first'),
+			$top = $el.find('>div:first');
 			top = $top[0],
-			header = $top.find('>div:first')[0],
-			fakeT = jq(top).clone()[0],
-			fakeH = jq(header).clone()[0];
+			$header = $top.find('>div:first'),
+			header = $header[0],
+			outerClass = wnd.getZclass() + '-outer',
+			headerOuterClass = wnd.getZclass() + '-header-outer',
+			attrs = getAttrs($top),
+			wrapH = document.createElement("div");
+			
+		attrs['class'] = attrs['class'].replace(outerClass, headerOuterClass);
+		
+		var fakeH = jq(header).clone().wrap(jq(wrapH).attr(attrs)).parent()[0];
 		
 		jq(document.body).prepend(
 			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
@@ -73,10 +91,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
-		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
+		var h = el.offsetHeight - header.offsetHeight - parseInt($top.css("border-top-width")) - parseInt($top.css("padding-top"));
 		el = jq("#zk_wndghost")[0];
 		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
-		el.insertBefore(fakeT, el.firstChild);
 		el.insertBefore(fakeH, el.lastChild);
 		return el;
 	}
@@ -309,7 +326,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _makeFloat(wgt) {
-		var handle = wgt.$n('cap');
+		var handle = wgt.$n('caption');
 		if (handle && !wgt._drag) {
 			jq(handle).addClass(wgt.getZclass() + '-header-move');
 			var Window = wgt.$class;
@@ -936,19 +953,20 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
 		if(zul.wnd.WindowRenderer.shallCheckBorder(this)) {
-			var outer = jq(n).find('>div:last')[0];
-			var pt = parseInt(jq(outer).css("border-top"))
-			h -= (zk(outer).padBorderHeight() - pt);
+			var outer = jq(n).find('>div:last')[0],
+				borderTop = parseInt(jq(outer).css("border-top-width")),
+				paddingTop = parseInt(jq(outer).css("padding-top"));
+			h -= zk(outer).padBorderHeight() - borderTop - paddingTop;
 		}
 		return h - zk(n).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var cap = this.$n('cap'),
-			outer = jq(n).find('>div:first')[0];
-		var pt = parseInt(jq(outer).css("border-top"))
-		
-		var val = cap ? cap.offsetHeight + pt:
-			zul.wnd.WindowRenderer.shallCheckBorder(this) ?  pt : 0
+		var cap = this.$n('caption'),
+			outer = jq(n).find('>div:first')[0],
+			borderTop = parseInt(jq(outer).css("border-top-width")),
+			paddingTop = parseInt(jq(outer).css("padding-top"));
+		var val = cap ? cap.offsetHeight + borderTop + (paddingTop):
+			zul.wnd.WindowRenderer.shallCheckBorder(this) ?  borderTop + paddingTop : 0
 		console.log(val)
 		return val;
 	},
@@ -1133,7 +1151,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this._mode == 'embedded' ? false : this.$n('cap'),
+				handle = this._mode == 'embedded' ? false : this.$n('caption'),
 				zcls = this.getZclass();
 			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
