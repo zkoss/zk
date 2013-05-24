@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid, zcls = this.getZclass(), content = this.domContent_();
 	out.push('<span', this.domAttrs_(), '>', '<input type="checkbox" id="', uuid,
-			'-real"', this.contentAttrs_(), '/><label ');
+			'-real"', this.contentAttrs_(), '/> <label ');
 		
 	//Fix bug 3290873 ,for ie6/7 if label is empty , ignore the "for" attribute 
 	//on label to prevent the bug . We left the label here ,so it won't break 
