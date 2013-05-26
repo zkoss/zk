@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {
 	var zcls = this.getZclass(),
+		dcls = this.domClass_(),
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
@@ -24,14 +25,16 @@ function (out, skipper) {
 
 	bordercls = 'normal' == bordercls ? '':
 		'none' == bordercls ? '-noborder' : '-' + bordercls;
+	var isNoBorderOrPopup = bordercls == '-noborder' || dcls.indexOf(zcls + '-popup') !== -1
 
 	out.push('<div', this.domAttrs_(), '>');
 
-	if(bordercls != '-noborder' && zcls != 'z-window-popup')
+	
+	if(!isNoBorderOrPopup)
 		out.push('<div class="', zcls,'-outer">');
 	
 	if (caption || title) {
-		if(bordercls == '-noborder' || zcls == 'z-window-popup')
+		if(isNoBorderOrPopup)
 			out.push('<div id="',
 					uuid, '-caption-outer" class="', zcls, '-header-outer">');
 			
@@ -42,24 +45,24 @@ function (out, skipper) {
 		else {
 			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
 			
-			var getIcon = function(iconClass) {
-				return '<button style="height: 100%; width: 100%;"><i class="' + zcls + '-icon z-' + iconClass + '"></i></button>';
+			var getIcon = function(type, iconClass) {
+				return '<button id="' + uuid + '-' + type + '" class="z-button ' + zcls + '-icon-img" style="padding: 0px;height: 100%; width: 100%;"><i class="' + zcls + '-icon z-' + iconClass + '"></i></button>';
 			}
 			
 			if (this._closable)
-				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close">' , getIcon('icon-remove') ,  '</div>');
+				out.push('<div class="', zcls, '-icon ', zcls, '-close">' , getIcon('close', 'icon-remove') ,  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid, '-maximize" class="', zcls, '-icon ', zcls, '-maximize');
+				out.push('<div class="', zcls, '-icon ', zcls, '-maximize');
 				if (this._maximized)
 					out.push(' ', zcls, '-maximized');
-				out.push('">', this._maximized ? getIcon('icon-chevron-down') : getIcon('icon-chevron-up') , '</div>');
+				out.push('">', this._maximized ? getIcon('maximize', 'icon-chevron-down') : getIcon('maximize', 'icon-chevron-up') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="' + uuid, '-minimize" class="', zcls, '-icon ', zcls, '-minimize">', getIcon('icon-minus'), '</div>');
+				out.push('<div class="', zcls, '-icon ', zcls, '-minimize">', getIcon('minimize', 'icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		
-		if(bordercls == '-noborder' || zcls == 'z-window-popup')
+		if(isNoBorderOrPopup)
 			out.push('</div>');
 		
 		out.push('</div>');
@@ -78,7 +81,7 @@ function (out, skipper) {
 
 	out.push('</div>');
 
-	if (bordercls != '-noborder' && zcls != 'z-window-popup')
+	if (!isNoBorderOrPopup)
 		out.push('</div>');
 
 	out.push('</div>');

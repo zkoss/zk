@@ -98,31 +98,6 @@
 		opacity: .5;
 	}
 	
-	&-move-ghost {
-		-webkit-border-top-left-radius: 5px;
-		-webkit-border-top-right-radius: 5px;
-		-moz-border-radius-topleft: 5px;
-		-moz-border-radius-topright: 5px;
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
-		position: absolute;
-		background: #D7E6F7;
-		overflow: hidden;
-		filter: alpha(opacity=65) !important; /* IE */
-		opacity: .65 !important;
-		cursor: move !important;
-		
-		dl {
-			border: 1px solid #9F9F9F;
-			margin: 0; padding: 0;
-			overflow: hidden;
-			display: block;
-			background: #D7E6F7;
-			line-height: 0;
-			font-size: 0;
-		}
-	}
-	
 	&-noborder {
 		display: none;
 	}
@@ -134,11 +109,7 @@
 	
 }
 
-/* without embedded */
-.z-window-modal,
-.z-window-overlapped,
-.z-window-popup,
-.z-window-highlighted {
+.z-window {
 	&-move-ghost {
 		-webkit-border-top-left-radius: 5px;
 		-webkit-border-top-right-radius: 5px;
@@ -162,10 +133,6 @@
 			line-height: 0;
 			font-size: 0;
 		}
-	}
-	
-	&-noborder {
-		display: none;
 	}
 	
 	&-header-move {

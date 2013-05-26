@@ -548,9 +548,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
-				var l, t, w, h, s = node.style, cls = this.getZclass();
+				var l, t, w, h, 
+				s = node.style, 
+				cls = this.getZclass(), 
+				up = '.z-icon-chevron-up',
+				down = '.z-icon-chevron-down';				
 				if (maximized) {
 					jq(this.$n('maximize')).addClass(cls + '-maximized');
+					jq(this.$n('maximize')).children('.z-icon-chevron-up')
+					.removeClass('z-icon-chevron-up').addClass('z-icon-chevron-down');
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -587,6 +593,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					var max = this.$n('maximize'),
 						$max = jq(max);
 					$max.removeClass(cls + '-maximized').removeClass(cls + '-maximized-over');
+					jq(this.$n('maximize')).children('.z-icon-chevron-down')
+					.removeClass('z-icon-chevron-down').addClass('z-icon-chevron-up');
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -1043,11 +1051,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		return cap && cap.focus_(timeout);
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-window-" + this._mode;
+	
+	domClass_: function(no) {
+		var s = this.$supers(zul.wnd.Window, 'domClass_', arguments);
+		s += (' ' + this.getZclass() + '-' + this._mode)  
+		return s;
 	},
-
+	
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {
