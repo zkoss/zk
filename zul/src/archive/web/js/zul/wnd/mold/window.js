@@ -20,30 +20,19 @@ function (out, skipper) {
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
-		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this),
-		bordercls = this._border;
-
-	bordercls = 'normal' == bordercls ? '':
-		'none' == bordercls ? '-noborder' : '-' + bordercls;
-	var isNoBorderOrPopup = bordercls == '-noborder' || dcls.indexOf(zcls + '-popup') !== -1
+		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this);
 
 	out.push('<div', this.domAttrs_(), '>');
 
-	
-	if(!isNoBorderOrPopup)
-		out.push('<div class="', zcls,'-outer">');
+	out.push('<div id="',
+			uuid, '-header-outer" class="', zcls, '-header-outer">');
 	
 	if (caption || title) {
-		if(isNoBorderOrPopup)
-			out.push('<div id="',
-					uuid, '-caption-outer" class="', zcls, '-header-outer">');
-			
 		out.push('<div id="',
 			uuid, '-caption" class="', zcls, '-header">');
 
 		if (caption) caption.redraw(out);
 		else {
-			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
 			
 			var getIcon = function(type, iconClass) {
 				return '<button id="' + uuid + '-' + type + '" class="z-button ' + zcls + '-icon-img" style="padding: 0px;height: 100%; width: 100%;"><i class="' + zcls + '-icon z-' + iconClass + '"></i></button>';
@@ -62,15 +51,18 @@ function (out, skipper) {
 			out.push(zUtl.encodeXML(title));
 		}
 		
-		if(isNoBorderOrPopup)
-			out.push('</div>');
-		
 		out.push('</div>');
 	} 
 	
+	out.push('</div>');
+	
+	out.push('<div id="',
+				uuid, '-content-outer" class="', zcls, '-content-outer">');
+	
+	
 	out.push('<div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
-	out.push(zcls, '-content', bordercls, '"');
+	out.push(zcls, '-content" ');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
@@ -78,11 +70,5 @@ function (out, skipper) {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (w != caption)
 				w.redraw(out);
-
-	out.push('</div>');
-
-	if (!isNoBorderOrPopup)
-		out.push('</div>');
-
-	out.push('</div>');
+	out.push('</div></div></div>');
 }

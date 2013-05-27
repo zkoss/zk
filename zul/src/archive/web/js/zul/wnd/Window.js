@@ -91,7 +91,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
-		var h = el.offsetHeight - header.offsetHeight - parseInt($top.css("border-top-width")) - parseInt($top.css("padding-top"));
+		var h = el.offsetHeight - wnd._titleHeight(el);
 		el = jq("#zk_wndghost")[0];
 		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
 		el.insertBefore(fakeH, el.lastChild);
@@ -959,24 +959,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_offsetHeight: function (n) {
-		var h = n.offsetHeight - this._titleHeight(n);
-		if(zul.wnd.WindowRenderer.shallCheckBorder(this)) {
-			var outer = jq(n).find('>div:last')[0],
-				borderTop = parseInt(jq(outer).css("border-top-width")),
-				paddingTop = parseInt(jq(outer).css("padding-top"));
-			h -= zk(outer).padBorderHeight() - borderTop - paddingTop;
-		}
-		return h - zk(n).padBorderHeight();
+		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk( this.$n('content-outer')).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var cap = this.$n('caption'),
-			outer = jq(n).find('>div:first')[0],
-			borderTop = parseInt(jq(outer).css("border-top-width")),
-			paddingTop = parseInt(jq(outer).css("padding-top"));
-		var val = cap ? cap.offsetHeight + borderTop + (paddingTop):
-			zul.wnd.WindowRenderer.shallCheckBorder(this) ?  borderTop + paddingTop : 0
-		console.log(val)
-		return val;
+		var ho = this.$n('header-outer')
+		return ho ? ho.offsetHeight : 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1053,9 +1040,21 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	
 	domClass_: function(no) {
-		var s = this.$supers(zul.wnd.Window, 'domClass_', arguments);
-		s += (' ' + this.getZclass() + '-' + this._mode)  
-		return s;
+		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
+			zcls = this.getZclass(),
+			bordercls = this._border;
+		
+		bordercls = "normal" == bordercls ? "":
+			"none" == bordercls ? "-noborder" : '-' + bordercls;
+		
+		if (bordercls)
+			cls += ' ' + zcls + bordercls;
+		
+		if (!(this.getTitle() || this.caption))
+			cls += ' ' + zcls + '-noheader';
+		
+		cls += ' ' + zcls + '-' + this._mode  
+		return cls;
 	},
 	
 	onChildAdded_: function (child) {

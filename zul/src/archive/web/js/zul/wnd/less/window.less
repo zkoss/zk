@@ -1,52 +1,45 @@
 @import "~./zul/less/_header.less";
 
-<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-
 @backgroundColor: #D9E5EF;
 
-.z-window,
-.z-window-modal,
-.z-window-overlapped,
-.z-window-popup,
-.z-window-highlighted,
-.z-window-embedded {
+.resetBorder() {
+	border-width: 0px;
+	border-style: none;
+	border-color: transparent;
+}
 
-	overflow: hidden;
-	zoom: 1;
+.resetHeaderOuter() {
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	padding: 0px;
+	background-color: transparent;
+	.resetBorder();
+	.defaultOverflowZoom();
+}
+
+.resetContentOuter() {
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	padding: 0px;
+	background-color: transparent;
+	.resetBorder();
+	.defaultOverflowZoom();
+}
+
+.defaultOverflowZoom() {
+	overflow: hidden; zoom: 1;
+}
+
+.z-window {
+
+	.defaultOverflowZoom();
 	
 	&-shadow {
 		border-radius: 5px;
 		box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-		-moz-border-radius: 5px;
-		-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-		-webkit-border-radius: 5px;
-		-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-	}
-	
-	&-outer {
-		border:1px solid #9F9F9F;
-		border-radius: 5px;
-		padding: 5px;
-		background-color: @backgroundColor;
-		overflow: hidden; zoom: 1;
-	}
-	
-	&-header {
-		overflow: hidden; zoom: 1;
-		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium; font-weight: normal;
-		cursor: default;
-		background-color: @backgroundColor;
-		color: #363636;
-		padding-top: 3px;
-		padding-bottom: 6px;
 	}
 	
 	&-header-outer {
-		-webkit-border-top-left-radius: 5px;
-		-webkit-border-top-right-radius: 5px;
-		-moz-border-radius-topleft: 5px;
-		-moz-border-radius-topright: 5px;
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 		border-width: 1px;
@@ -56,24 +49,26 @@
 		padding: 5px;
 		padding-bottom: 0px;
 		background-color: @backgroundColor;
-		overflow: hidden; zoom: 1;
+		.defaultOverflowZoom();
+	}
+	
+	&-header {
+		font-family: @baseTitleFontFamily;
+		font-size: @fontSizeMedium; font-weight: normal;
+		cursor: default;
+		background-color: @backgroundColor;
+		color: #363636;
+		padding-top: 3px;
+		padding-bottom: 6px;
+		.defaultOverflowZoom();
 	}
 	
 	&-content {
 		margin: 0;
 		padding: 4px;
-		background: white;
-		overflow: hidden;
-		zoom: 1;
+		background-color: white;
 		border: solid #ACACAC 1px;
-	}
-	
-	&-content-noborder {
-		margin: 0;
-		padding: 4px;
-		background: white;
-		overflow: hidden;
-		zoom: 1;
+		.defaultOverflowZoom();
 	}
 	
 	&-icon {
@@ -98,23 +93,12 @@
 		opacity: .5;
 	}
 	
-	&-noborder {
-		display: none;
-	}
-	
 	&-maximize, &-minimize, &-close {
 		width: 28px;
 		height: 17px;
 	}
 	
-}
-
-.z-window {
 	&-move-ghost {
-		-webkit-border-top-left-radius: 5px;
-		-webkit-border-top-right-radius: 5px;
-		-moz-border-radius-topleft: 5px;
-		-moz-border-radius-topright: 5px;
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 		position: absolute;
@@ -138,21 +122,56 @@
 	&-header-move {
 		cursor: move;
 	}
-}
-
-.z-window-modal,
-.z-window-highlighted {
-	&-shadow {
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
-		-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
-		-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+	
+	&-modal,
+	&-highlighted {
+		&-shadow {
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+		}
 	}
-}
-
-.z-window-embedded-header {
-	& a, & a:visited, & a:hover {
-		color: #222222;
+	
+	&-embedded-header {
+		& a, & a:visited, & a:hover {
+			color: #222222;
+		}
 	}
+	
+	&-modal > &-content-outer,
+	&-overlapped > &-content-outer,
+	&-highlighted > &-content-outer,
+	&-embedded > &-content-outer {
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		border-width: 1px;
+		border-top-width: 0px;  
+		border-style: solid;
+		border-color: #9F9F9F;
+		padding: 5px;
+		padding-top: 0px;
+		background-color: @backgroundColor;
+		.defaultOverflowZoom();
+	}
+	
+	&-popup&-noheader > &-header-outer {
+		.resetHeaderOuter();
+	}
+	
+	&-noborder > &-content-outer > &-content {
+		margin: 0;
+		padding: 4px;
+		background: white;
+		.resetBorder();
+		.defaultOverflowZoom();
+	}
+	
+	&-noborder > &-content-outer {
+		.resetContentOuter();
+	}
+	
+	&-noborder&-noheader > &-header-outer {
+		.resetHeaderOuter();
+	}
+
 }
 
 .z-messagebox {
@@ -200,24 +219,3 @@
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-button.png');
 	}
 }
-
-/* IE */
-<c:if test="${zk.ie > 0}">
-.z-messagebox-button {
-	width: 50pt;
-	text-overflow: ellipsis;
-}
-.z-messagebox-button table {
-	width: 100%;
-}
-</c:if>
-<c:if test="${zk.gecko > 0}">
-.z-messagebox-button {
-	width: 48pt;
-}
-</c:if>
-<c:if test="${zk.opera > 0}">
-.z-messagebox-button {
-	width: 50pt;
-}
-</c:if>
