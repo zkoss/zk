@@ -37,6 +37,7 @@ ZK 6.5.3
   ZK-1768: Retrieve a wrong selected index of the radiogroup, when grid model changed
   ZK-1765: Add new Tree node cause Null Pointer Exception
   ZK-1724: fileupload error "contentId is required!"
+  ZK-1791: @global-command does not provide predefined "event" variable
 
   --------
 ZK 6.5.2

@@ -1394,7 +1394,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_globalCommandBinding).getCommand());
 				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
-					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
+					
+					//ZK-1791 @global-command does not provide predefined "event" variable
+					Map<String,Object> implicit = null;
+					if(_implicitContributor!=null){
+						implicit = _implicitContributor.contirbuteCommandObject(BinderImpl.this,_commandBinding,event);
+					}
+					
+					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs(),implicit);
 					//post global command
 					postGlobalCommand(comp, _globalCommandBinding ,command ,event, args);
 				}
