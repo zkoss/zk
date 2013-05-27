@@ -551,12 +551,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				var l, t, w, h, 
 				s = node.style, 
 				cls = this.getZclass(), 
-				up = '.z-icon-chevron-up',
-				down = '.z-icon-chevron-down';				
+				up = 'z-icon-fullscreen',
+				down = 'z-icon-resize-small';				
 				if (maximized) {
 					jq(this.$n('maximize')).addClass(cls + '-maximized');
-					jq(this.$n('maximize')).children('.z-icon-chevron-up')
-					.removeClass('z-icon-chevron-up').addClass('z-icon-chevron-down');
+					jq(this.$n('maximize')).children('.' + up)
+					.removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -593,8 +593,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					var max = this.$n('maximize'),
 						$max = jq(max);
 					$max.removeClass(cls + '-maximized').removeClass(cls + '-maximized-over');
-					jq(this.$n('maximize')).children('.z-icon-chevron-down')
-					.removeClass('z-icon-chevron-down').addClass('z-icon-chevron-up');
+					jq(this.$n('maximize')).children('.' + down)
+					.removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -959,7 +959,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_offsetHeight: function (n) {
-		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk( this.$n('content-outer')).padBorderHeight();
+		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk(this.$n('content-outer')).padBorderHeight();
 	},
 	_titleHeight: function (n) {
 		var ho = this.$n('header-outer')

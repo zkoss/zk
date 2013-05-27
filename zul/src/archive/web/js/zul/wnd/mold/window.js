@@ -34,20 +34,20 @@ function (out, skipper) {
 		if (caption) caption.redraw(out);
 		else {
 			
-			var getIcon = function(type, iconClass) {
-				return '<button id="' + uuid + '-' + type + '" class="z-button ' + zcls + '-icon-img" style="padding: 0px;height: 100%; width: 100%;"><i class="' + zcls + '-icon z-' + iconClass + '"></i></button>';
+			var getIcon = function(iconClass) {
+				return '<i class="' + zcls + '-icon z-' + iconClass + '"></i>';
 			}
 			
 			if (this._closable)
-				out.push('<div class="', zcls, '-icon ', zcls, '-close">' , getIcon('close', 'icon-remove') ,  '</div>');
+				out.push('<div id="' + uuid + '-close" class="', zcls, '-icon-img ', zcls, '-close">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
-				out.push('<div class="', zcls, '-icon ', zcls, '-maximize');
+				out.push('<div id="' + uuid + '-maximize" class="', zcls, '-icon-img ', zcls, '-maximize');
 				if (this._maximized)
 					out.push(' ', zcls, '-maximized');
-				out.push('">', this._maximized ? getIcon('maximize', 'icon-chevron-down') : getIcon('maximize', 'icon-chevron-up') , '</div>');
+				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div class="', zcls, '-icon ', zcls, '-minimize">', getIcon('minimize', 'icon-minus'), '</div>');
+				out.push('<div id="' + uuid + '-minimize" class="', zcls, '-icon-img ', zcls, '-minimize" >', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		
