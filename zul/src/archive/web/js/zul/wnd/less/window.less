@@ -2,21 +2,11 @@
 
 @backgroundColor: #D9E5EF;
 
-.resetBorderTopRadius() {
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
-}
-
-.resetBorderBottomRadius() {
-	border-bottom-left-radius: 0px;
-	border-bottom-right-radius: 0px;
-}
-
 .resetHeaderOuter() {
 	padding: 0px;
 	background-color: transparent;
 	border: 0;
-	.resetBorderTopRadius();
+	.topBorderRadius('0px');
 	.defaultOverflowZoom();
 }
 
@@ -24,7 +14,7 @@
 	padding: 0px;
 	background-color: transparent;
 	border: 0;
-	.resetBorderBottomRadius();
+	.bottomBorderRadius('0px');
 	.defaultOverflowZoom();
 }
 
@@ -36,19 +26,6 @@
 
 	.defaultOverflowZoom();
 	
-	&-header-outer {
-		border-top-left-radius: @baseBorderRadius;
-		border-top-right-radius: @baseBorderRadius;
-		border-width: 1px;
-		border-bottom-width: 0px;  
-		border-style: solid;
-		border-color: #9F9F9F;
-		padding: 5px;
-		padding-bottom: 0px;
-		background-color: @backgroundColor;
-		.defaultOverflowZoom();
-	}
-	
 	&-header {
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium; font-weight: normal;
@@ -59,6 +36,20 @@
 		padding-top: 2px;
 		padding-bottom: 6px;
 		.defaultOverflowZoom();
+		
+		&-outer {
+			.topBorderRadius();
+			border: 1px solid #9F9F9F;
+			border-bottom-width: 0px;  
+			padding: 5px;
+			padding-bottom: 0px;
+			background-color: @backgroundColor;
+			.defaultOverflowZoom();
+		}
+		
+		&-move {
+			cursor: move;
+		}
 	}
 	
 	&-content {
@@ -69,25 +60,25 @@
 		.defaultOverflowZoom();
 	}
 	
-	&-icon-img {
-		background-color: #F8F8F8;
-		border-radius: 5px;
-		border: 1px solid #CFCFCF;
-		float: right;
-		cursor: pointer;
-		margin: auto 1px;
-		text-align: center;
-		color: #777777;
-		
-		&:hover {
-			background-color: #DFF2FC;
-		}
-	}
-	
 	&-icon {
 		background: transparent no-repeat 0 0;
 		overflow: hidden;
 		margin: auto 1px;
+		
+		&-img {
+			background-color: #F8F8F8;
+			.borderRadius();
+			border: 1px solid #CFCFCF;
+			float: right;
+			cursor: pointer;
+			margin: auto 1px;
+			text-align: center;
+			color: #777777;
+			
+			&:hover {
+				background-color: #DFF2FC;
+			}
+		}
 	}
 
 	&-maximize, &-minimize, &-close {
@@ -124,8 +115,7 @@
 	}
 	
 	&-move-ghost {
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
+		.topBorderRadius();
 		position: absolute;
 		background: #D7E6F7;
 		overflow: hidden;
@@ -144,19 +134,14 @@
 		}
 	}
 	
-	&-header-move {
-		cursor: move;
-	}
-	
 	&-overlapped&-shadow, &-popup&-shadow {
-		border-radius: 5px;
-		box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+		.borderRadius();
+		.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
 	}
 	
-	&-modal, &-highlighted {
-		&-shadow {
-			box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
-		}
+	&-modal&-shadow, &-highlighted&-shadow {
+		.borderRadius();
+		.boxShadow('0 0 4px rgba(0, 0, 0, 0.7)');
 	}
 	
 	&-embedded-header {
@@ -166,19 +151,16 @@
 	}
 	
 	&-embedded&-shadow {
-		box-shadow: none;
+		.boxShadow('none');
 	}
 	
 	&-modal > &-content-outer,
 	&-overlapped > &-content-outer,
 	&-highlighted > &-content-outer,
 	&-embedded > &-content-outer {
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-		border-width: 1px;
+		.bottomBorderRadius();
+		border: 1px solid #9F9F9F;
 		border-top-width: 0px;  
-		border-style: solid;
-		border-color: #9F9F9F;
 		padding: 5px;
 		padding-top: 0px;
 		background-color: @backgroundColor;
@@ -186,11 +168,11 @@
 	}
 	
 	&-embedded > &-header-outer {
-		.resetBorderTopRadius();
+		.topBorderRadius('0px');
 	}
 	 
 	&-embedded > &-content-outer {
-		.resetBorderBottomRadius();
+		.bottomBorderRadius('0px');
 	}
 	
 	&-popup&-noheader > &-header-outer {
@@ -216,8 +198,8 @@
 }
 
 .z-messagebox {
-	&-window .z-window-modal-content, 
-	&-window .z-window-highlighted-content {
+	&-window.z-window-modal > .z-window-content-outer > .z-window-content, 
+	&-window.z-window-highlighted > .z-window-content-outer > .z-window-content {
 		padding: 17px;
 		padding-bottom: 15px;
 	}
@@ -235,7 +217,6 @@
 }
 
 .z-msgbox {
-	display: -moz-inline-box;
 	display: inline-block;
 	background-repeat: no-repeat;
 	vertical-align: top;
@@ -245,18 +226,18 @@
 	height: 32px;
 	
 	&-question {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-button.png');
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-btn.png');
 	}
 	
 	&-exclamation {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-button.png');
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-btn.png');
 	}
 	
 	&-information {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-button.png');
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-btn.png');
 	}
 	
 	&-error {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-button.png');
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
 	}
 }
