@@ -1,6 +1,10 @@
 @import "~./zul/less/_header.less";
 
-@backgroundColor: #D9E5EF;
+@titleAndPaddingColor: #D9E5EF;
+@contentColor: white;
+@iconColor: #F8F8F8;
+@iconHoverColor: #DFF2FC;
+@iconFontColor: #777777;
 
 .resetHeaderOuter() {
 	padding: 0px;
@@ -30,7 +34,7 @@
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium; font-weight: normal;
 		cursor: default;
-		background-color: @backgroundColor;
+		background-color: @titleAndPaddingColor;
 		color: #363636;
 		line-height: 24px;
 		padding-top: 2px;
@@ -43,7 +47,7 @@
 			border-bottom-width: 0px;  
 			padding: 5px;
 			padding-bottom: 0px;
-			background-color: @backgroundColor;
+			background-color: @titleAndPaddingColor;
 			.defaultOverflowZoom();
 		}
 		
@@ -55,7 +59,7 @@
 	&-content {
 		margin: 0;
 		padding: 4px;
-		background-color: white;
+		background-color: @contentColor;
 		border: solid #ACACAC 1px;
 		.defaultOverflowZoom();
 	}
@@ -66,17 +70,17 @@
 		margin: auto 1px;
 		
 		&-img {
-			background-color: #F8F8F8;
+			background-color: @iconColor;
 			.borderRadius();
 			border: 1px solid #CFCFCF;
 			float: right;
 			cursor: pointer;
 			margin: auto 1px;
 			text-align: center;
-			color: #777777;
+			color: @iconFontColor;
 			
 			&:hover {
-				background-color: #DFF2FC;
+				background-color: @iconHoverColor;
 			}
 		}
 	}
@@ -163,7 +167,7 @@
 		border-top-width: 0px;  
 		padding: 5px;
 		padding-top: 0px;
-		background-color: @backgroundColor;
+		background-color: @titleAndPaddingColor;
 		.defaultOverflowZoom();
 	}
 	
@@ -182,7 +186,7 @@
 	&-noborder > &-content-outer > &-content {
 		margin: 0;
 		padding: 4px;
-		background: white;
+		background-color: @contentColor;
 		border: 0;
 		.defaultOverflowZoom();
 	}
