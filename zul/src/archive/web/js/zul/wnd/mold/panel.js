@@ -22,44 +22,39 @@ function (out, skipper) {
 		noborder = !this._bordered(), //Unlike window, panel does not support other kind of borders
 		noheader = !caption && !title;
 		
-	out.push('<div', this.domAttrs_(), '>');
+	out.push('<div', this.domAttrs_(), '><div id="',
+			uuid, '-header-outer" class="', zcls, '-header-outer">');
 	if (caption || title) {
-		if (isFrameRequired) {
-			out.push('<div class="', zcls, '-tl"><div class="', zcls, '-tr"></div></div>');
-			out.push('<div class="', zcls, '-hl"><div class="', zcls, '-hr"><div class="', zcls, '-hm">');
-		}
-		out.push('<div id="', uuid, '-cap" class="', zcls, '-header ');
-			if (!rounded && noborder) {
-				out.push(zcls, '-header-noborder');		
+		out.push('<div id="',
+				uuid, '-caption" class="', zcls, '-header">');
+		if (caption) caption.redraw(out);
+		else {
+			var getIcon = function(iconClass) {
+				return '<i class="' + zcls + '-icon z-' + iconClass + '"></i>';
 			}
-		out.push('">');
-		if (!caption) {
-			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
+			
 			if (this._closable)
-				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ',
-						zcls, '-close">', iconInner, '</div>');
+				out.push('<div id="', uuid , '-close" class="', zcls, '-icon-img ', zcls, '-close">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
+				out.push('<div id="', uuid , '-maximize" class="', zcls, '-icon-img ', zcls, '-maximize');
 				if (this._maximized)
-					out.push(' ', zcls, '-maxd');
-				out.push('">', iconInner, '</div>');
+					out.push(' ', zcls, '-maximized');
+				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid, '-min" class="', zcls, '-icon ',
-						zcls, '-min">', iconInner, '</div>');
+				out.push('<div id="', uuid , '-minimize" class="', zcls, '-icon-img ', zcls, '-minimize" >', getIcon('icon-minus'), '</div>');
 			if (this._collapsible)
-				out.push('<div id="', uuid, '-exp" class="', zcls, '-icon ',
-						zcls, '-exp">', iconInner, '</div>');
+				out.push('<div id="', uuid , '-expand" class="', zcls, '-icon-img ', zcls, '-expand" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
 			out.push(zUtl.encodeXML(title));
-		} else caption.redraw(out);
+		} 
 		
 		out.push('</div>');
 		
-		if (isFrameRequired) out.push('</div></div></div>');
-	} else if (rounded)
-		out.push('<div class="', zcls,'-tl ', zcls,'-tl-gray"><div class="' ,zcls ,'-tr ', zcls,'-tr-gray"></div></div>');
+//		if (isFrameRequired) out.push('</div></div></div>');
+	} //else if (rounded)
+		//out.push('<div class="', zcls,'-tl ', zcls,'-tl-gray"><div class="' ,zcls ,'-tr ', zcls,'-tr-gray"></div></div>');
 	
-	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
+	out.push('</div><div id="', uuid, '-body" class="', zcls, '-body"');
 	if (!this._open) 
 		out.push(' style="display:none;"');
 	out.push('>');

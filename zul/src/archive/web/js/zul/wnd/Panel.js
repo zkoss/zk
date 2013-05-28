@@ -42,8 +42,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wnd.Panel = zk.$extends(zul.Widget, {
-	_border: "none",
-	_title: "",
+	_border: 'none',
+	_title: '',
 	_open: true,
 	_minheight: 100,
 	_minwidth: 200,
@@ -250,16 +250,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		open: function (open, fromServer) {
-			var node = this.$n();
+			var node = this.$n(),
+				up = 'z-icon-caret-up',
+				down = 'z-icon-caret-down';
 			if (node) {
 				var zcls = this.getZclass(),
 					$body = jq(this.$n('body'));
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
-						jq(node).removeClass(zcls + '-colpsd');
+						jq(node).removeClass(zcls + '-collapsed');
+						jq(this.$n('expand')).children('.' + down)
+						.removeClass(down).addClass(up);
 						$body.zk.slideDown(this);
 					} else {
-						jq(node).addClass(zcls + '-colpsd');
+						jq(node).addClass(zcls + '-collapsed');
+						jq(this.$n('expand')).children('.' + up)
+						.removeClass(up).addClass(down);
 						this._hideShadow();
 						$body.zk.slideUp(this);
 					}
@@ -289,13 +295,18 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					isRealVisible = $n.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
-				var l, t, w, h, s = node.style, cls = this.getZclass();
+				var l, t, w, h,
+				s = node.style, 
+				cls = this.getZclass(),
+				up = 'z-icon-fullscreen',
+				down = 'z-icon-resize-small';
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maxd');
+					jq(this.$n('maximize')).addClass(cls + '-maximized')
+					.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
 					if (this._collapsible && !this._open) {
-						$n.jq.removeClass(cls + '-colpsd');
+						$n.jq.removeClass(cls + '-collapsed');
 						var body = this.$n('body');
 						if (body) body.style.display = "";
 					}
@@ -361,9 +372,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n('max'),
+					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + "-maxd").removeClass(cls + "-maxd-over");
+					$max.removeClass(cls + "-maximized").children('.' + down)
+					.removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -376,7 +388,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 					if (this._collapsible && !this._open) {
-						jq(node).addClass(cls + "-colpsd");
+						jq(node).addClass(cls + "-collapsed");
 						var body = this.$n('body');
 						if (body) body.style.display = "none";
 					}
@@ -716,7 +728,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_titleHeight: function (n) {
 		var isFramable = this.isFramable(),
-			cap = this.$n('cap'),
+			cap = this.$n('caption'),
 			top = isFramable || cap ? jq(n).find('> div:first-child')[0].offsetHeight : 0;
 		return cap ? (isFramable ?
 				jq(n).find('> div:first-child').next()[0].offsetHeight :
@@ -769,7 +781,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.setTopmost();
 	},
 	_initMove: function (cmp) {
-		var handle = this.$n('cap');
+		var handle = this.$n('caption');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.getZclass() + '-header-move');
 			var $Panel = this.$class;
@@ -873,7 +885,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this.isMovable() ? this.$n('cap') : false,
+				handle = this.isMovable() ? this.$n('caption') : false,
 				zcls = this.getZclass();
 			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
@@ -893,8 +905,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
-		var maxBtn = this.$n('max'),
-			minBtn = this.$n('min'),
+		var maxBtn = this.$n('maximize'),
+			minBtn = this.$n('minimize'),
 			zcls = this.getZclass(),
 			n = evt.domTarget;
 		if (!n.id)
@@ -905,13 +917,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			break;
 		case maxBtn:
 			this.setMaximized(!this._maximized);
-			jq(maxBtn).removeClass(zcls + '-max-over');
 			break;
 		case minBtn:
 			this.setMinimized(!this._minimized);
-			jq(minBtn).removeClass(zcls + '-min-over');
 			break;
-		case this.$n('exp'):
+		case this.$n('expand'):
 			var body = this.$n('body'),
 				open = body ? zk(body).isVisible() : this._open;
 
@@ -926,64 +936,20 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		evt.stop();
 	},
-	doMouseOver_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
-			break;
-		case this.$n('max'):
-			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
-			break;
-		case this.$n('min'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
-			break;
-		case this.$n('exp'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-exp-over');
-			break;
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		var jqn = jq(n);
-		switch (n) {
-		case this.$n('close'):
-			jqn.removeClass(zcls + '-close-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('max'):
-			if (this._maximized)
-				jqn.removeClass(zcls + '-maxd-over');
-			jqn.removeClass(zcls + '-max-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('min'):
-			jqn.removeClass(zcls + '-min-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('exp'):
-			jqn.removeClass(zcls + '-exp-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		}
-		this.$supers('doMouseOut_', arguments);
-	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
 			var added = this._bordered() ? '' : zcls + '-noborder';
 			if (added) scls += (scls ? ' ': '') + added;
-			added = this._open ? '' : zcls + '-colpsd';
+			added = this._open ? '' : zcls + '-collapsed';
 			if (added) scls += (scls ? ' ': '') + added;
+			
+			if (!(this.getTitle() || this.caption))
+				scls += ' ' + zcls + '-noheader';
+			
+			if (!this._rounded())
+				scls += ' ' + zcls + '-noframe';
 		}
 		return scls;
 	},
@@ -1048,9 +1014,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		switch (tar) {
 		case wgt.$n('close'):
-		case wgt.$n('max'):
-		case wgt.$n('min'):
-		case wgt.$n('exp'):
+		case wgt.$n('maximize'):
+		case wgt.$n('minimize'):
+		case wgt.$n('expand'):
 			return true; //ignore special buttons
 		}
 		return false;
