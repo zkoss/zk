@@ -21,29 +21,30 @@ function (out, skipper) {
 		contentSclass = this.getContentSclass();
 
 	out.push('<div', this.domAttrs_(), '><div id="',
-			uuid, '-header-outer" class="', zcls, '-header-outer">');
+			uuid, '-header-outer" class="', this.$s('header-outer'), '">');
 	
 	if (caption || title) {
 		out.push('<div id="',
-			uuid, '-caption" class="', zcls, '-header">');
+			uuid, '-caption" class="', this.$s('header'), '">');
 
+		
 		if (caption) caption.redraw(out);
 		else {
-			
+			var self = this;
 			var getIcon = function(iconClass) {
-				return '<i class="' + zcls + '-icon z-' + iconClass + '"></i>';
+				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
 			}
 			
 			if (this._closable)
-				out.push('<div id="', uuid , '-close" class="', zcls, '-icon-img ', zcls, '-close">' , getIcon('icon-remove') ,  '</div>');
+				out.push('<div id="', uuid , '-close" class="', this.$s('icon-img'), ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-maximize" class="', zcls, '-icon-img ', zcls, '-maximize');
+				out.push('<div id="', uuid , '-maximize" class="', this.$s('icon-img'), ' ', this.$s('maximize'));
 				if (this._maximized)
-					out.push(' ', zcls, '-maximized');
+					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-minimize" class="', zcls, '-icon-img ', zcls, '-minimize" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-minimize" class="', this.$s('icon-img'), ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		
@@ -51,9 +52,9 @@ function (out, skipper) {
 	} 
 	
 	out.push('</div><div id="',
-				uuid, '-content-outer" class="', zcls, '-content-outer"><div id="', uuid, '-cave" class="');
+				uuid, '-content-outer" class="', this.$s('content-outer'), '"><div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
-	out.push(zcls, '-content" ');
+	out.push(this.$s('content'), '" ');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 

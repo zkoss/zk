@@ -590,7 +590,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + '-maximized').removeClass(cls + '-maximized-hover');
+					$max.removeClass(cls + '-maximized');
 					jq(this.$n('maximize')).children('.' + down)
 					.removeClass(down).addClass(up);
 					if (this._lastSize) {
@@ -1194,49 +1194,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			evt.stop();
 		}
 		this.$supers('doClick_', arguments);
-	},
-	doMouseOver_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			jq(n).addClass(zcls + '-icon-hover ' + zcls + '-close-hover');
-			break;
-		case this.$n('maximize'):
-			var added = this._maximized ? ' ' + zcls + '-maximized-hover' : '';
-			jq(n).addClass(zcls + '-icon-hover ' + zcls + '-maximize-hover' + added);
-			break;
-		case this.$n('minimize'):
-			jq(n).addClass(zcls + '-icon-hover ' + zcls + '-minimize-hover');
-			break;
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		var jqn = jq(n);
-		switch (n) {
-		case this.$n('close'):
-			jqn.removeClass(zcls + '-close-hover');
-			jqn.removeClass(zcls + '-icon-hover');
-			break;
-		case this.$n('maximize'):
-			if (this._maximized)
-				jqn.removeClass(zcls + '-maximized-hover');
-			jqn.removeClass(zcls + '-maximize-hover');
-			jqn.removeClass(zcls + '-icon-hover');
-			break;
-		case this.$n('minimize'):
-			jqn.removeClass(zcls + '-minimize-hover');
-			jqn.removeClass(zcls + '-icon-hover');
-			break;
-		}
-		this.$supers('doMouseOut_', arguments);
 	},
 	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenMinFlex_: function (orient) {
