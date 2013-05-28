@@ -27,7 +27,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
 
-		// Sometimes, the clientWidth/Height in IE6 is wrong.
 		var sw = $op[0].clientWidth,
 			sh = $op[0].clientHeight;
 		if (!floated) {
@@ -61,19 +60,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_hideShadow(wnd);
 		
 		var getAttrs = function(e) {
-			var attrs = {}; 
+			var attrs = {};
 	        if( e.length ) {
-	            $.each( e[0].attributes, function( index, attr ) {
-	            	attrs[ attr.name ] = attr.value;
-	            } ); 
+	            jq.each(e[0].attributes, function(index, attr) {
+	            	attrs[attr.name] = attr.value;
+	            }); 
 	        }
 	        return attrs;
 		}
 		
 		var $el = jq(el),
-			$top = $el.find('>div:first'),
+			$top = jq(wnd.$n('header-outer')),
 			top = $top[0],
-			$header = $top.find('>div:first'),
+			$header = jq(wnd.$n('caption')),
 			header = $header[0],
 			outerClass = wnd.getZclass() + '-outer',
 			headerOuterClass = wnd.getZclass() + '-header-outer',
@@ -569,7 +568,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					s.top = '-10000px';
 					s.left = '-10000px';
 
-					// Sometimes, the clientWidth/Height in IE6 is wrong.
 					var sw = $op[0].clientWidth,
 						sh = $op[0].clientHeight;
 					if (!floated) {
@@ -592,7 +590,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + '-maximized').removeClass(cls + '-maximized-over');
+					$max.removeClass(cls + '-maximized').removeClass(cls + '-maximized-hover');
 					jq(this.$n('maximize')).children('.' + down)
 					.removeClass(down).addClass(up);
 					if (this._lastSize) {
@@ -900,11 +898,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.zsync();
 		}
 	},
-	beforeSize: function() {
-		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized)
-			this.$n().style.width='';
-	},
 	onSize: function() {
 		_hideShadow(this);
 		if (this._maximized)
@@ -962,7 +955,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk(this.$n('content-outer')).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var ho = this.$n('header-outer')
+		var ho = this.$n('header-outer');
 		return ho ? ho.offsetHeight : 0;
 	},
 
@@ -1209,14 +1202,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			n = n.parentNode;
 		switch (n) {
 		case this.$n('close'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
+			jq(n).addClass(zcls + '-icon-hover ' + zcls + '-close-hover');
 			break;
 		case this.$n('maximize'):
-			var added = this._maximized ? ' ' + zcls + '-maximized-over' : '';
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-maximize-over' + added);
+			var added = this._maximized ? ' ' + zcls + '-maximized-hover' : '';
+			jq(n).addClass(zcls + '-icon-hover ' + zcls + '-maximize-hover' + added);
 			break;
 		case this.$n('minimize'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-minimize-over');
+			jq(n).addClass(zcls + '-icon-hover ' + zcls + '-minimize-hover');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -1229,18 +1222,18 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var jqn = jq(n);
 		switch (n) {
 		case this.$n('close'):
-			jqn.removeClass(zcls + '-close-over');
-			jqn.removeClass(zcls + '-icon-over');
+			jqn.removeClass(zcls + '-close-hover');
+			jqn.removeClass(zcls + '-icon-hover');
 			break;
 		case this.$n('maximize'):
 			if (this._maximized)
-				jqn.removeClass(zcls + '-maximized-over');
-			jqn.removeClass(zcls + '-maximize-over');
-			jqn.removeClass(zcls + '-icon-over');
+				jqn.removeClass(zcls + '-maximized-hover');
+			jqn.removeClass(zcls + '-maximize-hover');
+			jqn.removeClass(zcls + '-icon-hover');
 			break;
 		case this.$n('minimize'):
-			jqn.removeClass(zcls + '-minimize-over');
-			jqn.removeClass(zcls + '-icon-over');
+			jqn.removeClass(zcls + '-minimize-hover');
+			jqn.removeClass(zcls + '-icon-hover');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
@@ -1265,7 +1258,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n) +
-				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? jq(n).find('>div:last')[0].offsetHeight : 0);
+				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n('content-outer')).padBorderHeight() : 0);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
