@@ -14,13 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {
 	var zcls = this.getZclass(),
-		dcls = this.domClass_(),
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass(),
-		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this);
+		contentSclass = this.getContentSclass();
 
 	out.push('<div', this.domAttrs_(), '>');
 

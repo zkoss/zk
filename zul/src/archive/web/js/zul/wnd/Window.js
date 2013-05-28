@@ -45,10 +45,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _startmove(dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf("%") >= 0)
-			 el.style.top = el.offsetTop + "px";
-		if(el.style.left && el.style.left.indexOf("%") >= 0)
-			 el.style.left = el.offsetLeft + "px";
+		if(el.style.top && el.style.top.indexOf('%') >= 0)
+			 el.style.top = el.offsetTop + 'px';
+		if(el.style.left && el.style.left.indexOf('%') >= 0)
+			 el.style.left = el.offsetLeft + 'px';
 
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 		//ZK-1662: refix ZK-1309
@@ -71,14 +71,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		
 		var $el = jq(el),
-			$top = $el.find('>div:first');
+			$top = $el.find('>div:first'),
 			top = $top[0],
 			$header = $top.find('>div:first'),
 			header = $header[0],
 			outerClass = wnd.getZclass() + '-outer',
 			headerOuterClass = wnd.getZclass() + '-header-outer',
 			attrs = getAttrs($top),
-			wrapH = document.createElement("div");
+			wrapH = document.createElement('div');
 			
 		attrs['class'] = attrs['class'].replace(outerClass, headerOuterClass);
 		
@@ -90,9 +90,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
-		el.style.visibility = "hidden";
+		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
-		el = jq("#zk_wndghost")[0];
+		el = jq('#zk_wndghost')[0];
 		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
 		el.insertBefore(fakeH, el.lastChild);
 		return el;
@@ -127,7 +127,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return true;
 	}
 	function _aftermove(dg, evt) {
-		dg.node.style.visibility = "";
+		dg.node.style.visibility = '';
 		var wgt = dg.control;
 
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
@@ -135,7 +135,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//delete wgt._isDragging;
 
 		// Bug for ZK-385 clear position value after move
-        if (wgt._position && wgt._position != "parent") {
+        if (wgt._position && wgt._position != 'parent') {
 			wgt._position = null;
 		}
 		wgt.zsync();
@@ -155,11 +155,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!n.style.top) {
 				n.style.top = jq.px(xy[1]);
 			}
-		} else if (pos == "parent")
+		} else if (pos == 'parent')
 			_posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		wgt.zsync();
 		_updDomPos(wgt);
@@ -170,10 +170,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var pos = wgt._position,
 			n = wgt.$n(),
 			$n = zk(n);
-		if (pos == "parent") _posByParent(wgt);
+		if (pos == 'parent') _posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
@@ -185,7 +185,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!wgt._mask) {
 			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement(): null;
 			wgt._mask = new zk.eff.FullMask({
-				id: wgt.uuid + "-mask",
+				id: wgt.uuid + '-mask',
 				anchor: anchor ? anchor: wgt.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: wgt._zIndex,
@@ -285,7 +285,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				st.left = jq.px(l - opts.right);
 			if (pos.indexOf('top') >= 0 && opts.top < 0)
 				st.top = jq.px(t - opts.top);
-			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+			else if (pos.indexOf('bottom') >= 0 && opts.bottom > 0)
 				st.top = jq.px(t - opts.bottom);
 		}
 
@@ -295,7 +295,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var y1 = top - y;
 				if (y1 > 100) n.style.top = jq.px0(top - (y1 - 100));
 			} else if (top > 100)
-				n.style.top = "100px";
+				n.style.top = '100px';
 		}
 
 		wgt.zsync();
@@ -583,8 +583,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
-					s.top = "0";
-					s.left = "0";
+					s.top = '0';
+					s.left = '0';
 
 					// resync
 					w = s.width;
@@ -609,7 +609,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 					var body = this.$n('cave');
 					if (body)
-						body.style.width = body.style.height = "";
+						body.style.width = body.style.height = '';
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
@@ -903,7 +903,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
 		if (this._maximized)
-			this.$n().style.width="";
+			this.$n().style.width='';
 	},
 	onSize: function() {
 		_hideShadow(this);
@@ -951,10 +951,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
 
-			if (hgh && hgh != "auto") {
+			if (hgh && hgh != 'auto') {
 				zk(cave).setOffsetHeight(this._offsetHeight(n) + zk(cave).padBorderHeight());
-			} else if (cvh && cvh != "auto") {
-				cave.style.height = "";
+			} else if (cvh && cvh != 'auto') {
+				cave.style.height = '';
 			}
 		}
 	},
@@ -1044,8 +1044,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zcls = this.getZclass(),
 			bordercls = this._border;
 		
-		bordercls = "normal" == bordercls ? "":
-			"none" == bordercls ? "-noborder" : '-' + bordercls;
+		bordercls = 'normal' == bordercls ? '':
+			'none' == bordercls ? '-noborder' : '-' + bordercls;
 		
 		if (bordercls)
 			cls += ' ' + zcls + bordercls;
@@ -1080,7 +1080,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if ((!no || !no.visible) && this._minimized)
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
-			style = "position:absolute;"+style;
+			style = 'position:absolute;'+style;
 		return style;
 	},
 
@@ -1423,7 +1423,7 @@ zul.wnd.WindowRenderer = {
 	 */
 	shallCheckBorder: function (wgt) {
 		return wgt._mode != 'popup' &&
-			(wgt._mode != 'embedded' || wgt.getBorder() != "none");
+			(wgt._mode != 'embedded' || wgt.getBorder() != 'none');
 	}
 };
 })();
