@@ -27,7 +27,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
 
-		// Sometimes, the clientWidth/Height in IE6 is wrong.
 		var sw = $op[0].clientWidth,
 			sh = $op[0].clientHeight;
 		if (!floated) {
@@ -45,10 +44,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _startmove(dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf("%") >= 0)
-			 el.style.top = el.offsetTop + "px";
-		if(el.style.left && el.style.left.indexOf("%") >= 0)
-			 el.style.left = el.offsetLeft + "px";
+		if(el.style.top && el.style.top.indexOf('%') >= 0)
+			 el.style.top = el.offsetTop + 'px';
+		if(el.style.left && el.style.left.indexOf('%') >= 0)
+			 el.style.left = el.offsetLeft + 'px';
 
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 		//ZK-1662: refix ZK-1309
@@ -59,23 +58,41 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wnd = dg.control,
 			el = dg.node;
 		_hideShadow(wnd);
+		
+		var getAttrs = function(e) {
+			var attrs = {};
+	        if( e.length ) {
+	            jq.each(e[0].attributes, function(index, attr) {
+	            	attrs[attr.name] = attr.value;
+	            }); 
+	        }
+	        return attrs;
+		}
+		
 		var $el = jq(el),
-			$top = $el.find('>div:first'),
+			$top = jq(wnd.$n('header-outer')),
 			top = $top[0],
-			header = $top.nextAll('div:first')[0],
-			fakeT = jq(top).clone()[0],
-			fakeH = jq(header).clone()[0];
+			$header = jq(wnd.$n('caption')),
+			header = $header[0],
+			outerClass = wnd.getZclass() + '-outer',
+			headerOuterClass = wnd.getZclass() + '-header-outer',
+			attrs = getAttrs($top),
+			wrapH = document.createElement('div');
+			
+		attrs['class'] = attrs['class'].replace(outerClass, headerOuterClass);
+		
+		var fakeH = jq(header).clone().wrap(jq(wrapH).attr(attrs)).parent()[0];
+		
 		jq(document.body).prepend(
 			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
-		el.style.visibility = "hidden";
-		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
-		el = jq("#zk_wndghost")[0];
+		el.style.visibility = 'hidden';
+		var h = el.offsetHeight - wnd._titleHeight(el);
+		el = jq('#zk_wndghost')[0];
 		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
-		el.insertBefore(fakeT, el.firstChild);
 		el.insertBefore(fakeH, el.lastChild);
 		return el;
 	}
@@ -84,7 +101,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
 		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
 
-		document.body.style.cursor = "";
+		document.body.style.cursor = '';
 		zWatch.fire('onMove'); //Bug ZK-1372: hide applet when overlapped
 	}
 	function _ignoremove(dg, pointer, evt) {
@@ -96,8 +113,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			tar = tar.parentNode;
 		switch (tar) {
 		case wgt.$n('close'):
-		case wgt.$n('max'):
-		case wgt.$n('min'):
+		case wgt.$n('maximize'):
+		case wgt.$n('minimize'):
 			return true; //ignore special buttons
 		}
 		if(wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
@@ -109,7 +126,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return true;
 	}
 	function _aftermove(dg, evt) {
-		dg.node.style.visibility = "";
+		dg.node.style.visibility = '';
 		var wgt = dg.control;
 
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
@@ -117,7 +134,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//delete wgt._isDragging;
 
 		// Bug for ZK-385 clear position value after move
-        if (wgt._position && wgt._position != "parent") {
+        if (wgt._position && wgt._position != 'parent') {
 			wgt._position = null;
 		}
 		wgt.zsync();
@@ -137,11 +154,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!n.style.top) {
 				n.style.top = jq.px(xy[1]);
 			}
-		} else if (pos == "parent")
+		} else if (pos == 'parent')
 			_posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		wgt.zsync();
 		_updDomPos(wgt);
@@ -152,10 +169,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var pos = wgt._position,
 			n = wgt.$n(),
 			$n = zk(n);
-		if (pos == "parent") _posByParent(wgt);
+		if (pos == 'parent') _posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
@@ -167,7 +184,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!wgt._mask) {
 			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement(): null;
 			wgt._mask = new zk.eff.FullMask({
-				id: wgt.uuid + "-mask",
+				id: wgt.uuid + '-mask',
 				anchor: anchor ? anchor: wgt.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: wgt._zIndex,
@@ -245,7 +262,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 
 		var n = wgt.$n(), pos = wgt._position;
-		if (pos == "parent") {
+		if (pos == 'parent') {
 			if (posParent)
 				_posByParent(wgt);
 			return;
@@ -254,20 +271,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 
 		var st = n.style;
-		st.position = "absolute"; //just in case
+		st.position = 'absolute'; //just in case
 		var ol = st.left, ot = st.top;
-		if (pos != "nocenter")
+		if (pos != 'nocenter')
 			zk(n).center(pos);
 		var sdw = wgt._shadowWgt;
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop;
-			if (pos.indexOf("left") >= 0 && opts.left < 0)
+			if (pos.indexOf('left') >= 0 && opts.left < 0)
 				st.left = jq.px(l - opts.left);
-			else if (pos.indexOf("right") >= 0 && opts.right > 0)
+			else if (pos.indexOf('right') >= 0 && opts.right > 0)
 				st.left = jq.px(l - opts.right);
-			if (pos.indexOf("top") >= 0 && opts.top < 0)
+			if (pos.indexOf('top') >= 0 && opts.top < 0)
 				st.top = jq.px(t - opts.top);
-			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+			else if (pos.indexOf('bottom') >= 0 && opts.bottom > 0)
 				st.top = jq.px(t - opts.bottom);
 		}
 
@@ -277,7 +294,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var y1 = top - y;
 				if (y1 > 100) n.style.top = jq.px0(top - (y1 - 100));
 			} else if (top > 100)
-				n.style.top = "100px";
+				n.style.top = '100px';
 		}
 
 		wgt.zsync();
@@ -308,7 +325,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _makeFloat(wgt) {
-		var handle = wgt.$n('cap');
+		var handle = wgt.$n('caption');
 		if (handle && !wgt._drag) {
 			jq(handle).addClass(wgt.getZclass() + '-header-move');
 			var Window = wgt.$class;
@@ -530,9 +547,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
-				var l, t, w, h, s = node.style, cls = this.getZclass();
+				var l, t, w, h, 
+				s = node.style, 
+				cls = this.getZclass(), 
+				up = 'z-icon-fullscreen',
+				down = 'z-icon-resize-small';				
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maxd');
+					jq(this.$n('maximize')).addClass(cls + '-maximized');
+					jq(this.$n('maximize')).children('.' + up)
+					.removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -542,10 +565,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					h = s.height;
 
 					// prevent the scroll bar.
-					s.top = "-10000px";
-					s.left = "-10000px";
+					s.top = '-10000px';
+					s.left = '-10000px';
 
-					// Sometimes, the clientWidth/Height in IE6 is wrong.
 					var sw = $op[0].clientWidth,
 						sh = $op[0].clientHeight;
 					if (!floated) {
@@ -559,16 +581,18 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
-					s.top = "0";
-					s.left = "0";
+					s.top = '0';
+					s.left = '0';
 
 					// resync
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n('max'),
+					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + "-maxd").removeClass(cls + "-maxd-over");
+					$max.removeClass(cls + '-maximized');
+					jq(this.$n('maximize')).children('.' + down)
+					.removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -583,7 +607,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 					var body = this.$n('cave');
 					if (body)
-						body.style.width = body.style.height = "";
+						body.style.width = body.style.height = '';
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
@@ -874,11 +898,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.zsync();
 		}
 	},
-	beforeSize: function() {
-		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized)
-			this.$n().style.width="";
-	},
 	onSize: function() {
 		_hideShadow(this);
 		if (this._maximized)
@@ -925,32 +944,19 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
 
-			if (hgh && hgh != "auto") {
-				zk(cave).setOffsetHeight(this._offsetHeight(n));
-			} else if (cvh && cvh != "auto") {
-				cave.style.height = "";
+			if (hgh && hgh != 'auto') {
+				zk(cave).setOffsetHeight(this._offsetHeight(n) + zk(cave).padBorderHeight());
+			} else if (cvh && cvh != 'auto') {
+				cave.style.height = '';
 			}
 		}
 	},
 	_offsetHeight: function (n) {
-		var h = n.offsetHeight - this._titleHeight(n);
-		if(zul.wnd.WindowRenderer.shallCheckBorder(this)) {
-			var cave = this.$n('cave'),
-				bl = jq(n).find('>div:last')[0],
-				cap = this.$n("cap");
-			h -= bl.offsetHeight;
-			if (cave)
-				h -= zk(cave.parentNode).padBorderHeight();
-			if (cap)
-				h -= zk(cap.parentNode).padBorderHeight();
-		}
-		return h - zk(n).padBorderHeight();
+		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk(this.$n('content-outer')).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var cap = this.$n('cap'),
-			$tl = jq(n).find('>div:first'), tl = $tl[0];
-		return cap ? cap.offsetHeight + tl.offsetHeight:
-			zul.wnd.WindowRenderer.shallCheckBorder(this) ? tl.offsetHeight: 0;
+		var ho = this.$n('header-outer');
+		return ho ? ho.offsetHeight : 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1025,11 +1031,25 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		return cap && cap.focus_(timeout);
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-window-" + this._mode;
+	
+	domClass_: function(no) {
+		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
+			zcls = this.getZclass(),
+			bordercls = this._border;
+		
+		bordercls = 'normal' == bordercls ? '':
+			'none' == bordercls ? '-noborder' : '-' + bordercls;
+		
+		if (bordercls)
+			cls += ' ' + zcls + bordercls;
+		
+		if (!(this.getTitle() || this.caption))
+			cls += ' ' + zcls + '-noheader';
+		
+		cls += ' ' + zcls + '-' + this._mode  
+		return cls;
 	},
-
+	
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {
@@ -1053,7 +1073,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if ((!no || !no.visible) && this._minimized)
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
-			style = "position:absolute;"+style;
+			style = 'position:absolute;'+style;
 		return style;
 	},
 
@@ -1133,7 +1153,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this._mode == 'embedded' ? false : this.$n('cap'),
+				handle = this._mode == 'embedded' ? false : this.$n('caption'),
 				zcls = this.getZclass();
 			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
@@ -1161,10 +1181,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			case this.$n('close'):
 				this.fire('onClose');
 				break;
-			case this.$n('max'):
+			case this.$n('maximize'):
 				this.setMaximized(!this._maximized);
 				break;
-			case this.$n('min'):
+			case this.$n('minimize'):
 				this.setMinimized(!this._minimized);
 				break;
 			default:
@@ -1174,49 +1194,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			evt.stop();
 		}
 		this.$supers('doClick_', arguments);
-	},
-	doMouseOver_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
-			break;
-		case this.$n('max'):
-			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
-			break;
-		case this.$n('min'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
-			break;
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		var jqn = jq(n);
-		switch (n) {
-		case this.$n('close'):
-			jqn.removeClass(zcls + '-close-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('max'):
-			if (this._maximized)
-				jqn.removeClass(zcls + '-maxd-over');
-			jqn.removeClass(zcls + '-max-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('min'):
-			jqn.removeClass(zcls + '-min-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		}
-		this.$supers('doMouseOut_', arguments);
 	},
 	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenMinFlex_: function (orient) {
@@ -1238,7 +1215,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n) +
-				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? jq(n).find('>div:last')[0].offsetHeight : 0);
+				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n('content-outer')).padBorderHeight() : 0);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
@@ -1396,7 +1373,7 @@ zul.wnd.WindowRenderer = {
 	 */
 	shallCheckBorder: function (wgt) {
 		return wgt._mode != 'popup' &&
-			(wgt._mode != 'embedded' || wgt.getBorder() != "none");
+			(wgt._mode != 'embedded' || wgt.getBorder() != 'none');
 	}
 };
 })();

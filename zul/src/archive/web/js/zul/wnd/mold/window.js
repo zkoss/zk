@@ -18,50 +18,43 @@ function (out, skipper) {
 		title = this.getTitle(),
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass(),
-		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this),
-		bordercls = this._border;
+		contentSclass = this.getContentSclass();
 
-	bordercls = "normal" == bordercls ? "":
-		"none" == bordercls ? "-noborder" : '-' + bordercls;
-
-	out.push('<div', this.domAttrs_(), '>');
-
+	out.push('<div', this.domAttrs_(), '><div id="',
+			uuid, '-header-outer" class="', this.$s('header-outer'), '">');
+	
 	if (caption || title) {
-		out.push('<div class="', zcls, '-tl"><div class="',
-			zcls, '-tr"></div></div><div class="',
-			zcls, '-hl"><div class="', zcls,
-			'-hr"><div class="', zcls, '-hm"><div id="',
-			uuid, '-cap" class="', zcls, '-header">');
+		out.push('<div id="',
+			uuid, '-caption" class="', this.$s('header'), '">');
 
+		
 		if (caption) caption.redraw(out);
 		else {
-			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
+			var self = this;
+			var getIcon = function(iconClass) {
+				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
+			}
+			
 			if (this._closable)
-				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close">', iconInner, '</div>');
+				out.push('<div id="', uuid , '-close" class="', this.$s('icon-img'), ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
+				out.push('<div id="', uuid , '-maximize" class="', this.$s('icon-img'), ' ', this.$s('maximize'));
 				if (this._maximized)
-					out.push(' ', zcls, '-maxd');
-				out.push('">', iconInner, '</div>');
+					out.push(' ', this.$s('maximized'));
+				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="' + uuid, '-min" class="', zcls, '-icon ', zcls, '-min">', iconInner, '</div>');
+				out.push('<div id="', uuid , '-minimize" class="', this.$s('icon-img'), ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
-		out.push('</div></div></div></div>');
-	} else if (withFrame)
-		out.push('<div class="', zcls, '-tl', bordercls,
-				'"><div class="', zcls, '-tr', bordercls, '"></div></div>');
-
-	if (withFrame)
-		out.push('<div class="', zcls, '-cl', bordercls,
-			'"><div class="', zcls, '-cr', bordercls,
-			'"><div class="', zcls, '-cm', bordercls, '">');
-
-	out.push('<div id="', uuid, '-cave" class="');
+		
+		out.push('</div>');
+	} 
+	
+	out.push('</div><div id="',
+				uuid, '-content-outer" class="', this.$s('content-outer'), '"><div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
-	out.push(zcls, '-cnt', bordercls, '"');
+	out.push(this.$s('content'), '" ');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
@@ -69,12 +62,5 @@ function (out, skipper) {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (w != caption)
 				w.redraw(out);
-
-	out.push('</div>');
-
-	if (withFrame)
-		out.push('</div></div></div><div class="', zcls, '-bl', bordercls,
-			'"><div class="', zcls, '-br', bordercls, '"></div></div>');
-
-	out.push('</div>');
+	out.push('</div></div></div>');
 }
