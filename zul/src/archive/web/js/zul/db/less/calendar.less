@@ -1,0 +1,171 @@
+@import "~./zul/less/_header.less";
+
+.z-calendar {
+	background: #FFFFFF;
+	border: 1px solid #C5C5C5;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+	min-width: 220px;
+	padding: 2px;
+	color: #4d9cb5;
+
+	a {
+		text-decoration: none;
+	}
+	th {
+		font-family: @baseTitleFontFamily;
+		font-weight: bold;
+		padding: 12px 3px;
+		font-size: @fontSizeMedium;
+	}
+	table {
+		width: 100%;
+	}
+
+	&-title {
+		width: 100%;
+		text-align: center;
+		font-weight: bold;
+		font-family: @baseTitleFontFamily;
+		font-size: @fontSizeMedium;
+		color: #636363;
+		padding: 5px 24px;
+		line-height: @baseLineHeight;
+	}
+
+	&-header {
+		position: relative;
+
+		& > a {
+			display: inline-block;
+		}
+	}
+
+	&-title:hover {
+		color: #4d9cb5;
+	}
+
+	&-body {
+		height: 100%;
+	}
+
+
+	&-decade {
+		min-height: 162px;
+	}
+	&-month,
+	&-year {
+		min-height: 162px;
+
+		.z-calendar-cell > a {
+			min-height: 48px;
+			line-height: @baseLineHeight * 3;
+		}
+	}
+	&-cell {
+		text-align: center;
+
+		& > a {
+			min-height: 24px;
+			min-width:  24px;
+			padding: 3px 0;
+			color: #636363;
+			font-size: @fontSizeSmall;
+			display: block;
+			line-height: 18px;
+
+			&:hover {
+				background: #E3F2FF;
+				.borderRadius(4px);
+				text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+			}
+		}
+	}
+	&-weekend {
+		color: #f7941d;
+		background: #F3F3F3;
+	}
+	&-weekday {
+		color: #636363;
+	}
+	&-outrange {
+		color: #AAAAAA;
+		text-shadow: none;
+	}
+	&-weekofyear,
+	&-weekofyear > a {
+		background: #636363;
+		font-style: italic;
+		color: #FFFFFF;
+	}
+
+	&-weekofyear > a:hover {
+		color: #636363;
+	}
+
+	// for transition's animation use only
+	&-anima {
+		overflow: hidden;
+		position: relative;
+	}
+	&-anima-inner {
+		position: absolute;
+		width: 200%;
+
+		table {
+			float: left;
+			width: 50%;
+		}
+	}
+	&-selected > a {
+		background: #D9EFFA;
+		.borderRadius(4px);
+		text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+		
+		&:hover {
+			background: #C3E5F4;
+			color: #008BB6;
+		}
+	}
+
+
+	&-icon {
+		position: absolute;
+		color: #AAAAAA;
+		font-size: 20px;
+		width: 24px;
+		height: 24px;
+		padding: 0 8px;
+
+		&:hover {
+			color: #C3E5F4;
+		}
+	}
+	&-right {
+		right: 0px;
+	}
+	&-left {
+		left: 0px;
+	}
+
+	&-left[disabled],
+	&-right[disabled] {
+		cursor: default !important;
+		color: #D6D6D6 !important;
+		color: rgba(214,214,214,0.6) !important;
+	}
+}
+
+.z-datebox-rounded-pp .z-calendar,
+.z-datebox-pp .z-calendar {
+	border: 0;
+}
+
+// Calendar and Datebox
+.z-datebox-timezone-body,
+.z-datebox-timezone-item {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+}
