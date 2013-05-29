@@ -1,7 +1,11 @@
 ZK 6.0.6
-XXX YY, 2013
+
+* Features
+
 * Bugs:
   ZK-1784: client rod with hflex cause js error
+
+* Upgrade Notes
 
   --------
 ZK 6.0.5
