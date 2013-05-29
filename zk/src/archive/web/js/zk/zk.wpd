@@ -53,4 +53,5 @@ window.$eval=function(s){return eval(s);};
 
 	<script src="ext/jquery.json.js"/>
 	<script src="ext/jquery.mousewheel.js"/>
+	<script src="ext/jquery.transit.js"/>
 </package>

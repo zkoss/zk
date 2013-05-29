@@ -48,11 +48,13 @@ html {
 }
 // Focus states
 a:focus {
+  outline: none;
   // Default
-  outline: thin dotted #333;
+  // Disable for Potix on 5/29/2013
+  //outline: thin dotted #333;
   // Webkit
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
+  //outline: 5px auto -webkit-focus-ring-color;
+  //outline-offset: -2px;
 }
 // Hover & Active
 a:hover,
