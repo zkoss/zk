@@ -26,18 +26,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
-
-		var sw = $op[0].clientWidth,
-			sh = $op[0].clientHeight;
-		if (!floated) {
-			sw -= $op.zk.paddingWidth();
-			sw = zkn.revisedWidth(sw);
-			sh -= $op.zk.paddingHeight();
-			sh = zkn.revisedHeight(sh);
-		}
-
-		s.width = jq.px0(sw);
-		s.height = jq.px0(sh);
+			
+			s.width = jq.px0($op[0].clientWidth);
+			s.height = jq.px0($op[0].clientHeight);
 	}
 
 	//drag move
@@ -568,16 +559,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					s.top = '-10000px';
 					s.left = '-10000px';
 
-					var sw = $op[0].clientWidth,
-						sh = $op[0].clientHeight;
-					if (!floated) {
-						sw -= $op.zk.paddingWidth();
-						sw = $n.revisedWidth(sw);
-						sh -= $op.zk.paddingHeight();
-						sh = $n.revisedHeight(sh);
-					}
-					s.width = jq.px0(sw);
-					s.height = jq.px0(sh);
+					s.width = jq.px0($op[0].clientWidth);
+					s.height = jq.px0($op[0].clientHeight);
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
