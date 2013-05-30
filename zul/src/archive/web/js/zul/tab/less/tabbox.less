@@ -19,13 +19,103 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.z-tabs .z-tabs-space {
-	font-size: 0;
-	line-height: 0;
-	background: none;
-	border: 0;
-	height: auto;
+
+.z-tab {
+	position: relative;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
+	cursor: default;
+	display: block;
+	float: left;
+	padding: 0;
+	margin: 0;
+	-moz-user-select: none;
 }
+
+.z-tab-ver {
+	position: relative;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
+	cursor: default;
+	display: block;
+	float: none;
+	margin: 0;
+	-moz-user-select: none;
+}
+
+.z-tabs {
+
+	&-ver > &-header > &-cnt {
+		padding-left: 0;
+		padding-top: 0;
+		list-style-image: none;
+		list-style-position:outside;
+		list-style-type: none;
+		display: block;
+		margin: 0;
+		zoom: 1;
+		height: 4096px;
+		border-right: 1px solid #E1E1E1;
+		-moz-user-select: none;
+	}
+
+	&-space {
+		font-size: 0;
+		line-height: 0;
+		background: none;
+		border: 0;
+		height: auto;
+	}
+
+	&-ver > &-space {
+		float: left;
+		border-left: 0 none;
+		position: relative;
+	}
+
+	&-ver > &-header {
+		background: none repeat scroll 0 0 transparent;
+		zoom: 1;
+		overflow: hidden;
+		position: relative;
+	}
+
+	&-ver > &-header-scroll {
+		margin: 20px 0px 20px 0px;		
+	}
+
+	&-ver > &-up-scroll, &-ver > &-down-scroll {
+		cursor: pointer;
+		height: 20px;
+		position: absolute;
+		left: 4px;
+		z-index: 25;
+		width: 100%;
+		display: block;
+		border-right: 1px solid #E1E1E1;
+	}
+
+	&-ver > &-up-scroll {
+		top: 0;
+		background-image: url(${c:encodeThemeURL('~./zul/img/tab/scroll-u.png')});
+
+		&:hover {
+			background-position: center 0;
+		}
+	}
+
+	&-ver > &-down-scroll {
+		bottom: 0;
+		background-image: url(${c:encodeThemeURL('~./zul/img/tab/scroll-d.png')});
+		&:hover {
+			background-position: center 0;
+		}
+	}
+
+}
+
+
+
 .z-tabs, 
 .z-tabs-ver {
 	overflow: hidden;
@@ -82,17 +172,7 @@
 	zoom: 1;
 	-moz-user-select: none;
 }
-.z-tabs-cnt li {
-	position: relative;
-	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeMedium;
-	cursor: default;
-	display: block;
-	float: left;
-	padding: 0;
-	margin: 0;
-	-moz-user-select: none;
-}
+
 .z-tab-close,
 .z-tab-ver-close {
 	background-image: url(${c:encodeThemeURL('~./zul/img/tab/tab-close.gif')});
@@ -323,12 +403,7 @@
 	border: 0;
 	height: auto;
 }
-.z-tabs-ver-scroll .z-tabs-ver-header {
-	background: none repeat scroll 0 0 transparent;
-	zoom: 1;
-	overflow: hidden;
-	position: relative;
-}
+
 .z-tabs-ver-edge {
 	margin: 0 !important;
 	padding: 0 !important;
@@ -340,28 +415,7 @@
 	background: transparent !important;
 	height: 1px;
 }
-.z-tabs-ver .z-tabs-ver-cnt {
-	padding-left: 0;
-	padding-top: 0;
-	list-style-image: none;
-	list-style-position:outside;
-	list-style-type: none;
-	display: block;
-	margin: 0;
-	zoom: 1;
-	height: 4096px;
-	border-right: 1px solid #E1E1E1;
-	-moz-user-select: none;
-}
-.z-tabs-ver .z-tabs-ver-cnt li {
-	position: relative;
-	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeMedium;
-	cursor: default;
-	display: block;
-	margin: 0;
-	-moz-user-select: none;
-}
+
 .z-tab-ver-noclose {
 	display:none;
 }
@@ -417,50 +471,6 @@
 	color: #555555;
 	cursor: pointer;
 	font-size-adjust: none;
-}
-.z-tabs-ver-space {
-	float: left;
-	border-left: 0 none;
-	position: relative;
-}
-.z-tabbox-ver .z-tabs-ver-header-scroll {
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-.z-tabs-ver-up-scroll,
-.z-tabs-ver-down-scroll {
-	cursor: pointer;
-	height: 20px;
-	position: absolute;
-	left: 4px;
-	z-index: 25;
-	width: 100%;
-	display: block;
-}
-.z-tabs-ver-up-scroll,
-.z-tabs-ver-up-scroll-hl {
-	background: transparent no-repeat center bottom;
-	  background-image: url(${c:encodeThemeURL('~./zul/img/tab/scroll-u.png')});
-	border-right: 1px solid #E1E1E1;
-}
-.z-tabs-ver-up-scroll {
-	top: 0;
-}
-.z-tabs-ver-down-scroll,
-.z-tabs-ver-down-scroll-hl {
-	background: transparent no-repeat center bottom;
-	  background-image: url(${c:encodeThemeURL('~./zul/img/tab/scroll-d.png')});
-	border-right: 1px solid #E1E1E1;
-}
-.z-tabs-ver-down-scroll {
-	bottom: 0;
-}
-
-.z-tabs-ver-up-scroll:hover {
-	background-position: center 0;
-}
-.z-tabs-ver-down-scroll:hover {
-	background-position: center 0;
 }
 
 /* Selected */
