@@ -2,7 +2,6 @@
 
 @frameBackgroundColor: #D9E5EF;
 @contentBackgroundColor: white;
-@iconBackgroundColor: #F8F8F8;
 @iconHoverBackgoundColor: #DFF2FC;
 @iconColor: #777777;
 
@@ -68,9 +67,10 @@
 		background: transparent no-repeat 0 0;
 		overflow: hidden;
 		margin: auto 1px;
-		
+		display: block;
+
 		&-img {
-			background-color: @iconBackgroundColor;
+			.buttonBackground();
 			.borderRadius();
 			border: 1px solid #CFCFCF;
 			float: right;
@@ -91,19 +91,17 @@
 	}
 	
 	&-close {
-		font-size: 1.5em;
-		line-height: 22px;
+		font-size: @fontSizeXLarge;
+	    line-height: 23px;
 	}
 	
 	&-maximize {
-		font-size: 1.3em;
-		line-height: 23px;
+		font-size: @fontSizeLarge;
 	}
 	
 	&-minimize {
-		font-size: 1.3em;
-		line-height: 23px;
-		padding-top: 6px;
+		font-size: @fontSizeLarge;
+		padding-top: 5px;
 	}
 	
 	&-resize-faker {
