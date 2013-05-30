@@ -42,7 +42,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * @import zul.wgt.Toolbar
  */
 zul.tab.Tabbox = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
+	_orient: 'horizontal',
 	_tabscroll: true,
 	/* ZK-1441
 	 * Reference: _sel() in Tab.js, Tabpanel.js
@@ -131,21 +131,21 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	isHorizontal: function() {
-		return "horizontal" == this.getOrient();
+		return 'horizontal' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is a vertical tabbox.
 	 * @return boolean
 	 */
 	isVertical: function() {
-		return "vertical" == this.getOrient();
+		return 'vertical' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is in the accordion mold.
 	 * @return boolean
 	 */
 	inAccordionMold: function () {
-		return this.getMold().indexOf("accordion") != -1;
+		return this.getMold().indexOf('accordion') != -1;
 	},
 	/**
 	 * Returns the selected index.
