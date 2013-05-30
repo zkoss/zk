@@ -1,10 +1,9 @@
 @import "~./zul/less/_header.less";
 
-@titleAndPaddingColor: #D9E5EF;
-@contentColor: white;
-@iconColor: #F8F8F8;
-@iconHoverColor: #DFF2FC;
-@iconFontColor: #777777;
+@frameBackgroundColor: #D9E5EF;
+@contentBackgroundColor: white;
+@iconHoverBackgoundColor: #DFF2FC;
+@iconColor: #777777;
 
 .resetHeaderOuter() {
 	padding: 0px;
@@ -34,7 +33,7 @@
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium; font-weight: normal;
 		cursor: default;
-		background-color: @titleAndPaddingColor;
+		background-color: @frameBackgroundColor;
 		color: #363636;
 		line-height: 24px;
 		padding-top: 2px;
@@ -47,7 +46,7 @@
 			border-bottom-width: 0px;  
 			padding: 5px;
 			padding-bottom: 0px;
-			background-color: @titleAndPaddingColor;
+			background-color: @frameBackgroundColor;
 			.defaultOverflowZoom();
 		}
 		
@@ -59,7 +58,7 @@
 	&-content {
 		margin: 0;
 		padding: 4px;
-		background-color: @contentColor;
+		background-color: @contentBackgroundColor;
 		border: solid #ACACAC 1px;
 		.defaultOverflowZoom();
 	}
@@ -68,19 +67,20 @@
 		background: transparent no-repeat 0 0;
 		overflow: hidden;
 		margin: auto 1px;
-		
+		display: block;
+
 		&-img {
-			background-color: @iconColor;
+			.buttonBackground();
 			.borderRadius();
 			border: 1px solid #CFCFCF;
 			float: right;
 			cursor: pointer;
 			margin: auto 1px;
 			text-align: center;
-			color: @iconFontColor;
+			color: @iconColor;
 			
 			&:hover {
-				background-color: @iconHoverColor;
+				background-color: @iconHoverBackgoundColor;
 			}
 		}
 	}
@@ -91,19 +91,17 @@
 	}
 	
 	&-close {
-		font-size: 1.5em;
-		line-height: 22px;
+		font-size: @fontSizeXLarge;
+	    line-height: 23px;
 	}
 	
 	&-maximize {
-		font-size: 1.3em;
-		line-height: 23px;
+		font-size: @fontSizeLarge;
 	}
 	
 	&-minimize {
-		font-size: 1.3em;
-		line-height: 23px;
-		padding-top: 6px;
+		font-size: @fontSizeLarge;
+		padding-top: 5px;
 	}
 	
 	&-resize-faker {
@@ -167,7 +165,7 @@
 		border-top-width: 0px;  
 		padding: 5px;
 		padding-top: 0px;
-		background-color: @titleAndPaddingColor;
+		background-color: @frameBackgroundColor;
 		.defaultOverflowZoom();
 	}
 	
@@ -186,7 +184,7 @@
 	&-noborder > &-content-outer > &-content {
 		margin: 0;
 		padding: 4px;
-		background-color: @contentColor;
+		background-color: @contentBackgroundColor;
 		border: 0;
 		.defaultOverflowZoom();
 	}
