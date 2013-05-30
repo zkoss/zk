@@ -26,18 +26,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
-
-		var sw = $op[0].clientWidth,
-			sh = $op[0].clientHeight;
-		if (!floated) {
-			sw -= $op.zk.paddingWidth();
-			sw = zkn.revisedWidth(sw);
-			sh -= $op.zk.paddingHeight();
-			sh = zkn.revisedHeight(sh);
-		}
-
-		s.width = jq.px0(sw);
-		s.height = jq.px0(sh);
+			
+			s.width = jq.px0($op[0].clientWidth);
+			s.height = jq.px0($op[0].clientHeight);
 	}
 
 	//drag move
@@ -553,9 +544,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				up = 'z-icon-fullscreen',
 				down = 'z-icon-resize-small';				
 				if (maximized) {
-					jq(this.$n('maximize')).addClass(cls + '-maximized');
-					jq(this.$n('maximize')).children('.' + up)
-					.removeClass(up).addClass(down);
+					jq(this.$n('maximize')).addClass(cls + '-maximized')
+					.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -568,16 +558,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					s.top = '-10000px';
 					s.left = '-10000px';
 
-					var sw = $op[0].clientWidth,
-						sh = $op[0].clientHeight;
-					if (!floated) {
-						sw -= $op.zk.paddingWidth();
-						sw = $n.revisedWidth(sw);
-						sh -= $op.zk.paddingHeight();
-						sh = $n.revisedHeight(sh);
-					}
-					s.width = jq.px0(sw);
-					s.height = jq.px0(sh);
+					s.width = jq.px0($op[0].clientWidth);
+					s.height = jq.px0($op[0].clientHeight);
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
@@ -590,9 +572,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + '-maximized');
-					jq(this.$n('maximize')).children('.' + down)
-					.removeClass(down).addClass(up);
+					$max.removeClass(cls + '-maximized')
+					.children('.' + down).removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -1038,16 +1019,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			bordercls = this._border;
 		
 		bordercls = 'normal' == bordercls ? '':
-			'none' == bordercls ? '-noborder' : '-' + bordercls;
+			'none' == bordercls ? 'noborder' : bordercls;
 		
 		if (bordercls)
-			cls += ' ' + zcls + bordercls;
+			cls += ' ' + this.$s(this.bordercls);
 		
 		if (!(this.getTitle() || this.caption))
-			cls += ' ' + zcls + '-noheader';
+			cls += ' ' + this.$s('noheader');
 		
-		cls += ' ' + zcls + '-' + this._mode  
-		return cls;
+		cls += ' ' + this.$s(this._mode)   
+		return cls;	
 	},
 	
 	onChildAdded_: function (child) {
