@@ -14,6 +14,7 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
+import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -85,6 +86,10 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			addItemReference(owner, lbl, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			lbl.setAttribute(itervarnm, iterStatus);
 
+			//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+			//selectbox doesn't support 1787 because it attaching comp is always detached after render
+//			//lbl.setAttribute(TemplateResolver.TEMPLATE_OBJECT, owner.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
+			
 			//add template dependency
 			addTemplateTracking(owner, lbl, data, index, size);
 
