@@ -40,6 +40,7 @@ ZK 6.5.3
   ZK-1791: @global-command does not provide predefined "event" variable
   ZK-1784: client rod with hflex cause js error
   ZK-1787: When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+  ZK-1785: Tabbox (accordion) : selecting and removing a tab results in wrong node being opened
 
   --------
 ZK 6.5.2
