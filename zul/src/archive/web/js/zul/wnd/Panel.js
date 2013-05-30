@@ -593,7 +593,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		});
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		console.log(zk(this.$n('body')).padBorderHeight())
 		if (isFlexMin) {
 			height += this._titleHeight(n) +
 				(this._rounded() ? zk(this.$n('body')).padBorderHeight() : 0);

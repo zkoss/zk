@@ -30,18 +30,19 @@ function (out, skipper) {
 				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
 			}
 			
+			var iconImg = this.$s('icon-img')
 			if (this._closable)
-				out.push('<div id="', uuid , '-close" class="', this.$s('icon-img'), ' ', this.$s('close'), '">' , getIcon('icon-remove') ,  '</div>');
+				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-maximize" class="', this.$s('icon-img'), ' ', this.$s('maximize'));
+				out.push('<div id="', uuid , '-maximize" class="', iconImg, ' ', this.$s('maximize'));
 				if (this._maximized)
 					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-minimize" class="', this.$s('icon-img'), ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-minimize" class="', iconImg, ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			if (this._collapsible)
-				out.push('<div id="', uuid , '-expand" class="', this.$s('icon-img'), ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up z-icon-large') : getIcon('icon-caret-down'), '</div>');
+				out.push('<div id="', uuid , '-expand" class="', iconImg, ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		} 
 		
