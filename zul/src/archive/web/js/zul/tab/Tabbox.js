@@ -114,9 +114,17 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	getToolbar: function () {
 		return this.toolbar;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-tabbox" +
-			( this.inAccordionMold() ? "-" + this.getMold() : this.isVertical() ? "-ver" : "") : this._zclass;
+	
+	domClass_: function (no) {
+		var zcls = this.getZClass();
+		if(zcls == null)
+			return this.inAccordionMold() ? zcls + ' ' +  this.$s(this.getMold()) : this.isVertical() ? zcls  + ' ' + this.$s('ver') : zcls; 
+		else
+			return zcls;
+	},
+	
+	getZClass: function() {
+		return this._zclass ? this._zclass : 'z-tabbox';
 	},
 	/**
 	 * Returns whether it is a horizontal tabbox.
