@@ -30,7 +30,7 @@ function (out, skipper) {
 				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
 			}
 			
-			var iconImg = this.$s('icon-img')
+			var iconImg = this.$s('icon-img');
 			if (this._closable)
 				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
