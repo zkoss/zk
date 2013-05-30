@@ -350,6 +350,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					// prevent the scroll bar.
 					s.top = '-10000px';
 					s.left = '-10000px';
+					
+					s.width = jq.px0($op[0].clientWidth);
+					s.height = jq.px0($op[0].clientHeight);
 
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
@@ -620,6 +623,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
+				
+				s.width = jq.px0($op[0].clientWidth);
+				s.height = jq.px0($op[0].clientHeight);
 		}
 		return function(ctl) {
 			this._hideShadow();
