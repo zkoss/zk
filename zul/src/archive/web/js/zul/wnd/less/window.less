@@ -1,10 +1,10 @@
 @import "~./zul/less/_header.less";
 
-@headerAndPaddingColor: #D9E5EF;
-@contentColor: white;
-@iconColor: #F8F8F8;
-@iconHoverColor: #DFF2FC;
-@iconFontColor: #777777;
+@frameBackgroundColor: #D9E5EF;
+@contentBackgroundColor: white;
+@iconBackgroundColor: #F8F8F8;
+@iconHoverBackgoundColor: #DFF2FC;
+@iconColor: #777777;
 
 .resetHeaderOuter() {
 	padding: 0px;
@@ -34,7 +34,7 @@
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium; font-weight: normal;
 		cursor: default;
-		background-color: @headerAndPaddingColor;
+		background-color: @frameBackgroundColor;
 		color: #363636;
 		line-height: 24px;
 		padding-top: 2px;
@@ -47,7 +47,7 @@
 			border-bottom-width: 0px;  
 			padding: 5px;
 			padding-bottom: 0px;
-			background-color: @headerAndPaddingColor;
+			background-color: @frameBackgroundColor;
 			.defaultOverflowZoom();
 		}
 		
@@ -59,7 +59,7 @@
 	&-content {
 		margin: 0;
 		padding: 4px;
-		background-color: @contentColor;
+		background-color: @contentBackgroundColor;
 		border: solid #ACACAC 1px;
 		.defaultOverflowZoom();
 	}
@@ -70,17 +70,17 @@
 		margin: auto 1px;
 		
 		&-img {
-			background-color: @iconColor;
+			background-color: @iconBackgroundColor;
 			.borderRadius();
 			border: 1px solid #CFCFCF;
 			float: right;
 			cursor: pointer;
 			margin: auto 1px;
 			text-align: center;
-			color: @iconFontColor;
+			color: @iconColor;
 			
 			&:hover {
-				background-color: @iconHoverColor;
+				background-color: @iconHoverBackgoundColor;
 			}
 		}
 	}
@@ -167,7 +167,7 @@
 		border-top-width: 0px;  
 		padding: 5px;
 		padding-top: 0px;
-		background-color: @headerAndPaddingColor;
+		background-color: @frameBackgroundColor;
 		.defaultOverflowZoom();
 	}
 	
@@ -186,7 +186,7 @@
 	&-noborder > &-content-outer > &-content {
 		margin: 0;
 		padding: 4px;
-		background-color: @contentColor;
+		background-color: @contentBackgroundColor;
 		border: 0;
 		.defaultOverflowZoom();
 	}
