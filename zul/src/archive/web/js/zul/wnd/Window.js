@@ -1038,16 +1038,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			bordercls = this._border;
 		
 		bordercls = 'normal' == bordercls ? '':
-			'none' == bordercls ? '-noborder' : '-' + bordercls;
+			'none' == bordercls ? 'noborder' : bordercls;
 		
 		if (bordercls)
-			cls += ' ' + zcls + bordercls;
+			cls += ' ' + this.$s(this.bordercls);
 		
 		if (!(this.getTitle() || this.caption))
-			cls += ' ' + zcls + '-noheader';
+			cls += ' ' + this.$s('noheader');
 		
-		cls += ' ' + zcls + '-' + this._mode  
-		return cls;
+		cls += ' ' + this.$s(this._mode)   
+		return cls;	
 	},
 	
 	onChildAdded_: function (child) {
