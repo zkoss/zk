@@ -544,9 +544,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				up = 'z-icon-fullscreen',
 				down = 'z-icon-resize-small';				
 				if (maximized) {
-					jq(this.$n('maximize')).addClass(cls + '-maximized');
-					jq(this.$n('maximize')).children('.' + up)
-					.removeClass(up).addClass(down);
+					jq(this.$n('maximize')).addClass(cls + '-maximized')
+					.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -573,9 +572,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + '-maximized');
-					jq(this.$n('maximize')).children('.' + down)
-					.removeClass(down).addClass(up);
+					$max.removeClass(cls + '-maximized')
+					.children('.' + down).removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
