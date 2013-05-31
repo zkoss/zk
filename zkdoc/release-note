@@ -40,7 +40,8 @@ ZK 6.5.3
   ZK-1791: @global-command does not provide predefined "event" variable
   ZK-1784: client rod with hflex cause js error
   ZK-1787: When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
-
+  ZK-1795: MVVM netsed template may cause exception
+  
   --------
 ZK 6.5.2
 Mar 26, 2013

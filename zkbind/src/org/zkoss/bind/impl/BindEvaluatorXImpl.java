@@ -17,10 +17,13 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.ExpressionX;
+import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ValueReference;
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.SimpleXelContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
@@ -105,8 +108,21 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 	}
 
 	//utility to create an XelContext associated to the reference
-	protected XelContext newXelContext(BindContext ctx, Component comp) {
-		final XelContext xelc = super.newXelContext(comp);
+	protected XelContext newXelContext(BindContext ctx, final Component comp) {	
+		final FunctionMapper mapper = getFunctionMapper(comp);
+		//ZK-1795MVVM nested template may cause exception
+		//Dennis: Shouldn't get the real variable-resolver and keep it, it will set ref as evaluator's self, 
+		//When nested MVVM templates, if there are a ref-binding, it will newXelContext multiple time to do new evaluation in this evaluation,
+		//this cause the real variable-resolver's self be changed when newXelContext called.
+		final VariableResolver resolver = new VariableResolver(){
+			public Object resolveVariable(String name) throws XelException {
+				VariableResolver vr = getVariableResolver(comp);
+				return vr==null?null:vr.resolveVariable(name);
+			}};
+		
+//		final XelContext xelc = super.newXelContext(comp);
+		final XelContext xelc = new SimpleXelContext(resolver, mapper);//super.newXelContext(comp);
+		
 		xelc.setAttribute(BinderImpl.BINDCTX, ctx);
 		if (ctx != null) {
 			xelc.setAttribute(BinderImpl.BINDING, ctx.getBinding());
