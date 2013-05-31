@@ -45,31 +45,17 @@ var Renderer =
 zul.db.Renderer = {
 	/** Returns the HTML fragment representing a day cell.
 	 * By overriding this method, you could customize the look of a day cell.
-	 * <p>Default: zul.db.Renderer.anchorHTML(day)
+	 * <p>Default: day
 	 * @param zul.db.Calendar cal the calendar
 	 * @param int y the year
 	 * @param int m the month (between 0 to 11)
 	 * @param int day the day (between 1 to 31)
 	 * @param int monthofs the month offset. If the day is in the same month
 	 * @return String the HTML fragment
-	 * @see #anchorHTML(String, String, String)
 	 * @since 5.0.3
 	 */
 	cellHTML: function (cal, y, m, day, monthofs) {
-		return this.anchorHTML(day);
-	},
-	/**
-	 * Returns the AnchorHTML fragment representing a cell
-	 * @param String val the value of the content
-	 * @param String title the title of the anchor
-	 * @param String classname the CSS classname
-	 * @return String the HTML fragment
-	 * @since 7.0.0
-	 */
-	anchorHTML: function (val, title, classname) {
-		return '<a href="javascript:;"' + (classname ? ' class="' + classname +
-				'"' : '') + (title ? ' title="' + title +
-						'"' : '') + '>' + val + '</a>';
+		return day;
 	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
 	 * <p>Default: does nothing
@@ -118,7 +104,7 @@ zul.db.Renderer = {
 	 * @since 6.5.0
 	 */
 	labelOfWeekOfYear: function (wgt, val) {
-		return '<a href="javascript:;">' + val + '</a>';
+		return val;
 	},
 	/**
 	 * Generates the title of the week of year.
@@ -214,7 +200,7 @@ zul.db.Renderer = {
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
 			out.push('<td class="', cell, '" id="', uuid, '-m', j, '"_dt="', j ,'">', 
-					Renderer.anchorHTML(localizedSymbols.SMON[j]) + '</td>');
+					localizedSymbols.SMON[j] + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -246,7 +232,7 @@ zul.db.Renderer = {
 				continue;
 			}
 			out.push('<td class="', cell, '" _dt="', yofs ,'" id="', uuid, '-y', j, '" >', 
-					Renderer.anchorHTML(yofs + ydelta), '</td>');
+					yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
 		}
@@ -283,8 +269,8 @@ zul.db.Renderer = {
 			
 			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '"',
-					' >', Renderer.anchorHTML((temp + ydelta) + '-<br />' +
-							(temp + ydelta + 9)), '</td>');
+					' >', (temp + ydelta) + '-<br />' +
+							(temp + ydelta + 9), '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -423,8 +409,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				domTarget: jq(this.$n('mid')).find('.' + this.$s('selected'))[0],
 				stop: zk.$void
 			});
-		} else
-			this.$supers('doKeyDown_', arguments);
+		}
 	},
 	_shift: function (ofs, opts) {
 		var oldTime = this.getTime();	
@@ -459,6 +444,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		case 'day':
 			if (oldTime.getYear() == newTime.getYear() &&
 				oldTime.getMonth() == newTime.getMonth()) {
+				opts = opts || {};
+				opts.sameMonth = true; //optimize
 				this._markCal(opts);
 			} else 
 				this.rerender();
@@ -592,6 +579,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this._value = _newDate(year, month, day, d == null);
 		this.fire('onChange', {value: this._value});
 	},
+	// calendar-ctrl.js will override this function 
 	_clickDate: function (evt) {
 		var target = evt.domTarget, val;
 		for (; target; target = target.parentNode)
@@ -622,21 +610,18 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				var newTime = this.getTime();
 				if (oldTime.getYear() == newTime.getYear() &&
 					oldTime.getMonth() == newTime.getMonth()) {
-						this._markCal();
+						this._markCal({sameMonth: true}); // optimize
 				} else
 					this.rerender();
 				break;
 			case 'month' :
-				this._setTime(null, val);
 				this._setView('day');
 				break;
 			case 'year' :
-				this._setTime(val);
 				this._setView('month');
 				break;
 			case 'decade' :
 				//Decade mode Set Year Also
-				this._setTime(val);
 				this._setView('year');
 				break;
 			}
@@ -692,6 +677,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	_setView: (function () {
+		
+		// check whether to disable the arrow
 		function _updateArrow(wgt) {
 			if (wgt.isOutOfRange(true)) {
 				jq(wgt.$n('left')).attr('disabled', 'disabled');
@@ -707,6 +694,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		return function (view, force) {
 			if (this._view != view) {
 				this._view = view;
+				
+				// ie9 and early won't support css3 transition
+				if (zk.ie < 10) {
+					this.rerender();
+					return;
+				}
 				var out = [],
 					localizedSymbols = this.getLocalizedSymbols();
 				
@@ -802,7 +795,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	/**
 	 * Check whether the date is out of range between 1900~2100 years
-	 * @param boolean left the left arrow button
+	 * @param boolean left it is used for the left arrow button
 	 * @param Date date the date object for the range if null, the current value
 	 * of {@link #getTime()} is assumed.
 	 * @returns boolean if true it means the date is out of range.
@@ -837,9 +830,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if ((anc = this.$n('a')) && (!opts || !opts.silent))
 			_doFocus(anc, opts && opts.timeout );
 	},
+	// calendar-ctrl.js will override this function 
 	_markCal0: function (opts) {
 		var	seldate = this.getTime(),
 		 	m = seldate.getMonth(),
+			mid = this.$n('mid'),
+			$mid = jq(mid),
+			seldClass = this.$s('selected'),
 			y = seldate.getFullYear();
 		if (this._view == 'day') {
 			var d = seldate.getDate(),
@@ -847,7 +844,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				v = new Date(y, m, 1).getDay()- DOW_1ST,
 				last = new Date(y, m + 1, 0).getDate(), //last date of this month
 				prev = new Date(y, m, 0).getDate(), //last date of previous month
-				today = zUtl.today(); //no time part
+				today = zUtl.today(), //no time part
+				outsideClass = this.$s('outside'),
+				disdClass = this.$s('disabled');
+			
+			$mid.find('.' + seldClass).removeClass(seldClass);
+			if (!opts || !opts.sameMonth) {
+				$mid.find('.' + outsideClass).removeClass(outsideClass);
+				$mid.find('.' + disdClass).removeClass(disdClass);
+			}
+			
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
 				var week = this.$n('w' + j);
@@ -858,24 +864,32 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							week.style.display = 'none';
 						else {
 							if (k == 0) week.style.display = '';
-							var $cell = jq(week.cells[k]),
-								monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
+							var	monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
 								bSel = cur == d;
 							
+							// check whether the date is out of range
 							if (y >= 2099 && m == 11 && monofs == 1
 									|| y <= 1900 && m == 0 && monofs == -1)
 								continue;
+
+							var $cell = jq(week.cells[k]);
 							
-							$cell[0]._monofs = monofs;								
-							$cell[bSel ? 'addClass' : 'removeClass'] (this.$s('selected'));
+							$cell[0]._monofs = monofs;
+							if (bSel)
+								$cell.addClass(seldClass);
 								
 								
 							//not same month
-							$cell[monofs ? 'addClass': 'removeClass'](this.$s('outside'))
-								[Renderer.disabled(this, y, m + monofs, v, today) ? 
-								'addClass': 'removeClass'](this.$s('disabled')).
-								html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).
-								attr('_dt', v);
+							if (!opts || !opts.sameMonth) { // optimize
+								if (monofs) {
+									$cell.addClass(outsideClass);
+								}
+								if (Renderer.disabled(this, y, m + monofs, v, today)) {
+									$cell.addClass(disdClass);
+								}
+								$cell.html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).
+									attr('_dt', v);
+							}
 						}
 					}
 				}
@@ -885,10 +899,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				field = isMon ? 'm': 'y',
 				index = isMon? m: y % 10 + 1,
 				node;
+
+			$mid.find('.' + seldClass).removeClass(seldClass);
 				
 			for (var j = 0; j < 12; ++j)
-				if (node = this.$n(field + j))
-					jq(node)[index == j ? 'addClass': 'removeClass'](this.$s('selected'));
+				if (index == j && (node = this.$n(field + j)))
+					jq(node).addClass(seldClass);
 		}
 	}
 });
