@@ -44,12 +44,11 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	domClass_: function() {
 		var cls = this.$supers('domClass_', arguments),
-			zcls = this.getZclass(),
 			tabbox = this.getTabbox();
 		if (!tabbox) return 'z-tabpanels';
 
 		var mold = tabbox.getMold();
-		return cls + ' ' + (mold == 'default' ? (tabbox.isVertical() ? this.$s('ver') : '') : this.$s(mold));
+		return cls + (mold == 'default' ? (tabbox.isVertical() ? ' ' + this.$s('ver') : '') : ' ' + this.$s(mold));
 	},
 	setWidth: function (val) {
 		var n = this.$n(),

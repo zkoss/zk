@@ -102,16 +102,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	getIndex: function() {
 		return this.getChildIndex();
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tab';
-
-		var mold = tabbox.getMold();
-		return 'z-tab' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
-	},
 	/**
 	 * Returns the panel associated with this tab.
 	 * @return Tabpanel
@@ -218,12 +208,19 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added = this.isDisabled() ? zcls + '-disd' : '';
-			if (this.isSelected())
-				added += ' ' + zcls + '-seld';
-			if (added) scls += (scls ? ' ': '') + added;
+			var tabbox = this.getTabbox(),
+				added = this.isDisabled() ? this.$s('disd') : '';
+			
+			if (!tabbox) return 'z-tab';
+			if (this.isSelected()) scls += ' ' + this.$s('seld');
+			
+			var mold = tabbox.getMold();
+			if(mold == 'default' && tabbox.isVertical())
+				scls += ' ' + this.$s('ver');
+			if(mold != 'default')
+				scls += ' ' + this.$s(mold);
 		}
+		
 		return scls;
 	},
 	domContent_: function () {
