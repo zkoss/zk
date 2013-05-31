@@ -17,18 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-doublebox.
  */
 zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
-	onSize: function() {
-		var width = this.getWidth();
-		if (!width || width.indexOf('%') != -1)
-			this.getInputNode().style.width = '';
-		this.syncWidth();
-	},
-
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
-	},
 	coerceFromString_: function (value) {
 		if (!value) return null;
 					
@@ -94,24 +82,10 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 			zk.fmt.Number.format(fmt, value, this._rounding, symbols) : 
 			DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-doublebox" + (this.inRoundedMold() ? "-rounded": "");
-	},
 	getAllowedKeys_: function () {
 		var symbols = this._localizedSymbols;
 		return this.$supers('getAllowedKeys_', arguments)
 			+ (symbols ? symbols: zk).DECIMAL + 'e';
 		//supports scientific expression such as 1e2
-	},
-	bind_: function(){
-		this.$supers(zul.inp.Doublebox, 'bind_', arguments);
-		if (this.inRoundedMold())
-			zWatch.listen({onSize: this});
-	},	
-	unbind_: function(){
-		if (this.inRoundedMold())
-			zWatch.unlisten({onSize: this});
-		this.$supers(zul.inp.Doublebox, 'unbind_', arguments);
 	}
 });
