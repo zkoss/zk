@@ -33,15 +33,17 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n().style.display = 'none';
 	},
+	domClass_: function() {
+		var cls = this.$supers('domClass_', arguments),
+			tabbox = this.getTabbox(),
+			mold = tabbox.getMold();
+		if (tabbox.inAccordionMold())
+			cls += ' ' + this.$s('cnt');
+		return cls + ' ' + (mold == "default" ? (tabbox.isVertical() ? this.$s('ver') : '') : this.$s(mold));
+	},
+	
 	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tabpanel';
-
-		var mold = tabbox.getMold();
-		return 'z-tabpanel' + (mold == "default" ? (tabbox.isVertical() ? '-ver' : '') : '-' + mold);
+		return this._zclass ? this._zclass : 'z-tabpanel';
 	},
 	/** Returns the tab associated with this tab panel.
 	 * @return Tab
@@ -135,39 +137,22 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				hgh = isHor ?
 					zk(n.parentNode).vflexHeight(): n.parentNode.clientHeight;
 					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
-				if (zk.ie8)
-					hgh -= 1; // show the bottom border
-				zk(n).setOffsetHeight(hgh);
+				zk(n).setOffsetHeight(hgh + zk(n).padBorderHeight());
 			} else {
 				var n = this.$n(),
 					hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
 				hgh = zk(n.parentNode).revisedHeight(hgh);
-
-				// fixed Opera 10.5+ bug
-				if (zk.opera) {
-					var parent;
-					if ((parent = tbx.parentNode) && tbx.style.height == '100%')
-						hgh = zk(parent).revisedHeight(parent.offsetHeight);
-				}
 
 				for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
 					if (e != n)
 						hgh -= e.offsetHeight;
 				hgh -= n.firstChild.offsetHeight;
 				hgh = zk(n = n.lastChild).revisedHeight(hgh);
-				if (zk.ie8)
-					hgh -= 1; // show the bottom border
 				var cave = this.$n('cave'),
 					s = cave.style;
 				s.height = jq.px0(hgh);
 			}
 		}
-	},
-	domClass_: function () {
-		var cls = this.$supers('domClass_', arguments);
-		if (this.getTabbox().inAccordionMold())
-			cls += ' ' + this.getZclass() + '-cnt';
-		return cls;
 	},
 	onSize: function() {
 		var tabbox = this.getTabbox();

@@ -37,12 +37,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return wd;
 	},
 	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-			
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tabs';
-		return "z-tabs" + (tabbox.getMold() == "default" && tabbox.isVertical() ? '-ver' : '');
+		return this._zclass != null ? this._zclass : 'z-tabs';
 	},
 	onSize: function () {
 		this._fixWidth();
@@ -69,8 +64,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var zcls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var tbx = this.getTabbox(),
-				added = tbx.isTabscroll() ? zcls + "-scroll" : "";
+				added = tbx.isTabscroll() ? this.$s('scroll') : '';
 			if (added) zcls += (zcls ? ' ': '') + added;
+			added = (tbx.getMold() == "default" && tbx.isVertical()) ? this.$s('ver') : '';
+			if (added) 
+				zcls += (zcls ? ' ': '') + added;
 		}
 		return zcls;
 	},

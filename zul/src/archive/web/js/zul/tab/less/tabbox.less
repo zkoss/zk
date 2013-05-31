@@ -30,21 +30,13 @@
 	padding: 0;
 	margin: 0;
 	-moz-user-select: none;
-}
 
-.z-tab-ver {
-	position: relative;
-	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeMedium;
-	cursor: default;
-	display: block;
-	float: none;
-	margin: 0;
-	-moz-user-select: none;
+	&-ver {
+		float: none;
+	}
 }
 
 .z-tabs {
-
 	&-ver > &-header > &-cnt {
 		padding-left: 0;
 		padding-top: 0;
@@ -114,7 +106,21 @@
 
 }
 
+.z-tabpanels {
+	border: 1px solid #E1E1E1;
+	border-width: 1px 1px 1px 0;
+	zoom: 1; 
+	overflow: hidden; 
+	position: relative;
 
+	&-ver, .z-tabpanel { 
+		border: 0;
+	}
+
+	&-ver-inner {
+		border-color: #E1E1E1;
+	}
+}
 
 .z-tabs, 
 .z-tabs-ver {
@@ -534,31 +540,13 @@
 	cursor: default;
 	color: gray;
 }
-/* Tabpanels Tabpanel */
-.z-tabpanel,
-.z-tabbox-ver .z-tabpanels-ver {
-	border-color: #E1E1E1;
-	border-width: 1px;
-	border-style: solid;
-}
-.z-tabbox-ver .z-tabpanels-ver .z-tabpanels-ver-inner {
-	border-color: #E1E1E1;
-}
-.z-tabbox-ver .z-tabpanels-ver {
-	border: 1px solid #E1E1E1;
-	border-width: 1px 1px 1px 0;
-}
+
 .z-tabpanel,
 .z-tabbox-ver .z-tabpanel-ver {
 	padding: 5px;
 	zoom: 1;
 }
-.z-tabpanels-ver {
-	float: left;
-	zoom: 1; 
-	overflow: hidden; 
-	position: relative;
-}
+
 
 .z-tabpanel {
 	border-top: none;
