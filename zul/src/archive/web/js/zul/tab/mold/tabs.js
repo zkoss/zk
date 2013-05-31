@@ -40,14 +40,8 @@ function (out) {
 			 '</div>');
 	
 	if (tbx.isVertical()) {
-		out.push('<div id="', uuid, '-up">',
-					'<div class="', zcls, '-up-scroll-hl"></div>',
-					'<div class="',zcls,'-up-scroll-hr"></div>',
-				 '</div>',
-				 '<div id="', uuid, '-down">',
-				 	'<div class="', zcls, '-down-scroll-hl"></div>',
-				 	'<div class="',zcls,'-down-scroll-hr"></div>',
-				 '</div>');
+		out.push('<div id="', uuid, '-up" class="z-tabs-up-scroll"></div>',
+				 '<div id="', uuid, '-down" class="z-tabs-down-scroll"></div>');
 	} 
 	
 	if (!tbx.isVertical()) {
