@@ -35,29 +35,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		/** Sets whether the button (on the right of the textbox) is visible.
 		 * @param boolean visible
 	 	*/
-		buttonVisible: function(v){			
-			var n = this.$n("btn"),
-				zcls = this.getZclass();
-			if (!n) return;
-			if (!this.inRoundedMold()) {
-				if (!this._inplace || !v)
-					jq(n)[v ? 'show': 'hide']();
-				else
-					n.style.display = '';
-				jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
-			} else {
-				var fnm = v ? 'removeClass': 'addClass';
-				jq(n)[fnm](zcls + '-btn-right-edge');
-			}
-			this.onSize();
+		buttonVisible: function (v) {
+			zul.inp.RoundUtl.buttonVisible(this, v);
 		}
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-spinner" + (this.inRoundedMold() ? "-rounded": "");
-	},
-	isButtonVisible: function(){
-		return _buttonVisible;
+	inRoundedMold: function () {
+		return true;
 	},
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
@@ -93,10 +76,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 				: value != null ? ''+value: '';
 	},
 	onSize: function () {
-		var width = this.getWidth();
-		if (!width || width.indexOf('%') != -1)
-			this.getInputNode().style.width = '';
-		this.syncWidth();
+		zul.inp.RoundUtl.onSize(this);
 	},
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
@@ -120,29 +100,20 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_ondropbtnup: function (evt) {
-		var zcls = this.getZclass();
-		
-		jq(this.$n("btn")).removeClass(zcls + "-btn-clk");
-		if (!this.inRoundedMold()) {
-			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
-			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
-		}
-		this.domUnlisten_(document.body, "onZMouseUp", "_ondropbtnup");
+		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
+		this._stopAutoIncProc();
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt){
-		var isRounded = this.inRoundedMold();
-		if (isRounded && !this._buttonVisible) return;
-		if(this.getInputNode().disabled) return;
+		if (!this._buttonVisible || this._disabled) return;
 		
-		var btn = this.$n("btn"),
-			zcls = this.getZclass();
+		var btn = this.$n('btn');
 			
 		if (!zk.dragging) {
-			if (this._currentbtn)
-				this.ondropbtnup(evt);
-			jq(btn).addClass(zcls + "-btn-clk");
-			this.domListen_(document.body, "onZMouseUp", "_ondropbtnup");
+			if (this._currentbtn) // just in case
+				this._ondropbtnup(evt);
+			
+			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup');
 			this._currentbtn = btn;
 		}
 		
@@ -158,14 +129,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this._increase(false);
 			this._startAutoIncProc(false);
 		}
-		
-		var sfx = isRounded? "" : 
-						isOverUpBtn? "-up":"-down";
-		if ((btn = this.$n("btn" + sfx)) && !isRounded) {
-			jq(btn).addClass(zcls + "-btn" + sfx + "-clk");
-			this._currentbtn = btn;
-		}
-		
+				
 		// disable browser's text selection
 		evt.stop();
 	},
@@ -188,34 +152,18 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 				inp.value = 0;
 		}
 	},
-	_btnUp: function(evt){
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.getInputNode();
-		if(inp.disabled) return;
+	_btnUp: function(evt) {
+		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		this._onChanging();
 		this._stopAutoIncProc();
 		
 		if (zk.ie) {
-			var len = inp.value.length;
+			var inp = this.getInputNode(),
+				len = inp.value.length;
 			zk(inp).setSelectionRange(len, len);
 		}
 		inp.focus();
-	},
-	_btnOut: function(evt){
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.getInputNode();
-		if (!inp.disabled && !zk.dragging)
-			jq(this.$n("btn")).removeClass(this.getZclass()+"-btn-over");
-			
-		if(inp.disabled) return;
-
-		this._stopAutoIncProc();
-	},
-	_btnOver: function(evt){
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		if (!this.getInputNode().disabled && !zk.dragging)
-			jq(this.$n("btn")).addClass(this.getZclass()+"-btn-over");
 	},
 	_increase: function (is_add){
 		var inp = this.getInputNode(),
@@ -238,7 +186,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		
 	},
 	_clearValue: function(){
-		this.getInputNode().value = this._defRawVal = "";
+		this.getInputNode().value = this._defRawVal = '';
 		return true;
 	},
 	_startAutoIncProc: function (isup){
@@ -254,40 +202,14 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		this.timerId = null;
 	},
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
-	},
 	doFocus_: function (evt) {
-		var n = this.$n();
-		if (this._inplace)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-			
 		this.$supers('doFocus_', arguments);
 
-		if (this._inplace) {
-			if (jq(n).hasClass(this.getInplaceCSS())) {
-				jq(n).removeClass(this.getInplaceCSS());
-				this.onSize();
-			}
-		}
+		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
-		var btn = this.$n('btn');
-		if (zk.ie <= 8 && btn && !this._instant && jq(btn).hasClass(this.getZclass()+'-btn-over'))
-			return; //Bug ZK-460: IE 6-8 only. If still focus on spinner, should not fire onChange.  
-		var n = this.$n();
-		if (this._inplace && this._inplaceout)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-
 		this.$supers('doBlur_', arguments);
-
-		if (this._inplace && this._inplaceout) {
-			jq(n).addClass(this.getInplaceCSS());
-			this.onSize();
-			n.style.width = this.getWidth() || '';
-		}
+		zul.inp.RoundUtl.doBlur_(this);
 	},
 	afterKeyDown_: function (evt,simulated) {
 		if (!simulated && this._inplace)
@@ -297,17 +219,11 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Spinner, 'bind_', arguments); 
-		this.timeId = null;
-
-		if (this._inplace)
-			jq(this.getInputNode()).addClass(this.getInplaceCSS());
-
+		
 		var btn;
-		if(btn = this.$n("btn"))
-			this.domListen_(btn, "onZMouseDown", "_btnDown")
-				.domListen_(btn, "onZMouseUp", "_btnUp")
-				.domListen_(btn, "onMouseOut", "_btnOut")
-				.domListen_(btn, "onMouseOver", "_btnOver");
+		if(btn = this.$n('btn'))
+			this.domListen_(btn, 'onZMouseDown', '_btnDown')
+				.domListen_(btn, 'onZMouseUp', '_btnUp');
 
 		zWatch.listen({onSize: this});
 	},
@@ -317,12 +233,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this.timerId = null;
 		}
 		zWatch.unlisten({onSize: this});
-		var btn = this.$n("btn");
+		var btn = this.$n('btn');
 		if(btn)
-			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")
-				.domUnlisten_(btn, "onZMouseUp", "_btnUp")
-				.domUnlisten_(btn, "onMouseOut", "_btnOut")
-				.domUnlisten_(btn, "onMouseOver", "_btnOver");
+			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
+				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 
 		this.$supers(zul.inp.Spinner, 'unbind_', arguments);
 	}

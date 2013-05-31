@@ -13,36 +13,27 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var zcls = this.getZclass(),
-		uuid = this.uuid,
-		isRounded = this.inRoundedMold(),
+	var uuid = this.uuid,
 		isButtonVisible = this._buttonVisible;
 	
-	out.push('<i', this.domAttrs_({text:true}), '>',
-			'<input id="', uuid,'-real"', 'class="', zcls,'-inp');
-			
-	if(!isButtonVisible)
-		out.push(' ', zcls, '-right-edge');
+	out.push('<span', this.domAttrs_({text:true}), '>',
+			'<input id="', uuid,'-real"', 'class="', this.$s('input'));
+
+	if (!isButtonVisible)
+		out.push(' ', this.$s('rightedge'));
+	
+	out.push('" autocomplete="off"',
+			this.textAttrs_(),'/>', '<span href="javascript:;" id="', uuid,'-btn"',
+			'class="', this.$s('icon'));
+	
+	if (!isButtonVisible)
+		out.push(' ', this.$s('disabled'));
 		
-	out.push('"', this.textAttrs_(),'/>', '<i id="', uuid,'-btn"',
-			'class="', zcls, '-btn');
 	
-	if (isRounded) {
-		if (!isButtonVisible)
-			out.push(' ', zcls, '-btn-right-edge');
-		if (this._readonly)
-			out.push(' ', zcls, '-btn-readonly');	
-	} else if (!isButtonVisible)
-		out.push('" style="display:none');	
-	
-	out.push('">');
-	if (!isRounded)
-		out.push('<div id="', uuid, '-btn-up" class="', zcls, 
-				'-btn-upper"><div class="', zcls, '-btn-up-icon"></div></div>',
-				'<div id="', uuid, '-btn-down" class="', zcls, 
-				'-btn-lower"><div class="', zcls, '-btn-down-icon"></div></div>');
-	else
-		out.push('<div class="', zcls, '-btn-icon"></div>');
-	out.push('</i></i>');
-	
+	out.push('"><a href="javascript:;" class="', this.$s('up'),
+			'"><i class="z-icon-angle-up"></i></a><i class="', this.$s('separator'),
+			'"></i><a href="javascript:;" class="', this.$s('down'),
+			'"><i class="z-icon-angle-down"></i></a>');
+
+	out.push('</span></span>');
 }

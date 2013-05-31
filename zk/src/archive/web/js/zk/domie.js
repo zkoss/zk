@@ -56,7 +56,15 @@ zk.override(jq.fn, _jq, {
 	}
 });
 zk.override(zjq, _zjq, {
-	_fixCSS: function (el) {
+	_fixCSS: zk.ie == 9 ? function (el) { // fix for filter gradient issue
+		var old = el.className,
+			oldDisplay = el.style.display;
+		el.className = '';
+		el.style.display = 'none';
+		if (el.offsetHeight);
+		el.className = old;
+		el.style.display = oldDisplay;
+	} : function (el) {
 		var zoom = el.style.zoom;
 		el.style.zoom = 1;
 		_zjq._fixCSS(el);

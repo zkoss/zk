@@ -26,18 +26,6 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 		 */
 		scale: null
 	},
-	onSize: function() {
-		var width = this.getWidth();
-		if (!width || width.indexOf('%') != -1)
-			this.getInputNode().style.width = '';
-		this.syncWidth();
-	},
-
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
-	},
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
@@ -62,10 +50,6 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding, this._localizedSymbols)
 			: value.$toLocaleString() : '';
 	},
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-decimalbox" + (this.inRoundedMold() ? "-rounded": "");
-	},
 	marshall_: function(val) {
 		return val ? val.$toString() : val;
 	},
@@ -76,15 +60,5 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 		var symbols = this._localizedSymbols;
 		return this.$supers('getAllowedKeys_', arguments)
 			+ (symbols ? symbols: zk).DECIMAL; //not support scientific expression
-	},
-	bind_: function(){
-		this.$supers(zul.inp.Decimalbox, 'bind_', arguments);
-		if (this.inRoundedMold())
-			zWatch.listen({onSize: this});
-	},	
-	unbind_: function(){
-		if (this.inRoundedMold())
-			zWatch.unlisten({onSize: this});
-		this.$supers(zul.inp.Decimalbox, 'unbind_', arguments);
 	}
 });
