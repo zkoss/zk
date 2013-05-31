@@ -306,7 +306,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		// Bug ZK-1295: Disabled buttons cannot regain focus by re-enabling and then setting focus
 		var wgt = this,
 			btn = this.$n('btn') || this.$n();
-		if (btn.disabled && !wgt._delayFocus) {
+		// Bug ZK-1797: Prevent TypeError by checking if btn is undefined 
+		if (btn && btn.disabled && !wgt._delayFocus) {
 			wgt._delayFocus = true;
 			setTimeout(function() {
 				wgt.focus_(timeout);
