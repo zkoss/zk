@@ -74,3 +74,10 @@
 .buttonBackground(@start: @baseGradientStart, @end: @baseGradientEnd) {
 	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
 }
+
+.resetGradient() {
+	background: none;
+	<c:if test="${zk.ie > 0}">
+	filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));
+	</c:if>
+}
