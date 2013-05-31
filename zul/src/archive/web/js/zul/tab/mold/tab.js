@@ -77,14 +77,8 @@ function (out) {
 			out.push('<a id="', uuid, '-close" class="', zcls, '-close"', 'onClick="return false;" ><div class="', zcls, '-close-icon"></div></a>');
 		else if (tbx.isVertical())
 			out.push('<a class="', zcls, '-noclose" ></a>');
-
-		out.push('<div id="', uuid, '-hl" class="', zcls, '-hl"><div id="', uuid, '-hr" class="', zcls, '-hr">');
-		if (this.isClosable())
-			out.push('<div id="', uuid, '-hm" class="', zcls, '-hm ', zcls, '-hm-close">');
-		else
-			out.push('<div id="', uuid, '-hm" class="', zcls, '-hm ">');
 		this.contentRenderer_(out);
 		
-		out.push('</div></div></div></li>');
+		out.push('</li>');
 	}
 }
