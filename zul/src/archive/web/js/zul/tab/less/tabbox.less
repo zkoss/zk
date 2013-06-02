@@ -92,32 +92,6 @@
 	height: 0;
 }
 
-.z-tab-hl {
-	position: relative;
-	padding-left: 10px;
-	background: transparent no-repeat 0 -128px;
-	background-image: url(${c:encodeThemeURL('~./zul/img/tab/tab-corner.png')});
-	-moz-outline: none;
-	outline: none;
-	cursor: pointer;
-}
-.z-tab-hr {
-	background: transparent no-repeat right -128px;
-	background-image: url(${c:encodeThemeURL('~./zul/img/tab/tab-corner.png')});
-	padding-right: 10px;
-	display: block;
-}
-.z-tab-hm {
-	padding-left: 2px;
-	padding-right: 1px;
-	overflow: hidden;
-	cursor: pointer;
-	background: transparent repeat-x 0 -128px;
-	// background-image: url(${c:encodeThemeURL('~./zul/img/tab/tab-hm.png')});
-}
-.z-tab-hm-close {
-	padding-right: 10px;
-}
 .z-tabs-edge {
 	float: left;
 	width: 1px;
@@ -205,12 +179,16 @@
 		top: 0;
 		width: 25px;
 		height: 100%;
+		display: block;
+		text-align: center;
 		cursor: pointer;
 		position: absolute;
 		z-index: 25;
 		border: 1px solid #E1E1E1;
 		border-radius: 4px 4px 0px 0px;
+		padding-top: 7px;
 	}
+
 
 	&-left-scroll {
 		left: 0;
@@ -260,8 +238,9 @@
 		border: 1px solid #E1E1E1;
 		border-bottom: 0px;
 		border-radius: 4px;
-		padding: 4px;
+		padding-top: 2px;
 		height: 24px;
+		text-align: center;
 
 		&:hover {
 			background-position: center 0;
@@ -320,7 +299,6 @@
 	top: 0;
 	z-index: 1;
 	padding: 0 4px;
-	margin-top: -1px;
 	border-bottom: 1px solid #E1E1E1;
 	height: 100%;
 }

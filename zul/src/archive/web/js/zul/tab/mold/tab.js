@@ -18,6 +18,12 @@ function (out) {
 	var zcls = this.getZclass(),
 		tbx = this.getTabbox(),
 		uuid = this.uuid;
+		self = this,
+		iconImg = this.$s('icon-img'),
+		getIcon = function(iconClass) {
+			return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
+		};
+	 
 	if (tbx.inAccordionMold()) {//Accordion
 		var panel = this.getLinkedPanel(),
 			n = panel? panel.$n() : null,
@@ -35,11 +41,13 @@ function (out) {
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
 
+		
+		
 		if (tbx.getMold() == 'accordion-lite') {
 			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
 				'<div align="left" class="', zcls, '-header">');
 			if (this.isClosable())
-				out.push('<a id="', this.uuid, '-close" class="', zcls, '-close"><div class="', zcls, '-close-icon"></div></a>');
+				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 
 			out.push('<div href="javascript:;" id="', this.uuid, '-tl" class="', zcls, '-tl">',
 					'<div class="', zcls, '-tr">',
@@ -60,7 +68,7 @@ function (out) {
 			out.push('<div class="' + zcls + '-hm" >');
 
 			if (this.isClosable())
-				out.push('<a id="', this.uuid, '-close"  class="', zcls, '-close"><div class="', zcls, '-close-icon"></div></a>');
+				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 
 			this.contentRenderer_(out);
 			
@@ -74,7 +82,7 @@ function (out) {
 	} else {
 		out.push('<li ', this.domAttrs_(), '>');
 		if (this.isClosable())
-			out.push('<a id="', uuid, '-close" class="', zcls, '-close"', 'onClick="return false;" ><div class="', zcls, '-close-icon"></div></a>');
+			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 		else if (tbx.isVertical())
 			out.push('<a class="', zcls, '-noclose" ></a>');
 		this.contentRenderer_(out);

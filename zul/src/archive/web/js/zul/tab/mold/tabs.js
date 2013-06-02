@@ -17,7 +17,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 function (out) {
 	var zcls = this.getZclass(),
 		tbx = this.getTabbox(),
-		uuid = this.uuid;
+		uuid = this.uuid,
+		self = this,
+		iconImg = this.$s('icon-img'),
+		getIcon = function(iconClass) {
+			return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
+		};
 	out.push('<div ', this.domAttrs_(), '>');
 	
 	
@@ -27,7 +32,8 @@ function (out) {
 			out.push('<div class="', tbx.toolbar.getZclass(), '-outer">');
 			tbx.toolbar.redraw(out);	
 		}
-		out.push('<div id="', uuid, '-right"></div><div id="', uuid, '-left"></div>');
+		out.push('<div id="', uuid , '-right" class="', iconImg, ' ', this.$s('right'), '">' , getIcon('icon-chevron-right'),  '</div>',
+					'<div id="', uuid , '-left" class="', iconImg, ' ', this.$s('left'), '">' , getIcon('icon-chevron-left'),  '</div>');
 	}
 	
 	out.push('<div id="', uuid, '-header" class="', zcls, '-header">',
@@ -40,8 +46,8 @@ function (out) {
 			 '</div>');
 	
 	if (tbx.isVertical()) {
-		out.push('<div id="', uuid, '-up" class="z-tabs-up-scroll"></div>',
-				 '<div id="', uuid, '-down" class="z-tabs-down-scroll"></div>');
+		out.push('<div id="', uuid , '-up" class="', iconImg, ' ', this.$s('up'), '">' , getIcon('icon-chevron-up'),  '</div>');
+		out.push('<div id="', uuid , '-down" class="', iconImg, ' ', this.$s('down'), '">' , getIcon('icon-chevron-down'),  '</div>');
 	} 
 	
 	if (!tbx.isVertical()) {
