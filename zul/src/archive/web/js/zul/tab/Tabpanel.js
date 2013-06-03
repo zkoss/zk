@@ -39,7 +39,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			mold = tabbox.getMold();
 		if (tabbox.inAccordionMold())
 			cls += ' ' + this.$s('cnt');
-		return cls + (mold == "default" ? (tabbox.isVertical() ? ' ' + this.$s('ver') : '') : ' ' + this.$s(mold));
+		return cls + (mold == 'default' ? (tabbox.isVertical() ? ' ' + this.$s('ver') : '') : ' ' + this.$s(mold));
 	},
 	/** Returns the tab associated with this tab panel.
 	 * @return Tab
@@ -78,7 +78,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			accd = tabbox.inAccordionMold();
 
 		if (accd && animation) {
-			var zkp = zk(this.$n("cave"));
+			var zkp = zk(this.$n('cave'));
 			if (toSel) {
 				/* ZK-1441
 				 * When a tabpanel is animating, set tabbox.animating
@@ -88,14 +88,14 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				tabbox._animating = true;
 				zkp.slideDown(
 					this,
-					{"afterAnima": function(){delete tabbox._animating;}}
+					{'afterAnima': function(){delete tabbox._animating;}}
 				);
 			} else {
 				zkp.slideUp(this);
 			}
 			//zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
-			var $pl = jq(accd ? this.$n("cave") : this.$n()),
+			var $pl = jq(accd ? this.$n('cave') : this.$n()),
 				vis = $pl.zk.isVisible();
 			if (toSel) {
 				if (!vis) {
@@ -126,7 +126,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox();
 		var tbx = tabbox.$n(),
 		hgh = tbx.style.height;
-		if (hgh && hgh != "auto") {
+		if (hgh && hgh != 'auto') {
 			if (!tabbox.inAccordionMold()) {
 				var n = this.$n(),
 					isHor = tabbox.isHorizontal();
@@ -152,7 +152,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	onSize: function() {
 		var tabbox = this.getTabbox();
-		if (tabbox.inAccordionMold() && !zk(this.$n("cave")).isVisible())
+		if (tabbox.inAccordionMold() && !zk(this.$n('cave')).isVisible())
 			return;
 		this._fixPanelHgh();		//Bug 2104974
 

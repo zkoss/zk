@@ -32,7 +32,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (!wd) {
 			var tabbox = this.getTabbox();
 			if (tabbox && tabbox.isVertical())
-				return "50px";
+				return '50px';
 		}
 		return wd;
 	},
@@ -40,7 +40,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this._fixWidth();
 		
 		// Bug Z35-tabbox-004.zul, we need to check again.
-		this._scrollcheck("init");
+		this._scrollcheck('init');
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
@@ -61,7 +61,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var zcls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var tbx = this.getTabbox();
-			if (tbx.getMold() == "default" && tbx.isVertical()) 
+			if (tbx.getMold() == 'default' && tbx.isVertical()) 
 				zcls += ' ' + this.$s('ver');
 		}
 		return zcls;
@@ -82,7 +82,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
 			if ((btn = this.$n(key[le])))
-				this.domListen_(btn, "onClick");
+				this.domListen_(btn, 'onClick');
 		
 		// reset
 		this._inited = false;
@@ -99,7 +99,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this});
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
 			if ((btn = this.$n(key[le])))
-				this.domUnlisten_(btn, "onClick");
+				this.domUnlisten_(btn, 'onClick');
 		this.$supers(zul.tab.Tabs, 'unbind_', arguments);
 	},
 	_isInited: function () {
@@ -114,12 +114,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			tbx = tabbox.$n();
 		if (!tbsdiv || !tbx) return;	// tabbox is delete , no need to check scroll
 		if (tabbox.isVertical()) {//vertical
-			var header = this.$n("header"),
+			var header = this.$n('header'),
 				headerOffsetHeight = header.offsetHeight,
 				headerScrollTop = header.scrollTop,
 				childHeight = 0;
 				
-			jq(this.$n("cave")).children().each(function () {
+			jq(this.$n('cave')).children().each(function () {
 				childHeight += this.offsetHeight;
 			});
 
@@ -139,16 +139,16 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					header.scrollTop = 0;
 				}
 				switch (way) {
-				case "end":
+				case 'end':
 					var d = childHeight - headerOffsetHeight - headerScrollTop;
-					this._doScroll(d >= 0 ? "down" : "up", d >= 0 ? d : Math.abs(d));
+					this._doScroll(d >= 0 ? 'down' : 'up', d >= 0 ? d : Math.abs(d));
 					break;
-				case "init":
-				case "vsel":
+				case 'init':
+				case 'vsel':
 					if (nodeOffsetTop < headerScrollTop) {
-						this._doScroll("up", headerScrollTop - nodeOffsetTop);
+						this._doScroll('up', headerScrollTop - nodeOffsetTop);
 					} else if (nodeOffsetTop + nodeOffsetHeight > headerScrollTop + headerOffsetHeight) {
-						this._doScroll("down", nodeOffsetTop + nodeOffsetHeight - headerScrollTop - headerOffsetHeight);
+						this._doScroll('down', nodeOffsetTop + nodeOffsetHeight - headerScrollTop - headerOffsetHeight);
 					}
 					break;
 				}
@@ -158,17 +158,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._showbutton(true);
 					var btnsize = this._getArrowSize(),
 						temp = tbx.offsetHeight - btnsize;
-					header.style.height = temp > 0 ? temp + "px" : "";
-					if (way == "end") {
+					header.style.height = temp > 0 ? temp + 'px' : '';
+					if (way == 'end') {
 						var d = childHeight - headerOffsetHeight - headerScrollTop + 2;
 						if (d >= 0)
-							this._doScroll(this.uuid, "down", d);
+							this._doScroll(this.uuid, 'down', d);
 					}
 				}
 			}
 		} else if(!tabbox.inAccordionMold()) {
-			var cave = this.$n("cave"),
-				header = this.$n("header"),
+			var cave = this.$n('cave'),
+				header = this.$n('header'),
 			 	sel = tabbox.getSelectedTab(),
 				node = tb ? tb.$n() : ( sel ? sel.$n() : null),
 			 	nodeOffsetLeft = node ? node.offsetLeft : 0,
@@ -201,16 +201,16 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				}
 				// scroll to specific position
 				switch (way) {
-				case "end":
+				case 'end':
 					var d = childWidth - headerOffsetWidth - headerScrollLeft;
-					this._doScroll(d >= 0 ? "right" : "left", d >= 0 ? d : Math.abs(d));
+					this._doScroll(d >= 0 ? 'right' : 'left', d >= 0 ? d : Math.abs(d));
 					break;
-				case "init":
-				case "sel":
+				case 'init':
+				case 'sel':
 					if (nodeOffsetLeft < headerScrollLeft) {
-						this._doScroll("left", headerScrollLeft - nodeOffsetLeft);
+						this._doScroll('left', headerScrollLeft - nodeOffsetLeft);
 					} else if (nodeOffsetLeft + nodeOffsetWidth > headerScrollLeft + headerOffsetWidth) {
-						this._doScroll("right", nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
+						this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
 					}
 					break;
 				}
@@ -218,20 +218,20 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childWidth - (headerOffsetWidth - zk(this.$n('cave')).padBorderWidth()) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
-					var cave = this.$n("cave"),
+					var cave = this.$n('cave'),
 						btnsize = this._getArrowSize(),
 						temp = tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize;//coz show button then getsize again
-					cave.style.width = "5555px";
-					header.style.width = temp > 0 ? temp + "px" : "";
+					cave.style.width = '5555px';
+					header.style.width = temp > 0 ? temp + 'px' : '';
 					
 					if (toolbar) 
 						this.$n('right').style.right = toolbar.offsetWidth + 'px';
 					
-					if (way == "sel") {
+					if (way == 'sel') {
 						if (nodeOffsetLeft < headerScrollLeft) {
-							this._doScroll("left", headerScrollLeft - nodeOffsetLeft);
+							this._doScroll('left', headerScrollLeft - nodeOffsetLeft);
 						} else if (nodeOffsetLeft + nodeOffsetWidth > headerScrollLeft + headerOffsetWidth) {
-							this._doScroll("right", nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
+							this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
 						}
 					}
 				}
@@ -245,7 +245,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			return;
 		var step,
 			self = this,
-			header = this.$n("header");
+			header = this.$n('header');
 		
 		this._doingScroll[to] = move;
 		//the tab bigger , the scroll speed faster
@@ -284,8 +284,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	_getArrowSize: function() {
 		var tabbox = this.getTabbox(),
 			isVer = tabbox.isVertical(),
-			btnA = isVer ? this.$n("up") : this.$n("left"),
-			btnB = isVer ? this.$n("down") : this.$n("right");
+			btnA = isVer ? this.$n('up') : this.$n('left'),
+			btnB = isVer ? this.$n('down') : this.$n('right');
 		return btnA && btnB ?
 			(isVer ? btnA.offsetHeight + btnB.offsetHeight : btnA.offsetWidth + btnB.offsetWidth) : 0;
 	},
@@ -297,21 +297,21 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				
 			if (tabbox.isVertical()) {//vertical
 				if (show) {
-					jq(tabs).addClass(zcls + "-scroll");
+					jq(tabs).addClass(zcls + '-scroll');
 				} else {
-					jq(tabs).removeClass(zcls + "-scroll");
+					jq(tabs).removeClass(zcls + '-scroll');
 				}				
 			}else {//horizontal
 				if (show) {
-					jq(tabs).addClass(zcls + "-scroll");
+					jq(tabs).addClass(zcls + '-scroll');
 				} else {
-					jq(tabs).removeClass(zcls + "-scroll");
+					jq(tabs).removeClass(zcls + '-scroll');
 				}		
 			}
 		}
 	},
 	_doClick: function(evt) {
-		var cave = this.$n("cave"),
+		var cave = this.$n('cave'),
 			allTab =  jq(cave).children();
 		
 		if (!allTab.length) return; // nothing to do	
@@ -319,59 +319,59 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var ele = evt.domTarget,
 			move = 0,
 			tabbox = this.getTabbox(),
-			head = this.$n("header"),
+			head = this.$n('header'),
 			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
 			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth,
 			plus = scrollLength + offsetLength;
 		
 		//Scroll to next right tab
-		if (ele.id == this.uuid + "-right") {
+		if (ele.id == this.uuid + '-right') {
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetLeft + allTab[i].offsetWidth > plus) {
 					move = allTab[i].offsetLeft + allTab[i].offsetWidth - scrollLength - offsetLength;
 					if (!move || isNaN(move))
 						return;
-					this._doScroll("right", move);
+					this._doScroll('right', move);
 					return;
 				}
 			}
-		} else if (ele.id == this.uuid + "-left") {//Scroll to next left tab
+		} else if (ele.id == this.uuid + '-left') {//Scroll to next left tab
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetLeft >= scrollLength) {
 					//if no Sibling tab no sroll
-					var tabli = jq(allTab[i]).prev("li")[0];
+					var tabli = jq(allTab[i]).prev('li')[0];
 					if (!tabli)  return;
 					move = scrollLength - tabli.offsetLeft;
 					if (isNaN(move)) return;
-					this._doScroll("left", move);
+					this._doScroll('left', move);
 					return;
 				};
 			};
 			move = scrollLength - allTab[allTab.length-1].offsetLeft;
 			if (isNaN(move)) return;
-			this._doScroll("left", move);
+			this._doScroll('left', move);
 			return;
-		} else if (ele.id == this.uuid + "-up") {
+		} else if (ele.id == this.uuid + '-up') {
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetTop >= scrollLength) {
-						var preli = jq(allTab[i]).prev("li")[0];
+						var preli = jq(allTab[i]).prev('li')[0];
 						if (!preli) return;
 						move = scrollLength - preli.offsetTop ;
-						this._doScroll("up", move);
+						this._doScroll('up', move);
 						return;
 					};
 				};
 				var preli = allTab[allTab.length-1];
 				if (!preli) return;
 				move = scrollLength - preli.offsetTop ;
-				this._doScroll("up", move);
+				this._doScroll('up', move);
 				return;
-		} else if (ele.id == this.uuid + "-down") {
+		} else if (ele.id == this.uuid + '-down') {
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetTop + allTab[i].offsetHeight > plus) {
 					move = allTab[i].offsetTop + allTab[i].offsetHeight - scrollLength - offsetLength;
 					if (!move || isNaN(move)) return ;
-					this._doScroll("down", move);
+					this._doScroll('down', move);
 					return;
 				};
 			};
@@ -382,10 +382,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		
 		var	tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
-			cave = this.$n("cave"),
-			head = this.$n("header"),
-			l = this.$n("left"),
-			r = this.$n("right"),
+			cave = this.$n('cave'),
+			head = this.$n('header'),
+			l = this.$n('left'),
+			r = this.$n('right'),
 			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
 			this._fixHgh();
 			if (this.parent.isVertical()) {
@@ -398,7 +398,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					tabs._width = tabs.style.width;
 				} else {
 					//vertical tabs have default width 50px
-					this._forceStyle(tabs, "w", tabs._width ? tabs._width : "50px");
+					this._forceStyle(tabs, 'w', tabs._width ? tabs._width : '50px');
 				}
 			} else if (!tabbox.inAccordionMold()) {
 				if (tbx.offsetWidth < btnsize) 
@@ -408,19 +408,19 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					if (toolbar) 
 						toolbar = toolbar.$n();
 					if (!tbx.style.width) {
-						this._forceStyle(tbx, "w", "100%");
-						this._forceStyle(tabs, "w", jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
+						this._forceStyle(tbx, 'w', '100%');
+						this._forceStyle(tabs, 'w', jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
 						if (tabbox._scrolling) 
-							this._forceStyle(head, "w", jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
+							this._forceStyle(head, 'w', jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
 						else 
-							this._forceStyle(head, "w", jq.px0(jq(head).zk.revisedWidth(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0))));
+							this._forceStyle(head, 'w', jq.px0(jq(head).zk.revisedWidth(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0))));
 					} else {
-						this._forceStyle(tabs, "w", jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
-						this._forceStyle(head, "w", tabs.style.width);
+						this._forceStyle(tabs, 'w', jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
+						this._forceStyle(head, 'w', tabs.style.width);
 						if (tabbox._scrolling) 
-							this._forceStyle(head, "w", jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
+							this._forceStyle(head, 'w', jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
 						else 
-							this._forceStyle(head, "w", jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)));
+							this._forceStyle(head, 'w', jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)));
 					}
 					if (toolbar && tabbox._scrolling) 
 						this.$n('right').style.right = toolbar.offsetWidth + 'px';
@@ -428,26 +428,26 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					if (!tbx.style.width) {
 						if (tbx.offsetWidth) {
 							var ofw = jq.px0(tbx.offsetWidth);
-							this._forceStyle(tbx, "w", ofw);
-							this._forceStyle(tabs, "w", ofw);	
+							this._forceStyle(tbx, 'w', ofw);
+							this._forceStyle(tabs, 'w', ofw);	
 						}
 					} else {
-						this._forceStyle(tabs, "w", jq.px0(tbx.offsetWidth));
+						this._forceStyle(tabs, 'w', jq.px0(tbx.offsetWidth));
 					}
 				}
 			}
 	},
 	_fixHgh: function () {
 		var tabbox = this.getTabbox(),
-			head = this.$n("header");
+			head = this.$n('header');
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
 			var tabs = this.$n(),
 				tbx = tabbox.$n(),
-				u = this.$n("up"),
-				d = this.$n("down"),
-				cave =  this.$n("cave"),
+				u = this.$n('up'),
+				d = this.$n('down'),
+				cave =  this.$n('cave'),
 				btnsize = u && d ? isNaN(u.offsetHeight + d.offsetHeight) ? 0 : u.offsetHeight + d.offsetHeight : 0,
 				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
@@ -456,35 +456,35 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					seldPanel = tabbox.getSelectedPanel(),
 					panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0 ,  //B60-ZK-965
 				realHgh = Math.max(tabsHgh, panelsHgh);
-				this._forceStyle(tbx, "h", jq.px0(realHgh));
+				this._forceStyle(tbx, 'h', jq.px0(realHgh));
 			}
-			this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
+			this._forceStyle(tabs, 'h', jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
-				this._forceStyle(head, "h", jq.px0(tabs.offsetHeight - btnsize));
+				this._forceStyle(head, 'h', jq.px0(tabs.offsetHeight - btnsize));
 			} else {
-				this._forceStyle(head, "h", jq.px0(jq(head).zk.revisedHeight(tabs.offsetHeight, true)));
+				this._forceStyle(head, 'h', jq.px0(jq(head).zk.revisedHeight(tabs.offsetHeight, true)));
 			}
 			//separator(+border)
-			this._forceStyle(child[1], "h", jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
+			this._forceStyle(child[1], 'h', jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
 			//tabpanels(+border)
-			this._forceStyle(child[2], "h", 
+			this._forceStyle(child[2], 'h', 
 				jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight - (2 - zk.parseInt(jq(this.$n('cave')).css('padding-top'))), true)));
 			// Merge breeze: now in vertical orientation Tabs has no border, but Tabpanels 
 			// still has border, so we need to introduce a 2px offset
 		} else {
 			if (head) //accordion have no head
-				head.style.height = "";
+				head.style.height = '';
 		}
 	},
 
 	_forceStyle: function(node, attr, value) {
 		if (!value)	return;
 		switch (attr) {
-		case "h":
+		case 'h':
 			node.style.height = value;
 			break;
-		case "w":
+		case 'w':
 			node.style.width = value;
 			break;
 		}
@@ -500,12 +500,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 //				p._selPnl = null; //stored in tabpanels
 //			}
 		}
-		this._scrollcheck("init");
-		this.$supers("onChildRemoved_", arguments);
+		this._scrollcheck('init');
+		this.$supers('onChildRemoved_', arguments);
 	},
 	onChildAdded_: function () {
-		this._scrollcheck("init");
-		this.$supers("onChildAdded_", arguments);
+		this._scrollcheck('init');
+		this.$supers('onChildAdded_', arguments);
 	},
 	
 	ignoreFlexSize_: function(attr) {

@@ -158,9 +158,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!bound) return;
 		
 		if (toSel)
-			jq(tab).addClass(zcls + "-seld");
+			jq(tab).addClass(zcls + '-seld');
 		else
-			jq(tab).removeClass(zcls + "-seld");
+			jq(tab).removeClass(zcls + '-seld');
 
 		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
 			panel._sel(toSel, !init);
@@ -172,9 +172,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		
 		if (tab == this) {
 			if (tabbox.isVertical())
-				tabs._scrollcheck("vsel", this);
+				tabs._scrollcheck('vsel', this);
 			else if (!tabbox.inAccordionMold())
-				tabs._scrollcheck("sel", this);
+				tabs._scrollcheck('sel', this);
 		}
 		
 		if (notify)
@@ -256,10 +256,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
 		var closebtn = this.isClosable() ? this.$n('close') : null,
 			tab = this;
-		this.domListen_(tab, "onMouseOver", '_doCloseOver');
-		this.domListen_(tab, "onMouseOut", '_doCloseOut');
+		this.domListen_(tab, 'onMouseOver', '_doCloseOver');
+		this.domListen_(tab, 'onMouseOut', '_doCloseOut');
 		if (closebtn) {
-			this.domListen_(closebtn, "onClick", '_doCloseClick');			
+			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
 		}
 
 		after.push(function () {
@@ -286,12 +286,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var closebtn = this.$n('close');
-		this.domUnlisten_(this, "onMouseOver", '_doCloseOver');
-		this.domUnlisten_(this, "onMouseOut", '_doCloseOut');
+		this.domUnlisten_(this, 'onMouseOver', '_doCloseOver');
+		this.domUnlisten_(this, 'onMouseOut', '_doCloseOut');
 		// ZK-886
 		_logId(this);
 		if (closebtn) {
-			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
+			this.domUnlisten_(closebtn, 'onClick', '_doCloseClick');
 		}
 		this.$supers(zul.tab.Tab, 'unbind_', arguments);
 	},

@@ -128,11 +128,11 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.$n().style.width = this.__width || '';
 	},
 	onChildRemoved_: function (child) {
-		this.$supers("onChildRemoved_", arguments);
+		this.$supers('onChildRemoved_', arguments);
 		_syncSelectedPanels(this);
 	},
 	onChildAdded_: function (child) {
-		this.$supers("onChildAdded_", arguments);
+		this.$supers('onChildAdded_', arguments);
 		// sync select status if tabbox not in accordion mold or
 		// the child cave is already visible
 		var tabbox = this.getTabbox(), 
