@@ -32,8 +32,8 @@ function (out) {
 			out.push('<div class="', tbx.toolbar.getZclass(), '-outer">');
 			tbx.toolbar.redraw(out);	
 		}
-		out.push('<div id="', uuid , '-right" class="', iconImg, ' ', this.$s('right'), '">' , getIcon('icon-chevron-right'),  '</div>',
-					'<div id="', uuid , '-left" class="', iconImg, ' ', this.$s('left'), '">' , getIcon('icon-chevron-left'),  '</div>');
+		out.push('<div id="', uuid , '-right" class="', iconImg, ' ', this.$s('right'), '">' , getIcon('icon-caret-right'),  '</div>',
+					'<div id="', uuid , '-left" class="', iconImg, ' ', this.$s('left'), '">' , getIcon('icon-caret-left'),  '</div>');
 	}
 	
 	out.push('<div id="', uuid, '-header" class="', zcls, '-header">',
@@ -46,8 +46,8 @@ function (out) {
 			 '</div>');
 	
 	if (tbx.isVertical()) {
-		out.push('<div id="', uuid , '-up" class="', iconImg, ' ', this.$s('up'), '">' , getIcon('icon-chevron-up'),  '</div>');
-		out.push('<div id="', uuid , '-down" class="', iconImg, ' ', this.$s('down'), '">' , getIcon('icon-chevron-down'),  '</div>');
+		out.push('<div id="', uuid , '-up" class="', iconImg, ' ', this.$s('up'), '">' , getIcon('icon-caret-up'),  '</div>',
+					'<div id="', uuid , '-down" class="', iconImg, ' ', this.$s('down'), '">' , getIcon('icon-caret-down'),  '</div>');
 	} 
 	
 	if (!tbx.isVertical()) {
