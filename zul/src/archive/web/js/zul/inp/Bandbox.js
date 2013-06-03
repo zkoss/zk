@@ -32,16 +32,12 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		}
 		return [w||'auto', h||'auto'];
 	},
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-bandbox" + (this.inRoundedMold() ? "-rounded": "");
-	},
 	getCaveNode: function () {
 		return this.$n('pp') || this.$n();
 	},
 	redrawpp_: function (out) {
-		out.push('<div id="', this.uuid, '-pp" class="', this.getZclass(),
-		'-pp" style="display:none" tabindex="-1">');
+		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
+		'" style="display:none" tabindex="-1">');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -49,6 +45,9 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		out.push('</div>');
 	},
 	//@Override
+	getIconClass_: function () {
+		return 'z-icon-search';
+	},
 	open: function (opts) {
 		if (!this.firstChild) { 
 			// ignore when <bandpopup> is absent, but event is still fired

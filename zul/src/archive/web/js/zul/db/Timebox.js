@@ -213,22 +213,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		/** Sets whether the button (on the right of the textbox) is visible.
 		 * @param boolean buttonVisible
 		 */
-		buttonVisible: function(v){
-			var n = this.$n('btn'),
-				zcls = this.getZclass();
-			if (n) {
-				if (!this.inRoundedMold()) {
-					if (!this._inplace || !v)
-						jq(n)[v ? 'show': 'hide']();
-					else
-						n.style.display = '';
-					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
-				} else {
-					var fnm = v ? 'removeClass': 'addClass';
-					jq(n)[fnm](zcls + '-btn-right-edge');
-				}
-				this.onSize();
-			}
+		buttonVisible: function (v) {
+			zul.inp.RoundUtl.buttonVisible(this, v);
 		},
 		/** Sets the unformater function. This method is called from Server side.
 		 * @param String unf the unformater function
@@ -249,6 +235,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				return val;
 			}
 		]
+	},
+	inRoundedMold: function () {
+		return true;
 	},
 	setFormat: function (fmt) {
 		fmt = fmt ? fmt.replace(/\'/g, '') : fmt;
@@ -317,20 +306,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		return date;
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-timebox" + (this.inRoundedMold() ? "-rounded": "");
-	},
 	onSize: function () {
-		var width = this.getWidth(),
-			inp = this.getInputNode();
-		if (!width || width.indexOf('%') != -1)
-			inp.style.width = '';
-
+		var inp = this.getInputNode();
 		if (inp && this._value && !inp.value)
 			inp.value = this.coerceToString_(this._value);
-
-		this.syncWidth();
+		
+		zul.inp.RoundUtl.onSize(this, this.$n('btn'));
 	},
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
@@ -412,32 +393,24 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this.$supers('doKeyDown_', arguments);
 	},
-	_dodropbtnup: function (evt) {
-		var zcls = this.getZclass();
-		
-		jq(this.$n("btn")).removeClass(zcls + "-btn-clk");
-		if (!this.inRoundedMold()) {
-			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
-			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
-		}
-		this.domUnlisten_(document.body, "onZMouseup", "_dodropbtnup");
+	_ondropbtnup: function (evt) {
+		this.domUnlisten_(document.body, "onZMouseup", "_ondropbtnup");
+		this._stopAutoIncProc();
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) { // TODO: format the value first
-		var isRounded = this.inRoundedMold();
-		if (isRounded && !this._buttonVisible) return;
-		
-		var inp;
-		if(!(inp = this.getInputNode()) || inp.disabled) return;
+		if (!this._buttonVisible || this._disabled) return;
 		
 		var btn = this.$n("btn"),
-			zcls = this.getZclass();
+			inp = this.getInputNode();
 			
-		if (this._currentbtn)
-			this._dodropbtnup(evt);
-		jq(btn).addClass(zcls + "-btn-clk");
-		this.domListen_(document.body, "onZMouseup", "_dodropbtnup");
-		this._currentbtn = btn;
+		if (!zk.dragging) {
+			if (this._currentbtn) // just in case
+				this._ondropbtnup(evt);
+			
+			this.domListen_(document.body, "onZMouseup", "_ondropbtnup");
+			this._currentbtn = btn;
+		}
 		
 		// if btn down before blur, needs to convert to real time string first
 		if (inp.value && Timebox._unformater)
@@ -460,13 +433,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this._startAutoIncProc(false);
 		}
 		
-		var sfx = isRounded? "" : 
-					isOverUpBtn? "-up":"-down";
-		if ((btn = this.$n("btn" + sfx)) && !isRounded) {
-			jq(btn).addClass(zcls + "-btn" + sfx + "-clk");
-			this._currentbtn = btn;
-		}
-		
 		this._changed = true;
 		delete this._shortcut;
 		
@@ -478,10 +444,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		evt.stop();
 	},
 	_btnUp: function(evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-
-		var inp = this.getInputNode();
-		if(inp.disabled || zk.dragging) return;
+		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		if (zk.opera) zk(inp).focus();
 			//unfortunately, in opera, it won't gain focus if we set in _btnDown
@@ -490,20 +453,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._stopAutoIncProc();
 		
 		if ((zk.ie || zk.safari) && this._lastPos)
-			zk(inp).setSelectionRange(this._lastPos, this._lastPos);
-	},
-	_btnOut: function(evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.getInputNode();
-		if(!inp || inp.disabled || zk.dragging) return;
-
-		jq(this.$n("btn")).removeClass(this.getZclass()+"-btn-over");
-		this._stopAutoIncProc();
-	},
-	_btnOver: function(evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		if (this.getInputNode() && !this.getInputNode().disabled && !zk.dragging)
-			jq(this.$n("btn")).addClass(this.getZclass()+"-btn-over");
+			zk(this.getInputNode()).setSelectionRange(this._lastPos, this._lastPos);
 	},
 	_getPos: function () {
 		return zk(this.getInputNode()).getSelectionRange()[0];
@@ -579,20 +529,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.currentStep = this.defaultStep;
 		this.timerId = null;
 	},
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
-	},
 	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
 		var n = this.$n(),
 			inp = this.getInputNode(),
 			selrng = zk(inp).getSelectionRange();
-		if (this._inplace)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-
-		this.$supers('doFocus_', arguments);	
-
+		
 		if (!inp.value)
 			inp.value = Timebox._unformater ? '' : this.coerceToString_();
 
@@ -603,29 +545,17 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			zk(inp).setSelectionRange(selrng[0], selrng[1]);
 			this.lastPos = selrng[1];
 		}
-		if (this._inplace) {
-			if (jq(n).hasClass(this.getInplaceCSS())) {
-				jq(n).removeClass(this.getInplaceCSS());
-				this.onSize();
-			}
-		}
+
+		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
-		var n = this.$n();
-		if (this._inplace && this._inplaceout)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-
 		// skip onchange, Bug 2936568
 		if (!this._value && !this._changed && !Timebox._unformater)
 			this.getInputNode().value = this._defRawVal = '';
 
 		this.$supers('doBlur_', arguments);
 
-		if (this._inplace && this._inplaceout) {
-			jq(n).addClass(this.getInplaceCSS());
-			this.onSize();
-			n.style.width = this.getWidth() || '';
-		}
+		zul.inp.RoundUtl.doBlur_(this);
 	},
 	afterKeyDown_: function (evt,simulated) {
 		if (!simulated && this._inplace)
@@ -635,17 +565,11 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.db.Timebox, 'bind_', arguments);
-		var btn, inp = this.getInputNode();
-	
-		if (this._inplace)
-			jq(inp).addClass(this.getInplaceCSS());
+		var btn;
 		
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, "onZMouseDown", "_btnDown")
-				.domListen_(btn, "onZMouseUp", "_btnUp")
-				.domListen_(btn, "onMouseOut", "_btnOut")
-				.domListen_(btn, "onMouseOver", "_btnOver");
-
+				.domListen_(btn, "onZMouseUp", "_btnUp");
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
@@ -657,9 +581,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var btn = this.$n("btn");
 		if (btn) {
 			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")
-				.domUnlisten_(btn, "onZMouseUp", "_btnUp")
-				.domUnlisten_(btn, "onMouseOut", "_btnOut")
-				.domUnlisten_(btn, "onMouseOver", "_btnOver");
+				.domUnlisten_(btn, "onZMouseUp", "_btnUp");
 		}
 		this._changed = false;
 		this.$supers(zul.db.Timebox, 'unbind_', arguments);

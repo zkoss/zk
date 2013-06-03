@@ -58,28 +58,24 @@
 	&-year {
 		min-height: 162px;
 
-		.z-calendar-cell > a {
+		.z-calendar-cell {
 			min-height: 48px;
 			line-height: @baseLineHeight * 3;
 		}
 	}
 	&-cell {
 		text-align: center;
+		min-height: @baseButtonHeight;
+		min-width:  @baseButtonHeight;
+		padding: 3px 0;
+		color: #636363;
+		font-size: @fontSizeSmall;
+		line-height: 18px;
 
-		& > a {
-			min-height: 24px;
-			min-width:  24px;
-			padding: 3px 0;
-			color: #636363;
-			font-size: @fontSizeSmall;
-			display: block;
-			line-height: 18px;
-
-			&:hover {
-				background: #E3F2FF;
-				.borderRadius(4px);
-				text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
-			}
+		&:hover {
+			background: #E3F2FF;
+			.borderRadius(4px);
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 		}
 	}
 	&-weekend {
@@ -93,15 +89,14 @@
 		color: #AAAAAA;
 		text-shadow: none;
 	}
-	&-weekofyear,
-	&-weekofyear > a {
+	&-weekofyear {
 		background: #636363;
 		font-style: italic;
 		color: #FFFFFF;
-	}
 
-	&-weekofyear > a:hover {
-		color: #636363;
+		&:hover {
+			color: #636363;
+		}
 	}
 
 	// for transition's animation use only
@@ -118,7 +113,7 @@
 			width: 50%;
 		}
 	}
-	&-selected > a {
+	&-selected {
 		background: #D9EFFA;
 		.borderRadius(4px);
 		text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
@@ -134,8 +129,8 @@
 		position: absolute;
 		color: #AAAAAA;
 		font-size: 20px;
-		width: 24px;
-		height: 24px;
+		width: @baseButtonWidth;
+		height: @baseButtonHeight;
 		padding: 0 8px;
 
 		&:hover {
@@ -157,15 +152,25 @@
 	}
 }
 
-.z-datebox-rounded-pp .z-calendar,
-.z-datebox-pp .z-calendar {
-	border: 0;
+.z-datebox-popup {
+	position: absolute;
+
+	.z-calendar {
+		border: 0;
+		& + .z-timebox {
+			margin: 5px;
+		}
+		& ~ .z-datebox-timezone {
+			margin: 0 5px 5px;
+		}
+	}
+
 }
 
 // Calendar and Datebox
-.z-datebox-timezone-body,
-.z-datebox-timezone-item {
+.z-datebox-timezone {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 }
+
