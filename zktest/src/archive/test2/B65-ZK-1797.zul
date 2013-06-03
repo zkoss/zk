@@ -1,24 +1,15 @@
 <zk>
-	<zscript>
-		import org.zkoss.zk.ui.util.Template;
-	</zscript>
 	<div id="mainDiv">
 		<listbox>
 			<attribute name="onSelect"><![CDATA[
-				/* When enable client ROD, clean component's children then invoke the Template.create() method. 
-				   Window widget will refocus its unbinded child.
-				*/
 			 	mainDiv.getChildren().clear();
 			 	mainDiv.getTemplate("tmp").create(mainDiv, null, null, null);
 				mainDiv.invalidate();
 			]]></attribute>
-			<listitem label="click"/>
+			<listitem label="click me should not see any JS error"/>
 		</listbox>
 		<template name="tmp">
 			<window >
-				<!-- workaround for this bug 
-				<custom-attributes org.zkoss.zul.client.rod="false"/>
-				 -->
 				<popup>
 					<button label="PopUpbutton"></button>
 				</popup>
