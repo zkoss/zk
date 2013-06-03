@@ -27,19 +27,25 @@
 	margin: 0;
 	-moz-user-select: none;
 	border: 1px solid #C5C5C5;
-	border-width: 1px 0px 0px 1px;
+	border-width: 1px 1px 0px 0px;
 	border-radius: 4px 4px 0px 0px;
 	height: 32px;
 	text-align: center;
 	padding: 4px 20px 0px 8px;
 
+	&:first-child {
+		border-left: 1px solid #C5C5C5;
+	}
+
 	&-ver {
-		.buttonBackground();
 		float: none;
-		border: 1px solid #C5C5C5;
-		border-width: 1px 0px 0px 1px;
+		border-width: 0px 0px 1px 1px;
 		border-radius: 4px 0px 0px 4px;
-		padding: 4px 4px 4px 16px;	
+		padding: 4px 4px 4px 16px;
+
+		&:first-child {
+			border-top: 1px solid #C5C5C5;
+		};	
 	}
 
 	&-ver > &-close {
@@ -84,8 +90,6 @@
 		border-bottom: 1px solid #C5C5C5;
 	}
 
-// background-image: url(${c:encodeThemeURL('~./zul/img/tab/tab-corner.png')});
-// background-image: url(${c:encodeThemeURL('~./zul/img/tab/tab-hm.png')});
 }
 
 .z-tabs-header .z-clear {
@@ -104,18 +108,11 @@
 	overflow: hidden;
 	zoom: 1;
 }
-.z-tab .z-tab-hl:hover {
-	background-position: 0 -64px;
-}
-.z-tab .z-tab-hl:hover .z-tab-hr {
-	background-position: right -64px;
-}
-.z-tab .z-tab-hl:hover .z-tab-hm {
-	background-position: right -64px;
-}
+
 .z-tab .z-tab-hl:hover .z-tab-text {
 	color: #555555;
 }
+
 .z-tab .z-tab-text {
 	color: #555555;
 	cursor: pointer;
@@ -133,7 +130,6 @@
 	padding-bottom: 0;
 	zoom: 1;
 }
-
 
 
 .z-tabs-scroll .z-toolbar-tabs-outer .z-tabs-cnt, 
@@ -155,11 +151,15 @@
 		position: relative;
 		overflow: hidden;
 		zoom: 1;
+		margin: 0px;		
+	}
+
+	&-scroll > &-header,
+	&-scroll > .z-toolbar-tabs-outer > &-header {
 		margin: 0px 25px 0px 25px;
 	}
 
 	&-cnt {
-		background: none repeat scroll 0 0 transparent;
 		padding-left: 0;
 		padding-top: 0;
 		border-bottom: 1px solid #E1E1E1;
@@ -173,7 +173,21 @@
 		-moz-user-select: none;
 	}
 
-	&-right-scroll, &-left-scroll {
+	&-icon-img {
+		color: #A2A2A2;
+	}
+
+	& > &-right, 
+	& > &-left,
+	& > .z-toolbar-tabs-outer > &-right, 
+	& > .z-toolbar-tabs-outer > &-left {
+		display: none;		
+	}
+
+	&-scroll > &-right, 
+	&-scroll > &-left,
+	&-scroll > .z-toolbar-tabs-outer > &-right, 
+	&-scroll > .z-toolbar-tabs-outer > &-left {
 		.buttonBackground();
 		right: 0;
 		top: 0;
@@ -189,20 +203,12 @@
 		padding-top: 7px;
 	}
 
-
-	&-left-scroll {
+	&-scroll > &-left,
+	&-scroll > .z-toolbar-tabs-outer > &-left {
 		left: 0;
 	}
 
 	&-ver > &-header > &-cnt {
-		padding-left: 0;
-		padding-top: 0;
-		list-style-image: none;
-		list-style-position:outside;
-		list-style-type: none;
-		display: block;
-		margin: 0;
-		zoom: 1;
 		height: 4096px;
 		border-right: 1px solid #E1E1E1;
 		-moz-user-select: none;
@@ -222,12 +228,17 @@
 		position: relative;
 	}
 
-	&-ver > &-header {
-		background: none repeat scroll 0 0 transparent;
+	&-ver&-scroll > &-header {
 		margin: 24px 0px 24px 0px;
 	}
 
-	&-ver > &-up-scroll, &-ver > &-down-scroll {
+	&-ver&-scroll  > &-up, 
+	&-ver&-scroll  > &-down {
+		display: none;		
+	}
+
+	&-ver&-scroll > &-up, 
+	&-ver&-scroll > &-down {
 		.buttonBackground();
 		cursor: pointer;
 		height: 20px;
@@ -243,15 +254,15 @@
 		text-align: center;
 
 		&:hover {
-			background-position: center 0;
+			
 		}
 	}
 
-	&-ver > &-up-scroll {	
+	&-ver > &-up {	
 		top: 0px;	
 	}
 
-	&-ver > &-down-scroll {
+	&-ver > &-down {
 		bottom: 0px;
 	}
 
