@@ -310,12 +310,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			wgt._delayFocus = true;
 			setTimeout(function() {
 				wgt.focus_(timeout);
+				wgt._delayFocus = null;				
 			}, 0);
-		} else {
-			wgt._delayFocus = null;
-		}
-		
-		//Bug ZK-354: refer to _docMouseDown in mount.js for details
+		}		
+		// Bug ZK-354: refer to _docMouseDown in mount.js for details
 		if (!zk.focusBackFix || !this._upload)
 			zk(btn).focus(timeout);
 		return true;
