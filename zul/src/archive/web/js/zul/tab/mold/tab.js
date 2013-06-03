@@ -21,7 +21,7 @@ function (out) {
 		self = this,
 		iconImg = this.$s('icon-img'),
 		getIcon = function(iconClass) {
-			return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
+			return '<i id="' + uuid + '-icon-close" class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
 		};
 	 
 	if (tbx.inAccordionMold()) {//Accordion
@@ -41,42 +41,19 @@ function (out) {
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
 
-		
-		
-		if (tbx.getMold() == 'accordion-lite') {
-			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
-				'<div align="left" class="', zcls, '-header">');
-			if (this.isClosable())
-				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
+		if (tbx.getPanelSpacing() && this.getIndex())
+			out.push('<div class="', zcls, '-spacing" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
 
-			out.push('<div href="javascript:;" id="', this.uuid, '-tl" class="', zcls, '-tl">',
-					'<div class="', zcls, '-tr">',
-					'<span class="', zcls, '-tm">');
-			this.contentRenderer_(out);
-			out.push('</span></div></div></div></div>');
-		} else {
-			var isFrameRequired = zul.tab.TabRenderer.isFrameRequired();
-			if (tbx.getPanelSpacing() && this.getIndex())
-				out.push('<div class="', zcls, '-spacing" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
-
-			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
+		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
 					'<div align="left" class="', zcls, '-header" >');
-			if (isFrameRequired)
-				out.push('<div class="', zcls, '-tl" ><div class="', zcls, '-tr" ></div></div>',
-						'<div class="', zcls, '-hl" >',
-						'<div class="', zcls, '-hr" >');
-			out.push('<div class="' + zcls + '-hm" >');
 
-			if (this.isClosable())
-				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
+		if (this.isClosable())
+			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');
 
-			this.contentRenderer_(out);
+		this.contentRenderer_(out);
 			
-			out.push('</div></div></div>');
-			
-			if (isFrameRequired)
-				out.push('</div></div>');
-		}
+		out.push('</div></div>');
+
 		if (n) // panel already rendered, do insert
 			jq(n).prepend(out.join(''));
 	} else {
