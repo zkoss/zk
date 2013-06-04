@@ -195,7 +195,7 @@
 	border-radius: 4px 4px 0px 0px;
 	height: 32px;
 	text-align: center;
-	padding: 4px 20px 0px 8px;
+	
 
 	&:first-child {
 		border-left: 1px solid #C5C5C5;
@@ -225,7 +225,7 @@
 		display:none;
 	}
 
-	&-text {
+	& > &-text {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		color: #555555;
@@ -234,9 +234,9 @@
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
 		font-size-adjust: none;
-		padding: 4px 0 4px;
 		white-space: nowrap;
 		display: block;
+		padding: 8px 20px 4px 12px;
 	}
 
 	&-seld {
@@ -257,7 +257,6 @@
 	&-seld > &-text {
 		cursor: default;
 		font-weight: bold;
-		padding: 4px 0 5px;
 	}
 
 	&-disd > &-text,
@@ -275,19 +274,27 @@
 		float: none;
 		border-width: 0px 0px 1px 1px;
 		border-radius: 4px 0px 0px 4px;
-		padding: 4px 4px 4px 16px;
-
 		&:first-child {
 			border-top: 1px solid #C5C5C5;
 		};	
 	}
 
-	&-ver &-text {
+	&-ver > &-text {
+		padding: 8px 5px 8px 5px;
 		text-align:center;
 	}
 
 	&-ver > &-close {
-		top: 9px;
+		top: 8px;
+		left: 3px;
+	}
+
+	&-ver > &-close + &-text {
+		padding: 8px 5px 8px 15px;
+	}
+
+	&-ver > &-close {
+		top: 8px;
 		left: 3px;
 	}
 
