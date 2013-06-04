@@ -32,9 +32,9 @@
 		user-select: none;
 	}
 
-	& > &-right, & > &-left,
-	& > .z-toolbar-tabs-outer > &-right, 
-	& > .z-toolbar-tabs-outer > &-left {
+	> &-right, > &-left,
+	> .z-toolbar-tabs-outer > &-right, 
+	> .z-toolbar-tabs-outer > &-left {
 		display: none;		
 	}
 
@@ -66,7 +66,7 @@
 		-moz-user-select: none;
 	}
 
-	& > .z-toolbar-tabs-outer > &-cnt {
+	> .z-toolbar-tabs-outer > &-cnt {
 		border-bottom: 1px solid #E1E1E1;
 	}
 
@@ -94,40 +94,6 @@
 		background: none;
 		border: 0;
 		height: auto;
-	}
-
-	&-scroll {
-		border: 0;
-		padding-bottom: 0;
-		zoom: 1;
-	}
-
-	&-scroll > &-header,
-	&-scroll > .z-toolbar-tabs-outer > &-header {
-		margin: 0px 25px 0px 25px;
-	}	
-
-	&-scroll > &-right,	&-scroll > &-left,
-	&-scroll > .z-toolbar-tabs-outer > &-right, 
-	&-scroll > .z-toolbar-tabs-outer > &-left {
-		.buttonBackground();
-		right: 0;
-		top: 0;
-		width: 25px;
-		height: 100%;
-		display: block;
-		text-align: center;
-		cursor: pointer;
-		position: absolute;
-		z-index: 25;
-		border: 1px solid #E1E1E1;
-		border-radius: 4px 4px 0px 0px;
-		padding-top: 7px;
-	}
-
-	&-scroll > &-left,
-	&-scroll > .z-toolbar-tabs-outer > &-left {
-		left: 0;
 	}
 }
 
@@ -177,7 +143,7 @@
 		display:none;
 	}
 
-	& > &-text {
+	> &-text {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		color: #555555;
@@ -189,7 +155,7 @@
 		padding: 8px 12px 4px 12px;
 	}
 
-	& > &-close + &-text {
+	> &-close + &-text {
 		padding: 8px 20px 4px 12px;
 	}
 
@@ -338,7 +304,7 @@
 	&-outer {
 		border-bottom: 0;
 		overflow: auto;
-		& > .z-tabs-header {
+		> .z-tabs-header {
 			padding-bottom: 0;
 		}
 	}
@@ -353,20 +319,21 @@
 	
 	&-ver {
 
-		& .@{tabs} {
+		// .z-tabbox-ver .z-tabs
+		.@{tabs} {
 			float:left;
 
-			& > .@{tabs}-up, & > .@{tabs}-down {
+			> .@{tabs}-up, > .@{tabs}-down {
 				display: none;
 			}
 
-			& > .@{tabs}-header > .@{tabs}-cnt {
+			> .@{tabs}-header > .@{tabs}-cnt {
 				height: 4096px;
 				border-right: 1px solid #E1E1E1;
 				-moz-user-select: none;
 			}
 
-			& > .@{tabs}-space {
+			> .@{tabs}-space {
 				background: none;
 				float: left;
 				position: relative;
@@ -376,13 +343,16 @@
 				width: 0;
 				height: auto;
 			}
+		}
 
-			&.@{tabs}-scroll > .@{tabs}-header {
+		// .z-tabbox-ver.z-tabbox-scroll .z-tabs
+		&.z-tabbox-scroll .@{tabs} {
+			
+			> .@{tabs}-header {
 				margin: 24px 0px 24px 0px;
 			}
 
-			&.@{tabs}-scroll > .@{tabs}-up, 
-			&.@{tabs}-scroll > .@{tabs}-down {
+			> .@{tabs}-up, > .@{tabs}-down {
 				.buttonBackground();
 				cursor: pointer;
 				height: 20px;
@@ -398,17 +368,17 @@
 				text-align: center;			
 			}
 
-			&.@{tabs}-scroll > .@{tabs}-up {	
+			> .@{tabs}-up {	
 				top: 0px;	
 			}
 
-			&.@{tabs}-scroll > .@{tabs}-down {
+			> .@{tabs}-down {
 				bottom: 0px;
 			}
 		}
 		
-
-		& .@{tab} {
+		// .z-tabbox-ver .z-tab
+		.@{tab} {
 			float: none;
 			border-width: 0px 0px 1px 1px;
 			border-radius: 4px 0px 0px 4px;
@@ -417,16 +387,16 @@
 				border-top: 1px solid #C5C5C5;
 			};
 
-			& > .@{tab}-text {
+			> .@{tab}-text {
 				padding: 8px 5px 8px 5px;
 			}
 
-			& > .@{tab}-close {
+			> .@{tab}-close {
 				top: 8px;
 				left: 3px;
 			}
 
-			& > .@{tab}-close + .@{tab}-text {
+			> .@{tab}-close + .@{tab}-text {
 				padding: 8px 5px 8px 15px;
 			}
 
@@ -445,8 +415,7 @@
 				white-space: nowrap;
 			}
 
-			&.@{tab}-disd > .@{tab}-text,
-			&.@{tab}-disd.@{tab}-seld > .@{tab}-text {
+			&.@{tab}-disd > .@{tab}-text {
 				cursor: default;
 				color: gray;
 				opacity: .6;
@@ -454,15 +423,54 @@
 			}
 		}
 
-
-		& .@{tabpanels} {		
+		// .z-tabbox-ver .z-tabpanels
+		.@{tabpanels} {		
 			border: 1px solid #E1E1E1;
 			border-left: 0px;
 		}
 
-
-		& .@{tabpanel} {
+		// .z-tabbox-ver .z-tabpanel
+		.@{tabpanel} {
 			border: 0;
 		}
+	}
+
+	&-scroll {
+
+		// .z-tabbox-scroll .z-tabs
+		.@{tabs} {
+			border: 0;
+			padding-bottom: 0;
+			zoom: 1;
+
+			> .@{tabs}-header,
+			> .z-toolbar-tabs-outer > .@{tabs}-header {
+				margin: 0px 25px 0px 25px;
+			}
+
+			> .@{tabs}-right, > .@{tabs}-left,
+			> .z-toolbar-tabs-outer > .@{tabs}-right, 
+			> .z-toolbar-tabs-outer > .@{tabs}-left {
+				.buttonBackground();
+				right: 0;
+				top: 0;
+				width: 25px;
+				height: 100%;
+				display: block;
+				text-align: center;
+				cursor: pointer;
+				position: absolute;
+				z-index: 25;
+				border: 1px solid #E1E1E1;
+				border-radius: 4px 4px 0px 0px;
+				padding-top: 7px;
+			}
+
+			> .@{tabs}-left,
+			> .z-toolbar-tabs-outer > .@{tabs}-left {
+				left: 0;
+			}
+		}		
+
 	}
 }

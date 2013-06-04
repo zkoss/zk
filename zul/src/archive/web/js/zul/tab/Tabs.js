@@ -282,21 +282,21 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	_showbutton : function(show) {
 		var tabbox = this.getTabbox(),
-			zcls = this.getZclass();
+			zcls = tabbox.getZclass();
 		if (tabbox.isTabscroll()) {
 			var tabs = this.$n();
 				
 			if (tabbox.isVertical()) {//vertical
 				if (show) {
-					jq(tabs).addClass(zcls + '-scroll');
+					jq(tabbox).addClass(zcls + '-scroll');
 				} else {
-					jq(tabs).removeClass(zcls + '-scroll');
+					jq(tabbox).removeClass(zcls + '-scroll');
 				}				
 			}else {//horizontal
 				if (show) {
-					jq(tabs).addClass(zcls + '-scroll');
+					jq(tabbox).addClass(zcls + '-scroll');
 				} else {
-					jq(tabs).removeClass(zcls + '-scroll');
+					jq(tabbox).removeClass(zcls + '-scroll');
 				}		
 			}
 		}
