@@ -116,7 +116,10 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	},
 	
 	domClass_: function (no) {
-		return this.$supers('domClass_', arguments) + ( this.inAccordionMold() ? ' ' + this.$s(this.getMold()) : this.isVertical() ? ' ' + this.$s('ver') : ''); 
+		var cls = this.$supers('domClass_', arguments),
+			orientCls = this.isVertical() ?  this.isVerticalLeft() ? ' ' + this.$s('vertical') : ' ' + this.$s('vertical-right') : '';
+		cls += this.inAccordionMold() ? ' ' + this.$s(this.getMold()) : orientCls;
+		return cls; 
 	},
 	/**
 	 * Returns whether it is a horizontal tabbox.
@@ -130,6 +133,12 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	isVertical: function() {
+		return this.getOrient().indexOf('vertical') != -1;
+	},
+	isVerticalRight: function() {
+		return 'vertical-right' == this.getOrient();
+	},
+	isVerticalLeft: function() {
 		return 'vertical' == this.getOrient();
 	},
 	/**
