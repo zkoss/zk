@@ -11,7 +11,6 @@
 	border: 1px solid #8FB9D0;
 	border-radius: 4px;
 	line-height: 13px;
-	text-align: center;
 }
 
 .z-tabs {
@@ -23,6 +22,12 @@
 
 	&-icon-img {
 		color: #A2A2A2;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 
 	& > &-right, & > &-left,
@@ -63,7 +68,7 @@
 		border-bottom: 1px solid #E1E1E1;
 	}
 
-	&-cnt > &-edge {
+	&-edge {
 		float: left;
 		width: 1px;
 		height: 1px;
@@ -181,14 +186,13 @@
 
 .z-tab {
 	.buttonBackground();
-	position: relative;
-	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeMedium;
-	cursor: default;
+	position: relative;	
 	display: block;
 	float: left;
 	padding: 0;
 	margin: 0;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
 	-moz-user-select: none;
 	border: 1px solid #C5C5C5;
 	border-width: 1px 1px 0px 0px;
@@ -207,6 +211,7 @@
 		width: 15px;
 		height: 15px;
 		position: absolute;
+		font-size: @fontSizeMedium;
 		right: 3px;
 		top: 8px;
 		z-index: 15;
@@ -231,11 +236,13 @@
 		color: #555555;
 		cursor: pointer;
 		font-style: normal;
-		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
 		font-size-adjust: none;
 		white-space: nowrap;
 		display: block;
+		padding: 8px 12px 4px 12px;
+	}
+
+	& > &-close + &-text {
 		padding: 8px 20px 4px 12px;
 	}
 
@@ -260,7 +267,7 @@
 	}
 
 	&-disd > &-text,
-	&-disd-seld > &-text {
+	&-disd&-seld > &-text {
 		cursor: default;
 		font-style: normal;
 		white-space: nowrap;
@@ -281,7 +288,6 @@
 
 	&-ver > &-text {
 		padding: 8px 5px 8px 5px;
-		text-align:center;
 	}
 
 	&-ver > &-close {
@@ -403,12 +409,10 @@
 	zoom: 1; 
 	overflow: hidden; 
 	position: relative;
-	border: 1px solid #E1E1E1;
-	border-top: 0px;
 
-	&-ver {
+	&-ver {		
+		border: 1px solid #E1E1E1;
 		border-left: 0px;
-		border-top: 1px solid #E1E1E1;
 	}
 
 	&-accordion {
@@ -420,7 +424,8 @@
 .z-tabpanel {	
 	padding: 5px;
 	zoom: 1;
-	border-top: none;	
+	border: 1px solid #E1E1E1;
+	border-top: 0px;	
 
 	&-cnt { /* Bug 2104974 */
 		height: 100%;
@@ -428,13 +433,6 @@
 
 	&-ver {
 		border: 0;
-	}
-
-	&-accordion {
-		border: 1px solid #CFCFCF;
-		border-top: 0;
-		padding: 5px;
-		zoom: 1;
 	}
 }
 
