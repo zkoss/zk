@@ -34,7 +34,7 @@ function (out) {
 
 	if(this.listhead){
 		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
-			'<table', wdAttr, zUtl.cellps0,
+			'<table id="', uuid, '-headtbl"', wdAttr, zUtl.cellps0,
 			' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker', zcls);
 		
@@ -80,7 +80,7 @@ function (out) {
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
-			'<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
+			'<table id="', uuid, '-foottbl"', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.listhead) 
 			this.domFaker_(out, '-ftfaker', zcls);
 			

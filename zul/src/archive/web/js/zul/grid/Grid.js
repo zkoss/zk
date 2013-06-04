@@ -54,6 +54,7 @@ var Grid =
  * style class to {@link #setOddRowSclass}.
  */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
+	_scrollbar: null,
 	$define: {
 		emptyMessage: function(msg) {
 			if(this.desktop)
@@ -179,16 +180,40 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	redrawEmpty_: function (out) {
 		var uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody class="', zcls, '-empty-body"><tr><td id="'
+		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="'
 				, uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Grid, 'bind_', arguments);
+		this._scrollbar = zul.mesh.Scrollbar.init(this);
 		var w = this;
 		after.push(function() {
 			_fixForEmpty(w);
 		});
+	},
+	unbind_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
+		}
+		this.$supers(Grid, 'unbind_', arguments);
+	},
+	onSize: function () {
+		this.$supers(Grid, 'onSize', arguments);
+		var self = this;
+		setTimeout(function () {
+			if (self.desktop) {
+				var bar = self._scrollbar,
+					embed = jq(self.$n()).data('embedscrollbar');
+				
+				bar.syncSize();
+				//show block DIV on header if vertical scroll-bar required
+				if (embed && bar.needV)
+					self.$n('headbar').style.display = 'block';
+			}
+		}, 200);
 	},
 	onResponse: function () {
 		if (this._shallFixEmpty) 
@@ -212,19 +237,19 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			if (fakerows) {
 				jq(fakerows).replaceWith(child.redrawHTML_());
 				child.bind(desktop);
-				this.ebodyrows = child.$n().rows;
+				this.ebodyrows = child.$n();
 				return;
 			} else {
 				var tpad = this.$n('tpad');
 				if (tpad) {
 					jq(tpad).after(child.redrawHTML_());
 					child.bind(desktop);
-					this.ebodyrows = child.$n().rows;
+					this.ebodyrows = child.$n();
 					return;
 				} else if (this.ebodytbl) {
 					jq(this.ebodytbl).append(child.redrawHTML_());
 					child.bind(desktop);
-					this.ebodyrows = child.$n().rows;
+					this.ebodyrows = child.$n();
 					return;
 				}
 			}

@@ -427,12 +427,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var uuid = this.uuid,
 			zcls = this.getZclass(),
 			label = this.domContent_();
-		out.push('<th', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
-				zcls, '-content"', this.domTextStyleAttr_(), '><div class="', zcls, '-sort-icon"><i id="', uuid, '-sort-icon"></i></div>',
-				( (!this.firstChild && label == '' ) ? "&nbsp;" : label));// ZK-805 MenuPopup without columns issue
+		out.push('<th', this.domAttrs_({width: true}), '><div id="',
+			uuid, '-cave" class="', this.$s('content'), '"',
+			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'), 
+			'"><i id="', uuid, '-sort-icon"></i></div>',
+			((!this.firstChild && label == '' ) ? "&nbsp;" : label)); //ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
-			out.push('<a id="', uuid, '-menu-icon" href="javascript:;" class="', zcls, '-menu-icon"><i class="z-icon-caret-down"></i></a>');
+			out.push('<a id="', uuid, '-menu-icon" href="javascript:;" class="',
+				this.$s('menuicon'), '"><i class="z-icon-caret-down"></i></a>');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
