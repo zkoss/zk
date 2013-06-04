@@ -120,7 +120,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
-		if (this.parent.isSizable()) this._initsz();
+		if (this.parent.isSizable())
+			this._initsz();
 		this.fixFaker_();
 	},
 	unbind_: function () {
@@ -202,19 +203,20 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			this.$supers('doDoubleClick_', arguments);
 	},
 	doMouseMove_: function (evt) {
-		if (zk.dragging || !this.parent.isSizable()) return;
+		if (zk.dragging || !this.parent.isSizable())
+			return;
 		var n = this.$n(),
 			ofs = zk(n).revisedOffset(); // Bug #1812154
 		if (this._insizer(evt.pageX - ofs[0])) {
-			jq(n).addClass(this.getZclass() + '-sizing');
+			jq(n).addClass(this.$s('sizing'));
 		} else {
-			jq(n).removeClass(this.getZclass() + '-sizing');
+			jq(n).removeClass(this.$s('sizing'));
 		}
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
 			var n = this.$n();
-			jq(n).removeClass(this.getZclass() + '-sizing');
+			jq(n).removeClass(this.$s('sizing'));
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
@@ -339,75 +341,54 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			n = wgt.$n(), $n = zk(n),
 			mesh = wgt.getMeshWidget(),
 			wd = dg._zszofs,
-			table = mesh.eheadtbl,
-			head = table.tBodies[0].rows[0],
-			rwd = $n.revisedWidth(wd),
+			eheadtbl = mesh.eheadtbl,
+			hdfaker = mesh.ehdfaker,
+			ebodytbl = mesh.ebodytbl,
+			bdfaker = mesh.ebdfaker,
+			efoottbl = mesh.efoottbl,
+			ftfaker = mesh.eftfaker,
 			cidx = $n.cellIndex();
 		
-		// For Opera, the code of adjusting width must be in front of the adjusting table.
-		// Otherwise, the whole layout in Opera always shows wrong.
-		if (mesh.efoottbl) {
-			mesh.eftfaker.cells[cidx].style.width = wd + 'px';
-		}
-		var fixed, disp;
-		if (mesh.ebodytbl) {
-			if (zk.opera && !mesh.ebodytbl.style.tableLayout) {
-				fixed = 'auto';
-				mesh.ebodytbl.style.tableLayout = 'fixed';
-			}
-			mesh.ebdfaker.cells[cidx].style.width = wd + 'px';
-		}
-
-		head.cells[cidx].style.width = wd + 'px';
-		n.style.width = rwd + 'px';
-		var cell = n.firstChild;
-		cell.style.width = zk(cell).revisedWidth(rwd) + 'px';
-
-		//feature#3177275: Listheader should override hflex when sized by end user
-		var hdfakercells = mesh.ehdfaker.cells,
-			bdfakercells = mesh.ebdfaker.cells,
-			wds = [],
-			i = 0;
+		//1. store original width
+		var wds = [];
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
-			var stylew = hdfakercells[i].style.width,
-				origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
-			w._width = wds[i] = origWd ? origWd :
-								stylew ? stylew : jq.px0(hdfakercells[i].offsetWidth); //bug#3180189. setWidth() has side effect
-			if (!stylew) //bug#3183228.
-				bdfakercells[i].style.width = hdfakercells[i].style.width = w._width;
-			++i;
+			var origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
+			wds[i++] = origWd ? origWd : jq.px0(w.$n().offsetWidth);
 		}
-
+		wds[cidx] = jq.px(wd);
+		
+		//2. clear width=100% setting, otherwise it will try to expand to whole width
+		eheadtbl.width = '';
+		ebodytbl.width = '';
+		if (efoottbl)
+			efoottbl.width = '';
+		
+		//3. set width to colgroup col
+		var hdcols = hdfaker.childNodes,
+			bdcols = bdfaker.childNodes,
+			ftcols = ftfaker ? ftfaker.childNodes : null;
+		for (var i = 0, len = hdcols.length; i < len; i++) {
+			hdcols[i].style.width = bdcols[i].style.width = wds[i];
+			if (ftcols)
+				ftcols[i].style.width = wds[i];
+		}
+		
 		delete mesh._span; //no span!
 		delete mesh._sizedByContent; //no sizedByContent!
 		for (var w = mesh.head.firstChild; w; w = w.nextSibling)
 			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
 
-		//bug#3147926: auto fit.
-		//Adjust hdfakerflex/bdfakerflex
-		var hdflex = mesh.head.$n('hdfakerflex'),
-			bdflex = mesh.body.$n('bdfakerflex'),
-			hdflexVal = hdflex.style.width;
-
-		hdflex.style.width = '';
-
-		if (bdflex) {
-			var bdflexVal = bdflex.style.width;
-			bdflex.style.width = '';
-
-		}
-
-		var meshn = mesh.$n();
-		if (zk.opera) {
-			if(fixed)
-				mesh.ebodytbl.style.tableLayout = fixed;
-
-			//bug 3061764: Opera only. Cannot sizing a column with width
-			var olddisp = meshn.style.display; //force redraw
-			meshn.style.display='none';
-			var redrawFix = meshn.offsetHeight;
-			meshn.style.display=olddisp;
-		}
+//		var meshn = mesh.$n();
+//		if (zk.opera) {
+//			if(fixed)
+//				mesh.ebodytbl.style.tableLayout = fixed;
+//
+//			//bug 3061764: Opera only. Cannot sizing a column with width
+//			var olddisp = meshn.style.display; //force redraw
+//			meshn.style.display='none';
+//			var redrawFix = meshn.offsetHeight;
+//			meshn.style.display=olddisp;
+//		}
 		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
@@ -417,7 +398,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}, evt.data), null, 0);
 
 		// bug #2799258 in IE, we have to force to recalculate the size.
-		meshn._lastsz = null;
+//		meshn._lastsz = null;
 
 		// bug #2799258
 		zUtl.fireSized(mesh, -1); //no beforeSize
