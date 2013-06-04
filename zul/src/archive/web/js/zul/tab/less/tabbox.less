@@ -328,10 +328,8 @@
 	}
 
 	&-accordion {
-		height: 32px;
 		padding: 0;
-		border: 1px solid #CFCFCF;
-		border-top: 0;
+		border: 0;
 		border-radius: 0;
 		float: none;
 	}
@@ -340,6 +338,13 @@
 		cursor: pointer;
 		position: relative;
 		zoom: 1;
+		border: 1px solid #CFCFCF;
+		border-top: 0;
+		height: 100%;
+	}
+
+	&-accordion:first-child {
+		border-left: 0;
 	}
 
 	&-accordion > &-header > &-close {
@@ -358,11 +363,7 @@
 		font-weight: bold;
 		text-decoration: none;
 		display: block;
-		padding: 8px 20px 8px 5px;
-	}
-
-	&-accordion:first-child {
-		border-left: 1px solid #CFCFCF;
+		padding: 8px 20px 6px 5px;
 	}
 
 	&-accordion&-seld {

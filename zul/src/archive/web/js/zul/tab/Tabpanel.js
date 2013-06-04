@@ -136,9 +136,9 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				zk(n).setOffsetHeight(hgh + zk(n).padBorderHeight());
 			} else {
 				var n = this.$n(),
-					hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
-				hgh = zk(n.parentNode).revisedHeight(hgh);
-
+					hgh = zk(tbx).revisedHeight(tbx.offsetHeight),
+					zkp = zk(n.parentNode);
+				hgh = zkp.revisedHeight(hgh) - zkp.padBorderHeight();
 				for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
 					if (e != n)
 						hgh -= e.offsetHeight;
