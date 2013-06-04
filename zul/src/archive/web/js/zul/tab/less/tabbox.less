@@ -114,6 +114,18 @@
 		border-left: 1px solid #C5C5C5;
 	}
 
+	& > &-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: #555555;
+		cursor: pointer;
+		font-style: normal;
+		font-size-adjust: none;
+		white-space: nowrap;
+		display: block;
+		padding: 8px 12px 4px 12px;
+	}
+
 	&-close {
 		cursor: pointer;
 		display: block;
@@ -133,46 +145,34 @@
 		&:hover {
 			.closeHoverStyle();
 		}
+
+		& + .@{tab}-text {
+			padding: 8px 20px 4px 12px;
+		}
 	}
 
 	&-noclose {
 		display:none;
 	}
 
-	& > &-text {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		color: #555555;
-		cursor: pointer;
-		font-style: normal;
-		font-size-adjust: none;
-		white-space: nowrap;
-		display: block;
-		padding: 8px 12px 4px 12px;
-	}
-
-	& > &-close + &-text {
-		padding: 8px 20px 4px 12px;
-	}
-
 	&-seld {
 		background: 0;
 		background-color: white;
-	}
 
-	&-seld:hover{
-		background: 0;
-		background-color: white;
-	}
+		&:hover {
+			background: 0;
+			background-color: white;
+		}
 
-	&-seld > &-close {
-		opacity: 1;
-		filter: alpha(opacity=100);
-	}
+		& > .@{tab}-close {
+			opacity: 1;
+			filter: alpha(opacity=100);
 
-	&-seld > &-text {
-		cursor: default;
-		font-weight: bold;
+			& > .@{tab}-text {
+				cursor: default;
+				font-weight: bold;
+			}
+		} 
 	}
 
 	&-disd > &-text {
@@ -308,19 +308,21 @@
 				padding: 8px 5px 8px 15px;
 			}
 
+			// .z-tabbox-ver .z-tab.z-tab-selected
 			&.@{tab}-seld {
 				border-bottom: 1px solid #C5C5C5;
-			}
 
-			&.@{tab}-seld > .@{tab}-close {
-				opacity: 1;
-				filter: alpha(opacity=100);
-			}
+				& > .@{tab}-close {
+					opacity: 1;
+					filter: alpha(opacity=100);
+				}
 
-			&.@{tab}-seld > .@{tab}-text {
-				cursor: default;
-				font-weight: bold;
-				white-space: nowrap;
+				& > .@{tab}-text {
+					cursor: default;
+					font-weight: bold;
+					white-space: nowrap;
+				}
+
 			}
 
 			&.@{tab}-disd > .@{tab}-text {
@@ -451,28 +453,29 @@
 
 			&-seld {
 				.buttonBackground();
+
+				& > .@{tab}-header > .@{tab}-close {
+					opacity: .8;
+					filter: alpha(opacity=80);
+				}
 			}
 
-			&-seld > .@{tab}-header > .@{tab}-close {
-				opacity: .8;
-				filter: alpha(opacity=80);
-			}
 
 			&-disd > .@{tab}-header {
 				color: gray;
 				cursor: default;
 				opacity: .6;
 				filter: alpha(opacity=60);
-			}
 
-			&-disd > .@{tab}-header > .@{tab}-close:hover {
-				opacity: .6;
-				filter: alpha(opacity=60);
-			}
+				& > .@{tab}-close:hover {
+					opacity: .6;
+					filter: alpha(opacity=60);
+				}
 
-			&-disd > .@{tab}-header > .@{tab}-text {
-				cursor: default;
-				color: gray;
+				& > .@{tab}-text {
+					cursor: default;
+					color: gray;
+				}
 			}
 
 			&-spacing {
