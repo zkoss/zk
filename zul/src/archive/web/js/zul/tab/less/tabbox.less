@@ -2,10 +2,6 @@
 
 @iconHoverBackgoundColor: #DFF2FC;
 
-.z-tabbox {
-	overflow: hidden;
-}
-
 .closeHoverStyle() {
 	background-color: @iconHoverBackgoundColor;
 	border: 1px solid #8FB9D0;
@@ -13,7 +9,13 @@
 	line-height: 13px;
 }
 
-.z-tabs {
+
+@tabs: z-tabs;
+@tab: z-tab;
+@tabpanels: z-tabpanels;
+@tabpanel: z-tabpanel;
+
+.@{tabs} {
 	overflow: hidden;
 	border: 0;
 	padding: 0;
@@ -127,64 +129,9 @@
 	&-scroll > .z-toolbar-tabs-outer > &-left {
 		left: 0;
 	}
-
-	&-ver {
-		float:left;
-	}
-
-	&-ver > &-up, &-ver > &-down {
-		display: none;		
-	}
-
-	&-ver > &-header > &-cnt {
-		height: 4096px;
-		border-right: 1px solid #E1E1E1;
-		-moz-user-select: none;
-	}
-
-	&-ver > &-space {
-		background: none;
-		float: left;
-		position: relative;
-		border: 0;
-		font-size: 0;
-		line-height: 0;
-		width: 0;
-		height: auto;
-	}
-
-	&-ver&-scroll > &-header {
-		margin: 24px 0px 24px 0px;
-	}
-
-	&-ver&-scroll > &-up, 
-	&-ver&-scroll > &-down {
-		.buttonBackground();
-		cursor: pointer;
-		height: 20px;
-		position: absolute;
-		z-index: 25;
-		width: 100%;
-		display: block;
-		border: 1px solid #E1E1E1;
-		border-bottom: 0px;
-		border-radius: 4px;
-		padding-top: 2px;
-		height: 24px;
-		text-align: center;			
-	}
-
-	&-ver&-scroll > &-up {	
-		top: 0px;	
-	}
-
-	&-ver&-scroll > &-down {
-		bottom: 0px;
-	}
-
 }
 
-.z-tab {
+.@{tab} {
 	.buttonBackground();
 	position: relative;	
 	display: block;
@@ -277,56 +224,6 @@
 		filter: alpha(opacity=40);
 	}
 
-	&-ver {
-		float: none;
-		border-width: 0px 0px 1px 1px;
-		border-radius: 4px 0px 0px 4px;
-		&:first-child {
-			border-top: 1px solid #C5C5C5;
-		};	
-	}
-
-	&-ver > &-text {
-		padding: 8px 5px 8px 5px;
-	}
-
-	&-ver > &-close {
-		top: 8px;
-		left: 3px;
-	}
-
-	&-ver > &-close + &-text {
-		padding: 8px 5px 8px 15px;
-	}
-
-	&-ver > &-close {
-		top: 8px;
-		left: 3px;
-	}
-
-	&-ver&-seld {
-		border-bottom: 1px solid #C5C5C5;
-	}
-
-	&-ver&-seld > &-close {
-		opacity: 1;
-		filter: alpha(opacity=100);
-	}
-
-	&-ver&-seld > &-text {
-		cursor: default;
-		font-weight: bold;
-		white-space: nowrap;
-	}
-
-	&-ver&-disd > &-text,
-	&-ver&-disd&-seld > &-text {
-		cursor: default;
-		color: gray;
-		opacity: .6;
-		filter: alpha(opacity=60);
-	}
-
 	&-accordion {
 		padding: 0;
 		border: 0;
@@ -406,15 +303,10 @@
 
 }
 
-.z-tabpanels {	
+.@{tabpanels} {	
 	zoom: 1; 
 	overflow: hidden; 
 	position: relative;
-
-	&-ver {		
-		border: 1px solid #E1E1E1;
-		border-left: 0px;
-	}
 
 	&-accordion {
 		border: 0;
@@ -422,7 +314,7 @@
 	}
 }
 
-.z-tabpanel {	
+.@{tabpanel} {	
 	padding: 5px;
 	zoom: 1;
 	border: 1px solid #E1E1E1;
@@ -430,10 +322,6 @@
 
 	&-cnt { /* Bug 2104974 */
 		height: 100%;
-	}
-
-	&-ver {
-		border: 0;
 	}
 }
 
@@ -457,5 +345,124 @@
 
 	&-body {
 		padding-top: 2px;
+	}
+}
+
+.z-tabbox {
+	overflow: hidden;
+	
+	&-ver {
+
+		& .@{tabs} {
+			float:left;
+
+			& > .@{tabs}-up, & > .@{tabs}-down {
+				display: none;
+			}
+
+			& > .@{tabs}-header > .@{tabs}-cnt {
+				height: 4096px;
+				border-right: 1px solid #E1E1E1;
+				-moz-user-select: none;
+			}
+
+			& > .@{tabs}-space {
+				background: none;
+				float: left;
+				position: relative;
+				border: 0;
+				font-size: 0;
+				line-height: 0;
+				width: 0;
+				height: auto;
+			}
+
+			&.@{tabs}-scroll > .@{tabs}-header {
+				margin: 24px 0px 24px 0px;
+			}
+
+			&.@{tabs}-scroll > .@{tabs}-up, 
+			&.@{tabs}-scroll > .@{tabs}-down {
+				.buttonBackground();
+				cursor: pointer;
+				height: 20px;
+				position: absolute;
+				z-index: 25;
+				width: 100%;
+				display: block;
+				border: 1px solid #E1E1E1;
+				border-bottom: 0px;
+				border-radius: 4px;
+				padding-top: 2px;
+				height: 24px;
+				text-align: center;			
+			}
+
+			&.@{tabs}-scroll > .@{tabs}-up {	
+				top: 0px;	
+			}
+
+			&.@{tabs}-scroll > .@{tabs}-down {
+				bottom: 0px;
+			}
+		}
+		
+
+		& .@{tab} {
+			float: none;
+			border-width: 0px 0px 1px 1px;
+			border-radius: 4px 0px 0px 4px;
+
+			&:first-child {
+				border-top: 1px solid #C5C5C5;
+			};
+
+			& > .@{tab}-text {
+				padding: 8px 5px 8px 5px;
+			}
+
+			& > .@{tab}-close {
+				top: 8px;
+				left: 3px;
+			}
+
+			& > .@{tab}-close + .@{tab}-text {
+				padding: 8px 5px 8px 15px;
+			}
+
+			&.@{tab}-seld {
+				border-bottom: 1px solid #C5C5C5;
+			}
+
+			&.@{tab}-seld > .@{tab}-close {
+				opacity: 1;
+				filter: alpha(opacity=100);
+			}
+
+			&.@{tab}-seld > .@{tab}-text {
+				cursor: default;
+				font-weight: bold;
+				white-space: nowrap;
+			}
+
+			&.@{tab}-disd > .@{tab}-text,
+			&.@{tab}-disd.@{tab}-seld > .@{tab}-text {
+				cursor: default;
+				color: gray;
+				opacity: .6;
+				filter: alpha(opacity=60);
+			}
+		}
+
+
+		& .@{tabpanels} {		
+			border: 1px solid #E1E1E1;
+			border-left: 0px;
+		}
+
+
+		& .@{tabpanel} {
+			border: 0;
+		}
 	}
 }

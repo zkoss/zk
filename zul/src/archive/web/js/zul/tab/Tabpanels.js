@@ -48,7 +48,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		if (!tabbox) return 'z-tabpanels';
 
 		var mold = tabbox.getMold();
-		return cls + (mold == 'default' ? (tabbox.isVertical() ? ' ' + this.$s('ver') : '') : ' ' + this.$s(mold));
+		return cls + (mold == 'default' ? '' : ' ' + this.$s(mold));
 	},
 	setWidth: function (val) {
 		var n = this.$n(),

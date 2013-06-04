@@ -57,15 +57,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 		child.bind(desktop);
 	},
-	domClass_: function (no) {
-		var zcls = this.$supers('domClass_', arguments);
-		if (!no || !no.zclass) {
-			var tbx = this.getTabbox();
-			if (tbx.getMold() == 'default' && tbx.isVertical()) 
-				zcls += ' ' + this.$s('ver');
-		}
-		return zcls;
-	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabs
 		if (v != 'min') v = false;

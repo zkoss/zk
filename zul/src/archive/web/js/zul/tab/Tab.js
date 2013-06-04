@@ -215,8 +215,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			if (this.isSelected()) scls += ' ' + this.$s('seld');
 			
 			var mold = tabbox.getMold();
-			if(mold == 'default' && tabbox.isVertical())
-				scls += ' ' + this.$s('ver');
 			if(mold != 'default')
 				scls += ' ' + this.$s(mold);
 		}
