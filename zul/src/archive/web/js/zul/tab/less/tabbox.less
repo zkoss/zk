@@ -322,9 +322,10 @@
 	}
 
 	&-accordion {
-		height: initial;
+		height: 32px;
 		padding: 0;
-		border: 0;
+		border: 1px solid #CFCFCF;
+		border-top: 0;
 		border-radius: 0;
 		float: none;
 	}
@@ -333,13 +334,10 @@
 		cursor: pointer;
 		position: relative;
 		zoom: 1;
-		border: 1px solid #CFCFCF;
-		border-top: 0;
 	}
 
 	&-accordion > &-header > &-close {
 		right: 5px;
-		top: 5px;
 		opacity: .6;
 		filter: alpha(opacity=60);
 		&:hover {
@@ -350,13 +348,15 @@
 	}
 
 	&-accordion > &-header > &-text {
+		color: #555555;
 		font-weight: bold;
 		text-decoration: none;
-		padding: 5px 30px 2px 5px;
+		display: block;
+		padding: 8px 20px 8px 5px;
 	}
 
 	&-accordion:first-child {
-		border-left: 0;
+		border-left: 1px solid #CFCFCF;
 	}
 
 	&-accordion&-seld {
