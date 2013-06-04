@@ -37,7 +37,7 @@ function (out) {
 	}
 	
 	out.push('<div id="', uuid, '-header" class="', zcls, '-header">',
-				'<ul id="', uuid, '-cave" class="', zcls, '-cnt">');
+				'<ul id="', uuid, '-cave" class="', zcls, '-content">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	out.push(		'<li id="', uuid, '-edge" class="', zcls, '-edge"></li>',

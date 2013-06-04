@@ -37,7 +37,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var cls = this.$supers('domClass_', arguments),
 			tabbox = this.getTabbox();
 		if (tabbox.inAccordionMold())
-			cls += ' ' + this.$s('cnt');
+			cls += ' ' + this.$s('content');
 		return cls;
 	},
 	/** Returns the tab associated with this tab panel.

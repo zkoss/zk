@@ -194,7 +194,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_calcHgh: function () {
 		var n = this.$n(),
-			cnt = this.$n('cnt');
+			cnt = this.$n('content');
 		if (cnt && (cnt = cnt.parentNode))
 			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
 	},
@@ -306,7 +306,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	contentRenderer_: function (out) {
 		var zcls = this.getZclass();
-		out.push('<span id="', this.uuid, '-cnt" class="', zcls, '-text">', this.domContent_(), '</span>');
+		out.push('<span id="', this.uuid, '-content" class="', zcls, '-text">', this.domContent_(), '</span>');
 	}
 });
 /** @class zul.tab.TabRenderer

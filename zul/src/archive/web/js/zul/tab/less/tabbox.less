@@ -52,7 +52,7 @@
 		zoom: 1;		
 	}
 
-	&-cnt {
+	&-content {
 		padding-left: 0;
 		padding-top: 0;
 		border-bottom: 1px solid #E1E1E1;
@@ -64,10 +64,10 @@
 		width: 100%;
 		zoom: 1;
 		-moz-user-select: none;
-	}
 
-	& > .z-toolbar-tabs-outer > &-cnt {
-		border-bottom: 1px solid #E1E1E1;
+		& > .z-clear {
+			height: 0;
+		}
 	}
 
 	&-edge {
@@ -82,10 +82,6 @@
 		line-height: 0 !important;
 		overflow: hidden;
 		zoom: 1;
-	}
-
-	&-cnt > .z-clear {
-		height: 0;
 	}
 
 	&-space {
@@ -208,7 +204,7 @@
 	border: 1px solid #E1E1E1;
 	border-top: 0px;	
 
-	&-cnt { /* Bug 2104974 */
+	&-content { /* Bug 2104974 */
 		height: 100%;
 	}
 }
@@ -244,7 +240,7 @@
 		.@{tabs} {
 			float:left;
 
-			& > .@{tabs}-header > .@{tabs}-cnt {
+			& > .@{tabs}-header > .@{tabs}-content {
 				height: 4096px;
 				border-right: 1px solid #E1E1E1;
 				-moz-user-select: none;
@@ -356,7 +352,7 @@
 		.@{tabs} {
 			float: right;
 
-			& > .@{tabs}-header > .@{tabs}-cnt {
+			& > .@{tabs}-header > .@{tabs}-content {
 				border-left: 1px solid #E1E1E1;
 			}
 
