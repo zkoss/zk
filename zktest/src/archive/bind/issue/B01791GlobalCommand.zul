@@ -1,0 +1,11 @@
+<zk>
+<label multiline="true">
+1.click global command, you should see label change to global: onClick, global
+</label>
+	<vlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01791GlobalCommand')">
+		<button label="global command" id="btn1" onClick="@global-command('testGlobal', event=event, param='global')"></button>
+		<button label="normal command" id="btn2" onClick="@command('testNormal', event=event, param='normal')"></button>
+		<hlayout>label : <label id="lb1" value="@load(vm.label)"></label>
+		</hlayout>
+	</vlayout>
+</zk>

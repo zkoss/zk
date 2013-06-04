@@ -35,7 +35,13 @@ ZK 6.5.3
   ZK-1748: Stackup and autohide not working
   ZK-1769: when click menu, menuitem and menu agian, then the menuitem should not be on focus.
   ZK-1768: Retrieve a wrong selected index of the radiogroup, when grid model changed
-  zk-1765: Add new Tree node cause Null Pointer Exception
+  ZK-1765: Add new Tree node cause Null Pointer Exception
+  ZK-1724: fileupload error "contentId is required!"
+  ZK-1791: @global-command does not provide predefined "event" variable
+  ZK-1784: client rod with hflex cause js error
+  ZK-1787: When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+  ZK-1785: Tabbox (accordion) : selecting and removing a tab results in wrong node being opened
+  ZK-1797: A js error happen while to rsFocus a button in a popup in window
 
   --------
 ZK 6.5.2

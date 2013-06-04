@@ -693,6 +693,8 @@ public class TrackerImpl implements Tracker, Serializable {
 			System.out.println(dumpSpace(spaces)+((ChildrenBinding)binding).getPropertyString()+":"+binding);
 		} else if(binding instanceof ReferenceBinding) {
 			System.out.println(dumpSpace(spaces)+((ReferenceBinding)binding).getPropertyString()+":"+binding);
+		} else{
+			System.out.println(dumpSpace(spaces)+":"+binding);
 		}
 	}
 	
