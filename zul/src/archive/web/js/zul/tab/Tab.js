@@ -242,7 +242,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$super(zul.tab.Tab, 'setHflex', v);
 	},	
 	_doCloseOver: function(e) {
-		console.log(jq(e.domTarget).attr('id'))
 		if(e.domTarget == this.$n('close') || e.domTarget == this.$n('icon-close')) {
 			jq(this.$n()).removeClass(this.$s('hover'));
 		} else {
