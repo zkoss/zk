@@ -796,7 +796,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 //				jq(this.ebodytbl).append(out.join(''));
 //			}
 //			_syncbodyrows(this);
-			if (this.$instanceof(zul.grid.Grid) && this.rows) //grid already bind ebodyrows when insertChildHTML_
+			if (zk.isLoaded('zul.grid') 
+					&& this.$instanceof(zul.grid.Grid) && this.rows)
 				this.ebodyrows = this.rows.$n();
 			else
 				this.ebodyrows = this.$n('rows');
@@ -1589,7 +1590,9 @@ zul.mesh.Scrollbar = {
 	 * @return int
 	 */
 	getScrollPosV: function (wgt) {
-		return Math.abs(Math.round(wgt._scrollbar.syncPos.y));
+		if (wgt._scrollbar && wgt._scrollbar.syncPos)
+			return Math.abs(Math.round(wgt._scrollbar.syncPos.y));
+		return 0;
 	},
 	/**
 	 * Return the horizontal scroll position of the body element of given MeshWidget.
@@ -1597,7 +1600,9 @@ zul.mesh.Scrollbar = {
 	 * @return int
 	 */
 	getScrollPosH: function (wgt) {
-		return Math.abs(Math.round(wgt._scrollbar.syncPos.x)); 
+		if (wgt._scrollbar && wgt._scrollbar.syncPos)
+			return Math.abs(Math.round(wgt._scrollbar.syncPos.x));
+		return 0;
 	}
 };
 })();
