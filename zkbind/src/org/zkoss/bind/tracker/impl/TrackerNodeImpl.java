@@ -169,4 +169,10 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	/*package*/ Map<Object, Object> getPropNameMapping() {
 		return _brackets;
 	}
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("[bean:").append(getBean()).append(",script:").append(_script).append("]@").append(System.identityHashCode(this));
+		return sb.toString();
+	}
 }

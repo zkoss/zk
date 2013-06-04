@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-a.
  */
 zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
-	_dir: "normal",
+	_dir: 'normal',
 	//_tabindex: 0,
 
 	$define: {
@@ -93,19 +93,20 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.wgt.A, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
-			this.domListen_(n, "onFocus", "doFocus_")
-				.domListen_(n, "onBlur", "doBlur_");
+			this.domListen_(n, 'onFocus', 'doFocus_')
+				.domListen_(n, 'onBlur', 'doBlur_');
 		}
 	},
 	unbind_: function(){
 		var n = this.$n();
-		this.domUnlisten_(n, "onFocus", "doFocus_")
-			.domUnlisten_(n, "onBlur", "doBlur_");
+		this.domUnlisten_(n, 'onFocus', 'doFocus_')
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(zul.wgt.A, 'unbind_', arguments);
 	},
 	domContent_: function(){
-		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage();
+		var label = zUtl.encodeXML(this.getLabel()), 
+			img = this.getImage();
 		if (!img) 
 			return label;
 		
@@ -113,13 +114,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
 	domClass_: function(no){
-		var scls = this.$supers('domClass_', arguments);
-		if (this._disabled && (!no || !no.zclass)) {
-			var s = this.getZclass();
-			if (s) 
-				scls += (scls ? ' ' : '') + s + '-disd';
-		}
-		return scls;
+		return this.$supers('domClass_', arguments);
 	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments),
@@ -132,17 +127,19 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			attr += ' href="' + v + '"';
 		else 
 			attr += ' href="javascript:;"';
+		if(this._disabled)
+			attr += ' disabled="disabled"';
 		return attr;
 	},
 	doClick_: function(evt){
 		if (this._disabled) 
-			evt.stop(); //prevent browser default
+			evt.stop(); // Prevent browser default
 		else {
 			this.fireX(evt);
 			if (!evt.stopped)
 				this.$super('doClick_', evt, true);
 		}
-			//Unlike DOM, we don't proprogate to parent (so not call $supers)
+			// Unlike DOM, we don't propagate to parent (so do not call $supers)
 	}
 });
 

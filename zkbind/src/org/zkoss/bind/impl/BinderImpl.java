@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -1394,7 +1395,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_globalCommandBinding).getCommand());
 				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
-					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
+					
+					//ZK-1791 @global-command does not provide predefined "event" variable
+					Map<String,Object> implicit = null;
+					if(_implicitContributor!=null){
+						implicit = _implicitContributor.contirbuteCommandObject(BinderImpl.this,_commandBinding,event);
+					}
+					
+					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs(),implicit);
 					//post global command
 					postGlobalCommand(comp, _globalCommandBinding ,command ,event, args);
 				}
@@ -1998,10 +2006,23 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			resolvers = new HashMap<String,TemplateResolver>();
 			_templateResolvers.put(comp, resolvers);
 		}	
-		resolvers.put(attr, new TemplateResolverImpl(this, comp,attr,templateExpr,templateArgs));
+		resolvers.put(attr, newTemplateResolverImpl(this, comp,attr,templateExpr,templateArgs));
 	}
 	
-	
+	//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+	private TemplateResolver newTemplateResolverImpl(BinderImpl binderImpl, Component comp, String attr,
+			String templateExpr, Map<String, Object> templateArgs) {
+		String clznm = Library.getProperty("org.zkoss.bind.TemplateResolver.class",TemplateResolverImpl.class.getName());
+		try {
+			Class<TemplateResolver> clz = (Class<TemplateResolver>)Classes.forNameByThread(clznm);
+			Constructor<TemplateResolver> c = clz.getDeclaredConstructor(Binder.class,Component.class,String.class,String.class,Map.class);
+			TemplateResolver resolver = c.newInstance(binderImpl, comp, attr,templateExpr, templateArgs);
+			return resolver;
+		} catch (Exception e) {
+			throw new UiException("Can't initialize template resolver ",e);
+		}
+	}
+
 	public TemplateResolver getTemplateResolver(Component comp, String attr){
 		Map<String,TemplateResolver> resolvers = _templateResolvers.get(comp);
 		return resolvers==null?null:resolvers.get(attr);

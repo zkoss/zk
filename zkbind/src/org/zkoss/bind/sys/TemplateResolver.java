@@ -26,6 +26,9 @@ public interface TemplateResolver {
 	public static final String STATUS_ATTR = "status";
 	public static final String EACH_STATUS_VAR = "forEachStatus";
 	
+	//ZK-1787When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+	public static final String TEMPLATE_OBJECT = "$TemplateVar$";
+	
 	/**
 	 * Resolve the template for the component 
 	 * @param eachComp the template to be resolved of the component
@@ -39,6 +42,17 @@ public interface TemplateResolver {
 	/**
 	 * Add template tracking to component
 	 * @param eachComp the component to add template tracking
+	 * @deprecated since 6.5.3
 	 */
+	@Deprecated
 	void addTemplateTracking(Component eachComp);
+	
+	/**
+	 * Add template tracking to component
+	 * @param eachComp the template to be resolved of the component
+	 * @param eachData the data for resolver
+	 * @param index the index of each
+	 * @param size the size of data set
+	 */
+	void addTemplateTracking(Component eachComp, Object eachData, int index, int size);
 }
