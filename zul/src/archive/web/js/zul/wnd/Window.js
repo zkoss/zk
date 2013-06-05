@@ -1007,7 +1007,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var cap = this.caption;
 		if(!zk.mobile) { //Bug ZK-1314: avoid focus on input widget to show keyboard on ipad
 			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w != cap && w.focus_(timeout))
+				//B65-ZK-1797: avoid focusing on removed widge when enable client ROD
+				if (w.desktop && w != cap && w.focus_(timeout))
 					return true;
 		}
 		return cap && cap.focus_(timeout);

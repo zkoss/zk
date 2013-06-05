@@ -165,7 +165,7 @@ div.z-log {
 	}
 }
 
-.z-label, .z-radio-cnt, .z-checkbox-cnt, .z-loading {
+.z-label, .z-radio-cnt, .z-checkbox-content, .z-loading {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
@@ -465,4 +465,101 @@ span.z-upload input {
 }
 .z-fileupload-manager {
 	width: 350px;
+}
+
+//scrollbar
+.z-scrollbar {
+	position: absolute;
+	opacity: 0;
+	.applyCSS3('transition-property', 'opacity');
+	.applyCSS3('transition-duration', '0.5s');
+	.applyCSS3('transition-timing-function', 'cubic-bezier(0.33, 0.66, 0.66, 1)');
+	&-embed {
+		opacity: 1.0;
+		background: #CFCFCF;
+	}
+	//vertical
+	&-vertical {
+		top: 0;
+		right: 0;
+		width: 16px;
+		height: 100%;
+		.z-scrollbar-wrapper {
+			position: absolute;
+			top: 16px;
+			left: 0;
+			width: 100%;
+			.z-scrollbar-indicator {
+				position: absolute;
+				width: 10px;
+				left: 3px;
+				cursor: pointer;
+				background: darken(#CFCFCF, 30%);
+				z-index: 100;
+				.transform('translate(0, 0)');
+			}
+			.z-scrollbar-rail {
+				height: 100%;
+			    margin: 0 auto;
+			    width: 8px;
+			    background: #CFCFCF;
+			}
+		}
+	}
+	&-up,
+	&-down {
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		padding: 1px;
+		cursor: pointer;
+	}
+	&-down {
+		bottom: 0;
+	}
+	//horizontal
+	&-horizontal {
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 16px;
+		.z-scrollbar-wrapper {
+			position: absolute;
+			bottom: 0;
+			left: 16px;
+			height: 100%;
+			.z-scrollbar-indicator {
+				position: absolute;
+				height: 10px;
+				top: 3px;
+				cursor: pointer;
+				background: darken(#CFCFCF, 30%);
+				z-index: 100;
+				.transform('translate(0, 0)');
+			}
+			.z-scrollbar-rail {
+				width: 100%;
+				height: 8px;
+				background: #CFCFCF;
+				position: absolute;
+				top: 4px;
+			}
+		}
+	}
+	&-left,
+	&-right {
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		cursor: pointer;
+		vertical-align: top;
+	}
+	&-right {
+		right: 0;
+	}
+	&-icon {
+		display: block;
+		font-size: @baseFontSize;
+		text-align: center;
+	}
 }

@@ -94,7 +94,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 					return size;
 				}
 			});
-			resolver.addTemplateTracking(eachComp);
+			resolver.addTemplateTracking(eachComp,data,index,size);
 		} finally {
 			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
 			eachComp.setAttribute(TemplateResolver.EACH_VAR, old);

@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -93,6 +94,9 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			
 			nci.setAttribute(itervarnm, iterStatus);
 			
+			//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+			//move TEMPLATE_OBJECT (was set in resoloveTemplate) to current for check in addTemplateTracking
+			nci.setAttribute(TemplateResolver.TEMPLATE_OBJECT, item.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
 			//add template dependency
 			addTemplateTracking(cb, nci, data, index, size);
 			

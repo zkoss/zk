@@ -77,29 +77,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {pre: 1});
 	},
-	doMouseOver_: function () {
-		if (zk.ie) { // ie cannot support tr:hover
-			if (!this._disabled) {
-				var n = this.$n(),
-					$n = jq(n);
-				$n.addClass(this.$s('hover'));
-			}
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function () {
-		if (zk.ie) { // ie cannot support tr:hover
-			if (!this._disabled) this._doMouseOut();
-		}
-		this.$supers('doMouseOut_', arguments);
-	},
-	_doMouseOut: zk.ie ? function () {
-		var n = this.$n();
-		jq(n).removeClass(this.$s('hover'));
-	} : zk.$void,
 	doClick_: function (evt) {
 		if (!this._disabled) {
-			this._doMouseOut();
 
 			var cb = this.parent;
 			cb._select(this, {sendOnSelect:true, sendOnChange: true});
@@ -121,6 +100,6 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<li', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></li>');
 	}
 });

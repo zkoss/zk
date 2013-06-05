@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Template;
 
 /**
- * rename it to template binding?
+ * The resolver resolves template and handles template changes
  * @author dennis
  * @since 6.0.0
  */
@@ -39,8 +39,6 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	private final String _attr;
 	private final Component _comp;
 	private final ExpressionX _expression;
-	private Binding _binding;
-	private boolean _bindingResolved;
 	
 	public TemplateResolverImpl(Binder binder, Component comp, String attr, String templateExpr, Map<String, Object> templateArgs) {
 		_binder = binder;
@@ -53,8 +51,25 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 		_expression = binder.getEvaluatorX().parseExpressionX(ctx, templateExpr, Object.class);
 	}
 	
+	public Binder getBinder(){
+		return _binder;
+	}
+	
+	public Component getComponent(){
+		return _comp;
+	}
+	
 	public String getExpression(){
 		return _templateExpr;
+	}
+	
+
+	public Map<String, Object> getTemplateArgs() {
+		return _templateArgs;
+	}
+
+	public String getAttr() {
+		return _attr;
 	}
 
 	private Template lookupTemplate(Component comp, String name) {
@@ -64,7 +79,7 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	}
 
 	
-	public Template resolveTemplate(Component eachComp, final Object eachData, final int index, final int size) {
+	protected Object evaluateTemplate(Component eachComp,final Object eachData, final int index, final int size){
 		Object oldEach = null;
 		Object oldStatus = null;
 		try {
@@ -88,10 +103,19 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 					return size;
 				}
 			});
-	
+			
 			final BindEvaluatorX eval = _binder.getEvaluatorX();
 			final BindContext ctx = BindContextUtil.newBindContext(_binder, null, false, null, eachComp, null);
 			final Object value = eval.getValue(ctx, eachComp, _expression);
+			return value;
+		} finally {
+			eachComp.setAttribute(EACH_VAR, oldEach);
+			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
+		}
+	}
+	
+	public Template resolveTemplate(Component eachComp, final Object eachData, final int index, final int size) {
+			final Object value = evaluateTemplate(eachComp,eachData,index,size);
 			if(value instanceof Template){
 				return (Template) value;
 			}else if(value instanceof String){
@@ -108,31 +132,48 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 			}else{
 				throw new UiException("unknow template type "+value);
 			}
-		} finally {
-			eachComp.setAttribute(EACH_VAR, oldEach);
-			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
-		}
 	}
 	
     //ZK-739: Allow dynamic template for collection binding.	
 	//Tracking template expression to trigger load binding of the template component
-	public void addTemplateTracking(Component eachComp) {
-		if(!_bindingResolved || _binding==null){//defer the linking between last prompt binding and template
-			List<Binding> bindings = ((BinderCtrl)_binder).getLoadPromptBindings(_comp,_attr);
-			_binding = bindings.size()>0?bindings.get(bindings.size()-1):null;
-			_bindingResolved = true;
-		}
-		if(_binding!=null){
-			final BindContext ctx = BindContextUtil.newBindContext(_binder, _binding, false, null, eachComp, null);
+	@Deprecated
+	public void addTemplateTracking(final Component eachComp) {
+		List<Binding> bindings = ((BinderCtrl)_binder).getLoadPromptBindings(_comp,_attr);
+		final Binding binding = bindings.size()>0?bindings.get(bindings.size()-1):null;
+		if(binding!=null){
+			//following is for making tracker traces _teamplateExpr with binding
+			final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, eachComp, null);
 			final BindEvaluatorX eval = _binder.getEvaluatorX();
 			final ExpressionX exprX = eval.parseExpressionX(ctx, _templateExpr, Object.class); 
 			eval.getValue(ctx, eachComp, exprX);
 		}
 	}
 	
+    //ZK-739: Allow dynamic template for collection binding.	
+	//Tracking template expression to trigger load binding of the template component
+	public void addTemplateTracking(final Component eachComp,final Object eachData, final int index, final int size) {
+		Binding binding = getTemplateBinding(eachComp,eachData, index, size);
+		if(binding!=null){
+			//following is for making tracker traces _teamplateExpr with binding
+			final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, eachComp, null);
+			final BindEvaluatorX eval = _binder.getEvaluatorX();
+			final ExpressionX exprX = eval.parseExpressionX(ctx, _templateExpr, Object.class); 
+			eval.getValue(ctx, eachComp, exprX);
+		}
+	}
+	
+	//Gets the binding that will be tacker when template change.
+	protected Binding getTemplateBinding(Component eachComp, Object eachData, int index, int size) {
+		List<Binding> bindings = ((BinderCtrl)_binder).getLoadPromptBindings(_comp,_attr);
+		final Binding loadbinding = bindings.size()>0?bindings.get(bindings.size()-1):null;
+		return loadbinding;
+	}
+
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append("[").append(_templateExpr).append("]").append(super.toString());
 		return sb.toString();
 	}
+	
+	
 }

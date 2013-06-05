@@ -13,13 +13,9 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	// ZK-945
-	// fine tune the style of image's td,
-	// add spacer so can customize easier
-	out.push('<tr', this.domAttrs_({text:true}), '><td class="',
-		this.$s('image'), '">', this.domImage_(), '</td><td class="',
-		this.$s('text'), '"><span class="',
-		this.$s('spacer'), '">&nbsp;</span>', this.domLabel_());
+	out.push('<li', this.domAttrs_({text:true}), '><span class="',
+		this.$s('image'), '">', this.domImage_(), '</span><span class="',
+		this.$s('text'), '">', this.domLabel_());
 
 	var v;
 	if (v = this._description)
@@ -28,5 +24,5 @@ function (out) {
 	if (v = this._content)
 		out.push('<span class="', this.$s('content'), '">', v, '</span>');
 
-	out.push('</td></tr>');
+	out.push('</span></li>');
 }

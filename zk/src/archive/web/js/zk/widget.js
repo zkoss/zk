@@ -1042,8 +1042,11 @@ new zul.wnd.Window({
 	setHflex_: function (v) {
 		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 		if (this._nhflex < 0 && v != 'min')
-			this._nhflex = 0; 
-		if (_binds[this.uuid] === this) { //if already bind
+			this._nhflex = 0;
+		if (this.desktop) { //ZK-1784 only update the components style when it is attached to desktop
+		                    //checking on (_binds[this.uuid] === this) as before does not work when 
+		                    //nested inside native component. in this case the nested component
+		                    //is bound earlier, when the native component is reused (mount.js create()) 
 			if (!this._nhflex) {
 				this.setFlexSize_({width: ''}); //clear the width
 				delete this._hflexsz;

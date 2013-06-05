@@ -264,8 +264,8 @@
 }
 
 // Comboitem
-.z-combobox-popup .z-comboitem,
-.z-combobox-popup .z-comboitem-icon {
+.z-comboitem,
+.z-comboitem-icon {
 	white-space: nowrap;
 	font-size: @fontSizeMedium;
 	cursor: pointer;
@@ -273,44 +273,39 @@
 .z-comboitem {
 	color: #555555;
 	text-shadow: 0 1px #FFFFFF;
+	padding: 0 2px;
+	position: relative;
+	display: block;
 }
-.z-combobox-popup .z-comboitem-inner,
-.z-combobox-popup .z-comboitem-content {//description
-	color: #555555;
-	font-size: @fontSizeSmall;
+.z-comboitem-inner,
+.z-comboitem-content {//description
+	color: #888888;
+	font-size: @fontSizeXSmall;
 	padding-left: 6px;
 }
-.z-combobox-popup .z-comboitem,
-.z-combobox-popup .z-comboitem a,
-.z-combobox-popup .z-comboitem a:visited {
+.z-comboitem,
+.z-comboitem a,
+.z-comboitem a:visited {
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 	color: black;
 	text-decoration: none;
 }
-.z-combobox-popup .z-comboitem-selected {
+.z-comboitem-selected {
 	.buttonBackground(#B6D5E5, #CAE4F1);
 }
-.z-combobox-popup .z-comboitem:hover {
+.z-comboitem:hover {
 	.buttonBackground(#E9F6FD, #DBF0FC);
 }
-.z-combobox-popup .z-comboitem-selected:hover {
+.z-comboitem-selected:hover {
 	.buttonBackground(#81d0f7, #DBF0FC);
 }
-// IE cannot support tr:hover
-<c:if test="${zk.ie > 0}">
-.z-combobox-popup .z-comboitem-selected > td {
-	.buttonBackground(#B6D5E5, #CAE4F1);
-}
-.z-combobox-popup .z-comboitem-hover > td {
-	.buttonBackground(#E9F6FD, #DBF0FC);
-}
-.z-combobox-popup .z-comboitem-selected.z-comboitem-hover > td {
-	.buttonBackground(#81d0f7, #DBF0FC);
-}
-</c:if>
-.z-comboitem .z-comboitem-img {
+.z-comboitem-image {
 	width: 1px;
+	margin-right: 3px;
+	&:empty {
+		margin-right: 0px;
+	}
 }
 
 .z-combobox-popup,
@@ -331,6 +326,17 @@
 .z-bandbox-popup {
 	overflow: auto;
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
+}
+
+.z-combobox-content {	
+	background: transparent none repeat 0 0;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
 }
 
 <%-- Shadow --%>

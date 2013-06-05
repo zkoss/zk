@@ -42,8 +42,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wnd.Panel = zk.$extends(zul.Widget, {
-	_border: "none",
-	_title: "",
+	_border: 'none',
+	_title: '',
 	_open: true,
 	_minheight: 100,
 	_minwidth: 200,
@@ -250,16 +250,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		open: function (open, fromServer) {
-			var node = this.$n();
+			var node = this.$n(),
+				up = 'z-icon-caret-up',
+				down = 'z-icon-caret-down';
 			if (node) {
 				var zcls = this.getZclass(),
 					$body = jq(this.$n('body'));
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
-						jq(node).removeClass(zcls + '-colpsd');
+						jq(node).removeClass(zcls + '-collapsed');
+						jq(this.$n('expand')).children('.' + down)
+						.removeClass(down).addClass(up);
 						$body.zk.slideDown(this);
 					} else {
-						jq(node).addClass(zcls + '-colpsd');
+						jq(node).addClass(zcls + '-collapsed');
+						jq(this.$n('expand')).children('.' + up)
+						.removeClass(up).addClass(down);
 						this._hideShadow();
 						$body.zk.slideUp(this);
 					}
@@ -289,15 +295,20 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					isRealVisible = $n.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
-				var l, t, w, h, s = node.style, cls = this.getZclass();
+				var l, t, w, h,
+				s = node.style, 
+				cls = this.getZclass(),
+				up = 'z-icon-fullscreen',
+				down = 'z-icon-resize-small';
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maxd');
+					jq(this.$n('maximize')).addClass(cls + '-maximized')
+					.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
 					if (this._collapsible && !this._open) {
-						$n.jq.removeClass(cls + '-colpsd');
+						$n.jq.removeClass(cls + '-collapsed');
 						var body = this.$n('body');
-						if (body) body.style.display = "";
+						if (body) body.style.display = '';
 					}
 					var floated = this.isFloatable(),
 						$op = floated ? jq(node).offsetParent() : jq(node).parent(),
@@ -312,7 +323,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							var oldinfo = this._oldNodeInfo = { _scrollTop: p.parentNode.scrollTop };
 							p.parentNode.scrollTop = 0;
 							$n.makeVParent();
-							zWatch.fireDown("onVParent", this);
+							zWatch.fireDown('onVParent', this);
 
 							oldinfo._pos = s.position;
 							oldinfo._ppos = ps.position;
@@ -337,33 +348,26 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					h = s.height;
 
 					// prevent the scroll bar.
-					s.top = "-10000px";
-					s.left = "-10000px";
+					s.top = '-10000px';
+					s.left = '-10000px';
+					
+					s.width = jq.px0($op[0].clientWidth);
+					s.height = jq.px0($op[0].clientHeight);
 
-					// Sometimes, the clientWidth/Height in IE6 is wrong.
-					var sw = $op[0].clientWidth;
-
-					if (!floated) {
-						sw -= $op.zk.paddingWidth();
-						sw = $n.revisedWidth(sw);
-						sh -= $op.zk.paddingHeight();
-						sh = $n.revisedHeight(sh);
-					}
-					s.width = jq.px0(sw);
-					s.height = jq.px0(sh);
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
-					s.top = "0";
-					s.left = "0";
+					s.top = '0';
+					s.left = '0';
 
 					// resync
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n('max'),
+					var max = this.$n('maximize'),
 						$max = jq(max);
-					$max.removeClass(cls + "-maxd").removeClass(cls + "-maxd-over");
+					$max.removeClass(cls + '-maximized').children('.' + down)
+					.removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -376,27 +380,27 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 					if (this._collapsible && !this._open) {
-						jq(node).addClass(cls + "-colpsd");
+						jq(node).addClass(cls + '-collapsed');
 						var body = this.$n('body');
-						if (body) body.style.display = "none";
+						if (body) body.style.display = 'none';
 					}
 					var body = this.panelchildren ? this.panelchildren.$n() : null;
 					if (body)
-						body.style.width = body.style.height = "";
+						body.style.width = body.style.height = '';
 
 					if (this._inWholeMode) {
 						$n.undoVParent();
-						zWatch.fireDown("onVParent", this);
+						zWatch.fireDown('onVParent', this);
 
 						var oldinfo = this._oldNodeInfo;
-						node.style.position = oldinfo ? oldinfo._pos : "";
-						this.setZIndex((oldinfo ? oldinfo._zIndex : ""), {fire:true});
+						node.style.position = oldinfo ? oldinfo._pos : '';
+						this.setZIndex((oldinfo ? oldinfo._zIndex : ''), {fire:true});
 						this.setFloating_(false);
 						var p = this.parent.parent.$n();
-						p.style.position = oldinfo ? oldinfo._ppos : "";
+						p.style.position = oldinfo ? oldinfo._ppos : '';
 						p.parentNode.scrollTop = oldinfo ? oldinfo._scrollTop : 0;
 						if (oldinfo && oldinfo._pheight)
-							p.style.height = "";
+							p.style.height = '';
 						this._oldNodeInfo = null;
 						this._inWholeMode = false;
 					}
@@ -594,18 +598,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n) +
-				(this._rounded() ? jq(this.$n('body')).find(':last')[0].offsetHeight : 0);
+				(this._rounded() ? zk(this.$n('body')).padBorderHeight() : 0);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
 	beforeSize: function() {
-		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized)
-			this.$n().style.width="";
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// have to clear width here if not listen to flex
 		if (!this._flexListened)
-			this.$n('body').style.width="";
+			this.$n('body').style.width='';
 	},
 	resetSize_: function(orient) {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
@@ -622,22 +623,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
-
-			// Sometimes, the clientWidth/Height in IE6 is wrong.
-			var sw = $op[0].clientWidth;
-			if (!floated) {
-				sw -= $op.zk.paddingWidth();
-				sw = $n.revisedWidth(sw);
-			}
-			s.width = jq.px0(sw);
-			if (wgt._open) {
-				var sh = $op[0].clientHeight;
-				if (!floated) {
-					sh -= $op.zk.paddingHeight();
-					sh = $n.revisedHeight(sh);
-				}
-				s.height = jq.px0(sh);
-			}
+				
+				s.width = jq.px0($op[0].clientWidth);
+				s.height = jq.px0($op[0].clientHeight);
 		}
 		return function(ctl) {
 			this._hideShadow();
@@ -664,15 +652,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var n = this.$n(),
 			body = pc.$n(),
 			hgh = n.style.height;
-		if (hgh && hgh != "auto")
-			zk(body).setOffsetHeight(this._offsetHeight(n));
+		if (hgh && hgh != 'auto')
+			zk(body).setOffsetHeight(this._offsetHeight(n) + zk(body).padBorderHeight());
 	},
 	_fixWdh: function () { // TODO: should be handled by Panelchildren onSize already
 		var pc = this.panelchildren;
 		if (!pc || pc.z_rod || !this.isRealVisible())
 			return;
 		var body = pc.$n(), pcst, pcwd;
-		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != "auto") {
+		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != 'auto') {
 			var w = this.$n().clientWidth,
 				cn = body;
 			if (this._rounded())
@@ -683,26 +671,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	//whether rounded border is required
 	_rounded: _zkf = function () {
-		return this._border.startsWith("rounded"); //rounded
+		return this._border.startsWith('rounded'); //rounded
 	},
 	isFramable: _zkf, //backward compatible with 5.0.6
 	//whether inner border is required
 	_bordered: function () {
 		var v;
-		return (v = this._border) != "none" && v != "rounded";
+		return (v = this._border) != 'none' && v != 'rounded';
 	},
 	_offsetHeight: function (n, ignoreToolbar) {
-		var h = n.offsetHeight - this._titleHeight(n);
-		if (this._rounded()) {
-			var body = this.panelchildren.$n(),
-				bl = jq(this.$n('body')).find('> div:last-child')[0],
-				title = this.$n('cap');
-			h -= bl.offsetHeight;
-			if (body)
-				h -= zk(body.parentNode).padBorderHeight();
-			if (title)
-				h -= zk(title.parentNode).padBorderHeight();
-		}
+		var h = n.offsetHeight - this._titleHeight(n),
+			body = this.$n('body');
+		if (body)
+			h -= zk(body).padBorderHeight();
 		h -= zk(n).padBorderHeight();
 		if (ignoreToolbar)
 			return h; // B60-ZK-774
@@ -715,12 +696,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var isFramable = this.isFramable(),
-			cap = this.$n('cap'),
-			top = isFramable || cap ? jq(n).find('> div:first-child')[0].offsetHeight : 0;
-		return cap ? (isFramable ?
-				jq(n).find('> div:first-child').next()[0].offsetHeight :
-					_getOuter(cap, n).offsetHeight) + top : top;
+		var ho = this.$n('header-outer');
+		return ho ? ho.offsetHeight : 0;
 	},
 	onFloatUp: function (ctl) {
 		if (!this._visible || !this.isFloatable())
@@ -759,7 +736,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			n.style.top = jq.px(xy[1]);
 		}
 
-		n.style.position = "absolute";
+		n.style.position = 'absolute';
 		if (this.isMovable())
 			this._initMove();
 
@@ -769,7 +746,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.setTopmost();
 	},
 	_initMove: function (cmp) {
-		var handle = this.$n('cap');
+		var handle = this.$n('caption');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.getZclass() + '-header-move');
 			var $Panel = this.$class;
@@ -873,7 +850,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this.isMovable() ? this.$n('cap') : false,
+				handle = this.isMovable() ? this.$n('caption') : false,
 				zcls = this.getZclass();
 			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
@@ -893,8 +870,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
-		var maxBtn = this.$n('max'),
-			minBtn = this.$n('min'),
+		var maxBtn = this.$n('maximize'),
+			minBtn = this.$n('minimize'),
 			zcls = this.getZclass(),
 			n = evt.domTarget;
 		if (!n.id)
@@ -905,13 +882,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			break;
 		case maxBtn:
 			this.setMaximized(!this._maximized);
-			jq(maxBtn).removeClass(zcls + '-max-over');
 			break;
 		case minBtn:
 			this.setMinimized(!this._minimized);
-			jq(minBtn).removeClass(zcls + '-min-over');
 			break;
-		case this.$n('exp'):
+		case this.$n('expand'):
 			var body = this.$n('body'),
 				open = body ? zk(body).isVisible() : this._open;
 
@@ -926,64 +901,20 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		evt.stop();
 	},
-	doMouseOver_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
-			break;
-		case this.$n('max'):
-			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
-			break;
-		case this.$n('min'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
-			break;
-		case this.$n('exp'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-exp-over');
-			break;
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		var jqn = jq(n);
-		switch (n) {
-		case this.$n('close'):
-			jqn.removeClass(zcls + '-close-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('max'):
-			if (this._maximized)
-				jqn.removeClass(zcls + '-maxd-over');
-			jqn.removeClass(zcls + '-max-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('min'):
-			jqn.removeClass(zcls + '-min-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('exp'):
-			jqn.removeClass(zcls + '-exp-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		}
-		this.$supers('doMouseOut_', arguments);
-	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
-			var added = this._bordered() ? '' : zcls + '-noborder';
+			var added = this._bordered() ? '' : this.$s('noborder');
 			if (added) scls += (scls ? ' ': '') + added;
-			added = this._open ? '' : zcls + '-colpsd';
+			added = this._open ? '' : this.$s('collapsed');
 			if (added) scls += (scls ? ' ': '') + added;
+			
+			if (!(this.getTitle() || this.caption))
+				scls += ' ' + this.$s('noheader');
+			
+			if (!this._rounded())
+				scls += ' ' + this.$s('noframe');
 		}
 		return scls;
 	},
@@ -1034,10 +965,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		dg.control._hideShadow();
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf("%") >= 0)
-			 el.style.top = el.offsetTop + "px";
-		if(el.style.left && el.style.left.indexOf("%") >= 0)
-			 el.style.left = el.offsetLeft + "px";
+		if(el.style.top && el.style.top.indexOf('%') >= 0)
+			 el.style.top = el.offsetTop + 'px';
+		if(el.style.left && el.style.left.indexOf('%') >= 0)
+			 el.style.left = el.offsetLeft + 'px';
 		//zkau.closeFloats(cmp, handle);
 	},
 	_ignoremove: function (dg, pointer, evt) {
@@ -1048,9 +979,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		switch (tar) {
 		case wgt.$n('close'):
-		case wgt.$n('max'):
-		case wgt.$n('min'):
-		case wgt.$n('exp'):
+		case wgt.$n('maximize'):
+		case wgt.$n('minimize'):
+		case wgt.$n('expand'):
 			return true; //ignore special buttons
 		}
 		return false;

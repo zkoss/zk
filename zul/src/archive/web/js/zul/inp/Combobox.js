@@ -378,13 +378,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	redrawpp_: function (out) {
 		var uuid = this.uuid;
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
-		' ', this.getSclass(), '" style="display:none" tabindex="-1"><table id="',
+		' ', this.getSclass(), '" style="display:none" tabindex="-1"><ul id="',
 		uuid, '-cave"', zUtl.cellps0, ' class="', this.$s('content'), '" >');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 
-		out.push('</table></div>');
+		out.push('</ul></div>');
 	},
 	afterAnima_: function (visible) {
 		// B50-ZK-568: Combobox does not scroll to selected item

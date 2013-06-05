@@ -123,8 +123,8 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.$n().style.width = this.__width || '';
 	},
 	onChildRemoved_: function (child) {
-		this.$supers('onChildRemoved_', arguments);
-		_syncSelectedPanels(this);
+		this.$supers("onChildRemoved_", arguments);
+		this.tabRemoved = true;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -135,6 +135,13 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		if (tabbox && (!tabbox.inAccordionMold()
 				|| (cave = child.$n('cave')) && cave.style.display != 'none'))
 			_syncSelectedPanels(this);
+	},
+	onResponse: function () {
+		//bug B65-ZK-1785 synchronize selection only once in the end after all removes have finished
+		if (this.tabRemoved) {
+			_synchSelectedPanels(this);
+			tabRemoved = false;
+		}
 	}
 });
 })();

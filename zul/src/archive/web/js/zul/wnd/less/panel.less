@@ -1,0 +1,191 @@
+@import "~./zul/less/_header.less";
+
+
+@frameBackgroundColor: #E1EDF4;
+@bodyBackgroundColor: #F1F9FF;
+@iconHoverBackgroundColor: #DFF2FC;
+@iconColor: #777777;
+
+.defaultOverflowZoom() {
+	overflow: hidden; zoom: 1;
+}
+
+.resetHeaderOuter() {
+	padding: 0px;
+	background-color: transparent;
+	border: 0;
+	.topBorderRadius('0px');
+	.defaultOverflowZoom();
+}
+
+.z-panel {
+
+	.defaultOverflowZoom();
+
+	&-shadow {
+		.borderRadius();
+		.boxShadow('0 0 4px rgba(0, 0, 0, 0.5)');
+	}
+	
+	&-header {
+		color: #363636;
+		padding: 1px 0 7px 0;
+		background-color: @frameBackgroundColor;
+		border: 0;
+		line-height: 24px;
+		font-weight: normal;
+		font-size: @fontSizeMedium;
+		font-family: @baseTitleFontFamily;
+		.defaultOverflowZoom();
+
+		&-outer {
+			.topBorderRadius();
+			border: 1px solid #9F9F9F;
+			border-bottom: 1px solid #C5C5C5;
+			padding: 6px;
+			padding-bottom: 0px;
+			background-color: @frameBackgroundColor;
+		}
+
+		&-move {
+			cursor: move;
+		}
+	}
+
+	&-body {
+		margin: 0;
+		background: @bodyBackgroundColor;
+		padding: 6px 3px 6px 3px;
+		border: 1px solid #9F9F9F;
+		border-top: 0;
+		.bottomBorderRadius();
+		.defaultOverflowZoom();
+	}
+
+	&-body > &-btm > .z-toolbar {
+		border-width: 0 1px 1px;
+		height: 32px;
+	}
+
+	&children {
+		background-color: white;
+		border: 1px solid #C5C5C5;
+		position: relative;
+		.defaultOverflowZoom();
+	}
+
+	&-top, &-btm, &-btm2 {
+		height: 32px;
+	}
+
+	&-icon {
+		background: transparent no-repeat 0 0;
+		overflow: hidden;
+		margin: auto 1px;
+		cursor: pointer;
+		display: block;
+		&-img {
+			.buttonBackground();
+			.borderRadius();
+			border: 1px solid #CFCFCF;
+			float: right;
+			cursor: pointer;
+			margin: auto 1px;
+			text-align: center;
+			color: @iconColor;
+			
+			&:hover {
+				background-color: @iconHoverBackgroundColor;
+			}
+		}
+	}
+
+	&-maximize, &-minimize, &-close, &-expand {
+		width: 28px;
+		height: 24px;
+	}
+	
+	&-close {
+		font-size: @fontSizeXLarge;
+		line-height: 23px;
+	}
+	
+	&-maximize {
+		font-size: @fontSizeLarge;
+	}
+	
+	&-minimize {
+		font-size: @fontSizeLarge;
+		padding-top: 5px;
+	}
+
+	&-expand {
+		font-size: @fontSizeXLarge;
+	}
+	
+	&-resize-faker {
+		position: absolute;
+		border: 1px dashed #1854C2;
+		overflow: hidden;
+		z-index: 60000;
+		left: 0;
+		top: 0;
+		background-color: #D7E6F7;
+		filter: alpha(opacity=50); /* IE */
+		opacity: .5;
+	}
+
+	&-move-ghost {
+		position: absolute;
+		background: #D7E6F7;
+		overflow: hidden;
+		filter: alpha(opacity=60) !important; /* IE */
+		opacity: .6 !important;
+		cursor: move !important;
+
+		dl {
+			border: 1px solid #B2CAD6;
+			margin: 0;
+			overflow: hidden;
+			padding: 0;
+			display: block;
+			background: #D7E6F7;
+			line-height: 0;
+			font-size: 0;
+		}
+	}
+
+ 	&-move-block {
+	 	border: 2px dashed #B2CAD6;
+	}
+
+	&-noframe > &-body {
+		background: white;
+		border: 0;
+		padding: 0;
+		.borderRadius('0px');
+	}
+
+	&-noframe > &-body > &children {
+		border-top: 0;
+	}
+
+	&-noheader > &-header-outer {
+		.resetHeaderOuter();
+	}
+
+	&-noheader > &-body {
+		border-top: 1px solid #c5c5c5;
+		.borderRadius();
+	}
+
+	&-noheader&-noframe > &-body {
+		border: 0;
+		.borderRadius('0px');
+	}	
+
+	&-noheader&-noframe > &-body > &children {
+		border-top: 1px solid #c5c5c5;
+	}
+
+}
