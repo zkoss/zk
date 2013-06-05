@@ -158,9 +158,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!bound) return;
 		
 		if (toSel)
-			jq(tab).addClass(zcls + '-seld');
+			jq(tab).addClass(zcls + '-selected');
 		else
-			jq(tab).removeClass(zcls + '-seld');
+			jq(tab).removeClass(zcls + '-selected');
 
 		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
 			panel._sel(toSel, !init);
@@ -211,8 +211,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			var tabbox = this.getTabbox();
 			
 			if (!tabbox) return 'z-tab';
-			if (this.isDisabled()) scls += ' ' + this.$s('disd');
-			if (this.isSelected()) scls += ' ' + this.$s('seld');
+			if (this.isDisabled()) scls += ' ' + this.$s('disabled');
+			if (this.isSelected()) scls += ' ' + this.$s('selected');
 		}
 		
 		return scls;

@@ -155,7 +155,7 @@
 		display:none;
 	}
 
-	&-seld {
+	&-selected {
 		background: 0;
 		background-color: white;
 		box-shadow: 0 1px 0 #FFFFFF;
@@ -176,7 +176,7 @@
 		} 
 	}
 
-	&-disd > &-text {
+	&-disabled > &-text {
 		cursor: default;
 		font-style: normal;
 		white-space: nowrap;
@@ -310,7 +310,7 @@
 			}
 
 			// .z-tabbox-vertical .z-tab.z-tab-selected
-			&.@{tab}-seld {
+			&.@{tab}-selected {
 				border-bottom: 1px solid #E1E1E1;
 				box-shadow: 1px 0px 0 #FFFFFF;
 
@@ -327,7 +327,7 @@
 
 			}
 
-			&.@{tab}-disd > .@{tab}-text {
+			&.@{tab}-disabled > .@{tab}-text {
 				cursor: default;
 				color: gray;
 				opacity: .6;
@@ -381,7 +381,7 @@
 				padding: 8px 15px 8px 5px;
 			}
 
-			&.@{tab}-seld {
+			&.@{tab}-selected {
 				box-shadow: -1px 0px 0 #FFFFFF;
 			}
 		}
@@ -470,7 +470,7 @@
 				padding: 8px 20px 6px 5px;
 			}
 
-			&-seld {
+			&-selected {
 				.buttonBackground();
 				box-shadow: initial;
 
@@ -481,7 +481,7 @@
 			}
 
 
-			&-disd > .@{tab}-header {
+			&-disabled > .@{tab}-header {
 				color: gray;
 				cursor: default;
 				opacity: .6;
