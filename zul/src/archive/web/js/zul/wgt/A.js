@@ -113,9 +113,6 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" />';
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
-	domClass_: function(no){
-		return this.$supers('domClass_', arguments);
-	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments),
 			v;
