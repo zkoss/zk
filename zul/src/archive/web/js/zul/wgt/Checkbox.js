@@ -149,7 +149,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether to disable the checkbox after the user clicks it.
 		 * @param String autodisable
 		 */
-		autodisable: null
+		autodisable: null,
 	},
 
 	//super//
@@ -207,7 +207,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				this.setChecked(checked) //so Radio has a chance to override it
 					.fireOnCheck_(checked);
 			}
-			if (zk.safari && !zk.mobile) zk(real).focus();
+			if (zk.safari && !zk.mobile) 
+				zk(real).focus();
 			return this.$supers('doClick_', arguments);
 		}
 	},
@@ -219,7 +220,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			this.$supers('beforeSendAU_', arguments);
 	},
 	getTextNode: function () {
-		return jq(this.$n()).find('label:first')[0];
+		return jq(this.$n('content'));
 	}
 });
 
