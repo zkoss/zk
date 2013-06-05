@@ -18,10 +18,10 @@ function (out) {
 	var zcls = this.getZclass(),
 		tbx = this.getTabbox(),
 		uuid = this.uuid,
-		self = this,
+		zicon = this.$s('icon'),
 		iconImg = this.$s('icon-img'),
 		getIcon = function(iconClass) {
-			return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
+			return '<i class="' + zicon + ' z-' + iconClass + '"></i>';
 		};
 	out.push('<div ', this.domAttrs_(), '>');
 	

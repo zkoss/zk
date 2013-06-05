@@ -18,10 +18,10 @@ function (out) {
 	var zcls = this.getZclass(),
 		tbx = this.getTabbox(),
 		uuid = this.uuid;
-		self = this,
+		zicon = this.$s('icon'),
 		iconImg = this.$s('icon-img'),
 		getIcon = function(iconClass) {
-			return '<i id="' + uuid + '-icon-close" class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
+			return '<i id="' + uuid + '-icon-close" class="' + zicon + ' z-' + iconClass + '"></i>';
 		};
 	 
 	if (tbx.inAccordionMold()) {//Accordion
