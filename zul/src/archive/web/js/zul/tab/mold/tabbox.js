@@ -16,8 +16,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 function (out) {
 	out.push('<div ', this.domAttrs_(), '>');
-	if (this.tabs) this.tabs.redraw(out);
-	if (this.tabpanels) this.tabpanels.redraw(out);
+	if (this.isHorizontalBottom()){
+		if (this.tabpanels) this.tabpanels.redraw(out);
+		if (this.tabs) this.tabs.redraw(out);		
+	} else {
+		if (this.tabs) this.tabs.redraw(out);
+		if (this.tabpanels) this.tabpanels.redraw(out);
+	}
+	
 	if (this.isVertical())
 		out.push('<div class="z-clear"></div>');
 	out.push("</div>");

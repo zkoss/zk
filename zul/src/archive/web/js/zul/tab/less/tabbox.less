@@ -9,11 +9,12 @@
 	line-height: 13px;
 }
 
-
+@tabbox: z-tabbox;
 @tabs: z-tabs;
 @tab: z-tab;
 @tabpanels: z-tabpanels;
 @tabpanel: z-tabpanel;
+@z-toolbar-tabs: z-toolbar-tabs;
 
 .@{tabs} {
 	overflow: hidden;
@@ -210,7 +211,7 @@
 	}
 }
 
-.z-toolbar-tabs {
+.@{z-toolbar-tabs} {
 	overflow: hidden;
 	position: absolute;
 	right: 0;
@@ -233,7 +234,7 @@
 	}
 }
 
-.z-tabbox {
+.@{tabbox} {
 	overflow: hidden;
 	
 	.verticalStyle() {
@@ -255,7 +256,7 @@
 		}
 
 		// .z-tabbox-vertical.z-tabbox-scroll .z-tabs
-		&.z-tabbox-scroll .@{tabs} {
+		&.@{tabbox}-scroll .@{tabs} {
 			
 			& > .@{tabs}-header {
 				margin: 24px 0px 24px 0px;
@@ -390,6 +391,51 @@
 		.@{tabpanels} {		
 			border: 1px solid #E1E1E1;
 			border-right: 0;
+		}
+	}
+
+	&-horizontal-bottom {
+		// .z-tabbox-horizontal-bottom .z-tabs
+		.@{tabs} {
+
+			.@{tabs}-content {
+				border-bottom: 0;
+				border-top: 1px solid #E1E1E1;
+			}
+		}
+
+		// .z-tabbox-horizontal-bottom .z-tab
+		.@{tab} {
+			border-width: 0px 1px 1px 0px;
+			border-radius: 0px 0px 4px 4px;
+
+			&:first-child {
+				border-left: 1px solid #E1E1E1;
+			};
+
+			&.@{tab}-selected {
+				box-shadow: 0px -1px 0 #FFFFFF;
+			}
+		}
+
+		// .z-tabbox-horizontal-bottom .z-tabpanels
+		.@{tabpanel} {		
+			border: 1px solid #E1E1E1;
+			border-bottom: 0;
+		}
+
+		// .z-tabbox-horizontal-bottom.z-tabbox-scroll .z-tabs
+		&.@{tabbox}-scroll .@{tabs} {
+			& > .@{tabs}-right, & > .@{tabs}-left,
+			& > .z-toolbar-tabs-outer > .@{tabs}-right, 
+			& > .z-toolbar-tabs-outer > .@{tabs}-left {
+				border-radius: 0px 0px 4px 4px;
+			}
+		}
+
+		.@{z-toolbar-tabs} {
+			border-bottom: 0;
+			border-top: 1px solid #E1E1E1;
 		}
 	}
 
