@@ -308,15 +308,19 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (!allTab.length) return; // nothing to do	
 			
 		var ele = evt.domTarget,
+			$parent = jq(ele).parent(),
 			move = 0,
 			tabbox = this.getTabbox(),
 			head = this.$n('header'),
 			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
 			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth,
-			plus = scrollLength + offsetLength;
-		
+			plus = scrollLength + offsetLength,
+			self = this,
+			isParentIdEq = function(id) {
+				return $parent && $parent.attr('id') == (self.uuid + '-' + id);
+			};
 		//Scroll to next right tab
-		if (ele.id == this.uuid + '-right') {
+		if (ele.id == this.uuid + '-right' || isParentIdEq('right')) {
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetLeft + allTab[i].offsetWidth > plus) {
 					move = allTab[i].offsetLeft + allTab[i].offsetWidth - scrollLength - offsetLength;
@@ -326,7 +330,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					return;
 				}
 			}
-		} else if (ele.id == this.uuid + '-left') {//Scroll to next left tab
+		} else if (ele.id == this.uuid + '-left' || isParentIdEq('left')) {//Scroll to next left tab
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetLeft >= scrollLength) {
 					//if no Sibling tab no sroll
@@ -342,7 +346,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			if (isNaN(move)) return;
 			this._doScroll('left', move);
 			return;
-		} else if (ele.id == this.uuid + '-up') {
+		} else if (ele.id == this.uuid + '-up' || isParentIdEq('up')) {
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetTop >= scrollLength) {
 						var preli = jq(allTab[i]).prev('li')[0];
@@ -357,7 +361,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				move = scrollLength - preli.offsetTop ;
 				this._doScroll('up', move);
 				return;
-		} else if (ele.id == this.uuid + '-down') {
+		} else if (ele.id == this.uuid + '-down' || isParentIdEq('down')) {
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetTop + allTab[i].offsetHeight > plus) {
 					move = allTab[i].offsetTop + allTab[i].offsetHeight - scrollLength - offsetLength;
