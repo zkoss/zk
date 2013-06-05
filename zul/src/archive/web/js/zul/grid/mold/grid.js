@@ -25,7 +25,7 @@ function (out) {
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
 		if (pgpos == 'top' || pgpos == 'both') {
-			out.push('<div id="', uuid, '-pgit" class="', this.$s('pgi-t'), '">');
+			out.push('<div id="', uuid, '-pgit" class="', this.$s('paging-top'), '">');
 			this.paging.redraw(out);
 			out.push('</div>');
 		}
@@ -88,7 +88,7 @@ function (out) {
 	}
 	
 	if (pgpos == 'bottom' || pgpos == 'both') {
-		out.push('<div id="', uuid, '-pgib" class="', this.$s('pgi-b'), '">');
+		out.push('<div id="', uuid, '-pgib" class="', this.$s('paging-bottom'), '">');
 		this.paging.redraw(out);
 		out.push('</div>');
 	}

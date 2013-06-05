@@ -163,8 +163,6 @@ table {
 		width: 16px;
 		height: 16px;
 		cursor: pointer;
-//		vertical-align: text-bottom;
-//		padding: 0 3px 0 6px;
 		font-size: @baseFontSize;
 		color: black;
 		position: relative;
@@ -200,11 +198,25 @@ table {
 .z-column-content,
 .z-auxheader-content {
 	font-weight: bold;
+	padding: 4px 5px 3px;
 }
 .z-group-content,
 .z-groupfoot-content {
 	.z-label {
 		font-weight: bold;
+	}
+}
+//paging
+.z-grid-paging {
+	&-top {
+		border-bottom: 1px solid @gridBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @gridBorderColor;
+		overflow: hidden;
+		width: 100%;
 	}
 }
 //column menu
