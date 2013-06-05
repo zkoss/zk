@@ -248,7 +248,7 @@ public class Tabbox extends XulElement {
 	 *            either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
-		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
+		if (!"horizontal".equals(orient) && !"vertical".equals(orient) && !"vertical-right".equals(orient))
 			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
 			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());

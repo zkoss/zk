@@ -236,7 +236,7 @@
 	overflow: hidden;
 	
 	.verticalStyle() {
-		// .z-tabbox-ver .z-tabs
+		// .z-tabbox-vertical .z-tabs
 		.@{tabs} {
 			float:left;
 
@@ -253,7 +253,7 @@
 			}
 		}
 
-		// .z-tabbox-ver.z-tabbox-scroll .z-tabs
+		// .z-tabbox-vertical.z-tabbox-scroll .z-tabs
 		&.z-tabbox-scroll .@{tabs} {
 			
 			& > .@{tabs}-header {
@@ -285,7 +285,7 @@
 			}
 		}
 		
-		// .z-tabbox-ver .z-tab
+		// .z-tabbox-vertical .z-tab
 		.@{tab} {
 			float: none;
 			border-width: 0px 0px 1px 1px;
@@ -308,7 +308,7 @@
 				padding: 8px 5px 8px 15px;
 			}
 
-			// .z-tabbox-ver .z-tab.z-tab-selected
+			// .z-tabbox-vertical .z-tab.z-tab-selected
 			&.@{tab}-seld {
 				border-bottom: 1px solid #C5C5C5;
 
@@ -333,13 +333,13 @@
 			}
 		}
 
-		// .z-tabbox-ver .z-tabpanels
+		// .z-tabbox-vertical .z-tabpanels
 		.@{tabpanels} {		
 			border: 1px solid #E1E1E1;
 			border-left: 0px;
 		}
 
-		// .z-tabbox-ver .z-tabpanel
+		// .z-tabbox-vertical .z-tabpanel
 		.@{tabpanel} {
 			border: 0;
 		}
@@ -351,10 +351,13 @@
 
 	&-vertical-right {
 		.verticalStyle();
+
+		// .z-tabbox-vertical-right .z-tabs
 		.@{tabs} {
 			float: right;
 
 			& > .@{tabs}-header > .@{tabs}-content {
+				border-right: 0;
 				border-left: 1px solid #E1E1E1;
 			}
 
@@ -363,11 +366,21 @@
 			}
 		}
 
+		// .z-tabbox-vertical-right .z-tab
 		.@{tab} {
-			border-width: 1px 1px 0px 0px;
+			border-width: 0px 1px 1px 0px;
 			border-radius: 0px 4px 4px 0px;
+
+			& > .@{tab}-close {
+				left: initial;
+			}
+
+			& > .@{tab}-close + .@{tab}-text {
+				padding: 8px 15px 8px 5px;
+			}
 		}
 
+		// .z-tabbox-vertical-right .z-tabpanels
 		.@{tabpanels} {		
 			border: 1px solid #E1E1E1;
 			border-right: 0;
