@@ -75,7 +75,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _redudant(group, radio) {
-		for (var p = radio; (p = p.parent) != null;)
+		for (var p = radio.parent; p != null; p = p.parent)
 			if (p.$instanceof(zul.wgt.Radiogroup))
 				return p == group;
 	}
@@ -93,7 +93,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	_jsel: -1,
 
 	$init: function () {
-		this.$supers("$init", arguments);
+		this.$supers('$init', arguments);
 		this._externs = [];
 	},
 	$define: { //zk.def
