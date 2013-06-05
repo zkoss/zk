@@ -103,7 +103,7 @@
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeMedium;
 	-moz-user-select: none;
-	border: 1px solid #C5C5C5;
+	border: 1px solid #E1E1E1;
 	border-width: 1px 1px 0px 0px;
 	border-radius: 4px 4px 0px 0px;
 	height: 32px;
@@ -111,7 +111,7 @@
 	
 
 	&:first-child {
-		border-left: 1px solid #C5C5C5;
+		border-left: 1px solid #E1E1E1;
 	}
 
 	& > &-text {
@@ -158,6 +158,7 @@
 	&-seld {
 		background: 0;
 		background-color: white;
+		box-shadow: 0 1px 0 #FFFFFF;
 
 		&:hover {
 			background: 0;
@@ -292,7 +293,7 @@
 			border-radius: 4px 0px 0px 4px;
 
 			&:first-child {
-				border-top: 1px solid #C5C5C5;
+				border-top: 1px solid #E1E1E1;
 			};
 
 			& > .@{tab}-text {
@@ -310,7 +311,8 @@
 
 			// .z-tabbox-vertical .z-tab.z-tab-selected
 			&.@{tab}-seld {
-				border-bottom: 1px solid #C5C5C5;
+				border-bottom: 1px solid #E1E1E1;
+				box-shadow: 1px 0px 0 #FFFFFF;
 
 				& > .@{tab}-close {
 					opacity: 1;
@@ -377,6 +379,10 @@
 
 			& > .@{tab}-close + .@{tab}-text {
 				padding: 8px 15px 8px 5px;
+			}
+
+			&.@{tab}-seld {
+				box-shadow: -1px 0px 0 #FFFFFF;
 			}
 		}
 
