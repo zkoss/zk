@@ -116,7 +116,7 @@ public class ThemeFns {
 			String[] cols = colors.split(";");
 			StringBuilder sb = new StringBuilder("\tbackground:").append(grad(
 					direction, Browser.W3C, cols));
-			if (temp != Browser.Old_IE)
+			if (temp != Browser.Old_IE && temp != Browser.IE9)
 				sb.append("\tbackground:");
 			return sb.append(grad(direction, temp, cols)).toString();
 		}
@@ -201,7 +201,7 @@ public class ThemeFns {
 		StringBuilder sb = new StringBuilder();
 		String[] cols = colors.split(";");
 		for (Browser grad : Browser.values()) {
-			if (grad != Browser.Old_IE)
+			if (grad != Browser.Old_IE && grad != Browser.IE9)
 				sb.append("\tbackground:");
 			sb.append(grad(direction, grad, cols));
 		}
@@ -452,7 +452,7 @@ public class ThemeFns {
 			_prefix = prefix;
 			if ("IE6-9".equals(browser) || "IE9".equals(browser)) {
 				_template = new StringBuilder(
-						"\tbackground-color: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
+						"\tbackground-color: %1$s;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
 						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-9 */\n")
 						.toString();
 			} else if ("Chrome,Safari4+".equals(browser)) {
