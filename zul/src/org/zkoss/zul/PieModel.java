@@ -17,13 +17,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * Kept for backwards compatibility use {@link SingleValueCategoryModel} instead
  * A Pie chart data model.
  *
  * @author henrichen
  * @see Chart
  * @see SimplePieModel
  */
-@Deprecated
 public interface PieModel extends SingleValueCategoryModel {
 }

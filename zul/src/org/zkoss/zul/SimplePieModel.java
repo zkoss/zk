@@ -17,8 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * Kept for backwards compatibiliy use {@link SimpleSingleValueCategoryModel} instead
- * 
  * A Pie chart data model implementation of {@link PieModel}.
  * Piechart model is an one series of (Category, value) data objects.
  *
@@ -26,7 +24,6 @@ package org.zkoss.zul;
  * @see PieModel
  * @see Chart
  */
-@Deprecated
 public class SimplePieModel extends SimpleSingleValueCategoryModel implements PieModel {
 	private static final long serialVersionUID = 20091008183556L;
 }
