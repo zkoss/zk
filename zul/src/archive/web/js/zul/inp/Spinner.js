@@ -157,10 +157,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		this._onChanging();
 		this._stopAutoIncProc();
-		
+
+		var inp = this.getInputNode();
 		if (zk.ie) {
-			var inp = this.getInputNode(),
-				len = inp.value.length;
+			var len = inp.value.length;
 			zk(inp).setSelectionRange(len, len);
 		}
 		inp.focus();

@@ -27,7 +27,6 @@
 	min-height: @baseButtonHeight;
 	.borderRadius(3px 0 0 3px);
 	line-height: @baseLineHeight;
-	.boxShadow(none);
 	color: black;
 	<c:if test="${zk.chrome > 0}">
 	margin-top: -1px; // fix a missing line at the bottom
@@ -179,6 +178,10 @@
 	&-input:focus {
 		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 	}
+	&-input[readonly] {
+		background: #FAFAFA;
+		border-color: #E6E6E6;
+	}
 	&-input[readonly]:focus {
 		.boxShadow('none');
 	}
@@ -186,7 +189,7 @@
 	&-invalid {
 		background: #FFFFFF;
 		border-color: #DD7777;
-		border-right-width: 1px !important;
+		border-right: 1px solid #DD7777!important;
 		margin-right: -1px;
 	}
 }
@@ -328,7 +331,7 @@
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
 }
 
-.z-combobox-content {	
+.z-combobox-content {
 	background: transparent none repeat 0 0;
 	border: 0;
 	padding: 0;

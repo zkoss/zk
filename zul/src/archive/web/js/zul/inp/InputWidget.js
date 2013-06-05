@@ -710,8 +710,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @see zul.inp.Errorbox#show
 	 */
 	showError_: function (msg) {
-		var eb = new zul.inp.Errorbox();
-		eb.show(this, msg);
+		var eb = new zul.inp.Errorbox(this, msg);
+		eb.show();
 		return eb;
 	},
 	_equalValue: function(a, b) {
