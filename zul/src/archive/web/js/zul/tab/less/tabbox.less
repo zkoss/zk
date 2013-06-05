@@ -157,12 +157,12 @@
 	}
 
 	&-selected {
-		background: 0;
+		.resetGradient();
 		background-color: white;
 		box-shadow: 0 1px 0 #FFFFFF;
 
 		&:hover {
-			background: 0;
+			.resetGradient();
 			background-color: white;
 		}
 
@@ -188,7 +188,7 @@
 	}
 
 	&-hover {
-		background: 0;
+		.resetGradient();
 		background-color: #DCF1FC;
 	}
 
@@ -375,7 +375,7 @@
 			border-radius: 0px 4px 4px 0px;
 
 			& > .@{tab}-close {
-				left: initial;
+				left: auto;
 			}
 
 			& > .@{tab}-close + .@{tab}-text {
@@ -518,7 +518,7 @@
 
 			&-selected {
 				.buttonBackground();
-				box-shadow: initial;
+				box-shadow: none;
 
 				& > .@{tab}-header > .@{tab}-close {
 					opacity: .8;
