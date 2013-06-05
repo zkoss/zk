@@ -20,18 +20,15 @@
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
-	padding: 4px 5px 3px;
+	padding: 4px 5px;
 	border: 1px solid #CFCFCF;
 	border-right: 0;
 	margin: 0;
-	min-height: @baseButtonHeight;
+	height: @baseButtonHeight;
 	.borderRadius(3px 0 0 3px);
 	line-height: @baseLineHeight;
 	.boxShadow(none);
 	color: black;
-	<c:if test="${zk.chrome > 0}">
-	margin-top: -1px; // fix a missing line at the bottom
-	</c:if>
 }
 .z-combobox-icon,
 .z-bandbox-icon,
@@ -39,7 +36,8 @@
 .z-timebox-icon,
 .z-spinner-icon,
 .z-doublespinner-icon {
-	vertical-align: top;
+	background: #FFFFFF;
+	vertical-align: middle;
 	cursor: pointer;
 	padding: 4px;
 	border: 1px solid #CFCFCF;
@@ -48,12 +46,8 @@
 	font-size: @baseFontSize;
 	line-height: @baseLineHeight;
 	min-width: @baseButtonWidth;
-	min-height: @baseButtonHeight;
+	height: @baseButtonHeight;
 	color: #363636;
-	<c:if test="${zk.chrome > 0}">
-	margin-top: -1px; // fix a missing line at the bottom
-	</c:if>
-
 	.borderRadius(0 3px 3px 0);
 
 	&:hover {
