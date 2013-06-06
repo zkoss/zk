@@ -21,11 +21,11 @@ function (out, skipper) {
 		contentSclass = this.getContentSclass();
 
 	out.push('<div', this.domAttrs_(), '><div id="',
-			uuid, '-header-outer" class="', this.$s('header-outer'), '">');
+			uuid, '-cap-outer" class="', this.$s('header-outer'), '">');
 	
 	if (caption || title) {
 		out.push('<div id="',
-			uuid, '-caption" class="', this.$s('header'), '">');
+			uuid, '-cap" class="', this.$s('header'), '">');
 
 		
 		if (caption) caption.redraw(out);
@@ -39,13 +39,13 @@ function (out, skipper) {
 			if (this._closable)
 				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-maximize" class="', iconImg, ' ', this.$s('maximize'));
+				out.push('<div id="', uuid , '-max" class="', iconImg, ' ', this.$s('maximize'));
 				if (this._maximized)
 					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-minimize" class="', iconImg, ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-min" class="', iconImg, ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		
@@ -53,7 +53,7 @@ function (out, skipper) {
 	} 
 	
 	out.push('</div><div id="',
-				uuid, '-content-outer" class="', this.$s('content-outer'), '"><div id="', uuid, '-cave" class="');
+				uuid, '-cave-outer" class="', this.$s('content-outer'), '"><div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(this.$s('content'), '" ');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
