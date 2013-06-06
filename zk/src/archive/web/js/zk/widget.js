@@ -273,7 +273,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				//s.t., Window's rerender could gain focus back and receive onblur correctly
 			try {
 				cf.focus();
-				if (cfi.range && cf.getInputNode && (cf = cf.getInputNode()))
+				// B65-ZK-1803: Check if InputNode is visible or not
+				if (cfi.range && cf.getInputNode && (cf = cf.getInputNode()) && zk(cf).isRealVisible())
 					zk(cf).setSelectionRange(cfi.range[0], cfi.range[1]);
 			} finally {
 				_ignCanActivate = false;
