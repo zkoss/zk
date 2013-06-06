@@ -34,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (onBlur) {
 			if ((zul.inp.InputWidget.onChangingForced &&
-					wgt.isListen("onChanging")) || wgt._instant)
+					wgt.isListen('onChanging')) || wgt._instant)
 				_onChanging.call(wgt, -1); //force
 			_clearOnChanging(wgt);
 		}
@@ -50,7 +50,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this._lastChg = val;
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
-			if (this.isListen("onChanging"))
+			if (this.isListen('onChanging'))
 				this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
 					{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 			if (this._instant)
@@ -81,51 +81,70 @@ zul.inp.RoundUtl = {
 	/** Synchronizes the input element's width of this component
 	*/
 	syncWidth: function (wgt, rightElem) {
-		var node = wgt.$n(), ns = node.style;
-		if (!zk(node).isRealVisible() || (!wgt._inplace && !ns.width))
+		var node = wgt.$n();
+		if (!zk(node).isRealVisible() || !wgt._inplace)
 			return;
 
-		var inp = wgt.getInputNode();
+		var inp = wgt.getInputNode(),
+			ns = node.style;
 
 		if (!ns.width && wgt._inplace &&
-			(wgt._buttonVisible == undefined
-				|| wgt._buttonVisible)) {
+			wgt._buttonVisible !== false) {
 			ns.width = jq.px0(this.getOuterWidth(wgt, true));
 		}
 
 		var width = this.getOuterWidth(wgt, wgt.inRoundedMold()),
 			// ignore left border, as it is countered by margin-left
-			rightElemWidth = rightElem ? rightElem.offsetWidth -
-					zk(rightElem).sumStyles('l', jq.borders) : 0,
-			rev = zk(inp).revisedWidth(width - rightElemWidth);
-		// Fix bug discovered by B50-3032892.ztl
-		// * inplace input widget's width reduced by one pixel each time 
-		//   it received focus then blurred
-		if (rightElem && !zk.safari_ && !zk.opera && !wgt._inplace && ns.width.indexOf('%') >= 0)
-			rev -= 1; //Bug ZK-1368: reduce 1px for right edge element, Bug ZK-1540: ZK-1368 only affect on percentage width
-		inp.style.width = jq.px0(rev);
+			rightElemWidth = rightElem ? rightElem.offsetWidth : 0;
+		inp.style.width = jq.px0(width - rightElemWidth);
 	},
 	getOuterWidth: function(wgt, rmInplace) {
 		var node = wgt.$n(),
 			$n = jq(node),
 			$inp = jq(wgt.getInputNode()),
 			inc = wgt.getInplaceCSS(),
-			shallClean = !node.style.width && wgt._inplace;
+			shallClean = $n.hasClass(inc);
 
 		if (rmInplace && shallClean) {
     		$n.removeClass(inc);
-    		$inp.removeClass(inc);
 		}
-		var	width = zk(node).revisedWidth(
-				node[zk.opera ? 'clientWidth': 'offsetWidth'])
-				+ (zk.opera ? zk(node).borderWidth(): 0);
+		var	width = node.offsetWidth;
 		if (rmInplace && shallClean) {
     		$n.addClass(inc);
-    		$inp.addClass(inc);
 		}
 		return width;
+	},
+	// @since 7.0.0
+	buttonVisible: function (wgt, v) {
+		var n = wgt.$n('btn');
+		if (n) {
+			var fnm = v ? 'removeClass': 'addClass';
+			jq(n)[fnm](wgt.$s('disabled'));
+			jq(wgt.getInputNode())[fnm](wgt.$s('rightedge'));
+			wgt.onSize();
+		}
+	},
+	// @since 7.0.0
+	doFocus_: function (wgt) {
+		if (wgt._inplace) {
+			wgt.onSize();
+		}
+	},
+	doBlur_: function (wgt) {
+		if (wgt._inplace && wgt._inplaceout) {  
+			var n = wgt.$n();
+			jq(n).addClass(wgt.getInplaceCSS());
+			wgt.onSize();
+			n.style.width = wgt.getWidth() || '';
+		}
+	},
+	// @since 7.0.0
+	onSize: function (wgt) {
+		var width = wgt.getWidth();
+		if (!width || width.indexOf('%') != -1)
+			wgt.getInputNode().style.width = '';
+		this.syncWidth(wgt, wgt.$n('btn'));
 	}
-
 };
 var InputWidget =
 /**
@@ -181,10 +200,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp) { //check if bind
 				inp.disabled = disabled;
-				var zcls = this.getZclass(),
-					fnm = disabled ? 'addClass': 'removeClass';
-				jq(this.$n())[fnm](zcls + '-disd');
-				jq(inp)[fnm](zcls + '-text-disd');
+				var fnm = disabled ? 'addClass': 'removeClass';
+				jq(this.$n())[fnm](this.$s('disabled'));
 			}
 		},
 		/** Returns whether it is readonly.
@@ -199,17 +216,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (inp) {
 				_fixInput(this);
 
-				var zcls = this.getZclass(),
-					fnm = readonly ? 'addClass': 'removeClass';
+				var fnm = readonly ? 'addClass': 'removeClass';
 				
 				inp.readOnly = readonly;
-				jq(this.$n())[fnm](zcls + '-real-readonly'); //Merge breeze
-				jq(inp)[fnm](zcls + '-readonly');
-				
-				if (!this.inRoundedMold()) return;
-				
-				var btn = this.$n('btn');
-				jq(btn)[fnm](zcls + '-btn-readonly');
+				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
 			}
 		},
 		/** Returns the cols.
@@ -292,7 +302,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	getInplaceCSS: function () {
-		return this._inplace ? this.getZclass() + '-inplace' : '';
+		return this._inplace ? this.$s('inplace') : '';
 	},
 	/** Selects the whole text in this input.
 	 * @param int start the starting index of the selection range
@@ -323,10 +333,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/**
 	 * Returns whether is in rounded mold or not.
+	 * <p>Default: false, only combo component are true (@since 7.0.0)
 	 * @return boolean
 	 */
 	inRoundedMold: function(){
-		return this._mold == "rounded";
+		return true;
 	},
 
 	/** Returns the text representing the value in the given format,
@@ -462,11 +473,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		var inp = this.getInputNode();
 		this._lastChg = inp.value;
-
 		if (evt.domTarget.tagName) { //Bug 2111900
-			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
-				jq(inp).removeClass(this.getInplaceCSS());
+				jq(this.$n()).removeClass(this.getInplaceCSS());
 				if (!this._inplaceout)
 					this._inplaceout = true;
 			}
@@ -476,7 +485,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				var self = this, cstp = self._cst && self._cst._pos;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, cstp || "end_before",
+						self._errbox.open(self, null, cstp || 'end_before',
 								{dodgeRef: !cstp}); // Bug 3251564
 				});
 			}
@@ -485,13 +494,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doBlur_: function (evt) {
 		_stopOnChanging(this, true);
 		
-		jq(this.$n()).removeClass(this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus)) {
 			this.updateChange_();
 			this.$supers('doBlur_', arguments);
 		}
 		if (this._inplace && this._inplaceout)
-			jq(this.getInputNode()).addClass(this.getInplaceCSS());
+			jq(this.$n()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
 		if (zk.ios && jq(this.$n()).data('fixscrollposition')) { //only scroll back when data-fixScrollPosition attribute is applied
@@ -575,9 +583,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			w.destroy();
 		}
 		if (!remainError) {
-			var zcls = this.getZclass();
 			this._errmsg = null;
-			jq(this.getInputNode()).removeClass(zcls + "-text-invalid");
+			jq(this.getInputNode()).removeClass(this.$s('invalid'));
 			
 		}
 		if (revalidate)
@@ -616,12 +623,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_markError: function (msg, val, noOnError) {
 		this._errmsg = msg;
 		
-		var zcls = this.getZclass();
 		if (this.desktop) { //err not visible if not attached
-			jq(this.getInputNode()).addClass(zcls + "-text-invalid");
+			jq(this.getInputNode()).addClass(this.$s('invalid'));
 
 			var cst = this._cst, errbox;
-			if (cst != "[c") {
+			if (cst != '[c') {
 				if (cst && (errbox = cst.showCustomError))
 					errbox = errbox.call(cst, this, msg);
 
@@ -635,12 +641,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	/** Make the {@link zul.inp.SimpleConstraint} calls the validate for val,
 	 * if {@link zul.inp.SimpleConstraint} is exist
 	 * @param Object val a String, a number, or a date,the number or name of flag,
-	 * such as "no positive", 0x0001.
+	 * such as 'no positive", 0x0001.
 	 */
 	validate_: function (val) {
 		var cst;
 		if (cst = this._cst) {
-			if (typeof cst == "string") return false; //by server
+			if (typeof cst == 'string') return false; //by server
 			var msg = cst.validate(this, val);
 			if (!msg && cst.serverValidate) return false; //client + server
 			return msg;
@@ -654,7 +660,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				val = this.coerceFromString_(val);
 				if (val && ((msg = val.error) || val.server)) {
 					this.clearErrorMessage(true);
-					if (val.server || this._cst == "[c") { //CustomConstraint
+					if (val.server || this._cst == '[c') { //CustomConstraint
 						this._reVald = false;
 						return {rawValue: value||'', server: true}; //let server to validate it
 					}
@@ -704,8 +710,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @see zul.inp.Errorbox#show
 	 */
 	showError_: function (msg) {
-		var eb = new zul.inp.Errorbox();
-		eb.show(this, msg);
+		var eb = new zul.inp.Errorbox(this, msg);
+		eb.show();
 		return eb;
 	},
 	_equalValue: function(a, b) {
@@ -788,56 +794,48 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return true;
 	},
 	domClass_: function (no) {
-		var sc = this.$supers('domClass_', arguments),
-			zcls = this.getZclass();
+		var sc = this.$supers('domClass_', arguments);
 		if ((!no || !no.zclass) && this._disabled)
-			sc += ' ' + zcls + '-disd';
+			sc += ' ' + this.$s('disabled');
 		
 		if ((!no || !no.input) && this._inplace)
 			sc += ' ' + this.getInplaceCSS();
 			
 		// Merge breeze
 		if ((!no || !no.zclass) && this._readonly)
-			sc += ' ' + zcls + '-real-readonly';
+			sc += ' ' + this.$s('readonly');
 			
 		return sc;
 	},
 	bind_: function () {
 		this.$supers(InputWidget, 'bind_', arguments);
-		var n = this.getInputNode(),
-			zcls = this.getZclass();
+		var n = this.getInputNode();
 
 		this._defRawVal = n.value;
-
-		if (this._readonly)
-			jq(n).addClass(zcls + '-readonly');
-		
-		if (this._disabled)
-			jq(n).addClass(zcls + '-text-disd');
 			
-		this.domListen_(n, "onFocus", "doFocus_")
-			.domListen_(n, "onBlur", "doBlur_")
-			.domListen_(n, "onSelect");
+		this.domListen_(n, 'onFocus', 'doFocus_')
+			.domListen_(n, 'onBlur', 'doBlur_')
+			.domListen_(n, 'onSelect');
 		
 		if (zk.ios)
-			this.domListen_(n, "onTouchStart", "_doTouch");
+			this.domListen_(n, 'onTouchStart', '_doTouch');
 
 		if (n = n.form)
-			jq(n).bind("reset", this.proxy(this._resetForm));
+			jq(n).bind('reset', this.proxy(this._resetForm));
 	},
 	unbind_: function () {
 		this.clearErrorMessage(true);
 
 		var n = this.getInputNode();
-		this.domUnlisten_(n, "onFocus", "doFocus_")
-			.domUnlisten_(n, "onBlur", "doBlur_")
-			.domUnlisten_(n, "onSelect");
+		this.domUnlisten_(n, 'onFocus', 'doFocus_')
+			.domUnlisten_(n, 'onBlur', 'doBlur_')
+			.domUnlisten_(n, 'onSelect');
 		
 		if (zk.ios)
-			this.domUnlisten_(n, "onTouchStart", "_doTouch");
+			this.domUnlisten_(n, 'onTouchStart', '_doTouch');
 
 		if (n = n.form)
-			jq(n).unbind("reset", this.proxy(this._resetForm));
+			jq(n).unbind('reset', this.proxy(this._resetForm));
 
 		this.$supers(InputWidget, 'unbind_', arguments);
 	},
@@ -887,7 +885,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if (this.isListen("onChanging") || this._instant)
+		if (this.isListen('onChanging') || this._instant)
 			_startOnChanging(this);
 
 		this.$supers('doKeyUp_', arguments);

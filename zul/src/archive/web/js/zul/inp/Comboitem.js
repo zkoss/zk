@@ -33,8 +33,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		disabled: function (v) {
 			var n = this.$n();
 			if (n) {
-				var zcls = this.getZclass() + '-disd';
-				v ? jq(n).addClass(zcls): jq(n).removeClass(zcls);
+				var disd = this.$s('disabled');
+				v ? jq(n).addClass(disd): jq(n).removeClass(disd);
 			}
 		},
 		/** Returns the description (never null).
@@ -77,29 +77,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {pre: 1});
 	},
-	doMouseOver_: function () {
-		if (!this._disabled) {
-			var n = this.$n(),
-				$n = jq(n),
-				zcls = this.getZclass();
-			$n.addClass($n.hasClass(zcls + '-seld') ?
-				zcls + "-over-seld": zcls + "-over");
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function () {
-		if (!this._disabled) this._doMouseOut();
-		this.$supers('doMouseOut_', arguments);
-	},
-	_doMouseOut: function () {
-		var n = this.$n(),
-			zcls = this.getZclass();
-		jq(n).removeClass(zcls + '-over')
-			.removeClass(zcls + '-over-seld');
-	},
 	doClick_: function (evt) {
 		if (!this._disabled) {
-			this._doMouseOut();
 
 			var cb = this.parent;
 			cb._select(this, {sendOnSelect:true, sendOnChange: true});
@@ -116,12 +95,11 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (this._disabled && (!no || !no.zclass)) {
-			var zcls = this.getZclass();
-			scls += ' ' + zcls + '-disd';
+			scls += ' ' + this.$s('disabled');
 		}
 		return scls;
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<li', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></li>');
 	}
 });

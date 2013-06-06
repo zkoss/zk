@@ -17,7 +17,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.fn;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,19 +49,22 @@ public class ThemeFns {
 	}
 
 	private static Browser getBrowser() {
-		Double number = Servlets.getBrowser(ServletFns.getCurrentRequest(),
-				"ff");
+		Double number = Servlets.getBrowser(
+				ServletFns.getCurrentRequest(), "ff");
 		if (number != null && number >= 3.6)
 			return Browser.Firefox;
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ie");
 		if (number != null) {
-			if (number < 10)
+			if (number < 10) {
+				if (number == 9)
+					return Browser.IE9;
 				return Browser.Old_IE;
-			else return Browser.IE;
+			} else return Browser.IE;
 		}
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "webkit");
 		if (number != null) {
-			Double android = Servlets.getBrowser(ServletFns.getCurrentRequest(), "android");
+			Double android = Servlets.getBrowser(
+					ServletFns.getCurrentRequest(), "android");
 			if (android != null && android < 3) {
 				return Browser.Old_WebKit;
 			}
@@ -76,13 +78,13 @@ public class ThemeFns {
 			}
 
 			// B65-ZK-1614: Full Screen iPad Web Apps Missing Component Buttons
-			version = Servlets.getBrowser(ServletFns.getCurrentRequest(),
-					"ios");
+			version = Servlets.getBrowser(
+					ServletFns.getCurrentRequest(), "ios");
 			if (version != null && version >= 500)
 				return Browser.WebKit;
 			
-			version = Servlets.getBrowser(ServletFns.getCurrentRequest(),
-					"safari");
+			version = Servlets.getBrowser(
+					ServletFns.getCurrentRequest(), "safari");
 			if (version != null) {
 				if (version >= 5.1)
 					return Browser.WebKit;
@@ -114,7 +116,7 @@ public class ThemeFns {
 			String[] cols = colors.split(";");
 			StringBuilder sb = new StringBuilder("\tbackground:").append(grad(
 					direction, Browser.W3C, cols));
-			if (temp != Browser.Old_IE)
+			if (temp != Browser.Old_IE && temp != Browser.IE9)
 				sb.append("\tbackground:");
 			return sb.append(grad(direction, temp, cols)).toString();
 		}
@@ -199,7 +201,7 @@ public class ThemeFns {
 		StringBuilder sb = new StringBuilder();
 		String[] cols = colors.split(";");
 		for (Browser grad : Browser.values()) {
-			if (grad != Browser.Old_IE)
+			if (grad != Browser.Old_IE && grad != Browser.IE9)
 				sb.append("\tbackground:");
 			sb.append(grad(direction, grad, cols));
 		}
@@ -212,9 +214,10 @@ public class ThemeFns {
 
 	private static String applyCSS(String styleName, String styleValue) {
 		Browser browser = getBrowser();
-		if (!Strings.isEmpty(browser.getPrefix()))
+		if (!Strings.isEmpty(browser.getPrefix())) {
 			return String.format(CSS_TEMPLATE, browser.getPrefix(), styleName,
 					styleValue);
+		}
 		return String.format(CSS_TEMPLATE_W3C, styleName, styleValue);
 	}
 
@@ -429,10 +432,15 @@ public class ThemeFns {
 	}
 
 	private enum Browser {
-		WebKit("-webkit-", "Chrome10+,Safari5.1+"), W3C("", "W3C"), Firefox(
-				"-moz-", "FF3.6+"), Opera("-o-", "Opera 11.10+"), IE("-ms-",
-				"IE10+"), Old(null, null), Old_IE(null, "IE6-9"), Old_WebKit(
-				"-webkit-", "Chrome,Safari4+");
+		WebKit("-webkit-", "Chrome10+,Safari5.1+"),
+		W3C("", "W3C"),
+		Firefox("-moz-", "FF3.6+"),
+		Opera("-o-", "Opera 11.10+"),
+		IE("-ms-", "IE10+"),
+		IE9("-ms-", "IE9"),
+		Old(null, null),
+		Old_IE(null, "IE6-9"),
+		Old_WebKit("-webkit-", "Chrome,Safari4+");
 
 		private final String _template;
 
@@ -442,9 +450,9 @@ public class ThemeFns {
 
 		Browser(String prefix, String browser) {
 			_prefix = prefix;
-			if ("IE6-9".equals(browser)) {
+			if ("IE6-9".equals(browser) || "IE9".equals(browser)) {
 				_template = new StringBuilder(
-						"\tbackground-color: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
+						"\tbackground-color: %1$s;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
 						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-9 */\n")
 						.toString();
 			} else if ("Chrome,Safari4+".equals(browser)) {

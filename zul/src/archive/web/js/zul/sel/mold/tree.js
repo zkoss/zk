@@ -34,7 +34,7 @@ function (out) {
 	
 	if (this.treecols) {
 		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
-				'<table', width, zUtl.cellps0,
+				'<table id="', uuid, '-headtbl"', width, zUtl.cellps0,
 				' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker', zcls);
 		
@@ -46,7 +46,7 @@ function (out) {
 	out.push('<div id="', uuid, '-body" class="', zcls, '-body');
 	if (this._autopaging)
 		out.push(' ', zcls, '-autopaging');
-	out.push('"><table', width,	zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
+	out.push('"><table id="', uuid, '-cave"', width,	zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.treecols)
 		this.domFaker_(out, '-bdfaker', zcls);
@@ -61,7 +61,7 @@ function (out) {
 	
 	if (this.treefoot) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
-				'<table', width, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
+				'<table id="', uuid, '-foottbl"', width, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.treecols) 
 			this.domFaker_(out, '-ftfaker', zcls);
 			

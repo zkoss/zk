@@ -1,0 +1,36 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01787NotifyChangeCase')">
+		<label multiline="true"><![CDATA[
+		[Analysis]
+		1.when <vm>.path change. it also notify it's kidbase, which is <path-instance>.*
+		2.pnode is tracking as <path-instance>[index], which match <path-instance>.*, so it will be notify change.
+		3.according 1,2, <pnode-instance>.* will be notified.
+		4.each in @teamplte is the same instance of pnode. so it triggers teampalte reload.
+		  Currently, we just reload binding of @template directly, we don't support to reload just a item in children-binding
+		  (And listbox/grid will reload all, but it is possible to enchance to reload just a item in listbox/grid for who support ListModel
+			single Item notify change)
+		========================
+		]]></label>
+		<hbox children="@load(vm.collection) @template(each.type)">
+			<template name="type1" var="cnode">
+				<label value="@load(vm.get1(cnode.name))"/>
+			</template>
+			<template name="type2" var="cnode">
+				<label value="@load(vm.get1x(cnode.name))"/>
+			</template>
+		</hbox>
+		<hbox children="@load(vm.path)">
+			<template name="children" var="pnode">
+				<label value="@load(vm.get2(pnode.name))"/>
+			</template>
+		</hbox>
+		<button label="clear" onClick="@command('clear')"/>
+		<button label="update path" onClick="@command('updatePath')"/>
+		<button label="update nodeA.*" onClick="@command('notifyChangeA')"/>
+		<button label="update nodeA.name" onClick="@command('notifyChangeAName')"/>
+		<button label="update nodeB.*" onClick="@command('notifyChangeB')"/>
+		<button label="update nodeB.name" onClick="@command('notifyChangeBName')"/>
+		<button label="dump" onClick="binder.getTracker().dump()"/>
+	</window>
+</zk>

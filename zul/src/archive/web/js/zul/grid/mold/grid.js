@@ -25,7 +25,7 @@ function (out) {
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
 		if (pgpos == 'top' || pgpos == 'both') {
-			out.push('<div id="', uuid, '-pgit" class="', this.$s('pgi-t'), '">');
+			out.push('<div id="', uuid, '-pgit" class="', this.$s('paging-top'), '">');
 			this.paging.redraw(out);
 			out.push('</div>');
 		}
@@ -33,14 +33,15 @@ function (out) {
 
 	if (this.columns) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
-			'<table id="', uuid, '-headtbl"', wdAttr, zUtl.cellps0,
-			' style="table-layout:fixed;', wdStyle,'">');
-		this.domFaker_(out, '-hdfaker', zcls);
+			'<div id="', uuid, '-headbar" class="', this.$s('header'), ' ', this.$s('header-bar'), '"></div>',
+			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
+		this.domFaker_(out, '-hdfaker');
 		
+		out.push('<tbody>');
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 		
-		out.push('</table></div>');
+		out.push('</tbody></table></div>');
 	}
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
 	if (this._autopaging)
@@ -53,8 +54,7 @@ function (out) {
 	out.push('>');
 	if (this.rows && this.domPad_ && !this.inPagingMold())
 		this.domPad_(out, '-tpad');
-	out.push('<table id="', uuid, '-cave"', wdAttr, zUtl.cellps0,
-			' style="table-layout:fixed;', wdStyle,'">');
+	out.push('<table id="', uuid, '-cave"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.columns)
 		this.domFaker_(out, '-bdfaker', zcls);
@@ -72,12 +72,13 @@ function (out) {
 	
 	if (this.foot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-			'<table id="', uuid, '-foottbl"', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
+			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.columns) 
 			this.domFaker_(out, '-ftfaker', zcls);
-			
+		
+		out.push('<tbody id="', uuid, '-footrows">');
 		this.foot.redraw(out);
-		out.push('</table></div>');
+		out.push('</tbody></table></div>');
 	}
 	
 	if (this.frozen) {
@@ -87,7 +88,7 @@ function (out) {
 	}
 	
 	if (pgpos == 'bottom' || pgpos == 'both') {
-		out.push('<div id="', uuid, '-pgib" class="', this.$s('pgi-b'), '">');
+		out.push('<div id="', uuid, '-pgib" class="', this.$s('paging-bottom'), '">');
 		this.paging.redraw(out);
 		out.push('</div>');
 	}

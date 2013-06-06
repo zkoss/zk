@@ -1320,7 +1320,6 @@ zk.log('value is", value);
 	}
 	var browser = jq.browser,
 		agent = zk.agent = navigator.userAgent.toLowerCase();
-	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
 	zk.ios = zk.safari && /iphone|ipad|ipod/.test(agent);
@@ -1328,12 +1327,12 @@ zk.log('value is", value);
 	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf('linux') >= 0;
 	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
-	zk.chrome = browser.chrome;
-	zk.safari_ = zk.safari && !zk.chrome; // safari only
 	zk.webkit = browser.webkit;
+	zk.chrome = browser.chrome;
+	zk.safari = browser.webkit && !zk.chrome; // safari only
 	zk.css3 = true;
 	
-	zk.vendor = zk.safari ? 'webkit' : '';
+	zk.vendor = zk.webkit ? 'webkit' : '';
 
 	var bodycls;
 	if (zk.ff) {

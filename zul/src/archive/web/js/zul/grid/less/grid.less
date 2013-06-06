@@ -1,7 +1,7 @@
 @import "~./zul/less/_header.less";
 
 @emptyColor: #7D7D7D;
-@gridBorder: #CFCFCF;
+@gridBorderColor: #CFCFCF;
 @hoverGradientStart: #F2F9FE;
 @hoverGradientEnd: #D6F0FD;
 @stripBackground: #F7F7F7;
@@ -10,36 +10,61 @@
 @groupGradientStart: #FFFFFF;
 @groupGradientEnd: #E9F2FB;
 
+//reset table
+table {
+	border-spacing: 0;
+	th, td {
+		padding: 0;
+	}
+}
 //grid
 .z-grid {
-	border: 1px solid @gridBorder;
+	border: 1px solid @gridBorderColor;
 	overflow: hidden;
 	zoom: 1;
-}
-//grid header
-.z-grid-header {
-	overflow: hidden;
-	width: 100%;
-}
-//grid body
-.z-grid-body {
-	overflow: auto;
-}
-.z-grid-empty-body td {
-	font-family: @baseContentFontFamily;
-	font-size: @fontSizeMedium;
-	color: @emptyColor;
-	font-style: italic;
-	text-align: center;
-}
-//grid footer
-.z-grid-footer {
-	overflow: hidden;
-	background: @footerBackground;
-	border-top: 1px solid @gridBorder;
-	.z-footer {
+	.applyCSS3('box-sizing', 'content-box');
+	//grid header
+	&-header {
 		overflow: hidden;
-		padding: 6px 7px;
+		width: 100%;
+		position: relative;
+		&.z-grid-header-bar {
+			display: none;
+			.verGradient();
+			border: 1px solid @gridBorderColor;
+			border-top: none;
+			border-right: none;
+			width: 16px;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			right: 0;
+			z-index: 100;
+		}
+	}
+	//grid body
+	&-body {
+		overflow: hidden;
+		position: relative;
+	}
+	&-emptybody td {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @emptyColor;
+		font-style: italic;
+		text-align: center;
+	}
+	//grid footer
+	&-footer {
+		overflow: hidden;
+		background: @footerBackground;
+		border-top: 1px solid @gridBorderColor;
+		.z-footer {
+			overflow: hidden;
+		}
+	}
+	&-odd {
+		background: @stripBackground;
 	}
 }
 //column and auxhead
@@ -58,63 +83,103 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-width: 0 1px 1px 1px;
-	border-color: transparent @gridBorder @gridBorder #FFFFFF;
+	border-width: 0 1px 1px 0;
+	border-color: transparent @gridBorderColor @gridBorderColor #FFFFFF;
 	border-style: none solid solid solid;
 	position: relative;
-}
-.z-column-hover,
-.z-auxheader-hover {
-	.verGradient(@hoverGradientStart, @hoverGradientEnd);
-}
-.z-column .z-column-content {
-	position: relative;
-}
-.z-column-sort {
-	 .z-column-content {
-		cursor: pointer;
+	.applyCSS3('box-sizing', 'content-box');
+	&-hover {
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
-	.z-column-sort-icon {
+}
+.z-column {
+	.z-column-content {
+		position: relative;
+	}
+	&-sort {
+		.z-column-content {
+			cursor: pointer;
+		}
+		.z-column-sorticon {
+			position: absolute;
+			top: -3px;
+			left: 50%;
+			color: #7094B3;
+		}
+	}
+	&-hover .z-column-menuicon {
+		display: block;
+	}
+	&-menuicon {
+		display: none;
 		position: absolute;
-		top: -3px;
-		left: 50%;
-		color: #7094B3;
+		z-index: 15;
+		cursor: pointer;
+		top: 0;
+		right: 0;
+		width: 23px;
+		height: 32px;
+		line-height: 32px;
+		text-decoration: none;
+		text-align: center;
+		border-left: 1px solid #A5CDE1;
+		.boxShadow('inset 1px 0 #FFFFFF');
+		color: black;
+		&:hover {
+			.verGradient(darken(@hoverGradientStart, 5%), darken(@hoverGradientEnd, 10%));
+		}
 	}
-}
-.z-column-hover .z-column-menu-icon {
-	display: block;
-}
-.z-column-menu-icon {
-	display: none;
-	position: absolute;
-	z-index: 15;
-	cursor: pointer;
-	top: 0;
-	right: 0;
-	width: 23px;
-	height: 32px;
-	line-height: 32px;
-	text-decoration: none;
-	text-align: center;
-	border-left: 1px solid #A5CDE1;
-	.boxShadow('inset 1px 0 #FFFFFF');
-	color: black;
-	&:hover {
-		.verGradient(darken(@hoverGradientStart, 5%), darken(@hoverGradientEnd, 10%));
+	&-sizing {
+		cursor: e-resize;
 	}
 }
 //row and cell
-.z-row:hover .z-row-inner {
-	.verGradient(@hoverGradientStart, @hoverGradientEnd);
+.z-row {
+	&-inner {
+		border-width: 0 1px 0 0;
+		border-color: transparent #FFFFFF transparent transparent;
+		border-style: none solid none none;
+		.applyCSS3('box-sizing', 'content-box');
+	}
+	&:hover &-inner {
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		position: relative;
+	}
+	td:last-child {
+		border-right: none;
+	}
 }
-.z-grid-odd {
-	background: @stripBackground;
+//Group
+.z-group {
+	&-inner {
+		.verGradient(@groupGradientStart, @groupGradientEnd);
+		position: relative;
+		border-width: 1px 0;
+		border-color: @gridBorderColor;
+		border-style: solid;
+	}
+	&-icon {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		cursor: pointer;
+		font-size: @baseFontSize;
+		color: black;
+		position: relative;
+	}
+	&-icon-open,
+	&-icon-close {
+		display: inline-block;
+		position: absolute;
+		left: 5px;
+	}
+	&-icon-open {
+		.transform('rotate(45deg)');
+	}
 }
-.z-row-inner {
-	padding: 5px;
-	border-width: 1px;
-	border-color: transparent transparent transparent #FFFFFF;
-	border-style: solid;
+.z-groupfoot-inner {
+	.verGradient(@groupGradientEnd, @groupGradientStart);
+	position: relative;
 }
 //content
 .z-column-content,
@@ -127,56 +192,32 @@
 	font-size: @fontSizeMedium;
 	color: @headFootColor;
 	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
 }
 .z-column-content,
 .z-auxheader-content {
 	font-weight: bold;
-	padding: 7px 5px;
-	line-height: 17px;
+	padding: 4px 5px 3px;
 }
-.z-row-content,
 .z-group-content,
-.z-groupfoot-content,
-.z-footer-content {
-	line-height: 20px;
+.z-groupfoot-content {
+	.z-label {
+		font-weight: bold;
+	}
 }
-//faker
-.z-grid-faker,
-.z-grid-faker th,
-.z-grid-faker div {
-	height: 0 !important;
-	border: none !important;
-	padding: 0 0 !important;
-	margin-top: 0 0 !important;
-}
-//Group
-.z-group-inner,
-.z-groupfoot-inner {
-	.verGradient(@groupGradientStart, @groupGradientEnd);
-	position: relative;
-	padding: 5px;
-	border-width: 1px 0;
-	border-color: @gridBorder;
-	border-style: solid;
-}
-.z-group-icon {
-	display: inline-block;
-	width: 18px;
-	height: 18px;
-	cursor: pointer;
-	vertical-align: bottom;
-	.encodeThemeURL(background, '~./zul/img/tree/arrow-toggle.png', no-repeat);
-}
-.z-group-icon-open {
-	background-position: 0 -18px;
-}
-.z-group-icon-close {
-	background-position: 0 0;
-}
-.z-groupfoot-inner {
-	.verGradient(@groupGradientEnd, @groupGradientStart);
-	border-width: 0;
-	padding: 6px 5px;
+//paging
+.z-grid-paging {
+	&-top {
+		border-bottom: 1px solid @gridBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @gridBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
 }
 //column menu
 .z-columns-menugrouping .z-menuitem-image {

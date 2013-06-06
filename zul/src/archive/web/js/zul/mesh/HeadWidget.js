@@ -34,7 +34,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		this.$supers('$init', arguments);
 		this.listen({onColSize: this}, -1000);
 	},
-
+	
 	$define: {
 		/** Returns whether the width of the child column is sizable.
 		 * @return boolean
@@ -50,7 +50,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
-
+	
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (!this.$instanceof(zul.mesh.Auxhead))
@@ -143,8 +143,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		var wgt = this.parent;
 		if (wgt) {
 			wgt._adjFlexWd();
-			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space 
-			wgt._removeScrollbar(); // 3188023: Unwanted vertical scrollbar
+			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
+//			wgt._removeScrollbar(); // 3188023: Unwanted vertical scrollbar
 		}
 	},
 	deferRedrawHTML_: function (out) {

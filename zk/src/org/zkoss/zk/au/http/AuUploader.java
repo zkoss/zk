@@ -173,7 +173,8 @@ public class AuUploader implements AuExtension {
 			}
 		}
 		if (attrs.get("contentId") == null && alert == null)
-			alert = "contentId is required!";
+			//B65-ZK-1724: display more meaningful errormessage
+			alert = "Upload Aborted : (contentId is required)";
 			
 		if (alert != null) {
 			if (desktop == null) {

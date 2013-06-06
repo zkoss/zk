@@ -14,6 +14,7 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
+import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -89,6 +90,9 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 				((Listgroup)nli).setOpen(((Listgroup)item).isOpen());
 			}
 			
+			//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+			//move TEMPLATE_OBJECT (was set in resoloveTemplate) to current for check in addTemplateTracking
+			nli.setAttribute(TemplateResolver.TEMPLATE_OBJECT, item.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
 			//add template dependency
 			addTemplateTracking(listbox, nli, data, index, size);
 			

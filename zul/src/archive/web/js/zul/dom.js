@@ -115,7 +115,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			efs.errMesg = {destroy: zk.$void};
 			zk.load("zul.inp", function () {
 				if (efs.errMesg) //not destroyed yet
-					(efs.errMesg = new zul.inp.Errorbox()).show(wgt, msg);
+					(efs.errMesg = new zul.inp.Errorbox(wgt, msg)).show();
 			});
 		}
 	};
