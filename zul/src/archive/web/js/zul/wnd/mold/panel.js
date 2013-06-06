@@ -19,10 +19,10 @@ function (out, skipper) {
 		caption = this.caption;
 		
 	out.push('<div', this.domAttrs_(), '><div id="',
-			uuid, '-header-outer" class="', this.$s('header-outer'), '">');
+			uuid, '-cap-outer" class="', this.$s('header-outer'), '">');
 	if (caption || title) {
 		out.push('<div id="',
-				uuid, '-caption" class="', this.$s('header'), '">');
+				uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {
 			var self = this;
@@ -34,15 +34,15 @@ function (out, skipper) {
 			if (this._closable)
 				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-maximize" class="', iconImg, ' ', this.$s('maximize'));
+				out.push('<div id="', uuid , '-max" class="', iconImg, ' ', this.$s('maximize'));
 				if (this._maximized)
 					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-minimize" class="', iconImg, ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-min" class="', iconImg, ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			if (this._collapsible)
-				out.push('<div id="', uuid , '-expand" class="', iconImg, ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
+				out.push('<div id="', uuid , '-exp" class="', iconImg, ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		} 
 		
