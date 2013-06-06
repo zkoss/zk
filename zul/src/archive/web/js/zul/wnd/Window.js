@@ -61,7 +61,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		
 		var $el = jq(el),
-			$top = jq(wnd.$n('header-outer')),
+			$top = jq(wnd.$n('cap-outer')),
 			top = $top[0],
 			$header = jq(wnd.$n('caption')),
 			header = $header[0],
@@ -104,8 +104,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			tar = tar.parentNode;
 		switch (tar) {
 		case wgt.$n('close'):
-		case wgt.$n('maximize'):
-		case wgt.$n('minimize'):
+		case wgt.$n('max'):
+		case wgt.$n('min'):
 			return true; //ignore special buttons
 		}
 		if(wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
@@ -544,7 +544,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				up = 'z-icon-fullscreen',
 				down = 'z-icon-resize-small';				
 				if (maximized) {
-					jq(this.$n('maximize')).addClass(cls + '-maximized')
+					jq(this.$n('max')).addClass(cls + '-maximized')
 						.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
@@ -570,7 +570,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n('maximize'),
+					var max = this.$n('max'),
 						$max = jq(max);
 					$max.removeClass(cls + '-maximized')
 						.children('.' + down).removeClass(down).addClass(up);
@@ -933,10 +933,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_offsetHeight: function (n) {
-		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk(this.$n('content-outer')).padBorderHeight();
+		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk(this.$n('cave-outer')).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var ho = this.$n('header-outer');
+		var ho = this.$n('cap-outer');
 		return ho ? ho.offsetHeight : 0;
 	},
 
@@ -1023,7 +1023,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			'none' == bordercls ? 'noborder' : bordercls;
 		
 		if (bordercls)
-			cls += ' ' + this.$s(this.bordercls);
+			cls += ' ' + this.$s(bordercls);
 		
 		if (!(this.getTitle() || this.caption))
 			cls += ' ' + this.$s('noheader');
@@ -1163,10 +1163,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			case this.$n('close'):
 				this.fire('onClose');
 				break;
-			case this.$n('maximize'):
+			case this.$n('max'):
 				this.setMaximized(!this._maximized);
 				break;
-			case this.$n('minimize'):
+			case this.$n('min'):
 				this.setMinimized(!this._minimized);
 				break;
 			default:
@@ -1197,7 +1197,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n) +
-				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n('content-outer')).padBorderHeight() : 0);
+				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n('cave-outer')).padBorderHeight() : 0);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
