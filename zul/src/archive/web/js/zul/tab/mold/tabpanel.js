@@ -30,13 +30,9 @@ function (out) {
 		out.push('</div></div>');
 
 	} else {//Default Mold
-		out.push('<div', this.domAttrs_(), '>');
-		if (tabbox.isHorizontal())
-			out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">');
+		out.push('<div ', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		if (tabbox.isHorizontal())
-			out.push('</div>');
 		out.push('</div>');
 	}
 }
