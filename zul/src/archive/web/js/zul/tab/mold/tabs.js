@@ -26,33 +26,19 @@ function (out) {
 	
 	
 	var hasToolbar = tbx.isTabscroll() && tbx.toolbar;
-	if (!tbx.isVertical()) {
-		if (hasToolbar) {
-			out.push('<div class="', tbx.toolbar.getZclass(), '-outer">');
-			tbx.toolbar.redraw(out);	
-		}
-		out.push('<div id="', uuid , '-right" class="', iconImg, ' ', this.$s('right'), '">' , getIcon('icon-caret-right'),  '</div>',
-					'<div id="', uuid , '-left" class="', iconImg, ' ', this.$s('left'), '">' , getIcon('icon-caret-left'),  '</div>');
-	}
 	
-	out.push('<div id="', uuid, '-header" class="', this.$s('header'), '">',
-				'<ul id="', uuid, '-cave" class="', this.$s('content'), '">');
+	out.push('<ul id="', uuid, '-cave" class="', this.$s('content'), '">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
-	out.push(		'<li id="', uuid, '-edge" class="', this.$s('edge'), '"></li>',
-						!tbx.isVertical() ? '<div id="' + uuid + '-clear" class="z-clear"> </div>' : '',
-				'</ul>',
-			 '</div>');
-	
-	if (tbx.isVertical()) {
-		out.push('<div id="', uuid , '-up" class="', iconImg, ' ', this.$s('up'), '">' , getIcon('icon-caret-up'),  '</div>',
-					'<div id="', uuid , '-down" class="', iconImg, ' ', this.$s('down'), '">' , getIcon('icon-caret-down'),  '</div>');
-	} 
-	
-	if (!tbx.isVertical()) {
-		if(hasToolbar)
-			out.push('</div>');
-	}
+	out.push(  '<li id="', uuid, '-edge" class="', this.$s('edge'), '"></li>',
+				!tbx.isVertical() ? '<div id="' + uuid + '-clear" class="z-clear"> </div>' : '',
+			 '</ul>');
+
+//		if(!tbx.isVertical() && hasToolbar) {
+//			out.push('<div class="', tbx.toolbar.getZclass(), '-outer">');
+//			tbx.toolbar.redraw(out);
+//			out.push('</div>');
+//		}
 	
 	out.push(	'<div id="', uuid,	'-line" class="',  this.$s('space'), '" ></div>',
 			 '</div>');

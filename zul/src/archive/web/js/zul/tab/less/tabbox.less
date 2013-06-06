@@ -145,33 +145,26 @@
 		}
 	}
 
-	&-header {
-		width: 100%;
+	& > .@{tabs}-content,
+	& > .z-toolbar-tabs-outer > .@{tabs}-content {
+		padding-left: 0;
+		padding-top: 0;
+		border-bottom: 1px solid #E1E1E1;
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+		display: block;
 		margin: 0;
-		position: relative;
-		overflow: hidden;
+		width: 100%;
 		zoom: 1;
+		-moz-user-select: none;
 
-		& > .@{tabs}-content {
-			padding-left: 0;
-			padding-top: 0;
-			border-bottom: 1px solid #E1E1E1;
-			list-style-image: none;
-			list-style-position: outside;
-			list-style-type: none;
-			display: block;
-			margin: 0;
-			width: 100%;
-			zoom: 1;
-			-moz-user-select: none;
+		& > .z-clear {
+			height: 0;
+		}
+	}		
 
-			& > .z-clear {
-				height: 0;
-			}
-		}		
-	}
-
-	&-header > &-content > .@{tab} {
+	&-content > .@{tab} {
 		.tab();
 	}	
 
@@ -226,12 +219,12 @@
 	z-index: 1;
 	padding: 0 4px;
 	border-bottom: 1px solid #E1E1E1;
-	height: 100%;
 
 	&-outer {
 		border-bottom: 0;
-		overflow: auto;
-		> .z-tabs-header {
+		overflow: hidden;
+		height: 32px;
+		> .z-tabs-content {
 			padding-bottom: 0;
 		}
 	}
@@ -243,13 +236,14 @@
 
 .@{tabbox} {
 	overflow: hidden;
+	position: relative;
 	
 	.verticalStyle() {
 		// .z-tabbox-vertical .z-tabs
 		& > .@{tabs} {
 			float:left;
 
-			& > .@{tabs}-header > .@{tabs}-content {
+			& > .@{tabs}-content {
 				height: 4096px;
 				border-right: 1px solid #E1E1E1;
 				-moz-user-select: none;
@@ -312,19 +306,19 @@
 		}
 
 		// .z-tabbox-vertical.z-tabbox-scroll .z-tabs
-		&.@{tabbox}-scroll > .@{tabs} {
-			
-			& > .@{tabs}-header {
+		&.@{tabbox}-scroll {
+
+			& > .@{tabs} {
 				margin: 24px 0px 24px 0px;
 			}
 
 			& > .@{tabs}-up, & > .@{tabs}-down {
 				.buttonBackground();
 				cursor: pointer;
-				height: 20px;
+				height: auto !important;
 				position: absolute;
 				z-index: 25;
-				width: 100%;
+				width: 80px; // will fix
 				display: block;
 				border: 1px solid #E1E1E1;
 				border-bottom: 0px;
@@ -340,10 +334,8 @@
 
 			& > .@{tabs}-down {
 				bottom: 0px;
-			}
-		}
-		
-		
+			}			
+		}		
 
 		// .z-tabbox-vertical .z-tabpanels
 		.@{tabpanels} {		
@@ -368,7 +360,7 @@
 		.@{tabs} {
 			float: right;
 
-			& > .@{tabs}-header > .@{tabs}-content {
+			& > .@{tabs}-content {
 				border-right: 0;
 				border-left: 1px solid #E1E1E1;
 
@@ -395,6 +387,11 @@
 			}			
 		}
 
+		&.@{tabbox}-scroll > .@{tabs}-up, 
+		&.@{tabbox}-scroll > .@{tabs}-down {
+			right: 0;
+		}
+
 		// .z-tabbox-vertical-right .z-tabpanels
 		.@{tabpanels} {		
 			border: 1px solid #E1E1E1;
@@ -404,10 +401,8 @@
 
 	&-horizontal-bottom {
 		
-		& > .@{tabs}
-		> .@{tabs}-header > .@{tabs}-content,
-		& >.@{tabs} > .z-toolbar-tabs-outer 
-		> .@{tabs}-header > .@{tabs}-content {
+		& > .@{tabs} > .@{tabs}-content,
+		& > .@{tabs} > .z-toolbar-tabs-outer > .@{tabs}-content {
 			border-bottom: 0;
 			border-top: 1px solid #E1E1E1;
 
@@ -447,38 +442,30 @@
 	}
 
 	// .z-tabbox-scroll .z-tabs
-	&-scroll .@{tabs} {
+	&-scroll > .@{tabs} {
 		border: 0;
 		padding-bottom: 0;
 		zoom: 1;
+		margin: 0px 25px 0px 25px;
+	}
 
-		& > .@{tabs}-header,
-		& > .z-toolbar-tabs-outer > .@{tabs}-header {
-			margin: 0px 25px 0px 25px;
-		}
+	&-scroll > .@{tabs}-left,
+	&-scroll > .@{tabs}-right {
+		.buttonBackground();
+		width: 25px;
+		height: 32px;
+		display: block;
+		text-align: center;
+		cursor: pointer;
+		position: absolute;
+		z-index: 25;
+		border: 1px solid #E1E1E1;
+		border-radius: 4px 4px 0px 0px;
+		padding-top: 7px;
+	}
 
-		& > .@{tabs}-right, & > .@{tabs}-left,
-		& > .z-toolbar-tabs-outer > .@{tabs}-right, 
-		& > .z-toolbar-tabs-outer > .@{tabs}-left {
-			.buttonBackground();
-			right: 0;
-			top: 0;
-			width: 25px;
-			height: 100%;
-			display: block;
-			text-align: center;
-			cursor: pointer;
-			position: absolute;
-			z-index: 25;
-			border: 1px solid #E1E1E1;
-			border-radius: 4px 4px 0px 0px;
-			padding-top: 7px;
-		}
-
-		& > .@{tabs}-left,
-		& > .z-toolbar-tabs-outer > .@{tabs}-left {
-			left: 0;
-		}
+	&-scroll > .@{tabs}-right {
+		right: 0;
 	}
 	
 	// .z-tabbox-accordion

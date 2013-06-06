@@ -70,10 +70,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tabs, 'bind_', arguments);
 		zWatch.listen({onSize: this});
-
-		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
-			if ((btn = this.$n(key[le])))
-				this.domListen_(btn, 'onClick');
 		
 		// reset
 		this._inited = false;
@@ -88,9 +84,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
-		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
-			if ((btn = this.$n(key[le])))
-				this.domUnlisten_(btn, 'onClick');
 		this.$supers(zul.tab.Tabs, 'unbind_', arguments);
 	},
 	_isInited: function () {
@@ -105,7 +98,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			tbx = tabbox.$n();
 		if (!tbsdiv || !tbx) return;	// tabbox is delete , no need to check scroll
 		if (tabbox.isVertical()) {//vertical
-			var header = this.$n('header'),
+			var header = this.$n(),
 				headerOffsetHeight = header.offsetHeight,
 				headerScrollTop = header.scrollTop,
 				childHeight = 0;
@@ -159,7 +152,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 		} else if(!tabbox.inAccordionMold()) {
 			var cave = this.$n('cave'),
-				header = this.$n('header'),
+				header = this.$n(),
 			 	sel = tabbox.getSelectedTab(),
 				node = tb ? tb.$n() : ( sel ? sel.$n() : null),
 			 	nodeOffsetLeft = node ? node.offsetLeft : 0,
@@ -236,7 +229,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			return;
 		var step,
 			self = this,
-			header = this.$n('header');
+			header = this.$n();
 		
 		this._doingScroll[to] = move;
 		//the tab bigger , the scroll speed faster
@@ -301,84 +294,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_doClick: function(evt) {
-		var cave = this.$n('cave'),
-			allTab =  jq(cave).children();
-		
-		if (!allTab.length) return; // nothing to do	
-			
-		var ele = evt.domTarget,
-			$parent = jq(ele).parent(),
-			move = 0,
-			tabbox = this.getTabbox(),
-			head = this.$n('header'),
-			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
-			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth,
-			plus = scrollLength + offsetLength,
-			self = this,
-			isParentIdEq = function(id) {
-				return $parent && $parent.attr('id') == (self.uuid + '-' + id);
-			};
-		//Scroll to next right tab
-		if (ele.id == this.uuid + '-right' || isParentIdEq('right')) {
-			for (var i = 0, count = allTab.length; i < count; i++) {
-				if (allTab[i].offsetLeft + allTab[i].offsetWidth > plus) {
-					move = allTab[i].offsetLeft + allTab[i].offsetWidth - scrollLength - offsetLength;
-					if (!move || isNaN(move))
-						return;
-					this._doScroll('right', move);
-					return;
-				}
-			}
-		} else if (ele.id == this.uuid + '-left' || isParentIdEq('left')) {//Scroll to next left tab
-			for (var i = 0, count = allTab.length; i < count; i++) {
-				if (allTab[i].offsetLeft >= scrollLength) {
-					//if no Sibling tab no sroll
-					var tabli = jq(allTab[i]).prev('li')[0];
-					if (!tabli)  return;
-					move = scrollLength - tabli.offsetLeft;
-					if (isNaN(move)) return;
-					this._doScroll('left', move);
-					return;
-				};
-			};
-			move = scrollLength - allTab[allTab.length-1].offsetLeft;
-			if (isNaN(move)) return;
-			this._doScroll('left', move);
-			return;
-		} else if (ele.id == this.uuid + '-up' || isParentIdEq('up')) {
-				for (var i = 0, count = allTab.length; i < count; i++) {
-					if (allTab[i].offsetTop >= scrollLength) {
-						var preli = jq(allTab[i]).prev('li')[0];
-						if (!preli) return;
-						move = scrollLength - preli.offsetTop ;
-						this._doScroll('up', move);
-						return;
-					};
-				};
-				var preli = allTab[allTab.length-1];
-				if (!preli) return;
-				move = scrollLength - preli.offsetTop ;
-				this._doScroll('up', move);
-				return;
-		} else if (ele.id == this.uuid + '-down' || isParentIdEq('down')) {
-			for (var i = 0, count = allTab.length; i < count; i++) {
-				if (allTab[i].offsetTop + allTab[i].offsetHeight > plus) {
-					move = allTab[i].offsetTop + allTab[i].offsetHeight - scrollLength - offsetLength;
-					if (!move || isNaN(move)) return ;
-					this._doScroll('down', move);
-					return;
-				};
-			};
-		}
-	},
 	_fixWidth: function() {
 		var tabs = this.$n();
 		
 		var	tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
 			cave = this.$n('cave'),
-			head = this.$n('header'),
+			head = this.$n(),
 			l = this.$n('left'),
 			r = this.$n('right'),
 			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
@@ -434,7 +356,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	_fixHgh: function () {
 		var tabbox = this.getTabbox(),
-			head = this.$n('header');
+			head = this.$n();
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
