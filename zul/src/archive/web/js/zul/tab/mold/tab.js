@@ -15,8 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 function (out) {
-	var zcls = this.getZclass(),
-		tbx = this.getTabbox(),
+	var tbx = this.getTabbox(),
 		uuid = this.uuid;
 		zicon = this.$s('icon'),
 		iconImg = this.$s('icon-img'),
@@ -42,10 +41,10 @@ function (out) {
 		out = n? [] : out;
 
 		if (tbx.getPanelSpacing() && this.getIndex())
-			out.push('<div class="', zcls, '-spacing" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
+			out.push('<div class="', this.$s('spacing'), '" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
 
 		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
-					'<div align="left" class="', zcls, '-header" >');
+					'<div align="left" class="', this.$s('header'), '" >');
 
 		if (this.isClosable())
 			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');
@@ -61,7 +60,7 @@ function (out) {
 		if (this.isClosable())
 			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 		else if (tbx.isVertical())
-			out.push('<a class="', zcls, '-noclose" ></a>');
+			out.push('<a class="', this.$s('noclose'), '" ></a>');
 		this.contentRenderer_(out);
 		
 		out.push('</li>');

@@ -15,8 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 function (out) {
-	var zcls = this.getZclass(),
-		tbx = this.getTabbox(),
+	var tbx = this.getTabbox(),
 		uuid = this.uuid,
 		zicon = this.$s('icon'),
 		iconImg = this.$s('icon-img'),
@@ -36,11 +35,11 @@ function (out) {
 					'<div id="', uuid , '-left" class="', iconImg, ' ', this.$s('left'), '">' , getIcon('icon-caret-left'),  '</div>');
 	}
 	
-	out.push('<div id="', uuid, '-header" class="', zcls, '-header">',
-				'<ul id="', uuid, '-cave" class="', zcls, '-content">');
+	out.push('<div id="', uuid, '-header" class="', this.$s('header'), '">',
+				'<ul id="', uuid, '-cave" class="', this.$s('content'), '">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
-	out.push(		'<li id="', uuid, '-edge" class="', zcls, '-edge"></li>',
+	out.push(		'<li id="', uuid, '-edge" class="', this.$s('edge'), '"></li>',
 						!tbx.isVertical() ? '<div id="' + uuid + '-clear" class="z-clear"> </div>' : '',
 				'</ul>',
 			 '</div>');
@@ -55,7 +54,7 @@ function (out) {
 			out.push('</div>');
 	}
 	
-	out.push(	'<div id="', uuid,	'-line" class="', zcls, '-space" ></div>',
+	out.push(	'<div id="', uuid,	'-line" class="',  this.$s('space'), '" ></div>',
 			 '</div>');
 	
 }
