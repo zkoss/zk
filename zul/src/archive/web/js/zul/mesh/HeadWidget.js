@@ -152,7 +152,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	}
 },{ //static
 	redraw: function (out) {
-		out.push('<tr', this.domAttrs_(), ' align="left">');
+		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</tr>');

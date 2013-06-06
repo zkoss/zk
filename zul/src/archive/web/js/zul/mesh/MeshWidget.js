@@ -959,23 +959,23 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (items.length)
 			this.fire('onRender', {items: items}, {implicit:true});
 	},
-	_syncBodyHeight: function () { //called only if ie6/7 (overriden in SelectWidget)
-		var ebody = this.ebody,
-			ebodytbl = this.ebodytbl;
-
-		// fixed B50-3175465.zul for IE6 if this.desktop is null
-		if (!this.desktop || this._height || (this._vflex && this._vflex != 'min'))
-			return; // height is predetermined, skip sync
-
-		// fixed for B30-1919180.zul and B30-1822564.zul,
-		//  and a side effect for B50-3188023.zul
-		if (ebody.style.height == '0px')
-			ebody.style.height = '';
-		// no scroll bar, but extra height on ebody
-		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
-				ebody.offsetWidth >= ebodytbl.offsetWidth)
-			ebody.style.height = (ebodytbl.offsetHeight) + 'px';
-	},
+//	_syncBodyHeight: function () { //called only if ie6/7 (overriden in SelectWidget)
+//		var ebody = this.ebody,
+//			ebodytbl = this.ebodytbl;
+//
+//		// fixed B50-3175465.zul for IE6 if this.desktop is null
+//		if (!this.desktop || this._height || (this._vflex && this._vflex != 'min'))
+//			return; // height is predetermined, skip sync
+//
+//		// fixed for B30-1919180.zul and B30-1822564.zul,
+//		//  and a side effect for B50-3188023.zul
+//		if (ebody.style.height == '0px')
+//			ebody.style.height = '';
+//		// no scroll bar, but extra height on ebody
+//		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
+//				ebody.offsetWidth >= ebodytbl.offsetWidth)
+//			ebody.style.height = (ebodytbl.offsetHeight) + 'px';
+//	},
 	//derive must override
 	//getHeadWidgetClass
 	//getBodyWidgetIterator
@@ -1547,7 +1547,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 /** @class zul.mesh.Scrollbar
  * @import zk.Widget
  * The extra Scrollbar for the MeshWidget.
- * It is designed to be overriden
  * @since 6.5.0
  */
 zul.mesh.Scrollbar = {
@@ -1565,17 +1564,17 @@ zul.mesh.Scrollbar = {
 		var embed = jq(wgt.$n()).data('embedscrollbar');
 		wgt._scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
-			onSyncPos: function() {
-				var sync = this.syncPos,
+			onSyncPosition: function() {
+				var pos = this.getCurrentPosition(),
 					headtbl = wgt.eheadtbl,
 					foottbl = wgt.efoottbl;
-				if (sync) {
+				if (pos) {
 					if (headtbl)
 						headtbl.style[zk.vendor + 'Transform'] = 
-							'translate(' + sync.x + 'px, 0)';
+							'translate(' + pos.x + 'px, 0)';
 					if (foottbl)
 						foottbl.style[zk.vendor + 'Transform'] = 
-							'translate(' + sync.x + 'px, 0)';
+							'translate(' + pos.x + 'px, 0)';
 				}
 			},
 			onScrollEnd: function() {
@@ -1590,18 +1589,25 @@ zul.mesh.Scrollbar = {
 	 * @return int
 	 */
 	getScrollPosV: function (wgt) {
-		if (wgt._scrollbar && wgt._scrollbar.syncPos)
-			return Math.abs(Math.round(wgt._scrollbar.syncPos.y));
+		var bar = wgt._scrollbar;
+		if (bar) {
+			var currPos = bar.getCurrentPosition();
+			return Math.abs(Math.round(currPos.y));
+		}
 		return 0;
 	},
 	/**
 	 * Return the horizontal scroll position of the body element of given MeshWidget.
 	 * @param zk.Widget wgt the widget
 	 * @return int
+	 * @since 7.0.0
 	 */
 	getScrollPosH: function (wgt) {
-		if (wgt._scrollbar && wgt._scrollbar.syncPos)
-			return Math.abs(Math.round(wgt._scrollbar.syncPos.x));
+		var bar = wgt._scrollbar;
+		if (bar) {
+			var currPos = bar.getCurrentPosition();
+			return Math.abs(Math.round(currPos.x));
+		}
 		return 0;
 	}
 };

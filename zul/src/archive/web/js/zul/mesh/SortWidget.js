@@ -228,12 +228,9 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	},
 	_fixDirection: function (ascending) {
 		//maintain
-		var direction = 'natural';
-		for (var w = this.parent.firstChild; w; w = w.nextSibling) {
-			if (w == this)
-				direction = ascending ? 'ascending' : 'descending';
-			w.setSortDirection(direction);
-		}
+		var direction = ascending ? 'ascending' : 'descending';
+		for (var w = this.parent.firstChild; w; w = w.nextSibling)
+			w.setSortDirection(w == this ? direction : 'natural');
 	},
 	onSort: function (evt) {
 		var dir = this.getSortDirection();
