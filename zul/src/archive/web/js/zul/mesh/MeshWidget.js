@@ -636,8 +636,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._hflex != 'min')
 			this._fixHeaders();
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign 
-		if ((zk.chrome || zk.ie || zk.safari) && this.ehead)
+		if (this.head && this.ehdheaders && zk(this.ehdheaders).isVisible()) {
 			this.domListen_(this.ehead, 'onScroll');
+		}
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflow = ''; // clear
@@ -651,7 +652,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
-		if ((zk.chrome || zk.ie || zk.safari) && this.ehead)
+		if (this.head && this.ehdheaders && zk(this.ehdheaders).isVisible())
 			this.domUnlisten_(this.ehead, 'onScroll');
 		
 		if (this.ebody)
@@ -664,7 +665,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	clearCache: function () {
 		this.$supers('clearCache', arguments);
 		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
-			= this.eheadtbl = this.efoottbl = this.ebodyrows
+			= this.eheadtbl = this.efoottbl = this.ebodyrows = this.ehdheaders
 			= this.ehdfaker = this.ebdfaker = null;
 	},
 
@@ -799,6 +800,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		if (this.ehead) {
 			this.ehdfaker = this.eheadtbl.tBodies[0].rows[0];
+			this.ehdheaders = this.eheadtbl.tBodies[1].rows[0];
 			this.ebdfaker = this.ebodytbl.tBodies[0].rows[0];
 			if (this.efoottbl)
 				this.eftfaker = this.efoottbl.tBodies[0].rows[0];
@@ -845,11 +847,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			return;
 		
 		var ehead = this.ehead,
+			ehdheaders = this.ehdheaders,
 			ebody = this.ebody,
 			efoot = this.efoot;
 		
+		
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
-		if ((zk.chrome || zk.ie || zk.safari) && ehead && zk(ehead).isVisible() && //Bug ZK-1649: should check if ehead is visible or not
+		if (ehead && zk(ehead).isVisible() && ehdheaders && zk(ehdheaders).isVisible() && //Bug ZK-1649: should check if ehead is visible or not
 				!(this.fire('onScroll', ehead.scrollLeft).stopped)) {
 			if (this._currentLeft != ehead.scrollLeft) {
 				if (ebody)
@@ -857,6 +861,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (efoot) 
 					efoot.scrollLeft = ehead.scrollLeft;
 			}
+			
 		}
 		
 		if (!(this.fire('onScroll', ebody.scrollLeft).stopped)) {
