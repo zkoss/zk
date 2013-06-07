@@ -70,7 +70,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	 */
 	getGrid: function () {
 		return this.parent ? this.parent.parent : null;
-	},	
+	},
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
@@ -111,7 +111,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				if (w.$instanceof(zkex.grid.Group)) return w;
 				
 		return null;
-	},	
+	},
 	setStyle: function (style) {
 		if (this._style != style) {
 			if (!zk._rowTime) zk._rowTime = jq.now();
@@ -136,6 +136,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	_getChdextr: function (child) {
 		return child.$n('chdextr') || child.$n();
+	},
+	scrollIntoView: function () {
+		var bar = this.getGrid()._scrollbar;
+		if (bar) {
+			bar.syncSize();
+			bar.scrollToElement(this.$n());
+		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var childHTML = this.encloseChildHTML_({

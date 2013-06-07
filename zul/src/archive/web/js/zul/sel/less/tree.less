@@ -1,0 +1,221 @@
+@import "~./zul/less/_header.less";
+
+@emptyColor: #7D7D7D;
+@gridBorderColor: #CFCFCF;
+@hoverGradientStart: #F2F9FE;
+@hoverGradientEnd: #D6F0FD;
+@stripBackground: #F7F7F7;
+@footerBackground: #F9F9F9;
+@headFootColor: #636363;
+@groupGradientStart: #FFFFFF;
+@groupGradientEnd: #E9F2FB;
+@selectGradientStart: #E5F4FB;
+@selectGradientEnd: #D3EDFA;
+
+//tree
+.z-tree {
+	border: 1px solid @gridBorderColor;
+	overflow: hidden;
+	zoom: 1;
+	.applyCSS3('box-sizing', 'content-box');
+	//tree header div
+	&-header {
+		overflow: hidden;
+		width: 100%;
+		position: relative;
+		&.z-tree-header-bar {
+			display: none;
+			.verGradient();
+			border: 1px solid @gridBorderColor;
+			border-top: none;
+			border-right: none;
+			width: @baseIconWidth;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			right: 0;
+			z-index: 100;
+		}
+	}
+	//tree body div
+	&-body {
+		overflow: hidden;
+		position: relative;
+	}
+	&-emptybody td {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @emptyColor;
+		font-style: italic;
+		text-align: center;
+	}
+	//tree footer div
+	&-footer {
+		overflow: hidden;
+		background: @footerBackground;
+		border-top: 1px solid @gridBorderColor;
+	}
+}
+//tree open icon and indent space
+.z-tree {
+	&-icon,
+	&-line {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		display: inline-block;
+		vertical-align: middle;
+	}
+	&-icon {
+		cursor: pointer;
+		font-size: @baseFontSize;
+		position: relative;
+	}
+	&-root-open,
+	&-tee-open,
+	&-last-open,
+	&-root-close,
+	&-tee-close,
+	&-last-close {
+		display: inline-block;
+		position: absolute;
+		left: 8px;
+		&:hover {
+			color: #0076a3;
+		}
+	}
+	&-root-open,
+	&-tee-open,
+	&-last-open {
+		color: black;
+		.transform('rotate(45deg)');
+	}
+	&-root-close,
+	&-tee-close,
+	&-last-close {
+		color: #8FB9D0;
+	}
+}
+//treecols and auxhead
+//no auxhead here because it is already defined in grid.less
+.z-treecols {
+	th:last-child {
+		border-right: none;
+	}
+}
+.z-treecol {
+	.verGradient();
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0;
+	border-right: 1px solid @gridBorderColor;
+	border-bottom: 1px solid @gridBorderColor;
+	position: relative;
+	.applyCSS3('box-sizing', 'content-box');
+	&-sort {
+		cursor: pointer;
+		&:hover {
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		}
+	}
+}
+//tree row and cell
+.z-treerow {
+	//tree cell
+	.z-treecell {
+		&:last-child {
+			border-right: none;
+		}
+	}
+	&:hover .z-treecell {
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		position: relative;
+	}
+	//check mark
+	&-checkable {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		border: 1px solid @gridBorderColor;
+		display: inline-block;
+		vertical-align: text-top;
+		.verGradient();
+		&.z-treerow-radio {
+			.borderRadius(8px);
+		}
+		.z-treerow-icon {
+			display: none;
+			cursor: default;
+		}
+	}
+	//selected tree cell
+	&.z-treerow-selected {
+		.z-treecell {
+			.verGradient(@selectGradientStart, @selectGradientEnd);
+			position: relative;
+		}
+		&:hover .z-treecell {
+			.verGradient(darken(@selectGradientStart, 5%), darken(@selectGradientEnd, 10%));
+		}
+	}
+	//selected check mark
+	&-selected {
+		.z-treerow-icon {
+			display: block;
+			line-height: @baseLineHeight;
+			padding-left: 1px;
+			color: #0076a3;
+			&.z-icon-ok {} //for checkbox, use font-awesome
+			&.z-icon-radio { //for radio
+				width: 8px;
+				height: 8px;
+				.borderRadius(4px);
+				background: #0076a3;
+				padding: 0;
+				margin: 3px;
+			}
+		}
+	}
+	//disabled
+	&.z-treerow-disabled {
+		* {
+			color: #aaaaaa !important;
+			cursor: default !important;
+		}
+		&:hover .z-treecell {
+			.resetGradient();
+			position: relative;
+		}
+	}
+}
+//content
+.z-treecol-content,
+.z-treecell-content,
+.z-treefooter-content {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: @headFootColor;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
+}
+.z-treecol-content {
+	font-weight: bold;
+	padding: 4px 5px 3px;
+	position: relative;
+}
+.z-treecell-content {
+	padding: 4px 2px;
+	line-height: @baseIconHeight;
+}
+//paging
+.z-tree-paging {
+	&-top {
+		border-bottom: 1px solid @gridBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @gridBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+}

@@ -12,16 +12,6 @@
 @selectGradientStart: #E5F4FB;
 @selectGradientEnd: #D3EDFA;
 
-//reset table
-table {
-	border-spacing: 0;
-	th, td {
-		padding: 0;
-	}
-	th {
-		text-align: inherit;
-	}
-}
 //listbox
 .z-listbox {
 	border: 1px solid @gridBorderColor;
@@ -64,16 +54,13 @@ table {
 		overflow: hidden;
 		background: @footerBackground;
 		border-top: 1px solid @gridBorderColor;
-		.z-footer {
-			overflow: hidden;
-		}
 	}
 	&-odd {
 		background: @stripBackground;
 	}
 }
 //listhead and auxhead
-//remove auxhead here because already defined in grid.less
+//no auxhead here because it is already defined in grid.less
 .z-listhead {
 	th:last-child {
 		border-right: none;
@@ -84,18 +71,12 @@ table {
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-width: 0 1px 1px 0;
-	border-color: transparent @gridBorderColor @gridBorderColor #FFFFFF;
-	border-style: none solid solid solid;
+	border-right: 1px solid @gridBorderColor;
+	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
 	.applyCSS3('box-sizing', 'content-box');
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-	}
-}
-.z-listheader {
-	&-content {
-		position: relative;
 	}
 	&-sort {
 		.z-listheader-content {
@@ -154,21 +135,21 @@ table {
 		cursor: e-resize;
 	}
 }
-//listitem and listcell
+//list item and cell
 .z-listitem {
-	td:last-child {
-		border-right: none;
+	//list cell
+	.z-listcell {
+		border-right: 1px solid #FFFFFF;
+		.applyCSS3('box-sizing', 'content-box');
+		td:last-child {
+			border-right: none;
+		}
 	}
 	&:hover .z-listcell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		position: relative;
 	}
-	.z-listcell {
-		border-width: 0 1px 0 0;
-		border-color: transparent #FFFFFF transparent transparent;
-		border-style: none solid none none;
-		.applyCSS3('box-sizing', 'content-box');
-	}
+	//check mark
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
@@ -184,6 +165,7 @@ table {
 			cursor: default;
 		}
 	}
+	//selected list cell
 	&.z-listitem-selected {
 		.z-listcell {
 			.verGradient(@selectGradientStart, @selectGradientEnd);
@@ -194,6 +176,7 @@ table {
 			position: relative;
 		}
 	}
+	//selected check mark
 	&-selected {
 		.z-listitem-icon {
 			display: block;
@@ -211,6 +194,7 @@ table {
 			}
 		}
 	}
+	//disabled
 	&.z-listitem-disabled {
 		* {
 			color: #aaaaaa !important;
@@ -255,7 +239,7 @@ table {
 	position: relative;
 }
 //content
-//remove auxhead here because already defined in grid.less
+//no auxhead here because it is already defined in grid.less
 .z-listheader-content,
 .z-listcell-content,
 .z-listgroup-content,
@@ -271,6 +255,7 @@ table {
 .z-listheader-content {
 	font-weight: bold;
 	padding: 4px 5px 3px;
+	position: relative;
 }
 .z-listgroup-content,
 .z-listgroupfoot-content {
@@ -290,10 +275,6 @@ table {
 		overflow: hidden;
 		width: 100%;
 	}
-}
-.z-listbox-autopaging .z-listcell-cnt {
-	height: 30px;
-	overflow: hidden;
 }
 //column menu
 .z-listhead-menugrouping .z-menuitem-image {

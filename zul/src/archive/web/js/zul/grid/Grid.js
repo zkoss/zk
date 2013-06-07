@@ -203,16 +203,22 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers(Grid, 'onSize', arguments);
 		var self = this;
 		setTimeout(function () {
-			if (self.desktop) {
-				var bar = self._scrollbar,
-					embed = jq(self.$n()).data('embedscrollbar');
-				
-				bar.syncSize();
-				//show block DIV on header if vertical scroll-bar required
-				if (embed && bar.needV)
-					self.$n('headbar').style.display = 'block';
-			}
+			if (self.desktop)
+				self.refreshBar_();
 		}, 200);
+	},
+	refreshBar_: function (showBar, scrollToTop) {
+		var bar = this._scrollbar,
+			embed = jq(this.$n()).data('embedscrollbar'),
+			headbar = this.$n('headbar');
+		if (bar) {
+			bar.syncSize(showBar);
+			if (scrollToTop)
+				bar.scrollTo(0, 0);
+			//show block DIV on header if vertical scroll-bar required
+			if (embed)
+				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
+		}
 	},
 	onResponse: function () {
 		if (this._shallFixEmpty) 

@@ -34,6 +34,7 @@ function (out) {
 
 	if(this.listhead){
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
+			'<div id="', uuid, '-headbar" class="', this.$s('header'), ' ', this.$s('header-bar'), '"></div>',
 			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;',
 			wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
@@ -44,10 +45,8 @@ function (out) {
 	
 		out.push('</tbody></table></div>');
 	}
-	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
-	if (this._autopaging)
-		out.push(' ', this.$s('autopaging'));
-	out.push('"');
+	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
+	
 	var hgh = this.getHeight();
 	if (hgh)
 		out.push(' style="overflow:hidden;height:', hgh, '"');

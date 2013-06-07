@@ -42,7 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _showDOM(wgt, visible) {
 		var n = wgt.$n();
 		if (n)
-			n.style.display = visible ? "" : "none";
+			n.style.display = visible ? '' : 'none';
 		var chld;
 		if (chld = wgt.treechildren)
 			for (var w = chld.firstChild; w; w = w.nextSibling)
@@ -107,31 +107,43 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
     	/** Sets whether this container is open.
     	 * @param boolean open
     	 */
-		open: function (open, fromServer) {
-			var img = this.$n('open');
+		open : function(open, fromServer) {
+			var img = this.$n('open'),
+				icon = this.$n('icon');
 			if (!img || _closed(this.parent)) {
-                if (img) {// B65-ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
-                    var cn = img.className;
-                    img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
-                }
+				if (icon) {
+					// B65-ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
+					var cn = icon.className;
+					icon.className = open ? 
+						cn.replace('-close', '-open') : cn.replace('-open', '-close');
+				}
 				return;
 			}
-            
-            var cn = img.className,
-				tree = this.getTree(),
-				ebodytbl = tree ? tree.ebodytbl: null,
-				oldwd = ebodytbl ? ebodytbl.clientWidth: 0; //ebodytbl shall not be null (just in case)
-			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
-			if (!open) zWatch.fireDown('onHide', this);
+
+			// (just in case)
+			if (icon) {
+				var cn = icon.className;
+				icon.className = open ? 
+					cn.replace('-close', '-open') : cn.replace('-open', '-close');
+			}
+
+			var tree = this.getTree(),
+				ebodytbl = tree ? tree.ebodytbl : null,
+				oldwd = ebodytbl ? ebodytbl.clientWidth : 0; // ebodytbl shall not be null
+			
+			if (!open)
+				zWatch.fireDown('onHide', this);
 			this._showKids(open);
 			if (open)
 				zUtl.fireShown(this);
 			if (tree) {
 				tree._sizeOnOpen();
-
+				// update scroll bar status
+				tree.refreshBar_(true);
+				
 				if (!fromServer)
-					this.fire('onOpen', {open: open},
-						{toServer: tree.inPagingMold() || tree.isModel()});
+					this.fire('onOpen', {open : open},
+							{toServer : tree.inPagingMold() || tree.isModel()});
 
 				tree._syncFocus(this);
 				tree.focus();
@@ -140,9 +152,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					tree._fixhdwcnt = tree._fixhdwcnt || 0;
 					if (!tree._fixhdwcnt++)
 						tree._fixhdoldwd = oldwd;
-					setTimeout(function () {
-						if (!--tree._fixhdwcnt && tree.$n() && 
-								(tree._fixhdoldwd != ebodytbl.clientWidth))
+					setTimeout(function() {
+						if (!--tree._fixhdwcnt
+								&& tree.$n()
+								&& (tree._fixhdoldwd != ebodytbl.clientWidth))
 							tree._calcSize();
 					}, 250);
 				}
@@ -296,19 +309,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 		return this;
 	},
-	doMouseOver_: function (evt) {
-		var ico = this.$n('open');
-		if (evt.domTarget == ico)
-			jq(this.$n()).addClass(this.getZclass() + '-ico-over');
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var ico = this.$n('open');	
-		if (evt.domTarget == ico)
-			jq(this.$n()).removeClass(this.getZclass() + '-ico-over');
-		this.$supers('doMouseOut_', arguments);
-	},
-	
 	beforeParentChanged_: function(newParent) {
 		var oldtree = this.getTree();
 		if (oldtree) 
@@ -363,9 +363,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this._fixOnAdd(child, true);
 		else if (this.desktop)
             this._fixOnAdd(child, true); // fixed dynamically change treerow. B65-ZK-1608
-		if (this.desktop && child.$instanceof(zul.sel.Treerow)) {
-		}
-		//else was handled by insertBefore/appendChild
 	},
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {

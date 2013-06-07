@@ -146,6 +146,13 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		this._syncListitems(newwgt);
 		this.$supers('replaceWidget', arguments);
 	},
+	scrollIntoView: function () {
+		var bar = this.getListbox()._scrollbar;
+		if (bar) {
+			bar.syncSize();
+			bar.scrollToElement(this.$n());
+		}
+	},
 	_updHeaderCM: function (bRemove) {
 		// B50-3322970: need to clear Listheader _check cache
 		var box, lh;
