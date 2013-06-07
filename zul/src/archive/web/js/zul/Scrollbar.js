@@ -90,6 +90,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		//initialize scroll-bar position
 		this._pos = [0, 0];
 		this._barPos = [0, 0];
+		this.currentPos = {x: this._pos[0], y: this._pos[1]};
 		//bind mouse enter / mouse leave
 		if (!opts.embed)
 			jq(cave)
@@ -106,12 +107,152 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		this._unbindMouseEvent('ver');
 		jq(this.$n('hor')).remove();
 		jq(this.$n('ver')).remove();
-		this._pos = this._barPos = null;
+		this._pos = this._barPos = this.currentPos = null;
+	},
+	syncSize: function (showScrollbar) {
+		this._checkBarRequired();
+		
+		var wgt = this.widget,
+			tpad = wgt.$n('tpad'),
+			bpad = wgt.$n('bpad'),
+			cave = this.cave,
+			scroller = this.scroller,
+			hwrapper = this.$n('hor-wrapper'),
+			vwrapper = this.$n('ver-wrapper'),
+			scrollHeight = scroller.offsetHeight;
+		
+		if (tpad && bpad) //for Mesh Widget rod
+			scrollHeight += tpad.offsetHeight + bpad.offsetHeight;
+		
+		if (this.needH || this.needV) {
+			scroller.style[zk.vendor + 'TransformOrigin'] = '0 0';
+			if (this.opts.embed) {
+				var cs = cave.style,
+					paddingB = hwrapper ? hwrapper.offsetHeight : 0,
+					paddingR = vwrapper ? vwrapper.offsetWidth : 0;
+				cs.paddingBottom = jq.px(paddingB);
+				cs.paddingRight = jq.px(paddingR);
+			}
+		}
+		
+		if (this.needH) {
+			var left = this.$n('hor-left'),
+				right = this.$n('hor-right'),
+				ind = this.$n('hor-indicator'),
+				hws = hwrapper.style,
+				wdh = cave.offsetWidth,
+				swdh = scroller.offsetWidth + zk(cave).paddingWidth(),
+				rwdh = right.offsetWidth,
+				hwdh = wdh - left.offsetWidth - rwdh;
+			
+			if (this.needV) {
+				hws.width = jq.px(hwdh - rwdh);
+				right.style.right = jq.px(rwdh);
+			} else {
+				hws.width = jq.px(hwdh);
+			}
+			
+			var wwdh = hwrapper.offsetWidth,
+				iwdh = Math.round(wwdh * wdh / swdh);
+			
+			ind.style.width = jq.px(iwdh > 8 ? iwdh : 8);
+			//sync scroller position limit
+			this.hLimit = wdh - swdh;
+			//sync scroll-bar indicator position limit
+			this.hBarLimit = wwdh - ind.offsetWidth;
+			//sync indicator/scroller width ratio
+			this.hRatio = Math.abs(this.hLimit / this.hBarLimit);
+			//sync bar position
+			this._syncBarPosition('hor', this._barPos[0]);
+		}
+		if (this.needV) {
+			var up = this.$n('ver-up'),
+				down = this.$n('ver-down'),
+				ind = this.$n('ver-indicator'),
+				vws = vwrapper.style,
+				hgh = cave.offsetHeight,
+				shgh = scrollHeight + zk(cave).paddingHeight(),
+				dhgh = down.offsetHeight,
+				vhgh = hgh - up.offsetHeight - dhgh;
+			
+			if (this.needH) {
+				vws.height = jq.px(vhgh - dhgh);
+				down.style.bottom = jq.px(dhgh);
+			} else {
+				vws.height = jq.px(vhgh);
+			}
+			
+			var whgh = vwrapper.offsetHeight,
+				ihgh = Math.round(whgh * hgh / shgh);
+			
+			ind.style.height = jq.px(ihgh > 8 ? ihgh : 8);
+			//sync scroller position limit
+			this.vLimit = hgh - shgh;
+			//sync scroll-bar indicator position limit
+			this.vBarLimit = whgh - ind.offsetHeight;
+			//sync indicator/scroller width ratio
+			this.vRatio = Math.abs(this.vLimit / this.vBarLimit);
+			//sync bar position
+			this._syncBarPosition('ver', this._barPos[1]);
+		}
+		if (showScrollbar)
+			_showScrollbar(this, 0.8);
+	},
+	scrollTo: function (x, y) {
+		if (this.needH) {
+			x = _setScrollPos(x, this.hLimit, 0);
+			this._syncPosition('hor', x);
+			this._syncBarPosition('hor', -x / this.hRatio);
+		}
+		if (this.needV) {
+			y = _setScrollPos(y, this.vLimit, 0);
+			this._syncPosition('ver', y);
+			this._syncBarPosition('ver', -y / this.vRatio);
+		}
+		var onScrollEnd = this.opts.onScrollEnd;
+		if (onScrollEnd) {
+			this.currentPos = {x: this._pos[0], y: this._pos[1]};
+			onScrollEnd.call(this);
+		}
+	},
+	scrollToElement: function (dom) {
+		if (!this.needV)
+			return; //no vertical scrollbar
+		
+		var cave = this.cave,
+			domTop = jq(dom).offset().top,
+			domBottom = domTop + dom.offsetHeight,
+			viewTop = jq(cave).offset().top,
+			viewBottom = viewTop + cave.offsetHeight,
+			scrollUp = true;
+		
+		if (domBottom <= viewBottom && domTop >= viewTop)
+			return; //already in the view port
+		
+		if (domTop < viewTop)
+			scrollUp = false;
+		
+		//calculate scrolling movement
+		var movement = scrollUp ? domBottom - viewBottom : viewTop - domTop,
+			pos = this._pos[1] + (scrollUp ? -movement : movement);
+		
+		//set and check if exceed scrolling limit
+		pos = _setScrollPos(pos, this.vLimit, 0);
+		//sync scroll position
+		this._syncPosition('ver', pos);
+		this._syncBarPosition('ver', -pos / this.vRatio);
+		//onScrollEnd callback
+		this._onScrollEnd();
+		
+	},
+	getCurrentPosition: function () {
+		return this.currentPos;
 	},
 	_checkBarRequired: function () {
-		var cave = this.cave;
+		var cave = this.cave,
+			scroller = this.scroller;
 		//check if horizontal scroll-bar required
-		this.needH = cave.offsetWidth < cave.scrollWidth;
+		this.needH = cave.offsetWidth < scroller.offsetWidth;
 		if (!this.needH) {
 			this._unbindMouseEvent('hor');
 			this._syncPosition('hor', 0);
@@ -123,7 +264,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 		}
 		//check if vertical scroll-bar required
-		this.needV = cave.offsetHeight < cave.scrollHeight;
+		this.needV = cave.offsetHeight < scroller.offsetHeight;
 		if (!this.needV) {
 			this._unbindMouseEvent('ver');
 			this._syncPosition('ver', 0);
@@ -229,12 +370,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		self.dragging = false;
 		if (!self.opts.embed && (x < offset || x > offset + cave.offsetWidth))
 			_showScrollbar(self, 0);
-		
-		var onScrollEnd = self.opts.onScrollEnd;
-		if (onScrollEnd) {
-			self.syncPos = {x: self._pos[0], y: self._pos[1]};
-			onScrollEnd.call(self);
-		}
+		//onScrollEnd callback
+		self._onScrollEnd();
 	},
 	_dragMove: function (evt) {
 		var data = evt.data,
@@ -269,9 +406,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			//sync position
 			this._syncPosition('hor', pos);
 			this._syncBarPosition('hor', -pos / this.hRatio);
-			var onScrollEnd = this.opts.onScrollEnd;
-			if (onScrollEnd)
-				onScrollEnd.call(this);
+			//onScrollEnd callback
+			this._onScrollEnd();
 		}
 	},
 	_mousewheelY: function (evt, delta, deltaX, deltaY) {
@@ -288,16 +424,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			//sync position
 			this._syncPosition('ver', pos);
 			this._syncBarPosition('ver', -pos / this.vRatio);
-			var onScrollEnd = this.opts.onScrollEnd;
-			if (onScrollEnd)
-				onScrollEnd.call(this);
+			//onScrollEnd callback
+			this._onScrollEnd();
 		}
 	},
 	_mouseUp: function (evt) {
 		clearInterval(pressTimer);
-		var onScrollEnd = this.opts.onScrollEnd;
-		if (onScrollEnd)
-			onScrollEnd.call(this);
+		this._onScrollEnd();
 	},
 	_mouseDown: function (evt) {
 		var target = evt.currentTarget,
@@ -351,93 +484,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}, 50);
 		}
 	},
-	syncSize: function () {
-		this._checkBarRequired();
-		
-		var wgt = this.widget,
-			tpad = wgt.$n('tpad'),
-			bpad = wgt.$n('bpad'),
-			cave = this.cave,
-			scroller = this.scroller,
-			hwrapper = this.$n('hor-wrapper'),
-			vwrapper = this.$n('ver-wrapper'),
-			scrollHeight = scroller.offsetHeight;
-		
-		if (tpad && bpad) //for Mesh Widget rod
-			scrollHeight += tpad.offsetHeight + bpad.offsetHeight;
-		
-		if (this.needH || this.needV) {
-			scroller.style[zk.vendor + 'TransformOrigin'] = '0 0';
-			if (this.opts.embed) {
-				var cs = cave.style,
-					paddingB = hwrapper ? hwrapper.offsetHeight : 0,
-					paddingR = vwrapper ? vwrapper.offsetWidth : 0;
-				cs.paddingBottom = jq.px(paddingB);
-				cs.paddingRight = jq.px(paddingR);
-			}
-		}
-		
-		if (this.needH) {
-			var left = this.$n('hor-left'),
-				right = this.$n('hor-right'),
-				ind = this.$n('hor-indicator'),
-				hws = hwrapper.style,
-				wdh = cave.offsetWidth,
-				swdh = scroller.offsetWidth + zk(cave).paddingWidth(),
-				rwdh = right.offsetWidth,
-				hwdh = wdh - left.offsetWidth - rwdh;
-			
-			if (this.needV) {
-				hws.width = jq.px(hwdh - rwdh);
-				right.style.right = jq.px(rwdh);
-			} else {
-				hws.width = jq.px(hwdh);
-			}
-			
-			var wwdh = hwrapper.offsetWidth,
-				iwdh = Math.round(wwdh * wdh / swdh);
-			
-			ind.style.width = jq.px(iwdh > 8 ? iwdh : 8);
-			//sync scroller position limit
-			this.hLimit = wdh - swdh;
-			//sync scroll-bar indicator position limit
-			this.hBarLimit = wwdh - ind.offsetWidth;
-			//sync indicator/scroller width ratio
-			this.hRatio = Math.abs(this.hLimit / this.hBarLimit);
-			//sync bar position
-			this._syncBarPosition('hor', this._barPos[0]);
-		}
-		if (this.needV) {
-			var up = this.$n('ver-up'),
-				down = this.$n('ver-down'),
-				ind = this.$n('ver-indicator'),
-				vws = vwrapper.style,
-				hgh = cave.offsetHeight,
-				shgh = scrollHeight + zk(cave).paddingHeight(),
-				dhgh = down.offsetHeight,
-				vhgh = hgh - up.offsetHeight - dhgh;
-			
-			if (this.needH) {
-				vws.height = jq.px(vhgh - dhgh);
-				down.style.bottom = jq.px(dhgh);
-			} else {
-				vws.height = jq.px(vhgh);
-			}
-			
-			var whgh = vwrapper.offsetHeight,
-				ihgh = Math.round(whgh * hgh / shgh);
-			
-			ind.style.height = jq.px(ihgh > 8 ? ihgh : 8);
-			//sync scroller position limit
-			this.vLimit = hgh - shgh;
-			//sync scroll-bar indicator position limit
-			this.vBarLimit = whgh - ind.offsetHeight;
-			//sync indicator/scroller width ratio
-			this.vRatio = Math.abs(this.vLimit / this.vBarLimit);
-			//sync bar position
-			this._syncBarPosition('ver', this._barPos[1]);
-		}
-	},
 	_syncPosition: function (orient, pos) {
 		if (!this._pos)
 			return;
@@ -447,10 +493,11 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		if (orient == 'ver')
 			this._pos[1] = pos;
 		
-		var onSyncPos = this.opts.onSyncPos;
-		if (onSyncPos) {
-			this.syncPos = {x: this._pos[0], y: this._pos[1]};
-			onSyncPos.call(this);
+		//onSyncPosition callback
+		var onSyncPosition = this.opts.onSyncPosition;
+		if (onSyncPosition) {
+			this.currentPos = {x: this._pos[0], y: this._pos[1]};
+			onSyncPosition.call(this);
 		}
 		
 		this.scroller.style[zk.vendor + 'Transform'] = 
@@ -466,6 +513,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			this._barPos[1] = pos;
 			this.$n('ver-indicator').style[zk.vendor + 'Transform'] = 
 				'translate(0, ' + this._barPos[1] + 'px)';
+		}
+	},
+	_onScrollEnd: function () {
+		var onScrollEnd = this.opts.onScrollEnd;
+		if (onScrollEnd) {
+			this.currentPos = {x: this._pos[0], y: this._pos[1]};
+			onScrollEnd.call(this);
 		}
 	},
 	redraw: function (cave, orient) {

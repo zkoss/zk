@@ -452,7 +452,7 @@ public class ThemeFns {
 			_prefix = prefix;
 			if ("IE6-9".equals(browser) || "IE9".equals(browser)) {
 				_template = new StringBuilder(
-						"\tbackground-color: %1$s;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
+						"\tbackground: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
 						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-9 */\n")
 						.toString();
 			} else if ("Chrome,Safari4+".equals(browser)) {

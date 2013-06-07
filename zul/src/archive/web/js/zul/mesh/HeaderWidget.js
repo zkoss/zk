@@ -76,8 +76,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			if (no) no.width = true;
 			else no = {width:true};
 		}
-		if (zk.ie >= 9 && this._align)
+		if (this._align)
 			style += 'text-align:' + this._align + ';';
+		if (this._valign)
+			style += 'vertical-align:' + this._valign + ';';
 
 		return style + this.$super('domStyle_', no);
 	},
@@ -96,24 +98,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	isSortable_: function () {
 		return false;
 	},
-	/**
-	 * Returns the column attributes. i.e. {@link #getAlign} and {@link #getValign}
-	 * in HTML format. (Like a="b")
-	 * @return String
-	 */
-	getColAttrs: function () {
-		return (this._align ? ' align="' + this._align + '"' : '')
-			+ (this._valign ? ' valign="' + this._valign + '"' : '') ;
-	},
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
 			this.updateMesh_('visible', visible);
 		}
-	},
-	domAttrs_: function (no) {
-		var attrs = this.$supers('domAttrs_', arguments);
-		return attrs + this.getColAttrs();
 	},
 	getTextNode: function () {
 		return jq(this.$n()).find('>div:first')[0];
@@ -156,9 +145,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			owner = this.getMeshWidget();
 		for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
 			faker = owner['e' + fs[i]]; // internal element
-			if (faker && !this.$n(fs[i]))
+			if (faker && !this.$n(fs[i])) {
 				faker[faker.cells.length > index ? 'insertBefore' : 'appendChild']
 					(this._createFaker(n, fs[i]), faker.cells[index]);
+			}
 		}
 	},
 	_createFaker: function (n, postfix) {
@@ -265,10 +255,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var w = zkp.revisedWidth(p.offsetWidth);
 			// Bug #3255116
 			if (mw.ebody) {
-				var scroll = zk(mw.ebody).hasVScroll();
-				if (scroll > 11)
-					w -= scroll;
-
 				if (zk.ie) { //Related bugs: ZK-890 and ZK-242
 					if (mw.ebodytbl && !mw.ebodytbl.width) {
 						mw.ebodytbl.width = '100%';
@@ -291,7 +277,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			&& (wp = wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
 	},
 	_insizer: function (x) {
-		return x >= this.$n().offsetWidth - 10;
+		return x >= this.$n().offsetWidth - 8;
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<th', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></th>');
@@ -377,18 +363,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		delete mesh._sizedByContent; //no sizedByContent!
 		for (var w = mesh.head.firstChild; w; w = w.nextSibling)
 			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
-
-//		var meshn = mesh.$n();
-//		if (zk.opera) {
-//			if(fixed)
-//				mesh.ebodytbl.style.tableLayout = fixed;
-//
-//			//bug 3061764: Opera only. Cannot sizing a column with width
-//			var olddisp = meshn.style.display; //force redraw
-//			meshn.style.display='none';
-//			var redrawFix = meshn.offsetHeight;
-//			meshn.style.display=olddisp;
-//		}
 		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
@@ -396,10 +370,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			width: wd + 'px',
 			widths: wds
 		}, evt.data), null, 0);
-
-		// bug #2799258 in IE, we have to force to recalculate the size.
-//		meshn._lastsz = null;
-
+		
 		// bug #2799258
 		zUtl.fireSized(mesh, -1); //no beforeSize
 	},

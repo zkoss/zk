@@ -184,14 +184,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				realIndex += this._spans[j] - 1;
 			}
 		}
-		var colattrs, visible, hgh,
+		var visible, hgh,
 			grid = this.getGrid();
 		if (grid) {
 			var cols = grid.columns;
 			if (cols) {
 				if (realIndex < cols.nChildren) {
 					var col = cols.getChildAt(realIndex);
-					colattrs = col.getColAttrs();
 					visible = col.isVisible() ? '' : 'display:none;';
 					hgh = col.getHeight();
 				}
@@ -210,7 +209,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				style += 'height:' + hgh + ';';
 		}
 		var clx = isDetail ? child.$s('outer') : this.$s('inner'),
-			attrs = colattrs || '';
+			attrs = '';
 		if (span !== 1)
 			attrs += ' colspan="' + span + '"';
 		if (this._nowrap)
@@ -235,6 +234,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		
 		var style = this.$supers('domStyle_', arguments),
 			group = this.getGroup();
+		if (this._align)
+			style += ' text-align:' + this._align + ';';
+		if (this._valign)
+			style += ' vertical-align:' + this._valign + ';';
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	},
 	onChildAdded_: function (child) {
@@ -288,14 +291,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			n.firstChild.style.MozUserSelect = 'none';
 		
 		this.$supers('doMouseOut_', arguments);
-	},
-	domAttrs_: function (no) {
-		var attr = this.$supers('domAttrs_', arguments);
-		if (this._align)
-			attr += ' align="' + this._align + '"';
-		if (this._valign)
-			attr += ' valign="' + this._valign + '"';
-		return attr;
 	},
 	domClass_: function () {
 		var cls = this.$supers('domClass_', arguments),

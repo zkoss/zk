@@ -71,6 +71,7 @@
 		color: #636363;
 		font-size: @fontSizeSmall;
 		line-height: 18px;
+		cursor: pointer;
 
 		&:hover {
 			background: #E3F2FF;
@@ -123,8 +124,10 @@
 			color: #008BB6;
 		}
 	}
-
-
+	&-outside {
+		color: #AAAAAA;
+		text-shadow: none;
+	}
 	&-icon {
 		position: absolute;
 		color: #AAAAAA;
@@ -145,7 +148,10 @@
 	}
 
 	&-left[disabled],
-	&-right[disabled] {
+	&-right[disabled],
+	&-disabled {
+		cursor: default !important;
+		text-shadow: none !important;
 		cursor: default !important;
 		color: #D6D6D6 !important;
 		color: rgba(214,214,214,0.6) !important;

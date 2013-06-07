@@ -60,25 +60,6 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			s += ' ' + this.$s(zUtl.encodeXML(type));
 		return s;
 	},
-	onFloatUp: function(ctl, opts) {
-		if (opts && opts.triggerByFocus) //only mouse click can close notification
-			return;
-		if (!this.isVisible())
-			return;
-		var wgt = ctl.origin;
-		for (var floatFound; wgt; wgt = wgt.parent) {
-			if (wgt == this) {
-				if (!floatFound) 
-					this.setTopmost();
-				return;
-			}
-			if (wgt == this.parent && wgt.ignoreDescendantFloatUp_(this))
-				return;
-			floatFound = floatFound || wgt.isFloating_();
-		}
-		if (this._dur <= 0)
-			this.close({sendOnOpen:true});
-	},
 	doClick_: function (evt) {
 		var p = evt.domTarget;
 		if (jq.contains(this.$n('cls'), p))

@@ -159,7 +159,7 @@ if="deploy.tomcat.required">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**, ${less}/**"/>
+		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**, ${less}/**/**.less"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
@@ -169,7 +169,7 @@ if="deploy.tomcat.required">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**, ${less}/**"/>
+		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**, ${less}/**/**.less"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, **/*.src.js"/>
 	</jar>
