@@ -42,8 +42,7 @@ function (out) {
 	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
 			'<tr><td id="', uuid, '-tdl" class="', zcls, '-tdl');
 	
-	if (view == 'decade' && ydec*100 == 1900)
-		out.push(' ', zcls, '-icon-disd');
+	out.push(' ',this.isOutOfRange(true) ? zcls + '-icon-disd' : '');
 		
 	out.push('"><div  class="', zcls, '-left"><div id="', uuid, '-ly" class="', zcls, '-left-icon"></div></div></td>',
 				'<td><table class="', zcls, '-calctrl" width="100%" border="0" cellspacing="0" cellpadding="0">',
@@ -65,10 +64,8 @@ function (out) {
 	out.push('</td></tr></table></td>',
 		'<td id="', uuid, '-tdr" class="', zcls, '-tdr');
 		
-	if (view == 'decade' && ydec*100 == 2000)
-		out.push(' ', zcls, '-icon-disd');
-	
-	out.push('"><div class="', zcls, '-right"><div id="', uuid, '-ry" class="', zcls, '-right-icon"></div></div></td></tr>');
+	out.push(' ',this.isOutOfRange() ? zcls + '-icon-disd' : '');
+	out.push('"><div class="', zcls, '-right"><div id="', uuid, '-ry" class="', zcls,'-right-icon"></div></div></td></tr>');
 	//year view
 	switch(view) {
 	case "day" :

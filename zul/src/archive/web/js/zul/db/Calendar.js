@@ -176,6 +176,13 @@ zul.db.Renderer = {
 
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
+			if (yofs + ydelta < 1900 || yofs + ydelta > 2099) {
+				out.push('<td class="', zcls, '-disd">&nbsp;</td>');
+				if (j + 1 == 12)
+					out.push('</tr>'); 
+				yofs++;
+				continue;
+			}
 			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '" >', yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
@@ -203,7 +210,7 @@ zul.db.Renderer = {
 		for (var j = 0 ; j < 12; ++j, temp += 10) {
 			if (!(j % 4)) out.push('<tr>');
 			if (temp < 1900 || temp > 2090) {
-				out.push('<td>&nbsp;</td>');
+				out.push('<td class="', zcls, '-disd">&nbsp;</td>');
 				if (j + 1 == 12)
 					out.push('</tr>'); 
 				continue;
@@ -363,7 +370,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ofs *= 10;
 			
 			var y = oldTime.getFullYear();
-			if (y + ofs < 1900 || y + ofs > 2100)
+			if (y + ofs < 1900 || y + ofs > 2099)
 				return;// out of range
 //			break;
 		}		
@@ -643,6 +650,37 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
+	/**
+	 * Check whether the date is out of range between 1900~2100 years
+	 * @param boolean left it is used for the left arrow button
+	 * @param Date date the date object for the range if null, the current value
+	 * of {@link #getTime()} is assumed.
+	 * @returns boolean if true it means the date is out of range.
+	 * @since 7.0.0
+	 */
+	isOutOfRange: function (left, date) {
+		var view = this._view,
+			val = date || this.getTime(),
+			y = val.getFullYear(),
+			ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y, 
+			yofs = y - (y % 10 + 1),
+			ydec = zk.parseInt(y/100);
+		
+		if (view == 'decade') {
+			var value = ydec*100 + ydelta;
+			return left ? value == 1900 : value == 2000;
+		} else if (view == 'year') {
+			var value = yofs + ydelta;
+			return left ? value < 1900 : value + 10 >= 2099;
+		} else if (view == 'day') {
+			var value = y + ydelta,
+				m = val.getMonth();
+			return left ? value <= 1900 && m == 0 : value >= 2099 && m == 11;
+		} else {
+			var value = y + ydelta;
+			return left ? value <= 1900 : value >= 2099;
+		}
+	},
 	_markCal: function (opts) {
 		this._markCal0(opts);
 		var anc;
@@ -674,6 +712,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							var $cell = jq(week.cells[k]),
 								monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
 								bSel = cur == d;
+							
+							// check whether the date is out of range
+							if (y >= 2099 && m == 11 && monofs == 1
+									|| y <= 1900 && m == 0 && monofs == -1) {
+								$cell.addClass(zcls + "-disd");
+								continue;
+							}
 								
 							$cell[0]._monofs = monofs;
 							$cell.css('textDecoration', '').
