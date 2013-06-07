@@ -636,6 +636,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._hflex != 'min')
 			this._fixHeaders();
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign 
+		// B65-ZK-1793: Should check if ehdheaders is visible or not
 		if (this.head && this.ehdheaders && zk(this.ehdheaders).isVisible()) {
 			this.domListen_(this.ehead, 'onScroll');
 		}
@@ -652,6 +653,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
+		// B65-ZK-1793: Should check if ehdheaders is visible or not
 		if (this.head && this.ehdheaders && zk(this.ehdheaders).isVisible())
 			this.domUnlisten_(this.ehead, 'onScroll');
 		
@@ -853,6 +855,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		
 		// Bug ZK-1284: Scrolling on grid/listbox header could cause column heading/body to misalign
+		// B65-ZK-1793: Should check if ehdheaders is visible or not
 		if (ehead && zk(ehead).isVisible() && ehdheaders && zk(ehdheaders).isVisible() && //Bug ZK-1649: should check if ehead is visible or not
 				!(this.fire('onScroll', ehead.scrollLeft).stopped)) {
 			if (this._currentLeft != ehead.scrollLeft) {
