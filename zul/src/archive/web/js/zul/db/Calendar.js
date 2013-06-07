@@ -571,13 +571,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	getTime: function () {
 		return this._value || zUtl.today(this.getFormat());
 	},
-	_setTime: function (y, m, d, hr, mi) {
+	_setTime: function (y, m, d, fireOnChange) {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate();
 		this._value = _newDate(year, month, day, d == null);
-		this.fire('onChange', {value: this._value});
+		if (fireOnChange)
+			this.fire('onChange', {value: this._value});
 	},
 	// calendar-ctrl.js will override this function 
 	_clickDate: function (evt) {
@@ -599,14 +600,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	_chooseDate: function (target, val) {
-		if (target && !jq(target).attr('disabled')) {
+		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
 				dateobj = this.getTime();
 			switch(this._view) {
 			case 'day' :
 				var oldTime = this.getTime();
 				this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
-						dateobj.getMonth() + cell._monofs : null, val);
+						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
 				var newTime = this.getTime();
 				if (oldTime.getYear() == newTime.getYear() &&
 					oldTime.getMonth() == newTime.getMonth()) {
@@ -615,13 +616,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this.rerender();
 				break;
 			case 'month' :
+				this._setTime(null, val);
 				this._setView('day');
 				break;
 			case 'year' :
+				this._setTime(val);
 				this._setView('month');
 				break;
 			case 'decade' :
 				//Decade mode Set Year Also
+				this._setTime(val);
 				this._setView('year');
 				break;
 			}
