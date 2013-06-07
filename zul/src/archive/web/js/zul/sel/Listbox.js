@@ -158,16 +158,23 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		var self = this;
 		setTimeout(function () {
 			if (self.desktop) {
-				var bar = self._scrollbar,
-					embed = jq(self.$n()).data('embedscrollbar');
-				
-				bar.syncSize();
+				self.refreshBar_();
 				self._syncSelInView();
-				//show block DIV on header if vertical scroll-bar required
-				if (embed && bar.needV)
-					self.$n('headbar').style.display = 'block';
 			}
 		}, 200);
+	},
+	refreshBar_: function (showBar, scrollToTop) {
+		var bar = this._scrollbar,
+			embed = jq(this.$n()).data('embedscrollbar'),
+			headbar = this.$n('headbar');
+		if (bar) {
+			bar.syncSize(showBar);
+			if (scrollToTop)
+				bar.scrollTo(0, 0);
+			//show block DIV on header if vertical scroll-bar required
+			if (embed)
+				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
+		}
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again

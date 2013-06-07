@@ -13,6 +13,7 @@
 //reset table
 table {
 	border-spacing: 0;
+	border-collapse: collapse;
 	th, td {
 		padding: 0;
 	}
@@ -83,9 +84,8 @@ table {
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-width: 0 1px 1px 0;
-	border-color: transparent @gridBorderColor @gridBorderColor #FFFFFF;
-	border-style: none solid solid solid;
+	border-right: 1px solid @gridBorderColor;
+	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
 	.applyCSS3('box-sizing', 'content-box');
 	&-hover {
@@ -138,9 +138,7 @@ table {
 //row and cell
 .z-row {
 	&-inner {
-		border-width: 0 1px 0 0;
-		border-color: transparent #FFFFFF transparent transparent;
-		border-style: none solid none none;
+		border-right: 1px solid #FFFFFF;
 		.applyCSS3('box-sizing', 'content-box');
 	}
 	&:hover &-inner {
@@ -162,8 +160,8 @@ table {
 	}
 	&-icon {
 		display: inline-block;
-		width: 16px;
-		height: 16px;
+		width: @baseIconWidth;
+		height: @baseIconHeight;
 		cursor: pointer;
 		font-size: @baseFontSize;
 		color: black;

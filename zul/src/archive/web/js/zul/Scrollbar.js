@@ -109,6 +109,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		jq(this.$n('ver')).remove();
 		this._pos = this._barPos = this.currentPos = null;
 	},
+	hasVScroll: function () {
+		return this.needV;
+	},
+	hasHScroll: function () {
+		return this.needH;
+	},
 	syncSize: function (showScrollbar) {
 		this._checkBarRequired();
 		
@@ -119,23 +125,27 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			scroller = this.scroller,
 			hwrapper = this.$n('hor-wrapper'),
 			vwrapper = this.$n('ver-wrapper'),
-			scrollHeight = scroller.offsetHeight;
+			scrollHeight = scroller.offsetHeight,
+			needH = this.needH,
+			needV = this.needV;
 		
 		if (tpad && bpad) //for Mesh Widget rod
 			scrollHeight += tpad.offsetHeight + bpad.offsetHeight;
 		
-		if (this.needH || this.needV) {
+		if (needH || needV) {
 			scroller.style[zk.vendor + 'TransformOrigin'] = '0 0';
 			if (this.opts.embed) {
 				var cs = cave.style,
 					paddingB = hwrapper ? hwrapper.offsetHeight : 0,
 					paddingR = vwrapper ? vwrapper.offsetWidth : 0;
-				cs.paddingBottom = jq.px(paddingB);
-				cs.paddingRight = jq.px(paddingR);
+				if (needV)
+					cs.paddingBottom = jq.px(paddingB);
+				if (needH)
+					cs.paddingRight = jq.px(paddingR);
 			}
 		}
 		
-		if (this.needH) {
+		if (needH) {
 			var left = this.$n('hor-left'),
 				right = this.$n('hor-right'),
 				ind = this.$n('hor-indicator'),
@@ -145,7 +155,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				rwdh = right.offsetWidth,
 				hwdh = wdh - left.offsetWidth - rwdh;
 			
-			if (this.needV) {
+			if (needV) {
 				hws.width = jq.px(hwdh - rwdh);
 				right.style.right = jq.px(rwdh);
 			} else {
@@ -165,7 +175,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			//sync bar position
 			this._syncBarPosition('hor', this._barPos[0]);
 		}
-		if (this.needV) {
+		if (needV) {
 			var up = this.$n('ver-up'),
 				down = this.$n('ver-down'),
 				ind = this.$n('ver-indicator'),
@@ -175,7 +185,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				dhgh = down.offsetHeight,
 				vhgh = hgh - up.offsetHeight - dhgh;
 			
-			if (this.needH) {
+			if (needH) {
 				vws.height = jq.px(vhgh - dhgh);
 				down.style.bottom = jq.px(dhgh);
 			} else {

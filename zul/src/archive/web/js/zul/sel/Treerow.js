@@ -42,9 +42,9 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		if (p && (!no || !no.zclass)) {
 			var zcls = this.getZclass();
 			if (p.isDisabled())
-				scls += (scls ? ' ': '') + zcls + '-disd';
+				scls += (scls ? ' ': '') + this.$s('disabled');
 			if (p.isSelected())
-				scls += (scls ? ' ': '') + zcls + '-seld';
+				scls += (scls ? ' ': '') + this.$s('selected');
 		}
 		return scls;
 	},
@@ -68,12 +68,21 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	},
 	//@Override
 	doClick_: function(evt) {
-		var ti = this.parent;
-		if (evt.domTarget == this.$n('open')) {
+		var ti = this.parent,
+			tg = evt.domTarget;
+		if (tg == this.$n('open') || tg == this.$n('icon')) {
 			ti.setOpen(!ti._open);
 			evt.stop();
 		} else if (!ti.isDisabled())
 			this.$supers('doClick_', arguments);
+	},
+	//@Override
+	scrollIntoView: function () {
+		var bar = this.getTree()._scrollbar;
+		if (bar) {
+			bar.syncSize();
+			bar.scrollToElement(this.$n());
+		}
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
