@@ -45,7 +45,7 @@ ZK 6.5.3
   ZK-1797: A js error happen while to rsFocus a button in a popup in window
   ZK-1795: MVVM netsed template may cause exception
   ZK-1803: Setting a textbox visible=false and invalidate its parent leading to "Failed to mount" error in Firefox
-
+  ZK-1793: Grid with hidden header flickering back and forth when you scroll horizontally
   --------
 ZK 6.5.2
 Mar 26, 2013
