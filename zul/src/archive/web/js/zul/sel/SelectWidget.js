@@ -344,7 +344,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			allWidth = true;
 		if (hdfaker) {
 			for (var col = hdfaker.firstChild; col; col = col.nextSibling) {
-				if (!col.style.width) {
+				var wd = col.style.width,
+					isWdh = wd && wd != 'auto' && !wd.endsWith('%');
+				if (!wd || !isWdh) {
 					allWidth = false;
 					break;
 				}
@@ -373,7 +375,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._calcHgh();
 	},
 	_calcHgh: function () {
-		var rows = this.ebodyrows,
+		var rows = this.ebodyrows.rows,
 			n = this.$n(),
 			hgh = n.style.height,
 			isHgh = hgh && hgh != 'auto' && hgh.indexOf('%') < 0;
@@ -417,7 +419,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			var r = rows[j];
 			if (zk(r).isVisible()) {
 				++nVisiRows;
-				if (!firstVisiRow) firstVisiRow = r;
+				if (!firstVisiRow)
+					firstVisiRow = r;
 
 				if (nRows === nVisiRows) {
 					midVisiRow = r;
@@ -442,7 +445,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (hgh < 25) hgh = 25;
 
 				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight(): null;
-				if (!rowhgh) rowhgh = this._headHgh(20);
+				if (!rowhgh)
+					rowhgh = this._headHgh(20);
 
 				nRows = Math.round((hgh - diff)/ rowhgh);
 			}
@@ -451,7 +455,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (nRows) {
 			if (!hgh) {
-				if (!nVisiRows) hgh = this._headHgh(20, true) * nRows;
+				if (!nVisiRows)
+					hgh = this._headHgh(20, true) * nRows;
 				else if (nRows <= nVisiRows) {
 					var $midVisiRow = zk(midVisiRow);
 					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
@@ -461,13 +466,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
 			}
-			
 			this.ebody.style.height = hgh + 'px';
-			
-			// bug fixed for B50-3315594.zul on safari and chrome latest version
-			// Note: also test with B50-ZK-373 (since zk.safari.redoCSS will hide and show)
-			if (zk.safari)
-				zk(this.ebody).redoCSS();
 		} else {
 			this.ebody.style.height = '';
 			var focusEL = this.$n('a');
