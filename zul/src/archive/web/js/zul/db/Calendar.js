@@ -656,7 +656,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @param Date date the date object for the range if null, the current value
 	 * of {@link #getTime()} is assumed.
 	 * @returns boolean if true it means the date is out of range.
-	 * @since 7.0.0
+	 * @since 6.5.3
 	 */
 	isOutOfRange: function (left, date) {
 		var view = this._view,
