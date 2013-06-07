@@ -1,7 +1,7 @@
 <zk>
 	<label>Grid with hidden header should not flicker back and forth when you scroll horizontally.</label>
 	<grid width="300px">
-		<columns sizable="true" visible="true">
+		<columns sizable="true" visible="false">
 			<column label="Type" sort="auto" width="300px" />
 			<column label="Content" width="300px"/>
 		</columns>
