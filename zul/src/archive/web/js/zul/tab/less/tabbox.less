@@ -143,6 +143,8 @@
 		width: 100%;
 		zoom: 1;
 		-moz-user-select: none;
+		clear: both;
+		display: table;
 
 		& > .z-clear {
 			height: 0;
@@ -151,28 +153,6 @@
 		& > .@{tab} {
 			.tab();
 		}
-	}	
-
-	&-edge {
-		float: left;
-		width: 1px;
-		height: 1px;
-		margin: 0 !important;
-		padding: 0 !important;
-		border: 0 none !important;
-		background: transparent !important;
-		font-size: 0 !important;
-		line-height: 0 !important;
-		overflow: hidden;
-		zoom: 1;
-	}
-
-	&-space {
-		font-size: 0;
-		line-height: 0;
-		background: none;
-		border: 0;
-		height: auto;
 	}
 }
 
