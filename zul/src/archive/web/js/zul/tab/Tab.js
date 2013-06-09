@@ -194,7 +194,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_calcHgh: function () {
 		var n = this.$n(),
-			cnt = this.$n('content')
+			cnt = this.$n('content'),
 			tabbox = this.getTabbox();
 		if (cnt && (cnt = cnt.parentNode))
 			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
