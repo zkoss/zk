@@ -116,6 +116,50 @@ zul.db.Renderer = {
 		return 'Wk';
 	},
 	/**
+	 * Generates the title of the content HTML.
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param Array out an array to output HTML fragments.
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @since 6.5.3
+	 */
+	titleHTML: function (wgt, out, localizedSymbols) {
+		var uuid = wgt.uuid,
+			view = wgt._view,
+			val = wgt.getTime(),
+			m = val.getMonth(),
+			y = val.getFullYear(),
+			ydelta = new zk.fmt.Calendar(val, wgt._localizedSymbols).getYear() - y, 
+			yofs = y - (y % 10 + 1),
+			ydec = zk.parseInt(y/100),
+			text = wgt.getZclass() + '-ctrler',
+			minyear = wgt._minyear,
+			maxyear = wgt._maxyear;
+		
+		switch(view) {
+		case 'day':
+			out.push('<span id="', uuid, '-tm" class="', text, '">',
+					localizedSymbols.SMON[m], '</span> <span id="', uuid,
+					'-ty" class="', text, '">', y + ydelta, '</span>');
+			break;
+		case 'month':
+			out.push('<span id="', uuid, '-tm" class="', text, '">',
+					localizedSymbols.SMON[m], '</span> <span id="', uuid, 
+					'-ty" class="', text, '">', y + ydelta, '</span>');
+			break;
+		case 'year':
+			out.push('<span id="', uuid, '-tyd" class="', text, '">',
+					(yofs + 1 > minyear ? yofs + 1 : minyear ) + ydelta, '-', 
+					(yofs + 10 < maxyear ? yofs + 10 : maxyear) + ydelta, '</span>');
+			break;
+		case 'decade':
+			var ycen = ydec*100;
+			out.push('<span id="', uuid, '-tyd" class="', text, '">',
+					(ycen > minyear ? ycen : minyear) + ydelta , '-', 
+					(ycen + 99 < maxyear ? ycen + 99 : maxyear) + ydelta , '</span>');
+			break;
+		}
+	},
+	/**
 	 * Renderer the dayView for this calendar
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
@@ -125,7 +169,8 @@ zul.db.Renderer = {
 	dayView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
 			zcls = wgt.getZclass();
-		out.push('<tr><td colspan="3"><table id="', uuid, '-mid" class="', zcls, '-calday" width="100%" border="0" cellspacing="0" cellpadding="0">',
+		out.push('<tr><td colspan="3"><table id="', uuid, '-mid" class="', zcls, 
+				'-calday" width="100%" border="0" cellspacing="0" cellpadding="0">',
 				'<tr class="', zcls, '-caldow">');
 		var sun = (7 - localizedSymbols.DOW_1ST) % 7, sat = (6 + sun) % 7;
 		for (var j = 0 ; j < 7; ++j)
@@ -149,7 +194,8 @@ zul.db.Renderer = {
 	monthView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
 			zcls = wgt.getZclass();
-		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calmon" width="100%" border="0" cellspacing="0" cellpadding="0">');
+		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, 
+				'-calmon" width="100%" border="0" cellspacing="0" cellpadding="0">');
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
 			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'">', localizedSymbols.SMON[j] + '</td>');
@@ -172,11 +218,14 @@ zul.db.Renderer = {
 			y = val.getFullYear(),
 			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y, 
 			yofs = y - (y % 10 + 1);
-		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
+			minyear = wgt._minyear;
+			maxyear = wgt._maxyear;		
+		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, 
+				'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
 
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			if (yofs + ydelta < 1900 || yofs + ydelta > 2099) {
+			if (yofs + ydelta < minyear || yofs + ydelta > maxyear) {
 				out.push('<td class="', zcls, '-disd">&nbsp;</td>');
 				if (j + 1 == 12)
 					out.push('</tr>'); 
@@ -203,21 +252,28 @@ zul.db.Renderer = {
 			d = val.getDate(),
 			y = val.getFullYear(),
 			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y,
-			ydec = zk.parseInt(y/100);
+			ydec = zk.parseInt(y/100),
+			minyear = wgt._minyear,
+			maxyear = wgt._maxyear,
+			mindec = zk.parseInt(minyear/10) * 10;
+			maxdec = zk.parseInt(maxyear/10) * 10;
+			
 		
-		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
+		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls,
+				'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
 		var temp = ydec*100 - 10;
 		for (var j = 0 ; j < 12; ++j, temp += 10) {
 			if (!(j % 4)) out.push('<tr>');
-			if (temp < 1900 || temp > 2090) {
+			if (temp < mindec || temp > maxdec) {
 				out.push('<td class="', zcls, '-disd">&nbsp;</td>');
 				if (j + 1 == 12)
 					out.push('</tr>'); 
 				continue;
 			}
-			
-			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="', (y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"',
-					' >', temp + ydelta, '-<br />', temp + ydelta + 9, '</td>');
+			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="',
+					(y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"', ' >', 
+					(temp < minyear ? minyear : temp) + ydelta , '-<br />', 
+					(temp + 9 > maxyear ? maxyear : temp + 9) + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 	}
@@ -229,6 +285,8 @@ var Calendar =
  */
 zul.db.Calendar = zk.$extends(zul.Widget, {
 	_view : "day", //"day", "month", "year", "decade",
+	_minyear: 1900,
+	_maxyear: 2099,
 	
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -370,7 +428,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ofs *= 10;
 			
 			var y = oldTime.getFullYear();
-			if (y + ofs < 1900 || y + ofs > 2099)
+			if (y + ofs < this._minyear || y + ofs > this._maxyear)
 				return;// out of range
 //			break;
 		}		
@@ -424,52 +482,52 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	bind_: function (){
 		this.$supers(Calendar, 'bind_', arguments);
 		var node = this.$n(),
-			title = this.$n("title"),
-			mid = this.$n("mid"),
-			tdl = this.$n("tdl"),
-			tdr = this.$n("tdr"),
+			title = this.$n('title'),
+			mid = this.$n('mid'),
+			tdl = this.$n('tdl'),
+			tdr = this.$n('tdr'),
 			zcls = this.getZclass();
 		jq(title).hover(
 			function () {
-				jq(this).toggleClass(zcls + "-title-over");
+				jq(this).toggleClass(zcls + '-title-over');
 			},
 			function () {
-				jq(this).toggleClass(zcls + "-title-over");
+				jq(this).toggleClass(zcls + '-title-over');
 			}
 		);
 		if (this._view != 'decade') 
 			this._markCal({silent: true});
 
-		this.domListen_(title, "onClick", '_changeView')
-			.domListen_(mid, "onClick", '_clickDate')
-			.domListen_(tdl, "onClick", '_clickArrow')
-			.domListen_(tdl, "onMouseOver", '_doMouseEffect')
-			.domListen_(tdl, "onMouseOut", '_doMouseEffect')
-			.domListen_(tdr, "onClick", '_clickArrow')
-			.domListen_(tdr, "onMouseOver", '_doMouseEffect')
-			.domListen_(tdr, "onMouseOut", '_doMouseEffect')
-			.domListen_(mid, "onMouseOver", '_doMouseEffect')
-			.domListen_(mid, "onMouseOut", '_doMouseEffect')
+		this.domListen_(title, 'onClick', '_changeView')
+			.domListen_(mid, 'onClick', '_clickDate')
+			.domListen_(tdl, 'onClick', '_clickArrow')
+			.domListen_(tdl, 'onMouseOver', '_doMouseEffect')
+			.domListen_(tdl, 'onMouseOut', '_doMouseEffect')
+			.domListen_(tdr, 'onClick', '_clickArrow')
+			.domListen_(tdr, 'onMouseOver', '_doMouseEffect')
+			.domListen_(tdr, 'onMouseOut', '_doMouseEffect')
+			.domListen_(mid, 'onMouseOver', '_doMouseEffect')
+			.domListen_(mid, 'onMouseOut', '_doMouseEffect')
 			.domListen_(node, 'onMousewheel');
 
 		this._updFormData(this.getTime());
 	},
 	unbind_: function () {
 		var node = this.$n(),
-			title = this.$n("title"),
-			mid = this.$n("mid"),
-			tdl = this.$n("tdl"),
-			tdr = this.$n("tdr");
-		this.domUnlisten_(title, "onClick", '_changeView')
-			.domUnlisten_(mid, "onClick", '_clickDate')
-			.domUnlisten_(tdl, "onClick", '_clickArrow')			
-			.domUnlisten_(tdl, "onMouseOver", '_doMouseEffect')
-			.domUnlisten_(tdl, "onMouseOut", '_doMouseEffect')
-			.domUnlisten_(tdr, "onClick", '_clickArrow')
-			.domUnlisten_(tdr, "onMouseOver", '_doMouseEffect')
-			.domUnlisten_(tdr, "onMouseOut", '_doMouseEffect')
-			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
-			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
+			title = this.$n('title'),
+			mid = this.$n('mid'),
+			tdl = this.$n('tdl'),
+			tdr = this.$n('tdr');
+		this.domUnlisten_(title, 'onClick', '_changeView')
+			.domUnlisten_(mid, 'onClick', '_clickDate')
+			.domUnlisten_(tdl, 'onClick', '_clickArrow')			
+			.domUnlisten_(tdl, 'onMouseOver', '_doMouseEffect')
+			.domUnlisten_(tdl, 'onMouseOut', '_doMouseEffect')
+			.domUnlisten_(tdr, 'onClick', '_clickArrow')
+			.domUnlisten_(tdr, 'onMouseOver', '_doMouseEffect')
+			.domUnlisten_(tdr, 'onMouseOut', '_doMouseEffect')
+			.domUnlisten_(mid, 'onMouseOver', '_doMouseEffect')
+			.domUnlisten_(mid, 'onMouseOut', '_doMouseEffect')
 			.domUnlisten_(node, 'onMousewheel')
 			.$supers(Calendar, 'unbind_', arguments);
 		this.efield = null;
@@ -487,56 +545,56 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 	},
 	_clickArrow: function (evt) {
-		var node = evt.domTarget.id.indexOf("-ly") > 0 ? this.$n("tdl") :
-				   evt.domTarget.id.indexOf("-ry") > 0 ?  this.$n("tdr") :
+		var node = evt.domTarget.id.indexOf('-ly') > 0 ? this.$n('tdl') :
+				   evt.domTarget.id.indexOf('-ry') > 0 ?  this.$n('tdr') :
 				   evt.domTarget;
 		if (jq(node).hasClass(this.getZclass() + '-icon-disd'))
 			return;
-		this._shiftView(node.id.indexOf("-tdl") > 0 ? -1 : 1);
+		this._shiftView(node.id.indexOf('-tdl') > 0 ? -1 : 1);
 	},
 	_shiftView: function (ofs) {
 		switch(this._view) {
-		case "day" :
-			this._shiftDate("month", ofs);
+		case 'day' :
+			this._shiftDate('month', ofs);
 			break;
-		case "month" :
-			this._shiftDate("year", ofs);
+		case 'month' :
+			this._shiftDate('year', ofs);
 			break;
-		case "year" :
-			this._shiftDate("year", ofs*10);
+		case 'year' :
+			this._shiftDate('year', ofs*10);
 			break;
-		case "decade" :
-			this._shiftDate("year", ofs*100);
-//			break;
+		case 'decade' :
+			this._shiftDate('year', ofs*100);
+			break;
 		}
 		this.rerender();
 	},
 	_doMousewheel: function (evt, intDelta) {		
-		if (jq(this.$n(-intDelta > 0 ? "tdr": "tdl")).hasClass(this.getZclass() + '-icon-disd'))
+		if (jq(this.$n(-intDelta > 0 ? 'tdr': 'tdl')).hasClass(this.getZclass() + '-icon-disd'))
 			return;
 		this._shiftView(intDelta > 0 ? -1: 1);
 		evt.stop();
 	},
 	_doMouseEffect: function (evt) {
-		var	ly = this.$n("ly"),
-			ry = this.$n("ry"), 
-			$node = evt.domTarget == ly ? jq(this.$n("tdl")) :
-					evt.domTarget == ry ? jq(this.$n("tdr")) : jq(evt.domTarget),
+		var	ly = this.$n('ly'),
+			ry = this.$n('ry'), 
+			$node = evt.domTarget == ly ? jq(this.$n('tdl')) :
+					evt.domTarget == ry ? jq(this.$n('tdr')) : jq(evt.domTarget),
 			zcls = this.getZclass();
 		
 		if ($node.hasClass(zcls + '-disd'))
 			return;
 			
-		if ($node.is("."+zcls+"-seld")) {
-			$node.removeClass(zcls + "-over")
-				.toggleClass(zcls + "-over-seld");
+		if ($node.is('.'+zcls+'-seld')) {
+			$node.removeClass(zcls + '-over')
+				.toggleClass(zcls + '-over-seld');
 		} else {
 			//ZK-1215: onMouseOver and onMouseOut use the same function,
 			//	do different behavior separately
-			if (evt.name == "onMouseOver") {
-				$node.toggleClass(zcls + "-over");
+			if (evt.name == 'onMouseOver') {
+				$node.toggleClass(zcls + '-over');
 			} else {
-				$node.removeClass(zcls + "-over");
+				$node.removeClass(zcls + '-over');
 			}
 		}
 	},
@@ -559,7 +617,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var target = evt.domTarget, val;
 		for (; target; target = target.parentNode)
 			try { //Note: _dt is also used in mold/calendar.js
-				if ((val = jq(target).attr("_dt")) !== undefined) {
+				if ((val = jq(target).attr('_dt')) !== undefined) {
 					val = zk.parseInt(val);
 					break;
 				}
@@ -578,7 +636,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var cell = target,
 				dateobj = this.getTime();
 			switch(this._view) {
-			case "day" :
+			case 'day' :
 				var oldTime = this.getTime();
 				this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
 						dateobj.getMonth() + cell._monofs : null, val);
@@ -589,19 +647,19 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				} else
 					this.rerender();
 				break;
-			case "month" :
+			case 'month' :
 				this._setTime(null, val);
-				this._setView("day");
+				this._setView('day');
 				break;
-			case "year" :
+			case 'year' :
 				this._setTime(val);
-				this._setView("month");
+				this._setView('month');
 				break;
-			case "decade" :
+			case 'decade' :
 				//Decade mode Set Year Also
 				this._setTime(val);
-				this._setView("year");
-//				break;
+				this._setView('year');
+				break;
 			}
 		}
 	},
@@ -612,36 +670,36 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			day = dateobj.getDate(),
 			nofix;
 		switch(opt) {
-		case "day" :
+		case 'day' :
 			day += ofs;
 			nofix = true;
 			break;
-		case "month" :
+		case 'month' :
 			month += ofs;
 			break;
-		case "year" :
+		case 'year' :
 			year += ofs;
 			break;
-		case "decade" :
+		case 'decade' :
 			year += ofs;
-//			break;
+			break;
 		}
 		this._value = _newDate(year, month, day, !nofix);
 		this.fire('onChange', {value: this._value, shallClose: false, shiftView: true});
 	},
 	_changeView : function (evt) {
-		var tm = this.$n("tm"),
-			ty = this.$n("ty"),
-			tyd = this.$n("tyd"),
-			title = this.$n("title");
+		var tm = this.$n('tm'),
+			ty = this.$n('ty'),
+			tyd = this.$n('tyd'),
+			title = this.$n('title');
 		if (evt.domTarget == tm)
-			this._setView("month");
+			this._setView('month');
 		else if (evt.domTarget == ty)
-			this._setView("year");
+			this._setView('year');
 		else if (evt.domTarget == tyd )
-			this._setView("decade");
+			this._setView('decade');
 		else if (tm != null && evt.domTarget == title)
-			this._setView("month");
+			this._setView('month');
 		evt.stop();
 	},
 	_setView : function (view) {
@@ -649,6 +707,20 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this._view = view;
 			this.rerender();
 		}
+	},
+	getLocalizedSymbols: function () {
+		return this._localizedSymbols || {
+			DOW_1ST: zk.DOW_1ST,
+				ERA: zk.ERA,    
+			 YDELTA: zk.YDELTA,
+			   SDOW: zk.SDOW,
+			  S2DOW: zk.S2DOW,
+			   FDOW: zk.FDOW,
+			   SMON: zk.SMON,
+			  S2MON: zk.S2MON,
+			   FMON: zk.FMON,
+				APM: zk.APM
+		};
 	},
 	/**
 	 * Check whether the date is out of range between 1900~2100 years
@@ -665,20 +737,26 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y, 
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y/100);
+			minyear = this._minyear;
+			maxyear = this._maxyear;		
+			mincen = zk.parseInt(this._minyear / 100) * 100;
+			maxcen = zk.parseInt(this._maxyear / 100) * 100;	
+			mindec = zk.parseInt(this._minyear / 10) * 10;
+			maxdec = zk.parseInt(this._maxyear / 10) * 10;			
 		
 		if (view == 'decade') {
 			var value = ydec*100 + ydelta;
-			return left ? value == 1900 : value == 2000;
+			return left ? value == mincen : value == maxcen;
 		} else if (view == 'year') {
 			var value = yofs + ydelta;
-			return left ? value < 1900 : value + 10 >= 2099;
+			return left ? value < this._minyear : value + 10 >= maxyear;
 		} else if (view == 'day') {
 			var value = y + ydelta,
 				m = val.getMonth();
-			return left ? value <= 1900 && m == 0 : value >= 2099 && m == 11;
+			return left ? value <= minyear && m == 0 : value >= maxyear && m == 11;
 		} else {
 			var value = y + ydelta;
-			return left ? value <= 1900 : value >= 2099;
+			return left ? value <= minyear : value >= maxyear;
 		}
 	},
 	_markCal: function (opts) {
@@ -701,49 +779,49 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				today = zUtl.today(); //no time part
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
-				var week = this.$n("w" + j);
+				var week = this.$n('w' + j);
 				if (week != null) {
 					for (var k = 0; k < 7; ++k, ++cur) {
 						v = cur <= 0 ? prev + cur: cur <= last ? cur: cur - last;
 						if (k == 0 && cur > last)
-							week.style.display = "none";
+							week.style.display = 'none';
 						else {
-							if (k == 0) week.style.display = "";
+							if (k == 0) week.style.display = '';
 							var $cell = jq(week.cells[k]),
 								monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
 								bSel = cur == d;
 							
 							// check whether the date is out of range
-							if (y >= 2099 && m == 11 && monofs == 1
-									|| y <= 1900 && m == 0 && monofs == -1) {
-								$cell.addClass(zcls + "-disd");
+							if (y >= this._maxyear && m == 11 && monofs == 1
+									|| y <= this._minyear && m == 0 && monofs == -1) {
+								$cell.addClass(zcls + '-disd');
 								continue;
 							}
 								
 							$cell[0]._monofs = monofs;
 							$cell.css('textDecoration', '').
-								removeClass(zcls+"-seld");
+								removeClass(zcls + '-seld');
 								
 							if (bSel) {
-								$cell.addClass(zcls+"-seld");
-								if ($cell.hasClass(zcls + "-over"))
-									$cell.addClass(zcls + "-over-seld");
+								$cell.addClass(zcls + '-seld');
+								if ($cell.hasClass(zcls + '-over'))
+									$cell.addClass(zcls + '-over-seld');
 							} else {
-								$cell.removeClass(zcls+"-seld");
+								$cell.removeClass(zcls + '-seld');
 								
 								//ZK-1215: use mouse and keyboard to operate calendar at the same time
 								//	must check and remove "-over-seld" css.
-								if ($cell.hasClass(zcls + "-over-seld")) {
-									$cell.removeClass(zcls + "-over")
-										.removeClass(zcls + "-over-seld");
+								if ($cell.hasClass(zcls + '-over-seld')) {
+									$cell.removeClass(zcls + '-over')
+										.removeClass(zcls + '-over-seld');
 								}
 							}
 								
 								
 							//not same month
-							$cell[monofs ? 'addClass': 'removeClass'](zcls+"-outside")
+							$cell[monofs ? 'addClass': 'removeClass'](zcls + '-outside')
 								[zul.db.Renderer.disabled(this, y, m + monofs, v, today) ? 
-								'addClass': 'removeClass'](zcls+"-disd").
+								'addClass': 'removeClass'](zcls + '-disd').
 								html(zul.db.Renderer.cellHTML(this, y, m + monofs, v, monofs)).
 								attr('_dt', v);
 						}
@@ -758,7 +836,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				
 			for (var j = 0; j < 12; ++j)
 				if (node = this.$n(field + j))
-					jq(node)[index == j ? 'addClass': 'removeClass'](zcls+"-seld");
+					jq(node)[index == j ? 'addClass': 'removeClass'](zcls + '-seld');
 		}
 	}
 });
