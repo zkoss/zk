@@ -44,7 +44,7 @@ function (out) {
 			out.push('<div class="', this.$s('spacing'), '" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
 
 		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
-					'<div align="left" class="', this.$s('header'), '" >');
+					'<div class="', this.$s('header'), '" >');
 
 		if (this.isClosable())
 			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');

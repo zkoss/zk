@@ -5,7 +5,7 @@
 .closeHoverStyle() {
 	background-color: @iconHoverBackgoundColor;
 	border: 1px solid #8FB9D0;
-	border-radius: 4px;
+	.borderRadius();
 	line-height: 13px;
 }
 
@@ -28,7 +28,7 @@
 	-moz-user-select: none;
 	border: 1px solid #E1E1E1;
 	border-width: 1px 1px 0px 0px;
-	border-radius: 4px 4px 0px 0px;
+	.topBorderRadius();
 	height: 32px;
 	text-align: center;
 
@@ -196,7 +196,7 @@
 		zoom: 1;
 		border: 1px solid #E1E1E1;
 		border-top: 0px;	
-		 
+
 		/* 
 		&-content {  Bug 2104974 
 			height: 100%;
@@ -247,7 +247,7 @@
 				& > .@{tab} {
 					float: none;
 					border-width: 0px 0px 1px 1px;
-					border-radius: 4px 0px 0px 4px;
+					.leftBorderRadius();
 
 					&:first-child {
 						border-top: 1px solid #E1E1E1;
@@ -317,7 +317,7 @@
 				display: block;
 				border: 1px solid #E1E1E1;
 				border-bottom: 0px;
-				border-radius: 4px;
+				.borderRadius();
 				padding-top: 2px;
 				height: 24px;
 				text-align: center;			
@@ -361,7 +361,7 @@
 
 				& > .@{tab} {
 					border-width: 0px 1px 1px 0px;
-					border-radius: 0px 4px 4px 0px;
+					.rightBorderRadius();
 
 					& > .@{tab}-close {
 						left: auto;
@@ -402,7 +402,7 @@
 
 			& > .@{tab} {
 				border-width: 0px 1px 1px 0px;
-				border-radius: 0px 0px 4px 4px;
+				.bottomBorderRadius();
 
 				&:first-child {
 					border-left: 1px solid #E1E1E1;
@@ -416,7 +416,7 @@
 
 		&.@{tabbox}-scroll > .@{tabs}-right, 
 		&.@{tabbox}-scroll > .@{tabs}-left {
-			border-radius: 0px 0px 4px 4px;
+			.bottomBorderRadius();
 		}
 
 		// .z-tabbox-horizontal-bottom .z-tabpanels
@@ -428,7 +428,7 @@
 		// .z-tabbox-horizontal-bottom.z-tabbox-scroll .z-tabs
 		&.@{tabbox}-scroll .@{tabs} {
 			& > .@{tabs}-right, & > .@{tabs}-left {
-				border-radius: 0px 0px 4px 4px;
+				.bottomBorderRadius();
 			}
 		}
 
@@ -459,7 +459,7 @@
 		position: absolute;
 		z-index: 25;
 		border: 1px solid #E1E1E1;
-		border-radius: 4px 4px 0px 0px;
+		.topBorderRadius();
 		padding-top: 7px;
 	}
 
@@ -482,7 +482,7 @@
 
 				padding: 0;
 				border: 0;
-				border-radius: 0;
+				.borderRadius('0px');
 				float: none;				
 
 				& > .@{tab}-header {
@@ -492,6 +492,7 @@
 					border: 1px solid #CFCFCF;
 					border-top: 0;
 					height: 100%;
+					text-align: left;
 				}
 
 				&:first-child {
