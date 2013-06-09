@@ -339,6 +339,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					}
 					if (toolbar && tabbox._scrolling) 
 						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
+					
 				} else {
 					if (!tbx.style.width) {
 						if (tbx.offsetWidth) {
@@ -351,6 +352,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					}
 				}
 			}
+			if(toolbar)
+				console.log(zk(toolbar).padBorderWidth() + 'px')
 	},
 	_fixHgh: function () {
 		var tabbox = this.getTabbox(),
@@ -360,10 +363,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (tabbox.isVertical()) {
 			var tabs = this.$n(),
 				tbx = tabbox.$n(),
-				u = this.$n('up'),
-				d = this.$n('down'),
+				u = tabbox.$n('up'),
+				d = tabbox.$n('down'),
 				cave =  this.$n('cave'),
-				btnsize = u && d ? isNaN(u.offsetHeight + d.offsetHeight) ? 0 : u.offsetHeight + d.offsetHeight : 0,
 				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
@@ -376,7 +378,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			this._forceStyle(tabs, 'h', jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
-				this._forceStyle(head, 'h', jq.px0(tabs.offsetHeight - btnsize));
+				this._forceStyle(head, 'h', jq.px0(tabs.offsetHeight));
 			} else {
 				this._forceStyle(head, 'h', jq.px0(jq(head).zk.revisedHeight(tabs.offsetHeight, true)));
 			}
@@ -387,6 +389,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight - (2 - zk.parseInt(jq(this.$n('cave')).css('padding-top'))), true)));
 			// Merge breeze: now in vertical orientation Tabs has no border, but Tabpanels 
 			// still has border, so we need to introduce a 2px offset
+			if(u && d) {
+				u.style.width = d.style.width = jq.px0(head.offsetWidth);
+			}
 		} else {
 			if (head) //accordion have no head
 				head.style.height = '';
