@@ -43,15 +43,14 @@ function (out) {
 		if (tbx.getPanelSpacing() && this.getIndex())
 			out.push('<div class="', this.$s('spacing'), '" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
 
-		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
-					'<div class="', this.$s('header'), '" >');
+		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>');
 
 		if (this.isClosable())
 			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');
 
 		this.contentRenderer_(out);
-			
-		out.push('</div></div>');
+
+		out.push('</div>');
 
 		if (n) // panel already rendered, do insert
 			jq(n).prepend(out.join(''));

@@ -36,8 +36,7 @@
 		border-left: 1px solid #E1E1E1;
 	}
 
-	& >	.@{tab}-text,
-	& > .@{tab}-header > .@{tab}-text {
+	& >	.@{tab}-text {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		color: #555555;
@@ -49,8 +48,7 @@
 		padding: 8px 12px 4px 12px;
 	}
 
-	& > .@{tab}-close,
-	& > .@{tab}-header > .@{tab}-close {
+	& > .@{tab}-close {
 		cursor: pointer;
 		display: block;
 		width: 15px;
@@ -156,10 +154,10 @@
 		& > .z-clear {
 			height: 0;
 		}
-	}		
 
-	&-content > .@{tab} {
-		.tab();
+		& > .@{tab} {
+			.tab();
+		}
 	}	
 
 	&-edge {
@@ -481,25 +479,21 @@
 				.tab();
 
 				padding: 0;
-				border: 0;
 				.borderRadius('0px');
-				float: none;				
-
-				& > .@{tab}-header {
-					cursor: pointer;
-					position: relative;
-					zoom: 1;
-					border: 1px solid #CFCFCF;
-					border-top: 0;
-					height: 100%;
-					text-align: left;
-				}
+				float: none;
+				cursor: pointer;
+				position: relative;
+				zoom: 1;
+				border: 1px solid #CFCFCF;
+				border-top: 0;
+				height: 32px;
+				text-align: left;
 
 				&:first-child {
-					border-left: 0;
+					border-left: auto;
 				}
 
-				& > .@{tab}-header > .@{tab}-close {
+				& > .@{tab}-close {
 					right: 5px;
 					opacity: .6;
 					filter: alpha(opacity=60);
@@ -514,7 +508,7 @@
 					}
 				}
 
-				& > .@{tab}-header > .@{tab}-text {
+				& > .@{tab}-text {
 					color: #555555;
 					font-weight: bold;
 					text-decoration: none;
@@ -526,7 +520,7 @@
 					.buttonBackground();
 					box-shadow: none;
 
-					& > .@{tab}-header > .@{tab}-close {
+					& > .@{tab}-close {
 						opacity: .8;
 						filter: alpha(opacity=80);
 					}
@@ -537,7 +531,7 @@
 					}
 				}
 
-				&-disabled > .@{tab}-header {
+				&-disabled {
 					color: gray;
 					cursor: default;
 					opacity: .6;
