@@ -14,7 +14,7 @@
 @tab: z-tab;
 @tabpanels: z-tabpanels;
 @tabpanel: z-tabpanel;
-@z-toolbar-tabs: z-toolbar-tabs;
+@toolbar-tabs: z-toolbar-tabs;
 
 .tab() {
 	.buttonBackground();
@@ -131,13 +131,6 @@
 		user-select: none;
 	}
 
-	&-right, &-left, &-up, &-down {
-		display: none;
-		&:hover {
-			color: #91CBFD;
-		}
-	}
-
 	& > .@{tabs}-content {
 		padding-left: 0;
 		padding-top: 0;
@@ -203,7 +196,7 @@
 	}
 }
 
-.@{z-toolbar-tabs} {
+.@{toolbar-tabs} {
 	overflow: hidden;
 	position: absolute;
 	right: 0;
@@ -230,6 +223,13 @@
 .@{tabbox} {
 	overflow: hidden;
 	position: relative;
+
+	&-right, &-left, &-up, &-down {
+		display: none;
+		&:hover {
+			color: #91CBFD;
+		}
+	}
 	
 	.verticalStyle() {
 		// .z-tabbox-vertical .z-tabs
@@ -305,7 +305,7 @@
 				margin: 24px 0px 24px 0px;
 			}
 
-			& > .@{tabs}-up, & > .@{tabs}-down {
+			& > .@{tabbox}-up, & > .@{tabbox}-down {
 				.buttonBackground();
 				cursor: pointer;
 				height: auto !important;
@@ -321,11 +321,11 @@
 				text-align: center;			
 			}
 
-			& > .@{tabs}-up {	
+			& > .@{tabbox}-up {	
 				top: 0px;	
 			}
 
-			& > .@{tabs}-down {
+			& > .@{tabbox}-down {
 				bottom: 0px;
 			}			
 		}		
@@ -380,8 +380,8 @@
 			}			
 		}
 
-		&.@{tabbox}-scroll > .@{tabs}-up, 
-		&.@{tabbox}-scroll > .@{tabs}-down {
+		&.@{tabbox}-scroll > .@{tabbox}-up, 
+		&.@{tabbox}-scroll > .@{tabbox}-down {
 			right: 0;
 		}
 
@@ -412,8 +412,9 @@
 			}
 		}
 
-		&.@{tabbox}-scroll > .@{tabs}-right, 
-		&.@{tabbox}-scroll > .@{tabs}-left {
+		// .z-tabbox-horizontal-bottom.z-tabbox-scroll .z-tabs
+		&.@{tabbox}-scroll > .@{tabbox}-right, 
+		&.@{tabbox}-scroll > .@{tabbox}-left {
 			.bottomBorderRadius();
 		}
 
@@ -423,14 +424,8 @@
 			border-bottom: 0;
 		}
 
-		// .z-tabbox-horizontal-bottom.z-tabbox-scroll .z-tabs
-		&.@{tabbox}-scroll .@{tabs} {
-			& > .@{tabs}-right, & > .@{tabs}-left {
-				.bottomBorderRadius();
-			}
-		}
-
-		.@{z-toolbar-tabs} {
+		// .z-tabbox-horizontal-bottom .z-toolbar-tabs
+		.@{toolbar-tabs} {
 			border-bottom: 0;
 			border-top: 1px solid #E1E1E1;
 			bottom: 0;
@@ -446,8 +441,8 @@
 		margin: 0px 25px 0px 25px;
 	}
 
-	&-scroll > .@{tabs}-left,
-	&-scroll > .@{tabs}-right {
+	&-scroll > &-left,
+	&-scroll > &-right {
 		.buttonBackground();
 		width: 25px;
 		height: 33px;
@@ -461,7 +456,7 @@
 		padding-top: 7px;
 	}
 
-	&-scroll > .@{tabs}-right {
+	&-scroll > &-right {
 		right: 0;
 	}
 	
