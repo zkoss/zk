@@ -133,20 +133,14 @@
 		user-select: none;
 	}
 
-	&-right, &-left, &-up, &-down,
-	& > .z-toolbar-tabs-outer > &-right, 
-	& > .z-toolbar-tabs-outer > &-left {
-		display: none;		
-	}
-
 	&-right, &-left, &-up, &-down {
+		display: none;
 		&:hover {
 			color: #91CBFD;
 		}
 	}
 
-	& > .@{tabs}-content,
-	& > .z-toolbar-tabs-outer > .@{tabs}-content {
+	& > .@{tabs}-content {
 		padding-left: 0;
 		padding-top: 0;
 		border-bottom: 1px solid #E1E1E1;
@@ -219,6 +213,7 @@
 	z-index: 1;
 	padding: 0 4px;
 	border-bottom: 1px solid #E1E1E1;
+	height: 33px;
 
 	&-outer {
 		border-bottom: 0;
@@ -401,8 +396,7 @@
 
 	&-horizontal-bottom {
 		
-		& > .@{tabs} > .@{tabs}-content,
-		& > .@{tabs} > .z-toolbar-tabs-outer > .@{tabs}-content {
+		& > .@{tabs} > .@{tabs}-content {
 			border-bottom: 0;
 			border-top: 1px solid #E1E1E1;
 
@@ -418,7 +412,12 @@
 					box-shadow: 0px -1px 0 #FFFFFF;
 				}
 			}
-		}	
+		}
+
+		&.@{tabbox}-scroll > .@{tabs}-right, 
+		&.@{tabbox}-scroll > .@{tabs}-left {
+			border-radius: 0px 0px 4px 4px;
+		}
 
 		// .z-tabbox-horizontal-bottom .z-tabpanels
 		.@{tabpanel} {		
@@ -428,9 +427,7 @@
 
 		// .z-tabbox-horizontal-bottom.z-tabbox-scroll .z-tabs
 		&.@{tabbox}-scroll .@{tabs} {
-			& > .@{tabs}-right, & > .@{tabs}-left,
-			& > .z-toolbar-tabs-outer > .@{tabs}-right, 
-			& > .z-toolbar-tabs-outer > .@{tabs}-left {
+			& > .@{tabs}-right, & > .@{tabs}-left {
 				border-radius: 0px 0px 4px 4px;
 			}
 		}
@@ -438,6 +435,8 @@
 		.@{z-toolbar-tabs} {
 			border-bottom: 0;
 			border-top: 1px solid #E1E1E1;
+			bottom: 0;
+			top: auto;
 		}
 	}
 
@@ -453,7 +452,7 @@
 	&-scroll > .@{tabs}-right {
 		.buttonBackground();
 		width: 25px;
-		height: 32px;
+		height: 33px;
 		display: block;
 		text-align: center;
 		cursor: pointer;

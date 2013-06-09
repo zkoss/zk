@@ -170,17 +170,15 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				toolbar = toolbar.$n();
 			if (tabbox._scrolling) { //already in scrolling status
 				var btnsize = this._getArrowSize();
-				if (toolbar) {
-					var outer, hgh;
-						
-					this.$n('right').style.right = toolbar.offsetWidth + 'px';
+				if (toolbar) {						
+					tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
 				}
 				
 				if (tbsdiv.offsetWidth < btnsize) return;
 				if (childWidth <= headerOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					header.style.width = jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
+					header.style.width = jq.px0(tbx.offsetWidth);
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -204,12 +202,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._showbutton(true);
 					var cave = this.$n('cave'),
 						btnsize = this._getArrowSize(),
-						temp = tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize;//coz show button then getsize again
+						temp = tbx.offsetWidth - btnsize;//coz show button then getsize again
 					cave.style.width = '5555px';
 					header.style.width = temp > 0 ? temp + 'px' : '';
 					
 					if (toolbar) 
-						this.$n('right').style.right = toolbar.offsetWidth + 'px';
+						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
 					
 					if (way == 'sel') {
 						if (nodeOffsetLeft < headerScrollLeft) {
@@ -268,8 +266,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	_getArrowSize: function() {
 		var tabbox = this.getTabbox(),
 			isVer = tabbox.isVertical(),
-			btnA = isVer ? this.$n('up') : this.$n('left'),
-			btnB = isVer ? this.$n('down') : this.$n('right');
+			btnA = isVer ? tabbox.$n('up') : tabbox.$n('left'),
+			btnB = isVer ? tabbox.$n('down') : tabbox.$n('right');
 		return btnA && btnB ?
 			(isVer ? btnA.offsetHeight + btnB.offsetHeight : btnA.offsetWidth + btnB.offsetWidth) : 0;
 	},
@@ -301,8 +299,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			tbx = tabbox.$n(),
 			cave = this.$n('cave'),
 			head = this.$n(),
-			l = this.$n('left'),
-			r = this.$n('right'),
+			l = tabbox.$n('left'),
+			r = tabbox.$n('right'),
 			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
 			this._fixHgh();
 			if (this.parent.isVertical()) {
@@ -340,7 +338,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 							this._forceStyle(head, 'w', jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)));
 					}
 					if (toolbar && tabbox._scrolling) 
-						this.$n('right').style.right = toolbar.offsetWidth + 'px';
+						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
 				} else {
 					if (!tbx.style.width) {
 						if (tbx.offsetWidth) {

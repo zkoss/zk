@@ -26,11 +26,15 @@ function (out) {
 		if (this.tabpanels) this.tabpanels.redraw(out);
 		out.push('<div id="', uuid , '-right" class="', iconImg, ' ', this.tabs.$s('right'), '">' , getIcon('icon-caret-right'),  '</div>',
 				'<div id="', uuid , '-left" class="', iconImg, ' ', this.tabs.$s('left'), '">' , getIcon('icon-caret-left'),  '</div>');
-		if (this.tabs) this.tabs.redraw(out);		
+		if (this.tabs) this.tabs.redraw(out);
+		if(this.isTabscroll() && this.toolbar) this.toolbar.redraw(out);
 	} else {
 		if (!this.isVertical()) {			
 			out.push('<div id="', uuid , '-right" class="', iconImg, ' ', this.tabs.$s('right'), '">' , getIcon('icon-caret-right'),  '</div>',
 						'<div id="', uuid , '-left" class="', iconImg, ' ', this.tabs.$s('left'), '">' , getIcon('icon-caret-left'),  '</div>');
+			if(this.isTabscroll() && this.toolbar) {
+				this.toolbar.redraw(out);
+			}
 		}
 		if (this.tabs) this.tabs.redraw(out);
 		if (this.isVertical()) {
@@ -39,7 +43,7 @@ function (out) {
 		}
 		if (this.tabpanels) this.tabpanels.redraw(out);
 		
-	}
+	}	
 	
 	if (this.isVertical())
 		out.push('<div class="z-clear"></div>');
