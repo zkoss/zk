@@ -352,8 +352,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			if(toolbar)
-				console.log(zk(toolbar).padBorderWidth() + 'px')
 	},
 	_fixHgh: function () {
 		var tabbox = this.getTabbox(),
@@ -393,6 +391,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				u.style.width = d.style.width = jq.px0(head.offsetWidth);
 			}
 		} else {
+			var r = tabbox.$n('right'),
+				l = tabbox.$n('left'),
+				tb = tabbox.toolbar,
+				hgh = jq.px0(head ? head.offsetHeight : 0);
+			if(r && l) {
+				r.style.height = l.style.height = hgh;
+			}
+			if(tb && (tb = tb.$n())) {
+				tb.style.height = hgh;
+			}
+			
 			if (head) //accordion have no head
 				head.style.height = '';
 		}
