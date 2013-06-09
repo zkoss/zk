@@ -598,11 +598,11 @@ zjq.prototype = {
 				te, le;
 			do {
 				if (!te) {
-					if (el.style.overflow == 'auto' || el.style.overflowY == 'auto')
+					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowY == 'auto')
 						te = el;
 				}
 				if (!le) {
-					if (el.style.overflow == 'auto' || el.style.overflowX == 'auto')
+					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto')
 						le = el;
 				}
 				if (te && le)

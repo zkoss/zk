@@ -52,8 +52,8 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * @since 5.0.4
 	 */
 	setRadiogroup: function (group) {
-		var old;
-		if ((old = this._group) != group) {
+		var old = this._group;
+		if (old !== group) {
 			if (old && this._attachExternal) old._rmExtern(this);
 			this._group = group;
 			if (group && this.desktop) {
@@ -101,7 +101,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 						for (var items = group.getItems(), i = items.length; i--;) {
 							if (items[i] != this) {
 								var item = items[i].$n('real');
-								if(item){
+								if (item) {
 									item.checked = false;
 									item.removeAttribute("checked");
 								}
@@ -142,7 +142,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		return group != null ? group.getName(): this.uuid;
 	},
 	_fixName: function () {
-		var n = this.$n("real");
+		var n = this.$n('real');
 		if (n)
 			n.name = this.getName();
 	},
@@ -153,20 +153,20 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		if (oldGroup != newGroup || !newParent) {
 			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)){
 				oldGroup._fixOnRemove(this);
-				if(this._attachExternal){
+				if (this._attachExternal) {
 					oldGroup._rmExtern(this);
 					this._attachExternal = false;
 				}
 			}
-			if (newGroup && newGroup.$instanceof(zul.wgt.Radiogroup)){
-				if(!this._attachExternal && newGroup == this._group ){
+			if (newGroup && newGroup.$instanceof(zul.wgt.Radiogroup)) {
+				if (!this._attachExternal && newGroup == this._group ) {
 					newGroup._addExtern(this);
 					this._attachExternal = true;
 				}
 				newGroup._fixOnAdd(this); 
 			}
 		}
-		this.$supers("beforeParentChanged_", arguments);
+		this.$supers('beforeParentChanged_', arguments);
 	},
 	fireOnCheck_: function (checked) {
 		// if Radiogroup listens to onCheck, we shall fire the event too.

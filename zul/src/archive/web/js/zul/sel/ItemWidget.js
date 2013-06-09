@@ -13,32 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _toggleEffect(wgt, undo) {
-		var self = wgt;
-		setTimeout(function () {
-			if (!self.desktop)
-				return;// fixed for B50-3362731.zul
-			
-			var $n = jq(self.$n()),
-				zcls = self.getZclass();
-			if (undo) {
-   				$n.removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
-   					//we have to remove both since _setSelectedDirectly doesn't
-   					//remove -over-seld
-			} else if (self._musin) {
-				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
-				
-				var mesh = self.getMeshWidget(),
-					musout = mesh._musout;
-				// fixed mouse-over issue for datebox 
-				if (musout && $n[0] != musout.$n()) {
-					jq(musout.$n()).removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
-					musout._musin = false;
-					mesh._musout = null;
-				}
-			}
-		});
-	}
 /**
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
@@ -102,7 +76,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_setSelectedDirectly: function (selected) {
 		var n = this.$n();
 		if (n) {
-			jq(n)[selected ? 'addClass' : 'removeClass'](this.getZclass() + '-seld');
+			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected'));
 			this._updHeaderCM();
 		}
 		this._selected = selected;
@@ -156,15 +130,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
 			if (this.isDisabled())
-				scls += (scls ? ' ': '') + zcls + '-disd';
+				scls += (scls ? ' ': '') + this.$s('disabled');
 			if (this.isSelected())
-				scls += (scls ? ' ': '') + zcls + '-seld';
+				scls += (scls ? ' ': '') + this.$s('selected');
 		}
 		return scls;
-	},
-	// SelectWidget count on this function
-	_toggleEffect: function (undo) {
-		_toggleEffect(this, undo);
 	},
 	focus_: function (timeout) {
 		var mesh = this.getMeshWidget();
@@ -177,7 +147,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_doFocusIn: function () {
 		var n = this.$n();
 		if (n)
-			jq(this._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
+			jq(this._getVisibleChild(n)).addClass(this.$s('focus'));
 		
 		if (n = this.getMeshWidget())
 			n._focusItem = this;			
@@ -185,9 +155,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_doFocusOut: function () {
 		var n = this.$n();
 		if (n) {
-			var zcls = this.getZclass();
-			jq(n).removeClass(zcls + "-focus");
-			jq(n.cells).removeClass(zcls + "-focus");
+			var cls = this.$s('focus');
+			jq(n).removeClass(cls);
+			jq(n.cells).removeClass(cls);
 		}
 	},
 	_updHeaderCM: function (bRemove) { //update header's checkmark
@@ -198,7 +168,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 				return;
 			}
 
-			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
+			var zcls = zk.Widget.$(box._headercm).$s('checked'),
 				$headercm = jq(box._headercm);
 
 			if (!this.isSelected())
@@ -211,13 +181,13 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	beforeParentChanged_: function (newp) {
 		if (!newp) //remove
 			this._updHeaderCM(true);
-		this.$supers("beforeParentChanged_", arguments);
+		this.$supers('beforeParentChanged_', arguments);
 	},
 	//@Override
 	afterParentChanged_: function () {
 		if (this.parent) //add
 			this._updHeaderCM();
-		this.$supers("afterParentChanged_", arguments);
+		this.$supers('afterParentChanged_', arguments);
 	},
 
 	// event
@@ -229,37 +199,17 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doSelect_', arguments);
 	},
-	doMouseOver_: function(evt) {
-		if (this._musin || this.isDisabled()) return;
-		this._musin = true;
-		this._toggleEffect();
-		evt.stop();
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function(evt) {
-		if (this.isDisabled() || (this._musin &&
-					jq.isAncestor(this.$n(), evt.domEvent.relatedTarget ||
-								evt.domEvent.toElement))) {
-			// fixed mouse-over issue for datebox 
-			this.getMeshWidget()._musout = this;
-			return;
-		}
-		this._musin = false;
-		this._toggleEffect(true);
-		evt.stop({propagation: true});
-		this.$supers('doMouseOut_', arguments);
-	},
 	doKeyDown_: function (evt) {
-		var mate = this.getMeshWidget();
-		if (!zk.gecko || !jq.nodeName(evt.domTarget, "input", "textarea"))
-			zk(mate.$n()).disableSelection();
-		mate._doKeyDown(evt);
+		var mesh = this.getMeshWidget();
+		if (!zk.gecko || !jq.nodeName(evt.domTarget, 'input', 'textarea'))
+			zk(mesh.$n()).disableSelection();
+		mesh._doKeyDown(evt);
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
-		var mate = this.getMeshWidget();
-		zk(mate.$n()).enableSelection();
-		mate._doKeyUp(evt);
+		var mesh = this.getMeshWidget();
+		zk(mesh.$n()).enableSelection();
+		mesh._doKeyUp(evt);
 		this.$supers('doKeyUp_', arguments);
 	},
 	deferRedrawHTML_: function (out) {

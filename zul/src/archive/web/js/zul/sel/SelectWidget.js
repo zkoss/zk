@@ -51,9 +51,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _updHeaderCM(box) { //update header's checkmark
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
-			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
+			var zcls = zk.Widget.$(box._headercm).getZclass() + '-checked',
 				$headercm = jq(box._headercm);
-			$headercm[box._isAllSelected() ? "addClass": "removeClass"](zcls);
+			$headercm[box._isAllSelected() ? 'addClass': 'removeClass'](zcls);
 		}
 	}
 	function _isButton(evt) {
@@ -66,7 +66,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			|| (zk.isLoaded('zul.inp') && evt.target.$instanceof(zul.inp.InputWidget));
 	}
 	function _focusable(evt) {
-		return (jq.nodeName(evt.domTarget, "input", "textarea", "button", "select", "option", "a")
+		return (jq.nodeName(evt.domTarget, 'input', 'textarea', 'button', 'select', 'option', 'a')
 				&& !evt.target.$instanceof(zul.sel.SelectWidget))
 			|| _isButton(evt) || _isInputWidget(evt);
 	}
@@ -179,12 +179,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						w = it.next();
 					if (w) {
 						this._selectOne(w, true);
-						zk(w).scrollIntoView(this.ebody);
-						if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
-							// B50-ZK-440: ebody can be null when ROD
-							this._currentTop = this.ebody.scrollTop; 
-							this._currentLeft = this.ebody.scrollLeft;
-						}
+						var bar = this._scrollbar;
+						if (bar)
+							bar.scrollToElement(item.$n());
 					}
 				}
 			}
@@ -274,15 +271,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.clearSelection();
 		else {
 			this._selectOne(item, true);
-			
 			// Bug ZK-1483: Jumpy scrollbar for listbox with rod when items are selected
-			if (!this._listbox$rod)
-				zk(item).scrollIntoView(this.ebody);
-			
-			if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
-				// B50-ZK-440: ebody can be null when ROD
-				this._currentTop = this.ebody.scrollTop; 
-				this._currentLeft = this.ebody.scrollLeft;
+			if (!this._listbox$rod) {
+				var bar = this._scrollbar;
+				if (bar)
+					bar.scrollToElement(item.$n());
 			}
 		}
 	},
@@ -338,7 +331,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (zk.ie8) {
 			var anchor = this.$n('a');
 			this._oldCSS = anchor.style.display;
-			anchor.style.display = "none";
+			anchor.style.display = 'none';
 		}
 
 		//Bug in B30-1926094-1.zul
@@ -346,6 +339,27 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncFocus(this._focusItem);
 
 		this._calcHgh();
+		
+		var hdfaker = this.ehdfaker,
+			allWidth = true;
+		if (hdfaker) {
+			for (var col = hdfaker.firstChild; col; col = col.nextSibling) {
+				var wd = col.style.width,
+					isWdh = wd && wd != 'auto' && !wd.endsWith('%');
+				if (!wd || !isWdh) {
+					allWidth = false;
+					break;
+				}
+			}
+			//If all cols has fixed width, need to clear width=100% setting,
+			//otherwise it will try to expand to whole width
+			if (allWidth) {
+				this.eheadtbl.width = '';
+				this.ebodytbl.width = '';
+				if (this.efoottbl)
+					this.efoottbl.width = '';
+			}
+		}
 	},
 	_afterCalcSize: function () {
 		// Bug 279925
@@ -361,10 +375,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._calcHgh();
 	},
 	_calcHgh: function () {
-		var rows = this.ebodyrows,
+		var rows = this.ebodyrows.rows,
 			n = this.$n(),
 			hgh = n.style.height,
-			isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0;
+			isHgh = hgh && hgh != 'auto' && hgh.indexOf('%') < 0;
 		if (isHgh) {
 			hgh = zk.parseInt(hgh);
 			if (hgh) {
@@ -395,12 +409,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
                 hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
                 //bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
                 hgh -= (this.efrozen ? this.efrozen.offsetHeight : 0);
-                this.ebody.style.height = (hgh < 0 ? 0 : hgh) + "px";
-
-				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
-				if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
-				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
-				// and IE7 at initializing phase.
+                this.ebody.style.height = (hgh < 0 ? 0 : hgh) + 'px';
 				return; //done
 			}
 		}
@@ -410,7 +419,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			var r = rows[j];
 			if (zk(r).isVisible()) {
 				++nVisiRows;
-				if (!firstVisiRow) firstVisiRow = r;
+				if (!firstVisiRow)
+					firstVisiRow = r;
 
 				if (nRows === nVisiRows) {
 					midVisiRow = r;
@@ -435,7 +445,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (hgh < 25) hgh = 25;
 
 				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight(): null;
-				if (!rowhgh) rowhgh = this._headHgh(20);
+				if (!rowhgh)
+					rowhgh = this._headHgh(20);
 
 				nRows = Math.round((hgh - diff)/ rowhgh);
 			}
@@ -444,7 +455,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (nRows) {
 			if (!hgh) {
-				if (!nVisiRows) hgh = this._headHgh(20, true) * nRows;
+				if (!nVisiRows)
+					hgh = this._headHgh(20, true) * nRows;
 				else if (nRows <= nVisiRows) {
 					var $midVisiRow = zk(midVisiRow);
 					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
@@ -453,94 +465,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight();
 					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
-				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
-
-			// Fixed for B50-3315594.zul
-			if (zk.opera) {
-				this.ebody.style.height = ''; //reset first to hide scrollbar
-				if (this.ebody.offsetHeight) {} // force to recalculate
-			}
-			
-			// B50-ZK-1118
-			if (this.isSizedByContent() && zk(this.$n('body')).hasHScroll()) //check if there are horizontal scrollbar
-				hgh += jq.scrollbarWidth(); // add scrollbar width to height for preventing vertical scrollbar
-			
-			this.ebody.style.height = hgh + "px";
-			
-			// bug fixed for B50-3315594.zul on safari and chrome latest version
-			// Note: also test with B50-ZK-373 (since zk.safari.redoCSS will hide and show)
-			if (zk.safari)
-				zk(this.ebody).redoCSS();	
-			
-			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
-			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
-			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
-			// and IE7 at initializing phase.
-			// 2008/03/28 The unnecessary scroll bar will appear when the vflex is true.
-
-			// bug #2799258
-			var h = n.style.height;
-			if (!h || h == "auto") {
-
-				// Bug #2129992 somethings the size of the offsetHeight in IE6,
-				// IE7, and IE7 in compatible mode is wrong.
-				if (zk.ie && !zk.ie8 && this.ebodytbl) {
-					var ow = this.ebody.offsetWidth,
-						cw = this.ebody.clientWidth,
-						w = ow - cw;
-					if (cw && w > 11) { //with vertical scrollbar
-						if (ow == this.ebodytbl.offsetWidth)
-							this.ebodytbl.style.width = jq.px0(zk(this.ebodytbl).revisedWidth(this.ebodytbl.offsetWidth - w));
-					}
-				}
-//bug# 3033016: Extra empty row when shrink fixed width Listbox
-//mark out
-/*				var oh = this.ebody.offsetHeight,
-					ch = this.ebody.clientHeight;
-				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
-				//in Chrome/Safari, clientHeight can be less than zero
-				h = oh - ((!zk.safari || ch >= 0) ? ch : 0);
-
-				// Bug #2805177, we have to check the clientWidth first.
-				if (ch && h > 11)
-					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
-*/			}
+			this.ebody.style.height = hgh + 'px';
 		} else {
-			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
-			//To fix the bug, we extend the height
-			hgh = n.style.height;
-			if (zk.ie && (!hgh || hgh == "auto") && zk(this.ebody).hasVScroll()) {
-				if (!nVisiRows) this.ebody.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
-				else this.ebody.style.height =
-						(this.ebody.offsetHeight * 2 - this.ebody.clientHeight) + "px";
-			} else {
-				this.ebody.style.height = "";
-				var focusEL = this.$n('a');
-				if ((this.paging || this._paginal) && zk(this.ebody).hasVScroll() && focusEL) {
-					focusEL.style.top = '0px'; // Bug ZK-1715: focus has no chance to sync if don't select item after changing page.
-				}
-			}
-
-			//bug# 3033016: Extra empty row when shrink fixed width Listbox
-			//mark out
-/*			// bug #2799258
-			if (!hgh || hgh == "auto") {
-				var oh = this.ebody.offsetHeight,
-					ch = this.ebody.clientHeight;
-				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
-				//in Chrome/Safari, clientHeight can be less than zero
-				hgh = oh - ((!zk.safari || ch >= 0) ? ch : 0);
-
-				// Bug #2805177, we have to check the clientWidth first.
-				if (ch && hgh > 11)
-					this.ebody.style.height = oh + jq.scrollbarWidth() + "px";
-			}
-*/		}
+			this.ebody.style.height = '';
+			var focusEL = this.$n('a');
+			if ((this.paging || this._paginal) && focusEL)
+				focusEL.style.top = '0px'; // Bug ZK-1715: focus has no chance to sync if don't select item after changing page.
+		}
 	},
 	/* Returns the real # of rows (aka., real size). */
 	_visibleRows: function (v) {
-		if ("number" == typeof v) {
+		if ('number' == typeof v) {
 			this._visiRows = v;
 		} else
 			return this.getRows() || this._visiRows || 0;
@@ -637,9 +573,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			} else {
 				// Bug ZK-414
 				if (this._currentTop)
-					btn.style.top = this._currentTop + "px";
+					btn.style.top = this._currentTop + 'px';
 				if (this._currentLeft)
-					btn.style.left = this._currentLeft + "px"; 	
+					btn.style.left = this._currentLeft + 'px'; 	
 			}
 			this.focusA_(btn, timeout);
 			return true;
@@ -658,10 +594,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				.domListen_(btn, 'onBlur', 'doBlur_');
 		this.updateFormData();
 		this._updHeaderCM();
-		
-		// Bug ZK-395(B50-ZK-272.zul), if no items, in opera it will appear a scrollbar
-		if (btn && zk.opera && !this.getBodyWidgetIterator().hasNext())
-			btn.style.top = "-1px";
 	},
 	unbind_: function () {
 		unlistenOnFitSize(this);
@@ -722,19 +654,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			} catch (e) {
 			}
 
-			if (typeof (bSel = this.nonselectableTags) == "string") {
+			if (typeof (bSel = this.nonselectableTags) == 'string') {
 				if (!bSel)
 					return; //not ignore
-				if (bSel == "*")
+				if (bSel == '*')
 					return true;
 
 				var tn = jq.nodeName(evt.domTarget),
-					bInpBtn = tn == "input" && evt.domTarget.type.toLowerCase() == "button";
+					bInpBtn = tn == 'input' && evt.domTarget.type.toLowerCase() == 'button';
 				if (bSel.indexOf(tn) < 0) {
-					return bSel.indexOf("button") >= 0
+					return bSel.indexOf('button') >= 0
 						&& (_isButton(evt) || bInpBtn);
 				}
-				return !bInpBtn || bSel.indexOf("button") >= 0;
+				return !bInpBtn || bSel.indexOf('button') >= 0;
 			}
 		}
 
@@ -812,7 +744,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			case 32: //SPACE
 			case 36: //Home
 			case 35: //End
-				if (!jq.nodeName(evt.domTarget, "a"))
+				if (!jq.nodeName(evt.domTarget, 'a'))
 					this.focus();
 				if (evt.domTarget == this.$n('a')) {// for test tool.
 					if (evt.target == this) //try to avoid the condition inside the _doKeyDown()
@@ -824,7 +756,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 
-		if (!zk.gecko || !jq.nodeName(evt.domTarget, "input", "textarea"))
+		if (!zk.gecko || !jq.nodeName(evt.domTarget, 'input', 'textarea'))
 			zk(this.$n()).disableSelection();
 
 		// Feature #1978624
@@ -850,7 +782,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var endless = false, step, lastrow;
 
 		// for test tool when browser is webkit
-		if (zk.safari && typeof data.keyCode == "string")
+		if (zk.safari && typeof data.keyCode == 'string')
 			data.keyCode = zk.parseInt(data.keyCode);
 		switch (data.keyCode) {
 		case 33: //PgUp
@@ -869,7 +801,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				return;
 			}
 			step = this._visibleRows();
-			if (step == 0) step = this.getPageSize() || 20;
+			if (step == 0)
+				step = this.getPageSize() || 20;
 			if (data.keyCode == 33)
 				step = -step;
 			break;
@@ -947,11 +880,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 			}
 		}
+		
 		if (lastrow) {
-			if (ctrl) this._focus(lastrow);
-			else this._select(lastrow, evt);
+			if (ctrl)
+				this._focus(lastrow);
+			else
+				this._select(lastrow, evt);
 			this._syncFocus(lastrow);
-			zk(lastrow).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
+			var bar = this._scrollbar;
+			if (bar)
+				bar.scrollToElement(lastrow.$n());
 		}
 
 		return _afterChildKey(evt);
@@ -983,11 +921,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
 			this._anchorLeft = offs[0];
-			this.fire("onAnchorPos",{top:this._anchorTop,left:this._anchorLeft});			
+			this.fire('onAnchorPos',{top:this._anchorTop,left:this._anchorLeft});			
 		}
 		
-		focusElStyle.top = this._anchorTop + "px";
-		focusElStyle.left = this._anchorLeft + "px";
+		focusElStyle.top = this._anchorTop + 'px';
+		focusElStyle.left = this._anchorLeft + 'px';
 	},
 	_toStyleOffset: function (el, x, y) {
 		var ofs1 = zk(el).revisedOffset(),
@@ -1160,7 +1098,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var changed = !!row.isSelected() != toSel;
 		if (changed) {
 			row.setSelected(toSel);
-			row._toggleEffect(true);
+			//row._toggleEffect(true);
 		}
 		return changed;
 	},
@@ -1210,10 +1148,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
-	},
-	_syncBodyHeight: function () {
-		if(this._rows == 0)
-			this.$supers('_syncBodyHeight', arguments);
 	},
 	_isAllSelected: function () {
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)

@@ -74,31 +74,26 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
-	getAlignAttrs: function () {
-		return (this._align ? ' align="' + this._align + '"' : '')
-			+ (this._valign ? ' valign="' + this._valign + '"' : '') ;
-	},
 	//super
 	domStyle_: function (no) {
 		var style = '',
 			header = this.getHeaderWidget();
-		if (zk.ie8 && this._align)
+		if (this._align)
 			style += 'text-align:' + this._align + ';';
+		else if (header && header._align)
+			style += 'text-align:' + header._align + ';';
+		if (this._valign)
+			style += 'vertical-align:' + this._align + ';';
+		else if (header && header._valign)
+			style += 'vertical-align:' + header._valign + ';';
 		if (header && !header.isVisible()) //Bug ZK-1425
 			style += 'display: none;';
 		
 		return style + this.$super('domStyle_', no);
 	},
 	domAttrs_: function () {
-		var head = this.getHeaderWidget(),
-			added;
-		if (head)
-			added = head.getColAttrs();
-		if (this._align || this._valign)
-			added = this.getAlignAttrs();
 		return this.$supers('domAttrs_', arguments)
-			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '')
-			+ (added ? ' ' + added : '');
+			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');

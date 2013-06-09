@@ -12,6 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+var Tree =
 /**
  *  A container which can be used to hold a tabular
  * or hierarchical set of rows of elements.
@@ -24,6 +25,38 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree.
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
+	_scrollbar: null,
+	bind_: function (desktop, skipper, after) {
+		this.$supers(Tree, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
+		this._scrollbar = zul.mesh.Scrollbar.init(this);
+	},
+	unbind_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
+		}
+		this.$supers(Tree, 'unbind_', arguments);
+	},
+	onSize: function () {
+		this.$supers(Tree, 'onSize', arguments);
+		var self = this;
+		setTimeout(function () {
+			if (self.desktop)
+				self.refreshBar_();
+		}, 200);
+	},
+	refreshBar_: function (showBar) {
+		var bar = this._scrollbar,
+			embed = jq(this.$n()).data('embedscrollbar'),
+			headbar = this.$n('headbar');
+		if (bar) {
+			bar.syncSize(showBar);
+			//show block DIV on header if vertical scroll-bar required
+			if (embed)
+				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
+		}
+	},
 	/**
 	 * clears the tree children.
 	 */
@@ -186,7 +219,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this.syncSize();
 		else {
 			for (w = cols.firstChild; w; w = w.nextSibling)
-				if (w._hflex || !(wd = w._width) || wd == "auto") {
+				if (w._hflex || !(wd = w._width) || wd == 'auto') {
 					this.syncSize();
 					return;
 				}
@@ -253,7 +286,11 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	shallIgnoreSelect_: function (evt/*, row*/) {
 		var n = evt.domTarget;
-		return n && n.id && n.id.endsWith('-open') || (evt.name == 'onRightClick' && !this.rightSelect);
+		if (n) {
+			var id = n.id;
+			return id.endsWith('open') || id.endsWith('icon') ||
+				(evt.name == 'onRightClick' && !this.rightSelect);
+		}
 	}
 });
 /**

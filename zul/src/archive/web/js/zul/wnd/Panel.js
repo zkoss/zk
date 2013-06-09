@@ -259,12 +259,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
 						jq(node).removeClass(zcls + '-collapsed');
-						jq(this.$n('expand')).children('.' + down)
+						jq(this.$n('exp')).children('.' + down)
 						.removeClass(down).addClass(up);
 						$body.zk.slideDown(this);
 					} else {
 						jq(node).addClass(zcls + '-collapsed');
-						jq(this.$n('expand')).children('.' + up)
+						jq(this.$n('exp')).children('.' + up)
 						.removeClass(up).addClass(down);
 						this._hideShadow();
 						$body.zk.slideUp(this);
@@ -301,7 +301,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				up = 'z-icon-fullscreen',
 				down = 'z-icon-resize-small';
 				if (maximized) {
-					jq(this.$n('maximize')).addClass(cls + '-maximized')
+					jq(this.$n('max')).addClass(cls + '-maximized')
 					.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
@@ -364,7 +364,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n('maximize'),
+					var max = this.$n('max'),
 						$max = jq(max);
 					$max.removeClass(cls + '-maximized').children('.' + down)
 					.removeClass(down).addClass(up);
@@ -696,7 +696,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var ho = this.$n('header-outer');
+		var ho = this.$n('cap-outer');
 		return ho ? ho.offsetHeight : 0;
 	},
 	onFloatUp: function (ctl) {
@@ -746,7 +746,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.setTopmost();
 	},
 	_initMove: function (cmp) {
-		var handle = this.$n('caption');
+		var handle = this.$n('cap');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.getZclass() + '-header-move');
 			var $Panel = this.$class;
@@ -850,7 +850,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this.isMovable() ? this.$n('caption') : false,
+				handle = this.isMovable() ? this.$n('cap') : false,
 				zcls = this.getZclass();
 			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
@@ -870,8 +870,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
-		var maxBtn = this.$n('maximize'),
-			minBtn = this.$n('minimize'),
+		var maxBtn = this.$n('max'),
+			minBtn = this.$n('min'),
 			zcls = this.getZclass(),
 			n = evt.domTarget;
 		if (!n.id)
@@ -886,7 +886,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		case minBtn:
 			this.setMinimized(!this._minimized);
 			break;
-		case this.$n('expand'):
+		case this.$n('exp'):
 			var body = this.$n('body'),
 				open = body ? zk(body).isVisible() : this._open;
 
@@ -979,9 +979,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		switch (tar) {
 		case wgt.$n('close'):
-		case wgt.$n('maximize'):
-		case wgt.$n('minimize'):
-		case wgt.$n('expand'):
+		case wgt.$n('max'):
+		case wgt.$n('min'):
+		case wgt.$n('exp'):
 			return true; //ignore special buttons
 		}
 		return false;

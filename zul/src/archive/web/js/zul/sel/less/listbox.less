@@ -9,36 +9,27 @@
 @headFootColor: #636363;
 @groupGradientStart: #FFFFFF;
 @groupGradientEnd: #E9F2FB;
+@selectGradientStart: #E5F4FB;
+@selectGradientEnd: #D3EDFA;
 
-//reset table
-table {
-	border-spacing: 0;
-	border-collapse: collapse;
-	th, td {
-		padding: 0;
-	}
-	th {
-		text-align: inherit;
-	}
-}
-//grid
-.z-grid {
+//listbox
+.z-listbox {
 	border: 1px solid @gridBorderColor;
 	overflow: hidden;
 	zoom: 1;
 	.applyCSS3('box-sizing', 'content-box');
-	//grid header
+	//listbox header
 	&-header {
 		overflow: hidden;
 		width: 100%;
 		position: relative;
-		&.z-grid-header-bar {
+		&.z-listbox-header-bar {
 			display: none;
 			.verGradient();
 			border: 1px solid @gridBorderColor;
 			border-top: none;
 			border-right: none;
-			width: 16px;
+			width: @baseIconWidth;
 			height: 100%;
 			position: absolute;
 			top: 0;
@@ -46,7 +37,7 @@ table {
 			z-index: 100;
 		}
 	}
-	//grid body
+	//listbox body
 	&-body {
 		overflow: hidden;
 		position: relative;
@@ -58,28 +49,24 @@ table {
 		font-style: italic;
 		text-align: center;
 	}
-	//grid footer
+	//listbox footer
 	&-footer {
 		overflow: hidden;
 		background: @footerBackground;
 		border-top: 1px solid @gridBorderColor;
-		.z-footer {
-			overflow: hidden;
-		}
 	}
 	&-odd {
 		background: @stripBackground;
 	}
 }
-//column and auxhead
-.z-columns,
-.z-auxhead {
+//listhead and auxhead
+//no auxhead here because it is already defined in grid.less
+.z-listhead {
 	th:last-child {
 		border-right: none;
 	}
 }
-.z-column,
-.z-auxheader {
+.z-listheader {
 	.verGradient();
 	overflow: hidden;
 	white-space: nowrap;
@@ -91,24 +78,37 @@ table {
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
-}
-.z-column {
-	.z-column-content {
-		position: relative;
-	}
 	&-sort {
-		.z-column-content {
+		.z-listheader-content {
 			cursor: pointer;
 		}
-		.z-column-sorticon {
+		.z-listheader-sorticon {
 			position: absolute;
 			top: -3px;
 			left: 50%;
 			color: #7094B3;
 		}
 	}
-	&-hover .z-column-menuicon {
+	&-hover .z-listheader-menuicon {
 		display: block;
+	}
+	&-checkable {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		border: 1px solid @gridBorderColor;
+		display: inline-block;
+		vertical-align: text-top;
+		.verGradient();
+		.z-listheader-icon {
+			display: none;
+			cursor: default;
+		}
+		&.z-listheader-checked .z-listheader-icon {
+			display: block;
+			line-height: @baseLineHeight;
+			padding-left: 1px;
+			color: #0076a3;
+		}
 	}
 	&-menuicon {
 		display: none;
@@ -130,27 +130,84 @@ table {
 		}
 	}
 	&-sizing,
-	&-sizing .z-column-menuicon,
-	&-sizing.z-column-sort .z-column-menuicon {
+	&-sizing .z-listheader-menuicon,
+	&-sizing.z-listheader-sort .z-listheader-content {
 		cursor: e-resize;
 	}
 }
-//row and cell
-.z-row {
-	&-inner {
+//list item and cell
+.z-listitem {
+	//list cell
+	.z-listcell {
 		border-right: 1px solid #FFFFFF;
 		.applyCSS3('box-sizing', 'content-box');
+		td:last-child {
+			border-right: none;
+		}
 	}
-	&:hover &-inner {
+	&:hover .z-listcell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		position: relative;
 	}
-	td:last-child {
-		border-right: none;
+	//check mark
+	&-checkable {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		border: 1px solid @gridBorderColor;
+		display: inline-block;
+		vertical-align: text-top;
+		.verGradient();
+		&.z-listitem-radio {
+			.borderRadius(8px);
+		}
+		.z-listitem-icon {
+			display: none;
+			cursor: default;
+		}
+	}
+	//selected list cell
+	&.z-listitem-selected {
+		.z-listcell {
+			.verGradient(@selectGradientStart, @selectGradientEnd);
+			position: relative;
+		}
+		&:hover .z-listcell {
+			.verGradient(darken(@selectGradientStart, 5%), darken(@selectGradientEnd, 10%));
+			position: relative;
+		}
+	}
+	//selected check mark
+	&-selected {
+		.z-listitem-icon {
+			display: block;
+			line-height: @baseLineHeight;
+			padding-left: 1px;
+			color: #0076a3;
+			&.z-icon-ok {} //for checkbox, use font-awesome
+			&.z-icon-radio { //for radio
+				width: 8px;
+				height: 8px;
+				.borderRadius(4px);
+				background: #0076a3;
+				padding: 0;
+				margin: 3px;
+			}
+		}
+	}
+	//disabled
+	&.z-listitem-disabled {
+		* {
+			color: #aaaaaa !important;
+			cursor: default !important;
+		}
+		&:hover .z-listcell {
+			.resetGradient();
+			position: relative;
+		}
 	}
 }
 //Group
-.z-group {
+.z-listgroup {
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
@@ -177,17 +234,17 @@ table {
 		.transform('rotate(45deg)');
 	}
 }
-.z-groupfoot-inner {
+.z-listgroupfoot-inner {
 	.verGradient(@groupGradientEnd, @groupGradientStart);
 	position: relative;
 }
 //content
-.z-column-content,
-.z-auxheader-content,
-.z-row-content,
-.z-group-content,
-.z-groupfoot-content,
-.z-footer-content {
+//no auxhead here because it is already defined in grid.less
+.z-listheader-content,
+.z-listcell-content,
+.z-listgroup-content,
+.z-listgroupfoot-content,
+.z-listfooter-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	color: @headFootColor;
@@ -195,19 +252,19 @@ table {
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
 }
-.z-column-content,
-.z-auxheader-content {
+.z-listheader-content {
 	font-weight: bold;
 	padding: 4px 5px 3px;
+	position: relative;
 }
-.z-group-content,
-.z-groupfoot-content {
+.z-listgroup-content,
+.z-listgroupfoot-content {
 	.z-label {
 		font-weight: bold;
 	}
 }
 //paging
-.z-grid-paging {
+.z-listbox-paging {
 	&-top {
 		border-bottom: 1px solid @gridBorderColor;
 		overflow: hidden;
@@ -220,15 +277,19 @@ table {
 	}
 }
 //column menu
-.z-columns-menugrouping .z-menuitem-image {
+.z-listhead-menugrouping .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-group.png');
 }
-.z-columns-menuungrouping .z-menuitem-image {
+.z-listhead-menuungrouping .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-ungroup.png');
 }
-.z-columns-menuascending .z-menuitem-image {
+.z-listhead-menuascending .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowup.png');
 }
-.z-columns-menudescending .z-menuitem-image {
+.z-listhead-menudescending .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowdown.png');
+}
+//select mold
+.z-select {
+	height: @baseButtonHeight;
 }

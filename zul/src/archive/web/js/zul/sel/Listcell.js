@@ -48,9 +48,10 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	setLabel: function () {
 		this.$supers('setLabel', arguments);
 		if (this.desktop) {
-	 		if (_isListgroup(this.parent))
-				this.parent.rerender();
-			else if (this.parent.$instanceof(zul.sel.Option))
+			var p = this.parent;
+	 		if (_isListgroup(p))
+				p.rerender();
+			else if (p.$instanceof(zul.sel.Option))
 				this.getListbox().rerender(); // for IE, we cannot use this.parent.rerender();
 		}
 	},
@@ -105,47 +106,47 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
 	},
 	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
-		if ((!no || !no.zclass)
-		&& (_isListgroup(this.parent) || _isListgroupfoot(this.parent))) {
-			var zcls = this.parent.getZclass();
-			scls += ' ' + zcls + '-inner';
-		}
+		var scls = this.$supers('domClass_', arguments),
+			p = this.parent;
+		
+		if ((!no || !no.zclass) && (_isListgroup(p) || _isListgroupfoot(p)))
+			scls += ' ' + p.$s('inner');
+		
 		return scls;
 	},
 	_colHtmlPre: function () {
 		var s = '',
 			box = this.getListbox(),
-			p = this.parent,
-			zcls = p.getZclass();
+			p = this.parent;
 		if (box != null && p.firstChild == this) {
 			var isGrp = _isListgroup(p);
 			// insert checkmark
-			if (box.isCheckmark() && !_isListgroupfoot(p) &&
-					(!isGrp || box.groupSelect)) {
+			if (box.isCheckmark() && !_isListgroupfoot(p) 
+					&& (!isGrp || box.groupSelect)) {
 				var chkable = p.isCheckable(),
-					multi = box.isMultiple(),
-					img = zcls + '-img';
-				s += '<span id="' + p.uuid + '-cm" class="' + img + ' ' + img
-					+ (multi ? '-checkbox' : '-radio');
+					multi = box.isMultiple();
+				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable') 
+					+ ' ' + (multi ? p.$s('checkbox') : p.$s('radio'));
 				
 				if (!chkable || p.isDisabled())
-					s += ' ' + img + '-disd';
+					s += ' ' + p.$s('disabled');
 				
 				s += '"';
 				if (!chkable)
 					s += ' style="visibility:hidden"';
-					
-				s += '></span>';
+				
+				s += '><i class="' + p.$s('icon') + ' ' 
+					+ (multi ? 'z-icon-ok' : 'z-icon-radio') + '"></i></span>';
 			}
 			// insert toggle icon
 			if (isGrp) {
-				s += '<span id="' + p.uuid + '-img" class="' + zcls + '-img ' + zcls
-					+ '-img-' + (p._open ? 'open' : 'close') + '"></span>';
+				var cls = p._open ? p.$s('icon-open') : p.$s('icon-close');
+				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + 
+					'"><i class="z-icon-caret-right ' + cls + '"></i></span>';
 			}
 			if (s) return s;
 		}
-		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? "&nbsp;": '';
+		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? '&nbsp;': '';
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
@@ -160,49 +161,49 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOver_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)
-		&& !jq.nodeName(evt.domTarget, "input", "textarea")) {
+		&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = "none";
+			if (n) n.firstChild.style.MozUserSelect = 'none';
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)) {
 			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = ""; // Bug ZK-580
+			if (n) n.firstChild.style.MozUserSelect = ''; // Bug ZK-580
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
 	domAttrs_: function () {
-		var head = this.getListheader(),
-			added;
-		if (head)
-			added = head.getColAttrs();
 		return this.$supers('domAttrs_', arguments)
-			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '')
-			+ (added ? ' ' + added : '');
+			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '');
 	},
 	//-- super --//
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments),
 			head = this.getListheader();
-		if (head && !head.isVisible())
-			style += "display:none;";
+		if (head) {
+			if (!head.isVisible())
+				style += 'display:none;';
+			if (head._align)
+				style += 'text-align:' + head._align + ';';
+			if (head._valign)
+				style += 'vertical-align:' + head._valign + ';';
+		}
 		return style;
 	},
 	bindChildren_: function () {
 		var p;
 		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
-			this.$supers("bindChildren_", arguments);
+			this.$supers('bindChildren_', arguments);
 	},
 	unbindChildren_: function () {
 		var p;
 		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
-			this.$supers("unbindChildren_", arguments);
+			this.$supers('unbindChildren_', arguments);
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}
-	
 });
 })();
