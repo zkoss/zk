@@ -16,11 +16,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 function (out) {
 	var tbx = this.getTabbox(),
-		uuid = this.uuid;
-		zicon = this.$s('icon'),
-		iconImg = this.$s('icon-img'),
-		getIcon = function(iconClass) {
-			return '<i id="' + uuid + '-icon-close" class="' + zicon + ' z-' + iconClass + '"></i>';
+		uuid = this.uuid,
+		icon = this.$s('icon'),
+		getIcon = function(fontIconCls) {
+			return '<i id="' + uuid + '-icon-close" class="z-' + fontIconCls + '"></i>';
 		};
 	 
 	if (tbx.inAccordionMold()) {//Accordion
@@ -43,7 +42,7 @@ function (out) {
 		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>');
 
 		if (this.isClosable())
-			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');
+			out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');
 
 		this.contentRenderer_(out);
 
@@ -54,7 +53,7 @@ function (out) {
 	} else {
 		out.push('<li ', this.domAttrs_(), '>');
 		if (this.isClosable())
-			out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
+			out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 		else if (tbx.isVertical())
 			out.push('<a class="', this.$s('noclose'), '" ></a>');
 		this.contentRenderer_(out);
