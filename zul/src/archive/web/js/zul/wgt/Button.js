@@ -245,7 +245,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			img = this.getImage();
 		if (!img) return label;
 
-		img = '<img class="', this.$s('image') , '" src="' + img + '" align="absmiddle" />';
+		img = '<img class="' + this.$s('image') + '" src="' + img + '" align="absmiddle" />';
 		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;
