@@ -436,7 +436,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var btn, inp = this.getInputNode();
 
 		if (btn = this.$n('btn')) {
-			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
@@ -449,8 +448,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			btn.close(true);
 
 		if (btn = this.$n('btn')) {
-			this._auxb.cleanup();
-			this._auxb = null;
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 

@@ -24,15 +24,15 @@ function (out) {
 	
 	out.push('" autocomplete="off"',
 			this.textAttrs_(),'/>', '<span href="javascript:;" id="', uuid,'-btn"',
-			'class="', this.$s('icon'));
+			'class="', this.$s('button'));
 	
 	if (!isButtonVisible)
 		out.push(' ', this.$s('disabled'));
 		
-	
-	out.push('"><a href="javascript:;" class="', this.$s('up'),
+	var iconClass = this.$s('icon') + ' ';
+	out.push('"><a href="javascript:;" class="', iconClass, this.$s('up'),
 			'"><i class="z-icon-angle-up"></i></a><i class="', this.$s('separator'),
-			'"></i><a href="javascript:;" class="', this.$s('down'),
+			'"></i><a href="javascript:;" class="', iconClass, this.$s('down'),
 			'"><i class="z-icon-angle-down"></i></a>');
 
 	out.push('</span></span>');
