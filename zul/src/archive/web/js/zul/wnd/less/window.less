@@ -64,24 +64,20 @@
 	}
 	
 	&-icon {
-		background: transparent no-repeat 0 0;
 		overflow: hidden;
 		margin: auto 1px;
 		display: block;
-
-		&-img {
-			.buttonBackground();
-			.borderRadius();
-			border: 1px solid #CFCFCF;
-			float: right;
-			cursor: pointer;
-			margin: auto 1px;
-			text-align: center;
-			color: @iconColor;
+		.buttonBackground();
+		.borderRadius();
+		border: 1px solid #CFCFCF;
+		float: right;
+		cursor: pointer;
+		margin: auto 1px;
+		text-align: center;
+		color: @iconColor;
 			
-			&:hover {
-				background-color: @iconHoverBackgoundColor;
-			}
+		&:hover {
+			background-color: @iconHoverBackgoundColor;
 		}
 	}
 

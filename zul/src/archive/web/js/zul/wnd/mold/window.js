@@ -13,8 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {
-	var zcls = this.getZclass(),
-		uuid = this.uuid,
+	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
@@ -30,22 +29,21 @@ function (out, skipper) {
 		
 		if (caption) caption.redraw(out);
 		else {
-			var self = this;
-			var getIcon = function(iconClass) {
-				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
-			}
+			var icon = this.$s('icon'),
+				getIcon = function(iconClass) {
+					return '<i class="z-' + iconClass + '"></i>';
+				};
 			
-			var iconImg = this.$s('icon-img');
 			if (this._closable)
-				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
+				out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-max" class="', iconImg, ' ', this.$s('maximize'));
+				out.push('<div id="', uuid , '-max" class="', icon, ' ', this.$s('maximize'));
 				if (this._maximized)
 					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-min" class="', iconImg, ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-min" class="', icon, ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		

@@ -63,7 +63,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var $el = jq(el),
 			$top = jq(wnd.$n('cap-outer')),
 			top = $top[0],
-			$header = jq(wnd.$n('caption')),
+			$header = jq(wnd.$n('cap')),
 			header = $header[0],
 			outerClass = wnd.getZclass() + '-outer',
 			headerOuterClass = wnd.getZclass() + '-header-outer',
@@ -316,7 +316,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _makeFloat(wgt) {
-		var handle = wgt.$n('caption');
+		var handle = wgt.$n('cap');
 		if (handle && !wgt._drag) {
 			jq(handle).addClass(wgt.getZclass() + '-header-move');
 			var Window = wgt.$class;
@@ -1135,7 +1135,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this._mode == 'embedded' ? false : this.$n('caption'),
+				handle = this._mode == 'embedded' ? false : this.$n('cap'),
 				zcls = this.getZclass();
 			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
