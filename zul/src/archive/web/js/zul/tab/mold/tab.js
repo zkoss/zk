@@ -40,9 +40,6 @@ function (out) {
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
 
-		if (tbx.getPanelSpacing() && this.getIndex())
-			out.push('<div class="', this.$s('spacing'), '" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
-
 		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>');
 
 		if (this.isClosable())
