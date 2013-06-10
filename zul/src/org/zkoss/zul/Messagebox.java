@@ -52,20 +52,20 @@ public class Messagebox {
 	/** A symbol consisting of a question mark in a circle.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String QUESTION = "z-msgbox z-msgbox-question";
+	public static final String QUESTION = "z-messagebox-icon z-messagebox-question z-icon-question-sign";
 	/** A symbol consisting of an exclamation point in a triangle with
 	 * a yellow background
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String EXCLAMATION  = "z-msgbox z-msgbox-exclamation";
+	public static final String EXCLAMATION  = "z-messagebox-icon z-messagebox-warning z-icon-warning-sign";
 	/** A symbol of a lower case letter i in a circle.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String INFORMATION = "z-msgbox z-msgbox-information";
+	public static final String INFORMATION = "z-messagebox-icon z-messagebox-info z-icon-info-sign";
 	/** A symbol consisting of a white X in a circle with a red background.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String ERROR = "z-msgbox z-msgbox-error";		
+	public static final String ERROR = "z-messagebox-icon z-messagebox-error z-icon-remove-sign";		
 	/** Contains no symbols. */
 	public static final String NONE = null;
 

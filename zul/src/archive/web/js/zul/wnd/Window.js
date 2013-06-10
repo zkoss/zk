@@ -47,44 +47,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _ghostmove(dg, ofs, evt) {
 		var wnd = dg.control,
-			el = dg.node;
+			el = dg.node,
+			$el = jq(el),
+			$top = $el.find('>div:first'),
+			top = $top[0],
+			$fakeT = jq(top).clone(),
+			fakeT = $fakeT[0],
+			zcls = wnd.getZclass();
 		_hideShadow(wnd);
 		
-		var getAttrs = function(e) {
-			var attrs = {};
-	        if( e.length ) {
-	            jq.each(e[0].attributes, function(index, attr) {
-	            	attrs[attr.name] = attr.value;
-	            }); 
-	        }
-	        return attrs;
-		}
-		
-		var $el = jq(el),
-			$top = jq(wnd.$n('cap-outer')),
-			top = $top[0],
-			$header = jq(wnd.$n('cap')),
-			header = $header[0],
-			outerClass = wnd.getZclass() + '-outer',
-			headerOuterClass = wnd.getZclass() + '-header-outer',
-			attrs = getAttrs($top),
-			wrapH = document.createElement('div');
-			
-		attrs['class'] = attrs['class'].replace(outerClass, headerOuterClass);
-		
-		var fakeH = jq(header).clone().wrap(jq(wrapH).attr(attrs)).parent()[0];
-		
 		jq(document.body).prepend(
-			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
-			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
+			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;' + 
+			'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;' + 
+			'width:' + ($el.width() + zk(el).padBorderHeight()) + 'px;' + 
+			'height:'+ ($el.height() + zk(el).padBorderHeight()) +'px;' + 
+			'z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
-		el.style.visibility = 'hidden';
+		el.style.visibility = "hidden";
 		var h = el.offsetHeight - wnd._titleHeight(el);
-		el = jq('#zk_wndghost')[0];
+		el = jq("#zk_wndghost")[0];
 		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
-		el.insertBefore(fakeH, el.lastChild);
+		el.insertBefore(fakeT, el.lastChild);
+		el.firstChild.style.padding = $top.css('padding');
+		el.firstChild.style.paddingRight = $el.css('padding-right');
+		el.firstChild.style.paddingLeft = $el.css('padding-left');
 		return el;
 	}
 	function _endghostmove(dg, origin) {
@@ -933,11 +919,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_offsetHeight: function (n) {
-		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight() - zk(this.$n('cave-outer')).padBorderHeight();
+		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var ho = this.$n('cap-outer');
-		return ho ? ho.offsetHeight : 0;
+		var cap = this.$n('cap');
+		return cap ? cap.offsetHeight : 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1197,7 +1183,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n) +
-				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n('cave-outer')).padBorderHeight() : 0);
+				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n()).padBorderHeight() : 0);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},

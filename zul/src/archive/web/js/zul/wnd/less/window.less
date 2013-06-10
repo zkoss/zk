@@ -1,23 +1,16 @@
 @import "~./zul/less/_header.less";
+@import "~./zul/less/font/_icons.less";
 
 @frameBackgroundColor: #D9E5EF;
 @contentBackgroundColor: white;
 @iconHoverBackgoundColor: #DFF2FC;
 @iconColor: #777777;
 
-.resetHeaderOuter() {
+.resetPadBorder() {
 	padding: 0px;
 	background-color: transparent;
 	border: 0;
-	.topBorderRadius('0px');
-	.defaultOverflowZoom();
-}
-
-.resetContentOuter() {
-	padding: 0px;
-	background-color: transparent;
-	border: 0;
-	.bottomBorderRadius('0px');
+	.borderRadius('0px');
 	.defaultOverflowZoom();
 }
 
@@ -26,9 +19,16 @@
 }
 
 .z-window {
-
 	.defaultOverflowZoom();
+	background: rgba(214,227,238, 0.9);
+	border: 1px solid rgba(17,17,17, 0.3);
+	padding: 5px;
+	.borderRadius();
 	
+	&-shadow {
+		.boxShadow('0 0 4px rgba(0, 0, 0, 0.25)');
+	}
+
 	&-header {
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium; font-weight: normal;
@@ -36,19 +36,9 @@
 		background-color: @frameBackgroundColor;
 		color: #363636;
 		line-height: 24px;
-		padding-top: 2px;
-		padding-bottom: 6px;
+		height: @baseBarHeight;
 		.defaultOverflowZoom();
-		
-		&-outer {
-			.topBorderRadius();
-			border: 1px solid #9F9F9F;
-			border-bottom-width: 0px;  
-			padding: 5px;
-			padding-bottom: 0px;
-			background-color: @frameBackgroundColor;
-			.defaultOverflowZoom();
-		}
+		padding: 3px 0 5px 0;
 		
 		&-move {
 			cursor: move;
@@ -59,7 +49,7 @@
 		margin: 0;
 		padding: 4px;
 		background-color: @contentBackgroundColor;
-		border: solid #ACACAC 1px;
+		border: solid #C5C5C5 1px;
 		.defaultOverflowZoom();
 	}
 	
@@ -77,6 +67,8 @@
 		color: @iconColor;
 			
 		&:hover {
+			.resetGradient();
+			border-color: #8FB9D0;
 			background-color: @iconHoverBackgoundColor;
 		}
 	}
@@ -117,87 +109,69 @@
 		position: absolute;
 		background: #D7E6F7;
 		overflow: hidden;
+		padding: 5px 0px 0px 0px;
 		filter: alpha(opacity=65) !important; /* IE */
 		opacity: .65 !important;
 		cursor: move !important;
+		border: 1px solid #9F9F9F;
 		
 		dl {
-			border: 1px solid #9F9F9F;
+			border-top: 1px solid #9F9F9F;
 			margin: 0; padding: 0;
 			overflow: hidden;
 			display: block;
-			background: #D7E6F7;
 			line-height: 0;
 			font-size: 0;
 		}
 	}
-	
-	&-overlapped&-shadow, &-popup&-shadow {
-		.borderRadius();
-		.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
+
+	&-popup {
+		.topBorderRadius();
+
+		&-content {
+			border-width: 1px 0 0 0;
+			margin: 0 -5px -5px;
+		}
+
+		&-popup.z-window-noheader {
+			.resetPadBorder();
+		}
 	}
 	
 	&-modal&-shadow, &-highlighted&-shadow {
 		.borderRadius();
-		.boxShadow('0 0 4px rgba(0, 0, 0, 0.7)');
-	}
-	
-	&-embedded-header {
-		& a, & a:visited, & a:hover {
-			color: #222222;
-		}
+		.boxShadow('inset 0px 1px 1px #FFFFFF, 0 0 4px rgba(0, 0, 0, 0.7)');
 	}
 	
 	&-embedded&-shadow {
 		.boxShadow('none');
 	}
 	
-	&-modal > &-content-outer,
-	&-overlapped > &-content-outer,
-	&-highlighted > &-content-outer,
-	&-embedded > &-content-outer {
-		.bottomBorderRadius();
-		border: 1px solid #9F9F9F;
-		border-top-width: 0px;  
-		padding: 5px;
-		padding-top: 0px;
-		background-color: @frameBackgroundColor;
-		.defaultOverflowZoom();
-	}
-	
-	&-embedded > &-header-outer {
-		.topBorderRadius('0px');
-	}
-	 
-	&-embedded > &-content-outer {
-		.bottomBorderRadius('0px');
-	}
-	
-	&-popup&-noheader > &-header-outer {
-		.resetHeaderOuter();
-	}
-	
-	&-noborder > &-content-outer > &-content {
-		margin: 0;
-		padding: 4px;
-		background-color: @contentBackgroundColor;
-		border: 0;
-		.defaultOverflowZoom();
-	}
-	
-	&-noborder > &-content-outer {
-		.resetContentOuter();
-	}
-	
-	&-noborder&-noheader > &-header-outer {
-		.resetHeaderOuter();
+	&-noborder {
+		border: 0px;
+		padding: 0px;
+
+		& > .z-window-content {
+			border: 0;
+		}
+
+		&:not(.z-window-noheader) {
+			padding: 5px 5px 0 5px;
+			& > .z-window-content {
+				margin: 0 -5px;
+			}
+		}
+
+		&.z-window-shadow {
+			.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
+		}
 	}
 
 }
 
 .z-messagebox {
-	&-window.z-window-modal > .z-window-content-outer > .z-window-content, 
-	&-window.z-window-highlighted > .z-window-content-outer > .z-window-content {
+	&-window.z-window-modal > .z-window-content, 
+	&-window.z-window-highlighted > .z-window-content {
 		padding: 17px;
 		padding-bottom: 15px;
 	}
@@ -211,31 +185,16 @@
 	&-button {
 		min-width: 48pt;
 		width: 100%;
-	}	
-}
+	}
 
-.z-msgbox {
-	display: inline-block;
-	background-repeat: no-repeat;
-	vertical-align: top;
-	cursor: pointer;
-	border: 0;
-	width: 32px;
-	height: 32px;
-	
-	&-question {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-btn.png');
-	}
-	
-	&-exclamation {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-btn.png');
-	}
-	
-	&-information {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-btn.png');
-	}
-	
-	&-error {
-		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
+	&-icon {
+		display: inline-block;
+		background-repeat: no-repeat;
+		vertical-align: top;
+		cursor: pointer;
+		border: 0;
+		width: 32px;
+		height: 32px;
+		font-size: 32px;
 	}
 }

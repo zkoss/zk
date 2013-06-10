@@ -19,8 +19,7 @@ function (out, skipper) {
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass();
 
-	out.push('<div', this.domAttrs_(), '><div id="',
-			uuid, '-cap-outer" class="', this.$s('header-outer'), '">');
+	out.push('<div', this.domAttrs_(), '>');
 	
 	if (caption || title) {
 		out.push('<div id="',
@@ -50,8 +49,8 @@ function (out, skipper) {
 		out.push('</div>');
 	} 
 	
-	out.push('</div><div id="',
-				uuid, '-cave-outer" class="', this.$s('content-outer'), '"><div id="', uuid, '-cave" class="');
+	out.push('<div id="', uuid, '-cave" class="');
+	
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(this.$s('content'), '" ');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
@@ -61,5 +60,5 @@ function (out, skipper) {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (w != caption)
 				w.redraw(out);
-	out.push('</div></div></div>');
+	out.push('</div></div>');
 }
