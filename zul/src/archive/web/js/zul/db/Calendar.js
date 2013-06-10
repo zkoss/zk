@@ -217,8 +217,8 @@ zul.db.Renderer = {
 			d = val.getDate(),
 			y = val.getFullYear(),
 			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y, 
-			yofs = y - (y % 10 + 1);
-			minyear = wgt._minyear;
+			yofs = y - (y % 10 + 1),
+			minyear = wgt._minyear,
 			maxyear = wgt._maxyear;		
 		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, 
 				'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
@@ -255,7 +255,7 @@ zul.db.Renderer = {
 			ydec = zk.parseInt(y/100),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear,
-			mindec = zk.parseInt(minyear/10) * 10;
+			mindec = zk.parseInt(minyear/10) * 10,
 			maxdec = zk.parseInt(maxyear/10) * 10;
 			
 		
@@ -752,12 +752,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			y = val.getFullYear(),
 			ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y, 
 			yofs = y - (y % 10 + 1),
-			ydec = zk.parseInt(y/100);
-			minyear = this._minyear;
-			maxyear = this._maxyear;		
-			mincen = zk.parseInt(minyear / 100) * 100;
-			maxcen = zk.parseInt(maxyear / 100) * 100;	
-			mindec = zk.parseInt(minyear / 10) * 10;
+			ydec = zk.parseInt(y/100),
+			minyear = this._minyear,
+			maxyear = this._maxyear,		
+			mincen = zk.parseInt(minyear / 100) * 100,
+			maxcen = zk.parseInt(maxyear / 100) * 100,	
+			mindec = zk.parseInt(minyear / 10) * 10,
 			maxdec = zk.parseInt(maxyear / 10) * 10;			
 		
 		if (view == 'decade') {
