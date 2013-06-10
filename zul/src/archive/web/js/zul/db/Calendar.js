@@ -80,9 +80,9 @@ zul.db.Renderer = {
 		if ((constraint = cal._constraint)&& typeof constraint == 'string') {
 			
 			// Bug ID: 3106676
-			if ((constraint.indexOf("no past") > -1 && (d - today) / 86400000 < 0) ||
-			    (constraint.indexOf("no future") > -1 && (today - d) / 86400000 < 0) ||
-			    (constraint.indexOf("no today") > -1 && today - d == 0))
+			if ((constraint.indexOf('no past') > -1 && (d - today) / 86400000 < 0) ||
+			    (constraint.indexOf('no future') > -1 && (today - d) / 86400000 < 0) ||
+			    (constraint.indexOf('no today') > -1 && today - d == 0))
 					return true;
 		}
 		
@@ -284,7 +284,7 @@ var Calendar =
  * <p>Default {@link #getZclass}: z-calendar.
  */
 zul.db.Calendar = zk.$extends(zul.Widget, {
-	_view : "day", //"day", "month", "year", "decade",
+	_view : 'day', //"day", "month", "year", "decade",
 	_minyear: 1900,
 	_maxyear: 2099,
 	
@@ -327,8 +327,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				len = format.length + 1;
 			for (var i = 0; i < constraints.length; i++) {
 				constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
-				if (constraint.startsWith("between")) {
-					var j = constraint.indexOf("and", 7);
+				if (constraint.startsWith('between')) {
+					var j = constraint.indexOf('and', 7);
 					if (j < 0 && zk.debugJS) 
 						zk.error('Unknown constraint: ' + constraint);
 					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), format);
@@ -343,10 +343,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this._end.setHours(0, 0, 0, 0);
 				} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
 					continue; //Constraint start with 'before_' and 'after_' means errorbox position, skip it
-				} else if (constraint.startsWith("before")) {
+				} else if (constraint.startsWith('before')) {
 					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), format);
 					this._end.setHours(0, 0, 0, 0);
-				} else if (constraint.startsWith("after")) {
+				} else if (constraint.startsWith('after')) {
 					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format);
 					this._beg.setHours(0, 0, 0, 0);
 				}
@@ -396,7 +396,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	//@Override
 	redraw: function () {
 		zul.db.Renderer.beforeRedraw(this);
-		this.$supers("redraw", arguments);
+		this.$supers('redraw', arguments);
 	},
 	onChange: function (evt) {
 		this._updFormData(evt.data.value);
@@ -408,6 +408,22 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this._shift(ofs);
 		} else 
 			this.$supers('doKeyDown_', arguments);
+	},
+	setMinYear_: function(v) {
+		if (v === undefined) {
+			this._minyear = 1900;
+		} else {
+			var y = this.getTime().getFullYear();
+			this._minyear = v > y ? y : (v > 100 ? v : 100);
+		}
+	},
+	setMaxYear_: function(v) {
+		if (v === undefined) {
+			this._maxyear = 2099;
+		} else {
+			var y = this.getTime().getFullYear();			
+			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
+		}
 	},
 	_shift: function (ofs, opts) {
 		var oldTime = this.getTime();	
@@ -457,7 +473,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	getFormat: function () {
-		return this._fmt || "yyyy/MM/dd";
+		return this._fmt || 'yyyy/MM/dd';
 	},
 	_updFormData: function (val) {
 		val = new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols);
@@ -723,7 +739,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		};
 	},
 	/**
-	 * Check whether the date is out of range between 1900~2100 years
+	 * Check whether the date is out of range between _minyear and _maxyear
 	 * @param boolean left it is used for the left arrow button
 	 * @param Date date the date object for the range if null, the current value
 	 * of {@link #getTime()} is assumed.
@@ -739,17 +755,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ydec = zk.parseInt(y/100);
 			minyear = this._minyear;
 			maxyear = this._maxyear;		
-			mincen = zk.parseInt(this._minyear / 100) * 100;
-			maxcen = zk.parseInt(this._maxyear / 100) * 100;	
-			mindec = zk.parseInt(this._minyear / 10) * 10;
-			maxdec = zk.parseInt(this._maxyear / 10) * 10;			
+			mincen = zk.parseInt(minyear / 100) * 100;
+			maxcen = zk.parseInt(maxyear / 100) * 100;	
+			mindec = zk.parseInt(minyear / 10) * 10;
+			maxdec = zk.parseInt(maxyear / 10) * 10;			
 		
 		if (view == 'decade') {
 			var value = ydec*100 + ydelta;
 			return left ? value == mincen : value == maxcen;
 		} else if (view == 'year') {
 			var value = yofs + ydelta;
-			return left ? value < this._minyear : value + 10 >= maxyear;
+			return left ? value < minyear : value + 10 >= maxyear;
 		} else if (view == 'day') {
 			var value = y + ydelta,
 				m = val.getMonth();
