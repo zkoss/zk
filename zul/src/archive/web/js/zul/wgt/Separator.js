@@ -21,13 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 /**
  * A separator.
- *  <p>Default {@link #getZclass} as follows:
- *  <ol>
- *  	<li>Case 1: If {@link #getOrient()} is vertical and {@link #isBar()} is false, "z-separator-ver" is assumed</li>
- *  	<li>Case 2: If {@link #getOrient()} is vertical and {@link #isBar()} is true, "z-separator-ver-bar" is assumed</li>
- *  	<li>Case 3: If {@link #getOrient()} is horizontal and {@link #isBar()} is false, "z-separator-hor" is assumed</li>
- *  	<li>Case 4: If {@link #getOrient()} is horizontal and {@link #isBar()} is true, "z-separator-hor-bar" is assumed</li>
- *  </ol>
+ *  <p>Default {@link #getZclass} is z-separator.
  */
 zul.wgt.Separator = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
@@ -82,7 +76,6 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 			jq(n).data('orient') = this._orient;
 		}
 	},
-	
 	updateBar: function () {
 		var n = this.$n();
 		if (n !== undefined) {
