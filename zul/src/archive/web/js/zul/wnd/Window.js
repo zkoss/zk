@@ -66,11 +66,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
 		el = jq('#zk_wndghost')[0];
-		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
+		var f = el.firstChild,
+			fs = f.style;
+		fs.height = jq.px0(zk(f).revisedHeight(h));
 		el.insertBefore(fakeT, el.lastChild);
-		el.firstChild.style.padding = $top.css('padding');
-		el.firstChild.style.paddingRight = $el.css('padding-right');
-		el.firstChild.style.paddingLeft = $el.css('padding-left');
+		fs.padding = $top.css('padding');
+		fs.paddingRight = $el.css('padding-right');
+		fs.paddingLeft = $el.css('padding-left');
 		return el;
 	}
 	function _endghostmove(dg, origin) {
