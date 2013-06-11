@@ -162,7 +162,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			tabbox._selTab = tab; //avoid loopback
 			var ps;
 			if (ps = tabbox.tabpanels){
-				if(ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false,false);
+				if(ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false, tabbox.inAccordionMold());
 				ps._selPnl = panel; //stored in tabpanels
 			}
 		}
