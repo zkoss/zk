@@ -71,15 +71,13 @@ table {
 		background: @stripBackground;
 	}
 }
-//column and auxhead
-.z-columns,
-.z-auxhead {
+//column
+.z-columns {
 	th:last-child {
 		border-right: none;
 	}
 }
-.z-column,
-.z-auxheader {
+.z-column {
 	.verGradient();
 	overflow: hidden;
 	white-space: nowrap;
@@ -183,7 +181,6 @@ table {
 }
 //content
 .z-column-content,
-.z-auxheader-content,
 .z-row-content,
 .z-group-content,
 .z-groupfoot-content,
@@ -195,8 +192,7 @@ table {
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
 }
-.z-column-content,
-.z-auxheader-content {
+.z-column-content {
 	font-weight: bold;
 	padding: 4px 5px 3px;
 }

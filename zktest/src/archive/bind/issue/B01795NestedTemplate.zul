@@ -1,0 +1,16 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<grid apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01795NestedTemplate')"
+	model="@load(vm.profiles)">
+	<template name="model" var="profile">
+		<row children="@load(vm.columns)">
+			<template name="children" var="column">
+				 <label value="@load(vm.getProfileSkillsX(column,profile))"/> 
+				 <label value="@load(vm.getProfileSkills(profile,column))"/>
+				 <label value="@load(profile[column]))"/>  
+			</template>
+		</row>
+	</template>
+</grid>
+</zk>

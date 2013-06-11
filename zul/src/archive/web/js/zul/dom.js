@@ -30,11 +30,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	});
 
 	var $alert = jq.alert,
-		icons = {QUESTION: "z-msgbox z-msgbox-question",
-			EXCLAMATION: "z-msgbox z-msgbox-exclamation",
-			INFORMATION: "z-msgbox z-msgbox-information",
-			ERROR: "z-msgbox z-msgbox-error",
-			NONE: 'z-msgbox z-msgbox-none'
+		icons = {QUESTION: 'z-messagebox-icon z-messagebox-question z-icon-question-sign',
+			EXCLAMATION: 'z-messagebox-icon z-messagebox-warning z-icon-warning-sign',
+			INFORMATION: 'z-messagebox-icon z-messagebox-info z-icon-info-sign',
+			ERROR: 'z-messagebox-icon z-messagebox-error z-icon-remove-sign',
+			NONE: 'z-messagebox z-messagebox-none'
 		};
 
 	function newButton(nm, f) {

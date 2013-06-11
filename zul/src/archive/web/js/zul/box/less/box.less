@@ -17,7 +17,7 @@
 	}
 }
 
-<%-- Splitter --%>
+// Splitter
 .z-splitter-button {
 	color: #959595;
 	vertical-align: top;// vertical-align: make it looks same in diff browsers
@@ -26,19 +26,23 @@
 	position: relative;
 	border: 1px solid #C5C5C5;
 }
+.z-splitter-button .z-splitter-icon {
+	opacity: 0.5;
+	&:hover {
+		opacity: 1;
+	}
+}
 .z-icon-caret-up,
 .z-icon-caret-down,
-.z-icon-caret-left,
-.z-icon-caret-right {
-	.z-splitter-button & {
-		opacity: 0.5;
-	}
+.z-icon-caret-right,
+.z-icon-caret-left {
 	.z-splitter-button:hover & {
 		opacity: 1;
 	}
 }
 .z-splitter-horizontal {
-	width: @splitterSize - 2;
+	width: @splitterSize;
+	border-width: 0 1px;
 	cursor: e-resize;
 	.horGradient(#FDFDFD, #F1F1F1);
 	& > .z-splitter-button {
@@ -61,19 +65,18 @@ tr.z-splitter-outer > td {
 	max-height: @splitterSize;
 	height: @splitterSize;
 }
-.z-splitter-nospliter {
+.z-splitter-nosplitter {
 	cursor: default;
 }
 
-td.z-splitter-outer,
-.z-splitter-vertical {
+.z-splitter-vertical,
+.z-splitter-horizontal {
 	border: 1px solid #C5C5C5;
 	overflow: hidden;
-
-	& > .z-splitter-button {
-		width: 30px;
-		height: @splitterSize;
-	}
+}
+.z-splitter-vertical > .z-splitter-button {
+	width: 30px;
+	height: @splitterSize;
 }
 .z-splitter-vertical, {
 	border-width: 1px 0;
@@ -82,7 +85,6 @@ td.z-splitter-outer,
 .z-splitter-horizontal > .z-splitter-button {
 	border-width: 1px 0;
 }
-td.z-splitter-outer,
 .z-splitter-vertical > .z-splitter-button {
 	border-width: 0 1px;
 }
@@ -93,11 +95,12 @@ td.z-splitter-outer,
 .z-splitter-horizontal {
 	.z-splitter-icon {
 		position: absolute;
-		font-size: @fontSizeXSmall;
-		top: 8px;
+		font-size: @fontSizeXSmall + 1; // add 1px more
+		top: 9px;
 		left: 1px;
 	}
 	.z-splitter-icon.z-icon-ellipsis-vertical {
+		font-size: @fontSizeXSmall;
 		top: -21px;
 		left: 2px;
 		cursor: e-resize;

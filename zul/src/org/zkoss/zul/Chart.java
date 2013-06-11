@@ -83,6 +83,7 @@ public class Chart extends Imagemap {
 	private static final long serialVersionUID = 20091008183601L;
 	//chart type
 	public static final String PIE = "pie";
+	public static final String FUNNEL = "funnel";
 	public static final String RING = "ring";
 	public static final String BAR = "bar";
 	public static final String LINE = "line";

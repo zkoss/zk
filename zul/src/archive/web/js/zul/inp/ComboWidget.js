@@ -368,7 +368,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var btn, inp = this.getInputNode();
 			
 		if (btn = this.$n('btn')) {
-			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 		
@@ -380,8 +379,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		var btn = this.$n('btn');
 		if (btn) {
-			this._auxb.cleanup();
-			this._auxb = null;
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
@@ -487,12 +484,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		out.push('" autocomplete="off"',
 			this.textAttrs_(), '/><a id="', uuid, '-btn" class="',
-			this.$s('icon'));
+			this.$s('button'));
 
 		if (!isButtonVisible)
 			out.push(' ', this.$s('disabled'));
 
-		out.push('"><i class="', this.getIconClass_(),'"></i></a>');
+		out.push('"><i class="', this.$s('icon'), ' ', this.getIconClass_(),'"></i></a>');
 
 		this.redrawpp_(out);
 

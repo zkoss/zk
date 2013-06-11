@@ -16,8 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collection;
-
 /**
  * A Pie chart data model.
  *
@@ -25,39 +23,5 @@ import java.util.Collection;
  * @see Chart
  * @see SimplePieModel
  */
-public interface PieModel extends ChartModel {
-	/**
-	 * Get category of the specified index (0 based).
-	 * @param index the index of the category.
-	 */
-	public Comparable<?> getCategory(int index);
-		
-	/**
-	 * Get categories as a collection.
-	 */
-	public Collection<Comparable<?>> getCategories();
-	
-	/**
-	 * Get value of the specified category.
-	 * @param category the pie category.
-	 */
-	public Number getValue(Comparable<?> category);
-
-	/**
-	 * add or update the value of a specified category.
-	 * @param category the pie category.
-	 * @param value the pie value.
-	 */
-	public void setValue(Comparable<?> category, Number value);
-
-	/**
-	 * remove the value of the specified category.
-	 * @param category the pie category.
-	 */	
-	public void removeValue(Comparable<?> category);
-	
-	/**
-	 * clear the model.
-	 */
-	public void clear();
+public interface PieModel extends SingleValueCategoryModel {
 }
