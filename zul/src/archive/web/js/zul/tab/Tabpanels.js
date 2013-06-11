@@ -148,7 +148,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		//bug B65-ZK-1785 synchronize selection only once in the end after all removes have finished
 		if (this.tabRemoved) {
 			_synchSelectedPanels(this);
-			tabRemoved = false;
+			this.tabRemoved = false;
 		}
 	}
 });
