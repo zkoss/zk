@@ -17,39 +17,37 @@ function (out, skipper) {
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption;
-		
-	out.push('<div', this.domAttrs_(), '><div id="',
-			uuid, '-cap-outer" class="', this.$s('header-outer'), '">');
+
+	out.push('<div', this.domAttrs_(), '>');
 	if (caption || title) {
-		out.push('<div id="',
-				uuid, '-cap" class="', this.$s('header'), '">');
+		out.push('<div id="', uuid, '-head" class="', zcls, '-head">',
+				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {
-			var self = this;
-			var getIcon = function(iconClass) {
-				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
-			}
-			
-			var iconImg = this.$s('icon-img');
+			var	icon = this.$s('icon'), 
+				getIcon = function(iconClass) {
+					return '<i class="z-' + iconClass + '"></i>';
+				};
+				
 			if (this._closable)
-				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove') ,  '</div>');
+				out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove') ,  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-max" class="', iconImg, ' ', this.$s('maximize'));
+				out.push('<div id="', uuid , '-max" class="', icon, ' ', this.$s('maximize'));
 				if (this._maximized)
 					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-min" class="', iconImg, ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-min" class="', icon, ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			if (this._collapsible)
-				out.push('<div id="', uuid , '-exp" class="', iconImg, ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
+				out.push('<div id="', uuid , '-exp" class="', icon, ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		} 
 		
-		out.push('</div>');
+		out.push('</div></div>');
 	} 
 	
-	out.push('</div><div id="', uuid, '-body" class="', this.$s('body'), '"');
+	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
 	if (!this._open) 
 		out.push(' style="display:none;"');
 	out.push('>');
