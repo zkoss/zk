@@ -1,0 +1,7 @@
+<zk>
+	<div id="div">
+		<label>Press enter in the textbox should not see any JS error </label>
+		<separator />
+		<textbox value="Jerry" width="150px" id="test" onOK="test.visible=false; div.invalidate();"/>
+	</div>
+</zk>
