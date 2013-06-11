@@ -169,7 +169,7 @@ public class ThemeFns {
 			int len = colorAll.length();
 			if (len > 0)
 				colorAll.delete(len - 1, len);
-		} else if (template == Browser.Old_IE) {
+		} else if (template == Browser.Old_IE || template == Browser.IE9) {
 			color1 = toIEHex(colors[0]);
 			color2 = toIEHex(colors[1]);
 		} else {
