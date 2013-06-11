@@ -11,6 +11,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
 zul.fud.FileuploadDlg = zk.$extends(zul.wnd.Window, {
+	getZclass: function () { // keep the window's zclass
+		return this._zclass == null ? 'z-window' : this._zclass;
+	},
 	cancel: function (sendToServer) {
 		var fu = this.$f('fileupload');
 		if (fu) {
@@ -43,7 +46,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au:true}),
 			html = '<div id="' + id + '" style="min-height:16px;background:#F4F8FF;border: 1px solid #99AABD;font-family:'
 			+ 'arial,sans-serif;font-size: 11px;padding: 2px;'
-			+ 'color: #0F3B82;"><image style="float: left;" src="' + uri + '"/>'
+			+ 'color: #0F3B82;"><img style="float: left;" src="' + uri + '"/>'
 			+ '<div id="' + id + '-cnt"><a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
 			+ ' font-weight: bold;cursor: pointer;">' + msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + filenm
 			+ '</div><div style="padding-left: 24px">'

@@ -199,7 +199,7 @@ zul.db.Renderer = {
 				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j, '"_dt="', j ,'">', 
+			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'">', 
 					localizedSymbols.SMON[j] + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
@@ -231,7 +231,7 @@ zul.db.Renderer = {
 				yofs++;
 				continue;
 			}
-			out.push('<td class="', cell, '" _dt="', yofs ,'" id="', uuid, '-y', j, '" >', 
+			out.push('<td class="', cell, '" data-value="', yofs ,'" id="', uuid, '-y', j, '" >', 
 					yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
@@ -267,7 +267,7 @@ zul.db.Renderer = {
 				continue;
 			}
 			
-			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="',
+			out.push('<td data-value="', temp ,'" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '"',
 					' >', (temp + ydelta) + '-<br />' +
 							(temp + ydelta + 9), '</td>');
@@ -584,8 +584,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_clickDate: function (evt) {
 		var target = evt.domTarget, val;
 		for (; target; target = target.parentNode)
-			try { //Note: _dt is also used in mold/calendar.js
-				if ((val = jq(target).attr('_dt')) !== undefined) {
+			try { //Note: data-dt is also used in mold/calendar.js
+				if ((val = jq(target).data('value')) !== undefined) {
 					val = zk.parseInt(val);
 					break;
 				}
@@ -892,7 +892,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 									$cell.addClass(disdClass);
 								}
 								$cell.html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).
-									attr('_dt', v);
+									data('value', v);
 							}
 						}
 					}
