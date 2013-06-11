@@ -62,10 +62,10 @@ zul.layout.Absolutechildren = zk.$extends(zul.Widget, {
 		this._rePositionY();
 	},
 	_rePositionX: function() {
-		jq(this.$n()).css("left", this._x);
+		jq(this.$n()).css('left', this._x);
 	},
 	_rePositionY: function() {
-		jq(this.$n()).css("top", this._y);
+		jq(this.$n()).css('top', this._y);
 	},
 	bind_: function () {
 		this.$supers(zul.layout.Absolutechildren, 'bind_', arguments);
