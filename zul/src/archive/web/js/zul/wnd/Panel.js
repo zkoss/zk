@@ -696,8 +696,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var ho = this.$n('cap-outer');
-		return ho ? ho.offsetHeight : 0;
+		var head = this.$n('head');
+		return head ? head.offsetHeight : 0;
 	},
 	onFloatUp: function (ctl) {
 		if (!this._visible || !this.isFloatable())
@@ -746,7 +746,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.setTopmost();
 	},
 	_initMove: function (cmp) {
-		var handle = this.$n('cap');
+		var handle = this.$n('head');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.getZclass() + '-header-move');
 			var $Panel = this.$class;
@@ -850,7 +850,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this.isMovable() ? this.$n('cap') : false,
+				handle = this.isMovable() ? this.$n('head') : false,
 				zcls = this.getZclass();
 			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
