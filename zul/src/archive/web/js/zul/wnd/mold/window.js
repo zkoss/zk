@@ -13,15 +13,13 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {
-	var zcls = this.getZclass(),
-		uuid = this.uuid,
+	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass();
 
-	out.push('<div', this.domAttrs_(), '><div id="',
-			uuid, '-cap-outer" class="', this.$s('header-outer'), '">');
+	out.push('<div', this.domAttrs_(), '>');
 	
 	if (caption || title) {
 		out.push('<div id="',
@@ -30,30 +28,29 @@ function (out, skipper) {
 		
 		if (caption) caption.redraw(out);
 		else {
-			var self = this;
-			var getIcon = function(iconClass) {
-				return '<i class="' + self.$s('icon') + ' z-' + iconClass + '"></i>';
-			}
+			var icon = this.$s('icon'),
+				getIcon = function(iconClass) {
+					return '<i class="z-' + iconClass + '"></i>';
+				};
 			
-			var iconImg = this.$s('icon-img');
 			if (this._closable)
-				out.push('<div id="', uuid , '-close" class="', iconImg, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
+				out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
 			if (this._maximizable) {
-				out.push('<div id="', uuid , '-max" class="', iconImg, ' ', this.$s('maximize'));
+				out.push('<div id="', uuid , '-max" class="', icon, ' ', this.$s('maximize'));
 				if (this._maximized)
 					out.push(' ', this.$s('maximized'));
 				out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="', uuid , '-min" class="', iconImg, ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
+				out.push('<div id="', uuid , '-min" class="', icon, ' ', this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		
 		out.push('</div>');
 	} 
 	
-	out.push('</div><div id="',
-				uuid, '-cave-outer" class="', this.$s('content-outer'), '"><div id="', uuid, '-cave" class="');
+	out.push('<div id="', uuid, '-cave" class="');
+	
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(this.$s('content'), '" ');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
@@ -63,5 +60,5 @@ function (out, skipper) {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (w != caption)
 				w.redraw(out);
-	out.push('</div></div></div>');
+	out.push('</div></div>');
 }
