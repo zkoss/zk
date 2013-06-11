@@ -128,9 +128,13 @@
 	&-popup {
 		.topBorderRadius();
 
-		&-content {
-			border-width: 1px 0 0 0;
-			margin: 0 -5px -5px;
+		&:not(.z-window-noheader) > .z-window-content {
+			margin: 0px -5px -5px -5px;
+		}
+
+		& > .z-window-content {
+			border-width: 0 0 0 0;
+			margin: -5px;
 		}
 
 		&-popup.z-window-noheader {
@@ -143,8 +147,11 @@
 		.boxShadow('inset 0px 1px 1px #FFFFFF, 0 0 4px rgba(0, 0, 0, 0.7)');
 	}
 	
-	&-embedded&-shadow {
-		.boxShadow('none');
+	&-embedded {
+		.borderRadius('0px');
+		& > .z-window-shadow {
+			.boxShadow('none');
+		}		
 	}
 	
 	&-noborder {
@@ -195,6 +202,7 @@
 		border: 0;
 		width: 32px;
 		height: 32px;
-		font-size: 32px;
+		font-size: 30px;
+		text-align: center;
 	}
 }
