@@ -1,0 +1,29 @@
+@import "~./zul/less/_header.less";
+
+@gridBorderColor: #CFCFCF;
+@headFootColor: #636363;
+
+.z-auxhead {
+	th:last-child {
+		border-right: none;
+	}
+}
+.z-auxheader {
+	.verGradient();
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0;
+	border-right: 1px solid @gridBorderColor;
+	border-bottom: 1px solid @gridBorderColor;
+	position: relative;
+	.applyCSS3('box-sizing', 'content-box');
+	&-content {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		font-weight: bold;
+		color: @headFootColor;
+		overflow: hidden;
+		padding: 4px 5px 3px;
+		line-height: @baseButtonHeight;
+	}
+}

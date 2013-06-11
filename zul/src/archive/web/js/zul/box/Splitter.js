@@ -222,7 +222,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_fixNSDomClass: function () {
 		jq(this.$n())
-			[this._open ? 'removeClass':'addClass'](this.$s('nospliter'));
+			[this._open ? 'removeClass':'addClass'](this.$s('nosplitter'));
 	},
 	_fixbtn: function () {
 		var $btn = jq(this.$n('btn')),

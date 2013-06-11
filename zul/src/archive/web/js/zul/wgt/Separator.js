@@ -41,7 +41,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 * @param String orient either "horizontal" or "vertical".
 		 */
 		orient: function () {
-			this.updateDomClass_();
+			this.updateOrient();
 		},
 		/** Returns whether to display a visual bar as the separator.
 		 * <p>Default: false
@@ -51,7 +51,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 * @param boolean bar
 		 */
 		bar: function () {
-			this.updateDomClass_();
+			this.updateBar();
 		},
 		/** Returns the spacing.
 		 * <p>Default: null (depending on CSS).
@@ -76,13 +76,21 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.wgt.Separator, 'bind_', arguments);
 	},
-
+	updateOrient: function () {
+		var n = this.$n();
+		if (n !== undefined) {
+			jq(n).data('orient') = this._orient;
+		}
+	},
+	
+	updateBar: function () {
+		var n = this.$n();
+		if (n !== undefined) {
+			jq(n).data('bar') = this._bar;
+		}
+	},
 	getZclass: function () {
-		var zcls = this._zclass,
-			bar = this.isBar();
-		return zcls ? zcls: "z-separator" +
-			(this.isVertical() ? "-ver" + (bar ? "-bar" : "") :
-				"-hor" + (bar ? "-bar" : ""))
+		return 'z-separator';
 	},
 	domStyle_: function () {
 		var s = this.$supers('domStyle_', arguments);

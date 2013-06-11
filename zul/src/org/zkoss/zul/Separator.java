@@ -113,8 +113,7 @@ public class Separator extends XulElement {
 
 	//super//
 	public String getZclass() {
-		return _zclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
-			"-hor" + (isBar() ? "-bar" : "")) : _zclass;
+		return _zclass == null ? "z-separator" : _zclass;
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
