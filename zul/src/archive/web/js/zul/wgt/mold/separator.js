@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var tag = this.isVertical() ? 'span': 'div';
-	out.push('<', tag, this.domAttrs_(), '><div class="', this.getZclass(), 
-			'-inner">&nbsp;</div></', tag, '>');
+	out.push('<', tag, this.domAttrs_());
+	out.push('data-orient="', this._orient, '" data-bar="', this.isBar() ? "true" : "false", '"');
+	out.push('>&nbsp;</', tag, '>');
 }
