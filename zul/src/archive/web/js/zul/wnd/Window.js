@@ -63,9 +63,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			'height:'+ ($el.height() + zk(el).padBorderHeight()) +'px;' + 
 			'z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
-		el.style.visibility = "hidden";
+		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
-		el = jq("#zk_wndghost")[0];
+		el = jq('#zk_wndghost')[0];
 		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
 		el.insertBefore(fakeT, el.lastChild);
 		el.firstChild.style.padding = $top.css('padding');
