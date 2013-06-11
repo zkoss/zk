@@ -1,0 +1,114 @@
+@import "~./zul/less/_header.less";
+
+@pagingBorderColor: #CFCFCF;
+@pagingBackground: #F9F9F9;
+@pagingTextColor: #006DA3;
+@pagingInfoColor: #363636;
+
+.z-paging {
+	border-bottom: 1px solid @pagingBorderColor;
+	background: @pagingBackground;
+	position: relative;
+	height: @baseBarHeight;
+	padding: 4px 10px;
+	&-os {
+		border-bottom: none;
+	}
+	ul {
+		display: inline-block;
+		margin: 0;
+		padding: 0;
+		& > li {
+			display: inline-block;
+		}
+	}
+	&-button {
+		display: inline-block;
+		.verGradient();
+		border: 1px solid @pagingBorderColor;
+		.borderRadius(@borderRadiusSmall);
+		min-width: @baseButtonWidth;
+		height: @baseButtonHeight;
+		padding: 3px 6px;
+		margin-right: 6px;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @pagingTextColor;
+		text-decoration: none;
+		text-align: center;
+		&:hover {
+			border-color: #A1A1A1;
+			.boxShadow('0 0 2px rgba(0, 0, 0, 0.34)');
+		}
+		&:active {
+			.verGradient(@baseGradientEnd, @baseGradientStart);
+			border-color: #A1A1A1 #CCCCCC #DDDDDD;
+		}
+		&[disabled] {
+			color: gray;
+			cursor: default;
+			opacity: 0.4;
+			filter: alpha(opacity=40);
+			&:hover {
+				.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+				border-color: @pagingBorderColor;
+			}
+			&:active {
+				.verGradient();
+				border-color: @pagingBorderColor;
+			}
+		}
+	}
+	&-noborder {
+		border: none;
+		.resetGradient();
+		&:hover {
+			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+			text-decoration: underline;
+		}
+		&:active {
+			.resetGradient();
+			border-color: @pagingBorderColor;
+		}
+	}
+	&-selected {
+		.resetGradient();
+		background: #E1E1E1;
+		border-color: #AEAEAE;
+		color: @pagingInfoColor;
+		&:hover {
+			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+			border-color: #AEAEAE;
+		}
+		&:active {
+			.resetGradient();
+			background: #E1E1E1;
+			border-color: #AEAEAE;
+		}
+	}
+	&-input {
+		border: 1px solid @pagingBorderColor;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @pagingInfoColor;
+		height: @baseButtonHeight;
+		margin-left: 6px;
+		vertical-align: baseline;
+	}
+	&-text {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @pagingInfoColor;
+		margin-right: 12px;
+	}
+	&-info {
+		position: absolute;
+		top: 0;
+		right: 10px;
+		padding: 4px 0;
+		line-height: 24px;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @pagingInfoColor;
+	}
+}
