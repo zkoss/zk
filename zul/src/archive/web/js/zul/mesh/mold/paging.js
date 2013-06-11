@@ -21,18 +21,18 @@ function (out) {
 	var uuid = this.uuid,
 		btn = this.$s('button');
 	
-	out.push('<div', this.domAttrs_(), '><ul>',
-			'<li><a id="', uuid, '-first" class="', btn,
+	out.push('<div name="', uuid, '"', this.domAttrs_(), '><ul>',
+			'<li><a name="', uuid, '-first" class="', btn, ' ', this.$s('first'),
 				'"><i class="z-icon-step-backward"></i></a></li>',
-			'<li><a id="', uuid, '-prev" class="', btn,
+			'<li><a name="', uuid, '-prev" class="', btn, ' ', this.$s('previous'),
 				'"><i class="z-icon-caret-left"></i></a></li>',
-			'<li><input id="',
+			'<li><input name="',
 				uuid, '-real" class="', this.$s('input'), '" type="text" value="',
-				this.getActivePage() + 1, '" size="1"></input><span class="',
+				this.getActivePage() + 1, '" size="3"></input><span class="',
 				this.$s('text'), '"> / ', this.getPageCount(), '</span></li>',
-			'<li><a id="', uuid, '-next" class="', btn,
+			'<li><a name="', uuid, '-next" class="', btn, ' ', this.$s('next'),
 				'"><i class="z-icon-caret-right"></i></a></li>',
-			'<li><a id="', uuid, '-last" class="', btn,
+			'<li><a name="', uuid, '-last" class="', btn, ' ', this.$s('last'),
 				'"><i class="z-icon-step-forward"></i></a></li></ul>');
 	
 	if (this.isDetailed())

@@ -197,7 +197,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (this._totalSize == 0)
 			return;
 		
-		out.push('<div class="', this.$s('info'), '"><span id="', this.uuid,
+		out.push('<div class="', this.$s('info'), '"><span name="', this.uuid,
 			'-info">', this.infoText_(), '</span></div>');
 	},
 	_innerTags: function () {
@@ -256,10 +256,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				'" href="javascript:;" onclick="zul.mesh.Paging.go(this,', val,
 				')">', label, '</a></li>');
 	},
-//	_doMouseEvt: function (evt) {
-//		var zcls = this.getZclass() + '-cnt-l';
-//		jq(evt.domTarget).parents('.' + zcls)[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](zcls + '-over');
-//	},
 	domClass_: function () {
 		var cls = this.$supers(zul.mesh.Paging, 'domClass_', arguments),
 			added = 'os' == this.getMold() ? ' ' + this.$s('os') : '';
@@ -271,43 +267,50 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Paging, 'bind_', arguments);
-		var input = jq('#' + this.uuid + '-real'),
+		var uuid = this.uuid,
+			input = jq.$$(uuid, 'real'),
 			Paging = this.$class,
 			pcount = this._pageCount,
 			acp = this._activePage,
 			postfix = ['first', 'prev', 'last', 'next'];
 
 		if (!this.$weave)
-			jq(input).keydown(Paging._domKeyDown).blur(Paging._domBlur);
+			for (var i = input.length; i--;)
+				jq(input[i]).keydown(Paging._domKeyDown).blur(Paging._domBlur);
 
 		for (var k = postfix.length; k--; ) {
-			var btn = this.$n(postfix[k]);
-			if (!this.$weave)
-				jq(btn).click(Paging['_dom' + postfix[k] + 'Click']);
-
-			if (pcount == 1) {
-				jq(btn).attr('disabled', true);
-			} else if (postfix[k] == 'first' || postfix[k] == 'prev') {
-				if (acp == 0)
-					jq(btn).attr('disabled', true);
-			} else if (acp == pcount - 1) {
-				jq(btn).attr('disabled', true);
+			var btn = jq.$$(uuid, postfix[k]);
+			for (var j = btn.length; j--;) {
+				if (!this.$weave)
+					jq(btn[j]).click(Paging['_dom' + postfix[k] + 'Click']);
+	
+				if (pcount == 1) {
+					jq(btn[j]).attr('disabled', true);
+				} else if (postfix[k] == 'first' || postfix[k] == 'prev') {
+					if (acp == 0)
+						jq(btn[j]).attr('disabled', true);
+				} else if (acp == pcount - 1) {
+					jq(btn[j]).attr('disabled', true);
+				}
 			}
 		}
 	},
 	unbind_: function () {
 		if (this.getMold() != 'os') {
-			var input = this.$n('real'),
+			var uuid = this.uuid,
+				input = jq.$$(uuid, 'real'),
 				Paging = this.$class,
 				postfix = ['first', 'prev', 'last', 'next'];
 
-			jq(input)
-				.unbind('keydown', Paging._domKeyDown)
-				.unbind('blur', Paging._domBlur);
+			for (var i = input.length; i--;)
+				jq(input[i])
+					.unbind('keydown', Paging._domKeyDown)
+					.unbind('blur', Paging._domBlur);
 
 			for (var k = postfix.length; k--;) {
-				var btn = this.$n(postfix[k]);
-				jq(btn).unbind('click', Paging['_dom' + postfix[k] + 'Click']);
+				var btn = jq.$$(uuid, postfix[k]);
+				for (j = btn.length; j--;)
+					jq(btn[j]).unbind('click', Paging['_dom' + postfix[k] + 'Click']);
 			}
 		}
 		this.$supers(zul.mesh.Paging, 'unbind_', arguments);
@@ -396,16 +399,19 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domfirstClick: function (evt) {
 		var wgt = zk.Widget.$(evt),
+			uuid = wgt.uuid,
 			postfix = ['first', 'prev'];
 		
 		if (wgt.getActivePage() != 0) {
 			wgt.$class.go(wgt, 0);
 			for (var k = postfix.length; k--;)
-				jq(wgt.$n(postfix[k])).attr('disabled', true);
+				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
+					jq(btn[i]).attr('disabled', true);
 		}
 	},
 	_domprevClick: function (evt) {
 		var wgt = zk.Widget.$(evt),
+			uuid = wgt.uuid,
 			ap = wgt.getActivePage(),
 			postfix = ['first', 'prev'];
 
@@ -413,12 +419,14 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			wgt.$class.go(wgt, ap - 1);
 			if (ap - 1 == 0) {
 				for (var k = postfix.length; k--;)
-					jq(wgt.$n(postfix[k])).attr('disabled', true);
+					for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
+						jq(btn[i]).attr('disabled', true);
 			}
 		}
 	},
 	_domnextClick: function (evt) {
 		var wgt = zk.Widget.$(evt),
+			uuid = wgt.uuid,
 			ap = wgt.getActivePage(),
 			pc = wgt.getPageCount(),
 			postfix = ['last', 'next'];
@@ -427,41 +435,24 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			wgt.$class.go(wgt, ap + 1);
 			if (ap + 1 == pc - 1) {
 				for (var k = postfix.length; k--;)
-					jq(wgt.$n(postfix[k])).attr('disabled', true);
+					for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
+						jq(btn[i]).attr('disabled', true);
 			}
 		}
 	},
 	_domlastClick: function (evt) {
 		var wgt = zk.Widget.$(evt),
+			uuid = wgt.uuid,
 			pc = wgt.getPageCount(),
 			postfix = ['last', 'next'];
 
 		if (wgt.getActivePage() < pc - 1) {
 			wgt.$class.go(wgt, pc - 1);
 			for (var k = postfix.length; k--;)
-				jq(wgt.$n(postfix[k])).attr('disabled', true);
+				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
+					jq(btn[i]).attr('disabled', true);
 		}
 	}
-//	,
-//	_domMouseDown: function (evt) {
-//		var target = evt.target,
-//			$table = jq(target).parents("table:first"),
-//			wgt = zk.Widget.$(target),
-//			zcls = wgt.getZclass();
-//		if (!$table.hasClass(zcls + "-btn-disd")) {
-//			$table.addClass(zcls + "-btn-clk");
-//			wgt.$class._downbtn = $table[0];
-//			jq(document).bind('zmouseup', wgt.$class._domMouseUp);
-//		}
-//	},
-//	_domMouseUp: function (evt) {
-//		if (zul.mesh.Paging._downbtn) {
-//			var zcls = zk.Widget.$(zul.mesh.Paging._downbtn).getZclass();
-//			jq(zul.mesh.Paging._downbtn).removeClass(zcls + "-btn-clk");
-//		}
-//		zul.mesh.Paging._downbtn = null;
-//		jq(document).unbind("zmouseup", zul.mesh.Paging._domMouseUp);
-//	}
 });
 
 })();

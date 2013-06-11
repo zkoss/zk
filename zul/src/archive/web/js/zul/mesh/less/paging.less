@@ -19,7 +19,7 @@
 		margin: 0;
 		padding: 0;
 		& > li {
-			display: inline-block;
+			display: inline;
 		}
 	}
 	&-button {
@@ -28,14 +28,14 @@
 		border: 1px solid @pagingBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
-		height: @baseButtonHeight;
-		padding: 3px 6px;
+		padding: 4px 6px;
 		margin-right: 6px;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @pagingTextColor;
 		text-decoration: none;
 		text-align: center;
+		cursor: pointer;
 		&:hover {
 			border-color: #A1A1A1;
 			.boxShadow('0 0 2px rgba(0, 0, 0, 0.34)');
@@ -58,6 +58,11 @@
 				border-color: @pagingBorderColor;
 			}
 		}
+	}
+	&-previous,
+	&-next {
+		font-size: unit(unit(@fontSizeMedium) + 1, px);
+		padding-top: 3px;
 	}
 	&-noborder {
 		border: none;
