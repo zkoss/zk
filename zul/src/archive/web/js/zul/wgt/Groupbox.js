@@ -20,6 +20,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Events: onOpen.
  *
  */
+(function(){
+	function firstChild(wgt) {
+		for (var w = wgt.firstChild, cap = wgt.caption; w; w = w.nextSibling)
+			if (w != cap) return w;
+	}
+
 zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
@@ -33,6 +39,23 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 */
 		open: function (open, fromServer) {
+			if(open) {
+				if (this._rodKid && (!this.parent || !this.parent.z_rod)) {
+					delete this._rodKid;
+					this._rodopen = true; // redraw counts on it
+
+					var out = [];
+					this._redrawCave(out);
+					jq('#' + this.uuid + '-cave').replaceWith(out.join(''));
+					for ( var w = firstChild(this); w; w = w.nextSibling) {
+						w.unbind();
+						if (!w._visible && zkmax.rod(w))
+							w.z_rod = true; // Bug ZK-1557
+						w.bind(this.desktop);
+					}
+					wgt.clearCache();
+				}
+			}
 			var node = this.$n();
 			if (node && this._closable) {
 				if (open && this._isDefault())
@@ -82,7 +105,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @since 6.0
 		 */
 		title: _zkf
-	},
+	},	
+	
 	_isDefault: function () {
 		return this._mold == 'default';
 	},
@@ -111,8 +135,25 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return html;
 	},
 	_redrawCave: function (out, skipper) { //reserve for customizing
-		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
+		var w, uuid = this.uuid;
+		if (this._rodopen)
+			delete this._rodopen;
+		else if ((w = firstChild(this)) && !this._open && zkmax.rod(this)) {
+			out.push('<div id="', uuid, '-cave"');
+			if (!this._isDefault())
+				out.push(' style="display:none;border:1px solid"');
+					//border-bottom required to have a shadow
+			out.push('></div>');
 
+			for (; w; w = w.nextSibling)
+				if (w != this.caption)
+					w.z_rod = true;
+			this._rodKid = true;
+			return;
+		}
+
+		out.push('<div id="', uuid, '-cave"', this._contentAttrs(), '>');
+		
 		if (!skipper)
 			for (var w = this.firstChild, cap = this.caption; w; w = w.nextSibling)
 				if (w != cap)
@@ -241,4 +282,4 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
 		this.$supers('afterAnima_', arguments);
 	}
-});
+})})();
