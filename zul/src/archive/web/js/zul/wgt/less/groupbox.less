@@ -1,63 +1,45 @@
 @import "~./zul/less/_header.less";
 
-.z-groupbox {
-	&-header {
-		padding-left: 10px;
-		padding-right: 10px;
-		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
-		font-weight: normal;
-		border: none;
-	}
 
-	&-cnt {
-		overflow: hidden;
-		padding: 5px;
-		border: 1px solid #C5C5C5;
-		border-top: none;
-	}
-
-	&-notitle {
-		border-top: 1px solid #C5C5C5;
-	}
-
-	& .z-caption {
-		cursor: pointer;
-	}
-
-	& .z-caption-readonly {
-		cursor: default;
-	}
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0px;
+    border-radius: 0px;
 }
 
-.z-groupbox >
-.z-groupbox-header > .z-caption-cnt,
+legend {
+    border: 0;
+    padding: 0;
+}
+
+.z-groupbox > .z-groupbox-header > 
+.z-caption-cnt,
 .z-groupbox-title-cnt {
-	display: -moz-inline-box;
 	display: inline-block;
 	background-color: #FFFFFF;
 	padding-left: 3px;
 	padding-right: 3px;
 }
 
-
-.z-groupbox-title {
-	cursor: pointer;
-}
-
-.z-groupbox-3d {
+.z-groupbox {
 	margin: 0;
 	overflow: hidden;
 	padding: 0;
+
+	&-title {
+		cursor: pointer;
+	}
 	
 	&-header {
 		color: #363636;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: bold;
-		padding: 8px 0px 0px 4px;
+		line-height: @baseBarHeight;
 		border: 1px solid #c5c5c5;
 		height: @baseBarHeight;
+		padding-left: 4px;
 		overflow: hidden;
 		zoom: 1;
 		.buttonBackground();
@@ -72,5 +54,33 @@
 		border: 1px solid #C5C5C5;
 		padding: 5px;
 		zoom: 1;
+	}
+
+	&-native {
+		.z-groupbox-header {
+			margin-left: 10px;
+			margin-right: 10px;
+			font-weight: normal;
+			border: none;
+			.resetGradient();
+		}
+
+		.z-groupbox-cnt {
+			overflow: hidden;
+			padding: 5px;
+			border: none;
+		}
+
+		.z-groupbox-notitle {
+			border: none;
+		}
+
+		.z-groupbox .z-caption {
+			cursor: pointer;
+		}
+
+		.z-groupbox .z-caption-readonly {
+			cursor: default;
+		}
 	}
 }

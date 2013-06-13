@@ -19,21 +19,41 @@ function (out, skipper) {
 	title = this.getTitle();
 	title = title && !cap ? zUtl.encodeXML(title) :  null;
 	
-	out.push('<div', this.domAttrs_(), '>');
+	if(!this._isDefault()) 
+		out.push('<fieldset');
+	else
+		out.push('<div');
+	
+	out.push(' ', this.domAttrs_(), '>');
+	
+	
 	
 	if (title || cap) {
-		out.push('<div class="', zcls, '-header',(this._closable? '': ' ' + zcls + '-readonly'),'">');
+		if(this._isDefault()) 
+			out.push('<div');		
+		else 
+			out.push('<legend');
+
+		out.push(' class="', zcls, '-header',(this._closable? '': ' ' + zcls + '-readonly'),'">');
 		if (cap)
 			cap.redraw(out);
 		else
 			out.push('<div id="', uuid,'-title" class="', zcls, 
 					'-title"><span class="', zcls, '-title-cnt">', title, '</span></div>');
-		out.push('</div>');
+		
+		if(this._isDefault()) 
+			out.push('</div>');		
+		else 
+			out.push('</legend>');
 	}
 	
 	this._redrawCave(out, skipper);
 	
-	// classicblue is deprecated and 
-	// shadow not used in breeze, sapphire and silvertail,
-	out.push('</div>');
+	if(!this._isDefault())
+		out.push('</fieldset>');
+	else {
+		// classicblue is deprecated and 
+		// shadow not used in breeze, sapphire and silvertail,
+		out.push('</div>');
+	}	
 }

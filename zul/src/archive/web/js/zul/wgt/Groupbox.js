@@ -39,28 +39,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 */
 		open: function (open, fromServer) {
-			if(open) {
-				if (this._rodKid && (!this.parent || !this.parent.z_rod)) {
-					delete this._rodKid;
-					this._rodopen = true; // redraw counts on it
-
-					var out = [];
-					this._redrawCave(out);
-					jq('#' + this.uuid + '-cave').replaceWith(out.join(''));
-					for ( var w = firstChild(this); w; w = w.nextSibling) {
-						w.unbind();
-						if (!w._visible && zkmax.rod(w))
-							w.z_rod = true; // Bug ZK-1557
-						w.bind(this.desktop);
-					}
-					wgt.clearCache();
-				}
-			}
 			var node = this.$n();
 			if (node && this._closable) {
 				if (open && this._isDefault())
 						jq(node).removeClass(this.getZclass() + "-colpsd");
-				zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
+				zk(this.$n())[open?'slideDown':'slideUp'](this);
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
 		},
@@ -136,21 +119,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_redrawCave: function (out, skipper) { //reserve for customizing
 		var w, uuid = this.uuid;
-		if (this._rodopen)
-			delete this._rodopen;
-		else if ((w = firstChild(this)) && !this._open && zkmax.rod(this)) {
-			out.push('<div id="', uuid, '-cave"');
-			if (!this._isDefault())
-				out.push(' style="display:none;border:1px solid"');
-					//border-bottom required to have a shadow
-			out.push('></div>');
-
-			for (; w; w = w.nextSibling)
-				if (w != this.caption)
-					w.z_rod = true;
-			this._rodKid = true;
-			return;
-		}
 
 		out.push('<div id="', uuid, '-cave"', this._contentAttrs(), '>');
 		
@@ -226,10 +194,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				return true;
 		return cap && cap.focus_(timeout);
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls ? zcls: this._isDefault() ? "z-groupbox": "z-groupbox-3d";
-	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 		zWatch.listen({onSize: this});
@@ -270,12 +234,17 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	domClass_: function () {
-		var html = this.$supers('domClass_', arguments);
-		if (!this._open) {
-			if (html) html += ' ';
-			html += this.getZclass() + '-colpsd';
+		var cls = this.$supers('domClass_', arguments);
+		if (!this._isDefault()) {
+			if (cls) cls += ' ';
+			cls += this.$s('native');
 		}
-		return html;
+			
+		if (!this._open) {
+			if (cls) cls += ' ';
+			cls += this.$s('colpsd');
+		}
+		return cls;
 	},
 	afterAnima_: function (visible) {
 		if (!visible && this._isDefault())
