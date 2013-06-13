@@ -1,4 +1,14 @@
   --------
+ZK 7.0.0
+
+* Features
+  ZK-1813: LabelImageElement support icon font CSS class instead of Image
+  
+* Bugs
+
+* Upgrade Notes
+
+  --------
 ZK 6.5.3
 
 * Features
@@ -47,6 +57,7 @@ ZK 6.5.3
   ZK-1803: Setting a textbox visible=false and invalidate its parent leading to "Failed to mount" error in Firefox
   ZK-1793: Grid with hidden header flickering back and forth when you scroll horizontally
   ZK-1804: Calendar should not be able to select year less than 1900 or greater than 2099
+
   --------
 ZK 6.5.2
 Mar 26, 2013

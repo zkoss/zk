@@ -227,14 +227,21 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		var label = '<span class="' + this.$s('text') + '">' + 
 				(zUtl.encodeXML(this.getLabel())) + '</span>',
 			icon = '<i class="' + this.$s('icon') + ' z-icon-ok"></i>',
-			img = this.getImage();
+			img = this.getImage(),
+			iconSclass = this.domIcon_();
 		
 		if (img)
-			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />';
-		else
-			img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
-				' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
-				this.$s('image') + '" align="absmiddle" />';
+			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />'
+				+ (iconSclass ? ' ' + iconSclass : '');
+		else {
+			if (iconSclass) {
+				img = iconSclass;
+			} else {
+				img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
+					' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
+					this.$s('image') + '" align="absmiddle" />';
+			}
+		}
 		return img + (this.isCheckmark() ? icon : '') + ' ' + label;
 	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.

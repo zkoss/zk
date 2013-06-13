@@ -234,10 +234,16 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this.getImage();
+			img = this.getImage(),
+			iconSclass = this.domIcon_();
+		
 		if (!label) label = '&nbsp;';
-		if (!img) return label;
-		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
+		if (!img && !iconSclass) return label;
+		if (!img) {
+			img = iconSclass;
+		} else
+			img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>'
+				+ (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	//bug #3014664

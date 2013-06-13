@@ -242,10 +242,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this.getImage();
-		if (!img) return label;
+			img = this.getImage(),
+			iconSclass = this.domIcon_();
+		if (!img && !iconSclass) return label;
 
-		img = '<img class="' + this.$s('image') + '" src="' + img + '" align="absmiddle" />';
+		if (!img) img = iconSclass;
+		else
+			img = '<img class="' + this.$s('image') + '" src="' + img + '" align="absmiddle" />'
+				+ (iconSclass ? ' ' + iconSclass : '');
 		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;

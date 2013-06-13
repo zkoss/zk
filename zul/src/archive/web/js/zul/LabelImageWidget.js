@@ -28,9 +28,21 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		 * <p>Default: "".
 		 * @return String
 		 */
-		label: function () {
-			this.updateDomContent_();
+		label: _zkf = function () {
+			if (this.desktop)
+				this.updateDomContent_();
 		},
+		/**
+		 * Sets the icon font
+		 * @param String iconSclass a CSS class name for the icon font
+		 * @since 7.0.0
+		 */
+		/**
+		 * Returns the icon font
+		 * @return String iconSclass a CSS class name for the icon font
+		 * @since 7.0.0
+		 */
+		iconSclass: _zkf,
 		/** Sets the image URI.
 		 * @param String image the URI of the image
 		 */
@@ -80,6 +92,15 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		return img ? '<img src="' + img + '" align="absmiddle" />': '';
 	},
 	/**
+	 * Returns the icon font class name with HTML content.
+	 * @return String
+	 * @since 7.0.0
+	 */
+	domIcon_: function () {
+		var icon = this._iconSclass;
+		return icon ? '<i class="' + icon + '"></i>': '';
+	},
+	/**
 	 * Returns the encoded label.
 	 * @return String
 	 * @see zUtl#encodeXML
@@ -96,8 +117,18 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 */
 	domContent_: function () {
 		var label = this.domLabel_(),
+			icon = this.domIcon_(),
 			img = this.domImage_();
-		return img ? label ? img + ' ' + label: img: label;
+		
+		if (img) {
+			if (icon) {
+				return img + ' ' + icon + (label ? ' ' + label : ''); 
+			} else {
+				return label ? img + ' ' + label: img;
+			}
+		} else {
+			return icon ? label ? icon + ' ' + label : icon : label;
+		}
 	},
 	doMouseOver_: function () {
 		this._updateHoverImage(true);

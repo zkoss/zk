@@ -136,14 +136,21 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		img = this.getImage(),
 		icon = '<i class="' + this.$s('icon') + ' z-icon-caret-' +
 				(this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '"></i>',
-		separator = '<div class="' + this.$s('separator') + '"></div>';
+		separator = '<div class="' + this.$s('separator') + '"></div>',
+		iconSclass = this.domIcon_();
 	
 		if (img)
-			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />';
-		else
-			img = '<img id="'+ this.uuid  + '-img" ' + (this.isTopmost() ? 'style="display:none"' : '') +
-				' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
-				this.$s('image') + '" align="absmiddle" />';
+			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />'
+				+ (iconSclass ? ' ' + iconSclass : '');
+		else {
+			if (iconSclass) {
+				img = iconSclass;
+			} else {
+				img = '<img id="'+ this.uuid  + '-img" ' + (this.isTopmost() ? 'style="display:none"' : '') +
+					' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
+					this.$s('image') + '" align="absmiddle" />';
+			}
+		}
 		return img + ' ' + label + ' ' + separator + icon;
 	},
 	/** Returns whether this is an top-level menu, i.e., not owning
