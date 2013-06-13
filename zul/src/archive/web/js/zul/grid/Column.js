@@ -182,17 +182,17 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		var n = this.$n();
 		this.domListen_(n, 'onMouseOver')
 			.domListen_(n, 'onMouseOut');
-		var menuIcon = this.$n('menu-icon');
-		if (menuIcon)
-			this.domListen_(menuIcon, 'onClick', '_doMenuClick');
+		var btn = this.$n('btn');
+		if (btn)
+			this.domListen_(btn, 'onClick', '_doMenuClick');
 	},
 	unbind_: function () {
 		var n = this.$n();
 		this.domUnlisten_(n, 'onMouseOver')
 			.domUnlisten_(n, 'onMouseOut');
-		var menuIcon = this.$n('menu-icon');
-		if (menuIcon)
-			this.domUnlisten_(menuIcon, 'onClick', '_doMenuClick');
+		var btn = this.$n('btn');
+		if (btn)
+			this.domUnlisten_(btn, 'onClick', '_doMenuClick');
 		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {

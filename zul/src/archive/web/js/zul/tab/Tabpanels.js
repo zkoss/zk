@@ -42,15 +42,8 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	getTabbox: function() {
 		return this.parent;
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tabpanels';
-
-		var mold = tabbox.getMold();
-		return 'z-tabpanels' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
+	domClass_: function() {
+		return this.getTabbox() ? this.$supers('domClass_', arguments) : 'z-tabpanels'; 
 	},
 	setWidth: function (val) {
 		var n = this.$n(),
@@ -122,8 +115,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		var width = parent.offsetWidth,
 			n = this.$n();
 
-		width -= jq(parent).find('>div:first')[0].offsetWidth
-				+ jq(n).prev()[0].offsetWidth;
+		width -= jq(parent).find('>div:first')[0].offsetWidth;
 
 		n.style.width = jq.px0(zk(n).revisedWidth(width));
 	},
@@ -135,7 +127,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.tabRemoved = true;
 	},
 	onChildAdded_: function (child) {
-		this.$supers("onChildAdded_", arguments);
+		this.$supers('onChildAdded_', arguments);
 		// sync select status if tabbox not in accordion mold or
 		// the child cave is already visible
 		var tabbox = this.getTabbox(), 
@@ -148,7 +140,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		//bug B65-ZK-1785 synchronize selection only once in the end after all removes have finished
 		if (this.tabRemoved) {
 			_synchSelectedPanels(this);
-			tabRemoved = false;
+			this.tabRemoved = false;
 		}
 	}
 });

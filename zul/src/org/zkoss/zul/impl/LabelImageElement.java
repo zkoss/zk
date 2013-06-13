@@ -75,7 +75,29 @@ abstract public class LabelImageElement extends LabelElement {
 	protected LabelImageElement(String label) {
 		setLabel(label);
 	}
-
+	
+	/**
+	 * Sets the icon font
+	 * @param iconSclass a CSS class name for the icon font
+	 * @since 7.0.0
+	 */
+	public void setIconSclass(String iconSclass) {
+		if (iconSclass != null && iconSclass.length() == 0) iconSclass = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclass: null, iconSclass)) {
+			initAuxInfo().iconSclass = iconSclass;
+			smartUpdate("iconSclass", iconSclass);
+		}
+	}
+	
+	/**
+	 * Returns the icon font
+	 * @param iconSclass a CSS class name for the icon font
+	 * @since 7.0.0
+	 */
+	public String getIconSclass() {
+		return _auxinf != null && _auxinf.iconSclass instanceof String ? (String)_auxinf.iconSclass: null;
+		
+	}
 	/** Returns the image URI.
 	 * <p>Default: null.
 	 */
@@ -271,6 +293,7 @@ abstract public class LabelImageElement extends LabelElement {
 		render(renderer, "_preloadImage", Utils.testAttribute(this, "org.zkoss.zul.image.preload", false, true));
 		render(renderer, "image", getEncodedImageURL());
 		render(renderer, "hoverImage", getEncodedHoverURL());
+		render(renderer, "iconSclass", getIconSclass());
 	}
 
 	//-- ComponentCtrl --//
@@ -331,6 +354,8 @@ abstract public class LabelImageElement extends LabelElement {
 		private byte imgver;
 		/** Count the version of {@link #hoverimg}. */
 		private byte hoverimgver;
+		
+		private String iconSclass;
 
 		public Object clone() {
 			try {

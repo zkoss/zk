@@ -31,12 +31,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = this.getLabel(),
 			img = this.getImage(),
-			title = this.parent ? this.parent._title: '';
+			title = this.parent ? this.parent._title: '',
+			iconSclass = this.domIcon_();
 		if (title) label = label ? title + ' - ' + label: title;
 		label = zUtl.encodeXML(label);
-		if (!img) return label;
+		if (!img && !iconSclass) return label;
 
-		img = '<img src="' + img + '" align="absmiddle" />';
+		if (!img) img = iconSclass;
+		else img = '<img src="' + img + '" align="absmiddle" />' + 
+				(iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML

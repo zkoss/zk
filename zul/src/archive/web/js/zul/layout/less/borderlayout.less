@@ -1,0 +1,216 @@
+@import "~./zul/less/_header.less";
+
+@media print {
+    .z-borderlayout {
+		<c:if test="${zk.safari > 0}">// Bug 2949287
+			position: static;
+		</c:if>
+	}
+}
+
+@media screen {
+    .z-borderlayout {
+		position: relative;
+	}
+}
+
+.z-borderlayout {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: #F0F0F0;
+	border: 0;
+
+	&-icon {
+		margin: 2px 2px 0 0;
+		overflow: hidden;
+		cursor: pointer;
+		position: relative;
+		float: right;
+		line-height: 17px;
+		font-size: 17px;
+		opacity: 0.5;
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.z-north,
+.z-south,
+.z-west,
+.z-center,
+.z-east {
+	border: 1px solid #C5C5C5;
+	position: absolute;
+	overflow: hidden;
+	background-color: #FFFFFF;
+
+	&-noborder {
+		border: 0;
+	}
+	&-header {
+		color: #555555;
+		font-size: @fontSizeMedium;
+		font-family: @baseTitleFontFamily;
+		font-weight: bold;
+		padding: 5px;
+		border-bottom: 1px solid #C5C5C5;
+		white-space: nowrap;
+		overflow: hidden;
+		cursor: default;
+		.buttonBackground();
+		line-height: @baseLineHeight + 8; // 22px = 32 - padding-top/bottom
+		height: @baseBarHeight;
+	}
+
+	&-body {
+		line-height: @baseLineHeight;
+	}
+
+	&-collapsed {
+		background-color: #FCFCFC;
+		width: @baseBarWidth;
+		height: @baseBarHeight;
+	 	cursor: pointer; // ios issue 
+		padding: 5px;
+		border: 1px solid #C5C5C5;
+		overflow: hidden;
+		position: absolute;
+	}
+
+	&-caption {
+		height: @baseBarHeight;
+	}
+}
+.z-north,
+.z-south,
+.z-center {
+	width: 100%;
+	// Fixed for B30-1902533.zul
+}
+.z-west,
+.z-east {
+	height: 100%;
+	// Fixed for B30-1902533.zul
+}
+
+
+.z-west,
+.z-west-collapsed,
+.z-west-splitter {
+	z-index: 12;
+}
+.z-center {
+	z-index: 8;
+}
+.z-east,
+.z-east-collapsed,
+.z-east-splitter {
+	z-index: 10;
+}
+.z-north,
+.z-north-collapsed,
+.z-north-splitter  {
+	z-index: 16;
+}
+.z-south,
+.z-south-collapsed,
+.z-south-splitter {
+	z-index: 14;
+}
+
+.z-east,
+.z-west,
+.z-north,
+.z-south {
+
+	&-splitter {
+		.horGradient(#FCFCFC, #F0F0F0);
+		height: 8px;
+		width: 8px;
+		position: absolute;
+		cursor: col-resize;
+		cursor: e-resize;
+		overflow: hidden;
+
+		// splitter-button
+		&-button {
+			color: #959595;
+			vertical-align: top;// vertical-align: make it looks same in diff browsers
+			display: inline-block;
+			cursor: pointer;
+			position: relative;
+			border: 1px solid #C5C5C5;
+		}
+	}
+
+	&-icon, {
+		position: absolute;
+		font-size: @fontSizeXSmall;
+		opacity: 0.5;
+	}
+}
+.z-north-splitter,
+.z-south-splitter {
+	.verGradient(#FCFCFC, #F0F0F0);
+	cursor: row-resize;
+	cursor: s-resize;
+}
+.z-north-splitter-button:hover .z-icon-caret-up,
+.z-south-splitter-button:hover .z-icon-caret-down,
+.z-west-splitter-button:hover .z-icon-caret-left,
+.z-east-splitter-button:hover .z-icon-caret-right {
+	opacity: 1;
+}
+.z-west-icon,
+.z-east-icon {
+	top: 8px;
+	font-size: @fontSizeXSmall + 1; // add 1px more
+	left: 2px;
+}
+
+.z-west-icon.z-icon-ellipsis-vertical,
+.z-east-icon.z-icon-ellipsis-vertical {
+	font-size: @fontSizeXSmall;
+	top: -21px;
+	left: 3px;
+	cursor: e-resize;
+}
+.z-north-icon,
+.z-south-icon {
+	left: 11px;
+	top: -2px;
+}
+.z-west-icon.z-icon-ellipsis-vertical ~
+.z-west-icon.z-icon-ellipsis-vertical,
+.z-east-icon.z-icon-ellipsis-vertical ~
+.z-east-icon.z-icon-ellipsis-vertical {
+	top: 39px;
+}
+
+.z-north-icon.z-icon-ellipsis-horizontal,
+.z-south-icon.z-icon-ellipsis-horizontal {
+	top: -1px;
+	left: -20px;
+	cursor: s-resize;
+}
+.z-north-icon.z-icon-ellipsis-horizontal ~
+.z-north-icon.z-icon-ellipsis-horizontal,
+.z-south-icon.z-icon-ellipsis-horizontal ~
+.z-south-icon.z-icon-ellipsis-horizontal {
+	left: 40px;
+}
+
+.z-west-splitter-button,
+.z-east-splitter-button {
+	border-width: 1px 0;
+	width: 8px;
+	height: 30px;
+}
+.z-north-splitter-button,
+.z-south-splitter-button {
+	border-width: 0 1px;
+	width: 30px;
+	height: 8px;
+}

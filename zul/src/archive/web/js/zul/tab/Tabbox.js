@@ -42,7 +42,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * @import zul.wgt.Toolbar
  */
 zul.tab.Tabbox = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
+	_orient: 'horizontal',
 	_tabscroll: true,
 	/* ZK-1441
 	 * Reference: _sel() in Tab.js, Tabpanel.js
@@ -114,30 +114,45 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	getToolbar: function () {
 		return this.toolbar;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-tabbox" +
-			( this.inAccordionMold() ? "-" + this.getMold() : this.isVertical() ? "-ver" : "") : this._zclass;
+	
+	domClass_: function (no) {
+		var cls = this.$supers('domClass_', arguments),
+			orientCls = this.isHorizontalTop() ? '' : ' ' + this.$s(this.getOrient());
+		cls += this.inAccordionMold() ? ' ' + this.$s(this.getMold()) : orientCls;
+		return cls; 
 	},
 	/**
 	 * Returns whether it is a horizontal tabbox.
 	 * @return boolean
 	 */
 	isHorizontal: function() {
-		return "horizontal" == this.getOrient();
+		return this.getOrient().indexOf('horizontal') != -1;
+	},
+	isHorizontalTop: function() {
+		return 'horizontal' == this.getOrient();
+	},
+	isHorizontalBottom: function() {
+		return 'horizontal-bottom' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is a vertical tabbox.
 	 * @return boolean
 	 */
 	isVertical: function() {
-		return "vertical" == this.getOrient();
+		return this.getOrient().indexOf('vertical') != -1;
+	},
+	isVerticalRight: function() {
+		return 'vertical-right' == this.getOrient();
+	},
+	isVerticalLeft: function() {
+		return 'vertical' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is in the accordion mold.
 	 * @return boolean
 	 */
 	inAccordionMold: function () {
-		return this.getMold().indexOf("accordion") != -1;
+		return this.getMold().indexOf('accordion') != -1;
 	},
 	/**
 	 * Returns the selected index.
@@ -205,6 +220,11 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			zWatch.listen({onResponse: this});
 			this._toolbarWidth = jq(toolbar.$n()).width();
 		}
+		
+		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;) 
+			if (btn = this.$n(key[le])) 				
+				this.domListen_(btn, 'onClick', '_doClick');
+		
 		if (tab)
 			after.push(function() {
 				tab.setSelected(true);
@@ -214,8 +234,82 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
+		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
+			if (btn = this.$n(key[le]))
+				this.domUnlisten_(btn, 'onClick');
 		this._toolbarWidth = null;
 		this.$supers(zul.tab.Tabbox, 'unbind_', arguments);
+	},
+	_doClick: function(evt) {
+		var cave = this.tabs.$n('cave'),
+			allTab =  jq(cave).children();
+		
+		if (!allTab.length) return; // nothing to do	
+			
+		var ele = evt.domTarget,
+			$parent = jq(ele).parent(),
+			move = 0,
+			tabbox = this,
+			head = this.tabs.$n(),
+			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
+			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth,
+			plus = scrollLength + offsetLength,
+			self = this,
+			isParentIdEq = function(id) {
+				return $parent && $parent.attr('id') == (self.uuid + '-' + id);
+			};
+		//Scroll to next right tab
+		if (ele.id == this.uuid + '-right' || isParentIdEq('right')) {
+			for (var i = 0, count = allTab.length; i < count; i++) {
+				if (allTab[i].offsetLeft + allTab[i].offsetWidth > plus) {
+					move = allTab[i].offsetLeft + allTab[i].offsetWidth - scrollLength - offsetLength;
+					if (!move || isNaN(move))
+						return;
+					this.tabs._doScroll('right', move);
+					return;
+				}
+			}
+		} else if (ele.id == this.uuid + '-left' || isParentIdEq('left')) {//Scroll to next left tab
+			for (var i = 0, count = allTab.length; i < count; i++) {
+				if (allTab[i].offsetLeft >= scrollLength) {
+					//if no Sibling tab no sroll
+					var tabli = jq(allTab[i]).prev('li')[0];
+					if (!tabli)  return;
+					move = scrollLength - tabli.offsetLeft;
+					if (isNaN(move)) return;
+					this.tabs._doScroll('left', move);
+					return;
+				};
+			};
+			move = scrollLength - allTab[allTab.length-1].offsetLeft;
+			if (isNaN(move)) return;
+			this.tabs._doScroll('left', move);
+			return;
+		} else if (ele.id == this.uuid + '-up' || isParentIdEq('up')) {
+				for (var i = 0, count = allTab.length; i < count; i++) {
+					if (allTab[i].offsetTop >= scrollLength) {
+						var preli = jq(allTab[i]).prev('li')[0];
+						if (!preli) return;
+						move = scrollLength - preli.offsetTop ;
+						this.tabs._doScroll('up', move);
+						return;
+					};
+				};
+				var preli = allTab[allTab.length-1];
+				if (!preli) return;
+				move = scrollLength - preli.offsetTop ;
+				this.tabs._doScroll('up', move);
+				return;
+		} else if (ele.id == this.uuid + '-down' || isParentIdEq('down')) {
+			for (var i = 0, count = allTab.length; i < count; i++) {
+				if (allTab[i].offsetTop + allTab[i].offsetHeight > plus) {
+					move = allTab[i].offsetTop + allTab[i].offsetHeight - scrollLength - offsetLength;
+					if (!move || isNaN(move)) return ;
+					this.tabs._doScroll('down', move);
+					return;
+				};
+			};
+		}
 	},
 	/** Synchronizes the size immediately.
 	 * This method is called automatically if the widget is created

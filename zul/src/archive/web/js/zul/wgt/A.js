@@ -106,11 +106,16 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 	domContent_: function(){
 		var label = zUtl.encodeXML(this.getLabel()), 
-			img = this.getImage();
-		if (!img) 
+			img = this.getImage(),
+			iconSclass = this.domIcon_();
+		if (!img && !iconSclass) 
 			return label;
 		
-		img = '<img src="' + img + '" align="absmiddle" />';
+		if (!img) {
+			img = iconSclass;
+		} else
+			img = '<img src="' + img + '" align="absmiddle" />'
+				+ (iconSclass ? ' ' + iconSclass : '');
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
 	domAttrs_: function(no){

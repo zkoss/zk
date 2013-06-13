@@ -12,6 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
 /**
  * A treecell.
  *
@@ -137,39 +138,14 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			}
 			var iconScls = tree ? tree.getZclass() : '',
 				pitems = this._getTreeitems(item, tree);
-			for (var j = 0, k = pitems.length; j < k; ++j) {
-				var name = zul.sel.Treecell.VBAR;
-				if (j == 0 || this._isLastVisibleChild(pitems[j])) 
-					name = zul.sel.Treecell.SPACER;
-				this._appendIcon(sb, iconScls, name, false);
-			}
+			for (var j = 0, k = pitems.length; j < k; ++j)
+				this._appendIcon(sb, iconScls, 'spacer', false);
 			
 			if (item.isContainer()) {
-				var name;
-				if (item.isOpen()) {
-					if (pitems.length == 0)
-						name = zul.sel.Treecell.ROOT_OPEN;
-					else if (this._isLastVisibleChild(item))
-						name = zul.sel.Treecell.LAST_OPEN;
-					else
-						name = zul.sel.Treecell.TEE_OPEN;
-				} else {
-					if (pitems.length == 0)
-						name = zul.sel.Treecell.ROOT_CLOSE;
-					else if (this._isLastVisibleChild(item))
-						name = zul.sel.Treecell.LAST_CLOSE;
-					else
-						name = zul.sel.Treecell.TEE_CLOSE;
-				}
+				var name = item.isOpen() ? 'open' : 'close';
 				this._appendIcon(sb, iconScls, name, true);
 			} else {
-				var name = zul.sel.Treecell.TEE;
-				if (pitems.length == 0)
-					name = zul.sel.Treecell.FIRSTSPACER;
-				else if (this._isLastVisibleChild(item))
-					name = zul.sel.Treecell.LAST;
-				
-				this._appendIcon(sb, iconScls, name, false);
+				this._appendIcon(sb, iconScls, 'spacer', false);
 			}
 			return sb.join('');
 		} else {
@@ -177,12 +153,6 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			//for empty cell. Otherwise, IE will make the height too small
 			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? "&nbsp;": null;
 		}
-	},
-	_isLastVisibleChild: function (item) {
-		var parent = item.parent;
-		for (var w = parent.lastChild; w; w = w.previousSibling)
-			if (w._isVisibleInTree()) return w == item; // B50-3314143
-		return false;
 	},
 	_getTreeitems: function (item, tree) {
 		var pitems = [];
@@ -200,8 +170,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	_appendIcon: function (sb, iconScls, name, button) {
 		var openCloseIcon = [];
 		sb.push('<span class="');
-		if (name == zul.sel.Treecell.TEE  || name == zul.sel.Treecell.LAST || 
-			name == zul.sel.Treecell.VBAR || name == zul.sel.Treecell.SPACER) {
+		if (name == 'spacer') {
 			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
 		} else {
 			var id = '';
@@ -210,18 +179,13 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				if (item)
 					id = item.uuid + '-icon';
 			}
-			if (name != zul.sel.Treecell.FIRSTSPACER) {
-				sb.push(iconScls, '-icon"');
-				var icon = this.getIconOpenClass_();
-				
-				if (name.indexOf('close') > -1)
-					icon = this.getIconCloseClass_();
-				
-				openCloseIcon.push('<i id="', id, '" class="', icon, ' ', 
-						iconScls, '-', name, '"></i>');
-			} else {
-				sb.push(iconScls, '-icon ', iconScls, '-', name, '"');
-			}
+			sb.push(iconScls, '-icon"');
+			var icon = this.getIconOpenClass_();
+			if (name.indexOf('close') > -1)
+				icon = this.getIconCloseClass_();
+			
+			openCloseIcon.push('<i id="', id, '" class="', icon, ' ', iconScls, 
+					'-', name, '"></i>');
 		}
 		if (button) {
 			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd() 
@@ -253,16 +217,5 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}
-}, {
-	ROOT_OPEN: 'root-open',
-	ROOT_CLOSE: 'root-close',
-	LAST_OPEN: 'last-open',
-	LAST_CLOSE: 'last-close',
-	TEE_OPEN: 'tee-open',
-	TEE_CLOSE: 'tee-close',
-	TEE: 'tee',
-	LAST: 'last',
-	VBAR: 'vbar',
-	SPACER: 'spacer',
-	FIRSTSPACER: 'firstspacer'
 });
+})();

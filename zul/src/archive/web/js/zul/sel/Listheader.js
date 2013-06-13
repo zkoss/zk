@@ -209,9 +209,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		if (n)
 			this.domListen_(n, 'onMouseOver', '_doMouseOver')
 				.domListen_(n, 'onMouseOut', '_doMouseOut');
-		var menuIcon = this.$n('menu-icon');
-		if (menuIcon)
-			this.domListen_(menuIcon, 'onClick', '_doMenuClick');
+		var btn = this.$n('btn');
+		if (btn)
+			this.domListen_(btn, 'onClick', '_doMenuClick');
 	},
 	unbind_: function () {
 		var cm = this.$n('cm'),
@@ -225,9 +225,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		if (n)
 			this.domUnlisten_(n, 'onMouseOver', '_doMouseOver')
 				.domUnlisten_(n, 'onMouseOut', '_doMouseOut');
-		var menuIcon = this.$n('menu-icon');
-		if (menuIcon)
-			this.domUnlisten_(menuIcon, 'onClick', '_doMenuClick');
+		var btn = this.$n('btn');
+		if (btn)
+			this.domUnlisten_(btn, 'onClick', '_doMenuClick');
 		this.$supers(zul.sel.Listheader, 'unbind_', arguments);
 	},
 	_doMouseOver: function (evt) {

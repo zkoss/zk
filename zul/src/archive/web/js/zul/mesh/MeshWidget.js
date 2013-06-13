@@ -753,13 +753,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.efoottbl = this.$n('foottbl');
 		this.efrozen = this.$n('frozen');
 		
-		if (this.ebody) {
-			if (zk.isLoaded('zul.grid') 
-					&& this.$instanceof(zul.grid.Grid) && this.rows)
-				this.ebodyrows = this.rows.$n();
-			else
-				this.ebodyrows = this.$n('rows');
-		}
+		// Grid will bind ebodyrows in Rows widget
+		var erows = this.$n('rows');
+		if (this.ebody && erows)
+			this.ebodyrows = erows;
 		
 		if (this.ehead) {
 			this.ehdfaker = this.head.$n('hdfaker');

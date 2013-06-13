@@ -266,7 +266,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	_doMenuClick: function (evt) {
 		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var pp = this.parent._menupopup,
-				menuIcon = this.$n('menu-icon'),
+				btn = this.$n('btn'),
 				zcls = this.getZclass();
 			
 			//for not removing hover effect when moving mouse on menupopup
@@ -278,7 +278,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 				pp = this.$f(this.parent._menupopup);
 
 			if (zul.menu.Menupopup.isInstance(pp)) {
-				var ofs = zk(menuIcon).revisedOffset(),
+				var ofs = zk(btn).revisedOffset(),
 					asc = this.getSortAscending() != 'none',
 					desc = this.getSortDescending() != 'none',
 					mw = this.getMeshWidget();
@@ -303,7 +303,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 				} else {
 					pp.listen({onOpen: [this.parent, this.parent._onMenuPopup]});
 				}
-				pp.open(menuIcon, [ofs[0], ofs[1] + menuIcon.offsetHeight - 4], null, {sendOnOpen: true});
+				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
 			}
 			evt.stop(); // avoid onSort event.
 		}

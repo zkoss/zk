@@ -14,14 +14,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var uuid = this.uuid,
-		zcls = this.getZclass(),
-		noCenter = this.getPosition() != zul.layout.Borderlayout.CENTER,
-		pzcls = this.parent.getZclass();
+		pos = this.getPosition(),
+		BL = zul.layout.Borderlayout,
+		noCenter = pos != BL.CENTER,
+		parent = this.parent;
 	out.push('<div id="', uuid,  '">', '<div id="', uuid, '-real"',
 			this.domAttrs_({id: 1}), '>');
 	
 	this.titleRenderer_(out);
-	out.push('<div id="', uuid, '-cave" class="', zcls, '-body">');
+	out.push('<div id="', uuid, '-cave" class="', this.$s('body'), '">');
 	
 	var firstChild = this.getFirstChild();
 	if (firstChild)
@@ -30,17 +31,42 @@ function (out) {
 	out.push('</div></div>');
 	
 	if (noCenter) {
-		out.push('<div id="', uuid, '-split" class="', zcls, '-splt"><span id="'
-			, uuid, '-splitbtn" class="', zcls, '-splt-btn"');
+		var icon = this.$s('icon'),
+			doticon = ' z-icon-ellipsis-' +
+				(BL.WEST == pos || BL.EAST == pos ? 'vertical' : 'horizontal'),
+			splitIcon = '';
+
+		switch (pos) {
+			case BL.NORTH:
+				splitIcon = 'z-icon-caret-up';
+				break;
+			case BL.SOUTH:
+				splitIcon = 'z-icon-caret-down';
+				break;
+			case BL.WEST:
+				splitIcon = 'z-icon-caret-left';
+				break;
+			case BL.EAST:
+				splitIcon = 'z-icon-caret-right';
+				break;
+		}
+		out.push('<div id="', uuid, '-split" class="', this.$s('splitter'),
+			'"><span id="', uuid, '-splitbtn" class="', this.$s('splitter-button'),
+			'"');
 		if (!this._collapsible)
 			out.push(' style="display:none;"');
-		out.push('></span></div>', '<div id="', uuid, '-colled" class="', zcls,
-				'-colpsd" style="display:none"><div id="',
-				uuid, '-btned" class="', pzcls, '-icon ', zcls, '-exp"');
+		out.push('>',
+			'<i class="', icon, doticon, '"></i>',
+			'<i class="', icon, ' ', splitIcon, '"></i>',
+			'<i class="', icon, doticon, '"></i>',
+			'</span></div>', '<div id="', uuid, '-colled" class="',
+				this.$s('collapsed'), '" style="display:none"><i id="',
+				uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true),
+				'"');
 		if (!this._collapsible)
 			out.push(' style="display:none;"');
 				
-		out.push('><div class="', pzcls, '-icon-img"></div></div></div>');
+		out.push('></i></div>');
 	}
 	out.push('</div>');
 }

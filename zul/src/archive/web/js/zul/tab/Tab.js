@@ -102,16 +102,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	getIndex: function() {
 		return this.getChildIndex();
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tab';
-
-		var mold = tabbox.getMold();
-		return 'z-tab' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
-	},
 	/**
 	 * Returns the panel associated with this tab.
 	 * @return Tabpanel
@@ -168,9 +158,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!bound) return;
 		
 		if (toSel)
-			jq(tab).addClass(zcls + "-seld");
+			jq(tab).addClass(zcls + '-selected');
 		else
-			jq(tab).removeClass(zcls + "-seld");
+			jq(tab).removeClass(zcls + '-selected');
 
 		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
 			panel._sel(toSel, !init);
@@ -182,9 +172,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		
 		if (tab == this) {
 			if (tabbox.isVertical())
-				tabs._scrollcheck("vsel", this);
+				tabs._scrollcheck('vsel', this);
 			else if (!tabbox.inAccordionMold())
-				tabs._scrollcheck("sel", this);
+				tabs._scrollcheck('sel', this);
 		}
 		
 		if (notify)
@@ -204,9 +194,24 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_calcHgh: function () {
 		var n = this.$n(),
-			cnt = this.$n('cnt');
+			cnt = this.$n('content'),
+			tabbox = this.getTabbox();
 		if (cnt && (cnt = cnt.parentNode))
 			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
+		
+		if (!tabbox.isVertical()) {
+			var r = tabbox.$n('right'),
+				l = tabbox.$n('left'),
+				tb = tabbox.toolbar,
+				tabs = tabbox.tabs.$n();
+				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
+			if(r && l) {
+				r.style.height = l.style.height = hgh;
+			}
+			if(tb && (tb = tb.$n())) {
+				tb.style.height = hgh;
+			}
+		}		
 	},
 	//protected
 	doClick_: function(evt) {
@@ -218,20 +223,27 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added = this.isDisabled() ? zcls + '-disd' : '';
-			if (this.isSelected())
-				added += ' ' + zcls + '-seld';
-			if (added) scls += (scls ? ' ': '') + added;
+			var tabbox = this.getTabbox();
+			
+			if (!tabbox) return 'z-tab';
+			if (this.isDisabled()) scls += ' ' + this.$s('disabled');
+			if (this.isSelected()) scls += ' ' + this.$s('selected');
 		}
+		
 		return scls;
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this.getImage();
+			img = this.getImage(),
+			iconSclass = this.domIcon_();
+		
 		if (!label) label = '&nbsp;';
-		if (!img) return label;
-		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
+		if (!img && !iconSclass) return label;
+		if (!img) {
+			img = iconSclass;
+		} else
+			img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>'
+				+ (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	//bug #3014664
@@ -243,13 +255,25 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	setHflex: function (v) { //hflex ignored for Tab
 		if (v != 'min') v = false;
 		this.$super(zul.tab.Tab, 'setHflex', v);
+	},	
+	_doCloseOver: function(e) {
+		if(e.domTarget == this.$n('close') || e.domTarget == this.$n('icon-close')) {
+			jq(this.$n()).removeClass(this.$s('hover'));
+		} else {
+			jq(this.$n()).addClass(this.$s('hover'));
+		}
+	},
+	_doCloseOut: function(e) {
+		jq(this.$n()).removeClass(this.$s('hover'));
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
 		var closebtn = this.isClosable() ? this.$n('close') : null,
 			tab = this;
+		this.domListen_(tab, 'onMouseOver', '_doCloseOver');
+		this.domListen_(tab, 'onMouseOut', '_doCloseOut');
 		if (closebtn) {
-			this.domListen_(closebtn, "onClick", '_doCloseClick');
+			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
 		}
 
 		after.push(function () {
@@ -276,10 +300,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var closebtn = this.$n('close');
+		this.domUnlisten_(this, 'onMouseOver', '_doCloseOver');
+		this.domUnlisten_(this, 'onMouseOut', '_doCloseOut');
 		// ZK-886
 		_logId(this);
 		if (closebtn) {
-			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
+			this.domUnlisten_(closebtn, 'onClick', '_doCloseClick');
 		}
 		this.$supers(zul.tab.Tab, 'unbind_', arguments);
 	},
@@ -301,7 +327,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	contentRenderer_: function (out) {
 		var zcls = this.getZclass();
-		out.push('<span id="', this.uuid, '-cnt" class="', zcls, '-text">', this.domContent_(), '</span>');
+		out.push('<span id="', this.uuid, '-content" class="', zcls, '-text">', this.domContent_(), '</span>');
 	}
 });
 /** @class zul.tab.TabRenderer

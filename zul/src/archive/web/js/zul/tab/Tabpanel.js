@@ -33,15 +33,12 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n().style.display = 'none';
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tabpanel';
-
-		var mold = tabbox.getMold();
-		return 'z-tabpanel' + (mold == "default" ? (tabbox.isVertical() ? '-ver' : '') : '-' + mold);
+	domClass_: function() {
+		var cls = this.$supers('domClass_', arguments),
+			tabbox = this.getTabbox();
+		if (tabbox.inAccordionMold())
+			cls += ' ' + this.$s('content');
+		return cls;
 	},
 	/** Returns the tab associated with this tab panel.
 	 * @return Tab
@@ -76,11 +73,12 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		}
 	},
 	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
-		var tabbox = this.getTabbox(),
-			accd = tabbox.inAccordionMold();
+		var tabbox = this.getTabbox();
+		if(!tabbox) return; //Bug ZK-1808 removed tabpanel is no longer in hierarchy, and cannot be removed
+		var accd = tabbox.inAccordionMold();
 
 		if (accd && animation) {
-			var zkp = zk(this.$n("cave"));
+			var zkp = zk(this.$n('cave'));
 			if (toSel) {
 				/* ZK-1441
 				 * When a tabpanel is animating, set tabbox.animating
@@ -90,14 +88,14 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				tabbox._animating = true;
 				zkp.slideDown(
 					this,
-					{"afterAnima": function(){delete tabbox._animating;}}
+					{'afterAnima': function(){delete tabbox._animating;}}
 				);
 			} else {
 				zkp.slideUp(this);
 			}
 			//zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
-			var $pl = jq(accd ? this.$n("cave") : this.$n()),
+			var $pl = jq(accd ? this.$n('cave') : this.$n()),
 				vis = $pl.zk.isVisible();
 			if (toSel) {
 				if (!vis) {
@@ -128,50 +126,34 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox();
 		var tbx = tabbox.$n(),
 		hgh = tbx.style.height;
-		if (hgh && hgh != "auto") {
+		if (hgh && hgh != 'auto') {
 			if (!tabbox.inAccordionMold()) {
 				var n = this.$n(),
 					isHor = tabbox.isHorizontal();
-				hgh = isHor ?
-					zk(n.parentNode).vflexHeight(): n.parentNode.clientHeight;
+
+				hgh = isHor ? zk(tabbox).offsetHeight() - zk(tabbox.tabs).offsetHeight() 
+						    : zk(tabbox).offsetHeight() - zk(n.parentNode).padBorderHeight();
 					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
-				if (zk.ie8)
-					hgh -= 1; // show the bottom border
-				zk(n).setOffsetHeight(hgh);
+				zk(n).setOffsetHeight(hgh + zk(n).padBorderHeight());
 			} else {
 				var n = this.$n(),
-					hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
-				hgh = zk(n.parentNode).revisedHeight(hgh);
-
-				// fixed Opera 10.5+ bug
-				if (zk.opera) {
-					var parent;
-					if ((parent = tbx.parentNode) && tbx.style.height == '100%')
-						hgh = zk(parent).revisedHeight(parent.offsetHeight);
-				}
-
+					hgh = zk(tbx).revisedHeight(tbx.offsetHeight),
+					zkp = zk(n.parentNode);
+				hgh = zkp.revisedHeight(hgh) - zkp.padBorderHeight();
 				for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
 					if (e != n)
 						hgh -= e.offsetHeight;
 				hgh -= n.firstChild.offsetHeight;
 				hgh = zk(n = n.lastChild).revisedHeight(hgh);
-				if (zk.ie8)
-					hgh -= 1; // show the bottom border
 				var cave = this.$n('cave'),
 					s = cave.style;
 				s.height = jq.px0(hgh);
 			}
 		}
 	},
-	domClass_: function () {
-		var cls = this.$supers('domClass_', arguments);
-		if (this.getTabbox().inAccordionMold())
-			cls += ' ' + this.getZclass() + '-cnt';
-		return cls;
-	},
 	onSize: function() {
 		var tabbox = this.getTabbox();
-		if (tabbox.inAccordionMold() && !zk(this.$n("cave")).isVisible())
+		if (tabbox.inAccordionMold() && !zk(this.$n('cave')).isVisible())
 			return;
 		this._fixPanelHgh();		//Bug 2104974
 

@@ -1,9 +1,9 @@
 /* LayoutRegion.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan  7 12:15:02     2009, Created by jumperchen
 
@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	
+
 	function _setFirstChildFlex(wgt, flex, ignoreMin) {
 		var cwgt = wgt.getFirstChild();
 		if (cwgt) {
@@ -32,7 +32,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 	}
-	
+
 /**
  * A layout region in a border layout.
  * <p>
@@ -40,7 +40,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
-	_border: "normal",
+	_border: 'normal',
 	_maxsize: 2000,
 	_minsize: 0,
 
@@ -59,7 +59,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		/**
 		 * Returns whether to grow and shrink vertical/horizontal to fit their given
 		 * space, so called flexibility.
-		 * 
+		 *
 		 * <p>
 		 * Default: false.
 		 * @return boolean
@@ -70,7 +70,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		},
 		/**
 		 * Sets the border (either none or normal).
-		 * 
+		 *
 		 * @param String border the border. If null or "0", "none" is assumed.
 		 */
 		/**
@@ -78,29 +78,29 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * <p>
 		 * The border actually controls what CSS class to use: If border is null, it
 		 * implies "none".
-		 * 
+		 *
 		 * <p>
 		 * If you also specify the CSS class ({@link #setSclass}), it overwrites
 		 * whatever border you specify here.
-		 * 
+		 *
 		 * <p>
 		 * Default: "normal".
 		 * @return String
 		 */
 		border: function (border) {
 			if (!border || '0' == border)
-				this._border = border = "none";
-				
+				this._border = border = 'none';
+
 			if (this.desktop)
 				(this.$n('real') || {})._lastSize = null;
-				
+
 			this.updateDomClass_();
 		},
 		/**
 		 * Sets the title.
 		 * @param String title
 		 */
-		/** 
+		/**
 		 * Returns the title.
 		 * <p>Default: null.
 		 * @return String
@@ -146,7 +146,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		minsize: null,
 		/**
 		 * Sets whether set the initial display to collapse.
-		 * 
+		 *
 		 * <p>It only applied when {@link #getTitle()} is not null.
 		 * @param boolean collapsible
 		 */
@@ -177,13 +177,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				var bodyEl = this.isFlex() && this.getFirstChild() ?
 						this.getFirstChild().$n() : cave;
 				if (autoscroll) {
-					bodyEl.style.overflow = "auto";
-					bodyEl.style.position = "relative";
-					this.domListen_(bodyEl, "onScroll");
+					bodyEl.style.overflow = 'auto';
+					bodyEl.style.position = 'relative';
+					this.domListen_(bodyEl, 'onScroll');
 				} else {
-					bodyEl.style.overflow = "hidden";
-					bodyEl.style.position = "";
-					this.domUnlisten_(bodyEl, "onScroll");
+					bodyEl.style.overflow = 'hidden';
+					bodyEl.style.position = '';
+					this.domUnlisten_(bodyEl, 'onScroll');
 				}
 			}
 		},
@@ -202,15 +202,15 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		open: function (open, fromServer, nonAnima) {
 			if (!this.$n() || !this.isCollapsible() || !this.parent)
 				return; //nothing changed
-	
+
 			nonAnima = this.parent._animationDisabled || nonAnima;
-	
+
 			var colled = this.$n('colled'),
 				real = this.$n('real');
 			if (open) {
 				// Bug 2994592
 				if (fromServer) {
-					
+
 					// Bug 2995770
 					if (!zk(this.$n()).isRealVisible()) {
 						if (colled) {
@@ -220,19 +220,19 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						return;
 					}
 					var s = this.$n('real').style;
-					s.visibility = "hidden";
-					s.display = "";
+					s.visibility = 'hidden';
+					s.display = '';
 					this._syncSize(true);
-					s.visibility = "";
-					s.display = "none";
+					s.visibility = '';
+					s.display = 'none';
 					this._open = true;
 				}
 				if (colled) {
-					if (!nonAnima) 
+					if (!nonAnima)
 						zk(colled).slideOut(this, {
 							anchor: this.sanchor,
 							duration: 200,
-							afterAnima: fromServer ? this.$class.afterSlideOut : 
+							afterAnima: fromServer ? this.$class.afterSlideOut :
 								this.$class._afterSlideOutX
 						});
 					else {
@@ -242,11 +242,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					}
 				}
 			} else {
-				if (colled && !nonAnima) 
+				if (colled && !nonAnima)
 					zk(real).slideOut(this, {
 							anchor: this.sanchor,
 							beforeAnima: this.$class.beforeSlideOut,
-							afterAnima: fromServer ? this.$class.afterSlideOut : 
+							afterAnima: fromServer ? this.$class.afterSlideOut :
 								this.$class._afterSlideOutX
 						});
 				else {
@@ -270,15 +270,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (v != 'min') v = false;
 		this.$super(zul.layout.LayoutRegion, 'setHflex', v);
 	},
-	// B50-ZK-236: add header height
-	//     header height should consider in setFlexSize_
-//	getChildMinSize_: function (o, cwgt) {
-//		return (o == 'h' && this.$n('cap') ? this.$n('cap').offsetHeight : 0) + 
-//				this.$supers('getChildMinSize_', arguments);
-//	},
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
-	 * 
+	 *
 	 * <p>
 	 * Default: "5,5,5,5".
 	 * @return String
@@ -329,17 +323,17 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var added = "normal" == this.getBorder() ? '' : this.getZclass() + "-noborder";
+			var added = 'normal' == this.getBorder() ? '' : this.$s('noborder');
 			if (added) scls += (scls ? ' ': '') + added;
 		}
 		return scls;
 	},
 	getZclass: function () {
-		return this._zclass == null ? "z-" + this.getPosition() : this._zclass;
+		return this._zclass == null ? 'z-' + this.getPosition() : this._zclass;
 	},
 	//-- super --//
 	getMarginSize_: function (attr) {
-		return zk(this.$n('real')).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);  
+		return zk(this.$n('real')).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	},
 	setWidth: function (width) {
 		this._width = width;
@@ -361,26 +355,26 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		return this;
 	},
-	setVisible: function (visible) {
+	setVisible : function(visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
-			var real = this.$n('real');
-			var colled = this.$n('colled');
-			if (real){
-				if(this._visible){
-					if(this._open){
+			var real = this.$n('real'),
+				colled = this.$n('colled');
+			if (real) {
+				if (this._visible) {
+					if (this._open) {
 						jq(real).show();
-						if(colled) 
+						if (colled)
 							jq(colled).hide();
-					}else{
+					} else {
 						jq(real).hide();
-						if(colled)
+						if (colled)
 							jq(colled).show();
 					}
-				}else{
+				} else {
 					jq(real).hide();
-					if(colled)
-						jq(colled).hide();	
+					if (colled)
+						jq(colled).hide();
 				}
 				this.parent.resize();
 			}
@@ -388,21 +382,23 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this;
 	},
 	//@Override to apply the calculated value on xxx-real element
-	setFlexSize_: function(sz) {
-		var n = this.$n('real');
+	setFlexSize_ : function(sz) {
+		var n = this.$n('real'),
+			ns = n.style;
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
-				n.style.height = '';
+				ns.height = '';
 			else if (sz.height == '')
-				n.style.height = this._height ? this._height : '';
+				ns.height = this._height ? this._height : '';
 			else {
-				var cave = this.$n('cave'),
-					cap = this.$n('cap'),
-					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);
+				var cave = this.$n('cave'), cap = this
+						.$n('cap'), hgh = cave
+						&& this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop)
+						: zk(n).revisedHeight(sz.height,
+								true);
 				if (cap) // B50-ZK-236: add header height
-					hgh +=  cap.offsetHeight;
-				if (zk.ie) n.style.height = '';
-				n.style.height = jq.px0(hgh);
+					hgh += cap.offsetHeight;
+				ns.height = jq.px0(hgh);
 			}
 		}
 		if (sz.width !== undefined) {
@@ -411,19 +407,22 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			else if (sz.width == '')
 				n.style.width = this._width ? this._width : '';
 			else {
-				var wdh = zk(n).revisedWidth(sz.width, true);
-				if (zk.ie) n.style.width = '';
+				var wdh = zk(n)
+						.revisedWidth(sz.width, true);
 				n.style.width = jq.px0(wdh);
 			}
 		}
-		return {height: n.offsetHeight, width: n.offsetWidth};
+		return {
+			height : n.offsetHeight,
+			width : n.offsetWidth
+		};
 	},
 	updateDomClass_: function () {
 		if (this.desktop) {
 			var real = this.$n('real');
 			if (real) {
 				real.className = this.domClass_();
-				if (this.parent) 
+				if (this.parent)
 					this.parent.resize();
 			}
 		}
@@ -433,7 +432,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			var real = this.$n('real');
 			if (real) {
 				zk(real).clearStyles().jq.css(jq.parseStyle(this.domStyle_()));
-				if (this.parent) 
+				if (this.parent)
 					this.parent.resize();
 			}
 		}
@@ -442,36 +441,38 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(true);
-			jq(this.$n()).addClass(this.getZclass() + "-nested");
+			jq(this.$n()).addClass(this.$s('nested'));
 		}
-		
+
 		// Bug for B36-2841185.zul, resync flex="true"
 		if (this.isFlex())
 			_setFirstChildFlex(this, true, true);
-		
+
 		// reset
 		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop) {
-			if (this.parent.isRealVisible({dom: true})) // B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
+			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
+			if (this.parent.isRealVisible({dom: true}))
 				this.parent.resize();
 		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		
+
 		// check before "if (child.$instanceof(zul.layout.Borderlayout)) {"
 		if (this.isFlex())
 			_setFirstChildFlex(this, false);
-				
+
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
-			jq(this.$n()).removeClass(this.getZclass() + "-nested");
+			jq(this.$n()).removeClass(this.$s('nested'));
 		}
-		
+
 		// reset
 		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop && !this.childReplacing_) {
-			if (this.parent.isRealVisible({dom: true})) // B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
+			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
+			if (this.parent.isRealVisible({dom: true}))
 				this.parent.resize();
 		}
 	},
@@ -484,12 +485,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	bind_: function(){
 		this.$supers(zul.layout.LayoutRegion, 'bind_', arguments);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
-			var split = this.$n('split');			
+			var split = this.$n('split');
 			if (split) {
 				this._fixSplit();
 				var vert = this._isVertical(),
 					LR = this.$class;
-				
+
 				this._drag = new zk.Draggable(this, split, {
 					constraint: vert ? 'vertical': 'horizontal',
 					ghosting: LR._ghosting,
@@ -500,7 +501,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					ignoredrag: LR._ignoredrag,
 					endeffect: LR._endeffect
 				});
-				
+
 				if (!this._open) {
 					var colled = this.$n('colled'),
 						real = this.$n('real');
@@ -508,7 +509,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						jq(colled).show();
 					jq(real).hide();
 				}
-				
+
 				if(!this._visible){
 					var colled = this.$n('colled'),
 						real = this.$n('real');
@@ -518,75 +519,35 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-					
-		if (this._open && !this.isVisible()) this.$n().style.display = "none";
-		
+
+		if (this._open && !this.isVisible()) this.$n().style.display = 'none';
+
 		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.getFirstChild() ? 
+			var bodyEl = this.isFlex() && this.getFirstChild() ?
 					this.getFirstChild().$n() : this.$n('cave');
-			this.domListen_(bodyEl, "onScroll");
+			this.domListen_(bodyEl, 'onScroll');
 		}
-		
+
 		if (this.isFlex())
 			_setFirstChildFlex(this, true, true);
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.getFirstChild() ? 
+			var bodyEl = this.isFlex() && this.getFirstChild() ?
 					this.getFirstChild().$n() : this.$n('cave');
-			this.domUnlisten_(bodyEl, "onScroll");
+			this.domUnlisten_(bodyEl, 'onScroll');
 		}
-		if (this.$n('split')) {			
+		if (this.$n('split')) {
 			if (this._drag) {
 				this._drag.destroy();
 				this._drag = null;
 			}
 		}
-		
+
 		if (this.isFlex())
 			_setFirstChildFlex(this, false);
-		
+
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
-	},
-	doMouseOver_: function (evt) {
-		var target = evt.domTarget;
-		if (!target.id)
-			target = target.parentNode;
-		switch (target) {
-		case this.$n('btn'):
-			jq(this.$n('btn')).addClass(this.getZclass() + '-colps-over');
-			break;
-		case this.$n('btned'):
-			jq(this.$n('btned')).addClass(this.getZclass() + '-exp-over');
-			// don't break
-		case this.$n('colled'):
-			jq(this.$n('colled')).addClass(this.getZclass() + '-colpsd-over');
-			break;
-		case this.$n('splitbtn'):
-			jq(this.$n('splitbtn')).addClass(this.getZclass() + '-splt-btn-over');
-			break;
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var target = evt.domTarget;
-		if (!target.id)
-			target = target.parentNode;
-		switch (target) {
-		case this.$n('btn'):
-			jq(this.$n('btn')).removeClass(this.getZclass() + '-colps-over');
-			break;
-		case this.$n('btned'):
-			jq(this.$n('btned')).removeClass(this.getZclass() + '-exp-over');
-			// don't break
-		case this.$n('colled'):
-			jq(this.$n('colled')).removeClass(this.getZclass() + '-colpsd-over');
-			break;
-		case this.$n('splitbtn'):
-			jq(this.$n('splitbtn')).removeClass(this.getZclass() + '-splt-btn-over');
-			break;
-		}
-		this.$supers('doMouseOut_', arguments);		
 	},
 	doClick_: function (evt) {
 		var target = evt.domTarget;
@@ -599,52 +560,54 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (this._isSlide || zk.animating()) return;
 			if (this.$n('btned') == target) {
 				var s = this.$n('real').style;
-				s.visibility = "hidden";
-				s.display = "";
+				s.visibility = 'hidden';
+				s.display = '';
 				this._syncSize(true);
-				s.visibility = "";
-				s.display = "none";
+				s.visibility = '';
+				s.display = 'none';
 			}
 			this.setOpen(!this._open);
 			break;
-		case this.$n('colled'):					
+		case this.$n('colled'):
 			if (this._isSlide) return;
 			this._isSlide = true;
 			var real = this.$n('real'),
 				s = real.style;
-			s.visibility = "hidden";
-			s.display = "";
+			s.visibility = 'hidden';
+			s.display = '';
 			this._syncSize();
 			this._original = [s.left, s.top];
 			this._alignTo();
 			s.zIndex = 100;
 
 			if (this.$n('btn'))
-				this.$n('btn').style.display = "none"; 
-			s.visibility = "";
-			s.display = "none";
+				this.$n('btn').style.display = 'none';
+			s.visibility = '';
+			s.display = 'none';
 			zk(real).slideDown(this, {
 				anchor: this.sanchor,
 				afterAnima: this.$class.afterSlideDown
 			});
 			break;
 		}
-		this.$supers('doClick_', arguments);		
+		this.$supers('doClick_', arguments);
 	},
 	_docClick: function (evt) {
 		var target = evt.target;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
 			var btned = this.$n('btned');
 			if (btned == target || btned == target.parentNode) {
-				this.$class.afterSlideUp.apply(this, [target]);
+				this.$class.afterSlideUp.apply(this, [this.$n('real')]);
 				this.setOpen(true, false, true);
 				this.$n('real').style.zIndex = ''; //reset
-			} else 
-				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid) || !zk.animating()) {
+			} else
+ 				if ((!this._isSlideUp && this.$class
+										.uuid(target) != this.uuid)
+						|| !zk.animating()) {
 					this._isSlideUp = true;
 					zk(this.$n('real')).slideUp(this, {
-						anchor: this.sanchor,
-						afterAnima: this.$class.afterSlideUp
+						anchor : this.sanchor,
+						afterAnima : this.$class.afterSlideUp
 					});
 				}
 		}
@@ -660,9 +623,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				w: width,
 				h: height
 			};
-		
+
 		this._open = true;
-		
+
 		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
 				j = 0, k = rs.length; j < k; ++j) {
 			region = layout[rs[j]];
@@ -675,7 +638,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				case 'north':
 				case 'south':
 					ambit.w = width - ambit.w;
-					if (rs[j] == 'north') 
+					if (rs[j] == 'north')
 						center.y = ambit.ts;
 					else
 						ambit.y = height - ambit.y;
@@ -716,23 +679,24 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_alignTo: function () {
 		var from = this.$n('colled'),
 			to = this.$n('real'),
+			ts = to.style,
 			BL = zul.layout.Borderlayout;
 		switch (this.getPosition()) {
 		case BL.NORTH:
-			to.style.top = jq.px(from.offsetTop + from.offsetHeight);
-			to.style.left = jq.px(from.offsetLeft);
+			ts.top = jq.px(from.offsetTop + from.offsetHeight);
+			ts.left = jq.px(from.offsetLeft);
 			break;
 		case BL.SOUTH:
-			to.style.top = jq.px(from.offsetTop - to.offsetHeight);
-			to.style.left = jq.px(from.offsetLeft);
+			ts.top = jq.px(from.offsetTop - to.offsetHeight);
+			ts.left = jq.px(from.offsetLeft);
 			break;
 		case BL.WEST:
-			to.style.left = jq.px(from.offsetLeft + from.offsetWidth);
-			to.style.top = jq.px(from.offsetTop);
+			ts.left = jq.px(from.offsetLeft + from.offsetWidth);
+			ts.top = jq.px(from.offsetTop);
 			break;
 		case BL.EAST:
-			to.style.left = jq.px(from.offsetLeft - to.offsetWidth);
-			to.style.top = jq.px(from.offsetTop);
+			ts.left = jq.px(from.offsetLeft - to.offsetWidth);
+			ts.top = jq.px(from.offsetTop);
 			break;
 		}
 	},
@@ -748,7 +712,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.getPosition() != BL.EAST;
 	},
 
-	// returns the ambit of the specified cmp for region calculation. 
+	// returns the ambit of the specified cmp for region calculation.
 	_ambit: function (ignoreSplit) {
 		var ambit, mars = this.getCurrentMargins_(), region = this.getPosition();
 		if (region && !this._open) {
@@ -771,7 +735,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				w: (pert = w.indexOf('%')) > 0 ?
 					Math.max(
 						Math.floor(pn.offsetWidth * zk.parseInt(w.substring(0, pert)) / 100),
-						0) : this.$n('real').offsetWidth, 
+						0) : this.$n('real').offsetWidth,
 				h: (pert = h.indexOf('%')) > 0 ?
 					Math.max(
 						Math.floor(pn.offsetHeight * zk.parseInt(h.substring(0, pert)) / 100),
@@ -789,7 +753,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_ambit2: zk.$void,
 	setBtnPos_: function (ambit, ver) {
 		var sbtn = this.$n('splitbtn');
-		if (ver) 
+		if (ver)
 			sbtn.style.marginLeft = jq.px0(((ambit.w - sbtn.offsetWidth) / 2));
 		else
 			sbtn.style.marginTop = jq.px0(((ambit.h - sbtn.offsetHeight) / 2));
@@ -809,20 +773,34 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return ambit;
 	},
 	_reszSp2: zk.$void,
+	getIconClass_: function (collapsed) {
+		var BL = zul.layout.Borderlayout;
+		switch(this.getPosition()) {
+		case BL.NORTH:
+			return collapsed ? 'z-icon-chevron-sign-down' : 'z-icon-chevron-sign-up';
+		case BL.SOUTH:
+			return collapsed ? 'z-icon-chevron-sign-up' : 'z-icon-chevron-sign-down';
+		case BL.WEST:
+			return collapsed ? 'z-icon-chevron-sign-right' : 'z-icon-chevron-sign-left';
+		case BL.EAST:
+			return collapsed ? 'z-icon-chevron-sign-left' : 'z-icon-chevron-sign-right';
+		}
+		return ''; // no icon
+	},
 	titleRenderer_: function (out) {
 		if (this._title) {
 			var uuid = this.uuid,
-				zcls = this.getZclass(),
-				noCenter = this.getPosition() != zul.layout.Borderlayout.CENTER,
-				pzcls = this.parent.getZclass();
-				
-			out.push('<div id="', uuid, '-cap" class="', zcls, '-header">');
+				pos = this.getPosition(),
+				noCenter = pos != zul.layout.Borderlayout.CENTER,
+				parent = this.parent;
+
+			out.push('<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 			if (noCenter) {
-				out.push('<div id="', uuid, '-btn" class="', pzcls,
-						'-icon ', zcls, '-colps"');
+				out.push('<i id="', uuid, '-btn" class="', parent.$s('icon'),
+						' ', this.getIconClass_(), '"');
 				if (!this._collapsible)
 					out.push(' style="display:none;"');
-				out.push('><div class="', pzcls, '-icon-img"></div></div>');
+				out.push('></i>');
 			}
 			out.push(zUtl.encodeXML(this._title), '</div>');
 		}
@@ -834,12 +812,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_aryToObject: function (array) {
 		return {top: array[0], left: array[1], right: array[2], bottom: array[3]};
 	},
-	
+
 	// invokes border layout's renderer before the component slides out
 	beforeSlideOut: function (n) {
 		var s = this.$n('colled').style;
-		s.display = "";
-		s.visibility = "hidden";
+		s.display = '';
+		s.visibility = 'hidden';
 		s.zIndex = 1;
 		this.parent.resize();
 	},
@@ -849,7 +827,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	// a callback function after the component slides out.
 	afterSlideOut: function (n, fireOnOpen) {
-		if (this._open) 
+		if (this._open)
 			zk(this.$n('real')).slideIn(this, {
 				anchor: this.sanchor,
 				afterAnima: fireOnOpen ? this.$class._afterSlideInX : this.$class.afterSlideIn
@@ -857,8 +835,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		else {
 			var colled = this.$n('colled'),
 				s = colled.style;
-			s.zIndex = ""; // reset z-index refered to the beforeSlideOut()
-			s.visibility = "";
+			s.zIndex = ''; // reset z-index refered to the beforeSlideOut()
+			s.visibility = '';
 			zk(colled).slideIn(this, {
 				anchor: this.sanchor,
 				duration: 200,
@@ -886,18 +864,18 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.left = this._original[0];
 		s.top = this._original[1];
 		n._lastSize = null;// reset size for Borderlayout
-		s.zIndex = "";
+		s.zIndex = '';
 		if (this.$n('btn'))
-			this.$n('btn').style.display = "";
-		jq(document).unbind("click", this.proxy(this._docClick));
+			this.$n('btn').style.display = '';
+		jq(document).unbind('click', this.proxy(this._docClick));
 		this._isSlideUp = this._isSlide = false;
 	},
 	//drag
 	_ignoredrag: function (dg, pointer, evt) {
 			var target = evt.domTarget,
 				wgt = dg.control;
-			if (!target || target != wgt.$n('split')) return true;
-			if (wgt.isSplittable() && wgt._open) {			
+			if (!target || !jq.contains(wgt.$n('split'), target)) return true;
+			if (wgt.isSplittable() && wgt._open) {
 				var BL = zul.layout.Borderlayout,
 					pos = wgt.getPosition(),
 					maxs = wgt.getMaxsize(),
@@ -911,7 +889,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					min = 0,
 					uuid = wgt.uuid;
 				switch (pos) {
-				case BL.NORTH:	
+				case BL.NORTH:
 				case BL.SOUTH:
 					var r = ol.center || (pos == BL.NORTH ? ol.south : ol.north);
 					if (r) {
@@ -922,27 +900,28 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						} else {
 							maxs = Math.min(maxs, ol.$n().offsetHeight
 									- r.$n('real').offsetHeight - r.$n('split').offsetHeight
-									- wgt.$n('split').offsetHeight - min); 
+									- wgt.$n('split').offsetHeight - min);
 						}
 					} else {
 						maxs = ol.$n().offsetHeight - wgt.$n('split').offsetHeight;
 					}
-					break;				
+					break;
 				case BL.WEST:
 				case BL.EAST:
 					var r = ol.center || (pos == BL.WEST ? ol.east : ol.west);
 					if (r) {
 						if (BL.CENTER == r.getPosition()) {
 							maxs = Math.min(maxs, (real.offsetWidth
-									+ zk(r.$n('real')).revisedWidth(r.$n('real').offsetWidth))- min);
+									+ r.$n('real').offsetWidth)- min);
 						} else {
 							maxs = Math.min(maxs, ol.$n().offsetWidth
-									- r.$n('real').offsetWidth - r.$n('split').offsetWidth - wgt.$n('split').offsetWidth - min); 
+									- r.$n('real').offsetWidth - r.$n('split').offsetWidth
+									- wgt.$n('split').offsetWidth - min);
 						}
 					} else {
 						maxs = ol.$n().offsetWidth - wgt.$n('split').offsetWidth;
 					}
-					break;						
+					break;
 				}
 				var ofs = zk(real).cmOffset();
 				dg._rootoffs = {
@@ -959,7 +938,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_endeffect: function (dg, evt) {
 		var wgt = dg.control,
-			keys = "";
+			keys = '';
 		if (wgt._isVertical())
 			wgt.setHeight(dg._point[1] + 'px');
 		else
@@ -967,7 +946,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		// Bug #1939859
 		wgt.$n().style.zIndex = '';
-			
+
 		dg._rootoffs = dg._point = null;
 
 		wgt.parent.resize();
@@ -1026,7 +1005,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$el.offsetWidth()+'px;height:'+$el.offsetHeight()
 			+'px;cursor:'+el.style.cursor+';"></div>');
-		return jq("#zk_layoutghost")[0];
+		return jq('#zk_layoutghost')[0];
 	}
 });
 
