@@ -124,7 +124,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers("onChildRemoved_", arguments);
-		_syncSelectedPanels(this);
+		this.tabRemoved = true;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
