@@ -162,15 +162,18 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return t;
 	},
 	doClick_: function (evt) {
-		var wgt = zk.Widget.$(evt.domTarget),
+		var tg = evt.domTarget,
+			wgt = zk.Widget.$(tg),
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false;
-		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
-				!jq.nodeName(evt.domTarget, 'input') && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
+			
+		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) 
+				&& this.isSortable_() && !jq.nodeName(tg, 'input') 
+				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
 			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
 		} else {
-			if (jq.nodeName(evt.domTarget, 'input'))
+			if (jq.nodeName(tg, 'input'))
 				evt.stop({propagation: true});
 			this.$supers('doClick_', arguments);
 		}
@@ -386,8 +389,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			((!this.firstChild && label == '' ) ? "&nbsp;" : label)); //ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
-			out.push('<a id="', uuid, '-menu-icon" href="javascript:;" class="',
-				this.$s('menuicon'), '"><i class="z-icon-caret-down"></i></a>');
+			out.push('<a id="', uuid, '-btn" href="javascript:;" class="',
+				this.$s('button'), '"><i class="z-icon-caret-down"></i></a>');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
