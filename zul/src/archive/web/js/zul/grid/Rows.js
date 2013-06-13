@@ -67,6 +67,9 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Rows, 'bind_', arguments);
+		var grid = this.getGrid();
+		if (grid) // bind ebodyrows for MeshWidget
+			grid.ebodyrows = this.$n();
 		zWatch.listen({onResponse: this});
 		var w = this;
 		after.push(function () {

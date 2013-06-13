@@ -70,12 +70,8 @@
 		font-size: @baseFontSize;
 		position: relative;
 	}
-	&-root-open,
-	&-tee-open,
-	&-last-open,
-	&-root-close,
-	&-tee-close,
-	&-last-close {
+	&-open,
+	&-close {
 		display: inline-block;
 		position: absolute;
 		left: 8px;
@@ -83,15 +79,11 @@
 			color: #0076a3;
 		}
 	}
-	&-root-open,
-	&-tee-open,
-	&-last-open {
+	&-open {
 		color: black;
 		.transform('rotate(45deg)');
 	}
-	&-root-close,
-	&-tee-close,
-	&-last-close {
+	&-close {
 		color: #8FB9D0;
 	}
 }
