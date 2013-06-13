@@ -242,8 +242,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!img) {
 			img = iconSclass;
 		} else
-			img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			img = '<img src="' + img + '" class="' + this.$s('image') + '"/>'
+			+ (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	//bug #3014664
