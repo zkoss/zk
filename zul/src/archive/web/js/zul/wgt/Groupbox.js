@@ -46,7 +46,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				self = this;
 			if (node && this._closable) {
 				if (open)
-					$this.removeClass(this.getZclass() + "-colpsd");
+					$this.removeClass(this.getZclass() + "-collapsed");
 				var head = this.$n('header'),
 					opts = { complete: function() { self.afterAnima_(false); } };
 				
@@ -113,7 +113,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			zcls = this.getZclass();
 		if (s)
 			html += s + ' ';
-		html += zcls + '-cnt';
+		html += zcls + '-content';
 		if (!title && !cap)
 			html += ' '+ zcls + '-notitle';
 		html += '"';
@@ -253,7 +253,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			
 		if (!this._open) {
 			if (cls) cls += ' ';
-			cls += this.$s('colpsd');
+			cls += this.$s('collapsed');
 		}
 		return cls;
 	},
@@ -264,7 +264,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			colpsd = ((zk(this).padBorderHeight() + jq(this).height()) + 'px') != this._defHeight;
 		
 		if ((this._isDefault() && !visible) || (!this._isDefault() && colpsd)) {
-			$this.addClass(this.$s('colpsd'));
+			$this.addClass(this.$s('collapsed'));
 		}
 		this.$supers('afterAnima_', arguments);
 	}

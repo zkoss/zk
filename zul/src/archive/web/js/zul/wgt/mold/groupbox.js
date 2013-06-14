@@ -39,7 +39,7 @@ function (out, skipper) {
 			cap.redraw(out);
 		else
 			out.push('<div id="', uuid,'-title" class="', zcls, 
-					'-title"><span class="', zcls, '-title-cnt">', title, '</span></div>');
+					'-title"><span class="', zcls, '-title-content">', title, '</span></div>');
 		
 		if(this._isDefault()) 
 			out.push('</div>');		

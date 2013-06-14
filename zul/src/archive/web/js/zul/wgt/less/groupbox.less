@@ -15,7 +15,7 @@ legend {
 
 .z-groupbox > .z-groupbox-header > 
 .z-caption-cnt,
-.z-groupbox-title-cnt {
+.z-groupbox-title-content {
 	display: inline-block;
 	background-color: #FFFFFF;
 	padding-left: 3px;
@@ -50,7 +50,7 @@ legend {
 		}
 	}
 
-	&-cnt {
+	&-content {
 		border: 1px solid #C5C5C5;
 		padding: 5px;
 		zoom: 1;
@@ -65,9 +65,9 @@ legend {
 			.resetGradient();
 		}
 
-		.z-groupbox-cnt {
+		.z-groupbox-content {
 			overflow: hidden;
-			height: inherit !important; // Firefox bug: content should be coll when scrolling
+			height: inherit !important; // Firefox bug: content cant be collapsed when scrolling
 			padding: 5px;
 			border: none;
 		}
@@ -84,7 +84,7 @@ legend {
 			cursor: default;
 		}
 
-		&.z-groupbox-colpsd {
+		&.z-groupbox-collapsed {
 			border-width: 1px 0px 0px 0px;
 			padding-left: 1px;
 
@@ -92,7 +92,7 @@ legend {
 				margin-right: 11px;
 			}
 
-			.z-groupbox-cnt {
+			.z-groupbox-content {
 				display: none; // Firefox bug: content cant be hidden after scrolling finish
 			}
 		}
