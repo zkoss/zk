@@ -46,7 +46,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				self = this;
 			if (node && this._closable) {
 				if (open)
-					$this.removeClass(this.getZclass() + "-collapsed");
+					$this.removeClass(this.$s('collapsed'));
 				var head = this.$n('header'),
 					opts = { complete: function() { self.afterAnima_(false); } };
 				
@@ -113,9 +113,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			zcls = this.getZclass();
 		if (s)
 			html += s + ' ';
-		html += zcls + '-content';
+		html += this.$s('content');
 		if (!title && !cap)
-			html += ' '+ zcls + '-notitle';
+			html += ' '+ this.$s('notitle');
 		html += '"';
 
 		s = this._contentStyle;
@@ -146,13 +146,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
-		if (hgh && hgh != "auto" && this.isOpen()) {
+		if (hgh && hgh != 'auto' && this.isOpen()) {
 			var n;
 			if (n = this.$n('cave')) {
 				var wgt = this,
 					$n = zk(n);
 				// B50-ZK-487: height isuue in the groupbox (with specified caption)
-				n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
+				n.style.height = $n.revisedHeight($n.vflexHeight(), true) + 'px';
 					//if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul
@@ -165,7 +165,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		var h = 0,
-			margins = zkn.sumStyles("tb", jq.margins);
+			margins = zkn.sumStyles('tb', jq.margins);
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			var node = this.$n(),
@@ -179,7 +179,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 		// fixed for B50-3317729.zul on webkit
 		if (zk.safari) {
-			margins -= zkn.sumStyles("tb", jq.margins);
+			margins -= zkn.sumStyles('tb', jq.margins);
 			if (margins)
 				n.style.height = jq.px0(h + margins);
 		}

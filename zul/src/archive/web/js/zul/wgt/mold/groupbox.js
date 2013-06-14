@@ -34,12 +34,12 @@ function (out, skipper) {
 		else 
 			out.push('<legend');
 
-		out.push(' id="', uuid, '-header" class="', zcls, '-header',(this._closable? '': ' ' + zcls + '-readonly'),'">');
+		out.push(' id="', uuid, '-header" class="', this.$s('header'), (this._closable? '': ' ' +  this.$s('readonly')),'">');
 		if (cap)
 			cap.redraw(out);
 		else
-			out.push('<div id="', uuid,'-title" class="', zcls, 
-					'-title"><span class="', zcls, '-title-content">', title, '</span></div>');
+			out.push('<div id="', uuid,'-title" class="', this.$s('title'), 
+					'"><span class="', this.$s('title-content'), '">', title, '</span></div>');
 		
 		if(this._isDefault()) 
 			out.push('</div>');		
