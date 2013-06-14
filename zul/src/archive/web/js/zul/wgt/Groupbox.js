@@ -29,6 +29,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
+	_defHeight: 0,
 
 	$define: { //zk.def
 		/** Returns whether this groupbox is open.
@@ -39,11 +40,20 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 */
 		open: function (open, fromServer) {
-			var node = this.$n();
+			var node = this.$n()
+				$this = jq(node),
+				def = this._isDefault()
+				self = this;
 			if (node && this._closable) {
-				if (open && this._isDefault())
-						jq(node).removeClass(this.getZclass() + "-colpsd");
-				zk(this.$n())[open?'slideDown':'slideUp'](this);
+				if (open)
+					$this.removeClass(this.getZclass() + "-colpsd");
+				var head = this.$n('header'),
+					opts = { complete: function() { self.afterAnima_(false); } };
+				
+				$this.animate({ 
+					height: open ? this._defHeight : head.offsetHeight + (def ? 0 : zk(head).padBorderHeight() + 5)
+				}, opts);					
+				
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
 		},
@@ -143,7 +153,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					$n = zk(n);
 				// B50-ZK-487: height isuue in the groupbox (with specified caption)
 				n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
-				if (zk.gecko) setTimeout(fix, 0);
+					//if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
@@ -197,6 +207,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 		zWatch.listen({onSize: this});
+		this._defHeight = this.$n().style.height;
 		var tt;
 		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
@@ -247,8 +258,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return cls;
 	},
 	afterAnima_: function (visible) {
-		if (!visible && this._isDefault())
-			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
+		var $this = jq(this),
+			head = this.$n('header'),
+			$head = jq(head)
+			colpsd = ((zk(this).padBorderHeight() + jq(this).height()) + 'px') != this._defHeight;
+		
+		if ((this._isDefault() && !visible) || (!this._isDefault() && colpsd)) {
+			$this.addClass(this.$s('colpsd'));
+		}
 		this.$supers('afterAnima_', arguments);
 	}
 })})();

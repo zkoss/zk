@@ -23,7 +23,7 @@ legend {
 }
 
 .z-groupbox {
-	margin: 0;
+	margin: 2px;
 	overflow: hidden;
 	padding: 0;
 
@@ -67,6 +67,7 @@ legend {
 
 		.z-groupbox-cnt {
 			overflow: hidden;
+			height: inherit !important; // Firefox bug: content should be coll when scrolling
 			padding: 5px;
 			border: none;
 		}
@@ -81,6 +82,19 @@ legend {
 
 		.z-groupbox .z-caption-readonly {
 			cursor: default;
+		}
+
+		&.z-groupbox-colpsd {
+			border-width: 1px 0px 0px 0px;
+			padding-left: 1px;
+
+			.z-groupbox-header {
+				margin-right: 11px;
+			}
+
+			.z-groupbox-cnt {
+				display: none; // Firefox bug: content cant be hidden after scrolling finish
+			}
 		}
 	}
 }

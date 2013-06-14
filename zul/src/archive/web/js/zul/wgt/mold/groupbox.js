@@ -34,7 +34,7 @@ function (out, skipper) {
 		else 
 			out.push('<legend');
 
-		out.push(' class="', zcls, '-header',(this._closable? '': ' ' + zcls + '-readonly'),'">');
+		out.push(' id="', uuid, '-header" class="', zcls, '-header',(this._closable? '': ' ' + zcls + '-readonly'),'">');
 		if (cap)
 			cap.redraw(out);
 		else
