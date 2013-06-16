@@ -1,15 +1,17 @@
+@import "~./zul/less/_header.less";
+
 .z-caption input, .z-caption td {
-	font-size: ${fontSizeS};
+	font-size: @fontSizeSmall;
 }
 .z-caption .z-caption-l, .z-caption .z-caption-r {
-	font-size: ${fontSizeM};
+	font-size: @fontSizeMedium;
 }
 .z-caption button, .z-caption .z-button .z-button-btn {
-	font-size: ${fontSizeXS}; font-weight: normal;
+	font-size: @fontSizeXSmall; font-weight: normal;
 	padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;
 }
 .z-caption a, .z-caption a:visited {
-	font-size: ${fontSizeS}; font-weight: normal; color: black; background: none;
+	font-size: @fontSizeSmall; font-weight: normal; color: black; background: none;
 	text-decoration: none;
 }
 .z-caption .z-toolbar a, .z-caption .z-toolbar a:visited, .z-caption .z-toolbar a:hover {
