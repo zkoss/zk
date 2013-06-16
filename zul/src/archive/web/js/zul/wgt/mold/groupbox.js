@@ -26,8 +26,6 @@ function (out, skipper) {
 	
 	out.push(' ', this.domAttrs_(), '>');
 	
-	
-	
 	if (title || cap) {
 		if(this._isDefault()) 
 			out.push('<div');		
