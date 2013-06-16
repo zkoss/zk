@@ -19,7 +19,7 @@ function (out) {
 		cnt = this.domContent_();
 	if (parent._isDefault && parent._isDefault()) {
 		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt" class="', 
-				zcls, '-cnt">', cnt);
+				zcls, '-content">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</span></div>');
@@ -39,20 +39,20 @@ function (out) {
 	out.push('</td>');
 	if (this._isCollapsibleVisible())
 		out.push('<td width="16"><div id="', puuid, '-exp" class="',
-				pzcls, '-icon ', pzcls, '-exp"></div></td>');
+				parent.$s('icon'), ' ', parent.$s('expand'), '"></div></td>');
 	if (this._isMinimizeVisible())
 		out.push('<td width="16"><div id="', puuid, '-min" class="',
-				pzcls, '-icon ', pzcls, '-min"></div></td>');
+				parent.$s('icon'), ' ', parent.$s('minimize'), '"></div></td>');
 	if (this._isMaximizeVisible()) {
 		out.push('<td width="16"><div id="', puuid, '-max" class="',
-				pzcls, '-icon ', pzcls, '-max');
+				parent.$s('icon'), ' ', parent.$s('maximize'));
 		if (parent.isMaximized())
 			out.push(' ', pzcls, '-maximized');
 		out.push('"></div></td>');
 	}
 	if (this._isCloseVisible())
 		out.push('<td width="16"><div id="', puuid, '-close" class="',
-				pzcls, '-icon ', pzcls, '-close"></div></td>');
+				parent.$s('icon'), ' ', parent.$s('close'), '"></div></td>');
 
 	out.push('</tr></table>');
 }

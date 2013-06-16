@@ -38,8 +38,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
-		else img = '<img src="' + img + '" align="absmiddle" />' + 
-				(iconSclass ? ' ' + iconSclass : '');
+		else img = '<img src="' + img + '" align="absmiddle" ' + 
+		(iconSclass ? ' ' + iconSclass : '') + '/>';
 		return label ? img + ' ' + label: img;
 	},
 	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
@@ -56,7 +56,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!parent.$instanceof(zul.wgt.Groupbox))
 			return sc;
 			
-		return sc + (parent._closable ? '': ' ' + this.getZclass() + '-readonly');
+		return sc + (parent._closable ? '': ' ' + this.$s('readonly'));
 	},
 	doClick_: function () {
 		if (this.parent.$instanceof(zul.wgt.Groupbox))
