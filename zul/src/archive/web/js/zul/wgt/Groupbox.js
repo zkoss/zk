@@ -29,7 +29,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
-	_defHeight: 0,
 
 	$define: { //zk.def
 		/** Returns whether this groupbox is open.
@@ -40,19 +39,23 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 */
 		open: function (open, fromServer) {
-			var node = this.$n()
+			var node = this.$n(),
 				$this = jq(node),
-				def = this._isDefault()
-				self = this;
+				def = this._isDefault();
 			if (node && this._closable) {
 				if (open)
 					$this.removeClass(this.$s('collapsed'));
-				var head = this.$n('header'),
-					opts = { complete: function() { self.afterAnima_(false); } };
-				
-				$this.animate({ 
-					height: open ? this._defHeight : head.offsetHeight + (def ? 0 : zk(head).padBorderHeight() + 5)
-				}, opts);					
+				var head = this.$n('header');
+				if(!def)
+					if(open) {
+						$this.zk.slideDown(this);
+					} else {
+						$this.zk.slideUp(this, { 
+							height: head.offsetHeight + (def ? 0 : zk(head).padBorderHeight() + 5)
+						});
+					}
+				else
+					zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
 				
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
@@ -207,7 +210,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 		zWatch.listen({onSize: this});
-		this._defHeight = this.$n().style.height;
 		var tt;
 		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
@@ -257,14 +259,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		return cls;
 	},
-	afterAnima_: function (visible) {
-		var $this = jq(this),
-			head = this.$n('header'),
-			$head = jq(head)
-			colpsd = ((zk(this).padBorderHeight() + jq(this).height()) + 'px') != this._defHeight;
-		
-		if ((this._isDefault() && !visible) || (!this._isDefault() && colpsd)) {
-			$this.addClass(this.$s('collapsed'));
+	afterAnima_: function (visible) {		
+		if (!this._open) {
+			jq(this).addClass(this.$s('collapsed'));
 		}
 		this.$supers('afterAnima_', arguments);
 	}
