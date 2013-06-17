@@ -40,8 +40,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				if (open)
 					$this.removeClass(this.$s('collapsed'));
 				var head = this.$n('header');
-				if(def)
+				if(def)					
 					if(open) {
+						jq(this.$n('cave')).show();
 						$this.zk.slideDown(this);
 					} else {
 						$this.zk.slideUp(this, { 
