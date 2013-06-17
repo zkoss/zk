@@ -633,7 +633,7 @@ def alert(m):
 			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<mold>
-			<mold-name>native</mold-name>
+			<mold-name>3d</mold-name>
 			<mold-uri>mold/groupbox.js</mold-uri>
 			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
