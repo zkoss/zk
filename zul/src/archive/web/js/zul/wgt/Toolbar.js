@@ -21,8 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <li>panel: this mold is used for {@link zul.wnd.Panel} component as its
  * foot toolbar.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-toolbar, if {@link #getMold()} is panel,
- * z-toolbar-panel is assumed.
+ * <p>Default {@link #getZclass}: z-toolbar
  */
 zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
