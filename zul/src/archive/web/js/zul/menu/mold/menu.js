@@ -18,7 +18,7 @@ function (out) {
 		contentHandler = this._contentHandler;
 	
 	out.push('<li', this.domAttrs_(), '><a href="javascript:;" id="', uuid,
-			'-a" class="', this.$s('content'), '">', this.domContent_(), '</a>'); //Merge breeze
+			'-a" class="', this.$s('content'), '">', this.domContent_(), '</a>');
 	if (this.menupopup)
 		this.menupopup.redraw(out);
 	else if (contentHandler)

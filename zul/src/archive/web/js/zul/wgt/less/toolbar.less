@@ -1,0 +1,99 @@
+@import "~./zul/less/_header.less";
+
+.z-toolbar {
+	border-color: #C5C5C5; 
+	border-style: solid; 
+	border-width: 0 0 1px; 
+	display: block;
+	padding: 4px 4px 3px;
+	.buttonBackground();
+	position: relative;
+}
+.z-caption .z-toolbar {
+	background: none; border: 0;
+}
+.z-toolbar-tabs .z-toolbar-content,
+.z-toolbar-tabs .z-toolbar-content span,
+.z-toolbar-content, .z-toolbar-content span {
+	font-size: @fontSizeSmall;
+}
+// toolbar horizontal alignment
+.z-toolbar-start {
+	float: left; clear: none;
+}
+.z-toolbar-center {
+	text-align: center;
+	margin: 0 auto;
+}
+.z-toolbar-end {
+	float: right; clear: none;
+}
+// Toolbar Panel Mold
+.z-toolbar-panel {
+	.resetGradient();
+	padding: 5px;
+}
+
+.z-toolbar-panel .z-toolbar-horizontal,
+.z-toolbar-panel .z-toolbar-vertical {
+	border: 0;
+	padding: 0;
+}
+.z-toolbar-panel .z-toolbar-horizontal {
+	padding-left: 3px;
+}
+.z-toolbar-panel .z-toolbar-vertical {
+	padding-bottom: 1px;
+}
+
+
+@buttonBorderHover: #8FB9D0;
+
+// Toolbarbutton
+.z-toolbarbutton {
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	margin: 0 2px;
+	height: 24px;
+	padding: 1px 0;
+	border: 1px solid transparent;
+	.borderRadius('3px');
+
+	&:hover {
+		border-color: @buttonBorderHover;
+		.buttonBackground(rgba(227,244,253,0.0), #C7E9F9);
+	}
+	&:active {
+		border: 1px solid #808080;
+		border-color-bottom: #B6B6B6;
+		border-color-right: #B6B6B6;
+		.buttonBackground(#C3F5FE, #86E2F9);
+		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75), 0 0 7px #CFCFCF');
+	}
+	&[disabled] {
+		color:gray !important;
+		cursor:default !important;
+		opacity: .5;
+		border: 1px solid transparent;
+		.resetGradient();
+		.boxShadow('none');
+	}
+}
+
+.z-toolbarbutton-checked {
+	border: 1px solid #C6DBE6;
+	.borderRadius('3px');
+	.verGradient(#F4FAFD, #E2EFF6);
+}
+.z-toolbarbutton-content {
+	padding: 2px 2px;
+	position: relative;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeSmall;
+	font-weight: normal;
+	text-shadow: 0 1px #FFFFFF;
+	line-height: @baseLineHeight + 6; // 20px for IE to v-align center
+	vertical-align: middle;
+}
+
