@@ -30,8 +30,7 @@ import org.zkoss.zul.impl.XulElement;
  * <li>panel: since 3.5.0, this mold is used for {@link Panel} component as its
  * foot toolbar.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-toolbar, if {@link #getMold()} is panel,
- * z-toolbar-panel is assumed.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-toolbar
  *  
  * @author tomyeh
  */
@@ -80,8 +79,7 @@ public class Toolbar extends XulElement {
 	
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-toolbar" + (getParent() instanceof Tabbox ? "-tabs" : "") +
-				(inPanelMold() ? "-panel" : "") : _zclass;
+		return _zclass == null ? "z-toolbar" : _zclass;
 	}
 
 	/** Returns the orient.
