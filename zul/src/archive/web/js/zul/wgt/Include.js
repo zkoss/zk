@@ -48,7 +48,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		return style;
 	},
 	bind_: function () {
-		this.$supers(zul.wgt.Include, "bind_", arguments);
+		this.$supers(zul.wgt.Include, 'bind_', arguments);
 		var ctn;
 		if (ctn = this._childjs) {
 			ctn();
@@ -64,6 +64,6 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		if (jq.isArray(this._xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n(); n.firstChild;)
 				n.removeChild(n.firstChild);
-		this.$supers(zul.wgt.Include, "unbind_", arguments);
+		this.$supers(zul.wgt.Include, 'unbind_', arguments);
 	}
 });
