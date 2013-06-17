@@ -277,14 +277,16 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
 						var h = c.offsetHeight + zkc.sumStyles('tb', jq.margins) + zkxc.paddingHeight(); //Bug ZK-1577: should consider padding size
-						cp.style.height = jq.px0(zkxc.revisedHeight(h));
+						cp.style.height = jq.px0(h);
 						if (vert)
 							hgh -= cp.offsetHeight + zkxc.sumStyles('tb', jq.margins);
 					} else {
 						vflexs.push(cwgt);
 						if (vert) {
 							vflexsz += cwgt._nvflex;
-							hgh = zkxc.revisedHeight(hgh, true); //bug#3157031: remove chdex's padding, border, margin
+							
+							//bug#3157031: remove chdex's padding, border, margin
+							hgh = hgh - zkxc.sumStyles('tb', jq.margins);
 						}
 					}
 				} else if (vert)
@@ -304,7 +306,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						hflexs.push(cwgt);
 						if (!vert) {
 							hflexsz += cwgt._nhflex;
-							wdh = zkxc.revisedWidth(wdh, true); //bug#3157031: remove chdex's padding, border, margin
+							
+							//bug#3157031: remove chdex's padding, border, margin
+							wdh = wdh - zkxc.sumStyles('lr', jq.margins); 
 						}
 					}
 				} else if (!vert)
@@ -321,10 +325,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				offtop = cwgt.$n().offsetTop,
 				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 
-			cwgt.setFlexSize_({height:isz});
+			var chdex = cwgt.$n('chdex');
+			cwgt.setFlexSize_({height:isz - zk(chdex).padBorderHeight()});
 			cwgt._vflexsz = vsz;
 
-			var chdex = cwgt.$n('chdex');
 			chdex.style.height = jq.px0(vsz);
 			if (vert) lastsz -= vsz;
 		}
@@ -333,9 +337,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var cwgt = vflexs.shift(),
 				offtop = cwgt.$n().offsetTop,
 				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
-			cwgt.setFlexSize_({height:isz});
-			cwgt._vflexsz = lastsz;
+
 			var chdex = cwgt.$n('chdex');
+			cwgt.setFlexSize_({height:isz - zk(chdex).padBorderHeight()});
+			cwgt._vflexsz = lastsz;
 			chdex.style.height = jq.px0(lastsz);
 		}
 		//setup the width for the hflex child
@@ -344,21 +349,22 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		while (hflexs.length > 1) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex}
 				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) || 0; //cast to integer
-			cwgt.setFlexSize_({width:hsz});
-			cwgt._hflexsz = hsz;
 
 			var chdex = cwgt.$n('chdex');
+			cwgt.setFlexSize_({width:hsz - zk(chdex).padBorderWidth()});
+			cwgt._hflexsz = hsz;
+
 			chdex.style.width = jq.px0(hsz);
 
 			if (!vert) lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
-			var cwgt = hflexs.shift();
-			cwgt.setFlexSize_({width:lastsz});
+			var cwgt = hflexs.shift(),
+				chdex = cwgt.$n('chdex');
+			cwgt.setFlexSize_({width:lastsz - zk(chdex).padBorderWidth()});
 			cwgt._hflexsz = lastsz;
 
-			var chdex = cwgt.$n('chdex');
 			chdex.style.width = jq.px0(lastsz);
 		}
 
