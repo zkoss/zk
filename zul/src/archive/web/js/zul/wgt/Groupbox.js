@@ -20,12 +20,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Events: onOpen.
  *
  */
-(function(){
-	function firstChild(wgt) {
-		for (var w = wgt.firstChild, cap = wgt.caption; w; w = w.nextSibling)
-			if (w != cap) return w;
-	}
-
 zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
@@ -131,9 +125,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return html;
 	},
 	_redrawCave: function (out, skipper) { //reserve for customizing
-		var w, uuid = this.uuid;
-
-		out.push('<div id="', uuid, '-cave"', this._contentAttrs(), '>');
+		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
 		
 		if (!skipper)
 			for (var w = this.firstChild, cap = this.caption; w; w = w.nextSibling)
@@ -265,4 +257,4 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		this.$supers('afterAnima_', arguments);
 	}
-})})();
+});
