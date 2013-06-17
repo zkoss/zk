@@ -48,6 +48,7 @@ ZK 6.5.3
   ZK-1793: Grid with hidden header flickering back and forth when you scroll horizontally
   ZK-1804: Calendar should not be able to select year less than 1900 or greater than 2099
   ZK-1808: Close tabpanel cause js error
+  ZK-1812: zAu.send: data of client event ignored on server side
   
   --------
 ZK 6.5.2
