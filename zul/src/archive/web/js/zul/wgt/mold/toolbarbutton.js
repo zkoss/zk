@@ -13,9 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var zcls = this.getZclass();
-	out.push('<div', this.domAttrs_(), '><div class="',
-		zcls, '-body"><div ', this.domTextStyleAttr_(), 
-		'class="', zcls, '-cnt">', this.domContent_(),
-		'</div></div></div>');
+	out.push('<a', this.domAttrs_(), '><span id="', this.uuid, '-cnt"', this.domTextStyleAttr_(), 
+		'class="', this.$s('content'), '">', this.domContent_(),
+		'</span></a>');
 }

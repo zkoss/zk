@@ -29,8 +29,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getZclass}: z-menubar, if {@link #getOrient()} == vertical,
- *  z-menubar-vertical will be added. (@since 7.0.0)
+ * <p>Default {@link #getZclass}: z-menubar
  */
 zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',

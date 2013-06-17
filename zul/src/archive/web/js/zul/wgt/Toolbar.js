@@ -21,12 +21,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <li>panel: this mold is used for {@link zul.wnd.Panel} component as its
  * foot toolbar.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-toolbar, if {@link #getMold()} is panel,
- * z-toolbar-panel is assumed.
+ * <p>Default {@link #getZclass}: z-toolbar
  */
 zul.wgt.Toolbar = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
-	_align: "start",
+	_orient: 'horizontal',
+	_align: 'start',
 
 	$define: {
 		/** Returns the alignment.
@@ -48,34 +47,25 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		 */
 		orient: _zkf
 	},
-	
-	// ZK-1706: cave size should be same as node width
-	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		if (this._orient == 'vertical') {
-			var cave = this.$n('cave');
-			n.style.height = cave.style.height = jq.px(height - zkn.padBorderHeight());
-		}
-	},
-	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
-		if (this._orient == 'horizontal') {
-			var cave = this.$n('cave');
-			n.style.width = cave.style.width = jq.px(width - zkn.padBorderWidth());
-		}
-	},
-
 	// super
-	getZclass: function(){
-		var zcls = this._zclass;
-		return zcls ? zcls : "z-toolbar"
-			+ (this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? "-tabs" : "") 
-			+ (this.inPanelMold() ? "-panel" : "");
-	}, 
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			var tabs = this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? this.$s('tabs') : '';
+				
+			if (tabs)
+				sc += ' ' + tabs;
+			if (this.inPanelMold())
+				sc += ' ' + this.$s('panel');
+		}
+		return sc;
+	},
 	/**
 	 * Returns whether is in panel mold or not.
 	 * @return boolean
 	 */
 	inPanelMold: function(){
-		return this._mold == "panel";
+		return this._mold == 'panel';
 	},
 	// protected
 	onChildAdded_: function(){
@@ -87,6 +77,5 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_ && this.inPanelMold())
 			this.rerender();
-	}
-	
+	}	
 });
