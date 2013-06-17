@@ -13,13 +13,12 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {	
-	var	zcls = this.getZclass(),
-	uuid = this.uuid,
-	cap = this.caption,
-	title = this.getTitle();
-	title = title && !cap ? zUtl.encodeXML(title) :  null;
+	var	uuid = this.uuid,
+		cap = this.caption,
+		title = this.getTitle();
+		title = title && !cap ? zUtl.encodeXML(title) :  null;
 	
-	if(!this._isDefault()) 
+	if(this._isDefault()) 
 		out.push('<fieldset');
 	else
 		out.push('<div');
@@ -27,7 +26,7 @@ function (out, skipper) {
 	out.push(' ', this.domAttrs_(), '>');
 	
 	if (title || cap) {
-		if(this._isDefault()) 
+		if(!this._isDefault()) 
 			out.push('<div');		
 		else 
 			out.push('<legend');
@@ -39,7 +38,7 @@ function (out, skipper) {
 			out.push('<div id="', uuid,'-title" class="', this.$s('title'), 
 					'"><span class="', this.$s('title-content'), '">', title, '</span></div>');
 		
-		if(this._isDefault()) 
+		if(!this._isDefault()) 
 			out.push('</div>');		
 		else 
 			out.push('</legend>');
@@ -47,7 +46,7 @@ function (out, skipper) {
 	
 	this._redrawCave(out, skipper);
 	
-	if(!this._isDefault())
+	if(this._isDefault())
 		out.push('</fieldset>');
 	else {
 		// classicblue is deprecated and 

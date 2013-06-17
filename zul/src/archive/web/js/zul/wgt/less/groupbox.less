@@ -19,17 +19,19 @@
 	}
 	
 	&-header {
+		margin-left: 10px;
+		margin-right: 10px;
+		font-weight: normal;
+		border: none;
+		.resetGradient();
 		color: #363636;
 		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
-		font-weight: bold;
-		line-height: @baseBarHeight;
-		border: 1px solid #c5c5c5;
+		font-size: @fontSizeMedium;		
+		line-height: @baseBarHeight;		
 		height: @baseBarHeight;
 		padding-left: 4px;
 		overflow: hidden;
 		zoom: 1;
-		.buttonBackground();
 		cursor: pointer;
 
 		&-readonly {
@@ -38,50 +40,59 @@
 	}
 
 	&-content {
-		border: 1px solid #C5C5C5;
+		overflow: hidden;
+		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		padding: 5px;
+		border: none;		
 		zoom: 1;
 	}
 
-	&-native {
+	&-notitle {
+		border: none;
+	}
+
+	.z-caption {
+		cursor: pointer;
+
+		&-readonly {
+			cursor: default;
+		}
+	}
+
+	&-collapsed {
+		border-width: 1px 0px 0px 0px;
+		padding-left: 1px;
+		
 		.z-groupbox-header {
-			margin-left: 10px;
-			margin-right: 10px;
-			font-weight: normal;
-			border: none;
-			.resetGradient();
+			margin-right: 11px;
 		}
 
 		.z-groupbox-content {
-			overflow: hidden;
-			height: inherit !important; // Firefox bug: content cant be collapsed when scrolling
-			padding: 5px;
-			border: none;
+			display: none; // Firefox bug: content cant be hidden after scrolling finish
+		}		
+	}
+
+	&-3d {
+		.z-groupbox-header {
+			margin-left: 0px;
+			margin-right: 0px;
+			font-weight: bold;
+			border: 1px solid #c5c5c5;
+			.buttonBackground();
 		}
 
-		.z-groupbox-notitle {
-			border: none;
-		}
-
-		.z-groupbox .z-caption {
-			cursor: pointer;
-		}
-
-		.z-groupbox .z-caption-readonly {
-			cursor: default;
+		.z-groupbox-content {
+			border: 1px solid #C5C5C5;
+			height: auto;		
 		}
 
 		&.z-groupbox-collapsed {
-			border-width: 1px 0px 0px 0px;
-			padding-left: 1px;
-
+			border-width: 0px;
+			padding-left: 0px;
+			
 			.z-groupbox-header {
-				margin-right: 11px;
-			}
-
-			.z-groupbox-content {
-				display: none; // Firefox bug: content cant be hidden after scrolling finish
-			}
+				margin-right: 0px;
+			}		
 		}
 	}
 }

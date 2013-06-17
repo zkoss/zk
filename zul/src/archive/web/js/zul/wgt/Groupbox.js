@@ -40,7 +40,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				if (open)
 					$this.removeClass(this.$s('collapsed'));
 				var head = this.$n('header');
-				if(!def)
+				if(def)
 					if(open) {
 						$this.zk.slideDown(this);
 					} else {
@@ -242,7 +242,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var cls = this.$supers('domClass_', arguments);
 		if (!this._isDefault()) {
 			if (cls) cls += ' ';
-			cls += this.$s('native');
+			cls += this.$s('3d');
 		}
 			
 		if (!this._open) {
