@@ -226,7 +226,7 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this.defaultAnimaOpts(wgt, opts, prop, true)
+		return this.defaultAnimaOpts(wgt, opts, prop, hgh ? true : false)
 			.jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 250,
 			complete: opts.afterAnima
