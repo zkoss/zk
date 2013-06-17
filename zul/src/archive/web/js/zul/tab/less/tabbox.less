@@ -167,22 +167,19 @@
 }
 
 .z-toolbar-tabs {
-	overflow: hidden;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 1;
-	padding: 0 4px;
-	border-bottom: 1px solid #E1E1E1;
-	height: @baseBarHeight + 1;
-
-	&-outer {
-		border-bottom: 0;
+	&.z-toolbar {
 		overflow: hidden;
-		height: @baseBarHeight;
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 1;
+		padding: 0 4px;
+		border-bottom: 1px solid #E1E1E1;
+		height: @baseBarHeight + 1;
+		.resetGradient();
 	}
 
-	&-body {
+	.z-toolbar-content {
 		padding-top: 2px;
 	}
 }

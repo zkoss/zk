@@ -40,9 +40,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-toolbarbutton.
  */
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
-	_orient: "horizontal",
-	_dir: "normal",
-	_mode:"default",
+	_orient: 'horizontal',
+	_dir: 'normal',
+	_mode:'default',
 	_checked: false,
 	//_tabindex: 0,
 
@@ -66,8 +66,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean val
 		 */
 		checked: function(val) {
-			if (this.desktop && this._mode == "toggle")
-				jq(this.$n())[val ? 'addClass' : 'removeClass'](this.getZclass() + '-ck');
+			if (this.desktop && this._mode == 'toggle')
+				jq(this.$n())[val ? 'addClass' : 'removeClass'](this.$s('checked'));
 		},
 		/** Returns whether it is disabled.
 		 * <p>Default: false.
@@ -239,22 +239,22 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 
 	// super//
 	getTextNode: function () {
-		return this.$n().firstChild.firstChild;
+		return this.$n('cnt');
 	},
 	bind_: function(){
 		this.$supers(zul.wgt.Toolbarbutton, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
-			this.domListen_(n, "onFocus", "doFocus_")
-				.domListen_(n, "onBlur", "doBlur_");
+			this.domListen_(n, 'onFocus', 'doFocus_')
+				.domListen_(n, 'onBlur', 'doBlur_');
 		}
 		if (!this._disabled && this._upload) _initUpld(this);
 	},
 	unbind_: function(){
 		_cleanUpld(this);
 		var n = this.$n();
-		this.domUnlisten_(n, "onFocus", "doFocus_")
-			.domUnlisten_(n, "onBlur", "doBlur_");
+		this.domUnlisten_(n, 'onFocus', 'doFocus_')
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(zul.wgt.Toolbarbutton, 'unbind_', arguments);
 	},
@@ -268,7 +268,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		else img = '<img src="' + img + '" align="absmiddle" />'
 					+ (iconSclass ? ' ' + iconSclass : '');
 		// B50-ZK-640: toolbarbutton with no label will display larger width blur box
-		var space = label? "vertical" == this.getOrient() ? '<br/>' : '&nbsp;' : '';
+		var space = label? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
 	},
 	domClass_: function(no){
@@ -276,19 +276,17 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			zcls = this.getZclass(),
 			nozcls = (!no || !no.zclass);
 		
-		if (this._disabled && nozcls && zcls) {
-				scls.push(' ' , zcls , '-disd');
+		if(this._mode == 'toggle' && this._checked && nozcls && zcls ) {
+			scls.push(' ', this.$s('checked'));
 		}
 		
-		if(this._mode == "toggle" && this._checked && nozcls && zcls ) {
-			scls.push(' ',zcls,'-ck');
-		}
-		
-		return scls.join("");
+		return scls.join('');
 	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments),
 			v = this.getTabindex();
+		if (this._disabled)
+			attr += ' disabled="disabled"';
 		if (v)
 			attr += ' tabIndex="' + v + '"';
 		return attr;
@@ -309,23 +307,11 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 					zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 				this.$super('doClick_', evt, true);
 				
-				if (this._mode == "toggle") {
+				if (this._mode == 'toggle') {
 					this.setChecked(!this.isChecked());
 					this.fire('onCheck', this.isChecked());
 				}
 			}
-		}
-	},
-	doMouseOver_: function (evt) {
-		if (!this._disabled) {
-			jq(this).addClass(this.getZclass() + '-over');
-			this.$supers('doMouseOver_', arguments);
-		}
-	},
-	doMouseOut_: function (evt) {
-		if (!this._disabled) {
-			jq(this).removeClass(this.getZclass() + '-over');
-			this.$supers('doMouseOut_', arguments);
 		}
 	}
 });

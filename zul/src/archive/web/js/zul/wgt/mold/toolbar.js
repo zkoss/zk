@@ -13,11 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var zcls = this.getZclass(),
-		space = 'vertical' != this.getOrient() ? '' : '<br/>';
+	var space = 'vertical' != this.getOrient() ? '' : '<br/>';
 		
 	out.push('<div ', this.domAttrs_(), '>', '<div id="', this.uuid, '-cave"',
-				' class="', zcls, "-body ", zcls, '-', this.getAlign(), '" >');
+			' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" >');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling) {
 		out.push(space);
