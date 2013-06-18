@@ -13,30 +13,44 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {	
-	var	zcls = this.getZclass(),
-		uuid = this.uuid,
+	var	uuid = this.uuid,
 		cap = this.caption,
 		title = this.getTitle();
-	title = title && !cap ? zUtl.encodeXML(title) :  null;
-
-	out.push('<div', this.domAttrs_(), '>');
+		title = title && !cap ? zUtl.encodeXML(title) :  null;
+	
+	if(this._isDefault()) 
+		out.push('<fieldset');
+	else
+		out.push('<div');
+	
+	out.push(' ', this.domAttrs_(), '>');
 	
 	if (title || cap) {
-		out.push('<div class="', zcls, '-tl"><div class="', zcls,
-			'-tr"></div></div><div class="', zcls, '-hl"><div class="',
-			zcls, '-hr"><div class="', zcls, '-hm',(this._closable? '': ' ' + zcls + '-hm-readonly'),'"><div class="',
-			zcls, '-header">');
+		if(!this._isDefault()) 
+			out.push('<div');		
+		else 
+			out.push('<legend');
+
+		out.push(' id="', uuid, '-header" class="', this.$s('header'), (this._closable? '': ' ' +  this.$s('readonly')),'">');
 		if (cap)
 			cap.redraw(out);
 		else
-			out.push('<div id="', uuid,'-title" class="', zcls, 
-					'-title"><span class="', zcls, '-title-cnt">', title, '</span></div>');
-		out.push('</div></div></div></div>');
+			out.push('<div id="', uuid,'-title" class="', this.$s('title'), 
+					'"><span class="', this.$s('title-content'), '">', title, '</span></div>');
+		
+		if(!this._isDefault()) 
+			out.push('</div>');		
+		else 
+			out.push('</legend>');
 	}
 	
 	this._redrawCave(out, skipper);
-
-	// classicblue is deprecated and 
-	// shadow not used in breeze, sapphire and silvertail,
-	out.push('</div>');
+	
+	if(this._isDefault())
+		out.push('</fieldset>');
+	else {
+		// classicblue is deprecated and 
+		// shadow not used in breeze, sapphire and silvertail,
+		out.push('</div>');
+	}	
 }

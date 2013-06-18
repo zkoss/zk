@@ -33,11 +33,25 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 */
 		open: function (open, fromServer) {
-			var node = this.$n();
+			var node = this.$n(),
+				$this = jq(node),
+				def = this._isDefault();
 			if (node && this._closable) {
-				if (open && this._isDefault())
-						jq(node).removeClass(this.getZclass() + "-colpsd");
-				zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
+				if (open)
+					$this.removeClass(this.$s('collapsed'));
+				var head = this.$n('header');
+				if(def)					
+					if(open) {
+						jq(this.$n('cave')).show();
+						$this.zk.slideDown(this);
+					} else {
+						$this.zk.slideUp(this, { 
+							height: head.offsetHeight + (def ? 0 : zk(head).padBorderHeight() + 5)
+						});
+					}
+				else
+					zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
+				
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
 		},
@@ -96,9 +110,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			zcls = this.getZclass();
 		if (s)
 			html += s + ' ';
-		html += zcls + '-cnt';
+		html += this.$s('content');
 		if (!title && !cap)
-			html += ' '+ zcls + '-notitle';
+			html += ' '+ this.$s('notitle');
 		html += '"';
 
 		s = this._contentStyle;
@@ -127,19 +141,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
-		if (hgh && hgh != "auto" && this.isOpen()) {
+		if (hgh && hgh != 'auto' && this.isOpen()) {
 			var n;
 			if (n = this.$n('cave')) {
 				var wgt = this,
-					$n = zk(n),
-					fix = function() {
-
-						// B50-ZK-487: height isuue in the groupbox (with specified caption)
-						n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
-					};
+					$n = zk(n);
 				// B50-ZK-487: height isuue in the groupbox (with specified caption)
-				fix()
-				if (zk.gecko) setTimeout(fix, 0);
+				n.style.height = $n.revisedHeight($n.vflexHeight(), true) + 'px';
+					//if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
@@ -148,7 +157,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		var h = 0,
-			margins = zkn.sumStyles("tb", jq.margins);
+			margins = zkn.sumStyles('tb', jq.margins);
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			var node = this.$n(),
@@ -162,7 +171,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 		// fixed for B50-3317729.zul on webkit
 		if (zk.safari) {
-			margins -= zkn.sumStyles("tb", jq.margins);
+			margins -= zkn.sumStyles('tb', jq.margins);
 			if (margins)
 				n.style.height = jq.px0(h + margins);
 		}
@@ -186,10 +195,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			if (w != cap && w.focus_(timeout))
 				return true;
 		return cap && cap.focus_(timeout);
-	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls ? zcls: this._isDefault() ? "z-groupbox": "z-groupbox-3d";
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
@@ -231,12 +236,17 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	domClass_: function () {
-		var html = this.$supers('domClass_', arguments);
-		if (!this._open) {
-			if (html) html += ' ';
-			html += this.getZclass() + '-colpsd';
+		var cls = this.$supers('domClass_', arguments);
+		if (!this._isDefault()) {
+			if (cls) cls += ' ';
+			cls += this.$s('3d');
 		}
-		return html;
+			
+		if (!this._open) {
+			if (cls) cls += ' ';
+			cls += this.$s('collapsed');
+		}
+		return cls;
 	},
 	afterAnima_: function (visible) {
 		if (!visible && this._isDefault())
