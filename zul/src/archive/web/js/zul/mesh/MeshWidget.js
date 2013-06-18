@@ -1146,7 +1146,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 				if (w._hflex == 'min')
 					wd = wds[i] = _minwds[i];
-				else if (wdh && wdh.endsWidth('px'))
+				else if (wdh && wdh.endsWith('px'))
 					wd = wds[i] = zk.parseInt(wdh);
 				else
 					wd = wds[i] = zk.parseInt(hdcol.style.width);
