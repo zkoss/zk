@@ -81,10 +81,10 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		 */
 		autodrop: null
 	},
-	getZclass: function () {
+	domClass_: function (no) {
 		var zcls = this._zclass;
 		// F60-ZK-719
-		return zcls ? zcls: this._isDefault() ? 'z-combobutton' : 'z-combobutton-toolbar';
+		return (zcls ? zcls : 'z-combobutton') + (this._isDefault() ? '' : ' z-combobutton-toolbar');
 	},
 	_isDefault: function () {
 		return this._mold == 'default';
@@ -209,6 +209,17 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			this.close();
 		}
 		this.$supers('rerender', arguments);
-	}
+	},
+	
+	redraw: function (out) {
+		out.push('<button type="', this._type, '"', this.domAttrs_());
+		var tabi = this._tabindex,
+			uuid = this.uuid;
+		if (this._disabled) out.push(' disabled="disabled"');
+		if (tabi) out.push(' tabindex="', tabi, '"');
+		out.push('>', this.domContent_(), '');
+		out.push('</button>');
+		out.push('<a id="', uuid, '-btn" class="', this.$s('button'), '"><i class="', this.$s('icon'), ' z-icon-caret-down"></i></a>');
+	}	
 });
 })();
