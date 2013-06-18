@@ -280,7 +280,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt._hflex == 'min') {
 			var w = _getMinWd(wgt);
 			wgt._hflexsz = w + zk(wgt).padBorderWidth(); //override
-			wgt.$n().style.width = jq.px0(w);
+			wgt.$n().style.width = jq.px0(wgt._hflexsz);
 		}
 	}
 	function _getMinWd(wgt) {

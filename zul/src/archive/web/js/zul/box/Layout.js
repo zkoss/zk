@@ -221,7 +221,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			}
 			return max;
 		}
-		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
+		if (attr == 'h') { // if display is not block the offsetHeight is wrong
+			return zk(el.parentNode).contentHeight();
+		} else {
+			return zjq.minWidth(el); //See also bug ZK-483
+		} 
 	},
 	//Bug ZK-1577: should consider spacing size of all chdex node
 	getContentEdgeHeight_: function () {
@@ -382,7 +386,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				if (w.firstChild.style.height) {
-    					w.style.height = jq.px0(w.firstChild.offsetHeight + zk(w.firstChild).sumStyles('tb', jq.margins));
+    					w.style.height = jq.px0(w.firstChild.offsetHeight
+    							+ zk(w).padBorderHeight()
+    							+ zk(w.firstChild).sumStyles('tb', jq.margins));
     				}
     				total += w.offsetHeight;
     			}
@@ -401,7 +407,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				if (w.firstChild.style.width) {
-    					w.style.width = jq.px0(w.firstChild.offsetWidth + zk(w.firstChild).sumStyles('lr', jq.margins));
+    					w.style.width = jq.px0(w.firstChild.offsetWidth
+    							+ zk(w).padBorderWidth()
+    							+ zk(w.firstChild).sumStyles('lr', jq.margins));
     				}
     				total += w.offsetWidth;
     			}

@@ -873,8 +873,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	//drag
 	_ignoredrag: function (dg, pointer, evt) {
 			var target = evt.domTarget,
-				wgt = dg.control;
-			if (!target || !jq.contains(wgt.$n('split'), target)) return true;
+				wgt = dg.control,
+				split = wgt.$n('split');
+			if (!target || (split != target && !jq.contains(split, target))) return true;
 			if (wgt.isSplittable() && wgt._open) {
 				var BL = zul.layout.Borderlayout,
 					pos = wgt.getPosition(),

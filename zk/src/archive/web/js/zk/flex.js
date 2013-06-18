@@ -119,7 +119,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function _fixMinHflex(wgt, wgtn, o, min) {
+	function _fixMinVflex(wgt, wgtn, o, min) {
 		if (wgt._vflexsz === undefined) { //cached?
 			var cwgt = wgt.firstChild, //bug #2928109
 				n = wgtn,
@@ -227,7 +227,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return wgt._vflexsz;
 	}
-	function _fixMinVflex(wgt, wgtn, o, min) {
+	function _fixMinHflex(wgt, wgtn, o, min) {
 		if (wgt._hflexsz === undefined) { //cached?
 			var cwgt = wgt.firstChild, //bug #2928109
 				n = wgtn,
@@ -524,7 +524,7 @@ zFlex = { //static methods
 	},
 	fixMinFlex: function (wgt, wgtn, o) {
 		//find the max size of all children
-		return (o == 'h' ? _fixMinHflex: o == 'w' ? _fixMinVflex: _zero)
+		return (o == 'h' ? _fixMinVflex: o == 'w' ? _fixMinHflex: _zero)
 			(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	}
 };
