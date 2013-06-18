@@ -18,7 +18,6 @@
 	overflow: hidden;
 	zoom: 1;
 	background: #FFFFFF;
-	.applyCSS3('box-sizing', 'content-box');
 	//listbox header
 	&-header {
 		overflow: hidden;
@@ -68,13 +67,13 @@
 }
 .z-listheader {
 	.verGradient();
+	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @gridBorderColor;
 	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
-	.applyCSS3('box-sizing', 'content-box');
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
@@ -140,13 +139,14 @@
 	//list cell
 	.z-listcell {
 		border-right: 1px solid #FFFFFF;
-		.applyCSS3('box-sizing', 'content-box');
-		td:last-child {
+		cursor: pointer;
+		&:last-child {
 			border-right: none;
 		}
 	}
 	&:hover .z-listcell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		background-clip: padding-box;
 		position: relative;
 	}
 	//check mark
@@ -169,6 +169,7 @@
 	&.z-listitem-selected {
 		.z-listcell {
 			.verGradient(@selectGradientStart, @selectGradientEnd);
+			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover .z-listcell {
@@ -251,9 +252,6 @@
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
-}
-.z-listcell-content {
-	white-space: nowrap;
 }
 .z-listheader-content {
 	font-weight: bold;

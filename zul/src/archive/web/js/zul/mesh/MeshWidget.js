@@ -47,7 +47,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	};
 	function _deleteFakeRow(tbody) {
-		jq('#' + tbody.id + '-fakeRow').remove();
+		if (tbody)
+			jq('#' + tbody.id + '-fakeRow').remove();
 	};
 	function _calcMinWd(wgt) {
 		var wgtn = wgt.$n(),
@@ -181,7 +182,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		if (wgt.eheadtbl && headn) {//restore headers widths
-			_deleteFakeRow(wgt.eheadrows);
 			wgt.eheadtbl.width = eheadtblw || '';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
 			if (zk.chrome)
@@ -292,9 +292,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _adjMinWd(wgt) {
 		if (wgt._hflex == 'min') {
-			var w = _getMinWd(wgt);
-			wgt._hflexsz = w + zk(wgt).padBorderWidth(); //override
-			wgt.$n().style.width = jq.px0(w);
+			var w = _getMinWd(wgt),
+				n = wgt.$n();
+			wgt._hflexsz = w + zk(n).padBorderWidth(); //override
+			n.style.width = jq.px0(wgt._hflexsz);
 		}
 	}
 	function _getMinWd(wgt) {
@@ -310,7 +311,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				bdcol = bdfaker.firstChild;
 			for (var i = 0; w; w = w.nextSibling) {
 				if (w._hflex == 'min')
-					wd = wds[i] = _minwds[i];
+					wd = wds[i] = _minwds[i] + zk(w.$n()).padBorderWidth();
 				else {
 					if (w._width && w._width.indexOf('px') > 0)
 						wd = wds[i] = zk.parseInt(w._width);
@@ -755,7 +756,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				hdcol = hdcol.nextSibling;
 				if (ftcol)
 					ftcol = ftcol.nextSibling;
-				//++i;
 			}
 			_adjMinWd(this);
 		}
@@ -916,7 +916,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			- (this.efoot ? this.efoot.offsetHeight : 0)
 			- pgHgh; // Bug #1815882 and Bug #1835369
 	},
-	setFlexSize_: function(sz) {
+	setFlexSize_: function (sz) {
 		var n = this.$n(),
 			head = this.$n('head');
 		if (sz.height !== undefined) {
@@ -1035,7 +1035,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		
 		for (var w = head.firstChild; w; w = w.nextSibling)
-			out.push('<col id="', w.uuid, fakeId, '" style="', w.domStyle_(), '"/>');
+			out.push('<col id="', w.uuid, fakeId, '" style="width:', 
+					(w._hflexWidth || w.getWidth()), '"/>');
 		
 		out.push('</colgroup>');
 	},
@@ -1263,6 +1264,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				bdcol = bdcol.nextSibling;
 				if (ftcol)
 					ftcol = ftcol.nextSibling;
+				i++;
 				continue;
 			} else {
 				var wd = jq.px(wds[i++]);
