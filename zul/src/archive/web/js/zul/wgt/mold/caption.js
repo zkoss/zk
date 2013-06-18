@@ -19,7 +19,7 @@ function (out) {
 		cnt = this.domContent_();
 	if (parent._isDefault && parent._isDefault()) {
 		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt" class="', 
-				zcls, '-cnt">', cnt);
+				zcls, '-content">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</span></div>');
@@ -27,32 +27,29 @@ function (out) {
 	}
 
 	var puuid = parent.uuid,
-		pzcls = parent.getZclass();
-	out.push('<table', this.domAttrs_(), zUtl.cellps0,
-			' width="100%"><tr valign="middle"><td id="', uuid, '-cnt" align="left" class="',
-			zcls, '-l">', (cnt ? cnt : this._getBlank()), //Bug 1688261: nbsp required
-			'</td><td align="right" class="', zcls,
-			'-r" id="', uuid, '-cave">');
+		picon = parent.$s('icon'),
+		getIcon = function(iconClass) {
+			return '<i class="z-' + iconClass + '"></i>';
+		};
+	out.push('<div', this.domAttrs_(), zUtl.cellps0, '>' + 
+				'<div id="', uuid, '-cave" class="', this.$s('content'), '">', 
+					'<div id="', uuid, '-text" class="', this.$s('text'), '">', (cnt ? cnt : this._getBlank()), '</div>'); // Bug 1688261: nbsp required
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
-
-	out.push('</td>');
+	out.push(   '</div>');
+	
 	if (this._isCollapsibleVisible())
-		out.push('<td width="16"><div id="', puuid, '-exp" class="',
-				pzcls, '-icon ', pzcls, '-exp"></div></td>');
+		out.push('<div id="', puuid, '-exp" class="', picon, ' ', parent.$s('expand'), '">', getIcon('icon-remove'), '</div>');
 	if (this._isMinimizeVisible())
-		out.push('<td width="16"><div id="', puuid, '-min" class="',
-				pzcls, '-icon ', pzcls, '-min"></div></td>');
+		out.push('<div id="', puuid, '-min" class="', picon, ' ', parent.$s('minimize'), '">', getIcon('icon-minus'), '</div>');
 	if (this._isMaximizeVisible()) {
-		out.push('<td width="16"><div id="', puuid, '-max" class="',
-				pzcls, '-icon ', pzcls, '-max');
+		out.push('<div id="', puuid, '-max" class="', picon, ' ', parent.$s('maximize'));
 		if (parent.isMaximized())
-			out.push(' ', pzcls, '-maximized');
-		out.push('"></div></td>');
+			out.push(' ', parent.$s('maximized'));
+		out.push('">', this._maximized ? getIcon('icon-resize-small') : getIcon('icon-fullscreen') , '</div>');
 	}
 	if (this._isCloseVisible())
-		out.push('<td width="16"><div id="', puuid, '-close" class="',
-				pzcls, '-icon ', pzcls, '-close"></div></td>');
+		out.push('<div id="', puuid, '-close" class="', picon, ' ', parent.$s('close'), '">', getIcon('icon-remove'), '</div>');
 
-	out.push('</tr></table>');
+	out.push('</div>');
 }

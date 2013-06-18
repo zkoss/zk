@@ -255,23 +255,11 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	setHflex: function (v) { //hflex ignored for Tab
 		if (v != 'min') v = false;
 		this.$super(zul.tab.Tab, 'setHflex', v);
-	},	
-	_doCloseOver: function(e) {
-		if(e.domTarget == this.$n('close') || e.domTarget == this.$n('icon-close')) {
-			jq(this.$n()).removeClass(this.$s('hover'));
-		} else {
-			jq(this.$n()).addClass(this.$s('hover'));
-		}
-	},
-	_doCloseOut: function(e) {
-		jq(this.$n()).removeClass(this.$s('hover'));
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
 		var closebtn = this.isClosable() ? this.$n('close') : null,
 			tab = this;
-		this.domListen_(tab, 'onMouseOver', '_doCloseOver');
-		this.domListen_(tab, 'onMouseOut', '_doCloseOut');
 		if (closebtn) {
 			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
 		}
@@ -300,8 +288,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var closebtn = this.$n('close');
-		this.domUnlisten_(this, 'onMouseOver', '_doCloseOver');
-		this.domUnlisten_(this, 'onMouseOut', '_doCloseOut');
 		// ZK-886
 		_logId(this);
 		if (closebtn) {

@@ -30,10 +30,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	});
 
 	var $alert = jq.alert,
-		icons = {QUESTION: 'z-messagebox-icon z-messagebox-question z-icon-question-sign',
-			EXCLAMATION: 'z-messagebox-icon z-messagebox-warning z-icon-warning-sign',
-			INFORMATION: 'z-messagebox-icon z-messagebox-info z-icon-info-sign',
-			ERROR: 'z-messagebox-icon z-messagebox-error z-icon-remove-sign',
+		icons = {QUESTION: 'z-messagebox-icon z-messagebox-question',
+			EXCLAMATION: 'z-messagebox-icon z-messagebox-exclamation',
+			INFORMATION: 'z-messagebox-icon z-messagebox-information',
+			ERROR: 'z-messagebox-icon z-messagebox-error',
 			NONE: 'z-messagebox z-messagebox-none'
 		};
 

@@ -597,8 +597,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
-			height += this._titleHeight(n) +
-				(this._rounded() ? zk(this.$n('body')).padBorderHeight() : 0);
+			height += this._titleHeight(n);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
@@ -661,12 +660,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			return;
 		var body = pc.$n(), pcst, pcwd;
 		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != 'auto') {
-			var w = this.$n().clientWidth,
-				cn = body;
-			if (this._rounded())
-				for (var i = 0; i < 3; i++)
-					w = zk(cn = cn.parentNode).revisedWidth(w); // cl, cr, cm
-			pcst.width = zk(body).revisedWidth(w) + 'px';
+			var w = zk(this.$n()).contentWidth();
+			pcst.width = w - zk(this.$n('body')).padBorderWidth() + 'px';
 		}
 	},
 	//whether rounded border is required
