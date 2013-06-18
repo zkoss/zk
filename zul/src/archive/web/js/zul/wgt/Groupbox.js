@@ -131,9 +131,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			var n;
 			if (n = this.$n('cave')) {
 				var wgt = this,
-					$n = zk(n);
+					$n = zk(n),
+					fix = function() {
+
+						// B50-ZK-487: height isuue in the groupbox (with specified caption)
+						n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
+					};
 				// B50-ZK-487: height isuue in the groupbox (with specified caption)
-				n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
+				fix()
 				if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul

@@ -167,17 +167,14 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//bug 3010663: boxes do not resize when browser window is resized
 		var p = this.$n(),
 			zkp = zk(p),
-			offhgh = p.offsetHeight,
-			offwdh = p.offsetWidth,
-			curhgh = this._vflexsz !== undefined ? this._vflexsz - zkp.sumStyles("tb", jq.margins) : offhgh,
-			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles("lr", jq.margins) : offwdh;
-		// B50-ZK-286: subtract scroll bar width
-		if (zkp.hasHScroll())
-			offhgh -= jq.scrollbarWidth();
-		if (zkp.hasVScroll())
-			offwdh -= jq.scrollbarWidth();
-		var hgh = zkp.revisedHeight(curhgh < offhgh ? curhgh : offhgh),
-			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
+			hgh = this._vflexsz !== undefined ? 
+					this._vflexsz - zkp.padBorderHeight() - zkp.sumStyles("tb", jq.margins)
+					// B50-ZK-286: subtract scroll bar width
+					: zkp.contentHeight(true)  - (zkp.hasHScroll() ? jq.scrollbarWidth() : 0),
+			wdh = this._hflexsz !== undefined ?
+					this._hflexsz - zkp.padBorderWidth() - zkp.sumStyles("lr", jq.margins)
+					// B50-ZK-286: subtract scroll bar width
+					: zkp.contentWidth(true) - (zkp.hasVScroll() ? jq.scrollbarWidth() : 0);
 		return zkp ? {height: hgh, width: wdh} : {};
 	},
 	//bug#3296056
@@ -325,9 +322,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				offtop = cwgt.$n().offsetTop,
 				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 
-			var chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({height:isz - zk(chdex).padBorderHeight()});
-			cwgt._vflexsz = vsz;
+			var chdex = cwgt.$n('chdex'),
+				minus = zk(chdex).padBorderHeight();
+			cwgt.setFlexSize_({height:isz - minus});
+			cwgt._vflexsz = vsz - minus;
 
 			chdex.style.height = jq.px0(vsz);
 			if (vert) lastsz -= vsz;
@@ -338,9 +336,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				offtop = cwgt.$n().offsetTop,
 				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 
-			var chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({height:isz - zk(chdex).padBorderHeight()});
-			cwgt._vflexsz = lastsz;
+			var chdex = cwgt.$n('chdex'),
+				minus = zk(chdex).padBorderHeight();
+			cwgt.setFlexSize_({height:isz - minus});
+			cwgt._vflexsz = lastsz - minus;
 			chdex.style.height = jq.px0(lastsz);
 		}
 		//setup the width for the hflex child
@@ -350,9 +349,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex}
 				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) || 0; //cast to integer
 
-			var chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({width:hsz - zk(chdex).padBorderWidth()});
-			cwgt._hflexsz = hsz;
+			var chdex = cwgt.$n('chdex'),
+				minus = zk(chdex).padBorderWidth();
+			cwgt.setFlexSize_({width:hsz - minus});
+			cwgt._hflexsz = hsz - minus;
 
 			chdex.style.width = jq.px0(hsz);
 
@@ -361,9 +361,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//last one with hflex
 		if (hflexs.length) {
 			var cwgt = hflexs.shift(),
-				chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({width:lastsz - zk(chdex).padBorderWidth()});
-			cwgt._hflexsz = lastsz;
+				chdex = cwgt.$n('chdex'),
+				minus = zk(chdex).padBorderWidth();
+			cwgt.setFlexSize_({width:lastsz - minus});
+			cwgt._hflexsz = lastsz - minus;
 
 			chdex.style.width = jq.px0(lastsz);
 		}
