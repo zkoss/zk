@@ -552,12 +552,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
 				isz = vsz;// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 
-			var chdex = cwgt.$n('chdex');
+			var chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex);
 			
-			cwgt.setFlexSize_({height:isz - zk(chdex).padBorderHeight()});
+			cwgt.setFlexSize_({height:isz - $chdex.padBorderHeight()});
 			cwgt._vflexsz = vsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.height = jq.px0(zk(chdex).revisedHeight(vsz, true));
+				chdex.style.height = jq.px0($chdex.revisedHeight(vsz, true));
 			}
 			if (vert) lastsz -= vsz;
 		}
@@ -567,11 +568,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				// B50-3014664.zul offtop = cwgt.$n().offsetTop,
 				isz = lastsz;// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 
-			var chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({height:isz - zk(chdex).padBorderHeight()});
+			var chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex);
+			cwgt.setFlexSize_({height:isz - $chdex.padBorderHeight()});
 			cwgt._vflexsz = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.height = jq.px0(zk(chdex).revisedHeight(lastsz, true));
+				chdex.style.height = jq.px0($chdex.revisedHeight(lastsz, true));
 			}
 		}
 		
@@ -582,22 +584,24 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
 
-			var chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({width:hsz - zk(chdex).padBorderWidth()});
+			var chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex);
+			cwgt.setFlexSize_({width:hsz - $chdex.padBorderWidth()});
 			cwgt._hflexsz = hsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.width = jq.px0(zk(chdex).revisedWidth(hsz, true));
+				chdex.style.width = jq.px0($chdex.revisedWidth(hsz, true));
 			}
 			if (!vert) lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
 			var cwgt = hflexs.shift();
-			var chdex = cwgt.$n('chdex');
-			cwgt.setFlexSize_({width:lastsz - zk(chdex).padBorderWidth()});
+			var chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex);
+			cwgt.setFlexSize_({width:lastsz - $chdex.padBorderWidth()});
 			cwgt._hflexsz = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.width = jq.px0(zk(chdex).revisedWidth(lastsz, true));
+				chdex.style.width = jq.px0($chdex.revisedWidth(lastsz, true));
 			}
 		}
 		

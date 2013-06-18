@@ -255,7 +255,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			p = mw.$n(),
 			zkp = p ? zk(p) : null;
 		if (zkp) {
-			var w = zkp.revisedWidth(p.offsetWidth);
 			// Bug #3255116
 			if (mw.ebody) {
 				if (zk.ie) { //Related bugs: ZK-890 and ZK-242
@@ -266,8 +265,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 			}
 			return {
-				height: zkp.revisedHeight(p.offsetHeight),
-				width: w
+				height: zkp.contentHeight(),
+				width: zkp.contentWidth()
 			}
 		}
 		return {};

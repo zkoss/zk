@@ -748,14 +748,17 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		scrolls[0] -= jq.innerX(); scrolls[1] -= jq.innerY();
 		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	},
-	/** Returns the revised (calibrated) width, which subtracted the width of its CSS border or padding, for the first matched element.
+	/** Returns the revised (calibrated) width, which subtracted the width of
+	 * its CSS border or padding, for the first matched element if the box-sizing
+	 * is not in the border-box mode.
 	 * <p>It is usually used to assign the width to an element (since we have to subtract the padding).
-<pre><code>el.style.width = jq(el).zk.revisedWidth(100);</code></pre>
+<pre><code>el.style.width = zk(parentEL).revisedWidth(100);</code></pre>
 	 *
 	 * @param int size the width to be assigned to the specified element.
 	 * @param boolean excludeMargin whether to subtract the margins, too.
 	 * You rarely need this unless the width is specified in term of the parent's perspective. 
 	 * @return int the revised width
+	 * @see #contentWidth(boolean)
 	 */
 	revisedWidth: function (size, excludeMargin) {
 		if (this.jq.css('box-sizing') != 'border-box')
@@ -764,18 +767,52 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 			size -= this.sumStyles("lr", jq.margins);
 		return size < 0 ? 0: size;
 	},
-	/** Returns the revised (calibrated) height, which subtracted the height of its CSS border or padding, for the first matched element.
-	 * <p>It is usually used to assign the height to an element (since we have to subtract the padding).
-<pre><code>el.style.height = jq(el).zk.revisedHeight(100);</code></pre>
+	/** Returns the revised (calibrated) height, which subtracted the height of
+	 * its CSS border or padding, for the first matched element if the box-sizing
+	 * is not in the border-box mode.
+	 * <p>It is usually used to assign the height to an element
+	 * (since we have to subtract the padding).
+<pre><code>el.style.height = zk(parentEL).revisedHeight(100);</code></pre>
 	 *
 	 * @param int size #  the height to be assigned to the first matched element.
 	 * @param boolean excludeMargin whether to subtract the margins, too.
 	 * You rarely need this unless the height is specified in term of the parent's perspective. 
 	 * @return int the revised height
+	 * @see #contentHeight(boolean)
 	 */
 	revisedHeight: function (size, excludeMargin) {
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderHeight();
+		if (size > 0 && excludeMargin)
+			size -= this.sumStyles("tb", jq.margins);
+		return size < 0 ? 0: size;
+	},
+	/**
+	 * Returns the content width of the element, which substracted the width of its
+	 * CSS border or padding, unlike {@link #revisedWidth(int, boolean)}, the contentWidth
+	 * will ignore the box-sizing with border-box.
+	 * @param boolean excludeMargin whether to subtract the margins, too.
+	 * @return int the content width.
+	 * @since 7.0.0
+	 */
+	contentWidth: function (excludeMargin) {
+		var size = this.jq[0].offsetWidth;
+		size -= this.padBorderWidth();
+		if (size > 0 && excludeMargin)
+			size -= this.sumStyles("lr", jq.margins);
+		return size < 0 ? 0: size;
+	},
+	/**
+	 * Returns the content height of the element, which substracted the height of its
+	 * CSS border or padding, unlike {@link #revisedHeight(int, boolean)},
+	 * the contentHeight will ignore the box-sizing with border-box.
+	 * @param boolean excludeMargin whether to subtract the margins, too.
+	 * @return int the content height.
+	 * @since 7.0.0
+	 */
+	contentHeight: function (excludeMargin) {
+		var size = this.jq[0].offsetHeight;
+		size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
 			size -= this.sumStyles("tb", jq.margins);
 		return size < 0 ? 0: size;

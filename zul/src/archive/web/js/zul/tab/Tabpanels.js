@@ -117,7 +117,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 
 		width -= jq(parent).find('>div:first')[0].offsetWidth;
 
-		n.style.width = jq.px0(zk(n).revisedWidth(width));
+		n.style.width = jq.px0(width);
 	},
 	beforeSize: function () {
 		this.$n().style.width = this.__width || '';

@@ -140,9 +140,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	getParentSize_: function(p) {
-		return this.$supers('getParentSize_', arguments);
-	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		var h = 0,
