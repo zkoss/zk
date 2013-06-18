@@ -212,14 +212,17 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	},
 	
 	redraw: function (out) {
-		out.push('<button type="', this._type, '"', this.domAttrs_());
 		var tabi = this._tabindex,
 			uuid = this.uuid;
+		out.push('<span ', this.domAttrs_(), ' >',	
+					'<button id="', uuid, '-real" class="', this.$s('input') ,'" type="', this._type, '"');
+		
 		if (this._disabled) out.push(' disabled="disabled"');
 		if (tabi) out.push(' tabindex="', tabi, '"');
-		out.push('>', this.domContent_(), '');
-		out.push('</button>');
-		out.push('<a id="', uuid, '-btn" class="', this.$s('button'), '"><i class="', this.$s('icon'), ' z-icon-caret-down"></i></a>');
+		out.push('>', this.domContent_(), '</button>',
+		'<a id="', uuid, '-btn" class="', this.$s('button'), '">', 
+			'<i class="', this.$s('icon'), ' z-icon-caret-down"></i>', 
+		'</a></span>');
 	}	
 });
 })();
