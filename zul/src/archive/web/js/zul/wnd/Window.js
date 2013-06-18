@@ -1184,8 +1184,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
-			height += this._titleHeight(n) +
-				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? zk(this.$n()).padBorderHeight() : 0);
+			height += this._titleHeight(n);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},

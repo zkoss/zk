@@ -89,9 +89,9 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(HeadWidget, 'bind_', arguments);
 		var w = this;
-		after.push(function () {
-			_syncFrozen(w);
-		});
+//		after.push(function () {
+//			_syncFrozen(w);
+//		});
 	},
 	unbind_: function () {
 		jq(this.hdfaker).remove();
@@ -104,7 +104,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			if (!_fixOnChildChanged(this) && this.parent._fixHeaders())
 				this.parent.onSize();
-			_syncFrozen(this);
+//			_syncFrozen(this);
 			this.parent._minWd = null;
 		}
 	},

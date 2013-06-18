@@ -15,6 +15,7 @@ table {
 	border-spacing: 0;
 	border-collapse: collapse;
 	th, td {
+		background-clip: padding-box;
 		padding: 0;
 	}
 	th {
@@ -26,7 +27,6 @@ table {
 	border: 1px solid @gridBorderColor;
 	overflow: hidden;
 	zoom: 1;
-	.applyCSS3('box-sizing', 'content-box');
 	//grid header
 	&-header {
 		overflow: hidden;
@@ -79,13 +79,13 @@ table {
 }
 .z-column {
 	.verGradient();
+	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @gridBorderColor;
 	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
-	.applyCSS3('box-sizing', 'content-box');
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
@@ -137,14 +137,14 @@ table {
 .z-row {
 	&-inner {
 		border-right: 1px solid #FFFFFF;
-		.applyCSS3('box-sizing', 'content-box');
+		&:last-child {
+			border-right: none;
+		}
 	}
 	&:hover &-inner {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		background-clip: padding-box;
 		position: relative;
-	}
-	td:last-child {
-		border-right: none;
 	}
 }
 //Group

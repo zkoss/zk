@@ -191,7 +191,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				realIndex += this._spans[j] - 1;
 			}
 		}
-		var visible, hgh,
+		var visible, hgh, align, valign,
 			grid = this.getGrid();
 		if (grid) {
 			var cols = grid.columns;
@@ -200,6 +200,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 					var col = cols.getChildAt(realIndex);
 					visible = col.isVisible() ? '' : 'display:none;';
 					hgh = col.getHeight();
+					align = col.getAlign();
+					valign = col.getValign();
 				}
 			}
 		}
@@ -210,10 +212,14 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			if (wd) 
 				style += 'width:' + wd + ';';
 		}
-		if (visible || hgh) {
+		if (visible || hgh || align || valign) {
 			style += visible;
 			if (hgh)
 				style += 'height:' + hgh + ';';
+			if (align)
+				style += 'text-align:' + align + ';';
+			if (valign)
+				style += 'vertical-align:' + valign + ';';
 		}
 		var clx = isDetail ? child.$s('outer') : this.$s('inner'),
 			attrs = '';
@@ -260,11 +266,12 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 		//sync frozen
-		var grid, frozen, tbody, td, tds;
-		if ((grid = this.getGrid()) && grid.efrozen && 
-			(frozen = zk.Widget.$(grid.efrozen.firstChild)) &&
-			grid.rows && (tbody = grid.rows.$n())) {
-			tds = jq(evt.domTarget).parents('td')
+		var grid = this.getGrid(),
+			frozen = grid ? grid.frozen : null,
+			tbody = grid && grid.rows ? grid.rows.$n() : null,
+			td, tds;
+		if (frozen && tbody) {
+			tds = jq(evt.domTarget).parents('td');
 			for (var i = 0, j = tds.length; i < j; i++) {
 				td = tds[i];
 				if (td.parentNode.parentNode == tbody) {

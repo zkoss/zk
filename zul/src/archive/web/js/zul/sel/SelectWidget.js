@@ -339,27 +339,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncFocus(this._focusItem);
 
 		this._calcHgh();
-		
-		var hdfaker = this.ehdfaker,
-			allWidth = true;
-		if (hdfaker) {
-			for (var col = hdfaker.firstChild; col; col = col.nextSibling) {
-				var wd = col.style.width,
-					isWdh = wd && wd != 'auto' && !wd.endsWith('%');
-				if (!wd || !isWdh) {
-					allWidth = false;
-					break;
-				}
-			}
-			//If all cols has fixed width, need to clear width=100% setting,
-			//otherwise it will try to expand to whole width
-			if (allWidth) {
-				this.eheadtbl.width = '';
-				this.ebodytbl.width = '';
-				if (this.efoottbl)
-					this.efoottbl.width = '';
-			}
-		}
 	},
 	_afterCalcSize: function () {
 		// Bug 279925

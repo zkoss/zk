@@ -17,7 +17,6 @@
 	border: 1px solid @gridBorderColor;
 	overflow: hidden;
 	zoom: 1;
-	.applyCSS3('box-sizing', 'content-box');
 	//tree header div
 	&-header {
 		overflow: hidden;
@@ -95,30 +94,36 @@
 }
 .z-treecol {
 	.verGradient();
+	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @gridBorderColor;
 	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
-	.applyCSS3('box-sizing', 'content-box');
 	&-sort {
 		cursor: pointer;
 		&:hover {
 			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		}
 	}
+	&-sizing,
+	&-sizing .z-treecol-content {
+		cursor: e-resize;
+	}
 }
 //tree row and cell
 .z-treerow {
 	//tree cell
 	.z-treecell {
+		cursor: pointer;
 		&:last-child {
 			border-right: none;
 		}
 	}
 	&:hover .z-treecell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		background-clip: padding-box;
 		position: relative;
 	}
 	//check mark
@@ -141,6 +146,7 @@
 	&.z-treerow-selected {
 		.z-treecell {
 			.verGradient(@selectGradientStart, @selectGradientEnd);
+			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover .z-treecell {

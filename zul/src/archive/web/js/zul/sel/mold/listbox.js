@@ -32,14 +32,14 @@ function (out) {
 		}
 	}
 
-	if(this.listhead){
+	if (this.listhead) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
 			'<div id="', uuid, '-headbar" class="', this.$s('header'), ' ', this.$s('header-bar'), '"></div>',
 			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;',
 			wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
 		
-		out.push('<tbody>');
+		out.push('<tbody id="', uuid, '-headrows">');
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 	
@@ -50,7 +50,6 @@ function (out) {
 	var hgh = this.getHeight();
 	if (hgh)
 		out.push(' style="overflow:hidden;height:', hgh, '"');
-	// Bug ZK-489 else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:', this.getRows() * 15, 'px"');
 	out.push('>');
 	
 	if (this.domPad_ && !inPaging)
@@ -58,7 +57,7 @@ function (out) {
 	
 	out.push('<table', wdAttr, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'">');
 	
-	if(this.listhead)
+	if (this.listhead)
 		this.domFaker_(out, '-bdfaker', zcls);
 
 	out.push('<tbody id="',uuid,'-rows">');
@@ -88,12 +87,6 @@ function (out) {
 		out.push('</tbody></table></div>');
 	}
 
-	if (this.frozen) {
-		out.push('<div id="', uuid, '-frozen" class="', this.$s('forzen'), '">');
-		this.frozen.redraw(out);
-		out.push('</div>');
-	}
-	
 	if (pgpos == 'bottom' || pgpos == 'both') {
 		out.push('<div id="', uuid, '-pgib" class="', this.$s('paging-bottom'), '">');
 		this.paging.redraw(out);

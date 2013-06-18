@@ -37,7 +37,7 @@ function (out) {
 			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
 		
-		out.push('<tbody>');
+		out.push('<tbody id="', uuid, '-headrows">');
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 		
@@ -46,11 +46,13 @@ function (out) {
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
 
 	var hgh = this.getHeight();
-	if (hgh) out.push(' style="height:', hgh, '"');
-	
+	if (hgh) 
+		out.push(' style="height:', hgh, '"');
 	out.push('>');
+	
 	if (this.rows && this.domPad_ && !this.inPagingMold())
 		this.domPad_(out, '-tpad');
+	
 	out.push('<table id="', uuid, '-cave"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.columns)
@@ -62,6 +64,7 @@ function (out) {
 	this.redrawEmpty_(out);
 	
 	out.push('</table>');
+	
 	if (this.rows && this.domPad_ && !this.inPagingMold())
 		this.domPad_(out, '-bpad');
 	
@@ -76,12 +79,6 @@ function (out) {
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.foot.redraw(out);
 		out.push('</tbody></table></div>');
-	}
-	
-	if (this.frozen) {
-		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
-		this.frozen.redraw(out);
-		out.push('</div>');
 	}
 	
 	if (pgpos == 'bottom' || pgpos == 'both') {

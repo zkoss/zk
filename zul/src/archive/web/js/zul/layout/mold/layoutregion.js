@@ -51,11 +51,10 @@ function (out) {
 				break;
 		}
 		out.push('<div id="', uuid, '-split" class="', this.$s('splitter'),
-			'"><span id="', uuid, '-splitbtn" class="', this.$s('splitter-button'),
-			'"');
+			'"><span id="', uuid, '-splitbtn" class="', this.$s('splitter-button'));
 		if (!this._collapsible)
-			out.push(' style="display:none;"');
-		out.push('>',
+			out.push(' ', this.$s('splitter-button-disabled'));
+		out.push('">',
 			'<i class="', icon, doticon, '"></i>',
 			'<i class="', icon, ' ', splitIcon, '"></i>',
 			'<i class="', icon, doticon, '"></i>',
