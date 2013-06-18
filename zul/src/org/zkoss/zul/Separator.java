@@ -22,12 +22,6 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A separator.
  *  <p>Default {@link #getZclass} as follows: (since 3.5.0)
- *  <ol>
- *  	<li>Case 1: If {@link #getOrient()} is vertical and {@link #isBar()} is false, "z-separator-ver" is assumed</li>
- *  	<li>Case 2: If {@link #getOrient()} is vertical and {@link #isBar()} is true, "z-separator-ver-bar" is assumed</li>
- *  	<li>Case 3: If {@link #getOrient()} is horizontal and {@link #isBar()} is false, "z-separator-hor" is assumed</li>
- *  	<li>Case 4: If {@link #getOrient()} is horizontal and {@link #isBar()} is true, "z-separator-hor-bar" is assumed</li>
- *  </ol>
  *
  * @author tomyeh
  */
