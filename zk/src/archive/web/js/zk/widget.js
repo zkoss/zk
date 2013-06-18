@@ -3086,7 +3086,7 @@ unbind_: function (skipper, after) {
 	getParentSize_: function(p) {
 		//to be overridden
 		var zkp = zk(p);
-		return {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)};
+		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	},
 	getMarginSize_: function (attr) { //'w' for width or 'h' for height
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
