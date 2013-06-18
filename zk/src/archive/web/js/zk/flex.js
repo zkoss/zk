@@ -439,7 +439,10 @@ zFlex = { //static methods
 						hflexs.push(cwgt);
 						hflexsz += cwgt._nhflex;
 					}
-				} else if (!cwgt || !cwgt.isExcludedHflex_()) {
+				} else if ((!cwgt &&
+						// panelchild cannot include panel's bottombar.
+						(!zk.isLoaded('zul.wnd') || !wgt.$instanceof(zul.wnd.Panelchildren))) 
+						|| (cwgt && !cwgt.isExcludedHflex_())) {
 					wdh -= offwdh;
 					wdh -= zkc.sumStyles("lr", jq.margins);
     			}

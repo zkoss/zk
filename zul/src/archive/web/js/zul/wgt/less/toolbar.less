@@ -1,9 +1,9 @@
 @import "~./zul/less/_header.less";
 
 .z-toolbar {
-	border-color: #C5C5C5; 
-	border-style: solid; 
-	border-width: 0 0 1px; 
+	border-color: #C5C5C5;
+	border-style: solid;
+	border-width: 0 0 1px;
 	display: block;
 	padding: 4px 4px 3px;
 	.buttonBackground();
@@ -16,6 +16,10 @@
 .z-toolbar-tabs .z-toolbar-content span,
 .z-toolbar-content, .z-toolbar-content span {
 	font-size: @fontSizeSmall;
+}
+.z-toolbar-panel .z-toolbar-content,
+.z-toolbar-panel .z-toolbar-content span {
+	font-size: @fontSizeMedium;
 }
 // toolbar horizontal alignment
 .z-toolbar-start {
@@ -31,6 +35,7 @@
 // Toolbar Panel Mold
 .z-toolbar-panel {
 	.resetGradient();
+	border-width: 0;
 	padding: 5px;
 }
 
