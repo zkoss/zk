@@ -206,19 +206,19 @@
 		text-align: center;
 	}
 
-	&-warning {
-		color: orange;
-	}
-
 	&-question {
-		color: green;
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-btn.gif');
 	}
 
-	&-info {
-		color: blue;
+	&-exclamation {
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-btn.gif');
+	}
+
+	&-information {
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-btn.gif');
 	}
 
 	&-error {
-		color: red;
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.gif');
 	}
 }

@@ -35,7 +35,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return cells;
 			else {
 				var out = [];
-				out.push('<tr id="', tbody.id, '-fakeRow" style="visiblity:none">');
+				out.push('<tr id="', tbody.id,
+						'-fakeRow" style="visibility:hidden;height:0">');
 				for (var i = 0; i < ncols; i++)
 					out.push('<td></td>');
 				out.push('</tr>');
@@ -80,6 +81,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.eheadtbl.style.width = '';
 			eheadtblfix = wgt.eheadtbl.style.tableLayout;
 			wgt.eheadtbl.style.tableLayout = '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = 'block';
 			var headcol = hdfaker.firstChild,
 				headcell = headn.firstChild;
 			for (var i = 0; headcol; headcol = headcol.nextSibling) {
@@ -103,6 +106,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.efoottbl.style.width = '';
 			efoottblfix = wgt.efoottbl.style.tableLayout;
 			wgt.efoottbl.style.tableLayout = '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = 'block';
 			if (ftfaker) {
 				var footcol = ftfaker.firstChild
 				for (var i = 0; footcol; footcol = footcol.nextSibling) {
@@ -118,6 +123,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.ebodytbl.style.width = '';
 			ebodytblfix = wgt.ebodytbl.style.tableLayout;
 			wgt.ebodytbl.style.tableLayout = '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = 'block';
 			if (bdfaker) {
 				var bodycol = bdfaker.firstChild;
 				for (var i = 0; bodycol; bodycol = bodycol.nextSibling) {
@@ -174,8 +181,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		if (wgt.eheadtbl && headn) {//restore headers widths
+			_deleteFakeRow(wgt.eheadrows);
 			wgt.eheadtbl.width = eheadtblw || '';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
+			if (zk.chrome)
+				wgt.eheadtbl.style.display = '';
 			var headcol = hdfaker.firstChild,
 				headcell = headn.firstChild;
 			for (var i = 0; headcol; headcol = headcol.nextSibling) {
@@ -191,6 +201,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.efoottbl) {//restore footers widths
 			wgt.efoottbl.width = efoottblw || '';
 			wgt.efoottbl.style.tableLayout = efoottblfix || '';
+			if (zk.chrome)
+				wgt.efoottbl.style.display = '';
 			if (ftfaker) {
 				var footcol = ftfaker.firstChild
 				for (var i = 0; footcol; footcol = footcol.nextSibling)
@@ -200,6 +212,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.ebodytbl) {//restore body fakers widths
 			wgt.ebodytbl.width = ebodytblw || '';
 			wgt.ebodytbl.style.tableLayout = ebodytblfix || '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = '';
 			if (bdfaker) {
 				var bodycol = bdfaker.firstChild;
 				for (var i = 0; bodycol; bodycol = bodycol.nextSibling)
@@ -620,11 +634,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_moveToHidingFocusCell: function (index) { //used in Row/Listcell
 		//B50-3178977 navigating the input in hiddin column.
-		var td, frozen;
-		if (this.head && (td = this.head.getChildAt(index).$n()) && parseInt(td.style.width) == 0 &&
-			(frozen = zk.Widget.$(this.efrozen.firstChild)) &&
-			(index = index - frozen.getColumns()) >= 0) {
-			frozen.setStart(index);
+		var td = this.head.getChildAt(index).$n(),
+			bar = this._scrollbar,
+			frozen = this.frozen;
+		if (this.head && td && zk.parseInt(td.style.width) == 0 && frozen &&
+			(index = index - frozen.getColumns()) >= 0 && bar) {
+			frozen._doScrollNow(index);
+			bar.setBarPosition(index);
 			_shallFocusBack = true;
 		}
 	},
@@ -751,7 +767,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.ebodytbl = this.$n('cave');
 		this.efoot = this.$n('foot');
 		this.efoottbl = this.$n('foottbl');
-		this.efrozen = this.$n('frozen');
 		
 		// Grid will bind ebodyrows in Rows widget
 		var erows = this.$n('rows');
@@ -759,6 +774,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.ebodyrows = erows;
 		
 		if (this.ehead) {
+			this.eheadrows = this.$n('headrows');
 			this.ehdfaker = this.head.$n('hdfaker');
 			this.ebdfaker = this.head.$n('bdfaker');
 			if (this.efoot)
@@ -877,7 +893,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	onSize: function () {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
-			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
+			if (n._lastsz && n._lastsz.height == n.offsetHeight 
+					&& n._lastsz.width == n.offsetWidth) {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
 			}
@@ -894,9 +911,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (pgit) pgHgh += pgit.offsetHeight;
 			if (pgib) pgHgh += pgib.offsetHeight;
 		}
-		return zk(n).revisedHeight(n.offsetHeight) - (this.ehead ? this.ehead.offsetHeight : 0)
+		return zk(n).revisedHeight(n.offsetHeight)
+			- (this.ehead ? this.ehead.offsetHeight : 0)
 			- (this.efoot ? this.efoot.offsetHeight : 0)
-			- (this.efrozen ? this.efrozen.offsetHeight : 0)
 			- pgHgh; // Bug #1815882 and Bug #1835369
 	},
 	setFlexSize_: function(sz) {
@@ -1273,14 +1290,28 @@ zul.mesh.Scrollbar = {
 	 */
 	init: function (wgt) {
 		var headtbl = wgt.eheadtbl,
-			foottbl = wgt.efoottbl;
+			foottbl = wgt.efoottbl,
+			embed = jq(wgt.$n()).data('embedscrollbar'),
+			frozen = wgt.frozen,
+			startPositionX = 0;
+		
 		if (headtbl)
 			headtbl.style[zk.vendor + 'Transform'] = 'translate(0, 0)';
 		if (foottbl)
 			foottbl.style[zk.vendor + 'Transform'] = 'translate(0, 0)';
-		var embed = jq(wgt.$n()).data('embedscrollbar');
+		if (frozen) {
+			var columns = frozen.getColumns();
+			if (headtbl) {
+				var cells = _getFirstRowCells(wgt.eheadrows);
+				if (cells) {
+					for (var i = 0; i < columns; i++)
+						startPositionX += cells[i].offsetWidth;
+				}
+			}
+		}
 		wgt._scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
+			startPositionX: startPositionX,
 			onSyncPosition: function() {
 				var pos = this.getCurrentPosition(),
 					headtbl = wgt.eheadtbl,

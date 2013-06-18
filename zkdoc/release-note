@@ -3,6 +3,7 @@ ZK 7.0.0
 
 * Features
   ZK-1813: LabelImageElement support icon font CSS class instead of Image
+  ZK-1818: Tabbox support vertical-right, horizontal-bottom orient
   
 * Bugs
 
