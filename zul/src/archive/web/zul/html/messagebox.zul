@@ -16,7 +16,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
  border="normal" width="260pt" closable="true"
  use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="client">
 	<hbox>
-		<n:i xmlns:n="native" class="${arg.icon}"/>
+		<div sclass="${arg.icon}"/>
 		<separator spacing="13px" />
 		<div sclass="z-messagebox">
 			<label value="${arg.message}" multiline="true"
