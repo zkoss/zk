@@ -3055,8 +3055,9 @@ unbind_: function (skipper, after) {
 		}
 		return attr == 'h' ? zk(wgt).offsetHeight() : wd; //See also bug ZK-483
 	},
-	getParentSize_: function(p) {
-		//to be overridden
+	// for v/hflex, if the box-sizing is in border-box mode (like ZK 7+),
+	// we should return the content size only (excluding padding and border)
+	getParentSize_: function(p) { //to be overridden
 		var zkp = zk(p);
 		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	},

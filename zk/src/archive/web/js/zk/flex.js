@@ -12,111 +12,53 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function (undefined) {
-	function _getTextWidth(zkc, zkp, zkpOffset) {
+(function () {
+	function _getTextSize(zkc, zkp, zkpOffset) {
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
-			start = 0,
-			oldVal = [],
+			pos = [0, 0],
+			zoldVal,
+			poldVal,
 			zs, ps, ignorePrev;
 		if ($prev.length) {
 			ps = $prev[0].style;
-			// ZK-700
-			// ignore prev if not displayed
+			// ZK-700 ignore prev if not displayed
 			if (ps.display == 'none')
 				ignorePrev = true;
 			else {
 				zs = $zkc[0].style;
-
 				// store the old value
-				oldVal[0] = zs.marginLeft;
-				oldVal[1] = zs.marginRight;
-				oldVal[2] = ps.marginLeft;
-				oldVal[3] = ps.marginRight;
+				zoldVal = {};
+				poldVal = {};
+				for (var margins = ['marginTop', 'marginBottom', 'marginLeft', 'marginRight'],
+						len = margins.length; len-- > 0;) {
+					zoldVal[margins[len]] = zs[margins[len]];
+					poldVal[margins[len]] = ps[margins[len]];
+
+					// clean margin
+					zs[margins[len]] = ps[margins[len]] = '0px';
+				}
 				
-				// clean margin
-				zs.marginLeft = zs.marginRight = ps.marginLeft = ps.marginRight = '0px';
-	
-				start = $prev.zk.cmOffset()[0] + $prev.zk.offsetWidth();
+				var offset = $prev.zk.revisedOffset();
+				pos[0] = offset[0] + $prev.zk.offsetWidth();
+				pos[1] = offset[1] + $prev.zk.offsetHeight();
 			}
 		} else {
-			start = zkpOffset[0] + zkp.sumStyles("l", jq.paddings) + zkp.sumStyles("l", jq.borders);
+			pos[0] = zkpOffset[0] + zkp.sumStyles('l', jq.paddings) + zkp.sumStyles('l', jq.borders);
+			pos[1] = zkpOffset[1] + zkp.sumStyles('t', jq.paddings) + zkp.sumStyles('t', jq.borders);
 		}
-
+	
 		// ZK-700
 		if (!ignorePrev) {
-			start = zkc.cmOffset()[0] - start;
+			var offset = zkc.revisedOffset();
+			pos[0] = offset[0] - pos[0];
+			pos[1] = offset[1] - pos[1];
 			
-			if (oldVal.length) {
-				zs.marginLeft = oldVal[0];
-				zs.marginRight = oldVal[1];
-				ps.marginLeft = oldVal[2];
-				ps.marginRight = oldVal[3];
-			}
+			// revert the values
+			zk.copy(zs, zoldVal);
+			zk.copy(ps, poldVal);
 		}
-		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
-		
-	}
-	
-	function _getTextHeight(zkc, zkp, zkpOffset) {
-		var $zkc = zkc.jq,
-			$prev = $zkc.prev(),
-			start = 0,
-			oldVal = [],
-			zs, ps, ignorePrev;
-		if ($prev.length) {
-			ps = $prev[0].style;
-			// ZK-700
-			// ignore prev if not displayed
-			if (ps.display == 'none')
-				ignorePrev = true;
-			else {
-				zs = $zkc[0].style;
-
-				// store the old value
-				oldVal[0] = zs.marginTop;
-				oldVal[1] = zs.marginBottom;
-				oldVal[2] = ps.marginTop;
-				oldVal[3] = ps.marginBottom;
-				
-				// clean margin
-				zs.marginTop = '0px';
-				zs.marginBottom = '0px';
-				ps.marginTop = '0px';
-				ps.marginBottom = '0px';
-				
-				start = $prev.zk.cmOffset()[1] + $prev.zk.offsetHeight();
-			}
-		} else {
-			start = zkpOffset[1] + zkp.sumStyles("t", jq.paddings) + zkp.sumStyles("t", jq.borders);
-		}
-
-		// ZK-700
-		if (!ignorePrev) {
-			start = zkc.cmOffset()[1] - start;
-			
-			if (oldVal.length) {
-				zs.marginTop = oldVal[0];
-				zs.marginBottom = oldVal[1];
-				ps.marginTop = oldVal[2];
-				ps.marginBottom = oldVal[3];
-			}
-		}
-		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
-	}
-	
-	// check whether the two elements are the same baseline, if so, we need to
-	// sum them together.
-	function _isSameBaseline(ref, cur, vertical) {
-		if (vertical) {
-			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
-				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
-			return cur.top >= hgh || cur.left < wdh;
-		} else {
-			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
-				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
-			return cur.left >= wdh || cur.top < hgh;
-		}
+		return !zk.ie ? [Math.max(0, pos[0]), Math.max(0, pos[1])] : pos; // ie may have a wrong gap
 	}
 
 	function _fixMinVflex(wgt, wgtn, o, min) {
@@ -153,14 +95,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 											+ zkc.sumStyles("tb", jq.margins);
 								}
 								
-								var curDim = first != cwgt ? zkc.dimension(true) : false;
 								//bug #3006276: East/West bottom cut if East/West higher than Center.
 								if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
 									vmax = sz;
 								else if (cwgt._sumFlexHeight) //@See North/South
 									totalsz += sz;
-								else if (!cwgt._maxFlexHeight && curDim && _isSameBaseline(refDim, curDim, true))
-									max += sz;
 								else if (sz > max)
 									max = sz;
 							}
@@ -200,12 +139,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							if (isText) {
 								if (sz > max) 
 									max = sz;
-							} else {
-								var curDim = zkc.dimension(true);
-								if (_isSameBaseline(refDim, curDim, true)) 
-									max += sz;
-								else if (sz > max) 
-									max = sz;
+							} else if (sz > max) {
+								max = sz;
 							}
 						}
 					} else //no kids at all, use self
@@ -259,11 +194,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
 											+ zkc.sumStyles("lr", jq.margins);
 								}
-								var curDim = first != cwgt ? zkc.dimension(true) : false;
 								if (cwgt._sumFlexWidth) //@See East/West/Center
 									totalsz += sz;
-								else if (curDim && _isSameBaseline(refDim, curDim))
-									max += sz;
 								else if (sz > max)
 									max = sz;
 							}
@@ -305,12 +237,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							if (isText) {
 								if (sz > max) 
 									max = sz;
-							} else {
-								var curDim = zkc.dimension(true);
-								if (_isSameBaseline(refDim, curDim)) 
-									max += sz;
-								else if (sz > max) 
-									max = sz;
+							} else if (sz > max) { 
+								max = sz;
 							}
 						}
 					} else //no kids at all, use self
@@ -419,15 +347,17 @@ zFlex = { //static methods
 				
 				//Bug ZK-1647: should consider header width
 				//Bug Flex-138: skip if width exists
-				if (offwdh == 0 && zk.isLoaded('zul.mesh') && cwgt && cwgt.$instanceof(zul.mesh.HeaderWidget))
-					offwdh = jq(c).width();
+				if (offwdh == 0 && cwgt && zk.isLoaded('zul.mesh')
+						&& cwgt.$instanceof(zul.mesh.HeaderWidget))
+					offwdh = zkc.jq.width();
 				
 				//Bug ZK-1706: should consider all text node size
 				if (pretxt) {
 					if (!zkpOffset)
-						zkpOffset = zkp.cmOffset();
-					wdh -= _getTextWidth(zkc, zkp, zkpOffset);
-					hgh -= _getTextHeight(zkc, zkp, zkpOffset);
+						zkpOffset = zkp.revisedOffset();
+					var size = _getTextSize(zkc, zkp, zkpOffset);
+					wdh -= size[0];
+					hgh -= size[1];
 				}
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
