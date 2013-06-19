@@ -26,13 +26,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}, 200);
 	}
 
-	// detect whether the dom element is in the right side of combobutton 
-	function _inRight (top, d) {
-		for (var n = d; n && n != top; n = n.parentNode)
-			if (jq.nodeName(n, 'td') && jq(n).index() == 2)
-				return true;
-		return false;
-	}
 	function _fireOnOpen (wgt, opts, o) {
 		if (opts && opts.sendOnOpen)
 			wgt.fire('onOpen', {open:o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
@@ -162,7 +155,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			// close it if click on both left and right side
 			var open = !this.isOpen();
 			if (this == evt.target)
-				if (_inRight(this.$n(), d) || !open)
+				if (this.$n('btn') == d || this.$n('icon') == d || !open)
 					this.setOpen(open, {sendOnOpen: true});
 				else
 					this.$supers('doClick_', arguments);
@@ -178,8 +171,9 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	doMouseOver_: function (evt) {
 		this._bover = true;
 		if (this == evt.target) {
+			var d = evt.domTarget;
 			// not change style and call open method if mouse over popup node
-			if (this._autodrop && _inRight(this.$n(), evt.domTarget) && !this.isOpen())
+			if (this._autodrop && (this.$n('btn') == d || this.$n('icon') == d) && !this.isOpen())
 				this.open({sendOnOpen: true});
 			this.$supers('doMouseOver_', arguments);
 		}
@@ -214,15 +208,21 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	redraw: function (out) {
 		var tabi = this._tabindex,
 			uuid = this.uuid;
+		
 		out.push('<span ', this.domAttrs_(), ' >',	
 					'<button id="', uuid, '-real" class="', this.$s('input') ,'" type="', this._type, '"');
 		
 		if (this._disabled) out.push(' disabled="disabled"');
 		if (tabi) out.push(' tabindex="', tabi, '"');
-		out.push('>', this.domContent_(), '</button>',
-		'<a id="', uuid, '-btn" class="', this.$s('button'), '">', 
-			'<i class="', this.$s('icon'), ' z-icon-caret-down"></i>', 
-		'</a></span>');
+		out.push('>', this.domContent_(), '</button>', 
+				 '<a id="', uuid, '-btn" class="', this.$s('button'), '">', 
+					'<i id="', uuid, '-icon" class="', this.$s('icon'), ' z-icon-caret-down"></i>', 
+				 '</a>');
+		// pp
+		if (this.firstChild)
+			this.firstChild.redraw(out);
+		
+		out.push('</span>');
 	}	
 });
 })();
