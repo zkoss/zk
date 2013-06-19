@@ -765,7 +765,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderWidth();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("lr", jq.margins);
+			size -= this.marginWidth();
 		return size < 0 ? 0: size;
 	},
 	/** Returns the revised (calibrated) height, which subtracted the height of
@@ -785,7 +785,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("tb", jq.margins);
+			size -= this.marginHeight();
 		return size < 0 ? 0: size;
 	},
 	/**
@@ -800,7 +800,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var size = this.jq[0].offsetWidth;
 		size -= this.padBorderWidth();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("lr", jq.margins);
+			size -= this.marginWidth();
 		return size < 0 ? 0: size;
 	},
 	/**
@@ -815,8 +815,22 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var size = this.jq[0].offsetHeight;
 		size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("tb", jq.margins);
+			size -= this.marginHeight();
 		return size < 0 ? 0: size;
+	},
+	/** Returns the summation of the margin width of the first matched element.
+	 * @return int summation
+	 * @since 7.0.0
+	 */
+	marginWidth: function () {
+		return this.sumStyles("lr", jq.margins);
+	},
+	/** Returns the summation of the margin height of the first matched element.
+	 * @return int summation
+	 * @since 7.0.0
+	 */
+	marginHeight: function () {
+		return this.sumStyles("tb", jq.margins);
 	},
 	/** Returns the summation of the border width of the first matched element.
 	 * @return int summation

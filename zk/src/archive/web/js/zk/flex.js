@@ -185,7 +185,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										if (dim[1] > sz)
 											sz = dim[1];
 									} else if ((zel = zk(el)).isVisible()) {
-										var h = zel.offsetHeight() + zel.sumStyles("tb", jq.margins);
+										var h = zel.offsetHeight() + zel.marginHeight();
 										if (h > sz)
 											sz = h;
 									}
@@ -194,7 +194,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (c.nodeType == 3)
 									sz = c.nodeValue ? zkn.textSize(c.nodeValue)[1] : 0;
 								else {
-									sz = zkc.offsetHeight() + zkc.sumStyles("tb", jq.margins);
+									sz = zkc.offsetHeight() + zkc.marginHeight();
 								}
 							}
 							if (isText) {
@@ -290,7 +290,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										if (dim[1] > sz)
 											sz = dim[1];
 									} else if ((zel = zk(el)).isVisible()){
-										var w = zel.offsetWidth() + zel.sumStyles("lr", jq.margins);
+										var w = zel.offsetWidth() + zel.marginWidth();
 										if (w > sz)
 											sz = w;
 									}
@@ -299,7 +299,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (c.nodeType == 3)
 									sz = c.nodeValue ? zkn.textSize(c.nodeValue)[0] : 0;
 								else {
-									sz = zkc.offsetWidth() + zkc.sumStyles("lr", jq.margins);
+									sz = zkc.offsetWidth() + zkc.marginWidth();
 								}
 							}
 							if (isText) {
@@ -444,7 +444,7 @@ zFlex = { //static methods
 						(!zk.isLoaded('zul.wnd') || !wgt.$instanceof(zul.wnd.Panelchildren))) 
 						|| (cwgt && !cwgt.isExcludedHflex_())) {
 					wdh -= offwdh;
-					wdh -= zkc.sumStyles("lr", jq.margins);
+					wdh -= zkc.marginWidth();
     			}
 				
 				//vertical size
@@ -459,7 +459,7 @@ zFlex = { //static methods
 					}
 				} else if (!cwgt || !cwgt.isExcludedVflex_()) {			
 					hgh -= offhgh;
-					hgh -= zkc.sumStyles("tb", jq.margins);
+					hgh -= zkc.marginHeight();
 				}
 				
 				pretxt = false;
