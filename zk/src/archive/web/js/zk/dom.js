@@ -661,7 +661,8 @@ zjq.prototype = {
 		var n;
 		if (n = this.jq[0])
 			return jq.isOverlapped(
-				this.cmOffset(), [n.offsetWidth, n.offsetHeight], zk(el).cmOffset(),
+				// use revisedOffset instead of cmOffset for body's scroll issue
+				this.revisedOffset(), [n.offsetWidth, n.offsetHeight], zk(el).revisedOffset(),
 				    [el.offsetWidth, el.offsetHeight], tolerant);
 	},
 
