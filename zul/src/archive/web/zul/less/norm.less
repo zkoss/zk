@@ -8,9 +8,17 @@ html, body {
 	height: 100%;
 }
 
-*, *:after, *:before {
+// affect ZK component only
+[class^="z-"],
+[class*=" z-"],
+[class^="z-"]:after,
+[class*=" z-"]:after,
+[class^="z-"]:before,
+[class*=" z-"]:before,
+.z-borderbox {
 	.applyCSS3('box-sizing', 'border-box');
 }
+
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -30,11 +38,13 @@ textarea:focus {
 input[type="radio"] {
 	-webkit-appearance: radio;
 	-moz-appearance: radio;
+	margin: 0px 2px 2px 2px;
 }
 
 input[type="checkbox"] {
 	-webkit-appearance: checkbox;
 	-moz-appearance: checkbox;
+	margin: 2px;
 }
 
 *:focus {
@@ -144,6 +154,9 @@ div.z-log {
 	
 	textarea {
 		width: 100%;
+		border-color: rgba(82,168,236,0.8);
+		outline: 0;
+		.boxShadow('inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6)');
 	}
 	button {
 		font-size: @fontSizeXSmall;

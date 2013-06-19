@@ -73,13 +73,15 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	updateOrient: function () {
 		var n = this.$n();
 		if (n !== undefined) {
-			jq(n).data('orient') = this._orient;
+			jq(n).data('orient', this._orient);
+			this.rerender();		
 		}
 	},
 	updateBar: function () {
 		var n = this.$n();
 		if (n !== undefined) {
-			jq(n).data('bar') = this._bar;
+			jq(n).data('bar', this._bar);
+			this.rerender();
 		}
 	},
 	getZclass: function () {

@@ -226,9 +226,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_fixbtn: function () {
 		var $btn = jq(this.$n('btn')),
+			$icon = jq(this.$n('icon')),
 			colps = this.getCollapse();
 		if (!colps || 'none' == colps) {
-			$btn.hide();
+			$btn.addClass(this.$s('button-disabled'));
+			$icon.hide();
 		} else {
 			var before = colps == 'before';
 			if (!this._open) before = !before;
@@ -240,7 +242,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				jq(this.$n('icon')).removeClass(before ? 'z-icon-caret-right' : 'z-icon-caret-left')
 					.addClass(before ? 'z-icon-caret-left' : 'z-icon-caret-right');
 			}
-			$btn.show();
+			$btn.removeClass(this.$s('button-disabled'));
+			$icon.show();
 		}
 	},
 	setBtnPos_: function (ver) {
@@ -297,7 +300,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	//drag
 	_ignoresizing: function (draggable, pointer, evt) {
 		var wgt = draggable.control;
-		if (!wgt._open || wgt.$n('btn') == evt.domTarget) return true;
+		if (!wgt._open || wgt.$n('icon') == evt.domTarget) return true;
 
 		var run = draggable.run = {},
 			node = wgt.$n(),

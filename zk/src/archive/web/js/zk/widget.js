@@ -3002,40 +3002,12 @@ unbind_: function (skipper, after) {
 		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		var h = zkn.revisedHeight(height, true), // excluding margin for F50-3000873.zul and B50-3285635.zul 
-			newh = h,
-			margins = zkn.sumStyles("tb", jq.margins);
-		n.style.height = jq.px0(h);
-			
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("tb", jq.margins);
-			if (margins) 
-				n.style.height = jq.px0(h + margins);
-		}
+		// excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.height = jq.px0(height - zkn.marginHeight());
 	},
-	
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
-		var w = zkn.revisedWidth(width, true), // excluding margin for F50-3000873.zul and B50-3285635.zul
-			neww = w,
-			margins = zkn.sumStyles("lr", jq.margins),
-			pb = zkn.padBorderWidth(); 
-		
-		n.style.width = jq.px0(w);
-		
-		// Bug ZK-521
-		if ((zk.linux || zk.mac) && zk.ff && jq.nodeName(n, "select")) {
-			var offset = width - margins,
-				diff = offset - n.offsetWidth;
-			if (diff > 0)
-				n.style.width = jq.px0(w + diff);
-		}
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("lr", jq.margins);
-			if (margins) 
-				n.style.width = jq.px0(w + margins);
-		}
+		// excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.width = jq.px0(width - zkn.marginWidth());
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden

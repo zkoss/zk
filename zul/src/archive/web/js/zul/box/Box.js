@@ -417,11 +417,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var p = this.$n(),
 			zkp = zk(p),
 			hgh = this._vflexsz !== undefined ? 
-					this._vflexsz - zkp.padBorderHeight() - zkp.sumStyles("tb", jq.margins)
+					this._vflexsz - zkp.padBorderHeight() - zkp.marginHeight()
 					// B50-ZK-286: subtract scroll bar width
 					: zkp.contentHeight(true)  - (zkp.hasHScroll() ? jq.scrollbarWidth() : 0),
 			wdh = this._hflexsz !== undefined ?
-					this._hflexsz - zkp.padBorderWidth() - zkp.sumStyles("lr", jq.margins)
+					this._hflexsz - zkp.padBorderWidth() - zkp.marginWidth()
 					// B50-ZK-286: subtract scroll bar width
 					: zkp.contentWidth(true) - (zkp.hasVScroll() ? jq.scrollbarWidth() : 0);
 		return zkp ? {height: hgh, width: wdh} : {};
@@ -514,8 +514,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						zk.ie && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
 						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
 					offwdh = fixedSize && !vert ? zk.parseInt(szes[k]) : zkc.offsetWidth(),
-					cwdh = offwdh + zkc.sumStyles('lr', jq.margins),
-					chgh = offhgh + zkc.sumStyles('tb', jq.margins);
+					cwdh = offwdh + zkc.marginWidth(),
+					chgh = offhgh + zkc.marginHeight();
 				
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
