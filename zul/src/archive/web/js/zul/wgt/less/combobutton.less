@@ -45,17 +45,43 @@
 		}
 	}
 
-	&-input:hover, &-button:hover {
+	&:not(.z-combobutton-toolbar) &-input:hover, 
+	&:not(.z-combobutton-toolbar) &-button:hover {
 		border-color: #AEAEAE;
-		.buttonBackground(#E1E1E1, #E1E1E1);
+		.buttonBackground(#C6E6F7, #C6E6F7);
 	}
 
-	&-input:active, &-button:active {
+	&:not(.z-combobutton-toolbar) &-input:active, 
+	&:not(.z-combobutton-toolbar) &-button:active {
 		border-top-color: #808080;
 		border-left-color: #808080;
 		border-bottom-color: #B6B6B6;
 		border-right-color: #B6B6B6;
 		.buttonBackground(#EEEEEE, #FEFEFE);
 		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75), 0 0 7px #CFCFCF');
+	}
+
+	&-toolbar {
+
+		.z-combobutton-input, .z-combobutton-button {
+			border: 0;
+			border-radius: 0px;
+			background: transparent;
+			line-height: @baseLineHeight + 2;
+			border-left: 1px solid transparent;
+		}
+
+		&:hover {
+
+			.z-combobutton-input, .z-combobutton-button {
+				border: 1px solid #7EAAC6;
+				line-height: @baseLineHeight;
+				.buttonBackground(#C6E6F7, #C6E6F7);
+			}
+
+			.z-combobutton-input {
+				border-right: 0px;
+			}
+		}
 	}
 }
