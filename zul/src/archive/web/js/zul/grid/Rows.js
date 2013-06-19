@@ -74,7 +74,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		var w = this;
 		after.push(function () {
 			w.stripe();
-			_syncFrozen(w); //bug# 3092890: Rows.invalidate() does not respect frozen state
+//			_syncFrozen(w); //bug# 3092890: Rows.invalidate() does not respect frozen state
 		});
 	},
 	unbind_: function () {
@@ -127,8 +127,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		}
 		this._syncStripe();
 		
-		if (this.desktop)
-			_syncFrozen(this);
+//		if (this.desktop)
+//			_syncFrozen(this);
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
