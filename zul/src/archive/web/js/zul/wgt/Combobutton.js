@@ -35,6 +35,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		// just attach if not attached
 		if (!wgt._oldppclose) {
 			var pp = wgt.firstChild;
+			if (pp) {
+				var $pp = jq(pp),
+					wd = jq(wgt).width();
+				if($pp.width() < wd) {
+					$pp.width(wd - zk(pp).padBorderWidth());
+
+					// popup onShow()
+					pp.fire(pp.firstChild);
+					var openInfo = pp._openInfo;
+					if (openInfo) {
+						pp.position.apply(pp, openInfo);
+						// B50-ZK-391
+						// should keep openInfo, maybe used in onResponse later.
+					}
+				}
+			}
 			wgt._oldppclose = pp.close;
 			// listen to onmouseover and onmouseout events of popup child
 			if (bListen)
