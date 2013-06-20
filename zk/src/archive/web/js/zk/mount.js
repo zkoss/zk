@@ -344,7 +344,9 @@ function zkamn(pkg, fn) {
 				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw "Unknown stub "+uuid;
 				var w = new Widget();
-				if (wgt.desktop) //Bug ZK-1596: may already unbind
+				//Bug ZK-1596: may already unbind
+				//Bug ZK-1821: should also unbind wgt if in ROD status
+				if (wgt.desktop || wgt.z_rod === 9)
 					wgt.unbind(); //reuse it as new widget, bug ZK-1589: should unbind first then replace
 				zk._wgtutl.replace(wgt, w, stub);
 					//to reuse wgt, we replace it with a dummy widget, w

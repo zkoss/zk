@@ -49,6 +49,7 @@ ZK 6.5.3
   ZK-1804: Calendar should not be able to select year less than 1900 or greater than 2099
   ZK-1808: Close tabpanel cause js error
   ZK-1812: zAu.send: data of client event ignored on server side
+  ZK-1821: Component inside native component doesn't cleanup correctly
   
   --------
 ZK 6.5.2
