@@ -29,7 +29,8 @@ public interface ValidationContext {
 	
 	/** 
 	 * Checks status of local validation context valid or not, it only relates to one validator. 
-	 * @return true of result is valid, false if this {@link Validator} called {@link #setInvalid()}, default is true. 
+	 * @return true of result is valid, false if this {@link Validator} called {@link #setInvalid()}, default is true.
+	 * @since 6.5.3 
 	 */
 	boolean isLocalValid();
 
