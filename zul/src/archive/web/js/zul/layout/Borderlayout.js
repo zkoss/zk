@@ -255,9 +255,11 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			var fchild = wgt.isFlex() && wgt.getFirstChild(),
 				bodyEl = fchild ? wgt.getFirstChild().$n() : wgt.$n('cave'),
-				bs = bodyEl.style; 
+				bs = bodyEl.style,
+				$el = zk(el);
 					
-			bs.width = el.style.width = jq.px0(ambit.w);
+			el.style.width = jq.px0(ambit.w);
+			bs.width = jq.px0($el.contentWidth());
 			el.style.height = jq.px0(ambit.h);
 			if (wgt.$n('cap'))
 				ambit.h = Math.max(0, ambit.h - wgt.$n('cap').offsetHeight);
@@ -265,9 +267,9 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			if (fchild) { // B50-ZK-198: always need cave height
 				var cv;
 				if (cv = wgt.$n('cave'))
-					cv.style.height = jq.px0(ambit.h);
+					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
-			bs.height = jq.px0(ambit.h);
+			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
 			if (wgt.isAutoscroll()) { 
 				bs.overflow = 'auto';
 				bs.position = 'relative';

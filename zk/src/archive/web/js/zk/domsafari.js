@@ -34,7 +34,7 @@ zk.copy(zjq, {
 		el.scrollLeft = lft;
 	}
 });
-
+var _bkZjq = {};
 zk.copy(zjq.prototype, {
 	disableSelection: function () {
 		return this.jq.each(_dissel);
@@ -51,7 +51,7 @@ zk.copy(zjq.prototype, {
 	offsetWidth: function () {
 		var el = this.jq[0];
 		if (!jq.nodeName(el, "tr"))
-			return el.offsetWidth;
+			return _bkZjq.offsetWidth.apply(this, arguments);
 		
 		var wd = 0;
 		for (var cells = el.cells, j = cells.length; j--;) 
@@ -61,7 +61,7 @@ zk.copy(zjq.prototype, {
 	offsetHeight: function () {
 		var el = this.jq[0];
 		if (!jq.nodeName(el, "tr"))
-			return el.offsetHeight;
+			return _bkZjq.offsetHeight.apply(this, arguments);
 
 		var hgh = 0;
 		for (var cells = el.cells, j = cells.length; j--;) {
@@ -83,7 +83,7 @@ zk.copy(zjq.prototype, {
 			el = el.cells[0];
 		return el.offsetLeft;
 	}
-});
+}, _bkZjq);
 
 zjq._sfKeys = {
 	25: 9, 	   // SHIFT-TAB
