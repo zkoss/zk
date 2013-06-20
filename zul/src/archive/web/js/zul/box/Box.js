@@ -378,7 +378,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		for (var j = 0, len = oo.length; j < len; ++j)
 			out.push(oo[j]);
 	},
-	_resetBoxSize: function () {
+	_resetBoxSize: function (vert) {
 		var	vert = this.isVertical(),
 			k = -1,
 			szes = this._sizes;
@@ -412,19 +412,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		
-		//bug 3010663: boxes do not resize when browser window is resized
-		var p = this.$n(),
-			zkp = zk(p),
-			hgh = this._vflexsz !== undefined ? 
-					this._vflexsz - zkp.padBorderHeight() - zkp.marginHeight()
-					// B50-ZK-286: subtract scroll bar width
-					: zkp.contentHeight(true)  - (zkp.hasHScroll() ? jq.scrollbarWidth() : 0),
-			wdh = this._hflexsz !== undefined ?
-					this._hflexsz - zkp.padBorderWidth() - zkp.marginWidth()
-					// B50-ZK-286: subtract scroll bar width
-					: zkp.contentWidth(true) - (zkp.hasVScroll() ? jq.scrollbarWidth() : 0);
-		return zkp ? {height: hgh, width: wdh} : {};
 	},
 	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
 	afterResetChildSize_: function () {
@@ -471,11 +458,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 	},
 	beforeChildrenFlex_: function(child) {
-		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
-			delete child._flexFixed;
-			return false;
-		}
-		
 		child._flexFixed = true;
 		
 		var	vert = this.isVertical(),
@@ -486,12 +468,25 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			chdex = child.$n('chdex'), 
 			p = chdex ? chdex.parentNode : child.$n().parentNode,
 			zkp = zk(p),
-			psz = this._resetBoxSize(),
+			psz = child.getParentSize_(this.$n()),
 			hgh = psz.height,
 			wdh = psz.width,
 			xc = p.firstChild,
 			k = -1,
-			szes = this._sizes;
+			szes = this._sizes,
+			scrWdh;
+
+		if (!zk.mounting) { // ignore for the loading time
+			this._resetBoxSize(vert);
+		}
+
+		// Bug 3185686, B50-ZK-452
+		if(zkp.hasVScroll()) //with vertical scrollbar
+			wdh -= (scrWdh = jq.scrollbarWidth());
+			
+		// B50-3312936.zul
+		if(zkp.hasHScroll()) //with horizontal scrollbar
+			hgh -= scrWdh || jq.scrollbarWidth();
 		
 		for (; xc; xc = xc.nextSibling) {
 			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? 
@@ -552,32 +547,38 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var cwgt = vflexs.shift(), 
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = vsz;// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
-
-			var chdex = cwgt.$n('chdex'),
+				isz = vsz,// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				 minus = $chdex.padBorderHeight();
 			
+			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height:isz - minus});
 			cwgt._vflexsz = vsz - minus;
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.height = jq.px0($chdex.revisedHeight(vsz, true));
+			
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {				
+				// no need to subtract padding and border for border-box mode
+				chdex.style.height = jq.px0(vsz - $chdex.marginHeight());
 			}
+
 			if (vert) lastsz -= vsz;
 		}
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
 				// B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = lastsz;// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
-
-			var chdex = cwgt.$n('chdex'),
+				isz = lastsz,// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight();
+			
+			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height:isz - minus});
 			cwgt._vflexsz = lastsz - minus;
+			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.height = jq.px0($chdex.revisedHeight(lastsz, true));
+				// no need to subtract padding and border for border-box mode
+				chdex.style.height = jq.px0(lastsz - $chdex.marginHeight());
 			}
 		}
 		
@@ -586,28 +587,35 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		lastsz = wdh > 0 ? wdh : 0;
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
-				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
-
-			var chdex = cwgt.$n('chdex'),
+				hsz = (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
+				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderWidth();
+			
+			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width:hsz - minus});
 			cwgt._hflexsz = hsz - minus;
+			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.width = jq.px0($chdex.revisedWidth(hsz, true));
+				// no need to subtract padding and border for border-box mode
+				chdex.style.width = jq.px0(hsz - $chdex.marginWidth());
 			}
 			if (!vert) lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
-			var cwgt = hflexs.shift();
-			var chdex = cwgt.$n('chdex'),
+			var cwgt = hflexs.shift(),
+				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderWidth();
+
+			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width:lastsz - minus});
 			cwgt._hflexsz = lastsz - minus;
+			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				chdex.style.width = jq.px0($chdex.revisedWidth(lastsz, true));
+				// no need to subtract padding and border for border-box mode
+				chdex.style.width = jq.px0(lastsz - $chdex.marginWidth());
 			}
 		}
 		

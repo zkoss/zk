@@ -244,17 +244,19 @@ zFlex = { //static methods
 		zFlex.fixFlex(this);
 	},
 	fixFlex: function (wgt) {
+		
+		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibliing has done it!
+			delete wgt._flexFixed;
+			return;
+		}
+		
 		//avoid firedown("onSize") calling in again
 		if ((wgt._vflex === undefined || (wgt._vflexsz && wgt._vflex == 'min'))
 			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min'))) 
 			return;
+
 		
 		if (!wgt.parent.beforeChildrenFlex_(wgt)) { //don't do fixflex if return false
-			return;
-		}
-		
-		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibliing has done it!
-			delete wgt._flexFixed;
 			return;
 		}
 		wgt._flexFixed = true;

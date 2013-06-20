@@ -685,20 +685,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		}
 		return val;
 	},
-
-	/** Sets the offset height by specifying the inner height. 
-	 * @param int hgh the height without margin and border 
-	 * @return jqzk this object
-	 */
-	setOffsetHeight: function (hgh) {
-		var $jq = this.jq;
-		hgh -= this.padBorderHeight()
-			+ zk.parseInt($jq.css("margin-top"))
-			+ zk.parseInt($jq.css("margin-bottom"));
-		$jq[0].style.height = jq.px0(hgh);
-		return this;
-	},
-
+	
 	/** Returns the revised (i.e., browser's coordinate) offset of the selected
 	 * element.
 	 * In other words, it is the offset of the left-top corner related to
