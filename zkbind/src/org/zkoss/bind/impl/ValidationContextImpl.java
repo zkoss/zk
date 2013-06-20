@@ -26,6 +26,9 @@ import org.zkoss.bind.ValidationContext;
 public class ValidationContextImpl implements ValidationContext{
 
 	private boolean _valid = true;//default validation result is true
+	
+	//ZK-1819 ValidationContext support a new flag that can identify the value of single field whether is valid when use form binding
+	private boolean _localValid = true;
 	private String _command;
 	private Property _property; //main property
 	private Map<String,Property[]> _properties; //related properties
@@ -100,9 +103,12 @@ public class ValidationContextImpl implements ValidationContext{
 		return _valid;
 	}
 
+	public boolean isLocalValid(){
+		return _localValid;
+	}
 	
 	public void setInvalid(){
-		this._valid = false;
+		this._valid = this._localValid = false;
 	}
 
 }
