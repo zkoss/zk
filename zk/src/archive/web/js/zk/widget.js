@@ -3056,6 +3056,13 @@ unbind_: function (skipper, after) {
 			}
 			return wd;
 		} else {
+			var n = wgt.$n();
+			// span will causes a special gap between top and bottom
+			// when use HTML5 doctype
+			if (document.doctype && document.doctype == '<!DOCTYPE html>' &&
+					jq.nodeName(n, 'SPAN')) {
+				return zk(document.body).textSize(n.outerHTML)[1];
+			}
 			return zk(wgt).offsetHeight();//See also bug ZK-483
 		}
 	},

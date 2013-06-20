@@ -576,7 +576,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		if (data.height != s.height) {
 			s.height = data.height;
-			this._fixHgh();
+			this._fixHgh(true);
 		}
 
 		if (data.left != s.left || data.top != s.top) {
@@ -637,7 +637,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				ctl.fireDown(this.bbar);
 			if (this.fbar)
 				ctl.fireDown(this.fbar);
-			this._fixHgh();
+			this._fixHgh(true);
 			this._fixWdh(); // B55-ZK-328
 			this.zsync();
 		};
@@ -645,14 +645,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	onHide: function () {
 		this._hideShadow();
 	},
-	_fixHgh: function () { // TODO: should be handled by Panelchildren onSize already
+	_fixHgh: function (ignoreRealVisible) { // TODO: should be handled by Panelchildren onSize already
 		var pc;
-		if (!(pc=this.panelchildren) || pc.z_rod || !this.isRealVisible()) return;
+		if (!(pc=this.panelchildren) || pc.z_rod || (!ignoreRealVisible && !this.isRealVisible())) return;
 		var n = this.$n(),
 			body = pc.$n(),
 			hgh = n.style.height;
 		if (hgh && hgh != 'auto')
-			zk(body).setOffsetHeight(this._offsetHeight(n) + zk(body).padBorderHeight());
+			body.style.height = jq.px0(this._offsetHeight(n));
 	},
 	_fixWdh: function () { // TODO: should be handled by Panelchildren onSize already
 		var pc = this.panelchildren;
@@ -674,24 +674,23 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var v;
 		return (v = this._border) != 'none' && v != 'rounded';
 	},
-	_offsetHeight: function (n, ignoreToolbar) {
-		var h = n.offsetHeight - this._titleHeight(n),
-			body = this.$n('body');
-		if (body)
+	_offsetHeight: function (n) {
+		var tHeight = this._titleHeight(),
+			body = this.$n('body')
+			h = zk(tHeight ? n : body).contentHeight() - this._titleHeight();
+		if (tHeight)
 			h -= zk(body).padBorderHeight();
-		h -= zk(n).padBorderHeight();
-		if (ignoreToolbar)
-			return h; // B60-ZK-774
-		var tb = this.$n('tb'),
-			bb = this.$n('bb'),
-			fb = this.$n('fb');
+		
+		var tb = this.tbar ? this.$n('tb') : null,
+			bb = this.bbar ? this.$n('bb') : null,
+			fb = this.fbar ? this.$n('fb') : null;
 		if (tb) h -= tb.offsetHeight;
 		if (bb) h -= bb.offsetHeight;
 		if (fb) h -= fb.offsetHeight;
 		return h;
 	},
-	_titleHeight: function (n) {
-		var head = this.$n('head');
+	_titleHeight: function () {
+		var head = this.getTitle() || this.caption ? this.$n('head') : null;
 		return head ? head.offsetHeight : 0;
 	},
 	onFloatUp: function (ctl) {

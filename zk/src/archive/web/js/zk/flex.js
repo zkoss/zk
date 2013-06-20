@@ -17,22 +17,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
 			pos = [0, 0],
-			zoldVal,
+			coldVal,
 			poldVal,
-			zs, ps, ignorePrev;
+			zs, ps;
 		if ($prev.length) {
 			ps = $prev[0].style;
 			// ZK-700 ignore prev if not displayed
 			if (ps.display == 'none')
-				ignorePrev = true;
+				return pos;
 			else {
 				zs = $zkc[0].style;
 				// store the old value
-				zoldVal = {};
+				coldVal = {};
 				poldVal = {};
 				for (var margins = ['marginTop', 'marginBottom', 'marginLeft', 'marginRight'],
 						len = margins.length; len-- > 0;) {
-					zoldVal[margins[len]] = zs[margins[len]];
+					coldVal[margins[len]] = zs[margins[len]];
 					poldVal[margins[len]] = ps[margins[len]];
 
 					// clean margin
@@ -49,15 +49,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	
 		// ZK-700
-		if (!ignorePrev) {
-			var offset = zkc.revisedOffset();
-			pos[0] = offset[0] - pos[0];
-			pos[1] = offset[1] - pos[1];
+		var offset = zkc.revisedOffset();
+		pos[0] = offset[0] - pos[0];
+		pos[1] = offset[1] - pos[1];
+		
+		// revert the values
+		zk.copy(zs, coldVal);
+		zk.copy(ps, poldVal);
 			
-			// revert the values
-			zk.copy(zs, zoldVal);
-			zk.copy(ps, poldVal);
-		}
 		return !zk.ie ? [Math.max(0, pos[0]), Math.max(0, pos[1])] : pos; // ie may have a wrong gap
 	}
 	

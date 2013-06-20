@@ -212,7 +212,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var el = wgt.$n(); //Bug ZK-1578: should get child size instead of chdex size
 		//If child uses hflex="1" when parent has hflex="min"
 		//   Find max sibling width and apply on the child
-		if (wgt._hflex && this.isVertical_() && attr == 'w') {
+		if (attr == 'w' && wgt._hflex && this.isVertical_()) {
 			for (var w = wgt.nextSibling, max = 0, width; w; w = w.nextSibling) {
 				if (!w._hflex) {
 					width = zjq.minWidth(w.$n());
@@ -396,7 +396,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			} else {
     			var max = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				var h = w.firstChild.offsetHeight;
+    				// use w.offsetHeight instead of w.firstChild.offsetHeight
+    				// for avoiding span's special gap when using HTML5 doctype
+    				var h = w.offsetHeight;
     				if (h > max)
     					max = h;
     			}
