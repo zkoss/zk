@@ -391,11 +391,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			else if (sz.height == '')
 				ns.height = this._height ? this._height : '';
 			else {
-				var cave = this.$n('cave'), cap = this
-						.$n('cap'), hgh = cave
-						&& this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop)
-						: zk(n).revisedHeight(sz.height,
-								true);
+				var cave = this.$n('cave'),
+					cap = this.$n('cap'),
+					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop)
+						: sz.height - zk(n).marginHeight();
 				if (cap) // B50-ZK-236: add header height
 					hgh += cap.offsetHeight;
 				ns.height = jq.px0(hgh);
@@ -407,8 +406,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			else if (sz.width == '')
 				n.style.width = this._width ? this._width : '';
 			else {
-				var wdh = zk(n)
-						.revisedWidth(sz.width, true);
+				var wdh = sz.width - zk(n).marginWidth();
 				n.style.width = jq.px0(wdh);
 			}
 		}

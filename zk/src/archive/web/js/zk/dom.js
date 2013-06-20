@@ -200,6 +200,25 @@ zjq = function (jq) { //ZK extension
 		}
 	}
 
+	// since ZK 7.0.0
+	var isHTML5DocType = (function () {
+		var html5;
+		return function () {
+			if (html5 === undefined) {
+			    if (document.doctype === null) return false;
+		
+			    var node = document.doctype;
+			    var doctype_string = "<!DOCTYPE " + node.name +
+			    		(node.publicId ? ' PUBLIC"' + node.publicId + '"' : '') +
+			    		(!node.publicId && node.systemId ? ' SYSTEM' : '') +
+			    		(node.systemId ? ' "' + node.systemId + '"' : '') + ">";
+		
+			    html5 = doctype_string === '<!DOCTYPE html>';
+			}
+			return html5;
+		}
+	})();
+
 zk.copy(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
 	minWidth: function (el) {
@@ -685,20 +704,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		}
 		return val;
 	},
-
-	/** Sets the offset height by specifying the inner height. 
-	 * @param int hgh the height without margin and border 
-	 * @return jqzk this object
-	 */
-	setOffsetHeight: function (hgh) {
-		var $jq = this.jq;
-		hgh -= this.padBorderHeight()
-			+ zk.parseInt($jq.css("margin-top"))
-			+ zk.parseInt($jq.css("margin-bottom"));
-		$jq[0].style.height = jq.px0(hgh);
-		return this;
-	},
-
+	
 	/** Returns the revised (i.e., browser's coordinate) offset of the selected
 	 * element.
 	 * In other words, it is the offset of the left-top corner related to
@@ -1300,7 +1306,14 @@ jq(el).zk.center(); //same as 'center'
 	 * @return int the offset height
 	 */
 	offsetHeight: function () {
-		return this.jq[0].offsetHeight;
+		var n = this.jq[0];
+		// span will causes a special gap between top and bottom
+		// when use HTML5 doctype
+		if (isHTML5DocType() &&
+				jq.nodeName(n, 'SPAN')) {
+			return zk(document.body).textSize(n.outerHTML)[1];
+		}
+		return n.offsetHeight;
 	},
 	/** Returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation. 
 	 * @return int the offset top

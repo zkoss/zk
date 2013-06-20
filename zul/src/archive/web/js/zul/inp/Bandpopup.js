@@ -28,7 +28,8 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 			var bandbox = this.parent,
 				pp = bandbox && bandbox.$n('pp');
 			if (pp) {
-				pp.style.width = jq.px0(this._hflexsz);
+				// test case is B50-ZK-859.zul
+				pp.style.width = jq.px0(this._hflexsz + zk(pp).padBorderWidth());
 				zk(pp)._updateProp(['width']);
 			}
 		}
