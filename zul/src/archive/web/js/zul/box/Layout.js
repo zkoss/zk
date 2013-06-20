@@ -168,11 +168,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var p = this.$n(),
 			zkp = zk(p),
 			hgh = this._vflexsz !== undefined ? 
-					this._vflexsz - zkp.padBorderHeight() - zkp.sumStyles("tb", jq.margins)
+					this._vflexsz - zkp.padBorderHeight() - zkp.marginHeight()
 					// B50-ZK-286: subtract scroll bar width
 					: zkp.contentHeight(true)  - (zkp.hasHScroll() ? jq.scrollbarWidth() : 0),
 			wdh = this._hflexsz !== undefined ?
-					this._hflexsz - zkp.padBorderWidth() - zkp.sumStyles("lr", jq.margins)
+					this._hflexsz - zkp.padBorderWidth() - zkp.marginWidth()
 					// B50-ZK-286: subtract scroll bar width
 					: zkp.contentWidth(true) - (zkp.hasVScroll() ? jq.scrollbarWidth() : 0);
 		return zkp ? {height: hgh, width: wdh} : {};
@@ -212,7 +212,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var el = wgt.$n(); //Bug ZK-1578: should get child size instead of chdex size
 		//If child uses hflex="1" when parent has hflex="min"
 		//   Find max sibling width and apply on the child
-		if (wgt._hflex && this.isVertical_() && attr == 'w') {
+		if (attr == 'w' && wgt._hflex && this.isVertical_()) {
 			for (var w = wgt.nextSibling, max = 0, width; w; w = w.nextSibling) {
 				if (!w._hflex) {
 					width = zjq.minWidth(w.$n());
@@ -277,21 +277,21 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-						var h = c.offsetHeight + zkc.sumStyles('tb', jq.margins) + zkxc.paddingHeight(); //Bug ZK-1577: should consider padding size
+						var h = c.offsetHeight + zkc.marginHeight() + zkxc.paddingHeight(); //Bug ZK-1577: should consider padding size
 						cp.style.height = jq.px0(h);
 						if (vert)
-							hgh -= cp.offsetHeight + zkxc.sumStyles('tb', jq.margins);
+							hgh -= cp.offsetHeight + zkxc.marginHeight();
 					} else {
 						vflexs.push(cwgt);
 						if (vert) {
 							vflexsz += cwgt._nvflex;
 							
 							//bug#3157031: remove chdex's padding, border, margin
-							hgh = hgh - zkxc.sumStyles('tb', jq.margins);
+							hgh = hgh - zkxc.marginHeight();
 						}
 					}
 				} else if (vert)
-					hgh -= cp.offsetHeight + zkxc.sumStyles('tb', jq.margins);
+					hgh -= cp.offsetHeight + zkxc.marginHeight();
 
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
@@ -299,21 +299,21 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-						var w = c.offsetWidth + zkc.sumStyles('lr', jq.margins) + zkxc.paddingWidth(); //Bug ZK-1577: should consider padding size
+						var w = c.offsetWidth + zkc.marginWidth() + zkxc.paddingWidth(); //Bug ZK-1577: should consider padding size
 						cp.style.width = jq.px0(zkxc.revisedWidth(w));
 						if (!vert)
-							wdh -= cp.offsetWidth + zkxc.sumStyles('lr', jq.margins);
+							wdh -= cp.offsetWidth + zkxc.marginWidth();
 					} else {
 						hflexs.push(cwgt);
 						if (!vert) {
 							hflexsz += cwgt._nhflex;
 							
 							//bug#3157031: remove chdex's padding, border, margin
-							wdh = wdh - zkxc.sumStyles('lr', jq.margins); 
+							wdh = wdh - zkxc.marginWidth(); 
 						}
 					}
 				} else if (!vert)
-					wdh -= cp.offsetWidth + zkxc.sumStyles('lr', jq.margins);
+					wdh -= cp.offsetWidth + zkxc.marginWidth();
 			}
 		}
 
@@ -388,7 +388,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				if (w.firstChild.style.height) {
     					w.style.height = jq.px0(w.firstChild.offsetHeight
     							+ zk(w).padBorderHeight()
-    							+ zk(w.firstChild).sumStyles('tb', jq.margins));
+    							+ zk(w.firstChild).marginHeight());
     				}
     				total += w.offsetHeight;
     			}
@@ -396,7 +396,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			} else {
     			var max = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				var h = w.firstChild.offsetHeight;
+    				// use w.offsetHeight instead of w.firstChild.offsetHeight
+    				// for avoiding span's special gap when using HTML5 doctype
+    				var h = w.offsetHeight;
     				if (h > max)
     					max = h;
     			}
@@ -409,7 +411,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				if (w.firstChild.style.width) {
     					w.style.width = jq.px0(w.firstChild.offsetWidth
     							+ zk(w).padBorderWidth()
-    							+ zk(w.firstChild).sumStyles('lr', jq.margins));
+    							+ zk(w.firstChild).marginWidth());
     				}
     				total += w.offsetWidth;
     			}

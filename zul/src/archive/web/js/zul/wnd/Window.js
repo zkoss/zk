@@ -907,24 +907,24 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixHgh: function () {
-		if (this.isRealVisible()) {
+		if (this.getTitle() || this.caption) {
 			var n = this.$n(),
 				hgh = n.style.height,
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
-
+	
 			if (hgh && hgh != 'auto') {
-				zk(cave).setOffsetHeight(this._offsetHeight(n) + zk(cave).padBorderHeight());
+				cave.style.height = jq.px0(this._offsetHeight(n));
 			} else if (cvh && cvh != 'auto') {
 				cave.style.height = '';
 			}
 		}
 	},
 	_offsetHeight: function (n) {
-		return n.offsetHeight - this._titleHeight(n) - zk(n).padBorderHeight();
+		return zk(n).contentHeight() - this._titleHeight();
 	},
-	_titleHeight: function (n) {
-		var cap = this.$n('cap');
+	_titleHeight: function () {
+		var cap = this.getTitle() || this.caption ? this.$n('cap') : null;
 		return cap ? cap.offsetHeight : 0;
 	},
 
@@ -1051,10 +1051,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers(Window, 'bind_', arguments);
 
 		var mode = this._mode;
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 
 		if (mode != 'embedded') {
-			zWatch.listen({onFloatUp: this, onHide: this});
+			zWatch.listen({onFloatUp: this, onHide: this, onShow: this});
 			this.setFloating_(true);
 
 			if (_isModal(mode)) _doModal(this);

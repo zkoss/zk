@@ -28,11 +28,16 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_align: 'start',
 
 	$define: {
-		/** Returns the alignment.
-		 * <p>Default: null (use browser default).
+		/**
+		 * Returns the alignment of any children added to this toolbar. Valid values
+		 * are "start", "end" and "center".
+		 * <p>Default: "start"
 		 * @return String
 		 */
-		/** Sets the alignment: one of left, center, right, ustify,
+		/**
+		 * Sets the alignment of any children added to this toolbar. Valid values
+		 * are "start", "end" and "center".
+		 * <p>Default: "start", if null, "start" is assumed.
 		 * @param String align
 		 */
 		align: _zkf = function () {
@@ -59,6 +64,16 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 				sc += ' ' + this.$s('panel');
 		}
 		return sc;
+	},
+	// Bug ZK-1706 issue: we have to expand the width of the content div when
+	// align="left", others won't support
+	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+		this.$supers('setFlexSizeW_', arguments);
+		if (!isFlexMin && this.getAlign() == 'start') {
+			var cave = this.$n('cave');
+			if (cave)
+				cave.style.width = jq.px0(zk(this.$n()).contentWidth());
+		}
 	},
 	/**
 	 * Returns whether is in panel mold or not.

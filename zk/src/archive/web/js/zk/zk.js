@@ -167,7 +167,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!console.length) {
 				jq(document.body).append(
 	'<div id="zk_logbox" class="z-log">'
-	+'<button onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
+	+'<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
 	+'<textarea id="zk_log" rows="10"></textarea></div>');
 				console = jq("#zk_log");
 			}

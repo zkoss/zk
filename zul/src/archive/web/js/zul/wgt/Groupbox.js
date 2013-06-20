@@ -156,25 +156,16 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		var h = 0,
-			margins = zkn.sumStyles('tb', jq.margins);
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			var node = this.$n(),
 				c;
+			height = 0;
 			for (c = n.firstChild; c; c = c.nextSibling)
-				h += jq(c).outerHeight();
-		} else
-			h = zkn.revisedHeight(height, true); // excluding margin for F50-3000873.zul and B50-3285635.zul
-
-		n.style.height = jq.px0(h);
-
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles('tb', jq.margins);
-			if (margins)
-				n.style.height = jq.px0(h + margins);
+				height += jq(c).outerHeight();
 		}
+
+		this.$supers('setFlexSizeH_', arguments);
 	},
 	//watch//
 	onSize: function () {

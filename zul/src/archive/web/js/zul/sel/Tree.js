@@ -26,10 +26,6 @@ var Tree =
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	_scrollbar: null,
-	bind_: function (desktop, skipper, after) {
-		this.$supers(Tree, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
-		this._scrollbar = zul.mesh.Scrollbar.init(this);
-	},
 	unbind_: function () {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -43,6 +39,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		var self = this;
 		setTimeout(function () {
 			if (self.desktop)
+				if (!self._scrollbar)
+					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				self.refreshBar_();
 		}, 200);
 	},

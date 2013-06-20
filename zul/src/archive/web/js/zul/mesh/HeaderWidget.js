@@ -59,7 +59,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == ''
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
-			//updated: need to concern inner padding due to _getContentEdgeWidth
+			//updated: need to concern inner padding due to wgt.getContentEdgeWidth_()
 			//spec in flex.js
 			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
 					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
@@ -326,39 +326,24 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
-			n = wgt.$n(), $n = zk(n),
 			mesh = wgt.getMeshWidget(),
 			wd = dg._zszofs,
-			eheadtbl = mesh.eheadtbl,
 			hdfaker = mesh.ehdfaker,
-			ebodytbl = mesh.ebodytbl,
 			bdfaker = mesh.ebdfaker,
-			efoottbl = mesh.efoottbl,
 			ftfaker = mesh.eftfaker,
-			cidx = $n.cellIndex();
+			cidx = zk(wgt.$n()).cellIndex();
 		
-		//1. store original width
+		//1. set resized width to colgroup col
+		var hdcols = hdfaker.childNodes,
+			bdcols = bdfaker.childNodes,
+			ftcols = ftfaker ? ftfaker.childNodes : null;
+		hdcols[cidx].style.width = bdcols[cidx].style.width = jq.px(wd);
+		
+		//2. store resized width
 		var wds = [];
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
 			var origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
 			wds[i++] = origWd ? origWd : jq.px0(w.$n().offsetWidth);
-		}
-		wds[cidx] = jq.px(wd);
-		
-		//2. clear width=100% setting, otherwise it will try to expand to whole width
-		eheadtbl.width = '';
-		ebodytbl.width = '';
-		if (efoottbl)
-			efoottbl.width = '';
-		
-		//3. set width to colgroup col
-		var hdcols = hdfaker.childNodes,
-			bdcols = bdfaker.childNodes,
-			ftcols = ftfaker ? ftfaker.childNodes : null;
-		for (var i = 0, len = hdcols.length; i < len; i++) {
-			hdcols[i].style.width = bdcols[i].style.width = wds[i];
-			if (ftcols)
-				ftcols[i].style.width = wds[i];
 		}
 		
 		delete mesh._span; //no span!
@@ -372,6 +357,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			width: wd + 'px',
 			widths: wds
 		}, evt.data), null, 0);
+		
+		// bug #2799258 in IE, we have to force to recalculate the size.
+		mesh.$n()._lastsz = null;
 		
 		// bug #2799258
 		zUtl.fireSized(mesh, -1); //no beforeSize
