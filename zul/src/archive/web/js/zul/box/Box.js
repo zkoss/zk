@@ -457,6 +457,20 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	_getContentSize: function () {
+		//bug 3010663: boxes do not resize when browser window is resized
+		var p = this.$n(),
+			zkp = zk(p),
+			hgh = this._vflexsz !== undefined ? 
+					this._vflexsz - zkp.padBorderHeight() - zkp.marginHeight()
+					// B50-ZK-286: subtract scroll bar width
+					: zkp.contentHeight(true),
+			wdh = this._hflexsz !== undefined ?
+					this._hflexsz - zkp.padBorderWidth() - zkp.marginWidth()
+					// B50-ZK-286: subtract scroll bar width
+					: zkp.contentWidth(true);
+		return zkp ? {height: hgh, width: wdh} : {height: 0, width: 0};
+	},
 	beforeChildrenFlex_: function(child) {
 		child._flexFixed = true;
 		
@@ -468,7 +482,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			chdex = child.$n('chdex'), 
 			p = chdex ? chdex.parentNode : child.$n().parentNode,
 			zkp = zk(p),
-			psz = child.getParentSize_(this.$n()),
+			psz = this._getContentSize(),
 			hgh = psz.height,
 			wdh = psz.width,
 			xc = p.firstChild,

@@ -149,7 +149,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						if (c) { //no child widget, try html element directly
 							//feature 3000339: The hflex of the cloumn will calculate by max width
 							var isText = c.nodeType == 3,
-								ignore = wgt.ignoreChildNodeOffset_(o);
+								ignore = wgt.ignoreChildNodeOffset_(o),
+								refDim = isText ? null : zk(c).dimension(true);
 							for(; c; c = c.nextSibling) {
 								var zkc = zk(c),
 									sz = 0;
