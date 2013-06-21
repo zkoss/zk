@@ -102,15 +102,6 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 				return cn;	
 			}
 	},
-	/*
-	isVisible: function () {
-		if (!this.$supers('isVisible', arguments))
-			return false;
-		var p;
-		return this.isTopmost()
-			|| ((p = this.parent) && p.isOpen() && p.isVisible()); //recursive
-	},
-	*/
 	//@Override
 	isRealVisible: function () {
 		this._isRealVisible() && this.$supers('isRealVisible', arguments);

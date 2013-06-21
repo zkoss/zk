@@ -17,10 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
-	function _syncFrozen(wgt) {
-		if ((wgt = wgt.getGrid()) && (wgt = wgt.frozen))
-			wgt._syncFrozen();
-	}
 
 var Rows =
 /**
@@ -74,7 +70,6 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		var w = this;
 		after.push(function () {
 			w.stripe();
-//			_syncFrozen(w); //bug# 3092890: Rows.invalidate() does not respect frozen state
 		});
 	},
 	unbind_: function () {
@@ -126,9 +121,6 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			g._syncEmpty();
 		}
 		this._syncStripe();
-		
-//		if (this.desktop)
-//			_syncFrozen(this);
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
