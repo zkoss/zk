@@ -345,7 +345,7 @@ the short time styling.
 	}
 	/** Returns the styling index, or -111 if not matched. */
 	/*package*/static int toStyle(String format) {
-		if ("short".equals(format = format.trim().toLowerCase()))
+		if ("short".equals(format = format.trim().toLowerCase(java.util.Locale.ENGLISH)))
 			return DateFormat.SHORT;
 		if ("medium".equals(format))
 			return DateFormat.MEDIUM;

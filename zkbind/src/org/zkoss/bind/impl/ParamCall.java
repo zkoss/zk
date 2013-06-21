@@ -273,14 +273,14 @@ public class ParamCall {
 						final Cookie[] cks = ((HttpServletRequest)req).getCookies();
 						if(cks != null){
 							for(Cookie ck:cks){
-								m.put(ck.getName().toLowerCase(), ck.getValue());
+								m.put(ck.getName().toLowerCase(java.util.Locale.ENGLISH), ck.getValue());
 							}
 						}
 					}else/* if(req instanceof PortletRequest)*/{
 						//no cookie in protlet 1.0
 					}
 				}
-				Object val = m==null?null:m.get(((CookieParam) anno).value().toLowerCase());
+				Object val = m==null?null:m.get(((CookieParam) anno).value().toLowerCase(java.util.Locale.ENGLISH));
 				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
