@@ -11,19 +11,23 @@
 
 .z-groupbox {
 	margin: 2px;
-	overflow: hidden;
-	padding: 0;
+	padding: 12px 2px 2px 2px;
+	border: 1px solid #000;
 
 	&-title {
 		cursor: pointer;
 	}
 	
 	&-header {
-		margin-left: 10px;
-		margin-right: 10px;
+		margin-top: -16px;
+		margin-left: 16px;
+		padding: 0 8px 0 8px;
+		width: auto;
+		display: inline-block;
 		font-weight: normal;
 		border: none;
 		.resetGradient();
+		background: white;
 		color: #363636;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;		
@@ -33,6 +37,11 @@
 		overflow: hidden;
 		zoom: 1;
 		cursor: pointer;
+
+		.z-caption {
+			width: auto !important;
+			display: inline-block;
+		}
 
 		&-readonly {
 			cursor: default;
@@ -74,11 +83,16 @@
 	}
 
 	&-3d {
+		margin-top: 2px;
+		border: 0;
+		padding: 0;
+
 		.z-groupbox-header {
-			margin-left: 0px;
-			margin-right: 0px;
+			margin: 0;
+			padding: 0 0 0 4px;
 			font-weight: bold;
 			border: 1px solid #c5c5c5;
+			width: 100%;
 			.buttonBackground();
 		}
 

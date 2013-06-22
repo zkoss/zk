@@ -38,8 +38,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
-		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('img') + ' ' + 
-		(iconSclass ? ' ' + iconSclass : '') + '" />';
+		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('img') + '" />' + (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
