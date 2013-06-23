@@ -43,7 +43,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	},
 	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
 		var cnt = this.domContent_(),
-			dn = this.$n('text');
+			dn = this.$n('head');
 		if (dn) 
 			jq(dn).html(cnt ? cnt : '&nbsp;');
 	},
