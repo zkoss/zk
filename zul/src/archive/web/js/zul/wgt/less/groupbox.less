@@ -10,37 +10,33 @@
 }
 
 .z-groupbox {
-	margin: 2px;
-	padding: 12px 2px 2px 2px;
-	border: 1px solid #000;
+	padding-top: 16px;
 
 	&-title {
 		cursor: pointer;
 	}
 	
-	&-header {
-		margin-top: -16px;
-		margin-left: 16px;
-		padding: 0 8px 0 8px;
-		width: auto;
-		display: inline-block;
-		font-weight: normal;
-		border: none;
+	&-header {		
+		border: 1px solid black;
+		border-bottom: 0;
+		width: 100%;
+		font-weight: normal;		
 		.resetGradient();
-		background: white;
 		color: #363636;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;		
 		line-height: @baseBarHeight;		
-		height: @baseBarHeight;
+		height: @baseIconHeight;
 		padding-left: 4px;
-		overflow: hidden;
 		zoom: 1;
 		cursor: pointer;
 
 		.z-caption {
+			margin-top: -16px;
+			padding: 0 4px 0 4px;
+			background: white;
 			width: auto !important;
-			display: inline-block;
+			display: table-caption;
 		}
 
 		&-readonly {
@@ -52,7 +48,8 @@
 		overflow: hidden;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		padding: 5px;
-		border: none;
+		border: 1px solid black;
+		border-top: 0;
 		display: block;	
 		zoom: 1;
 	}
@@ -69,21 +66,12 @@
 		}
 	}
 
-	&-collapsed {
-		border-width: 1px 0px 0px 0px;
-		padding-left: 1px;
-		
-		.z-groupbox-header {
-			margin-right: 11px;
-		}
-
-		.z-groupbox-content {
-			display: none; // Firefox bug: content cant be hidden after scrolling finish
-		}		
+	&-collapsed .z-groupbox-header {
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
 	}
 
 	&-3d {
-		margin-top: 2px;
 		border: 0;
 		padding: 0;
 
@@ -93,7 +81,16 @@
 			font-weight: bold;
 			border: 1px solid #c5c5c5;
 			width: 100%;
+			height: @baseBarHeight;
 			.buttonBackground();
+
+			.z-caption {
+				margin: 0;
+				padding: 0;
+				background: none;
+				width: 100% !important;
+				display: inline-block;
+			}
 		}
 
 		.z-groupbox-content {

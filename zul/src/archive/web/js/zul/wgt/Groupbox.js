@@ -33,24 +33,12 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 */
 		open: function (open, fromServer) {
-			var node = this.$n(),
-				$this = jq(node),
-				def = this._isDefault();
+			var node = this.$n();
 			if (node && this._closable) {
+				var cave = this.getCaveNode();
 				if (open)
-					$this.removeClass(this.$s('collapsed'));
-				var head = this.$n('header');
-				if(def)					
-					if(open) {
-						jq(this.$n('cave')).show();
-						$this.zk.slideDown(this);
-					} else {
-						$this.zk.slideUp(this, { 
-							height: head.offsetHeight + (def ? 0 : zk(head).padBorderHeight() + 5)
-						});
-					}
-				else
-					zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
+					jq(node).removeClass(this.$s('collapsed'));
+				zk(cave)[open ? 'slideDown' : 'slideUp'](this);			
 				
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
@@ -144,10 +132,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if (hgh && hgh != 'auto' && this.isOpen()) {
 			var n;
 			if (n = this.$n('cave')) {
-				var wgt = this,
-					$n = zk(n);
+				var $n = zk(n);
 				// B50-ZK-487: height isuue in the groupbox (with specified caption)
-				n.style.height = $n.revisedHeight($n.vflexHeight(), true) + 'px';
+				n.style.height = ($n.revisedHeight($n.vflexHeight(), true) - 
+								 (this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0)) + 'px';
 					//if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul
@@ -241,7 +229,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	afterAnima_: function (visible) {
 		if (!visible && this._isDefault())
-			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
+			jq(this.$n()).addClass(this.getZclass() + "-collapsed");		
+				
 		this.$supers('afterAnima_', arguments);
 	}
 });

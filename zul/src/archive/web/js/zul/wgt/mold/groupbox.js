@@ -36,4 +36,5 @@ function (out, skipper) {
 	this._redrawCave(out, skipper);
 
 	out.push('</div>');
+	
 }
