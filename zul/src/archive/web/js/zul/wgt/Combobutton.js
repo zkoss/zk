@@ -54,8 +54,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt._oldppclose = pp.close;
 			// listen to onmouseover and onmouseout events of popup child
 			if (bListen)
-				wgt.domListen_(pp, "onMouseOver")
-					.domListen_(pp, "onMouseOut");
+				wgt.domListen_(pp, 'onMouseOver')
+					.domListen_(pp, 'onMouseOut');
 
 			// override close function of popup widget for clear objects
 			pp.close = function (opts) {
@@ -63,8 +63,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_fireOnOpen(wgt, opts, false);
 
 				if (bListen)
-					wgt.domUnlisten_(pp, "onMouseOver")
-						.domUnlisten_(pp, "onMouseOut");
+					wgt.domUnlisten_(pp, 'onMouseOver')
+						.domUnlisten_(pp, 'onMouseOut');
 				pp.close = wgt._oldppclose;
 				delete wgt._oldppclose;
 			}
@@ -133,8 +133,8 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		// ZK-983
 		if ((pp = this.firstChild)
 			&& (pp = pp.$n()))
-			this.domUnlisten_(pp, "onMouseOver")
-				.domUnlisten_(pp, "onMouseOut");
+			this.domUnlisten_(pp, 'onMouseOver')
+				.domUnlisten_(pp, 'onMouseOut');
 		this.$supers('unbind_', arguments);
 	},
 	doFocus_: function (evt) {
@@ -176,7 +176,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 				else
 					this.$supers('doClick_', arguments);
 			if (this._mold == 'toolbar')
-				jq(this.$n('box')).addClass(this.getZclass() + "-over");
+				jq(this.$n('box')).addClass(this.getZclass() + '-over');
 		}
 	},
 	doMouseDown_: function (evt) {
@@ -219,26 +219,6 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			this.close();
 		}
 		this.$supers('rerender', arguments);
-	},
-	
-	redraw: function (out) {
-		var tabi = this._tabindex,
-			uuid = this.uuid;
-		
-		out.push('<span ', this.domAttrs_(), ' >',	
-					'<button id="', uuid, '-real" class="', this.$s('input') ,'" type="', this._type, '"');
-		
-		if (this._disabled) out.push(' disabled="disabled"');
-		if (tabi) out.push(' tabindex="', tabi, '"');
-		out.push('>', this.domContent_(), '</button>', 
-				 '<a id="', uuid, '-btn" class="', this.$s('button'), '">', 
-					'<i id="', uuid, '-icon" class="', this.$s('icon'), ' z-icon-caret-down"></i>', 
-				 '</a>');
-		// pp
-		if (this.firstChild)
-			this.firstChild.redraw(out);
-		
-		out.push('</span>');
-	}	
+	}
 });
 })();
