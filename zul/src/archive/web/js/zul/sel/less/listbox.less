@@ -139,6 +139,7 @@
 	//list cell
 	.z-listcell {
 		border-right: 1px solid #FFFFFF;
+		overflow: hidden;
 		cursor: pointer;
 		&:last-child {
 			border-right: none;
@@ -212,9 +213,10 @@
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border-width: 1px 0;
-		border-color: @gridBorderColor;
-		border-style: solid;
+		border: 1px solid @gridBorderColor;
+		border-left: none;
+		border-right: none;
+		overflow: hidden;
 	}
 	&-icon {
 		display: inline-block;
@@ -238,6 +240,7 @@
 .z-listgroupfoot-inner {
 	.verGradient(@groupGradientEnd, @groupGradientStart);
 	position: relative;
+	overflow: hidden;
 }
 //content
 //no auxhead here because it is already defined in grid.less

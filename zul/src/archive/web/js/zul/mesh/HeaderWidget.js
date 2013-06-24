@@ -111,7 +111,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
 		if (this.parent.isSizable())
 			this._initsz();
-		this.fixFaker_();
 	},
 	unbind_: function () {
 		if (this._dragsz) {
@@ -135,31 +134,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				endeffect: $Header._aftersizing
 			});
 		}
-	},
-	/**
-	 * Fixes the faker (an visible row for adjusting column), if any.
-	 */
-	fixFaker_: function () {
-		var n = this.$n(),
-			index = zk(n).cellIndex(),
-			owner = this.getMeshWidget();
-		for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
-			faker = owner['e' + fs[i]]; // internal element
-			if (faker && !this.$n(fs[i])) {
-				faker[faker.cells.length > index ? 'insertBefore' : 'appendChild']
-					(this._createFaker(n, fs[i]), faker.cells[index]);
-			}
-		}
-	},
-	_createFaker: function (n, postfix) {
-		var t = document.createElement('th'),
-			d = document.createElement('div');
-		t.id = n.id + '-' + postfix;
-		t.className = n.className;
-		t.style.cssText = n.style.cssText;
-		d.style.overflow = 'hidden';
-		t.appendChild(d);
-		return t;
 	},
 	doClick_: function (evt) {
 		var tg = evt.domTarget,

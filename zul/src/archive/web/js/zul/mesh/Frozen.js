@@ -56,21 +56,20 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
 		var p = this.parent,
 			body = p.$n('body'),
-			bdfaker;
-		if (p.$n('head')) {
-			bdfaker = p.head.$n('bdfaker');
-			//_scrollScale is used in Scrollbar.js
-			if (bdfaker)
-				this._scrollScale = bdfaker.childNodes.length - this._columns - 1;
-		}
+			foot = p.$n('foot');
 		if (body)
 			jq(body).addClass('z-word-nowrap');
+		if (foot)
+			jq(foot).addClass('z-word-nowrap');
 	},
 	unbind_: function () {
 		var p = this.parent,
-			body = p.$n('body');
+			body = p.$n('body'),
+			foot = p.$n('foot');
 		if (body = p.$n('body'))
 			jq(body).removeClass('z-word-nowrap');
+		if (foot)
+			jq(foot).removeClass('z-word-nowrap');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
 	},
 	beforeParentChanged_: function (p) {
@@ -90,15 +89,19 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this._start = num;
 	},
 	_doScrollNow: function (num, force) {
-		var mesh = this.parent,
+		var totalWidth = 0,
+			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows;
 
 		if (mesh.head) {
+			totalWidth = mesh.eheadtbl.offsetWidth;
 			// set fixed size
 			var hdrows = mesh.eheadrows.rows,
 				hdcells = mesh.eheadrows.rows[hdrows.length - 1].cells,
-				hdcol = mesh.ehdfaker.firstChild;
+				hdcol = mesh.ehdfaker.firstChild,
+				ftrows = mesh.foot ? mesh.efootrows : null,
+				ftcells = ftrows ? ftrows.rows[0].cells : null;
 			
 			for (var faker, i = 0; hdcol; hdcol = hdcol.nextSibling) {
 				if (hdcol.style.width.indexOf('px') == -1) {
@@ -120,9 +123,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					isVisible = hdWgt && hdWgt.isVisible(),
 					shallUpdate = false,
 					cellWidth;
+
 				if (cnt-- <= 0) { //show
-					if (force || n.offsetWidth == 0) {
-						cellWidth = hdWgt._origWd || jq.px(n.offsetWidth);
+					var wd = n.offsetWidth;
+					if (force || wd == 0 || wd == 1) {
+						cellWidth = hdWgt._origWd || jq.px(wd);
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
@@ -134,7 +139,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 				
 				if (force || shallUpdate) {
-					n.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 						faker.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-bdfaker')[0]) && isVisible)
@@ -143,15 +147,26 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						faker.style.width = cellWidth;
 
 					// foot
-					if (mesh.foot) {
-						var ftrows = mesh.efootrows;
-						if (ftrows)
-							ftrows.rows[0].cells[i].style.width = cellWidth;
-					}
+					if (ftcells)
+						ftcells[i].style.width = cellWidth;
+					
+					var origWd = hdWgt._origWd;
+					totalWidth += origWd ? 
+							-zk.parseInt(origWd) : zk.parseInt(cellWidth);
 				}
 			}
 		}
+		// Set style width to table to avoid colgroup width not working 
+		// because of width attribute (width="100%") on table
+		if (mesh.eheadtbl)
+			mesh.eheadtbl.style.width = jq.px(totalWidth);
+		if (mesh.ebodytbl)
+			mesh.ebodytbl.style.width = jq.px(totalWidth);
+		if (mesh.efoottbl)
+			mesh.efoottbl.style.width = jq.px(totalWidth);
+		
 		mesh._restoreFocus();
+		
 		// Bug ZK-601, Bug ZK-1572
 		if (zk.ie == 8 || zk.ie == 9)
 			zk(mesh).redoCSS();
