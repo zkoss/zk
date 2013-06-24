@@ -133,6 +133,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		this._checkBarRequired();
 		
 		var wgt = this.widget,
+			frozen = wgt.frozen,
+			froenScrollWidth = 0,
 			tpad = wgt.$n('tpad'),
 			bpad = wgt.$n('bpad'),
 			cave = this.cave,
@@ -148,8 +150,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			startX = opts.startPositionX,
 			startY = opts.startPositionY;
 		
-		if (tpad && bpad) //for Mesh Widget rod
+		if (tpad && bpad) //for Mesh Widget ROD
 			scrollHeight += tpad.offsetHeight + bpad.offsetHeight;
+		if (frozen) //for Frozen component
+			froenScrollWidth = 50 * (frozen._scrollScale || 0);
 		
 		if (needH || needV) {
 			scroller.style[zk.vendor + 'TransformOrigin'] = '0 0';
@@ -170,11 +174,15 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ind = this.$n('hor-indicator'),
 				hws = hwrapper.style,
 				wdh = cave.offsetWidth - startX,
-				swdh = scroller.offsetWidth - startX + zk(cave).paddingWidth(),
+				swdh = scroller.offsetWidth - startX
+						+ zk(cave).paddingWidth() + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
 
+			if (swdh < wdh) //only happened with Frozen
+				swdh = wdh + zk(cave).paddingWidth() + froenScrollWidth;
+			
 			if (startX) {
 				left.style.left = jq.px(startX);
 				hwrapper.style.left = jq.px(startX + lwdh);
@@ -189,7 +197,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			var wwdh = hwrapper.offsetWidth,
 				iwdh = Math.round(wwdh * wdh / swdh);
 			
-			ind.style.width = jq.px(iwdh > 8 ? iwdh : 8);
+			ind.style.width = jq.px(iwdh > 20 ? iwdh : 20);
 			//sync scroller position limit
 			this.hLimit = wdh - swdh;
 			//sync scroll-bar indicator position limit
@@ -223,7 +231,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			var whgh = vwrapper.offsetHeight,
 				ihgh = Math.round(whgh * hgh / shgh);
 			
-			ind.style.height = jq.px(ihgh > 8 ? ihgh : 8);
+			ind.style.height = jq.px(ihgh > 20 ? ihgh : 20);
 			//sync scroller position limit
 			this.vLimit = hgh - shgh;
 			//sync scroll-bar indicator position limit
@@ -288,16 +296,17 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	},
 	setBarPosition: function (start) { //for Frozen use only
 		var frozen = this.widget.frozen;
-		if (frozen) {
+		if (frozen && this.needH) {
 			var step = this.hBarLimit / frozen._scrollScale;
 			this._syncBarPosition('hor', start * step);
 		}	
 	},
 	_checkBarRequired: function () {
 		var cave = this.cave,
-			scroller = this.scroller;
+			scroller = this.scroller,
+			frozen = this.widget.frozen;
 		//check if horizontal scroll-bar required
-		this.needH = cave.offsetWidth < scroller.offsetWidth;
+		this.needH = frozen ? true : (cave.offsetWidth < scroller.offsetWidth);
 		if (!this.needH) {
 			this._unbindMouseEvent('hor');
 			this._syncPosition('hor', 0);
@@ -612,14 +621,15 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		out.push(
 		'<div id="', uid, '" class="z-scrollbar ', ecls, 'z-scrollbar-', hv, '">',
 			'<div id="', uid, '-', lu, '" class="z-scrollbar-', lu, '">',
-				'<i class="z-icon-arrow-', lu, '"></i>',
+				'<i class="z-icon-caret-', lu, '"></i>',
 			'</div>',
 			'<div id="', uid,'-wrapper" class="z-scrollbar-wrapper">',
-				'<div id="', uid,'-indicator" class="z-scrollbar-indicator"></div>',
+				'<div id="', uid,'-indicator" class="z-scrollbar-indicator">',
+					'<i class="z-icon-reorder"></i></div>',
 				'<div id="', uid,'-rail" class="z-scrollbar-rail"></div>',
 			'</div>',
 			'<div id="', uid, '-', rd, '" class="z-scrollbar-', rd, '">',
-				'<i class="z-icon-arrow-', rd, '"></i>',
+				'<i class="z-icon-caret-', rd, '"></i>',
 			'</div>',
 		'</div>');
 		jq(cave).append(out.join(''));

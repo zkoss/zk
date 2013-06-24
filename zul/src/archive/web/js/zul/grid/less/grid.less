@@ -13,7 +13,6 @@
 //reset table
 table {
 	border-spacing: 0;
-	border-collapse: collapse;
 	th, td {
 		background-clip: padding-box;
 		padding: 0;
@@ -91,6 +90,7 @@ table {
 	}
 }
 .z-column {
+	overflow: hidden;
 	.z-column-content {
 		position: relative;
 	}
@@ -135,16 +135,21 @@ table {
 }
 //row and cell
 .z-row {
-	&-inner {
+	.z-row-inner,
+	.z-cell {
 		border-right: 1px solid #FFFFFF;
+		overflow: hidden;
 		&:last-child {
 			border-right: none;
 		}
 	}
-	&:hover &-inner {
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-		background-clip: padding-box;
-		position: relative;
+	&:hover {
+		.z-row-inner,
+		.z-cell {
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			background-clip: padding-box;
+			position: relative;
+		}
 	}
 }
 //Group
@@ -152,9 +157,10 @@ table {
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border-width: 1px 0;
-		border-color: @gridBorderColor;
-		border-style: solid;
+		border: 1px solid @gridBorderColor;
+		border-left: none;
+		border-right: none;
+		overflow: hidden;
 	}
 	&-icon {
 		display: inline-block;
@@ -178,6 +184,7 @@ table {
 .z-groupfoot-inner {
 	.verGradient(@groupGradientEnd, @groupGradientStart);
 	position: relative;
+	overflow: hidden;
 }
 //content
 .z-column-content,
@@ -201,6 +208,14 @@ table {
 	.z-label {
 		font-weight: bold;
 	}
+}
+//Cell Content
+.z-cell {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
 }
 //paging
 .z-grid-paging {
