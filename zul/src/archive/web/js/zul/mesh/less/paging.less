@@ -60,10 +60,17 @@
 			}
 		}
 	}
-	&-previous,
+	&-previous {
+		> .z-icon-caret-left {
+			display: inline-block;
+			.transform('translate(-1px, 0px) scale(1.42)');
+		}
+	}
 	&-next {
-		font-size: unit(unit(@fontSizeMedium) + 1, px);
-		padding-top: 3px;
+		> .z-icon-caret-right:before {
+			display: inline-block;
+			.transform('translate(1px, 0px) scale(1.42)');
+		}
 	}
 	&-noborder {
 		border: none;

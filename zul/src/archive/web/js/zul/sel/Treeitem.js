@@ -115,7 +115,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					// B65-ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
 					var cn = icon.className;
 					icon.className = open ? 
-						cn.replace('-close', '-open') : cn.replace('-open', '-close');
+						cn.replace('-right', '-down').replace('-close', '-open') : 
+						cn.replace('-down', '-right').replace('-open', '-close');
 				}
 				return;
 			}
@@ -124,7 +125,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (icon) {
 				var cn = icon.className;
 				icon.className = open ? 
-					cn.replace('-close', '-open') : cn.replace('-open', '-close');
+					cn.replace('-right', '-down').replace('-close', '-open') : 
+					cn.replace('-down', '-right').replace('-open', '-close');
 			}
 
 			var tree = this.getTree(),

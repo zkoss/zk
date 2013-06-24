@@ -19,8 +19,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}: zk.$void;
 
 	function _syncFrozen(wgt) {
-		if ((wgt = wgt.getMeshWidget()) && (wgt = wgt.frozen))
-			wgt._syncFrozen();
+		var mesh = wgt.getMeshWidget(),
+			frozen, hdfaker;
+		if (mesh && (frozen = mesh.frozen) && (hdfaker = mesh.ehdfaker))
+			//_scrollScale is used in Scrollbar.js
+			frozen._scrollScale = 
+				hdfaker.childNodes.length - frozen._columns - 1;
 	}
 
 var HeadWidget =
@@ -89,9 +93,9 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(HeadWidget, 'bind_', arguments);
 		var w = this;
-//		after.push(function () {
-//			_syncFrozen(w);
-//		});
+		after.push(function () {
+			_syncFrozen(w);
+		});
 	},
 	unbind_: function () {
 		jq(this.hdfaker).remove();
@@ -104,7 +108,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			if (!_fixOnChildChanged(this) && this.parent._fixHeaders())
 				this.parent.onSize();
-//			_syncFrozen(this);
+			_syncFrozen(this);
 			this.parent._minWd = null;
 		}
 	},
@@ -127,7 +131,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				hdf = hdfaker ? hdfaker.firstChild : null,
 				bdf = bdfaker ? bdfaker.firstChild : null,
 				everFlex = false; 
-			for(var h = this.firstChild; h; h = h.nextSibling) {
+			for (var h = this.firstChild; h; h = h.nextSibling) {
 				if (h._nhflex > 0) { //not min or undefined
 					everFlex = true;
 					if (hdf) hdf.style.width = '';
@@ -144,7 +148,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (wgt) {
 			wgt._adjFlexWd();
 			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
-//			wgt._removeScrollbar(); // 3188023: Unwanted vertical scrollbar
 		}
 	},
 	deferRedrawHTML_: function (out) {
