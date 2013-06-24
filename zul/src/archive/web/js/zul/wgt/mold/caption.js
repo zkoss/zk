@@ -18,11 +18,11 @@ function (out) {
 		zcls = this.getZclass(),
 		cnt = this.domContent_();
 	if (parent._isDefault && parent._isDefault()) {
-		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt" class="', 
+		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-cnt" class="', 
 				zcls, '-content">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</span></div>');
+		out.push('</div></div>');
 		return;
 	}
 
@@ -33,7 +33,7 @@ function (out) {
 		};
 	out.push('<div', this.domAttrs_(), zUtl.cellps0, '>' + 
 				'<div id="', uuid, '-cave" class="', this.$s('content'), '">', 
-					'<div id="', uuid, '-text" class="', this.$s('text'), '">', (cnt ? cnt : this._getBlank()), '</div>'); // Bug 1688261: nbsp required
+					'<div id="', uuid, '-head" class="', this.$s('head'), '">', (cnt ? cnt : this._getBlank()), '</div>'); // Bug 1688261: nbsp required
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	out.push(   '</div>');
