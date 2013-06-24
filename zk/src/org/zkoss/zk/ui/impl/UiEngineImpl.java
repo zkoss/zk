@@ -1483,7 +1483,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		uv.addResponse(new AuAlert(msg)); //default handling
+		uv.addResponse(new AuAlert(msg, true)); //default handling
 	}
 
 	/** Processing the event and stores result into UiVisualizer. */

@@ -7,6 +7,7 @@ ZK 7.0.0
   ZK-1825: Timebox should not reset the date value to today
   
 * Bugs
+  ZK-1683: endless loop AU-loop in Grid, on Render Exception
 
 * Upgrade Notes
 
