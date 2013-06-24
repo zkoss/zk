@@ -716,7 +716,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	throws IOException {
 		//Don't use sendError because Browser cannot handle UTF-8
 		AuWriter out = AuWriters.newInstance().open(request, response);
-		out.write(new AuAlert(errmsg));
+		out.write(new AuAlert(errmsg, true));
 		out.close(request, response);
 	}
 
