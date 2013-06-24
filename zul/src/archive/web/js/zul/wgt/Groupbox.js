@@ -35,10 +35,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
-				var cave = this.getCaveNode();
 				if (open)
 					jq(node).removeClass(this.$s('collapsed'));
-				zk(cave)[open ? 'slideDown' : 'slideUp'](this);			
+				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
 				
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
@@ -93,18 +92,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_contentAttrs: function () {
 		var html = ' class="', s = this._contentSclass,
-			cap = this.caption,
-			title = this.getTitle(),
 			zcls = this.getZclass();
 		if (s)
 			html += s + ' ';
-		html += this.$s('content');
-		if (!title && !cap)
-			html += ' '+ this.$s('notitle');
-		html += '"';
+		html += this.$s('content') + '"';
 
 		s = this._contentStyle;
-		if (cap || title) // B60-ZK-987
+		if (this.caption || this.getTitle()) // B60-ZK-987
 			s = 'border-top:0;' + (s||'');
 		if (!this._open)
 			s = 'display:none;' + (s||'');
@@ -220,8 +214,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			if (cls) cls += ' ';
 			cls += this.$s('3d');
 		}
+		
+		if (!this.caption && !this.getTitle()) {
+			if (cls) cls += ' ';
+			cls += ' '+ this.$s('notitle');
+		}
 			
-		if (!this._open) {
+		if (!this._open && this._isDefault()) {
 			if (cls) cls += ' ';
 			cls += this.$s('collapsed');
 		}
