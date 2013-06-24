@@ -26,13 +26,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}, 200);
 	}
 
-	// detect whether the dom element is in the right side of combobutton 
-	function _inRight (top, d) {
-		for (var n = d; n && n != top; n = n.parentNode)
-			if (jq.nodeName(n, 'td') && jq(n).index() == 2)
-				return true;
-		return false;
-	}
 	function _fireOnOpen (wgt, opts, o) {
 		if (opts && opts.sendOnOpen)
 			wgt.fire('onOpen', {open:o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
@@ -42,11 +35,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		// just attach if not attached
 		if (!wgt._oldppclose) {
 			var pp = wgt.firstChild;
+			if (pp) {
+				var $pp = jq(pp),
+					wd = jq(wgt).width();
+				if($pp.width() < wd) {
+					$pp.width(wd - zk(pp).padBorderWidth());
+
+					// popup onShow()
+					pp.fire(pp.firstChild);
+					var openInfo = pp._openInfo;
+					if (openInfo) {
+						pp.position.apply(pp, openInfo);
+						// B50-ZK-391
+						// should keep openInfo, maybe used in onResponse later.
+					}
+				}
+			}
 			wgt._oldppclose = pp.close;
 			// listen to onmouseover and onmouseout events of popup child
 			if (bListen)
-				wgt.domListen_(pp, "onMouseOver")
-					.domListen_(pp, "onMouseOut");
+				wgt.domListen_(pp, 'onMouseOver')
+					.domListen_(pp, 'onMouseOut');
 
 			// override close function of popup widget for clear objects
 			pp.close = function (opts) {
@@ -54,8 +63,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_fireOnOpen(wgt, opts, false);
 
 				if (bListen)
-					wgt.domUnlisten_(pp, "onMouseOver")
-						.domUnlisten_(pp, "onMouseOut");
+					wgt.domUnlisten_(pp, 'onMouseOver')
+						.domUnlisten_(pp, 'onMouseOut');
 				pp.close = wgt._oldppclose;
 				delete wgt._oldppclose;
 			}
@@ -81,10 +90,10 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		 */
 		autodrop: null
 	},
-	getZclass: function () {
+	domClass_: function (no) {
 		var zcls = this._zclass;
 		// F60-ZK-719
-		return zcls ? zcls: this._isDefault() ? 'z-combobutton' : 'z-combobutton-toolbar';
+		return (zcls ? zcls : 'z-combobutton') + (this._isDefault() ? '' : ' z-combobutton-toolbar');
 	},
 	_isDefault: function () {
 		return this._mold == 'default';
@@ -124,8 +133,8 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		// ZK-983
 		if ((pp = this.firstChild)
 			&& (pp = pp.$n()))
-			this.domUnlisten_(pp, "onMouseOver")
-				.domUnlisten_(pp, "onMouseOut");
+			this.domUnlisten_(pp, 'onMouseOver')
+				.domUnlisten_(pp, 'onMouseOut');
 		this.$supers('unbind_', arguments);
 	},
 	doFocus_: function (evt) {
@@ -162,12 +171,12 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			// close it if click on both left and right side
 			var open = !this.isOpen();
 			if (this == evt.target)
-				if (_inRight(this.$n(), d) || !open)
+				if (this.$n('btn') == d || this.$n('icon') == d || !open)
 					this.setOpen(open, {sendOnOpen: true});
 				else
 					this.$supers('doClick_', arguments);
 			if (this._mold == 'toolbar')
-				jq(this.$n('box')).addClass(this.getZclass() + "-over");
+				jq(this.$n('box')).addClass(this.getZclass() + '-over');
 		}
 	},
 	doMouseDown_: function (evt) {
@@ -178,8 +187,9 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	doMouseOver_: function (evt) {
 		this._bover = true;
 		if (this == evt.target) {
+			var d = evt.domTarget;
 			// not change style and call open method if mouse over popup node
-			if (this._autodrop && _inRight(this.$n(), evt.domTarget) && !this.isOpen())
+			if (this._autodrop && (this.$n('btn') == d || this.$n('icon') == d) && !this.isOpen())
 				this.open({sendOnOpen: true});
 			this.$supers('doMouseOver_', arguments);
 		}
