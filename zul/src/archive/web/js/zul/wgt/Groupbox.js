@@ -228,7 +228,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	afterAnima_: function (visible) {
 		if (!visible && this._isDefault())
-			jq(this.$n()).addClass(this.getZclass() + "-collapsed");		
+			jq(this.$n()).addClass(this.$s('collapsed'));		
 				
 		this.$supers('afterAnima_', arguments);
 	}
