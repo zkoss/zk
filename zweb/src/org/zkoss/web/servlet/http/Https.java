@@ -577,7 +577,7 @@ public class Https extends Servlets {
 		return "UTF-8";
 	}
 	static private int[] parseRange(String range) {
-		range = range.toLowerCase();
+		range = range.toLowerCase(java.util.Locale.ENGLISH);
 		for (int j = 0, k, len = range.length();
 		(k = range.indexOf("bytes", j)) >= 0;) {
 			for (k += 5; k < len;) {

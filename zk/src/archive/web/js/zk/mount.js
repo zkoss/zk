@@ -341,7 +341,7 @@ function zkamn(pkg, fn) {
 		} else {
 			if ((stub = type == "#stub") || type == "#stubs") {
 				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
-				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
+						|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw "Unknown stub "+uuid;
 				var w = new Widget();
 				//Bug ZK-1596: may already unbind

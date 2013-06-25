@@ -536,7 +536,7 @@ public class CommonFns {
 	}
 	private static final int toStyle (String style) {
 		if (style != null) {
-			style = style.trim().toLowerCase();
+			style = style.trim().toLowerCase(java.util.Locale.ENGLISH);
 			return "short".equals(style) ? DateFormat.SHORT
 					: "medium".equals(style) ? DateFormat.MEDIUM
 					: "long".equals(style) ? DateFormat.LONG

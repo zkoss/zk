@@ -557,7 +557,7 @@ public class LanguageDefinition {
 		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
-			zslang = zslang.toLowerCase();
+			zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 			synchronized (_initscripts) {
 				final String s = _initscripts.get(zslang);
 				_initscripts.put(zslang, s != null ? s + '\n' + script: script);
@@ -568,7 +568,7 @@ public class LanguageDefinition {
 	 * the specified language, or null if no script.
 	 */
 	public String getInitScript(String zslang) {
-		zslang = zslang.toLowerCase();
+		zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 		synchronized (_initscripts) {
 			return _initscripts.get(zslang);
 		}
@@ -586,7 +586,7 @@ public class LanguageDefinition {
 		if (zslang == null || zslang.length() == 0)
 			throw new IllegalArgumentException("null or empty language");
 		if (script != null && script.length() > 0) {
-			zslang = zslang.toLowerCase();
+			zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 			synchronized (_eachscripts) {
 				final String s = _eachscripts.get(zslang);
 				_eachscripts.put(zslang, s != null ? s + '\n' + script: script);
@@ -600,7 +600,7 @@ public class LanguageDefinition {
 	 * zscript.
 	 */
 	public String getEachTimeScript(String zslang) {
-		zslang = zslang.toLowerCase();
+		zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 		synchronized (_eachscripts) {
 			return _eachscripts.get(zslang);
 		}

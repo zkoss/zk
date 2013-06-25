@@ -1,5 +1,4 @@
   --------
-
 ZK 6.5.3
 
 * Features
@@ -7,8 +6,7 @@ ZK 6.5.3
   ZK-1801: provide fusion funnel chart integration
   ZK-1819: ValidationContext support a new flag that can identify the value of single field whether is valid when use form binding
   ZK-1825: Timebox should not reset the date value to today
-
-
+  
 * Bugs
   ZK-1693: Dial chart customize color issues
   ZK-1692: widget.isVisible API doesn't work properly
@@ -54,6 +52,8 @@ ZK 6.5.3
   ZK-1808: Close tabpanel cause js error
   ZK-1812: zAu.send: data of client event ignored on server side
   ZK-1821: Component inside native component doesn't cleanup correctly
+  ZK-1822: Turkish locale problem during browser detection (on server side)
+  ZK-1827: Component inside native component js error
   
   --------
 ZK 6.5.2
