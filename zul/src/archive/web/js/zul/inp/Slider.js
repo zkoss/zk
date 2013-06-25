@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	function _getBtnNewPos(wgt) {
-		var btn = wgt.$n("btn");
+		var btn = wgt.$n('btn');
 		
 		btn.title = wgt._curpos;
 		wgt.updateFormData(wgt._curpos);
@@ -31,7 +31,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return ofs[(isVertical ? 1: 0)];
 	}
 	function _getNextPos(wgt, offset) {
-		var $btn = jq(wgt.$n("btn")),
+		var $btn = jq(wgt.$n('btn')),
 			fum = wgt.isVertical()? ['top', 'height']: ['left', 'width'],
 			newPosition = {};
 			
@@ -51,13 +51,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *  </ol>
  */
 zul.inp.Slider = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
-	_height: "207px",
-	_width: "207px",
+	_orient: 'horizontal',
+	_height: '207px',
+	_width: '207px',
 	_curpos: 0,
 	_maxpos: 100,
 	_pageIncrement: 10,
-	_slidingtext: "{0}",
+	_slidingtext: '{0}',
 	_pageIncrement: -1,
 	
 	$define: {
@@ -149,20 +149,20 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (this._zclass != null)
 			return this._zclass;
 		
-		var name = "z-slider";
+		var name = 'z-slider';
 		if (this.inScaleMold()) 
-			return name + "-scale";
+			return name + '-scale';
 		else if (this.inSphereMold()) 
-			return name + ("horizontal" == this._orient ? "-sphere-hor" : "-sphere-ver");
+			return name + ('horizontal' == this._orient ? '-sphere-hor' : '-sphere-ver');
 		else 
-			return name + ("horizontal" == this._orient ? "-hor" : "-ver");
+			return name + ('horizontal' == this._orient ? '-hor' : '-ver');
 	},
 	doMouseOver_: function(evt) {
-		jq(this.$n("btn")).addClass(this.getZclass() + "-btn-over");
+		jq(this.$n('btn')).addClass(this.getZclass() + '-btn-over');
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		jq(this.$n("btn")).removeClass(this.getZclass() + "-btn-over");
+		jq(this.$n('btn')).removeClass(this.getZclass() + '-btn-over');
 		this.$supers('doMouseOut_', arguments);
 	},
 	onup_: function(evt) {
@@ -170,22 +170,22 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (btn) {
 			widget = zk.Widget.$(btn);
 			var	zcls = widget.getZclass();
-			jq(btn).removeClass(zcls + "-btn-drag").removeClass(zcls + "-btn-over");
+			jq(btn).removeClass(zcls + '-btn-drag').removeClass(zcls + '-btn-over');
 		}
 		
 		zul.inp.Slider.down_btn = null;
 		if (widget)
-			jq(document).unbind("zmouseup", widget.onup_);
+			jq(document).unbind('zmouseup', widget.onup_);
 	},
 	doMouseDown_: function(evt) {
-		var btn = this.$n("btn");
-		jq(btn).addClass(this.getZclass() + "-btn-drag");
+		var btn = this.$n('btn');
+		jq(btn).addClass(this.getZclass() + '-btn-drag');
 		jq(document).bind('zmouseup', this.onup_);
 		zul.inp.Slider.down_btn = btn;
 		this.$supers('doMouseDown_', arguments);
 	},
 	doClick_: function(evt) {
-		var $btn = jq(this.$n("btn")),
+		var $btn = jq(this.$n('btn')),
 			pos = $btn.zk.revisedOffset(),
 			wgt = this,
 			pageIncrement = this._pageIncrement,
@@ -200,26 +200,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			offset = null; // update by _curpos
 		}
 		
-		$btn.animate(_getNextPos(this, offset), "slow", function() {
+		$btn.animate(_getNextPos(this, offset), 'slow', function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			if (pos > wgt._maxpos) 
 				pos = wgt._maxpos;
-			wgt.fire("onScroll", pos);
+			wgt.fire('onScroll', pos);
 			if (moveToCursor)
 				wgt._fixPos();
 		});
 		this.$supers('doClick_', arguments);
 	},
 	_makeDraggable: function() {
-		this._drag = new zk.Draggable(this, this.$n("btn"), {
-			constraint: this._orient || "horizontal",
+		this._drag = new zk.Draggable(this, this.$n('btn'), {
+			constraint: this._orient || 'horizontal',
 			starteffect: this._startDrag,
 			change: this._dragging,
 			endeffect: this._endDrag
 		});
 	},
 	_snap: function(x, y) {
-		var btn = this.$n("btn"), ofs = zk(this.$n()).cmOffset();
+		var btn = this.$n('btn'), ofs = zk(this.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
@@ -239,7 +239,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	_startDrag: function(dg) {
 		var widget = dg.control;
-		widget.$n('btn').title = ""; //to avoid annoying effect
+		widget.$n('btn').title = ''; //to avoid annoying effect
 		widget.slidepos = widget._curpos,
 		vert = widget.isVertical(),
 		cls = vert ? 'z-slider-ver-pp' : 'z-slider-hor-pp';
@@ -250,15 +250,15 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			+ 'background-color:white;border: 1px outset">' + widget.slidepos +
 			'</div>');
 		
-		widget.slidetip = jq("#zul_slidetip")[0];
+		widget.slidetip = jq('#zul_slidetip')[0];
 		if (widget.slidetip) {
 			var slideStyle = widget.slidetip.style;
 			if (zk.chrome || zk.safari) { //give initial position to avoid browser scrollbar
-				slideStyle.top = "0px";
-				slideStyle.left = "0px";
+				slideStyle.top = '0px';
+				slideStyle.left = '0px';
 			}
-			slideStyle.display = "block";
-			zk(widget.slidetip).position(widget.$n(), vert ? "end_before" : "after_start");
+			slideStyle.display = 'block';
+			zk(widget.slidetip).position(widget.$n(), vert ? 'end_before' : 'after_start');
 		}
 	},
 	_dragging: function(dg) {
@@ -270,21 +270,21 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			widget.slidepos = pos;
 			if (widget.slidetip) 
 				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, pos);
-			widget.fire("onScrolling", pos);
+			widget.fire('onScrolling', pos);
 		}
 		widget._fixPos();
 	},
 	_endDrag: function(dg) {
 		var widget = dg.control, pos = widget._realpos();
 		
-		widget.fire("onScroll", pos);
+		widget.fire('onScroll', pos);
 		
 		widget._fixPos();
 		jq(widget.slidetip).remove();
 		widget.slidetip = null;
 	},
 	_realpos: function(dg) {
-		var btnofs = zk(this.$n("btn")).cmOffset(), refofs = zk(this.getRealNode()).cmOffset(), maxpos = this._maxpos, pos;
+		var btnofs = zk(this.$n('btn')).cmOffset(), refofs = zk(this.getRealNode()).cmOffset(), maxpos = this._maxpos, pos;
 		if (this.isVertical()) {
 			var ht = this._getHeight();
 			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht) : 0;
@@ -295,24 +295,24 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		return this._curpos = (pos >= 0 ? pos : 0);
 	},
 	_getWidth: function() {
-		return this.getRealNode().clientWidth - this.$n("btn").offsetWidth + 7;
+		return this.getRealNode().clientWidth - this.$n('btn').offsetWidth + 7;
 	},
 	_getHeight: function() {
-		return this.getRealNode().clientHeight - this.$n("btn").offsetHeight + 7;
+		return this.getRealNode().clientHeight - this.$n('btn').offsetHeight + 7;
 	},
 	_fixHgh: function() {
 		if (this.isVertical()) {
-			this.$n("btn").style.top = "0px";
-			var inner = this.$n("inner"), 
+			this.$n('btn').style.top = '0px';
+			var inner = this.$n('inner'), 
 				het = this.getRealNode().clientHeight;
 			if (het > 0) 
-				inner.style.height = (het + 7) + "px";
+				inner.style.height = (het + 7) + 'px';
 			else 
-				inner.style.height = "214px";
+				inner.style.height = '214px';
 		}
 	},
 	_fixPos: function() {
-		this.$n("btn").style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
+		this.$n('btn').style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
 	onSize: function() {
 		this._fixHgh();
@@ -323,19 +323,19 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	inScaleMold: function() {
-		return this.getMold() == "scale";
+		return this.getMold() == 'scale';
 	},
 	/** Return whether this widget in sphere mold
 	 * @return boolean
 	 */
 	inSphereMold: function() {
-		return this.getMold() == "sphere";
+		return this.getMold() == 'sphere';
 	},
 	/** Returns whether it is a vertical slider.
 	 * @return boolean
 	 */
 	isVertical: function() {
-		return "vertical" == this._orient;
+		return 'vertical' == this._orient;
 	},
 	updateFormData: function(val) {
 		if (this._name) {
@@ -347,7 +347,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	getRealNode: function () {
-		return this.inScaleMold() && this.isVertical() ? this.$n("real") : this.$n();
+		return this.inScaleMold() && this.isVertical() ? this.$n('real') : this.$n();
 	},
 	bind_: function() {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
