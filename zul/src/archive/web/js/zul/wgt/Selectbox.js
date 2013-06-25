@@ -32,7 +32,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		 */
 		tabindex: function (tabindex) {
 			var n = this.$n();
-			if (n) n.tabindex = tabindex||'';
+			if (n) n.tabindex = tabindex || '';
 		},
 		/**
 		 * Returns the index of the selected item (-1 if no one is selected).

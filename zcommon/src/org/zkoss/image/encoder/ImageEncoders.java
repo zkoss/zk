@@ -47,7 +47,7 @@ public class ImageEncoders {
      * @exception SystemException if failed to instantiate the encoder
      */
     public static ImageEncoder newInstance(String format) {
-    	final Class klass = _encoders.get(format.toLowerCase());
+    	final Class klass = _encoders.get(format.toLowerCase(java.util.Locale.ENGLISH));
     	if (klass == null)
     		throw new IllegalArgumentException("Unsupported format: "+format);
 
@@ -71,12 +71,12 @@ public class ImageEncoders {
     public static Class setEncoderClass(String format, Class klass) {
     	if (!ImageEncoder.class.isAssignableFrom(klass))
     		throw new IllegalArgumentException(ImageEncoder.class+" must be implemented by "+klass);
-    	return _encoders.put(format.toLowerCase(), klass);
+    	return _encoders.put(format.toLowerCase(java.util.Locale.ENGLISH), klass);
     }
     /** Returns the class of the image encoder for the specified format,
      * or null if not specified yet.
      */
     public static Class getEncoderClass(String format) {
-    	return _encoders.get(format.toLowerCase());
+    	return _encoders.get(format.toLowerCase(java.util.Locale.ENGLISH));
     }
 }

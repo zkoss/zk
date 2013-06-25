@@ -1322,14 +1322,14 @@ zk.log('value is", value);
 		agent = zk.agent = navigator.userAgent.toLowerCase();
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ios = zk.safari && /iphone|ipad|ipod/.test(agent);
-	zk.android = zk.safari && (agent.indexOf('android') >= 0);
-	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf('linux') >= 0;
 	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
 	zk.webkit = browser.webkit;
 	zk.chrome = browser.chrome;
 	zk.safari = browser.webkit && !zk.chrome; // safari only
+	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent);
+	zk.android = zk.webkit && (agent.indexOf('android') >= 0);
+	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;
 	
 	zk.vendor = zk.webkit ? 'webkit' : '';

@@ -40,12 +40,16 @@ public class Event implements java.io.Serializable {
 		final String name = request.getCommand();
 		final Component comp = request.getComponent();
 		final Map<String, Object> data = request.getData();
-		final Object data2 = data != null ? data.get(""): null;
-		if (data2 == null)
-			return new Event(name, comp);
-		if (data2 instanceof Collection)
-			return new Event(name, comp, ((Collection)data2).toArray());
-		return new Event(name, comp, data2);
+		//ZK-1812 extract value of ""-key, only if there is nothing else in the map 
+		if(data != null && data.containsKey("") && data.size() == 1) {
+			final Object extractedData = data.get("");
+			if (extractedData == null)
+				return new Event(name, comp);
+			if (extractedData instanceof Collection)
+				return new Event(name, comp, ((Collection<?>)extractedData).toArray());
+			return new Event(name, comp, extractedData);
+		}
+		return new Event(name, comp, data);
 	}
 
 	/** Constructs a simple event without target.
