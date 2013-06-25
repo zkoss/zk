@@ -128,7 +128,7 @@ public class DspExtendlet implements Extendlet {
 		int k = j > 0 ? path.lastIndexOf('.', j - 1): -1;
 		if (k < 0 || path.indexOf('/', k + 1) >= 0)
 			return null;
-		return path.substring(k + 1, j).toLowerCase();
+		return path.substring(k + 1, j).toLowerCase(java.util.Locale.ENGLISH);
 	}
 
 	/** Helper class. */

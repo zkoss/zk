@@ -163,7 +163,7 @@ public class Maps {
 
 	//			assert res.separator == '=': "Wrong separator: "+res.separator;
 				final String val;
-				String key = caseInsensitive ? res.token.toLowerCase(): res.token;
+				String key = caseInsensitive ? res.token.toLowerCase(java.util.Locale.ENGLISH): res.token;
 				int j = Strings.skipWhitespaces(line, res.next);
 				int k = Strings.skipWhitespacesBackward(line, len - 1);
 				if (j == k && line.charAt(k) == '{') { //pack multiple lines

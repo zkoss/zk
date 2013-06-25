@@ -111,7 +111,7 @@ public class AImage implements Image, java.io.Serializable {
 			final Iterator it = ImageIO.getImageReaders(imis);
 			if (it.hasNext()) {
 				final ImageReader rd = (ImageReader)it.next();
-				format = rd.getFormatName().toLowerCase();
+				format = rd.getFormatName().toLowerCase(java.util.Locale.ENGLISH);
 			}
 		} catch (IOException ex) {
 			//not possible, but eat it and recover it later

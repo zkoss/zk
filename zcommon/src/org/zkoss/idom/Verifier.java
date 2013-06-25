@@ -95,7 +95,7 @@ public class Verifier {
 		} else if (first == '.') {
 			reason = "a period (.)";
 		} else {
-			final String s = prefix.toLowerCase();
+			final String s = prefix.toLowerCase(java.util.Locale.ENGLISH);
 			if (s.startsWith("xml") && !s.equals("xmlns"))
 				reason = "\"xml\" in any combination of case";
 		}
