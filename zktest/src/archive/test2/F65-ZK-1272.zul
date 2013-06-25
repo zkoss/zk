@@ -50,6 +50,10 @@
 				<textbox />
 			</window>
 			<window title="window 2" border="normal" width="200px" height="354px">This is Window 2</window>
+			<window title="window 2" border="normal" width="200px" height="354px">This is Window 2</window>
+			<window title="window 2" border="normal" width="200px" height="354px">This is Window 2</window>
+			<window title="window 2" border="normal" width="200px" height="354px">This is Window 2</window>
+			<window title="window 2" border="normal" width="200px" height="354px">This is Window 2</window>
 		</scrollview>
 		</vlayout>
 	</window>
