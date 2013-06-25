@@ -1,0 +1,38 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	Click "test" button, should not see JS Error showed.
+	<tabbox id="tabbox">
+		<attribute name="onEcho"><![CDATA[
+			tabbox.invalidate();
+		]]></attribute>
+		<tabs id="tabs">
+			<tab id="tab1" label="Tab 1" />
+			<tab id="tab2" label="Tab 2" />
+		</tabs>
+		<tabpanels id="tabpanels">
+			<tabpanel id="panel1">
+				<attribute name="onCreate"><![CDATA[
+					HtmlNativeComponent table = new HtmlNativeComponent("table", "<tbody>", "</tbody>");
+					HtmlNativeComponent tr = new HtmlNativeComponent("tr");
+					HtmlNativeComponent td = new HtmlNativeComponent("td");
+					Window win = new Window();
+					win.setTitle("window inside native");
+					win.setVflex("true");
+					win.setHflex("true");
+					td.appendChild(win);
+					tr.appendChild(td);
+					table.appendChild(tr);
+					panel1.appendChild(table);
+				]]></attribute>
+				<button label="test">
+					<attribute name="onClick"><![CDATA[
+						tab2.setSelected(true);
+						tabbox.invalidate();
+						Events.echoEvent("onEcho", tabbox, null);
+					]]></attribute>
+				</button>
+			</tabpanel>
+			<tabpanel>test</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

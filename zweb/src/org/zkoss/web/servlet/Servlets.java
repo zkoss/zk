@@ -365,7 +365,8 @@ public class Servlets {
 	}
 	private static void browserInfo(Map<String, Object> zk, String ua) {
 		if (ua != null) {
-			ua = ua.toLowerCase();
+			// ZK-1822: In locale Turkish, it can prevent 'I'.toLowerCase becomes 'i' without dot.
+			 ua = ua.toLowerCase(Locale.ENGLISH);
 			if (_clientId != null) {
 				final ClientIdentifier ci = _clientId.matches(ua);
 				if (ci != null) {
@@ -566,8 +567,8 @@ public class Servlets {
 			return false;
 
 		boolean ie = userAgent.indexOf("MSIE ") >= 0;
-			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
-		userAgent = userAgent.toLowerCase();
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return !ie && userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
 			&& userAgent.indexOf("gecko/") < 0 && userAgent.indexOf("safari") < 0
 			&& userAgent.indexOf("zk") < 0 && userAgent.indexOf("rmil") < 0;
@@ -593,8 +594,8 @@ public class Servlets {
 			return false;
 
 		boolean ie = userAgent.indexOf("MSIE ") >= 0;
-			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
-		userAgent = userAgent.toLowerCase();
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return (ie || userAgent.indexOf("msie ") >= 0) && userAgent.indexOf("opera") < 0;
 	}
 	/** Returns whether the browser is Explorer 7 or later.
@@ -635,7 +636,7 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
-		userAgent = userAgent.toLowerCase();
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") < 0;
 	}
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
@@ -675,7 +676,7 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
-		userAgent = userAgent.toLowerCase();
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("safari") >= 0;
 	}
 	
@@ -697,7 +698,7 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
-		userAgent = userAgent.toLowerCase();
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("opera") >= 0;
 	}
 
@@ -726,7 +727,7 @@ public class Servlets {
 			return false;
 
 		//ZK Mobile for Android 1.0 (RMIL; RHIL)
-		userAgent = userAgent.toLowerCase();
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("zk") >= 0 && userAgent.indexOf("rhil") >= 0;
 	}
 
@@ -968,7 +969,7 @@ public class Servlets {
 	 */
 	public static final URL getResource(ServletContext ctx, String uri) {
 		try {
-			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
 				final File file = new File(new URI(uri));
 				return file.exists() ? file.toURI().toURL(): null;
 					//spec: return null if not found
@@ -992,7 +993,7 @@ public class Servlets {
 	ServletContext ctx, String uri)
 	throws IOException {
 		try {
-			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
 				final File file = new File(new URI(uri));
 				return file.exists() ?
 					new BufferedInputStream (new FileInputStream(file)): null;
@@ -1012,7 +1013,7 @@ public class Servlets {
 	private static URL toURL(String uri)
 	throws MalformedURLException {
 		String s;
-		if (uri != null && ((s = uri.toLowerCase()).startsWith("http://")
+		if (uri != null && ((s = uri.toLowerCase(java.util.Locale.ENGLISH)).startsWith("http://")
 		|| s.startsWith("https://") || s.startsWith("ftp://")))
 			return new URL(uri);
 		return null;
@@ -1267,7 +1268,7 @@ public class Servlets {
 		if (path != null) {
 			int j = path.lastIndexOf('.');
 			if (j >= 0 && path.indexOf('/', j + 1) < 0)
-				return path.substring(j + 1).toLowerCase();
+				return path.substring(j + 1).toLowerCase(java.util.Locale.ENGLISH);
 				//don't worry jsessionid since it is handled by container
 		}
 		return null;
@@ -1306,7 +1307,7 @@ public class Servlets {
 			else if (cc == '/')
 				break;
 		}
-		return dot >= 0 ? path.substring(dot + 1).toLowerCase(): "";
+		return dot >= 0 ? path.substring(dot + 1).toLowerCase(java.util.Locale.ENGLISH): "";
 	}
 
 	/** Returns the request detail infomation.

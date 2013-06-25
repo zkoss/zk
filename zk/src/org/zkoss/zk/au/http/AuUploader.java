@@ -266,7 +266,7 @@ public class AuUploader implements AuExtension {
 		}
 
 		String ctype = fi.getContentType(),
-			ctypelc = ctype != null ? ctype.toLowerCase(): null;
+			ctypelc = ctype != null ? ctype.toLowerCase(java.util.Locale.ENGLISH): null;
 		if (name != null && "application/octet-stream".equals(ctypelc)) { //Bug 1896291: IE limit
 			final int j = name.lastIndexOf('.');
 			if (j >= 0) {
@@ -316,7 +316,7 @@ public class AuUploader implements AuExtension {
 			new StreamMedia(name, null, ctype, fi);
 	}
 	private static String getCharset(String ctype) {
-		final String ctypelc = ctype.toLowerCase();
+		final String ctypelc = ctype.toLowerCase(java.util.Locale.ENGLISH);
 		for (int j = 0; (j = ctypelc.indexOf("charset", j)) >= 0; j += 7) {
 			int k = Strings.skipWhitespacesBackward(ctype, j - 1);
 			if (k < 0 || ctype.charAt(k) == ';') {
@@ -401,7 +401,7 @@ public class AuUploader implements AuExtension {
 	/** Returns whether the request contains multipart content.
 	 */
 	public static final boolean isMultipartContent(HttpServletRequest request) {
-		return "post".equals(request.getMethod().toLowerCase())
+		return "post".equals(request.getMethod().toLowerCase(java.util.Locale.ENGLISH))
 			&& FileUploadBase.isMultipartContent(new ServletRequestContext(request));
 	}
 
