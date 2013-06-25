@@ -17,40 +17,24 @@ function (out, skipper) {
 		cap = this.caption,
 		title = this.getTitle();
 		title = title && !cap ? zUtl.encodeXML(title) :  null;
-	
-	if(this._isDefault()) 
-		out.push('<fieldset');
-	else
-		out.push('<div');
-	
-	out.push(' ', this.domAttrs_(), '>');
+
+	out.push('<div ', this.domAttrs_(), '>');
 	
 	if (title || cap) {
-		if(!this._isDefault()) 
-			out.push('<div');		
-		else 
-			out.push('<legend');
-
-		out.push(' id="', uuid, '-header" class="', this.$s('header'), (this._closable? '': ' ' +  this.$s('readonly')),'">');
+		
+		out.push('<div id="', uuid, '-header" class="', this.$s('header'), (this._closable? '': ' ' +  this.$s('readonly')),'">');
+		
 		if (cap)
 			cap.redraw(out);
 		else
 			out.push('<div id="', uuid,'-title" class="', this.$s('title'), 
 					'"><span class="', this.$s('title-content'), '">', title, '</span></div>');
-		
-		if(!this._isDefault()) 
-			out.push('</div>');		
-		else 
-			out.push('</legend>');
+
+		out.push('</div>');		
 	}
 	
 	this._redrawCave(out, skipper);
+
+	out.push('</div>');
 	
-	if(this._isDefault())
-		out.push('</fieldset>');
-	else {
-		// classicblue is deprecated and 
-		// shadow not used in breeze, sapphire and silvertail,
-		out.push('</div>');
-	}	
 }

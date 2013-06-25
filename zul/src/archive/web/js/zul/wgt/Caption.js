@@ -38,13 +38,12 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
-		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('img') + ' ' + 
-		(iconSclass ? ' ' + iconSclass : '') + '" />';
+		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('img') + '" />' + (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
 		var cnt = this.domContent_(),
-			dn = this.$n('text');
+			dn = this.$n('head');
 		if (dn) 
 			jq(dn).html(cnt ? cnt : '&nbsp;');
 	},
