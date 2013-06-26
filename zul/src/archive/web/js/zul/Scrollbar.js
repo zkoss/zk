@@ -175,7 +175,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				hws = hwrapper.style,
 				wdh = cave.offsetWidth - startX,
 				swdh = scroller.offsetWidth - startX
-						+ zk(cave).paddingWidth() + froenScrollWidth,
+						+ zk(cave).padBorderWidth() + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;

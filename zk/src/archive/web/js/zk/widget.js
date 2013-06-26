@@ -1814,6 +1814,7 @@ wgt.$f().main.setTitle("foo");
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
+			jq.onSyncScroll(this);
 		}
 		return this;
 	},
@@ -1872,6 +1873,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
+		jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been removed to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
@@ -1880,6 +1882,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
+		jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been replaced.
 	 * Unlike {@link #onChildAdded_} and {@link #onChildRemoved_}, this
@@ -4210,6 +4213,14 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 		}
 	},
 
+	/** Resize zul.Scrollbar size after child added/removed or hide/show.
+	 * @since 6.5.0
+	 */
+	doResizeScroll_: function () {
+		var p = this.parent;
+		if (p) p.doResizeScroll_();
+	},
+	
 	//DOM event handling//
 	/** Registers an DOM event listener for the specified DOM element (aka., node).
 	 * You can use jQuery to listen the DOM event directly, or

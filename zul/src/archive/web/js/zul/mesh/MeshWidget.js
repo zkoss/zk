@@ -1346,7 +1346,7 @@ zul.mesh.Scrollbar = {
 				}
 			}
 		}
-		wgt._scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
+		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
 			startPositionX: startPositionX,
 			onSyncPosition: function() {
@@ -1366,7 +1366,7 @@ zul.mesh.Scrollbar = {
 				wgt._doScroll();
 			}
 		});
-		return wgt._scrollbar;
+		return scrollbar;
 	},
 	/**
 	 * Return the vertical scroll position of the body element of given MeshWidget.

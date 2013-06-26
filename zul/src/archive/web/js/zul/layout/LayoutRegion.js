@@ -43,6 +43,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_border: 'normal',
 	_maxsize: 2000,
 	_minsize: 0,
+	_scrollbar: null,
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -174,16 +175,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		autoscroll: function (autoscroll) {
 			var cave = this.$n('cave');
 			if (cave) {
-				var bodyEl = this.isFlex() && this.getFirstChild() ?
-						this.getFirstChild().$n() : cave;
 				if (autoscroll) {
-					bodyEl.style.overflow = 'auto';
-					bodyEl.style.position = 'relative';
-					this.domListen_(bodyEl, 'onScroll');
+					zWatch.listen({onSize: this});
 				} else {
-					bodyEl.style.overflow = 'hidden';
-					bodyEl.style.position = '';
-					this.domUnlisten_(bodyEl, 'onScroll');
+					zWatch.unlisten({onSize: this});
 				}
 			}
 		},
@@ -520,20 +515,20 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		if (this._open && !this.isVisible()) this.$n().style.display = 'none';
 
-		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.getFirstChild() ?
-					this.getFirstChild().$n() : this.$n('cave');
-			this.domListen_(bodyEl, 'onScroll');
-		}
+		if (this.isAutoscroll())
+			zWatch.listen({onSize: this});
 
 		if (this.isFlex())
 			_setFirstChildFlex(this, true, true);
 	},
 	unbind_: function () {
-		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.getFirstChild() ?
-					this.getFirstChild().$n() : this.$n('cave');
-			this.domUnlisten_(bodyEl, 'onScroll');
+		if (this.isAutoscroll())
+			zWatch.unlisten({onSize: this});
+		
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destory();
+			bar = this._scrollbar = null;
 		}
 		if (this.$n('split')) {
 			if (this._drag) {
@@ -546,6 +541,40 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			_setFirstChildFlex(this, false);
 
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
+	},
+	onSize: function () {
+		var wgt = this;
+		setTimeout(function () {
+			if (wgt.desktop) {
+				if (!wgt._scrollbar)
+					wgt._scrollbar = wgt._initScrollbar();
+				wgt.refreshBar_();
+			}
+		}, 200);
+	},
+	_initScrollbar: function () {
+		var wgt = this,
+			embed = jq(wgt.$n('real')).data('embedscrollbar'),
+			cave = wgt.$n('cave');
+			scrollbar = new zul.Scrollbar(cave, cave.firstChild, {
+				embed: embed,
+				onScrollEnd: function() {
+					wgt._doScroll();
+				}
+			});
+		return scrollbar;
+	},
+	refreshBar_: function (showBar, scrollToTop) {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.syncSize(showBar);
+			if (scrollToTop)
+				bar.scrollTo(0, 0);
+		}
+	},
+	doResizeScroll_: function () {
+		this.$supers('doResizeScroll_', arguments);
+		this.refreshBar_();
 	},
 	doClick_: function (evt) {
 		var target = evt.domTarget;
@@ -599,8 +628,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.setOpen(true, false, true);
 				this.$n('real').style.zIndex = ''; //reset
 			} else
- 				if ((!this._isSlideUp && this.$class
-										.uuid(target) != this.uuid)
+ 				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid)
 						|| !zk.animating()) {
 					this._isSlideUp = true;
 					zk(this.$n('real')).slideUp(this, {
