@@ -757,6 +757,8 @@ public class ClassWebResource {
 			//prefix context path
 			if (request instanceof HttpServletRequest) {
 				String ctxpath = ((HttpServletRequest)request).getContextPath();
+				if (ctxpath == null)
+					throw new NullPointerException("HttpServletRequest#getContentPath() returns a null value from [ " + request + " ]");
 				final int ctxlen = ctxpath.length();
 				if (ctxlen > 0) {
 					final char cc = ctxpath.charAt(0);
