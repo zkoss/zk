@@ -27,7 +27,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var n = wgt.$n();
 		if (n) {
 			try {
-				n[fn]();
+				if (fn === 'stop') {
+					n.pause();
+					n.currentTime = 0;
+				} else 	
+					n[fn]();
 			} catch (e) {
 				if (!unbind)
 					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message);
@@ -53,19 +57,6 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		 */
 		src: function () {
 			this.rerender();
-		},
-		/** Returns whether to auto start playing the audio.
-		 * <p>Default: false;
-		 * @return boolean
-		 * @deprecated As of release 7.0.0, use getAutoplay instead.
-		 */
-		/** Sets whether to auto start playing the audio.
-		 * @param boolean autostart
-		 * @deprecated As of release 7.0.0, use setAutoplay instead.
-		 */
-		autostart: function (v) {
-			var n = this.$n();
-			if (n) n.autostart = v;
 		},
 		/** Returns whether to auto start playing the audio.
 		 * <p>Default: false;
@@ -134,7 +125,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	/** Stops the audio at the client.
 	 */
 	stop: function () {
-		_invoke(this, 'pause');		
+		_invoke(this, 'stop');		
 	},
 	/** Pauses the audio at the client.
 	 */
@@ -142,7 +133,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		_invoke(this, 'pause');		
 	},
 	unbind_: function () {
-		this.stop();
+		this.stop(true);
 		this.$supers(Audio, 'unbind_', arguments);
 	},
 	domAttrs_: function(no){
@@ -159,25 +150,23 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			attr += ' muted';
 		return attr;
 	},
-	_sourceHTML: function(out) {
+	domContent_: function() {
 		var src = this._src,
 			length = src.length,
 			result = '';
 		for (var i = 0; i < length; i ++) {
 			result += '<source src="' + src[i] + '" type="' + this._MIMEtype(src[i]) + '">';
 		}
-		if (out) {
-			out.push(result);
-		}
+		return result;
 	},
 	_MIMEtype: function(name) {
 		var start = name.lastIndexOf('.'),
 		type = 'wav';
 		if (start !== -1) {
 			var ext = name.substring(start + 1).toLowerCase();
-			if (ext === "mp3") {
+			if (ext === 'mp3') {
 				type = 'mpeg';
-			} else if (ext ==="ogg") {
+			} else if (ext === 'ogg') {
 				type = 'ogg';
 			}
 		}

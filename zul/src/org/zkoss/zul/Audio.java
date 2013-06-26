@@ -36,21 +36,18 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Audio extends XulElement {
-	protected List<String> _src;
+	protected List<String> _src = new ArrayList<String>();
 	/** The audio. _src and _audio cannot be nonnull at the same time. */
-	private List<org.zkoss.sound.Audio> _audio;
+	private org.zkoss.sound.Audio _audio;
 	/** Count the version of {@link #_audio}. */
 	private byte _audver;
 	private boolean _autoplay, _controls, _loop, _muted;
 	private String _preload;
-
+	
 	public Audio() {
-		_src = new ArrayList<String>();
-		_audio = new ArrayList<org.zkoss.sound.Audio>();
 	}
+
 	public Audio(String src) {
-		_src = new ArrayList<String>();
-		_audio = new ArrayList<org.zkoss.sound.Audio>();
 		setSrc(src);
 	}
 
@@ -90,8 +87,8 @@ public class Audio extends XulElement {
 		} else {
 			list.add(src.trim());
 		}
-		if (!_audio.isEmpty() || !_src.equals(list)) {
-			_audio.clear();
+		if (_audio != null || !_src.equals(list)) {
+			_audio = null;
 			setSrc(list);
 		}
 		
@@ -110,10 +107,8 @@ public class Audio extends XulElement {
 	private List<String> getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		List<String> list = new ArrayList<String>();
-		if(!_audio.isEmpty()) {
-			for (org.zkoss.sound.Audio audio : _audio) {
-				list.add(getAudioSrc(audio));
-			}
+		if(_audio != null) {
+			list.add(getAudioSrc());
 		} else if (dt != null) {
 			for(String src: _src) {
 				list.add(dt.getExecution().encodeURL(src));
@@ -131,6 +126,7 @@ public class Audio extends XulElement {
 		return isAutoplay();
 	}
 	/** Sets whether to auto start playing the audio.
+	 * 
 	 * @deprecated As of release 7.0.0, use {@link #setAutoplay()} instead.
 	 */
 	public void setAutostart(boolean autostart) {
@@ -163,6 +159,7 @@ public class Audio extends XulElement {
 		return _preload;
 	}
 	/** Sets whether and how the audio should be loaded.
+	 * 
 	 * @since 7.0.0
 	 */
 	public void setPreload(String preload) {
@@ -204,6 +201,7 @@ public class Audio extends XulElement {
 		return _loop;
 	}
 	/** Sets whether to play the audio repeatedly.
+	 * 
 	 * @since 3.6.1
 	 */
 	public void setLoop(boolean loop) {
@@ -221,6 +219,7 @@ public class Audio extends XulElement {
 		return _muted;
 	}
 	/** Sets whether to mute the audio.
+	 * 
 	 * @since 7.0.0
 	 */
 	public void setMuted(boolean muted) {
@@ -230,26 +229,21 @@ public class Audio extends XulElement {
 		}
 	}
 	/** Sets the content directly.
+	 * 
 	 * <p>Default: null.
 	 *
 	 * <p>Calling this method implies setSrc(null).
 	 * In other words, the last invocation of {@link #setContent} overrides
 	 * the previous {@link #setSrc}, if any.
+	 * Note: setContent doesn't support in Chrome.
 	 * @param audio the audio to display.
 	 * @see #setSrc
 	 */
 	public void setContent(org.zkoss.sound.Audio audio) {
-		List<org.zkoss.sound.Audio> list = new ArrayList<org.zkoss.sound.Audio>();
-		list.add(audio);
-		setContent(list);
-	}
-	public void setContent(List<org.zkoss.sound.Audio> audio) {
-		if (!_src.isEmpty() || !_audio.contains(audio)) {
-			_audio.clear();
-			_audio.addAll(audio);
-			if (!_src.isEmpty()) 
-				_src.clear();
-			if (!_audio.isEmpty()) ++_audver; //enforce browser to reload
+		if (_src != null || audio != _audio) {
+			_audio = audio;
+			_src = null;
+			if (_audio != null) ++_audver; //enforce browser to reload
 			smartUpdate("src", new EncodedSrc());
 		}
 	}
@@ -258,15 +252,15 @@ public class Audio extends XulElement {
 	 * It simply returns what is passed to {@link #setContent}.
 	 */
 	public org.zkoss.sound.Audio getContent() {
-		return _audio.get(0);
+		return _audio;
 	}
 
 	/** Returns the encoded URL for the current audio content.
 	 * Don't call this method unless _audio is not null;
 	 */
-	private String getAudioSrc(org.zkoss.sound.Audio audio) {
+	private String getAudioSrc() {
 		return Utils.getDynamicMediaURI(
-			this, _audver, audio.getName(), audio.getFormat());
+			this, _audver, _audio.getName(), _audio.getFormat());
 	}
 
 	// super
@@ -295,12 +289,11 @@ public class Audio extends XulElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements DynamicMedia {
-		// get Audio
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements DynamicMedia {
+		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
-			if (_audio.isEmpty())
-				return null;
-			return _audio.get(0);
+			return _audio;
 		}
 	}
 
