@@ -1694,6 +1694,11 @@ wgt.$f().main.setTitle("foo");
 		var dom = opts && opts.dom,
 			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
+		
+		//Bug ZK-1692: widget may not bind or render yet.
+		if (!wgt.desktop)
+			return false;
+		
 		while (wgt) {
 			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined)
 				return _markCache(cache, visited, ck);
