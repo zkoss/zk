@@ -80,7 +80,7 @@ public class ZkFns {
 	 */
 	public static String encodeWithZK(String name) {
 		if (name.startsWith("zk"))
-			return "zk" + (WebApps.getEdition().toLowerCase()) + name.substring(2);
-		return "zk" + (WebApps.getEdition().toLowerCase()) + name;
+			return "zk" + (WebApps.getEdition().toLowerCase(java.util.Locale.ENGLISH)) + name.substring(2);
+		return "zk" + (WebApps.getEdition().toLowerCase(java.util.Locale.ENGLISH)) + name;
 	}
 }

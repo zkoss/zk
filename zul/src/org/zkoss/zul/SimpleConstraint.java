@@ -214,7 +214,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				}
 			}
 			
-			_flags |= parseConstraint(s.trim().toLowerCase());
+			_flags |= parseConstraint(s.trim().toLowerCase(java.util.Locale.ENGLISH));
 		}
 
 		_raw = constraint;

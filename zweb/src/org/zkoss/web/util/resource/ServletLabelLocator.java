@@ -85,7 +85,7 @@ public class ServletLabelLocator implements LabelLocator {
 		final String prefix = j >= 0 ? path.substring(0, j): path;
 		final String suffix = j >= 0 ? path.substring(j): "";
 		path = locale == null ? prefix + suffix: prefix + '_' + locale + suffix;
-		return path.toLowerCase().startsWith("file://") ?
+		return path.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://") ?
 			Servlets.getResource(_ctx, path): _ctx.getResource(path);
 			//we don't accept http:// since we cannot detect if it exists
 	}

@@ -483,7 +483,11 @@ span.z-upload input {
 .z-fileupload-manager {
 	width: 350px;
 }
-
+//Selectbox
+.z-selectbox {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+}
 //scrollbar
 .z-scrollbar {
 	position: absolute;
@@ -518,6 +522,8 @@ span.z-upload input {
 				z-index: 100;
 				.transform('translate(0, 0)');
 				> .z-icon-reorder:before {
+					width: @baseIconWidth;
+					height: @baseIconHeight;
 					position: absolute;
 					left: -2px;
 					top: 50%;
@@ -536,15 +542,30 @@ span.z-upload input {
 	&-up,
 	&-down {
 		position: absolute;
-		width: 16px;
-		height: 16px;
-		padding-left: 4px;
+		width: @baseIconWidth;
+		height: @baseIconHeight;
 		cursor: pointer;
 		font-size: @baseFontSize;
 		background: #DDDDDD;
 	}
+	&-up {
+		> .z-icon-caret-up:before {
+			width: @baseIconWidth;
+			height: @baseIconHeight;
+			position: absolute;
+			left: 4px;
+			top: -1px;
+		}
+	}
 	&-down {
 		bottom: 0;
+		> .z-icon-caret-down:before {
+			width: @baseIconWidth;
+			height: @baseIconHeight;
+			position: absolute;
+			left: 4px;
+			top: 1px;
+		}
 	}
 	//horizontal
 	&-horizontal {

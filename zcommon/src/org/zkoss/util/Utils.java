@@ -104,7 +104,7 @@ public class Utils {
 		} catch (Throwable ex) { //eat
 		}
 
-		subver = subver.toLowerCase();
+		subver = subver.toLowerCase(java.util.Locale.ENGLISH);
 		final int base, j;
 		if (subver.startsWith("rc")) {
 			base = -100;
