@@ -274,7 +274,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		if (!val) return null;
 
-		var date = zUtl.today(this._format),
+		// F65-ZK-1825: use this._value instead of "today"
+		// We cannot use this._value in this case, which won't trigger onChange
+		// event. Using clone date instead.
+		var date = this._value ? new Date(this._value.getTime()) : zUtl.today(this._format),
 			hasAM, isAM, hasHour1,
 			fmt = [], emptyCount = 0;
 		date.setSeconds(0);

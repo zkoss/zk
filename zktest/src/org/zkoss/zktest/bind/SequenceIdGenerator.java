@@ -25,7 +25,7 @@ public class SequenceIdGenerator implements IdGenerator{
 			desktop.setAttribute("__sidg_idhash", idcmap);
 		}
 		
-		String name = comp.getClass().getSimpleName().toLowerCase();
+		String name = comp.getClass().getSimpleName().toLowerCase(java.util.Locale.ENGLISH);
 		if(name.length()>6){
 			name = name.substring(0,6);
 		}

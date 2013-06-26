@@ -21,10 +21,18 @@ import java.util.Map;
 public interface ValidationContext {
 
 	/** 
-	 * is valid 
-	 * @return true of result is valid, Note, default is true if no {@link Validator} called {@link #setInvalid()}
+	 * Checks status of validation context valid or not, it is a global status of same command, 
+	 * any validator of this validation phase call {@link #setInvalid()} will set this false. 
+	 * @return true of result is valid, false if any {@link Validator} called {@link #setInvalid()}. Note, default is true. 
 	 */
 	boolean isValid();
+	
+	/** 
+	 * Checks status of local validation context valid or not, it only relates to one validator. 
+	 * @return true of result is valid, false if this {@link Validator} called {@link #setInvalid()}, default is true.
+	 * @since 6.5.3 
+	 */
+	boolean isLocalValid();
 
 	/**
 	 * set invalid

@@ -483,7 +483,11 @@ span.z-upload input {
 .z-fileupload-manager {
 	width: 350px;
 }
-
+//Selectbox
+.z-selectbox {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+}
 //scrollbar
 .z-scrollbar {
 	position: absolute;
@@ -492,8 +496,9 @@ span.z-upload input {
 	.applyCSS3('transition-duration', '0.5s');
 	.applyCSS3('transition-timing-function', 'cubic-bezier(0.33, 0.66, 0.66, 1)');
 	&-embed {
-		opacity: 1.0;
-		background: #CFCFCF;
+		background: lighten(#DDDDDD, 5%);
+		opacity: 0.8;
+		filter: alpha(opacity=80);
 	}
 	//vertical
 	&-vertical {
@@ -508,35 +513,59 @@ span.z-upload input {
 			width: 100%;
 			.z-scrollbar-indicator {
 				position: absolute;
-				width: 10px;
-				left: 3px;
+				width: 13px;
+				left: 2px;
 				cursor: pointer;
-				background: darken(#CFCFCF, 30%);
+				border: 1px solid darken(#CFCFCF, 30%);
+				.borderRadius(2px);
+				.horGradient(#FFFFFF, #CFCFCF);
 				z-index: 100;
 				.transform('translate(0, 0)');
+				> .z-icon-reorder:before {
+					width: @baseIconWidth;
+					height: @baseIconHeight;
+					position: absolute;
+					left: -2px;
+					top: 50%;
+					margin-top: -8px;
+					color: #666666;
+					.transform('scale(0.5, 0.7)');
+				}
 			}
 			.z-scrollbar-rail {
 				height: 100%;
-			    margin: 0 auto;
-			    width: 8px;
-			    background: #CFCFCF;
+			    width: 100%;
+			    background: #DDDDDD;
 			}
 		}
 	}
 	&-up,
 	&-down {
 		position: absolute;
-		width: 16px;
-		height: 16px;
-		line-height: 16px;
-		padding: 1px;
+		width: @baseIconWidth;
+		height: @baseIconHeight;
 		cursor: pointer;
-		vertical-align: top;
 		font-size: @baseFontSize;
-		text-align: center;
+		background: #DDDDDD;
+	}
+	&-up {
+		> .z-icon-caret-up:before {
+			width: @baseIconWidth;
+			height: @baseIconHeight;
+			position: absolute;
+			left: 4px;
+			top: -1px;
+		}
 	}
 	&-down {
 		bottom: 0;
+		> .z-icon-caret-down:before {
+			width: @baseIconWidth;
+			height: @baseIconHeight;
+			position: absolute;
+			left: 4px;
+			top: 1px;
+		}
 	}
 	//horizontal
 	&-horizontal {
@@ -551,19 +580,27 @@ span.z-upload input {
 			height: 100%;
 			.z-scrollbar-indicator {
 				position: absolute;
-				height: 10px;
-				top: 3px;
+				height: 13px;
+				top: 1px;
 				cursor: pointer;
-				background: darken(#CFCFCF, 30%);
+				border: 1px solid darken(#CFCFCF, 30%);
+				.borderRadius(2px);
+				.verGradient(#FFFFFF, #CFCFCF);
 				z-index: 100;
 				.transform('translate(0, 0)');
+				> .z-icon-reorder:before {
+					position: absolute;
+					left: 50%;
+					top: -3px;
+					margin-left: -8px;
+					color: #111111;
+					.transform('rotate(90deg) scale(0.5, 0.7)');
+				}
 			}
 			.z-scrollbar-rail {
 				width: 100%;
-				height: 8px;
-				background: #CFCFCF;
-				position: absolute;
-				top: 4px;
+				height: 100%;
+				background: #DDDDDD;
 			}
 		}
 	}
@@ -572,11 +609,10 @@ span.z-upload input {
 		position: absolute;
 		width: 16px;
 		height: 16px;
-		line-height: 16px;
+		padding: 0 6px 0 5px;
 		cursor: pointer;
-		vertical-align: top;
 		font-size: @baseFontSize;
-		text-align: center;
+		background: #DDDDDD;
 	}
 	&-right {
 		right: 0;

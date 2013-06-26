@@ -31,6 +31,16 @@ public class AuAlert extends AuResponse {
 		super("alert", message); //component-independent
 	}
 	/**
+	 * For the response error use, the next AuRequest will be stopped until the
+	 * alert dialog is closed.
+	 * @param message the message to display.
+	 * @param disabledAuRequest whether to disable the next AuRequset
+	 * @since 7.0.0
+	 */
+	public AuAlert(String message, boolean disabledAuRequest) {
+		super("alert", new Object[] {message, null, null, disabledAuRequest}); //component-independent
+	}
+	/**
 	 * @param message the message to display.
 	 * @param title the title of the message box
 	 * @since 5.0.3

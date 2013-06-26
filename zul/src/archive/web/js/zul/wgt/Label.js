@@ -77,5 +77,15 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 	 */
 	getEncodedText: function () {
 		return zUtl.encodeXML(this._value, {multiline:this._multiline,pre:this._pre, maxlength: this._maxlength});
+	},
+	// fix for HTML5 doctype that give a special gap between top and button
+	getMarginSize_: function (attr) { //'w' for width or 'h' for height
+		var o = this.$supers('getMarginSize_', arguments);
+		if (attr == 'h') {
+			var n = this.$n(),
+				oh = zk(n).offsetHeight();
+			return o + oh - n.offsetHeight;
+		}
+		return o;
 	}
 });

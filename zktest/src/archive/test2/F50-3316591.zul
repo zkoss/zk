@@ -11,7 +11,7 @@
 ]]>
 </html>
 	<style>
-		.container { text-align:center; padding: 50px 300px; }
+		.container { text-align:center; margin: 50px 300px; }
 		.container .z-panel-embedded-cnt { padding:0; } .txb { border:
 		none; }
 	</style>

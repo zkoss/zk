@@ -10,7 +10,7 @@
 	background: @pagingBackground;
 	position: relative;
 	height: @baseBarHeight;
-	padding: 4px 10px;
+	padding: 3px 10px 2px;
 	&-os {
 		border-bottom: none;
 	}
@@ -28,6 +28,7 @@
 		border: 1px solid @pagingBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
+		line-height: @baseLineHeight;
 		padding: 4px 6px;
 		margin-right: 6px;
 		font-family: @baseContentFontFamily;
@@ -59,10 +60,17 @@
 			}
 		}
 	}
-	&-previous,
+	&-previous {
+		> .z-icon-caret-left {
+			display: inline-block;
+			.transform('translate(-1px, 0px) scale(1.42)');
+		}
+	}
 	&-next {
-		font-size: unit(unit(@fontSizeMedium) + 1, px);
-		padding-top: 3px;
+		> .z-icon-caret-right:before {
+			display: inline-block;
+			.transform('translate(1px, 0px) scale(1.42)');
+		}
 	}
 	&-noborder {
 		border: none;
@@ -96,8 +104,9 @@
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @pagingInfoColor;
-		height: @baseButtonHeight;
+		line-height: @baseLineHeight;
 		margin-left: 6px;
+		padding: 3px 0;
 		vertical-align: baseline;
 	}
 	&-text {

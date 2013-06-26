@@ -62,7 +62,7 @@ public class Interpreters {
 		if (zslang == null || zslang.length() == 0 || owner == null)
 			throw new IllegalArgumentException("empty or null");
 
-		final String zsl = zslang.toLowerCase();
+		final String zsl = zslang.toLowerCase(java.util.Locale.ENGLISH);
 		final Object clsnm;
 		synchronized (_ips) {
 			clsnm = _ips.get(zsl);
@@ -107,7 +107,7 @@ public class Interpreters {
 	public static final boolean exists(String zslang) {
 		if (zslang == null) return false;
 
-		zslang = zslang.toLowerCase();
+		zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 		synchronized (_ips) {
 			return _ips.containsKey(zslang);
 		}
@@ -140,7 +140,7 @@ public class Interpreters {
 		if (log.debugable()) log.debug("Scripting language is added: "+zslang+", "+ipcls);
 		_zslangs.add(zslang);
 
-		final String zsl = zslang.toLowerCase();
+		final String zsl = zslang.toLowerCase(java.util.Locale.ENGLISH);
 		final Object old;
 		synchronized (_ips) {
 			old = _ips.put(zsl, ipcls);

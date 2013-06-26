@@ -196,7 +196,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		openCloseIcon = null;
 	},
 	getIconOpenClass_: function () {
-		return 'z-icon-caret-right';
+		return 'z-icon-caret-down';
 	},
 	getIconCloseClass_: function () {
 		return 'z-icon-caret-right';

@@ -75,7 +75,7 @@ public class WebApps {
 	 * @since 3.0.7
 	 */
 	public static boolean getFeature(String feature) {
-		final String f = feature.toLowerCase();
+		final String f = feature.toLowerCase(java.util.Locale.ENGLISH);
 		return "pe".equals(f) || "professional".equals(f) ? _pe:
 			"ee".equals(f) || "enterprise".equals(f) ? _ee: false;
 	}

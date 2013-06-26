@@ -1310,7 +1310,7 @@ jq(el).zk.center(); //same as 'center'
 		// span will causes a special gap between top and bottom
 		// when use HTML5 doctype
 		if (isHTML5DocType() &&
-				jq.nodeName(n, 'SPAN')) {
+				jq.nodeName(n, 'SPAN') && this.jq.css('display') != 'block') {
 			return zk(document.body).textSize(n.outerHTML)[1];
 		}
 		return n.offsetHeight;

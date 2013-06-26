@@ -1,99 +1,76 @@
 @import "~./zul/less/_header.less";
 
-.z-groupbox > .z-groupbox-header > 
-.z-caption-cnt,
-.z-groupbox-title-content {
-	display: inline-block;
-	background-color: #FFFFFF;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-
 .z-groupbox {
-	margin: 2px;
-	overflow: hidden;
-	padding: 0;
-
-	&-title {
-		cursor: pointer;
-	}
+	padding-top: 16px;
 	
-	&-header {
-		margin-left: 10px;
-		margin-right: 10px;
-		font-weight: normal;
-		border: none;
+	&-header {		
+		border: 1px solid #C5C5C5;
+		border-bottom: 0;
+		width: 100%;
+		font-weight: normal;		
 		.resetGradient();
 		color: #363636;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;		
 		line-height: @baseBarHeight;		
-		height: @baseBarHeight;
-		padding-left: 4px;
-		overflow: hidden;
+		height: @baseIconHeight;
+		padding-left: 10px;
 		zoom: 1;
-		cursor: pointer;
 
-		&-readonly {
-			cursor: default;
-		}
+		.z-caption, .z-groupbox-title {
+			margin-top: -16px;
+			padding: 0 4px 0 4px;
+			background: white;
+			width: auto !important;
+			display: table-caption;
+			cursor: pointer;
+
+			&-readonly {
+				cursor: default;
+			}
+		}	
 	}
 
 	&-content {
 		overflow: hidden;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		padding: 5px;
-		border: none;
+		border: 1px solid #C5C5C5;
+		border-top: 0;
 		display: block;	
 		zoom: 1;
 	}
 
 	&-notitle {
-		border: none;
-	}
-
-	.z-caption {
-		cursor: pointer;
-
-		&-readonly {
-			cursor: default;
-		}
-	}
-
-	&-collapsed {
-		border-width: 1px 0px 0px 0px;
-		padding-left: 1px;
-		
-		.z-groupbox-header {
-			margin-right: 11px;
-		}
+		padding: 0;
 
 		.z-groupbox-content {
-			display: none; // Firefox bug: content cant be hidden after scrolling finish
-		}		
+			border-top: 1px solid #C5C5C5;
+		}
+	}
+
+	&-collapsed .z-groupbox-header {
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
 	}
 
 	&-3d {
+		padding: 0;
+
 		.z-groupbox-header {
-			margin-left: 0px;
-			margin-right: 0px;
+			padding: 0 0 0 4px;
+			border-bottom: 1px solid #C5C5C5;
 			font-weight: bold;
-			border: 1px solid #c5c5c5;
+			height: @baseBarHeight;
 			.buttonBackground();
-		}
 
-		.z-groupbox-content {
-			border: 1px solid #C5C5C5;
-			height: auto;		
-		}
-
-		&.z-groupbox-collapsed {
-			border-width: 0px;
-			padding-left: 0px;
-			
-			.z-groupbox-header {
-				margin-right: 0px;
-			}		
+			.z-caption, .z-groupbox-title {
+				margin: 0;
+				padding: 0;
+				background: none;
+				width: 100% !important;
+				display: inline-block;
+			}
 		}
 	}
 }

@@ -41,7 +41,7 @@ public class AjaxDevice extends GenericDevice {
 		return false;
 	}
 	public Boolean isCompatible(String userAgent) {
-		userAgent = userAgent.toLowerCase();
+		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("mozilla") >= 0 
 			|| userAgent.indexOf("msie ") >= 0
 			|| userAgent.indexOf("gecko/") >= 0

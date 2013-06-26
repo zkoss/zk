@@ -282,7 +282,7 @@ public class ClassWebResource {
 		if (ext == null)
 			return null;
 
-		ext = ext.toLowerCase();
+		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		for (;;) {
 			synchronized (_extlets) {
 				Extendlet exlet = _extlets.get(ext);
@@ -333,7 +333,7 @@ public class ClassWebResource {
 			}
 		});
 
-		ext = ext.toLowerCase();
+		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		synchronized (_extlets) {
 			return _extlets.put(ext, extlet);
 		}
@@ -350,7 +350,7 @@ public class ClassWebResource {
 		if (ext == null)
 			return null;
 
-		ext = ext.toLowerCase();
+		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		synchronized (_extlets) {
 			return _extlets.remove(ext);
 		}
@@ -374,7 +374,7 @@ public class ClassWebResource {
 		if (ext == null)
 			return null;
 
-		ext = ext.toLowerCase();
+		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		final Map<String, FastReadArray<Filter>> filters =
 			flag == 0 || (flag & FILTER_REQUEST) != 0 ? _reqfilters: _incfilters;
 		if (filters.isEmpty()) //no need to sync
@@ -417,7 +417,7 @@ public class ClassWebResource {
 			}
 		});
 
-		ext = ext.toLowerCase();
+		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		if (flags == 0 || (flags & FILTER_REQUEST) != 0)
 			addFilter(_reqfilters, ext, filter);
 		if ((flags & FILTER_INCLUDE) != 0)
@@ -443,7 +443,7 @@ public class ClassWebResource {
 		if (ext == null || filter == null)
 			return false;
 
-		ext = ext.toLowerCase();
+		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		boolean removed = false;
 		if (flags == 0 || (flags & FILTER_REQUEST) != 0)
 			removed = rmFilter(_reqfilters, ext, filter);

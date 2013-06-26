@@ -139,8 +139,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!nest || wgt.z_rod === 9) { //Bug 2948829: don't delete value set by real ROD
 			delete wgt.z_rod;
 
-			for (var child = wgt.firstChild; child; child = child.nextSibling)
+			for (var child = wgt.firstChild; child; child = child.nextSibling) {
 				_unbindrod(child, true);
+				//Bug ZK-1827: native component with rod should also store the widget for used in mount.js(create function)
+				if (child.$instanceof(zk.Native))
+					zAu._storeStub(child);
+			}
 		}
 	}
 
@@ -2960,8 +2964,9 @@ unbind_: function (skipper, after) {
 				if (child.z_rod) _unbindrod(child);
 				else if (child.desktop) {
 					child.unbind_(null, after); //don't pass skipper
-					if (zk.feature.ee && child.$instanceof(zk.Native))
-						zAu._storeStub(child); //Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
+					//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
+					if (child.$instanceof(zk.Native))
+						zAu._storeStub(child);
 				}
 		}
 	},

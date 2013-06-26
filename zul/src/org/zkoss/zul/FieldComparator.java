@@ -169,7 +169,7 @@ public class FieldComparator implements Comparator, Serializable {
 					((Character)c).charValue()));
 		} else if ("LOWER".equals(func)) {
 			if (c instanceof String)
-				return ((String)c).toLowerCase();
+				return ((String)c).toLowerCase(java.util.Locale.ENGLISH);
 			if (c instanceof Character)
 				return new Character(Character.toLowerCase(
 					((Character)c).charValue()));

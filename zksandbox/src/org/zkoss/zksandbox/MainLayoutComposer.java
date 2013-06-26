@@ -237,8 +237,8 @@ public class MainLayoutComposer extends GenericForwardComposer<Borderlayout> imp
 
 		if (key.trim().length() != 0) {
 			for (int i = 0; i < items.length; i++) {
-				if (items[i].getLabel().toLowerCase()
-						.indexOf(key.toLowerCase()) != -1)
+				if (items[i].getLabel().toLowerCase(java.util.Locale.ENGLISH)
+						.indexOf(key.toLowerCase(java.util.Locale.ENGLISH)) != -1)
 					item.add(items[i]);
 			}
 			itemList.setModel(new ListModelList<DemoItem>(item, true));
