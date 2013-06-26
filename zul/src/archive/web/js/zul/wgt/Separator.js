@@ -95,7 +95,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		//_spacing contains % and it's gecko
 		var v = zk.parseInt(this._spacing.substring(0, this._spacing.length - 1).trim());
 		if (v <= 0) return s;
-		v = v >= 2 ? (v / 2) + "%" : "1%";
+		v = v >= 2 ? (v / 2) + '%' : '1%';
 
 		return 'margin:' + (this.isVertical() ? '0 ' + v : v + ' 0')
 			+ ';' + s;
