@@ -335,10 +335,13 @@ zWatch = (function () {
 		return _bindLevel(a[0]) - _bindLevel(b[0]);
 	}
 	zk._zsyncFns = function (name, org) {
-		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
+		if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
 			jq.zsync(org);
 			if (name == 'onSize')
                 setTimeout('zk.doAfterResize()', 20); // invoked after mounted
+		}
+		if (name == 'onResponse')
+			jq.doSyncScroll();
 	};
 	//invoke fns in the reverse order
 	function _reversefns(fns, args) {

@@ -143,7 +143,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			vbar = this.$n('ver'),
 			hwrapper = this.$n('hor-wrapper'),
 			vwrapper = this.$n('ver-wrapper'),
-			scrollHeight = scroller.offsetHeight,
+			scrollHeight = scroller.scrollHeight,
 			needH = this.needH,
 			needV = this.needV,
 			opts = this.opts,
@@ -175,7 +175,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				hws = hwrapper.style,
 				wdh = cave.offsetWidth - startX,
 				swdh = scroller.offsetWidth - startX
-						+ zk(cave).paddingWidth() + froenScrollWidth,
+						+ zk(cave).padBorderWidth() + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
