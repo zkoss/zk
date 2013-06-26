@@ -2228,7 +2228,7 @@ this._syncShadow(); //synchronize shadow
 		}
 		a.focus();
 		setTimeout(function () {jq(a).remove();}, 500);
-	}
+	},
 	/**
 	 * An override function that provide a way to get the style value where is
 	 * defined in the CSS file or the style object, rather than the computed value.
@@ -2296,6 +2296,47 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @since 5.0.5
 	 */
 	//j2d: function () {}
+	_syncScroll: {},
+	/** To register one object for the <code>doSyncScroll</code> invocation.
+	 * For example,
+	 * <pre><code>onSyncScroll();</code></pre>
+	 * @param Object wgt the object to register
+	 * @see #doSyncScroll
+	 * @see #unSyncScroll
+	 * @since 6.5.0
+	 */
+	onSyncScroll: function (wgt) {
+		var sync = this._syncScroll;
+		if (!sync[wgt.id])
+			sync[wgt.id] = wgt;
+	},
+	/** To invoke the <code>doSyncScroll</code> method of the registered objects.
+	 * <p><code>doSyncScroll</code> is called automatically when {@link zWatch}
+	 * fires onResponse, onShow or onHide.
+	 * It is useful if you have a Widget that using zul.Scrollbar.
+	 * Then, if you register the widget, the widget's doSyncScroll method will be called when widget add/remove/hide/show its child widget.
+	 * @see #onSyncScroll
+	 * @see #unSyncScroll
+	 * @since 6.5.0
+	 */
+	doSyncScroll: function () {
+		var sync = this._syncScroll;
+		for (var id in sync) {
+			sync[id].doResizeScroll_();
+			delete sync[id];
+		}
+	},
+	/** To unregister one object for the <code>doSyncScroll</code> invocation.
+	 * For example,
+	 * <pre><code>unSyncScroll(wgt);</code></pre>
+	 * @param Object wgt the object to register
+	 * @see #doSyncScroll
+	 * @see #onSyncScroll
+	 * @since 6.5.0
+	 */
+	unSyncScroll: function (wgt) {
+		delete this._syncScroll[wgt.id];
+	}
 });
 
 /** @class jq.Event

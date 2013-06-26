@@ -1,7 +1,7 @@
 @import "~./zul/less/_header.less";
 
 .z-caption {
-	width: 100% !important;
+	width: 100%;
 	height: 24px;
 	font-size: @fontSizeMedium;
 	white-space: nowrap;
@@ -11,17 +11,24 @@
 		margin-right: 4px;
 	}
 
+	.z-label {
+		line-height: 16px;
+		padding: 4px 0px 4px 0px;
+		margin-right: 4px;
+		display: inline-block;
+	}
+
+	.z-button {
+		margin-top: -2px;
+		margin-right: 4px;
+	}
+
 	&-image {
 		vertical-align:middle;
 	}
 
 	input {
 		font-size: @fontSizeSmall;
-	}
-
-	.z-button {
-		font-size: @fontSizeXSmall; 
-		font-weight: normal;
 	}
 
 	.z-toolbar {
