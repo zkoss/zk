@@ -224,17 +224,23 @@
 		height: @baseIconHeight;
 		cursor: pointer;
 		font-size: @baseFontSize;
-		color: black;
 		position: relative;
 	}
 	&-icon-open,
 	&-icon-close {
 		display: inline-block;
 		position: absolute;
-		left: 5px;
+		left: 8px;
+		&:hover {
+			color: #0076a3;
+		}
 	}
 	&-icon-open {
-		.transform('rotate(45deg)');
+		color: black;
+		left: 5px;
+	}
+	&-icon-close {
+		color: #8FB9D0;
 	}
 }
 .z-listgroupfoot-inner {
