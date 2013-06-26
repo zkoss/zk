@@ -55,7 +55,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em")
 		 */
 		spacing: function () {
-			this.updateDomStyle_();
+			this.updateDomStyle_();		
 		}
 	},
 
@@ -95,21 +95,21 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		//_spacing contains % and it's gecko
 		var v = zk.parseInt(this._spacing.substring(0, this._spacing.length - 1).trim());
 		if (v <= 0) return s;
-		v = v >= 2 ? (v / 2) + "%": "1%";
+		v = v >= 2 ? (v / 2) + "%" : "1%";
 
-		return 'margin:' + (this.isVertical() ? '0 ' + v: v + ' 0')
+		return 'margin:' + (this.isVertical() ? '0 ' + v : v + ' 0')
 			+ ';' + s;
 	},
 	getWidth: function () {
 		var wd = this.$supers('getWidth', arguments);
 		return !this.isVertical() || (wd != null && wd.length > 0)
-			|| _shallFixPercent(this) ? wd: this._spacing;
+			|| _shallFixPercent(this) ? wd : this._spacing;
 		
 	},
 	getHeight: function () {
 		var hgh = this.$supers('getHeight', arguments);
 		return this.isVertical() || (hgh != null && hgh.length > 0)
-			|| _shallFixPercent(this) ? hgh: this._spacing;
+			|| _shallFixPercent(this) ? hgh : this._spacing;
 	}
 });
 
