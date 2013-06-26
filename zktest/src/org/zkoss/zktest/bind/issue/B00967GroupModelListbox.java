@@ -86,8 +86,8 @@ public class B00967GroupModelListbox {
 			List<Food> somefoods = new ArrayList<Food>();
 			for (Iterator<Food> i = foods.iterator(); i.hasNext();) {
 				Food tmp = i.next();
-				if (tmp.getCategory().toLowerCase().indexOf(filter1.trim().toLowerCase()) >= 0
-						&& tmp.getName().toLowerCase().indexOf(filter2.trim().toLowerCase()) >= 0) {
+				if (tmp.getCategory().toLowerCase(java.util.Locale.ENGLISH).indexOf(filter1.trim().toLowerCase(java.util.Locale.ENGLISH)) >= 0
+						&& tmp.getName().toLowerCase(java.util.Locale.ENGLISH).indexOf(filter2.trim().toLowerCase(java.util.Locale.ENGLISH)) >= 0) {
 					somefoods.add(tmp);
 				}
 			}

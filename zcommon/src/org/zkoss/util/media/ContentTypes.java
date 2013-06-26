@@ -59,7 +59,7 @@ public class ContentTypes {
 		if (format == null)
 			return null;
 
-		format = format.trim().toLowerCase();
+		format = format.trim().toLowerCase(java.util.Locale.ENGLISH);
 		for (;;) {
 			synchronized (_fmt2ct) {
 				String fmt2ct = _fmt2ct.get(format);
@@ -78,7 +78,7 @@ public class ContentTypes {
 		if (ctype == null)
 			throw new IllegalArgumentException();
 
-		ctype = ctype.trim().toLowerCase();
+		ctype = ctype.trim().toLowerCase(java.util.Locale.ENGLISH);
 		String format;
 		synchronized (_ct2fmt) {
 			format = _ct2fmt.get(ctype);

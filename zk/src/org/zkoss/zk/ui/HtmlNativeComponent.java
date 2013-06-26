@@ -165,7 +165,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 		if (exec != null && !HtmlPageRenders.isZkTagsGenerated(exec)
 		&& exec.getAttribute(ATTR_TOP_NATIVE) == null) { //need to check topmost native only
 			String tn;
-			if (root || "html".equals(tn = _tag != null ? _tag.toLowerCase(): "")
+			if (root || "html".equals(tn = _tag != null ? _tag.toLowerCase(java.util.Locale.ENGLISH): "")
 			|| "body".equals(tn) || "head".equals(tn)) {
 				exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
 				oldout = out;
@@ -241,7 +241,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 				&& ((jhead = junav) < 0) //use <body> if no <head>
 				&& ((jhead = html) < 0)) { //use <html> if no <body>
 					if (_tag != null) {
-						final String tn = _tag.toLowerCase();
+						final String tn = _tag.toLowerCase(java.util.Locale.ENGLISH);
 						if ("div".equals(tn) || "span".equals(tn)) {
 							l_loop:
 							for (int j = 0, len = sb.length(); j < len; ++j)
@@ -374,7 +374,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 			NativeHelpers.getAttributes(sb, props, namespaces);
 
 			if (tag != null) {
-				final String tn = tag.toLowerCase();
+				final String tn = tag.toLowerCase(java.util.Locale.ENGLISH);
 				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					sb.append('/');
 				sb.append('>');
@@ -382,7 +382,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 		}
 		public void getSecondHalf(StringBuffer sb, String tag) {
 			if (tag != null) {
-				final String tn = tag.toLowerCase();
+				final String tn = tag.toLowerCase(java.util.Locale.ENGLISH);
 				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					return;
 

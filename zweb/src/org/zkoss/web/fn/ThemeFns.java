@@ -151,7 +151,7 @@ public class ThemeFns {
 				boolean hex = color.startsWith("#");
 
 				int end = hex ? color.indexOf(" ") + 1 : color.indexOf(")") + 1;
-				if (end == 0 && !color.toLowerCase().contains("transparent"))
+				if (end == 0 && !color.toLowerCase(java.util.Locale.ENGLISH).contains("transparent"))
 					if (hex)
 						throw new IllegalArgumentException(
 								"The format of hexadecimal is wrong! [" + color

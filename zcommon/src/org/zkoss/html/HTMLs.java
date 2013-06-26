@@ -195,7 +195,7 @@ public class HTMLs {
 	 * @param tagname the tag name, e.g., br and tr.
 	 */
 	public static final boolean isOrphanTag(String tagname) {
-		return _orphans.contains(tagname.toLowerCase());
+		return _orphans.contains(tagname.toLowerCase(java.util.Locale.ENGLISH));
 	}
 	/** A set of tags that don't have child. */
 	private static final Set<String> _orphans = new HashSet<String>(29);

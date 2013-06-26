@@ -4,7 +4,9 @@ ZK 6.5.3
 * Features
   ZK-1764: Fileupload.get() supports to provide a callback event listener
   ZK-1801: provide fusion funnel chart integration
-
+  ZK-1819: ValidationContext support a new flag that can identify the value of single field whether is valid when use form binding
+  ZK-1825: Timebox should not reset the date value to today
+  
 * Bugs
   ZK-1693: Dial chart customize color issues
   ZK-1692: widget.isVisible API doesn't work properly
@@ -47,6 +49,12 @@ ZK 6.5.3
   ZK-1803: Setting a textbox visible=false and invalidate its parent leading to "Failed to mount" error in Firefox
   ZK-1793: Grid with hidden header flickering back and forth when you scroll horizontally
   ZK-1804: Calendar should not be able to select year less than 1900 or greater than 2099
+  ZK-1808: Close tabpanel cause js error
+  ZK-1812: zAu.send: data of client event ignored on server side
+  ZK-1821: Component inside native component doesn't cleanup correctly
+  ZK-1822: Turkish locale problem during browser detection (on server side)
+  ZK-1827: Component inside native component js error
+  
   --------
 ZK 6.5.2
 Mar 26, 2013
