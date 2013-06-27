@@ -459,6 +459,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			shiftTime.setYear(oldTime.getFullYear() + ofs);		
 			break;
 		}	
+		//Bug B65-ZK-1804: Constraint the shifted time should not be out of range between _minyear and _maxyear
 		if (shiftTime.getTime() < this._minDate.getTime() || shiftTime.getTime() > this._maxDate.getTime())
 			return; // out of range
 		this._shiftDate(this._view, ofs);
@@ -820,7 +821,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
 								bSel = cur == d;
 							
-							// check whether the date is out of range
+							// Bug B65-ZK-1804: check whether the date is out of range
 							if (y >= this._maxyear && m == 11 && monofs == 1
 									|| y <= this._minyear && m == 0 && monofs == -1) {
 								$cell.addClass(zcls + '-disd');
