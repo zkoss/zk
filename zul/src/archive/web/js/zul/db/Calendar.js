@@ -142,9 +142,8 @@ zul.db.Renderer = {
 					'-ty" class="', text, '">', y + ydelta, '</span>');
 			break;
 		case 'month':
-			out.push('<span id="', uuid, '-tm" class="', text, '">',
-					localizedSymbols.SMON[m], '</span> <span id="', uuid, 
-					'-ty" class="', text, '">', y + ydelta, '</span>');
+			out.push('<span id="', uuid, '-ty" class="', text, '">', 
+					y + ydelta, '</span>');
 			break;
 		case 'year':
 			out.push('<span id="', uuid, '-tyd" class="', text, '">',
@@ -287,6 +286,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_view : 'day', //"day", "month", "year", "decade",
 	_minyear: 1900,
 	_maxyear: 2099,
+	_minDate: new Date(1899, 11, 31, 23, 59, 59),
+	_maxDate: new Date(2099, 11, 31, 23, 59, 59),
 	
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -416,6 +417,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var y = this.getTime().getFullYear();
 			this._minyear = v > y ? y : (v > 100 ? v : 100);
 		}
+		this._minDate.setYear(this._minyear);
 	},
 	setMaxYear_: function(v) {
 		if (v === undefined) {
@@ -424,17 +426,29 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var y = this.getTime().getFullYear();			
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
 		}
+		this._maxDate.setYear(this._maxyear);
 	},
 	_shift: function (ofs, opts) {
-		var oldTime = this.getTime();	
+		var oldTime = this.getTime(),
+		shiftTime = new Date(oldTime.getTime());
 		
 		switch(this._view) {
+		case 'day':
+			shiftTime.setDate(oldTime.getDate() + ofs);
+			break;
 		case 'month':
+			if (ofs == 7)
+				ofs = 4;
+			else if (ofs == -7)
+				ofs = -4;
+			shiftTime.setMonth(oldTime.getMonth() + ofs);	
+			break;
 		case 'year':
 			if (ofs == 7)
 				ofs = 4;
 			else if (ofs == -7)
 				ofs = -4;
+			shiftTime.setYear(oldTime.getFullYear() + ofs);				
 			break;
 		case 'decade':
 			if (ofs == 7)
@@ -442,12 +456,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			else if (ofs == -7)
 				ofs = -4;
 			ofs *= 10;
-			
-			var y = oldTime.getFullYear();
-			if (y + ofs < this._minyear || y + ofs > this._maxyear)
-				return;// out of range
-//			break;
-		}		
+			shiftTime.setYear(oldTime.getFullYear() + ofs);		
+			break;
+		}	
+		//Bug B65-ZK-1804: Constraint the shifted time should not be out of range between _minyear and _maxyear
+		if (shiftTime.getTime() < this._minDate.getTime() || shiftTime.getTime() > this._maxDate.getTime())
+			return; // out of range
 		this._shiftDate(this._view, ofs);
 		var newTime = this.getTime();
 		switch(this._view) {
@@ -466,7 +480,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			break;
 		default:			
 			this.rerender();
-//			break;
+			break;
 		}
 	},
 	/** Returns the format of this component.
@@ -807,7 +821,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
 								bSel = cur == d;
 							
-							// check whether the date is out of range
+							// Bug B65-ZK-1804: check whether the date is out of range
 							if (y >= this._maxyear && m == 11 && monofs == 1
 									|| y <= this._minyear && m == 0 && monofs == -1) {
 								$cell.addClass(zcls + '-disd');
