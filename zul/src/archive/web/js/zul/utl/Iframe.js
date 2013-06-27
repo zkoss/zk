@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * any other components).
  */
 zul.utl.Iframe = zk.$extends(zul.Widget, {
-	_scrolling: "auto",
+	_scrolling: 'auto',
 
 	$define: {
 		src: function (v) {
@@ -35,18 +35,22 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		 * Return the scroll bars.
 		 * <p>Defalut: "auto"
 		 * @return String
+		 * @deprecated as of release 7.0.0, use CSS instead.
 		 */
 		/**
 		 * Define scroll bars
 		 * @param String scrolling "true", "false", "yes" or "no" or "auto", "auto" by default
 		 * If null, "auto" is assumed.
+		 * @deprecated as of release 7.0.0, use CSS instead.
 		 */
 		scrolling: function (v) {
 			if (!v) this._scrolling = v = 'auto';
 			var n = this.$n();
 			if (n) {
-				n.scrolling = v;
-				this.rerender();
+				if (zk.gecko || zk.opera)
+					n.scrolling = 'true' === v ? 'yes': 'false' === v ? 'no': v;	
+				else 
+					this.rerender();
 			}
 		},
 		/** Returns the alignment.
@@ -107,10 +111,10 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments)
-				+ ' src="'+zjq.src0+'" frameborder="0"',
-			v = this._scrolling;
-		if ('auto' != v)
-			attr += ' scrolling="' + ('true' == v ? 'yes': 'false' == v ? 'no': v) + '"';
+				+ ' src="' + zjq.src0 + '" frameborder="0"',
+		v = this._scrolling;
+		if ("auto" != v)
+			attr += ' scrolling="' + ('true' === v ? 'yes': 'false' === v ? 'no': v) + '"';	
 		if (v = this._align) 
 			attr += ' align="' + v + '"';
 		if (v = this._name) 
