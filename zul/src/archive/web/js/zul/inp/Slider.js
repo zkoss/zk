@@ -145,17 +145,17 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				this.efield.name = this._name;
 		}
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
+	domClass_: function() {
+		var scls = this.$supers('domClass_', arguments);
 		
-		var name = 'z-slider';
+		scls = scls ? scls : 'z-slider';
+		scls += ' ' + ('horizontal' == this._orient ? this.$s('hor') : this.$s('ver'));
 		if (this.inScaleMold()) 
-			return name + '-scale';
-		else if (this.inSphereMold()) 
-			return name + ('horizontal' == this._orient ? '-sphere-hor' : '-sphere-ver');
-		else 
-			return name + ('horizontal' == this._orient ? '-hor' : '-ver');
+			scls += ' ' + this.$s('scale');
+		if (this.inSphereMold())
+            scls += ' ' + this.$s('sphere');
+			
+		return scls;
 	},
 	doMouseOver_: function(evt) {
 		jq(this.$n('btn')).addClass(this.getZclass() + '-btn-over');
