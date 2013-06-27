@@ -23,11 +23,10 @@ function (out) {
 				this.domStyle_({height:true}), '">');
 		this.uuid += '-real'; //this is for calling domAttrs
 	}
-	
+	out.push('<div', this.domAttrs_(isVer ? {width:true} : {height:true}), '>');
 	if(isScale)
-		this.uuid = uuid;
-	out.push('<div', this.domAttrs_(isVer ? {width:true} : {height:true}), '>', 
-			   '<div id="', uuid, '-inner" class="', this.$s('center'), '">',
+		this.uuid = uuid;	
+	out.push(  '<div id="', uuid, '-inner" class="', this.$s('center'), '">',
 			     '<div id="', uuid, '-btn" class="', this.$s('button'), '"></div>', 
 			   '</div>', 
 			 '</div>');
