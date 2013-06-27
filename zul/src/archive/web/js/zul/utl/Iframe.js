@@ -42,13 +42,11 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		 * If null, "auto" is assumed.
 		 */
 		scrolling: function (v) {
-			if (!v) this._scrolling = v = "auto";
+			if (!v) this._scrolling = v = 'auto';
 			var n = this.$n();
 			if (n) {
-				if (zk.ie || zk.safari)
-					this.rerender();
-				else
-					n.scrolling = v;
+				n.scrolling = v;
+				this.rerender();
 			}
 		},
 		/** Returns the alignment.
@@ -111,7 +109,7 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		var attr = this.$supers('domAttrs_', arguments)
 				+ ' src="'+zjq.src0+'" frameborder="0"',
 			v = this._scrolling;
-		if ("auto" != v)
+		if ('auto' != v)
 			attr += ' scrolling="' + ('true' == v ? 'yes': 'false' == v ? 'no': v) + '"';
 		if (v = this._align) 
 			attr += ' align="' + v + '"';
