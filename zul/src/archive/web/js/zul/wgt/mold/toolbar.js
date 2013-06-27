@@ -13,8 +13,9 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
+	// ZK-1706: the width of empty space does not always equal 3px in ie9, ie10 
 	var zcls = this.getZclass(),
-		space = 'vertical' != this.getOrient() ? '' : '<br/>';
+		space = 'vertical' != this.getOrient() ? (zk.ie && zk.ie > 8 ? '<span></span>' : '') : '<br/>';
 		
 	out.push('<div ', this.domAttrs_(), '>', '<div id="', this.uuid, '-cave"',
 				' class="', zcls, "-body ", zcls, '-', this.getAlign(), '" >');
