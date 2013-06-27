@@ -14,26 +14,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var parent = this.parent,
-		uuid = this.uuid,
-		zcls = this.getZclass(),
 		cnt = this.domContent_();
+	out.push('<div', this.domAttrs_(), '>',
+			   '<div id="', this.uuid, '-cave" class="', this.$s('content'), '">', (cnt ? cnt : this._getBlank()), '</div>'); // Bug 1688261: nbsp required
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
+	
 	if (parent._isDefault && parent._isDefault()) {
-		out.push('<div', this.domAttrs_(), '>', cnt);
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			w.redraw(out);
 		out.push('</div>');
-		return;
+		return; 
 	}
-
+	
 	var puuid = parent.uuid,
 		picon = parent.$s('icon'),
 		getIcon = function(iconClass) {
 			return '<i class="z-' + iconClass + '"></i>';
 		};
-	out.push('<div', this.domAttrs_(), '>',
-			   '<div id="', uuid, '-cave" class="', this.$s('content'), '">', (cnt ? cnt : this._getBlank()), '</div>'); // Bug 1688261: nbsp required
-	for (var w = this.firstChild; w; w = w.nextSibling)
-		w.redraw(out);
 	
 	if (this._isCollapsibleVisible())
 		out.push('<div id="', puuid, '-exp" class="', picon, ' ', parent.$s('expand'), '">', getIcon('icon-remove'), '</div>');

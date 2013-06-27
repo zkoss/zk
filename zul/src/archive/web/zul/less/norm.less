@@ -79,72 +79,56 @@ body {
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 <%-- ZK JavaScript debug box --%>
-div.z-error {
+.z-error {
 	display: none;
 	z-index: 9999999;
 	position: absolute;
 	top: 0;
 	left: 40%;
-	height: 90px;
 	width: 450px;
 	padding: 3px 5px 3px 3px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #990000;
-	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
-	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
-	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+	border: 1px solid #990000;
+	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
 	background-color: #FFEEEE;
-
-	.msgcnt {
+	
+	.messagecontent {
 		padding: 0;
 		border: 1px solid #990000;
 		background-color: white;
-		height: 60px;
 	}
-	.msgs {
-		padding: 2px 3px;
-		height: 60px;
-		width: 440px;
+	.messages {
+		padding: 2px 3px 15px;
 		word-wrap: break-word;
 		overflow: auto;
-
-		.msg {
+		.message {
 			padding: 3px 0 2px;
 			border-bottom: 1px solid #990000;
 		}
 	}
-	.newmsg {
+	.newmessage {
 		background-color: #FFEEEE;
 		display: none;
 	}
-
-	.btn {
+	.button {
 		cursor: pointer;	
-		color: #363636; 
-		width: 16px;
-		height: 16px;
-		display: inline-block;
-		margin-left: 10px;
+		color: #990000;
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		margin-left: 4px;
+		float: right;
+		> .z-icon-remove {
+			font-size: @fontSizeXLarge;
+		}
 	}
 	#zk_err-p {
 		cursor: move;
+		padding-top: 6px;
 	}
-
-	.errnum {
-		padding-left: 20px;
+	.errornumbers {
+		padding-left: 4px;
 		color: #990000;
-		font-weight: bold;	
-	}
-
-	.errnum {
-		.encodeURL(background, '~./zk/img/error.png', no-repeat scroll -31px 4px transparent);
-	}
-	.redraw {
-		.encodeURL(background, '~./zk/img/error.png', no-repeat scroll 0 0 transparent);
-	}
-	.close {
-		.encodeURL(background, '~./zk/img/error.png', no-repeat scroll -17px 0 transparent);
+		font-weight: bold;
+		float: left;
 	}
 }
 
@@ -497,8 +481,8 @@ span.z-upload input {
 	.applyCSS3('transition-timing-function', 'cubic-bezier(0.33, 0.66, 0.66, 1)');
 	&-embed {
 		background: lighten(#DDDDDD, 5%);
-		opacity: 0.8;
-		filter: alpha(opacity=80);
+		opacity: 1.0;
+		filter: alpha(opacity=100);
 	}
 	//vertical
 	&-vertical {
