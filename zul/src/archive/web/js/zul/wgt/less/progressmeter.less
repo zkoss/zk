@@ -1,0 +1,18 @@
+@import "~./zul/less/_header.less";
+
+.z-progressmeter {
+	background: #FFFFFF repeat-x 0 0 ;
+	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter-anim.gif');
+	border:1px solid #CFCFCF;
+	text-align: left;
+	height: 15px;
+	overflow: hidden;
+
+	&-image {
+		display: inline-block;
+		.verGradient(#E8F6FD, #C6E9FA);
+		height: 15px;
+		line-height: 0;
+		font-size: 0;
+	}
+}
