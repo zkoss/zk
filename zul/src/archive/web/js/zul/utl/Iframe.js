@@ -113,7 +113,7 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		var attr = this.$supers('domAttrs_', arguments)
 				+ ' src="' + zjq.src0 + '" frameborder="0"',
 		v = this._scrolling;
-		if ("auto" != v)
+		if ('auto' != v)
 			attr += ' scrolling="' + ('true' === v ? 'yes': 'false' === v ? 'no': v) + '"';	
 		if (v = this._align) 
 			attr += ' align="' + v + '"';
