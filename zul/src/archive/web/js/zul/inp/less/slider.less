@@ -3,7 +3,7 @@
 .z-slider {
 	background-image: none;
 	height: 32px;
-	margin-right: 0;
+	margin-right: 7px;
 
 	&-center {
 		.gradient('ver', 'rgba(157,157,157,0.5) 0%; rgba(130,140,149,0.5) 13%; rgba(215,215,215,0.5) 100%');
@@ -11,13 +11,13 @@
 		height: 6px;
 		width: 100%;
 		top: 15px;	
-		margin-right: 7px;	
+		margin-right: -7px;	
 		line-height: 0;		
 		position: relative;
 		cursor: pointer;
 	}
 
-	&-btn {
+	&-button {
 		width: 16px;
 		height: 16px;
 		.applyCSS3('box-sizing', 'border-box');
@@ -37,9 +37,14 @@
 			
 			.verGradient(#EEEEEE, #FEFEFE);
 		}
+
+		&:hover {
+			.resetGradient();
+			background-color: #F3F3F3;
+		}
 	}
 
-	&-pp {
+	&-popup {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
@@ -49,14 +54,14 @@
 		padding: 2px;
 	}
 
-	&-ver {
-		background-image: none;
+	&-vertical {
 		width: 32px;
 		margin-bottom: 7px;
+		margin-right: 0px;
 		line-height: 0;
 		font-size: 0;
 
-		.z-slider-btn {
+		.z-slider-button {
 			left: -5px;
 		}
 
@@ -73,12 +78,18 @@
 	}
 
 	&-sphere {
-		.z-slider-btn {
-			.borderRadius('15px');
-		}
-
-		.z-slider-ver .z-slider-btn {
+		.z-slider-vertical .z-slider-button {
 			bottom: 0;			
 		}
+	}
+
+	&-sphere, &-scale {
+		.z-slider-button {
+			.borderRadius('15px');
+		}
+	}
+
+	&-tick {
+		.encodeThemeURL(background-image, '~./zul/img/slider/ticks.gif');
 	}
 }

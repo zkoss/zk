@@ -149,7 +149,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		var scls = this.$supers('domClass_', arguments);
 		
 		scls = scls ? scls : 'z-slider';
-		scls += ' ' + ('horizontal' == this._orient ? this.$s('hor') : this.$s('ver'));
+		scls += ('horizontal' == this._orient ? '' : ' ' +  this.$s('vertical'));
 		if (this.inScaleMold()) 
 			scls += ' ' + this.$s('scale');
 		if (this.inSphereMold())
@@ -157,20 +157,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			
 		return scls;
 	},
-	doMouseOver_: function(evt) {
-		jq(this.$n('btn')).addClass(this.getZclass() + '-btn-over');
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function(evt) {
-		jq(this.$n('btn')).removeClass(this.getZclass() + '-btn-over');
-		this.$supers('doMouseOut_', arguments);
-	},
 	onup_: function(evt) {
 		var btn = zul.inp.Slider.down_btn, widget;
 		if (btn) {
 			widget = zk.Widget.$(btn);
-			var	zcls = widget.getZclass();
-			jq(btn).removeClass(zcls + '-btn-drag').removeClass(zcls + '-btn-over');
 		}
 		
 		zul.inp.Slider.down_btn = null;
@@ -178,10 +168,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			jq(document).unbind('zmouseup', widget.onup_);
 	},
 	doMouseDown_: function(evt) {
-		var btn = this.$n('btn');
-		jq(btn).addClass(this.getZclass() + '-btn-drag');
 		jq(document).bind('zmouseup', this.onup_);
-		zul.inp.Slider.down_btn = btn;
+		zul.inp.Slider.down_btn = this.$n('btn');
 		this.$supers('doMouseDown_', arguments);
 	},
 	doClick_: function(evt) {
@@ -241,11 +229,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		var widget = dg.control;
 		widget.$n('btn').title = ''; //to avoid annoying effect
 		widget.slidepos = widget._curpos,
-		vert = widget.isVertical(),
-		cls = vert ? 'z-slider-ver-pp' : 'z-slider-hor-pp';
+		vert = widget.isVertical();
 		
 		jq(document.body)
-			.append('<div id="zul_slidetip" class="z-slider-pp ' + cls + '"'
+			.append('<div id="zul_slidetip" class="z-slider-popup"'
 			+ 'style="position:absolute;display:none;z-index:60000;'
 			+ 'background-color:white;border: 1px outset">' + widget.slidepos +
 			'</div>');
@@ -310,12 +297,24 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			else 
 				inner.style.height = '214px';
 		}
+	},	
+	_fixWdh: function() {
+		if (!this.isVertical()) {
+			this.$n('btn').style.left = '0px';
+			var inner = this.$n('inner'), 
+				wd = this.getRealNode().clientWidth;
+			if (wd > 0) 
+				inner.style.width = (wd + 7) + 'px';
+			else 
+				inner.style.width = '214px';
+		}
 	},
 	_fixPos: function() {
 		this.$n('btn').style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
 	onSize: function() {
 		this._fixHgh();
+		this._fixWdh();
 		this._fixPos();
 	},
 

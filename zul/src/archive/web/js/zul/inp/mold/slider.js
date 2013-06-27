@@ -28,7 +28,7 @@ function (out) {
 		this.uuid = uuid;
 	out.push('<div', this.domAttrs_(isVer ? {width:true} : {height:true}), '>', 
 			   '<div id="', uuid, '-inner" class="', this.$s('center'), '">',
-			     '<div id="', uuid, '-btn" class="', this.$s('btn'), '"></div>', 
+			     '<div id="', uuid, '-btn" class="', this.$s('button'), '"></div>', 
 			   '</div>', 
 			 '</div>');
 	
