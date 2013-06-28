@@ -918,10 +918,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			} else if (cvh && cvh != 'auto') {
 				cave.style.height = '';
 			}
-		}
+		} 
 	},
 	_offsetHeight: function (n) {
-		return zk(n).contentHeight() - this._titleHeight();
+		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();		
 	},
 	_titleHeight: function () {
 		var cap = this.getTitle() || this.caption ? this.$n('cap') : null;
