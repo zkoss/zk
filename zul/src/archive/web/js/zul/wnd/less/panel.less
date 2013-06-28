@@ -59,13 +59,16 @@
 		}
 	}
 
-	&-body > &-btm > .z-toolbar {
-		border-width: 0 1px 1px;
-		height: @baseBarHeight;
+	.z-toolbar {
+		line-height: 24px;
+		padding: 4px;
 	}
 
-	&-top, &-btm, &-btm2 {
-		height: @baseBarHeight;
+	&-top .z-toolbar:not(.z-toolbar-panel),
+	&-btm2 .z-toolbar:not(.z-toolbar-panel),
+	&-btm .z-toolbar {
+		border-width: 0 1px 1px 1px;
+		padding: 4px 3px 3px 3px;
 	}
 
 	&-icon {
@@ -128,9 +131,9 @@
 		position: absolute;
 		background: #D7E6F7;
 		overflow: hidden;
-		filter: alpha(opacity=60) !important; /* IE */
-		opacity: .6 !important;
-		cursor: move !important;
+		filter: alpha(opacity=60); /* IE */
+		opacity: .6;
+		cursor: move;
 		margin: 0; padding: 0;		
 
 		.z-panel-body {
@@ -152,33 +155,38 @@
 	 	border: 2px dashed #B2CAD6;
 	}
 
-	&-noframe > &-body {
+	&-noframe &-body {
 		background: white;
 		border: 0;
 		padding: 0;
 		.borderRadius('0px');
+
+		.z-panelchildren {
+			border-top: 0;
+		}
 	}
 
-	&-noframe > &-body > &children {
-		border-top: 0;
-	}
-
-	&-noheader > &-body {
+	&-noheader &-body {
 		border-top: 1px solid #c5c5c5;
 		.borderRadius();
 	}
 
-	&-noheader&-noframe > &-body {
+	&-noheader&-noframe &-body {
 		border: 0;
 		.borderRadius('0px');
-	}	
 
-	&-noheader&-noframe > &-body > &children {
-		border-top: 1px solid #c5c5c5;
+		.z-panelchildren {
+			border-top: 1px solid #C5C5C5;
+		}
 	}
 
-	&-collapsed {
-		height: auto !important;
+	&-noborder&-noframe &children {
+		border: 0;
+	}
+
+	&-noborder .z-panel-btm .z-toolbar {
+		border: 0;
+		padding: 4px;
 	}
 }
 
@@ -187,8 +195,4 @@
 	border: 1px solid #C5C5C5;
 	position: relative;
 	.defaultOverflowZoom();
-
-	&-noborder {
-		border: 0;
-	}
 }
