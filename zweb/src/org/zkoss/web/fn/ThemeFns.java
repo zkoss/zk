@@ -17,6 +17,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.fn;
 
 import java.awt.Color;
+import java.io.UnsupportedEncodingException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
@@ -116,7 +118,7 @@ public class ThemeFns {
 			String[] cols = colors.split(";");
 			StringBuilder sb = new StringBuilder("\tbackground:").append(grad(
 					direction, Browser.W3C, cols));
-			if (temp != Browser.Old_IE && temp != Browser.IE9)
+			if (temp != Browser.Old_IE)
 				sb.append("\tbackground:");
 			return sb.append(grad(direction, temp, cols)).toString();
 		}
@@ -169,7 +171,27 @@ public class ThemeFns {
 			int len = colorAll.length();
 			if (len > 0)
 				colorAll.delete(len - 1, len);
-		} else if (template == Browser.Old_IE || template == Browser.IE9) {
+		} else if (template == Browser.IE9) {
+			for (String color : colors) {
+				color = color.trim();
+				boolean hex = color.startsWith("#");
+
+				int end = hex ? color.indexOf(" ") + 1 : color.indexOf(")") + 1;
+				if (end == 0 && !color.toLowerCase(java.util.Locale.ENGLISH).contains("transparent"))
+					if (hex)
+						throw new IllegalArgumentException(
+								"The format of hexadecimal is wrong! [" + color
+										+ "]");
+					else throw new IllegalArgumentException(
+							"The format of RGBA is wrong! [" + color + "]");
+
+				String pos = color.substring(end, color.length());
+				color = color.substring(0, end);
+				colorAll.append("<stop stop-color=\"").append(color).append("\" offset=\"")
+						.append(pos).append("\"/>");
+			}
+		
+		} else if (template == Browser.Old_IE) {
 			color1 = toIEHex(colors[0]);
 			color2 = toIEHex(colors[1]);
 		} else {
@@ -184,8 +206,18 @@ public class ThemeFns {
 		String gradType = "rad".equals(dir) ? "radial" : "linear";
 		int ieGradType = "hor".equals(dir) ? 1 : 0; // IE only supports
 													// ver/hor
-		return String.format(template.getGradient(dir), color1, color2, "",
+		String result = String.format(template.getGradient(dir), color1, color2, "",
 				gradType, ieGradType, colorAll.toString());
+		if (template == Browser.IE9) {
+			try {
+				result = Base64.encodeBase64String(result.getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				result = Base64.encodeBase64String(result.getBytes());
+			}
+			result = "url(data:image/svg+xml;base64," + result + ")";
+		}
+		
+		return result;
 	}
 
 	/**
@@ -201,7 +233,7 @@ public class ThemeFns {
 		StringBuilder sb = new StringBuilder();
 		String[] cols = colors.split(";");
 		for (Browser grad : Browser.values()) {
-			if (grad != Browser.Old_IE && grad != Browser.IE9)
+			if (grad != Browser.Old_IE)
 				sb.append("\tbackground:");
 			sb.append(grad(direction, grad, cols));
 		}
@@ -450,11 +482,25 @@ public class ThemeFns {
 
 		Browser(String prefix, String browser) {
 			_prefix = prefix;
-			if ("IE6-9".equals(browser) || "IE9".equals(browser)) {
+			if ("IE6-9".equals(browser)) {
 				_template = new StringBuilder(
 						"\tbackground: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
 						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-9 */\n")
 						.toString();
+			} else if ("IE9".equals(browser)) {
+				_template = new StringBuilder(
+						"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 1 1\" preserveAspectRatio=\"none\">\n")
+						.append("%3$s\n")
+						.append("%6$s\n")
+						.append("</linearGradient>\n")
+						.append("<rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#zkie9)\" /></svg>").toString();
+				_GRAD_TYPE = new HashMap<String, String>();
+				_GRAD_TYPE.put("ver", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"0%%\" y2=\"100%%\">");
+				_GRAD_TYPE.put("hor", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"0%%\">");
+				_GRAD_TYPE.put("diag-", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"100%%\">");
+				_GRAD_TYPE.put("diag+", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"100%%\" x2=\"100%%\" y2=\"0%%\">");
+				_GRAD_TYPE
+						.put("rad", "<radialGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" cx=\"50%%\" cy=\"50%%\" r=\"50%%\">");
 			} else if ("Chrome,Safari4+".equals(browser)) {
 				_template = new StringBuilder().append("\t").append(prefix)
 						.append("gradient(%4$s, %3$s, %6$s); /* ")
