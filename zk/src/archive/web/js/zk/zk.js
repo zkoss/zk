@@ -167,7 +167,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!console.length) {
 				jq(document.body).append(
 	'<div id="zk_logbox" class="z-log">'
-	+'<button onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
+	+'<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
 	+'<textarea id="zk_log" rows="10"></textarea></div>');
 				console = jq("#zk_log");
 			}
@@ -1322,14 +1322,14 @@ zk.log('value is", value);
 		agent = zk.agent = navigator.userAgent.toLowerCase();
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ios = zk.safari && /iphone|ipad|ipod/.test(agent);
-	zk.android = zk.safari && (agent.indexOf('android') >= 0);
-	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf('linux') >= 0;
 	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
 	zk.webkit = browser.webkit;
 	zk.chrome = browser.chrome;
 	zk.safari = browser.webkit && !zk.chrome; // safari only
+	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent);
+	zk.android = zk.webkit && (agent.indexOf('android') >= 0);
+	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;
 	
 	zk.vendor = zk.webkit ? 'webkit' : '';
@@ -1629,17 +1629,21 @@ var _erbx, _errcnt = 0;
 
 zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 	$init: function (msg) {
-		var id = "zk_err",
-			$id = "#" + id,
+		var id = 'zk_err',
+			$id = '#' + id,
+			click = zk.mobild ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
- 			html = '<div class="z-error" id="' + id + '"><table cellpadding="2" cellspacing="2" width="100%">'
- 					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
- 					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >'
-					+ '<div class="btn redraw" onclick="zk._Erbx.redraw()"' + (zk.mobile ? ' ontouchstart="zk._Erbx.redraw()"' : '') + '></div>'
-					+ '<div class="btn close" onclick="zk._Erbx.remove()"' + (zk.mobile ? ' ontouchstart="zk._Erbx.remove()"' : '')	+ '></div>'
-					+ '</div></td></tr></table></div>';
+ 			html = ['<div class="z-error" id="', id, '">',
+ 			        '<div class="messagecontent"><div class="messages">',
+ 			        zUtl.encodeXML(msg, {multiline : true}), '</div></div>',
+ 			        '<div id="', id, '-p"><div class="errornumbers">',
+ 					'<i class="z-icon-warning-sign"/>&nbsp;', ++_errcnt, ' Errors</div>',
+ 					'<div class="button"', click, '="zk._Erbx.remove()">',
+ 					'<i class="z-icon-remove"/></div>',
+ 					'<div class="button"', click, '="zk._Erbx.redraw()">',
+ 					'<i class="z-icon-refresh"/></div></div></div>'];
 
-		jq(document.body).append(html);
+		jq(document.body).append(html.join(''));
 		_erbx = this;
 		this.id = id;
 		try {
@@ -1650,7 +1654,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 				endeffect: zk.$void});
 		} catch (e) {
 		}
-		jq("#" + id).slideDown(1000);
+		jq($id).slideDown(1000);
 	},
 	destroy: function () {
 		_erbx = null;
@@ -1668,10 +1672,12 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 			return new zk._Erbx(msg);
 
 		var id = _erbx.id;
-		jq("#" + id + " .errnum").html(++_errcnt + " Errors");
-		jq("#" + id + " .msgs").prepend('<div class="newmsg">' + msg + "</hr></div>");
-		jq("#" + id + " .newmsg")
-			.removeClass("newmsg").addClass("msg").slideDown(600)
+		jq('#' + id + ' .errornumbers')
+			.html('<i class="z-icon-warning-sign"/>&nbsp;'+ ++_errcnt + ' Errors');
+		jq('#' + id + ' .messages')
+			.prepend('<div class="newmessage">' + msg + '</hr></div>');
+		jq('#' + id + ' .newmessage')
+			.removeClass('newmessage').addClass('message').slideDown(600)
 	},
 	remove: function () {
 		if (_erbx) _erbx.destroy();

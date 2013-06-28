@@ -80,7 +80,7 @@ implements Cloneable, java.io.Serializable {
 
 		String name = compdef.getName();
 		if (isCaseInsensitive())
-			name = name.toLowerCase();
+			name = name.toLowerCase(java.util.Locale.ENGLISH);
 
 		Object implcls = compdef.getImplementationClass();
 		if (implcls instanceof Class)
@@ -103,7 +103,7 @@ implements Cloneable, java.io.Serializable {
 	public boolean contains(String name) {
 		return _compdefs != null
 			&& _compdefs.containsKey(
-				isCaseInsensitive() ? name.toLowerCase(): name);
+				isCaseInsensitive() ? name.toLowerCase(java.util.Locale.ENGLISH): name);
 	}
 
 	/** Returns the component definition of the specified name, or null if not
@@ -116,7 +116,7 @@ implements Cloneable, java.io.Serializable {
 	public ComponentDefinition get(String name) {
 		return _compdefs != null ?
 			_compdefs.get(
-				isCaseInsensitive() ? name.toLowerCase(): name):
+				isCaseInsensitive() ? name.toLowerCase(java.util.Locale.ENGLISH): name):
 			null;
 	}
 	/** Returns the component definition of the specified class, or null if not

@@ -139,8 +139,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!nest || wgt.z_rod === 9) { //Bug 2948829: don't delete value set by real ROD
 			delete wgt.z_rod;
 
-			for (var child = wgt.firstChild; child; child = child.nextSibling)
+			for (var child = wgt.firstChild; child; child = child.nextSibling) {
 				_unbindrod(child, true);
+				//Bug ZK-1827: native component with rod should also store the widget for used in mount.js(create function)
+				if (child.$instanceof(zk.Native))
+					zAu._storeStub(child);
+			}
 		}
 	}
 
@@ -1810,6 +1814,7 @@ wgt.$f().main.setTitle("foo");
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
+			jq.onSyncScroll(this);
 		}
 		return this;
 	},
@@ -1868,6 +1873,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
+		jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been removed to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
@@ -1876,6 +1882,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
+		jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been replaced.
 	 * Unlike {@link #onChildAdded_} and {@link #onChildRemoved_}, this
@@ -2960,8 +2967,9 @@ unbind_: function (skipper, after) {
 				if (child.z_rod) _unbindrod(child);
 				else if (child.desktop) {
 					child.unbind_(null, after); //don't pass skipper
-					if (zk.feature.ee && child.$instanceof(zk.Native))
-						zAu._storeStub(child); //Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
+					//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
+					if (child.$instanceof(zk.Native))
+						zAu._storeStub(child);
 				}
 		}
 	},
@@ -3002,40 +3010,12 @@ unbind_: function (skipper, after) {
 		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		var h = zkn.revisedHeight(height, true), // excluding margin for F50-3000873.zul and B50-3285635.zul 
-			newh = h,
-			margins = zkn.sumStyles("tb", jq.margins);
-		n.style.height = jq.px0(h);
-			
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("tb", jq.margins);
-			if (margins) 
-				n.style.height = jq.px0(h + margins);
-		}
+		// excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.height = jq.px0(height - zkn.marginHeight());
 	},
-	
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
-		var w = zkn.revisedWidth(width, true), // excluding margin for F50-3000873.zul and B50-3285635.zul
-			neww = w,
-			margins = zkn.sumStyles("lr", jq.margins),
-			pb = zkn.padBorderWidth(); 
-		
-		n.style.width = jq.px0(w);
-		
-		// Bug ZK-521
-		if ((zk.linux || zk.mac) && zk.ff && jq.nodeName(n, "select")) {
-			var offset = width - margins,
-				diff = offset - n.offsetWidth;
-			if (diff > 0)
-				n.style.width = jq.px0(w + diff);
-		}
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("lr", jq.margins);
-			if (margins) 
-				n.style.width = jq.px0(w + margins);
-		}
+		// excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.width = jq.px0(width - zkn.marginWidth());
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden
@@ -3076,15 +3056,20 @@ unbind_: function (skipper, after) {
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
-		// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
-		var wd = zjq.minWidth(wgt);
-		if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
-			wd = zk(wgt).offsetWidth();
+		if (attr == 'w') {
+			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
+			var wd = zjq.minWidth(wgt);
+			if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
+				wd = zk(wgt).offsetWidth();
+			}
+			return wd;
+		} else {
+			return zk(wgt).offsetHeight();//See also bug ZK-483
 		}
-		return attr == 'h' ? zk(wgt).offsetHeight() : wd; //See also bug ZK-483
 	},
-	getParentSize_: function(p) {
-		//to be overridden
+	// for v/hflex, if the box-sizing is in border-box mode (like ZK 7+),
+	// we should return the content size only (excluding padding and border)
+	getParentSize_: function(p) { //to be overridden
 		var zkp = zk(p);
 		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	},
@@ -4228,6 +4213,14 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 		}
 	},
 
+	/** Resize zul.Scrollbar size after child added/removed or hide/show.
+	 * @since 6.5.0
+	 */
+	doResizeScroll_: function () {
+		var p = this.parent;
+		if (p) p.doResizeScroll_();
+	},
+	
 	//DOM event handling//
 	/** Registers an DOM event listener for the specified DOM element (aka., node).
 	 * You can use jQuery to listen the DOM event directly, or

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F70-ZK-1825.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 24, 2013 11:13:08 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Please select a date in the datebox.
+	<separator/>
+	2. Change the time in the timebox.
+	<separator/>
+	3. Click the "show timebox value", the result should be the value of datebox + timebox.	It shouldn't be reset to today.
+	<datebox onChange="tb.value = self.value;"/>
+	<timebox id="tb"/>
+	<button label="show timebox value" onClick="alert(tb.value);"/>
+</zk>

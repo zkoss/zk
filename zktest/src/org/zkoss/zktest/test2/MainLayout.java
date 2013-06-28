@@ -309,7 +309,7 @@ public class MainLayout extends Borderlayout {
 				if (!ptns[j].contains("!")) {
 					for (int k = 0; k < vals.length; k++) {												
 						if (ptns[j].trim().length() > 1 && vals[k].trim().length() > 1) {
-							if (vals[k].trim().toLowerCase().indexOf(ptns[j].trim().toLowerCase()) > -1) {
+							if (vals[k].trim().toLowerCase(java.util.Locale.ENGLISH).indexOf(ptns[j].trim().toLowerCase(java.util.Locale.ENGLISH)) > -1) {
 								m = true;
 								break;
 							}
@@ -334,7 +334,7 @@ public class MainLayout extends Borderlayout {
 				if (ptns[j].contains("!")) {
 					for (int k = 0; k < vals.length; k++) {										
 						if (ptns[j].trim().length() > 1 && (vals[k].trim().length()-1 > 1)) {
-							if (vals[k].trim().toLowerCase().indexOf(ptns[j].trim().toLowerCase().substring(1)) > -1) {
+							if (vals[k].trim().toLowerCase(java.util.Locale.ENGLISH).indexOf(ptns[j].trim().toLowerCase(java.util.Locale.ENGLISH).substring(1)) > -1) {
 								m = false;
 								break;
 							}

@@ -17,16 +17,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isListgroup(wgt) {
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
 	}
-	function _syncFrozen(wgt) {
-		if (wgt && (wgt = wgt.frozen))
-			wgt._syncFrozen();
-	}
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
 			var $jq = jq(wgt.$n('empty')),
 				colspan = 0;
 			if (wgt._nrows) {
-				$jq.hide(); // colspan 1 fixed IE7 issue ZK-528
+				$jq.hide();
 			} else {
 				if (wgt.listhead) {
 					for (var w = wgt.listhead.firstChild; w; w = w.nextSibling)
@@ -158,6 +154,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		var self = this;
 		setTimeout(function () {
 			if (self.desktop) {
+				if (!self._scrollbar)
+					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				self.refreshBar_();
 				self._syncSelInView();
 			}
@@ -174,26 +172,34 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			//show block DIV on header if vertical scroll-bar required
 			if (embed)
 				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
+			//sync frozen
+			var frozen = this.frozen,
+				start;
+			if (frozen && (start = frozen._start) != 0) {
+				frozen._doScrollNow(start);
+				bar.setBarPosition(start);
+			}
+		}
+	},
+	destoryBar_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
 		}
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		this._shallStripe = true;
 		var w = this;
-		this._scrollbar = zul.mesh.Scrollbar.init(this);
 		after.push(function () {
 			w.stripe();
-			_syncFrozen(w);
 			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
 	},
 	unbind_: function () {
-		var bar = this._scrollbar;
-		if (bar) {
-			bar.destroy();
-			bar = this._scrollbar = null;
-		}
+		this.destoryBar_();
 		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	_syncSelInView: function () {
@@ -319,8 +325,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._syncStripe();
 			if (!ignoreDom)
 				this._syncSize();
-			if (this.desktop)
-				_syncFrozen(this);
 		}
 	},
 	removeChild: function (child, ignoreDom) {
@@ -335,9 +339,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.listhead = null;
 		else if (child == this.paging)
 			this.paging = null;
-		else if (child == this.frozen)
+		else if (child == this.frozen) {
 			this.frozen = null;
-		else if (child == this.listfoot)
+			this.destroyBar_();
+		} else if (child == this.listfoot)
 			this.listfoot = null;
 		else if (!child.$instanceof(zul.mesh.Auxhead)) {
 			if (child == this.firstItem) {
@@ -391,8 +396,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				|| (newc && newc.$instanceof(zul.sel.Listitem)))
 			this._syncStripe();
 		this._syncSize();
-		if (this.desktop)
-			_syncFrozen(this);
 	},
 	/**
 	 * Returns the head widget class

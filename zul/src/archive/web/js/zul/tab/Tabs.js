@@ -90,8 +90,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return this._inited;
 	},
 	_scrollcheck: function(way, tb) {
-		var tabbox = this.getTabbox();
-		if (!this.desktop || !tabbox.isRealVisible() || !tabbox.isTabscroll())
+		var tabbox;
+		if (!this.desktop || ((tabbox = this.getTabbox()) && 
+				(!tabbox.isRealVisible() || !tabbox.isTabscroll())))
 			return;
 
 		var tbsdiv = this.$n(),
@@ -189,6 +190,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					break;
 				case 'init':
 				case 'sel':
+					if (nodeOffsetLeft == headerScrollLeft) // nothing to do
+						break;
+					
 					if (nodeOffsetLeft < headerScrollLeft) {
 						this._doScroll('left', headerScrollLeft - nodeOffsetLeft);
 					} else if (nodeOffsetLeft + nodeOffsetWidth > headerScrollLeft + headerOffsetWidth) {

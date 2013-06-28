@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _shallFocusBack;
 
 	function _getFirstRowCells(tbody) {
-		if (tbody) {
+		if (tbody && tbody.rows && tbody.rows.length) {
 			var cells = tbody.rows[0].cells,
 				length = cells.length,
 				ncols = 0;
@@ -47,7 +47,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	};
 	function _deleteFakeRow(tbody) {
-		jq('#' + tbody.id + '-fakeRow').remove();
+		if (tbody)
+			jq('#' + tbody.id + '-fakeRow').remove();
 	};
 	function _calcMinWd(wgt) {
 		var wgtn = wgt.$n(),
@@ -137,6 +138,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//calculate widths
 		var wds = [],
 			width = 0,
+			len = head ? head.nChildren : 0,
 			w = head ? head = head.firstChild : null,
 			headWgt = wgt.getHeadWidget(),
 			max = 0, maxj;
@@ -144,8 +146,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var bodycells = _getFirstRowCells(wgt.ebodyrows),
 				footcells = ftfaker ? _getFirstRowCells(wgt.efootrows) : null;
 			
-			for (var i = 0, len = bodycells.length; i < len; i++) {
-				var wd = zk.parseInt(bodycells[i].offsetWidth),
+			for (var i = 0; i < len; i++) {
+				var wd = bodycells ? zk.parseInt(bodycells[i].offsetWidth) : 0,
 					$cv = zk(w.$n('cave')),
 					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
 					ftwd = footcells && zk(footcells[i]).isVisible() ? zk.parseInt(footcells[i].offsetWidth) : 0,
@@ -181,7 +183,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		if (wgt.eheadtbl && headn) {//restore headers widths
-			_deleteFakeRow(wgt.eheadrows);
 			wgt.eheadtbl.width = eheadtblw || '';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
 			if (zk.chrome)
@@ -292,9 +293,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _adjMinWd(wgt) {
 		if (wgt._hflex == 'min') {
-			var w = _getMinWd(wgt);
-			wgt._hflexsz = w + zk(wgt).padBorderWidth(); //override
-			wgt.$n().style.width = jq.px0(wgt._hflexsz);
+			var w = _getMinWd(wgt),
+				n = wgt.$n();
+			wgt._hflexsz = w + zk(n).padBorderWidth(); //override
+			n.style.width = jq.px0(wgt._hflexsz);
 		}
 	}
 	function _getMinWd(wgt) {
@@ -310,7 +312,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				bdcol = bdfaker.firstChild;
 			for (var i = 0; w; w = w.nextSibling) {
 				if (w._hflex == 'min')
-					wd = wds[i] = _minwds[i];
+					wd = wds[i] = _minwds[i] + zk(w.$n()).padBorderWidth();
 				else {
 					if (w._width && w._width.indexOf('px') > 0)
 						wd = wds[i] = zk.parseInt(w._width);
@@ -755,7 +757,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				hdcol = hdcol.nextSibling;
 				if (ftcol)
 					ftcol = ftcol.nextSibling;
-				//++i;
 			}
 			_adjMinWd(this);
 		}
@@ -916,7 +917,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			- (this.efoot ? this.efoot.offsetHeight : 0)
 			- pgHgh; // Bug #1815882 and Bug #1835369
 	},
-	setFlexSize_: function(sz) {
+	setFlexSize_: function (sz) {
 		var n = this.$n(),
 			head = this.$n('head');
 		if (sz.height !== undefined) {
@@ -976,22 +977,26 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this._getEbodyWd(),
-			sizedByContent = this.isSizedByContent();
+			sizedByContent = this.isSizedByContent(),
+			ehead = this.ehead,
+			ebodyrows = this.ebodyrows,
+			efoot = this.efoot,
+			efootrows = this.efootrows;
 		
-		if (this.ehead) {
+		if (ehead) {
 			if (tblwd)
-				this.ehead.style.width = tblwd + 'px';
-			if (sizedByContent && this.ebodyrows)
+				ehead.style.width = tblwd + 'px';
+			if (sizedByContent && ebodyrows)
 				this._adjHeadWd();
-			else if (tblwd && this.efoot)
-				this.efoot.style.width = tblwd + 'px';
-		} else if (this.efoot) {
+			else if (tblwd && efoot)
+				efoot.style.width = tblwd + 'px';
+		} else if (efoot) {
 			if (tblwd)
-				this.efoot.style.width = tblwd + 'px';
-			if (this.efootrows && this.ebodyrows)
+				efoot.style.width = tblwd + 'px';
+			if (efootrows && ebodyrows)
 				_cpCellWd(this);
 		}
-
+		
 		//check if need to span width
 		this._adjSpanWd();
 		// no header case
@@ -1008,6 +1013,23 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._setHgh(this.$n().style.height);
 	},
 	_afterCalcSize: function () {
+		// Set style width to table to avoid colgroup width not working 
+		// because of width attribute (width="100%") on table 
+		if (this._isAllWidths()) {
+			var hdtbl = this.eheadtbl,
+				bdtbl = this.ebodytbl,
+				fttbl = this.efoottbl;
+			if (hdtbl) {
+				hdtbl.width = '';
+				var wd = hdtbl.offsetWidth;
+				hdtbl.style.width = wd + 'px';
+				hdtbl.width = '100%';
+				if (bdtbl)
+					bdtbl.style.width = wd + 'px';
+				if (fttbl)
+					fttbl.style.width = wd + 'px';
+			}
+		}
 		// Bug in B36-2841185.zul
 		if (zk.ie8 && this.isModel() && this.inPagingMold())
 			zk(this).redoCSS();
@@ -1033,10 +1055,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	domFaker_: function (out, fakeId, zcls) { //used by redraw
 		var head = this.head;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
-		
-		for (var w = head.firstChild; w; w = w.nextSibling)
-			out.push('<col id="', w.uuid, fakeId, '" style="', w.domStyle_(), '"/>');
-		
+		for (var w = head.firstChild; w; w = w.nextSibling) {
+			var wd = w._hflexWidth || w.getWidth(),
+				wd = wd ? 'width: ' + wd + ';' : '',
+				visible = !w.isVisible() ? 'display:none;' : '';
+			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
+		}
 		out.push('</colgroup>');
 	},
 
@@ -1244,28 +1268,35 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Bug #1886788 the size of these table must be specified a fixed size.
 		var ebody = this.ebody,
 			bdtable = this.ebodytbl,
+			bdwd = ebody.offsetWidth,
 			total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth),
-			tblwd = Math.min(ebody.offsetWidth, bdtable.offsetWidth);
+			tblwd = Math.min(bdwd, bdtable.offsetWidth);
 		
-		if (total == ebody.offsetWidth 
-				&& ebody.offsetWidth > tblwd && ebody.offsetWidth - tblwd < 20)
+		if (total == bdwd && bdwd > tblwd && bdwd - tblwd < 20)
 			total = tblwd;
 		
-		var wds = this._calcMinWds().wds,
+		var minWd = this._calcMinWds(),
+			wds = minWd.wds,
+			width = minWd.width,
 			hdcol = hdfaker.firstChild,
 			bdcol = bdfaker.firstChild,
-			ftcol = ftfaker ? ftfaker.firstChild : null;
+			ftcol = ftfaker ? ftfaker.firstChild : null,
+			hwgt = this.head.firstChild;
 		
-		for (var i = 0, hwgt = this.head.firstChild; hwgt; hwgt = hwgt.nextSibling) {
+		for (var i = 0; hwgt; hwgt = hwgt.nextSibling, i++) {
 			// sizedByContent shall not override column width
-			if (hwgt._width) {
+			if (hwgt._width || wds[i] == 0) {
+				if (wds[i] == 0) {
+					hdcol.style.width = bdcol.style.width = '0px';
+					if (ftcol)
+						ftcol.style.width = '0px';
+				}
 				hdcol = hdcol.nextSibling;
 				bdcol = bdcol.nextSibling;
 				if (ftcol)
 					ftcol = ftcol.nextSibling;
-				continue;
 			} else {
-				var wd = jq.px(wds[i++]);
+				var wd = jq.px(wds[i]);
 				hdcol.style.width = bdcol.style.width = wd;
 				hdcol = hdcol.nextSibling;
 				bdcol = bdcol.nextSibling;
@@ -1275,6 +1306,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 		}
+		
+		hdtable.style.width = jq.px(width);
+		bdtable.style.width = jq.px(width);
+		if (ftfaker)
+			this.efoottbl.style.width = jq.px(width);
+		
 		_adjMinWd(this);
 	}
 });
@@ -1309,7 +1346,7 @@ zul.mesh.Scrollbar = {
 				}
 			}
 		}
-		wgt._scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
+		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
 			startPositionX: startPositionX,
 			onSyncPosition: function() {
@@ -1329,7 +1366,7 @@ zul.mesh.Scrollbar = {
 				wgt._doScroll();
 			}
 		});
-		return wgt._scrollbar;
+		return scrollbar;
 	},
 	/**
 	 * Return the vertical scroll position of the body element of given MeshWidget.

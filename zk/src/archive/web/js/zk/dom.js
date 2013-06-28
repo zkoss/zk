@@ -200,6 +200,25 @@ zjq = function (jq) { //ZK extension
 		}
 	}
 
+	// since ZK 7.0.0
+	var isHTML5DocType = (function () {
+		var html5;
+		return function () {
+			if (html5 === undefined) {
+			    if (document.doctype === null) return false;
+		
+			    var node = document.doctype;
+			    var doctype_string = "<!DOCTYPE " + node.name +
+			    		(node.publicId ? ' PUBLIC"' + node.publicId + '"' : '') +
+			    		(!node.publicId && node.systemId ? ' SYSTEM' : '') +
+			    		(node.systemId ? ' "' + node.systemId + '"' : '') + ">";
+		
+			    html5 = doctype_string === '<!DOCTYPE html>';
+			}
+			return html5;
+		}
+	})();
+
 zk.copy(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
 	minWidth: function (el) {
@@ -661,7 +680,8 @@ zjq.prototype = {
 		var n;
 		if (n = this.jq[0])
 			return jq.isOverlapped(
-				this.cmOffset(), [n.offsetWidth, n.offsetHeight], zk(el).cmOffset(),
+				// use revisedOffset instead of cmOffset for body's scroll issue
+				this.revisedOffset(), [n.offsetWidth, n.offsetHeight], zk(el).revisedOffset(),
 				    [el.offsetWidth, el.offsetHeight], tolerant);
 	},
 
@@ -684,20 +704,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		}
 		return val;
 	},
-
-	/** Sets the offset height by specifying the inner height. 
-	 * @param int hgh the height without margin and border 
-	 * @return jqzk this object
-	 */
-	setOffsetHeight: function (hgh) {
-		var $jq = this.jq;
-		hgh -= this.padBorderHeight()
-			+ zk.parseInt($jq.css("margin-top"))
-			+ zk.parseInt($jq.css("margin-bottom"));
-		$jq[0].style.height = jq.px0(hgh);
-		return this;
-	},
-
+	
 	/** Returns the revised (i.e., browser's coordinate) offset of the selected
 	 * element.
 	 * In other words, it is the offset of the left-top corner related to
@@ -764,7 +771,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderWidth();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("lr", jq.margins);
+			size -= this.marginWidth();
 		return size < 0 ? 0: size;
 	},
 	/** Returns the revised (calibrated) height, which subtracted the height of
@@ -784,7 +791,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("tb", jq.margins);
+			size -= this.marginHeight();
 		return size < 0 ? 0: size;
 	},
 	/**
@@ -799,7 +806,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var size = this.jq[0].offsetWidth;
 		size -= this.padBorderWidth();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("lr", jq.margins);
+			size -= this.marginWidth();
 		return size < 0 ? 0: size;
 	},
 	/**
@@ -814,8 +821,22 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var size = this.jq[0].offsetHeight;
 		size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("tb", jq.margins);
+			size -= this.marginHeight();
 		return size < 0 ? 0: size;
+	},
+	/** Returns the summation of the margin width of the first matched element.
+	 * @return int summation
+	 * @since 7.0.0
+	 */
+	marginWidth: function () {
+		return this.sumStyles("lr", jq.margins);
+	},
+	/** Returns the summation of the margin height of the first matched element.
+	 * @return int summation
+	 * @since 7.0.0
+	 */
+	marginHeight: function () {
+		return this.sumStyles("tb", jq.margins);
 	},
 	/** Returns the summation of the border width of the first matched element.
 	 * @return int summation
@@ -1285,7 +1306,14 @@ jq(el).zk.center(); //same as 'center'
 	 * @return int the offset height
 	 */
 	offsetHeight: function () {
-		return this.jq[0].offsetHeight;
+		var n = this.jq[0];
+		// span will causes a special gap between top and bottom
+		// when use HTML5 doctype
+		if (isHTML5DocType() &&
+				jq.nodeName(n, 'SPAN') && this.jq.css('display') != 'block') {
+			return zk(document.body).textSize(n.outerHTML)[1];
+		}
+		return n.offsetHeight;
 	},
 	/** Returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation. 
 	 * @return int the offset top
@@ -2200,7 +2228,7 @@ this._syncShadow(); //synchronize shadow
 		}
 		a.focus();
 		setTimeout(function () {jq(a).remove();}, 500);
-	}
+	},
 	/**
 	 * An override function that provide a way to get the style value where is
 	 * defined in the CSS file or the style object, rather than the computed value.
@@ -2268,6 +2296,47 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @since 5.0.5
 	 */
 	//j2d: function () {}
+	_syncScroll: {},
+	/** To register one object for the <code>doSyncScroll</code> invocation.
+	 * For example,
+	 * <pre><code>onSyncScroll();</code></pre>
+	 * @param Object wgt the object to register
+	 * @see #doSyncScroll
+	 * @see #unSyncScroll
+	 * @since 6.5.0
+	 */
+	onSyncScroll: function (wgt) {
+		var sync = this._syncScroll;
+		if (!sync[wgt.id])
+			sync[wgt.id] = wgt;
+	},
+	/** To invoke the <code>doSyncScroll</code> method of the registered objects.
+	 * <p><code>doSyncScroll</code> is called automatically when {@link zWatch}
+	 * fires onResponse, onShow or onHide.
+	 * It is useful if you have a Widget that using zul.Scrollbar.
+	 * Then, if you register the widget, the widget's doSyncScroll method will be called when widget add/remove/hide/show its child widget.
+	 * @see #onSyncScroll
+	 * @see #unSyncScroll
+	 * @since 6.5.0
+	 */
+	doSyncScroll: function () {
+		var sync = this._syncScroll;
+		for (var id in sync) {
+			sync[id].doResizeScroll_();
+			delete sync[id];
+		}
+	},
+	/** To unregister one object for the <code>doSyncScroll</code> invocation.
+	 * For example,
+	 * <pre><code>unSyncScroll(wgt);</code></pre>
+	 * @param Object wgt the object to register
+	 * @see #doSyncScroll
+	 * @see #onSyncScroll
+	 * @since 6.5.0
+	 */
+	unSyncScroll: function (wgt) {
+		delete this._syncScroll[wgt.id];
+	}
 });
 
 /** @class jq.Event

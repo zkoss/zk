@@ -196,7 +196,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				width: 0, height: 0
 			}
 		}
-		if (dim) return {pos: pos, dim: dim};
+		if (dim) {
+			// we should include margin in this case for customizing theme. (since ZK 7.0.0)
+			var $n = zk(this.$n());
+			dim.top += $n.sumStyles('t', jq.margins);
+			dim.left += $n.sumStyles('l', jq.margins);
+			return {pos: pos, dim: dim};
+		}
 	},
 	onResponse: function () {
 		if (this.mask) this.mask.destroy();

@@ -12,97 +12,52 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function (undefined) {
-	function _getTextWidth(zkc, zkp, zkpOffset) {
+(function () {
+	function _getTextSize(zkc, zkp, zkpOffset) {
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
-			start = 0,
-			oldVal = [],
-			zs, ps, ignorePrev;
+			pos = [0, 0],
+			coldVal,
+			poldVal,
+			zs, ps;
 		if ($prev.length) {
 			ps = $prev[0].style;
-			// ZK-700
-			// ignore prev if not displayed
+			// ZK-700 ignore prev if not displayed
 			if (ps.display == 'none')
-				ignorePrev = true;
+				return pos;
 			else {
 				zs = $zkc[0].style;
-
 				// store the old value
-				oldVal[0] = zs.marginLeft;
-				oldVal[1] = zs.marginRight;
-				oldVal[2] = ps.marginLeft;
-				oldVal[3] = ps.marginRight;
+				coldVal = {};
+				poldVal = {};
+				for (var margins = ['marginTop', 'marginBottom', 'marginLeft', 'marginRight'],
+						len = margins.length; len-- > 0;) {
+					coldVal[margins[len]] = zs[margins[len]];
+					poldVal[margins[len]] = ps[margins[len]];
+
+					// clean margin
+					zs[margins[len]] = ps[margins[len]] = '0px';
+				}
 				
-				// clean margin
-				zs.marginLeft = zs.marginRight = ps.marginLeft = ps.marginRight = '0px';
-	
-				start = $prev.zk.cmOffset()[0] + $prev.zk.offsetWidth();
+				var offset = $prev.zk.revisedOffset();
+				pos[0] = offset[0] + $prev.zk.offsetWidth();
+				pos[1] = offset[1] + $prev.zk.offsetHeight();
 			}
 		} else {
-			start = zkpOffset[0] + zkp.sumStyles("l", jq.paddings) + zkp.sumStyles("l", jq.borders);
+			pos[0] = zkpOffset[0] + zkp.sumStyles('l', jq.paddings) + zkp.sumStyles('l', jq.borders);
+			pos[1] = zkpOffset[1] + zkp.sumStyles('t', jq.paddings) + zkp.sumStyles('t', jq.borders);
 		}
-
+	
 		// ZK-700
-		if (!ignorePrev) {
-			start = zkc.cmOffset()[0] - start;
-			
-			if (oldVal.length) {
-				zs.marginLeft = oldVal[0];
-				zs.marginRight = oldVal[1];
-				ps.marginLeft = oldVal[2];
-				ps.marginRight = oldVal[3];
-			}
-		}
-		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
+		var offset = zkc.revisedOffset();
+		pos[0] = offset[0] - pos[0];
+		pos[1] = offset[1] - pos[1];
 		
-	}
-	
-	function _getTextHeight(zkc, zkp, zkpOffset) {
-		var $zkc = zkc.jq,
-			$prev = $zkc.prev(),
-			start = 0,
-			oldVal = [],
-			zs, ps, ignorePrev;
-		if ($prev.length) {
-			ps = $prev[0].style;
-			// ZK-700
-			// ignore prev if not displayed
-			if (ps.display == 'none')
-				ignorePrev = true;
-			else {
-				zs = $zkc[0].style;
-
-				// store the old value
-				oldVal[0] = zs.marginTop;
-				oldVal[1] = zs.marginBottom;
-				oldVal[2] = ps.marginTop;
-				oldVal[3] = ps.marginBottom;
-				
-				// clean margin
-				zs.marginTop = '0px';
-				zs.marginBottom = '0px';
-				ps.marginTop = '0px';
-				ps.marginBottom = '0px';
-				
-				start = $prev.zk.cmOffset()[1] + $prev.zk.offsetHeight();
-			}
-		} else {
-			start = zkpOffset[1] + zkp.sumStyles("t", jq.paddings) + zkp.sumStyles("t", jq.borders);
-		}
-
-		// ZK-700
-		if (!ignorePrev) {
-			start = zkc.cmOffset()[1] - start;
+		// revert the values
+		zk.copy(zs, coldVal);
+		zk.copy(ps, poldVal);
 			
-			if (oldVal.length) {
-				zs.marginTop = oldVal[0];
-				zs.marginBottom = oldVal[1];
-				ps.marginTop = oldVal[2];
-				ps.marginBottom = oldVal[3];
-			}
-		}
-		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
+		return !zk.ie ? [Math.max(0, pos[0]), Math.max(0, pos[1])] : pos; // ie may have a wrong gap
 	}
 	
 	// check whether the two elements are the same baseline, if so, we need to
@@ -119,220 +74,145 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function _fixMinVflex(wgt, wgtn, o, min) {
-		if (wgt._vflexsz === undefined) { //cached?
-			var cwgt = wgt.firstChild, //bug #2928109
-				n = wgtn,
-				zkn = zk(n),
-				max = 0;
-			if (min != null)
-				max = min;
-			else {
-				wgt.setFlexSize_({height:'auto'}, true);
-				var totalsz = 0,
-					vmax = 0;
-				if (cwgt && cwgt.desktop){ //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
-					var first = cwgt,
-						refDim = zk(cwgt).dimension(true);
-					for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout
-						if (!cwgt.ignoreFlexSize_('h')) {
-							var c = cwgt.$n();
-							if (c) { //node might not exist if rod on
+	function _fixMinFlex(isVflex) {
+		var flexsz, sizePos, flex, offsetPos, marginPos, maxFlexPos, sumFlexPos,
+			index, contentPos;
+		if (isVflex) {
+			flexsz = '_vflexsz';
+			sizePos = 'height';
+			flex = '_vflex';
+			offsetPos = 'offsetHeight';
+			marginPos = 'marginHeight';
+			maxFlexPos = '_maxFlexHeight';
+			sumFlexPos = '_sumFlexHeight';
+			index = 1;
+			contentPos = 'getContentEdgeHeight_';
+		} else {
+			flexsz = '_hflexsz';
+			sizePos = 'width';
+			flex = '_hflex';
+			offsetPos = 'offsetWidth';
+			marginPos = 'marginWidth';
+			maxFlexPos = '_maxFlexWidth';
+			sumFlexPos = '_sumFlexWidth';
+			index = 0;
+			contentPos = 'getContentEdgeWidth_';
+		}
+		return function (wgt, wgtn, o, min) {
+			if (wgt[flexsz] === undefined) { //cached?
+				var cwgt = wgt.firstChild, //bug #2928109
+					n = wgtn,
+					zkn = zk(n),
+					max = 0;
+				if (min != null)
+					max = min;
+				else {
+					var map = {};
+					map[sizePos] = 'auto';
+					wgt.setFlexSize_(map, true);
+					var totalsz = 0,
+						vmax = 0;
+					if (cwgt && cwgt.desktop){ //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
+						var first = cwgt,
+							refDim = zk(cwgt).dimension(true);
+						for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout
+							if (!cwgt.ignoreFlexSize_(o)) {
+								var c = cwgt.$n();
+								if (c) { //node might not exist if rod on
+									var zkc = zk(c),
+										sz = 0; 
+									if (cwgt[flex] == 'min') {
+										if (zkc.isVisible()) {
+											sz += cwgt[flexsz] === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt[flexsz];
+										}
+									} else {
+										cwgt.beforeParentMinFlex_(o);
+										sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
+												+ zkc[marginPos]();
+									}
+									
+									var curDim = first != cwgt ? zkc.dimension(true) : false;
+									//bug #3006276: East/West bottom cut if East/West higher than Center.
+									if (cwgt[maxFlexPos] && sz > vmax) //@See West/East/Center
+										vmax = sz;
+									else if (cwgt[sumFlexPos]) //@See North/South
+										totalsz += sz;
+									else if (!cwgt[maxFlexPos] && curDim && _isSameBaseline(refDim, curDim, isVflex))
+										max += sz;
+									else if (sz > max)
+										max = sz;
+								}
+							}
+						}
+					} else {
+						var c = wgtn.firstChild;
+						if (c) { //no child widget, try html element directly
+							//feature 3000339: The hflex of the cloumn will calculate by max width
+							var isText = c.nodeType == 3,
+								ignore = wgt.ignoreChildNodeOffset_(o),
+								refDim = isText ? null : zk(c).dimension(true);
+							for(; c; c = c.nextSibling) {
 								var zkc = zk(c),
-									sz = 0; 
-								if (cwgt._vflex == 'min') {
-									if (zkc.isVisible()) {
-										sz += cwgt._vflexsz === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt._vflexsz;
-									}/* Fixed for B50-3356022.zul
-									 else
-										sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
-									*/
-								} else {
-									cwgt.beforeParentMinFlex_(o);
-									sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
-											+ zkc.sumStyles("tb", jq.margins);
-								}
-								
-								var curDim = first != cwgt ? zkc.dimension(true) : false;
-								//bug #3006276: East/West bottom cut if East/West higher than Center.
-								if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
-									vmax = sz;
-								else if (cwgt._sumFlexHeight) //@See North/South
-									totalsz += sz;
-								else if (!cwgt._maxFlexHeight && curDim && _isSameBaseline(refDim, curDim, true))
-									max += sz;
-								else if (sz > max)
-									max = sz;
-							}
-						}
-					}
-				} else {
-					var c = wgtn.firstChild;
-					if (c) { //no child widget, try html element directly
-						//feature 3000339: The hflex of the cloumn will calculate by max width
-						var isText = c.nodeType == 3,
-							ignore = wgt.ignoreChildNodeOffset_('h'),
-							refDim = isText ? null : zk(c).dimension(true);
-						for(; c; c = c.nextSibling) {
-							var zkc = zk(c),
-								sz = 0;
-							if (ignore) {
-								for(var el = c.firstChild; el; el = el.nextSibling) {
-									var txt = el && el.nodeType == 3 ? el.nodeValue : null,
-										zel;
-									if (txt) {
-										var dim = zkc.textSize(txt);
-										if (dim[1] > sz)
-											sz = dim[1];
-									} else if ((zel = zk(el)).isVisible()) {
-										var h = zel.offsetHeight() + zel.sumStyles("tb", jq.margins);
-										if (h > sz)
-											sz = h;
-									}
-								}
-							} else {
-								if (c.nodeType == 3)
-									sz = c.nodeValue ? zkn.textSize(c.nodeValue)[1] : 0;
-								else {
-									sz = zkc.offsetHeight() + zkc.sumStyles("tb", jq.margins);
-								}
-							}
-							if (isText) {
-								if (sz > max) 
-									max = sz;
-							} else {
-								var curDim = zkc.dimension(true);
-								if (_isSameBaseline(refDim, curDim, true)) 
-									max += sz;
-								else if (sz > max) 
-									max = sz;
-							}
-						}
-					} else //no kids at all, use self
-						max = zkn.offsetHeight();
-				}
-				if (vmax)
-					totalsz += vmax;
-				if (totalsz > max)
-					max = totalsz;
-			}
-			
-			var margin = wgt.getMarginSize_(o);
-			if (zk.safari && margin < 0) 
-				margin = 0;
-			sz = wgt.setFlexSize_({height:(max + wgt.getContentEdgeHeight_() + margin)}, true);
-			if (sz && sz.height >= 0)
-				wgt._vflexsz = sz.height + margin;
-			wgt.afterChildrenMinFlex_('h');
-		}
-		return wgt._vflexsz;
-	}
-	function _fixMinHflex(wgt, wgtn, o, min) {
-		if (wgt._hflexsz === undefined) { //cached?
-			var cwgt = wgt.firstChild, //bug #2928109
-				n = wgtn,
-				zkn = zk(n),
-				max = 0;
-			if (min != null)
-				max = min;
-			else {
-				wgt.setFlexSize_({width:'auto'}, true);
-				var totalsz = 0;
-				if (cwgt) { //try child widgets
-					var first = cwgt,
-						refDim = zk(cwgt).dimension(true);
-					for (; cwgt; cwgt = cwgt.nextSibling) { //bug#3132199: hflex="min" in hlayout
-						if (!cwgt.ignoreFlexSize_('w')) {
-							var c = cwgt.$n();
-							if (c) { //node might not exist if rod on
-								var	zkc = zk(c),
 									sz = 0;
-								if (cwgt._hflex == 'min') {
-									if (zkc.isVisible()) {
-										sz += cwgt._hflexsz === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt._hflexsz;
-									}/* Fixed for B50-3356022.zul
-									 else {
-										sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
-									}*/
+								if (ignore) {
+									for(var el = c.firstChild; el; el = el.nextSibling) {
+										var txt = el && el.nodeType == 3 ? el.nodeValue : null,
+											zel;
+										if (txt) {
+											var dim = zkc.textSize(txt);
+											if (dim[1] > sz)
+												sz = dim[1];
+										} else if ((zel = zk(el)).isVisible()) {
+											var s = zel[offsetPos]() + zel[marginPos]();
+											if (s > sz)
+												sz = s;
+										}
+									}
 								} else {
-									cwgt.beforeParentMinFlex_(o);
-									sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
-											+ zkc.sumStyles("lr", jq.margins);
-								}
-								var curDim = first != cwgt ? zkc.dimension(true) : false;
-								if (cwgt._sumFlexWidth) //@See East/West/Center
-									totalsz += sz;
-								else if (curDim && _isSameBaseline(refDim, curDim))
-									max += sz;
-								else if (sz > max)
-									max = sz;
-							}
-						}
-					}
-				} else {
-					var c = wgtn.firstChild;
-					if (c) { //no child widget, try html element directly
-						//feature 3000339: The hflex of the cloumn will calculate by max width
-						var isText = c.nodeType == 3,
-							ignore = wgt.ignoreChildNodeOffset_('w'),
-							refDim = isText ? null : zk(c).dimension(true);
-							
-						for(; c; c = c.nextSibling) { 
-							var	zkc = zk(c),
-								sz = 0;
-							if (ignore) {
-								var el = c.firstChild;
-								for(; el; el = el.nextSibling) {
-									var txt = el && el.nodeType == 3 ? el.nodeValue : null,
-										zel;
-									if (txt) {
-										var dim = zkc.textSize(txt);
-										if (dim[1] > sz)
-											sz = dim[1];
-									} else if ((zel = zk(el)).isVisible()){
-										var w = zel.offsetWidth() + zel.sumStyles("lr", jq.margins);
-										if (w > sz)
-											sz = w;
+									if (c.nodeType == 3)
+										sz = c.nodeValue ? zkn.textSize(c.nodeValue)[index] : 0;
+									else {
+										sz = zkc[offsetPos]() + zkc[marginPos]();
 									}
 								}
-							} else {
-								if (c.nodeType == 3)
-									sz = c.nodeValue ? zkn.textSize(c.nodeValue)[0] : 0;
-								else {
-									sz = zkc.offsetWidth() + zkc.sumStyles("lr", jq.margins);
+								if (isText) {
+									if (sz > max) 
+										max = sz;
+								} else  {
+									var curDim = zkc.dimension(true);
+									if (_isSameBaseline(refDim, curDim, isVflex)) 
+										max += sz;
+									else if (sz > max) 
+										max = sz;
 								}
 							}
-							if (isText) {
-								if (sz > max) 
-									max = sz;
-							} else {
-								var curDim = zkc.dimension(true);
-								if (_isSameBaseline(refDim, curDim)) 
-									max += sz;
-								else if (sz > max) 
-									max = sz;
-							}
-						}
-					} else //no kids at all, use self
-						max = zkn.offsetWidth();// - zkn.padBorderWidth();
+						} else //no kids at all, use self
+							max = zkn[offsetPos]();
+					}
+					if (vmax)
+						totalsz += vmax;
+					if (totalsz > max)
+						max = totalsz;
 				}
-				if (totalsz > max)
-					max = totalsz;
-			}
+
+				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
+				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
+				var margin = wgt.getMarginSize_(o);
+				if (zk.safari && margin < 0) 
+					margin = 0;
 				
-			//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
-			//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
-			var margin = wgt.getMarginSize_(o);
-			if (zk.safari && margin < 0)
-				margin = 0;
-			
-			var sz = wgt.setFlexSize_({width: max + wgt.getContentEdgeWidth_() + margin}, true);			
-			if (sz && sz.width >= 0)
-				wgt._hflexsz = sz.width + margin;
-			wgt.afterChildrenMinFlex_('w');
+				var map = {};
+				map[sizePos] = (max + wgt[contentPos]() + margin);
+				sz = wgt.setFlexSize_(map, true);
+				if (sz && sz[sizePos] >= 0)
+					wgt[flexsz] = sz[sizePos] + margin;
+				wgt.afterChildrenMinFlex_(o);
+			}
+			return wgt[flexsz];
 		}
-		return wgt._hflexsz;
 	}
+	var _fixMinVflex = _fixMinFlex(true),
+		_fixMinHflex = _fixMinFlex();
 	function _zero() {
 		return 0;
 	}
@@ -365,17 +245,19 @@ zFlex = { //static methods
 		zFlex.fixFlex(this);
 	},
 	fixFlex: function (wgt) {
+		
+		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibliing has done it!
+			delete wgt._flexFixed;
+			return;
+		}
+		
 		//avoid firedown("onSize") calling in again
 		if ((wgt._vflex === undefined || (wgt._vflexsz && wgt._vflex == 'min'))
 			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min'))) 
 			return;
+
 		
 		if (!wgt.parent.beforeChildrenFlex_(wgt)) { //don't do fixflex if return false
-			return;
-		}
-		
-		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibliing has done it!
-			delete wgt._flexFixed;
 			return;
 		}
 		wgt._flexFixed = true;
@@ -419,15 +301,17 @@ zFlex = { //static methods
 				
 				//Bug ZK-1647: should consider header width
 				//Bug Flex-138: skip if width exists
-				if (offwdh == 0 && zk.isLoaded('zul.mesh') && cwgt && cwgt.$instanceof(zul.mesh.HeaderWidget))
-					offwdh = jq(c).width();
+				if (offwdh == 0 && cwgt && zk.isLoaded('zul.mesh')
+						&& cwgt.$instanceof(zul.mesh.HeaderWidget))
+					offwdh = zkc.jq.width();
 				
 				//Bug ZK-1706: should consider all text node size
 				if (pretxt) {
 					if (!zkpOffset)
-						zkpOffset = zkp.cmOffset();
-					wdh -= _getTextWidth(zkc, zkp, zkpOffset);
-					hgh -= _getTextHeight(zkc, zkp, zkpOffset);
+						zkpOffset = zkp.revisedOffset();
+					var size = _getTextSize(zkc, zkp, zkpOffset);
+					wdh -= size[0];
+					hgh -= size[1];
 				}
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
@@ -444,7 +328,7 @@ zFlex = { //static methods
 						(!zk.isLoaded('zul.wnd') || !wgt.$instanceof(zul.wnd.Panelchildren))) 
 						|| (cwgt && !cwgt.isExcludedHflex_())) {
 					wdh -= offwdh;
-					wdh -= zkc.sumStyles("lr", jq.margins);
+					wdh -= zkc.marginWidth();
     			}
 				
 				//vertical size
@@ -459,7 +343,7 @@ zFlex = { //static methods
 					}
 				} else if (!cwgt || !cwgt.isExcludedVflex_()) {			
 					hgh -= offhgh;
-					hgh -= zkc.sumStyles("tb", jq.margins);
+					hgh -= zkc.marginHeight();
 				}
 				
 				pretxt = false;

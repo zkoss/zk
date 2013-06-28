@@ -140,19 +140,18 @@ zk.copy(zjq.prototype, {
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
 			anima = {},
 			css = {overflow: 'hidden'},
-			dims = this.dimension(),
-			baseHgh = jq(wgt).data('zk.cache.baseHeight');
+			dims = this.dimension();
 
 		opts = opts || {};
 		_checkPosition(_saveProp(this, prop), css);
 
 		switch (anchor) {
 		case 't':
-			css.height = baseHgh ? baseHgh :'0';
+			css.height = '0';
 			anima.height = jq.px0(dims.height);
 			break;
 		case 'b':
-			css.height = baseHgh ? baseHgh : '0';
+			css.height = '0';
 			css.top = jq.px(dims.top + dims.height);
 			anima.height = jq.px0(dims.height);
 			anima.top = jq.px(dims.top);
@@ -199,21 +198,18 @@ zk.copy(zjq.prototype, {
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
 			anima = {},
 			css = {overflow: 'hidden'},
-			dims = this.dimension(),
-			hgh = opts ? opts.height : null;
+			dims = this.dimension();
 
 		opts = opts || {};
 		_checkPosition(_saveProp(this, prop), css);
-		if(hgh)
-			jq(wgt).data('zk.cache.baseHeight', hgh);
 
 		switch (anchor) {
 		case 't':
-			anima.height = hgh ? hgh : 'hide';
+			anima.height = 'hide';
 			break;
 		case 'b':
 			css.height = jq.px0(dims.height);
-			anima.height = hgh ? hgh : 'hide';
+			anima.height = 'hide';
 			anima.top = jq.px(dims.top + dims.height);
 			break;
 		case 'l':
@@ -226,7 +222,7 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this.defaultAnimaOpts(wgt, opts, prop, hgh ? true : false)
+		return this.defaultAnimaOpts(wgt, opts, prop)
 			.jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 250,
 			complete: opts.afterAnima

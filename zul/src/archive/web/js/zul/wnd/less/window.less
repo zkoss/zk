@@ -23,7 +23,7 @@
 	border: 1px solid rgba(17,17,17, 0.3);
 	padding: 5px;
 	.borderRadius();
-	
+
 	&-shadow {
 		.boxShadow('0 0 4px rgba(0, 0, 0, 0.25)');
 	}
@@ -50,6 +50,9 @@
 		background-color: @contentBackgroundColor;
 		border: solid #C5C5C5 1px;
 		.defaultOverflowZoom();
+		&:first-child {
+			height: 100%;
+		}
 	}
 	
 	&-icon {
@@ -108,7 +111,7 @@
 		position: absolute;
 		background: #D7E6F7;
 		overflow: hidden;
-		padding: 5px 0px 0px 0px;
+		padding: 5px;
 		filter: alpha(opacity=65) !important; /* IE */
 		opacity: .65 !important;
 		cursor: move !important;

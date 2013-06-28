@@ -18,7 +18,6 @@
 	overflow: hidden;
 	zoom: 1;
 	background: #FFFFFF;
-	
 	//listbox header
 	&-header {
 		overflow: hidden;
@@ -68,13 +67,13 @@
 }
 .z-listheader {
 	.verGradient();
+	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @gridBorderColor;
 	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
-	.applyCSS3('box-sizing', 'content-box');
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
@@ -140,13 +139,15 @@
 	//list cell
 	.z-listcell {
 		border-right: 1px solid #FFFFFF;
-		.applyCSS3('box-sizing', 'content-box');
-		td:last-child {
+		overflow: hidden;
+		cursor: pointer;
+		&:last-child {
 			border-right: none;
 		}
 	}
 	&:hover .z-listcell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		background-clip: padding-box;
 		position: relative;
 	}
 	//check mark
@@ -169,6 +170,7 @@
 	&.z-listitem-selected {
 		.z-listcell {
 			.verGradient(@selectGradientStart, @selectGradientEnd);
+			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover .z-listcell {
@@ -211,9 +213,10 @@
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border-width: 1px 0;
-		border-color: @gridBorderColor;
-		border-style: solid;
+		border: 1px solid @gridBorderColor;
+		border-left: none;
+		border-right: none;
+		overflow: hidden;
 	}
 	&-icon {
 		display: inline-block;
@@ -221,22 +224,29 @@
 		height: @baseIconHeight;
 		cursor: pointer;
 		font-size: @baseFontSize;
-		color: black;
 		position: relative;
 	}
 	&-icon-open,
 	&-icon-close {
 		display: inline-block;
 		position: absolute;
-		left: 5px;
+		left: 8px;
+		&:hover {
+			color: #0076a3;
+		}
 	}
 	&-icon-open {
-		.transform('rotate(45deg)');
+		color: black;
+		left: 5px;
+	}
+	&-icon-close {
+		color: #8FB9D0;
 	}
 }
 .z-listgroupfoot-inner {
 	.verGradient(@groupGradientEnd, @groupGradientStart);
 	position: relative;
+	overflow: hidden;
 }
 //content
 //no auxhead here because it is already defined in grid.less
@@ -251,9 +261,6 @@
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
-}
-.z-listcell-content {
-	white-space: nowrap;
 }
 .z-listheader-content {
 	font-weight: bold;
@@ -294,5 +301,6 @@
 }
 //select mold
 .z-select {
-	height: @baseButtonHeight;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
 }

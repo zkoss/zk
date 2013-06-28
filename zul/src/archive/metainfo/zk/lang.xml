@@ -477,12 +477,12 @@ def alert(m):
 		<widget-class>zul.wgt.Combobutton</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/button.js</mold-uri>
+			<mold-uri>mold/combobutton.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>toolbar</mold-name>
-			<mold-uri>mold/button.js</mold-uri>
+			<mold-uri>mold/combobutton.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -604,7 +604,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/frozen.js</mold-uri>
-			<css-uri>css/frozen.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>

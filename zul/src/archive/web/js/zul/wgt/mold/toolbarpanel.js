@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<div ', this.domAttrs_(), '>', '<table id="', this.uuid,
-				'-cnt" class="', this.$s('content'), ' ', this.$s(this.getAlign()),
+				'-cave" class="', this.$s('content'), ' ', this.$s(this.getAlign()),
 				'"', zUtl.cellps0, '><tbody>');
 	if ('vertical' != this.getOrient()) {
 		out.push("<tr>");

@@ -166,9 +166,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.foot = null;
 		else if (child == this.paging) 
 			this.paging = null;
-		else if (child == this.frozen) 
+		else if (child == this.frozen) {
 			this.frozen = null;
-
+			this.destroyBar_();
+		}
 		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
 			this._syncSize();
 	},
@@ -185,26 +186,24 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Grid, 'bind_', arguments);
-		this._scrollbar = zul.mesh.Scrollbar.init(this);
 		var w = this;
 		after.push(function() {
 			_fixForEmpty(w);
 		});
 	},
 	unbind_: function () {
-		var bar = this._scrollbar;
-		if (bar) {
-			bar.destroy();
-			bar = this._scrollbar = null;
-		}
+		this.destroyBar_();
 		this.$supers(Grid, 'unbind_', arguments);
 	},
 	onSize: function () {
 		this.$supers(Grid, 'onSize', arguments);
 		var self = this;
 		setTimeout(function () {
-			if (self.desktop)
+			if (self.desktop) {
+				if (!self._scrollbar)
+					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				self.refreshBar_();
+			}
 		}, 200);
 	},
 	refreshBar_: function (showBar, scrollToTop) {
@@ -218,6 +217,20 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			//show block DIV on header if vertical scroll-bar required
 			if (embed)
 				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
+			//sync frozen
+			var frozen = this.frozen,
+				start;
+			if (frozen && (start = frozen._start) != 0) {
+				frozen._doScrollNow(start);
+				bar.setBarPosition(start);
+			}
+		}
+	},
+	destroyBar_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
 		}
 	},
 	onResponse: function () {

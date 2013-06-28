@@ -17,6 +17,9 @@
 .z-toolbar-content, .z-toolbar-content span {
 	font-size: @fontSizeSmall;
 }
+.z-toolbar-content > span {
+	line-height: @baseLineHeight + 8;
+}
 .z-toolbar-panel .z-toolbar-content,
 .z-toolbar-panel .z-toolbar-content span {
 	font-size: @fontSizeMedium;
@@ -62,6 +65,7 @@
 	margin: 0 2px;
 	height: 24px;
 	padding: 1px 0;
+	line-height: @baseLineHeight;
 	border: 1px solid transparent;
 	.borderRadius('3px');
 

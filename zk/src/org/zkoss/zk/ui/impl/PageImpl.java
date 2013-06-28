@@ -876,7 +876,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Interpreter getInterpreter(String zslang) {
-		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
+		zslang = (zslang != null ? zslang: _zslang).toLowerCase(java.util.Locale.ENGLISH);
 		Interpreter ip = _ips.get(zslang);
 		if (ip == null) {
 			if (_desktop != null //might be null, if deserialized

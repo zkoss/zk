@@ -13,8 +13,8 @@
 //reset table
 table {
 	border-spacing: 0;
-	border-collapse: collapse;
 	th, td {
+		background-clip: padding-box;
 		padding: 0;
 	}
 	th {
@@ -26,7 +26,6 @@ table {
 	border: 1px solid @gridBorderColor;
 	overflow: hidden;
 	zoom: 1;
-	.applyCSS3('box-sizing', 'content-box');
 	//grid header
 	&-header {
 		overflow: hidden;
@@ -79,18 +78,19 @@ table {
 }
 .z-column {
 	.verGradient();
+	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @gridBorderColor;
 	border-bottom: 1px solid @gridBorderColor;
 	position: relative;
-	.applyCSS3('box-sizing', 'content-box');
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 }
 .z-column {
+	overflow: hidden;
 	.z-column-content {
 		position: relative;
 	}
@@ -135,16 +135,21 @@ table {
 }
 //row and cell
 .z-row {
-	&-inner {
+	.z-row-inner,
+	.z-cell {
 		border-right: 1px solid #FFFFFF;
-		.applyCSS3('box-sizing', 'content-box');
+		overflow: hidden;
+		&:last-child {
+			border-right: none;
+		}
 	}
-	&:hover &-inner {
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-		position: relative;
-	}
-	td:last-child {
-		border-right: none;
+	&:hover {
+		.z-row-inner,
+		.z-cell {
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			background-clip: padding-box;
+			position: relative;
+		}
 	}
 }
 //Group
@@ -152,9 +157,10 @@ table {
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border-width: 1px 0;
-		border-color: @gridBorderColor;
-		border-style: solid;
+		border: 1px solid @gridBorderColor;
+		border-left: none;
+		border-right: none;
+		overflow: hidden;
 	}
 	&-icon {
 		display: inline-block;
@@ -162,22 +168,29 @@ table {
 		height: @baseIconHeight;
 		cursor: pointer;
 		font-size: @baseFontSize;
-		color: black;
 		position: relative;
 	}
 	&-icon-open,
 	&-icon-close {
 		display: inline-block;
 		position: absolute;
-		left: 5px;
+		left: 8px;
+		&:hover {
+			color: #0076a3;
+		}
 	}
 	&-icon-open {
-		.transform('rotate(45deg)');
+		color: black;
+		left: 5px;
+	}
+	&-icon-close {
+		color: #8FB9D0;
 	}
 }
 .z-groupfoot-inner {
 	.verGradient(@groupGradientEnd, @groupGradientStart);
 	position: relative;
+	overflow: hidden;
 }
 //content
 .z-column-content,
@@ -201,6 +214,14 @@ table {
 	.z-label {
 		font-weight: bold;
 	}
+}
+//Cell Content
+.z-cell {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
 }
 //paging
 .z-grid-paging {

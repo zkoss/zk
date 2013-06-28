@@ -140,9 +140,11 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			}
 			// insert toggle icon
 			if (isGrp) {
-				var cls = p._open ? p.$s('icon-open') : p.$s('icon-close');
+				var cls = p._open ? 
+						p.getIconOpenClass_() + ' ' + p.$s('icon-open') : 
+						p.getIconCloseClass_() + ' ' + p.$s('icon-close');
 				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + 
-					'"><i class="z-icon-caret-right ' + cls + '"></i></span>';
+					'"><i class="' + cls + '"></i></span>';
 			}
 			if (s) return s;
 		}
@@ -150,14 +152,13 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
-		
 		//sync frozen
-		var box, frozen, tbody, td, tds, node;
-		if ((box = this.getListbox()) && box.efrozen && 
-			(frozen = zk.Widget.$(box.efrozen.firstChild) && 
-			(node = this.$n()))) {
+		var box = this.getListbox(),
+			frozen = box ? box.frozen : null,
+			node = this.$n(),
+			td, tds;
+		if (frozen && node)
 			box._moveToHidingFocusCell(node.cellIndex);
-		}
 	},
 	doMouseOver_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)

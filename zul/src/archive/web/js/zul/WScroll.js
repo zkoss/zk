@@ -685,9 +685,10 @@ zul.WScroll = zk.$extends(zk.Object, {
 	},
 	redraw: function (p) {
 		var orient = this._isVer ? 'v' : 'h',
+			ocls = this._isVer ? 'vertical' : 'horizontal',
 			uuid = this.uid + '-' + orient + 'bar',
-			zcls = this.zcls + '-ws';
-		jq(p).append(['<div id="', uuid, '" class="', zcls, '-', orient ,'">',
+			zcls = this.widget.$s('wscroll');
+		jq(p).append(['<div id="', uuid, '" class="', zcls, '-', ocls ,'">',
 				'<div class="', zcls, '-drag">',
 					'<div class="', zcls, '-home" title="', msgzul.WS_HOME, '"></div>',
 					'<div class="', zcls, '-up" title="', msgzul.WS_PREV, '"></div>',

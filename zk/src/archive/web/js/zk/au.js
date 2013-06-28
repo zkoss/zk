@@ -815,6 +815,9 @@ zAu.beforeSend = function (uri, req, dt) {
 	 * for other condition, this method returns false.
 	 */
 	sendNow: function (dt) {
+		if (zAu.disabledRequest) {
+			return false;
+		}
 		var es = dt._aureqs;
 		if (es.length == 0)
 			return false;
@@ -1044,7 +1047,9 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * For widget's error message, use {@link #wrongValue} instead.
 	 * @param String msg the error message
 	 */
-	alert: function (msg, title, icon) {
+	alert: function (msg, title, icon, disabledAuRequest) {
+		if (disabledAuRequest)
+			zAu.disabledRequest = true;
 		jq.alert(msg, {icon: icon||'ERROR', title: title});
 	},
 	/** Redirects to the specified URL.

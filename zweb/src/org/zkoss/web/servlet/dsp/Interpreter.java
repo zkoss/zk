@@ -56,7 +56,7 @@ public class Interpreter {
 		int k = path.indexOf(';', j + 1); //it might contain session-id
 		String ext =
 			(k >= 0 ? path.substring(j + 1, k): path.substring(j + 1))
-			.toLowerCase();
+			.toLowerCase(java.util.Locale.ENGLISH);
 		if ("dsp".equals(ext)) {
 			if (j == 0) return null; //unknown
 			k = path.lastIndexOf('.', j - 1);
