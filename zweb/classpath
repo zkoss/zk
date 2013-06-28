@@ -1,3 +1,4 @@
 ../dist/lib/zcommon.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/portlet-api.jar
+../dist/lib/ext/commons-codec.jar
