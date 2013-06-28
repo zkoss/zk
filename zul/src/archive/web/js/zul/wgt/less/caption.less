@@ -2,7 +2,7 @@
 
 .z-caption {
 	width: 100%;
-	height: 24px;
+	height: @baseButtonHeight;
 	font-size: @fontSizeMedium;
 	white-space: nowrap;
 
@@ -12,8 +12,8 @@
 	}
 
 	.z-label {
-		line-height: 16px;
-		padding: 4px 0px 4px 0px;
+		line-height: @baseLineHeight + 2;
+		padding: 4px 0px;
 		margin-right: 4px;
 		display: inline-block;
 	}
@@ -24,7 +24,7 @@
 	}
 
 	&-image {
-		vertical-align:middle;
+		vertical-align: middle;
 	}
 
 	input {
@@ -32,15 +32,20 @@
 	}
 
 	.z-toolbar {
-		.z-a, .z-a:visited, .z-a:hover {
-			background: none; border: 0; color: white;
+		.z-a,
+		.z-a:visited,
+		.z-a:hover {
+			background: none;
+			border: 0;
+			color: #FFFFFF;
 		}
 	}
 
-	.z-a, .z-a:visited {
+	.z-a,
+	.z-a:visited {
 		font-size: @fontSizeSmall; 
 		font-weight: normal; 
-		color: black; 
+		color: @baseTextColor; 
 		background: none;
 		text-decoration: none;
 	}

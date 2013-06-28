@@ -972,20 +972,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//note: we don't solve this bug for paging yet
-		var n = this.$n(),
-			wd = n.style.width;
+		var n = this.$n();
 		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this._getEbodyWd(),
 			sizedByContent = this.isSizedByContent(),
 			ehead = this.ehead,
+			ebody = this.ebody,
 			ebodyrows = this.ebodyrows,
 			efoot = this.efoot,
 			efootrows = this.efootrows;
 		
 		if (ehead) {
-			if (tblwd)
+			if (tblwd) {
 				ehead.style.width = tblwd + 'px';
+				if (ebody)
+					ebody.style.width = tblwd + 'px';
+				if (efoot)
+					efoot.style.width = tblwd + 'px';
+			}
 			if (sizedByContent && ebodyrows)
 				this._adjHeadWd();
 			else if (tblwd && efoot)
@@ -1007,7 +1012,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._afterCalcSize();
 	},
 	_getEbodyWd: function () {
-		return this.ebody.offsetWidth;
+		return this.ebody.offsetWidth + zk(this.$n()).padBorderWidth();
 	},
 	_beforeCalcSize: function () {
 		this._setHgh(this.$n().style.height);
@@ -1020,10 +1025,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				bdtbl = this.ebodytbl,
 				fttbl = this.efoottbl;
 			if (hdtbl) {
-				hdtbl.width = '';
-				var wd = hdtbl.offsetWidth;
+				var wd = 0;
+				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling)
+					wd += zk.parseInt(w.style.width);
 				hdtbl.style.width = wd + 'px';
-				hdtbl.width = '100%';
 				if (bdtbl)
 					bdtbl.style.width = wd + 'px';
 				if (fttbl)

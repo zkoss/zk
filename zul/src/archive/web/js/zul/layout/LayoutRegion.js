@@ -527,7 +527,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		
 		var bar = this._scrollbar;
 		if (bar) {
-			bar.destory();
+			bar.destroy();
 			bar = this._scrollbar = null;
 		}
 		if (this.$n('split')) {
@@ -567,6 +567,21 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
 		if (bar) {
+			var p = this.$n('cave'),
+				c = p.firstChild,
+				cs = c.style,
+				ph = p.offsetHeight,
+				pw = p.offsetWidth;
+			
+			// force to recalculate size
+			cs.height = '';
+			cs.width = '';
+			if (c.offsetHeight && c.offsetWidth);
+			
+//			cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+//			cs.width  = jq.px(c.scrollWidth  >= pw ? c.scrollWidth  : pw);
+			
+			bar.scroller = c;
 			bar.syncSize(showBar);
 			if (scrollToTop)
 				bar.scrollTo(0, 0);

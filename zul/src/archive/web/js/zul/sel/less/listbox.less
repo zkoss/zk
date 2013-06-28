@@ -1,23 +1,19 @@
 @import "~./zul/less/_header.less";
 
-@emptyColor: #7D7D7D;
-@gridBorderColor: #CFCFCF;
-@hoverGradientStart: #F2F9FE;
-@hoverGradientEnd: #D6F0FD;
-@stripBackground: #F7F7F7;
-@footerBackground: #F9F9F9;
-@headFootColor: #636363;
-@groupGradientStart: #FFFFFF;
-@groupGradientEnd: #E9F2FB;
-@selectGradientStart: #E5F4FB;
-@selectGradientEnd: #D3EDFA;
+@listboxStripBackground: #F7F7F7;
+@listfooterBackground: #F9F9F9;
+@listgroupGradientStart: #FFFFFF;
+@listgroupGradientEnd: #E9F2FB;
+@listgroupIconOpenColor: #000000;
+@listgroupIconCloseColor: #8FB9D0;
+@listgroupIconHoverColor: #0076A3;
+@listboxCheckIconColor: #0076A3;
 
 //listbox
 .z-listbox {
-	border: 1px solid @gridBorderColor;
+	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
-	background: #FFFFFF;
 	//listbox header
 	&-header {
 		overflow: hidden;
@@ -26,7 +22,7 @@
 		&.z-listbox-header-bar {
 			display: none;
 			.verGradient();
-			border: 1px solid @gridBorderColor;
+			border: 1px solid @baseBorderColor;
 			border-top: none;
 			border-right: none;
 			width: @baseIconWidth;
@@ -45,18 +41,18 @@
 	&-emptybody td {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @emptyColor;
+		color: @disabledColor;
 		font-style: italic;
 		text-align: center;
 	}
 	//listbox footer
 	&-footer {
 		overflow: hidden;
-		background: @footerBackground;
-		border-top: 1px solid @gridBorderColor;
+		background: @listfooterBackground;
+		border-top: 1px solid @baseBorderColor;
 	}
 	&-odd {
-		background: @stripBackground;
+		background: @listboxStripBackground;
 	}
 }
 //listhead
@@ -71,8 +67,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @gridBorderColor;
-	border-bottom: 1px solid @gridBorderColor;
+	border-right: 1px solid @baseBorderColor;
+	border-bottom: 1px solid @baseBorderColor;
 	position: relative;
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -94,7 +90,7 @@
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @gridBorderColor;
+		border: 1px solid @baseBorderColor;
 		display: inline-block;
 		vertical-align: text-top;
 		.verGradient();
@@ -106,7 +102,7 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: #0076a3;
+			color: @listboxCheckIconColor;
 		}
 	}
 	&-button {
@@ -116,12 +112,12 @@
 		cursor: pointer;
 		top: 0;
 		right: 0;
-		width: 23px;
-		height: 32px;
-		line-height: 32px;
+		width: @baseButtonWidth - 1;
+		height: @baseBarHeight;
+		line-height: @baseBarHeight;
 		text-decoration: none;
 		text-align: center;
-		border-left: 1px solid #A5CDE1;
+		border-left: 1px solid darken(@hoverGradientStart, 15%);
 		.boxShadow('inset 1px 0 #FFFFFF');
 		color: black;
 		&:hover {
@@ -154,7 +150,7 @@
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @gridBorderColor;
+		border: 1px solid @baseBorderColor;
 		display: inline-block;
 		vertical-align: text-top;
 		.verGradient();
@@ -174,7 +170,7 @@
 			position: relative;
 		}
 		&:hover .z-listcell {
-			.verGradient(darken(@selectGradientStart, 5%), darken(@selectGradientEnd, 10%));
+			.verGradient(@selectHoverGradientStart, @selectHoverGradientEnd);
 			position: relative;
 		}
 	}
@@ -184,13 +180,13 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: #0076a3;
+			color: @listboxCheckIconColor;
 			&.z-icon-ok {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
 				width: 8px;
 				height: 8px;
 				.borderRadius(4px);
-				background: #0076a3;
+				background: @listboxCheckIconColor;
 				padding: 0;
 				margin: 3px;
 			}
@@ -199,7 +195,7 @@
 	//disabled
 	&.z-listitem-disabled {
 		* {
-			color: #aaaaaa !important;
+			color: @disabledColor !important;
 			cursor: default !important;
 		}
 		&:hover .z-listcell {
@@ -211,9 +207,9 @@
 //Group
 .z-listgroup {
 	&-inner {
-		.verGradient(@groupGradientStart, @groupGradientEnd);
+		.verGradient(@listgroupGradientStart, @listgroupGradientEnd);
 		position: relative;
-		border: 1px solid @gridBorderColor;
+		border: 1px solid @baseBorderColor;
 		border-left: none;
 		border-right: none;
 		overflow: hidden;
@@ -232,19 +228,19 @@
 		position: absolute;
 		left: 8px;
 		&:hover {
-			color: #0076a3;
+			color: @listgroupIconHoverColor;
 		}
 	}
 	&-icon-open {
-		color: black;
+		color: @listgroupIconOpenColor;
 		left: 5px;
 	}
 	&-icon-close {
-		color: #8FB9D0;
+		color: @listgroupIconCloseColor;
 	}
 }
 .z-listgroupfoot-inner {
-	.verGradient(@groupGradientEnd, @groupGradientStart);
+	.verGradient(@listgroupGradientEnd, @listgroupGradientStart);
 	position: relative;
 	overflow: hidden;
 }
@@ -257,7 +253,7 @@
 .z-listfooter-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	color: @headFootColor;
+	color: @textColorLighter;
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
@@ -276,12 +272,12 @@
 //paging
 .z-listbox-paging {
 	&-top {
-		border-bottom: 1px solid @gridBorderColor;
+		border-bottom: 1px solid @baseBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}
 	&-bottom {
-		border-top: 1px solid @gridBorderColor;
+		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}

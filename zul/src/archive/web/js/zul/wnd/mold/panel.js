@@ -13,14 +13,13 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out, skipper) {
-	var zcls = this.getZclass(),
-		uuid = this.uuid,
+	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption;
 
 	out.push('<div', this.domAttrs_(), '>');
 	if (caption || title) {
-		out.push('<div id="', uuid, '-head" class="', zcls, '-head">',
+		out.push('<div id="', uuid, '-head" class="', this.$s('head'), '">',
 				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {

@@ -254,16 +254,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				up = 'z-icon-caret-up',
 				down = 'z-icon-caret-down';
 			if (node) {
-				var zcls = this.getZclass(),
-					$body = jq(this.$n('body'));
+				var $body = jq(this.$n('body'));
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
-						jq(node).removeClass(zcls + '-collapsed');
+						jq(node).removeClass(this.$s('collapsed'));
 						jq(this.$n('exp')).children('.' + down)
 						.removeClass(down).addClass(up);
 						$body.zk.slideDown(this);
 					} else {
-						jq(node).addClass(zcls + '-collapsed');
+						jq(node).addClass(this.$s('collapsed'));
 						jq(this.$n('exp')).children('.' + up)
 						.removeClass(up).addClass(down);
 						this._hideShadow();
@@ -297,16 +296,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 				var l, t, w, h,
 				s = node.style, 
-				cls = this.getZclass(),
 				up = 'z-icon-fullscreen',
 				down = 'z-icon-resize-small';
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maximized')
+					jq(this.$n('max')).addClass(this.$s('maximized'))
 					.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
 					if (this._collapsible && !this._open) {
-						$n.jq.removeClass(cls + '-collapsed');
+						$n.jq.removeClass(this.$s('collapsed'));
 						var body = this.$n('body');
 						if (body) body.style.display = '';
 					}
@@ -366,7 +364,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('max'),
 						$max = jq(max);
-					$max.removeClass(cls + '-maximized').children('.' + down)
+					$max.removeClass(this.$s('maximized')).children('.' + down)
 					.removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
@@ -380,7 +378,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					w = s.width;
 					h = s.height;
 					if (this._collapsible && !this._open) {
-						jq(node).addClass(cls + '-collapsed');
+						jq(node).addClass(this.$s('collapsed'));
 						var body = this.$n('body');
 						if (body) body.style.display = 'none';
 					}
@@ -742,7 +740,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_initMove: function (cmp) {
 		var handle = this.$n('head');
 		if (handle && !this._drag) {
-			jq(handle).addClass(this.getZclass() + '-header-move');
+			jq(handle).addClass(this.$s('header-move'));
 			var $Panel = this.$class;
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, stackup: true,
@@ -844,8 +842,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this.isMovable() ? this.$n('head') : false,
-				zcls = this.getZclass();
+				handle = this.isMovable() ? this.$n('head') : false;
 			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
@@ -853,10 +850,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
 					c == 7 ? 'w-resize': 'nw-resize';
-				if (handle) jq(handle).removeClass(zcls + '-header-move');
+				if (handle) jq(handle).removeClass(this.$s('header-move'));
 			} else {
 				n.style.cursor = this._backupCursor || '';
-				if (handle) jq(handle).addClass(zcls + '-header-move');
+				if (handle) jq(handle).addClass(this.$s('header-move'));
 			}
 		}
 	},
@@ -866,7 +863,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	doClick_: function (evt) {
 		var maxBtn = this.$n('max'),
 			minBtn = this.$n('min'),
-			zcls = this.getZclass(),
 			n = evt.domTarget;
 		if (!n.id)
 			n = n.parentNode;
@@ -898,7 +894,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass();
 			var added = this._bordered() ? '' : this.$s('noborder');
 			if (added) scls += (scls ? ' ': '') + added;
 			added = this._open ? '' : this.$s('collapsed');

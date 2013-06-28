@@ -1,5 +1,14 @@
 @import "~./zul/less/_header.less";
 
+@popupColor: #555555;
+@popupGradientStart: #FFFFFF;
+@popupGradientEnd: #F5F5F5;
+// bug ZK-1135: IE8 does not support rgba
+@infoColor:    rgba(33, 155, 166, 0.88);
+@warningColor: rgba(234, 67, 23, 0.88);
+@errorColor:   rgba(190, 0, 5, 0.88);
+@arrowColor: rgba(51, 51, 51, 0.9);
+
 .z-popup {
 	position: absolute;
 	top: 0;
@@ -7,11 +16,11 @@
 	overflow: hidden;
 	.borderRadius('1px');
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
-	.verGradient(#FFFFFF, #F5F5F5);
-	border: 1px solid #CFCFCF;
+	.verGradient(@popupGradientStart, @popupGradientEnd);
+	border: 1px solid @baseBorderColor;
 
 	&-content {
-		color: #555555;
+		color: @popupColor;
 		line-height: @baseLineHeight;
 		padding: 10px;
 		height: 100%;
@@ -81,22 +90,17 @@
 	border: 10px solid transparent;
 }
 .z-notification-left {
-	border-right-color: rgba(51, 51, 51, 0.9);
+	border-right-color: @arrowColor;
 }
 .z-notification-right {
-	border-left-color: rgba(51, 51, 51, 0.9);
+	border-left-color: @arrowColor;
 }
 .z-notification-up {
-	border-bottom-color: rgba(51, 51, 51, 0.9);
+	border-bottom-color: @arrowColor;
 }
 .z-notification-down {
-	border-top-color: rgba(51, 51, 51, 0.9);
+	border-top-color: @arrowColor;
 }
-
-// bug ZK-1135: IE8 does not support rgba
-@infoColor:    rgba(33, 155, 166, 0.88);
-@warningColor: rgba(234, 67, 23, 0.88);
-@errorColor:   rgba(190, 0, 5, 0.88);
 
 // notification: info
 .z-notification-info .z-notification-content {
@@ -163,8 +167,8 @@
 	font-size: 10px;
 
 	&:hover {
-		.borderRadius('2px');
-		background: #FFFFFF;
+		.borderRadius(@borderRadiusSmall - 1);
+		background: @baseBackgroundColor;
 		opacity: 1;
 	}
 }

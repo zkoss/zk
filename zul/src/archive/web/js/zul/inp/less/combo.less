@@ -1,5 +1,7 @@
 @import "~./zul/less/_header.less";
 
+@comboitemContentColor: #888888;
+
 .z-combobox,
 .z-bandbox,
 .z-datebox,
@@ -16,18 +18,18 @@
 .z-timebox-input,
 .z-spinner-input,
 .z-doublespinner-input {
-	background: #FFFFFF;
+	background: @baseBackgroundColor;
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 	padding: 4px 5px;
-	border: 1px solid #CFCFCF;
+	border: 1px solid @baseBorderColor;
 	border-right: 0;
 	margin: 0;
 	height: @baseButtonHeight;
-	.borderRadius(3px 0 0 3px);
+	.leftBorderRadius(@borderRadiusSmall);
 	line-height: @baseLineHeight;
-	color: black;
+	color: @baseTextColor;
 }
 .z-combobox-button,
 .z-bandbox-button,
@@ -35,33 +37,33 @@
 .z-timebox-button,
 .z-spinner-button,
 .z-doublespinner-button {
-	background: #FFFFFF;
+	background: @baseBackgroundColor;
 	vertical-align: middle;
 	cursor: pointer;
 	padding: 4px;
-	border: 1px solid #CFCFCF;
+	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	display: inline-block;
 	font-size: @baseFontSize;
 	line-height: @baseLineHeight;
 	min-width: @baseButtonWidth;
 	height: @baseButtonHeight;
-	color: #363636;
-	.borderRadius(0 3px 3px 0);
+	color: @textColorLight;
+	.rightBorderRadius(@borderRadiusSmall);
 
 	&:hover {
-		border-color: #94B9DA;
-		.buttonBackground(#E9F6FD, #DBF0FC);
+		border-color: @hoverBorderColor;
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 	&:active {
-		border-color: #94B9DA;
-		.buttonBackground(#B6D5E5, #CAE4F1);
+		border-color: @activeBorderColor;
+		.verGradient(@activeGradientStart, @activeGradientEnd);
 		.boxShadow('inset 1px 1px 1px #91AAB7');
 	}
 	input[disabled] + & {
 		&:hover,
 		&:active {
-			border-color: #CFCFCF;
+			border-color: @baseBorderColor;
 			.resetGradient();
 			.boxShadow('none');
 		}
@@ -90,14 +92,14 @@
 
 	& > a {
 		padding: 0 7px;
-		color: #363636;
+		color: @textColorLight;
 		text-decoration: none;
 		position: absolute;
 		left: 0;
 		width: @baseButtonWidth;
-		height: 12px;
+		height: @baseButtonHeight / 2;
 		overflow: hidden;
-		background: #FFFFFF;
+		background: @baseBackgroundColor;
 
 
 		&:first-child {// up icon
@@ -108,12 +110,12 @@
 			}
 		}
 		&:hover {
-			border-color: #94B9DA;
-			.buttonBackground(#E9F6FD, #DBF0FC);
+			border-color: @hoverBorderColor;
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		}
 		&:active {
-			border-color: #94B9DA;
-			.buttonBackground(#B6D5E5, #CAE4F1);
+			border-color: @activeBorderColor;
+			.verGradient(@activeGradientStart, @activeGradientEnd);
 			.boxShadow('inset 1px 1px 1px #91AAB7');
 		}
 	}
@@ -123,7 +125,7 @@
 	}
 	&:hover > i {
 		height: 1px;
-		border-top: 1px solid #94B9DA;
+		border-top: 1px solid @hoverBorderColor;
 		position: absolute;
 		top: 11px;
 		left: 0;
@@ -173,21 +175,20 @@
 		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 	}
 	&-input[readonly] {
-		background: #FAFAFA;
-		border-color: #E6E6E6;
+		background: @readonlyBackgroundColor;
+		border-color: @readonlyBorderColor;
 	}
 	&-input[readonly]:focus {
 		.boxShadow('none');
 	}
 
 	&-invalid {
-		background: #FFFFFF;
-		border-color: #DD7777;
-		border-right: 1px solid #DD7777!important;
+		background: @baseBackgroundColor;
+		border-color: @invalidBorderColor;
+		border-right: 1px solid @invalidBorderColor!important;
 		margin-right: -1px;
 	}
 }
-
 
 .z-combobox-button {
 	font-size: @fontSizeLarge;
@@ -202,12 +203,12 @@
 .z-bandbox-disabled,
 .z-comboitem-disabled,
 .z-combobox-disabled {
-	opacity: 0.6;
+	.disabledOpacity();
 
  	& * {
 		cursor: default !important;
-		color: #AAAAAA !important;
-		background: #F0F0F0 !important;
+		color: @disabledColor !important;
+		background: @disabledBackgroundColor !important;
 	}
 }
 
@@ -218,8 +219,7 @@
 .z-bandbox-readonly:focus,
 .z-combobox-readonly:focus {
 	background: transparent repeat-x 0 0;
-	border-color: #E6E6E6;
-	border-top-color: #B2B2B2;
+	border-color: @readonlyBorderColor;
 	border-right-width: 0;
 	cursor: default;
 	.boxShadow(none);
@@ -231,8 +231,8 @@
 .z-timebox-rightedge,
 .z-spinner-rightedge,
 .z-doublespinner-rightedge {
-	border-right: 1px solid #CFCFCF;
-	.borderRadius(3px);
+	border-right: 1px solid @baseBorderColor;
+	.rightBorderRadius(@borderRadiusSmall);
 }
 
 // Inplace editing
@@ -268,7 +268,6 @@
 	cursor: pointer;
 }
 .z-comboitem {
-	color: #555555;
 	text-shadow: 0 1px #FFFFFF;
 	padding: 0 2px;
 	position: relative;
@@ -276,7 +275,7 @@
 }
 .z-comboitem-inner,
 .z-comboitem-content {//description
-	color: #888888;
+	color: @comboitemContentColor;
 	font-size: @fontSizeXSmall;
 	padding-left: 6px;
 }
@@ -285,17 +284,17 @@
 .z-comboitem a:visited {
 	font-size: @fontSizeMedium;
 	font-weight: normal;
-	color: black;
+	color: @baseTextColor;
 	text-decoration: none;
 }
 .z-comboitem-selected {
-	.buttonBackground(#B6D5E5, #CAE4F1);
+	.verGradient(@selectGradientStart, @selectGradientEnd);
 }
 .z-comboitem:hover {
-	.buttonBackground(#E9F6FD, #DBF0FC);
+	.verGradient(@hoverGradientStart, @hoverGradientEnd);
 }
 .z-comboitem-selected:hover {
-	.buttonBackground(#81d0f7, #DBF0FC);
+	.verGradient(@selectHoverGradientStart, @selectHoverGradientEnd);
 }
 .z-comboitem-image {
 	width: 1px;
@@ -311,8 +310,8 @@
 .z-timebox-popup {
 	display: block;
 	position: absolute;
-	background: #FFFFFF;
-	border: 1px solid #CFCFCF;
+	background: @baseBackgroundColor;
+	border: 1px solid @baseBorderColor;
 	padding: 2px;
 	font-family: @baseContentFontFamily;
 	font-weight: normal;
@@ -336,10 +335,10 @@
 	list-style-type: none;
 }
 
-<%-- Shadow --%>
+//Shadow
 .z-combobox-shadow,
 .z-bandbox-shadow,
 .z-datebox-shadow {
-	.borderRadius(3px);
+	.borderRadius(@borderRadiusSmall);
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
 }

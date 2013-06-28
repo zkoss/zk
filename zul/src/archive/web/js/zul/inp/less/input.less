@@ -1,43 +1,47 @@
 @import "~./zul/less/_header.less";
 
+@errorboxColor: #990000;
+@errorboxBorderColor: @errorboxColor;
+@errorboxBackgroundColor: #FFEEEE;
+
 .z-textbox,
 .z-decimalbox,
 .z-intbox,
 .z-longbox,
 .z-doublebox {
-	background: #FFFFFF;
+	background: @baseBackgroundColor;
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 	padding: 4px 5px 3px;
-	border: 1px solid #CFCFCF;
+	border: 1px solid @baseBorderColor;
 	margin: 0;
 	min-height: @baseButtonHeight;
-	.borderRadius(3px 0 0 3px);
+	.borderRadius(@borderRadiusSmall);
 	line-height: @baseLineHeight;
-	color: black;
+	color: @baseTextColor;
 
 	&:focus {
 		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 	}
 	&[readonly] {
-		background: #FAFAFA;
-		border-color: #E6E6E6;
+		background: @readonlyBackgroundColor;
+		border-color: @readonlyBorderColor;
 	}
 	&[readonly]:focus {
 		.boxShadow('none');
 	}
 
 	&-invalid {
-		background: #FFFFFF;
-		border-color: #DD7777;
+		background: @baseBackgroundColor;
+		border-color: @invalidBorderColor;
 		margin-right: -1px;
 	}
 	&[disabled] {
-		opacity: 0.6;
+		.disabledOpacity();
 		cursor: default !important;
-		color: #AAAAAA !important;
-		background: #F0F0F0 !important;
+		color: @disabledColor !important;
+		background: @disabledBackgroundColor !important;
 	}
 }
 
@@ -58,7 +62,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	color: #990000;
+	color: @errorboxColor;
 	width: 260px;
 	& > .z-errorbox-icon {
 		position: absolute;
@@ -66,7 +70,7 @@
 		top: 7px;
 		z-index: 2;
 		left: 7px;
-		color: #990000;
+		color: @errorboxColor;
 	}
 }
 .z-errorbox-left + 
@@ -80,8 +84,8 @@
 .z-errorbox-content {
 	width: 100%;
 	position: relative;
-	border: 1px solid #990000;
-	background: #FFEEEE;
+	border: 1px solid @errorboxBorderColor;
+	background: @errorboxBackgroundColor;
 	overflow: hidden;
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeSmall;
@@ -99,7 +103,7 @@
 	border: 6px solid transparent;
 	z-index: 100;
 }
-// notification: base style
+// errorbox arrows: base style
 .z-errorbox-left,
 .z-errorbox-right,
 .z-errorbox-up,
@@ -108,36 +112,35 @@
 }
 
 // bug ZK-1135: IE8 does not support rgba
-@errorColor: #990000;
 
 .z-errorbox-left {
-	border-right-color: @errorColor;
+	border-right-color: @errorboxColor;
 }
 .z-errorbox-right {
-	border-left-color: @errorColor;
+	border-left-color: @errorboxColor;
 }
 .z-errorbox-up {
-	border-bottom-color: @errorColor;
+	border-bottom-color: @errorboxColor;
 }
 .z-errorbox-down {
-	border-top-color: @errorColor;
+	border-top-color: @errorboxColor;
 }
 
 
 .z-errorbox-close {
 	position: absolute;
 	cursor: pointer;
-	width: 12px;
-	height: 12px;
+	width: @baseIconWidth - 4;
+	height: @baseIconHeight - 4;
 	top: 8px;
 	right: 8px;
-	line-height: 11px;
+	line-height: @baseLineHeight - 3;
 	padding: 0 2px;
 	opacity: 0.6;
-	font-size: 10px;
+	font-size: @fontSizeXSmall;
 
 	&:hover {
-		.borderRadius('2px');
+		.borderRadius(@borderRadiusSmall - 1);
 		background: #FFFFFF;
 		opacity: 1;
 	}
@@ -164,5 +167,5 @@
 	top: 15px;
 }
 .z-errorbox-close:hover {
-	color: @errorColor;
+	color: @errorboxColor;
 }

@@ -57,7 +57,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 		jq(uploaded).append(html);
 
 		if (max > 0 && max <= uploaded.$n().childNodes.length)
-			uploaded.$f("fileupload").setVisible(false); // B50-ZK-340: need to skip rerender
+			uploaded.$f('fileupload').setVisible(false); // B50-ZK-340: need to skip rerender
 		
 		this.viewer = jq('#'+ id)[0];
 		jq('#' + id + '-cancel').click(function() {
@@ -66,12 +66,12 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 			else {
 				var $n = jq('#' + id),
 					index = $n.parent().children().index($n[0]);
-				zAu.send(new zk.Event(wgt.$o(), "onRemove", index));
+				zAu.send(new zk.Event(wgt.$o(), 'onRemove', index));
 				jq(self.viewer).remove();
 			}
 			
 			if (max > 0 && max > uploaded.$n().childNodes.length)
-				uploaded.$f("fileupload").setVisible(true); // B50-ZK-340: need to skip rerender
+				uploaded.$f('fileupload').setVisible(true); // B50-ZK-340: need to skip rerender
 		});
 	},
 	update: function (sent, total) {

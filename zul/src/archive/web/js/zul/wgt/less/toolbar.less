@@ -1,12 +1,12 @@
 @import "~./zul/less/_header.less";
 
 .z-toolbar {
-	border-color: #C5C5C5;
+	border-color: @baseBorderColor;
 	border-style: solid;
 	border-width: 0 0 1px;
 	display: block;
 	padding: 4px 4px 3px;
-	.buttonBackground();
+	.verGradient();
 	position: relative;
 }
 .z-caption .z-toolbar {
@@ -26,14 +26,16 @@
 }
 // toolbar horizontal alignment
 .z-toolbar-start {
-	float: left; clear: none;
+	float: left;
+	clear: none;
 }
 .z-toolbar-center {
 	text-align: center;
 	margin: 0 auto;
 }
 .z-toolbar-end {
-	float: right; clear: none;
+	float: right;
+	clear: none;
 }
 // Toolbar Panel Mold
 .z-toolbar-panel {
@@ -54,36 +56,31 @@
 	padding-bottom: 1px;
 }
 
-
-@buttonBorderHover: #8FB9D0;
-
 // Toolbarbutton
 .z-toolbarbutton {
 	display: inline-block;
 	position: relative;
 	cursor: pointer;
 	margin: 0 2px;
-	height: 24px;
+	height: @baseButtonHeight;
 	padding: 1px 0;
 	line-height: @baseLineHeight;
 	border: 1px solid transparent;
-	.borderRadius('3px');
+	.borderRadius(@borderRadiusSmall);
 
 	&:hover {
-		border-color: @buttonBorderHover;
-		.buttonBackground(rgba(227,244,253,0.0), #C7E9F9);
+		border-color: @hoverBorderColor;
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 	&:active {
-		border: 1px solid #808080;
-		border-color-bottom: #B6B6B6;
-		border-color-right: #B6B6B6;
-		.buttonBackground(#C3F5FE, #86E2F9);
+		border: 1px solid @activeBorderColor;
+		.verGradient(@activeGradientStart, @activeGradientEnd);
 		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75), 0 0 7px #CFCFCF');
 	}
 	&[disabled] {
-		color:gray !important;
-		cursor:default !important;
-		opacity: .5;
+		color: @disabledColor !important;
+		cursor: default !important;
+		.disabledOpacity();
 		border: 1px solid transparent;
 		.resetGradient();
 		.boxShadow('none');
@@ -91,12 +88,12 @@
 }
 
 .z-toolbarbutton-checked {
-	border: 1px solid #C6DBE6;
-	.borderRadius('3px');
-	.verGradient(#F4FAFD, #E2EFF6);
+	border: 1px solid @checkedBorderColor;
+	.borderRadius(@borderRadiusSmall);
+	.verGradient(@checkedGradientStart, @checkedGradientEnd);
 }
 .z-toolbarbutton-content {
-	padding: 2px 2px;
+	padding: 2px;
 	position: relative;
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeSmall;
