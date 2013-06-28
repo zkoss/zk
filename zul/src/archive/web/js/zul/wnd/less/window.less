@@ -121,19 +121,20 @@
 		.topBorderRadius();
 		padding: @framePadding @framePadding 0 @framePadding;
 
-		& > .z-window-content {
+		.z-window-content {
 			border-width: 0 0 0 0;
 			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
 		}
 
 		&.z-window-noheader {
 			padding-top: 0;
-			& > .z-window-content {
+
+			z-window-content {
 				margin: 0px;
 			}
 		}
 
-		&.z-window-noheader:not(.z-window-noborder) > .z-window-content {
+		&.z-window-noheader:not(.z-window-noborder) .z-window-content {
 			margin: 0px -1 * @framePadding;
 		}
 	}
@@ -145,7 +146,8 @@
 	
 	&-embedded {
 		.borderRadius('0px');
-		& > .z-window-shadow {
+
+		.z-window-shadow {
 			.boxShadow('none');
 		}		
 	}
@@ -158,11 +160,11 @@
 			padding: 0;
 		}
 
-		& > .z-window-content {
+		.z-window-content {
 			border: 0;			
 		}
 
-		&:not(.z-window-noheader) > .z-window-content {
+		&:not(.z-window-noheader) .z-window-content {
 			margin: 0 -1 * @framePadding;
 		}
 
@@ -173,8 +175,8 @@
 }
 
 .z-messagebox {
-	&-window.z-window-modal > .z-window-content, 
-	&-window.z-window-highlighted > .z-window-content {
+	&-window.z-window-modal .z-window-content, 
+	&-window.z-window-highlighted .z-window-content {
 		padding: 17px;
 		padding-bottom: 15px;
 	}
