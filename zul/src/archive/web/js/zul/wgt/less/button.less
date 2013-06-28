@@ -1,10 +1,6 @@
 @import "~./zul/less/_header.less";
 
-// Button Variables
-@buttonBorder:		#A6A6A6;
-@buttonBorderHover: #8FB9D0;
-@buttonBorderFocus: #00B9FF;
-@buttonBorderActive: #499EB3;
+@buttonBorder: darken(@baseBorderColor, 15%);
 
 .z-button {
 	font-family: @baseTitleFontFamily;
@@ -19,22 +15,23 @@
 	cursor: pointer;
 	
 	&:hover {
-		border-color: @buttonBorderHover;
-		.buttonBackground(rgba(227,244,253,0.0), #C7E9F9);
+		border-color: @hoverBorderColor;
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 	&:focus {
-		border-color: @buttonBorderFocus;
+		border-color: @focusBorderColor;
 		.boxShadow('inset 1px 1px 1px #0CBCFF, inset -1px -1px 1px #0CBCFF');
 	}
 	&:active {
-		border-color: @buttonBorderActive;
-		.buttonBackground(#C3F5FE, #86E2F9);
+		border-color: @activeBorderColor;
+		.verGradient(@activeGradientStart, @activeGradientEnd);
 	}
 	&[disabled] {
-		opacity: .65;
+		.disabledOpacity();
 		border: 1px solid @buttonBorder;
-		.buttonBackground();
+		.verGradient();
 		.boxShadow('none');
+		cursor: default;
 	}
 	img {
 		vertical-align: text-top;

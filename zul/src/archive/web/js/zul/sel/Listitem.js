@@ -60,7 +60,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	setLabel: function (val) {
 		this._autoFirstCell().setLabel(val);
 	},
-	// override this functino for multiple z-drop-cnt
+	// override this function for multiple z-drop-content
 	getDragMessage_: function () {
 		var p = this.parent,
 			p_sel = p._selItems,
@@ -82,7 +82,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 				if (!msg)
 					msg = label;
 				else
-					msg += '</div><div class="z-drop-cnt"><span id="zk_ddghost-img'
+					msg += '</div><div class="z-drop-content"><span id="zk_ddghost-img'
 						+ (cnt++) + '" class="z-drop-disallow"></span>&nbsp;'
 						+ label;
 			}

@@ -14,25 +14,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 function (out) {
-	var zcls = this.getZclass(),
-		isVer = this.isVertical(),
+	var isVer = this.isVertical(),
 		isScale = this.inScaleMold() && !isVer,
 		uuid = this.uuid;
 		
 	if(isScale){
-		out.push('<div id="', uuid, '" class="', zcls, '-tick" style="', 
+		out.push('<div id="', uuid, '" class="', this.$s('tick'), '" style="', 
 				this.domStyle_({height:true}), '">');
 		this.uuid += '-real'; //this is for calling domAttrs
 	}
-	
 	out.push('<div', this.domAttrs_(isVer ? {width:true} : {height:true}), '>');
-	
 	if(isScale)
-		this.uuid = uuid;
-	
-	out.push('<div id="', uuid, '-inner" class="', zcls, '-center">',
-			'<div id="', uuid, '-btn" class="', zcls, '-btn">',
-			'</div></div></div>');
+		this.uuid = uuid;	
+	out.push(  '<div id="', uuid, '-inner" class="', this.$s('center'), '">',
+			     '<div id="', uuid, '-btn" class="', this.$s('button'), '"></div>', 
+			   '</div>', 
+			 '</div>');
 	
 	if(isScale)
 		out.push('</div>');

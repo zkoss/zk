@@ -1,20 +1,14 @@
 @import "~./zul/less/_header.less";
 
-@emptyColor: #7D7D7D;
-@gridBorderColor: #CFCFCF;
-@hoverGradientStart: #F2F9FE;
-@hoverGradientEnd: #D6F0FD;
-@stripBackground: #F7F7F7;
-@footerBackground: #F9F9F9;
-@headFootColor: #636363;
-@groupGradientStart: #FFFFFF;
-@groupGradientEnd: #E9F2FB;
-@selectGradientStart: #E5F4FB;
-@selectGradientEnd: #D3EDFA;
+@treefooterBackground: #F9F9F9;
+@treeIconOpenColor: #000000;
+@treeIconCloseColor: #8FB9D0;
+@treeIconHoverColor: #0076A3;
+@treeCheckIconColor: #0076A3;
 
 //tree
 .z-tree {
-	border: 1px solid @gridBorderColor;
+	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
 	//tree header div
@@ -25,7 +19,7 @@
 		&.z-tree-header-bar {
 			display: none;
 			.verGradient();
-			border: 1px solid @gridBorderColor;
+			border: 1px solid @baseBorderColor;
 			border-top: none;
 			border-right: none;
 			width: @baseIconWidth;
@@ -44,15 +38,15 @@
 	&-emptybody td {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @emptyColor;
+		color: @disabledColor;
 		font-style: italic;
 		text-align: center;
 	}
 	//tree footer div
 	&-footer {
 		overflow: hidden;
-		background: @footerBackground;
-		border-top: 1px solid @gridBorderColor;
+		background: @treefooterBackground;
+		border-top: 1px solid @baseBorderColor;
 	}
 }
 //tree open icon and indent space
@@ -75,15 +69,15 @@
 		position: absolute;
 		left: 8px;
 		&:hover {
-			color: #0076a3;
+			color: @treeIconHoverColor;
 		}
 	}
 	&-open {
-		color: black;
+		color: @treeIconOpenColor;
 		left: 5px;
 	}
 	&-close {
-		color: #8FB9D0;
+		color: @treeIconCloseColor;
 	}
 }
 //treecols
@@ -98,8 +92,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @gridBorderColor;
-	border-bottom: 1px solid @gridBorderColor;
+	border-right: 1px solid @baseBorderColor;
+	border-bottom: 1px solid @baseBorderColor;
 	position: relative;
 	&-sort {
 		cursor: pointer;
@@ -131,7 +125,7 @@
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @gridBorderColor;
+		border: 1px solid @baseBorderColor;
 		display: inline-block;
 		vertical-align: text-top;
 		.verGradient();
@@ -160,13 +154,13 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: #0076a3;
+			color: @treeCheckIconColor;
 			&.z-icon-ok {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
 				width: 8px;
 				height: 8px;
 				.borderRadius(4px);
-				background: #0076a3;
+				background: @treeCheckIconColor;
 				padding: 0;
 				margin: 3px;
 			}
@@ -175,7 +169,7 @@
 	//disabled
 	&.z-treerow-disabled {
 		* {
-			color: #aaaaaa !important;
+			color: @disabledColor !important;
 			cursor: default !important;
 		}
 		&:hover .z-treecell {
@@ -190,7 +184,7 @@
 .z-treefooter-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	color: @headFootColor;
+	color: @textColorLighter;
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
@@ -207,12 +201,12 @@
 //paging
 .z-tree-paging {
 	&-top {
-		border-bottom: 1px solid @gridBorderColor;
+		border-bottom: 1px solid @baseBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}
 	&-bottom {
-		border-top: 1px solid @gridBorderColor;
+		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}

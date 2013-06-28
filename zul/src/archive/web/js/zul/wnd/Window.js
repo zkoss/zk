@@ -66,13 +66,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
 		el = jq('#zk_wndghost')[0];
-		var f = el.firstChild,
-			fs = f.style;
-		fs.height = jq.px0(zk(f).revisedHeight(h));
+		
+		var f = el.firstChild;
+		f.style.height = jq.px0(zk(f).revisedHeight(h));
+		
 		el.insertBefore(fakeT, el.lastChild);
-		fs.padding = $top.css('padding');
-		fs.paddingRight = $el.css('padding-right');
-		fs.paddingLeft = $el.css('padding-left');
 		return el;
 	}
 	function _endghostmove(dg, origin) {
@@ -528,11 +526,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 				var l, t, w, h, 
 				s = node.style, 
-				cls = this.getZclass(), 
 				up = 'z-icon-fullscreen',
 				down = 'z-icon-resize-small';				
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maximized')
+					jq(this.$n('max')).addClass(this.$s('maximized'))
 						.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
@@ -560,7 +557,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('max'),
 						$max = jq(max);
-					$max.removeClass(cls + '-maximized')
+					$max.removeClass(this.$s('maximized'))
 						.children('.' + down).removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
@@ -918,10 +915,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			} else if (cvh && cvh != 'auto') {
 				cave.style.height = '';
 			}
-		}
+		} 
 	},
 	_offsetHeight: function (n) {
-		return zk(n).contentHeight() - this._titleHeight();
+		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();		
 	},
 	_titleHeight: function () {
 		var cap = this.getTitle() || this.caption ? this.$n('cap') : null;
@@ -1004,7 +1001,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	
 	domClass_: function(no) {
 		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
-			zcls = this.getZclass(),
 			bordercls = this._border;
 		
 		bordercls = 'normal' == bordercls ? '':
@@ -1123,8 +1119,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this._mode == 'embedded' ? false : this.$n('cap'),
-				zcls = this.getZclass();
+				handle = this._mode == 'embedded' ? false : this.$n('cap');
 			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
@@ -1132,10 +1127,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
 					c == 7 ? 'w-resize': 'nw-resize';
-				if (handle) jq(handle).removeClass(zcls + '-header-move');
+				if (handle) jq(handle).removeClass(this.$s('header-move'));
 			} else {
 				n.style.cursor = this._backupCursor || ''; // bug #2977948
-				if (handle) jq(handle).addClass(zcls + '-header-move');
+				if (handle) jq(handle).addClass(this.$s('header-move'));
 			}
 		}
 	},

@@ -1,14 +1,21 @@
 @import "~./zul/less/_header.less";
 
+// weekend  Sun Sat
+@calendarWeekendColor: #F7941D;
+@calendarWeekendBackgroundColor: #F3F3F3;
+// week of year  Wk
+@calendarWeekYearColor: #FFFFFF;
+@calendarWeekYearBackgroundColor: @textColorLighter;
+
+@calendarDisabledColor: rgba(214, 214, 214, 0.6);
+
 .z-calendar {
-	background: #FFFFFF;
-	border: 1px solid #C5C5C5;
+	border: 1px solid @baseBorderColor;
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 	min-width: 220px;
 	padding: 2px;
-	color: #4d9cb5;
 
 	a {
 		text-decoration: none;
@@ -29,7 +36,7 @@
 		font-weight: bold;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
-		color: #636363;
+		color: @textColorLighter;
 		padding: 5px 24px;
 		line-height: @baseLineHeight;
 	}
@@ -39,11 +46,12 @@
 
 		& > a {
 			display: inline-block;
+			line-height: normal;
 		}
 	}
 
 	&-title:hover {
-		color: #4d9cb5;
+		color: @hoverColor;
 	}
 
 	&-body {
@@ -68,35 +76,35 @@
 		min-height: @baseButtonHeight;
 		min-width:  @baseButtonHeight;
 		padding: 3px 0;
-		color: #636363;
+		color: @textColorLighter;
 		font-size: @fontSizeSmall;
-		line-height: 18px;
+		line-height: @baseLineHeight + 3;
 		cursor: pointer;
 
 		&:hover {
-			background: #E3F2FF;
+			background: @hoverGradientEnd;
 			.borderRadius(4px);
 			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 		}
 	}
 	&-weekend {
-		color: #f7941d;
-		background: #F3F3F3;
+		color: @calendarWeekendColor;
+		background: @calendarWeekendBackgroundColor;
 	}
 	&-weekday {
-		color: #636363;
+		color: @textColorLighter;
 	}
 	&-outrange {
-		color: #AAAAAA;
+		color: @disabledColor;
 		text-shadow: none;
 	}
 	&-weekofyear {
-		background: #636363;
+		background: @calendarWeekYearBackgroundColor;
 		font-style: italic;
-		color: #FFFFFF;
-
+		color: @calendarWeekYearColor;
+		
 		&:hover {
-			color: #636363;
+			color: @textColorLighter;
 		}
 	}
 
@@ -115,29 +123,29 @@
 		}
 	}
 	&-selected {
-		background: #D9EFFA;
+		background: @selectGradientEnd;
 		.borderRadius(4px);
 		text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 		
 		&:hover {
-			background: #C3E5F4;
-			color: #008BB6;
+			background: @selectHoverGradientEnd;
+			color: @hoverColor;
 		}
 	}
 	&-outside {
-		color: #AAAAAA;
+		color: @disabledColor;
 		text-shadow: none;
 	}
 	&-icon {
 		position: absolute;
-		color: #AAAAAA;
+		color: @disabledColor;
 		font-size: 20px;
 		width: @baseButtonWidth;
 		height: @baseButtonHeight;
 		padding: 0 8px;
 
 		&:hover {
-			color: #C3E5F4;
+			color: @hoverColor;
 		}
 	}
 	&-right {
@@ -152,9 +160,8 @@
 	&-disabled {
 		cursor: default !important;
 		text-shadow: none !important;
-		cursor: default !important;
 		color: #D6D6D6 !important;
-		color: rgba(214,214,214,0.6) !important;
+		color: @calendarDisabledColor !important;
 	}
 }
 

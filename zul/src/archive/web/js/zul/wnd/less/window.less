@@ -1,27 +1,19 @@
 @import "~./zul/less/_header.less";
 
-@frameBackgroundColor: #D9E5EF;
-@contentBackgroundColor: white;
-@iconHoverBackgoundColor: #DFF2FC;
+@windowBackgroundColor: #D9E5EF;
 @iconColor: #777777;
-
-.resetPadBorder() {
-	padding: 0px;
-	background-color: transparent;
-	border: 0;
-	.borderRadius('0px');
-	.defaultOverflowZoom();
-}
+@framePadding: 4px;
 
 .defaultOverflowZoom() {
-	overflow: hidden; zoom: 1;
+	overflow: hidden;
+	zoom: 1;
 }
 
 .z-window {
 	.defaultOverflowZoom();
-	background: rgba(214,227,238, 0.9);
-	border: 1px solid rgba(17,17,17, 0.3);
-	padding: 5px;
+	background: @windowBackgroundColor;
+	border: 1px solid darken(@baseBorderColor, 20%);
+	padding: @framePadding;
 	.borderRadius();
 
 	&-shadow {
@@ -30,12 +22,12 @@
 
 	&-header {
 		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium; font-weight: normal;
+		font-size: @fontSizeMedium;
+		font-weight: normal;
 		cursor: default;
-		background-color: @frameBackgroundColor;
-		color: #363636;
-		line-height: 24px;
-		height: @baseBarHeight;
+		background-color: @windowBackgroundColor;
+		color: @textColorLight;
+		line-height: @baseButtonWidth;
 		.defaultOverflowZoom();
 		padding: 3px 0 5px 0;
 		
@@ -47,8 +39,8 @@
 	&-content {
 		margin: 0;
 		padding: 4px;
-		background-color: @contentBackgroundColor;
-		border: solid #C5C5C5 1px;
+		background-color: @baseBackgroundColor;
+		border: 1px solid @baseBorderColor;
 		.defaultOverflowZoom();
 		&:first-child {
 			height: 100%;
@@ -59,25 +51,25 @@
 		overflow: hidden;
 		margin: auto 1px;
 		display: block;
-		.buttonBackground();
+		.verGradient();
 		.borderRadius();
-		border: 1px solid #CFCFCF;
+		border: 1px solid @baseBorderColor;
 		float: right;
 		cursor: pointer;
-		margin: auto 1px;
 		text-align: center;
 		color: @iconColor;
-			
+		
 		&:hover {
 			.resetGradient();
-			border-color: #8FB9D0;
-			background-color: @iconHoverBackgoundColor;
+			border-color: @hoverBorderColor;
+			background-color: @hoverBackgroundColor;
 		}
 	}
 
 	&-maximize, &-minimize, &-close {
-		width: 28px;
-		height: 24px;
+		width: @baseButtonWidth + 4;
+		height: @baseButtonHeight;
+		font-size: @fontSizeLarge;
 	}
 	
 	&-close {
@@ -85,12 +77,7 @@
 	    line-height: 23px;
 	}
 	
-	&-maximize {
-		font-size: @fontSizeLarge;
-	}
-	
 	&-minimize {
-		font-size: @fontSizeLarge;
 		padding-top: 5px;
 	}
 	
@@ -102,8 +89,7 @@
 		left: 0;
 		top: 0;
 		background-color: #D7E6F7;
-		filter: alpha(opacity=50); /* IE */
-		opacity: .5;
+		.opacity(0.5);
 	}
 	
 	&-move-ghost {
@@ -111,15 +97,19 @@
 		position: absolute;
 		background: #D7E6F7;
 		overflow: hidden;
-		padding: 5px;
-		filter: alpha(opacity=65) !important; /* IE */
-		opacity: .65 !important;
+		padding: 0;
+		.opacity(0.65);
 		cursor: move !important;
 		border: 1px solid #9F9F9F;
 		
+		.z-window-header {
+			padding: 7px 4px 5px 4px;
+		}
+
 		dl {
 			border-top: 1px solid #9F9F9F;
-			margin: 0; padding: 0;
+			margin: 0;
+			padding: 0;
 			overflow: hidden;
 			display: block;
 			line-height: 0;
@@ -129,18 +119,22 @@
 
 	&-popup {
 		.topBorderRadius();
-
-		&:not(.z-window-noheader) > .z-window-content {
-			margin: 0px -5px -5px -5px;
-		}
+		padding: @framePadding @framePadding 0 @framePadding;
 
 		& > .z-window-content {
 			border-width: 0 0 0 0;
-			margin: -5px;
+			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
 		}
 
-		&-popup.z-window-noheader {
-			.resetPadBorder();
+		&.z-window-noheader {
+			padding-top: 0;
+			& > .z-window-content {
+				margin: 0px;
+			}
+		}
+
+		&.z-window-noheader:not(.z-window-noborder) > .z-window-content {
+			margin: 0px -1 * @framePadding;
 		}
 	}
 	
@@ -158,25 +152,24 @@
 	
 	&-noborder {
 		border: 0px;
-		padding: 0px;
+		padding: @framePadding @framePadding 0 @framePadding;
 
-		& > .z-window-content {
-			border: 0;
+		&.z-window-noheader {
 			padding: 0;
 		}
 
-		&:not(.z-window-noheader) {
-			padding: 5px 5px 0 5px;
-			& > .z-window-content {
-				margin: 0 -5px;
-			}
+		& > .z-window-content {
+			border: 0;			
+		}
+
+		&:not(.z-window-noheader) > .z-window-content {
+			margin: 0 -1 * @framePadding;
 		}
 
 		&.z-window-shadow {
 			.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
 		}
 	}
-
 }
 
 .z-messagebox {
@@ -189,11 +182,11 @@
 	& .z-label {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: #363636;
+		color: @textColorLight;
 	}
 	
 	&-button {
-		min-width: 48pt;
+		min-width: 48px;
 		width: 100%;
 	}
 
@@ -203,8 +196,8 @@
 		vertical-align: top;
 		cursor: pointer;
 		border: 0;
-		width: 32px;
-		height: 32px;
+		width: @baseBarWidth;
+		height: @baseBarHeight;
 		font-size: 30px;
 		text-align: center;
 	}

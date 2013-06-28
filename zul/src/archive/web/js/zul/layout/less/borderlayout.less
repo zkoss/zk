@@ -1,24 +1,29 @@
 @import "~./zul/less/_header.less";
 
 @media print {
-    .z-borderlayout {
-		<c:if test="${zk.safari > 0}">// Bug 2949287
-			position: static;
-		</c:if>
+	.z-borderlayout {
+		.borderlayoutPatch(); //Bug 2949287
 	}
 }
 
 @media screen {
-    .z-borderlayout {
+	.z-borderlayout {
 		position: relative;
 	}
 }
+
+@borderlayoutCollapseBackgroundColor: #FCFCFC;
+@borderlayoutColor: #555555;
+
+@splitterColor: #959595;
+@splitterGradientStart: #FDFDFD;
+@splitterGradientEnd: #F1F1F1;
 
 .z-borderlayout {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	background-color: #FFFFFF;
+	background-color: @baseBackgroundColor;
 	border: 0;
 
 	&-icon {
@@ -27,8 +32,8 @@
 		cursor: pointer;
 		position: relative;
 		float: right;
-		line-height: 17px;
-		font-size: 17px;
+		line-height: @baseLineHeight + 3;
+		font-size: @fontSizeLarge + 1;
 		opacity: 0.5;
 		&:hover {
 			opacity: 1;
@@ -41,21 +46,21 @@
 .z-west,
 .z-center,
 .z-east {
-	border: 1px solid #C5C5C5;
+	border: 1px solid @baseBorderColor;
 	position: absolute;
 	overflow: hidden;
-	background-color: #FFFFFF;
+	background-color: @baseBackgroundColor;
 
 	&-noborder {
 		border: 0;
 	}
 	&-header {
-		color: #555555;
+		color: @borderlayoutColor;
 		font-size: @fontSizeMedium;
 		font-family: @baseTitleFontFamily;
 		font-weight: bold;
 		padding: 5px;
-		border-bottom: 1px solid #C5C5C5;
+		border-bottom: 1px solid @baseBorderColor;
 		white-space: nowrap;
 		overflow: hidden;
 		cursor: default;
@@ -69,12 +74,12 @@
 	}
 
 	&-collapsed {
-		background-color: #FCFCFC;
+		background-color: @borderlayoutCollapseBackgroundColor;
 		width: @baseBarWidth;
 		height: @baseBarHeight;
-	 	cursor: pointer; // ios issue 
+	 	cursor: pointer; // ios issue
 		padding: 5px;
-		border: 1px solid #C5C5C5;
+		border: 1px solid @baseBorderColor;
 		overflow: hidden;
 		position: absolute;
 	}
@@ -126,29 +131,28 @@
 .z-south {
 
 	&-splitter {
-		.horGradient(#FCFCFC, #F0F0F0);
-		height: 8px;
-		width: 8px;
+		.horGradient(@splitterGradientStart, @splitterGradientEnd);
+		height: @baseHeight;
+		width: @baseWidth;
 		position: absolute;
-		cursor: col-resize;
 		cursor: e-resize;
 		overflow: hidden;
 
 		// splitter-button
 		&-button {
-			color: #959595;
+			color: @splitterColor;
 			vertical-align: top;// vertical-align: make it looks same in diff browsers
 			display: inline-block;
 			cursor: pointer;
 			position: relative;
-			border: 1px solid #C5C5C5;
+			border: 1px solid @baseBorderColor;
 		}
 		&-button-disabled {
 			border: 0;
 		}
 	}
 
-	&-icon, {
+	&-icon {
 		position: absolute;
 		font-size: @fontSizeXSmall;
 		opacity: 0.5;
@@ -156,9 +160,10 @@
 }
 .z-north-splitter,
 .z-south-splitter {
-	.verGradient(#FCFCFC, #F0F0F0);
-	cursor: row-resize;
+	.verGradient(@splitterGradientStart, @splitterGradientEnd);
 	cursor: s-resize;
+	border-left: 1px solid @baseBorderColor;
+	border-right: 1px solid @baseBorderColor;
 }
 .z-north-splitter-button:hover .z-icon-caret-up,
 .z-south-splitter-button:hover .z-icon-caret-down,
@@ -182,8 +187,8 @@
 }
 .z-west-icon,
 .z-east-icon {
-	top: 8px;
 	font-size: @fontSizeXSmall + 1; // add 1px more
+	top: 8px;
 	left: 2px;
 }
 

@@ -1,23 +1,25 @@
 @import "~./zul/less/_header.less";
 
+@buttonBorder: darken(@baseBorderColor, 15%);
+
 .z-combobutton {
 	display: inline-block;
 	min-height: @baseButtonHeight;
 
 	&-content {
-		.buttonBackground();
+		.verGradient();
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
 		padding: 4px 5px;
-		border: 1px solid #A6A6A6;
+		border: 1px solid @buttonBorder;
 		border-right: 0;
 		margin: 0;
 		min-height: @baseButtonHeight;
-		.borderRadius(3px 0 0 3px);
+		.leftBorderRadius(@borderRadiusSmall);
 		line-height: @baseLineHeight;
 		height: @baseButtonHeight;
-		color: black;
+		color: @baseTextColor;
 	}
 
 	&-button {
@@ -25,20 +27,20 @@
 		vertical-align: middle;
 		cursor: pointer;
 		padding: 4px 4px 4px 6px;	
-		border: 1px solid #A6A6A6;
-		border-left: 1px solid #CFCFCF;
+		border: 1px solid @buttonBorder;
+		border-left: 1px solid @baseBorderColor;
 		overflow: hidden;
 		display: inline-block;
 		font-size: @fontSizeLarge;
 		line-height: @baseLineHeight;
 		min-width: @baseButtonWidth;
 		height: @baseButtonHeight;
-		color: #363636;
-		.borderRadius(0 3px 3px 0);
+		color: @textColorLight;
+		.rightBorderRadius(@borderRadiusSmall);
 
 		button[disabled] + & {
 			&:hover, &:active {
-				border-color: #CFCFCF;
+				border-color: @baseBorderColor;
 				.resetGradient();
 				.boxShadow('none');
 			}
@@ -47,17 +49,15 @@
 
 	&:not(.z-combobutton-toolbar) &-content:hover, 
 	&:not(.z-combobutton-toolbar) &-button:hover {
-		border-color: #AEAEAE;
-		.buttonBackground(#C6E6F7, #C6E6F7);
+		border-color: @buttonBorder;
+		//background: #C6E6F7;
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 
 	&:not(.z-combobutton-toolbar) &-content:active, 
 	&:not(.z-combobutton-toolbar) &-button:active {
-		border-top-color: #808080;
-		border-left-color: #808080;
-		border-bottom-color: #B6B6B6;
-		border-right-color: #B6B6B6;
-		.buttonBackground(#EEEEEE, #FEFEFE);
+		border-color: #808080 #B6B6B6 #B6B6B6 #808080;
+		.verGradient(@baseGradientEnd, @baseGradientStart);
 		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75), 0 0 7px #CFCFCF');
 	}
 
@@ -74,9 +74,10 @@
 		&:hover {
 
 			.z-combobutton-content, .z-combobutton-button {
-				border: 1px solid #7EAAC6;
+				border: 1px solid @hoverColor;
 				line-height: @baseLineHeight;
-				.buttonBackground(#C6E6F7, #C6E6F7);
+				//background: #C6E6F7;
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
 			}
 
 			.z-combobutton-content {

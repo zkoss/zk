@@ -41,10 +41,10 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 
 	//super//
 	getImageNode: function () {
-		return this.$n("real");
+		return this.$n('real');
 	},
 	getCaveNode: function () {
-		return this.$n("map");
+		return this.$n('map');
 	},
 	doClick_: function (evt) {
 		//does nothing (so zk.Widget won't fire onClick)
@@ -94,7 +94,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 			url = Imagemap._doneURI;
 		return url ? url:
 			Imagemap._doneURI = zk.IMAGEMAP_DONE_URI ? zk.IMAGEMAP_DONE_URI:
-				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop:this.desktop,au:true});
+				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop:this.desktop, au:true});
 	}
 },{
 	/** Called by imagemap-done.html. */

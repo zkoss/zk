@@ -174,7 +174,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ind = this.$n('hor-indicator'),
 				hws = hwrapper.style,
 				wdh = cave.offsetWidth - startX,
-				swdh = scroller.offsetWidth - startX
+				swdh = scroller.scrollWidth - startX
 						+ zk(cave).padBorderWidth() + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
@@ -306,7 +306,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			scroller = this.scroller,
 			frozen = this.widget.frozen;
 		//check if horizontal scroll-bar required
-		this.needH = frozen ? true : (cave.offsetWidth < scroller.offsetWidth);
+		this.needH = frozen ? true : (cave.offsetWidth < scroller.scrollWidth);
+		
 		if (!this.needH) {
 			this._unbindMouseEvent('hor');
 			this._syncPosition('hor', 0);
