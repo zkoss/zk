@@ -1,13 +1,11 @@
 @import "~./zul/less/_header.less";
 
-
-@frameBackgroundColor: #E1EDF4;
-@bodyBackgroundColor: #F1F9FF;
-@iconHoverBackgroundColor: #DFF2FC;
+@panelBackgroundColor: #E1EDF4;
 @iconColor: #777777;
 
 .defaultOverflowZoom() {
-	overflow: hidden; zoom: 1;
+	overflow: hidden;
+	zoom: 1;
 }
 
 .z-panel {
@@ -21,17 +19,17 @@
 
 	&-head {
 		padding: 5px 5px 0;
-		border: 1px solid #9F9F9F;
+		border: 1px solid darken(@baseBorderColor, 20%);
 		.boxShadow('inset 0px 1px 1px #FFFFFF');
-		background-color: @frameBackgroundColor;
+		background-color: @panelBackgroundColor;
 		overflow: hidden;
-		border-bottom-color: #C5C5C5;
+		border-bottom-color: @baseBorderColor;
 		.topBorderRadius();
 	}
 
 	&-header {
-		color: #363636;
-		background-color: @frameBackgroundColor;
+		color: @textColorLight;
+		background-color: @panelBackgroundColor;
 		border: 0;
 		line-height: 24px;
 		font-weight: normal;
@@ -47,9 +45,9 @@
 
 	&-body {
 		margin: 0;
-		background: @bodyBackgroundColor;
+		background: darken(@baseBackgroundColor, 5%);
 		padding: 6px 3px 6px 3px;
-		border: 1px solid #9F9F9F;
+		border: 1px solid darken(@baseBorderColor, 20%);
 		border-top: 0;
 		.bottomBorderRadius();
 		.defaultOverflowZoom();
@@ -78,22 +76,22 @@
 		display: block;
 		.buttonBackground();
 		.borderRadius();
-		border: 1px solid #CFCFCF;
+		border: 1px solid @baseBorderColor;
 		float: right;
-		margin: auto 1px;
 		text-align: center;
 		color: @iconColor;
 
 		&:hover {
 			.resetGradient();
-			border-color: #8FB9D0;
-			background-color: @iconHoverBackgroundColor;
+			border-color: @hoverBorderColor;
+			background-color: @hoverBackgroundColor;
 		}
 	}
 
 	&-maximize, &-minimize, &-close, &-expand {
-		width: 28px;
-		height: 24px;
+		width: @baseButtonWidth + 4;
+		height: @baseButtonHeight;
+		font-size: @fontSizeLarge;
 	}
 	
 	&-close {
@@ -101,12 +99,7 @@
 		line-height: 23px;
 	}
 	
-	&-maximize {
-		font-size: @fontSizeLarge;
-	}
-	
 	&-minimize {
-		font-size: @fontSizeLarge;
 		padding-top: 5px;
 	}
 
@@ -122,8 +115,7 @@
 		left: 0;
 		top: 0;
 		background-color: #D7E6F7;
-		filter: alpha(opacity=50); /* IE */
-		opacity: .5;
+		.opacity(0.5);
 	}
 
 	&-move-ghost {
@@ -131,19 +123,20 @@
 		position: absolute;
 		background: #D7E6F7;
 		overflow: hidden;
-		filter: alpha(opacity=60); /* IE */
-		opacity: .6;
+		.opacity(0.6);
 		cursor: move;
-		margin: 0; padding: 0;		
+		margin: 0;
+		padding: 0;		
 
 		.z-panel-body {
 			padding: 0;
 		}
 
 		dl {
-			border: 1px solid #9F9F9F;
+			border: 1px solid darken(@baseBorderColor, 20%);
 			border-top: 0;
-			margin: 0; padding: 0;
+			margin: 0;
+			padding: 0;
 			overflow: hidden;			
 			display: block;
 			line-height: 0;
@@ -167,7 +160,7 @@
 	}
 
 	&-noheader &-body {
-		border-top: 1px solid #c5c5c5;
+		border-top: 1px solid @baseBorderColor;
 		.borderRadius();
 	}
 
@@ -176,7 +169,7 @@
 		.borderRadius('0px');
 
 		.z-panelchildren {
-			border-top: 1px solid #C5C5C5;
+			border-top: 1px solid @baseBorderColor;
 		}
 	}
 
@@ -192,7 +185,7 @@
 
 .z-panelchildren {
 	background-color: white;
-	border: 1px solid #C5C5C5;
+	border: 1px solid @baseBorderColor;
 	position: relative;
 	.defaultOverflowZoom();
 }

@@ -1,13 +1,10 @@
 @import "~./zul/less/_header.less";
 
-@pagingBorderColor: #CFCFCF;
-@pagingBackground: #F9F9F9;
 @pagingTextColor: #006DA3;
-@pagingInfoColor: #363636;
 
 .z-paging {
-	border-bottom: 1px solid @pagingBorderColor;
-	background: @pagingBackground;
+	border-bottom: 1px solid @baseBorderColor;
+	background: darken(@baseBackgroundColor, 2%);
 	position: relative;
 	height: @baseBarHeight;
 	padding: 3px 10px 2px;
@@ -25,7 +22,7 @@
 	&-button {
 		display: inline-block;
 		.verGradient();
-		border: 1px solid @pagingBorderColor;
+		border: 1px solid @baseBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
 		line-height: @baseLineHeight;
@@ -38,25 +35,24 @@
 		text-align: center;
 		cursor: pointer;
 		&:hover {
-			border-color: #A1A1A1;
+			border-color: darken(@baseBorderColor, 15%);
 			.boxShadow('0 0 2px rgba(0, 0, 0, 0.34)');
 		}
 		&:active {
 			.verGradient(@baseGradientEnd, @baseGradientStart);
-			border-color: #A1A1A1 #CCCCCC #DDDDDD;
+			border-color: darken(@baseBorderColor, 15%) @baseBorderColor lighten(@baseBorderColor, 5%);
 		}
 		&[disabled] {
-			color: gray;
+			color: @disabledColor;
 			cursor: default;
-			opacity: 0.4;
-			filter: alpha(opacity=40);
+			.disabledOpacity();
 			&:hover {
 				.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-				border-color: @pagingBorderColor;
+				border-color: @baseBorderColor;
 			}
 			&:active {
 				.verGradient();
-				border-color: @pagingBorderColor;
+				border-color: @baseBorderColor;
 			}
 		}
 	}
@@ -81,29 +77,29 @@
 		}
 		&:active {
 			.resetGradient();
-			border-color: @pagingBorderColor;
+			border-color: @baseBorderColor;
 		}
 	}
 	&-selected {
 		.resetGradient();
-		background: #E1E1E1;
-		border-color: #AEAEAE;
-		color: @pagingInfoColor;
+		background: darken(@baseBackgroundColor, 10%);
+		border-color: darken(@baseBorderColor, 15%);
+		color: @textColorLight;
 		&:hover {
 			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-			border-color: #AEAEAE;
+			border-color: darken(@baseBorderColor, 15%);
 		}
 		&:active {
 			.resetGradient();
-			background: #E1E1E1;
-			border-color: #AEAEAE;
+			background: darken(@baseBackgroundColor, 10%);
+			border-color: darken(@baseBorderColor, 15%);
 		}
 	}
 	&-input {
-		border: 1px solid @pagingBorderColor;
+		border: 1px solid @baseBorderColor;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @pagingInfoColor;
+		color: @textColorLight;
 		line-height: @baseLineHeight;
 		margin-left: 6px;
 		padding: 3px 0;
@@ -112,7 +108,7 @@
 	&-text {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @pagingInfoColor;
+		color: @textColorLight;
 		margin-right: 12px;
 	}
 	&-info {
@@ -123,6 +119,6 @@
 		line-height: 24px;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @pagingInfoColor;
+		color: @textColorLight;
 	}
 }

@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.4
  */
 zul.box.Layout = zk.$extends(zk.Widget, {
-	_spacing: '0.3em',
+	_spacing: '5px',
 	$define: {
 		/** Sets the spacing between adjacent children.
 	 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),

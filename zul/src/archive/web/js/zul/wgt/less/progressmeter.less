@@ -1,17 +1,20 @@
 @import "~./zul/less/_header.less";
 
+@progressmeterGradientStart: #E8F6FD;
+@progressmeterGradientEnd: #C6E9FA;
+
 .z-progressmeter {
-	background: #FFFFFF repeat-x 0 0 ;
+	background: @baseBackgroundColor 0 0 repeat-x;
 	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter-anim.gif');
-	border:1px solid #CFCFCF;
+	border:1px solid @baseBorderColor;
 	text-align: left;
-	height: 15px;
+	height: @baseIconHeight - 1;
 	overflow: hidden;
 
 	&-image {
 		display: inline-block;
-		.verGradient(#E8F6FD, #C6E9FA);
-		height: 15px;
+		.verGradient(@progressmeterGradientStart, @progressmeterGradientEnd);
+		height: @baseIconHeight - 1;
 		line-height: 0;
 		font-size: 0;
 	}

@@ -4,12 +4,12 @@
 	padding-top: 16px;
 	
 	&-header {		
-		border: 1px solid #C5C5C5;
+		border: 1px solid @baseBorderColor;
 		border-bottom: 0;
 		width: 100%;
 		font-weight: normal;		
 		.resetGradient();
-		color: #363636;
+		color: @textColorLight;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;		
 		line-height: @baseBarHeight;		
@@ -35,7 +35,7 @@
 		overflow: hidden;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		padding: 5px;
-		border: 1px solid #C5C5C5;
+		border: 1px solid @baseBorderColor;
 		border-top: 0;
 		display: block;	
 		zoom: 1;
@@ -45,7 +45,7 @@
 		padding: 0;
 
 		.z-groupbox-content {
-			border-top: 1px solid #C5C5C5;
+			border-top: 1px solid @baseBorderColor;
 		}
 	}
 
@@ -58,8 +58,8 @@
 		padding: 0;
 
 		.z-groupbox-header {
-			padding: 0 0 0 4px;
-			border-bottom: 1px solid #C5C5C5;
+			padding-left: 4px;
+			border-bottom: 1px solid @baseBorderColor;
 			font-weight: bold;
 			height: @baseBarHeight;
 			.buttonBackground();

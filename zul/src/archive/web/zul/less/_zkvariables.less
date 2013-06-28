@@ -33,7 +33,58 @@
 @borderRadiusLarge:     6px;
 @borderRadiusSmall:     3px;
 
+@basePopupZIndex: 88000;
+
+// Component Basic Coloring
+@baseTextColor: #000000;
+@textColorLight: #363636;
+@textColorLighter: #636363;
+@baseBorderColor: #CFCFCF;
+@baseBackgroundColor: #FFFFFF;
 @baseGradientStart: #FEFEFE;
 @baseGradientEnd: #EEEEEE;
 
-@basePopupZIndex: 88000;
+// Component State
+// --------------------
+// Active
+@activeBorderColor: #499EB3;
+@activeGradientStart: #C3F5FE;
+@activeGradientEnd: #86E2F9;
+// Focus
+@focusBorderColor: #00B9FF;
+// Hover
+@hoverColor: #008BB6;
+@hoverBorderColor: #8FB9D0;
+@hoverBackgroundColor: #D6F0FD;
+@hoverGradientStart: #F2F9FE;
+@hoverGradientEnd: #D6F0FD;
+// Selected
+@selectBackgroundColor: #BEE7FC;    //darken(@hoverBackgroundColor, 5%)
+@selectGradientStart: #E5F4FB;
+@selectGradientEnd: #D3EDFA;
+// Selected Hover
+@selectHoverGradientStart: #CFEBF8; //darken(@selectGradientStart, 5%)
+@selectHoverGradientEnd: #A5DAF5;   //darken(@selectGradientEnd, 10%)
+// Disabled
+@disabledColor: #AAAAAA;
+@disabledBackgroundColor: #F0F0F0;
+@disabledOpacity: 0.6;
+// Invalid
+@invalidBorderColor: #DD7777;
+// Read-only
+@readonlyBorderColor: #E6E6E6;
+@readonlyBackgroundColor: #FAFAFA;
+// Checked
+@checkedBorderColor: #C6DBE6;
+@checkedGradientStart: #F4FAFD;
+@checkedGradientEnd: #E2EFF6;
+
+// Component independent variables
+//------------------------------------------
+@maskBackgroundColor: #E0E1E3;
+@loadingBackgroundColor: #E3E3E3;
+@dragBackgroundColor: #E0EAF0;
+@dragHoverBackgroundColor: #ADD2FF;
+@scrollbarBackgroundColor: #DDDDDD;
+@scrollbarGradientStart: #FFFFFF;
+@scrollbarGradientEnd: #CFCFCF;

@@ -69,6 +69,14 @@
 .leftBorderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size} 0 0 @{size}')};
 }
+.transition(@property, @duration, @timingFunc, @delay: 0) {
+	${t:applyCSS3('transition', '@{property} @{duration} @{timingFunc} @{delay}')};
+}
+.opacity(@opacity) {
+	opacity: @opacity;
+	@opacity100: @opacity * 100;
+	<c:if test="${zk.ie < 9}">filter: ~"alpha(opacity=@{opacity100})";</c:if>
+}
 // Component Function
 //----------------------------------------------
 .buttonBackground(@start: @baseGradientStart, @end: @baseGradientEnd) {
@@ -77,7 +85,21 @@
 
 .resetGradient() {
 	background: none;
+	<c:if test="${zk.ie > 0}">filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));</c:if>
+}
+
+.disabledOpacity(@opacity: @disabledOpacity) {
+	.opacity(@opacity)
+}
+
+.anchorlayoutPatch() {
 	<c:if test="${zk.ie > 0}">
-	filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));
+	.z-anchorlayout,
+	.z-anchorchildren {
+	    zoom: 1;
+	}
 	</c:if>
+}
+.borderlayoutPatch() {//Bug 2949287
+	<c:if test="${zk.safari > 0}">position: static;</c:if>
 }

@@ -1,14 +1,12 @@
 @import "~./zul/less/_header.less";
 
-@emptyColor: #7D7D7D;
-@gridBorderColor: #CFCFCF;
-@hoverGradientStart: #F2F9FE;
-@hoverGradientEnd: #D6F0FD;
-@stripBackground: #F7F7F7;
-@footerBackground: #F9F9F9;
-@headFootColor: #636363;
+@gridStripBackgroundColor: #F7F7F7;
+@gridFooterBackgroundColor: #F9F9F9;
 @groupGradientStart: #FFFFFF;
 @groupGradientEnd: #E9F2FB;
+@groupIconOpenColor: #000000;
+@groupIconCloseColor: #8FB9D0;
+@groupIconHoverColor: #0076A3;
 
 //reset table
 table {
@@ -23,7 +21,7 @@ table {
 }
 //grid
 .z-grid {
-	border: 1px solid @gridBorderColor;
+	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
 	//grid header
@@ -34,10 +32,10 @@ table {
 		&.z-grid-header-bar {
 			display: none;
 			.verGradient();
-			border: 1px solid @gridBorderColor;
+			border: 1px solid @baseBorderColor;
 			border-top: none;
 			border-right: none;
-			width: 16px;
+			width: @baseIconWidth;
 			height: 100%;
 			position: absolute;
 			top: 0;
@@ -53,21 +51,21 @@ table {
 	&-emptybody td {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @emptyColor;
+		color: @disabledColor;
 		font-style: italic;
 		text-align: center;
 	}
 	//grid footer
 	&-footer {
 		overflow: hidden;
-		background: @footerBackground;
-		border-top: 1px solid @gridBorderColor;
+		background: @gridFooterBackgroundColor;
+		border-top: 1px solid @baseBorderColor;
 		.z-footer {
 			overflow: hidden;
 		}
 	}
 	&-odd {
-		background: @stripBackground;
+		background: @gridStripBackgroundColor;
 	}
 }
 //column
@@ -82,8 +80,8 @@ table {
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @gridBorderColor;
-	border-bottom: 1px solid @gridBorderColor;
+	border-right: 1px solid @baseBorderColor;
+	border-bottom: 1px solid @baseBorderColor;
 	position: relative;
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -115,12 +113,12 @@ table {
 		cursor: pointer;
 		top: 0;
 		right: 0;
-		width: 23px;
-		height: 32px;
-		line-height: 32px;
+		width: @baseButtonWidth - 1;
+		height: @baseBarHeight;
+		line-height: @baseBarHeight;
 		text-decoration: none;
 		text-align: center;
-		border-left: 1px solid #A5CDE1;
+		border-left: 1px solid darken(@hoverGradientStart, 15%);
 		.boxShadow('inset 1px 0 #FFFFFF');
 		color: black;
 		&:hover {
@@ -157,7 +155,7 @@ table {
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border: 1px solid @gridBorderColor;
+		border: 1px solid @baseBorderColor;
 		border-left: none;
 		border-right: none;
 		overflow: hidden;
@@ -176,15 +174,15 @@ table {
 		position: absolute;
 		left: 8px;
 		&:hover {
-			color: #0076a3;
+			color: @groupIconHoverColor;
 		}
 	}
 	&-icon-open {
-		color: black;
+		color: @groupIconOpenColor;
 		left: 5px;
 	}
 	&-icon-close {
-		color: #8FB9D0;
+		color: @groupIconCloseColor;
 	}
 }
 .z-groupfoot-inner {
@@ -200,7 +198,7 @@ table {
 .z-footer-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	color: @headFootColor;
+	color: @textColorLighter;
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
@@ -226,12 +224,12 @@ table {
 //paging
 .z-grid-paging {
 	&-top {
-		border-bottom: 1px solid @gridBorderColor;
+		border-bottom: 1px solid @baseBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}
 	&-bottom {
-		border-top: 1px solid @gridBorderColor;
+		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}
