@@ -276,22 +276,22 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			(isVer ? btnA.offsetHeight + btnB.offsetHeight : btnA.offsetWidth + btnB.offsetWidth) : 0;
 	},
 	_showbutton : function(show) {
-		var tabbox = this.getTabbox(),
-			zcls = tabbox.getZclass();
+		var tabbox = this.getTabbox();
 		if (tabbox.isTabscroll()) {
-			var tabs = this.$n();
+			var tabs = this.$n(),
+				cls = tabbox.$s('scroll');
 				
 			if (tabbox.isVertical()) {//vertical
 				if (show) {
-					jq(tabbox).addClass(zcls + '-scroll');
+					jq(tabbox).addClass(cls);
 				} else {
-					jq(tabbox).removeClass(zcls + '-scroll');
+					jq(tabbox).removeClass(cls);
 				}				
 			}else {//horizontal
 				if (show) {
-					jq(tabbox).addClass(zcls + '-scroll');
+					jq(tabbox).addClass(cls);
 				} else {
-					jq(tabbox).removeClass(zcls + '-scroll');
+					jq(tabbox).removeClass(cls);
 				}		
 			}
 		}
