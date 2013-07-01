@@ -39,7 +39,7 @@ function (out, skipper) {
 			if (this._minimizable)
 				out.push('<div id="', uuid , '-min" class="', icon, ' ',  this.$s('minimize'), '" >', getIcon('icon-minus'), '</div>');
 			if (this._collapsible)
-				out.push('<div id="', uuid , '-exp" class="', icon, ' ',  this.$s('expand'), '" >', this._collapsible ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
+				out.push('<div id="', uuid , '-exp" class="', icon, ' ',  this.$s('expand'), '" >', this._open ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
 			out.push(zUtl.encodeXML(title));
 		} 
 		
