@@ -118,7 +118,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var cls = this.$supers('domClass_', arguments),
 			orientCls = this.isHorizontalTop() ? '' : ' ' + this.$s(this.getOrient());
-		cls += this.inAccordionMold() ? ' ' + this.$s(this.getMold()) : orientCls;
+		cls += this.inAccordionMold() ? ' ' + this.$s('accordion') : orientCls;
 		return cls; 
 	},
 	/**
