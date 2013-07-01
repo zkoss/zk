@@ -139,7 +139,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_setSel: function(tab, toSel, notify, init) {
 		var tabbox = this.getTabbox(),
-			zcls = this.getZclass(),
 			panel = tab.getLinkedPanel(),
 			bound = this.desktop;
 		if (tab.isSelected() == toSel && notify)
@@ -158,9 +157,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!bound) return;
 		
 		if (toSel)
-			jq(tab).addClass(zcls + '-selected');
+			jq(tab).addClass(this.$s('selected'));
 		else
-			jq(tab).removeClass(zcls + '-selected');
+			jq(tab).removeClass(this.$s('selected'));
 
 		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
 			panel._sel(toSel, !init);
@@ -194,7 +193,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_calcHgh: function () {
 		var n = this.$n(),
-			cnt = this.$n('content'),
+			cnt = this.$n('cnt'),
 			tabbox = this.getTabbox();
 		if (cnt && (cnt = cnt.parentNode))
 			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
@@ -312,8 +311,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
 	},
 	contentRenderer_: function (out) {
-		var zcls = this.getZclass();
-		out.push('<span id="', this.uuid, '-content" class="', zcls, '-text">', this.domContent_(), '</span>');
+		out.push('<span id="', this.uuid, '-content" class="', this.$s('text'), '">', this.domContent_(), '</span>');
 	}
 });
 /** @class zul.tab.TabRenderer

@@ -2,7 +2,10 @@
 
 @media print {
 	.z-borderlayout {
-		.borderlayoutPatch(); //Bug 2949287
+		//Bug 2949287
+		<c:if test="${zk.safari > 0}">
+		position: static;
+		</c:if>
 	}
 }
 
@@ -64,7 +67,7 @@
 		white-space: nowrap;
 		overflow: hidden;
 		cursor: default;
-		.buttonBackground();
+		.verGradient();
 		line-height: @baseLineHeight + 8; // 22px = 32 - padding-top/bottom
 		height: @baseBarHeight;
 	}
