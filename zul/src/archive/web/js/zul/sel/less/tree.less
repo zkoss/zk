@@ -140,12 +140,12 @@
 	//selected tree cell
 	&.z-treerow-selected {
 		.z-treecell {
-			.verGradient(@selectGradientStart, @selectGradientEnd);
+			.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover > .z-treecell {
-			.verGradient(darken(@selectGradientStart, 5%), darken(@selectGradientEnd, 10%));
+			.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 		}
 	}
 	//selected check mark

@@ -165,12 +165,12 @@
 	//selected list cell
 	&.z-listitem-selected {
 		.z-listcell {
-			.verGradient(@selectGradientStart, @selectGradientEnd);
+			.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover > .z-listcell {
-			.verGradient(@selectHoverGradientStart, @selectHoverGradientEnd);
+			.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 			position: relative;
 		}
 	}
