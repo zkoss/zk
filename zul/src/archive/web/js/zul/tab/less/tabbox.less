@@ -137,7 +137,7 @@
 			border-top: 1px solid @baseBorderColor;
 			line-height: @baseButtonHeight;
 
-			.z-tabpanel-outer .z-tab {
+			.z-tab {
 				
 				.tab();
 
@@ -203,7 +203,6 @@
 				}
 			}
 
-			.z-tabpanel-outer 
 			.z-tab:not(.z-tab-disabled):not(.z-tab-selected):hover {
 				.resetGradient();
 				.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -402,6 +401,7 @@
 
 					&.z-tab-selected {
 						.boxShadow('-1px 0px 0 #FFFFFF');
+						border-left: 0px;
 					}
 				}
 			}
@@ -448,7 +448,7 @@
 			.bottomBorderRadius();
 		}
 
-		.z-tabpanel {		
+		.z-tabpanels .z-tabpanel {		
 			border: 1px solid @baseBorderColor;
 			border-bottom: 0;
 		}
