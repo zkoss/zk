@@ -182,7 +182,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			this._calcHgh();
+			this._calcHgh();			
 			zUtl.fireSized(this.parent);
 		}
 	},
@@ -193,17 +193,15 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_calcHgh: function () {
 		var n = this.$n(),
-			cnt = this.$n('cnt'),
 			tabbox = this.getTabbox();
-		if (cnt && (cnt = cnt.parentNode))
-			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
 		
 		if (!tabbox.isVertical()) {
 			var r = tabbox.$n('right'),
 				l = tabbox.$n('left'),
 				tb = tabbox.toolbar,
 				tabs = tabbox.tabs.$n();
-				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
+			var hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
+				
 			if(r && l) {
 				r.style.height = l.style.height = hgh;
 			}
