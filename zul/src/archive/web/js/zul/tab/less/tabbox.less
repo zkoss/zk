@@ -62,7 +62,7 @@
 		z-index: 15;
 		.opacity(0.8);
 		zoom: 1;
-		color: @textColorLighter;
+		color: @textColorGrayLight;
 		text-align: center;
 
 		&:hover {
@@ -179,7 +179,7 @@
 				}
 
 				&-selected {
-					.buttonBackground();
+					.verGradient();
 					.boxShadow('none');
 
 					.z-tab-close {
@@ -263,7 +263,7 @@
 	}
 
 	&-icon {
-		color: lighten(@textColorLighter, 40%);
+		color: lighten(@textColorGrayLight, 40%);
 		.userSelect();	
 	}
 	
@@ -339,7 +339,7 @@
 			}
 
 			.z-tabbox-up, .z-tabbox-down {
-				.buttonBackground();
+				.verGradient();
 				cursor: pointer;
 				position: absolute;
 				z-index: 25;
@@ -471,7 +471,7 @@
 		}
 
 		.z-tabbox-right, .z-tabbox-left {
-			.buttonBackground();
+			.verGradient();
 			width: @baseButtonWidth;
 			height: @baseBarHeight + 1;
 			display: block;

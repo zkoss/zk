@@ -116,7 +116,7 @@
 			border-right: none;
 		}
 	}
-	&:hover .z-treecell {
+	&:hover > .z-treecell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		background-clip: padding-box;
 		position: relative;
@@ -144,7 +144,7 @@
 			background-clip: padding-box;
 			position: relative;
 		}
-		&:hover .z-treecell {
+		&:hover > .z-treecell {
 			.verGradient(darken(@selectGradientStart, 5%), darken(@selectGradientEnd, 10%));
 		}
 	}
@@ -172,7 +172,7 @@
 			color: @disabledColor !important;
 			cursor: default !important;
 		}
-		&:hover .z-treecell {
+		&:hover > .z-treecell {
 			.resetGradient();
 			position: relative;
 		}
@@ -184,7 +184,7 @@
 .z-treefooter-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	color: @textColorLighter;
+	color: @textColorGrayLight;
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;

@@ -84,7 +84,7 @@
 			color: #7094B3;
 		}
 	}
-	&-hover .z-listheader-button {
+	&-hover > .z-listheader-button {
 		display: block;
 	}
 	&-checkable {
@@ -141,7 +141,7 @@
 			border-right: none;
 		}
 	}
-	&:hover .z-listcell {
+	&:hover > .z-listcell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		background-clip: padding-box;
 		position: relative;
@@ -169,7 +169,7 @@
 			background-clip: padding-box;
 			position: relative;
 		}
-		&:hover .z-listcell {
+		&:hover > .z-listcell {
 			.verGradient(@selectHoverGradientStart, @selectHoverGradientEnd);
 			position: relative;
 		}
@@ -198,7 +198,7 @@
 			color: @disabledColor !important;
 			cursor: default !important;
 		}
-		&:hover .z-listcell {
+		&:hover > .z-listcell {
 			.resetGradient();
 			position: relative;
 		}
@@ -253,7 +253,7 @@
 .z-listfooter-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	color: @textColorLighter;
+	color: @textColorGrayLight;
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;

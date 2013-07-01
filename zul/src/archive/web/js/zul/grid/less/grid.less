@@ -64,7 +64,8 @@ table {
 			overflow: hidden;
 		}
 	}
-	&-odd {
+	&-odd > .z-row-inner,
+	&-odd > .z-cell {
 		background: @gridStripBackgroundColor;
 	}
 }
@@ -142,8 +143,8 @@ table {
 		}
 	}
 	&:hover {
-		.z-row-inner,
-		.z-cell {
+		> .z-row-inner,
+		> .z-cell {
 			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 			background-clip: padding-box;
 			position: relative;
@@ -198,7 +199,7 @@ table {
 .z-footer-content {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	color: @textColorLighter;
+	color: @textColorGrayLight;
 	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;

@@ -1,7 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@pagingTextColor: #006DA3;
-
 .z-paging {
 	border-bottom: 1px solid @baseBorderColor;
 	background: darken(@baseBackgroundColor, 2%);
@@ -30,7 +28,7 @@
 		margin-right: 6px;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @pagingTextColor;
+		color: @textColorBlue;
 		text-decoration: none;
 		text-align: center;
 		cursor: pointer;
@@ -84,7 +82,7 @@
 		.resetGradient();
 		background: darken(@baseBackgroundColor, 10%);
 		border-color: darken(@baseBorderColor, 15%);
-		color: @textColorLight;
+		color: @textColorGrayDark;
 		&:hover {
 			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
 			border-color: darken(@baseBorderColor, 15%);
@@ -99,7 +97,7 @@
 		border: 1px solid @baseBorderColor;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @textColorLight;
+		color: @textColorGrayDark;
 		line-height: @baseLineHeight;
 		margin-left: 6px;
 		padding: 3px 0;
@@ -108,7 +106,7 @@
 	&-text {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @textColorLight;
+		color: @textColorGrayDark;
 		margin-right: 12px;
 	}
 	&-info {
@@ -119,6 +117,6 @@
 		line-height: 24px;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @textColorLight;
+		color: @textColorGrayDark;
 	}
 }
