@@ -5,22 +5,25 @@
 	height: @baseButtonHeight;
 	font-size: @fontSizeMedium;
 	white-space: nowrap;
+	height: auto;
 
 	&-content {
-		float: left;
 		margin-right: 4px;
+		display: inline-block;
+		line-height: @baseButtonHeight;
 	}
 
 	.z-label {
-		line-height: @baseLineHeight + 2;
+		line-height: @baseIconHeight;
 		padding: 4px 0px;
 		margin-right: 4px;
 		display: inline-block;
 	}
 
-	.z-button {
-		margin-top: -2px;
+	.z-button, .z-toolbarbutton {
 		margin-right: 4px;
+		top: -1px;
+		position: relative;
 	}
 
 	&-image {
@@ -32,17 +35,14 @@
 	}
 
 	.z-toolbar {
-		.z-a,
-		.z-a:visited,
-		.z-a:hover {
+		.z-a, .z-a:visited, .z-a:hover {
 			background: none;
 			border: 0;
 			color: #FFFFFF;
 		}
 	}
 
-	.z-a,
-	.z-a:visited {
+	.z-a, .z-a:visited {
 		font-size: @fontSizeSmall; 
 		font-weight: normal; 
 		color: @baseTextColor; 
