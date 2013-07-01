@@ -54,6 +54,7 @@ ZK 6.5.3
   ZK-1821: Component inside native component doesn't cleanup correctly
   ZK-1822: Turkish locale problem during browser detection (on server side)
   ZK-1827: Component inside native component js error
+  ZK-1834: Listbox scroll bug
   
   --------
 ZK 6.5.2

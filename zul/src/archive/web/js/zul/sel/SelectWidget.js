@@ -622,6 +622,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 			this._updHeaderCM();
+		} else {
+			//Bug ZK-1834: should reset Focus Element after clearing selected item
+			this._anchorTop = this._anchorLeft = 0;
+			this._syncFocus();
 		}
 	},
 	//super
