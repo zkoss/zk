@@ -20,11 +20,11 @@ function (out) {
 	if (tabbox.inAccordionMold()) {//Accordion
 		var tab = this.getLinkedTab();
 		
-		out.push('<div class="', this.$s('outer'), '" id="', uuid, '">');
+		out.push('<div class="', this.getZclass() , '" id="', uuid, '">');
 		// only draw tab if it is not rendered
 		if (tab && !tab.$n())
 			tab.redraw(out);
-		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1}), '>');
+		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1, zclass:1}), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div></div>');
