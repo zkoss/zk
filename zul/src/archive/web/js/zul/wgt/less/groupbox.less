@@ -12,7 +12,7 @@
 		color: @textColorGrayDark;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
-		line-height: @baseBarHeight;
+		line-height: @baseLineHeight;
 		height: auto;
 		padding-left: 10px;
 		zoom: 1;
@@ -25,12 +25,16 @@
 			cursor: pointer;
 			position: relative;
 			top: @baseButtonHeight * -0.5;
-			line-height: @baseButtonHeight;
+			line-height: @baseLineHeight;
+
+			.z-caption-content, .z-label {
+				float: none;
+			}
 
 			&-readonly {
 				cursor: default;
 			}
-		}	
+		}
 	}
 
 	&-content {
@@ -63,7 +67,7 @@
 			padding: 3px 4px;
 			border-bottom: 1px solid @baseBorderColor;
 			font-weight: bold;
-			line-height: @baseButtonHeight;
+			line-height: @baseLineHeight;
 			.verGradient();
 
 			.z-caption, .z-groupbox-title {
@@ -74,6 +78,10 @@
 				position: static;
 				top: 0px;
 				display: inline-block;
+			}
+
+			.z-caption-content {
+				padding: 6px 0px 2px 0px;
 			}
 		}
 	}
