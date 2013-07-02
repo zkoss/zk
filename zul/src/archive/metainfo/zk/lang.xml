@@ -933,36 +933,6 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
-		<component-name>nav</component-name>
-		<component-class>org.zkoss.zmax.zul.Nav</component-class>
-		<widget-class>zul.nav.nav</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/nav.js</mold-uri>
-			<css-uri>css/nav.css.dsp</css-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>navbar</component-name>
-		<component-class>org.zkoss.zmax.zul.Navbar</component-class>
-		<widget-class>zul.nav.Navbar</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/navbar.js</mold-uri>
-			<css-uri>css/nav.css.dsp</css-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>navitem</component-name>
-		<component-class>org.zkoss.zul.zmax.Navitem</component-class>
-		<widget-class>zul.nav.Navitem</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/navitem.js</mold-uri>
-			<css-uri>css/nav.css.dsp</css-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>north</component-name>
 		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.North</component-class>
