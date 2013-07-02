@@ -221,7 +221,7 @@ div.z-log {
 .z-apply-loading-indicator {
 	border: 1px solid @baseBorderColor;
 	background-color: @baseBackgroundColor;
-	color: @textColorLight;
+	color: @textColorGrayDark;
 	white-space: nowrap;
 }
 .z-loading-indicator {
@@ -291,7 +291,7 @@ div.z-log {
 	}
 	.z-loading-indicator {
 		font-size: @fontSizeMedium;
-		color: @textColorLight;
+		color: @textColorGrayDark;
 	}
 }
 //Fix float issue for CSS
@@ -371,7 +371,7 @@ div.z-log {
 //Drag-Drop
 .z-dragged {
 	background: none no-repeat scroll 0 0 @dragBackgroundColor;
-	color: #888888;
+	color: lighten(@textColorGray, 20%);
 }
 .z-drag-over {
 	background: none no-repeat scroll 0 0 @dragHoverBackgroundColor;
@@ -390,7 +390,7 @@ div.z-drop-ghost {
 div.z-drop-content {
 	background: none no-repeat scroll 0 0 @baseBackgroundColor;
 	width: 120px;
-	height: @baseIconHeight;
+	height: @baseButtonHeight - 2; // minus border height
 	padding: 3px;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
@@ -398,21 +398,21 @@ div.z-drop-content {
 }
 //5.0.4
 div.z-drop-allow {
-	border: 1px solid #99CC99;
+	border: 1px solid @dragAllowBorderColor;
 }
 div.z-drop-disallow {
-	border: 1px solid #CC6666;
+	border: 1px solid @dragAllowBackgroundColor;
 }
 div.z-drop-allow div.z-drop-content,
 span.z-drop-allow {
-	background: none no-repeat scroll 0 0 #EEFFEE;
+	background: none no-repeat scroll 0 0 @dragAllowBackgroundColor;
 }
 span.z-drop-allow {
 	.encodeThemeURL(background-image, '~./zul/img/misc/drag-allow.png');
 }
 div.z-drop-disallow div.z-drop-content,
 span.z-drop-disallow {
-	background: none no-repeat scroll 0 0 #FFEEEE;
+	background: none no-repeat scroll 0 0 @dragDisAllowBackgroundColor;
 }
 span.z-drop-disallow {
 	.encodeThemeURL(background-image, '~./zul/img/misc/drag-disallow.png');

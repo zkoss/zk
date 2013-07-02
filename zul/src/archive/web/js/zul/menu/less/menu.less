@@ -186,7 +186,7 @@
 	&-icon,
 	&-icon:hover,
 	&-icon:active {
-		color: @textColorLighter;
+		color: @textColorGrayLight;
 		vertical-align: text-bottom;
 	}
 	&-selected > &-content {
@@ -250,7 +250,7 @@
 	.z-menuitem-icon {
 		position: absolute;
 		color: #0076A3;
-		text-shadow: 1px 0 rgba(0,118,163, 0.5);
+		text-shadow: 1px 0 rgba(0, 118, 163, 0.5);
 		.opacity(0.7);
 		display: none;
 		left: 6px;
@@ -278,7 +278,7 @@
 }
 //define checked menuitem effect in menupopup
 .z-menuitem-checkable .z-menuitem-image {
-	.buttonBackground();
+	.verGradient();
 	border: 1px solid @baseBorderColor;
 }
 .z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
@@ -301,7 +301,7 @@
 		width: 5000px;
 	}
 	&-icon {
-		color: lighten(@textColorLighter, 40%);
+		color: lighten(@textColorGrayLight, 40%);
 		text-shadow: 1px 0 #DFDFDF;
 		.opacity(0.7);
 	}
@@ -333,8 +333,8 @@
 	}
 	&-scrollable {
 		border: 1px solid lighten(@baseBorderColor, 5%);
-		.borderRadius('3px 3px 0 0');
-		.buttonBackground();
+		.topBorderRadius(@borderRadiusSmall);
+		.verGradient();
 		top: 0;
 		right: 0;
 		width: @baseBarWidth;
@@ -342,5 +342,6 @@
 		cursor: pointer;
 		position: absolute;
 		z-index: 25;
+		line-height: normal;
 	}
 }

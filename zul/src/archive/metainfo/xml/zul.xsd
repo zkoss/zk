@@ -585,6 +585,7 @@
 			<xs:element ref="longbox" />
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
+			<xs:element ref="navbar" />
 			<xs:element ref="paging" />
 			<xs:element ref="panel" />
 			<xs:element ref="pivottable" />
@@ -667,6 +668,7 @@
 				<xs:element ref="longbox" />
 				<xs:element ref="menubar" />
 				<xs:element ref="menupopup" />
+				<xs:element ref="navbar" />
 				<xs:element ref="paging" />
 				<xs:element ref="panel" />
 				<xs:element ref="pivottable" />
@@ -1940,6 +1942,38 @@
 	<xs:complexType name="menuseparatorType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+    <!-- nav -->
+	<xs:element name="nav" type="navType" />
+	<xs:complexType name="navType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="navitem" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- navbar -->
+	<xs:element name="navbar" type="navbarType" />
+	<xs:complexType name="navbarType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="nav" />
+			<xs:element ref="navitem" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+    <!-- navitem -->
+	<xs:element name="navitem" type="navitemType" />
+	<xs:complexType name="navitemType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
+		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- north -->
 	<xs:element name="north" type="northType" />

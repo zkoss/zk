@@ -91,8 +91,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {
-		var html = ' class="', s = this._contentSclass,
-			zcls = this.getZclass();
+		var html = ' class="', s = this._contentSclass;
 		if (s)
 			html += s + ' ';
 		html += this.$s('content') + '"';

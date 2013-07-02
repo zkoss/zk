@@ -10,7 +10,7 @@
 	line-height: @baseLineHeight;
 	border: 1px solid @buttonBorder;
 	.borderRadius();
-	.buttonBackground();
+	.verGradient();
 	text-shadow: 0 1px #FFFFFF;
 	cursor: pointer;
 	
@@ -20,7 +20,7 @@
 	}
 	&:focus {
 		border-color: @focusBorderColor;
-		.boxShadow('inset 1px 1px 1px #0CBCFF, inset -1px -1px 1px #0CBCFF');
+		.boxShadow('inset 0 0 2px #0CBCFF');
 	}
 	&:active {
 		border-color: @activeBorderColor;

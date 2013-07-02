@@ -5,7 +5,7 @@
 @calendarWeekendBackgroundColor: #F3F3F3;
 // week of year  Wk
 @calendarWeekYearColor: #FFFFFF;
-@calendarWeekYearBackgroundColor: @textColorLighter;
+@calendarWeekYearBackgroundColor: @textColorGrayLight;
 
 @calendarDisabledColor: rgba(214, 214, 214, 0.6);
 
@@ -36,7 +36,7 @@
 		font-weight: bold;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
-		color: @textColorLighter;
+		color: @textColorGrayLight;
 		padding: 5px 24px;
 		line-height: @baseLineHeight;
 	}
@@ -76,7 +76,7 @@
 		min-height: @baseButtonHeight;
 		min-width:  @baseButtonHeight;
 		padding: 3px 0;
-		color: @textColorLighter;
+		color: @textColorGrayLight;
 		font-size: @fontSizeSmall;
 		line-height: @baseLineHeight + 3;
 		cursor: pointer;
@@ -92,7 +92,7 @@
 		background: @calendarWeekendBackgroundColor;
 	}
 	&-weekday {
-		color: @textColorLighter;
+		color: @textColorGrayLight;
 	}
 	&-outrange {
 		color: @disabledColor;
@@ -104,7 +104,7 @@
 		color: @calendarWeekYearColor;
 		
 		&:hover {
-			color: @textColorLighter;
+			color: @textColorGrayLight;
 		}
 	}
 
@@ -123,12 +123,12 @@
 		}
 	}
 	&-selected {
-		background: @selectGradientEnd;
+		background: @selectedGradientEnd;
 		.borderRadius(4px);
 		text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 		
 		&:hover {
-			background: @selectHoverGradientEnd;
+			background: @selectedHoverGradientEnd;
 			color: @hoverColor;
 		}
 	}

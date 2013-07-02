@@ -477,12 +477,12 @@ def alert(m):
 		<widget-class>zul.wgt.Combobutton</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/combobutton.js</mold-uri>
+			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>toolbar</mold-name>
-			<mold-uri>mold/combobutton.js</mold-uri>
+			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -900,6 +900,36 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/menuseparator.js</mold-uri>
+		</mold>
+	</component>
+	
+	<component>
+		<component-name>menubar</component-name>
+		<component-class>org.zkoss.zul.Menubar</component-class>
+		<widget-class>zul.menu.Menubar</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/menubar.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>menuitem</component-name>
+		<component-class>org.zkoss.zul.Menuitem</component-class>
+		<widget-class>zul.menu.Menuitem</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/menuitem.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>menupopup</component-name>
+		<component-class>org.zkoss.zul.Menupopup</component-class>
+		<widget-class>zul.menu.Menupopup</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/menupopup.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

@@ -72,7 +72,7 @@
 		z-index: 15;
 		.opacity(0.8);
 		zoom: 1;
-		color: @textColorLighter;
+		color: @textColorGrayLight;
 		text-align: center;
 		line-height: @baseButtonHeight;
 
@@ -143,6 +143,88 @@
 	overflow: hidden;
 	position: relative;
 
+	// .z-tabbox-accordion
+	&-accordion, &-accordion-lite {
+
+		.z-tabpanels {
+			border: 0;
+			border-top: 1px solid @baseBorderColor;
+			line-height: @baseButtonHeight;
+
+			.z-tabpanel-outer .z-tab {
+				
+				.tab();
+
+				padding: 0;
+				.borderRadius('0px');
+				float: none;
+				cursor: pointer;
+				position: relative;
+				zoom: 1;
+				border: 1px solid @baseBorderColor;
+				border-top: 0;
+				height: @baseBarHeight;
+				text-align: left;
+
+				&:first-child {
+					border-left: auto;
+				}
+
+				.z-tab-close {
+					right: 5px;
+					.opacity(0.6);
+
+					&:hover {
+						color: @hoverColor;
+						.opacity(1.0);
+					}
+
+					& + .z-tab-text {
+						padding-right: 20px;
+					}
+				}
+
+				.z-tab-text {
+					color: @tabColor;
+					font-weight: bold;
+					text-decoration: none;
+					display: block;
+					padding: 4px 5px 2px 5px;
+				}
+
+				&-selected {
+					.verGradient();
+					.boxShadow('none');
+
+					.z-tab-close {
+						.opacity(0.8);
+					}
+				}
+
+				&-disabled {
+					color: @disabledColor;
+					cursor: default;
+					.disabledOpacity();
+
+					.z-tab-close:hover {
+						.disabledOpacity();
+					}
+
+					.z-tab-text {
+						cursor: default;
+						color: @disabledColor;
+					}
+				}
+			}
+
+			.z-tabpanel-outer 
+			.z-tab:not(.z-tab-disabled):not(.z-tab-selected):hover {
+				.resetGradient();
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			}
+		}		
+	}
+	
 	.z-tabs {
 		overflow: hidden;
 		border: 0;
@@ -195,7 +277,7 @@
 	}
 
 	&-icon {
-		color: lighten(@textColorLighter, 40%);
+		color: lighten(@textColorGrayLight, 40%);
 		.userSelect();	
 	}
 
@@ -329,7 +411,7 @@
 			}
 
 			.z-tabbox-up, .z-tabbox-down {
-				.buttonBackground();
+				.verGradient();
 				cursor: pointer;
 				position: absolute;
 				z-index: 25;
@@ -481,7 +563,7 @@
 		}
 
 		.z-tabbox-right, .z-tabbox-left {
-			.buttonBackground();
+			.verGradient();
 			width: @baseButtonWidth;
 			display: block;
 			text-align: center;
