@@ -64,6 +64,7 @@
 	&-close {
 		display: inline-block;
 		position: absolute;
+		top: 1px;
 		left: 8px;
 		color: @baseTextColor;
 		&:hover {
@@ -121,7 +122,7 @@
 		height: @baseIconHeight;
 		border: 1px solid @baseBorderColor;
 		display: inline-block;
-		vertical-align: text-top;
+		vertical-align: middle;
 		.verGradient();
 		&.z-treerow-radio {
 			.borderRadius(8px);
@@ -190,7 +191,10 @@
 }
 .z-treecell-content {
 	padding: 4px 2px;
-	line-height: @baseIconHeight;
+	line-height: @baseLineHeight;
+}
+.z-treecell-text {
+	vertical-align: middle;
 }
 //paging
 .z-tree-paging {

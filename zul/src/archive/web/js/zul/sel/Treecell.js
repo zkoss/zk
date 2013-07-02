@@ -93,7 +93,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();
-		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
+		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">&nbsp;' + s1 + '</span>' : s1: s2;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -151,7 +151,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		} else {
 			//To make the tree's height more correct, we have to generate &nbsp;
 			//for empty cell. Otherwise, IE will make the height too small
-			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? "&nbsp;": null;
+			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? '&nbsp;' : null;
 		}
 	},
 	_getTreeitems: function (item, tree) {
