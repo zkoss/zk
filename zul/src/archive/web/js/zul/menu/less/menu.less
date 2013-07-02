@@ -250,7 +250,7 @@
 	.z-menuitem-icon {
 		position: absolute;
 		color: #0076A3;
-		text-shadow: 1px 0 rgba(0,118,163, 0.5);
+		text-shadow: 1px 0 rgba(0, 118, 163, 0.5);
 		.opacity(0.7);
 		display: none;
 		left: 6px;
@@ -333,7 +333,7 @@
 	}
 	&-scrollable {
 		border: 1px solid lighten(@baseBorderColor, 5%);
-		.borderRadius('3px 3px 0 0');
+		.topBorderRadius(@borderRadiusSmall);
 		.verGradient();
 		top: 0;
 		right: 0;
@@ -342,5 +342,6 @@
 		cursor: pointer;
 		position: absolute;
 		z-index: 25;
+		line-height: normal;
 	}
 }

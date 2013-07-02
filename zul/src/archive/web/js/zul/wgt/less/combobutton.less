@@ -1,7 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@buttonBorder: darken(@baseBorderColor, 15%);
-
 .z-combobutton {
 	display: inline-block;
 	min-height: @baseButtonHeight;
@@ -12,7 +10,7 @@
 		font-size: @fontSizeMedium;
 		font-weight: normal;
 		padding: 4px 5px;
-		border: 1px solid @buttonBorder;
+		border: 1px solid darken(@baseBorderColor, 15%);
 		border-right: 0;
 		margin: 0;
 		min-height: @baseButtonHeight;
@@ -27,7 +25,7 @@
 		vertical-align: middle;
 		cursor: pointer;
 		padding: 4px 4px 4px 6px;	
-		border: 1px solid @buttonBorder;
+		border: 1px solid darken(@baseBorderColor, 15%);
 		border-left: 1px solid @baseBorderColor;
 		overflow: hidden;
 		display: inline-block;
@@ -49,16 +47,14 @@
 
 	&:not(.z-combobutton-toolbar) &-content:hover, 
 	&:not(.z-combobutton-toolbar) &-button:hover {
-		border-color: @buttonBorder;
-		//background: #C6E6F7;
+		border-color: darken(@baseBorderColor, 15%);
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 
 	&:not(.z-combobutton-toolbar) &-content:active, 
 	&:not(.z-combobutton-toolbar) &-button:active {
-		border-color: #808080 #B6B6B6 #B6B6B6 #808080;
-		.verGradient(@baseGradientEnd, @baseGradientStart);
-		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75), 0 0 7px #CFCFCF');
+		border-color: @activeBorderColor;
+		.verGradient(@activeGradientStart, @activeGradientEnd);
 	}
 
 	&-toolbar {
