@@ -1,14 +1,5 @@
 @import "~./zul/less/_header.less";
 
-// weekend  Sun Sat
-@calendarWeekendColor: #F7941D;
-@calendarWeekendBackgroundColor: #F3F3F3;
-// week of year  Wk
-@calendarWeekYearColor: #FFFFFF;
-@calendarWeekYearBackgroundColor: @textColorGrayLight;
-
-@calendarDisabledColor: rgba(214, 214, 214, 0.6);
-
 .z-calendar {
 	border: 1px solid @baseBorderColor;
 	font-family: @baseContentFontFamily;
@@ -58,7 +49,6 @@
 		height: 100%;
 	}
 
-
 	&-decade {
 		min-height: 162px;
 	}
@@ -83,13 +73,13 @@
 
 		&:hover {
 			background: @hoverGradientEnd;
-			.borderRadius(4px);
+			.borderRadius(@baseBorderRadius);
 			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 		}
 	}
 	&-weekend {
-		color: @calendarWeekendColor;
-		background: @calendarWeekendBackgroundColor;
+		color: @textColorOrange;
+		background: darken(@baseBackgroundColor, 5%);
 	}
 	&-weekday {
 		color: @textColorGrayLight;
@@ -99,9 +89,9 @@
 		text-shadow: none;
 	}
 	&-weekofyear {
-		background: @calendarWeekYearBackgroundColor;
+		background: contrast(@baseBackgroundColor, @textColorGrayLight);
 		font-style: italic;
-		color: @calendarWeekYearColor;
+		color: contrast(@textColorGrayLight);
 		
 		&:hover {
 			color: @textColorGrayLight;
@@ -160,8 +150,11 @@
 	&-disabled {
 		cursor: default !important;
 		text-shadow: none !important;
-		color: #D6D6D6 !important;
-		color: @calendarDisabledColor !important;
+		color: @disabledColor !important;
+		.opacity(0.4);
+		&:hover {
+			background: @baseBackgroundColor;
+		}
 	}
 }
 

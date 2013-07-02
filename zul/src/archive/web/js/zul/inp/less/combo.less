@@ -1,7 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@comboitemContentColor: #888888;
-
 .z-combobox,
 .z-bandbox,
 .z-datebox,
@@ -275,7 +273,7 @@
 }
 .z-comboitem-inner,
 .z-comboitem-content {//description
-	color: @comboitemContentColor;
+	color: lighten(@textColorGray, 20%);
 	font-size: @fontSizeXSmall;
 	padding-left: 6px;
 }

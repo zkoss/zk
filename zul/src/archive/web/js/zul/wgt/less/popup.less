@@ -1,14 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@popupColor: #555555;
-@popupGradientStart: #FFFFFF;
-@popupGradientEnd: #F5F5F5;
-// bug ZK-1135: IE8 does not support rgba
-@infoColor:    rgba(33, 155, 166, 0.88);
-@warningColor: rgba(234, 67, 23, 0.88);
-@errorColor:   rgba(190, 0, 5, 0.88);
-@arrowColor: rgba(51, 51, 51, 0.9);
-
 .z-popup {
 	position: absolute;
 	top: 0;
@@ -16,11 +7,11 @@
 	overflow: hidden;
 	.borderRadius('1px');
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
-	.verGradient(@popupGradientStart, @popupGradientEnd);
+	.verGradient(@baseBackgroundColor, darken(@baseBackgroundColor, 4%));
 	border: 1px solid @baseBorderColor;
 
 	&-content {
-		color: @popupColor;
+		color: @textColorGray;
 		line-height: @baseLineHeight;
 		padding: 10px;
 		height: 100%;
@@ -90,67 +81,67 @@
 	border: 10px solid transparent;
 }
 .z-notification-left {
-	border-right-color: @arrowColor;
+	border-right-color: @notificationArrowColor;
 }
 .z-notification-right {
-	border-left-color: @arrowColor;
+	border-left-color: @notificationArrowColor;
 }
 .z-notification-up {
-	border-bottom-color: @arrowColor;
+	border-bottom-color: @notificationArrowColor;
 }
 .z-notification-down {
-	border-top-color: @arrowColor;
+	border-top-color: @notificationArrowColor;
 }
 
 // notification: info
 .z-notification-info .z-notification-content {
-	background-color: @infoColor;
+	background-color: @notificationInfoColor;
 }
 .z-notification-info .z-notification-left {
-	border-right-color: @infoColor;
+	border-right-color: @notificationInfoColor;
 }
 .z-notification-info .z-notification-right {
-	border-left-color: @infoColor;
+	border-left-color: @notificationInfoColor;
 }
 .z-notification-info .z-notification-up {
-	border-bottom-color: @infoColor;
+	border-bottom-color: @notificationInfoColor;
 }
 .z-notification-info .z-notification-down {
-	border-top-color: @infoColor;
+	border-top-color: @notificationInfoColor;
 }
 
 // notification: warning
 .z-notification-warning .z-notification-content {
-	background-color: @warningColor;
+	background-color: @notificationWarningColor;
 }
 .z-notification-warning .z-notification-left {
-	border-right-color: @warningColor;
+	border-right-color: @notificationWarningColor;
 }
 .z-notification-warning .z-notification-right {
-	border-left-color: @warningColor;
+	border-left-color: @notificationWarningColor;
 }
 .z-notification-warning .z-notification-up {
-	border-bottom-color: @warningColor;
+	border-bottom-color: @notificationWarningColor;
 }
 .z-notification-warning .z-notification-down {
-	border-top-color: @warningColor;
+	border-top-color: @notificationWarningColor;
 }
 
 // notification: error
 .z-notification-error .z-notification-content {
-	background-color: @errorColor;
+	background-color: @notificationErrorColor;
 }
 .z-notification-error .z-notification-left {
-	border-right-color: @errorColor;
+	border-right-color: @notificationErrorColor;
 }
 .z-notification-error .z-notification-right {
-	border-left-color: @errorColor;
+	border-left-color: @notificationErrorColor;
 }
 .z-notification-error .z-notification-up {
-	border-bottom-color: @errorColor;
+	border-bottom-color: @notificationErrorColor;
 }
 .z-notification-error .z-notification-down {
-	border-top-color: @errorColor;
+	border-top-color: @notificationErrorColor;
 }
 
 
@@ -186,11 +177,11 @@
 	top: 17px;
 }
 .z-notification-info .z-notification-close:hover {
-		color: @infoColor;
+		color: @notificationInfoColor;
 }
 .z-notification-warning .z-notification-close:hover {
-		color: @warningColor;
+		color: @notificationWarningColor;
 }
 .z-notification-error .z-notification-close:hover {
-		color: @errorColor;
+		color: @notificationErrorColor;
 }

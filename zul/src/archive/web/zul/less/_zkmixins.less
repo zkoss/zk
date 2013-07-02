@@ -86,3 +86,16 @@
 .disabledOpacity(@opacity: @disabledOpacity) {
 	.opacity(@opacity)
 }
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}

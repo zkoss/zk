@@ -7,10 +7,10 @@
 
 	&-center {
 		.gradient('ver', 'rgba(157,157,157,0.5) 0%; rgba(130,140,149,0.5) 13%; rgba(215,215,215,0.5) 100%');
-		.borderRadius('5px');
+		.borderRadius(5px);
 		height: @baseHeight - 2;
 		width: 100%;
-		top: 15px;	
+		top: 15px;
 		margin-right: -7px;	
 		line-height: 0;		
 		position: relative;
@@ -21,15 +21,15 @@
 		width: @baseIconWidth;
 		height: @baseIconHeight;
 		border: 1px solid @baseBorderColor;
-		.borderRadius('3px');
-		.gradient('ver', "#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%");
+		.borderRadius(@borderRadiusSmall);
+		.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
 		position: absolute;
 		top: -5px;
 		left: 0;
 		cursor: pointer;
 
 		&:active {
-			border-color: #808080 #B6B6B6 #B6B6B6 #808080;
+			border-color: darken(@baseBorderColor, 30%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 30%);
 			.verGradient(@baseGradientEnd, @baseGradientStart);
 		}
 
@@ -80,7 +80,7 @@
 
 	&-sphere, &-scale {
 		.z-slider-button {
-			.borderRadius('15px');
+			.borderRadius(15px);
 		}
 	}
 

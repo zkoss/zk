@@ -1,14 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@listboxStripBackground: #F7F7F7;
-@listfooterBackground: #F9F9F9;
-@listgroupGradientStart: #FFFFFF;
-@listgroupGradientEnd: #E9F2FB;
-@listgroupIconOpenColor: #000000;
-@listgroupIconCloseColor: #8FB9D0;
-@listgroupIconHoverColor: #0076A3;
-@listboxCheckIconColor: #0076A3;
-
 //listbox
 .z-listbox {
 	border: 1px solid @baseBorderColor;
@@ -19,6 +10,7 @@
 		overflow: hidden;
 		width: 100%;
 		position: relative;
+		.resetTable();
 		&.z-listbox-header-bar {
 			display: none;
 			.verGradient();
@@ -37,6 +29,7 @@
 	&-body {
 		overflow: hidden;
 		position: relative;
+		.resetTable();
 	}
 	&-emptybody td {
 		font-family: @baseContentFontFamily;
@@ -48,11 +41,12 @@
 	//listbox footer
 	&-footer {
 		overflow: hidden;
-		background: @listfooterBackground;
+		background: darken(@baseBackgroundColor, 2%);
 		border-top: 1px solid @baseBorderColor;
+		.resetTable();
 	}
 	&-odd {
-		background: @listboxStripBackground;
+		background: darken(@baseBackgroundColor, 3%);
 	}
 }
 //listhead
@@ -102,7 +96,7 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: @listboxCheckIconColor;
+			color: @textColorBlue;
 		}
 	}
 	&-button {
@@ -180,13 +174,13 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: @listboxCheckIconColor;
+			color: @textColorBlue;
 			&.z-icon-ok {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
 				width: 8px;
 				height: 8px;
 				.borderRadius(4px);
-				background: @listboxCheckIconColor;
+				background: @textColorBlue;
 				padding: 0;
 				margin: 3px;
 			}
@@ -207,7 +201,7 @@
 //Group
 .z-listgroup {
 	&-inner {
-		.verGradient(@listgroupGradientStart, @listgroupGradientEnd);
+		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
 		border: 1px solid @baseBorderColor;
 		border-left: none;
@@ -227,20 +221,17 @@
 		display: inline-block;
 		position: absolute;
 		left: 8px;
+		color: @baseTextColor;
 		&:hover {
-			color: @listgroupIconHoverColor;
+			color: @hoverColor;
 		}
 	}
 	&-icon-open {
-		color: @listgroupIconOpenColor;
 		left: 5px;
-	}
-	&-icon-close {
-		color: @listgroupIconCloseColor;
 	}
 }
 .z-listgroupfoot-inner {
-	.verGradient(@listgroupGradientEnd, @listgroupGradientStart);
+	.verGradient(@groupGradientEnd, @groupGradientStart);
 	position: relative;
 	overflow: hidden;
 }

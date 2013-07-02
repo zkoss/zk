@@ -487,9 +487,15 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			pos = this._pos[1];
 		
 		if (deltaY) {
+			var scrollUp = deltaY > 0;
+			if (scrollUp && pos == 0)
+				return;
+			if (!scrollUp && pos == this.vLimit)
+				return;
+			
 			evt.stop();
 			//up: step, down: -step
-			pos += (deltaY > 0 ? step : -step);
+			pos += (scrollUp ? step : -step);
 			//set and check if exceed scrolling limit
 			pos = _setScrollPos(pos, this.vLimit, 0);
 			//sync position

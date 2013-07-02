@@ -266,8 +266,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	_doMenuClick: function (evt) {
 		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var pp = this.parent._menupopup,
-				btn = this.$n('btn'),
-				zcls = this.getZclass();
+				btn = this.$n('btn');
 			
 			//for not removing hover effect when moving mouse on menupopup
 			jq(this.$n()).addClass(this.$s('visited'));

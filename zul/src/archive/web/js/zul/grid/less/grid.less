@@ -1,24 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@gridStripBackgroundColor: #F7F7F7;
-@gridFooterBackgroundColor: #F9F9F9;
-@groupGradientStart: #FFFFFF;
-@groupGradientEnd: #E9F2FB;
-@groupIconOpenColor: #000000;
-@groupIconCloseColor: #8FB9D0;
-@groupIconHoverColor: #0076A3;
-
-//reset table
-table {
-	border-spacing: 0;
-	th, td {
-		background-clip: padding-box;
-		padding: 0;
-	}
-	th {
-		text-align: inherit;
-	}
-}
 //grid
 .z-grid {
 	border: 1px solid @baseBorderColor;
@@ -26,6 +7,7 @@ table {
 	zoom: 1;
 	//grid header
 	&-header {
+		.resetTable();
 		overflow: hidden;
 		width: 100%;
 		position: relative;
@@ -47,6 +29,7 @@ table {
 	&-body {
 		overflow: hidden;
 		position: relative;
+		.resetTable();
 	}
 	&-emptybody td {
 		font-family: @baseContentFontFamily;
@@ -58,15 +41,16 @@ table {
 	//grid footer
 	&-footer {
 		overflow: hidden;
-		background: @gridFooterBackgroundColor;
+		background: darken(@baseBackgroundColor, 2%);
 		border-top: 1px solid @baseBorderColor;
+		.resetTable();
 		.z-footer {
 			overflow: hidden;
 		}
 	}
 	&-odd > .z-row-inner,
 	&-odd > .z-cell {
-		background: @gridStripBackgroundColor;
+		background: darken(@baseBackgroundColor, 3%);
 	}
 }
 //column
@@ -174,16 +158,13 @@ table {
 		display: inline-block;
 		position: absolute;
 		left: 8px;
+		color: @baseTextColor;
 		&:hover {
-			color: @groupIconHoverColor;
+			color: @hoverColor;
 		}
 	}
 	&-icon-open {
-		color: @groupIconOpenColor;
 		left: 5px;
-	}
-	&-icon-close {
-		color: @groupIconCloseColor;
 	}
 }
 .z-groupfoot-inner {

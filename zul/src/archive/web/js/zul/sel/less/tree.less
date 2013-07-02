@@ -1,11 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@treefooterBackground: #F9F9F9;
-@treeIconOpenColor: #000000;
-@treeIconCloseColor: #8FB9D0;
-@treeIconHoverColor: #0076A3;
-@treeCheckIconColor: #0076A3;
-
 //tree
 .z-tree {
 	border: 1px solid @baseBorderColor;
@@ -16,6 +10,7 @@
 		overflow: hidden;
 		width: 100%;
 		position: relative;
+		.resetTable();
 		&.z-tree-header-bar {
 			display: none;
 			.verGradient();
@@ -34,6 +29,7 @@
 	&-body {
 		overflow: hidden;
 		position: relative;
+		.resetTable();
 	}
 	&-emptybody td {
 		font-family: @baseContentFontFamily;
@@ -45,8 +41,9 @@
 	//tree footer div
 	&-footer {
 		overflow: hidden;
-		background: @treefooterBackground;
+		background: darken(@baseBackgroundColor, 2%);
 		border-top: 1px solid @baseBorderColor;
+		.resetTable();
 	}
 }
 //tree open icon and indent space
@@ -68,16 +65,13 @@
 		display: inline-block;
 		position: absolute;
 		left: 8px;
+		color: @baseTextColor;
 		&:hover {
-			color: @treeIconHoverColor;
+			color: @hoverColor;
 		}
 	}
 	&-open {
-		color: @treeIconOpenColor;
 		left: 5px;
-	}
-	&-close {
-		color: @treeIconCloseColor;
 	}
 }
 //treecols
@@ -154,13 +148,13 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: @treeCheckIconColor;
+			color: @textColorBlue;
 			&.z-icon-ok {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
 				width: 8px;
 				height: 8px;
 				.borderRadius(4px);
-				background: @treeCheckIconColor;
+				background: @textColorBlue;
 				padding: 0;
 				margin: 3px;
 			}

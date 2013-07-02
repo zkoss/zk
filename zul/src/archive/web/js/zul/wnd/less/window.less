@@ -1,7 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@windowBackgroundColor: #D9E5EF;
-@iconColor: #777777;
 @framePadding: 4px;
 
 .defaultOverflowZoom() {
@@ -57,7 +55,7 @@
 		float: right;
 		cursor: pointer;
 		text-align: center;
-		color: @iconColor;
+		color: lighten(@textColorGray, 13%);
 		
 		&:hover {
 			.resetGradient();

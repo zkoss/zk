@@ -2,18 +2,13 @@
 
 // Button Variables
 @menuImageSize: 16px;
-@menupopupBackgroundColor: #FAFAFA;
-@menuitemColor: #555555;
-@menuseparatorBorderColor: #808080;
-@menuseparatorBackgroundColor: #B6B6B6;
-@menupopupSeparatorBackgroundColor: #E0E0E0;
 
 .hoverStyle() {
 	border-color: @hoverBorderColor;
 	.verGradient(@hoverGradientStart, @hoverGradientEnd);
 }
 .activeStyle() {
-	border-color: #808080 #B6B6B6 #B6B6B6 #808080;
+	border-color: darken(@baseBorderColor, 30%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 30%);
 	.verGradient();
 	.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 }
@@ -53,7 +48,7 @@
 			margin: 0 2px;
 		}
 		.z-menuseparator {
-			border-left: 1px solid @menuseparatorBorderColor;
+			border-left: 1px solid darken(@baseBorderColor, 30%);
 			width: 1px;
 			display: block;
 			line-height: @baseButtonHeight;
@@ -70,7 +65,7 @@
 			}
 		}
 		.z-menuseparator {
-			border-top: 1px solid @menuseparatorBorderColor;
+			border-top: 1px solid darken(@baseBorderColor, 30%);
 			line-height: 0;
 			height: 0;
 			min-height: 0;
@@ -111,7 +106,7 @@
 		margin-right: 3px;
 	}
 	&-content {
-		color: @menuitemColor;
+		color: @textColorGray;
 		cursor: pointer;
 		border: 1px solid transparent;
 		.borderRadius();
@@ -167,7 +162,7 @@
 		&.z-menu:active,
 		&.z-menu-selected {
 			.z-menu-separator {
-				background: @menuseparatorBackgroundColor;
+				background: darken(@baseBackgroundColor, 28%);
 			}
 		}
 		.z-menu-text {
@@ -216,7 +211,7 @@
 	z-index: @basePopupZIndex;
 }
 .z-menupopup {
-	background: @menupopupBackgroundColor;
+	background: darken(@baseBackgroundColor, 2%);
 	border: 1px solid @baseBorderColor;
 	padding: 3px;
 	z-index: @basePopupZIndex;
@@ -230,13 +225,13 @@
 	&-separator {
 		height: 100%;
 		width: 2px;
-		background: @menupopupSeparatorBackgroundColor;
+		background: darken(@baseBackgroundColor, 12%);
 		position: absolute;
 		top: 0;
 		left: 31px;
 		z-index: 10;
-		border-top: 3px solid @menupopupBackgroundColor;
-		border-bottom: 3px solid @menupopupBackgroundColor;
+		border-top: 3px solid darken(@baseBackgroundColor, 2%);
+		border-bottom: 3px solid darken(@baseBackgroundColor, 2%);
 		border-right: 1px solid #FFFFFF;
 
 	}
@@ -267,7 +262,7 @@
 	.z-menuseparator {
 		font-size: 1px;
 		line-height: 1px;
-		background-color: @menupopupSeparatorBackgroundColor;
+		background-color: darken(@baseBackgroundColor, 12%);
 		border-bottom: 1px solid #FFFFFF;
 		display: block;
 		width: auto;
