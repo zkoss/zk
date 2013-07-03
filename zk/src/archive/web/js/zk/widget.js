@@ -4988,8 +4988,8 @@ zk.Native = zk.$extends(zk.Widget, {
 					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j); 
 				}
 			}
-
-			out.push(s);
+			// B65-ZK-1836
+			out.push(s.replace(/<\/(?=script>)/ig, '<\\/'));
 			if (this.value && s.startsWith("<textarea"))
 				out.push(this.value);
 		}

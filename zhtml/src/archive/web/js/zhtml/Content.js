@@ -20,7 +20,8 @@ zhtml.Content = zk.$extends(zhtml.Widget, {
 		var s = this.prolog;
 		if (s) out.push(s);
 
-		out.push(this._content||'');
+		// B65-ZK-1836
+		out.push((this._content||'').replace(/<\/(?=script>)/ig, '<\\/'));
 
 		s = this.epilog;
 		if (s) out.push(s);

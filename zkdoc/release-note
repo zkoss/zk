@@ -1,4 +1,11 @@
   --------
+ZK 6.5.4 
+* Features
+
+* Bugs
+  ZK-1836: Javascript string with </script> escape issue
+
+  --------
 ZK 6.5.3
 Jul 02, 2013
 * Features
