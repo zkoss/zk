@@ -199,7 +199,7 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(256);
 		if (!directJS)
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkac(");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(");
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
@@ -219,7 +219,7 @@ public class HtmlPageRenders {
 		}
 
 		if (!directJS)
-			sb.append(");//]]>\n</script>");
+			sb.append(");\n</script>");
 		return sb.toString();
 	}
 
@@ -306,7 +306,7 @@ public class HtmlPageRenders {
 			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkopt({");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -319,7 +319,7 @@ public class HtmlPageRenders {
 
 			if (sb.charAt(sb.length() - 1) == ',')
 				sb.setLength(sb.length() - 1);
-			sb.append("});//]]>\n</script>");
+			sb.append("});\n</script>");
 		}
 
 		final Device device = Devices.getDevice(deviceType);
@@ -471,7 +471,10 @@ public class HtmlPageRenders {
 				sb.append(" charset=\"").append(charset).append('"');
 			sb.append('>');
 		} else {
-			sb.append(" class=\"z-runonce\">//<![CDATA[\n").append(js.getContent()).append("//>]]\n");
+			sb.append(" class=\"z-runonce\">\n")
+				// B65-ZK-1836
+				.append(js.getContent().replaceAll("</(?i)(?=script>)", "<\\\\/"))
+				.append("\n");
 		}
 		sb.append("</script>");
 	}
@@ -566,7 +569,7 @@ public class HtmlPageRenders {
 			out = new StringWriter();
 		} else if (divRequired) {
 			//generate JS second
-			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\n");
+			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">\n");
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
@@ -631,8 +634,9 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(page, out);
 				//close tag after temp, but before perm (so perm won't be destroyed)
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
-
-			Files.write(out, sw); //js
+			
+			// B65-ZK-1836
+			Files.write(out, new StringBuffer(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/"))); //js
 		} else if (owner != null) { //restore
 			setRenderContext(exec, old);
 		}
@@ -640,7 +644,7 @@ public class HtmlPageRenders {
 		if (includedAndPart) {
 			((Includer)owner).setRenderingResult(((StringWriter)out).toString());
 		} else if (divRequired) {
-			out.write("//]]>\n</script>\n");
+			out.write("\n</script>\n");
 		}
 	}
 	private static void outDivTemplateBegin(Writer out, String uuid)

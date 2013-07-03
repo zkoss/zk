@@ -235,7 +235,9 @@ public class Script extends AbstractComponent {
 				renderer.renderDirectly("content", "function(){\n" + cnt + "\n}");
 			else {
 				Writer out = ComponentRedraws.getScriptBuffer();
-				out.write(cnt);
+
+				// B65-ZK-1836
+				out.write(cnt.replaceAll("</(?i)(?=script>)", "<\\\\/"));
 				out.write('\n');
 			}
 

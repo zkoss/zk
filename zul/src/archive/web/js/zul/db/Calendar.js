@@ -298,6 +298,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_view : 'day', //"day", "month", "year", "decade",
 	_minyear: 1900,
 	_maxyear: 2099,
+	_minDate: new Date(1899, 11, 31, 23, 59, 59),
+	_maxDate: new Date(2099, 11, 31, 23, 59, 59),
 	
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -433,6 +435,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var y = this.getTime().getFullYear();
 			this._minyear = v > y ? y : (v > 100 ? v : 100);
 		}
+		this._minDate.setYear(this._minyear);
 	},
 	setMaxYear_: function(v) {
 		if (v === undefined) {
@@ -441,6 +444,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var y = this.getTime().getFullYear();			
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
 		}
+		this._maxDate.setYear(this._maxyear);
 	},		
 	_shift: function (ofs, opts) {
 		var oldTime = this.getTime();	
@@ -912,7 +916,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							var	monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
 								bSel = cur == d;
 							
-							// check whether the date is out of range
+							// Bug B65-ZK-1804: check whether the date is out of range
 							if (y >= maxyear && m == 11 && monofs == 1
 									|| y <= minyear && m == 0 && monofs == -1)
 								continue;

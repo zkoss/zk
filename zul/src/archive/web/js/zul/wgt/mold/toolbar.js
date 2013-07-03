@@ -13,7 +13,8 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var space = 'vertical' != this.getOrient() ? '' : '<br/>';
+	// ZK-1706: the width of empty space does not always equal 3px in ie9, ie10 
+	var space = 'vertical' != this.getOrient() ? (zk.ie >= 9 ? '<span></span>' : '') : '<br/>';
 		
 	out.push('<div ', this.domAttrs_(), '>', '<div id="', this.uuid, '-cave"',
 			' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" >');
