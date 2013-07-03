@@ -75,13 +75,15 @@
 .opacity(@opacity) {
 	opacity: @opacity;
 	@opacity100: @opacity * 100;
-	<c:if test="${zk.ie < 9}">filter: ~"alpha(opacity=@{opacity100})";</c:if>
+	filter: ~"alpha(opacity=@{opacity100})";
 }
 // Component Function
 //----------------------------------------------
 .resetGradient() {
 	background: none;
-	<c:if test="${zk.ie > 0}">filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));</c:if>
+	<c:if test="${zk.ie > 0}">
+	filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));
+	</c:if>
 }
 .disabledOpacity(@opacity: @disabledOpacity) {
 	.opacity(@opacity)
