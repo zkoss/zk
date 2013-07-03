@@ -17,6 +17,7 @@ ZK 6.5.4
 
 * Bugs
   ZK-1836: Javascript string with </script> escape issue
+  ZK-1837: Checking the checkbox inside the groupbox should not trigger the onOpen event of Groupbox
 
   --------
 ZK 6.5.3
