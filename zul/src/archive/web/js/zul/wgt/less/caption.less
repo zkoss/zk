@@ -2,28 +2,22 @@
 
 .z-caption {
 	width: 100%;
-	height: @baseButtonHeight;
 	font-size: @fontSizeMedium;
 	white-space: nowrap;
 	height: auto;
+	line-height: @baseLineHeight;
+	min-height: @baseButtonHeight;
 
-	&-content {
-		margin-right: 4px;
+	&-content, .z-label {
+		margin-right: 4px; 
 		display: inline-block;
-		line-height: @baseButtonHeight;
-	}
-
-	.z-label {
-		line-height: @baseIconHeight;
 		padding: 4px 0px;
-		margin-right: 4px;
-		display: inline-block;
+		float: left;
 	}
 
-	.z-button, .z-toolbarbutton {
-		margin-right: 4px;
-		top: -1px;
-		position: relative;
+	.z-button, .z-toolbarbutton, 
+	input, input + a, input + span {
+		vertical-align: bottom;
 	}
 
 	&-image {
