@@ -2,24 +2,24 @@
 
 .z-separator {
 	overflow: hidden;
-	&[data-orient="vertical"] {
+	&[class*='-vertical'] {
 		display: inline-block;
 		width: 10px;
-		&[data-bar="true"] {
+		&[class$='-bar'] {
 			background-position: top center; 
 			background-repeat: repeat-y;
 		}
 	}
-	&[data-orient="horizontal"] {
+	&[class*='-horizontal'] {
 		height: 7px;
 		line-height: 0;
 		font-size: 0;
-		&[data-bar="true"] {
+		&[class$='-bar'] {
 			background-position: center left; 
 			background-repeat: repeat-x;
 		}
 	}
-	&[data-bar="true"] {
+	&[class$='-bar'] {
 		.encodeURL(background-image, "~./img/dot.gif");
 	}
 }

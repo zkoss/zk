@@ -16,7 +16,7 @@ function (out) {
 	var uuid = this.uuid, content = this.domContent_();
 	out.push('<span', this.domAttrs_(), '>', '<input type="checkbox" id="', uuid,
 			'-real"', this.contentAttrs_(), '/>', 
-			'<label for="', uuid, '-real" id="', uuid, '-content"');
+			'<label for="', uuid, '-real" id="', uuid, '-cnt"');
 	
 	out.push(this.domTextStyleAttr_(), 
 			' class="', this.$s('content') ,'">', this.domContent_(), '</label></span>');

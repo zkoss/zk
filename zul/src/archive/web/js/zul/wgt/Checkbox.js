@@ -224,7 +224,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			this.$supers('beforeSendAU_', arguments);
 	},
 	getTextNode: function () {
-		return this.$n('content');
+		return this.$n('cnt');
 	}
 });
 

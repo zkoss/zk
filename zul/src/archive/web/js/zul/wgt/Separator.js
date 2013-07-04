@@ -19,10 +19,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return (s = wgt._spacing) && s.endsWith("%");
 		}: zk.$void;
 
-/**
- * A separator.
- *  <p>Default {@link #getZclass} is z-separator.
- */
+		/**
+		 * A separator.
+		 *  <p>Default {@link #getZclass} as follows:
+		 *  <ol>
+		 *  	<li>Case 1: If {@link #getOrient()} is vertical and {@link #isBar()} is false, "z-separator-vertical" is assumed</li>
+		 *  	<li>Case 2: If {@link #getOrient()} is vertical and {@link #isBar()} is true, "z-separator-vertical-bar" is assumed</li>
+		 *  	<li>Case 3: If {@link #getOrient()} is horizontal and {@link #isBar()} is false, "z-separator-horizontal" is assumed</li>
+		 *  	<li>Case 4: If {@link #getOrient()} is horizontal and {@link #isBar()} is true, "z-separator-horizontal-bar" is assumed</li>
+		 *  </ol>
+		 */
 zul.wgt.Separator = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 
@@ -35,7 +41,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 * @param String orient either "horizontal" or "vertical".
 		 */
 		orient: function () {
-			this.updateOrient();
+			this.updateDomClass_();
 		},
 		/** Returns whether to display a visual bar as the separator.
 		 * <p>Default: false
@@ -45,7 +51,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 * @param boolean bar
 		 */
 		bar: function () {
-			this.updateBar();
+			this.updateDomClass_();
 		},
 		/** Returns the spacing.
 		 * <p>Default: null (depending on CSS).
@@ -70,22 +76,17 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.wgt.Separator, 'bind_', arguments);
 	},
-	updateOrient: function () {
-		var n = this.$n();
-		if (n !== undefined) {
-			jq(n).data('orient', this._orient);
-			this.rerender();		
-		}
-	},
-	updateBar: function () {
-		var n = this.$n();
-		if (n !== undefined) {
-			jq(n).data('bar', this._bar);
-			this.rerender();
-		}
-	},
 	getZclass: function () {
 		return 'z-separator';
+	},
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments),
+			bar = this.isBar();
+		if (!no || !no.zclass) {
+			sc += ' ' + this.$s((this.isVertical() ? 'vertical' + (bar ? '-bar' : '') :
+				'horizontal' + (bar ? '-bar' : '')));
+		}
+		return sc;
 	},
 	domStyle_: function () {
 		var s = this.$supers('domStyle_', arguments);
