@@ -868,7 +868,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		_hideShadow(this);
 		if (this._maximized)
 			_syncMaximized(this);
-		this._fixHgh();
+		this._fixHgh(true);
 		if (this._mode != 'embedded')
 			_updDomPos(this);
 		this.zsync();
@@ -903,8 +903,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					return;
 			}
 	},
-	_fixHgh: function () {
-		if (this.isRealVisible()) {
+	_fixHgh: function (ignoreVisible/* speed up */) {
+		if (ignoreVisible || this.isRealVisible()) {
 			var n = this.$n(),
 				hgh = n.style.height,
 				cave = this.$n('cave'),

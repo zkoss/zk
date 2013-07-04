@@ -1311,7 +1311,13 @@ jq(el).zk.center(); //same as 'center'
 		// when use HTML5 doctype
 		if (isHTML5DocType() &&
 				jq.nodeName(n, 'SPAN') && this.jq.css('display') != 'block') {
-			return zk(document.body).textSize(n.outerHTML)[1];
+			var text = n.outerHTML;
+			
+			// replace uuid to speed up the calculation
+			if (zk.Widget.$(n, {exact: 1})) {
+				text = text.replace(/id="[^"]*"/, 'id="zktextsize"');
+			}
+			return zk(document.body).textSize(text)[1];
 		}
 		return n.offsetHeight;
 	},
@@ -1358,28 +1364,42 @@ jq(el).zk.center(); //same as 'center'
 	 * @param String text the content text 
 	 * @return Size the size of the text
 	 */
-	textSize: function (txt) {
-		if (!_txtSizDiv) {
-			_txtSizDiv = document.createElement("div");
-			_txtSizDiv.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
-			document.body.appendChild(_txtSizDiv);
+	textSize: (function () {
+		// cache
+		var _txtStylesCamel = [],
+			_txtSizDiv,
+			_defaultStyle = 'left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none;display:none;',
+			_cache = {};
+		return function (txt) {
+			txt = txt || jq[0].innerHTML;
+			if (!_txtSizDiv) {
+				_txtSizDiv = document.createElement('div');
+				_txtSizDiv.style.cssText = _defaultStyle;
+				document.body.appendChild(_txtSizDiv);
 
-			_txtStylesCamel = [];
-			for (var ss = _txtStyles, j = ss.length; j--;)
-				_txtStylesCamel[j] = ss[j].$camel();
-		}
-		_txtSizDiv.style.display = 'none';
-		var jq = this.jq;
-		for (var ss = _txtStylesCamel, j = ss.length; j--;) {
-			var nm = ss[j];
-			_txtSizDiv.style[nm] = jq.css(nm);
-		}
-
-		_txtSizDiv.innerHTML = txt || jq[0].innerHTML;
-		_txtSizDiv.style.display = '';
-		return [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
-	},
-
+				for (var ss = _txtStyles, j = ss.length; j--;)
+					_txtStylesCamel[j] = ss[j].$camel();
+			}
+			var jq = this.jq,
+				newStyle = '';
+			for (var ss = _txtStylesCamel, j = ss.length; j--;) {
+				var nm = ss[j];
+				newStyle += _txtStyles[j] + ':' + jq.css(nm) + ';';
+			}
+			
+			var result,
+				key = newStyle + txt;
+			if (!(result = _cache[key])) {
+				_txtSizDiv.innerHTML = txt;
+				_txtSizDiv.style.cssText = _defaultStyle + newStyle;
+				_txtSizDiv.style.display = '';
+				result = _cache[key] = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
+				_txtSizDiv.style.display = 'none';
+				_txtSizDiv.innerHTML = ''; //reset
+			}
+			return result;
+		};
+	})(),
 	/** Returns the dimension of the specified element.
 	 * <p>If revised not specified (i.e., not to calibrate), the left and top are the offsetLeft and offsetTop of the element.
 	 * @param boolean revised if revised is true, {@link #revisedOffset} will be
