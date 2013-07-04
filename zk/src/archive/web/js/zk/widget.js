@@ -926,7 +926,7 @@ new zul.wnd.Window({
 				this._nvflex = 0;
 			if (this.desktop) { //if already bind
 				if (!this._nvflex) {
-					this.setFlexSize_({height: ''}); //clear the height
+					this.setFlexSize_({height: 'auto'}); //clear the height
 					delete this._vflexsz;
 					if (!this._nhflex)
 						_unlistenFlex(this);
@@ -1053,7 +1053,7 @@ new zul.wnd.Window({
 		                    //nested inside native component. in this case the nested component
 		                    //is bound earlier, when the native component is reused (mount.js create()) 
 			if (!this._nhflex) {
-				this.setFlexSize_({width: ''}); //clear the width
+				this.setFlexSize_({width: 'auto'}); //clear the width
 				delete this._hflexsz;
 				if (!this._nvflex)
 					_unlistenFlex(this);
@@ -3012,7 +3012,6 @@ unbind_: function (skipper, after) {
 			else
 				n.style.width = this._width || '';
 		}
-		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul

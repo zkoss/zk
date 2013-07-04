@@ -151,12 +151,12 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var chdex = kid.$n('chdex');
 			//ZK-1679: clear height only vflex != min, clear width only hflex != min
 			if (vert && kid._nvflex && kid.getVflex() != 'min') {
-				kid.setFlexSize_({height:'', width:''});
+				kid.setFlexSize_({height:'auto', width:'auto'});
 				if (chdex)
 					chdex.style.height = '';
 			}
 			if (!vert && kid._nhflex && kid.getHflex() != 'min') {
-				kid.setFlexSize_({height:'', width:''});
+				kid.setFlexSize_({height:'auto', width:'auto'});
 				if (chdex)
 					chdex.style.width = '';
 			}
@@ -393,12 +393,15 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			if (this.isVertical_()) {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				if (w.firstChild.style.height) {
-    					w.style.height = jq.px0(w.firstChild.offsetHeight
-    							+ zk(w).padBorderHeight()
-    							+ zk(w.firstChild).marginHeight());
-    				}
-    				total += w.offsetHeight;
+    				var fchd = w.firstChild;
+    				if (fchd.style.height) {
+    					var hgh = fchd.offsetHeight
+								+ zk(w).padBorderHeight()
+								+ zk(fchd).marginHeight();
+    					w.style.height = jq.px0(hgh);
+    					total += hgh;
+    				} else
+    					total += w.offsetHeight;
     			}
     			n.style.height = jq.px0(total);
 			} else {
@@ -416,12 +419,15 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			if (!this.isVertical_()) {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				if (w.firstChild.style.width) {
-    					w.style.width = jq.px0(w.firstChild.offsetWidth
-    							+ zk(w).padBorderWidth()
-    							+ zk(w.firstChild).marginWidth());
-    				}
-    				total += w.offsetWidth;
+    				var fchd = w.firstChild;
+    				if (fchd.style.width) {
+    					var wdh = fchd.offsetWidth
+								+ zk(w).padBorderWidth()
+								+ zk(fchd).marginWidth();
+    					w.style.width = jq.px0(wdh);
+    					total += wdh;
+    				} else
+    					total += w.offsetWidth;
     			}
 
 				// IE9+ bug ZK-483

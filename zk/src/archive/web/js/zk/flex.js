@@ -114,7 +114,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						vmax = 0;
 					if (cwgt && cwgt.desktop){ //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
 						var first = cwgt,
-							refDim = zk(cwgt).dimension(true);
+							refDim;
 						for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout
 							if (!cwgt.ignoreFlexSize_(o)) {
 								var c = cwgt.$n();
@@ -131,13 +131,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 												+ zkc[marginPos]();
 									}
 									
-									var curDim = first != cwgt ? zkc.dimension(true) : false;
 									//bug #3006276: East/West bottom cut if East/West higher than Center.
 									if (cwgt[maxFlexPos] && sz > vmax) //@See West/East/Center
 										vmax = sz;
 									else if (cwgt[sumFlexPos]) //@See North/South
 										totalsz += sz;
-									else if (!cwgt[maxFlexPos] && curDim && _isSameBaseline(refDim, curDim, isVflex))
+									else if (!cwgt[maxFlexPos] && first != cwgt
+											&& _isSameBaseline(refDim || (refDim = zk(first).dimension(true)), zkc.dimension(true), isVflex))
 										max += sz;
 									else if (sz > max)
 										max = sz;
@@ -150,7 +150,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							//feature 3000339: The hflex of the cloumn will calculate by max width
 							var isText = c.nodeType == 3,
 								ignore = wgt.ignoreChildNodeOffset_(o),
-								refDim = isText ? null : zk(c).dimension(true);
+								first = c,
+								refDim;
 							for(; c; c = c.nextSibling) {
 								var zkc = zk(c),
 									sz = 0;
@@ -180,7 +181,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										max = sz;
 								} else  {
 									var curDim = zkc.dimension(true);
-									if (_isSameBaseline(refDim, curDim, isVflex)) 
+									if (_isSameBaseline(refDim || (refDim = zk(first).dimension(true)),
+											curDim, isVflex)) 
 										max += sz;
 									else if (sz > max) 
 										max = sz;
@@ -201,9 +203,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.safari && margin < 0) 
 					margin = 0;
 				
-				var map = {};
+				var map = {},
+					n = wgt.$n();
 				map[sizePos] = (max + wgt[contentPos]() + margin);
-				sz = wgt.setFlexSize_(map, true);
+				wgt.setFlexSize_(map, true);
+				sz = {height: n.offsetHeight, width: n.offsetWidth};
 				if (sz && sz[sizePos] >= 0)
 					wgt[flexsz] = sz[sizePos] + margin;
 				wgt.afterChildrenMinFlex_(o);
