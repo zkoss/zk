@@ -939,7 +939,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
-		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
 	/* set the height. */
 	_setHgh: function (hgh) {

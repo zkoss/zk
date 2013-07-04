@@ -64,9 +64,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
 					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
 			this._hflexWidth = rvw;
-			return {width: rvw};
 		} else
-			return this.$supers('setFlexSize_', arguments);
+			this.$supers('setFlexSize_', arguments);
 	},
 	domStyle_: function (no) {
 		var style = '';

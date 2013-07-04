@@ -389,7 +389,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 						++k;
 					if (kid._nvflex && kid.getVflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
+						kid.setFlexSize_({height:'auto', width:'auto'});
 						var chdex = kid.$n('chdex');
 						if (chdex) {
 							chdex.style.height = szes && k < szes.length ? szes[k] : '';
@@ -402,7 +402,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 						++k;
 					if (kid._nhflex && kid.getHflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
+						kid.setFlexSize_({height:'auto', width:'auto'});
 						var chdex = kid.$n('chdex');
 						if (chdex) {
 							chdex.style.width = szes && k < szes.length ? szes[k] : '';

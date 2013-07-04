@@ -405,10 +405,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				n.style.width = jq.px0(wdh);
 			}
 		}
-		return {
-			height : n.offsetHeight,
-			width : n.offsetWidth
-		};
 	},
 	updateDomClass_: function () {
 		if (this.desktop) {

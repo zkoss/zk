@@ -310,7 +310,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			else
 				n.style.width = this._width ? this._width : '';
 		}
-		return {height: n.offsetHeight, width: n.offsetWidth};
 	}
 });
 //handle autodisabled buttons
