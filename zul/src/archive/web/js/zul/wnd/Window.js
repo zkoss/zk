@@ -904,7 +904,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixHgh: function () {
-		if (this.getTitle() || this.caption) {
+		if (this.isRealVisible()) {
 			var n = this.$n(),
 				hgh = n.style.height,
 				cave = this.$n('cave'),
@@ -915,7 +915,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			} else if (cvh && cvh != 'auto') {
 				cave.style.height = '';
 			}
-		} 
+		}
 	},
 	_offsetHeight: function (n) {
 		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();		

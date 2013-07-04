@@ -32,7 +32,7 @@
 			</nav>
 			<navitem id="item" label="Freeze" iconSclass="z-icon-asterisk"/>
 			<navitem label="Cog" iconSclass="z-icon-cog"/>
-			<nav id="det" label="Mails" iconSclass="z-icon-envelope" detailed="true">
+			<nav id="det" label="Mail" iconSclass="z-icon-envelope">
 					<navitem label="Reply" iconSclass="z-icon-reply"/>
 					<navitem label="Reply all" iconSclass="z-icon-reply-all"/>
 					<navitem label="Inbox" iconSclass="z-icon-inbox"/>
