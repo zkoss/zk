@@ -1,4 +1,17 @@
 @import "~./zul/less/_header.less";
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
 
 //listbox
 .z-listbox {
@@ -196,6 +209,12 @@
 			.resetGradient();
 			position: relative;
 		}
+		a, a:visited, a:hover {
+			text-decoration: none;
+		}
+	}
+	a, a:visited, a:hover {
+		text-decoration: none;
 	}
 }
 //Group
@@ -207,6 +226,11 @@
 		border-left: none;
 		border-right: none;
 		overflow: hidden;
+		
+		.z-listcell-content,
+		.z-listgroup-content {
+			padding: 3px 5px;
+		}
 	}
 	&-icon {
 		display: inline-block;
