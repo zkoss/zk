@@ -1,7 +1,5 @@
 @import "~./zul/less/_header.less";
 
-@tabColor: #555555;
-
 .userSelect() {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -35,7 +33,7 @@
 	.z-tab-text {
 		overflow: hidden;
 		text-overflow: ellipsis;
-		color: @tabColor;
+		color: @textColorGray;
 		font-style: normal;
 		white-space: nowrap;
 		display: block;
@@ -134,7 +132,7 @@
 
 	&.z-tab-selected + .z-tab {
 		.boxShadow(0 1px 0 #CFCFCF);
-	}	
+	}
 }
 
 .z-tabbox {
@@ -213,7 +211,7 @@
 		.z-tabpanel-content {
 			padding: 5px;
 			zoom: 1;
-			border: 1px solid #cfcfcf;
+			border: 1px solid @baseBorderColor;
 			border-top: 0;
 		}
 
@@ -261,7 +259,7 @@
 			}
 
 			.z-tab-text {
-				color: @tabColor;
+				color: @textColorGray;
 				font-weight: bold;
 				text-decoration: none;
 				display: block;
@@ -338,7 +336,7 @@
 			float: none;
 			border-width: 1px 0px 1px 1px;
 			.leftBorderRadius();
-			border-top: 1px solid #CFCFCF;
+			border-top: 1px solid @baseBorderColor;
 
 			.z-tab-text {
 				padding: 4px 5px 2px 5px;
