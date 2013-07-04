@@ -436,6 +436,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				if (wd > max)
     					max = wd;
     			}
+    			
+    			// IE9+ bug ZK-483
+				if (zk.ie9 && this._hflexsz)
+					max = Math.max(this._hflexsz, max);
+				
     			n.style.width = jq.px0(max);
 			}
 		}

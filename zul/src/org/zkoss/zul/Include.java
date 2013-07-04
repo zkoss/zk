@@ -584,7 +584,9 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 
 				renderer.render("_xcnt", incsb.toString());
 				if (_renderResult != null && _renderResult.length() > 0)
-					renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
+					renderer.renderDirectly("_childjs", "function(){" +
+							// B65-ZK-1836
+							_renderResult.replaceAll("</(?i)(?=script>)", "<\\\\/") + '}');
 			}
 		} finally {
 			_renderResult = null;

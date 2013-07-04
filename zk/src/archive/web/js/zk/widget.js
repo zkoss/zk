@@ -1696,6 +1696,11 @@ wgt.$f().main.setTitle("foo");
 		var dom = opts && opts.dom,
 			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
+		
+		//Bug ZK-1692: widget may not bind or render yet.
+		if (!wgt.desktop)
+			return false;
+		
 		while (wgt) {
 			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined)
 				return _markCache(cache, visited, ck);
@@ -5030,8 +5035,8 @@ zk.Native = zk.$extends(zk.Widget, {
 					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j); 
 				}
 			}
-
-			out.push(s);
+			// B65-ZK-1836
+			out.push(s.replace(/<\/(?=script>)/ig, '<\\/'));
 			if (this.value && s.startsWith('<textarea'))
 				out.push(this.value);
 		}

@@ -209,6 +209,10 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			}
 			if (zk.safari && !zk.mobile) 
 				zk(real).focus();
+
+			// B65-ZK-1837
+			evt.stop({propagation: true});
+
 			return this.$supers('doClick_', arguments);
 		}
 	},

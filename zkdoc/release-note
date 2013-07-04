@@ -12,8 +12,16 @@ ZK 7.0.0
 * Upgrade Notes
 
   --------
-ZK 6.5.3
+ZK 6.5.4 
+* Features
 
+* Bugs
+  ZK-1836: Javascript string with </script> escape issue
+  ZK-1837: Checking the checkbox inside the groupbox should not trigger the onOpen event of Groupbox
+
+  --------
+ZK 6.5.3
+Jul 02, 2013
 * Features
   ZK-1764: Fileupload.get() supports to provide a callback event listener
   ZK-1801: provide fusion funnel chart integration
@@ -67,6 +75,7 @@ ZK 6.5.3
   ZK-1821: Component inside native component doesn't cleanup correctly
   ZK-1822: Turkish locale problem during browser detection (on server side)
   ZK-1827: Component inside native component js error
+  ZK-1834: Listbox scroll bug
   
   --------
 ZK 6.5.2

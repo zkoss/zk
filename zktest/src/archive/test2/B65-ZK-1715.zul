@@ -13,8 +13,8 @@
 		<listitem label="item 1"/>
 		<listitem label="item 2"/>
 		<listitem label="item 3"/>
-		<listitem label="item 4"/>
-		<listitem label="item 5"/>
+		<listitem label="item 4" disabled="true" />
+		<listitem label="item 5" disabled="true" />
 		<listitem label="item 6"/>
 		<listitem label="item 7"/>
 	</listbox>
