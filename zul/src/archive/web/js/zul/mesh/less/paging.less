@@ -5,9 +5,10 @@
 	background: darken(@baseBackgroundColor, 2%);
 	position: relative;
 	height: @baseBarHeight;
-	padding: 3px 10px 2px;
+	padding: 4px 10px 3px;
 	&-os {
 		border-bottom: none;
+		padding-bottom: 4px;
 	}
 	ul {
 		display: inline-block;
@@ -23,9 +24,10 @@
 		border: 1px solid @baseBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
-		line-height: @baseLineHeight;
+		height: @baseButtonHeight;
 		padding: 4px 6px;
 		margin-right: 6px;
+		vertical-align: top;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @textColorBlue;
@@ -54,28 +56,29 @@
 			}
 		}
 	}
-	&-previous {
-		> .z-icon-caret-left {
-			display: inline-block;
-			.transform('translate(-1px, 0px) scale(1.42)');
-		}
+	&-previous > .z-icon-caret-left:before {
+		font-size: 16px;
+		position: relative;
+		left: -1px;
+		top: -1px;
 	}
-	&-next {
-		> .z-icon-caret-right:before {
-			display: inline-block;
-			.transform('translate(1px, 0px) scale(1.42)');
-		}
+	&-next > .z-icon-caret-right:before {
+		font-size: 16px;
+		position: relative;
+		left: 1px;
+		top: -1px;
 	}
 	&-noborder {
-		border: none;
+		border-color: transparent;
 		.resetGradient();
 		&:hover {
 			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+			border-color: transparent;
 			text-decoration: underline;
 		}
 		&:active {
 			.resetGradient();
-			border-color: @baseBorderColor;
+			border-color: transparent;
 		}
 	}
 	&-selected {
@@ -98,7 +101,7 @@
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @textColorGrayDark;
-		line-height: @baseLineHeight;
+		height: @baseButtonHeight;
 		margin-left: 6px;
 		padding: 3px 0;
 		vertical-align: baseline;
@@ -111,10 +114,9 @@
 	}
 	&-info {
 		position: absolute;
-		top: 0;
+		top: 4px;
 		right: 10px;
 		padding: 4px 0;
-		line-height: 24px;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @textColorGrayDark;

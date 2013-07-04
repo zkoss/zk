@@ -42,10 +42,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var evt = jq.Event.zk(devt),
 			pt = [evt.pageX, evt.pageY];
+		
+		if (!pt[0]) {
+			var origEvt = devt.originalEvent;
+			pt = [origEvt.pageX, origEvt.pageY];
+		}
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
-		if(_lastPt && _lastPt[0] == pt [0]
-		&& _lastPt[1] == pt [1])
+		if(_lastPt && _lastPt[0] == pt[0]
+		&& _lastPt[1] == pt[1])
 			return;
 
 		_lastPt = pt;
@@ -595,6 +600,10 @@ String scroll; //DOM Element's ID</code></pre>
 			// Now select element is not draggable in Chrome and Safari
 
 		var pt = [evt.pageX, evt.pageY];
+		if (!pt[0]) {
+			var origEvt = devt.originalEvent;
+			pt = [origEvt.pageX, origEvt.pageY];
+		}
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
 			return;
