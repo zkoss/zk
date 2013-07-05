@@ -42,7 +42,7 @@
 
 	&-body {
 		margin: 0;
-		background: darken(@baseBackgroundColor, 5%);
+		background: #F1F9FF;
 		padding: 6px 3px 6px 3px;
 		border: 1px solid darken(@baseBorderColor, 20%);
 		border-top: 0;
@@ -165,13 +165,15 @@
 		border: 0;
 		.borderRadius('0px');
 
-		.z-panelchildren {
-			border-top: 1px solid @baseBorderColor;
-		}
+		
 	}
 
-	&-noborder&-noframe &children {
-		border: 0;
+	&-noheader&-noframe .z-panelchildren {
+		border-top: 1px solid @baseBorderColor;
+	}
+
+	&-noborder&-noframe .z-panelchildren {
+		border: none;
 	}
 
 	&-noborder .z-panel-btm .z-toolbar {
