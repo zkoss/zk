@@ -321,8 +321,13 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 
 		this.$supers(zul.inp.Doublespinner, 'unbind_', arguments);
+	},
+	getBtnUpIconClass_: function () {
+		return 'z-icon-angle-up';
+	},
+	getBtnDownIconClass_: function () {
+		return 'z-icon-angle-down';
 	}
-	
 });
 
 })();
