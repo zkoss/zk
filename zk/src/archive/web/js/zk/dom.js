@@ -1371,6 +1371,7 @@ jq(el).zk.center(); //same as 'center'
 			_defaultStyle = 'left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none;display:none;',
 			_cache = {};
 		return function (txt) {
+			var jq = this.jq;
 			txt = txt || jq[0].innerHTML;
 			if (!_txtSizDiv) {
 				_txtSizDiv = document.createElement('div');
@@ -1380,8 +1381,7 @@ jq(el).zk.center(); //same as 'center'
 				for (var ss = _txtStyles, j = ss.length; j--;)
 					_txtStylesCamel[j] = ss[j].$camel();
 			}
-			var jq = this.jq,
-				newStyle = '';
+			var newStyle = '';
 			for (var ss = _txtStylesCamel, j = ss.length; j--;) {
 				var nm = ss[j];
 				newStyle += _txtStyles[j] + ':' + jq.css(nm) + ';';
