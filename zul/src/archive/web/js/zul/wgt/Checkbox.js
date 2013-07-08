@@ -164,6 +164,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			html += ' name="' + v + '"';
 		if (this._disabled)
 			html += ' disabled="disabled"';
+		zk.log('content attrs', this._checked);
 		if (this._checked)
 			html += ' checked="checked"';
 		if (v = this._tabindex)
@@ -204,8 +205,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			var real = this.$n('real'),
 				checked = real.checked;
 			if (checked != this._checked) { //changed
-				this.setChecked(checked) //so Radio has a chance to override it
-					.fireOnCheck_(checked);
+				this.setChecked(checked); //so Radio has a chance to override it
+				this.fireOnCheck_(checked);
 			}
 			if (zk.safari && !zk.mobile) 
 				zk(real).focus();

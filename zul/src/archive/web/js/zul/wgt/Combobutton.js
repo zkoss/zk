@@ -90,10 +90,14 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		 */
 		autodrop: null
 	},
+	getZclass: function () {
+		return 'z-combobutton';
+	},
 	domClass_: function (no) {
-		var zcls = this._zclass;
-		// F60-ZK-719
-		return (zcls ? zcls : 'z-combobutton') + (this._isDefault() ? '' : ' z-combobutton-toolbar');
+		var cls = this.$supers(zul.wgt.Combobutton, 'domClass_', arguments);
+		if (!this._isDefault())
+			cls += ' z-combobutton-toolbar';
+		return cls;
 	},
 	_isDefault: function () {
 		return this._mold == 'default';

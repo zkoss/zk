@@ -1,14 +1,12 @@
 @import "~./zul/less/_header.less";
 
-@buttonBorder: darken(@baseBorderColor, 15%);
-
 .z-button {
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
-	padding: 4px 12px;
+	padding: 3px 12px;
 	line-height: @baseLineHeight;
-	border: 1px solid @buttonBorder;
+	border: 1px solid darken(@baseBorderColor, 15%);
 	.borderRadius();
 	.verGradient();
 	text-shadow: 0 1px #FFFFFF;
@@ -28,7 +26,7 @@
 	}
 	&[disabled] {
 		.disabledOpacity();
-		border: 1px solid @buttonBorder;
+		border: 1px solid darken(@baseBorderColor, 15%);
 		.verGradient();
 		.boxShadow('none');
 		cursor: default;
