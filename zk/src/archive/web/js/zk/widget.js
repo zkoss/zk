@@ -55,8 +55,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _domEvtProxy(wgt, f, evtnm, keyword) {
 		var fps = wgt._$evproxs, fp;
 		if (!fps) wgt._$evproxs = fps = {};
-		else if (fp = fps[evtnm + '__' + keyword]) return fp;
-		return fps[evtnm + '__' + keyword] = _domEvtProxy0(wgt, f, keyword);
+		if (keyword)
+			f.__keyword = keyword;
+		else if (fp = fps[f]) return fp;
+		return fps[f] = _domEvtProxy0(wgt, f, keyword);
 	}
 	function _domEvtProxy0(wgt, f, keyword) {
 		return function (evt) {
