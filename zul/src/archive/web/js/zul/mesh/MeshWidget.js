@@ -1338,7 +1338,7 @@ zul.mesh.Scrollbar = {
 		
 		if (frozen) {
 			var columns = frozen.getColumns();
-			if (headtbl) {
+			if (head) {
 				var cells = _getFirstRowCells(wgt.eheadrows);
 				if (cells) {
 					for (var i = 0; i < columns; i++)
