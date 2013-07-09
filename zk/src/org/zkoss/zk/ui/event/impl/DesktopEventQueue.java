@@ -93,7 +93,9 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			final Execution exec = Executions.getCurrent();
 			if (exec == null)
 				throw new IllegalStateException("Execution required");
-			_serverPushEnabled = !exec.getDesktop().enableServerPush(true);
+			exec.getDesktop().enableServerPush(true, this);
+			//B65-ZK-1840 make sure the flag is true after enabling (otherwise disabling will fail) 
+			_serverPushEnabled = true; 
 		}
 		_listenerInfos.add(new ListenerInfo<T>(listener, callback, async));
 	}
@@ -104,7 +106,8 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 				if (listener.equals(inf.listener)) {
 					it.remove();
 					if (inf.async && --_nAsync == 0 && _serverPushEnabled)
-						Executions.getCurrent().getDesktop().enableServerPush(false);
+						//B65-ZK-1840 added enabler argument for reference counting  
+						Executions.getCurrent().getDesktop().enableServerPush(false, this);
 					return true;
 				}
 			}
@@ -122,7 +125,8 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 		_listenerInfos.clear();
 		if (_serverPushEnabled) {
 			try {
-				Executions.getCurrent().getDesktop().enableServerPush(false);
+				//B65-ZK-1840 added enabler argument for reference counting  
+				Executions.getCurrent().getDesktop().enableServerPush(false, this);
 			} catch (Throwable ex) {
 				log.warningBriefly("Ingored: unable to stop server push", ex);
 			}

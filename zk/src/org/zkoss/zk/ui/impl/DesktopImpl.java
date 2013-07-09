@@ -64,6 +64,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.VisibilityChangeEvent;
+import org.zkoss.zk.ui.event.impl.DesktopEventQueue;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -198,8 +199,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	/** Whether any onPiggyback listener is registered. */
 	private boolean _piggybackListened;
+
 	/** Whether the server push shall stop after deactivate. */
 	private boolean _spushShallStop;
+	
+	/** references of enabling DesktopEventQueues to enable reference counting, when several queues run against one desktop. */
+	private Set<DesktopEventQueue<?>> enablers = new HashSet<DesktopEventQueue<?>>();
+	
+
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -1346,14 +1353,49 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//Server Push//
 	public boolean enableServerPush(boolean enable) {
-		return enableServerPush0(null, enable);
+		return enableServerPush(enable, null);
 	}
+	
+	@Override
+	public boolean enableServerPush(boolean enable, DesktopEventQueue<?> enabler) {
+		return enableServerPush(null, enable, enabler);
+	}
+	
+	//ZK-1840 make sure the serverpush does not get enabled/disabled multiple times, to keep reference counting consistent
+	//and privde possibility to disable/enable in the same execution
+	private boolean enableServerPush(ServerPush serverPush, boolean enable, DesktopEventQueue<?> enabler) {
+		synchronized(enablers) {
+			boolean enablersEmptyBefore = enablers.isEmpty();
+			if(enable) {
+				if(!enablers.add(enabler)) {
+					log.debug("trying to enable already enabled serverpush by: " + enabler);
+					return false;
+				}
+				if(enablersEmptyBefore) {
+					return enableServerPush0(serverPush, enable);
+				}
+			} else { 
+				if(!enablers.remove(enabler)) {
+					log.debug("trying to disable already disabled serverpush by: " + enabler);
+					return false;
+				}
+				if(enablers.isEmpty() && !enablersEmptyBefore) {
+					return enableServerPush0(serverPush, enable);
+				}
+			}
+		}
+		//nothing to do already enabled/disabled by this "enabler"
+		return false;
+	}
+	
 	private boolean enableServerPush0(ServerPush sp, boolean enable) {
 		if (_sess == null)
 			throw new IllegalStateException("Server push cannot be enabled in a working thread");
 
-		final boolean old = _spush != null;
-		if (old != enable) {
+		final boolean serverPushAlreadyExists = _spush != null;
+		
+		
+		if (serverPushAlreadyExists != enable) {
 			final Integer icnt = (Integer)_sess.getAttribute(ATTR_PUSH_COUNT);
 			int cnt = icnt != null ? icnt.intValue(): 0;
 			if (enable) {
@@ -1375,30 +1417,37 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					_spush = ((WebAppCtrl)_wapp).getUiFactory().newServerPush(this, cls);
 				}
 				_spush.start(this);
+				_spushShallStop = false;
 				++cnt;
 			} else if (_spush.isActive()) {
-				_spushShallStop = true;
-				--cnt;
+				if(enablers.isEmpty()) {
+					_spushShallStop = true;
+					--cnt;
+				}
 			} else {
 				_spush.stop();
 				_spush = null;
 				--cnt;
 			}
 			_sess.setAttribute(ATTR_PUSH_COUNT, new Integer(cnt));
+		} else if(enable) {
+			//B65-ZK-1840 make sure the serverpush resumes in case stopped during that executions
+			_spushShallStop = false;
 		}
-		return old;
+		return serverPushAlreadyExists;
 	}
 	public boolean enableServerPush(ServerPush serverpush) {
-		final boolean old = _spush != null,
+		final boolean serverPushAlreadyExists = _spush != null,
 			enable = serverpush != null;
-		if (old != enable || serverpush != _spush) {
-			if (old)
-				enableServerPush(false);
+		if (serverPushAlreadyExists != enable || serverpush != _spush) {
+			if (serverPushAlreadyExists)
+				enableServerPush(false, null);
 			if (enable)
-				enableServerPush0(serverpush, true);
+				enableServerPush(serverpush, true, null);
 		}
-		return old;
+		return serverPushAlreadyExists;
 	}
+	
 	public boolean isServerPushEnabled() {
 		return _spush != null;
 	}
