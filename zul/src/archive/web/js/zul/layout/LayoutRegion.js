@@ -574,8 +574,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			cs.width = '';
 			if (c.offsetHeight && c.offsetWidth);
 			
-//			cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
-//			cs.width  = jq.px(c.scrollWidth  >= pw ? c.scrollWidth  : pw);
+			cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+			cs.width  = jq.px(c.scrollWidth  >= pw ? c.scrollWidth  : pw);
 			
 			bar.scroller = c;
 			bar.syncSize(showBar);

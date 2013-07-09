@@ -496,7 +496,6 @@ span.z-upload input {
 .z-scrollbar {
 	position: absolute;
 	opacity: 0;
-	.transition(opacity, 0.5s, cubic-bezier(0.33, 0.66, 0.66, 1));
 	&-embed {
 		background: lighten(@scrollbarBackgroundColor, 5%);
 		.opacity(1.0);
@@ -506,7 +505,6 @@ span.z-upload input {
 		top: 0;
 		right: 0;
 		width: @baseIconWidth;
-		height: 100%;
 		.z-scrollbar-wrapper {
 			position: absolute;
 			top: 16px;
@@ -515,7 +513,7 @@ span.z-upload input {
 			.z-scrollbar-indicator {
 				position: absolute;
 				width: 13px;
-				left: 2px;
+				left: 1px;
 				cursor: pointer;
 				border: 1px solid darken(@baseBorderColor, 30%);
 				.borderRadius(@borderRadiusSmall - 1);
@@ -559,7 +557,6 @@ span.z-upload input {
 		}
 	}
 	&-down {
-		bottom: 0;
 		> .z-icon-caret-down:before {
 			width: @baseIconWidth;
 			height: @baseIconHeight;
@@ -572,7 +569,6 @@ span.z-upload input {
 	&-horizontal {
 		bottom: 0;
 		left: 0;
-		width: 100%;
 		height: @baseIconHeight;
 		.z-scrollbar-wrapper {
 			position: absolute;
@@ -614,8 +610,5 @@ span.z-upload input {
 		cursor: pointer;
 		font-size: @baseFontSize;
 		background: @scrollbarBackgroundColor;
-	}
-	&-right {
-		right: 0;
 	}
 }

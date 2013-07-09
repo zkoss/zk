@@ -86,7 +86,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		//define cave container style to hide native browser scroll-bar
 		this.cave = cave;
 		var cs = cave.style;
-		cs.position = 'relative';
+		cs.position = 'static';
 		cs.overflow = 'hidden';
 		//scrolling content
 		this.scroller = scroller;
@@ -138,6 +138,9 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			tpad = wgt.$n('tpad'),
 			bpad = wgt.$n('bpad'),
 			cave = this.cave,
+			$cave = zk(cave),
+			cavew = cave.offsetWidth,
+			caveh = cave.offsetHeight,
 			scroller = this.scroller,
 			hbar = this.$n('hor'),
 			vbar = this.$n('ver'),
@@ -156,7 +159,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			froenScrollWidth = 50 * (frozen._scrollScale || 0);
 		
 		if (needH || needV) {
-			scroller.style[zk.vendor + 'TransformOrigin'] = '0 0';
 			if (this.opts.embed) {
 				var cs = cave.style,
 					paddingB = hwrapper ? hwrapper.offsetHeight : 0,
@@ -175,13 +177,17 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				hws = hwrapper.style,
 				wdh = cave.offsetWidth - startX,
 				swdh = scroller.scrollWidth - startX
-						+ zk(cave).padBorderWidth() + froenScrollWidth,
+						+ $cave.paddingWidth() + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
 
 			if (swdh < wdh) //only happened with Frozen
-				swdh = wdh + zk(cave).paddingWidth() + froenScrollWidth;
+				swdh = wdh + $cave.paddingWidth() + froenScrollWidth;
+			
+			//set scroll bar position
+			hbar.style.top = jq.px(cave.offsetTop + caveh - hwrapper.offsetHeight - 1);
+			hbar.style.left = jq.px(cave.offsetLeft);
 			
 			if (startX) {
 				left.style.left = jq.px(startX);
@@ -189,13 +195,15 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			if (needV) {
 				hws.width = jq.px(hwdh - rwdh);
-				right.style.right = jq.px(rwdh);
 			} else {
 				hws.width = jq.px(hwdh);
 			}
 			
 			var wwdh = hwrapper.offsetWidth,
 				iwdh = Math.round(wwdh * wdh / swdh);
+			
+			// set scroll bar arrow position
+			right.style.left = jq.px(left.offsetWidth + wwdh + startX);
 			
 			ind.style.width = jq.px(iwdh > 20 ? iwdh : 20);
 			//sync scroller position limit
@@ -213,23 +221,25 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ind = this.$n('ver-indicator'),
 				vws = vwrapper.style,
 				hgh = cave.offsetHeight - startY,
-				shgh = scrollHeight - startY + zk(cave).paddingHeight(),
+				shgh = scrollHeight - startY + $cave.paddingHeight(),
 				dhgh = down.offsetHeight,
 				vhgh = hgh - up.offsetHeight - dhgh;
 			
-			if (startY) {
-				vbar.style.top = jq.px(startY);
-				down.style.bottom = jq.px(startY);
-			}
+			//set scroll bar position
+			vbar.style.top = jq.px(cave.offsetTop + startY);
+			vbar.style.left = jq.px(cave.offsetLeft + cavew - vwrapper.offsetWidth - 1);
+			
 			if (needH) {
 				vws.height = jq.px(vhgh - dhgh);
-				down.style.bottom = jq.px(startY + dhgh);
 			} else {
 				vws.height = jq.px(vhgh);
 			}
 			
 			var whgh = vwrapper.offsetHeight,
 				ihgh = Math.round(whgh * hgh / shgh);
+			
+			// set scroll bar arrow position
+			down.style.top = jq.px(up.offsetHeight + whgh + startY);
 			
 			ind.style.height = jq.px(ihgh > 20 ? ihgh : 20);
 			//sync scroller position limit
@@ -395,6 +405,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		_showScrollbar(this, 0);
 	},
 	_dragStart: function (evt) {
+		if (this._pressTimer) { //just in case
+			clearInterval(this._pressTimer);
+			this._pressTimer = null;
+		}
 		evt.preventDefault();
 		var self = this,
 			orient = self.$n('hor-indicator') == evt.currentTarget ? 'hor' : 'ver',
@@ -428,8 +442,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				&& ((x < left || x > left + cave.offsetWidth)
 				|| (y < top || y > top + cave.offsetHeight)))
 			_showScrollbar(self, 0);
-		//onScrollEnd callback
-		self._onScrollEnd();
 	},
 	_dragMove: function (evt) {
 		var data = evt.data,
@@ -454,6 +466,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			frozen._doScroll(barPos / step);
 		} else {
 			this._syncPosition(orient, -barPos * ratio);
+			//onScrollEnd callback
+			this._onScrollEnd();
 		}
 	},
 	_mousewheelX: function (evt, delta, deltaX, deltaY) {
@@ -508,9 +522,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	_mouseUp: function (evt) {
 		clearInterval(this._pressTimer);
 		this._pressTimer = null;
-		this._onScrollEnd();
 	},
 	_mouseDown: function (evt) {
+		if (this._pressTimer) {
+			clearInterval(this._pressTimer);
+			this._pressTimer = null;
+		}
 		var target = evt.currentTarget,
 			hRail = this.$n('hor-rail'),
 			vRail = this.$n('ver-rail'),
@@ -526,25 +543,44 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		if (target == hRail || target == vRail) {
 			var isHor = target == hRail,
 				orient = isHor ? 'hor' : 'ver',
-				point = isHor ? evt.pageX : evt.pageY,
 				offset = jq(target).offset(),
 				offset = isHor ? offset.left : offset.top,
 				ind = this.$n(isHor ? 'hor-indicator' : 'ver-indicator'),
 				indsz = isHor ? ind.offsetWidth : ind.offsetHeight,
-				limit = isHor ? this.hBarLimit : this.vBarLimit,
-				ratio = isHor ? this.hRatio : this.vRatio;
-				barPos = point - offset - indsz/2;
+				point = (isHor ? evt.pageX : evt.pageY) - offset  - indsz/2,
+				limit = isHor ? this.hLimit : this.vLimit,
+				ratio = isHor ? this.hRatio : this.vRatio,
+				pos = isHor ? this._pos[0] : this._pos[1],
+				barPos = isHor ? this._barPos[0] : this._barPos[1],
+				pointlimit = point * ratio,
+				rstep = step * 10;
+				self = this;
 			
-			//set and check if exceed scrolling limit
-			barPos = _setScrollPos(barPos, 0, limit);
-			var pos = -barPos * ratio;
-			if (frozen && isHor) {
-				frozen._doScroll(barPos / step);
-			} else {
-				//sync position
-				this._syncPosition(orient, pos);
-			}
-			this._syncBarPosition(orient, barPos);
+			//setInterval for long press on arrow button
+			self._pressTimer = setInterval(function () {
+				if (frozen && isHor) {
+					frozen._doScroll(barPos / step);
+				} else {
+					var isLeftDown = point > barPos,
+						min = isLeftDown ? -pointlimit : pos,
+						min = min < limit ? limit : min,
+						max = isLeftDown ? pos : -pointlimit,
+						max = max > 0 ? 0 : max;
+					
+					//left/down: step, right/up: -step
+					pos += (isLeftDown ? -rstep : rstep);
+					//set and check if exceed scrolling limit
+					pos = _setScrollPos(pos, min, max);
+					if (pos == -pointlimit) {
+						clearInterval(self._pressTimer);
+						self._pressTimer = null;
+					}
+					//sync position
+					self._syncPosition(orient, pos);
+					self._syncBarPosition(orient, -pos / ratio);
+					self._onScrollEnd();
+				}
+			}, 50);
 		}
 		//click on arrows
 		if (target == left || target == right || target == up || target == down) {
@@ -574,6 +610,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 					//sync position
 					self._syncPosition(orient, pos);
 					self._syncBarPosition(orient, -pos / ratio);
+					self._onScrollEnd();
 				}
 			}, 50);
 		}
@@ -594,19 +631,18 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			onSyncPosition.call(this);
 		}
 		
-		this.scroller.style[zk.vendor + 'Transform'] = 
-			'translate(' + this._pos[0] + 'px, ' + this._pos[1] + 'px)';
+		var cave = this.cave;
+		cave.scrollLeft = -this._pos[0];
+		cave.scrollTop = -this._pos[1];
 	},
 	_syncBarPosition: function (orient, pos) {
 		if (orient == 'hor') {
 			this._barPos[0] = pos;
-			this.$n('hor-indicator').style[zk.vendor + 'Transform'] = 
-				'translate(' + this._barPos[0] + 'px, 0)';
+			this.$n('hor-indicator').style.left = this._barPos[0] + 'px';
 		}
 		if (orient == 'ver') {
 			this._barPos[1] = pos;
-			this.$n('ver-indicator').style[zk.vendor + 'Transform'] = 
-				'translate(0, ' + this._barPos[1] + 'px)';
+			this.$n('ver-indicator').style.top = this._barPos[1] + 'px';
 		}
 	},
 	_onScrollEnd: function () {

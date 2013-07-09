@@ -1330,16 +1330,12 @@ zul.mesh.Scrollbar = {
 	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
-		var headtbl = wgt.eheadtbl,
-			foottbl = wgt.efoottbl,
+		var head = wgt.ehead,
+			foot = wgt.efoot,
 			embed = jq(wgt.$n()).data('embedscrollbar'),
 			frozen = wgt.frozen,
 			startPositionX = 0;
 		
-		if (headtbl)
-			headtbl.style[zk.vendor + 'Transform'] = 'translate(0, 0)';
-		if (foottbl)
-			foottbl.style[zk.vendor + 'Transform'] = 'translate(0, 0)';
 		if (frozen) {
 			var columns = frozen.getColumns();
 			if (headtbl) {
@@ -1350,6 +1346,15 @@ zul.mesh.Scrollbar = {
 				}
 			}
 		}
+		if (head && embed) {
+			var headbar = wgt.$n('headbar'),
+				headbarStyle = headbar.style;
+			headbarStyle.display = 'block';
+			headbarStyle.height = jq.px(head.offsetHeight);
+			headbarStyle.top = jq.px(head.offsetTop);
+			headbarStyle.left = jq.px(head.offsetLeft + head.offsetWidth - headbar.offsetWidth - 2);
+			headbarStyle.display = 'none';
+		}
 		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
 			startPositionX: startPositionX,
@@ -1358,12 +1363,10 @@ zul.mesh.Scrollbar = {
 					headtbl = wgt.eheadtbl,
 					foottbl = wgt.efoottbl;
 				if (pos) {
-					if (headtbl)
-						headtbl.style[zk.vendor + 'Transform'] = 
-							'translate(' + pos.x + 'px, 0)';
-					if (foottbl)
-						foottbl.style[zk.vendor + 'Transform'] = 
-							'translate(' + pos.x + 'px, 0)';
+					if (head)
+						head.scrollLeft = -pos.x;
+					if (foot)
+						foot.scrollLeft = -pos.x;
 				}
 			},
 			onScrollEnd: function() {
