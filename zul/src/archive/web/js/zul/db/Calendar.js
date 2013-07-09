@@ -430,19 +430,19 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	setMinYear_: function(v) {
 		if (v) {
-			this._minyear = 1900;
-		} else {
 			var y = this.getTime().getFullYear();
 			this._minyear = v > y ? y : (v > 100 ? v : 100);
+		} else {
+			this._minyear = 1900;
 		}
 		this._minDate.setYear(this._minyear);
 	},
 	setMaxYear_: function(v) {
 		if (v) {
-			this._maxyear = 2099;
-		} else {
 			var y = this.getTime().getFullYear();			
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
+		} else {
+			this._maxyear = 2099;;
 		}
 		this._maxDate.setYear(this._maxyear);
 	},		
