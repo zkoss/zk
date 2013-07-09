@@ -82,13 +82,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				(!tabbox.isRealVisible() || !tabbox.isTabscroll())))
 			return;
 
-		var tbsdiv = this.$n(),
+		var tabs = this.$n(),
 			tbx = tabbox.$n();
-		if (!tbsdiv || !tbx) return;	// tabbox is delete , no need to check scroll
+		if (!tabs || !tbx) return;	// tabbox is delete , no need to check scroll
 		if (tabbox.isVertical()) {//vertical
-			var header = this.$n(),
-				headerOffsetHeight = header.offsetHeight,
-				headerScrollTop = header.scrollTop,
+				tabsOffsetHeight = tabs.offsetHeight,
+				tabsScrollTop = tabs.scrollTop,
 				childHeight = 0;
 				
 			jq(this.$n('cave')).children().each(function () {
@@ -97,42 +96,42 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 
 			if (tabbox._scrolling) { //already in scrolling status
 				var btnsize = this._getArrowSize();
-				if (tbsdiv.offsetHeight < btnsize)  return;
+				if (tabs.offsetHeight <= btnsize)  return;
 				
 				var sel = tabbox.getSelectedTab(),
 					node = tb ? tb.$n() : (sel ? sel.$n() : null),
 					nodeOffsetTop = node ? node.offsetTop : 0,
 					nodeOffsetHeight = node ? node.offsetHeight : 0;
 					
-				if (childHeight <= headerOffsetHeight + btnsize) {
+				if (childHeight <= tabsOffsetHeight + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false)
-					header.style.height = jq.px0(tbx.offsetHeight-2);
-					header.scrollTop = 0;
+					tabs.style.height = jq.px0(tbx.offsetHeight-2);
+					tabs.scrollTop = 0;
 				}
 				switch (way) {
 				case 'end':
-					var d = childHeight - headerOffsetHeight - headerScrollTop;
+					var d = childHeight - tabsOffsetHeight - tabsScrollTop;
 					this._doScroll(d >= 0 ? 'down' : 'up', d >= 0 ? d : Math.abs(d));
 					break;
 				case 'init':
 				case 'vsel':
-					if (nodeOffsetTop < headerScrollTop) {
-						this._doScroll('up', headerScrollTop - nodeOffsetTop);
-					} else if (nodeOffsetTop + nodeOffsetHeight > headerScrollTop + headerOffsetHeight) {
-						this._doScroll('down', nodeOffsetTop + nodeOffsetHeight - headerScrollTop - headerOffsetHeight);
+					if (nodeOffsetTop < tabsScrollTop) {
+						this._doScroll('up', tabsScrollTop - nodeOffsetTop);
+					} else if (nodeOffsetTop + nodeOffsetHeight > tabsScrollTop + tabsOffsetHeight) {
+						this._doScroll('down', nodeOffsetTop + nodeOffsetHeight - tabsScrollTop - tabsOffsetHeight);
 					}
 					break;
 				}
 			} else { // not enough tab to scroll
-				if (childHeight - (headerOffsetHeight - zk(this.$n('cave')).padBorderHeight()) > 0) {
+				if (childHeight - (tabsOffsetHeight - zk(this.$n('cave')).padBorderHeight()) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var btnsize = this._getArrowSize(),
 						temp = tbx.offsetHeight - btnsize;
-					header.style.height = temp > 0 ? temp + 'px' : '';
+					tabs.style.height = temp > 0 ? temp + 'px' : '';
 					if (way == 'end') {
-						var d = childHeight - headerOffsetHeight - headerScrollTop + 2;
+						var d = childHeight - tabsOffsetHeight - tabsScrollTop + 2;
 						if (d >= 0)
 							this._doScroll(this.uuid, 'down', d);
 					}
@@ -140,13 +139,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 		} else if(!tabbox.inAccordionMold()) {
 			var cave = this.$n('cave'),
-				header = this.$n(),
 			 	sel = tabbox.getSelectedTab(),
 				node = tb ? tb.$n() : ( sel ? sel.$n() : null),
 			 	nodeOffsetLeft = node ? node.offsetLeft : 0,
 				nodeOffsetWidth = node ? node.offsetWidth : 0,
-				headerOffsetWidth = header.offsetWidth,
-				headerScrollLeft = header.scrollLeft,
+				tabsOffsetWidth = tabs.offsetWidth,
+				tabsScrollLeft = tabs.scrollLeft,
 				childWidth = 0,
 				toolbar = tabbox.toolbar;
 
@@ -162,49 +160,49 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
 				}
 				
-				if (tbsdiv.offsetWidth < btnsize) return;
-				if (childWidth <= headerOffsetWidth + btnsize) {
+				if (tabs.offsetWidth <= btnsize) return;
+				if (childWidth <= tabsOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					header.style.width = jq.px0(tbx.offsetWidth);
-					header.scrollLeft = 0;
+					tabs.style.width = jq.px0(tbx.offsetWidth);
+					tabs.scrollLeft = 0;
 				}
 				// scroll to specific position
 				switch (way) {
 				case 'end':
-					var d = childWidth - headerOffsetWidth - headerScrollLeft;
+					var d = childWidth - tabsOffsetWidth - tabsScrollLeft;
 					this._doScroll(d >= 0 ? 'right' : 'left', d >= 0 ? d : Math.abs(d));
 					break;
 				case 'init':
 				case 'sel':
-					if (nodeOffsetLeft == headerScrollLeft) // nothing to do
+					if (nodeOffsetLeft == tabsScrollLeft) // nothing to do
 						break;
 					
-					if (nodeOffsetLeft < headerScrollLeft) {
-						this._doScroll('left', headerScrollLeft - nodeOffsetLeft);
-					} else if (nodeOffsetLeft + nodeOffsetWidth > headerScrollLeft + headerOffsetWidth) {
-						this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
+					if (nodeOffsetLeft < tabsScrollLeft) {
+						this._doScroll('left', tabsScrollLeft - nodeOffsetLeft);
+					} else if (nodeOffsetLeft + nodeOffsetWidth > tabsScrollLeft + tabsOffsetWidth) {
+						this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - tabsScrollLeft - tabsOffsetWidth);
 					}
 					break;
 				}
 			} else { // not enough tab to scroll
-				if (childWidth - (headerOffsetWidth - zk(this.$n('cave')).padBorderWidth()) > 0) {
+				if (childWidth - (tabsOffsetWidth - zk(this.$n('cave')).padBorderWidth()) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var cave = this.$n('cave'),
 						btnsize = this._getArrowSize(),
 						temp = tbx.offsetWidth - btnsize;//coz show button then getsize again
 					cave.style.width = '5555px';
-					header.style.width = temp > 0 ? temp + 'px' : '';
+					tabs.style.width = temp > 0 ? temp + 'px' : '';
 					
 					if (toolbar) 
 						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
 					
 					if (way == 'sel') {
-						if (nodeOffsetLeft < headerScrollLeft) {
-							this._doScroll('left', headerScrollLeft - nodeOffsetLeft);
-						} else if (nodeOffsetLeft + nodeOffsetWidth > headerScrollLeft + headerOffsetWidth) {
-							this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
+						if (nodeOffsetLeft < tabsScrollLeft) {
+							this._doScroll('left', tabsScrollLeft - nodeOffsetLeft);
+						} else if (nodeOffsetLeft + nodeOffsetWidth > tabsScrollLeft + tabsOffsetWidth) {
+							this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - tabsScrollLeft - tabsOffsetWidth);
 						}
 					}
 				}
@@ -218,28 +216,28 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			return;
 		var step,
 			self = this,
-			header = this.$n();
+			tabs = this.$n();
 		
 		this._doingScroll[to] = move;
 		//the tab bigger , the scroll speed faster
 		step = move <= 60 ? 5 : (5 * (zk.parseInt(move / 60) + 1));
 		//Use to scroll
-		var goscroll = function(header, to, step) {
+		var goscroll = function(tabs, to, step) {
 			switch (to) {
 			case 'right':
-				header.scrollLeft += step;
+				tabs.scrollLeft += step;
 				break;
 			case 'left':
-				header.scrollLeft -= step;
+				tabs.scrollLeft -= step;
 				break;
 			case 'up':
-				header.scrollTop -= step;
+				tabs.scrollTop -= step;
 				break;
 			default:
-				header.scrollTop += step;
+				tabs.scrollTop += step;
 			}
-			header.scrollLeft = (header.scrollLeft <= 0 ? 0 : header.scrollLeft);
-			header.scrollTop = (header.scrollTop <= 0 ? 0 : header.scrollTop);
+			tabs.scrollLeft = (tabs.scrollLeft <= 0 ? 0 : tabs.scrollLeft);
+			tabs.scrollTop = (tabs.scrollTop <= 0 ? 0 : tabs.scrollTop);
 		}
 		var run = setInterval(function() {
 			if (!move) {
@@ -248,7 +246,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				return;
 			} else {
 				//high speed scroll, need break
-				move < step ? goscroll(header, to, move) : goscroll(header, to, step);
+				move < step ? goscroll(tabs, to, move) : goscroll(tabs, to, step);
 				move -= step;
 				move = move < 0 ? 0 : move;
 			}
@@ -265,21 +263,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	_showbutton : function(show) {
 		var tabbox = this.getTabbox();
 		if (tabbox.isTabscroll()) {
-			var tabs = this.$n(),
-				cls = tabbox.$s('scroll');
+			var cls = tabbox.$s('scroll');
 				
-			if (tabbox.isVertical()) {//vertical
-				if (show) {
-					jq(tabbox).addClass(cls);
-				} else {
-					jq(tabbox).removeClass(cls);
-				}				
-			}else {//horizontal
-				if (show) {
-					jq(tabbox).addClass(cls);
-				} else {
-					jq(tabbox).removeClass(cls);
-				}		
+			if (show) {
+				jq(tabbox).addClass(cls);
+			} else {
+				jq(tabbox).removeClass(cls);
 			}
 		}
 	},
@@ -306,23 +295,20 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (tbx.offsetWidth < btnsize) 
 					return;
 				if (tabbox.isTabscroll()) {
-					var head = this.$n(),
-						toolbar = tabbox.toolbar;
+					var toolbar = tabbox.toolbar;
 					if (toolbar) 
 						toolbar = toolbar.$n();
 					if (!tbx.style.width) {
 						tbx.style.width = '100%';
-						tabs.style.width = jq.px0(zk(tbx).contentWidth());
 						if (tabbox._scrolling) 
-							head.style.width = jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
+							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
 						else 
-							head.style.width = jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
+							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0));
 					} else {
-						head.style.width = tabs.style.width = jq.px0(zk(tbx).contentWidth());
 						if (tabbox._scrolling)
-							head.style.width = jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
+							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
 						else 
-							head.style.width = jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
+							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0));
 					}
 					if (toolbar && tabbox._scrolling) 
 						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
@@ -367,8 +353,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			var r = tabbox.$n('right'),
 				l = tabbox.$n('left'),
 				tb = tabbox.toolbar,
-				head = this.$n(),
-				hgh = jq.px0(head ? head.offsetHeight : 0);
+				tabs = this.$n(),
+				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
 			if(r && l) {
 				r.style.height = l.style.height = hgh;
 			}
@@ -376,8 +362,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				tb.style.height = hgh;
 			}
 			
-			if (head)
-				head.style.height = '';
+			if (tabs)
+				tabs.style.height = '';
 		}
 	},
 	onResponse: function () {
