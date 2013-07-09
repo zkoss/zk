@@ -17,7 +17,7 @@ function _createMouseEvent (type, button, changedTouch, ofs) {
 	if (!ofs)
 		ofs = {sx: 0,sy: 0,cx: 0,cy: 0};
 	
-	var simulatedEvent = document.createEvent("MouseEvent");
+	var simulatedEvent = document.createEvent('MouseEvent');
 	simulatedEvent.initMouseEvent(type, true, true, window, 1, 
 		changedTouch.screenX + ofs.sx, changedTouch.screenY + ofs.sy, 
 		changedTouch.clientX + ofs.cx, changedTouch.clientY + ofs.cy,
@@ -34,6 +34,10 @@ function _createJQEvent (target, type, button, changedTouch, ofs) {
 		props = jQuery.event.props,
 		event = jQuery.Event(originalEvent);
 
+	//Add missing props removed by jQuery
+	props.push('button', 'charCode', 'clientX', 'clientY', 'detail',
+			'fromElement', 'keyCode', 'layerX', 'layerY', 'offsetX', 'offsetY',
+			'pageX', 'pageY', 'screenX', 'screenY', 'srcElement', 'toElement');
 	for ( var i = props.length, prop; i; ) {
 		prop = props[--i];
 		event[prop] = originalEvent[prop];

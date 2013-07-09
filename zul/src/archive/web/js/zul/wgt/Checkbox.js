@@ -164,7 +164,6 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			html += ' name="' + v + '"';
 		if (this._disabled)
 			html += ' disabled="disabled"';
-		zk.log('content attrs', this._checked);
 		if (this._checked)
 			html += ' checked="checked"';
 		if (v = this._tabindex)

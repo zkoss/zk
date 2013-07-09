@@ -47,7 +47,7 @@
 			}
 		}
 
-		&.z-tab-selected {
+		&-selected {
 			border-bottom: 1px solid @baseBorderColor;
 			.boxShadow('1px 0px 0 #FFFFFF');
 			background: 0;
@@ -83,7 +83,7 @@
 			z-index: 25;
 			display: block;
 			border: 1px solid @baseBorderColor;
-			.borderRadius();
+			.leftBorderRadius();
 			padding-top: 4px;
 			height: @baseButtonHeight;
 			text-align: center;
@@ -335,6 +335,7 @@
 
 		&.z-tabbox-scroll .z-tabbox-up, 
 		&.z-tabbox-scroll .z-tabbox-down {
+			.rightBorderRadius();
 			right: 0;
 		}
 
