@@ -36,7 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//Event Handling//
-	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
+	function _domEvtInf(wgt, evtnm, fn, keyword) { //proxy event listener
 		if (typeof fn != 'function') {
 			if (!fn && !(fn = _domevtfnm[evtnm]))
 				_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
@@ -50,15 +50,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var domn = _domevtnm[evtnm];
 		if (!domn)
 			domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
-		return [domn, _domEvtProxy(wgt, fn)];
+		return [domn, _domEvtProxy(wgt, fn, evtnm, keyword)];
 	}
-	function _domEvtProxy(wgt, f) {
+	function _domEvtProxy(wgt, f, evtnm, keyword) {
 		var fps = wgt._$evproxs, fp;
 		if (!fps) wgt._$evproxs = fps = {};
-		else if (fp = fps[f]) return fp;
-		return fps[f] = _domEvtProxy0(wgt, f);
+		else if (fp = fps[evtnm + '__' + keyword]) return fp;
+		return fps[evtnm + '__' + keyword] = _domEvtProxy0(wgt, f, keyword);
 	}
-	function _domEvtProxy0(wgt, f) {
+	function _domEvtProxy0(wgt, f, keyword) {
 		return function (evt) {
 			var devt = evt; //make a copy since we will change evt (and arguments) in the following line
 			evt = jq.Event.zk(devt, wgt); //also change arguments[0]
@@ -83,8 +83,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.Draggable.ignoreClick())
 					return;
 			}
-
-			var ret = f.apply(wgt, arguments);
+			
+			// ZK 7.0 support the extra arguments for callback function 
+			var args;
+			if (keyword) {
+				args = [].slice.call(arguments);
+				args.push(keyword);
+			} else
+				args = arguments;
+			var ret = f.apply(wgt, args);
 			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
 			return devt.type == 'dblclick' && ret === undefined ? false: ret;
@@ -4263,12 +4270,14 @@ _doFooSelect: function (evt) {
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
 	 * _doFocus.
+	 * @param String keyword the extra argumenet for the function, which is passed
+	 * into the callback function. (since 7.0)
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	domListen_: function (n, evtnm, fn) {
+	domListen_: function (n, evtnm, fn, keyword) {
 		if (!this.$weave) {
-			var inf = _domEvtInf(this, evtnm, fn);
+			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).bind(inf[0], inf[1]);
 		}
 		return this;
@@ -4284,12 +4293,14 @@ _doFooSelect: function (evt) {
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
 	 * _doFocus.
+	 * @param String keyword the extra argumenet for the function, which is passed
+	 * into the callback function. (since 7.0)
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	domUnlisten_: function (n, evtnm, fn) {
+	domUnlisten_: function (n, evtnm, fn, keyword) {
 		if (!this.$weave) {
-			var inf = _domEvtInf(this, evtnm, fn);
+			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).unbind(inf[0], inf[1]);
 		}
 		return this;

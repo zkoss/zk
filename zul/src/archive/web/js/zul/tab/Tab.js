@@ -139,8 +139,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_setSel: function(tab, toSel, notify, init) {
 		var tabbox = this.getTabbox(),
-			panel = tab.getLinkedPanel(),
-			bound = this.desktop;
+			panel = tab.getLinkedPanel();
 		if (tab.isSelected() == toSel && notify)
 			return;
 
@@ -154,7 +153,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 		tab._selected = toSel;
 		
-		if (!bound) return;
+		if (!this.desktop) return;
 		
 		if (toSel)
 			jq(tab).addClass(this.$s('selected'));
@@ -199,34 +198,29 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			var r = tabbox.$n('right'),
 				l = tabbox.$n('left'),
 				tb = tabbox.toolbar,
-				tabs = tabbox.tabs.$n();
-			var hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
+				tabs = tabbox.tabs.$n(),
+				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
 				
-			if(r && l) {
+			if (r && l) {
 				r.style.height = l.style.height = hgh;
 			}
-			if(tb && (tb = tb.$n())) {
+			if (tb && (tb = tb.$n())) {
 				tb.style.height = hgh;
 			}
-		}		
+		}
 	},
 	//protected
 	doClick_: function(evt) {
-		if (this._disabled)
-			return;
+		if (this._disabled) return;
 		this._sel(true);
 		this.$supers('doClick_', arguments);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var tabbox = this.getTabbox();
-			
-			if (!tabbox) return 'z-tab';
 			if (this.isDisabled()) scls += ' ' + this.$s('disabled');
 			if (this.isSelected()) scls += ' ' + this.$s('selected');
 		}
-		
 		return scls;
 	},
 	domContent_: function () {
@@ -246,12 +240,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tab
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tab, 'setVflex', v);
+		this.$supers('setVflex', arguments);
 	},
 	//bug #3014664
 	setHflex: function (v) { //hflex ignored for Tab
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tab, 'setHflex', v);
+		this.$supers('setHflex', arguments);
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
@@ -260,25 +254,18 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (closebtn) {
 			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
 		}
-
-		after.push(function () {
-			tab.parent._fixHgh();
-			//Bug 3022274: required so it is is called before, say, panel's slideDown
-			//_sel will invoke _fixWidth but it is too late since it uses afterMount
-			
+		if (tab.isSelected()) {
 			zk.afterMount(function () {
-				if (tab.isSelected()) {
-					if (tab.getTabbox().inAccordionMold()) {
-						var panel = tab.getLinkedPanel(),
-							cave = panel? panel.$n('cave') : null;
-						// slide down if the cave node of panel is not visible before select
-						if (cave && cave.style.display == 'none')
-							panel._sel(true, true);
-					}
-					tab._sel(false, true);
+				if (tab.desktop && tab.getTabbox().inAccordionMold()) {
+					var panel = tab.getLinkedPanel(),
+						cave = panel? panel.$n('cave') : null;
+					// slide down if the cave node of panel is not visible before select
+					if (cave && cave.style.display == 'none')
+						panel._sel(true, true);
 				}
+				tab._sel(false, true);
 			});
-		});
+		}
 		
 		if (this.getHeight())
 			this._calcHgh();

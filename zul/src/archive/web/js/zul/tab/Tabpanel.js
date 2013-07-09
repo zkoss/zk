@@ -123,28 +123,28 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		return Math.max(node && node.offsetHeight,panelContentHeight) ; // B50-ZK-298: concern panel height
 	},
 	_fixPanelHgh: function() {
-		var tabbox = this.getTabbox();
-		var tbx = tabbox.$n(),
-		hgh = tbx.style.height;
+		var tabbox = this.getTabbox(),
+			tbx = tabbox.$n(),
+			hgh = tbx.style.height;
+		
 		if (hgh && hgh != 'auto') {
 			if (!tabbox.inAccordionMold()) {
 				var n = this.$n(),
 					isHor = tabbox.isHorizontal();
 
-				hgh = isHor ? zk(tabbox).offsetHeight() - zk(tabbox.tabs).offsetHeight() 
-						    : zk(tabbox).offsetHeight() - zk(n.parentNode).padBorderHeight();
+				hgh = isHor ? zk(tabbox).contentHeight() - zk(tabbox.tabs).offsetHeight() 
+						    : zk(tabbox).contentHeight() - zk(n.parentNode).padBorderHeight();
 					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
 				n.style.height = jq.px0(hgh);
 			} else {
 				var n = this.$n(),
-					hgh = zk(tbx).revisedHeight(tbx.offsetHeight),
+					hgh = tbx.offsetHeight,
 					zkp = zk(n.parentNode);
-				hgh = zkp.revisedHeight(hgh) - zkp.padBorderHeight();
+				hgh = hgh - zkp.padBorderHeight();
 				for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
 					if (e != n)
 						hgh -= e.offsetHeight;
 				hgh -= n.firstChild.offsetHeight;
-				hgh = zk(n = n.lastChild).revisedHeight(hgh);
 				var cave = this.$n('cave'),
 					s = cave.style;
 				s.height = jq.px0(hgh);
@@ -156,18 +156,17 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (tabbox.inAccordionMold() && !zk(this.$n('cave')).isVisible())
 			return;
 		this._fixPanelHgh();		//Bug 2104974
-
 	},
 
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabpanel
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tabpanel, 'setVflex', v);
+		this.$supers('setVflex', arguments);
 	},
 	//bug #3014664
 	setHflex: function (v) { //hflex ignored for Tabpanel
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tabpanel, 'setHflex', v);
+		this.$supers('setHflex', arguments);
 	},
 	bind_: function(desktop) {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
@@ -175,7 +174,8 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
 		var tab;
 		if (this.getTabbox().inAccordionMold()
-		&& (tab=this.getLinkedTab()))
+				&& (tab=this.getLinkedTab())) {
+			
 			if (!tab.$n())
 				tab.unbind().bind(desktop);
 			else if (!jq.isAncestor(this.$n(), tab.$n())) {
@@ -185,6 +185,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				var cave = this.$n('cave');
 				if (cave) cave.style.display = 'none';
 			}
+		}
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});

@@ -69,27 +69,14 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tabs, 'bind_', arguments);
-		zWatch.listen({onSize: this});
-		
-		// reset
-		this._inited = false;
-		
-		var self = this;
-		after.push(
-			function () {
-				self._inited = true;
-			}
-		);
-		
+		zWatch.listen({onSize: this, onResponse: this});		
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this});
+		zWatch.unlisten({onSize: this, onResponse: this});
 		this.$supers(zul.tab.Tabs, 'unbind_', arguments);
 	},
-	_isInited: function () {
-		return this._inited;
-	},
 	_scrollcheck: function(way, tb) {
+		this._shallCheck = false;
 		var tabbox;
 		if (!this.desktop || ((tabbox = this.getTabbox()) && 
 				(!tabbox.isRealVisible() || !tabbox.isTabscroll())))
@@ -297,49 +284,45 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixWidth: function() {
-		var tabs = this.$n();
-		
-		var	tabbox = this.getTabbox(),
+		var tabs = this.$n(),
+			tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
-			cave = this.$n('cave'),
-			head = this.$n(),
 			l = tabbox.$n('left'),
 			r = tabbox.$n('right'),
 			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
 			this._fixHgh();
-			if (this.parent.isVertical()) {
+			if (tabbox.isVertical()) {
 				var panels = tabbox.getTabpanels();
 				if (panels)
 					panels._fixWidth();
-				var most = 0;
 				//LI in IE doesn't have width...
 				if (tabs.style.width) {
 					tabs._width = tabs.style.width;
 				} else {
 					//vertical tabs have default width 50px
-					this._forceStyle(tabs, 'w', tabs._width ? tabs._width : '50px');
+					tabs.style.width = tabs._width ? tabs._width : '50px';
 				}
 			} else if (!tabbox.inAccordionMold()) {
 				if (tbx.offsetWidth < btnsize) 
 					return;
 				if (tabbox.isTabscroll()) {
-					var toolbar = tabbox.toolbar;
+					var head = this.$n(),
+						toolbar = tabbox.toolbar;
 					if (toolbar) 
 						toolbar = toolbar.$n();
 					if (!tbx.style.width) {
-						this._forceStyle(tbx, 'w', '100%');
-						this._forceStyle(tabs, 'w', jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
+						tbx.style.width = '100%';
+						tabs.style.width = jq.px0(zk(tbx).contentWidth());
 						if (tabbox._scrolling) 
-							this._forceStyle(head, 'w', jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
+							head.style.width = jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
 						else 
-							this._forceStyle(head, 'w', jq.px0(jq(head).zk.revisedWidth(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0))));
+							head.style.width = jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
 					} else {
-						this._forceStyle(tabs, 'w', jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
-						this._forceStyle(head, 'w', tabs.style.width);
-						if (tabbox._scrolling) 
-							this._forceStyle(head, 'w', jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
+						head.style.width = tabs.style.width = jq.px0(zk(tbx).contentWidth());
+						if (tabbox._scrolling)
+							head.style.width = jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
 						else 
-							this._forceStyle(head, 'w', jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)));
+							head.style.width = jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
 					}
 					if (toolbar && tabbox._scrolling) 
 						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
@@ -347,19 +330,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				} else {
 					if (!tbx.style.width) {
 						if (tbx.offsetWidth) {
-							var ofw = jq.px0(tbx.offsetWidth);
-							this._forceStyle(tbx, 'w', ofw);
-							this._forceStyle(tabs, 'w', ofw);	
+							tbx.style.width = jq.px0(tbx.offsetWidth);
+							tabs.style.width = jq.px0(zk(tbx).contentWidth() - zk(tabs).marginWidth());
 						}
 					} else {
-						this._forceStyle(tabs, 'w', jq.px0(tbx.offsetWidth));
+						tabs.style.width = jq.px0(zk(tbx).contentWidth() - zk(tabs).marginWidth());
 					}
 				}
 			}
 	},
 	_fixHgh: function () {
-		var tabbox = this.getTabbox(),
-			head = this.$n();
+		var tabbox = this.getTabbox();
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
@@ -371,33 +352,22 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
-				var tabsHgh = allTab.length * 35, // default height
+				var tabsHgh = allTab.length * allTab[0].offsetHeight, // default height
 					seldPanel = tabbox.getSelectedPanel(),
 					panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0 ,  //B60-ZK-965
 				realHgh = Math.max(tabsHgh, panelsHgh);
-				this._forceStyle(tbx, 'h', jq.px0(realHgh));
+				tbx.style.height = jq.px0(realHgh + zk(tbx).padBorderHeight());
 			}
-			this._forceStyle(tabs, 'h', jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
-			//coz we have to make the header full
-			if (tabbox._scrolling) {
-				this._forceStyle(head, 'h', jq.px0(tabs.offsetHeight));
-			} else {
-				this._forceStyle(head, 'h', jq.px0(jq(head).zk.revisedHeight(tabs.offsetHeight, true)));
-			}
-			//separator(+border)
-			this._forceStyle(child[1], 'h', jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
-			//tabpanels(+border)
-			this._forceStyle(child[2], 'h', 
-				jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight - (2 - zk.parseInt(jq(this.$n('cave')).css('padding-top'))), true)));
-			// Merge breeze: now in vertical orientation Tabs has no border, but Tabpanels 
-			// still has border, so we need to introduce a 2px offset
+			tabs.style.height =  jq.px0(zk(tbx).contentHeight() - zk(tabs).marginHeight());
+			
 			if(u && d) {
-				u.style.width = d.style.width = jq.px0(head.offsetWidth);
+				u.style.width = d.style.width = tabs.style.width;
 			}
 		} else {
 			var r = tabbox.$n('right'),
 				l = tabbox.$n('left'),
 				tb = tabbox.toolbar,
+				head = this.$n(),
 				hgh = jq.px0(head ? head.offsetHeight : 0);
 			if(r && l) {
 				r.style.height = l.style.height = hgh;
@@ -406,38 +376,27 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				tb.style.height = hgh;
 			}
 			
-			if (head) //accordion have no head
+			if (head)
 				head.style.height = '';
 		}
 	},
-
-	_forceStyle: function(node, attr, value) {
-		if (!value)	return;
-		switch (attr) {
-		case 'h':
-			node.style.height = value;
-			break;
-		case 'w':
-			node.style.width = value;
-			break;
+	onResponse: function () {
+		if (this._shallCheck) {
+			this._scrollcheck('init');	
 		}
 	},
-
 	onChildRemoved_: function (child) {
 		var p = this.parent;
 		if (p && child == p._selTab) {
 			p._selTab = null;
-			
-			//ZK-937
-//			if (p = p.tabpanels){
-//				p._selPnl = null; //stored in tabpanels
-//			}
 		}
-		this._scrollcheck('init');
+		if (this.desktop)
+			this._shallCheck = true;
 		this.$supers('onChildRemoved_', arguments);
 	},
 	onChildAdded_: function () {
-		this._scrollcheck('init');
+		if (this.desktop)
+			this._shallCheck = true;
 		this.$supers('onChildAdded_', arguments);
 	},
 	
