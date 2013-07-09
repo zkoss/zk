@@ -1,4 +1,17 @@
 @import "~./zul/less/_header.less";
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
 
 //grid
 .z-grid {
@@ -144,6 +157,10 @@
 		border-left: none;
 		border-right: none;
 		overflow: hidden;
+		.z-group-content,
+		.z-cell {
+			padding: 3px 5px;
+		}
 	}
 	&-icon {
 		display: inline-block;

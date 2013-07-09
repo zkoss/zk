@@ -19,6 +19,10 @@
 		height: @baseButtonHeight;
 		color: @baseTextColor;
 	}
+	
+	&-image {
+		vertical-align: text-top;
+	}
 
 	&-button {
 		.verGradient();
@@ -31,8 +35,8 @@
 		display: inline-block;
 		font-size: @fontSizeLarge;
 		line-height: @baseLineHeight;
-		min-width: @baseButtonWidth;
-		height: @baseButtonHeight;
+		width: @baseButtonWidth;
+		min-height: @baseButtonHeight;
 		color: @textColorGrayDark;
 		.rightBorderRadius(@borderRadiusSmall);
 

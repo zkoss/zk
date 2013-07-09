@@ -1,25 +1,19 @@
 @import "~./zul/less/_header.less";
 
-.z-separator {
+.z-separator-horizontal, .z-separator-horizontal-bar {
+	height: 7px; 
+	overflow: hidden; 
+	line-height: 0; 
+	font-size: 0;
+}
+.z-separator-vertical, .z-separator-vertical-bar {
+	display: inline-block;
+	width: 10px;
 	overflow: hidden;
-	&[data-orient="vertical"] {
-		display: inline-block;
-		width: 10px;
-		&[data-bar="true"] {
-			background-position: top center; 
-			background-repeat: repeat-y;
-		}
-	}
-	&[data-orient="horizontal"] {
-		height: 7px;
-		line-height: 0;
-		font-size: 0;
-		&[data-bar="true"] {
-			background-position: center left; 
-			background-repeat: repeat-x;
-		}
-	}
-	&[data-bar="true"] {
-		.encodeURL(background-image, "~./img/dot.gif");
-	}
+}
+.z-separator-horizontal-bar {
+	.gradient('ver', ' transparent 0%; transparent 3px; #808080 3px; #808080 4px; transparent 4px; transparent 100%');
+}
+.z-separator-vertical-bar {
+	.gradient('hor', ' transparent 0%; transparent 5px; #808080 5px; #808080 6px; transparent 6px; transparent 100%');
 }

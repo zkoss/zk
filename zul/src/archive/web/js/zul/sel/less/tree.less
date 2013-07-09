@@ -1,4 +1,17 @@
 @import "~./zul/less/_header.less";
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
 
 //tree
 .z-tree {

@@ -13,9 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
+	/*
 	var tag = this.isVertical() ? 'span': 'div';
-	out.push('<', tag, this.domAttrs_(), 
-			'data-orient="', this._orient, 
-			'" data-bar="', this.isBar() ? "true" : "false", 
-			'">&nbsp;</', tag, '>');
+	out.push('<', tag, this.domAttrs_(), '><div class="', this.$s('inner'), 
+			'">&nbsp;</div></', tag, '>');
+			*/
+	out.push('<div', this.domAttrs_(), '>&nbsp;</div>');
 }

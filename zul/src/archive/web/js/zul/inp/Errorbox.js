@@ -223,7 +223,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
 			if(dir == 'r') { 
 				pointer.style.left = null;
-				pointer.style.right = '-2px';
+				pointer.style.right = '-4px';
 				s.paddingRight = pw + 'px';
 			} else {
 				pointer.style.left = '-4px';
@@ -272,13 +272,15 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	},
 	_change: function (dg) {
 		var errbox = dg.control,
-			stackup = errbox._stackup;
+			stackup = errbox._stackup,
+			el = errorbox.$n();
 		if (stackup) {
-			var el = errbox.$n();
 			stackup.style.top = el.style.top;
 			stackup.style.left = el.style.left;
 		}
 		errbox._fixarrow();
+		if (zk.android)
+			zk(el).redoCSS();
 	}
 });
 })();

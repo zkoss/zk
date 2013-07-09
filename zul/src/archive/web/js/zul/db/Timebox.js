@@ -588,8 +588,13 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this._changed = false;
 		this.$supers(zul.db.Timebox, 'unbind_', arguments);
+	},
+	getBtnUpIconClass_: function () {
+		return 'z-icon-angle-up';
+	},
+	getBtnDownIconClass_: function () {
+		return 'z-icon-angle-down';
 	}
-
 });
 zul.inp.TimeHandler = zk.$extends(zk.Object, {
 	maxsize: 59,
