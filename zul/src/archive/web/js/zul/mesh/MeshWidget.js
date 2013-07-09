@@ -147,10 +147,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				footcells = ftfaker ? _getFirstRowCells(wgt.efootrows) : null;
 			
 			for (var i = 0; i < len; i++) {
-				var wd = bodycells ? zk.parseInt(bodycells[i].offsetWidth) : 0,
+				var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
 					$cv = zk(w.$n('cave')),
 					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
-					ftwd = footcells && zk(footcells[i]).isVisible() ? zk.parseInt(footcells[i].offsetWidth) : 0,
+					ftwd = footcells && footcells[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
 					header;
 				
 				if ((header = headWgt.getChildAt(i)) && header.getWidth())

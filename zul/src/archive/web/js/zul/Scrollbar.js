@@ -139,6 +139,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			bpad = wgt.$n('bpad'),
 			cave = this.cave,
 			$cave = zk(cave),
+			caveOffset = jq(cave).offset(),
 			cavew = cave.offsetWidth,
 			caveh = cave.offsetHeight,
 			scroller = this.scroller,
@@ -186,8 +187,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				swdh = wdh + $cave.paddingWidth() + froenScrollWidth;
 			
 			//set scroll bar position
-			hbar.style.top = jq.px(cave.offsetTop + caveh - hwrapper.offsetHeight - 1);
-			hbar.style.left = jq.px(cave.offsetLeft);
+			hbar.style.top = jq.px(caveOffset.top + caveh - hwrapper.offsetHeight - 1);
+			hbar.style.left = jq.px(caveOffset.left);
 			
 			if (startX) {
 				left.style.left = jq.px(startX);
@@ -226,8 +227,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				vhgh = hgh - up.offsetHeight - dhgh;
 			
 			//set scroll bar position
-			vbar.style.top = jq.px(cave.offsetTop + startY);
-			vbar.style.left = jq.px(cave.offsetLeft + cavew - vwrapper.offsetWidth - 1);
+			vbar.style.top = jq.px(caveOffset.top + startY);
+			vbar.style.left = jq.px(caveOffset.left + cavew - vwrapper.offsetWidth - 1);
 			
 			if (needH) {
 				vws.height = jq.px(vhgh - dhgh);
