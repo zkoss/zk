@@ -86,7 +86,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		//define cave container style to hide native browser scroll-bar
 		this.cave = cave;
 		var cs = cave.style;
-		cs.position = 'static';
 		cs.overflow = 'hidden';
 		//scrolling content
 		this.scroller = scroller;
