@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +65,6 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.VisibilityChangeEvent;
-import org.zkoss.zk.ui.event.impl.DesktopEventQueue;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -204,7 +204,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private boolean _spushShallStop;
 	
 	/** references of enabling DesktopEventQueues to enable reference counting, when several queues run against one desktop. */
-	private Set<DesktopEventQueue<?>> enablers = new HashSet<DesktopEventQueue<?>>();
+	private Set<Serializable> enablers = Collections.synchronizedSet(new HashSet<Serializable>());
 	
 
 
@@ -1357,13 +1357,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	
 	@Override
-	public boolean enableServerPush(boolean enable, DesktopEventQueue<?> enabler) {
+	public boolean enableServerPush(boolean enable, Serializable enabler) {
 		return enableServerPush(null, enable, enabler);
 	}
 	
 	//ZK-1840 make sure the serverpush does not get enabled/disabled multiple times, to keep reference counting consistent
-	//and privde possibility to disable/enable in the same execution
-	private boolean enableServerPush(ServerPush serverPush, boolean enable, DesktopEventQueue<?> enabler) {
+	//and provide possibility to disable/enable in the same execution
+	private boolean enableServerPush(ServerPush serverPush, boolean enable, Serializable enabler) {
 		synchronized(enablers) {
 			boolean enablersEmptyBefore = enablers.isEmpty();
 			if(enable) {

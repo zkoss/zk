@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.device.Device;
-import org.zkoss.zk.ui.event.impl.DesktopEventQueue;
 import org.zkoss.zk.ui.ext.Scope;
 
 /**
@@ -251,7 +250,6 @@ public interface Desktop extends Scope {
 	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
-	public boolean enableServerPush(boolean enable, DesktopEventQueue<?> enabler);
 	/** Returns whether the server-push feature is enabled for this
 	 * desktop.
 	 *

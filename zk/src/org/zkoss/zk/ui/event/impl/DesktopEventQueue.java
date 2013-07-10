@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 /**
  * The default implementation of the desktop-scoped event queue ({@link EventQueue}).
@@ -93,7 +94,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			final Execution exec = Executions.getCurrent();
 			if (exec == null)
 				throw new IllegalStateException("Execution required");
-			exec.getDesktop().enableServerPush(true, this);
+			((DesktopCtrl)exec.getDesktop()).enableServerPush(true, this);
 			//B65-ZK-1840 make sure the flag is true after enabling (otherwise disabling will fail) 
 			_serverPushEnabled = true; 
 		}
@@ -107,7 +108,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 					it.remove();
 					if (inf.async && --_nAsync == 0 && _serverPushEnabled)
 						//B65-ZK-1840 added enabler argument for reference counting  
-						Executions.getCurrent().getDesktop().enableServerPush(false, this);
+						((DesktopCtrl)Executions.getCurrent().getDesktop()).enableServerPush(false, this);
 					return true;
 				}
 			}
@@ -126,7 +127,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 		if (_serverPushEnabled) {
 			try {
 				//B65-ZK-1840 added enabler argument for reference counting  
-				Executions.getCurrent().getDesktop().enableServerPush(false, this);
+				((DesktopCtrl)Executions.getCurrent().getDesktop()).enableServerPush(false, this);
 			} catch (Throwable ex) {
 				log.warningBriefly("Ingored: unable to stop server push", ex);
 			}
