@@ -86,6 +86,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		//define cave container style to hide native browser scroll-bar
 		this.cave = cave;
 		var cs = cave.style;
+		cs.position = 'relative';
 		cs.overflow = 'hidden';
 		//scrolling content
 		this.scroller = scroller;
@@ -137,10 +138,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			tpad = wgt.$n('tpad'),
 			bpad = wgt.$n('bpad'),
 			cave = this.cave,
-			$cave = zk(cave),
-			caveOffset = jq(cave).offset(),
-			cavew = cave.offsetWidth,
-			caveh = cave.offsetHeight,
 			scroller = this.scroller,
 			hbar = this.$n('hor'),
 			vbar = this.$n('ver'),
@@ -176,18 +173,14 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ind = this.$n('hor-indicator'),
 				hws = hwrapper.style,
 				wdh = cave.offsetWidth - startX,
-				swdh = scroller.scrollWidth - startX
-						+ $cave.paddingWidth() + froenScrollWidth,
+				padding = zk(cave).paddingWidth(),
+				swdh = scroller.scrollWidth - startX + padding + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
 
 			if (swdh < wdh) //only happened with Frozen
-				swdh = wdh + $cave.paddingWidth() + froenScrollWidth;
-			
-			//set scroll bar position
-			hbar.style.top = jq.px(caveOffset.top + caveh - hwrapper.offsetHeight - 1);
-			hbar.style.left = jq.px(caveOffset.left);
+				swdh = wdh + padding + froenScrollWidth;
 			
 			if (startX) {
 				left.style.left = jq.px(startX);
@@ -195,15 +188,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			if (needV) {
 				hws.width = jq.px(hwdh - rwdh);
+				right.style.right = jq.px(rwdh);
 			} else {
 				hws.width = jq.px(hwdh);
 			}
 			
 			var wwdh = hwrapper.offsetWidth,
 				iwdh = Math.round(wwdh * wdh / swdh);
-			
-			// set scroll bar arrow position
-			right.style.left = jq.px(left.offsetWidth + wwdh + startX);
 			
 			ind.style.width = jq.px(iwdh > 20 ? iwdh : 20);
 			//sync scroller position limit
@@ -221,25 +212,23 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ind = this.$n('ver-indicator'),
 				vws = vwrapper.style,
 				hgh = cave.offsetHeight - startY,
-				shgh = scrollHeight - startY + $cave.paddingHeight(),
+				shgh = scrollHeight - startY + zk(cave).paddingHeight(),
 				dhgh = down.offsetHeight,
 				vhgh = hgh - up.offsetHeight - dhgh;
 			
-			//set scroll bar position
-			vbar.style.top = jq.px(caveOffset.top + startY);
-			vbar.style.left = jq.px(caveOffset.left + cavew - vwrapper.offsetWidth - 1);
-			
+			if (startY) {
+				vbar.style.top = jq.px(cave.offsetTop + startY);
+				down.style.bottom = jq.px(startY);
+			}
 			if (needH) {
 				vws.height = jq.px(vhgh - dhgh);
+				down.style.bottom = jq.px(startY + dhgh);
 			} else {
 				vws.height = jq.px(vhgh);
 			}
 			
 			var whgh = vwrapper.offsetHeight,
 				ihgh = Math.round(whgh * hgh / shgh);
-			
-			// set scroll bar arrow position
-			down.style.top = jq.px(up.offsetHeight + whgh + startY);
 			
 			ind.style.height = jq.px(ihgh > 20 ? ihgh : 20);
 			//sync scroller position limit
@@ -631,9 +620,19 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			onSyncPosition.call(this);
 		}
 		
-		var cave = this.cave;
+		var cave = this.cave,
+			hbar = this.$n('hor'),
+			vbar = this.$n('ver');
 		cave.scrollLeft = -this._pos[0];
+		if (hbar) {
+			hbar.style.left = jq.px(-this._pos[0]);
+			hbar.style.bottom = jq.px(this._pos[1]);
+		}
 		cave.scrollTop = -this._pos[1];
+		if (vbar) {
+			vbar.style.right = jq.px(this._pos[0]);
+			vbar.style.top = jq.px(-this._pos[1]);
+		}
 	},
 	_syncBarPosition: function (orient, pos) {
 		if (orient == 'hor') {

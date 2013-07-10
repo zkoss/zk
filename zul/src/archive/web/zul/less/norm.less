@@ -494,7 +494,7 @@ span.z-upload input {
 }
 //scrollbar
 .z-scrollbar {
-	position: fixed;
+	position: absolute;
 	opacity: 0;
 	&-embed {
 		background: lighten(@scrollbarBackgroundColor, 5%);
@@ -502,7 +502,10 @@ span.z-upload input {
 	}
 	//vertical
 	&-vertical {
+		top: 0;
+		right: 0;
 		width: @baseIconWidth;
+		height: 100%;
 		.z-scrollbar-wrapper {
 			position: absolute;
 			top: 16px;
@@ -555,6 +558,7 @@ span.z-upload input {
 		}
 	}
 	&-down {
+		bottom: 0;
 		> .z-icon-caret-down:before {
 			width: @baseIconWidth;
 			height: @baseIconHeight;
@@ -565,6 +569,9 @@ span.z-upload input {
 	}
 	//horizontal
 	&-horizontal {
+		left: 0;
+		bottom: 0;
+		width: 100%;
 		height: @baseIconHeight;
 		.z-scrollbar-wrapper {
 			position: absolute;
@@ -606,5 +613,8 @@ span.z-upload input {
 		cursor: pointer;
 		font-size: @baseFontSize;
 		background: @scrollbarBackgroundColor;
+	}
+	&-right {
+		right: 0;
 	}
 }
