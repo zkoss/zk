@@ -16,51 +16,46 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Collection;
-import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Strings;
-import org.zkoss.io.Files;
-import org.zkoss.web.fn.ServletFns;
+import org.zkoss.html.HTMLs;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
-import org.zkoss.html.HTMLs;
+import org.zkoss.io.Files;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
+import org.zkoss.web.fn.ServletFns;
+import org.zkoss.web.fn.ThemeFns;
 import org.zkoss.xml.XMLs;
-
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.device.Device;
+import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.WebApps;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
-import org.zkoss.zk.ui.ext.Includer;
-import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.sys.Attributes;
-import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.device.Devices;
-import org.zkoss.zk.device.Device;
 
 /**
  * Utilities for implementing HTML-based {@link PageRenderer}.
@@ -763,6 +758,22 @@ public class HtmlPageRenders {
 			desktop.setAttribute(ATTR_APPNM, appnm);
 		}
 
+		//output zktheme cookie
+		String oldthemenm = (String) desktop.getAttribute(ATTR_THEMENM);
+		if (oldthemenm == null)
+			oldthemenm = "";
+		final Object request = desktop.getExecution().getNativeRequest();
+		String themenm = "";
+		if (request instanceof HttpServletRequest) {
+			themenm = ThemeFns.getThemeResolver().getTheme((HttpServletRequest) request);
+		}
+		if (!oldthemenm.equals(themenm)) {
+			sb.append("zk.themeName='");
+			Strings.escape(sb, themenm, Strings.ESCAPE_JAVASCRIPT)
+				.append("';");
+			desktop.setAttribute(ATTR_THEMENM, themenm);
+		}
+
 		//output ZK ICON
 		final Session sess = Sessions.getCurrent();
 		if (sess != null) {
@@ -780,6 +791,7 @@ public class HtmlPageRenders {
 		return sb.toString();
 	}
 	private static final String ATTR_APPNM = "org.zkoss.zk.appnm";
+	private static final String ATTR_THEMENM = "org.zkoss.zk.zkthemenm";
 	private static final String ATTR_PI = "org.zkoss.zk.pi";
 	private static class PI implements java.io.Serializable {
 		long _t;
