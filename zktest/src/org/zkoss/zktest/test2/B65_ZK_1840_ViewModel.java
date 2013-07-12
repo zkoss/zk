@@ -3,7 +3,6 @@ package org.zkoss.zktest.test2;
 import org.apache.commons.beanutils.BeanUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -83,14 +82,11 @@ public class B65_ZK_1840_ViewModel {
 
 	private BusyLongOperation busyOperation(final String queueName, String busyMessage,
 			final String statusField, final int duration) {
-		return new BusyLongOperation(queueName, busyMessage) {			
-			@Override
+		return new BusyLongOperation(queueName, busyMessage) {
 			protected void onStart() {
 				super.onStart();
 				appendStatus(statusField, queueName + " started ... ");
 			}
-			
-			@Override
 			protected void execute() {
 				sleep(duration);
 			}
@@ -104,17 +100,12 @@ public class B65_ZK_1840_ViewModel {
 	
 	private LongOperation backgroundOperation(final String queueName, final String statusField, final int duration) {
 		return new LongOperation(queueName) {
-			@Override
 			protected void onStart() {
 				appendStatus(statusField, queueName + " started ... ");
 			}
-
-			@Override
 			protected void execute() {
 				sleep(duration);
 			}
-			
-			@Override
 			protected void onFinish() {
 				appendStatus(statusField, queueName + " finished. ");
 			}
@@ -204,20 +195,15 @@ public class B65_ZK_1840_ViewModel {
 			super(queueName);
 			this.busyMessage = busyMessage;
 		}
-		
-		@Override
 		protected void onStart() {
 			Clients.showBusy(busyMessage);
 		}
-		
-		@Override
 		protected void onFinish() {
 			Clients.clearBusy();
 			if(nextOperation != null) {
 				nextOperation.start();
 			}
 		}
-		
 	}
 	
 	public static abstract class LongOperation {

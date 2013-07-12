@@ -1356,7 +1356,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return enableServerPush(enable, null);
 	}
 	
-	@Override
 	public boolean enableServerPush(boolean enable, Serializable enabler) {
 		return enableServerPush(null, enable, enabler);
 	}
