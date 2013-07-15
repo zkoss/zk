@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.IdentityHashMap;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
@@ -38,7 +36,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
-import org.zkoss.mesg.Messages;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
@@ -74,7 +71,6 @@ import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.xel.Evaluators;
-import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.au.*;
 import org.zkoss.zk.au.out.*;
 
@@ -546,11 +542,18 @@ public class UiEngineImpl implements UiEngine {
 		final UiVisualizer uv = doActivate(exec, false, false, null, -1);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(page);
+
 		try {
 			Events.postEvent(new Event(Events.ON_DESKTOP_RECYCLE));
 
 			final List<Throwable> errs = new LinkedList<Throwable>();
 			final Desktop desktop = exec.getDesktop();
+			
+			//ZK-1777 resume existing serverpush on a recycled desktop
+			if(desktop.isServerPushEnabled()) {
+				((DesktopCtrl) desktop).getServerPush().resume();
+			}
+			
 			Event event = nextEvent(uv);
 			do {
 				for (; event != null; event = nextEvent(uv)) {

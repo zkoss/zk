@@ -6,6 +6,7 @@ ZK 6.5.4
   ZK-1836: Javascript string with </script> escape issue
   ZK-1837: Checking the checkbox inside the groupbox should not trigger the onOpen event of Groupbox
   ZK-1840: Chained Long operations using different event queues, causing errors after first operation finishes
+  ZK-1777: Server Push does not initialize when recycling
 
   --------
 ZK 6.5.3
