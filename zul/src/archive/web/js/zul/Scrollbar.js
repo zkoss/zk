@@ -90,6 +90,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		cs.overflow = 'hidden';
 		//scrolling content
 		this.scroller = scroller;
+		scroller.style.position = 'relative';
 		//default options
 		this.opts = zk.$default(opts, {
 			embed: false,
@@ -620,19 +621,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			onSyncPosition.call(this);
 		}
 		
-		var cave = this.cave,
-			hbar = this.$n('hor'),
-			vbar = this.$n('ver');
-		cave.scrollLeft = -this._pos[0];
-		if (hbar) {
-			hbar.style.left = jq.px(-this._pos[0]);
-			hbar.style.bottom = jq.px(this._pos[1]);
-		}
-		cave.scrollTop = -this._pos[1];
-		if (vbar) {
-			vbar.style.right = jq.px(this._pos[0]);
-			vbar.style.top = jq.px(-this._pos[1]);
-		}
+		var scrollerStyle = this.scroller.style;
+		
+		if (scrollerStyle.position != 'relative')
+			scrollerStyle.position = 'relative';
+		scrollerStyle.left = jq.px(this._pos[0]);
+		scrollerStyle.top = jq.px(this._pos[1]);
 	},
 	_syncBarPosition: function (orient, pos) {
 		if (orient == 'hor') {

@@ -1330,30 +1330,25 @@ zul.mesh.Scrollbar = {
 	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
-		var head = wgt.ehead,
-			foot = wgt.efoot,
+		var headtbl = wgt.eheadtbl,
+			foottbl = wgt.efoottbl,
 			embed = jq(wgt.$n()).data('embedscrollbar'),
 			frozen = wgt.frozen,
 			startPositionX = 0;
 		
+		if (headtbl)
+			headtbl.style.position = 'relative';
+		if (foottbl)
+			foottbl.style.position = 'relative';
 		if (frozen) {
 			var columns = frozen.getColumns();
-			if (head) {
+			if (headtbl) {
 				var cells = _getFirstRowCells(wgt.eheadrows);
 				if (cells) {
 					for (var i = 0; i < columns; i++)
 						startPositionX += cells[i].offsetWidth;
 				}
 			}
-		}
-		if (head && embed) {
-			var headbar = wgt.$n('headbar'),
-				headbarStyle = headbar.style;
-			headbarStyle.display = 'block';
-			headbarStyle.height = jq.px(head.offsetHeight);
-			headbarStyle.top = jq.px(head.offsetTop);
-			headbarStyle.left = jq.px(head.offsetLeft + head.offsetWidth - headbar.offsetWidth - 2);
-			headbarStyle.display = 'none';
 		}
 		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
@@ -1363,10 +1358,10 @@ zul.mesh.Scrollbar = {
 					headtbl = wgt.eheadtbl,
 					foottbl = wgt.efoottbl;
 				if (pos) {
-					if (head)
-						head.scrollLeft = -pos.x;
-					if (foot)
-						foot.scrollLeft = -pos.x;
+					if (headtbl)
+						headtbl.style.left = jq.px(pos.x);
+					if (foottbl)
+						foottbl.style.left = jq.px(pos.x);
 				}
 			},
 			onScrollEnd: function() {
