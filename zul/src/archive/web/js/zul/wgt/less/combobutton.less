@@ -3,7 +3,7 @@
 .z-combobutton {
 	display: inline-block;
 	min-height: @baseButtonHeight;
-
+	
 	&-content {
 		.verGradient();
 		font-family: @baseContentFontFamily;
@@ -19,68 +19,83 @@
 		height: @baseButtonHeight;
 		color: @baseTextColor;
 	}
-	
 	&-image {
 		vertical-align: text-top;
 	}
-
 	&-button {
 		.verGradient();
 		vertical-align: middle;
 		cursor: pointer;
-		padding: 4px 4px 4px 6px;	
+		padding-top: 2px;
+		padding-left: 6px;
 		border: 1px solid darken(@baseBorderColor, 15%);
 		border-left: 1px solid @baseBorderColor;
 		overflow: hidden;
 		display: inline-block;
-		font-size: @fontSizeLarge;
-		line-height: @baseLineHeight;
 		width: @baseButtonWidth;
 		min-height: @baseButtonHeight;
-		color: @textColorGrayDark;
 		.rightBorderRadius(@borderRadiusSmall);
-
 		button[disabled] + & {
-			&:hover, &:active {
+			&:hover,
+			&:active {
 				border-color: @baseBorderColor;
 				.resetGradient();
 				.boxShadow('none');
 			}
 		}
 	}
-
-	&:not(.z-combobutton-toolbar) &-content:hover, 
-	&:not(.z-combobutton-toolbar) &-button:hover {
-		border-color: darken(@baseBorderColor, 15%);
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	&-icon {
+		font-size: @fontSizeLarge;
+		color: @iconColor;
 	}
-
-	&:not(.z-combobutton-toolbar) &-content:active, 
-	&:not(.z-combobutton-toolbar) &-button:active {
-		border-color: @activeBorderColor;
-		.verGradient(@activeGradientStart, @activeGradientEnd);
-	}
-
-	&-toolbar {
-
-		.z-combobutton-content, .z-combobutton-button {
-			border: 0;
-			border-radius: 0px;
-			background: transparent;
-			line-height: @baseLineHeight + 2;
-			border-left: 1px solid transparent;
+	&:hover {
+		.z-combobutton-content,
+		.z-combobutton-button {
+			border-color: @hoverBorderColor;
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		}
-
-		&:hover {
-
-			.z-combobutton-content, .z-combobutton-button {
-				border: 1px solid @hoverColor;
-				line-height: @baseLineHeight;
-				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	}
+	&:focus {
+		.z-combobutton-content,
+		.z-combobutton-button {
+			border-color: @focusBorderColor;
+			.boxShadow('inset 0 0 2px #0CBCFF');
+		}
+		.z-combobutton-button {
+			border-left-color: @baseBorderColor;
+		}
+	}
+	&:active {
+		.z-combobutton-content,
+		.z-combobutton-button {
+			border-color: @activeBorderColor;
+			.verGradient(@activeGradientStart, @activeGradientEnd);
+		}
+	}
+	
+	//toolbar mold
+	&-toolbar {
+		.z-combobutton-content,
+		.z-combobutton-button {
+			border-color: transparent;
+			.borderRadius(0);
+			background: transparent;
+		}
+		.z-combobutton-button {
+			padding-top: 3px;
+		}
+		&:focus {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				border-color: transparent;
+				.boxShadow('none');
 			}
-
-			.z-combobutton-content {
-				border-right: 0px;
+		}
+		&:active {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				border-color: @hoverBorderColor;
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
 			}
 		}
 	}

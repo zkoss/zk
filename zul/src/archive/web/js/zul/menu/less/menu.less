@@ -1,8 +1,5 @@
 @import "~./zul/less/_header.less";
 
-// Button Variables
-@menuImageSize: 16px;
-
 .hoverStyle() {
 	border-color: @hoverBorderColor;
 	.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -181,7 +178,7 @@
 	&-icon,
 	&-icon:hover,
 	&-icon:active {
-		color: @textColorGrayLight;
+		color: @iconColor;
 		vertical-align: text-bottom;
 	}
 	&-selected > &-content {
@@ -244,12 +241,11 @@
 
 	.z-menuitem-icon {
 		position: absolute;
-		color: #0076A3;
-		text-shadow: 1px 0 rgba(0, 118, 163, 0.5);
-		.opacity(0.7);
+		color: @textColorBlue;
+		font-size: 14px;
 		display: none;
-		left: 6px;
-		top: 5px;
+		left: 7px;
+		top: 4px;
 	}
 	.z-menu-content {
 		padding-right: 16px;
@@ -296,7 +292,7 @@
 		width: 5000px;
 	}
 	&-icon {
-		color: lighten(@textColorGrayLight, 40%);
+		color: @iconColor;
 		text-shadow: 1px 0 #DFDFDF;
 		.opacity(0.7);
 	}
@@ -317,7 +313,7 @@
 		&:hover {
 			> .z-menubar-icon {
 				opacity: 1;
-				color: @hoverColor;
+				color: @iconHoverColor;
 				text-shadow: 1px 0 #C2E0F9;
 			}
 		}
