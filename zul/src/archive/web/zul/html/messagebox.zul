@@ -25,6 +25,6 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 	</hbox>
 	<separator spacing="15px"/>
 	<hbox id="buttons" style="margin-left:auto; margin-right:auto">
-		<custom-attributes button.sclass="z-messagebox-btn"/><!-- CSS class for buttons -->
+		<custom-attributes button.sclass="z-messagebox-button"/><!-- CSS class for buttons -->
 	</hbox>
 </window>
