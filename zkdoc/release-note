@@ -7,6 +7,7 @@ ZK 6.5.4
   ZK-1837: Checking the checkbox inside the groupbox should not trigger the onOpen event of Groupbox
   ZK-1840: Chained Long operations using different event queues, causing errors after first operation finishes
   ZK-1841: maximum allowed number of desktops is one more then the number set in the max-desktops-per-session element in zk.xml
+  ZK-1847: When sending a request without data to server, the created event's data is an empty map instead of null
 
   --------
 ZK 6.5.3

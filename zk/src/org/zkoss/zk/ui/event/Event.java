@@ -40,8 +40,11 @@ public class Event implements java.io.Serializable {
 		final String name = request.getCommand();
 		final Component comp = request.getComponent();
 		final Map<String, Object> data = request.getData();
-		//ZK-1812 extract value of ""-key, only if there is nothing else in the map 
-		if(data != null && data.containsKey("") && data.size() == 1) {
+		//ZK-1812 should check whether data is empty or not
+		if (data.isEmpty()) {
+			return new Event(name, comp);
+		} else if(data.containsKey("") && data.size() == 1) {
+			//ZK-1812 extract value of ""-key, only if there is nothing else in the map 
 			final Object extractedData = data.get("");
 			if (extractedData == null)
 				return new Event(name, comp);

@@ -1,0 +1,15 @@
+<zk xmlns:w="client">
+	<vlayout>
+		click the buttons, it should work as expected (and return the expected data). 
+		<div>
+			1. 
+			<button label="fire event" w:onClick="zAu.send(new zk.Event(this.$f('message1'), 'onFoo', null, {toServer:true}));"/>
+			zAu.send(new zk.Event(this.$f('message1'), 'onFoo', null, {toServer:true}));
+		</div>
+		Expected Result: null
+		<hlayout>
+			Actual Result: <label id="message1" onFoo='self.value = "" + event.data' />
+		</hlayout>
+	</vlayout>
+</zk>
+
