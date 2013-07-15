@@ -40,7 +40,7 @@ public class Event implements java.io.Serializable {
 		final String name = request.getCommand();
 		final Component comp = request.getComponent();
 		final Map<String, Object> data = request.getData();
-		//ZK-1812 should check whether data is empty or not
+		//ZK-1847 should check whether data is empty or not
 		if (data.isEmpty()) {
 			return new Event(name, comp);
 		} else if(data.containsKey("") && data.size() == 1) {
