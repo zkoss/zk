@@ -177,6 +177,18 @@ public class PollingServerPush implements ServerPush {
 		_desktop = desktop;
 		startClientPush();
 	}
+	
+	/**
+	 * ZK-1777 resume serverpush after DesktopRecycling
+	 */
+	public void resume() {
+		if(_desktop == null) {
+			throw new IllegalStateException(
+					"ServerPush cannot be resumed without desktop, or has been stopped!call #start(desktop)} instead");
+		}
+		startClientPush();
+	}
+	
 	public void stop() {
 		if (_desktop == null) {
 			log.warning("Ignored: Sever-push not started");

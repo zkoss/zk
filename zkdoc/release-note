@@ -10,6 +10,7 @@ ZK 6.5.4
   ZK-1842: Listbox scroll bug listheader sort
   ZK-1839: Listbox select mold not works in listcell
   ZK-1847: When sending a request without data to server, the created event's data is an empty map instead of null
+  ZK-1777: Server Push does not initialize when recycling
 
   --------
 ZK 6.5.3
