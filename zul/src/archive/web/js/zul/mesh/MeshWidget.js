@@ -944,6 +944,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_setHgh: function (hgh) {
 		var ebody = this.ebody,
 			ebodyStyle = ebody.style;
+		hgh = (jq.px(height) - zk(this.$n()).padBorderWidth()) + 'px';
 		if (this.isVflex() || (hgh && hgh != 'auto' && hgh.indexOf('%') < 0)) {
 			if (zk.safari && ebodyStyle.height == jq.px(this._vflexSize(hgh)))
 				return; // Bug ZK-417, ignore to set the same size
@@ -971,29 +972,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//note: we don't solve this bug for paging yet
-		var n = this.$n(),
-			wd = n.style.width,
+		var n = this.$n();
 		
-		//Bug 1659601: we cannot do it in init(); or, IE failed!
-			tblwd,
+			//Bug 1659601: we cannot do it in init(); or, IE failed!
+			tblwd = this._getEbodyWd(),
 			sizedByContent = this.isSizedByContent(),
 			ehead = this.ehead,
 			ebody = this.ebody,
 			ebodyrows = this.ebodyrows,
 			efoot = this.efoot,
 			efootrows = this.efootrows;
-		
-		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = zk(n).revisedWidth(n.offsetWidth);
-			if (wd) 
-				wd += "px";
-		}
-		
-		if (wd) {
-			ebody.style.width = wd;
-		}
-		
-		tblwd = this._getEbodyWd();
 		
 		if (ehead) {
 			if (tblwd) {
@@ -1024,7 +1012,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._afterCalcSize();
 	},
 	_getEbodyWd: function () {
-		return this.ebody.offsetWidth - zk(this.$n()).padBorderWidth();
+		var n = this.$n(),
+			wd = n.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			wd = zk(n).revisedWidth(n.offsetWidth);
+		} else {
+			wd = n.offsetWidth;
+		}
+		return wd.offsetWidth - zk(this.$n()).padBorderWidth();
 	},
 	_beforeCalcSize: function () {
 		this._setHgh(this.$n().style.height);
