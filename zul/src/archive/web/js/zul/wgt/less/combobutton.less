@@ -26,7 +26,7 @@
 		.verGradient();
 		vertical-align: middle;
 		cursor: pointer;
-		padding-top: 2px;
+		padding: 4px;
 		padding-left: 6px;
 		border: 1px solid darken(@baseBorderColor, 15%);
 		border-left: 1px solid @baseBorderColor;
@@ -35,6 +35,8 @@
 		width: @baseButtonWidth;
 		min-height: @baseButtonHeight;
 		.rightBorderRadius(@borderRadiusSmall);
+		max-height: @baseButtonHeight;
+		line-height: @baseLineHeight;
 		button[disabled] + & {
 			&:hover,
 			&:active {
@@ -80,9 +82,6 @@
 			border-color: transparent;
 			.borderRadius(0);
 			background: transparent;
-		}
-		.z-combobutton-button {
-			padding-top: 3px;
 		}
 		&:focus {
 			.z-combobutton-content,
