@@ -153,7 +153,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		var pp = this.firstChild;
 		if (pp && !this.isOpen()) {
 			if (pp.$instanceof(zul.wgt.Popup)) {
-				pp.open(this.uuid, null, 'after_end', opts);
+				pp.open(this.uuid, null, 'after_start', opts);
 				_fireOnOpen(this, opts, true);
 			}
 			_attachPopup(this, !pp.$instanceof(zul.wgt.Menupopup));
