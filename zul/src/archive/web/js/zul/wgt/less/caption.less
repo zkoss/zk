@@ -8,16 +8,18 @@
 	line-height: @baseLineHeight;
 	min-height: @baseButtonHeight;
 
+	& > * {
+		margin-left: 4px;
+
+		&:first-child {
+			margin-left: 0px;
+		} 
+	}
+
 	&-content, .z-label {
-		margin-right: 4px; 
 		display: inline-block;
 		padding: 4px 0px;
 		float: left;
-	}
-
-	.z-button, .z-toolbarbutton, 
-	input, input + a, input + span {
-		vertical-align: bottom;
 	}
 
 	&-image {

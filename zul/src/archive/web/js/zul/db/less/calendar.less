@@ -74,7 +74,6 @@
 		&:hover {
 			background: @hoverGradientEnd;
 			.borderRadius(@baseBorderRadius);
-			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 		}
 	}
 	&-weekend {
@@ -92,8 +91,11 @@
 		background: contrast(@baseBackgroundColor, @textColorGrayLight);
 		font-style: italic;
 		color: contrast(@textColorGrayLight);
+		cursor: default;
 		
 		&:hover {
+			background: contrast(@baseBackgroundColor, @textColorGrayLight);
+			.borderRadius(0);
 			color: contrast(@textColorGrayLight);
 		}
 	}
@@ -114,8 +116,7 @@
 	}
 	&-selected {
 		background: @selectedGradientEnd;
-		.borderRadius(4px);
-		text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+		.borderRadius(@baseBorderRadius);
 		
 		&:hover {
 			background: @selectedHoverGradientEnd;
@@ -128,14 +129,14 @@
 	}
 	&-icon {
 		position: absolute;
-		color: @disabledColor;
+		color: @iconColor;
 		font-size: 20px;
 		width: @baseButtonWidth;
 		height: @baseButtonHeight;
 		padding: 0 8px;
 
 		&:hover {
-			color: @hoverColor;
+			color: @iconHoverColor;
 		}
 	}
 	&-right {

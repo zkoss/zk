@@ -106,6 +106,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		this._pos = [0, 0];
 		this._barPos = [0, 0];
 		this.currentPos = {x: this._pos[0], y: this._pos[1]};
+		//bind scroll event for input tab scroll
+		jq(cave).bind('scroll', this.proxy(this._fixScroll));
 		//bind mouse enter / mouse leave
 		if (!opts.embed)
 			jq(cave)
@@ -113,6 +115,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				.bind('mouseleave', this.proxy(this._mouseLeave));
 	},
 	destroy: function () {
+		//unbind scroll event for input tab scroll
+		jq(cave).unbind('scroll', this.proxy(this._fixScroll));
 		//unbind mouse enter / mouse leave
 		if (!this.opts.embed)
 			jq(this.cave)
@@ -384,6 +388,26 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		jq(arrow2)
 			.unbind('mousedown', self.proxy(self._mouseDown))
 			.unbind('mouseup', self.proxy(self._mouseUp));
+	},
+	_fixScroll: function (evt) {
+		var cave = this.cave;
+		if (cave.scrollTop == 1)
+			return;
+		
+		cave.scrollLeft = cave.scrollTop = 1;
+		var hbar = this.$n('hor'),
+			vbar = this.$n('ver');
+		
+		if (hbar) {
+			hbar.style.bottom = '-1px';
+			hbar.style.left = '1px';
+		}
+		if (vbar) {
+			vbar.style.top = '1px';
+			vbar.style.right = '-1px';
+		}
+		if (zk.currentFocus)
+			this.scrollToElement(zk.currentFocus.$n());
 	},
 	_mouseEnter: function (evt) {
 		_showScrollbar(this, 0.8);

@@ -6,16 +6,15 @@
 }
 
 .z-panel {
-
 	.defaultOverflowZoom();
-
+	
 	&-shadow {
 		.borderRadius();
 		.boxShadow('0 0 4px rgba(0, 0, 0, 0.5)');
 	}
-
+	
 	&-head {
-		padding: 5px 5px 0;
+		padding: 5px 5px 1px;
 		border: 1px solid darken(@baseBorderColor, 20%);
 		.boxShadow('inset 0px 1px 1px #FFFFFF');
 		background-color: @panelBackgroundColor;
@@ -23,7 +22,7 @@
 		border-bottom-color: @baseBorderColor;
 		.topBorderRadius();
 	}
-
+	
 	&-header {
 		color: @textColorGrayDark;
 		background-color: @panelBackgroundColor;
@@ -33,13 +32,13 @@
 		font-size: @fontSizeMedium;
 		font-family: @baseTitleFontFamily;
 		.defaultOverflowZoom();
-		padding: 3px 0 5px 0;		
-
+		padding: 3px 0 5px 0;
+		
 		&-move {
 			cursor: move;
 		}
 	}
-
+	
 	&-body {
 		margin: 0;
 		background: lighten(@panelBackgroundColor, 4%);
@@ -48,24 +47,23 @@
 		border-top: 0;
 		.bottomBorderRadius();
 		.defaultOverflowZoom();
-
+		
 		&:first-child {
 			height: 100%;
 		}
 	}
-
+	
 	.z-toolbar {
-		line-height: 24px;
 		padding: 4px;
 	}
-
+	
 	&-top .z-toolbar:not(.z-toolbar-panel),
 	&-btm2 .z-toolbar:not(.z-toolbar-panel),
 	&-btm .z-toolbar {
 		border-width: 0 1px 1px 1px;
 		padding: 4px 3px 3px 3px;
 	}
-
+	
 	&-icon {
 		overflow: hidden;
 		margin: auto 1px;
@@ -76,19 +74,21 @@
 		border: 1px solid @baseBorderColor;
 		float: right;
 		text-align: center;
-		color: lighten(@textColorGray, 13%);
-
+		color: @iconColor;
+		
 		&:hover {
 			.resetGradient();
 			border-color: @hoverBorderColor;
 			background-color: @hoverBackgroundColor;
+			color: @iconHoverColor;
 		}
 	}
-
+	
 	&-maximize, &-minimize, &-close, &-expand {
 		width: @baseButtonWidth + 4;
 		height: @baseButtonHeight;
 		font-size: @fontSizeLarge;
+		line-height: @baseButtonHeight;
 	}
 	
 	&-close {
@@ -99,7 +99,7 @@
 	&-minimize {
 		padding-top: 5px;
 	}
-
+	
 	&-expand {
 		font-size: @fontSizeXLarge;
 	}
@@ -114,7 +114,7 @@
 		background-color: #D7E6F7;
 		.opacity(0.5);
 	}
-
+	
 	&-move-ghost {
 		.topBorderRadius();
 		position: absolute;
@@ -123,12 +123,12 @@
 		.opacity(0.6);
 		cursor: move;
 		margin: 0;
-		padding: 0;		
-
+		padding: 0;
+		
 		.z-panel-body {
 			padding: 0;
 		}
-
+		
 		dl {
 			border: 1px solid darken(@baseBorderColor, 20%);
 			border-top: 0;
@@ -140,42 +140,40 @@
 			font-size: 0;
 		}
 	}
-
+	
  	&-move-block {
 	 	border: 2px dashed #B2CAD6;
 	}
-
+	
 	&-noframe &-body {
 		background: white;
 		border: 0;
 		padding: 0;
-		.borderRadius('0px');
-
+		.borderRadius(0);
+		
 		.z-panelchildren {
 			border-top: 0;
 		}
 	}
-
+	
 	&-noheader &-body {
 		border-top: 1px solid @baseBorderColor;
 		.borderRadius();
 	}
-
+	
 	&-noheader&-noframe &-body {
 		border: 0;
-		.borderRadius('0px');
-
-		
+		.borderRadius(0);
 	}
-
+	
 	&-noheader&-noframe .z-panelchildren {
 		border-top: 1px solid @baseBorderColor;
 	}
-
+	
 	&-noborder&-noframe .z-panelchildren {
 		border: none;
 	}
-
+	
 	&-noborder .z-panel-btm .z-toolbar {
 		border: 0;
 		padding: 4px;

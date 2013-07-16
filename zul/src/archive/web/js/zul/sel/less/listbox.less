@@ -30,7 +30,7 @@
 			border: 1px solid @baseBorderColor;
 			border-top: none;
 			border-right: none;
-			width: @baseIconWidth;
+			width: @scrollbarWidth;
 			height: 100%;
 			position: absolute;
 			top: 0;
@@ -87,10 +87,10 @@
 			position: absolute;
 			top: -3px;
 			left: 50%;
-			color: #7094B3;
+			color: @iconColor;
 		}
 	}
-	&-hover > .z-listheader-button {
+	&-hover .z-listheader-button {
 		display: block;
 	}
 	&-checkable {
@@ -125,7 +125,7 @@
 		text-align: center;
 		border-left: 1px solid darken(@hoverGradientStart, 15%);
 		.boxShadow('inset 1px 0 #FFFFFF');
-		color: black;
+		color: @iconColor;
 		&:hover {
 			.verGradient(darken(@hoverGradientStart, 5%), darken(@hoverGradientEnd, 10%));
 		}
@@ -244,9 +244,9 @@
 		display: inline-block;
 		position: absolute;
 		left: 8px;
-		color: @baseTextColor;
+		color: @iconColor;
 		&:hover {
-			color: @hoverColor;
+			color: @iconHoverColor;
 		}
 	}
 	&-icon-open {

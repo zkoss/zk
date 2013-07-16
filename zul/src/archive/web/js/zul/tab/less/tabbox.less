@@ -138,9 +138,6 @@
 
 	&-right, &-left, &-up, &-down {
 		display: none;
-		&:hover {
-			color: @hoverColor;
-		}
 	}
 
 	&-right {
@@ -148,8 +145,17 @@
 	}
 
 	&-icon {
-		color: lighten(@textColorGrayLight, 40%);
-		.userSelect();	
+		color: @iconColor;
+		.userSelect();
+		> i {
+			.opacity(0.7);
+		}
+		&:hover {
+			color: @iconHoverColor;
+			> i {
+				.opacity(1);
+			}
+		}
 	}
 
 	&-accordion {
@@ -205,12 +211,12 @@
 				top: 4px;
 				z-index: 15;
 				zoom: 1;
-				color: @textColorGrayLight;
+				color: @iconColor;
 				text-align: center;
 				line-height: @baseButtonHeight;
 
 				&:hover {
-					color: @hoverColor;
+					color: @iconHoverColor;
 					.opacity(1.0);
 				}
 			}

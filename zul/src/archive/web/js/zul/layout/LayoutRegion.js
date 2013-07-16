@@ -564,17 +564,20 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var bar = this._scrollbar;
 		if (bar) {
 			var p = this.$n('cave'),
+				fc = this.firstChild,
+				fch = fc ? fc.getHeight() : 0,
 				c = p.firstChild,
 				cs = c.style,
 				ph = p.offsetHeight,
 				pw = p.offsetWidth;
 			
-			// force to recalculate size
-			cs.height = '';
-			if (c.offsetHeight);
-			
-			cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
-			
+			if (!fch || !fch.indexOf('px')) { // only recalculate size if no fixed height
+				// force to recalculate size
+				cs.height = '';
+				if (c.offsetHeight);
+				
+				cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+			}
 			bar.scroller = c;
 			bar.syncSize(showBar);
 			if (scrollToTop)

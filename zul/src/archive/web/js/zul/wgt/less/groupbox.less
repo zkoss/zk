@@ -7,24 +7,22 @@
 		border: 1px solid @baseBorderColor;
 		border-bottom: 0;
 		width: 100%;
-		font-weight: normal;		
-		.resetGradient();
+		font-weight: normal;
 		color: @textColorGrayDark;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
 		line-height: @baseLineHeight;
-		height: auto;
+		height: @baseIconHeight;
 		padding-left: 10px;
 		zoom: 1;
 
 		.z-caption, .z-groupbox-title {
-			padding-left: 4px;
+			padding: 0px 4px;
 			background: white;
 			width: auto;
 			display: table-caption;
 			cursor: pointer;
 			position: relative;
-			top: @baseButtonHeight * -0.5;
 			line-height: @baseLineHeight;
 
 			.z-caption-content, .z-label {
@@ -69,6 +67,7 @@
 			font-weight: bold;
 			line-height: @baseLineHeight;
 			.verGradient();
+			height: auto;
 
 			.z-caption, .z-groupbox-title {
 				margin: 0;
@@ -81,7 +80,8 @@
 			}
 
 			.z-caption-content {
-				padding: 6px 0px 2px 0px;
+				padding: 4px 0px 4px 0px;
+				line-height: @baseIconHeight;
 			}
 		}
 	}

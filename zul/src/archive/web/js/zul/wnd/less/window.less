@@ -13,11 +13,11 @@
 	border: 1px solid darken(@baseBorderColor, 20%);
 	padding: @framePadding;
 	.borderRadius();
-
+	
 	&-shadow {
 		.boxShadow('0 0 4px rgba(0, 0, 0, 0.25)');
 	}
-
+	
 	&-header {
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
@@ -40,6 +40,7 @@
 		background-color: @baseBackgroundColor;
 		border: 1px solid @baseBorderColor;
 		.defaultOverflowZoom();
+		
 		&:first-child {
 			height: 100%;
 		}
@@ -55,7 +56,7 @@
 		float: right;
 		cursor: pointer;
 		text-align: center;
-		color: lighten(@textColorGray, 13%);
+		color:@iconColor;
 		
 		&:hover {
 			.resetGradient();
@@ -63,11 +64,12 @@
 			background-color: @hoverBackgroundColor;
 		}
 	}
-
+	
 	&-maximize, &-minimize, &-close {
 		width: @baseButtonWidth + 4;
 		height: @baseButtonHeight;
 		font-size: @fontSizeLarge;
+		line-height: @baseButtonHeight;
 	}
 	
 	&-close {
@@ -103,7 +105,7 @@
 		.z-window-header {
 			padding: 7px 4px 5px 4px;
 		}
-
+		
 		dl {
 			border-top: 1px solid #9F9F9F;
 			margin: 0;
@@ -114,24 +116,24 @@
 			font-size: 0;
 		}
 	}
-
+	
 	&-popup {
 		.topBorderRadius();
 		padding: @framePadding @framePadding 0 @framePadding;
-
+		
 		.z-window-content {
 			border-width: 0 0 0 0;
 			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
 		}
-
+		
 		&.z-window-noheader {
 			padding-top: 0;
-
+			
 			z-window-content {
 				margin: 0px;
 			}
 		}
-
+		
 		&.z-window-noheader:not(.z-window-noborder) .z-window-content {
 			margin: 0px -1 * @framePadding;
 		}
@@ -143,8 +145,8 @@
 	}
 	
 	&-embedded {
-		.borderRadius('0px');
-
+		.borderRadius(0);
+		
 		.z-window-shadow {
 			.boxShadow('none');
 		}		
@@ -153,19 +155,19 @@
 	&-noborder {
 		border: 0px;
 		padding: @framePadding @framePadding 0 @framePadding;
-
+		
 		&.z-window-noheader {
 			padding: 0;
 		}
-
+		
 		.z-window-content {
 			border: 0;			
 		}
-
+		
 		&:not(.z-window-noheader) .z-window-content {
 			margin: 0 -1 * @framePadding;
 		}
-
+		
 		&.z-window-shadow {
 			.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
 		}
@@ -189,7 +191,7 @@
 		min-width: 48px;
 		width: 100%;
 	}
-
+	
 	&-icon {
 		display: inline-block;
 		background-repeat: no-repeat;
@@ -201,19 +203,19 @@
 		font-size: 30px;
 		text-align: center;
 	}
-
+	
 	&-question {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-btn.png');
 	}
-
+	
 	&-exclamation {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-btn.png');
 	}
-
+	
 	&-information {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-btn.png');
 	}
-
+	
 	&-error {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
 	}

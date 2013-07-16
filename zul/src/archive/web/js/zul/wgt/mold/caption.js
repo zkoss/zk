@@ -32,7 +32,7 @@ function (out) {
 		};
 	
 	if (this._isCollapsibleVisible())
-		out.push('<div id="', puuid, '-exp" class="', picon, ' ', parent.$s('expand'), '">', getIcon('icon-remove'), '</div>');
+		out.push('<div id="', puuid , '-exp" class="', picon, ' ',  parent.$s('expand'), '" >', parent._open ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
 	if (this._isMinimizeVisible())
 		out.push('<div id="', puuid, '-min" class="', picon, ' ', parent.$s('minimize'), '">', getIcon('icon-minus'), '</div>');
 	if (this._isMaximizeVisible()) {
