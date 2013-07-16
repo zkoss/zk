@@ -971,16 +971,29 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//note: we don't solve this bug for paging yet
-		var n = this.$n();
+		var n = this.$n(),
+			wd = n.style.width,
 		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var tblwd = this._getEbodyWd(),
+			tblwd,
 			sizedByContent = this.isSizedByContent(),
 			ehead = this.ehead,
 			ebody = this.ebody,
 			ebodyrows = this.ebodyrows,
 			efoot = this.efoot,
 			efootrows = this.efootrows;
+		
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			wd = zk(n).revisedWidth(n.offsetWidth);
+			if (wd) 
+				wd += "px";
+		}
+		
+		if (wd) {
+			ebody.style.width = wd;
+		}
+		
+		tblwd = this._getEbodyWd();
 		
 		if (ehead) {
 			if (tblwd) {
@@ -1011,7 +1024,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._afterCalcSize();
 	},
 	_getEbodyWd: function () {
-		return this.ebody.offsetWidth + zk(this.$n()).padBorderWidth();
+		return this.ebody.offsetWidth - zk(this.$n()).padBorderWidth();
 	},
 	_beforeCalcSize: function () {
 		this._setHgh(this.$n().style.height);
@@ -1056,7 +1069,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		return allwidths;
 	},
-	domFaker_: function (out, fakeId, zcls) { //used by redraw
+	domFaker_: function (out, fakeId) { //used by redraw
 		var head = this.head;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {

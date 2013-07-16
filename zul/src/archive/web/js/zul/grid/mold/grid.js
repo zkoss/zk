@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var uuid = this.uuid,
-		zcls = this.getZclass(),
 		innerWidth = this.getInnerWidth(),
 		wdAttr = innerWidth == '100%' ? ' width="100%"' : '', //bug#3183182
 		wdStyle = innerWidth != '100%' ? 'width:' + innerWidth : '',
@@ -56,7 +55,7 @@ function (out) {
 	out.push('<table id="', uuid, '-cave"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.columns)
-		this.domFaker_(out, '-bdfaker', zcls);
+		this.domFaker_(out, '-bdfaker');
 	
 	if (this.rows)
 		this.rows.redraw(out);
@@ -74,7 +73,7 @@ function (out) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
 			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.columns) 
-			this.domFaker_(out, '-ftfaker', zcls);
+			this.domFaker_(out, '-ftfaker');
 		
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.foot.redraw(out);
