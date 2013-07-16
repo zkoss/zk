@@ -116,7 +116,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	},
 	destroy: function () {
 		//unbind scroll event for input tab scroll
-		jq(cave).unbind('scroll', this.proxy(this._fixScroll));
+		jq(this.cave).unbind('scroll', this.proxy(this._fixScroll));
 		//unbind mouse enter / mouse leave
 		if (!this.opts.embed)
 			jq(this.cave)

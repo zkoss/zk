@@ -135,6 +135,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 						if (d >= 0)
 							this._doScroll(this.uuid, 'down', d);
 					}
+				} else {
+					this._showbutton(false);
 				}
 			}
 		} else if(!tabbox.inAccordionMold()) {
@@ -205,6 +207,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 							this._doScroll('right', nodeOffsetLeft + nodeOffsetWidth - tabsScrollLeft - tabsOffsetWidth);
 						}
 					}
+				} else {
+					this._showbutton(false);
 				}
 			}
 		}
@@ -267,8 +271,24 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				
 			if (show) {
 				jq(tabbox).addClass(cls);
+				if (tabbox.isHorizontal()) {
+					tabbox.$n('left').style.display = 'block';
+					tabbox.$n('right').style.display = 'block';
+				}
+				if (tabbox.isVertical()) {
+					tabbox.$n('up').style.display = 'block';
+					tabbox.$n('down').style.display = 'block';
+				}
 			} else {
 				jq(tabbox).removeClass(cls);
+				if (tabbox.isHorizontal()) {
+					tabbox.$n('left').style.display = 'none';
+					tabbox.$n('right').style.display = 'none';
+				}
+				if (tabbox.isVertical()) {
+					tabbox.$n('up').style.display = 'none';
+					tabbox.$n('down').style.display = 'none';
+				}
 			}
 		}
 	},
