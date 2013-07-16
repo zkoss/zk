@@ -359,7 +359,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			hgh = n.style.height,
 			isHgh = hgh && hgh != 'auto' && hgh.indexOf('%') < 0;
 		if (isHgh) {
-			hgh = zk.parseInt(hgh);
+			hgh = zk.parseInt(hgh) - zk(n).padBorderHeight();
 			if (hgh) {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
@@ -382,12 +382,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					}
 				}
 				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
-
 				this._visibleRows(sz);
-
-                hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
-                //bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
-                hgh -= (this.efrozen ? this.efrozen.offsetHeight : 0);
+				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
                 this.ebody.style.height = (hgh < 0 ? 0 : hgh) + 'px';
 				return; //done
 			}
