@@ -28,7 +28,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 			 <borderlayout id="borderlayoutOriginatorRegistration" height="100%" >
 				<center border="normal"  autoscroll="true">
  					 
-					<div id="orgDetailTabDiv"  height="500px">
+					<div id="orgDetailTabDiv"  vflex="min">
  
  						   <grid sclass="GridLayoutNoBorder" fixedLayout="true"  >
 								<columns>	
