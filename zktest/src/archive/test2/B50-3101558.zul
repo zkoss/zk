@@ -16,11 +16,11 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 <zk>
 	you shall see 5 "30" in the right bottom corner, after click the button.
 	<div id="div">
-		<combobox width="30px" />
-		<bandbox width="30px" />
-		<datebox width="30px" />
-		<timebox width="30px" />
-		<spinner width="30px" />
+		<combobox width="35px" />
+		<bandbox width="35px" />
+		<datebox width="35px" />
+		<timebox width="35px" />
+		<spinner width="35px" />
 	</div>
 	<button label="click" xmlns:w="client">
 		<attribute w:name="onClick"><![CDATA[
