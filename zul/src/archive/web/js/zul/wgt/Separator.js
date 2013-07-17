@@ -16,19 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	var _shallFixPercent = zk.gecko ? function (wgt) {
 			var s;
-			return (s = wgt._spacing) && s.endsWith("%");
+			return (s = wgt._spacing) && s.endsWith('%');
 		}: zk.$void;
 
-		/**
-		 * A separator.
-		 *  <p>Default {@link #getZclass} as follows:
-		 *  <ol>
-		 *  	<li>Case 1: If {@link #getOrient()} is vertical and {@link #isBar()} is false, "z-separator-vertical" is assumed</li>
-		 *  	<li>Case 2: If {@link #getOrient()} is vertical and {@link #isBar()} is true, "z-separator-vertical-bar" is assumed</li>
-		 *  	<li>Case 3: If {@link #getOrient()} is horizontal and {@link #isBar()} is false, "z-separator-horizontal" is assumed</li>
-		 *  	<li>Case 4: If {@link #getOrient()} is horizontal and {@link #isBar()} is true, "z-separator-horizontal-bar" is assumed</li>
-		 *  </ol>
-		 */
+/**
+ * A separator.
+ *  <p>Default {@link #getZclass} is "z-separator".
+ */
 zul.wgt.Separator = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 
@@ -93,8 +87,9 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		if (!_shallFixPercent(this))
 			return s;
 
-		//_spacing contains % and it's gecko
-		var v = zk.parseInt(this._spacing.substring(0, this._spacing.length - 1).trim());
+		//_spacing contains %
+		var space = this._spacing,
+			v = zk.parseInt(space.substring(0, space.length - 1).trim());
 		if (v <= 0) return s;
 		v = v >= 2 ? (v / 2) + '%' : '1%';
 
