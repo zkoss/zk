@@ -2010,6 +2010,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
+	@SuppressWarnings("unchecked")
 	private TemplateResolver newTemplateResolverImpl(BinderImpl binderImpl, Component comp, String attr,
 			String templateExpr, Map<String, Object> templateArgs) {
 		String clznm = Library.getProperty("org.zkoss.bind.TemplateResolver.class",TemplateResolverImpl.class.getName());
