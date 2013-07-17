@@ -140,8 +140,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				zUtl.fireShown(this);
 			if (tree) {
 				tree._sizeOnOpen();
-				// update scroll bar status
-				tree.refreshBar_(true);
 				
 				if (!fromServer)
 					this.fire('onOpen', {open : open},

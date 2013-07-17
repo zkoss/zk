@@ -245,6 +245,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			//sync bar position
 			this._syncBarPosition('ver', this._barPos[1]);
 		}
+		
+		this.scrollTo(this._pos[0], this._pos[1]); //keep scroll position
 		if (showScrollbar)
 			_showScrollbar(this, 0.8);
 	},
