@@ -62,13 +62,13 @@ function (out, skipper) {
 			this.panelchildren.redraw(out);
 			
 		if (this.bbar) {
-			out.push('<div id="', uuid, '-bb" class="', this.$s('btm'), '">');
+			out.push('<div id="', uuid, '-bb" class="', this.$s('bottom'), '">');
 			this.bbar.redraw(out);
 			out.push('</div>');
 		}
 		
 		if (this.fbar) {
-			out.push('<div id="', uuid, '-fb" class="', this.$s('btm2'), '">');
+			out.push('<div id="', uuid, '-fb" class="', this.$s('bottom2'), '">');
 			this.fbar.redraw(out);
 			out.push('</div>');
 		}
