@@ -17,7 +17,7 @@
 		padding: 5px 5px 1px;
 		border: 1px solid darken(@baseBorderColor, 20%);
 		.boxShadow('inset 0px 1px 1px #FFFFFF');
-		background-color: @panelBackgroundColor;
+		background: @panelBackgroundColor;
 		overflow: hidden;
 		border-bottom-color: @baseBorderColor;
 		.topBorderRadius();
@@ -25,7 +25,7 @@
 	
 	&-header {
 		color: @textColorGrayDark;
-		background-color: @panelBackgroundColor;
+		background: @panelBackgroundColor;
 		border: 0;
 		line-height: 24px;
 		font-weight: normal;
@@ -79,7 +79,7 @@
 		&:hover {
 			.resetGradient();
 			border-color: @hoverBorderColor;
-			background-color: @hoverBackgroundColor;
+			background: @hoverBackgroundColor;
 			color: @iconHoverColor;
 		}
 	}
@@ -111,7 +111,7 @@
 		z-index: 60000;
 		left: 0;
 		top: 0;
-		background-color: #D7E6F7;
+		background: #D7E6F7;
 		.opacity(0.5);
 	}
 	
@@ -181,7 +181,7 @@
 }
 
 .z-panelchildren {
-	background-color: @baseBackgroundColor;
+	background: @baseBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	position: relative;
 	.defaultOverflowZoom();

@@ -19,7 +19,7 @@
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	background-color: @baseBackgroundColor;
+	background: @baseBackgroundColor;
 	border: 0;
 
 	&-icon {
@@ -46,7 +46,7 @@
 	border: 1px solid @baseBorderColor;
 	position: absolute;
 	overflow: hidden;
-	background-color: @baseBackgroundColor;
+	background: @baseBackgroundColor;
 
 	&-noborder {
 		border: 0;
@@ -71,7 +71,7 @@
 	}
 
 	&-collapsed {
-		background-color: darken(@baseBackgroundColor, 1%);
+		background: darken(@baseBackgroundColor, 1%);
 		width: @baseBarWidth;
 		height: @baseBarHeight;
 	 	cursor: pointer; // ios issue

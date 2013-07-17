@@ -23,7 +23,7 @@
 		font-size: @fontSizeMedium;
 		font-weight: normal;
 		cursor: default;
-		background-color: @windowBackgroundColor;
+		background: @windowBackgroundColor;
 		color: @textColorGrayDark;
 		line-height: @baseButtonWidth;
 		.defaultOverflowZoom();
@@ -37,7 +37,7 @@
 	&-content {
 		margin: 0;
 		padding: 4px;
-		background-color: @baseBackgroundColor;
+		background: @baseBackgroundColor;
 		border: 1px solid @baseBorderColor;
 		.defaultOverflowZoom();
 		
@@ -61,7 +61,7 @@
 		&:hover {
 			.resetGradient();
 			border-color: @hoverBorderColor;
-			background-color: @hoverBackgroundColor;
+			background: @hoverBackgroundColor;
 		}
 	}
 	
@@ -88,7 +88,7 @@
 		z-index: 60000;
 		left: 0;
 		top: 0;
-		background-color: #D7E6F7;
+		background: #D7E6F7;
 		.opacity(0.5);
 	}
 	

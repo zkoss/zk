@@ -75,12 +75,12 @@ body {
 	padding: 3px 5px 3px 3px;
 	border: 1px solid @errorboxBorderColor;
 	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
-	background-color: @errorboxBackgroundColor;
+	background: @errorboxBackgroundColor;
 	
 	.messagecontent {
 		padding: 0;
 		border: 1px solid @errorboxBorderColor;
-		background-color: @baseBackgroundColor;
+		background: @baseBackgroundColor;
 	}
 	.messages {
 		padding: 2px 3px 15px;
@@ -92,7 +92,7 @@ body {
 		}
 	}
 	.newmessage {
-		background-color: @errorboxBackgroundColor;
+		background: @errorboxBackgroundColor;
 		display: none;
 	}
 	.button {
@@ -208,7 +208,7 @@ input[type="checkbox"] {
 .z-loading, .z-apply-loading {
 	position: absolute;
 	cursor: wait;
-	background-color: @loadingBackgroundColor;
+	background: @loadingBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	white-space: nowrap;
 	padding: 3px;
@@ -225,7 +225,7 @@ input[type="checkbox"] {
 .z-loading-indicator,
 .z-apply-loading-indicator {
 	border: 1px solid @baseBorderColor;
-	background-color: @baseBackgroundColor;
+	background: @baseBackgroundColor;
 	color: @textColorGrayDark;
 	white-space: nowrap;
 }
@@ -284,13 +284,13 @@ input[type="checkbox"] {
 
 .z-temp * { //temporary
 	color: #FFFFFF;
-	background-color: #FFFFFF;
+	background: #FFFFFF;
 	font-size: 5px;
 	text-decoration: none;
 }
 .z-temp {
 	.z-loading {
-		background-color: @loadingBackgroundColor;
+		background: @loadingBackgroundColor;
 		top: 49%;
 		left: 46%;
 	}
