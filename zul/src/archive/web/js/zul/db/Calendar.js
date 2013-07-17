@@ -846,7 +846,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @param boolean left it is used for the left arrow button
 	 * @param Date date the date object for the range if null, the current value
 	 * of {@link #getTime()} is assumed.
-	 * @returns boolean if true it means the date is out of range.
+	 * @return boolean if true it means the date is out of range.
 	 * @since 6.5.3
 	 */
 	isOutOfRange: function (left, date) {
