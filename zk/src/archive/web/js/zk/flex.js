@@ -119,8 +119,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							if (!cwgt.ignoreFlexSize_(o)) {
 								var c = cwgt.$n();
 								if (c) { //node might not exist if rod on
+									//Skip absolute or fixed DOM element size
+									var cpos = c.style.position;
+									if (cpos == 'absolute' || cpos == 'fixed')
+										continue;
+									
 									var zkc = zk(c),
-										sz = 0; 
+										sz = 0;
 									if (cwgt[flex] == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt[flexsz] === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt[flexsz];
@@ -153,6 +158,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								first = c,
 								refDim;
 							for(; c; c = c.nextSibling) {
+								//Skip absolute or fixed DOM element size
+								var cpos = c.style.position;
+								if (cpos == 'absolute' || cpos == 'fixed')
+									continue;
+								
 								var zkc = zk(c),
 									sz = 0;
 								if (ignore) {
@@ -296,6 +306,10 @@ zFlex = { //static methods
 				pretxt = true;
 				continue;
 			}
+			//Skip absolute or fixed DOM element size
+			var cpos = c.style.position;
+			if (cpos == 'absolute' || cpos == 'fixed')
+				continue;
 			
 			var zkc = zk(c);
 			if (zkc.isVisible()) {
@@ -345,7 +359,7 @@ zFlex = { //static methods
 						vflexs.push(cwgt);
 						vflexsz += cwgt._nvflex;
 					}
-				} else if (!cwgt || !cwgt.isExcludedVflex_()) {			
+				} else if (!cwgt || !cwgt.isExcludedVflex_()) {
 					hgh -= offhgh;
 					hgh -= zkc.marginHeight();
 				}
@@ -353,7 +367,7 @@ zFlex = { //static methods
 				pretxt = false;
 			}
 		}
-				
+		
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		var lastsz = hgh = Math.max(hgh, 0);
