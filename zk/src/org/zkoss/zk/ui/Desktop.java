@@ -16,13 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Map;
 import java.util.Collection;
+import java.util.Map;
 
 import org.zkoss.util.media.Media;
-
-import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.device.Device;
+import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * Represents a desktop.

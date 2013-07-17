@@ -1,0 +1,22 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01848FormBindingUpdate')">
+		<div form="@id('fx')@load(vm.product)">
+			<vlayout>
+				<div>
+					fx.item: <label value="@load(fx.item)"/>
+				</div>
+				<div>
+					fx.item.name: <label value="@load(fx.item.name)"/>
+				</div>
+			</vlayout>
+			<combobox model="@load(vm.list)"
+				selectedItem="@bind(fx.item)">
+				<template name="model" var="item">
+					<comboitem label="@load(item.name)"/>
+				</template>
+			</combobox>
+		</div>
+		<button label="dump" onClick="binder.getTracker().dump()"/>
+	</window>
+</zk>

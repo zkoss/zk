@@ -860,7 +860,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(comp.getPage(), out);
 			}
 
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkmx(");
+			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\nzkmx(");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -872,7 +872,7 @@ public class HtmlPageRenders {
 
 		outEndJavaScriptFunc(exec, out, extra, false);
 			//generate extra, responses and ");"
-		out.write("//]]>\n</script>\n");
+		out.write("\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {
@@ -971,13 +971,13 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">//<![CDATA[\nzkdt('")
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('")
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))
 				.append("','").append(desktop.getRequestPath())
 				.append("');").append(outSpecialJS(desktop))
-				.append("//]]>\n</script>\n");
+				.append("\n</script>\n");
 		}
 
 		return sb.toString();

@@ -33,4 +33,5 @@ jruby.jar
 js.jar
 jython.jar
 flashchart.jar
-commons-lang.jar
+commons-beanutils.jar
+commons-codec.jar

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_1840_ViewModel')">
+		<vlayout>
+			<span>
+				clicking the buttons will launch several long running operations using server push 
+			</span>
+			<span>
+				the last button will launch all at once 
+			</span>
+			<span>
+				check the network tab in Firebug, that after finishing any button, the server push should be disabled correctly 
+			</span>
+			<hlayout>
+				<button label="start long operation sequence" onClick="@command('startSequencedOperation')" />	
+				the busy window should disappear after the second task, and no server error being thrown
+			</hlayout>
+			<hlayout>
+				<button label="start 2 parallel background operations" onClick="@command('startBackgroundOperations')" /> 
+				just 2 parallel tasks with different duration without busy screen
+			</hlayout>
+			<hlayout>
+				<button label="start manual operation" onClick="@command('startManualOperation')" /> 
+				a task triggered without using EventQueue
+			</hlayout>
+			<hlayout>
+				<button label="start all at once" onClick="@command('startAllOperations')" />
+			</hlayout>
+			<hlayout>
+				<label value="@load(vm.sequenceStatus)" />	
+			</hlayout>
+			<hlayout>
+				<label value="@load(vm.backgroundStatus)" />	
+			</hlayout>
+			<hlayout>
+				<label value="@load(vm.manualStatus)" />	
+			</hlayout>
+		</vlayout>
+	</div>
+</zk>

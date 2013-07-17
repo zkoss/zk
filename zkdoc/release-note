@@ -18,6 +18,12 @@ ZK 6.5.4
 * Bugs
   ZK-1836: Javascript string with </script> escape issue
   ZK-1837: Checking the checkbox inside the groupbox should not trigger the onOpen event of Groupbox
+  ZK-1840: Chained Long operations using different event queues, causing errors after first operation finishes
+  ZK-1841: maximum allowed number of desktops is one more then the number set in the max-desktops-per-session element in zk.xml
+  ZK-1842: Listbox scroll bug listheader sort
+  ZK-1839: Listbox select mold not works in listcell
+  ZK-1847: When sending a request without data to server, the created event's data is an empty map instead of null
+  ZK-1777: Server Push does not initialize when recycling
 
   --------
 ZK 6.5.3

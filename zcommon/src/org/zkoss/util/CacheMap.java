@@ -192,7 +192,8 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * @see #shallExpunge
 	 */
 	protected int canExpunge(int size, Value<V> v) {
-		return size > getMaxSize()
+		//Bug ZK-1841: current desktopCache size should also check if equal to max desktop per session size
+		return size >= getMaxSize()
 			|| (System.currentTimeMillis() - v.access) > getLifetime() ?
 			(EXPUNGE_YES|EXPUNGE_CONTINUE): (EXPUNGE_NO|EXPUNGE_STOP);
 	}
