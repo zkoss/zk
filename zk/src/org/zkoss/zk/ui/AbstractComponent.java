@@ -40,6 +40,7 @@ import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Threads;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
 import org.zkoss.util.logging.Log;
@@ -1393,8 +1394,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	public void onParentInvalidated() {
-		for (Component comp : getChildren())
-			comp.onParentInvalidated();
+		List<Component> children = getChildren();
+		if (!children.isEmpty() && getFirstChild() != null) {
+			for (Component comp : children) {
+				comp.onParentInvalidated();
+			}
+		}
 	}
 
 	/** Causes a response to be sent to the client.

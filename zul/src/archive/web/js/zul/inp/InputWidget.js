@@ -82,9 +82,9 @@ zul.inp.RoundUtl = {
 	*/
 	syncWidth: function (wgt, rightElem) {
 		var node = wgt.$n();
-		if (!zk(node).isRealVisible() || !wgt._inplace)
+		if (!zk(node).isRealVisible() || (!wgt._inplace && !node.style.width))
 			return;
-
+		
 		var inp = wgt.getInputNode(),
 			ns = node.style;
 

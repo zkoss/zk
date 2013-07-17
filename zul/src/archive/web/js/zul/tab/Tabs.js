@@ -166,7 +166,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childWidth <= tabsOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					tabs.style.width = jq.px0(tbx.offsetWidth);
+					tabs.style.width = jq.px0(tbx.offsetWidth - toolbar.offsetWidth);
 					tabs.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -193,7 +193,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._showbutton(true);
 					var cave = this.$n('cave'),
 						btnsize = this._getArrowSize(),
-						temp = tbx.offsetWidth - btnsize;//coz show button then getsize again
+						temp = tbx.offsetWidth - toolbar.offsetWidth - btnsize;//coz show button then getsize again
 					cave.style.width = '5555px';
 					tabs.style.width = temp > 0 ? temp + 'px' : '';
 					

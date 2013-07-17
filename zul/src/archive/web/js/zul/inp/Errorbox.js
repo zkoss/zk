@@ -90,7 +90,6 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
 		
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
-		this._drag = null;
 	},
 	/** Reset the position on scroll
 	 * @param zk.Widget wgt
@@ -127,6 +126,12 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this.$supers('open', arguments);
 		this.setTopmost();
 		this._fixarrow();
+	},
+	afterCloseAnima_: function (opts) {
+		this.setVisible(false);
+		this.setFloating_(false);
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open:false});
 	},
 	redraw: function (out) {
 		var uuid = this.uuid,
