@@ -12,11 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+var North =
 /**
  * A north region of a border layout.
  * <p>Default {@link #getZclass}: z-north.
  */
-var North =
 zul.layout.North = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_sumFlexHeight: true, //indicate shall add this flex height for borderlayout. @See _fixMinFlex in widget.js
 	/**

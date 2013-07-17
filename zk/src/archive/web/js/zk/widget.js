@@ -2723,7 +2723,7 @@ function () {
 	/**
 	 * Returns the sub zclass name that cache for this widget.
 	 * It returns the zclass if the subclass is empty or null,
-	 * since it caches the result (and clean up at the {@link #setZclass()}).
+	 * since it caches the result (and clean up at the {@link #setZclass(String)}).
 	 * <pre><code>var subzcls = wgt.$s('hover'); // z-xxx-hover will be return</code></pre>
 	 * @return String
 	 * @see #getZclass()
