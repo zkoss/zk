@@ -944,7 +944,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_setHgh: function (hgh) {
 		var ebody = this.ebody,
 			ebodyStyle = ebody.style;
-		hgh = (jq.px(height) - zk(this.$n()).padBorderWidth()) + 'px';
+		hgh = (jq.px(height) - zk(this.$n()).borderHeight) + 'px';
 		if (this.isVflex() || (hgh && hgh != 'auto' && hgh.indexOf('%') < 0)) {
 			if (zk.safari && ebodyStyle.height == jq.px(this._vflexSize(hgh)))
 				return; // Bug ZK-417, ignore to set the same size
@@ -1019,7 +1019,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else {
 			wd = n.offsetWidth;
 		}
-		return wd.offsetWidth - zk(this.$n()).padBorderWidth();
+		return wd.offsetWidth - zk(this.$n()).borderWidth();
 	},
 	_beforeCalcSize: function () {
 		this._setHgh(this.$n().style.height);
