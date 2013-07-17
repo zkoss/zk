@@ -83,7 +83,7 @@ public class Audio extends XulElement {
 	public void setSrc(String src) {
 		List<String> list = new ArrayList<String>();  
 		if (src.contains(",")) {
-			list = new ArrayList(Arrays.asList(src.split("\\s*,\\s*"))); 
+			list = new ArrayList<String>(Arrays.asList(src.split("\\s*,\\s*"))); 
 		} else {
 			list.add(src.trim());
 		}
