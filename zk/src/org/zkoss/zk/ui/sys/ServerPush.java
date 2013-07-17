@@ -75,6 +75,18 @@ public interface ServerPush {
 	 */
 	public void stop();
 
+	
+	/** 
+	 * Resumes server-push - this is required after desktop recycling.
+	 * (added ServerPush interface to fix ZK-1777) 
+	 *
+	 * <p>{@link #resume} is called when {@link UiEngine#recycleDesktop}
+	 * is called to resume a previously enabled server-push on the recycled
+	 * desktop.
+	 * @since 6.5.4
+	 */
+	public void resume();
+	
 	/** Called by the associated desktop to schedule a task to execute
 	 * asynchronously.
 	 * <p>The implementation usually delegates the scheduling to
@@ -136,4 +148,5 @@ public interface ServerPush {
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 */
 	public void onPiggyback();
+
 }

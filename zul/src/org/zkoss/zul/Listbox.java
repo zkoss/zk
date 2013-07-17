@@ -399,8 +399,12 @@ public class Listbox extends MeshElement {
 				final boolean oldFlag = setReplacingItem(true);
 				try {
 					//Bug ZK-1834: if there are selected items, clear first.
-					if (getSelectedCount() > 0)
+					if (getSelectedCount() > 0) {
 						clearSelection();
+						
+						// Bug ZK-1842 Listbox scroll bug listheader sort 
+						_anchorLeft = _anchorTop = 0;
+					}
 					super.clear();
 				} finally {
 					setReplacingItem(oldFlag);

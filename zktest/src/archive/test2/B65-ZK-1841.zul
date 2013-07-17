@@ -1,0 +1,11 @@
+<zk>
+	<label multiline="true">
+	1. Set "max-desktops-per-session" to 1 in zk.xml.
+	2. Open another browser tab and link to this page.
+	3. Go back to this tab and click "test" button.
+	4. Should see the page redirect to timeout.zul.
+	</label>
+	<window border="normal" title="B65-ZK-1841">
+		<button label="test" onClick='alert("Hello World")'></button>
+	</window>
+</zk>

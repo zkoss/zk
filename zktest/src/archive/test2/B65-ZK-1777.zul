@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<vlayout>
+		<label>
+			ZK-1777 is about serverpush in combination with desktop recycle (so to test this you need to enable desktop recycling in zk.xml org.zkoss.zkmax.ui.util.DesktopRecycle)
+		</label>
+		<label>
+			To test click button Start 1 (will execute a long OP for 2 seconds) then close the browser tab and reopen the page (so that the desktop is being recycled)
+		</label>
+		<label>
+			1) check serverpush still works, by triggering an operation (the busy should disappear after the operation is completed)
+		</label>
+		<label>
+			2) launch "Start 2" during these 10 seconds close the browser tab and reopen it... the operation should be ongoing and updating the busy message and then disappear
+		</label>
+	</vlayout>
+	
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_1777_ViewModel')">
+		<button label="Start 1 (2 sec)" onClick="@command('start1')"/>
+		<button label="Start 2 (10 sec)" onClick="@command('start2')"/>
+		<div>
+			<label value="@load(vm.status1)" />
+			<label value="@load(vm.status2)" />
+		</div>
+	</div>
+</zk>

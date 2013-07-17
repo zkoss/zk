@@ -13,3 +13,4 @@
 ../dist/lib/ext/cdi-api.jar
 ../dist/lib/ext/javax.inject-1.jar
 ../dist/lib/ext/commons-lang.jar
+../dist/lib/ext/commons-beanutils.jar
