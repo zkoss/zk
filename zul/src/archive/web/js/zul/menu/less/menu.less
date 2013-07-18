@@ -5,7 +5,9 @@
 	.verGradient(@hoverGradientStart, @hoverGradientEnd);
 }
 .activeStyle() {
-	border-color: darken(@baseBorderColor, 30%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 30%);
+	@tr: darken(@baseBorderColor, 30%);
+	@bl: darken(@baseBorderColor, 10%);
+	border-color: @tr @bl @bl @tr;
 	.verGradient();
 	.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 }
@@ -242,7 +244,7 @@
 
 	.z-menuitem-icon {
 		position: absolute;
-		color: @textColorBlue;
+		color: @checkedColor;
 		font-size: 14px;
 		display: none;
 		left: 7px;

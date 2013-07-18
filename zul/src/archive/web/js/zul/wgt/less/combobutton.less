@@ -5,38 +5,30 @@
 	min-height: @baseButtonHeight;
 	
 	&-content {
-		.verGradient();
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
-		padding: 4px 5px;
+		padding: 4px 30px 4px 5px;
+		.verGradient();
 		border: 1px solid darken(@baseBorderColor, 15%);
-		border-right: 0;
-		margin: 0;
 		min-height: @baseButtonHeight;
-		.leftBorderRadius(@borderRadiusSmall);
 		line-height: @baseLineHeight;
-		height: @baseButtonHeight;
+		.borderRadius(@borderRadiusSmall);
 		color: @baseTextColor;
+		position: relative;
 	}
 	&-image {
-		vertical-align: text-top;
+		vertical-align: middle;
 	}
 	&-button {
-		.verGradient();
-		vertical-align: middle;
 		cursor: pointer;
-		padding: 4px;
-		padding-left: 6px;
-		border: 1px solid darken(@baseBorderColor, 15%);
 		border-left: 1px solid @baseBorderColor;
-		overflow: hidden;
-		display: inline-block;
+		display: block;
 		width: @baseButtonWidth;
-		min-height: @baseButtonHeight;
-		.rightBorderRadius(@borderRadiusSmall);
-		max-height: @baseButtonHeight;
-		line-height: @baseLineHeight;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
 		button[disabled] + & {
 			&:hover,
 			&:active {
@@ -49,6 +41,12 @@
 	&-icon {
 		font-size: @fontSizeLarge;
 		color: @iconColor;
+		&.z-icon-caret-down {
+			display: block;
+			position: relative;
+			top: 50%;
+			margin-top: -8px;
+		}
 	}
 	&:hover {
 		.z-combobutton-content,

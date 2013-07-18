@@ -24,12 +24,12 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
+		.verGradient();
+		border-bottom: 1px solid @baseBorderColor;
 		&.z-grid-header-bar {
 			display: none;
-			.verGradient();
-			border: 1px solid @baseBorderColor;
-			border-top: none;
-			border-right: none;
+			border-left: 1px solid @baseBorderColor;
+			border-bottom-width: 0;
 			width: @scrollbarWidth;
 			height: 100%;
 			position: absolute;
@@ -72,13 +72,11 @@
 	}
 }
 .z-column {
-	.verGradient();
 	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @baseBorderColor;
-	border-bottom: 1px solid @baseBorderColor;
 	position: relative;
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);

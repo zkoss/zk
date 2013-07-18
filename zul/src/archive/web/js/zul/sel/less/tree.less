@@ -20,16 +20,16 @@
 	zoom: 1;
 	//tree header div
 	&-header {
+		.resetTable();
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-		.resetTable();
+		.verGradient();
+		border-bottom: 1px solid @baseBorderColor;
 		&.z-tree-header-bar {
 			display: none;
-			.verGradient();
-			border: 1px solid @baseBorderColor;
-			border-top: none;
-			border-right: none;
+			border-left: 1px solid @baseBorderColor;
+			border-bottom-width: 0;
 			width: @baseIconWidth;
 			height: 100%;
 			position: absolute;
@@ -94,13 +94,11 @@
 	}
 }
 .z-treecol {
-	.verGradient();
 	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-right: 1px solid @baseBorderColor;
-	border-bottom: 1px solid @baseBorderColor;
 	position: relative;
 	&-sort {
 		cursor: pointer;
@@ -161,13 +159,13 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: @textColorBlue;
+			color: @checkedColor;
 			&.z-icon-ok {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
 				width: 8px;
 				height: 8px;
 				.borderRadius(4px);
-				background: @textColorBlue;
+				background: @checkedColor;
 				padding: 0;
 				margin: 3px;
 			}
