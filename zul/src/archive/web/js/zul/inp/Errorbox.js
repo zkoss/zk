@@ -96,8 +96,21 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
-			if (zk(this.parent).isScrollIntoView()) {// B65-ZK-1632
-				this.position(this.parent, null, 'end_before', {overflow:true});
+			var desktop = this.desktop,
+				inp = p = this.parent,
+				bar = null;
+			while (p && p != desktop) {
+				bar = p._scrollbar;
+				if (bar && (bar.hasVScroll() || bar.hasHScroll()))
+					break;
+				bar = null;
+				p = p.parent;
+			}
+			
+			var isInView = bar ? 
+					bar.isScrollIntoView(inp.$n()) : zk(inp).isScrollIntoView();
+			if (isInView) {// B65-ZK-1632
+				this.position(inp, null, 'end_before', {overflow:true});
 				this._fixarrow();
 			} else {
 				this.close();

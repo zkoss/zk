@@ -268,34 +268,67 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		}
 	},
 	scrollToElement: function (dom) {
-		if (!this.needV)
-			return; //no vertical scrollbar
-		
 		var cave = this.cave,
 			domTop = jq(dom).offset().top,
 			domBottom = domTop + dom.offsetHeight,
+			domLeft = jq(dom).offset().left,
+			domRight = domLeft + dom.offsetWidth,
 			viewTop = jq(cave).offset().top,
 			viewBottom = viewTop + cave.offsetHeight,
-			scrollUp = true;
+			viewLeft = jq(cave).offset().left,
+			viewRight = viewLeft + cave.offsetWidth
+			scrollUp = true,
+			scrollLeft = true;
 		
-		if (domBottom <= viewBottom && domTop >= viewTop)
+		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop) ||
+			(this.needH && domRight <= viewRight && domLeft >= viewLeft))
 			return; //already in the view port
 		
 		if (domTop < viewTop)
 			scrollUp = false;
+		if (domLeft < viewLeft)
+			scrollLeft = false;
 		
 		//calculate scrolling movement
-		var movement = scrollUp ? domBottom - viewBottom : viewTop - domTop,
-			pos = this._pos[1] + (scrollUp ? -movement : movement);
+		var movementY = scrollUp ? domBottom - viewBottom : viewTop - domTop,
+			posY = this._pos[1] + (scrollUp ? -movementY : movementY),
+			movementX = scrollLeft ? domRight - viewRight : viewLeft - domLeft,
+			posX = this._pos[0] + (scrollLeft ? -movementX : movementX);
 		
-		//set and check if exceed scrolling limit
-		pos = _setScrollPos(pos, this.vLimit, 0);
-		//sync scroll position
-		this._syncPosition('ver', pos);
-		this._syncBarPosition('ver', -pos / this.vRatio);
+		if (this.needV) {
+			//set and check if exceed scrolling limit
+			posY = _setScrollPos(posY, this.vLimit, 0);
+			//sync scroll position
+			this._syncPosition('ver', posY);
+			this._syncBarPosition('ver', -posY / this.vRatio);
+		}
+		if (this.needH) {
+			//set and check if exceed scrolling limit
+			posX = _setScrollPos(posX, this.hLimit, 0);
+			//sync scroll position
+			this._syncPosition('hor', posX);
+			this._syncBarPosition('hor', -posX / this.hRatio);
+		}
 		//onScrollEnd callback
 		this._onScrollEnd();
 		
+	},
+	isScrollIntoView: function (dom) {
+		var cave = this.cave,
+			domTop = jq(dom).offset().top,
+			domBottom = domTop + dom.offsetHeight,
+			domLeft = jq(dom).offset().left,
+			domRight = domLeft + dom.offsetWidth,
+			viewTop = jq(cave).offset().top,
+			viewBottom = viewTop + cave.offsetHeight,
+			viewLeft = jq(cave).offset().left,
+			viewRight = viewLeft + cave.offsetWidth;
+		
+		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop) ||
+			(this.needH && domRight <= viewRight && domLeft >= viewLeft))
+			return true;
+		else
+			return false;
 	},
 	getCurrentPosition: function () {
 		return this.currentPos;
