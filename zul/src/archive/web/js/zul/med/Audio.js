@@ -59,7 +59,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		/** Returns whether to auto start playing the audio.
-		 * <p>Default: false;
+		 * <p>Default: false.
 		 * @return boolean
 		 */
 		/** Sets whether to auto start playing the audio.
@@ -71,10 +71,12 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		},
 		/** Returns whether and how the audio should be loaded.
 		 *
-		 * <p>Default: false;
+		 * <p>Default: null.
+		 * @return String
 		 * @since 7.0.0
 		 */
 		/** Sets whether and how the audio should be loaded.
+		 * @param String preload
 		 * @since 7.0.0
 		 */	
 		preload: function(v) {
@@ -83,10 +85,12 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		},
 		/** Returns whether to display the audio controls.
 		 *
-		 * <p>Default: false;
+		 * <p>Default: false.
+		 * @return boolean
 		 * @since 7.0.0
 		 */
 		/** Sets whether to display the audio controls.
+		 * @param boolean controls
 		 * @since 7.0.0
 		 */
 		controls: function (v) {
@@ -94,7 +98,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			if (n) n.controls = v;
 		},
 		/** Returns whether to play the audio repeatedly.
-		 * <p>Default: false;
+		 * <p>Default: false.
 		 * @return boolean
 		 */
 		/** Sets whether to play the audio repeatedly.
@@ -106,10 +110,12 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		},
 		/** Returns whether to mute the audio.
 		 *
-		 * <p>Default: false;
+		 * <p>Default: false.
+		 * @return boolean
 		 * @since 7.0.0
 		 */
 		/** Sets whether to mute the audio.
+		 * @param boolean muted
 		 * @since 7.0.0
 		 */
 		muted: function (v) {
