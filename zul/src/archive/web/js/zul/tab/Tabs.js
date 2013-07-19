@@ -193,12 +193,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._showbutton(true);
 					var cave = this.$n('cave'),
 						btnsize = this._getArrowSize(),
-						temp = tbx.offsetWidth - toolbar.offsetWidth - btnsize;//coz show button then getsize again
+						toolbarWidth = toolbar ? toolbar.offsetWidth : 0,
+						temp = tbx.offsetWidth - toolbarWidth - btnsize;//coz show button then getsize again
 					cave.style.width = '5555px';
 					tabs.style.width = temp > 0 ? temp + 'px' : '';
 					
 					if (toolbar) 
-						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
+						tabbox.$n('right').style.right = toolbarWidth + 'px';
 					
 					if (way == 'sel') {
 						if (nodeOffsetLeft < tabsScrollLeft) {
