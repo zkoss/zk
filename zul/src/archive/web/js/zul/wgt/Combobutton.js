@@ -122,9 +122,6 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			// have to provide empty opts or menupopup will set sendOnOpen to true
 			this[b ? 'open' : 'close'](opts || {});
 	},
-	renderIcon_: function (out) {
-		out.push('<div class="', this.getZclass(), '-btn-img" />');
-	},
 	renderInner_: function (out) {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -179,8 +176,6 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 					this.setOpen(open, {sendOnOpen: true});
 				else
 					this.$supers('doClick_', arguments);
-			if (this._mold == 'toolbar')
-				jq(this.$n('box')).addClass(this.getZclass() + '-over');
 		}
 	},
 	doMouseDown_: function (evt) {

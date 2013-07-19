@@ -148,25 +148,25 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				tabsOffsetWidth = tabs.offsetWidth,
 				tabsScrollLeft = tabs.scrollLeft,
 				childWidth = 0,
-				toolbar = tabbox.toolbar;
+				toolbar = tabbox.toolbar,
+				toolbarWidth = 0;
 
 			jq(cave).children().each(function () {
 				childWidth += this.offsetWidth;
 			});
 			
-			if (toolbar)
-				toolbar = toolbar.$n();
+			if (toolbar && toolbar.desktop)
+				toolbarWidth = toolbar.$n().offsetWidth;
+			
 			if (tabbox._scrolling) { //already in scrolling status
 				var btnsize = this._getArrowSize();
-				if (toolbar) {						
-					tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
-				}
+				tabbox.$n('right').style.right = toolbarWidth + 'px';
 				
 				if (tabs.offsetWidth <= btnsize) return;
 				if (childWidth <= tabsOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					tabs.style.width = jq.px0(tbx.offsetWidth - toolbar.offsetWidth);
+					tabs.style.width = jq.px0(tbx.offsetWidth - toolbarWidth);
 					tabs.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -193,12 +193,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._showbutton(true);
 					var cave = this.$n('cave'),
 						btnsize = this._getArrowSize(),
-						temp = tbx.offsetWidth - toolbar.offsetWidth - btnsize;//coz show button then getsize again
+						temp = tbx.offsetWidth - toolbarWidth - btnsize;//coz show button then getsize again
 					cave.style.width = '5555px';
 					tabs.style.width = temp > 0 ? temp + 'px' : '';
-					
-					if (toolbar) 
-						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
+					tabbox.$n('right').style.right = toolbarWidth + 'px';
 					
 					if (way == 'sel') {
 						if (nodeOffsetLeft < tabsScrollLeft) {
