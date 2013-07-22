@@ -32,6 +32,7 @@ import org.zkoss.zul.impl.Utils;
  * An audio clip.
  *
  * <p>An extension to XUL.
+ * Only works for browsers supporting HTML5 audio tag (since ZK 7.0.0).
  *
  * @author tomyeh
  */
@@ -138,7 +139,7 @@ public class Audio extends XulElement {
 		}
 	}
 	/** Returns whether and how the audio should be loaded.
-	 *
+	 * "none" or "metadata" or "auto" or null
 	 * <p>Default: null.
 	 * @since 7.0.0
 	 */
@@ -146,7 +147,13 @@ public class Audio extends XulElement {
 		return _preload;
 	}
 	/** Sets whether and how the audio should be loaded.
-	 * 
+	 * <p>The options could be specified as follows:
+	 * <ul>
+	 *  <li>"none": browser should not load anything</li>
+	 * 	<li>"metadata" : browser should fetch the metadata only</li>
+	 *  <li>"auto" : browser should load the entire audio stream</li>
+	 * </ul>
+	 * @param preload which could be one of "none", "metadata", "auto".
 	 * @since 7.0.0
 	 */
 	public void setPreload(String preload) {
