@@ -33,10 +33,9 @@ var Button =
  * <p>Default {@link #getZclass}: z-button.
  */
 zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
-	_orient: "horizontal",
-	_dir: "normal",
-	_type: "button",
-	//_tabindex: 0,
+	_orient: 'horizontal',
+	_dir: 'normal',
+	_type: 'button',
 
 	$define: {
 		/** Returns the href that the browser shall jump to, if an user clicks
@@ -248,7 +247,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		if (!img) img = iconSclass;
 		else
-			img = '<img class="' + this.$s('image') + '" src="' + img + '" align="absmiddle" />'
+			img = '<img class="' + this.$s('image') + '" src="' + img + '" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
 		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
 		return this.getDir() == 'reverse' ?

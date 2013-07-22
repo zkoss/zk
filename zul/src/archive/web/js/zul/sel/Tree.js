@@ -12,6 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+var scrollPosition = null;
 var Tree =
 /**
  *  A container which can be used to hold a tabular
@@ -26,9 +27,11 @@ var Tree =
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	_scrollbar: null,
+	_barPos: null,
 	unbind_: function () {
 		var bar = this._scrollbar;
 		if (bar) {
+			scrollPosition = bar.getCurrentPosition();
 			bar.destroy();
 			bar = this._scrollbar = null;
 		}
@@ -38,10 +41,11 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Tree, 'onSize', arguments);
 		var self = this;
 		setTimeout(function () {
-			if (self.desktop)
+			if (self.desktop) {
 				if (!self._scrollbar)
 					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				self.refreshBar_();
+			}
 		}, 200);
 	},
 	refreshBar_: function (showBar) {
@@ -53,6 +57,9 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			//show block DIV on header if vertical scroll-bar required
 			if (embed)
 				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
+			
+			if (scrollPosition)
+				bar.scrollTo(scrollPosition.x, scrollPosition.y);
 		}
 	},
 	/**

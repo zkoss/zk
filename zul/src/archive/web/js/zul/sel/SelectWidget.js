@@ -430,9 +430,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (nRows) {
 			if (!hgh) {
-				if (!nVisiRows)
+				if (!nVisiRows) {
 					hgh = this._headHgh(20, true) * nRows;
-				else if (nRows <= nVisiRows) {
+				} else if (nRows <= nVisiRows) {
 					var $midVisiRow = zk(midVisiRow);
 					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
 				} else {

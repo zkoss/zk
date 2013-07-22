@@ -34,7 +34,7 @@
 		}
 	}
 	
-	&-content {
+	> .z-window-content {
 		margin: 0;
 		padding: 4px;
 		background: @baseBackgroundColor;
@@ -56,12 +56,13 @@
 		float: right;
 		cursor: pointer;
 		text-align: center;
-		color:@iconColor;
+		color: @iconColor;
 		
 		&:hover {
 			.resetGradient();
 			border-color: @hoverBorderColor;
 			background: @hoverBackgroundColor;
+			color: @iconHoverColor;
 		}
 	}
 	
@@ -121,7 +122,7 @@
 		.topBorderRadius();
 		padding: @framePadding @framePadding 0 @framePadding;
 		
-		.z-window-content {
+		> .z-window-content {
 			border-width: 0 0 0 0;
 			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
 		}
@@ -129,12 +130,12 @@
 		&.z-window-noheader {
 			padding-top: 0;
 			
-			z-window-content {
+			& > .z-window-content {
 				margin: 0px;
 			}
 		}
 		
-		&.z-window-noheader:not(.z-window-noborder) .z-window-content {
+		&.z-window-noheader:not(.z-window-noborder) > .z-window-content {
 			margin: 0px -1 * @framePadding;
 		}
 	}
@@ -160,11 +161,11 @@
 			padding: 0;
 		}
 		
-		.z-window-content {
+		> .z-window-content {
 			border: 0;			
 		}
 		
-		&:not(.z-window-noheader) .z-window-content {
+		&:not(.z-window-noheader) > .z-window-content {
 			margin: 0 -1 * @framePadding;
 		}
 		
@@ -181,7 +182,7 @@
 		padding-bottom: 15px;
 	}
 	
-	& .z-label {
+	.z-label {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @textColorGrayDark;

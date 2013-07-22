@@ -50,7 +50,7 @@
 		&-selected {
 			border-bottom: 1px solid @baseBorderColor;
 			.boxShadow('1px 0px 0 #FFFFFF');
-			background: 0;
+			background: none;
 
 			.z-tab-close {
 				.opacity(1.0);
@@ -498,12 +498,12 @@
 		z-index: 15;
 		.opacity(0.8);
 		zoom: 1;
-		color: @textColorGrayLight;
+		color: @iconColor;
 		text-align: center;
 		line-height: @baseButtonHeight;
 
 		&:hover {
-			color: @hoverColor;
+			color: @iconHoverColor;
 		}
 
 		& + .z-tab-text {

@@ -21,10 +21,10 @@ function (out) {
 		
 	if (this._disabled) out.push(' disabled="disabled"');
 	if (tabi) out.push(' tabindex="', tabi, '"');
-	out.push('>', this.domContent_(), '</button>', 
+	out.push('>', this.domContent_(), 
 			 '<a id="', uuid, '-btn" class="', this.$s('button'), '">', 
 				'<i id="', uuid, '-icon" class="', this.$s('icon'), ' z-icon-caret-down"></i>', 
-			 '</a>');
+			 '</a></button>');
 	// pp
 	if (this.firstChild)
 		this.firstChild.redraw(out);

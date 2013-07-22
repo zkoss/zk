@@ -811,8 +811,8 @@ String scroll; //DOM Element's ID</code></pre>
 	ignoreStop: function (target) { //called by mount
 		//Bug 3310017/3309975: if trigger focus() FF and chrome cannot handle input cursor.
 		return zk(target).isInput()
-				// B65-ZK-1839 ignore select tag for IE9
-				|| (zk.ie9 && jq.nodeName(target, 'select'));
+			// B65-ZK-1839 ignore select tag for IE9, chrome, opera
+			|| ((zk.ie9 || zk.chrome || zk.opera) && jq.nodeName(target, 'select'));
 	}
 });
 })();
