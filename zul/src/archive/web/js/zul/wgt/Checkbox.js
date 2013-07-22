@@ -55,9 +55,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		checked: function (v) {
 			var n = this.$n('real');
 			if (n) {
-				// Bug ZK-622
-				n.removeAttribute('checked');
-				n.checked = v;
+				v ? jq(n).attr('checked','checked') : jq(n).removeAttr('checked');
 			}
 		},
 		/** Returns the name of this component.
@@ -149,7 +147,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether to disable the checkbox after the user clicks it.
 		 * @param String autodisable
 		 */
-		autodisable: null,
+		autodisable: null
 	},
 
 	//super//

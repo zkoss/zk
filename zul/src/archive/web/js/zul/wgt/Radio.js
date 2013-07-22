@@ -89,10 +89,10 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			var n = this.$n('real');
 			if (n) {
 				n.checked = checked || false;
-				
+				checked ? jq(n).attr('checked','checked') : jq(n).removeAttr('checked');
 				// Bug ZK-622
 				if (!n.checked)
-					n.removeAttribute("checked");
+					jq(n).removeAttr('checked');
 				
 				var group = this.getRadiogroup();
 				if (group) {
@@ -103,7 +103,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 								var item = items[i].$n('real');
 								if (item) {
 									item.checked = false;
-									item.removeAttribute("checked");
+									jq(item).removeAttr('checked');
 								}
 								items[i]._checked = false;
 							}
