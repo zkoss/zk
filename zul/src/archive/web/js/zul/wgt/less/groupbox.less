@@ -3,7 +3,7 @@
 .z-groupbox {
 	padding-top: 16px;
 	
-	&-header {		
+	> .z-groupbox-header {
 		border: 1px solid @baseBorderColor;
 		border-bottom: 0;
 		width: 100%;
@@ -18,20 +18,20 @@
 
 		.z-caption, .z-groupbox-title {
 			padding: 0px 4px;
-			background: white;
+			background: @baseBackgroundColor;
 			width: auto;
-			display: table-caption;
+			display: inline;
 			cursor: pointer;
 			position: relative;
 			line-height: @baseLineHeight;
 
-			.z-caption-content, .z-label {
-				float: none;
-			}
-
 			&-readonly {
 				cursor: default;
 			}
+		}
+
+		.z-caption-content, .z-label {
+			float: none;
 		}
 	}
 
@@ -61,12 +61,13 @@
 	&-3d {
 		padding: 0;
 
-		.z-groupbox-header {
+		> .z-groupbox-header {
 			padding: 3px 4px;
 			border-bottom: 1px solid @baseBorderColor;
 			font-weight: bold;
 			.verGradient();
 			min-height: @baseBarHeight;
+			height: auto;
 
 			.z-caption, .z-groupbox-title {
 				margin: 0;
