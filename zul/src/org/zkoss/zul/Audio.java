@@ -147,12 +147,7 @@ public class Audio extends XulElement {
 		return _preload;
 	}
 	/** Sets whether and how the audio should be loaded.
-	 * <p>The options could be specified as follows:
-	 * <ul>
-	 *  <li>"none": browser should not load anything</li>
-	 * 	<li>"metadata" : browser should fetch the metadata only</li>
-	 *  <li>"auto" : browser should load the entire audio stream</li>
-	 * </ul>
+	 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
 	 * @param preload which could be one of "none", "metadata", "auto".
 	 * @since 7.0.0
 	 */

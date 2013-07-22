@@ -45,6 +45,7 @@ var Audio =
  * An audio clip.
  *
  * <p>An extension to XUL.
+ * Only works for browsers supporting HTML5 audio tag (since ZK 7.0.0).
  */
 zul.med.Audio = zk.$extends(zul.Widget, {
 	$define: {
@@ -76,6 +77,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		 * @since 7.0.0
 		 */
 		/** Sets whether and how the audio should be loaded.
+		 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
 		 * @param String preload
 		 * @since 7.0.0
 		 */	
