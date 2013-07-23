@@ -159,9 +159,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								refDim;
 							for(; c; c = c.nextSibling) {
 								//Skip absolute or fixed DOM element size
-								var cpos = c.style.position;
-								if (cpos == 'absolute' || cpos == 'fixed')
-									continue;
+								if (!isText) {
+									var cpos = c.style.position;
+									if (cpos == 'absolute' || cpos == 'fixed')
+										continue;
+								}
 								
 								var zkc = zk(c),
 									sz = 0;
@@ -180,7 +182,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										}
 									}
 								} else {
-									if (c.nodeType == 3)
+									if (isText)
 										sz = c.nodeValue ? zkn.textSize(c.nodeValue)[index] : 0;
 									else {
 										sz = zkc[offsetPos]() + zkc[marginPos]();
