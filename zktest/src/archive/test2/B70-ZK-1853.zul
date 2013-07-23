@@ -1,0 +1,19 @@
+<zk>
+	<audio id="audio" src="../media/guitar.wav"></audio>
+	<vlayout>
+	<label value="When clikc the button, you should hear the guitar sound."/>
+	<label value="Only works for browsers supporting HTML5 audio tag"/>
+	<button label="play">
+		<attribute name="onClick"><![CDATA[
+			audio.play();
+		]]></attribute>
+	</button>
+	<html>
+		<div xmlns:cc="http://creativecommons.org/ns#" about="urn:sha1:LJTEPSYNUVZNTPWFJO2OSXZ7SOGM54JB">
+			The playing audio is from
+			<a rel="cc:attributionURL" property="cc:attributionName" href="http://ccmixter.org/files/samplepacks/6892"> ccMixStar Sample Packs</a> / 
+			<a rel="license" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>
+		</div>
+	</html>
+	</vlayout>
+</zk>
