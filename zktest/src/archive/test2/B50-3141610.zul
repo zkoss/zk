@@ -8,7 +8,7 @@
 ]]></attribute>
 	</checkbox>
 	<style>
-		.z-menubar-hor, .z-menubar-ver { border: 1px solid #D8D8D8; }
+		.z-menubar-horizontal, .z-menubar-vertical { border: 1px solid #D8D8D8; }
 	</style>
 	<label value="Check the checkbox. The size of menubar will be changed. If you can scroll the resized menubar, it is correct." />
 	<menubar id="menubar" width="100%" scrollable="true">

@@ -151,18 +151,19 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth <= nodeWidth) {
 				this._scrolling = false;
 				body.scrollLeft = 0;
+				if (body.offsetWidth <= totalWidth)
+					body.style.width = jq.px0(fixedSize);
 			} else {
 				body.style.width = jq.px0(fixedSize);
 				this._fixScrollPos(node);
 			}
-			this._fixButtonPos(node);
 		} else {
 			if (totalWidth > nodeWidth) {
 				this._scrolling = true;
-				this._fixButtonPos(node);
 				body.style.width = jq.px0(fixedSize);
 			}
 		}
+		this._fixButtonPos(node);
 	},
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
@@ -178,10 +179,13 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			left = this.$n('left'),
 			right = this.$n('right'),
 			css = this._scrolling ? 'addClass' : 'removeClass';
-
+		
+		body.style.marginLeft = this._scrolling ? jq.px(left.offsetWidth) : '0';
+		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
+		left.style.display = right.style.display = this._scrolling ? 'block' : 'none';
 		jq(node)[css](this.$s('scroll'));
-		jq(left)[css](this.$s('left'));
-		jq(right)[css](this.$s('right'));
+//		jq(left)[css](this.$s('left'));
+//		jq(right)[css](this.$s('right'));
 	},
 	_forceStyle: function (node, value) {
 		if (zk.parseInt(value) < 0)
