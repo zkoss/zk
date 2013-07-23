@@ -12,6 +12,7 @@ ZK 6.5.4
   ZK-1847: When sending a request without data to server, the created event's data is an empty map instead of null
   ZK-1777: Server Push does not initialize when recycling
   ZK-1850: Unused conditional in org.zkoss.bind.converter.sys.ListboxModelConverter
+  ZK-1851: Apply a format into the Spinner componet, it will show NaN value after increase the number
 
   --------
 ZK 6.5.3
