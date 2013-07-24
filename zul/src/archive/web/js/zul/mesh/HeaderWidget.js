@@ -67,6 +67,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		} else
 			this.$supers('setFlexSize_', arguments);
 	},
+	getContentEdgeHeight_: function () {
+		return zk(this).sumStyles('tb', jq.margins);
+	},
+	getContentEdgeWidth_: function() {
+		return zk(this).sumStyles('lr', jq.margins);
+	},
 	domStyle_: function (no) {
 		var style = '';
 		if (this._hflexWidth) { //handle hflex
