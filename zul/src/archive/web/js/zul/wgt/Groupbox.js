@@ -137,7 +137,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		
 		var cap = this.caption;		
 		if(this._isDefault() && cap) {
-			cap.$n().style.top = jq.px(zk(cap.$n("cave")).offsetHeight() / 2 * -1);
+			cap.$n().style.top = jq.px(zk(cap.$n('cave')).offsetHeight() / 2 * -1);
 		}
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
@@ -146,7 +146,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			// B60-ZK-562
 			var node = this.$n(),
 				c;
-			height = 0;
+			height = this._isDefault() ? jq(this.$n('header')).outerHeight() : 0;
 			for (c = n.firstChild; c; c = c.nextSibling)
 				height += jq(c).outerHeight();
 		}
