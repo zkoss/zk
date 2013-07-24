@@ -1334,19 +1334,13 @@ zul.mesh.Scrollbar = {
 	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
-		var headtbl = wgt.eheadtbl,
-			foottbl = wgt.efoottbl,
-			embed = jq(wgt.$n()).data('embedscrollbar'),
+		var embed = jq(wgt.$n()).data('embedscrollbar'),
 			frozen = wgt.frozen,
 			startPositionX = 0;
 		
-		if (headtbl)
-			headtbl.style.position = 'relative';
-		if (foottbl)
-			foottbl.style.position = 'relative';
 		if (frozen) {
 			var columns = frozen.getColumns();
-			if (headtbl) {
+			if (wgt.eheadtbl) {
 				var cells = _getFirstRowCells(wgt.eheadrows);
 				if (cells) {
 					for (var i = 0; i < columns; i++)
@@ -1359,13 +1353,13 @@ zul.mesh.Scrollbar = {
 			startPositionX: startPositionX,
 			onSyncPosition: function() {
 				var pos = this.getCurrentPosition(),
-					headtbl = wgt.eheadtbl,
-					foottbl = wgt.efoottbl;
-				if (pos) {
-					if (headtbl)
-						headtbl.style.left = jq.px(pos.x);
-					if (foottbl)
-						foottbl.style.left = jq.px(pos.x);
+					head = wgt.ehead,
+					foot = wgt.efoot;
+				if (pos && this.hasHScroll()) {
+					if (head)
+						head.scrollLeft = pos.x;
+					if (foot)
+						foot.scrollLeft = pos.x;
 				}
 			},
 			onScrollEnd: function() {

@@ -500,11 +500,8 @@ span.z-upload input {
 //scrollbar
 .z-scrollbar {
 	position: absolute;
-	opacity: 0;
-	&-embed {
-		background: lighten(@scrollbarBackgroundColor, 5%);
-		.opacity(1.0);
-	}
+	display: none;
+	.opacity(0);
 	//vertical
 	&-vertical {
 		top: 0;
@@ -541,6 +538,17 @@ span.z-upload input {
 			    width: 100%;
 			    background: @scrollbarBackgroundColor;
 			}
+		}
+		&-embed {
+			width: @scrollbarWidth / 2;
+			height: 100%;
+			background: #000000;
+			position: absolute;
+			top: 0;
+			right: 0;
+			.borderRadius();
+			.opacity(0.2);
+			.boxShadow('inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07)');
 		}
 	}
 	&-up,
@@ -606,6 +614,17 @@ span.z-upload input {
 				height: 100%;
 				background: @scrollbarBackgroundColor;
 			}
+		}
+		&-embed {
+			width: 100%;
+			height: @scrollbarHeight / 2;
+			background: #000000;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			.borderRadius();
+			.opacity(0.2);
+			.boxShadow('inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07)');
 		}
 	}
 	&-left,

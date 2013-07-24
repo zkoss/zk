@@ -49,15 +49,9 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		}, 200);
 	},
 	refreshBar_: function (showBar) {
-		var bar = this._scrollbar,
-			embed = jq(this.$n()).data('embedscrollbar'),
-			headbar = this.$n('headbar');
+		var bar = this._scrollbar;
 		if (bar) {
 			bar.syncSize(showBar);
-			//show block DIV on header if vertical scroll-bar required
-			if (embed)
-				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
-			
 			if (scrollPosition)
 				bar.scrollTo(scrollPosition.x, scrollPosition.y);
 		}

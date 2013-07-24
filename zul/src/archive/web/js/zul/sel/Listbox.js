@@ -162,16 +162,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}, 200);
 	},
 	refreshBar_: function (showBar, scrollToTop) {
-		var bar = this._scrollbar,
-			embed = jq(this.$n()).data('embedscrollbar'),
-			headbar = this.$n('headbar');
+		var bar = this._scrollbar;
 		if (bar) {
 			bar.syncSize(showBar);
 			if (scrollToTop)
 				bar.scrollTo(0, 0);
-			//show block DIV on header if vertical scroll-bar required
-			if (embed)
-				headbar.style.display = bar.hasVScroll() ? 'block' : 'none';
 			//sync frozen
 			var frozen = this.frozen,
 				start;

@@ -25,17 +25,6 @@
 		overflow: hidden;
 		width: 100%;
 		.verGradient();
-		&.z-grid-header-bar {
-			display: none;
-			border-left: 1px solid @baseBorderColor;
-			border-bottom: 1px solid @baseBorderColor;
-			width: @scrollbarWidth;
-			height: 100%;
-			position: absolute;
-			top: 0;
-			right: 0;
-			z-index: 100;
-		}
 	}
 	//grid body
 	&-body {
@@ -210,7 +199,7 @@
 	}
 }
 //Cell Content
-.z-cell {
+.z-grid-body .z-cell {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	overflow: hidden;

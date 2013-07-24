@@ -33,7 +33,6 @@ function (out) {
 	//head
 	if (this.treecols) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
-				'<div id="', uuid, '-headbar" class="', this.$s('header'), ' ', this.$s('header-bar'), '"></div>',
 				'<table id="', uuid, '-headtbl"', width,
 				' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
