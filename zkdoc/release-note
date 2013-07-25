@@ -13,6 +13,7 @@ ZK 6.5.4
   ZK-1777: Server Push does not initialize when recycling
   ZK-1850: Unused conditional in org.zkoss.bind.converter.sys.ListboxModelConverter
   ZK-1851: Apply a format into the Spinner componet, it will show NaN value after increase the number
+  ZK-1588: bandbox popup should drop up when the space between the bandbox and the bottom of browser is not enough, refix in ie10 
 
   --------
 ZK 6.5.3
