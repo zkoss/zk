@@ -39,6 +39,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
 import org.zkoss.json.JSONValue;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
@@ -646,6 +647,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				resp = new AuSendRedirect(uri, null);
 			} else {
 				String msg = wapp.getConfiguration().getTimeoutMessage(deviceType);
+				dtid = XMLs.encodeText(dtid); // Fix ZK-1862 security issue
 				if (msg != null && msg.startsWith("label:")) {
 					final String key;
 					msg = Labels.getLabel(key = msg.substring(6), new Object[] {dtid});
