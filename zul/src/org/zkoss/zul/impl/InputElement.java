@@ -383,6 +383,7 @@ implements Constrainted, Readonly, Disable {
 		return _auxinf != null ? _auxinf.maxlength: 0;
 	}
 	/** Sets the maxlength.
+	 * <p> The length includes the format, if specified.
 	 */
 	public void setMaxlength(int maxlength) {
 		if ((_auxinf != null ? _auxinf.maxlength: 0) != maxlength) {
