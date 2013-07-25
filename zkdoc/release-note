@@ -15,6 +15,7 @@ ZK 6.5.4
   ZK-1851: Apply a format into the Spinner componet, it will show NaN value after increase the number
   ZK-1862: Should not echo parameter value back to client
   ZK-1588: bandbox popup should drop up when the space between the bandbox and the bottom of browser is not enough, refix in ie10 
+  ZK-1863: validationMessages with init annotation throw exception
 
   --------
 ZK 6.5.3
