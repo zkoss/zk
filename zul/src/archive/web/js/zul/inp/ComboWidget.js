@@ -44,8 +44,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 						jq(n)[fnm](zcls + 
 							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
 						
-						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
-							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
+						if (jq(this.getInputNode()).hasClass(zcls + '-text-invalid'))
+							jq(n)[fnm](zcls + '-btn-right-edge-invalid');
 					}
 				}
 				this.onSize();
@@ -151,18 +151,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		var ppofs = this.getPopupSize_(pp);
 		pp.style.width = ppofs[0];
-		pp.style.height = "auto";
+		pp.style.height = 'auto';
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1 ; //on-top of everything
 
 		var pp2 = this.getPopupNode_(true);
-		if (pp2) pp2.style.width = pp2.style.height = "auto";
+		if (pp2) pp2.style.width = pp2.style.height = 'auto';
 
-		pp.style.position = "absolute"; //just in case
-		pp.style.display = "block";
+		pp.style.position = 'absolute'; //just in case
+		pp.style.display = 'block';
 
 		// throw out
-		pp.style.visibility = "hidden";
-		pp.style.left = "-10000px";
+		pp.style.visibility = 'hidden';
+		pp.style.left = '-10000px';
 
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
@@ -178,19 +178,25 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			ppofs = this.getPopupSize_(pp);
 		
 		// throw in
-		pp.style.left = "";
+		pp.style.left = '';
 		this._fixsz(ppofs);//fix size
 		
 		// given init position
-		$pp.position(inp, "after_start");
+		$pp.position(inp, 'after_start');
 		
-		// B65-ZK-1588
-		if(jq(pp).position().top < jq(inp).position().top + zk(inp).offsetHeight()) {
-			$pp.position(inp, "before_start");
+		// B65-ZK-1588: bandbox popup should drop up 
+		//   when the space between the bandbox and the bottom of browser is not enough  
+		var top = jq(pp).position().top + (zk.chrome ? 1 : 0), // chrome alignement issue: -1px margin-top
+			realtop = zk.ie > 9 ? Math.round(top) : top,
+			after = jq(inp).position().top + zk(inp).offsetHeight(),
+			realafter = zk.ie > 9 ? Math.round(after) : after;
+		
+		if(realtop < realafter) {
+			$pp.position(inp, 'before_start');
 		}
 		
-		pp.style.display = "none";
-		pp.style.visibility = "";
+		pp.style.display = 'none';
+		pp.style.visibility = '';
 		this.slideDown_(pp);
 
 		//FF issue:
@@ -204,7 +210,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					var hgh = 0;
 					for (var j = rows.length; j--;)
 						hgh += rows[j].offsetHeight;
-					pp.style.height = (hgh + 20) + "px";
+					pp.style.height = (hgh + 20) + 'px';
 						//add the height of scrollbar (18 is an experimental number)
 				}
 			}
@@ -236,7 +242,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @since 5.0.4
 	 */
 	slideUp_: function (pp) {
-		pp.style.display = "none";
+		pp.style.display = 'none';
 	},
 
 	zsync: function () {
@@ -263,7 +269,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @since 5.0.4
 	 */
 	getPopupNode_: function (inner) {
-		return inner ? this.$n("cave"): this.$n("pp");
+		return inner ? this.$n('cave'): this.$n('pp');
 	},
 
 	/** Closes the list of combo items ({@link Comboitem} if it was
@@ -289,7 +295,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!pp) return;
 
 		this.setFloating_(false);
-		zWatch.fireDown("onHide", this);
+		zWatch.fireDown('onHide', this);
 		this.slideUp_(pp);
 
 		zk.afterAnimate(function() {
@@ -313,17 +319,17 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!pp) return;
 
 		var pp2 = this.getPopupNode_(true);
-		if (ppofs[1] == "auto" && pp.offsetHeight > 350) {
-			pp.style.height = "350px";
+		if (ppofs[1] == 'auto' && pp.offsetHeight > 350) {
+			pp.style.height = '350px';
 		} else if (pp.offsetHeight < 10) {
-			pp.style.height = "10px"; //minimal
+			pp.style.height = '10px'; //minimal
 		}
 
-		if (ppofs[0] == "auto") {
+		if (ppofs[0] == 'auto') {
 			var cb = this.$n();
 			if (pp.offsetWidth < cb.offsetWidth) {
-				pp.style.width = zk(pp).revisedWidth(cb.offsetWidth) + "px";
-				if (pp2) pp2.style.width = "100%";
+				pp.style.width = zk(pp).revisedWidth(cb.offsetWidth) + 'px';
+				if (pp2) pp2.style.width = '100%';
 					//Note: we have to set width to auto and then 100%
 					//Otherwise, the width is too wide in IE
 			} else {
