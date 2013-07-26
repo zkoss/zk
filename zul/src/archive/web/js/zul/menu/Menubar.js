@@ -184,8 +184,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
 		left.style.display = right.style.display = this._scrolling ? 'block' : 'none';
 		jq(node)[css](this.$s('scroll'));
-//		jq(left)[css](this.$s('left'));
-//		jq(right)[css](this.$s('right'));
 	},
 	_forceStyle: function (node, value) {
 		if (zk.parseInt(value) < 0)
@@ -201,7 +199,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		this._closeOnOut();
 	},
 	_doScroll: function (evt) {
-		this._scroll(evt.domTarget == this.$n('left') ? 'left' : 'right');
+		this._scroll(evt.domTarget == this.$n('left') || evt.domTarget.parentNode == this.$n('left') ? 'left' : 'right');
 	},
 	_scroll: function (direction) {
 		if (!this.checkScrollable() || this._runId) return;
