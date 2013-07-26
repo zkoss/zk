@@ -702,12 +702,14 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		
 		pos = Math.round(pos);
 		this._pos[isH ? 0 : 1] = pos;
-		cave[isH ? 'scrollLeft' : 'scrollTop'] = pos;
+		
 		bar.style[isH ? 'left' : 'top'] = pos + 'px';
 		if (isH && this.needV)
 			this.$n('ver').style.right = -pos + 'px';
 		if (!isH && this.needH)
 			this.$n('hor').style.bottom = -pos + 'px';
+		
+		cave[isH ? 'scrollLeft' : 'scrollTop'] = pos;
 		
 		//onSyncPosition callback
 		var onSyncPosition = this.opts.onSyncPosition;
