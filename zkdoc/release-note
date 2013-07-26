@@ -18,6 +18,7 @@ ZK 6.5.4
   ZK-1863: validationMessages with init annotation throw exception
   ZK-1864: share listmodelist cause un-predictable reload
   ZK-1861: Js error when flex + visible = false
+  ZK-1867: Set visible of row doesn't work correctly
 
   --------
 ZK 6.5.3
