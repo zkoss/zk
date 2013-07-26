@@ -91,7 +91,6 @@ abstract public class LabelImageElement extends LabelElement {
 	
 	/**
 	 * Returns the icon font
-	 * @param iconSclass a CSS class name for the icon font
 	 * @since 7.0.0
 	 */
 	public String getIconSclass() {
