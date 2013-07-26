@@ -707,7 +707,9 @@ public class Grid extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					onListDataChange(event);
+					// ZK-1864: share listmodelist cause un-predictable reload
+					if (event.getType() != ListDataEvent.SELECTION_CHANGED)
+						onListDataChange(event);
 				}
 			};
 			
