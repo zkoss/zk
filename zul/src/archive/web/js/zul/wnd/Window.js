@@ -27,8 +27,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
 			
-		s.width = jq.px0($op[0].clientWidth);
-		s.height = jq.px0($op[0].clientHeight);
+		s.width = jq.px0($op[0].clientWidth - $op.zk.paddingWidth());
+		s.height = jq.px0($op[0].clientHeight - $op.zk.paddingHeight());
 	}
 
 	//drag move
@@ -542,9 +542,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					// prevent the scroll bar.
 					s.top = '-10000px';
 					s.left = '-10000px';
-
-					s.width = jq.px0($op[0].clientWidth);
-					s.height = jq.px0($op[0].clientHeight);
+					
+					s.width = jq.px0($op[0].clientWidth - (!floated ? $op.zk.paddingWidth() : 0));
+					s.height = jq.px0($op[0].clientHeight - (!floated ? $op.zk.paddingHeight() : 0));
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
