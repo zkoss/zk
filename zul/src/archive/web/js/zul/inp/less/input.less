@@ -110,16 +110,16 @@
 // bug ZK-1135: IE8 does not support rgba
 
 .z-errorbox-left {
-	border-right-color: @errorboxColor;
+	border-right-color: @errorboxBorderColor;
 }
 .z-errorbox-right {
-	border-left-color: @errorboxColor;
+	border-left-color: @errorboxBorderColor;
 }
 .z-errorbox-up {
-	border-bottom-color: @errorboxColor;
+	border-bottom-color: @errorboxBorderColor;
 }
 .z-errorbox-down {
-	border-top-color: @errorboxColor;
+	border-top-color: @errorboxBorderColor;
 }
 
 
@@ -130,16 +130,19 @@
 	height: @baseIconHeight - 4;
 	top: 8px;
 	right: 8px;
-	line-height: @baseLineHeight - 3;
-	padding: 0 2px;
-	opacity: 0.6;
+	padding: 0 1px;
+	.opacity(0.6);
 	font-size: @fontSizeXSmall;
 
 	&:hover {
 		.borderRadius(@borderRadiusSmall - 1);
-		background: #FFFFFF;
+		border: 1px solid @errorboxBorderColor;
 		opacity: 1;
 	}
+}
+.z-errorbox-icon {
+	position: absolute;
+	top: -1px;
 }
 .z-errorbox-pointer ~ .z-errorbox-close {
 	top: 7px;
@@ -161,7 +164,4 @@
 .z-errorbox-up ~
 .z-errorbox-close {
 	top: 15px;
-}
-.z-errorbox-close:hover {
-	color: @errorboxColor;
 }

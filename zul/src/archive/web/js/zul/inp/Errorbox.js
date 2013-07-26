@@ -291,7 +291,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	_change: function (dg) {
 		var errbox = dg.control,
 			stackup = errbox._stackup,
-			el = errorbox.$n();
+			el = errbox.$n();
 		if (stackup) {
 			stackup.style.top = el.style.top;
 			stackup.style.left = el.style.left;
