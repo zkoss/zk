@@ -971,10 +971,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//note: we don't solve this bug for paging yet
-		var n = this.$n();
-		
+		var n = this.$n(),
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
-			tblwd = zk(n).contentWidth(),
+			tblwd = zk(n).contentWidth() + zk(n).padBorderWidth(),
 			sizedByContent = this.isSizedByContent(),
 			ehead = this.ehead,
 			ebody = this.ebody,
@@ -1009,9 +1008,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// B50-ZK-543, B50-ZK-773
 		// should re-calculate height because
 		// the string height maybe changed after width changed.
-		if (sizedByContent && this.getRows && this.getRows() > 1 && (typeof this._calcHgh == "function")
-				&& this.ebody.style.height) // check only if height exists for F50-3000339.zul
+		if (sizedByContent 
+				&& this.getRows && this.getRows() > 1 
+				&& (typeof this._calcHgh == 'function')
+				&& this.ebody.style.height) { // check only if height exists for F50-3000339.zul
 			this._calcHgh(); // recalculate height again ZK-796
+		}
 		
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 		
