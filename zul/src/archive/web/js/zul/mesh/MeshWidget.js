@@ -706,7 +706,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
 			for (var i = this.heads.length; i-- > 0;)
 				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
-					if (hdsmin && !w._width && !w._nhflex) {
+					if (hdsmin && !this.ehdfaker.childNodes[i].style.width && !w._nhflex) {
 						// B50-3357475: assume header hflex min if width/hflex unspecified
 						w._hflex = 'min';
 						w._nhflex = -65500; // min
