@@ -252,13 +252,17 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		}
 	},
 	_moveTo: function (body, moveDest) {
-		var currPos = body.scrollLeft,
-			step = 5;
-		if (currPos == moveDest) return false;
+		var currPos = body.scrollLeft;
+		if (currPos == moveDest)
+			return false;
 		
-		var delta = currPos > moveDest ? -1 : 1,
-			setTo = currPos + step * delta;
-		body.scrollLeft = setTo < moveDest ?  moveDest : setTo;
+		var step = 5,
+			delta = currPos > moveDest ? -step : step,
+			setTo = currPos + delta;
+		if ((setTo < moveDest && delta < 0) || (setTo > moveDest && delta > 0))
+			setTo = moveDest;
+		
+		body.scrollLeft = setTo;
 		return true;
 	},
 	insertChildHTML_: function (child, before, desktop) {

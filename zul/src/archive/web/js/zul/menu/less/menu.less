@@ -301,7 +301,8 @@
 	}
 	&-right {
 		.z-menubar-icon {
-			left: 13px;
+			position: relative;
+			left: 2px;
 		}
 	}
 	&-left,
@@ -327,7 +328,7 @@
 	}
 	&-scrollable {
 		border: 1px solid lighten(@baseBorderColor, 5%);
-		.topBorderRadius(@borderRadiusSmall);
+		border-width: 0 1px;
 		.verGradient();
 		top: 0;
 		right: 0;
