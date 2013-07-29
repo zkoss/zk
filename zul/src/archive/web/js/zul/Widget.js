@@ -89,7 +89,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_tt_clearClosing_();
 
 		var tip = _tt_tip;
-		if (tip) {
+		if (tip && tip.desktop) { //check still attached to desktop
 			// Bug ZK-1222, ZK-1594
 			//
 			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event 

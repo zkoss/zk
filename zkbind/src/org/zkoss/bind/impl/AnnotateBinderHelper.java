@@ -55,6 +55,7 @@ public class AnnotateBinderHelper {
 	final static public String FORM_ATTR = "form";
 	final static public String VIEW_MODEL_ATTR = "viewModel";
 	final static public String BINDER_ATTR = "binder";
+	final static public String VALIDATION_MESSAGES_ATTR = "validationMessages";
 	final static public String CHILDREN_ATTR = "children";
 	
 	//control key
@@ -104,6 +105,8 @@ public class AnnotateBinderHelper {
 			}else if(VIEW_MODEL_ATTR.equals(propName)){
 				//ignore
 			}else if(BINDER_ATTR.equals(propName)){
+				//ignore
+			}else if(VALIDATION_MESSAGES_ATTR.equals(propName)){
 				//ignore
 			}else{
 				processPropertyBindings(comp, propName);
