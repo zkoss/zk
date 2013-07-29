@@ -220,7 +220,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				
 				var map = {},
 					n = wgt.$n(), 
-					hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0
+					hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0,
 					cavesz = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : 0;
 
 				map[sizePos] = max + cavesz + wgt[contentPos]() + margin;
