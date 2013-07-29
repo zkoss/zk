@@ -34,6 +34,8 @@ ZK 6.5.4
   ZK-1861: Js error when flex + visible = false
   ZK-1867: Set visible of row doesn't work correctly
   ZK-1868: TypeError: $tipOff is null in function _tt_close()
+  ZK-1870: ZK Does not set session in SessionCtrl when handling a Portlet Ajax request
+  ZK-1854: Issue with toolbar and hflex= 1
 
   --------
 ZK 6.5.3
