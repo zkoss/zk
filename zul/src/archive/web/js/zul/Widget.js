@@ -84,7 +84,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_tt_clearClosing_();
 
 		var tip = _tt_tip;
-		if (tip) {
+		if (tip && tip.desktop) { //check still attached to desktop
 			_tt_tip = _tt_ref = null;
 			tip.close({sendOnOpen:true});
 		}
