@@ -209,7 +209,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
 		if (bar) {
-			bar.syncSize(showBar);
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			this._shallShowScrollbar = false;
 			if (scrollToTop)
 				bar.scrollTo(0, 0);
 			
@@ -232,6 +233,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	onResponse: function () {
 		if (this._shallFixEmpty) 
 			_fixForEmpty(this);
+		this._shallShowScrollbar = true;
 		this.$supers(Grid, 'onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns

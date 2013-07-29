@@ -164,7 +164,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
 		if (bar) {
-			bar.syncSize(showBar);
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			this._shallShowScrollbar = false;
 			if (scrollToTop)
 				bar.scrollTo(0, 0);
 			//sync frozen
@@ -218,6 +219,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this.stripe();
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
+			this._shallShowScrollbar = true;
 		}
 		this.$supers(Listbox, 'onResponse', arguments);
 	},
