@@ -196,6 +196,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			return;
 		}
 		final Object old = I18Ns.setup(httpreq.getSession(), httpreq, httpres, "UTF-8");
+		SessionsCtrl.setCurrent(sess);
 		try {
 			response.setProperty("Pragma", "no-cache");
 			response.setProperty("Cache-Control", "no-cache");
@@ -207,6 +208,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			e.printStackTrace();
 		} finally {
 			I18Ns.cleanup(httpreq, old);
+			SessionsCtrl.requestExit(sess);
+			SessionsCtrl.setCurrent((Session)null);
 		}
 	}
 	
