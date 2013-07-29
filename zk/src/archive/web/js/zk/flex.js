@@ -106,6 +106,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					n = wgtn,
 					zkn = zk(n),
 					max = 0;
+
 				if (min != null)
 					max = min;
 				else {
@@ -218,8 +219,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					margin = 0;
 				
 				var map = {},
-					n = wgt.$n();
-				map[sizePos] = (max + wgt[contentPos]() + margin);
+					n = wgt.$n(), 
+					cavesz = wgt.$instanceof(zul.wgt.Caption) && wgt.$n().childNodes.length > 1 ? zk(wgt.$n("cave"))[offsetPos]() : 0;
+
+				map[sizePos] = max + cavesz + wgt[contentPos]() + margin;
 				wgt.setFlexSize_(map, true);
 				sz = {height: n.offsetHeight, width: n.offsetWidth};
 				if (sz && sz[sizePos] >= 0)
