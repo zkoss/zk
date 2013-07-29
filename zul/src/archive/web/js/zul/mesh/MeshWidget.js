@@ -973,7 +973,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//note: we don't solve this bug for paging yet
 		var n = this.$n(),
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
-			tblwd = zk(n).contentWidth() + zk(n).padBorderWidth(),
+			tblwd = zk(n).contentWidth(),
 			sizedByContent = this.isSizedByContent(),
 			ehead = this.ehead,
 			ebody = this.ebody,
