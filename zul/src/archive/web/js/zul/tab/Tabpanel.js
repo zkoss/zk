@@ -93,7 +93,6 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			} else {
 				zkp.slideUp(this);
 			}
-			//zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
 			var $pl = jq(accd ? this.$n('cave') : this.$n()),
 				vis = $pl.zk.isVisible();
