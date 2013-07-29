@@ -149,19 +149,18 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	_resetBoxSize: function (vert) {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			var chdex = kid.$n('chdex');
-				// ZK-1861: Js error when flex + visible = false
-				if (chdex) {
-					//ZK-1679: clear height only vflex != min, clear width only hflex != min
-					if (vert && kid._nvflex && kid.getVflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
-						if (chdex)
-							chdex.style.height = '';
-					}
-					if (!vert && kid._nhflex && kid.getHflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
-						if (chdex)
-							chdex.style.width = '';
-					}
+			// ZK-1861: Js error when flex + visible = false
+			if (chdex) {
+				//ZK-1679: clear height only vflex != min, clear width only hflex != min
+				if (vert && kid._nvflex && kid.getVflex() != 'min') {
+					kid.setFlexSize_({height:'', width:''});
+					if (chdex)
+						chdex.style.height = '';
+				}
+				if (!vert && kid._nhflex && kid.getHflex() != 'min') {
+					kid.setFlexSize_({height:'', width:''});
+					if (chdex)
+						chdex.style.width = '';
 				}
 			}
 		}
