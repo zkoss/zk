@@ -1,0 +1,29 @@
+<zk>
+	<label multiline="true">
+	1. Should not see "First Panel".
+	2. Click "test" button, should see "First Panel" showed.
+	3. Reload browser
+	4. Select "Second Tab".
+	5. Click "test" button.
+	6. Select "First Tab", should see "First Panel" showed.
+	</label>
+	<tabbox width="500px">
+		<tabs>
+			<tab label="First Tab" id="firstTab" />
+			<tab label="Second Tab" />
+			<tab label="Third Tab" />
+		</tabs>
+		<tabpanels>
+			<tabpanel id="firstTabPanel" visible="false">
+				First Panel <textbox  value="first"></textbox>
+			</tabpanel>
+			<tabpanel>
+				Second Panel <textbox value="second"></textbox>
+			</tabpanel>
+			<tabpanel>
+				Third Panel <textbox value="third"></textbox>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<button label="test" onClick="firstTabPanel.setVisible(!firstTabPanel.isVisible());" />
+</zk>

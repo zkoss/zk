@@ -44,7 +44,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (_tt_ref == ref || _tt_tip == ref) {
 			_tt_clearClosing_(); //just in case
 			_tt_tmClosing = setTimeout(_tt_close_, 100);
-			//don't cloes immediate since user might move from ref to toolip
+			//don't close immediate since user might move from ref to toolip
 		} else
 			_tt_clearOpening_();
 	}
@@ -74,8 +74,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return _tt_tip = _tt_ref = null;
 
 			var params = inf.params,
-				xy = params.x !== undefined ? [params.x, params.y]
-							: zk.currentPointer;
+				xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
 			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
 		}
 	}
@@ -85,6 +84,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var tip = _tt_tip;
 		if (tip && tip.desktop) { //check still attached to desktop
+			// B50-ZK-1222, ZK-1594
+			//
+			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event 
+			// will be triggered again that closes the tooltip immediately, then another 
+			// TooltipOver event will open the tooltip again...
+			// 
+			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
+			// IE 10: Bug ZK-1519
+	    	if (zk.ie > 9 || zk.ff) {
+				var $tip = jq(tip.$n()),
+					$tipOff = $tip.offset(),
+					pointer = zk.currentPointer;
+				if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width())) &&
+					(pointer[1] >= $tipOff.top  && pointer[1] <= ($tipOff.top + $tip.height())))
+					return;
+			}
 			_tt_tip = _tt_ref = null;
 			tip.close({sendOnOpen:true});
 		}

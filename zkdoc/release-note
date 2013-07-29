@@ -1,7 +1,25 @@
+ZK 5.0.13
+
+* Features
+  
+* Bugs
+  ZK-1523: JS Error if echoEvent to the component under unselected tab
+  ZK-1572: Scrolling-Bug in Listbox with freezed columns with ie9
+  ZK-1594: Blinking popup in Firefox
+  ZK-1618: Tabpanel not follow the visible attribute
+  ZK-1622: Paging listbox scrollbar is wrong
+  ZK-1868: TypeError: $tipOff is null in function _tt_close()
+
+  
+* Upgrade Notes
+
 	--------
 ZK 5.0.12
+Nov 06, 2012
 * Features
   ZK-1002: Remove script carrying ZK initialization code after mounted
+  ZK-1301: The buttons in the Messagebox shall use autodisable
+  ZK-1397: DefaultTreeNode support empty children mean leaf node
 
 * Bugs
   ZK-998: Uploading mp3 fails in 5.0.11
@@ -27,7 +45,22 @@ ZK 5.0.12
   ZK-1143: Subsequent WrongValueException causes JS error on ipad
   ZK-1146: TreeModel getChildCount invoke too much times
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
-  ZK-1868: TypeError: $tipOff is null in function _tt_close()
+  ZK-1222: Popup component as tooltips fires multiple onOpen events
+  ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
+  ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
+  ZK-1391: When a window is invisible at first, its top (or left) attribute takes no effect even we turn the window to be visible.
+  ZK-1276: Combobox does not sync the selected item
+  ZK-1298: Can not set composer name with <custom-attributes>
+  ZK-1322: Issue on timebox with null value
+  ZK-1256: Combobox onSelect not working properly
+  ZK-1400: Focus issue when Listbox in select mold after invalidate
+  ZK-1519: Popup disappear when mouse over on the corner where the two scrollbars meet, IE 10 only
+  
+* Upgrade Notes
+  + Decouple Flashchart component from zul.jar to flashchart.jar, due to Flashchart contains a potential
+   SWF vulnerability in YUI 2 that the SWF files in question contain a cross-site JavaScript injection
+   vulnerability which allows for the execution of arbitrary third-party code within the domain from which
+   the files are served. Please download the flashchart.jar from the link instead - https://github.com/zkoss/flashchart
   
 	--------
 ZK 5.0.11

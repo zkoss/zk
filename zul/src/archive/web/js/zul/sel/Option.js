@@ -102,6 +102,12 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	getMaxlength: function () {
 		return this.parent ? this.parent.getMaxlength() : 0;
 	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		//Bug ZK-1303: force update parent's selected index.
+		if (this.isSelected())
+			this.parent._selectedIndex = this._index;
+	},
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	},

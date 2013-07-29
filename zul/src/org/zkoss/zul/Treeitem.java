@@ -254,7 +254,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 			
 			Tree tree = getTree();
 			if(tree != null && tree.getModel() !=null){
-				if(_open)
+				if(_open && !isLoaded())
 					tree.renderItem(this);
 				TreeModel model = tree.getModel();
 				if (model instanceof Openable)

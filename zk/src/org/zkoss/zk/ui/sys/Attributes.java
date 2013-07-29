@@ -120,11 +120,6 @@ public class Attributes {
 	 * @since 3.5.1
 	 */
 	public static final String RENEW_NATIVE_SESSION = "org.zkoss.zk.ui.renewNativeSession";
-	/** A special attribute set to the session to cause Google App Engine
-	 * to update attributes to the storage.
-	 * @since 5.0.0
-	 */
-	public static final String GAE_FIX = "org.zkoss.zk.gae.fix";
 
 	//Library//
 	/** A library property to indicate the default resend delay

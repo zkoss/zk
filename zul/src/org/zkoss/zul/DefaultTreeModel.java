@@ -42,21 +42,36 @@ public class DefaultTreeModel extends AbstractTreeModel
 implements TreeModelExt, java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
+	/** Whether to treat the zero size of children node as a leaf node. */
+	private boolean _emptyleaf;
 
 	/** Creates a tree with the specified note as the root.
 	 * @param root the root (cannot be null).
 	 */
 	public DefaultTreeModel(TreeNode root) {
+		this(root, false);
+	}
+	
+	/** Creates a tree with the specified note as the root.
+	 * @param root the root (cannot be null).
+	 * @param emptyChildAsLeaf whether to treat the zero size of children node as a leaf node.
+	 */
+	public DefaultTreeModel(TreeNode root, boolean emptyChildAsLeaf) {
 		super(root);
 		TreeNode parent = root.getParent();
 		if (parent != null)
 			parent.remove(root);
 		root.setModel(this);
+		_emptyleaf = emptyChildAsLeaf;
 	}
 
 	//@Override
 	public boolean isLeaf(Object node) {
-		return ((TreeNode)node).isLeaf();
+		TreeNode tNode = (TreeNode)node;
+		boolean isLeaf = tNode.isLeaf();
+		if (!isLeaf && _emptyleaf)
+			return tNode.getChildCount() == 0;
+		return isLeaf;
 	}
 	//@Override
 	public Object getChild(Object parent, int index) {
