@@ -19,7 +19,7 @@ function (out) {
 		uuid = this.uuid,
 		icon = this.$s('icon'),
 		getIcon = function(fontIconCls) {
-			return '<i id="' + uuid + '-icon-close" class="z-' + fontIconCls + '"></i>';
+			return '<i id="' + uuid + '-cls" class="z-' + fontIconCls + ' ' + icon + '"></i>';
 		};
 	 
 	if (tbx.inAccordionMold()) {//Accordion
@@ -42,7 +42,7 @@ function (out) {
 		out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>');
 
 		if (this.isClosable())
-			out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove'), '</div>');
+			out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">' , getIcon('icon-remove'), '</div>');
 
 		this.contentRenderer_(out);
 
@@ -53,9 +53,9 @@ function (out) {
 	} else {
 		out.push('<li ', this.domAttrs_(), '>');
 		if (this.isClosable())
-			out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '">' , getIcon('icon-remove'),  '</div>');
+			out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">' , getIcon('icon-remove'),  '</div>');
 		else if (tbx.isVertical())
-			out.push('<a class="', this.$s('noclose'), '" ></a>');
+			out.push('<div class="', this.$s('noclose'), '" ></div>');
 		this.contentRenderer_(out);
 		
 		out.push('</li>');

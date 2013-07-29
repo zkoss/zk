@@ -220,7 +220,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				
 				var map = {},
 					n = wgt.$n(), 
-					cavesz = wgt.$instanceof(zul.wgt.Caption) && wgt.$n().childNodes.length > 1 ? zk(wgt.$n("cave"))[offsetPos]() : 0;
+					hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0
+					cavesz = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : 0;
 
 				map[sizePos] = max + cavesz + wgt[contentPos]() + margin;
 				wgt.setFlexSize_(map, true);
