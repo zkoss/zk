@@ -249,7 +249,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
-		var closebtn = this.isClosable() ? this.$n('close') : null,
+		var closebtn = this.isClosable() ? this.$n('cls') : null,
 			tab = this;
 		if (closebtn) {
 			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
@@ -271,7 +271,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			this._calcHgh();
 	},
 	unbind_: function () {
-		var closebtn = this.$n('close');
+		var closebtn = this.$n('cls');
 		// ZK-886
 		_logId(this);
 		if (closebtn) {
