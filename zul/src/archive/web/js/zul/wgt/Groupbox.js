@@ -134,15 +134,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
 		}
-		
-		var cap = this.caption;		
-		if(this._isDefault() && cap) {
-			cap.$n().style.top = jq.px(zk(cap.$n('cave')).offsetHeight() / 2 * -1);
-		}
-		
-		var title = this.$n('title');
-		if(this._isDefault() && title) {
-			title.style.top = jq.px(zk(title.firstChild).offsetHeight() / 2 * -1);
+		if (this._isDefault()) {
+			var title = this.$n('title-cnt'),
+				cap = this.caption;
+			if (cap)
+				cap.$n().style.top = jq.px(zk(cap.$n('cave')).offsetHeight() / 2 * -1);
+			if (title)
+				title.style.top = jq.px(zk(title-cnt).offsetHeight() / 2 * -1);
 		}
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
