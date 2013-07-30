@@ -28,7 +28,7 @@ function (out, skipper) {
 			cap.redraw(out);
 		else
 			out.push('<div id="', uuid,'-title" class="', this.$s('title'), 
-					'"><span class="', this.$s('title-content'), '">', title, '</span></div>');
+					'"><div class="', this.$s('title-content'), '">', title, '</div></div>');
 
 		out.push('</div>');		
 	}
