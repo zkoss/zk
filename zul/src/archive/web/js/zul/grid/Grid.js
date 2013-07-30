@@ -213,6 +213,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._shallShowScrollbar = false;
 			if (scrollToTop)
 				bar.scrollTo(0, 0);
+			else
+				bar.scrollTo(this._currentLeft, this._currentTop);
 			
 			//sync frozen
 			var frozen = this.frozen,
@@ -230,10 +232,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			bar = this._scrollbar = null;
 		}
 	},
-	onResponse: function () {
+	onResponse: function (ctl, opts) {
 		if (this._shallFixEmpty) 
 			_fixForEmpty(this);
-		this._shallShowScrollbar = true;
+		if (this.desktop && opts && opts.rtags.onDataLoading)
+			this._shallShowScrollbar = true;
 		this.$supers(Grid, 'onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns

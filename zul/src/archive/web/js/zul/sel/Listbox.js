@@ -168,6 +168,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._shallShowScrollbar = false;
 			if (scrollToTop)
 				bar.scrollTo(0, 0);
+			else
+				bar.scrollTo(this._currentLeft, this._currentTop);
 			//sync frozen
 			var frozen = this.frozen,
 				start;
@@ -219,7 +221,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this.stripe();
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
-			this._shallShowScrollbar = true;
+			if (opts && opts.rtags.onDataLoading)
+				this._shallShowScrollbar = true;
 		}
 		this.$supers(Listbox, 'onResponse', arguments);
 	},
