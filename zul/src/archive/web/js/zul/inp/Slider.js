@@ -240,7 +240,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip = jq('#zul_slidetip')[0];
 		if (widget.slidetip) {
 			var slideStyle = widget.slidetip.style;
-			if (zk.chrome || zk.safari) { //give initial position to avoid browser scrollbar
+			if (zk.webkit) { //give initial position to avoid browser scrollbar
 				slideStyle.top = '0px';
 				slideStyle.left = '0px';
 			}

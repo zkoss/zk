@@ -947,7 +947,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ebody = this.ebody,
 			ebodyStyle = ebody.style;
 		if (this.isVflex() || (hgh && hgh != 'auto' && hgh.indexOf('%') < 0)) {
-			if (zk.safari && ebodyStyle.height == jq.px(this._vflexSize()))
+			if (zk.webkit && ebodyStyle.height == jq.px(this._vflexSize()))
 				return; // Bug ZK-417, ignore to set the same size
 			ebodyStyle.height = ''; //allow browser adjusting to default size
 			var h = this._vflexSize();

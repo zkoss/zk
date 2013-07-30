@@ -205,7 +205,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				this.setChecked(checked); //so Radio has a chance to override it
 				this.fireOnCheck_(checked);
 			}
-			if (zk.safari && !zk.mobile) 
+			if (zk.webkit && !zk.mobile) 
 				zk(real).focus();
 
 			// B65-ZK-1837

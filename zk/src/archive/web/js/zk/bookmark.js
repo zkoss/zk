@@ -41,7 +41,7 @@ zk.bmk = (function () { //used internally
 	}
 	function _toHash(nm, hashRequired) {
 		nm = encodeURIComponent(nm);
-		return (!hashRequired && zk.safari) || !nm ? nm: '#' + nm;
+		return (!hashRequired && zk.webkit) || !nm ? nm: '#' + nm;
 	}
 	function _bookmark(nm, replace) {
 		if (_curbk != nm) {

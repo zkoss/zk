@@ -28,13 +28,13 @@ function (out) {
 	//IE and Safari need to set height, or the table height will shrink to as high as inner table
 	//FF2 should not set this, or the td will stretch the parent table height.
 	//FF3 is OK to set or not set
-	if (zk.ie || zk.safari) out.push(';height:100%');
+	if (zk.ie || zk.webkit) out.push(';height:100%');
 	out.push('"');
 	
 	var v = this.getAlign();
 	if (v && v != 'stretch') out.push(' align="', zul.box.Box._toHalign(v), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
-	if (v == 'stretch' || (zk.safari && (v == null || v == 'start'))) out.push(';width:100%');
+	if (v == 'stretch' || (zk.webkit && (v == null || v == 'start'))) out.push(';width:100%');
 	if (this._isStretchPack()) out.push(';height:100%');
 	out.push('">');
 

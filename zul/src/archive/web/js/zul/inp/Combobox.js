@@ -74,7 +74,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				//will update it later in onResponse with _fixsz
 				if (pp) {
 					pp.style.width = 'auto';
-					if(zk.safari) this._shallRedoCss = true ;
+					if(zk.webkit) this._shallRedoCss = true ;
 				}
 			}
 			this._repos = false;
@@ -310,7 +310,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					this._select(sel, {sendOnSelect: true});
 			}
 		else
-			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera || zk.safari ? 10 : 0);
+			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera || zk.webkit ? 10 : 0);
 			//use timeout, since, when key down, value not ready yet, opear and safari need extra time to set value to dom
 	},
 	_typeahead: function (bDel, ofs) {

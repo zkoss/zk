@@ -215,7 +215,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
 				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
 				var margin = wgt.getMarginSize_(o);
-				if (zk.safari && margin < 0) 
+				if (zk.webkit && margin < 0) 
 					margin = 0;
 				
 				var map = {},

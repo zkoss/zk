@@ -315,14 +315,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_getEbodyWd: function () {
 		var anchor = this.$n('a');
 		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
-		if (zk.safari)
+		if (zk.webkit)
 			anchor.style.display = 'none';
 
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = zk.opera && this.ebody.offsetHeight == 0 ? // B50-ZK-269
 				this.ebody.offsetWidth : this.ebody.clientWidth;
 
-		if (zk.safari)
+		if (zk.webkit)
 			anchor.style.display = '';
 		return tblwd;
 	},
@@ -680,7 +680,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//Bug 1650540: double click as select again
 		//Note: we don't handle if clicking on checkmark, since FF always
 		//toggle and it causes incosistency
-			if ((zk.gecko || zk.safari) && row.isListen('onDoubleClick')) {
+			if ((zk.gecko || zk.webkit) && row.isListen('onDoubleClick')) {
 				var now = jq.now(), last = row._last;
 				row._last = now;
 				if (last && now - last < 900)
@@ -761,7 +761,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var endless = false, step, lastrow;
 
 		// for test tool when browser is webkit
-		if (zk.safari && typeof data.keyCode == 'string')
+		if (zk.webkit && typeof data.keyCode == 'string')
 			data.keyCode = zk.parseInt(data.keyCode);
 		switch (data.keyCode) {
 		case 33: //PgUp

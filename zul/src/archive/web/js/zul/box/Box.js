@@ -92,7 +92,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//Safari/chrome will not extend the height of td to as tr (B30-2088496.zul)
 		//but cannot always give pixels if size determined by contents (big gap in B30-1769047.zul)
 		var nh;
-		if (zk.safari && !vert && (nh = this.$n().style.height)) {
+		if (zk.webkit && !vert && (nh = this.$n().style.height)) {
 			var td = this.$n('frame');
 			td.style.height = '';
 			td.style.height = nh.indexOf('%') > 0 ? 
@@ -742,9 +742,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (child.isVisible() && (c = child.$n())) {
 					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
-						c.style.width = zk(c).revisedWidth(tdsz, !zk.safari) + 'px';
+						c.style.width = zk(c).revisedWidth(tdsz, !zk.webkit) + 'px';
 					else 
-						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.safari) + 'px';
+						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.webkit) + 'px';
 				}
 			}
 		}

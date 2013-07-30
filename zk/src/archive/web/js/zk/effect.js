@@ -77,8 +77,8 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.top = jq.px(t);
 			st.width = jq.px0(w);
 			st.height = jq.px0(h);
-			st.zIndex = zk.parseInt($node.css("zIndex"));
-			st.display = "block";
+			st.zIndex = zk.parseInt($node.css('zIndex'));
+			st.display = 'block';
 		}
 		return true;
 	},
@@ -92,7 +92,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	function _syncMaskPos() {
 		var n = this.mask,
 			st = n.style;
-		if (st.display != "none") {
+		if (st.display != 'none') {
 			var ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY());
 			st.left = jq.px(ofs[0]);
 			st.top = jq.px(ofs[1]);
@@ -100,7 +100,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.height = jq.px0(jq.innerHeight());
 
 			if (n = this.stackup)
-				zk.set(n.style, st, ["left", "top", "width", "height"]);
+				zk.set(n.style, st, ['left', 'top', 'width', 'height']);
 		}
 	}
 
@@ -159,10 +159,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	 */
 	destroy: function () {
 		var mask = this.mask, f;
-		jq(mask).unbind("click", jq.Event.stop)
+		jq(mask).unbind('click', jq.Event.stop)
 			.remove()
-		jq(window).unbind("resize", f = this.proxy(_syncMaskPos))
-			.unbind("scroll", f);
+		jq(window).unbind('resize', f = this.proxy(_syncMaskPos))
+			.unbind('scroll', f);
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
 	},
@@ -229,8 +229,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (progbox) return this;
 		
-		var msg = opts.message || ((window.msgzk?msgzk.LOADING:"Loading")+'...'),
-			n = document.createElement("div");
+		var msg = opts.message || ((window.msgzk?msgzk.LOADING:'Loading')+'...'),
+			n = document.createElement('div');
 		
 		document.body.appendChild(n);
 		var xy = opts.offset || $anchor.revisedOffset(), 
@@ -308,7 +308,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		// grab the maximum along the chain of nodes
 		for (var n = rleaf[0]; n && n.style; n = n.parentNode) {
 			//Chrome and Safari only, HTML tag's zIndex value is empty
-			if (n.tagName == 'HTML' && (zk.chrome || zk.safari))
+			if (n.tagName == 'HTML' && zk.webkit)
 				n.style.zIndex = 'auto';
 			var zic = n.style.zIndex || jq(n).css('z-index');
 			if (zic && zic != 'auto') {
@@ -325,7 +325,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		this.mask.style.display = 'block';
 		
-		var loading = jq(this.mask.id+"-z_loading", zk)[0];
+		var loading = jq(this.mask.id+'-z_loading', zk)[0];
 		if (loading) {
 			if (loading.offsetHeight > h) 
 				loading.style.height = jq.px0(zk(loading).revisedHeight(h));
@@ -335,7 +335,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) /2));
 		}
 		
-		this.mask.style.visibility = "";
+		this.mask.style.visibility = '';
 	},
 	onSize: function () {
 		this.__mask.sync();
@@ -432,11 +432,11 @@ jq(function() {
 	}
 
 	_useSKU = zk.useStackup;
-	if (_useSKU == "auto" || (_callback = _useSKU == "auto/gecko")) {
+	if (_useSKU == 'auto' || (_callback = _useSKU == 'auto/gecko')) {
 		if (zk.gecko && _callback)
 			_useSKU = false;
 		else {
-			_callback = zk.safari || zk.opera;
+			_callback = zk.webkit || zk.opera;
 			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)

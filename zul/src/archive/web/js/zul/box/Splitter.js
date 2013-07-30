@@ -265,7 +265,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				this.setBtnPos_(true);
 			} else {
 				node.style.height =
-					(zk.safari ? pn.parentNode.clientHeight: pn.clientHeight)+'px';
+					(zk.webkit ? pn.parentNode.clientHeight: pn.clientHeight)+'px';
 					//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
 				this.setBtnPos_();
 			}

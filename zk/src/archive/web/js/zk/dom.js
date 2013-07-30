@@ -76,10 +76,10 @@ zjq = function (jq) { //ZK extension
 	}
 
 	function _dissel() {
-		this.style.MozUserSelect = "none";
+		this.style.MozUserSelect = 'none';
 	}
 	function _ensel() {
-		this.style.MozUserSelect = "";
+		this.style.MozUserSelect = '';
 	}
 
 	function _scrlIntoView(outer, inner, info) {
@@ -121,10 +121,10 @@ zjq = function (jq) { //ZK extension
 			var p = el.parentNode;
 			while (p && p != document.body && p.nodeType === 1) {
 				var $p = jq(p),
-					style = $p.css("position");
-				if (style == "relative" || style == "absolute") {
-					t += zk.parseInt($p.css("border-top-width"));
-					l += zk.parseInt($p.css("border-left-width"));
+					style = $p.css('position');
+				if (style == 'relative' || style == 'absolute') {
+					t += zk.parseInt($p.css('border-top-width'));
+					l += zk.parseInt($p.css('border-left-width'));
 				}
 				p = p.offsetParent;
 			}
@@ -133,7 +133,7 @@ zjq = function (jq) { //ZK extension
 		do {
 			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
 			var $el = jq(el);
-			if ($el.css("position") == 'fixed') {
+			if ($el.css('position') == 'fixed') {
 				t += jq.innerY() + el.offsetTop;
 				l += jq.innerX() + el.offsetLeft;
 				break;
@@ -155,7 +155,7 @@ zjq = function (jq) { //ZK extension
 		return [l, t];
 	}
 	function _posOffset(el) {
-		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
+		if (zk.webkit && jq.nodeName(el, 'tr') && el.cells.length)
 			el = el.cells[0];
 
 		var t = 0, l = 0;
@@ -166,7 +166,7 @@ zjq = function (jq) { //ZK extension
 			el = zk.gecko && el != document.body ?
 				_ofsParent(el): el.offsetParent;
 			if (el) {
-				if(jq.nodeName(el, "body")) break;
+				if(jq.nodeName(el, 'body')) break;
 				var p = jq(el).css('position');
 				if (p == 'relative' || p == 'absolute') break;
 			}
@@ -208,7 +208,7 @@ zjq = function (jq) { //ZK extension
 			    if (document.doctype === null) return false;
 		
 			    var node = document.doctype;
-			    var doctype_string = "<!DOCTYPE " + node.name +
+			    var doctype_string = '<!DOCTYPE ' + node.name +
 			    		(node.publicId ? ' PUBLIC"' + node.publicId + '"' : '') +
 			    		(!node.publicId && node.systemId ? ' SYSTEM' : '') +
 			    		(node.systemId ? ' "' + node.systemId + '"' : '') + ">";
@@ -233,7 +233,7 @@ zk.copy(zjq, {
 		el.className.trim();
 	},
 	_cleanVisi: function (n) { //overriden in domopera.js
-		n.style.visibility = "inherit";
+		n.style.visibility = 'inherit';
 	},
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
@@ -564,7 +564,7 @@ zjq.prototype = {
 	 */
 	isVisible: function (strict) {
 		var n = this.jq[0];
-		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
+		return n && (!n.style || (n.style.display != 'none' && (!strict || n.style.visibility != 'hidden')));
 	},
 	/** Returns whether the first match element is really visible.
 	 * By real visible we mean the element and all its ancestors are visible. 
@@ -726,11 +726,11 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
 				var elst, oldvisi;
-				if (zk.ie && el.style.display == "none") {
+				if (zk.ie && el.style.display == 'none') {
 				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
 					oldvisi = (elst = el.style).visibility;
-					elst.visibility = "hidden";
-					elst.display = "";
+					elst.visibility = 'hidden';
+					elst.display = '';
 				}
 
 				var b = el.getBoundingClientRect();
@@ -738,7 +738,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 					b.top + jq.innerY() - el.ownerDocument.documentElement.clientTop];
 
 				if (elst) {
-					elst.display = "none";
+					elst.display = 'none';
 					elst.visibility = oldvisi;
 				}
 				return b;
@@ -829,38 +829,38 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	 * @since 7.0.0
 	 */
 	marginWidth: function () {
-		return this.sumStyles("lr", jq.margins);
+		return this.sumStyles('lr', jq.margins);
 	},
 	/** Returns the summation of the margin height of the first matched element.
 	 * @return int summation
 	 * @since 7.0.0
 	 */
 	marginHeight: function () {
-		return this.sumStyles("tb", jq.margins);
+		return this.sumStyles('tb', jq.margins);
 	},
 	/** Returns the summation of the border width of the first matched element.
 	 * @return int summation
 	 */
 	borderWidth: function () {
-		return this.sumStyles("lr", jq.borders);
+		return this.sumStyles('lr', jq.borders);
 	},
 	/** Returns the summation of the border height of the first matched element.
 	 * @return int summation
 	 */
 	borderHeight: function () {
-		return this.sumStyles("tb", jq.borders);
+		return this.sumStyles('tb', jq.borders);
 	},
 	/** Returns the summation of the padding width of the first matched element.
 	 * @return int summation
 	 */
 	paddingWidth: function () {
-		return this.sumStyles("lr", jq.paddings);
+		return this.sumStyles('lr', jq.paddings);
 	},
 	/** Returns the summation of the padding height of the first matched element.
 	 * @return int summation
 	 */
 	paddingHeight: function () {
-		return this.sumStyles("tb", jq.paddings);
+		return this.sumStyles('tb', jq.paddings);
 	},
 	/** Returns the summation of the padding height and the border width of the first matched element. 
 	 * @return int the summation
@@ -932,10 +932,10 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		//2)we cannot assing "", either
 		//test case: menu
 		//IE/gecko fix: auto causes toStyleOffset incorrect
-		if (resetFirst || el.style.left == "" || el.style.left == "auto")
-			el.style.left = "0";
-		if (resetFirst || el.style.top == "" || el.style.top == "auto")
-			el.style.top = "0";
+		if (resetFirst || el.style.left == '' || el.style.left == 'auto')
+			el.style.left = '0';
+		if (resetFirst || el.style.top == '' || el.style.top == 'auto')
+			el.style.top = '0';
 
 		var ofs1 = this.cmOffset(),
 			x2 = zk.parseInt(el.style.left),
@@ -963,11 +963,11 @@ jq(el).zk.center(); //same as 'center'
 			hghgap = this.offsetHeight();
 
 		if ((!wdgap || !hghgap) && !this.isVisible()) {
-			el.style.left = el.style.top = "-10000px"; //avoid annoying effect
-			el.style.display = "block"; //we need to calculate the size
+			el.style.left = el.style.top = '-10000px'; //avoid annoying effect
+			el.style.display = 'block'; //we need to calculate the size
 			wdgap = this.offsetWidth();
 			hghgap = this.offsetHeight(),
-			el.style.display = "none"; //avoid Firefox to display it too early
+			el.style.display = 'none'; //avoid Firefox to display it too early
 		}
 
 		var left = jq.innerX(), top = jq.innerY();
@@ -975,18 +975,18 @@ jq(el).zk.center(); //same as 'center'
 
 		wdgap = jq.innerWidth() - wdgap;
 		if (!flags) x = left + wdgap / 2;
-		else if (flags.indexOf("left") >= 0) x = left;
-		else if (flags.indexOf("right") >= 0) x = left + wdgap - 1; //just in case
-		else if (flags.indexOf("center") >= 0) x = left + wdgap / 2;
+		else if (flags.indexOf('left') >= 0) x = left;
+		else if (flags.indexOf('right') >= 0) x = left + wdgap - 1; //just in case
+		else if (flags.indexOf('center') >= 0) x = left + wdgap / 2;
 		else {
 			x = 0; skipx = true;
 		}
 
 		hghgap = jq.innerHeight() - hghgap;
 		if (!flags) y = top + hghgap / 2;
-		else if (flags.indexOf("top") >= 0) y = top;
-		else if (flags.indexOf("bottom") >= 0) y = top + hghgap - 1; //just in case
-		else if (flags.indexOf("center") >= 0) y = top + hghgap / 2;
+		else if (flags.indexOf('top') >= 0) y = top;
+		else if (flags.indexOf('bottom') >= 0) y = top + hghgap - 1; //just in case
+		else if (flags.indexOf('center') >= 0) y = top + hghgap / 2;
 		else {
 			y = 0; skipy = true;
 		}
@@ -1048,7 +1048,7 @@ jq(el).zk.center(); //same as 'center'
      * @see #center
      */
 	position: function (dim, where, opts) {
-		where = where || "overlap";
+		where = where || 'overlap';
 		
 		if (!dim) {
 			var bd = jq('body')[0];
@@ -1071,88 +1071,88 @@ jq(el).zk.center(); //same as 'center'
 		}
 		*/
 		switch(where) {
-		case "before_start":
+		case 'before_start':
 			y -= hgh;
 			break;
-		case "before_center":
+		case 'before_center':
 			y -= hgh;
 			x += (dim.width - wd) / 2 | 0;
 			break;
-		case "before_end":
+		case 'before_end':
 			y -= hgh;
 			x += dim.width - wd;
 			break;
-		case "after_start":
+		case 'after_start':
 			y += dim.height;
 			break;
-		case "after_center":
+		case 'after_center':
 			y += dim.height;
 			x += (dim.width - wd) / 2 | 0;
 			break;
-		case "after_end":
+		case 'after_end':
 			y += dim.height;
 			x += dim.width - wd;
 			break;
-		case "start_before":
+		case 'start_before':
 			x -= wd;
 			break;
-		case "start_center":
+		case 'start_center':
 			x -= wd;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "start_after":
+		case 'start_after':
 			x -= wd;
 			y += dim.height - hgh;
 			break;
-		case "end_before":
+		case 'end_before':
 			x += dim.width;
 			break;
-		case "end_center":
+		case 'end_center':
 			x += dim.width;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "end_after":
+		case 'end_after':
 			x += dim.width;
 			y += dim.height - hgh;
 			break;
-		case "at_pointer":
+		case 'at_pointer':
 			var offset = zk.currentPointer;
 			x = offset[0];
 			y = offset[1];
 			break;
-		case "after_pointer":
+		case 'after_pointer':
 			var offset = zk.currentPointer;
 			x = offset[0];
 			y = offset[1] + 20;
 			break;
-		case "top_right":
-		case "overlap_end":
+		case 'top_right':
+		case 'overlap_end':
 			x += dim.width - wd;
 			break;
-		case "top_center":
+		case 'top_center':
 			x += (dim.width - wd) / 2 | 0;
 			break;
-		case "middle_left":
+		case 'middle_left':
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "middle_center":
+		case 'middle_center':
 			x += (dim.width - wd) / 2 | 0;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "middle_right":
+		case 'middle_right':
 			x += dim.width - wd;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "bottom_left":
-		case "overlap_before":
+		case 'bottom_left':
+		case 'overlap_before':
 			y += dim.height - hgh;
 			break;
-		case "bottom_center":
+		case 'bottom_center':
 			x += (dim.width - wd) / 2 | 0;
 			y += dim.height - hgh;
 			break;
-		case "bottom_right":
-		case "overlap_after":
+		case 'bottom_right':
+		case 'overlap_after':
 			x += dim.width - wd;
 			y += dim.height - hgh;
 			break;
@@ -1235,17 +1235,17 @@ jq(el).zk.center(); //same as 'center'
 	cmOffset: function () {
 		//fix safari's bug: TR has no offsetXxx
 		var el = this.jq[0];
-		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
+		if (zk.webkit && jq.nodeName(el, 'tr') && el.cells.length)
 			el = el.cells[0];
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
-		if (!(zk.gecko || zk.safari)
+		if (!(zk.gecko || zk.webkit)
 		|| this.isVisible() || this.offsetWidth())
 			return _cmOffset(el);
 
-		el.style.display = "";
+		el.style.display = '';
 		var ofs = _cmOffset(el);
-		el.style.display = "none";
+		el.style.display = 'none';
 		return ofs;
 	},
 	/**
@@ -1497,9 +1497,9 @@ jq(el).zk.center(); //same as 'center'
 			return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
-			agt = document.createElement("span");
+			agt = document.createElement('span');
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
-		agt.style.display = "none";
+		agt.style.display = 'none';
 		
 		// Bug 3049181 and 3092040
 		zjq._fixedVParent(el, true);
@@ -1509,7 +1509,7 @@ jq(el).zk.center(); //same as 'center'
 
 		el.z_vp = p.id; //might be empty
 		var st = el.style;
-		if (!st.top) st.top = "0";
+		if (!st.top) st.top = '0';
 			//B3178359: if no top and parent is relative+absolute, the following
 			//line causes browser crazy
 			//Strange: all browsers have the same behavior
@@ -1617,8 +1617,8 @@ jq(el).zk.center(); //same as 'center'
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange();
 				var rangetwo = inp.createTextRange();
-				var stored_range = "";
-				if(inp.type.toLowerCase() == "text"){
+				var stored_range = '';
+				if(inp.type.toLowerCase() == 'text'){
 					stored_range = rangetwo.duplicate();
 				}else{
 					 stored_range = range.duplicate();
@@ -1711,10 +1711,10 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 		var st = this.jq[0];
 		if (st && (st=st.style))
 			for (var nm in st)
-				if ((!zk.ie || nm != "accelerator")
-				&& st[nm] && typeof st[nm] == "string")
+				if ((!zk.ie || nm != 'accelerator')
+				&& st[nm] && typeof st[nm] == 'string')
 					try {
-						st[nm] = "";
+						st[nm] = '';
 					} catch (e) { //ignore
 					}
 		return this;
@@ -1746,8 +1746,8 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 			len = $jq.length,
 			types = ['text', 'password', 'number', 'tel', 'url', 'email'];
 		for (var j = len, tag, n; j--;)
-			if ((tag = jq.nodeName(n = $jq[j])) != "textarea"
-			&& (tag != "input" || (jq.inArray(n.type, types) == -1)))
+			if ((tag = jq.nodeName(n = $jq[j])) != 'textarea'
+			&& (tag != 'input' || (jq.inArray(n.type, types) == -1)))
 				return false;
 		return len > 0; //false if nothing selected
 	}
@@ -1788,7 +1788,7 @@ zk.copy(jq, {
 	 * @see #px0
 	 */
 	px: function (v) {
-		return (v||0) + "px";
+		return (v||0) + 'px';
 	},
 	/** Converting an integer a string ending with "px".
 	 * <p>Unlike {@link #px}, this method assumes 0 if v is negative.
@@ -1798,7 +1798,7 @@ zk.copy(jq, {
 	 * @see #px
 	 */
 	px0: function (v) {
-		return Math.max(v||0, 0) + "px";
+		return Math.max(v||0, 0) + 'px';
 	},
 
 	/** Returns an array of {@link DOMElement} that matches.
@@ -1869,7 +1869,7 @@ zk.copy(jq, {
 	 * @see #paddings
 	 * @return Map
 	 */
-	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
+	margins: {l: 'margin-left', r: 'margin-right', t: 'margin-top', b: 'margin-bottom'},
 	/** A map of the border style names: {l: 'border-left', t: 'border-top'...}.
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
@@ -1877,7 +1877,7 @@ zk.copy(jq, {
 	 * @see #paddings
 	 * @return Map
 	 */
-	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
+	borders: {l: 'border-left-width', r: 'border-right-width', t: 'border-top-width', b: 'border-bottom-width'},
 	/** A map of the padding style names: {l: 'padding-left', t: 'padding-top'...}. 
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
@@ -1885,15 +1885,15 @@ zk.copy(jq, {
 	 * @see #borders
 	 * @return Map
 	 */
-	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
+	paddings: {l: 'padding-left', r: 'padding-right', t: 'padding-top', b: 'padding-bottom'},
 
 	/** Returns the width of the scrollbar
 	 * @return int
 	 */
 	scrollbarWidth: function () {
 		if (!_sbwDiv) {
-			_sbwDiv = document.createElement("div");
-			_sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
+			_sbwDiv = document.createElement('div');
+			_sbwDiv.style.cssText = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
 			document.body.appendChild(_sbwDiv);
 		}
 		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
@@ -1936,8 +1936,8 @@ zk.copy(jq, {
 	 */
 	clearSelection: function () {
 		try{
-			if (window["getSelection"]) {
-				if (zk.safari) window.getSelection().collapse();
+			if (window['getSelection']) {
+				if (zk.webkit) window.getSelection().collapse();
 				else window.getSelection().removeAllRanges();
 			} else if (document.selection) {
 				if (document.selection.empty) document.selection.empty();
@@ -1975,7 +1975,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 */
 	filterTextStyle: function (style, plus) {
 		if (typeof style == 'string') {
-			var ts = "";
+			var ts = '';
 			if (style)
 				for (var j = 0, k = 0; k >= 0; j = k + 1) {
 					k = style.indexOf(';', j);
@@ -2052,15 +2052,15 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 */
 	newStackup: function (el, id, anchor) {
 		el = jq(el||[], zk)[0];
-		var ifr = document.createElement("iframe");
+		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
-		ifr.style.cssText = "position:absolute;overflow:hidden;opacity:0;filter:alpha(opacity=0)";
-		ifr.frameBorder = "no";
+		ifr.style.cssText = 'position:absolute;overflow:hidden;opacity:0;filter:alpha(opacity=0)';
+		ifr.frameBorder = 'no';
 		ifr.tabIndex = -1;
 		ifr.src = zjq.src0;
 		if (el) {
-			ifr.style.width = el.offsetWidth + "px";
-			ifr.style.height = el.offsetHeight + "px";
+			ifr.style.width = el.offsetWidth + 'px';
+			ifr.style.height = el.offsetHeight + 'px';
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
 			ifr.style.zIndex = el.style.zIndex;
@@ -2075,8 +2075,8 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @return DOMElement
 	 */
 	newHidden: function (nm, val, parent) {
-		var inp = document.createElement("input");
-		inp.type = "hidden";
+		var inp = document.createElement('input');
+		inp.type = 'hidden';
 		inp.name = nm;
 		inp.value = val;
 		if (parent) parent.appendChild(inp);
@@ -2088,7 +2088,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @since 5.0.1
 	 */
 	head: function () {
-		return document.getElementsByTagName("head")[0] || document.documentElement;
+		return document.getElementsByTagName('head')[0] || document.documentElement;
 	},
 
 	//dialog//

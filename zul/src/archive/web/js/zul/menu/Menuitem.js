@@ -323,7 +323,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 						p._updateHoverImage(); // remove parent Menu hover image
 
 			var menubar;
-			if (zk.safari && (menubar=this.getMenubar()) && menubar._autodrop)
+			if (zk.webkit && (menubar=this.getMenubar()) && menubar._autodrop)
 				menubar._noFloatUp = true;
 				//_noFloatUp used in Menu.js to fix Bug 1852304
 			this.$super('doClick_', evt, true);

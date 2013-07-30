@@ -374,7 +374,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
-		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
+		if (keyCode == 9 || (zk.webkit && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
 			if (bOpen) this._pop.close();
 			return;
 		}
