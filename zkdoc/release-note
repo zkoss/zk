@@ -22,6 +22,7 @@ ZK 6.5.4
   ZK-1868: TypeError: $tipOff is null in function _tt_close()
   ZK-1870: ZK Does not set session in SessionCtrl when handling a Portlet Ajax request
   ZK-1854: Issue with toolbar and hflex= 1
+  ZK-1857: ZK 6.5 EE OSGi: Comet Servlet 3 Push does not work
 
   --------
 ZK 6.5.3
