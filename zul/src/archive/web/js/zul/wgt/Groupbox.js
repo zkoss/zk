@@ -139,6 +139,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if(this._isDefault() && cap) {
 			cap.$n().style.top = jq.px(zk(cap.$n('cave')).offsetHeight() / 2 * -1);
 		}
+		
+		var title = this.$n('title');
+		if(this._isDefault() && title) {
+			title.style.top = jq.px(zk(title.firstChild).offsetHeight() / 2 * -1);
+		}
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
