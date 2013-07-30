@@ -87,7 +87,7 @@ zjq = function (jq) { //ZK extension
 			var ooft = zk(outer).revisedOffset(),
 				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
 				top = ioft[1] - ooft[1] +
-						(outer == (zk.safari ? document.body : document.body.parentNode)
+						(outer == (zk.webkit ? document.body : document.body.parentNode)
 								? 0 : outer.scrollTop),
 				ih = info ? info.h : inner.offsetHeight,
 				bottom = top + ih,
