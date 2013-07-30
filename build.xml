@@ -71,6 +71,9 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<condition property="build.ear.required">
 			<equals arg1="${format}" arg2="ear"/>
 		</condition>
+		<condition property="build.zweb">
+			<equals arg1="${project.name}" arg2="zweb"/>
+		</condition>
 		<condition property="build.jar.required">
 			<or>
 				<equals arg1="${format}" arg2="jar"/>
