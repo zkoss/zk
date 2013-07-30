@@ -22,6 +22,8 @@ ZK 6.5.4
   ZK-1868: TypeError: $tipOff is null in function _tt_close()
   ZK-1870: ZK Does not set session in SessionCtrl when handling a Portlet Ajax request
   ZK-1854: Issue with toolbar and hflex= 1
+  ZK-1871: Comet Servlet 3 Push returns 500 Internal Server Error
+  ZK-1859: Comet Servlet 3 Push: AsycInfo does not catch IllegalStateException thrown on GlassFish 3.1.2
 
   --------
 ZK 6.5.3
