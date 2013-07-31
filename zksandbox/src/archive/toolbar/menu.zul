@@ -82,7 +82,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<checkbox label="Vertical orient">
 		<attribute name="onCheck">
 			menubar.orient= self.checked ? "vertical" : "horizontal";
-			menubar.width = self.checked ? "100px" : "200px";
 		</attribute>
 	</checkbox>
 	<checkbox label="Autodrop" if="${zk.mobile == null}">
