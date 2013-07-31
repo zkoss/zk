@@ -1354,9 +1354,12 @@ zk.log('value is", value);
 			zk.ie7 = zk.ie >= 7; //ie7 or later
 			zk.ie8 = zk.ie >= 8; //ie8 or later
 			zk.css3 = zk.ie9 = zk.ie >= 9; //ie9 or later
+			zk.ie10 = zk.ie >= 10; //ie10 or later
 			zk.ie6_ = zk.ie < 7;
 			zk.ie7_ = zk.ie == 7;
 			zk.ie8_ = zk.ie == 8;
+			zk.ie9_ = zk.ie == 9;
+			zk.ie10_ = zk.ie == 10;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
 			zk.vendor = 'ms';
 		} else {
