@@ -20,7 +20,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Audio Demo</h4>
-		<p>Uploads an audio and plays it at the browser.</p>
+		<p>Uploads an audio and plays it at the browser.
+			Note: Only works for browsers supporting HTML5 audio tag,
+				and this demo cannot work in Chrome.
+		</p>
 	]]></html>
 	<separator />
 	<tabbox width="100%" tabscroll="false">
