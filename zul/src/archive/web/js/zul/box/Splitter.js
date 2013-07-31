@@ -46,9 +46,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
 		if (sib2) {
 			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
-			diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
-			if (diff < 0) diff = 0;
-			c.style[fd] = diff + 'px';
+				sz = c.style[fd];
+			if (sz && sz.indexOf('px') > -1) {
+				diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
+				if (diff < 0) diff = 0;
+				c.style[fd] = diff + 'px';
+			}
 		}
 		if (sib && open)
 			zUtl.fireShown(sibwgt);
