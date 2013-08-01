@@ -16,7 +16,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 			bar = wgt.$n(orient),
 			embed = wgt.$n(orient + '-embed'),
 			style;
-		
 		if (bar) {
 			style = bar.style;
 			style.display = isHide ? 'none' : 'block';
@@ -261,14 +260,14 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	},
 	scrollTo: function (x, y) {
 		if (this.needH) {
-			x = _setScrollPos(x, this.hLimit, 0);
+			x = _setScrollPos(x, 0, this.hLimit);
 			var barPos = x / this.hRatio;
 			this._syncPosition('hor', x);
 			this._syncBarPosition('hor', barPos);
 			this._syncEmbedBarPosition('hor', x + barPos);
 		}
 		if (this.needV) {
-			y = _setScrollPos(y, this.vLimit, 0);
+			y = _setScrollPos(y, 0, this.vLimit);
 			var barPos = y / this.vRatio;
 			this._syncPosition('ver', y);
 			this._syncBarPosition('ver', barPos);
@@ -634,18 +633,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 					var isLeftDown = point > barPos,
 						min, max, bPos;
 					
-					//left/down: -rstep, right/up:-rstep
-					if (isHor) {
-						min = isLeftDown ? pointlimit : pos;
-						max = isLeftDown ? pos : pointlimit;
-						pos += (isLeftDown ? -rstep : rstep);
-					} else {
-						min = isLeftDown ? pos : pointlimit;
-						max = isLeftDown ? pointlimit : pos;
-						pos += (isLeftDown ? rstep : -rstep);
-					}
+					min = isLeftDown ? pos : pointlimit;
 					min = min < 0 ? 0 : min;
+					max = isLeftDown ? pointlimit : pos;
 					max = max > limit ? limit : max;
+					//left/down: rstep, right/up: -rstep
+					pos += (isLeftDown ? rstep : -rstep);
 					//set and check if exceed scrolling limit
 					pos = _setScrollPos(pos, min, max);
 					bPos = pos/ratio;

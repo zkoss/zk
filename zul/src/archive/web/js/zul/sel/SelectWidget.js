@@ -179,9 +179,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						w = it.next();
 					if (w) {
 						this._selectOne(w, true);
-						var bar = this._scrollbar;
-						if (bar)
-							bar.scrollToElement(item.$n());
+						if (!this._listbox$rod) {
+							var bar = this._scrollbar;
+							if (bar)
+								bar.scrollToElement(item.$n());
+						}
 					}
 				}
 			}
