@@ -135,12 +135,12 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			}
 		}
 		if (this._isDefault()) {
-			var title = this.$n('title-cnt'),
+			var title = this.$n('title'),
 				cap = this.caption;
 			if (cap)
 				cap.$n().style.top = jq.px(zk(cap.$n('cave')).offsetHeight() / 2 * -1);
 			if (title)
-				title.style.top = jq.px(zk(title-cnt).offsetHeight() / 2 * -1);
+				title.style.top = jq.px(zk(this.$n('title-cnt')).offsetHeight() / 2 * -1);
 		}
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
