@@ -447,7 +447,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	},
 	_fixScroll: function (evt) {
 		var cave = this.cave;
-		this.scrollTo(cave.scrollLeft, cave.scrollTop);
+		if (!this.dragging)
+			this.scrollTo(cave.scrollLeft, cave.scrollTop);
 	},
 	_mouseEnter: function (evt) {
 		_showScrollbar(this, 'hor', 0.8);
@@ -494,6 +495,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			.unbind('mouseup', self.proxy(self._dragEnd));
 		
 		self.dragging = false;
+		
 		if ((x < left || x > left + cave.offsetWidth) ||
 			(y < top || y > top + cave.offsetHeight)) {
 			_showScrollbar(self, 'hor', 0);
@@ -623,32 +625,38 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			
 			if (frozen) {
 				point = _setScrollPos(point, 0, hBarLimit);
-				self._syncBarPosition(orient, point);
+				self._syncBarPosition('hor', point);
 				self._syncEmbedBarPosition('hor', point);
 				frozen._doScroll(point / step);
 			} else {
 				//setInterval for long press on scroll rail
 				self._pressTimer = setInterval(function () {
 					var isLeftDown = point > barPos,
-						min = isLeftDown ? pointlimit : pos,
-						min = min < 0 ? 0 : min,
-						max = isLeftDown ? pos : pointlimit,
-						max = max > limit ? limit : max,
-						barPos;
+						min, max, bPos;
 					
 					//left/down: -rstep, right/up:-rstep
-					pos += (isLeftDown ? -rstep : rstep);
+					if (isHor) {
+						min = isLeftDown ? pointlimit : pos;
+						max = isLeftDown ? pos : pointlimit;
+						pos += (isLeftDown ? -rstep : rstep);
+					} else {
+						min = isLeftDown ? pos : pointlimit;
+						max = isLeftDown ? pointlimit : pos;
+						pos += (isLeftDown ? rstep : -rstep);
+					}
+					min = min < 0 ? 0 : min;
+					max = max > limit ? limit : max;
 					//set and check if exceed scrolling limit
 					pos = _setScrollPos(pos, min, max);
-					barPos = pos/ratio;
-					if (pos == pointlimit || pos == min || pos == max) {
+					bPos = pos/ratio;
+					if (pos == pointlimit || pos <= min || pos >= max) {
 						clearInterval(self._pressTimer);
 						self._pressTimer = null;
 					}
 					//sync position
 					self._syncPosition(orient, pos);
-					self._syncBarPosition(orient, barPos);
-					self._syncEmbedBarPosition(orient, pos + barPos);
+					self._syncBarPosition(orient, bPos);
+					self._syncEmbedBarPosition(orient, pos + bPos);
 					//onScrollEnd callback
 					self._onScrollEnd();
 				}, 50);
