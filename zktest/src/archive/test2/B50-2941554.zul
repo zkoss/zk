@@ -20,7 +20,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
     </tabs>
     <tabpanels>
         <tabpanel>
-            <textbox constraint="no empty" focus="true"/>
+            <textbox constraint="no empty, after_start" focus="true"/>
             <button label="click me" popup="pp"/>
             <popup width="300px" id="pp">
                 After click the t2 tab, the popup and the errorbox should be hidden.
