@@ -195,7 +195,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			var indicator = this.$n('hor-indicator'),
 				wwdh = wrapper.offsetWidth,
 				iwdh = Math.round(wwdh * wdh / swdh),
-				iwdh = iwdh > 20 ? iwdh : 20;
+				iwdh = iwdh > 15 ? iwdh : 15;
 			
 			indicator.style.width = iwdh + 'px';
 			if (embed)
@@ -203,7 +203,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			//sync scroller position limit
 			this.hLimit = swdh - wdh;
 			//sync scroll-bar indicator position limit
-			this.hBarLimit = wwdh - iwdh;
+			var limit = wwdh - iwdh;
+			if (limit <= 0) {
+				this.hBarLimit = 0;
+				indicator.style.display = 'none';
+			} else {
+				this.hBarLimit = limit;
+			}
 			//sync indicator/scroller width ratio
 			this.hRatio = Math.abs(this.hLimit / this.hBarLimit);
 			hbar.style.display = 'none'; // for calculate size
@@ -238,7 +244,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			var indicator = this.$n('ver-indicator'),
 				whgh = wrapper.offsetHeight,
 				ihgh = Math.round(whgh * hgh / shgh),
-				ihgh = ihgh > 20 ? ihgh : 20;
+				ihgh = ihgh > 15 ? ihgh : 15;
 			
 			indicator.style.height = ihgh + 'px';
 			if (embed)
@@ -246,7 +252,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			//sync scroller position limit
 			this.vLimit = shgh - hgh;
 			//sync scroll-bar indicator position limit
-			this.vBarLimit = whgh - ihgh;
+			var limit = whgh - ihgh;
+			if (limit <= 0) {
+				this.vBarLimit = 0;
+				indicator.style.display = 'none';
+			} else {
+				this.vBarLimit = limit;
+			}
 			//sync indicator/scroller width ratio
 			this.vRatio = Math.abs(this.vLimit / this.vBarLimit);
 			vbar.style.display = 'none'; // for calculate size
