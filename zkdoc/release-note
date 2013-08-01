@@ -27,6 +27,7 @@ ZK 6.5.4
   ZK-1859: Comet Servlet 3 Push: AsycInfo does not catch IllegalStateException thrown on GlassFish 3.1.2
   ZK-1747: Chosenbox - Combobox behaving differently (when using ListSubModel)
   ZK-1877: Can not drag a slider, which is in a grid, to 0
+  ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
 
   --------
 ZK 6.5.3
