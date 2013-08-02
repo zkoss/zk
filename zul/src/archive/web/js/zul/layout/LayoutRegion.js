@@ -567,9 +567,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				fc = this.firstChild,
 				fch = fc ? fc.getHeight() : 0,
 				c = p.firstChild,
-				cs = c.style,
 				ph = p.offsetHeight,
 				pw = p.offsetWidth;
+			while (c.nodeType == 3)
+				c = c.nextSibling;
+			var cs = c.style;
 			
 			if (!fch || !fch.indexOf('px')) { // only recalculate size if no fixed height
 				// force to recalculate size
