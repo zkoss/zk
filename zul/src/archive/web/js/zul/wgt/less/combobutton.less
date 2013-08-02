@@ -16,6 +16,7 @@
 		.borderRadius(@borderRadiusSmall);
 		color: @baseTextColor;
 		position: relative;
+		cursor: default;
 	}
 	&-image {
 		vertical-align: middle;
@@ -44,9 +45,10 @@
 		color: @iconColor;
 		&.z-icon-caret-down {
 			display: block;
-			position: relative;
+			position: absolute;
 			top: 50%;
 			margin-top: -8px;
+			left: 7px;
 		}
 	}
 	&:hover {
