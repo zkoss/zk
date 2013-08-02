@@ -1285,7 +1285,7 @@ zk.log('value is", value);
 		var exdate = new Date();
 		exdate.setDate(exdate.getDate() + exdays);
 		var value = escape(value) + ((exdays == null) ? '' : '; expires=' + exdate.toUTCString());
-		document.cookie = name + "=" + value;
+		document.cookie = name + "=" + value + ";path=/";
 	}
 	function _getCookie(name) {
 		var cookies = document.cookie.split(';'),
@@ -1346,7 +1346,7 @@ zk.log('value is", value);
 			// ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
 			var v = _getCookie("zkie-compatibility");
 			if (zk.iex != zk.ie || (v && v != zk.ie)) {
-				if (v && v != zk.ie) {
+				if (v != zk.ie) {
 					_setCookie("zkie-compatibility", zk.ie, 365*10);
 					window.location.reload();
 				}
