@@ -569,21 +569,23 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				c = p.firstChild,
 				ph = p.offsetHeight,
 				pw = p.offsetWidth;
-			while (c.nodeType == 3)
+			while (c && c.nodeType == 3)
 				c = c.nextSibling;
-			var cs = c.style;
-			
-			if (!fch || !fch.indexOf('px')) { // only recalculate size if no fixed height
-				// force to recalculate size
-				cs.height = '';
-				if (c.offsetHeight);
+			if (c) {
+				var cs = c.style;
 				
-				cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+				if (!fch || !fch.indexOf('px')) { // only recalculate size if no fixed height
+					// force to recalculate size
+					cs.height = '';
+					if (c.offsetHeight);
+					
+					cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+				}
+				bar.scroller = c;
+				bar.syncSize(showBar);
+				if (scrollToTop)
+					bar.scrollTo(0, 0);
 			}
-			bar.scroller = c;
-			bar.syncSize(showBar);
-			if (scrollToTop)
-				bar.scrollTo(0, 0);
 		}
 	},
 	doResizeScroll_: function () {
