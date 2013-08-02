@@ -271,7 +271,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip = null;
 	},
 	_realpos: function(dg) {
-		var btnofs = zk(this.$n('btn')).cmOffset(), refofs = zk(this.getRealNode()).cmOffset(), maxpos = this._maxpos, pos;
+		var btnofs = zk(this.$n("btn")).revisedOffset(), refofs = zk(this.getRealNode()).revisedOffset(), maxpos = this._maxpos, pos;
 		if (this.isVertical()) {
 			var ht = this._getHeight();
 			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht) : 0;

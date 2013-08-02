@@ -906,7 +906,9 @@ public class Grid extends MeshElement {
 				}
 				if (row instanceof Group)
 					open = ((Group) row).isOpen();
-				else index++;
+
+				// B65-ZK-1867 and Z60-Grid-GroupsModelArray-Paging-noROD.zul
+				index++;
 			}
 
 		} catch (Throwable ex) {

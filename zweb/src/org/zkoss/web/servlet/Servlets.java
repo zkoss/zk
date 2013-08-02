@@ -39,6 +39,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -483,7 +484,7 @@ public class Servlets {
 	 */
 	public static boolean isBrowser(ServletRequest req, String type) {
 		return (req instanceof HttpServletRequest)
-			&& isBrowser(((HttpServletRequest)req).getHeader("user-agent"), type);
+			&& isBrowser(getUserAgent(req), type);
 	}
 	/** Returns whether the user agent is a browser of the specified type.
 	 *
@@ -550,7 +551,7 @@ public class Servlets {
 	 */
 	public static final boolean isRobot(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isRobot(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isRobot(getUserAgent(req));
 	}
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
@@ -579,7 +580,7 @@ public class Servlets {
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isExplorer(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isExplorer(getUserAgent(req));
 	}
 	/** Returns whether the browser is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
@@ -603,7 +604,7 @@ public class Servlets {
 	 */
 	public static final boolean isExplorer7(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isExplorer7(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isExplorer7(getUserAgent(req));
 	}
 	/** Returns whether the browser is Explorer 7 or later.
 	 *
@@ -622,7 +623,7 @@ public class Servlets {
 	 */
 	public static final boolean isGecko(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isGecko(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isGecko(getUserAgent(req));
 	}
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
 	 * If true, it also implies {@link #isGecko3} is true.
@@ -645,7 +646,7 @@ public class Servlets {
 	 */
 	public static final boolean isGecko3(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isGecko3(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isGecko3(getUserAgent(req));
 	}
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 *
@@ -663,7 +664,7 @@ public class Servlets {
 	 */
 	public static final boolean isSafari(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isSafari(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isSafari(getUserAgent(req));
 	}
 	/** Returns whether the browser is Safari.
 	 *
@@ -685,7 +686,7 @@ public class Servlets {
 	 */
 	public static final boolean isOpera(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isOpera(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isOpera(getUserAgent(req));
 	}
 	/** Returns whether the browser is Opera.
 	 *
@@ -711,7 +712,7 @@ public class Servlets {
 	 */
 	public static final boolean isHilDevice(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
-			&& isHilDevice(((HttpServletRequest)req).getHeader("user-agent"));
+			&& isHilDevice(getUserAgent(req));
 	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
@@ -742,7 +743,20 @@ public class Servlets {
 	public static final String getUserAgent(ServletRequest req) {
 		if (req instanceof HttpServletRequest) {
 			final String s = ((HttpServletRequest)req).getHeader("user-agent");
-			if (s != null) return s;
+			if (s != null && isBrowser(s, "ie")) {
+				Cookie[] cookies = ((HttpServletRequest)req).getCookies();
+				if (cookies == null) 
+					return s;
+				for (Cookie c : cookies) {
+					// the key of zkie-compatibility is the same as in zk.js
+					if ("zkie-compatibility".equals(c.getName())) {
+						String value = c.getValue();
+						if (value != null) 
+							return s + "; MSIE " + value + ".0";
+					}
+				}
+				return s;
+			}
 		}
 		return "";
 	}

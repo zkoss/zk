@@ -27,6 +27,8 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -287,6 +289,10 @@ public class Selectbox extends HtmlBasedComponent {
 	@SuppressWarnings("unchecked")
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+		onInitRenderNow();
+		invalidate();
+	}
+	public void onInitRenderNow() {
 		if (_model != null) {
 			_tmpdatas = new String[_model.getSize()];
 			final boolean old = _childable;
@@ -309,7 +315,6 @@ public class Selectbox extends HtmlBasedComponent {
 				getChildren().clear();
 			}
 		}
-		invalidate();
 	}
 
 	private void postOnInitRender() {
@@ -395,11 +400,7 @@ public class Selectbox extends HtmlBasedComponent {
 
 		super.invalidate();
 	}
-	// Bug ZK-1711: re-render data if parent/ancestor component invalidate
-	public void onParentInvalidated() {
-		prepareDatas();
-		super.onParentInvalidated();
-	}
+
 	// ZK-948 need render data when change parent or attach to page
 	public void setParent (Component parent) {
 		super.setParent(parent);
@@ -412,7 +413,8 @@ public class Selectbox extends HtmlBasedComponent {
 		super.onPageAttached(newpage, oldpage);
 		prepareDatas();
 	}
-	private void prepareDatas () {
+	
+	private void prepareDatas() {
 		if (_tmpdatas == null && _model != null && _model.getSize() > 0) {
 			// post onInitRender to rerender content
 			postOnInitRender();
@@ -428,7 +430,11 @@ public class Selectbox extends HtmlBasedComponent {
 
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
-
+		
+		//Bug ZK-1711: re-render data when invalidate parent component
+		if (_tmpdatas == null && _model != null && _model.getSize() > 0) {
+			onInitRenderNow();
+		}
 		if (_tmpdatas != null) {
 			render(renderer, "items", _tmpdatas);
 			_tmpdatas = null; //purge the data

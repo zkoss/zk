@@ -1390,16 +1390,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void invalidate() {
 		if (_page != null) {
 			getAttachedUiEngine().addInvalidate(this);
-			onParentInvalidated();
 		}
-	}
-	public void onParentInvalidated() {
-		List<Component> children = getChildren();
-		if (!children.isEmpty() && getFirstChild() != null) {
-			for (Component comp : children) {
-				comp.onParentInvalidated();
-			}
-		}
+		
 	}
 
 	/** Causes a response to be sent to the client.
