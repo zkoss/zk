@@ -743,16 +743,18 @@ public class Servlets {
 	public static final String getUserAgent(ServletRequest req) {
 		if (req instanceof HttpServletRequest) {
 			final String s = ((HttpServletRequest)req).getHeader("user-agent");
-			if (s != null && isBrowser(s, "ie")) {
-				Cookie[] cookies = ((HttpServletRequest)req).getCookies();
-				if (cookies == null) 
-					return s;
-				for (Cookie c : cookies) {
-					// the key of zkie-compatibility is the same as in zk.js
-					if ("zkie-compatibility".equals(c.getName())) {
-						String value = c.getValue();
-						if (value != null) 
-							return s + "; MSIE " + value + ".0";
+			if (s != null) {
+				if (isBrowser(s, "ie")) {
+					Cookie[] cookies = ((HttpServletRequest)req).getCookies();
+					if (cookies == null) 
+						return s;
+					for (Cookie c : cookies) {
+						// the key of zkie-compatibility is the same as in zk.js
+						if ("zkie-compatibility".equals(c.getName())) {
+							String value = c.getValue();
+							if (value != null) 
+								return s + "; MSIE " + value + ".0";
+						}
 					}
 				}
 				return s;
