@@ -16,8 +16,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//detect </script>
 	function containsScript(html) {
 		if (html)
-			for (var j = 0, len = html.length; (j = html.indexOf("</", j)) >= 0 && j + 8 < len;)
-				if (html.substring(j += 2, j + 6).toLowerCase() == "script")
+			for (var j = 0, len = html.length; (j = html.indexOf('</', j)) >= 0 && j + 8 < len;)
+				if (html.substring(j += 2, j + 6).toLowerCase() == 'script')
 					return true;
 	}
 	function noSkipBfUnload() {
@@ -37,14 +37,14 @@ zk.override(jq.fn, _jq, {
 			//but unable to find what scripts are created since they might not be
 			//children of new created elements
 			if (typeof html == 'string' && (el = this[0])
-			&& !jq.nodeName(el, "td", "th", "table", "tr",
-			"caption", "tbody", "thead", "tfoot", "colgroup","col")
+			&& !jq.nodeName(el, 'td', 'th', 'table', 'tr',
+			'caption', 'tbody', 'thead', 'tfoot', 'colgroup', 'col')
 			&& !containsScript(html)) {
 				var o = zjq._beforeOuter(el);
 
-				jq.cleanData(el.getElementsByTagName("*"));
+				jq.cleanData(el.getElementsByTagName('*'));
 				jq.cleanData([el]);
-				el.innerHTML = ""; //seems less memory leak
+				el.innerHTML = ''; //seems less memory leak
 				el.outerHTML = html;
 				done = true;
 				zjq._afterOuter(o);
@@ -74,7 +74,7 @@ zk.override(zjq, _zjq, {
 	}
 });
 zk.copy(zjq, {
-	src0: "javascript:'';",
+	src0: 'javascript:"";',
 		//IE: prevent secure/nonsecure warning with HTTPS
 
 	//IE sometimes won't show caret when setting a focus to an input element
@@ -95,7 +95,7 @@ zk.copy(zjq, {
 			if (jq.nodeName(el, 'iframe'))
 				zk(el).redoSrc();
 			else
-				for (var ns = el.getElementsByTagName("iframe"), j = ns.length; j--;)
+				for (var ns = el.getElementsByTagName('iframe'), j = ns.length; j--;)
 					zk(ns[j]).redoSrc();
 		} catch (e) {
 		}
@@ -106,8 +106,8 @@ zk.copy(zjq, {
 		//Bug 1896749: <area>
 		if (zk.confirmClose)
 			for (var n = evt.target; n; n = n.parentNode)
-				if (jq.nodeName(n, "a", "area")) {
-					if (n.href.indexOf("javascript:") >= 0) {
+				if (jq.nodeName(n, 'a', 'area')) {
+					if (n.href.indexOf('javascript:') >= 0) {
 						zk.skipBfUnload = true;
 						setTimeout(noSkipBfUnload, 0); //restore
 					}

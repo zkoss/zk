@@ -19,9 +19,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_encs[_decs[v]] = v;
 
 	function _pathname(url) {
-		var j = url.indexOf("//");
+		var j = url.indexOf('//');
 		if (j > 0) {
-			j = url.indexOf("/", j + 2);
+			j = url.indexOf('/', j + 2);
 			if (j > 0) return url.substring(j);
 		}
 	}
@@ -191,12 +191,12 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					out.push(txt.substring(k, j), '&', enc, ';');
 					k = j + 1;
 				} else if (multiline && cc == '\n') {
-					out.push(txt.substring(k, j), "<br/>\n");
+					out.push(txt.substring(k, j), '<br/>\n');
 					k = j + 1;
 				} else if (pre && (cc == ' ' || cc == '\t')) {
-					out.push(txt.substring(k, j), "&nbsp;");
+					out.push(txt.substring(k, j), '&nbsp;');
 					if (cc == '\t')
-						out.push("&nbsp;&nbsp;&nbsp;");
+						out.push('&nbsp;&nbsp;&nbsp;');
 					k = j + 1;
 				}
 			}
@@ -218,7 +218,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return String the decoded string
 	 */
 	decodeXML: function (txt) {
-		var out = "";
+		var out = '';
 		if (!txt) return out;
 
 		var k = 0, tl = txt.length;
@@ -278,7 +278,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	today: function (fmt) {
 		var d = new Date(), hr = 0, min = 0, sec = 0, msec = 0;
-		if (typeof fmt == "string") {
+		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();
 			if (fmt0.indexOf('h') >= 0 || fmt0.indexOf('k') >= 0) hr = d.getHours();
 			if (fmt.indexOf('m') >= 0) min = d.getMinutes();
@@ -327,7 +327,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
 					e._applyMask = new zk.eff.Mask({
-						id: e.uuid + "-mask",
+						id: e.uuid + '-mask',
 						message: msg,
 						anchor: e.$n()
 					});
@@ -383,19 +383,19 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					wdgap = width - zk(txt).offsetWidth(),
 					hghgap = height - zk(txt).offsetHeight();
 
-				if (pos.indexOf("mouse") >= 0) {
+				if (pos.indexOf('mouse') >= 0) {
 					var offset = zk.currentPointer;
 					left = offset[0] + 10;
 					top = offset[1] + 10;
 				} else {
-					if (pos.indexOf("left") >= 0) left = x;
-					else if (pos.indexOf("right") >= 0)	left = x + wdgap -1;
-					else if (pos.indexOf("center") >= 0) left = x + wdgap / 2;
+					if (pos.indexOf('left') >= 0) left = x;
+					else if (pos.indexOf('right') >= 0)	left = x + wdgap -1;
+					else if (pos.indexOf('center') >= 0) left = x + wdgap / 2;
 					else left = 0;
 					
-					if (pos.indexOf("top") >= 0) top = y;
-					else if (pos.indexOf("bottom") >= 0) top = y + hghgap - 1;
-					else if (pos.indexOf("center") >= 0) top = y + hghgap / 2;
+					if (pos.indexOf('top') >= 0) top = y;
+					else if (pos.indexOf('bottom') >= 0) top = y + hghgap - 1;
+					else if (pos.indexOf('center') >= 0) top = y + hghgap / 2;
 					else top = 0;
 					
 					left = left < x ? x : left;
@@ -489,7 +489,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @see #stringToInts
 	 */
 	intsToString: function (ary) {
-		if (!ary) return "";
+		if (!ary) return '';
 
 		var sb = [];
 		for (var j = 0, k = ary.length; j < k; ++j)
@@ -558,7 +558,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 5.0.3
 	 */
 	appendAttr: function (nm, val, force)  {
-		return val || force ? ' ' + nm + '="' + val + '"': "";
+		return val || force ? ' ' + nm + '="' + val + '"': '';
 	},
 	/** Fires beforeSize, onFitSize and onSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.

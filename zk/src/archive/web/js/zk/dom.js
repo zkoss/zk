@@ -24,7 +24,7 @@ zjq = function (jq) { //ZK extension
 			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 			'direction', 'word-spacing', 'white-space'],
 		_txtStylesCamel, _txtSizDiv, //inited in textSize
-		_txtStyles2 = ["color", "background-color", "background"],
+		_txtStyles2 = ['color', 'background-color', 'background'],
 		_zsyncs = [],
 		_pendzsync = 0,
 		_vpId = 0, //id for virtual parent's reference node
@@ -211,7 +211,7 @@ zjq = function (jq) { //ZK extension
 			    var doctype_string = '<!DOCTYPE ' + node.name +
 			    		(node.publicId ? ' PUBLIC"' + node.publicId + '"' : '') +
 			    		(!node.publicId && node.systemId ? ' SYSTEM' : '') +
-			    		(node.systemId ? ' "' + node.systemId + '"' : '') + ">";
+			    		(node.systemId ? ' "' + node.systemId + '"' : '') + '>';
 		
 			    html5 = doctype_string === '<!DOCTYPE html>';
 			}
