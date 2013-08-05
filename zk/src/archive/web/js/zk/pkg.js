@@ -146,18 +146,18 @@ zk.load('zul.utl', function () {
 		markLoading(pkg);
 
 		var modver = zk.getVersion(pkg) || zk.build,
-			e = document.createElement("script"),
-			uri = pkg + ".wpd",
+			e = document.createElement('script'),
+			uri = pkg + '.wpd',
 			host = zk.getHost(pkg, true);
-		e.type = "text/javascript";
-		e.charset = "UTF-8";
+		e.type = 'text/javascript';
+		e.charset = 'UTF-8';
 
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 
-		if (host) uri = host + "/web/js" + uri;
+		if (host) uri = host + '/web/js' + uri;
 		else {
-			if (modver) uri = "/web/_zv" + modver + "/js" + uri;
-			else uri = "/web/js" + uri;
+			if (modver) uri = '/web/_zv' + modver + '/js' + uri;
+			else uri = '/web/js' + uri;
 			uri = zk.ajaxURI(uri, {desktop:dt,au:true});
 		}
 
@@ -181,9 +181,9 @@ zk.load('zul.utl', function () {
 		if (name)
 			markLoading(name);
 
-		var e = document.createElement("script");
-		e.type = "text/javascript";
-		e.charset = charset || "UTF-8";
+		var e = document.createElement('script');
+		e.type = 'text/javascript';
+		e.charset = charset || 'UTF-8';
 		e.src = src;
 		jq.head().appendChild(e);
 		return this;
@@ -196,10 +196,10 @@ zk.load('zul.utl', function () {
 	 * @return zk
 	 */
 	loadCSS: function (href, id, media) {
-		var ln = document.createElement("link");
+		var ln = document.createElement('link');
 		if (id) ln.id = id;
-		ln.rel = "stylesheet";
-		ln.type = "text/css";
+		ln.rel = 'stylesheet';
+		ln.type = 'text/css';
 		ln.href = href;
 		if (media) ln.media = media;
 		jq.head().appendChild(ln);
@@ -326,14 +326,14 @@ zk.afterLoad(function() {});
 	setHost: function (host, updURI, pkgs) {
 		var hostUpd = host + updURI;
 		if (!_defhost.length)
-			for (var scs = document.getElementsByTagName("script"), j = 0, len = scs.length;
+			for (var scs = document.getElementsByTagName('script'), j = 0, len = scs.length;
 			j < len; ++j) {
 				var src = scs[j].src;
 				if (src)
 					if (src.startsWith(host)) {
 						_defhost = [host, hostUpd];
 						break;
-					} else if (src.indexOf("/zk.wpd") >= 0)
+					} else if (src.indexOf('/zk.wpd') >= 0)
 						break;
 			}
 		for (var j = 0; j < pkgs.length; ++j)

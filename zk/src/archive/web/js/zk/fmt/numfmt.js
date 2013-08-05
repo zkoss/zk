@@ -81,7 +81,7 @@ zk.fmt.Number = {
 	},
 	//Test if rounding is required (used if Rounding is UNNECESSARY
 	isRoundingRequired: function(val, fmt, localizedSymbols){
-		if(!fmt || val == null || val =="")
+		if(!fmt || val == null || val =='')
 			return false;
 		
 		var useMinsuFmt;
@@ -295,7 +295,7 @@ zk.fmt.Number = {
 		var len = (indFmt < 0 ? fmt.length : indFmt) - (ind < 0 ? pureFmtStr.length : ind),
 			prej = efmt.prej;
 		if (len > 0) {
-			var p = fmt.substring(prej, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0.,]", 'g'), '');
+			var p = fmt.substring(prej, prefmt > 0 ? prefmt : len).replace(new RegExp('[#0.,]', 'g'), '');
 			if (p)
 				pre = p + pre;
 		}

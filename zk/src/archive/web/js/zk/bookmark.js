@@ -13,7 +13,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.bmk = (function () { //used internally
-	var _curbk = "", _initbk = "";
+	var _curbk = '', _initbk = '';
 
 	function getBookmark() {
 		var nm = location.hash,
@@ -26,7 +26,7 @@ zk.bmk = (function () { //used internally
 		var nm = getBookmark();
 		if (nm != _curbk) {
 			_curbk = nm;
-			zAu.send(new zk.Event(null, "onBookmarkChange", nm), 50);
+			zAu.send(new zk.Event(null, 'onBookmarkChange', nm), 50);
 			zk.bmk.onURLChange();
 		}
 	}
@@ -49,7 +49,7 @@ zk.bmk = (function () { //used internally
 			_curbk = nm; //to avoid loop back the server
 
 			if (replace)
-				location.replace(location.href.replace(/#.*/, "") + _toHash(nm, true));
+				location.replace(location.href.replace(/#.*/, '') + _toHash(nm, true));
 			else
 				location.hash = _toHash(nm);
 			zk.bmk.onURLChange();
@@ -96,12 +96,12 @@ zk.bmk = (function () { //used internally
 				var s = url.substring(0, j);
 				url = k < 0 ? s: s + url.substring(k);
 			}
-			if (l1.hash && "#" != l1.hash) url += l1.hash;
+			if (l1.hash && '#' != l1.hash) url += l1.hash;
 
 			var $ifr = jq(ifr);
-			if ($ifr.attr("z_xsrc") != ifr.src) {//the first zul page being loaded
+			if ($ifr.attr('z_xsrc') != ifr.src) {//the first zul page being loaded
 				var ifrsrc = ifr.src, loc = location.pathname;
-				$ifr.attr("z_xsrc", ifrsrc);
+				$ifr.attr('z_xsrc', ifrsrc);
 
 			//The first zul page might or might not be ifr.src
 			//We have to compare ifr.src with location
@@ -113,14 +113,14 @@ zk.bmk = (function () { //used internally
 				loc = _simplifyURL(loc);
 				if (ifrsrc.endsWith(loc)
 				|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
-					$ifr.attr("z_xurl", url);
+					$ifr.attr('z_xurl', url);
 					return; //not notify if changed by server
 				}
 			}
 
-			if (parent.onIframeURLChange && $ifr.attr("z_xurl") != url) {
+			if (parent.onIframeURLChange && $ifr.attr('z_xurl') != url) {
 				parent.onIframeURLChange(ifr.id, url);
-				$ifr.attr("z_xurl", url);
+				$ifr.attr('z_xurl', url);
 			}
 		} catch (e) { //due to JS sandbox, we cannot access if not from same host
 //			if (zk.debugJS) zk.log("Unable to access parent frame");

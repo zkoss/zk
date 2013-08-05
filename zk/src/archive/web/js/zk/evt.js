@@ -315,7 +315,7 @@ zWatch = (function () {
 	function _fn(inf, o, name) {
 		var fn = jq.isArray(inf) ? inf[1]: o[name];
 		if (!fn)
-			throw (o.className || o) + ':' + name + " not found";
+			throw (o.className || o) + ':' + name + ' not found';
 		return fn;
 	}
 	function _sync() {
