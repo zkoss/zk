@@ -109,7 +109,7 @@ zul.inp.RoundUtl = {
 		if (rmInplace && shallClean) {
     		$n.removeClass(inc).addClass(inc);
 		}
-		if (!w || w.indexOf('%') != -1) {
+		if (!w) {
 			width = wgt.$n('real').offsetWidth + wgt.$n('btn').offsetWidth;
 		}
 		return width;
