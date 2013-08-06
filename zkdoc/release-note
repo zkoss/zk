@@ -12,6 +12,7 @@ ZK 7.0.0
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
   ZK-1853: Audio component doesn't work with Chrome and Firefox
+  ZK-1879: collapse and open the splitter makes the hbox width no effect in zksandbox combobox case
 
 * Upgrade Notes
 
