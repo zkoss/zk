@@ -14,10 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	function _dissel() {
-		this.style.KhtmlUserSelect = "none";
+		this.style.KhtmlUserSelect = 'none';
 	}
 	function _ensel() {
-		this.style.KhtmlUserSelect = "";
+		this.style.KhtmlUserSelect = '';
 	}
 	
 zk.copy(zjq, {
@@ -44,13 +44,13 @@ zk.copy(zjq.prototype, {
 	},
 	beforeHideOnUnbind: function () { //Bug 3076384 (though i cannot reproduce in chrome/safari)
 		return this.jq.each(function () {
-			for (var ns = this.getElementsByTagName("iframe"), j = ns.length; j--;)
+			for (var ns = this.getElementsByTagName('iframe'), j = ns.length; j--;)
 				ns[j].src = zjq.src0;
 		});
 	},
 	offsetWidth: function () {
 		var el = this.jq[0];
-		if (!jq.nodeName(el, "tr"))
+		if (!jq.nodeName(el, 'tr'))
 			return _bkZjq.offsetWidth.apply(this, arguments);
 		
 		var wd = 0;
@@ -60,7 +60,7 @@ zk.copy(zjq.prototype, {
 	},
 	offsetHeight: function () {
 		var el = this.jq[0];
-		if (!jq.nodeName(el, "tr"))
+		if (!jq.nodeName(el, 'tr'))
 			return _bkZjq.offsetHeight.apply(this, arguments);
 
 		var hgh = 0;
@@ -73,13 +73,13 @@ zk.copy(zjq.prototype, {
 	},
 	offsetTop: function () {
 		var el = this.jq[0];
-		if (jq.nodeName(el, "tr") && el.cells.length)
+		if (jq.nodeName(el, 'tr') && el.cells.length)
 			el = el.cells[0];
 		return el.offsetTop;
 	},
 	offsetLeft: function () {
 		var el = this.jq[0];
-		if (jq.nodeName(el, "tr") && el.cells.length)
+		if (jq.nodeName(el, 'tr') && el.cells.length)
 			el = el.cells[0];
 		return el.offsetLeft;
 	}

@@ -50,13 +50,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _saveProp(self, set) {
 		var ele = self.jq;
 		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.data("zk.cache."+set[i], ele[0].style[set[i]]);
+			if(set[i] !== null) ele.data('zk.cache.'+set[i], ele[0].style[set[i]]);
 		return self;
 	}
 	function _restoreProp(self, set) {
 		var ele = self.jq;
 		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.css(set[i], ele.data("zk.cache."+set[i]));
+			if(set[i] !== null) ele.css(set[i], ele.data('zk.cache.'+set[i]));
 		return self;
 	}
 	function _checkAnimated(self, wgt, opts, anima) {

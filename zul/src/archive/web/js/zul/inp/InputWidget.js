@@ -108,7 +108,7 @@ zul.inp.RoundUtl = {
 		if (rmInplace && shallClean) {
     		$n.removeClass(inc);
 		}
-		var	width = node.offsetWidth;
+		var	width = wgt.$n('real').offsetWidth + wgt.$n('btn').offsetWidth;
 		if (rmInplace && shallClean) {
     		$n.addClass(inc);
 		}

@@ -104,7 +104,7 @@ function zkamn(pkg, fn) {
 	//run after page AU cmds
 	zk._apac = function (fn, _which_) {
 		if (_paci)
-			return _paci[_which_ || "f1"].push(fn);
+			return _paci[_which_ || 'f1'].push(fn);
 		zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
 	};
 
@@ -193,7 +193,7 @@ function zkamn(pkg, fn) {
 		if (type === 0) //page
 			type = wi[2].wc;
 		else if (type === 1) //1: zhtml.Widget
-			wi[0] = type = "zhtml.Widget";
+			wi[0] = type = 'zhtml.Widget';
 		if (type)
 			types[type] = dt;
 
@@ -243,11 +243,11 @@ function zkamn(pkg, fn) {
 			else {
 				var $jq;
 				if (zk.processing
-						&& ($jq = jq("#zk_proc")).length) {
+						&& ($jq = jq('#zk_proc')).length) {
 					if ($jq.hasClass('z-loading') && $jq.parent().hasClass('z-temp')) {
 						$jq[0].id = 'zna';
-						if (!jq("#zk_proc").length) //B65-ZK-1431: check if progressbox exists
-							zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+						if (!jq('#zk_proc').length) //B65-ZK-1431: check if progressbox exists
+							zUtl.progressbox('zk_proc', window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
 					}
 				}
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
@@ -324,7 +324,7 @@ function zkamn(pkg, fn) {
 			zk._apac(function () {
 				for (var j = 0; j < cmds.length; j += 2)
 					zAu.process(cmds[j], cmds[j + 1]);
-			}, "f0");
+			}, 'f0');
 	}
 
 	/* create the widget tree. */
@@ -334,15 +334,15 @@ function zkamn(pkg, fn) {
 			uuid = wi[1],
 			props = wi[2]||{};
 		if (type === 0) { //page
-			type = zk.cut(props, "wc")
+			type = zk.cut(props, 'wc')
 			var cls = type ? zk.$import(type): zk.Page;
-			(wgt = new cls({uuid: uuid}, zk.cut(props, "ct"))).inServer = true;
+			(wgt = new cls({uuid: uuid}, zk.cut(props, 'ct'))).inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
-			if ((stub = type == "#stub") || type == "#stubs") {
+			if ((stub = type == '#stub') || type == '#stubs') {
 				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
 						|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
-					throw "Unknown stub "+uuid;
+					throw 'Unknown stub '+uuid;
 				var w = new Widget();
 				//Bug ZK-1596: may already unbind
 				//Bug ZK-1821: should also unbind wgt if in ROD status
@@ -364,7 +364,7 @@ function zkamn(pkg, fn) {
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
 			//z$al: afterLoad
-			if (v = zk.cut(props, "z$al"))
+			if (v = zk.cut(props, 'z$al'))
 				zk.afterLoad(function () {
 					for (var p in v)
 						wgt.set(p, v[p](), true); //value must be func; fromServer
@@ -431,8 +431,8 @@ function zkamn(pkg, fn) {
 			if (wi) {
 				if (wi[0] === 0) { //page
 					var props = wi[2],
-						dt = zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"));
-					if (owner = zk.cut(props, "ow"))
+						dt = zkdt(zk.cut(props, 'dt'), zk.cut(props, 'cu'), zk.cut(props, 'uu'), zk.cut(props, 'ru'));
+					if (owner = zk.cut(props, 'ow'))
 						owner = Widget.$(owner);
 					var zf;
 					if ((zf = zk.feature) && (zf.pe || zf.ee) && zk.clientinfo !== undefined) {
@@ -462,7 +462,7 @@ function zkamn(pkg, fn) {
 			doAuCmds(aucmds);
 		} catch (e) {
 			zk.mounting = false;
-			zk.error("Failed to mount: "+(e.message||e));
+			zk.error('Failed to mount: '+(e.message||e));
 			setTimeout(function(){
 				throw e;
 			},0);				
@@ -788,14 +788,14 @@ jq(function() {
 		setTimeout(_docResize, delay);
 
 		if (zk.mobile && zAu._cInfoReg) {
-			if (!jq("#zk_proc").length && !jq("#zk_showBusy").length) {
-				zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+			if (!jq('#zk_proc').length && !jq('#zk_showBusy').length) {
+				zUtl.progressbox('zk_proc', window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
 			}
 		}
 	};
 	
 	if(zk.mobile)
-		jq(window).bind("orientationchange", _sizeHandler);
+		jq(window).bind('orientationchange', _sizeHandler);
 	else
 		jq(window).resize(_sizeHandler);
 

@@ -48,7 +48,7 @@ zk.canvas.Canvas = {
 	 * @return DOMElement
 	 */
 	create: function (width, height) {
-		var el = document.createElement("canvas");
+		var el = document.createElement('canvas');
 		if (width) el.width = zk.parseInt(width);
 		if (height) el.height = zk.parseInt(height);
 		_init(el);

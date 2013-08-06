@@ -77,19 +77,22 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	_scrollcheck: function(way, tb) {
 		this._shallCheck = false;
-		var tabbox;
-		if (!this.desktop || ((tabbox = this.getTabbox()) && 
-				(!tabbox.isRealVisible() || !tabbox.isTabscroll())))
+		var tabbox = this.getTabbox();
+		if (!this.desktop || 
+				(tabbox && (!tabbox.isRealVisible() || !tabbox.isTabscroll())))
 			return;
 
 		var tabs = this.$n(),
 			tbx = tabbox.$n();
-		if (!tabs || !tbx) return;	// tabbox is delete , no need to check scroll
-		if (tabbox.isVertical()) {//vertical
-				tabsOffsetHeight = tabs.offsetHeight,
+
+		if (!tabs || !tbx) 
+			return;	// tabbox is delete , no need to check scroll
+
+		if (tabbox.isVertical()) { //vertical
+			var tabsOffsetHeight = tabs.offsetHeight,
 				tabsScrollTop = tabs.scrollTop,
 				childHeight = 0;
-				
+			
 			jq(this.$n('cave')).children().each(function () {
 				childHeight += this.offsetHeight;
 			});
@@ -124,7 +127,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					break;
 				}
 			} else { // not enough tab to scroll
-				if (childHeight - (tabsOffsetHeight - zk(this.$n('cave')).padBorderHeight()) > 0) {
+				if (childHeight - tabsOffsetHeight > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var btnsize = this._getArrowSize(),
@@ -188,7 +191,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					break;
 				}
 			} else { // not enough tab to scroll
-				if (childWidth - (tabsOffsetWidth - zk(this.$n('cave')).padBorderWidth()) > 0) {
+				if (childWidth - tabsOffsetWidth > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var cave = this.$n('cave'),
@@ -266,28 +269,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox();
 		if (tabbox.isTabscroll()) {
 			var cls = tabbox.$s('scroll');
-				
-			if (show) {
+			jq(tabbox).removeClass(cls);
+			if (show)
 				jq(tabbox).addClass(cls);
-				if (tabbox.isHorizontal()) {
-					tabbox.$n('left').style.display = 'block';
-					tabbox.$n('right').style.display = 'block';
-				}
-				if (tabbox.isVertical()) {
-					tabbox.$n('up').style.display = 'block';
-					tabbox.$n('down').style.display = 'block';
-				}
-			} else {
-				jq(tabbox).removeClass(cls);
-				if (tabbox.isHorizontal()) {
-					tabbox.$n('left').style.display = 'none';
-					tabbox.$n('right').style.display = 'none';
-				}
-				if (tabbox.isVertical()) {
-					tabbox.$n('up').style.display = 'none';
-					tabbox.$n('down').style.display = 'none';
-				}
-			}
 		}
 	},
 	_fixWidth: function() {

@@ -40,7 +40,7 @@ if (!zk.css3) {
 		$init: function (element, opts) {
 			opts = this.opts = zk.eff._skuOpts(zk.$default(opts, _defShadowOpts));
 			this.node = element;
-			var sdwid = element.id + "-sdw";
+			var sdwid = element.id + '-sdw';
 			jq(element).before('<div id="' + sdwid + _shadowEnding);
 			this.shadow = jq(sdwid, zk)[0];
 		},
@@ -85,8 +85,8 @@ if (!zk.css3) {
 			st.left = jq.px(l + opts.left);
 			st.top = jq.px(t + opts.top);
 			st.width = jq.px0(wd);
-			st.zIndex = zk.parseInt($node.css("zIndex"));
-			st.display = "block";
+			st.zIndex = zk.parseInt($node.css('zIndex'));
+			st.display = 'block';
 			var cns = shadow.childNodes;
 			cns[1].style.height = jq.px0(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
 
@@ -102,7 +102,7 @@ if (!zk.css3) {
 				st.width = jq.px0(w);
 				st.height = jq.px0(h);
 				st.zIndex = shadow.style.zIndex;
-				st.display = "block";
+				st.display = 'block';
 			}
 			return true;
 		},

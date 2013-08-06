@@ -117,10 +117,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _showprgb(mask, icon) {
 		var $jq;
 		if (zk.processing
-		&& !($jq = jq("#zk_proc")).length && !jq("#zk_showBusy").length) {
-			zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
+		&& !($jq = jq('#zk_proc')).length && !jq('#zk_showBusy').length) {
+			zUtl.progressbox('zk_proc', window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
 		} else if (icon == 'z-initing') {
-			var $jq = $jq || jq("#zk_proc");
+			var $jq = $jq || jq('#zk_proc');
 			if ($jq.length && $jq.hasClass('z-loading') && ($jq = $jq.parent()).hasClass('z-temp')) {
 				$jq.append('<div class="z-initing"></div>');
 			}
@@ -163,13 +163,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function doLog() {
 		if (_logmsg) {
-			var console = jq("#zk_log");
+			var console = jq('#zk_log');
 			if (!console.length) {
 				jq(document.body).append(
 	'<div id="zk_logbox" class="z-log">'
 	+'<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
 	+'<textarea id="zk_log" rows="10"></textarea></div>');
-				console = jq("#zk_log");
+				console = jq('#zk_log');
 			}
 			console = console[0];
 			console.value += _logmsg;
@@ -321,7 +321,7 @@ zk.copy(zk, {
 	 * @type String
 	 * @since 5.0.6
 	 */
-	appName: "ZK",
+	appName: 'ZK',
 
 	/** The version of ZK, such as '5.0.0'
 	 * @type String
@@ -853,11 +853,11 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 		}
 		var fe = !(zk.feature && zk.feature.ee);
 		switch (typeof backup) {
-		case "function":
+		case 'function':
 			var old = dst;
 			dst = backup;
 			return old;
-		case "string":
+		case 'string':
 			// B50-ZK-493: shall update subclasses
 			if (fe)
 				_overrideSub(dst, backup, dst['$'+backup] = dst[backup], dst[backup] = src, true);
@@ -1044,7 +1044,7 @@ zk.set(dst, src, ["foo", "mike"]);
 	 * @see #copy
 	 */
 	set: function (o, name, value, extra) {
-		if (typeof name == "string") {
+		if (typeof name == 'string') {
 			zk._set(o, name, value, extra);
 		} else //o: dst, name: src, value: props
 			for (var j = 0, len = value.length, m, n, v; j < len;) {
@@ -1117,7 +1117,7 @@ zk.endProcessing();
 	 */
 	endProcessing: function () {
 		zk.processing = false;
-		zUtl.destroyProgressbox("zk_proc");
+		zUtl.destroyProgressbox('zk_proc');
 	},
 
 	/** Disable the default behavior of ESC. In other words, after called, the user cannot abort the loading from the server.
@@ -1146,7 +1146,7 @@ zk.endProcessing();
 	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
-		zAu.send(new zk.Event(null, "error", {message: msg}, {ignorable: true}), 800);
+		zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
 		zk._Erbx.push(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.
@@ -1208,7 +1208,7 @@ zk.log('value is", value);
 				zk.log(inf.n + ': ' + (inf.t - _t0));
 				_t0 = inf.t;
 			}
-			zk.log("total: " + (_t0 - t0));
+			zk.log('total: ' + (_t0 - t0));
 		}
 	},
 
@@ -1267,7 +1267,7 @@ zk.log('value is", value);
 		var Desktop = zk.Desktop, dt;
 		dtid = dtid || ('z_auto' + _statelesscnt++);
 		dt = Desktop.all[dtid];
-		if (dt && !dt.stateless) throw "Desktop conflict";
+		if (dt && !dt.stateless) throw 'Desktop conflict';
 		if (zk.updateURI == null)
 			zk.updateURI = updateURI;
 		if (zk.contextURI == null) //it might be ""
@@ -1285,7 +1285,7 @@ zk.log('value is", value);
 		var exdate = new Date();
 		exdate.setDate(exdate.getDate() + exdays);
 		var value = escape(value) + ((exdays == null) ? '' : '; expires=' + exdate.toUTCString());
-		document.cookie = name + "=" + value + ";path=/";
+		document.cookie = name + '=' + value + ';path=/';
 	}
 	function _getCookie(name) {
 		var cookies = document.cookie.split(';'),
@@ -1293,7 +1293,7 @@ zk.log('value is", value);
 			value = 0;
 		for (var i = 0, c, j; i < len; i++) {
 			c = cookies[i];
-			j = c.indexOf("=");
+			j = c.indexOf('=');
 			if (name == jq.trim(c.substr(0, j))) {
 				value = zk.parseInt(jq.trim(c.substr(j+1)));
 				break;
@@ -1310,12 +1310,12 @@ zk.log('value is", value);
 			/(webkit)[ \/]([\w.]+)/.exec( ua ) ||
 			/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
 			/(msie) ([\w.]+)/.exec( ua ) ||
-			ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+			ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
 			[];
 
 		return {
-			browser: match[ 1 ] || "",
-			version: match[ 2 ] || "0"
+			browser: match[ 1 ] || '',
+			version: match[ 2 ] || '0'
 		};
 	};
 
@@ -1357,7 +1357,7 @@ zk.log('value is", value);
 	var bodycls;
 	if (zk.ff) {
 		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
-		&& (bodycls = agent.indexOf("firefox/")) > 0)
+		&& (bodycls = agent.indexOf('firefox/')) > 0)
 			zk.ff = zk.gecko = _ver(agent.substring(bodycls + 8));
 		bodycls = 'gecko gecko' + Math.floor(zk.ff);
 		zk.vendor = 'Moz';
@@ -1384,16 +1384,16 @@ zk.log('value is", value);
 			zk.vendor = 'ms';
 			
 			// ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
-			var v = _getCookie("zkie-compatibility");
+			var v = _getCookie('zkie-compatibility');
 			if (zk.iex != zk.ie || (v && v != zk.ie)) {
 				if (v != zk.ie) {
-					_setCookie("zkie-compatibility", zk.ie, 365*10);
+					_setCookie('zkie-compatibility', zk.ie, 365*10);
 					window.location.reload();
 				}
 			}
 		} else {
-			if (zk.safari)
-				bodycls = 'safari safari' + Math.floor(zk.safari);
+			if (zk.webkit)
+				bodycls = 'webkit webkit' + Math.floor(zk.webkit);
 			if (zk.mobile) {
 				bodycls = (bodycls || '') + ' mobile';
 				if (zk.ios)
@@ -1403,7 +1403,7 @@ zk.log('value is", value);
 			}
 		}
 	}
-	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
+	if ((zk.air = agent.indexOf('adobeair') >= 0) && zk.webkit)
 		bodycls = (bodycls || '') + ' air';
 
 	if (bodycls)
@@ -1514,7 +1514,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @since 5.0.2
 	 */
 	$super: function (arg0, arg1) {
-		if (typeof arg0 != "string") {
+		if (typeof arg0 != 'string') {
 			return this.$supers(arg0, arg1, [].slice.call(arguments, 2));
 		}
 		return this.$supers(arg0, [].slice.call(arguments, 1));
@@ -1558,10 +1558,10 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
-		if (typeof nm != "string") { //zk.Class assumed
+		if (typeof nm != 'string') { //zk.Class assumed
 			var old = supers[args], p; //args is method's name
 			if (!(p = nm.prototype._$super) || !(nm = p[args])) //nm is zk.Class
-				throw args + " not in superclass"; //args is the method name
+				throw args + ' not in superclass'; //args is the method name
 
 			supers[args] = p;
 			try {
@@ -1588,7 +1588,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 			}
 
 		if (!m)
-			throw nm + " not in superclass";
+			throw nm + ' not in superclass';
 
 		try {
 			return m.apply(this, args);

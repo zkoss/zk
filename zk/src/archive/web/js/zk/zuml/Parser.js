@@ -61,11 +61,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	}
 	function _getPkgs0(e, pkgmap) {
 		var tn = e.tagName;
-		if ("zk" != tn && "attribute" != tn) {
+		if ('zk' != tn && 'attribute' != tn) {
 			if (!zk.Widget.getClass(tn)) { //not register?
 				var clsnm = zk.wgt.WidgetInfo.getClassName(tn);
 				if (!clsnm) 
-					throw "Unknown tag: "+tn;
+					throw 'Unknown tag: '+tn;
 
 				var j = clsnm.lastIndexOf('.');
 				if (j >= 0)
@@ -97,12 +97,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			unless = _eval(parent, e.getAttribute('unless'), args);
 		if ((ifc == null || ifc) && (unless == null || !unless)) {
 			var tn = e.tagName, wgt;
-			if ("zk" == tn) {
+			if ('zk' == tn) {
 				wgt = parent;
-			} else if ("attribute" == tn) {
+			} else if ('attribute' == tn) {
 				var attnm = _eval(parent, e.getAttribute('name'), args);
 				if (!attnm)
-					throw "The name attribute required, "+e;
+					throw 'The name attribute required, '+e;
 				parent.set(attnm, zk.xml.Utl.getElementValue(e));
 				return;
 			} else {

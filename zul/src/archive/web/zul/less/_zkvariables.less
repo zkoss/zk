@@ -23,11 +23,11 @@
 // Component sizing
 // -------------------------
 // Based on 14px font-size and 20px line-height
-@fontSizeXLarge:               18px;
-@fontSizeLarge:                16px;
-@fontSizeMedium:               12px;
-@fontSizeSmall:                11px;
-@fontSizeXSmall:               10px;
+@fontSizeXLarge:               ceil(@baseFontSize * 1.25); // 18px
+@fontSizeLarge:                floor(@baseFontSize * 1.15); // 16px
+@fontSizeMedium:               ceil(@baseFontSize * 0.85); // 12px
+@fontSizeSmall:                floor(@baseFontSize * 0.8); // 11px
+@fontSizeXSmall:               ceil(@baseFontSize * 0.7); // 10px
 
 @baseBorderRadius:             4px;
 @borderRadiusLarge:            6px;
@@ -52,7 +52,7 @@
 @baseGradientStart:            #FEFEFE;
 @baseGradientEnd:              #EEEEEE;
 
-// Icon font color
+// Icon font color (used for font-awesome)
 // --------------------
 @iconColor:                    #636363;
 @iconHoverColor:               #636363;
@@ -61,25 +61,23 @@
 // Component State
 // --------------------
 // Active
+@activeColor:                  @baseTextColor;
 @activeBorderColor:            #499EB3;
+@activeBackgroundColor:        #86E2F9;
 @activeGradientStart:          #C3F5FE;
 @activeGradientEnd:            #86E2F9;
-// Focus
+// Focus (used on button, combobutton)
+@focusColor:                   @baseTextColor;
 @focusBorderColor:             #00B9FF;
+@focusBackgroundColor:         @baseGradientEnd;
+@focusGradientStart:           @baseGradientStart;
+@focusGradientEnd:             @baseGradientEnd;
 // Hover
 @hoverColor:                   #008BB6;
 @hoverBorderColor:             #8FB9D0;
 @hoverBackgroundColor:         #D6F0FD;
 @hoverGradientStart:           #F2F9FE;
 @hoverGradientEnd:             #D6F0FD;
-// Selected
-@selectedBackgroundColor:      #BEE7FC;
-@selectedGradientStart:        #E5F4FB;
-@selectedGradientEnd:          #D3EDFA;
-// Selected Hover
-@selectedHoverBackgroundColor: #C5E7F8;
-@selectedHoverGradientStart:   #CFEBF8;
-@selectedHoverGradientEnd:     #A5DAF5;
 // Disabled
 @disabledColor:                #AAAAAA;
 @disabledBackgroundColor:      #F0F0F0;
@@ -89,14 +87,24 @@
 // Read-only
 @readonlyBorderColor:          #E6E6E6;
 @readonlyBackgroundColor:      #FAFAFA;
-// Checked
+// Selected (used on listbox, tree, comboitem)
+@selectedBackgroundColor:      #BEE7FC;
+@selectedGradientStart:        #E5F4FB;
+@selectedGradientEnd:          #D3EDFA;
+// Selected Hover (used on listbox, tree, comboitem)
+@selectedHoverBackgroundColor: #C5E7F8;
+@selectedHoverGradientStart:   #CFEBF8;
+@selectedHoverGradientEnd:     #A5DAF5;
+// Checked (used on menu, listbox, tree, toolbarbutton)
 @checkedColor:                 #2184BA;
 @checkedBorderColor:           #C6DBE6;
+@checkedBackgroundColor:       #E2EFF6;
 @checkedGradientStart:         #F4FAFD;
 @checkedGradientEnd:           #E2EFF6;
 
 // Component independent variables
 //------------------------------------------
+// mask and loading
 @maskBackgroundColor:          #E0E1E3;
 @loadingBackgroundColor:       #E3E3E3;
 // scrollbar
@@ -119,11 +127,11 @@
 // group (group, listgroup)
 @groupGradientStart:           #FFFFFF;
 @groupGradientEnd:             #E9F2FB;
-// errorbox
+// errorbox (input constraint)
 @errorboxColor:                #990000;
 @errorboxBorderColor:          #990000;
 @errorboxBackgroundColor:      #FFEEEE;
-// notification (bug ZK-1135: IE8 does not support rgba)
+// notification
 @notificationInfoColor:        rgba(33, 155, 166, 0.88);
 @notificationWarningColor:     rgba(234, 67, 23, 0.88);
 @notificationErrorColor:       rgba(190, 0, 5, 0.88);
@@ -141,7 +149,7 @@
 @navImageSize:                 16px;
 @navColor:                     #333333;
 @navBorderColor:               #F4F4F3;
-@navBackgroundColor:           #FFFFFF;
+@navBackgroundColor:           #FFFFFF; //first level, each level is 3% darker (darken(@navBackgroundColor, 3 * level));
 @navHoverBackgroundColor:      #E8E8E8;
 @navSelectedColor:             #FFFFFF;
 @navSelectedBackgroundColor:   #372F2B;

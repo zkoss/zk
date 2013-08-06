@@ -13,7 +13,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 zk.copy(zjq.prototype, {
 	beforeHideOnUnbind: function () { //Bug 3076384
 		return this.jq.each(function () {
-			for (var ns = this.getElementsByTagName("iframe"), j = ns.length; j--;)
+			for (var ns = this.getElementsByTagName('iframe'), j = ns.length; j--;)
 				ns[j].src = zjq.src0;
 		});
 	}

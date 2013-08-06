@@ -18,7 +18,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 .z-calendar {
 	width: 360px;
 }
-.z-calendar-calmon td, .z-calendar-calday td, .z-calendar-calday td a, .z-calendar-calday td a:visited, .z-datebox-calmon td, .z-datebox-calday td, .z-datebox-calday td a, .z-datebox-calday td a:visited {
+.z-calendar-cell {
    font-size: 20px;
 }
 </style>
