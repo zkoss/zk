@@ -261,9 +261,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox(),
 			isVer = tabbox.isVertical(),
 			btnA = isVer ? tabbox.$n('up') : tabbox.$n('left'),
-			btnB = isVer ? tabbox.$n('down') : tabbox.$n('right');
-		return btnA && btnB ?
-			(isVer ? btnA.offsetHeight + btnB.offsetHeight : btnA.offsetWidth + btnB.offsetWidth) : 0;
+			btnB = isVer ? tabbox.$n('down') : tabbox.$n('right'),
+			size = 0;
+		if (btnA && btnB) {
+			size = isVer ? btnA.offsetHeight + btnB.offsetHeight : btnA.offsetWidth + btnB.offsetWidth;
+		}
+		return size;
 	},
 	_showbutton : function(show) {
 		var tabbox = this.getTabbox();
@@ -278,54 +281,52 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabs = this.$n(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
-			l = tabbox.$n('left'),
-			r = tabbox.$n('right'),
-			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
-			this._fixHgh();
-			if (tabbox.isVertical()) {
-				var panels = tabbox.getTabpanels();
-				if (panels)
-					panels._fixWidth();
-				//LI in IE doesn't have width...
-				if (tabs.style.width) {
-					tabs._width = tabs.style.width;
+			btnsize = tabbox._scrolling ? this._getArrowSize() : 0;
+		this._fixHgh();
+		if (tabbox.isVertical()) {
+			var panels = tabbox.getTabpanels();
+			if (panels)
+				panels._fixWidth();
+			//LI in IE doesn't have width...
+			if (tabs.style.width) {
+				tabs._width = tabs.style.width;
+			} else {
+				//vertical tabs have default width 50px
+				tabs.style.width = tabs._width ? tabs._width : '50px';
+			}
+		} else if (!tabbox.inAccordionMold()) {
+			if (tbx.offsetWidth < btnsize) 
+				return;
+			if (tabbox.isTabscroll()) {
+				var toolbar = tabbox.toolbar;
+				if (toolbar) 
+					toolbar = toolbar.$n();
+				if (!tbx.style.width) {
+					tbx.style.width = '100%';
+					if (tabbox._scrolling) 
+						tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
+					else 
+						tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0));
 				} else {
-					//vertical tabs have default width 50px
-					tabs.style.width = tabs._width ? tabs._width : '50px';
+					if (tabbox._scrolling)
+						tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
+					else 
+						tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0));
 				}
-			} else if (!tabbox.inAccordionMold()) {
-				if (tbx.offsetWidth < btnsize) 
-					return;
-				if (tabbox.isTabscroll()) {
-					var toolbar = tabbox.toolbar;
-					if (toolbar) 
-						toolbar = toolbar.$n();
-					if (!tbx.style.width) {
-						tbx.style.width = '100%';
-						if (tabbox._scrolling) 
-							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
-						else 
-							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0));
-					} else {
-						if (tabbox._scrolling)
-							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0) - btnsize);
-						else 
-							tabs.style.width = jq.px0(zk(tbx).contentWidth() - (toolbar ? toolbar.offsetWidth : 0));
-					}
-					if (toolbar && tabbox._scrolling) 
-						tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
-					
-				} else {
-					if (!tbx.style.width) {
-						if (tbx.offsetWidth) {
-							tbx.style.width = jq.px0(tbx.offsetWidth);
-							tabs.style.width = jq.px0(zk(tbx).contentWidth() - zk(tabs).marginWidth());
-						}
-					} else {
+				if (toolbar && tabbox._scrolling) 
+					tabbox.$n('right').style.right = toolbar.offsetWidth + 'px';
+				
+			} else {
+				if (!tbx.style.width) {
+					if (tbx.offsetWidth) {
+						tbx.style.width = jq.px0(tbx.offsetWidth);
 						tabs.style.width = jq.px0(zk(tbx).contentWidth() - zk(tabs).marginWidth());
 					}
+				} else {
+					tabs.style.width = jq.px0(zk(tbx).contentWidth() - zk(tabs).marginWidth());
 				}
 			}
+		}
 	},
 	_fixHgh: function () {
 		var tabbox = this.getTabbox();
@@ -357,13 +358,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				tb = tabbox.toolbar,
 				tabs = this.$n(),
 				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
-			if(r && l) {
+			if (r && l) {
 				r.style.height = l.style.height = hgh;
 			}
-			if(tb && (tb = tb.$n())) {
+			if (tb && (tb = tb.$n())) {
 				tb.style.height = hgh;
 			}
-			
 			if (tabs)
 				tabs.style.height = '';
 		}

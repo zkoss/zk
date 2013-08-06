@@ -99,18 +99,18 @@ zul.inp.RoundUtl = {
 		inp.style.width = jq.px0(width - rightElemWidth);
 	},
 	getOuterWidth: function(wgt, rmInplace) {
-		var node = wgt.$n(),
+		var w = wgt.getWidth(),
+			node = wgt.$n(),
+			width = node.offsetWidth,
 			$n = jq(node),
-			$inp = jq(wgt.getInputNode()),
 			inc = wgt.getInplaceCSS(),
 			shallClean = $n.hasClass(inc);
 
 		if (rmInplace && shallClean) {
-    		$n.removeClass(inc);
+    		$n.removeClass(inc).addClass(inc);
 		}
-		var	width = wgt.$n('real').offsetWidth + wgt.$n('btn').offsetWidth;
-		if (rmInplace && shallClean) {
-    		$n.addClass(inc);
+		if (!w || w.indexOf('%') != -1) {
+			width = wgt.$n('real').offsetWidth + wgt.$n('btn').offsetWidth;
 		}
 		return width;
 	},
