@@ -47,6 +47,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (sib2) {
 			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
 				sz = c.style[fd];
+			//ZK-1879: set width only if it has width originally
 			if (sz && sz.indexOf('px') > -1) {
 				diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
