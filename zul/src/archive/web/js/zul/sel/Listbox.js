@@ -154,8 +154,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (this.desktop) {
 			if (!this._scrollbar)
 				this._scrollbar = zul.mesh.Scrollbar.init(this);
-			this.refreshBar_();
-			this._syncSelInView();
+			if (!this._listbox$rod) {
+				this.refreshBar_();
+				this._syncSelInView();
+			}
 		}
 	},
 	refreshBar_: function (showBar, scrollToTop) {
