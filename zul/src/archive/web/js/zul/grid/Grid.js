@@ -202,7 +202,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			if (self.desktop) {
 				if (!self._scrollbar)
 					self._scrollbar = zul.mesh.Scrollbar.init(self);
-				if (!this._grid$rod)
+				if (!this._grid$rod || this.inPagingMold())
 					self.refreshBar_();
 			}
 		}, 200);

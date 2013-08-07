@@ -17,7 +17,7 @@ function (out) {
 		uuid = this.uuid;
 		
 	out.push('<span ', this.domAttrs_(), ' >',	
-				'<span id="', uuid, '-real" class="', this.$s('content') ,'" type="', this._type, '"');
+				'<span id="', uuid, '-real" class="', this.$s('content') ,'"');
 		
 	if (this._disabled) out.push(' disabled="disabled"');
 	if (tabi) out.push(' tabindex="', tabi, '"');

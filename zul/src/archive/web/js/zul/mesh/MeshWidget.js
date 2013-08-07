@@ -658,10 +658,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._bindDomNode();
 		if (this._hflex != 'min')
 			this._fixHeaders();
+		if ((zk.webkit || zk.ie) && this.ehead) //sync scroll for input tab key scroll
+			this.domListen_(this.ehead, 'onScroll', '_doSyncScroll');
 		zWatch.listen({onSize: this, onResponse: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, onResponse: this});
+		if ((zk.webkit || zk.ie) && this.ehead) //sync scroll for input tab key scroll
+			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
 		this.$supers(zul.mesh.MeshWidget, 'unbind_', arguments);
 	},
 	clearCache: function () {
@@ -832,6 +836,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		if (scrolled)
 			this._fireOnScrollPos();
+	},
+	_doSyncScroll: function () { //sync scroll for input tab key scroll
+		var ehead = this.ehead,
+			ebody = this.ebody,
+			efoot = this.efoot;
+		if (ehead && zk(ehead).isVisible()) {
+			if (this._currentLeft != ehead.scrollLeft) {
+				if (ebody)
+					ebody.scrollLeft = ehead.scrollLeft;
+				if (efoot) 
+					efoot.scrollLeft = ehead.scrollLeft;
+			}
+		}
 	},
 	_timeoutId: null,
 	_fireOnScrollPos: function (time) { //overriden in zkmax
