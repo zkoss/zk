@@ -99,8 +99,7 @@ zul.inp.RoundUtl = {
 		inp.style.width = jq.px0(width - rightElemWidth);
 	},
 	getOuterWidth: function(wgt, rmInplace) {
-		var w = wgt.getWidth(),
-			node = wgt.$n(),
+		var node = wgt.$n(),
 			width = node.offsetWidth,
 			$n = jq(node),
 			inc = wgt.getInplaceCSS(),
@@ -109,7 +108,7 @@ zul.inp.RoundUtl = {
 		if (rmInplace && shallClean) {
     		$n.removeClass(inc).addClass(inc);
 		}
-		if (!w) {
+		if (!wgt.getWidth() && !wgt.getHflex()) {
 			width = wgt.$n('real').offsetWidth + wgt.$n('btn').offsetWidth;
 		}
 		return width;
