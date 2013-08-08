@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	// the condition LinkedPanel.firstChild != this.$n()
 	// will get the wrong result
 	// delete it later for the invalidate() case
-	function _logId (wgt) {
+	function _logId(wgt) {
 		if (!wgt._oldId) {
 			wgt._oldId = wgt.uuid;
 			setTimeout(function () {
@@ -292,7 +292,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	rerender: function (skipper) {
 		// ZK-886
-		_logId(this);
+		if (this.desktop)
+			_logId(this);
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
 	},
 	contentRenderer_: function (out) {
