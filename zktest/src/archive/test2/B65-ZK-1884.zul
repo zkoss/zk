@@ -3,12 +3,12 @@
 	<window border="normal" width="500px" height="200px">
 		<vbox>
 			click slider's rightmost position, its value should not be greater then 70
-			<separator orient="vertical" spacing="4px" />
+			<separator spacing="4px" />
 			<hbox>
 				<label id="lb" value="40" />/ 70
 			</hbox>
-			<separator orient="vertical" spacing="4px" />
-			<slider curpos="40" maxpos="70">
+			<separator spacing="4px" />
+			<slider orient="horizontal" maxpos="70" curpos="40">
 				<attribute w:name="onScroll"><![CDATA[
 					var pos = this.getCurpos();
 					this.$f("lb").setValue(pos);
