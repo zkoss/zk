@@ -179,6 +179,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			pageIncrement = this._pageIncrement,
 			moveToCursor = pageIncrement < 0,
 			isVertical = this.isVertical(),
+			height = this._getHeight(),
+			width = this._getWidth(),
 			offset = isVertical ? evt.pageY - pos[1]: evt.pageX - pos[0];
 		
 		if (!$btn[0] || $btn.is(':animated')) return;
@@ -187,7 +189,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._curpos += offset > 0? pageIncrement: - pageIncrement;
 			offset = null; // update by _curpos
 		}
-		
+		// B65-ZK-1884: Avoid button's animation out of range
+		var nextPos = _getNextPos(this, offset);
+		if (isVertical && zk.parseInt(nextPos.top) > height)
+			nextPos.top = jq.px0(height);
+		if (!isVertical && zk.parseInt(nextPos.left) > width)
+			nextPos.left = jq.px0(width);
 		$btn.animate(_getNextPos(this, offset), 'slow', function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			if (pos > wgt._maxpos) 
@@ -271,7 +278,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip = null;
 	},
 	_realpos: function(dg) {
-		var btnofs = zk(this.$n("btn")).revisedOffset(), refofs = zk(this.getRealNode()).revisedOffset(), maxpos = this._maxpos, pos;
+		var btnofs = zk(this.$n("btn")).revisedOffset(),
+			refofs = zk(this.getRealNode()).revisedOffset(),
+			maxpos = this._maxpos,
+			pos;
 		if (this.isVertical()) {
 			var ht = this._getHeight();
 			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht) : 0;
@@ -279,7 +289,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			var wd = this._getWidth();
 			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd) : 0;
 		}
-		return this._curpos = (pos >= 0 ? pos : 0);
+		// B65-ZK-1884: curpos should not be greater then maxpos
+		return this._curpos = (pos >= 0 ? (pos > maxpos ? maxpos : pos ) : 0);
 	},
 	_getWidth: function() {
 		return this.getRealNode().clientWidth - this.$n('btn').offsetWidth + 7;
