@@ -18,7 +18,9 @@
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
 	&:focus {
+		color: @focusColor;
 		border-color: @focusBorderColor;
+		.verGradient(@focusGradientStart, @focusGradientEnd);
 		.boxShadow('inset 0 0 2px #0CBCFF');
 	}
 	&:active {
