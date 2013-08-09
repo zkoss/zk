@@ -29,14 +29,6 @@
 		.leftBorderRadius();
 		border-top: 1px solid @baseBorderColor;
 		padding-top: 0px;
-		&-button {
-			top: 0;
-			left: 4px;
-			& + .z-tab-text {
-				padding-right: 4px;
-				padding-left: 20px;
-			}
-		}
 		&-selected {
 			border-bottom: 1px solid @baseBorderColor;
 			.boxShadow('1px 0px 0 #FFFFFF');
@@ -206,6 +198,21 @@
 			padding-top: 0;
 		}
 		.verticalStyle();
+
+		.z-tab {
+			&-button {
+				top: 0;
+				left: 0px;
+				& + .z-tab-text {
+					margin-left: 14px;
+					margin-right: 0px;
+				}
+			}
+			&-icon {
+				right: auto;
+				left: 10px;
+			}
+		}
 	}
 
 	// vertical-right
@@ -230,13 +237,6 @@
 		.z-tab {
 			border-width: 1px 1px 1px 0px;
 			.rightBorderRadius();
-			&-button {
-				left: auto;
-				& + .z-tab-text {
-					padding-left: 4px;
-					padding-right: 20px;
-				}
-			}
 			&.z-tab-selected {
 				.boxShadow('-1px 0px 0 #FFFFFF');
 				border-left: 0px;
@@ -270,8 +270,10 @@
 			border-width: 0 1px 1px 1px;
 			padding-top: 1px;
 			text-align: left;
+
 			&-selected {
 				.verGradient();
+				.boxShadow('none');
 				cursor: default;
 			}
 			&-disabled {
@@ -292,14 +294,14 @@
 				}
 			}
 		}
-		.z-tab-icon {
-			right: 3px;
-		}
 		.z-tab-button {
 			.opacity(0.7);
-			right: 5px;
 			&:hover {
 				color: @iconHoverColor;
+			}
+
+			+ .z-tab-text {
+				margin-right: @baseButtonWidth;
 			}
 		}
 		.z-tab-text {
@@ -390,11 +392,11 @@
 	&-button {
 		.userSelect();
 		display: block;
-		width: @baseIconWidth - 1;
+		width: @baseButtonHeight;
 		height: 100%;
 		position: absolute;
 		font-size: @fontSizeMedium;
-		right: 4px;
+		right: 0;
 		top: 0;
 		z-index: 15;
 		.opacity(0.7);
@@ -406,7 +408,7 @@
 			color: @iconHoverColor;
 		}
 		& + .z-tab-text {
-			padding-right: 20px;
+			margin-right: 14px;
 		}
 	}
 	.z-caption {
