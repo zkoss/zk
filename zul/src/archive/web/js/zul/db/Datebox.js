@@ -691,7 +691,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('_setView', arguments);
 
 		// fix shadow ghost for ie9
-		if (zk.ie == 9 && force) {
+		if (zk.ie9_ && force) {
 			zk(this.parent.$n('pp')).redoCSS(500); // wait for animation
 		}
 	}

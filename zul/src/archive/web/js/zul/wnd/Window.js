@@ -186,8 +186,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//2) setVisible might use animation
 		setTimeout(function () {
 			zk.afterAnimate(function () {
-				if (!zUtl.isAncestor(wgt, zk.currentFocus))
-					wgt.focus();
+				if (!zUtl.isAncestor(wgt, zk.currentFocus)) {
+					if (zk.ie9_)
+						wgt.focus(100);
+					else
+						wgt.focus();
+				}
 			}, -1)});
 	}
 	function _unmarkModal(wgt) {

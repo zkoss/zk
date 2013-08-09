@@ -56,7 +56,7 @@ zk.override(jq.fn, _jq, {
 	}
 });
 zk.override(zjq, _zjq, {
-	_fixCSS: zk.ie == 9 ? function (el) { // fix for filter gradient issue
+	_fixCSS: zk.ie9_ ? function (el) { // fix for filter gradient issue
 		var old = el.className,
 			oldDisplay = el.style.display;
 		el.className = '';
