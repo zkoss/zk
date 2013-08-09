@@ -201,12 +201,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._curpos += offset > 0? pageIncrement: - pageIncrement;
 			offset = null; // update by _curpos
 		}
+		// B65-ZK-1884: Avoid button's animation out of range
 		var nextPos = _getNextPos(this, offset);
 		if (isVertical && zk.parseInt(nextPos.top) > height)
 			nextPos.top = jq.px0(height);
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
-		// B65-ZK-1884: Avoid button's animation out of range
 		$btn.animate(nextPos, "slow", function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			if (pos > wgt._maxpos) 
