@@ -530,7 +530,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 		return true;
 	},
-	bind_: function (){
+	bind_: function (desktop, skipper, after){
 		this.$supers(Calendar, 'bind_', arguments);
 		var node = this.$n(),
 			title = this.$n('title'),
@@ -753,12 +753,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				
 				Renderer[view + 'View'](this, out, localizedSymbols);
 				
-				
 				jq(this.$n('mid')).after(out.join('')).remove();
+				
+				var after = [];
 				// unlisten event
-				this.unbind_();
+				this.unbind_(null, after);
 				// listen event
-				this.bind_();
+				this.bind_(this.desktop, null, after);
 				
 				out = []; // reset
 				Renderer.titleHTML(this, out, localizedSymbols);
