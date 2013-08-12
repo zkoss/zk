@@ -195,7 +195,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			nextPos.top = jq.px0(height);
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
-		$btn.animate(_getNextPos(this, offset), 'slow', function() {
+		$btn.animate(nextPos, 'slow', function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			if (pos > wgt._maxpos) 
 				pos = wgt._maxpos;
@@ -298,34 +298,23 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_getHeight: function() {
 		return this.getRealNode().clientHeight - this.$n('btn').offsetHeight + 7;
 	},
-	_fixHgh: function() {
+	_fixSize: function() {
+		var inner = this.$n("inner");
 		if (this.isVertical()) {
-			this.$n('btn').style.top = '0px';
-			var inner = this.$n('inner'), 
-				het = this.getRealNode().clientHeight;
-			if (het > 0) 
-				inner.style.height = (het + 7) + 'px';
-			else 
-				inner.style.height = '214px';
-		}
-	},	
-	_fixWdh: function() {
-		if (!this.isVertical()) {
-			this.$n('btn').style.left = '0px';
-			var inner = this.$n('inner'), 
-				wd = this.getRealNode().clientWidth;
-			if (wd > 0) 
-				inner.style.width = (wd + 7) + 'px';
-			else 
-				inner.style.width = '214px';
+			this.$n("btn").style.top = jq.px0(0);
+			var het = this.getRealNode().clientHeight;
+			inner.style.height = het > 0 ? jq.px0(het + 7) : "214px";
+		} else { 
+			this.$n("btn").style.left = jq.px0(0);
+			var wd = this.getRealNode().clientWidth;
+			inner.style.width = wd > 0 ? jq.px0(wd + 7) : "214px";
 		}
 	},
 	_fixPos: function() {
 		this.$n('btn').style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
 	onSize: function() {
-		this._fixHgh();
-		this._fixWdh();
+		this._fixSize();
 		this._fixPos();
 	},
 
@@ -357,11 +346,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	getRealNode: function () {
-		return this.inScaleMold() && this.isVertical() ? this.$n('real') : this.$n();
+		return this.inScaleMold() && !this.isVertical() ? this.$n('real') : this.$n();
 	},
 	bind_: function() {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
-		this._fixHgh();
+		this._fixSize();
 		this._makeDraggable();
 		
 		zWatch.listen({onSize: this});
