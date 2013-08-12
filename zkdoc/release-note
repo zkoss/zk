@@ -30,6 +30,8 @@ ZK 6.5.4
   ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
   ZK-1875: DateFormatConverter should be serializable
   ZK-1885: IE8 scrollable div (with vflex) and tooltip
+  ZK-1884: The slider's value should not be greater then maxpos after clicked its rightmost position
+
 
   --------
 ZK 6.5.3

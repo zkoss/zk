@@ -191,7 +191,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			pageIncrement = this._pageIncrement,
 			moveToCursor = pageIncrement < 0,
 			isVertical = this.isVertical(),
-			offset = isVertical ? evt.pageY - pos[1]: evt.pageX - pos[0];
+			height = this._getHeight(),
+			width = this._getWidth(),
+			offset = isVertical ? (evt.pageY - pos[1]) : evt.pageX - pos[0];
 		
 		if (!$btn[0] || $btn.is(':animated')) return;
 		
@@ -199,8 +201,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._curpos += offset > 0? pageIncrement: - pageIncrement;
 			offset = null; // update by _curpos
 		}
-		
-		$btn.animate(_getNextPos(this, offset), "slow", function() {
+		// B65-ZK-1884: Avoid button's animation out of range
+		var nextPos = _getNextPos(this, offset);
+		if (isVertical && zk.parseInt(nextPos.top) > height)
+			nextPos.top = jq.px0(height);
+		if (!isVertical && zk.parseInt(nextPos.left) > width)
+			nextPos.left = jq.px0(width);
+		$btn.animate(nextPos, "slow", function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			if (pos > wgt._maxpos) 
 				pos = wgt._maxpos;
@@ -284,7 +291,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip = null;
 	},
 	_realpos: function(dg) {
-		var btnofs = zk(this.$n("btn")).revisedOffset(), refofs = zk(this.getRealNode()).revisedOffset(), maxpos = this._maxpos, pos;
+		var btnofs = zk(this.$n("btn")).revisedOffset(), 
+			refofs = zk(this.getRealNode()).revisedOffset(), 
+			maxpos = this._maxpos, 
+			pos;
 		if (this.isVertical()) {
 			var ht = this._getHeight();
 			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht) : 0;
@@ -292,7 +302,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			var wd = this._getWidth();
 			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd) : 0;
 		}
-		return this._curpos = (pos >= 0 ? pos : 0);
+		return this._curpos = pos >= 0 ? pos  : 0;
 	},
 	_getWidth: function() {
 		return this.getRealNode().clientWidth - this.$n("btn").offsetWidth + 7;
@@ -300,22 +310,23 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_getHeight: function() {
 		return this.getRealNode().clientHeight - this.$n("btn").offsetHeight + 7;
 	},
-	_fixHgh: function() {
+	_fixSize: function() {
+		var inner = this.$n("inner");
 		if (this.isVertical()) {
-			this.$n("btn").style.top = "0px";
-			var inner = this.$n("inner"), 
-				het = this.getRealNode().clientHeight;
-			if (het > 0) 
-				inner.style.height = (het + 7) + "px";
-			else 
-				inner.style.height = "214px";
+			this.$n("btn").style.top = jq.px0(0);
+			var het = this.getRealNode().clientHeight;
+			inner.style.height = het > 0 ? jq.px0(het + 7) : "214px";
+		} else { 
+			this.$n("btn").style.left = jq.px0(0);
+			var wd = this.getRealNode().clientWidth;
+			inner.style.width = wd > 0 ? jq.px0(wd + 7) : "214px";
 		}
 	},
 	_fixPos: function() {
 		this.$n("btn").style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
 	onSize: function() {
-		this._fixHgh();
+		this._fixSize();
 		this._fixPos();
 	},
 
@@ -347,11 +358,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	getRealNode: function () {
-		return this.inScaleMold() && this.isVertical() ? this.$n("real") : this.$n();
+		return this.inScaleMold() && !this.isVertical() ? this.$n("real") : this.$n();
 	},
 	bind_: function() {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
-		this._fixHgh();
+		this._fixSize();
 		this._makeDraggable();
 		
 		zWatch.listen({onSize: this});

@@ -1,0 +1,36 @@
+<zk>
+	<style>
+		.icon{ 
+			width: 40px; background-color: red; height: 20px;
+			border:1px solid blue;
+			margin-top:2px;
+		}
+	</style>
+	<label multiline="true">
+		1. click on a un-selected item's inner div.
+		2. the label should be updated to item/sub-item 's name
+	</label>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01873SelectedItemOnClick')">
+
+		<listbox mold="paging" pageSize="10" pagingPosition="both"
+			model="@load(vm.items)" selectedItem="@bind(vm.selectedItem)">
+			<template name="model" var="item">
+				<listitem>
+					<listcell children="@load(item.subItems)">
+						<template name="children" var="sub">
+							<div onClick="@command('onClickSubItem',subitem=sub)"
+								sclass="icon" >
+								</div>
+						</template>
+					</listcell>
+					<listcell label="@load(item.name)" />
+				</listitem>
+			</template>
+		</listbox>
+		<hlayout>
+			<label value="@bind(vm.selectedItem.name)" />/
+			<label value="@bind(vm.clickedSubItem.name)" />
+		</hlayout>
+	</window>
+</zk>
