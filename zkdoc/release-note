@@ -29,6 +29,7 @@ ZK 6.5.4
   ZK-1877: Can not drag a slider, which is in a grid, to 0
   ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
   ZK-1875: DateFormatConverter should be serializable
+  ZK-1885: IE8 scrollable div (with vflex) and tooltip
 
   --------
 ZK 6.5.3

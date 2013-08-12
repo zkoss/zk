@@ -3142,7 +3142,10 @@ unbind_: function (skipper, after) {
 		delete this._vflexsz;
 	},
 	resetSize_: function(orient) {
-		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
+		var n = this.$n();
+		if (zk.ie == 8 && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+			return;// do nothing Bug ZK-1885 IE8: scrollable div (with vflex) and tooltip
+		n.style[orient == 'w' ? 'width': 'height'] = '';
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).
