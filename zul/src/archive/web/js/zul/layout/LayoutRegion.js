@@ -195,8 +195,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		open: function (open, fromServer, nonAnima) {
-			if (!this.$n() || !this.isCollapsible() || !this.parent)
+			if (!this.$n() || !this.isCollapsible() || !this.parent) {
+				// restore open
+				this._open = !open;
 				return; //nothing changed
+			}
 
 			nonAnima = this.parent._animationDisabled || nonAnima;
 
