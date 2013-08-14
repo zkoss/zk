@@ -17,7 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<c:include page="~./zul/css/ext.css.dsp"/>
 ${z:setCSSCacheControl()}
 
 html {overflow:auto;}
@@ -37,9 +36,7 @@ ul {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
-a, a:visited {
-	color:#008bb6;
-}
+
 ul li	{list-style: url(${c:encodeURL(zk.ie == 6 ? '/img/z-bullet1.gif' : '/img/Centigrade-Widget-Icons/Bullet-10x10.png')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
