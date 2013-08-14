@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt.updateFormData(wgt._curpos);
 		
 		var isVertical = wgt.isVertical(),
-			ofs = zk(wgt.getRealNode()).cmOffset(),
+			ofs = zk(wgt.$n()).cmOffset(),
 			totalLen = isVertical ? wgt._getHeight(): wgt._getWidth(),
 			x = totalLen > 0 ? Math.round((wgt._curpos * totalLen) / wgt._maxpos) : 0;
 			
@@ -52,12 +52,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.Slider = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
-	_height: '207px',
-	_width: '207px',
+	_height: '200px',
+	_width: '200px',
 	_curpos: 0,
 	_maxpos: 100,
 	_pageIncrement: 10,
-	_slidingtext: '{0}',
+	_slidingtext: '0',
 	_pageIncrement: -1,
 	
 	$define: {
@@ -100,11 +100,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			}
 		},
 		/** Returns the sliding text.
-		 * <p>Default : "{0}"
+		 * <p>Default : "0"
 		 * @return String
 		 */
 		/** Sets the sliding text.
-		 * The syntax "{0}" will be replaced with the position at client side.
+		 * The syntax "0" will be replaced with the position at client side.
 		 * @param String slidingtext
 		 */
 		slidingtext: null,
@@ -146,14 +146,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	domClass_: function() {
-		var scls = this.$supers('domClass_', arguments);
-		
-		scls = scls ? scls : 'z-slider';
-		scls += ('horizontal' == this._orient ? '' : ' ' +  this.$s('vertical'));
-		if (this.inScaleMold()) 
-			scls += ' ' + this.$s('scale');
+		var scls = this.$supers('domClass_', arguments),
+			isVertical = this.isVertical();
+		if (isVertical)
+			scls += ' ' + this.$s('vertical');
 		if (this.inSphereMold())
             scls += ' ' + this.$s('sphere');
+		else if (this.inScaleMold() && !isVertical) 
+			scls += ' ' + this.$s('scale');
 			
 		return scls;
 	},
@@ -263,7 +263,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				pos = widget._maxpos;
 			widget.slidepos = pos;
 			if (widget.slidetip) 
-				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, pos);
+				widget.slidetip.innerHTML = widget._slidingtext = pos;
 			widget.fire('onScrolling', pos);
 		}
 		widget._fixPos();
@@ -279,7 +279,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	_realpos: function(dg) {
 		var btnofs = zk(this.$n("btn")).revisedOffset(),
-			refofs = zk(this.getRealNode()).revisedOffset(),
+			refofs = zk(this.$n()).revisedOffset(),
 			maxpos = this._maxpos,
 			pos;
 		if (this.isVertical()) {
@@ -289,25 +289,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			var wd = this._getWidth();
 			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd) : 0;
 		}
-		// B65-ZK-1884: curpos should not be greater then maxpos
-		return this._curpos = (pos >= 0 ? (pos > maxpos ? maxpos : pos ) : 0);
+		return this._curpos = pos > 0 ? pos : 0;
 	},
 	_getWidth: function() {
-		return this.getRealNode().clientWidth - this.$n('btn').offsetWidth + 7;
+		return this.$n().clientWidth - this.$n('btn').offsetWidth;
 	},
 	_getHeight: function() {
-		return this.getRealNode().clientHeight - this.$n('btn').offsetHeight + 7;
+		return this.$n().clientHeight - this.$n('btn').offsetHeight;
 	},
 	_fixSize: function() {
-		var inner = this.$n("inner");
+		var n = this.$n(),
+			btn = this.$n('btn'),
+			inners = this.$n('inner').style;
 		if (this.isVertical()) {
-			this.$n("btn").style.top = jq.px0(0);
-			var het = this.getRealNode().clientHeight;
-			inner.style.height = het > 0 ? jq.px0(het + 7) : "214px";
+			btn.style.top = '-' + btn.offsetHeight / 2 + 'px';
+			var het = n.clientHeight;
+			inners.height = het > 0 ? jq.px0(het) : this._height - btn.offsetHeight;
 		} else { 
-			this.$n("btn").style.left = jq.px0(0);
-			var wd = this.getRealNode().clientWidth;
-			inner.style.width = wd > 0 ? jq.px0(wd + 7) : "214px";
+			btn.style.left = '-' + btn.offsetWidth / 2 + 'px';
+			var wd = n.clientWidth;
+			inners.width = wd > 0 ? jq.px0(wd) : this._width - btn.offsetWidth;
 		}
 	},
 	_fixPos: function() {
@@ -317,7 +318,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this._fixSize();
 		this._fixPos();
 	},
-
 	/** Return whether this widget in scale mold
 	 * @return boolean
 	 */
@@ -344,9 +344,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			else 
 				this.efield.value = val;
 		}
-	},
-	getRealNode: function () {
-		return this.inScaleMold() && !this.isVertical() ? this.$n('real') : this.$n();
 	},
 	bind_: function() {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);

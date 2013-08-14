@@ -3,7 +3,6 @@
 .z-slider {
 	background-image: none;
 	height: @baseBarHeight;
-	margin-right: 7px;
 
 	&-center {
 		.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
@@ -51,7 +50,6 @@
 
 	&-vertical {
 		width: @baseBarWidth;
-		margin-bottom: 7px;
 		margin-right: 0px;
 		line-height: 0;
 		font-size: 0;
@@ -84,7 +82,7 @@
 		}
 	}
 
-	&-tick {
+	&-scale {
 		.encodeThemeURL(background-image, '~./zul/img/slider/ticks.gif');
 	}
 }
