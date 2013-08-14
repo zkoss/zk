@@ -133,6 +133,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
 	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
+	public static final String ON_BIND_CLEAN = "onBindClean"; //do component binding clean up
 	public static final String MODEL = "$MODEL$"; //collection model for index tracking
 	
 	//events for dummy target

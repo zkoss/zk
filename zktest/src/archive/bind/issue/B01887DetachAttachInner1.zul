@@ -1,0 +1,5 @@
+<zk>
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init(entityVM)">
+		<label id="lab1" value="@load(vm.inc)"/>
+	</div>
+</zk>
