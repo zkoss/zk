@@ -195,8 +195,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		open: function (open, fromServer, nonAnima) {
-			if (!this.$n() || !this.isCollapsible() || !this.parent)
+			if (!this.$n() || !this.isCollapsible() || !this.parent) {
+				// keep opened
+				this._open = true;
 				return; //nothing changed
+			}
 
 			nonAnima = this.parent._animationDisabled || nonAnima;
 
@@ -600,7 +603,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		case this.$n('btn'):
 		case this.$n('btned'):
 		case this.$n('splitbtn'):
-			if (this._isSlide || zk.animating()) return;
+			if (!this.isCollapsible() || this._isSlide || zk.animating()) 
+				return;
 			if (this.$n('btned') == target) {
 				var s = this.$n('real').style;
 				s.visibility = 'hidden';
@@ -612,7 +616,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.setOpen(!this._open);
 			break;
 		case this.$n('colled'):
-			if (this._isSlide) return;
+			if (this._isSlide) 
+				return;
 			this._isSlide = true;
 			var real = this.$n('real'),
 				s = real.style;
