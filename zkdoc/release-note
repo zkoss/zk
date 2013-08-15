@@ -32,6 +32,7 @@ ZK 6.5.4
   ZK-1885: IE8 scrollable div (with vflex) and tooltip
   ZK-1884: The slider's value should not be greater then maxpos after clicked its rightmost position
   ZK-1887: detach - reattach component in ViewModel @AfterCompose, fails to initialize bindings
+  ZK-1888: Grid in paging mold doesn't change pages count
 
   --------
 ZK 6.5.3
