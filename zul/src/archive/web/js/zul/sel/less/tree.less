@@ -41,7 +41,7 @@
 	//tree footer div
 	&-footer {
 		overflow: hidden;
-		background: darken(@baseBackgroundColor, 2%);
+		background: @tableFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		.resetTable();
 	}
@@ -86,8 +86,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @baseBorderColor;
-	border-bottom: 1px solid @baseBorderColor;
+	border-right: 1px solid @tableTitleBorderColor;
+	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
 	&-sort {
 		cursor: pointer;
@@ -106,9 +106,6 @@
 	.z-treecell {
 		overflow: hidden;
 		cursor: pointer;
-		&:last-child {
-			border-right: none;
-		}
 	}
 	&:hover > .z-treecell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);

@@ -2,7 +2,7 @@
 
 .z-paging {
 	border-bottom: 1px solid @baseBorderColor;
-	background: darken(@baseBackgroundColor, 2%);
+	background: @pagingBackgroundColor;
 	position: relative;
 	height: @baseBarHeight;
 	padding: 4px 10px 3px;
@@ -30,18 +30,18 @@
 		vertical-align: top;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
-		color: @textColorBlue;
+		color: @pagingColor;
 		text-decoration: none;
 		text-align: center;
 		cursor: pointer;
 		line-height: @baseLineHeight;
 		&:hover {
-			border-color: darken(@baseBorderColor, 15%);
+			border-color: @pagingActiveBorderColor;
 			.boxShadow('0 0 2px rgba(0, 0, 0, 0.34)');
 		}
 		&:active {
 			.verGradient(@baseGradientEnd, @baseGradientStart);
-			border-color: darken(@baseBorderColor, 15%) @baseBorderColor lighten(@baseBorderColor, 5%);
+			border-color: @pagingActiveBorderColor @baseBorderColor;
 		}
 		&[disabled] {
 			color: @disabledColor;
@@ -82,17 +82,17 @@
 	}
 	&-selected {
 		.resetGradient();
-		background: darken(@baseBackgroundColor, 10%);
-		border-color: darken(@baseBorderColor, 15%);
-		color: @textColorGrayDark;
+		background: @pagingSelectedBackgroundColor;
+		border-color: @pagingActiveBorderColor;
+		color: @pagingSelectedColor;
 		&:hover {
 			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-			border-color: darken(@baseBorderColor, 15%);
+			border-color: @pagingActiveBorderColor;
 		}
 		&:active {
 			.resetGradient();
-			background: darken(@baseBackgroundColor, 10%);
-			border-color: darken(@baseBorderColor, 15%);
+			background: @pagingSelectedBackgroundColor;
+			border-color: @pagingActiveBorderColor;
 		}
 	}
 	&-input {

@@ -41,7 +41,7 @@
 	//grid footer
 	&-footer {
 		overflow: hidden;
-		background: darken(@baseBackgroundColor, 2%);
+		background: @tableFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		.resetTable();
 		.z-footer {
@@ -50,7 +50,7 @@
 	}
 	&-odd > .z-row-inner,
 	&-odd > .z-cell {
-		background: darken(@baseBackgroundColor, 3%);
+		background: @tableStripeBackgroundColor;
 	}
 }
 //column
@@ -64,8 +64,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @baseBorderColor;
-	border-bottom: 1px solid @baseBorderColor;
+	border-right: 1px solid @tableTitleBorderColor;
+	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -119,7 +119,7 @@
 .z-row {
 	.z-row-inner,
 	.z-cell {
-		border-right: 1px solid #FFFFFF;
+		border-right: 1px solid @tableContentBorderColor;
 		overflow: hidden;
 		&:last-child {
 			border-right: none;
@@ -139,7 +139,7 @@
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @tableTitleBorderColor;
 		border-left: none;
 		border-right: none;
 		overflow: hidden;

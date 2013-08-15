@@ -34,11 +34,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var $btn = jq(wgt.$n('btn')),
 			fum = wgt.isVertical()? ['top', 'height']: ['left', 'width'],
 			newPosition = {};
-			
+		
 		newPosition[fum[0]] = jq.px0(offset ? 
 			(offset + zk.parseInt($btn.css(fum[0])) - $btn[fum[1]]() / 2):
 			_getBtnNewPos(wgt));
-				
+		
 		return newPosition;
 	}
 	
@@ -150,11 +150,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			isVertical = this.isVertical();
 		if (isVertical)
 			scls += ' ' + this.$s('vertical');
+		else
+			scls += ' ' + this.$s('horizontal');
 		if (this.inSphereMold())
             scls += ' ' + this.$s('sphere');
 		else if (this.inScaleMold() && !isVertical) 
 			scls += ' ' + this.$s('scale');
-			
+		
 		return scls;
 	},
 	onup_: function(evt) {

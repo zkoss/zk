@@ -106,9 +106,6 @@
 .z-errorbox-down {
 	border: 6px solid transparent;
 }
-
-// bug ZK-1135: IE8 does not support rgba
-
 .z-errorbox-left {
 	border-right-color: @errorboxBorderColor;
 }
@@ -121,8 +118,6 @@
 .z-errorbox-down {
 	border-top-color: @errorboxBorderColor;
 }
-
-
 .z-errorbox-close {
 	position: absolute;
 	cursor: pointer;
@@ -137,7 +132,7 @@
 	&:hover {
 		.borderRadius(@borderRadiusSmall - 1);
 		border: 1px solid @errorboxBorderColor;
-		opacity: 1;
+		.opacity(1);
 	}
 }
 .z-errorbox-icon {

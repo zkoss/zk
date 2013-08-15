@@ -18,7 +18,7 @@
 // Splitter
 .z-splitter-button {
 	color: @iconColor;
-	vertical-align: top;// vertical-align: make it looks same in diff browsers
+	vertical-align: top; //vertical-align: make it looks same in diff browsers
 	display: inline-block;
 	cursor: pointer;
 	position: relative;
@@ -35,9 +35,9 @@
 	}
 }
 .z-splitter-button .z-splitter-icon {
-	opacity: 0.5;
+	.opacity(0.5);
 	&:hover {
-		opacity: 1;
+		.opacity(1);
 	}
 }
 .z-icon-caret-up,
@@ -45,7 +45,7 @@
 .z-icon-caret-right,
 .z-icon-caret-left {
 	.z-splitter-button:hover & {
-		opacity: 1;
+		.opacity(1);
 	}
 }
 .z-splitter-horizontal {
