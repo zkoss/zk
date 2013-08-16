@@ -582,6 +582,7 @@ public class HtmlPageRenders {
 				lazypkgs.addAll(langdef.getLazyPackages());
 			}
 			StringBuilder pkgs = new StringBuilder();
+			// B65-ZK-1889: calls zk.load() to load the lazy packages
 			for (String lazypkg : lazypkgs) {
 				pkgs.append("zk.load('" + lazypkg + "');");
 			}

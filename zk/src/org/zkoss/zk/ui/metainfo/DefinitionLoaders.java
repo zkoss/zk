@@ -348,6 +348,7 @@ public class DefinitionLoaders {
 				log.warning("Ignored: none of the src or package attribute, or the content specified, "+el.getLocator());
 				continue;
 			}
+			// B65-ZK-1889: Store lazy packages
 			if (lazy) 
 				langdef.addLazyPackage(lazyPkg);
 			else 
