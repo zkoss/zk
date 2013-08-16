@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.CollectionsX;
@@ -34,7 +35,6 @@ import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
-
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
@@ -142,6 +142,8 @@ public class LanguageDefinition {
 	private final FastReadArray<Taglib> _taglibs = new FastReadArray<Taglib>(Taglib.class);
 	/** A list of JavaScript. */
 	private final FastReadArray<JavaScript> _js = new FastReadArray<JavaScript>(JavaScript.class);
+	/** A set of lazy Package */
+	private final Set<String> _lazypkgs = new LinkedHashSet<String>(); 
 	/** A list of deferrable JavaScript package. */
 	private Map<String, FastReadArray<String>> _mergepkgs = new HashMap<String, FastReadArray<String>>(4);
 	private Map<String, String> _jsmods = new HashMap<String, String>();
@@ -632,6 +634,34 @@ public class LanguageDefinition {
 	 */
 	public Collection<JavaScript> getJavaScripts() {
 		return new CollectionsX.ArrayCollection<JavaScript>(_js.toArray());
+	}
+	
+	/** Adds a package name required by this language.
+	 * @since 6.5.4
+	 */
+	public void addLazyPackage(String pkg) {
+		if (pkg == null || pkg.length() <= 0)
+			throw new IllegalArgumentException();
+		_lazypkgs.add(pkg);
+	}
+	/** Removes a package of the give package required by this language.
+	 * @see #addLazyPackage
+	 * @since 6.5.4
+	 */
+	public void removeLazyPackage(String pkg) {
+		for (String lazypkg : _lazypkgs) {
+			if (Objects.equals(pkg, lazypkg)) {
+				_lazypkgs.remove(lazypkg);
+				return; //found
+			}
+		}
+	}
+	/** Returns a set of all lazy packages
+	 * by this language.
+	 * @since 6.5.4
+	 */
+	public Set<String> getLazyPackages() {
+		return _lazypkgs;
 	}
 
 	/** Merge a JavaScript package, say pkgFrom, to another package, say pkgTo,

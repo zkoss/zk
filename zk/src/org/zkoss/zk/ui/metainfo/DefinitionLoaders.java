@@ -313,6 +313,9 @@ public class DefinitionLoaders {
 			String mergeTo = el.getAttributeValue("merge");
 			final boolean merge = mergeTo != null && !"false".equals(mergeTo);
 			if (merge && "true".equals(mergeTo)) mergeTo = "zk";
+			final String lazyTo = el.getAttributeValue("lazy");
+			final boolean lazy = lazyTo != null && !"false".equals(lazyTo) && pkg != null && pkg.length() > 0;
+			final String lazyPkg = pkg;
 			final boolean ondemand = "true".equals(el.getAttributeValue("ondemand"));
 				//ondemand means to cancel the previous definition (merge or not)
 			if (pkg != null) {
@@ -345,7 +348,10 @@ public class DefinitionLoaders {
 				log.warning("Ignored: none of the src or package attribute, or the content specified, "+el.getLocator());
 				continue;
 			}
-			langdef.addJavaScript(js);
+			if (lazy) 
+				langdef.addLazyPackage(lazyPkg);
+			else 
+				langdef.addJavaScript(js);
 		}
 		for (Iterator it = root.getElements("javascript-module").iterator();
 		it.hasNext();) {

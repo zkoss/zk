@@ -29,7 +29,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<message-loader-class>org.zkoss.zul.impl.ZulMessageLoader</message-loader-class>
 
 	<javascript package="zk"/>
-	<javascript package="zul.lang"/>
+	<javascript package="zul.lang" lazy="true"/>
 	<javascript package="zul" merge="true"/><!-- merge since usually required though optional -->
 	<javascript package="zul.wgt" merge="true"/><!-- merge since usually required though optional -->
 
