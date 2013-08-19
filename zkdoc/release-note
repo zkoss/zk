@@ -34,6 +34,7 @@ ZK 6.5.4
   ZK-1887: detach - reattach component in ViewModel @AfterCompose, fails to initialize bindings
   ZK-1888: Grid in paging mold doesn't change pages count
   ZK-1889: zul.lang.wpd is always loaded twice with some JS package merge configurations
+  ZK-1893: Failure to configure log handler properties
 
   --------
 ZK 6.5.3

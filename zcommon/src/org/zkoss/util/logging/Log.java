@@ -118,22 +118,26 @@ public class Log {
 		Log log = null;
 		final StringBuffer sb = new StringBuffer();
 		String[] handlers = null;
+		
+		// read handlers first - ZK-1893
+		final String values = (String) props.remove("handlers");
+		if (values != null) {
+			handlers = values.split("[, ]");
+			for (int j = handlers.length; --j >= 0;) {
+				handlers[j] = handlers[j].trim();
+				handlers[j] = handlers[j].length() > 0 ? handlers[j] + '.'
+						: null;
+			}
+			sb.append("handlers").append('=').append(values).append('\n');
+		}
+		
 		for (Iterator<Map.Entry<Object, Object>> it = props.entrySet().iterator();
 		it.hasNext();) {
 			final Map.Entry<Object, Object> me = it.next();
 			final String key = (String)me.getKey();
 			final String val = (String)me.getValue();
 			boolean matched = false;
-			if ("handlers".equals(key)) {
-				matched = true;
-
-				handlers = val.split("[, ]");
-				for (int j = handlers.length; --j >= 0;) {
-					handlers[j] = handlers[j].trim();
-					handlers[j] = handlers[j].length() > 0 ?
-						handlers[j] + '.': null;
-				}
-			} else if (handlers != null) {
+			if (handlers != null) {
 				for (String h: handlers) {
 					if (h != null && key.startsWith(h)) {
 						matched = true;
