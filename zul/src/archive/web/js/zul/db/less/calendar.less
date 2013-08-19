@@ -29,9 +29,13 @@
 		font-weight: bold;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
-		color: @textColorGrayLight;
+		color: @titleColor;
 		padding: 5px 24px;
 		line-height: @baseLineHeight;
+
+		&:hover {
+			color: @hoverColor;
+		}
 	}
 
 	&-header {
@@ -41,10 +45,6 @@
 			display: inline-block;
 			line-height: normal;
 		}
-	}
-
-	&-title:hover {
-		color: @hoverColor;
 	}
 
 	&-body {
@@ -68,37 +68,39 @@
 		min-height: @baseButtonHeight;
 		min-width:  @baseButtonHeight;
 		padding: 3px 0;
-		color: @textColorGrayLight;
+		color: @cellColor;
+		background: @baseBackgroundColor;
 		font-size: @fontSizeSmall;
 		line-height: @baseLineHeight + 3;
 		cursor: pointer;
 
 		&:hover {
-			background: @hoverGradientEnd;
-			.borderRadius(@baseBorderRadius);
+			background: @hoverBackgroundColor;
+			.borderRadius();
 		}
 	}
 	&-weekend {
-		color: @textColorOrange;
-		background: darken(@baseBackgroundColor, 5%);
+		color: @weekendColor;
+		background: @weekendBackgroundColor;
 	}
 	&-weekday {
-		color: @textColorGrayLight;
+		color: @weekColor;
+		background: @baseBackgroundColor;
 	}
 	&-outrange {
 		color: @disabledColor;
 		text-shadow: none;
 	}
 	&-weekofyear {
-		background: contrast(@baseBackgroundColor, @textColorGrayLight);
+		background: @weekofyearBackgroundColor;
 		font-style: italic;
-		color: contrast(@textColorGrayLight);
+		color: @weekofyearColor;
 		cursor: default;
 		
 		&:hover {
-			background: contrast(@baseBackgroundColor, @textColorGrayLight);
+			background: @weekofyearBackgroundColor;
 			.borderRadius(0);
-			color: contrast(@textColorGrayLight);
+			color: @weekofyearColor;
 		}
 	}
 
@@ -118,7 +120,7 @@
 	}
 	&-selected {
 		background: @selectedGradientEnd;
-		.borderRadius(@baseBorderRadius);
+		.borderRadius();
 		color: @hoverColor;
 		
 		&:hover {
