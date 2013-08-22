@@ -56,6 +56,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * the tree owning this item is using a tree model.
 	 */
 	private boolean _loaded;
+	private boolean _rendered;
 
 	static {
 		addClientEvent(Treeitem.class, Events.ON_OPEN, CE_IMPORTANT);
@@ -129,6 +130,23 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	/**
+	 * Returns true whether this tree item is rendered. Unlike {@link #isLoaded()}
+	 * which is used to check whether all children of this tree item are loaded.
+	 * <p>Default: false
+	 * @since 7.0.0
+	 */
+	public boolean isRendered() {
+		return _rendered;
+	}
+
+	// Component developer use only. (since 7.0.0)
+	/*package*/ void setRendered(boolean rendered) {
+		if (_rendered != rendered) {
+			_rendered = rendered;
+			smartUpdate("_loaded", _loaded);
+		}
+	}
+	/**
 	 * Return true whether all children of this tree item, if any, is loaded
 	 * @return true whether all children of this tree item is loaded
 	 * @since 3.0.0
@@ -144,7 +162,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	/*package*/ void setLoaded(boolean loaded){
 		if (_loaded != loaded) {
 			_loaded = loaded;
-			smartUpdate("_loaded", _loaded);
+			smartUpdate("_loadedChildren", _loaded);
 		}
 	}
 	
@@ -568,7 +586,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 		render(renderer, "disabled", isDisabled());
 		if (!isOpen()) renderer.render("open", false);
 		if (!isCheckable()) renderer.render("checkable", false);
-		render(renderer, "_loaded", isLoaded());
+		render(renderer, "_loadedChildren", isLoaded());
+		render(renderer, "_loaded", isRendered());
 		
 		if (_value instanceof String)
 			render(renderer, "value", _value);

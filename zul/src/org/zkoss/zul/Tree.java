@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
@@ -60,6 +61,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
@@ -154,6 +156,19 @@ import org.zkoss.zul.impl.XulElement;
  * }
  * </code></pre>
  * 
+ * </br/>
+ * [Since 7.0.0] (EE version only)
+ * 
+ * <dt>org.zkoss.zul.tree.initRodSize</dt>. 
+ * <dd>Specifies the number of items rendered when the Tree first render.
+ * 
+ * <dt>org.zkoss.zul.tree.preloadSize</dt>. 
+ * <dd>Specifies the number of items to preload when receiving
+ * the rendering request from the client.
+ * <p>It is used only if live data ({@link #setModel(TreeModel)} and
+ * not paging ({@link #getPagingChild}).</dd>
+ * 
+ * 
  * @author tomyeh
  */
 public class Tree extends MeshElement {
@@ -188,16 +203,20 @@ public class Tree extends MeshElement {
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private EventListener<PagingEvent> _pgListener;
-	private EventListener<Event> _pgImpListener, _modelInitListener;
+	private EventListener<PagingEvent> _pgListener, _pgImpListener;
+	private EventListener<Event> _modelInitListener;
 
 	private int _currentTop = 0; // since 5.0.8 scroll position
 	private int _currentLeft = 0;
 	
 	private int _anchorTop = 0 ; //since 5.0.11/6.0.0 anchor position
-	private int _anchorLeft = 0 ; 
+	private int _anchorLeft = 0 ;
+	
+	private static final int INIT_LIMIT = -1; // since 7.0.0
+	private int _preloadsz = 50; // since 7.0.0
 	
 	static {
+		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
@@ -435,10 +454,41 @@ public class Tree extends MeshElement {
 			return null; // skip to clone
 		}
 	}
-	private class PGImpListener implements SerializableEventListener<Event>,
-			CloneableEventListener<Event> {
-		public void onEvent(Event event) {
+	private class PGImpListener implements SerializableEventListener<PagingEvent>,
+			CloneableEventListener<PagingEvent> {
+		public void onEvent(PagingEvent event) {
 			if (inPagingMold()) {
+				if (WebApps.getFeature("ee")) {
+					int ap =  event.getActivePage();
+					int size = Tree.this.getPaginal().getPageSize();
+					int start = ap * size;
+					int end = start + size;
+					int i = 0;
+					final Renderer renderer = new Renderer();
+					try {							
+						for (Treeitem ti : Tree.this.getItems()) {
+							if (i < start) {
+								i++;
+								continue;
+							}
+							if (i >= end) {
+								break;
+							}
+							if (!ti.isRendered()) {
+									ti.getChildren().clear();
+									Treechildren parent = (Treechildren) ti.getParent();
+									Object childNode = Tree.this.getAssociatedNode(ti, Tree.this);
+									renderChildren0(renderer, parent, ti, childNode, i);
+							}
+								
+							i++;
+						}
+					} catch (Throwable ex) {
+						renderer.doCatch(ex);
+					} finally {
+						renderer.doFinally();
+					}
+				}
 				invalidate();
 			}
 		}
@@ -1669,44 +1719,92 @@ public class Tree extends MeshElement {
 			ipath[j] = path.get(j);
 		return ipath;
 	}
+	
+	private void renderChildren0(Renderer renderer, Treechildren parent, Treeitem ti,
+			Object childNode, int i) throws Throwable {
+		renderer.render(ti, childNode, i);
+		Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
+		if (v != null) {//a new item is created to replace the existent one
+			(ti = (Treeitem) v).setOpen(false);
+		}
+		ti.setRendered(true);
+
+		// B60-ZK-767: handle selected/open state here, as it might be replaced
+		int[] path = null;
+		boolean isLeaf = childNode != null && _model.isLeaf(childNode);
+		if (_model instanceof TreeSelectableModel) {
+			TreeSelectableModel model = (TreeSelectableModel) _model;
+			if (!model.isSelectionEmpty() && 
+					getSelectedCount() != model.getSelectionCount() &&
+					model.isPathSelected(path = getPath0(parent, i)))
+				addItemToSelection(ti);
+		}
+		if (_model instanceof TreeOpenableModel) {
+			TreeOpenableModel model = (TreeOpenableModel) _model;
+			if (!model.isOpenEmpty()) {
+				if (!isLeaf) {
+					if (path == null)
+						path = getPath0(parent, i);
+					ti.setOpen(model.isPathOpened(path));
+				}
+			}
+		}
+		if (!isLeaf && ti.getTreechildren() == null) {
+			Treechildren tc = new Treechildren();
+			tc.setParent(ti);
+		}
+	}
 	/*
 	 * Renders the direct children for the specified parent
 	 */
 	private void renderChildren(Renderer renderer, Treechildren parent,
 	Object node) throws Throwable {
+		final int initSize = initRodSize();
 		for (int i = 0, j = _model.getChildCount(node); i < j; i++) {
 			Treeitem ti = newUnloadedItem();
 			ti.setParent(parent);
+			if (initSize >= 0 && i >= initSize) {
+				ti.appendChild(new Treerow());
+				ti.getTreerow().appendChild(new Treecell());
+				continue;
+			}
 			Object childNode = _model.getChild(node, i);
-			renderer.render(ti, childNode, i);
-			Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
-			if (v != null) //a new item is created to replace the existent one
-				(ti = (Treeitem) v).setOpen(false);
-			// B60-ZK-767: handle selected/open state here, as it might be replaced
-			int[] path = null;
-			boolean isLeaf = childNode != null && _model.isLeaf(childNode);
-			if (_model instanceof TreeSelectableModel) {
-				TreeSelectableModel model = (TreeSelectableModel) _model;
-				if (!model.isSelectionEmpty() && 
-						getSelectedCount() != model.getSelectionCount() &&
-						model.isPathSelected(path = getPath0(parent, i)))
-					addItemToSelection(ti);
-			}
-			if (_model instanceof TreeOpenableModel) {
-				TreeOpenableModel model = (TreeOpenableModel) _model;
-				if (!model.isOpenEmpty()) {
-					if (!isLeaf) {
-						if (path == null)
-							path = getPath0(parent, i);
-						ti.setOpen(model.isPathOpened(path));
-					}
-				}
-			}
-			if (!isLeaf && ti.getTreechildren() == null) {
-				Treechildren tc = new Treechildren();
-				tc.setParent(ti);
-			}
+			renderChildren0(renderer, parent, ti, childNode, i);
 		}
+	}
+
+	/** 
+	 * Returns the number of rows to preload when receiving the rendering
+	 * request from the client.
+	 * <p>
+	 * Default: 50. (since 7.0.0)
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int preloadSize() {
+		final String size = (String) getAttribute("pre-load-size");
+		int sz = size != null ? Integer.parseInt(size) : _preloadsz;
+		
+		if ((sz = Utils.getIntAttribute(this, 
+				"org.zkoss.zul.tree.preloadSize", sz, true)) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
+	}
+
+	
+	/** 
+	 * Returns the number of items rendered when the Tree first render.
+	 *  <p>
+	 * Default: 50. (Since 7.0.0)
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int initRodSize() {
+		int sz = WebApps.getFeature("ee") ? Utils.getIntAttribute(this, "org.zkoss.zul.tree.initRodSize",
+				INIT_LIMIT, true) : -1;
+		return sz;
 	}
 	private Treeitem newUnloadedItem() {
 		Treeitem ti = new Treeitem();
@@ -2290,6 +2388,56 @@ public class Tree extends MeshElement {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
+		} else if (cmd.equals(Events.ON_RENDER)) {
+			final RenderEvent<Treeitem> event = RenderEvent.getRenderEvent(request);
+			final Set<Treeitem> items = event.getItems();
+
+			int cnt = items.size();
+			if (cnt == 0) return; //nothing to do
+			
+			int preloadsz = preloadSize();
+			
+			final Renderer renderer = new Renderer();
+			try {
+				Treeitem maxItem = null;
+				int maxIndex = -1;
+				for (Treeitem ti : items) {
+					if (ti.isRendered())
+						continue;
+					int i = ti.getIndex();
+					if (maxItem == null) {
+						maxItem = ti;
+						maxIndex = i;
+					}
+					if (i > maxIndex) {
+						maxItem = ti;
+						maxIndex = i;
+					}
+					
+					ti.getChildren().clear();
+					Treechildren parent = (Treechildren) ti.getParent();
+					Object childNode = getAssociatedNode(ti, this);
+					renderChildren0(renderer, parent, ti, childNode, i);
+				}
+				if (preloadsz > 0) {
+					while (maxItem != null && preloadsz-- > 0) {
+						maxItem = (Treeitem) maxItem.getNextSibling();
+						if (maxItem != null) {
+							if (maxItem.isRendered())
+								continue;
+
+							maxItem.getChildren().clear();
+							Treechildren parent = (Treechildren) maxItem.getParent();
+							Object childNode = getAssociatedNode(maxItem, this);
+							renderChildren0(renderer, parent, maxItem, childNode, maxItem.getIndex());
+						}
+					}
+				}
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
 		} else
 			super.service(request, everError);
 	}

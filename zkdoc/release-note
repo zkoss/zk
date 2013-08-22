@@ -9,6 +9,7 @@ ZK 7.0.0
   ZK-1882: Support Richlet with Servlet Filter
   ZK-1796: Make audio component support HTML5
   ZK-1725: ExtendletLoader should provide debug information
+  ZK-1898: Tree support render on demand
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
