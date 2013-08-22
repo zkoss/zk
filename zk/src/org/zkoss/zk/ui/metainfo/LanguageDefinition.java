@@ -142,8 +142,6 @@ public class LanguageDefinition {
 	private final FastReadArray<Taglib> _taglibs = new FastReadArray<Taglib>(Taglib.class);
 	/** A list of JavaScript. */
 	private final FastReadArray<JavaScript> _js = new FastReadArray<JavaScript>(JavaScript.class);
-	/** A set of lazy Package */
-	private final Set<String> _lazypkgs = new LinkedHashSet<String>(); 
 	/** A list of deferrable JavaScript package. */
 	private Map<String, FastReadArray<String>> _mergepkgs = new HashMap<String, FastReadArray<String>>(4);
 	private Map<String, String> _jsmods = new HashMap<String, String>();
@@ -635,35 +633,6 @@ public class LanguageDefinition {
 	public Collection<JavaScript> getJavaScripts() {
 		return new CollectionsX.ArrayCollection<JavaScript>(_js.toArray());
 	}
-	
-	/** Adds a package name required by this language.
-	 * @since 6.5.4
-	 */
-	public void addLazyPackage(String pkg) {
-		if (pkg == null || pkg.length() <= 0)
-			throw new IllegalArgumentException();
-		_lazypkgs.add(pkg);
-	}
-	/** Removes a package of the give package required by this language.
-	 * @see #addLazyPackage
-	 * @since 6.5.4
-	 */
-	public void removeLazyPackage(String pkg) {
-		for (String lazypkg : _lazypkgs) {
-			if (Objects.equals(pkg, lazypkg)) {
-				_lazypkgs.remove(lazypkg);
-				return; //found
-			}
-		}
-	}
-	/** Returns a set of all lazy packages
-	 * by this language.
-	 * @since 6.5.4
-	 */
-	public Set<String> getLazyPackages() {
-		return _lazypkgs;
-	}
-
 	/** Merge a JavaScript package, say pkgFrom, to another package, say pkgTo,
 	 * such that, when loading pkgTo, pkgFrom will be placed in the same WPD file.
 	 * Thus, the number of WPD fields to load will be reduced, and

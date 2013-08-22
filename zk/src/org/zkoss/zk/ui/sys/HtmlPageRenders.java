@@ -254,7 +254,6 @@ public class HtmlPageRenders {
 		final Set<JavaScript> jses = new LinkedHashSet<JavaScript>(32);
 		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType))
 			jses.addAll(langdef.getJavaScripts());
-		
 		for (JavaScript js: jses)
 			append(sb, js);
 
@@ -577,16 +576,6 @@ public class HtmlPageRenders {
 		final int order = ComponentRedraws.beforeRedraw(false);
 		final String extra;
 		try {
-			final Set<String> lazypkgs = new LinkedHashSet<String>(32);
-			for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType("ajax")) {
-				lazypkgs.addAll(langdef.getLazyPackages());
-			}
-			StringBuilder pkgs = new StringBuilder();
-			// B65-ZK-1889: calls zk.load() to load the lazy packages
-			for (String lazypkg : lazypkgs) {
-				pkgs.append("zk.load('" + lazypkg + "');");
-			}
-			out.write(pkgs.toString());
 			if (order < 0) {
 				if (aupg) out.write('[');
 				else {
