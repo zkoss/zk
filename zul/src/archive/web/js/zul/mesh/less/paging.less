@@ -1,0 +1,123 @@
+@import "~./zul/less/_header.less";
+
+.z-paging {
+	border-bottom: 1px solid @baseBorderColor;
+	background: @pagingBackgroundColor;
+	position: relative;
+	height: @baseBarHeight;
+	padding: 4px 10px 3px;
+	&-os {
+		border-bottom: none;
+		padding-bottom: 4px;
+	}
+	ul {
+		display: inline-block;
+		margin: 0;
+		padding: 0;
+		& > li {
+			display: inline;
+		}
+	}
+	&-button {
+		display: inline-block;
+		.verGradient();
+		border: 1px solid @baseBorderColor;
+		.borderRadius(@borderRadiusSmall);
+		min-width: @baseButtonWidth;
+		height: @baseButtonHeight;
+		padding: 4px 6px;
+		margin-right: 6px;
+		vertical-align: top;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @pagingColor;
+		text-decoration: none;
+		text-align: center;
+		cursor: pointer;
+		line-height: @baseLineHeight;
+		&:hover {
+			border-color: @pagingActiveBorderColor;
+			.boxShadow('0 0 2px rgba(0, 0, 0, 0.34)');
+		}
+		&:active {
+			.verGradient(@baseGradientEnd, @baseGradientStart);
+			border-color: @pagingActiveBorderColor @baseBorderColor;
+		}
+		&[disabled] {
+			color: @disabledColor;
+			cursor: default;
+			.disabledOpacity();
+			&:hover {
+				.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+				border-color: @baseBorderColor;
+			}
+			&:active {
+				.verGradient();
+				border-color: @baseBorderColor;
+			}
+		}
+	}
+	&-previous > .z-icon-caret-left:before {
+		font-size: 17px;
+		position: relative;
+		left: -1px;
+	}
+	&-next > .z-icon-caret-right:before {
+		font-size: 17px;
+		position: relative;
+		left: 1px;
+	}
+	&-noborder {
+		border-color: transparent;
+		.resetGradient();
+		&:hover {
+			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+			border-color: transparent;
+			text-decoration: underline;
+		}
+		&:active {
+			.resetGradient();
+			border-color: transparent;
+		}
+	}
+	&-selected {
+		.resetGradient();
+		background: @pagingSelectedBackgroundColor;
+		border-color: @pagingActiveBorderColor;
+		color: @pagingSelectedColor;
+		&:hover {
+			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
+			border-color: @pagingActiveBorderColor;
+		}
+		&:active {
+			.resetGradient();
+			background: @pagingSelectedBackgroundColor;
+			border-color: @pagingActiveBorderColor;
+		}
+	}
+	&-input {
+		border: 1px solid @baseBorderColor;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @textColorGrayDark;
+		height: @baseButtonHeight;
+		margin-left: 6px;
+		padding: 3px 0;
+		vertical-align: baseline;
+	}
+	&-text {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @textColorGrayDark;
+		margin-right: 12px;
+	}
+	&-info {
+		position: absolute;
+		top: 4px;
+		right: 10px;
+		padding: 4px 0;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @textColorGrayDark;
+	}
+}
