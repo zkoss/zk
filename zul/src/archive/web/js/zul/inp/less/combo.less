@@ -168,7 +168,6 @@
 	& + i[class*='-separator'] {
 		display: none;
 	}
-
 }
 
 .z-combobox,
@@ -191,7 +190,7 @@
 	&-invalid {
 		background: @baseBackgroundColor;
 		border-color: @invalidBorderColor;
-		border-right: 1px solid @invalidBorderColor!important;
+		border-right: 1px solid @invalidBorderColor !important;
 		margin-right: -1px;
 	}
 }
@@ -202,6 +201,7 @@
 	padding-top: 5px;
 	max-height: @baseButtonHeight;
 }
+
 // disable
 .z-spinner-disabled,
 .z-doublespinner-disabled,
@@ -276,7 +276,7 @@
 }
 .z-comboitem {
 	text-shadow: 0 1px #FFFFFF;
-	padding: 0 2px;
+	padding: 3px 2px;
 	position: relative;
 	display: block;
 }
@@ -284,7 +284,6 @@
 .z-comboitem-content {//description
 	color: @textColorGray;
 	font-size: @fontSizeXSmall;
-	padding-left: 6px;
 }
 .z-comboitem,
 .z-comboitem a,
@@ -304,8 +303,9 @@
 	.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 }
 .z-comboitem-image {
-	width: 1px;
 	margin-right: 3px;
+	float: left;
+	margin-top: -4px;
 	&:empty {
 		margin-right: 0px;
 	}

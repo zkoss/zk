@@ -47,41 +47,52 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <zk>
 <style>
 .myBlack { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #666666 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #666666 100%')};
+}
+.myBlack:focus {
+	${t:gradient('ver', '#FFFFFF 0%; #666666 100%')};
 }
 .myBlack:hover { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #A6A6A6 100%')};	
+	${t:gradient('ver', '#FFFFFF 0%; #A6A6A6 100%')};	
 }
 .myBlack:active {	
-	background : ${t:gradient('ver', '#FFFFFF 0%; #000000 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #000000 100%')};
 }
 
 .myBlue { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #6666FF 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #6666FF 100%')};
+}
+.myBlue:focus {
+	${t:gradient('ver', '#FFFFFF 0%; #6666FF 100%')};
 }
 .myBlue:hover { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #A6A6FF 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #A6A6FF 100%')};
 }
 .myBlue:active { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #0000FF 100%')};	
+	${t:gradient('ver', '#FFFFFF 0%; #0000FF 100%')};	
 }
 
 .myRed { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #FF6666 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #FF6666 100%')};
+}
+.myRed:focus {
+	${t:gradient('ver', '#FFFFFF 0%; #FF6666 100%')};
 }
 .myRed:hover { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #FFA6A6 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #FFA6A6 100%')};
 }
 .myRed:active { 
-	background : ${t:gradient('ver', '#FFFFFF 0%; #FF0000 100%')};
+	${t:gradient('ver', '#FFFFFF 0%; #FF0000 100%')};
 }
 
 .myBlack:hover, .myBlue:hover, .myRed:hover {
 	border-color: #CFCFCF;
 }
-.myBlack:focus, .myBlue:focus, .myRed:focus { 
+.myBlack:focus, .myBlue:focus, .myRed:focus {
+	border-color: #CFCFCF;
 	${t:boxShadow('inset 0 0 2px #A6A6A6')};
 }
+
 
 </style>
 <hbox>

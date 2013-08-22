@@ -51,7 +51,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	refreshBar_: function (showBar) {
 		var bar = this._scrollbar;
 		if (bar) {
-			bar.syncSize(showBar);
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			this._shallShowScrollbar = false;
 			if (scrollPosition)
 				bar.scrollTo(scrollPosition.x, scrollPosition.y);
 		}
@@ -213,6 +214,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		return false;
 	},
 	_sizeOnOpen: function () {
+		this._shallShowScrollbar = true;
 		var cols = this.treecols, w, wd;
 		if (!cols || this.isSizedByContent() || this._hflex == 'min')
 			this.syncSize();

@@ -2,17 +2,9 @@
 
 .z-slider {
 	background-image: none;
-	height: @baseBarHeight;
 
 	&-center {
-		.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
 		.borderRadius(5px);
-		height: @baseHeight - 2;
-		width: 100%;
-		top: 15px;
-		margin-right: -7px;	
-		line-height: 0;		
-		position: relative;
 		cursor: pointer;
 	}
 
@@ -22,13 +14,12 @@
 		border: 1px solid @baseBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
-		position: absolute;
-		top: -5px;
-		left: 0;
+		position: relative;
 		cursor: pointer;
 
 		&:active {
-			border-color: darken(@baseBorderColor, 30%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 10%) darken(@baseBorderColor, 30%);
+			border-top-color: @sliderBorderColor;
+			border-left-color: @sliderBorderColor;
 			.verGradient(@baseGradientEnd, @baseGradientStart);
 		}
 
@@ -38,14 +29,22 @@
 		}
 	}
 
-	&-popup {
-		font-family: @baseContentFontFamily;
-		font-size: @fontSizeMedium;
-		font-weight: normal;
-		.borderRadius(@borderRadiusSmall);
-		text-shadow: 0 1px #FFFFFF;
-		.boxShadow('0 0 10px rgba(0, 0, 0, 0.35)');
-		padding: 2px;
+	&-horizontal {
+		height: @baseBarHeight;
+
+		.z-slider-center {
+			.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
+			height: @baseHeight - 2;
+			width: 100%;
+			position: relative;
+			top: 50%;
+			margin-top: -3px;
+		}
+
+		.z-slider-button {
+			top: -5px;
+			left: 0;
+		}
 	}
 
 	&-vertical {
@@ -62,12 +61,17 @@
 			.gradient('hor', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
 			height: 100%;
 			width: @baseWidth - 2;
-			left: 15px;
-			top: 0px;			
-			font-size: 0;
-			margin-bottom: 7px;
-			margin-right: 0px;
+			margin: auto;
 		}
+	}
+
+	&-popup {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		font-weight: normal;
+		text-shadow: 0 1px #FFFFFF;
+		.boxShadow('0 0 10px rgba(0, 0, 0, 0.35)');
+		padding: 2px;
 	}
 
 	&-sphere {
@@ -76,7 +80,8 @@
 		}
 	}
 
-	&-sphere, &-scale {
+	&-sphere,
+	&-scale {
 		.z-slider-button {
 			.borderRadius(15px);
 		}

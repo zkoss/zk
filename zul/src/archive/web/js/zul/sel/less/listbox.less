@@ -41,13 +41,13 @@
 	//listbox footer
 	&-footer {
 		overflow: hidden;
-		background: darken(@baseBackgroundColor, 2%);
+		background: @tableFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		.resetTable();
 	}
 
 	&-odd.z-listitem {
-		background: darken(@baseBackgroundColor, 3%);
+		background: @tableStripeBackgroundColor;
 	}
 }
 //listhead
@@ -61,8 +61,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @baseBorderColor;
-	border-bottom: 1px solid @baseBorderColor;
+	border-right: 1px solid @tableTitleBorderColor;
+	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -126,10 +126,10 @@
 }
 //list item and cell
 .z-listitem {
-	background: @baseBackgroundColor;
+	background: @tableBackgroundColor;
 	//list cell
 	.z-listcell {
-		border-right: 1px solid #FFFFFF;
+		border-right: 1px solid @tableContentBorderColor;
 		overflow: hidden;
 		cursor: pointer;
 		&:last-child {
@@ -210,7 +210,7 @@
 	&-inner {
 		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @tableTitleBorderColor;
 		border-left: none;
 		border-right: none;
 		overflow: hidden;

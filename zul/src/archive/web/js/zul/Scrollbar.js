@@ -154,7 +154,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			hbar = this.$n('hor'), vbar = this.$n('ver'),
 			needH = this.needH, needV = this.needV,
 			opts = this.opts,
-			scrollHeight = scroller.offsetHeight;
+			scrollHeight = scroller.scrollHeight;
 		
 		if (tpad && bpad) //for Mesh Widget ROD
 			scrollHeight += tpad.offsetHeight + bpad.offsetHeight;
@@ -170,7 +170,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startX = opts.startPositionX,
 				wdh = cave.offsetWidth - startX,
-				swdh = scroller.offsetWidth - startX + froenScrollWidth,
+				swdh = scroller.scrollWidth - startX + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
@@ -713,22 +713,24 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			cave = this.cave,
 			bar = this.$n(orient);
 		
-		pos = Math.round(pos);
-		this._pos[isH ? 0 : 1] = pos;
-		
-		bar.style[isH ? 'left' : 'top'] = pos + 'px';
-		if (isH && this.needV)
-			this.$n('ver').style.right = -pos + 'px';
-		if (!isH && this.needH)
-			this.$n('hor').style.bottom = -pos + 'px';
-		
-		cave[isH ? 'scrollLeft' : 'scrollTop'] = pos;
-		
-		//onSyncPosition callback
-		var onSyncPosition = this.opts.onSyncPosition;
-		if (onSyncPosition) {
-			this.currentPos = {x: this._pos[0], y: this._pos[1]};
-			onSyncPosition.call(this);
+		if (bar) {
+			pos = Math.round(pos);
+			this._pos[isH ? 0 : 1] = pos;
+			
+			bar.style[isH ? 'left' : 'top'] = pos + 'px';
+			if (isH && this.needV)
+				this.$n('ver').style.right = -pos + 'px';
+			if (!isH && this.needH)
+				this.$n('hor').style.bottom = -pos + 'px';
+			
+			cave[isH ? 'scrollLeft' : 'scrollTop'] = pos;
+			
+			//onSyncPosition callback
+			var onSyncPosition = this.opts.onSyncPosition;
+			if (onSyncPosition) {
+				this.currentPos = {x: this._pos[0], y: this._pos[1]};
+				onSyncPosition.call(this);
+			}
 		}
 	},
 	_syncBarPosition: function (orient, pos) {

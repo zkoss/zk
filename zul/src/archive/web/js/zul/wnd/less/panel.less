@@ -19,7 +19,7 @@
 	
 	&-head {
 		padding: 5px 5px 1px;
-		border: 1px solid darken(@baseBorderColor, 20%);
+		border: 1px solid @outerBorderColor;
 		.boxShadow('inset 0px 1px 1px #FFFFFF');
 		background: @panelBackgroundColor;
 		overflow: hidden;
@@ -47,8 +47,8 @@
 		margin: 0;
 		background: lighten(@panelBackgroundColor, 4%);
 		padding: 6px 3px 6px 3px;
-		border: 1px solid darken(@baseBorderColor, 20%);
-		border-top: 0;
+		border: 1px solid @outerBorderColor;
+		border-top-width: 0;
 		.bottomBorderRadius();
 		.defaultOverflowZoom();
 		
@@ -134,7 +134,7 @@
 		}
 		
 		dl {
-			border: 1px solid darken(@baseBorderColor, 20%);
+			border: 1px solid @outerBorderColor;
 			border-top: 0;
 			margin: 0;
 			padding: 0;
