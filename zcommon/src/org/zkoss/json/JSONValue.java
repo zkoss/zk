@@ -6,6 +6,7 @@ package org.zkoss.json;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -98,9 +99,9 @@ public class JSONValue {
 		if(value instanceof Map)
 			return JSONObject.toJSONString((Map)value);
 		
-		if(value instanceof List)
-			return JSONArray.toJSONString((List)value);
-
+		if(value instanceof Collection) //proposed enhancement F65-ZK-1866 use Collection instead of List
+			return JSONArray.toJSONString((Collection)value);
+		
 		if (value.getClass().isArray()) {
 			if (value instanceof Object[])
 				return JSONArray.toJSONString((Object[])value);
@@ -121,6 +122,10 @@ public class JSONValue {
 			if (value instanceof char[])
 				return JSONArray.toJSONString((char[])value);
 		}
+
+		if(value instanceof Enum) //proposed enhancement F65-ZK-1866 provide a default Enum conversion 
+			return "\"" + escape(value.toString()) + "\"";
+		
 		return value.toString();
 	}
 	/** Converts an integer to JSON text
