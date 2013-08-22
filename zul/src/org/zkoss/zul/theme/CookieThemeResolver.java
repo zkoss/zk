@@ -60,6 +60,9 @@ public class CookieThemeResolver implements ThemeResolver {
 	public void setTheme(HttpServletRequest request,
 			HttpServletResponse response, String themeName) {
 		Cookie cookie = new Cookie(THEME_COOKIE_KEY, themeName);
+		if (request.isSecure()) {
+			cookie.setSecure(true);
+		}
 		cookie.setMaxAge(60*60*24*30); //store 30 days
 		String cp = request.getContextPath();
 		if (cp == null || "/".equals(cp))
