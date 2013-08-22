@@ -1,0 +1,36 @@
+<zk>
+	<label multiline="true">
+	1.Select combobox 01,
+	2.in combobox , delete 1, and tab out, you will see error message
+	3.in combobox, delete 0, the combobox should stay on empty (it becomes 01 if bug wasn't fixed)
+	
+	</label>
+	<window apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01891ComboboxValidator')"
+		validationMessages = "@id('vmsgs')">
+		<vlayout>
+			<hlayout>
+				<combobox id="cb1" model="@load(vm.model1)"
+					selectedItem="@bind(vm.selItem) @validator(vm.validator1)"
+					autodrop="true" autocomplete="false">
+					<template name="model">
+						<comboitem label="@load(each.name)"/>
+					</template>
+				</combobox>
+				<label value="@load(vmsgs[cb1])" style="color:red;" />
+				<label value="@load(vm.selItem.name)" />
+			</hlayout>
+			<hlayout>
+				<combobox id="cb2" model="@load(vm.model2)"
+					selectedIndex="@bind(vm.selIndex) @validator(vm.validator2)"
+					autodrop="true" autocomplete="false">
+					<template name="model">
+						<comboitem label="@load(each.name)"/>
+					</template>
+				</combobox>
+				<label value="@load(vmsgs[cb2])" style="color:red;" />
+				<label value="@load(vm.selIndex)" />
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

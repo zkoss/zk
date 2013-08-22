@@ -1381,7 +1381,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				if(_log.debugable()){
 					_log.debug("This is a prompt command");
 				}
-				BinderImpl.this.doLoadEvent(comp, evtnm); //load on event
+				BinderImpl.this.doLoadEvent(comp, event); //load on event
 			}
 
 			notifyVMsgsChanged();//always, no better way to know which properties of validation are changed
@@ -1619,12 +1619,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	//for event -> prompt only, no command
-	private void doLoadEvent(Component comp, String evtnm) {
+	private void doLoadEvent(Component comp, Event evt) {
 		if(_log.debugable()){
-			_log.debug("doLoadEvent comp=[%s],evtnm=[%s]",comp,evtnm);
+			_log.debug("doLoadEvent comp=[%s],evtnm=[%s]",comp,evt.getName());
 		}
-		final BindingKey bkey = getBindingKey(comp, evtnm); 
-		_propertyBindingHandler.doLoadEvent(bkey, comp, evtnm);
+		final BindingKey bkey = getBindingKey(comp, evt.getName()); 
+		_propertyBindingHandler.doLoadEvent(bkey, comp, evt);
 	}
 	
 	//doCommand -> doValidate

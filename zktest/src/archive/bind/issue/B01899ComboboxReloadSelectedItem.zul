@@ -1,0 +1,52 @@
+<zk>
+<!-- 
+	<window apply="org.zkoss.bind.BindComposer" title="use selItem (vm.selItem)" border="normal" width="350px"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01899ComboboxReloadSelectedItem')"
+		validationMessages = "@id('vmsgs')">
+		<combobox id="cb" model="@load(vm.items)" 
+			selectedItem="@bind(vm.selItem)@validator(vm.validator)">
+			<template name="model">
+				<comboitem label="@load(each.name)"/>
+			</template>
+		</combobox>
+		<label value="@load(vm.selItem.name)" />
+		<label value="@load(vmsgs[cb])" style="color:red;" />
+	</window>
+	<window apply="org.zkoss.bind.BindComposer"  title="use selItem (vm.selItem)" border="normal" width="350px"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01899ComboboxReloadSelectedItem')"
+		validationMessages = "@id('vmsgs')">
+		<combobox id="cb" model="@load(vm.items)" 
+			selectedItem="@bind(vm.selItem)@validator(vm.validator)">
+			<template name="model">
+				<comboitem label="@load(each.name)"/>
+			</template>
+		</combobox>
+		<label value="@load(vm.selItem.name)" />
+		<label value="@load(vmsgs[cb])" style="color:red;" />
+	</window>
+	 -->
+	<window id="w3" apply="org.zkoss.bind.BindComposer"  title="use item in selItem (vm.selItem2.subItem)" border="normal" width="350px"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01899ComboboxReloadSelectedItem')"
+		validationMessages = "@id('vmsgs')">
+		<combobox id="cb" model="@load(vm.items)" 
+			selectedItem="@bind(vm.selItem2.subItem)@validator(vm.validator)">
+			<template name="model">
+				<comboitem label="@load(each.name)"/>
+			</template>
+		</combobox>
+		<label value="@load(vm.selItem2.subItem.name)" />
+		<label value="@load(vmsgs[cb])" style="color:red;" />
+	</window>
+	<window id="w4" apply="org.zkoss.bind.BindComposer"  title="use item in selItem (vm.selItem2.subItem)" border="normal" width="350px"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01899ComboboxReloadSelectedItem')"
+		validationMessages = "@id('vmsgs')">
+		<combobox id="cb" model="@load(vm.items)" 
+			selectedItem="@bind(vm.selItem2.subItem)@validator(vm.validator)">
+			<template name="model">
+				<comboitem label="@load(each.name)"/>
+			</template>
+		</combobox>
+		<label value="@load(vm.selItem2.subItem.name)" />
+		<label value="@load(vmsgs[cb])" style="color:red;" />
+	</window>
+</zk>
