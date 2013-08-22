@@ -37,6 +37,7 @@ ZK 6.5.4
   ZK-1893: Failure to configure log handler properties
   ZK-1890: Can't subscribe eventqueue in desktop cleanup
   ZK-1897: Possible Cross-site Scripting Vulnerability
+  ZK-1896: ZK session timeout on JBoss AS 7 cluster issue
 
   --------
 ZK 6.5.3

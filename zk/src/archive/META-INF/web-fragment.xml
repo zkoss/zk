@@ -16,7 +16,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
 	version="3.0">
 	<name>zk</name>
-
+	
+	<distributable/><!-- Bug ZK-1896: Enable cluster setting by default -->
+	
 	<listener>
 		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
 	</listener>
