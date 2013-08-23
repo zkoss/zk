@@ -182,7 +182,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._fixsz(ppofs);//fix size
 		
 		// given init position
-		$pp.position(inp, 'after_start');		
+		$pp.position(inp, 'after_start');	
+		this._shallSyncPopupPosition = false;
 		
 		// B65-ZK-1588: bandbox popup should drop up 
 		//   when the space between the bandbox and the bottom of browser is not enough  
