@@ -3,6 +3,9 @@
 .z-combobutton {
 	display: inline-block;
 	min-height: @baseButtonHeight;
+	<c:if test="${zk.ie == 8}">
+		min-height: 12px;
+	</c:if>
 	
 	&-content {
 		font-family: @baseContentFontFamily;
@@ -12,6 +15,9 @@
 		.verGradient();
 		border: 1px solid @outerBorderColor;
 		min-height: @baseButtonHeight;
+		<c:if test="${zk.ie == 8}">
+			min-height: 12px;
+		</c:if>
 		line-height: @baseLineHeight;
 		.borderRadius(@borderRadiusSmall);
 		color: @baseTextColor;
@@ -19,6 +25,7 @@
 		cursor: default;
 		display: inline-block;
 		vertical-align: middle;
+		white-space: nowrap;
 	}
 	&-image {
 		vertical-align: middle;
@@ -87,7 +94,7 @@
 		.z-combobutton-button {
 			border-color: transparent;
 			.borderRadius(0);
-			background: transparent;
+			.resetGradient();
 		}
 		&:focus {
 			.z-combobutton-content,

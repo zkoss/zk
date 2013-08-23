@@ -48,6 +48,9 @@
 	font-family: none;
 	line-height: @baseLineHeight;
 	min-width: @baseButtonWidth;
+	<c:if test="${zk.ie == 8}">
+		min-width: 14px;
+	</c:if>	
 	height: @baseButtonHeight;
 	color: @iconColor;
 	.rightBorderRadius(@borderRadiusSmall);
@@ -89,6 +92,9 @@
 .z-doublespinner-button {
 	padding: 0;
 	position: relative;
+	<c:if test="${zk.ie == 8}">
+		min-width: 22px;
+	</c:if>	
 
 	&:hover,
 	&:active {
@@ -200,6 +206,9 @@
 	padding-left: 7px;
 	padding-top: 5px;
 	max-height: @baseButtonHeight;
+	<c:if test="${zk.ie == 8}">
+		min-width: 11px;
+	</c:if>	
 }
 
 // disable
