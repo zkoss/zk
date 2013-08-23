@@ -65,11 +65,11 @@
 			color: @iconHoverColor;
 		}
 
+		<c:if test="${zk.ie == 8}">
 		.z-icon-minus, .z-icon-fullscreen {
-			<c:if test="${zk.ie == 8}">
-				margin-left: 1px;
-			</c:if>
+			margin-left: 1px;			
 		}
+		</c:if>
 	}
 	
 	&-maximize, &-minimize, &-close {
