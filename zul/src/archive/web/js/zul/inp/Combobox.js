@@ -80,11 +80,15 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this._repos = false;
 		}
 	},
-	onResponse: function () {
+	onResponse: function (ctl, opts) {
 		this.$supers('onResponse',arguments);
 		if (this._shallRedoCss) { //fix in case
 			zk(this.getPopupNode_()).redoCSS(-1);
 			this._shallRedoCss = null;
+		}
+		// B65-ZK-1990: Fix position of popup when it appears above the input, aligned to the left
+		if (this.isOpen && this._shallSyncPopupPosition && opts.rtags.onChanging) {
+			zk(this.getPopupNode_()).position(this.getInputNode(), 'before_start');
 		}
 	},
 	setValue: function (val) {

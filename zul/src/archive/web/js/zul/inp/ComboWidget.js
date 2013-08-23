@@ -17,7 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_buttonVisible: true,
-	_popupPosition: 'after_start', // Cache position of popup
 
 	$define: {
 		/** Returns whether the button (on the right of the textbox) is visible.
@@ -112,10 +111,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			if (zk.ie8)
 				pp.style.width = pz[0];
 			this._fixsz(pz);
-			// B65-ZK-1990: Fix position of popup when it appears above the input, aligned to the left
-			if (this._popupPosition == 'before_start') {
-				zk(pp).position(this.getInputNode(), 'before_start');
-			}
 		}
 	},
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
@@ -188,7 +183,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		// given init position
 		$pp.position(inp, 'after_start');		
-		this._popupPosition = 'after_start';
 		
 		// B65-ZK-1588: bandbox popup should drop up 
 		//   when the space between the bandbox and the bottom of browser is not enough  
@@ -199,7 +193,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		if(realtop < realafter) {
 			$pp.position(inp, 'before_start');	
-			this._popupPosition = 'before_start';
+			this._shallSyncPopupPosition = true;
 		}
 		pp.style.display = 'none';
 		pp.style.visibility = '';
