@@ -64,6 +64,12 @@
 			background: @hoverBackgroundColor;
 			color: @iconHoverColor;
 		}
+
+		.z-icon-minus, .z-icon-fullscreen {
+			<c:if test="${zk.ie == 8}">
+				margin-left: 1px;
+			</c:if>
+		}
 	}
 	
 	&-maximize, &-minimize, &-close {
@@ -130,13 +136,13 @@
 		&.z-window-noheader {
 			padding-top: 0;
 			
-			& > .z-window-content {
-				margin: 0px;
+			> .z-window-content {
+				margin: 0px -1 * @framePadding;
 			}
 		}
-		
-		&.z-window-noheader:not(.z-window-noborder) > .z-window-content {
-			margin: 0px -1 * @framePadding;
+
+		&.z-window-noborder > .z-window-content {
+			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
 		}
 	}
 	
@@ -157,16 +163,20 @@
 		border: 0px;
 		padding: @framePadding @framePadding 0 @framePadding;
 		
-		&.z-window-noheader {
-			padding: 0;
-		}
-		
 		> .z-window-content {
 			border: 0;			
 		}
 		
-		&:not(.z-window-noheader) > .z-window-content {
+		& > .z-window-content {
 			margin: 0 -1 * @framePadding;
+		}
+
+		&.z-window-noheader {
+			padding: 0;
+
+			> .z-window-content {
+				margin: 0;
+			}
 		}
 		
 		&.z-window-shadow {
