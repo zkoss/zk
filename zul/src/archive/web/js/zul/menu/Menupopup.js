@@ -230,6 +230,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				zk.currentFocus = this; //Bug 2807475: (IE only) s.t. _docMouseDown will focus later (since menupop becomes invisible)
 			}
 		}
+		
+		if(zk.ie == 8) 
+			zk(this).redoFontIcon();
+		
 	},
 	onHide: function () {
 		if (this.isOpen())

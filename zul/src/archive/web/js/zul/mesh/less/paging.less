@@ -24,8 +24,12 @@
 		border: 1px solid @baseBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
+		<c:if test="${zk.ie == 8}">
+			min-width: 14px;
+		</c:if>
+		width: @baseButtonWidth;
 		height: @baseButtonHeight;
-		padding: 4px 6px;
+		padding: 4px 0px;
 		margin-right: 6px;
 		vertical-align: top;
 		font-family: @baseContentFontFamily;
@@ -104,6 +108,10 @@
 		margin-left: 6px;
 		padding: 3px 0;
 		vertical-align: baseline;
+		line-height: 20px;
+		<c:if test="${zk.ie == 8}">
+			vertical-align: middle;
+		</c:if>
 	}
 	&-text {
 		font-family: @baseContentFontFamily;

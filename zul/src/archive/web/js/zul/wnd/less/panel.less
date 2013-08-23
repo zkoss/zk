@@ -61,11 +61,17 @@
 		padding: 4px;
 	}
 	
-	&-top .z-toolbar:not(.z-toolbar-panel),
-	&-bottom2 .z-toolbar:not(.z-toolbar-panel),
+	&-top .z-toolbar,
+	&-bottom2 .z-toolbar,
 	&-bottom .z-toolbar {
 		border-width: 0 1px 1px 1px;
 		padding: 4px 3px 3px 3px;
+	}
+
+	&-top .z-toolbar.z-toolbar-panel,
+	&-bottom2 .z-toolbar.z-toolbar-panel {
+		border-width: 0px;
+		padding: 4px;
 	}
 	
 	&-icon {
@@ -85,6 +91,12 @@
 			border-color: @hoverBorderColor;
 			background: @hoverBackgroundColor;
 			color: @iconHoverColor;
+		}
+
+		.z-icon-minus, .z-icon-fullscreen {
+			<c:if test="${zk.ie == 8}">
+				margin-left: 1px;
+			</c:if>
 		}
 	}
 	

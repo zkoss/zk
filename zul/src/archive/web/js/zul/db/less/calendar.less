@@ -5,8 +5,11 @@
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
-	min-width: 220px;
-	width: 220px;
+	min-width: 230px;
+	<c:if test="${zk.ie == 8}">
+		min-width: 224px;
+	</c:if>
+	width: 230px;
 	padding: 2px;
 
 	a {
@@ -66,7 +69,11 @@
 	&-cell {
 		text-align: center;
 		min-height: @baseButtonHeight;
-		min-width:  @baseButtonHeight;
+		min-width:  @baseButtonWidth;
+		<c:if test="${zk.ie == 8}">
+			min-height: 18px;
+			min-width:  @baseButtonWidth;
+		</c:if>
 		padding: 3px 0;
 		color: @cellColor;
 		background: @baseBackgroundColor;

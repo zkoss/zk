@@ -1459,6 +1459,21 @@ jq(el).zk.center(); //same as 'center'
 		}
 		return this;
 	},
+	
+	/** Forces the browser to redo (re-apply) CSS of the font awesome relatived elements
+	 * @return jqzk this object
+	 */
+	redoFontIcon: function () {
+		var head = document.getElementsByTagName('head')[0],
+    		style = document.createElement('style');
+		style.type = 'text/css';
+		style.styleSheet.cssText = '#' + this.$n().id + ' *:before,:after{content:none !important';
+		head.appendChild(style);
+		setTimeout(function(){
+		    head.removeChild(style);
+		}, 0);
+		return this;
+	},
 
 	/** Returns the virtual parent of the first matched element.
 	 * <p>Refer to {@link #makeVParent} for more information.

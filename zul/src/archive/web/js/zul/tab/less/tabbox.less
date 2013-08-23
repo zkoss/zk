@@ -127,7 +127,7 @@
 		text-align: center;
 		border: 1px solid @baseBorderColor;
 		.topBorderRadius();
-		padding-top: 4px;
+		padding-top: 5px;
 		line-height: @baseButtonHeight;
 		color: @iconColor;
 		cursor: pointer;
@@ -152,6 +152,7 @@
 	}
 	&-right {
 		right: 0;
+		padding-left: 1px;
 	}
 	&-up,
 	&-down {
@@ -374,6 +375,10 @@
 		left: 5px;
 		display: block;
 		cursor: pointer;
+		<c:if test="${zk.ie == 8}">
+			margin-top: -7px;
+			font-size: 14px;
+		</c:if>
 	}
 
 	&-text {

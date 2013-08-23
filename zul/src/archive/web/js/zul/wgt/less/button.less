@@ -11,8 +11,10 @@
 	.verGradient();
 	text-shadow: 0 1px #FFFFFF;
 	cursor: pointer;
-	min-height: @baseButtonHeight;
-	
+	min-height: 24px;
+	<c:if test="${zk.ie == 8}">min-height: 16px;</c:if>
+	white-space: nowrap;
+
 	&:hover {
 		border-color: @hoverBorderColor;
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);

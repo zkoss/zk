@@ -13,6 +13,9 @@
 	border: 1px solid @baseBorderColor;
 	margin: 0;
 	min-height: @baseButtonHeight;
+	<c:if test="${zk.ie == 8}">
+		min-height: 15px;
+	</c:if>	
 	.borderRadius(@borderRadiusSmall);
 	line-height: @baseLineHeight;
 	color: @baseTextColor;
@@ -51,6 +54,10 @@
 	padding: 3px;
 	background: none;
 	resize: none;
+	<c:if test="${zk.ie == 8}">
+		min-height: 18px;
+		line-height: @baseIconHeight;
+	</c:if>
 }
 
 // error box
