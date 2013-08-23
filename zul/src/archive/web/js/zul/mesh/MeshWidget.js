@@ -21,35 +21,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 (function () {
 	var _shallFocusBack;
-
-	function _getFirstRowCells(tbody) {
-		if (tbody && tbody.rows && tbody.rows.length) {
-			var cells = tbody.rows[0].cells,
-				length = cells.length,
-				ncols = 0;
-			for (var i = 0; i < length; i++) {
-				var span = cells[i].colSpan;
-				ncols += span != 1 ? span : 1;
-			}
-			if (ncols == length)
-				return cells;
-			else {
-				var out = [];
-				out.push('<tr id="', tbody.id,
-						'-fakeRow" style="visibility:hidden;height:0">');
-				for (var i = 0; i < ncols; i++)
-					out.push('<td></td>');
-				out.push('</tr>');
-				jq(tbody.rows[0]).before(out.join(''));
-				out = null;
-				return tbody.rows[0].cells;
-			}
-		}
-	};
-	function _deleteFakeRow(tbody) {
-		if (tbody)
-			jq('#' + tbody.id + '-fakeRow').remove();
-	};
 	function _calcMinWd(wgt) {
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
@@ -86,13 +57,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.ebodytbl.style.display = 'block';
 			var headcol = hdfaker.firstChild,
 				headcell = headn.firstChild;
-			for (var i = 0; headcol; headcol = headcol.nextSibling) {
+			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
 				var headcave = headcell.firstChild;
+				if (!headcave)
+					continue;
 				hdfakerws[i] = headcol.style.width;
 				headcol.style.width = '';
 				hdws[i] = headcell.style.width;
 				headcell.style.width = '';
-				hdcavews[i++] = headcave.style.width;
+				hdcavews[i] = headcave.style.width;
 				headcave.style.width = '';
 				
 				headcell = headcell.nextSibling;
@@ -143,8 +116,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			headWgt = wgt.getHeadWidget(),
 			max = 0, maxj;
 		if (bdfaker && w) {
-			var bodycells = _getFirstRowCells(wgt.ebodyrows),
-				footcells = ftfaker ? _getFirstRowCells(wgt.efootrows) : null;
+			var bodycells = wgt._getFirstRowCells(wgt.ebodyrows),
+				footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : null;
 			
 			for (var i = 0; i < len; i++) {
 				var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
@@ -166,9 +139,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (w)
 					w = w.nextSibling;
 			}
-			_deleteFakeRow(wgt.ebodyrows);
+			wgt._deleteFakeRow(wgt.ebodyrows);
 			if (ftfaker)
-				_deleteFakeRow(wgt.efootrows);
+				wgt._deleteFakeRow(wgt.efootrows);
 		} else {
 			var tr;
 			if (tr = _getSigRow(wgt)) {
@@ -189,12 +162,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.eheadtbl.style.display = '';
 			var headcol = hdfaker.firstChild,
 				headcell = headn.firstChild;
-			for (var i = 0; headcol; headcol = headcol.nextSibling) {
+			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
 				var headcave = headcell.firstChild;
-				
+				if (!headcave)
+					continue;
 				headcol.style.width = hdfakerws[i];
 				headcell.style.width = hdws[i];
-				headcave.style.width = hdcavews[i++];
+				headcave.style.width = hdcavews[i];
 				
 				headcell = headcell.nextSibling;
 			}
@@ -636,13 +610,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_moveToHidingFocusCell: function (index) { //used in Row/Listcell
 		//B50-3178977 navigating the input in hiddin column.
-		var td = this.head.getChildAt(index).$n(),
-			bar = this._scrollbar,
-			frozen = this.frozen;
-		if (this.head && td && zk.parseInt(td.style.width) == 0 && frozen &&
-			(index = index - frozen.getColumns()) >= 0 && bar) {
-			frozen._doScrollNow(index);
-			bar.setBarPosition(index);
+		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] : null,
+			frozen = this.frozen,
+			bar;
+		if (td && frozen && zk.parseInt(td.style.width) == 0 &&
+			(index = index - frozen.getColumns()) >= 0) {
+			if (this._nativebar) {
+				frozen.setStart(index);
+			} else if (bar = this._scrollbar) {
+				frozen._doScrollNow(index);
+				bar.setBarPosition(index);
+			}
 			_shallFocusBack = true;
 		}
 	},
@@ -660,12 +638,23 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._fixHeaders();
 		if ((zk.webkit || zk.ie) && this.ehead) //sync scroll for input tab key scroll
 			this.domListen_(this.ehead, 'onScroll', '_doSyncScroll');
+		
+		var ebody = this.ebody;
+		if (this._nativebar && ebody) {
+			this.domListen_(ebody, 'onScroll', '_doScroll');
+			ebody.style.overflow = 'auto';
+			if (this.efrozen)
+				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
+		}
 		zWatch.listen({onSize: this, onResponse: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, onResponse: this});
 		if ((zk.webkit || zk.ie) && this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
+		var ebody = this.ebody;
+		if (this._nativebar && ebody && this.efrozen)
+			jq(ebody).css('overflow-x', 'auto');
 		this.$supers(zul.mesh.MeshWidget, 'unbind_', arguments);
 	},
 	clearCache: function () {
@@ -772,6 +761,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.ebodytbl = this.$n('cave');
 		this.efoot = this.$n('foot');
 		this.efoottbl = this.$n('foottbl');
+		this.efrozen = this.$n('frozen');
 		
 		// Grid will bind ebodyrows in Rows widget
 		var erows = this.$n('rows');
@@ -823,8 +813,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_doScroll: function () { //called zkmax, overriden in Listbox
 		var t = zul.mesh.Scrollbar.getScrollPosV(this),
 			l = zul.mesh.Scrollbar.getScrollPosH(this),
-			scrolled = (t != this._currentTop || l != this._currentLeft);
-		
+			scrolled = (t != this._currentTop || l != this._currentLeft),
+			ebody = this.ebody,
+			ehead = this.ehead,
+			efoot = this.efoot;
+
+		if (this._nativebar && !(this.fire('onScroll', ebody.scrollLeft).stopped)) {
+			if (this._currentLeft != ebody.scrollLeft) {
+				if (ehead)
+					ehead.scrollLeft = ebody.scrollLeft;
+				if (efoot)
+					efoot.scrollLeft = ebody.scrollLeft;
+			}
+		}
+
 		if (scrolled &&	!this._listbox$rod && !this._grid$rod) // Bug ZK-353 ignore in rod
 			this._currentTop = t;
 
@@ -917,6 +919,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
+			
+			if (this._nativebar) { // Bug ZK-355: keep scrollbar position
+				var ebody = this.ebody;
+				if (ebody.scrollHeight >= this._currentTop)
+					ebody.scrollTop = this._currentTop;
+				
+				if (ebody.scrollWidth >= this._currentLeft) {
+					ebody.scrollLeft = this._currentLeft;
+					if (this.ehead) 
+						this.ehead.scrollLeft = this._currentLeft;
+					if (this.efoot) 
+						this.efoot.scrollLeft = this._currentLeft;
+				}
+			}
 			this._shallSize = false;
 		}
 	},
@@ -929,10 +945,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (pgit) pgHgh += pgit.offsetHeight;
 			if (pgib) pgHgh += pgib.offsetHeight;
 		}
-		return zk(n).contentHeight()
+		// Bug #1815882 and Bug #1835369
+		var hgh = zk(n).contentHeight()
 			- (this.ehead ? this.ehead.offsetHeight : 0)
 			- (this.efoot ? this.efoot.offsetHeight : 0)
-			- pgHgh; // Bug #1815882 and Bug #1835369
+			- pgHgh;
+		return this.frozen && this._nativebar ?
+				hgh - this.efrozen.offsetHeight : hgh;
 	},
 	setFlexSize_: function (sz) {
 		var n = this.$n(),
@@ -1047,13 +1066,28 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				fttbl = this.efoottbl;
 			if (hdtbl) {
 				var wd = 0;
-				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling)
-					wd += zk.parseInt(w.style.width);
+				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
+					if (w.style.display != 'none')
+						wd += zk.parseInt(w.style.width);
+				}
 				hdtbl.style.width = wd + 'px';
 				if (bdtbl)
 					bdtbl.style.width = wd + 'px';
 				if (fttbl)
 					fttbl.style.width = wd + 'px';
+			}
+		}
+		if (this._nativebar && !this.frozen) {
+			var zkb = zk(this.ebody),
+				hScroll = zkb.hasHScroll(),
+				vScroll = zkb.hasVScroll(),
+				hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
+				ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
+			if (vScroll) {
+				if (hdfakerbar)
+					hdfakerbar.style.width = vScroll + 'px';
+				if (ftfakerbar)
+					ftfakerbar.style.width = vScroll + 'px';
 			}
 		}
 		// Bug in B36-2841185.zul
@@ -1087,6 +1121,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				visible = !w.isVisible() ? 'display:none;' : '';
 			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
 		}
+		if (this._nativebar && !this.frozen && (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0))
+			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" />');
 		out.push('</colgroup>');
 	},
 
@@ -1188,9 +1224,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wds = [],
 			width = 0,
 			hdcol = hdfaker.firstChild,
-			_minwds = this._minWd.wds;
+			_minwds = this._minWd.wds,
+			hdlen = this.head.nChildren;
 		
-		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
+		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			if (zk(hdcol).isVisible()) {
 				var wdh = w._width;
 				
@@ -1203,7 +1240,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 				width += wd;
 			}
-			++i;
 			hdcol = hdcol.nextSibling;
 		}
 		
@@ -1216,9 +1252,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			visj = -1;
 		
 		if (this._nspan < 0) { //span to all columns
-			for (var i = 0; hdcol; hdcol = hdcol.nextSibling) {
+			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
 				if (!zk(hdcol).isVisible()) {
-					++i;
 					bdcol = bdcol.nextSibling;
 					if (ftcol)
 						ftcol = ftcol.nextSibling;
@@ -1227,7 +1262,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					wds[i] = wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) || 0);
 					var stylew = jq.px0(wd);
 					count -= wd;
-					visj = i++;
+					visj = i;
 					
 					hdcol.style.width = stylew;
 					bdcol.style.width = stylew;
@@ -1252,9 +1287,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		} else { //feature#3184415: span to a specific column
 			visj = this._nspan - 1;
-			for (var i = 0; hdcol; hdcol = hdcol.nextSibling) {
+			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
 				if (!zk(hdcol).isVisible()) {
-					++i;
 					bdcol = bdcol.nextSibling;
 					if (ftcol)
 						ftcol = ftcol.nextSibling;
@@ -1269,7 +1303,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						ftcol.style.width = stylew;
 						ftcol = ftcol.nextSibling;
 					}
-					++i;
 				}
 			}
 		}
@@ -1339,6 +1372,34 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.efoottbl.style.width = jq.px(width);
 		
 		_adjMinWd(this);
+	},
+	_getFirstRowCells: function (tbody) {
+		if (tbody && tbody.rows && tbody.rows.length) {
+			var cells = tbody.rows[0].cells,
+				length = cells.length,
+				ncols = 0;
+			for (var i = 0; i < length; i++) {
+				var span = cells[i].colSpan;
+				ncols += span != 1 ? span : 1;
+			}
+			if (ncols == length)
+				return cells;
+			else {
+				var out = [];
+				out.push('<tr id="', tbody.id,
+						'-fakeRow" style="visibility:hidden;height:0">');
+				for (var i = 0; i < ncols; i++)
+					out.push('<td></td>');
+				out.push('</tr>');
+				jq(tbody.rows[0]).before(out.join(''));
+				out = null;
+				return tbody.rows[0].cells;
+			}
+		}
+	},
+	_deleteFakeRow: function (tbody) {
+		if (tbody)
+			jq('#' + tbody.id + '-fakeRow').remove();
 	}
 });
 /** @class zul.mesh.Scrollbar
@@ -1359,11 +1420,12 @@ zul.mesh.Scrollbar = {
 		if (frozen) {
 			var columns = frozen.getColumns();
 			if (wgt.eheadtbl) {
-				var cells = _getFirstRowCells(wgt.eheadrows);
+				var cells = wgt._getFirstRowCells(wgt.eheadrows);
 				if (cells) {
 					for (var i = 0; i < columns; i++)
 						startPositionX += cells[i].offsetWidth;
 				}
+				wgt._deleteFakeRow(wgt.eheadrows);
 			}
 		}
 		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
@@ -1393,11 +1455,10 @@ zul.mesh.Scrollbar = {
 	 */
 	getScrollPosV: function (wgt) {
 		var bar = wgt._scrollbar;
-		if (bar) {
-			var currPos = bar.getCurrentPosition();
-			return Math.abs(Math.round(currPos.y));
-		}
-		return 0;
+		if (bar)
+			return bar.getCurrentPosition().y;
+		
+		return wgt.ebody.scrollTop;
 	},
 	/**
 	 * Return the horizontal scroll position of the body element of given MeshWidget.
@@ -1407,11 +1468,10 @@ zul.mesh.Scrollbar = {
 	 */
 	getScrollPosH: function (wgt) {
 		var bar = wgt._scrollbar;
-		if (bar) {
-			var currPos = bar.getCurrentPosition();
-			return Math.abs(Math.round(currPos.x));
-		}
-		return 0;
+		if (bar)
+			return bar.getCurrentPosition().x;
+		
+		return wgt.ebody.scrollLeft;
 	}
 };
 })();

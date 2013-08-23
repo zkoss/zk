@@ -191,7 +191,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers(Grid, 'onSize', arguments);
 		var self = this;
 		setTimeout(function () {
-			if (self.desktop) {
+			if (self.desktop && !self._nativebar) {
 				if (!self._scrollbar)
 					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				if (!this._grid$rod || this.inPagingMold())

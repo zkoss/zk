@@ -17,6 +17,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isListgroup(wgt) {
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
 	}
+	function _syncFrozen(wgt) {
+		if (wgt._nativebar && (wgt = wgt.frozen))
+			wgt._syncFrozen();
+	}
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
 			var $jq = jq(wgt.$n('empty')),
@@ -151,7 +155,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	// bug ZK-56 for non-ROD to scroll after onSize ready
 	onSize: function () {
 		this.$supers(Listbox, 'onSize', arguments);
-		if (this.desktop && !this.inSelectMold()) {
+		if (this.desktop && !this.inSelectMold() && !this._nativebar) {
 			if (!this._scrollbar)
 				this._scrollbar = zul.mesh.Scrollbar.init(this);
 			if (!this._listbox$rod || this.inPagingMold()) {
@@ -191,6 +195,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		var w = this;
 		after.push(function () {
 			w.stripe();
+			_syncFrozen(w);
 			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
@@ -324,6 +329,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._syncStripe();
 			if (!ignoreDom)
 				this._syncSize();
+			if (this.desktop)
+				_syncFrozen(this);
 		}
 	},
 	removeChild: function (child, ignoreDom) {
@@ -395,6 +402,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				|| (newc && newc.$instanceof(zul.sel.Listitem)))
 			this._syncStripe();
 		this._syncSize();
+		if (this.desktop)
+			_syncFrozen(this);
 	},
 	/**
 	 * Returns the head widget class

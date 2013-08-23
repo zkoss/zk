@@ -224,8 +224,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					cavesz = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : 0;
 
 				map[sizePos] = max + cavesz + wgt[contentPos]() + margin;
-				wgt.setFlexSize_(map, true);
-				sz = {height: n.offsetHeight, width: n.offsetWidth};
+				var s = wgt.setFlexSize_(map, true);
+				sz = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
 				if (sz && sz[sizePos] >= 0)
 					wgt[flexsz] = sz[sizePos] + margin;
 				wgt.afterChildrenMinFlex_(o);

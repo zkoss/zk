@@ -278,6 +278,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				var bar = this._scrollbar;
 				if (bar)
 					bar.scrollToElement(item.$n());
+				if (this._nativebar)
+					zk(item).scrollIntoView(this.ebody);
+			}
+			if (zk.ff >= 4 && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
+				// B50-ZK-440: ebody can be null when ROD
+				this._currentTop = this.ebody.scrollTop; 
+				this._currentLeft = this.ebody.scrollLeft;
 			}
 		}
 	},
@@ -386,6 +393,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 				this._visibleRows(sz);
 				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
+				//bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
+                hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
                 this.ebody.style.height = (hgh < 0 ? 0 : hgh) + 'px';
 				return; //done
 			}

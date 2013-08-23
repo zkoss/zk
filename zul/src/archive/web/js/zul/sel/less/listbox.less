@@ -26,9 +26,15 @@
 		width: 100%;
 		.verGradient();
 	}
+	&-header-border {
+		position: relative;
+		margin-top: -1px;
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
 	//listbox body
 	&-body {
 		overflow: hidden;
+		position: relative;
 		.resetTable();
 	}
 	&-emptybody td {
@@ -52,8 +58,11 @@
 }
 //listhead
 .z-listhead {
-	th:last-child {
-		border-right: none;
+	th:first-child {
+		border-left: none;
+	}
+	&-bar {
+		border-bottom: 1px solid @tableTitleBorderColor;
 	}
 }
 .z-listheader {
@@ -61,7 +70,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @tableTitleBorderColor;
+	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
 	&-hover {
@@ -127,14 +136,14 @@
 //list item and cell
 .z-listitem {
 	background: @tableBackgroundColor;
+	td:first-child {
+		border-left: none;
+	}
 	//list cell
 	.z-listcell {
-		border-right: 1px solid @tableContentBorderColor;
+		border-left: 1px solid @tableContentBorderColor;
 		overflow: hidden;
 		cursor: pointer;
-		&:last-child {
-			border-right: none;
-		}
 	}
 	&:hover > .z-listcell {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);

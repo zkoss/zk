@@ -26,9 +26,16 @@
 		width: 100%;
 		.verGradient();
 	}
+	&-header-border {
+		position: relative;
+		margin-top: -1px;
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
 	//grid body
 	&-body {
+		margin-top: auto;
 		overflow: hidden;
+		position: relative;
 		.resetTable();
 	}
 	&-emptybody td {
@@ -55,8 +62,11 @@
 }
 //column
 .z-columns {
-	th:last-child {
-		border-right: none;
+	th:first-child {
+		border-left: none;
+	}
+	&-bar {
+		border-bottom: 1px solid @tableTitleBorderColor;
 	}
 }
 .z-column {
@@ -64,7 +74,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
-	border-right: 1px solid @tableTitleBorderColor;
+	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
 	&-hover {
@@ -117,13 +127,13 @@
 }
 //row and cell
 .z-row {
+	td:first-child {
+		border-left: none;
+	}
 	.z-row-inner,
 	.z-cell {
-		border-right: 1px solid @tableContentBorderColor;
+		border-left: 1px solid @tableContentBorderColor;
 		overflow: hidden;
-		&:last-child {
-			border-right: none;
-		}
 	}
 	&:hover {
 		> .z-row-inner,

@@ -17,7 +17,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
-
+	function _syncFrozen(wgt) {
+		var grid = wgt.getGrid(),
+			frozen;
+		if (grid && grid._nativebar && (frozen = grid.frozen))
+			frozen._syncFrozen();
+	}
+	
 var Rows =
 /**
  * Defines the rows of a grid.
@@ -70,6 +76,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		var w = this;
 		after.push(function () {
 			w.stripe();
+			_syncFrozen(w);
 		});
 	},
 	unbind_: function () {
@@ -121,6 +128,9 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			g._syncEmpty();
 		}
 		this._syncStripe();
+		
+		if (this.desktop)
+			_syncFrozen(this);
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
