@@ -59,7 +59,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		jq(document.body).prepend(
 			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;' + 
 			'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;' + 
-			'width:' + ($el.width() + zk(el).padBorderHeight()) + 'px;' + 
+			'width:' + ($el.width() + zk(el).padBorderWidth()) + 'px;' + 
 			'height:'+ ($el.height() + zk(el).padBorderHeight()) +'px;' + 
 			'z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
