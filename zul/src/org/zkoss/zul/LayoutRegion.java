@@ -348,7 +348,11 @@ public abstract class LayoutRegion extends XulElement {
 			smartUpdate("open", open);
 		}
 	}
-	
+
+	/*package*/ boolean isNativeScrollbar() {
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
+	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-" + getPosition() : _zclass;
 	}
@@ -424,6 +428,9 @@ public abstract class LayoutRegion extends XulElement {
 			//always generate since different region might have different default
 		if (!_open)
 			renderer.render("open", _open);
+
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 	
 	/** Processes an AU request.

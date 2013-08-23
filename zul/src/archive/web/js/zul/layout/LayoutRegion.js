@@ -175,10 +175,24 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		autoscroll: function (autoscroll) {
 			var cave = this.$n('cave');
 			if (cave) {
+				var bodyEl = this.isFlex() && this.getFirstChild() ?
+						this.getFirstChild().$n() : cave;
 				if (autoscroll) {
-					zWatch.listen({onSize: this});
+					if (this._nativebar) {
+						bodyEl.style.overflow = 'auto';
+						bodyEl.style.position = 'relative';
+						this.domListen_(bodyEl, 'onScroll');
+					} else {
+						zWatch.listen({onSize: this});
+					}
 				} else {
-					zWatch.unlisten({onSize: this});
+					if (this._nativebar) {
+						bodyEl.style.overflow = 'hidden';
+						bodyEl.style.position = '';
+						this.domUnlisten_(bodyEl, 'onScroll');
+					} else {
+						zWatch.unlisten({onSize: this});
+					}
 				}
 			}
 		},
@@ -514,15 +528,29 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		if (this._open && !this.isVisible()) this.$n().style.display = 'none';
 
-		if (this.isAutoscroll())
-			zWatch.listen({onSize: this});
+		if (this.isAutoscroll()) {
+			if (this._nativebar) {
+				var bodyEl = this.isFlex() && this.getFirstChild() ? 
+						this.getFirstChild().$n() : this.$n('cave');
+				this.domListen_(bodyEl, 'onScroll');
+			} else {
+				zWatch.listen({onSize: this});
+			}
+		}
 
 		if (this.isFlex())
 			_setFirstChildFlex(this, true, true);
 	},
 	unbind_: function () {
-		if (this.isAutoscroll())
-			zWatch.unlisten({onSize: this});
+		if (this.isAutoscroll()) {
+			if (this._nativebar) {
+				var bodyEl = this.isFlex() && this.getFirstChild() ? 
+						this.getFirstChild().$n() : this.$n('cave');
+				this.domUnlisten_(bodyEl, 'onScroll');
+			} else {
+				zWatch.unlisten({onSize: this});
+			}
+		}
 		
 		var bar = this._scrollbar;
 		if (bar) {
@@ -545,7 +573,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var wgt = this;
 		setTimeout(function () {
 			if (wgt.desktop) {
-				if (!wgt._scrollbar)
+				if (!wgt._scrollbar && !wgt._nativebar)
 					wgt._scrollbar = wgt._initScrollbar();
 				wgt.refreshBar_();
 			}
@@ -565,13 +593,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
-		if (bar) {
+		if (bar && this._open) {
 			var p = this.$n('cave'),
 				fc = this.firstChild,
 				fch = fc ? fc.getHeight() : 0,
 				c = p.firstChild,
 				ph = p.offsetHeight,
 				pw = p.offsetWidth;
+			
 			while (c && c.nodeType == 3)
 				c = c.nextSibling;
 			if (c) {
@@ -593,7 +622,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	doResizeScroll_: function () {
 		this.$supers('doResizeScroll_', arguments);
-		this.refreshBar_();
+		this.refreshBar_(true);
 	},
 	doClick_: function (evt) {
 		var target = evt.domTarget;

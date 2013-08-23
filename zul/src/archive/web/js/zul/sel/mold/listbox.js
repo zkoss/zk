@@ -42,7 +42,7 @@ function (out) {
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 	
-		out.push('</tbody></table></div>');
+		out.push('</tbody></table></div><div class="', this.$s('header-border'), '"></div>');
 	}
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
 	
@@ -84,6 +84,12 @@ function (out) {
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.listfoot.redraw(out);
 		out.push('</tbody></table></div>');
+	}
+
+	if (this._nativebar && this.frozen) {
+		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
+		this.frozen.redraw(out);
+		out.push('</div>');
 	}
 
 	if (pgpos == 'bottom' || pgpos == 'both') {

@@ -41,7 +41,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Tree, 'onSize', arguments);
 		var self = this;
 		setTimeout(function () {
-			if (self.desktop) {
+			if (self.desktop && !self._nativebar) {
 				if (!self._scrollbar)
 					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				self.refreshBar_();
