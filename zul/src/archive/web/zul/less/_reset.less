@@ -85,9 +85,10 @@ sub {
 
 img {
   /* Responsive images (ensure images don't scale beyond their parents) */
-  <c:if test="${zk.ie != 8}">
-    max-width: 100%; /* Part 1: Set a maxium relative to the parent */
-  </c:if>
+
+  // Potix: this style will make img invisible in ie8
+  /*  max-width: 100%; Part 1: Set a maxium relative to the parent */
+
   width: auto\9; /* IE7-8 need help adjusting responsive images */
   height: auto; /* Part 2: Scale the height according to the width, otherwise you get stretching */
 
@@ -204,9 +205,8 @@ textarea {
   }
 
   img {
-  	<c:if test="${zk.ie != 8}">
-    	max-width: 100% !important;
-    </c:if>
+  	// Potix: this style will make img invisible in ie8
+    //	max-width: 100% !important;    
   }
 
   @page {
