@@ -80,7 +80,10 @@
 			font-weight: bold;
 			.verGradient();
 			min-height: @baseBarHeight;
-			height: auto;
+			<c:if test="${zk.ie == 8}">
+				min-height: @baseButtonHeight;
+			</c:if>
+			height: auto;			
 
 			.z-caption, .z-groupbox-title {
 				margin: 0;

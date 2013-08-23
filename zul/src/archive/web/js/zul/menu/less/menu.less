@@ -91,11 +91,12 @@
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
+		line-height: @baseIconHeight;
 		text-shadow: 0 1px #FFFFFF;
 		
 		// align for img + text
 		img ~ & {
-		  vertical-align: text-bottom;
+		  vertical-align: middle;
 		}
 		&:empty {
 			display: none;
@@ -111,7 +112,7 @@
 		border: 1px solid transparent;
 		.borderRadius();
 		line-height: @baseLineHeight - 2;
-		padding: 2px 6px 4px;
+		padding: 3px 6px 3px;
 		display: block;
 		text-decoration: none;
 		white-space: nowrap;

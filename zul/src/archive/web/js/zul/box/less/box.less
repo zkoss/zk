@@ -112,26 +112,40 @@ tr.z-splitter-outer > td {
 		top: -21px;
 		left: 2px;
 		cursor: e-resize;
+		<c:if test="${zk.ie == 8}">
+			font-size: 14px;
+		</c:if>
 	}
 	.z-splitter-icon.z-icon-ellipsis-vertical ~
 	.z-splitter-icon.z-icon-ellipsis-vertical {
 		top: 39px;
+		<c:if test="${zk.ie == 8}">
+			top: 37px;
+		</c:if>
 	}
 }
 .z-splitter-vertical {
 	.z-splitter-icon {
 		position: absolute;
 		font-size: @fontSizeXSmall;
-		top: -4px;
+		top: -3px;
 		left: 11px;
+		line-height: normal;
 	}
 	.z-splitter-icon.z-icon-ellipsis-horizontal {
-		top: -3px;
+		top: -2px;
 		left: -20px;
 		cursor: s-resize;
+		<c:if test="${zk.ie == 8}">
+			top: -3px;
+			font-size: 14px;
+		</c:if>
 	}
 	.z-splitter-icon.z-icon-ellipsis-horizontal ~
 	.z-splitter-icon.z-icon-ellipsis-horizontal {
 		left: 40px;
+		<c:if test="${zk.ie == 8}">
+			left: 38px;
+		</c:if>
 	}
 }
