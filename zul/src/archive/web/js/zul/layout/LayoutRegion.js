@@ -178,7 +178,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				var bodyEl = this.isFlex() && this.getFirstChild() ?
 						this.getFirstChild().$n() : cave;
 				if (autoscroll) {
-					zk.log(this._nativebar, bodyEl);
 					if (this._nativebar) {
 						bodyEl.style.overflow = 'auto';
 						bodyEl.style.position = 'relative';
