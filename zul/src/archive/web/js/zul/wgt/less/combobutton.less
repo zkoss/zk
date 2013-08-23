@@ -4,7 +4,7 @@
 	display: inline-block;
 	min-height: @baseButtonHeight;
 	<c:if test="${zk.ie == 8}">
-		min-height: 12px;
+		min-height: @baseButtonHeight - 10;
 	</c:if>
 	
 	&-content {
@@ -16,7 +16,7 @@
 		border: 1px solid @outerBorderColor;
 		min-height: @baseButtonHeight;
 		<c:if test="${zk.ie == 8}">
-			min-height: 12px;
+			min-height: @baseButtonHeight - 10;
 		</c:if>
 		line-height: @baseLineHeight;
 		.borderRadius(@borderRadiusSmall);

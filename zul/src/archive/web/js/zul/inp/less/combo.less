@@ -49,7 +49,7 @@
 	line-height: @baseLineHeight;
 	min-width: @baseButtonWidth;
 	<c:if test="${zk.ie == 8}">
-		min-width: 14px;
+		min-width: @baseButtonWidth - 10;
 	</c:if>	
 	height: @baseButtonHeight;
 	color: @iconColor;
@@ -93,7 +93,7 @@
 	padding: 0;
 	position: relative;
 	<c:if test="${zk.ie == 8}">
-		min-width: 22px;
+		min-width: @baseButtonWidth - 2;
 	</c:if>	
 
 	&:hover,
@@ -207,7 +207,7 @@
 	padding-top: 5px;
 	max-height: @baseButtonHeight;
 	<c:if test="${zk.ie == 8}">
-		min-width: 11px;
+		min-width: @baseButtonWidth - 13;
 	</c:if>	
 }
 
