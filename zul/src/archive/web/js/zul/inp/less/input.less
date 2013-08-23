@@ -14,7 +14,7 @@
 	margin: 0;
 	min-height: @baseButtonHeight;
 	<c:if test="${zk.ie == 8}">
-		min-height: 15px;
+		min-height: @baseButtonHeight - 10 + 1;
 	</c:if>	
 	.borderRadius(@borderRadiusSmall);
 	line-height: @baseLineHeight;
@@ -55,7 +55,7 @@
 	background: none;
 	resize: none;
 	<c:if test="${zk.ie == 8}">
-		min-height: 18px;
+		min-height: @baseButtonHeight - 6;
 		line-height: @baseIconHeight;
 	</c:if>
 }

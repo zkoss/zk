@@ -25,7 +25,7 @@
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
 		<c:if test="${zk.ie == 8}">
-			min-width: 14px;
+			min-width: @baseButtonWidth - 10;
 		</c:if>
 		width: @baseButtonWidth;
 		height: @baseButtonHeight;

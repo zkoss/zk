@@ -71,8 +71,7 @@
 		min-height: @baseButtonHeight;
 		min-width:  @baseButtonWidth;
 		<c:if test="${zk.ie == 8}">
-			min-height: 18px;
-			min-width:  @baseButtonWidth;
+			min-height: @baseButtonHeight - 6;
 		</c:if>
 		padding: 3px 0;
 		color: @cellColor;
