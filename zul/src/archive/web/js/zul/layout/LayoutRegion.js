@@ -210,8 +210,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 */
 		open: function (open, fromServer, nonAnima) {
 			if (!this.$n() || !this.isCollapsible() || !this.parent) {
-				// keep opened
-				this._open = true;
 				return; //nothing changed
 			}
 
