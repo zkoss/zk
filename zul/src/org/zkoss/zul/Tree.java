@@ -466,7 +466,7 @@ public class Tree extends MeshElement {
 					int i = 0;
 					final Renderer renderer = new Renderer();
 					try {							
-						for (Treeitem ti : Tree.this.getItems()) {
+						for (Treeitem ti : new ArrayList<Treeitem>(Tree.this.getItems())) {
 							if (i < start) {
 								i++;
 								continue;
