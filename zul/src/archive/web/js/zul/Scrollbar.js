@@ -235,7 +235,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 					embed.style.top = vbar.style.top;
 			}
 			if (needH) {
-				ws.height = jq.px(vhgh - dhgh);
+				ws.height = jq.px0(vhgh - dhgh);
 				down.style.bottom = jq.px(startY + dhgh);
 			} else {
 				ws.height = jq.px(vhgh);

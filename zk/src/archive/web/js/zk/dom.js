@@ -1438,9 +1438,14 @@ jq(el).zk.center(); //same as 'center'
 	redoCSS: function (timeout, opts) {
 		if ((zk.ie == 8) && opts && opts['fixFontIcon']) {
 			var head = document.getElementsByTagName('head')[0],
-    			style = document.createElement('style');
+    			style = document.createElement('style'),
+    			n = this.jq[0],
+    			c = opts['class'],
+    			id = n ? '#' + n.id : '', 
+    			cls = c ? '.' + c : '*';
 			style.type = 'text/css';
-			style.styleSheet.cssText = '#' + this.jq[0].id + ' *:before,:after{content:none !important';
+			
+			style.styleSheet.cssText = id + ' ' + cls + ':before,:after{content:none !important';
 			head.appendChild(style);
 			setTimeout(function(){
 			    head.removeChild(style);
