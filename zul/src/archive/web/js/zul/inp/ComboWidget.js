@@ -126,7 +126,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	/** Returns whether the list of combo items is open
-	 * @return boolean
+	 * @return boolean 
 	 */
 	isOpen: function () {
 		return this._open;
@@ -182,7 +182,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._fixsz(ppofs);//fix size
 		
 		// given init position
-		$pp.position(inp, 'after_start');
+		$pp.position(inp, 'after_start');	
+		this._shallSyncPopupPosition = false;
 		
 		// B65-ZK-1588: bandbox popup should drop up 
 		//   when the space between the bandbox and the bottom of browser is not enough  
@@ -192,9 +193,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			realafter = zk.ie > 9 ? Math.round(after) : after;
 		
 		if(realtop < realafter) {
-			$pp.position(inp, 'before_start');
+			$pp.position(inp, 'before_start');	
+			this._shallSyncPopupPosition = true;
 		}
-		
 		pp.style.display = 'none';
 		pp.style.visibility = '';
 		this.slideDown_(pp);

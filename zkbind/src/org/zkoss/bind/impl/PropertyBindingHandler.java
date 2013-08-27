@@ -157,8 +157,8 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//generic operation to load a property binding
-	private void doLoadBinding(Component comp, LoadPropertyBinding binding, String command) {
-		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, command, binding.getComponent(), null);
+	private void doLoadBinding(Component comp, LoadPropertyBinding binding, String command, Event evt) {
+		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, command, binding.getComponent(), evt);
 		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 		if(binding instanceof InitPropertyBindingImpl){
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
@@ -180,11 +180,11 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//for event -> prompt only, no command
-	void doLoadEvent(BindingKey bkey,Component comp, String evtnm) {
+	void doLoadEvent(BindingKey bkey,Component comp, Event evt) {
 		final List<LoadPropertyBinding> bindings = _loadEventBindings.get(bkey);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
-				doLoadBinding(comp, binding, null);
+				doLoadBinding(comp, binding, null,evt);
 			}
 		}
 	}
@@ -320,7 +320,7 @@ import org.zkoss.zk.ui.event.Event;
 		final List<LoadPropertyBinding> bindings = _loadBeforeBindings.get(command);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
-				doLoadBinding(comp, binding, command);
+				doLoadBinding(comp, binding, command, null);
 			}
 		}
 	}
@@ -329,7 +329,7 @@ import org.zkoss.zk.ui.event.Event;
 		final List<LoadPropertyBinding> bindings = _loadAfterBindings.get(command);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
-				doLoadBinding(comp, binding, command);
+				doLoadBinding(comp, binding, command, null);
 			}
 		}
 	}
@@ -369,7 +369,7 @@ import org.zkoss.zk.ui.event.Event;
 		final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(bkey);
 		if (propBindings != null) {
 			for (LoadPropertyBinding binding : propBindings) {
-				doLoadBinding(comp,binding,null);
+				doLoadBinding(comp,binding,null,null);
 			}
 		}
 	}
@@ -378,7 +378,7 @@ import org.zkoss.zk.ui.event.Event;
 		final List<InitPropertyBinding> initBindings = _initBindings.get(bkey);
 		if (initBindings != null) {
 			for (InitPropertyBinding binding : initBindings) {
-				doLoadBinding(comp, binding,null);
+				doLoadBinding(comp, binding,null,null);
 			}
 		}
 	}
