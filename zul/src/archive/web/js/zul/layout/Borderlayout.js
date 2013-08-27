@@ -210,7 +210,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (wgt._open) {
 			if (!ignoreSplit && wgt.$n('split')) {
 				wgt._fixSplit();
-				 ambit = wgt._reszSplt(ambit);
+				ambit = wgt._reszSplt(ambit);
 			}
 			zk.copy(wgt.$n('real').style, {
 				left: jq.px(ambit.x),
@@ -271,6 +271,10 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
 			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
+			if (wgt._nativebar && wgt.isAutoscroll()) { 
+				bs.overflow = 'auto';
+				bs.position = 'relative';
+			}
 			if (!this._isOnSize)
 				zUtl.fireSized(wgt);
 		}

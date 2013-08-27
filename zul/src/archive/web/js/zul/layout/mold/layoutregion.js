@@ -18,7 +18,7 @@ function (out) {
 		BL = zul.layout.Borderlayout,
 		noCenter = pos != BL.CENTER,
 		parent = this.parent;
-	out.push('<div id="', uuid,  '">', '<div id="', uuid, '-real"',
+	out.push('<div id="', uuid,  '"><div id="', uuid, '-real"',
 			this.domAttrs_({id: 1}), '>');
 	
 	this.titleRenderer_(out);

@@ -126,7 +126,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			try {
 				eval(expr + end); //don't use $eval since this function shall not be compressed
 			} catch (e) {
-				zk.error("Failed to invoke applet's method: "+expr+'\n'+e.message);
+				zk.error('Failed to invoke applet\'s method: ' + expr + '\n' + e.message);
 			}
 		}
 	}: function(){
@@ -135,7 +135,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			var fn = arguments[0],
 				func = n[fn];
 			if (!func) {
-				zk.error("Method not found: "+fn);
+				zk.error('Method not found: ' + fn);
 				return;
 			}
 			try {
@@ -151,7 +151,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				}
 				func.apply(n, args);
 			} catch (e) {
-				zk.error("Failed to invoke applet's method: "+fn+'\n'+e.message);
+				zk.error('Failed to invoke applet\'s method: ' + fn + '\n' + e.message);
 			}
 		}
 	},
@@ -173,7 +173,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			try {
 				n[name] = value;
 			} catch(e) {
-				zk.error("Failed to set applet's field: "+ name+'\n'+e.message);
+				zk.error('Failed to set applet\'s field: ' + name + '\n' + e.message);
 			}
 	},
 	/** Sets the param. Notice that it is meaningful only if it is called

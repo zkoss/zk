@@ -39,7 +39,7 @@ function (out) {
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 		
-		out.push('</tbody></table></div>');
+		out.push('</tbody></table></div><div class="', this.$s('header-border'), '"></div>');
 	}
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
 
@@ -78,7 +78,13 @@ function (out) {
 		this.foot.redraw(out);
 		out.push('</tbody></table></div>');
 	}
-	
+
+	if (this._nativebar && this.frozen) {
+		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
+		this.frozen.redraw(out);
+		out.push('</div>');
+	}
+
 	if (pgpos == 'bottom' || pgpos == 'both') {
 		out.push('<div id="', uuid, '-pgib" class="', this.$s('paging-bottom'), '">');
 		this.paging.redraw(out);

@@ -16,7 +16,7 @@ function (out) {
 	// ZK-1706: the width of empty space does not always equal 3px in ie9, ie10 
 	var space = 'vertical' != this.getOrient() ? (zk.ie >= 9 ? '<span></span>' : '') : '<br/>';
 		
-	out.push('<div ', this.domAttrs_(), '>', '<div id="', this.uuid, '-cave"',
+	out.push('<div ', this.domAttrs_(), '><div id="', this.uuid, '-cave"',
 			' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" >');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling) {

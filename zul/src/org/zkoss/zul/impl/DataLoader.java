@@ -21,8 +21,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.event.ListDataEvent;
 
 /**
- * DataLoader is used with {@link org.zkoss.zul.Grid}, {@link org.zkoss.zul.Listbox}, and 
- * {@link org.zkoss.zul.Tree} to handle data loading from model to server and then to client side.
+ * DataLoader is used with {@link org.zkoss.zul.Grid}, {@link org.zkoss.zul.Listbox}
+ * to handle data loading from model to server and then to client side.
  *  
  * @author henrichen
  * @since 5.0.0

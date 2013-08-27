@@ -19,12 +19,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}: zk.$void;
 
 	function _syncFrozen(wgt) {
-		var mesh = wgt.getMeshWidget(),
-			frozen, hdfaker;
-		if (mesh && (frozen = mesh.frozen) && (hdfaker = mesh.ehdfaker))
-			//_scrollScale is used in Scrollbar.js
-			frozen._scrollScale = 
-				hdfaker.childNodes.length - frozen._columns - 1;
+		var mesh = wgt.getMeshWidget(), frozen;
+		if (mesh && (frozen = mesh.frozen)) {
+			var hdfaker;
+			if (mesh._nativebar) {
+				frozen._syncFrozen();
+			} else if ((hdfaker = mesh.ehdfaker)) {
+				//_scrollScale is used in Scrollbar.js
+				frozen._scrollScale = 
+					hdfaker.childNodes.length - frozen._columns - 1;
+			}
+		}
 	}
 
 var HeadWidget =
@@ -158,6 +163,11 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
+
+		var mesh = this.getMeshWidget();
+		if (mesh._nativebar && !mesh.frozen)
+			out.push('<th class="', this.$s('bar'), '" />');
+
 		out.push('</tr>');
 	}
 });

@@ -13,10 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<div ', this.domAttrs_(), '>', '<table id="', this.uuid,
-				'-cave" class="', this.$s('content'), ' ', this.$s(this.getAlign()),
-				'"', zUtl.cellps0, '><tbody>');
-	if ('vertical' != this.getOrient()) {
+	out.push('<div ', this.domAttrs_(), '><table id="', this.uuid,
+			'-cave" class="', this.$s('content'), ' ', this.$s(this.getAlign()),
+			'"', zUtl.cellps0, '><tbody>');
+	if ('horizontal' == this.getOrient()) {
 		out.push("<tr>");
 		for (var w = this.firstChild; w; w = w.nextSibling) {
 			out.push('<td class="', this.$s('horizontal'), '">');

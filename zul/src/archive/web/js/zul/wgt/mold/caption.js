@@ -29,25 +29,25 @@ function (out) {
 	var puuid = p.uuid,
 		picon = p.$s('icon'),
 		getIcon = function(iconClass) {
-			return '<i class="z-' + iconClass + '"></i>';
+			return '<i class="z-icon-' + iconClass + '"></i>';
 		};
 	
 	if (this._isCloseVisible())
 		out.push('<div id="', puuid, '-close" class="', picon, ' ', p.$s('close'),
-				'">', getIcon('icon-remove'), '</div>');
+				'">', getIcon('remove'), '</div>');
 	if (this._isMaximizeVisible()) {
 		out.push('<div id="', puuid, '-max" class="', picon, ' ', p.$s('maximize'));
 		if (p.isMaximized())
 			out.push(' ', p.$s('maximized'));
 		out.push('">', this._maximized ? 
-				getIcon('icon-resize-small') : getIcon('icon-fullscreen'), '</div>');
+				getIcon('resize-small') : getIcon('fullscreen'), '</div>');
 	}
 	if (this._isMinimizeVisible())
 		out.push('<div id="', puuid, '-min" class="', picon, ' ', p.$s('minimize'),
-				'">', getIcon('icon-minus'), '</div>');
+				'">', getIcon('minus'), '</div>');
 	if (this._isCollapsibleVisible())
 		out.push('<div id="', puuid , '-exp" class="', picon, ' ', p.$s('expand'),
-				'" >', p._open ? getIcon('icon-caret-up') : getIcon('icon-caret-down'), '</div>');
+				'" >', p._open ? getIcon('caret-up') : getIcon('caret-down'), '</div>');
 	
 	out.push('</div>');
 }

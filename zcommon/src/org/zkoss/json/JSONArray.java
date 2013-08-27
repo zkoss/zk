@@ -4,6 +4,7 @@
  */
 package org.zkoss.json;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,16 +24,16 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * 
 	 * @see JSONValue#toJSONString(Object)
 	 * 
-	 * @param list
+	 * @param collection
 	 * @return JSON text, or "null" if list is null.
 	 */
-	public static String toJSONString(List list){
-		if(list == null)
+	public static String toJSONString(Collection collection){
+		if(collection == null)
 			return "null";
 		
         boolean first = true;
         StringBuffer sb = new StringBuffer();
-		Iterator iter=list.iterator();
+		Iterator iter=collection.iterator();
         
         sb.append('[');
 		while(iter.hasNext()){
@@ -51,6 +52,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
         sb.append(']');
 		return sb.toString();
 	}
+	
 	/** Convert an object array to JSON text.
 	 * <p>patched by tomyeh
 	 */

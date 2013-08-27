@@ -31,7 +31,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	private boolean _sizedByContent;
 	private boolean _autopaging;
 	private String _pagingPosition = "bottom";
-	
+
 	/**
 	 * Return column span hint of this component.
 	 * <p>Default: null
@@ -209,7 +209,11 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public void setActivePage(int pg) throws WrongValueException {
 		pgi().setActivePage(pg);
 	}
-	
+
+	/*package*/ boolean isNativeScrollbar() {
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
+	}
+
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -221,5 +225,8 @@ abstract public class MeshElement extends XulElement implements Paginated {
 			renderer.render("autopaging", true);
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
+
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 }

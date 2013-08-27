@@ -169,7 +169,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	_MIMEtype: function(name) {
 		var start = name.lastIndexOf('.'),
-		type = 'wav';
+			type = 'wav';
 		if (start !== -1) {
 			var ext = name.substring(start + 1).toLowerCase();
 			if (ext === 'mp3') {

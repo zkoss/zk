@@ -64,6 +64,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
 					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
 			this._hflexWidth = rvw;
+			return {width: rvw};
 		} else
 			this.$supers('setFlexSize_', arguments);
 	},
@@ -315,16 +316,30 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		//1. set resized width to colgroup col
 		var hdcols = hdfaker.childNodes,
-			bdcols = bdfaker.childNodes,
-			ftcols = ftfaker ? ftfaker.childNodes : null;
+			bdcols = bdfaker.childNodes;
 		hdcols[cidx].style.width = bdcols[cidx].style.width = jq.px(wd);
-		
+			
 		//2. store resized width
 		var wds = [];
-		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
-			var origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
-			wds[i++] = origWd ? origWd : jq.px0(w.$n().offsetWidth);
+		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
+			var stylew = hdcols[i].style.width,
+				origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
+			
+			if (origWd) {
+				w._width = wds[i] = origWd;
+			} else {
+				w._width = wds[i] = stylew ? stylew : jq.px0(w.$n().offsetWidth);
+			}
+			
+			if (!stylew)
+				hdcols[i].style.width = bdcols[i].style.width = w._width;
 		}
+		
+		//3. clear width=100% setting, otherwise it will try to expand to whole width
+		mesh.eheadtbl.width = '';
+		mesh.ebodytbl.width = '';
+		if (mesh.efoottbl)
+			mesh.efoottbl.width = '';
 		
 		delete mesh._span; //no span!
 		delete mesh._sizedByContent; //no sizedByContent!
