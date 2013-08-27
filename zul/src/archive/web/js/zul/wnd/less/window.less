@@ -112,6 +112,12 @@
 		.z-window-header {
 			padding: 7px 4px 5px 4px;
 		}
+
+		<c:if test="${zk.ie == 8}">
+		.z-window-icon {
+			.opacity(1);
+		}
+		</c:if>
 		
 		dl {
 			border-top: 1px solid #9F9F9F;
