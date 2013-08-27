@@ -576,7 +576,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	setLocalizedSymbols: function (symbols) {
 		this._localizedSymbols = symbols;
 	},
-	//B65-ZK-1904: Does not  need to sync shadow in rerender, it syncs in _reposition function
+	//B65-ZK-1904: Does not need to sync shadow in rerender, it syncs in _reposition function
 	/*
 	rerender: function () {
 		this.$supers('rerender', arguments);
@@ -589,6 +589,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (!pp || !zk(pp).isVisible()) return;
 		if (this._shadow) {
+			// B65-ZK-1904: Make shadow behavior the same as ComboWidget
 			this._shadow.destroy();
 			this._shadow = null;
 		}
