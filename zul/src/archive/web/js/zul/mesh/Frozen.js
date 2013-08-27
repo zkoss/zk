@@ -274,10 +274,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ? n.offsetWidth : 0,
-						native = mesh._nativebar;
+						nativebar = mesh._nativebar;
 					if (force
-							|| (!native && (wd == 0 || wd == 1)) 
-							|| (native && n.style.display == 'none')) {
+							|| (!nativebar && (wd == 0 || wd == 1)) 
+							|| (nativebar && n.style.display == 'none')) {
 						cellWidth = hdWgt._origWd || jq.px(wd);
 						hdWgt._origWd = null;
 						shallUpdate = true;
