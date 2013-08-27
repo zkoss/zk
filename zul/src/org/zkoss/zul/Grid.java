@@ -328,6 +328,10 @@ public class Grid extends MeshElement {
 						initModel();
 					} else {
 						resetDataLoader();  //enforce recreate dataloader
+						
+						// Bug ZK-1895
+						//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
+						Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
 					}
 				}
 			} else if (_model != null){ //rows not created yet
