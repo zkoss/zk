@@ -349,8 +349,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					s.top = '-10000px';
 					s.left = '-10000px';
 					
-					s.width = jq.px0($op[0].clientWidth);
-					s.height = jq.px0($op[0].clientHeight);
+					var sw = $op[0].clientWidth;
+					
+					if (!floated) {
+						sw -= $op.zk.paddingWidth();
+						sw = $n.revisedWidth(sw);
+						sh -= $op.zk.paddingHeight();
+						sh = $n.revisedHeight(sh);
+					}
+					
+					s.width = jq.px0(sw);
+					s.height = jq.px0(sh);
 
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
@@ -621,8 +630,20 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
 				
-				s.width = jq.px0($op[0].clientWidth);
-				s.height = jq.px0($op[0].clientHeight);
+				var sw = $op[0].clientWidth;
+				if (!floated) {
+					sw -= $op.zk.paddingWidth();
+					sw = $n.revisedWidth(sw);
+				}
+				s.width = jq.px0(sw);
+				if (wgt._open) {
+					var sh = $op[0].clientHeight;
+					if (!floated) {
+						sh -= $op.zk.paddingHeight();
+						sh = $n.revisedHeight(sh);
+					}
+					s.height = jq.px0(sh);
+				}
 		}
 		return function(ctl) {
 			this._hideShadow();
