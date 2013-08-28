@@ -144,6 +144,12 @@
 		.z-panel-body {
 			padding: 0;
 		}
+
+		<c:if test="${zk.ie == 8}">
+		.z-panel-icon {
+			.opacity(1);
+		}
+		</c:if>
 		
 		dl {
 			border: 1px solid @outerBorderColor;

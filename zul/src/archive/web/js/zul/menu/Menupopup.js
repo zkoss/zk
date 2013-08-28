@@ -231,8 +231,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			}
 		}
 		
-		if(zk.ie == 8) 
-			zk(this).redoFontIcon();
+		zk(this).redoCSS(-1, {'fixFontIcon': true});
 		
 	},
 	onHide: function () {

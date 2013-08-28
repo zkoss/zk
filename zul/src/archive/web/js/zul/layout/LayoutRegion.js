@@ -780,6 +780,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_fixSplit: function () {
 		jq(this.$n('split'))[this._splittable ? 'show' : 'hide']();
 	},
+	_fixFontIcon: function () {
+		zk(this).redoCSS(-1, {'fixFontIcon': true, 'class': 'z-borderlayout-icon'});
+	},
 	_isVertical : function () {
 		var BL = zul.layout.Borderlayout;
 		return this.getPosition() != BL.WEST &&
@@ -898,6 +901,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_afterSlideOutX: function (n) {
 		// B50-ZK-301: fire onOpen after animation
 		this.$class.afterSlideOut.call(this, n, true);
+		this._fixFontIcon();
 	},
 	// a callback function after the component slides out.
 	afterSlideOut: function (n, fireOnOpen) {
@@ -918,19 +922,23 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				afterAnima: fireOnOpen ? function (n) {this.fire('onOpen', {open: this._open});} : zk.$void
 			});
 		}
+		this._fixFontIcon();
 	},
 	_afterSlideInX: function (n) {
 		// B50-ZK-301: fire onOpen after animation
 		this.$class.afterSlideIn.call(this, n);
 		this.fire('onOpen', {open: this._open});
+		this._fixFontIcon();
 	},
 	// recalculates the size of the whole border layout after the component sildes in.
 	afterSlideIn: function (n) {
 		this.parent.resize();
+		this._fixFontIcon();
 	},
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
 		jq(document).click(this.proxy(this._docClick));
+		this._fixFontIcon();
 	},
 	// a callback function after the collapsed region slides up
 	afterSlideUp: function (n) {
@@ -943,6 +951,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.$n('btn').style.display = '';
 		jq(document).unbind('click', this.proxy(this._docClick));
 		this._isSlideUp = this._isSlide = false;
+		this._fixFontIcon();
 	},
 	//drag
 	_ignoredrag: function (dg, pointer, evt) {
