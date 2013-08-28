@@ -998,6 +998,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_aftermove: function (dg, evt) {
 		dg.control.zsync();
+		zk(wgt).redoCSS(-1, {'fixFontIcon': true});
 	},
 	// drag sizing
 	_startsizing: zul.wnd.Window._startsizing,
