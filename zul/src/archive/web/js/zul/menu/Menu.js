@@ -521,8 +521,8 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		
 		this._pp = wgt.$n('cnt-pp');
 
-	 	jq(this._pp, zk).bind('mouseenter', this.proxy(this._doMouseOver))
-	 		.bind('mouseleave', this.proxy(this._doMouseOut));
+	 	jq(this._pp, zk).bind('mouseenter', this.proxy(this._doMouseEnter))
+	 		.bind('mouseleave', this.proxy(this._doMouseLeave));
 	},
 	unbind: function () {
 	 	var wgt = this._wgt;
@@ -535,8 +535,8 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 			zWatch.unlisten({onFloatUp: wgt, onHide: wgt});
 		}
 
-	 	jq(this._pp, zk).unbind('mouseenter', this.proxy(this._doMouseOver))
-	 		.unbind('mouseleave', this.proxy(this._doMouseOut));
+	 	jq(this._pp, zk).unbind('mouseenter', this.proxy(this._doMouseEnter))
+	 		.unbind('mouseleave', this.proxy(this._doMouseLeave));
 		this._pp = null;
 	},
 	isOpen: function () {
