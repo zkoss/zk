@@ -458,7 +458,7 @@ public class Tree extends MeshElement {
 			CloneableEventListener<PagingEvent> {
 		public void onEvent(PagingEvent event) {
 			if (inPagingMold()) {
-				if (WebApps.getFeature("ee")) {
+				if (WebApps.getFeature("ee") && getModel() != null) {
 					int ap =  event.getActivePage();
 					int size = Tree.this.getPaginal().getPageSize();
 					int start = ap * size;
