@@ -65,6 +65,9 @@ td.z-splitter-outer {
 }
 .z-splitter-vertical {
 	max-height: @splitterSize;
+	<c:if test="${zk.ie == 8}">
+		max-height: @splitterSize - 2;
+	</c:if>
 	height: @splitterSize;
 	border-width: 1px 0;
 	cursor: s-resize;
