@@ -48,13 +48,23 @@
 }
 
 
-.z-notification-left + 
-.z-notification-icon {
-	left: 23px;
+.z-notification-pointer + .z-notification-icon {
+	left: 24px;
 }
-.z-notification-up +
-.z-notification-icon {
-	top: 26px;
+
+.z-notification-down + .z-notification-icon,
+.z-notification-up + .z-notification-icon, 
+.z-notification-right + .z-notification-icon,
+.z-notification-pointer[style*=none] + .z-notification-icon {
+	left: 14px;
+}
+
+.z-notification-up + .z-notification-icon {
+	margin-top: -6px;
+}
+
+.z-notification-down + .z-notification-icon {
+	margin-top: -18px;
 }
 .z-notification-content {
 	width: 250px;
@@ -254,6 +264,23 @@
 .z-notification-close {
 	top: 17px;
 }
+
+.z-notification-pointer ~ .z-icon-info-sign {
+
+}
+
+.z-notification-right ~ .z-icon-info-sign {
+	
+}
+
+.z-notification-down ~ .z-icon-info-sign {
+	
+}
+
+.z-notification-up ~ .z-icon-info-sign {
+	
+}
+
 .z-notification-info .z-notification-close:hover {
 	color: @notificationInfoColor;
 	<c:if test="${zk.ie == 8}">
