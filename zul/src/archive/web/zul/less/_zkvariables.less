@@ -50,13 +50,21 @@
 
 // Border color
 @baseBorderColor:              #CFCFCF;
-@outerBorderColor:             #9C9C9C;
+@outerBorderColor:             @baseBorderColor;
+@headerBorderColor:            #9C9C9C;
+@bodyBorderColor:              #9C9C9C;
 @innerBorderColor:             #B3B3B3;
+@contentBorderColor:           @baseBorderColor;
+@footerBorderColor:            @baseBorderColor;
 
 // Background color
 @baseBackgroundColor:          #FFFFFF;
-@titleBackgroundColor:         #FFFFFF;
+@outerBackgroundColor:         @baseBackgroundColor;
+@headerBackgroundColor:        @baseBackgroundColor;
+@bodyBackgroundColor:          @baseBackgroundColor;
+@innerBackgroundColor:         @baseBackgroundColor;
 @contentBackgroundColor:       #F0F6F9;
+@footerBackgroundColor:        @baseBackgroundColor;;
 
 // Gradient background
 @baseGradientStart:            #FEFEFE;
@@ -70,7 +78,19 @@
 @iconDisabledColor:            #AAAAAA;
 
 // -------------------------------------
-// Table (used for grid, listbox, tree)
+// Button (used for button, combobutton, toolbarbutton)
+// -------------------------------------
+@buttonBorderColor:            #A9A9A9;
+@buttonBackgroundColor:        @baseBackgroundColor;
+
+// -------------------------------------
+// Input (used for textbox, intbox, spinner, ...)
+// -------------------------------------
+@inputBorderColor:             @baseBorderColor;
+@inputBackgroundColor:         @baseBackgroundColor;
+
+// -------------------------------------
+// Table (used for grid, listbox, tree, biglistbox)
 // -------------------------------------
 @tableTitleBorderColor:        @baseBorderColor;
 @tableContentBorderColor:      #FFFFFF;
@@ -88,7 +108,7 @@
 @activeGradientStart:          #C3F5FE;
 @activeGradientEnd:            #86E2F9;
 
-// Focus (used on button, combobutton)
+// Focus
 @focusColor:                   @baseTextColor;
 @focusBorderColor:             #00B9FF;
 @focusBackgroundColor:         @baseGradientEnd;
@@ -115,16 +135,20 @@
 @readonlyBackgroundColor:      #FAFAFA;
 
 // Selected (used on listbox, tree, comboitem)
+@selectedColor:                @baseTextColor;
+@selectedBorderColor:          @baseBorderColor;
 @selectedBackgroundColor:      #BEE7FC;
 @selectedGradientStart:        #E5F4FB;
 @selectedGradientEnd:          #D3EDFA;
 
 // Selected Hover (used on listbox, tree, comboitem)
+@selectedHoverColor:           @baseTextColor;
+@selectedHoverBorderColor:     @baseBorderColor;
 @selectedHoverBackgroundColor: #C5E7F8;
 @selectedHoverGradientStart:   #CFEBF8;
 @selectedHoverGradientEnd:     #A5DAF5;
 
-// Checked (used on menu, listbox, tree, toolbarbutton)
+// Checked (used on menuitem, listbox, tree, toolbarbutton)
 @checkedColor:                 #2184BA;
 @checkedBorderColor:           #C6DBE6;
 @checkedBackgroundColor:       #E2EFF6;
@@ -159,8 +183,8 @@
 @splitterGradientEnd:          #F1F1F1;
 
 // calendar
-@titleColor:                   @textColorGrayLight;
-@cellColor:                    @textColorGrayLight;
+@calendarTitleColor:           @textColorGrayLight;
+@calendarCellColor:            @textColorGrayLight;
 @weekendColor:                 @textColorOrange;
 @weekendBackgroundColor:       #F2F2F2;
 @weekColor:                    @textColorGrayLight;
