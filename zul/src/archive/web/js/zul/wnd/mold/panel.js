@@ -78,7 +78,7 @@ function (out, skipper) {
 		}
 		
 		if (this.fbar) {
-			out.push('<div id="', uuid, '-fb" class="', this.$s('bottom2'), '">');
+			out.push('<div id="', uuid, '-fb" class="', this.$s('footer'), '">');
 			this.fbar.redraw(out);
 			out.push('</div>');
 		}
