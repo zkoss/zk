@@ -11,15 +11,15 @@
 	&-button {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @sliderBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
 		position: relative;
 		cursor: pointer;
 
 		&:active {
-			border-top-color: @sliderBorderColor;
-			border-left-color: @sliderBorderColor;
+			border-top-color: @sliderActiveBorderColor;
+			border-left-color: @sliderActiveBorderColor;
 			.verGradient(@baseGradientEnd, @baseGradientStart);
 		}
 

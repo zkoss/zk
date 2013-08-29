@@ -1,7 +1,7 @@
 @import "~./zul/less/_header.less";
 
 .z-paging {
-	border-bottom: 1px solid @baseBorderColor;
+	border-bottom: 1px solid @pagingBorderColor;
 	background: @pagingBackgroundColor;
 	position: relative;
 	height: @baseBarHeight;
@@ -21,7 +21,7 @@
 	&-button {
 		display: inline-block;
 		.verGradient();
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @pagingBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		min-width: @baseButtonWidth;
 		<c:if test="${zk.ie == 8}">
@@ -45,7 +45,7 @@
 		}
 		&:active {
 			.verGradient(@baseGradientEnd, @baseGradientStart);
-			border-color: @pagingActiveBorderColor @baseBorderColor;
+			border-color: @pagingActiveBorderColor @pagingBorderColor;
 		}
 		&[disabled] {
 			color: @disabledColor;
@@ -53,11 +53,11 @@
 			.disabledOpacity();
 			&:hover {
 				.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-				border-color: @baseBorderColor;
+				border-color: @pagingBorderColor;
 			}
 			&:active {
 				.verGradient();
-				border-color: @baseBorderColor;
+				border-color: @pagingBorderColor;
 			}
 		}
 	}
@@ -100,7 +100,7 @@
 		}
 	}
 	&-input {
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @pagingBorderColor;
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @textColorGrayDark;

@@ -71,12 +71,12 @@
 	}
 
 	&-collapsed {
-		background: darken(@baseBackgroundColor, 1%);
+		background: @collapsedBackgroundColor;
 		width: @baseBarWidth;
 		height: @baseBarHeight;
 	 	cursor: pointer; // ios issue
 		padding: 5px;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @collapsedBorderColor;
 		overflow: hidden;
 		position: absolute;
 	}
@@ -221,10 +221,8 @@
 	left: 11px;
 	top: -3px;
 }
-.z-west-icon.z-icon-ellipsis-vertical ~
-.z-west-icon.z-icon-ellipsis-vertical,
-.z-east-icon.z-icon-ellipsis-vertical ~
-.z-east-icon.z-icon-ellipsis-vertical {
+.z-west-icon.z-icon-ellipsis-vertical ~ .z-west-icon.z-icon-ellipsis-vertical,
+.z-east-icon.z-icon-ellipsis-vertical ~ .z-east-icon.z-icon-ellipsis-vertical {
 	top: 39px;
 }
 
@@ -237,10 +235,8 @@
 		font-size: @baseFontSize;
 	</c:if>
 }
-.z-north-icon.z-icon-ellipsis-horizontal ~
-.z-north-icon.z-icon-ellipsis-horizontal,
-.z-south-icon.z-icon-ellipsis-horizontal ~
-.z-south-icon.z-icon-ellipsis-horizontal {
+.z-north-icon.z-icon-ellipsis-horizontal ~ .z-north-icon.z-icon-ellipsis-horizontal,
+.z-south-icon.z-icon-ellipsis-horizontal ~ .z-south-icon.z-icon-ellipsis-horizontal {
 	left: 40px;
 }
 

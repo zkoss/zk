@@ -49,12 +49,8 @@ html {
 // Focus states
 a:focus {
   outline: none;
-  // Default
   // Disable for Potix on 5/29/2013
-  //outline: thin dotted #333;
-  // Webkit
-  //outline: 5px auto -webkit-focus-ring-color;
-  //outline-offset: -2px;
+  //.tab-focus();
 }
 // Hover & Active
 a:hover,
@@ -87,7 +83,6 @@ img {
 
   // Potix: this style will make img invisible in ie8
   /*  max-width: 100%; Part 1: Set a maxium relative to the parent */
-
   width: auto\9; /* IE7-8 need help adjusting responsive images */
   height: auto; /* Part 2: Scale the height according to the width, otherwise you get stretching */
 
@@ -142,7 +137,9 @@ input[type="checkbox"] {
     cursor: pointer; // Improves usability and consistency of cursor style between image-type `input` and others.
 }
 input[type="search"] { // Appearance in Safari/Chrome
-  ${t:applyCSS3('box-sizing', 'content-box')};
+  // Potix: using zk mixins
+  //.box-sizing(content-box);
+  .applyCSS3('box-sizing', 'content-box');
   -webkit-appearance: textfield;
 }
 input[type="search"]::-webkit-search-decoration,
@@ -222,23 +219,5 @@ textarea {
   h2,
   h3 {
     page-break-after: avoid;
-  }
-}
-
-// Clearfix: move to reset.less because of all component import this file
-// --------
-// For clearing floats like a boss h5bp.com/q
-.clearfix {
-  *zoom: 1;
-  &:before,
-  &:after {
-    display: table;
-    content: "";
-    // Fixes Opera/contenteditable bug:
-    // http://nicolasgallagher.com/micro-clearfix-hack/#comment-36952
-    line-height: 0;
-  }
-  &:after {
-    clear: both;
   }
 }

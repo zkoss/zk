@@ -6,7 +6,7 @@
 	font-weight: normal;
 	padding: 3px 12px;
 	line-height: @baseLineHeight;
-	border: 1px solid darken(@baseBorderColor, 15%);
+	border: 1px solid @buttonBorderColor;
 	.borderRadius();
 	.verGradient();
 	text-shadow: 0 1px #FFFFFF;
@@ -33,7 +33,7 @@
 	}
 	&[disabled] {
 		.disabledOpacity();
-		border: 1px solid darken(@baseBorderColor, 15%);
+		border: 1px solid @buttonBorderColor;
 		.verGradient();
 		.boxShadow('none');
 		cursor: default;

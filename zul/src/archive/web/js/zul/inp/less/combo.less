@@ -9,75 +9,102 @@
 	display: inline-block;
 	min-height: @baseButtonHeight;
 	white-space: nowrap;
-}
 
-.z-combobox-input,
-.z-bandbox-input,
-.z-datebox-input,
-.z-timebox-input,
-.z-spinner-input,
-.z-doublespinner-input {
-	background: @baseBackgroundColor;
-	font-family: @baseContentFontFamily;
-	font-size: @fontSizeMedium;
-	font-weight: normal;
-	padding: 4px 5px;
-	border: 1px solid @baseBorderColor;
-	border-right: 0;
-	margin: 0;
-	height: @baseButtonHeight;
-	.leftBorderRadius(@borderRadiusSmall);
-	line-height: @baseLineHeight;
-	color: @baseTextColor;
-}
-.z-combobox-button,
-.z-bandbox-button,
-.z-datebox-button,
-.z-timebox-button,
-.z-spinner-button,
-.z-doublespinner-button {
-	background: @baseBackgroundColor;
-	vertical-align: middle;
-	cursor: pointer;
-	padding: 4px;
-	border: 1px solid @baseBorderColor;
-	overflow: hidden;
-	display: inline-block;
-	font-size: @baseFontSize;
-	font-weight: normal;
-	font-family: none;
-	line-height: @baseLineHeight;
-	min-width: @baseButtonWidth;
-	<c:if test="${zk.ie == 8}">
-		min-width: @baseButtonWidth - 10;
-	</c:if>	
-	height: @baseButtonHeight;
-	color: @iconColor;
-	.rightBorderRadius(@borderRadiusSmall);
-	text-align: left;
+	&-input {
+		background: @inputBackgroundColor;
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		font-weight: normal;
+		padding: 4px 5px;
+		border: 1px solid @inputBorderColor;
+		border-right: 0;
+		margin: 0;
+		height: @baseButtonHeight;
+		.leftBorderRadius(@borderRadiusSmall);
+		line-height: @baseLineHeight;
+		color: @baseTextColor;
 
-	&:hover {
-		border-color: @hoverBorderColor;
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-	}
-	&:active {
-		border-color: @activeBorderColor;
-		.verGradient(@activeGradientStart, @activeGradientEnd);
-		.boxShadow('inset 1px 1px 1px #91AAB7');
-	}
-	input[disabled] + & {
-		&:hover,
-		&:active {
-			border-color: @baseBorderColor;
-			.resetGradient();
+		&:focus {
+		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+		}
+		&[readonly] {
+			background: @readonlyBackgroundColor;
+			border-color: @readonlyBorderColor;
+		}
+		&[readonly]:focus {
 			.boxShadow('none');
 		}
 	}
+
+	&-button {
+		background: @inputBackgroundColor;
+		vertical-align: middle;
+		cursor: pointer;
+		padding: 4px;
+		border: 1px solid @inputBorderColor;
+		overflow: hidden;
+		display: inline-block;
+		font-size: @baseFontSize;
+		font-weight: normal;
+		font-family: none;
+		line-height: @baseLineHeight;
+		min-width: @baseButtonWidth;
+		<c:if test="${zk.ie == 8}">
+			min-width: @baseButtonWidth - 10;
+		</c:if>
+		height: @baseButtonHeight;
+		color: @iconColor;
+		.rightBorderRadius(@borderRadiusSmall);
+		text-align: left;
+
+		&:hover {
+			border-color: @hoverBorderColor;
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		}
+		&:active {
+			border-color: @activeBorderColor;
+			.verGradient(@activeGradientStart, @activeGradientEnd);
+			.boxShadow('inset 1px 1px 1px #91AAB7');
+		}
+		input[disabled] + & {
+			&:hover,
+			&:active {
+				border-color: @inputBorderColor;
+				.resetGradient();
+				.boxShadow('none');
+			}
+		}
+	}
+
+	&-disabled {
+		.disabledOpacity();
+		& * {
+			cursor: default !important;
+			color: @disabledColor !important;
+			background: @disabledBackgroundColor !important;
+		}
+	}
+
+	&-invalid {
+		background: @baseBackgroundColor;
+		border: 1px solid @invalidBorderColor !important;
+		margin-right: -1px;
+	}
+
+	&-readonly:focus {
+		background: transparent repeat-x 0 0;
+		border-color: @readonlyBorderColor;
+		border-right-width: 0;
+		cursor: default;
+		.boxShadow(none);
+	}
+
+	&-rightedge {
+		border-right: 1px solid @inputBorderColor;
+		.rightBorderRadius(@borderRadiusSmall);
+	}
 }
-.z-datebox-button,
-.z-bandbox-button {
-	text-align: center;
-}
+
 .z-combobox-button.z-combobox-disabled,
 .z-bandbox-button.z-bandbox-disabled,
 .z-datebox-button.z-datebox-disabled,
@@ -85,6 +112,21 @@
 .z-spinner-button.z-spinner-disabled,
 .z-doublespinner-button.z-doublespinner-disabled {
 	display: none;
+}
+
+.z-combobox-button {
+	font-size: @fontSizeLarge;
+	padding-left: 7px;
+	padding-top: 5px;
+	max-height: @baseButtonHeight;
+	<c:if test="${zk.ie == 8}">
+		min-width: @baseButtonWidth - 13;
+	</c:if>	
+}
+
+.z-datebox-button,
+.z-bandbox-button {
+	text-align: center;
 }
 
 .z-timebox-button,
@@ -112,7 +154,6 @@
 		height: @baseButtonHeight / 2;
 		overflow: hidden;
 		background: @baseBackgroundColor;
-
 
 		&:first-child {// up icon
 			top: -1px;
@@ -155,6 +196,7 @@
 		}
 	}
 }
+
 .z-timebox-disabled a,
 .z-spinner-disabled a,
 .z-doublespinner-disabled a {
@@ -174,81 +216,6 @@
 	& + i[class*='-separator'] {
 		display: none;
 	}
-}
-
-.z-combobox,
-.z-bandbox,
-.z-datebox,
-.z-timebox,
-.z-spinner,
-.z-doublespinner {
-	&-input:focus {
-		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
-	}
-	&-input[readonly] {
-		background: @readonlyBackgroundColor;
-		border-color: @readonlyBorderColor;
-	}
-	&-input[readonly]:focus {
-		.boxShadow('none');
-	}
-
-	&-invalid {
-		background: @baseBackgroundColor;
-		border-color: @invalidBorderColor;
-		border-right: 1px solid @invalidBorderColor !important;
-		margin-right: -1px;
-	}
-}
-
-.z-combobox-button {
-	font-size: @fontSizeLarge;
-	padding-left: 7px;
-	padding-top: 5px;
-	max-height: @baseButtonHeight;
-	<c:if test="${zk.ie == 8}">
-		min-width: @baseButtonWidth - 13;
-	</c:if>	
-}
-
-// disable
-.z-spinner-disabled,
-.z-doublespinner-disabled,
-.z-timebox-disabled,
-.z-datebox-disabled,
-.z-bandbox-disabled,
-.z-comboitem-disabled,
-.z-combobox-disabled {
-	.disabledOpacity();
-
-	& * {
-		cursor: default !important;
-		color: @disabledColor !important;
-		background: @disabledBackgroundColor !important;
-	}
-}
-
-.z-spinner-readonly:focus,
-.z-doublespinner-readonly:focus,
-.z-timebox-readonly:focus,
-.z-datebox-readonly:focus,
-.z-bandbox-readonly:focus,
-.z-combobox-readonly:focus {
-	background: transparent repeat-x 0 0;
-	border-color: @readonlyBorderColor;
-	border-right-width: 0;
-	cursor: default;
-	.boxShadow(none);
-}
-
-.z-combobox-rightedge,
-.z-bandbox-rightedge,
-.z-datebox-rightedge,
-.z-timebox-rightedge,
-.z-spinner-rightedge,
-.z-doublespinner-rightedge {
-	border-right: 1px solid @baseBorderColor;
-	.rightBorderRadius(@borderRadiusSmall);
 }
 
 // Inplace editing
@@ -326,8 +293,8 @@
 .z-timebox-popup {
 	display: block;
 	position: absolute;
-	background: @baseBackgroundColor;
-	border: 1px solid @baseBorderColor;
+	background: @popupBackgroundColor;
+	border: 1px solid @popupBorderColor;
 	padding: 2px;
 	font-family: @baseContentFontFamily;
 	font-weight: normal;

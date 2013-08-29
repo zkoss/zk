@@ -2,9 +2,9 @@
 
 .z-groupbox {
 	padding-top: 16px;
-	
+
 	> .z-groupbox-header {
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @contentBorderColor;
 		border-bottom: 0;
 		width: 100%;
 		font-weight: normal;
@@ -52,9 +52,9 @@
 		overflow: hidden;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		padding: 5px;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @contentBorderColor;
 		border-top: 0;
-		display: block;	
+		display: block;
 		zoom: 1;
 	}
 
@@ -62,7 +62,7 @@
 		padding: 0;
 
 		.z-groupbox-content {
-			border-top: 1px solid @baseBorderColor;
+			border-top: 1px solid @contentBorderColor;
 		}
 	}
 
@@ -76,7 +76,7 @@
 
 		> .z-groupbox-header {
 			padding: 3px 4px;
-			border-bottom: 1px solid @baseBorderColor;
+			border-bottom: 1px solid @contentBorderColor;
 			font-weight: bold;
 			.verGradient();
 			min-height: @baseBarHeight;

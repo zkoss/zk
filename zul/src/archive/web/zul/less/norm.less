@@ -17,7 +17,7 @@ html, body {
 	.applyCSS3('box-sizing', 'border-box');
 }
 
-//Reset
+// Reset
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -44,7 +44,7 @@ fieldset {
 	border-radius: 0px; 
 }
 
-legend { 
+legend {
 	border: 0; padding: 0; 
 }
 
@@ -171,6 +171,8 @@ input[type="checkbox"] {
 	-moz-appearance: checkbox;
 	margin: 2px;
 }
+
+//label
 .z-label {
 	line-height: normal;
 }
@@ -183,7 +185,8 @@ input[type="checkbox"] {
 	font-weight: normal;
 }
 
-.z-temp, .z-modal-mask {
+.z-temp,
+.z-modal-mask {
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -192,6 +195,7 @@ input[type="checkbox"] {
 	.opacity(0.6);
 	background: @maskBackgroundColor;
 }
+
 .z-initing {
 	width: 60px;
 	height: 60px;
@@ -205,7 +209,9 @@ input[type="checkbox"] {
 .z-uptime {
 	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkuptime.png")}');
 }
-.z-loading, .z-apply-loading {
+
+.z-loading,
+.z-apply-loading {
 	position: absolute;
 	cursor: wait;
 	background: @loadingBackgroundColor;
@@ -299,6 +305,7 @@ input[type="checkbox"] {
 		color: @textColorGrayDark;
 	}
 }
+
 //Fix float issue for CSS
 .z-clear {
 	clear: both;
@@ -367,16 +374,16 @@ input[type="checkbox"] {
 .z-shadow .z-shadow-tr {
 	.encodeThemeURL(background-image, '~./zul/img/shadow-tlr.png');
 }
-
 .z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br {
 	.encodeThemeURL(background-image, '~./zul/img/shadow-blr.png');
 }
 </c:if>
+
 //Drag-Drop
 .z-dragged {
 	background: none no-repeat scroll 0 0 @dragBackgroundColor;
-	color: lighten(@textColorGray, 20%);
+	color: @dragColor;
 }
 .z-drag-over {
 	background: none no-repeat scroll 0 0 @dragHoverBackgroundColor;
@@ -447,7 +454,7 @@ span.z-drop-disallow {
 	&:focus {
 		-moz-outline: 0 none;
 		outline: 0 none;
-	};
+	}
 }
 
 //upload button
@@ -475,10 +482,6 @@ span.z-upload input {
 }
 
 //fileupload dialog
-.z-fileupload-img {
-	width: 16px;
-	padding-top: 4px;
-}
 .z-fileupload-add,
 .z-fileupload-remove {
 	cursor: pointer;
@@ -492,11 +495,13 @@ span.z-upload input {
 .z-fileupload-manager {
 	width: 350px;
 }
+
 //Selectbox
 .z-selectbox {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 }
+
 //scrollbar
 .z-scrollbar {
 	position: absolute;
@@ -518,7 +523,7 @@ span.z-upload input {
 				width: @scrollbarWidth - 2;
 				left: 1px;
 				cursor: pointer;
-				border: 1px solid darken(@baseBorderColor, 30%);
+				border: 1px solid @scrollbarBorderColor;
 				.borderRadius(@borderRadiusSmall - 1);
 				.horGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
 				z-index: 100;
@@ -531,11 +536,6 @@ span.z-upload input {
 					margin-top: -8px;
 					color: @iconColor;
 					.transform('scale(0.6, 0.9)');
-					<c:if test="${zk.ie == 8}">
-						left: 1px;
-						font-size: 12px;
-						margin-top: -6px;
-					</c:if>	
 				}
 			}
 			.z-scrollbar-rail {
@@ -601,7 +601,7 @@ span.z-upload input {
 				height: @scrollbarHeight - 2;
 				top: 1px;
 				cursor: pointer;
-				border: 1px solid darken(@baseBorderColor, 30%);
+				border: 1px solid @scrollbarBorderColor;
 				.borderRadius(2px);
 				.verGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
 				z-index: 100;
@@ -612,11 +612,6 @@ span.z-upload input {
 					margin-left: -8px;
 					color: @iconColor;
 					.transform('rotate(90deg) scale(0.5, 0.7)');
-					<c:if test="${zk.ie == 8}">
-						top: -1px;
-						font-size: 12px;
-						margin-left: -6px;
-					</c:if>	
 				}
 			}
 			.z-scrollbar-rail {
