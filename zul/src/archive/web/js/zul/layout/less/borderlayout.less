@@ -152,6 +152,7 @@
 	&-icon {
 		position: absolute;
 		font-size: @fontSizeXSmall;
+		line-height: @baseLineHeight;
 		.opacity(0.5);
 	}
 }
@@ -162,6 +163,22 @@
 	border-left: 1px solid @baseBorderColor;
 	border-right: 1px solid @baseBorderColor;
 }
+
+<c:if test="${zk.ie == 8}">
+.z-west-icon.z-icon-caret-left {
+	font-size: @fontSizeMedium;
+}
+.z-south-icon.z-icon-caret-down {
+	font-size: @fontSizeSmall;
+	top: -2px;
+}
+.z-east-icon.z-icon-caret-right {
+	font-size: @fontSizeXSmall;
+}
+.z-north-icon.z-icon-caret-up {
+	font-size: @fontSizeSmall;
+}
+</c:if>
 .z-north-splitter-button:hover .z-icon-caret-up,
 .z-south-splitter-button:hover .z-icon-caret-down,
 .z-west-splitter-button:hover .z-icon-caret-left,

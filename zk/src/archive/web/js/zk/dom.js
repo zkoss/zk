@@ -1440,12 +1440,12 @@ jq(el).zk.center(); //same as 'center'
 			var head = document.getElementsByTagName('head')[0],
     			style = document.createElement('style'),
     			n = this.jq[0],
-    			c = opts['class'],
+    			s = opts['selector'],
     			id = n ? '#' + n.id : '', 
-    			cls = c ? '.' + c : '*';
+    			selector = s ? s : '*';
 			style.type = 'text/css';
 			
-			style.styleSheet.cssText = id + ' ' + cls + ':before,:after{content:none !important';
+			style.styleSheet.cssText = id + ' ' + selector + ':before{content:"" !important';
 			head.appendChild(style);
 			setTimeout(function(){
 			    head.removeChild(style);

@@ -781,7 +781,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		jq(this.$n('split'))[this._splittable ? 'show' : 'hide']();
 	},
 	_fixFontIcon: function () {
-		zk(this).redoCSS(-1, {'fixFontIcon': true, 'class': 'z-borderlayout-icon'});
+		zk(this).redoCSS(-1, {'fixFontIcon': true, 'selector': '.z-borderlayout-icon *'});
 	},
 	_isVertical : function () {
 		var BL = zul.layout.Borderlayout;
