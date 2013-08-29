@@ -43,6 +43,7 @@ ZK 6.5.4
   ZK-1891: Combobox with Validator will trigger reload selectedItem when typing
   ZK-1904: Datebox doesn't sync dropdown stackup well (IE only)
   ZK-1908: Databinding Load order causing problems on Paging component.
+  ZK-1909: Set maxlength attribute to the doublebox conponent, the maxlength checking is not correct
 
   --------
 ZK 6.5.3
