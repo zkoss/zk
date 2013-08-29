@@ -162,6 +162,12 @@ implements org.zkoss.zk.ui.ext.Disable {
 	/*package*/ void setLoaded(boolean loaded){
 		if (_loaded != loaded) {
 			_loaded = loaded;
+			
+			// B65-ZK-1639.zul
+			// if the children have loaded, that means the item has loaded too.
+			if (_loaded)
+				setRendered(true);
+			
 			smartUpdate("_loadedChildren", _loaded);
 		}
 	}
