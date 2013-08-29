@@ -13,7 +13,7 @@
 		font-weight: normal;
 		padding: 4px 30px 4px 5px;
 		.verGradient();
-		border: 1px solid @outerBorderColor;
+		border: 1px solid @buttonBorderColor;
 		min-height: @baseButtonHeight;
 		<c:if test="${zk.ie == 8}">
 			min-height: @baseButtonHeight - 10;
@@ -32,7 +32,7 @@
 	}
 	&-button {
 		cursor: pointer;
-		border-left: 1px solid @baseBorderColor;
+		border-left: 1px solid @buttonBorderColor;
 		display: block;
 		width: @baseButtonWidth;
 		height: 100%;
@@ -44,7 +44,7 @@
 		button[disabled] + & {
 			&:hover,
 			&:active {
-				border-color: @baseBorderColor;
+				border-color: @buttonBorderColor;
 				.resetGradient();
 				.boxShadow('none');
 			}

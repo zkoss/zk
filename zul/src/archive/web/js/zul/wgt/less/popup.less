@@ -7,8 +7,8 @@
 	overflow: hidden;
 	.borderRadius('1px');
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
-	.verGradient(@baseBackgroundColor, darken(@baseBackgroundColor, 4%));
-	border: 1px solid @baseBorderColor;
+	.verGradient(@popupGradientStart, @popupGradientEnd);
+	border: 1px solid @popupBorderColor;
 
 	&-content {
 		color: @textColorGray;
@@ -47,7 +47,6 @@
 	}
 }
 
-
 .z-notification-pointer + .z-notification-icon {
 	left: 24px;
 }
@@ -66,6 +65,7 @@
 .z-notification-down + .z-notification-icon {
 	margin-top: -18px;
 }
+
 .z-notification-content {
 	width: 250px;
 	min-height: 130px;
@@ -78,8 +78,8 @@
 	.borderRadius('10px');
 	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
 }
-.z-notification-pointer ~
-.z-notification-content {
+
+.z-notification-pointer ~ .z-notification-content {
 	min-height: 60px; // fix for IE9
 	height: 60px;
 	width: 125px;
@@ -88,6 +88,7 @@
 	padding: 5px 18px 5px 45px;
 	.borderRadius('5px');
 }
+
 .z-notification-pointer {
 	position: absolute;
 	display: none;
@@ -96,14 +97,14 @@
 	border: 10px solid transparent;
 	z-index: 100;
 }
-// notification: base style
+
+// notification arrow: base style
 .z-notification-left,
 .z-notification-right,
 .z-notification-up,
 .z-notification-down {
 	border: 10px solid transparent;
 }
-
 .z-notification-left {
 	border-right-color: @notificationArrowColor;
 	<c:if test="${zk.ie == 8}">
@@ -129,8 +130,7 @@
 	</c:if>
 }
 
-
-// notification: info
+// notification arrow: info
 .z-notification-info .z-notification-content {
 	background: @notificationInfoColor;
 	<c:if test="${zk.ie == 8}">
@@ -162,7 +162,7 @@
 	</c:if>
 }
 
-// notification: warning
+// notification arrow: warning
 .z-notification-warning .z-notification-content {
 	background: @notificationWarningColor;
 	<c:if test="${zk.ie == 8}">
@@ -194,7 +194,7 @@
 	</c:if>
 }
 
-// notification: error
+// notification arrow: error
 .z-notification-error .z-notification-content {
 	background: @notificationErrorColor;
 	<c:if test="${zk.ie == 8}">
@@ -226,7 +226,6 @@
 	</c:if>
 }
 
-
 .z-notification-close {
 	position: absolute;
 	cursor: pointer;
@@ -246,17 +245,16 @@
 		opacity: 1;
 	}
 }
+
 .z-notification-pointer ~ .z-notification-close {
 	top: 5px;
 	right: 5px;
 }
-.z-notification-right ~ 
-.z-notification-close {
+.z-notification-right ~ .z-notification-close {
 	top: 5px;
 	right: 17px;
 }
-.z-notification-up ~
-.z-notification-close {
+.z-notification-up ~ .z-notification-close {
 	top: 17px;
 }
 

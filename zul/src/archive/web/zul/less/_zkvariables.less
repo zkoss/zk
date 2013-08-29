@@ -63,7 +63,7 @@
 @headerBackgroundColor:        @baseBackgroundColor;
 @bodyBackgroundColor:          @baseBackgroundColor;
 @innerBackgroundColor:         @baseBackgroundColor;
-@contentBackgroundColor:       #F0F6F9;
+@contentBackgroundColor:       @baseBackgroundColor;;
 @footerBackgroundColor:        @baseBackgroundColor;;
 
 // Gradient background
@@ -78,10 +78,9 @@
 @iconDisabledColor:            #AAAAAA;
 
 // -------------------------------------
-// Button (used for button, combobutton, toolbarbutton)
+// Button (used for button, combobutton)
 // -------------------------------------
 @buttonBorderColor:            #A9A9A9;
-@buttonBackgroundColor:        @baseBackgroundColor;
 
 // -------------------------------------
 // Input (used for textbox, intbox, spinner, ...)
@@ -155,6 +154,10 @@
 @checkedGradientStart:         #F4FAFD;
 @checkedGradientEnd:           #E2EFF6;
 
+// Collapsed (used on Borderlayout)
+@collapsedBorderColor:         @baseBorderColor;
+@collapsedBackgroundColor:     #FCFCFC;
+
 // -------------------------------------
 // Component independent variables
 // -------------------------------------
@@ -165,11 +168,13 @@
 // scrollbar
 @scrollbarWidth:               16px;
 @scrollbarHeight:              16px;
+@scrollbarBorderColor:         #838383;
 @scrollbarBackgroundColor:     #DDDDDD;
 @scrollbarGradientStart:       #FFFFFF;
 @scrollbarGradientEnd:         #CFCFCF;
 
 // drag and drop
+@dragColor:                    #888888;
 @dragBackgroundColor:          #E0EAF0;
 @dragHoverBackgroundColor:     #ADD2FF;
 @dragAllowBorderColor:         #99CC99;
@@ -194,6 +199,8 @@
 // popup
 @popupBorderColor:             @baseBorderColor;
 @popupBackgroundColor:         @baseBackgroundColor;
+@popupGradientStart:           @baseBackgroundColor;
+@popupGradientEnd:             #F5F5F5;
 
 // group (group, listgroup)
 @groupGradientStart:           #FFFFFF;
@@ -202,12 +209,14 @@
 // paging
 @pagingColor:                  @textColorBlue;
 @pagingSelectedColor:          @textColorGrayDark;
+@pagingBorderColor:            @baseBorderColor;
 @pagingActiveBorderColor:      #A9A9A9;
 @pagingBackgroundColor:        #FAFAFA;
 @pagingSelectedBackgroundColor:#E6E6E6;
 
 // slider
-@sliderBorderColor:            #838383;
+@sliderBorderColor:            @baseBorderColor;
+@sliderActiveBorderColor:      #838383;
 
 // errorbox (input constraint)
 @errorboxColor:                #990000;
@@ -229,13 +238,22 @@
 @progressmeterGradientEnd:     #C6E9FA;
 
 // window
+@windowBorderColor:            #9C9C9C;
 @windowBackgroundColor:        #D9E5EF;
+@windowHeaderBackground:       @windowBackgroundColor;
 
 // panel
 @panelBackgroundColor:         #E1EDF4;
+@panelBodyBackground:          #F0F6F9;
 
 // menu
 @menuImageSize:                16px;
+@menuActiveBorderColorTR:      #838383;
+@menuActiveBorderColorBL:      #B6B6B6;
+@menuPopupBackground:          #FAFAFA;
+@menuSeparatorBorderColor:     #838383;
+@menuSeparatorBackgroundColor: #B8B8B8;
+@menuPopupSeparatorBackground: #E0E0E0;
 
 // navbar
 @navImageSize:                 16px;

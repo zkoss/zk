@@ -178,6 +178,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				var bodyEl = this.isFlex() && this.getFirstChild() ?
 						this.getFirstChild().$n() : cave;
 				if (autoscroll) {
+					if (zk.ie <= 8)
+						this._nativebar = true;
 					if (this._nativebar) {
 						bodyEl.style.overflow = 'auto';
 						bodyEl.style.position = 'relative';
@@ -527,6 +529,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this._open && !this.isVisible()) this.$n().style.display = 'none';
 
 		if (this.isAutoscroll()) {
+			if (zk.ie <= 8)
+				this._nativebar = true;
 			if (this._nativebar) {
 				var bodyEl = this.isFlex() && this.getFirstChild() ? 
 						this.getFirstChild().$n() : this.$n('cave');
