@@ -10,7 +10,7 @@
 .z-window {
 	.defaultOverflowZoom();
 	background: @windowBackgroundColor;
-	border: 1px solid @outerBorderColor;
+	border: 1px solid @windowBorderColor;
 	padding: @framePadding;
 	.borderRadius();
 	
@@ -23,7 +23,7 @@
 		font-size: @fontSizeMedium;
 		font-weight: normal;
 		cursor: default;
-		background: @windowBackgroundColor;
+		background: @windowHeaderBackground;
 		color: @textColorGrayDark;
 		line-height: @baseButtonWidth;
 		.defaultOverflowZoom();
@@ -37,8 +37,8 @@
 	> .z-window-content {
 		margin: 0;
 		padding: 4px;
-		background: @baseBackgroundColor;
-		border: 1px solid @baseBorderColor;
+		background: @contentBackgroundColor;
+		border: 1px solid @contentBorderColor;
 		.defaultOverflowZoom();
 		
 		&:first-child {
@@ -112,9 +112,15 @@
 		.z-window-header {
 			padding: 7px 4px 5px 4px;
 		}
+
+		<c:if test="${zk.ie == 8}">
+		.z-window-icon {
+			.opacity(1);
+		}
+		</c:if>
 		
 		dl {
-			border-top: 1px solid #9F9F9F;
+			border-top: 1px solid @outerBorderColor;
 			margin: 0;
 			padding: 0;
 			overflow: hidden;

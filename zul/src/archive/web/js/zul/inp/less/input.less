@@ -5,12 +5,12 @@
 .z-intbox,
 .z-longbox,
 .z-doublebox {
-	background: @baseBackgroundColor;
+	background: @inputBackgroundColor;
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 	padding: 4px 5px 3px;
-	border: 1px solid @baseBorderColor;
+	border: 1px solid @inputBorderColor;
 	margin: 0;
 	min-height: @baseButtonHeight;
 	<c:if test="${zk.ie == 8}">
@@ -30,11 +30,9 @@
 	&[readonly]:focus {
 		.boxShadow('none');
 	}
-
 	&-invalid {
 		background: @baseBackgroundColor;
 		border-color: @invalidBorderColor;
-		margin-right: -1px;
 	}
 	&[disabled] {
 		.disabledOpacity();
@@ -42,22 +40,18 @@
 		color: @disabledColor !important;
 		background: @disabledBackgroundColor !important;
 	}
-}
 
-// Inplace editing
-.z-textbox-inplace,
-.z-decimalbox-inplace,
-.z-intbox-inplace,
-.z-longbox-inplace,
-.z-doublebox-inplace {
-	border: 0;
-	padding: 3px;
-	background: none;
-	resize: none;
-	<c:if test="${zk.ie == 8}">
-		min-height: @baseButtonHeight - 6;
-		line-height: @baseIconHeight;
-	</c:if>
+	// Inplace editing
+	&-inplace {
+		border: 0;
+		padding: 3px;
+		background: none;
+		resize: none;
+		<c:if test="${zk.ie == 8}">
+			min-height: @baseButtonHeight - 6;
+			line-height: @baseIconHeight;
+		</c:if>
+	}
 }
 
 // error box
@@ -76,12 +70,10 @@
 		color: @errorboxColor;
 	}
 }
-.z-errorbox-left + 
-.z-errorbox-icon {
+.z-errorbox-left + .z-errorbox-icon {
 	left: 15px;
 }
-.z-errorbox-up +
-.z-errorbox-icon {
+.z-errorbox-up + .z-errorbox-icon {
 	top: 15px;
 }
 .z-errorbox-content {
@@ -151,19 +143,15 @@
 	right: 7px;
 }
 
-.z-errorbox-right ~ 
-.z-errorbox-close {
+.z-errorbox-right ~ .z-errorbox-close {
 	top: 7px;
 	right: 14px;
 }
 
-.z-errorbox-up ~
-.z-errorbox-close,
-.z-errorbox-down ~
-.z-errorbox-close {
+.z-errorbox-up ~ .z-errorbox-close,
+.z-errorbox-down ~ .z-errorbox-close {
 	right: 7px;
 }
-.z-errorbox-up ~
-.z-errorbox-close {
+.z-errorbox-up ~ .z-errorbox-close {
 	top: 15px;
 }

@@ -116,6 +116,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		wgt.zsync();
 		wgt._fireOnMove(evt.data);
+		zk(wgt).redoCSS(-1, {'fixFontIcon': true});
 	}
 
 	function _doOverlapped(wgt) {

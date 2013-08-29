@@ -117,6 +117,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
 		if (this.parent.isSizable())
 			this._initsz();
+		
 	},
 	unbind_: function () {
 		if (this._dragsz) {

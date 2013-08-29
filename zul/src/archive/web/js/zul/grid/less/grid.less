@@ -24,7 +24,6 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-		.verGradient();
 	}
 	&-header-border {
 		position: relative;
@@ -77,6 +76,7 @@
 	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
+	.verGradient();
 	&-hover {
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	}
@@ -219,12 +219,12 @@
 //paging
 .z-grid-paging {
 	&-top {
-		border-bottom: 1px solid @baseBorderColor;
+		border-bottom: 1px solid @pagingBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}
 	&-bottom {
-		border-top: 1px solid @baseBorderColor;
+		border-top: 1px solid @pagingBorderColor;
 		overflow: hidden;
 		width: 100%;
 	}

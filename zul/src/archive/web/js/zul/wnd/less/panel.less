@@ -19,7 +19,7 @@
 	
 	&-head {
 		padding: 5px 5px 1px;
-		border: 1px solid @outerBorderColor;
+		border: 1px solid @headerBorderColor;
 		.boxShadow('inset 0px 1px 1px #FFFFFF');
 		background: @panelBackgroundColor;
 		overflow: hidden;
@@ -45,9 +45,9 @@
 	
 	&-body {
 		margin: 0;
-		background: lighten(@panelBackgroundColor, 4%);
+		background: @panelBodyBackground;
 		padding: 6px 3px 6px 3px;
-		border: 1px solid @outerBorderColor;
+		border: 1px solid @bodyBorderColor;
 		border-top-width: 0;
 		.bottomBorderRadius();
 		.defaultOverflowZoom();
@@ -145,6 +145,12 @@
 			padding: 0;
 		}
 		
+		<c:if test="${zk.ie == 8}">
+		.z-panel-icon {
+			.opacity(1);
+		}
+		</c:if>
+		
 		dl {
 			border: 1px solid @outerBorderColor;
 			border-top: 0;
@@ -173,7 +179,7 @@
 	}
 	
 	&-noheader &-body {
-		border-top: 1px solid @baseBorderColor;
+		border-top: 1px solid @bodyBorderColor;
 		.borderRadius();
 	}
 	

@@ -1435,7 +1435,23 @@ jq(el).zk.center(); //same as 'center'
 	 * 100 is assumed if not specified , -1 means re-applying css right now.
 	 * @return jqzk this object
 	 */
-	redoCSS: function (timeout) {
+	redoCSS: function (timeout, opts) {
+		if ((zk.ie == 8) && opts && opts['fixFontIcon']) {
+			var head = document.getElementsByTagName('head')[0],
+    			style = document.createElement('style'),
+    			n = this.jq[0],
+    			c = opts['class'],
+    			id = n ? '#' + n.id : '', 
+    			cls = c ? '.' + c : '*';
+			style.type = 'text/css';
+			
+			style.styleSheet.cssText = id + ' ' + cls + ':before,:after{content:none !important';
+			head.appendChild(style);
+			setTimeout(function(){
+			    head.removeChild(style);
+			}, 0);
+			return this;
+		} 
 		if (timeout == -1){ //timeout -1 means immediately
 			for (var j = this.jq.length; j--;)
 				zjq._fixCSS(this.jq[j]);	
@@ -1457,21 +1473,6 @@ jq(el).zk.center(); //same as 'center'
 			el.src = zjq.src0;
 			el.src = src;
 		}
-		return this;
-	},
-	
-	/** Forces the browser to redo (re-apply) CSS of the font awesome relatived elements
-	 * @return jqzk this object
-	 */
-	redoFontIcon: function () {
-		var head = document.getElementsByTagName('head')[0],
-    		style = document.createElement('style');
-		style.type = 'text/css';
-		style.styleSheet.cssText = '#' + this.$n().id + ' *:before,:after{content:none !important';
-		head.appendChild(style);
-		setTimeout(function(){
-		    head.removeChild(style);
-		}, 0);
 		return this;
 	},
 

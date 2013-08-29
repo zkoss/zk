@@ -3,6 +3,7 @@
 // EL Function
 // --------------------------------------------
 
+//---------------------------------------------
 // web/core.dsp.tld
 //---------------------------------------------
 .encodeURL(@property, @url, @rest...) when (@property = background) {
@@ -17,8 +18,11 @@
 .encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
 	background-image: url(${c:encodeThemeURL('@{url}')}) @rest;
 }
+
+//---------------------------------------------
 // theme.dsp.tld
 //---------------------------------------------
+// gradient
 .gradient(@direction, @value) {
 	${t:gradient('@{direction}', '@{value}')};
 }
@@ -28,6 +32,7 @@
 .gradients(@direction, @value) {
 	${t:gradients('@{direction}', '@{value}')};
 }
+// box-shadow
 .box(@name, @value) {
 	${t:box('@{name}', '@{value}')};
 }
@@ -40,23 +45,34 @@
 .boxShadow(@value) {
 	${t:boxShadow('@{value}')};
 }
+// border-radius
 .borderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size}')};
 }
-.applyCSS3(@key, @value) {
-	${t:applyCSS3('@{key}', '@{value}')};
-}
+// transform
 .transform(@value) {
 	${t:transform('@{value}')};
 }
+// CSS3
+.applyCSS3(@key, @value) {
+	${t:applyCSS3('@{key}', '@{value}')};
+}
+
+//---------------------------------------------
 // Other helpful utilities
 //---------------------------------------------
+// gradient utility
 .horGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
 	${t:gradient('hor', '@{start} 0%; @{end} 100%')};
 }
 .verGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
 	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
 }
+.resetGradient() {
+	background: none;
+	<c:if test="${zk.ie > 0}">filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));</c:if>
+}
+// border-radius utility
 .topBorderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size} @{size} 0 0')};
 }
@@ -69,27 +85,20 @@
 .leftBorderRadius(@size: @baseBorderRadius) {
 	${t:borderRadius('@{size} 0 0 @{size}')};
 }
+// transition utility
 .transition(@property, @duration, @timingFunc, @delay: 0) {
 	${t:applyCSS3('transition', '@{property} @{duration} @{timingFunc} @{delay}')};
 }
+// opacity utility
 .opacity(@opacity) {
 	opacity: @opacity;
 	@opacity100: @opacity * 100;
 	filter: ~"alpha(opacity=@{opacity100})";
 }
-// Component Function
-//----------------------------------------------
-.resetGradient() {
-	background: none;
-	<c:if test="${zk.ie > 0}">
-	filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));
-	</c:if>
-}
 .disabledOpacity(@opacity: @disabledOpacity) {
 	.opacity(@opacity)
 }
-
-// Utile Function
+// icon font utility
 .baseIconFont() {
 	font-family: FontAwesome;
 	font-weight: normal;
@@ -97,4 +106,33 @@
 	text-decoration: inherit;
 	-webkit-font-smoothing: antialiased;
 	*margin-right: .3em; // fixes ie7 issues
+}
+
+//---------------------------------------------
+// IE 8 only
+//---------------------------------------------
+.minWidthIE8(@size) {
+	<c:if test="${zk.ie == 8}">
+		min-width: @size;
+	</c:if>
+}
+.minHeightIE8(@size) {
+	<c:if test="${zk.ie == 8}">
+		min-height: @size;
+	</c:if>
+}
+.rgbColorIE8(@color) {
+	<c:if test="${zk.ie == 8}">
+		color: @color;
+	</c:if>
+}
+.rgbBorderIE8(@color) {
+	<c:if test="${zk.ie == 8}">
+		border-color: @color;
+	</c:if>
+}
+.rgbBackgroundIE8(@color) {
+	<c:if test="${zk.ie == 8}">
+		background: @color;
+	</c:if>
 }

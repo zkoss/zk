@@ -7,8 +7,8 @@
 	overflow: hidden;
 	.borderRadius('1px');
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
-	.verGradient(@baseBackgroundColor, darken(@baseBackgroundColor, 4%));
-	border: 1px solid @baseBorderColor;
+	.verGradient(@popupGradientStart, @popupGradientEnd);
+	border: 1px solid @popupBorderColor;
 
 	&-content {
 		color: @textColorGray;
@@ -31,18 +31,41 @@
 
 .z-notification-icon {
 	position: absolute;
-	top: 50%;
-	margin-top: -5px;
+	top: 50%;	
 	left: 2px;
+	z-index: 1;
+
+	&.z-icon-remove {
+		margin-top: -5px;
+	}
+
+	&.z-icon-remove-sign, 
+	&.z-icon-exclamation-sign,
+	&.z-icon-info-sign {
+		font-size: 24px;
+		margin-top: -12px;
+	}
 }
-.z-notification-left + 
-.z-notification-icon {
-	left: 23px;
+
+.z-notification-pointer + .z-notification-icon {
+	left: 24px;
 }
-.z-notification-up +
-.z-notification-icon {
-	top: 26px;
+
+.z-notification-down + .z-notification-icon,
+.z-notification-up + .z-notification-icon, 
+.z-notification-right + .z-notification-icon,
+.z-notification-pointer[style*=none] + .z-notification-icon {
+	left: 14px;
 }
+
+.z-notification-up + .z-notification-icon {
+	margin-top: -6px;
+}
+
+.z-notification-down + .z-notification-icon {
+	margin-top: -18px;
+}
+
 .z-notification-content {
 	width: 250px;
 	min-height: 130px;
@@ -55,8 +78,8 @@
 	.borderRadius('10px');
 	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
 }
-.z-notification-pointer ~
-.z-notification-content {
+
+.z-notification-pointer ~ .z-notification-content {
 	min-height: 60px; // fix for IE9
 	height: 60px;
 	width: 125px;
@@ -65,6 +88,7 @@
 	padding: 5px 18px 5px 45px;
 	.borderRadius('5px');
 }
+
 .z-notification-pointer {
 	position: absolute;
 	display: none;
@@ -73,7 +97,8 @@
 	border: 10px solid transparent;
 	z-index: 100;
 }
-// notification: base style
+
+// notification arrow: base style
 .z-notification-left,
 .z-notification-right,
 .z-notification-up,
@@ -82,68 +107,124 @@
 }
 .z-notification-left {
 	border-right-color: @notificationArrowColor;
+	<c:if test="${zk.ie == 8}">
+		border-right-color: @notificationArrowColorIE8;
+	</c:if>
 }
 .z-notification-right {
 	border-left-color: @notificationArrowColor;
+	<c:if test="${zk.ie == 8}">
+		border-left-color: @notificationArrowColorIE8;
+	</c:if>
 }
 .z-notification-up {
 	border-bottom-color: @notificationArrowColor;
+	<c:if test="${zk.ie == 8}">
+		border-bottom-color: @notificationArrowColorIE8;
+	</c:if>
 }
 .z-notification-down {
 	border-top-color: @notificationArrowColor;
+	<c:if test="${zk.ie == 8}">
+		border-top-color: @notificationArrowColorIE8;
+	</c:if>
 }
 
-// notification: info
+// notification arrow: info
 .z-notification-info .z-notification-content {
 	background: @notificationInfoColor;
+	<c:if test="${zk.ie == 8}">
+		background: @notificationInfoColorIE8;
+	</c:if>
 }
 .z-notification-info .z-notification-left {
 	border-right-color: @notificationInfoColor;
+	<c:if test="${zk.ie == 8}">
+		border-right-color: @notificationInfoColorIE8;
+	</c:if>
 }
 .z-notification-info .z-notification-right {
 	border-left-color: @notificationInfoColor;
+	<c:if test="${zk.ie == 8}">
+		border-left-color: @notificationInfoColorIE8;
+	</c:if>
 }
 .z-notification-info .z-notification-up {
 	border-bottom-color: @notificationInfoColor;
+	<c:if test="${zk.ie == 8}">
+		border-bottom-color: @notificationInfoColorIE8;
+	</c:if>
 }
 .z-notification-info .z-notification-down {
 	border-top-color: @notificationInfoColor;
+	<c:if test="${zk.ie == 8}">
+		border-top-color: @notificationInfoColorIE8;
+	</c:if>
 }
 
-// notification: warning
+// notification arrow: warning
 .z-notification-warning .z-notification-content {
 	background: @notificationWarningColor;
+	<c:if test="${zk.ie == 8}">
+		background: @notificationWarningColorIE8;
+	</c:if>
 }
 .z-notification-warning .z-notification-left {
 	border-right-color: @notificationWarningColor;
+	<c:if test="${zk.ie == 8}">
+		border-right-color: @notificationWarningColorIE8;
+	</c:if>
 }
 .z-notification-warning .z-notification-right {
 	border-left-color: @notificationWarningColor;
+	<c:if test="${zk.ie == 8}">
+		border-left-color: @notificationWarningColorIE8;
+	</c:if>
 }
 .z-notification-warning .z-notification-up {
 	border-bottom-color: @notificationWarningColor;
+	<c:if test="${zk.ie == 8}">
+		border-bottom-color: @notificationWarningColorIE8;
+	</c:if>
 }
 .z-notification-warning .z-notification-down {
 	border-top-color: @notificationWarningColor;
+	<c:if test="${zk.ie == 8}">
+		border-top-color: @notificationWarningColorIE8;
+	</c:if>
 }
 
-// notification: error
+// notification arrow: error
 .z-notification-error .z-notification-content {
 	background: @notificationErrorColor;
+	<c:if test="${zk.ie == 8}">
+		background: @notificationErrorColorIE8;
+	</c:if>
 }
 .z-notification-error .z-notification-left {
 	border-right-color: @notificationErrorColor;
+	<c:if test="${zk.ie == 8}">
+		border-right-color: @notificationErrorColorIE8;
+	</c:if>
 }
 .z-notification-error .z-notification-right {
 	border-left-color: @notificationErrorColor;
+	<c:if test="${zk.ie == 8}">
+		border-left-color: @notificationErrorColorIE8;
+	</c:if>
 }
 .z-notification-error .z-notification-up {
 	border-bottom-color: @notificationErrorColor;
+	<c:if test="${zk.ie == 8}">
+		border-bottom-color: @notificationErrorColorIE8;
+	</c:if>
 }
 .z-notification-error .z-notification-down {
 	border-top-color: @notificationErrorColor;
+	<c:if test="${zk.ie == 8}">
+		border-top-color: @notificationErrorColorIE8;
+	</c:if>
 }
-
 
 .z-notification-close {
 	position: absolute;
@@ -164,25 +245,34 @@
 		opacity: 1;
 	}
 }
+
 .z-notification-pointer ~ .z-notification-close {
 	top: 5px;
 	right: 5px;
 }
-.z-notification-right ~ 
-.z-notification-close {
+.z-notification-right ~ .z-notification-close {
 	top: 5px;
 	right: 17px;
 }
-.z-notification-up ~
-.z-notification-close {
+.z-notification-up ~ .z-notification-close {
 	top: 17px;
 }
+
 .z-notification-info .z-notification-close:hover {
-		color: @notificationInfoColor;
+	color: @notificationInfoColor;
+	<c:if test="${zk.ie == 8}">
+		color: @notificationInfoColorIE8;
+	</c:if>
 }
 .z-notification-warning .z-notification-close:hover {
-		color: @notificationWarningColor;
+	color: @notificationWarningColor;
+	<c:if test="${zk.ie == 8}">
+		color: @notificationWarningColorIE8;
+	</c:if>
 }
 .z-notification-error .z-notification-close:hover {
-		color: @notificationErrorColor;
+	color: @notificationErrorColor;
+	<c:if test="${zk.ie == 8}">
+		color: @notificationErrorColorIE8;
+	</c:if>
 }
