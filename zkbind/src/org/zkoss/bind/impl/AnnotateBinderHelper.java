@@ -14,8 +14,11 @@ package org.zkoss.bind.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -92,7 +95,7 @@ public class AnnotateBinderHelper {
 	private void processComponentBindings0(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		
-		final List<String> props = compCtrl.getAnnotatedProperties();// look every property has annotation	
+		final List<String> props = reorder(compCtrl.getAnnotatedProperties());// look every property has annotation
 		for (final Iterator<?> it = props.iterator(); it.hasNext(); ) {
 			final String propName = (String) it.next();
 			if (isEventProperty(propName)) {
@@ -119,6 +122,43 @@ public class AnnotateBinderHelper {
 		//}
 	}
 	
+	
+	//ZK-1908 Databinding Load order causing problems on Paging component.
+	//introduce(6.5.4) a new spec of annotation on attribute, now allow to add a priority(large number is higher,default 0)
+	//after property name('property:priority')
+	private List<String> reorder(List<String> props) {
+		if(props==null || props.size()==0)
+			return Collections.EMPTY_LIST;
+		//'prop:priority' -> object[]{'prop',priority}
+		List<Object[]> propsList = new ArrayList<Object[]>(props.size());
+		int idx,priority;
+		for(String p:props){//
+			try{
+				idx = p.indexOf(":");
+				priority = idx==-1?0:Integer.parseInt(p.substring(idx+1));
+				propsList.add(new Object[]{idx==-1?p:p.substring(0,idx),priority});
+			}catch(Exception x){
+				propsList.add(new Object[]{p,0});
+			}
+		}
+		Collections.sort(propsList, new Comparator<Object[]>() {
+			public int compare(Object[] o1, Object[] o2) {
+				Integer idx1 = (Integer)o1[1];
+				Integer idx2 = (Integer)o2[1];
+				return idx2.compareTo(idx1);//descent
+			}
+		});
+		int size = propsList.size();
+		List<String> propsList2 = new LinkedList<String>();
+		for(int i=0;i<size;i++){
+			String p = (String)propsList.get(i)[0];
+			if(!propsList2.contains(p)){
+				propsList2.add(p);
+			}
+		}
+		return propsList2;
+	}
+
 	private boolean isEventProperty(String propName) {
 		return propName.startsWith("on") && propName.length() >= 3 && Character.isUpperCase(propName.charAt(2));
 	}

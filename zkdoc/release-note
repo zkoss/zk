@@ -42,6 +42,7 @@ ZK 6.5.4
   ZK-1900: Auto-complete Combobox in the bottom of the browser doesn't sync dropdown position well
   ZK-1891: Combobox with Validator will trigger reload selectedItem when typing
   ZK-1904: Datebox doesn't sync dropdown stackup well (IE only)
+  ZK-1908: Databinding Load order causing problems on Paging component.
 
   --------
 ZK 6.5.3

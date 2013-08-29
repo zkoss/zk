@@ -1,0 +1,12 @@
+<zk>
+	<label multiline="true">
+		you should see there are 10 page and currently at page 4.
+	</label>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('searchvm') @init('org.zkoss.zktest.bind.issue.B01908DatabindingOnPaging')">
+		<paging pageSize="@load(searchvm.pageSize)" id="pg"
+			totalSize="@load(searchvm.totalSize)"
+			activePage="@bind(searchvm.activePage)"
+			onPaging="@command('onPaging')" />
+	</vlayout>
+</zk>
