@@ -239,7 +239,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 */
 	afterCloseAnima_: function (opts) {
 		this.setVisible(false);
-		zk(this.$n()).undoVParent();
+		
+		var node = this.$n();
+		
+		if (zk.ie) { // re-create dom element to remove :hover state style
+			this.replaceHTML(node);
+		}
+		
+		zk(node).undoVParent();
 		zWatch.fireDown('onVParent', this);
 
 		this.setFloating_(false);
