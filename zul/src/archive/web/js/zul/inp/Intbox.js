@@ -41,9 +41,9 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			val = parseInt(info.raw, 10),
-			sval = new zk.BigDecimal(info.raw).$toString();
+			sval = new zk.BigDecimal(info.raw).$toString(); //parse raw input by big decimal to avoid scientific notation
 		
-		// B65-ZK-1907: Avoid scientific notation for large numbers
+		// B65-ZK-1907: Should compare raw input string instead of parsed number(may contain scientific notation)
 		if (isNaN(val) || (info.raw != sval && info.raw != '-'+sval))
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
