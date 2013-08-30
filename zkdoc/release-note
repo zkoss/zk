@@ -41,6 +41,7 @@ ZK 6.5.4
   ZK-1895: Paging on listbox with onFulfill
   ZK-1900: Auto-complete Combobox in the bottom of the browser doesn't sync dropdown position well
   ZK-1891: Combobox with Validator will trigger reload selectedItem when typing
+  ZK-1905: Chosenbox emptyMessage does not re-appear after remove all selected items
 
   --------
 ZK 6.5.3
