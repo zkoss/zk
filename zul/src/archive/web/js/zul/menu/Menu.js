@@ -584,7 +584,8 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		this._shadow.sync();
 	},
 	hideShadow: function () {
-		this._shadow.hide();
+		if (this._shadow)
+			this._shadow.hide();
 	},
 	destroy: function () {
 	 	this._wgt.rerender();

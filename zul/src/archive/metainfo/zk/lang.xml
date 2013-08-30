@@ -206,6 +206,7 @@ def alert(m):
 			<mold-uri>mold/a.js</mold-uri>
 			<css-uri>css/a.css.dsp</css-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>absolutechildren</component-name>

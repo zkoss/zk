@@ -681,7 +681,12 @@ public class Parser {
 		}
 
 		if (textAsBuffer != null) { //parent might be TempalteInfo
-			final String trimLabel = textAsBuffer.toString().trim();
+			String trimLabel = textAsBuffer.toString();
+			
+			// Bug ZK-1911
+			if (pi == null || !pi.isBlankPreserved())
+				trimLabel = trimLabel.trim();
+			
 			if (trimLabel.length() != 0)
 				pi.addProperty(textAs, trimLabel, null);
 		}
