@@ -70,7 +70,7 @@
 }
 .resetGradient() {
 	background: none;
-	<c:if test="${zk.ie > 0}">filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));</c:if>
+	<c:if test="${zk.ie > 0}">filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);</c:if>
 }
 // border-radius utility
 .topBorderRadius(@size: @baseBorderRadius) {
