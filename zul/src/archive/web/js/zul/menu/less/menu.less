@@ -239,14 +239,17 @@
 		min-width:  @menuImageSize;
 		min-height:  @menuImageSize;
 	}
-
 	.z-menuitem-icon {
 		position: absolute;
 		color: @checkedColor;
 		font-size: 14px;
 		display: none;
 		left: 7px;
-		top: 4px;
+		top: 5px;
+		<c:if test="${zk.ie == 8}">
+			left: 8px;
+			top: 6px;
+		</c:if>
 	}
 	.z-menu-content {
 		padding-right: 16px;

@@ -24,6 +24,7 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
+		.verGradient();
 	}
 	&-header-border {
 		position: relative;
@@ -97,7 +98,9 @@
 	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
-	.verGradient();
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
 	&-sort {
 		cursor: pointer;
 		&:hover {
@@ -117,7 +120,9 @@
 		cursor: pointer;
 	}
 	&:hover > .z-treecell {
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		</c:if>
 		background-clip: padding-box;
 		position: relative;
 	}
@@ -140,12 +145,16 @@
 	//selected tree cell
 	&.z-treerow-selected {
 		.z-treecell {
-			.verGradient(@selectedGradientStart, @selectedGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@selectedGradientStart, @selectedGradientEnd);
+			</c:if>
 			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover > .z-treecell {
-			.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+			</c:if>
 		}
 	}
 	//selected check mark
@@ -212,5 +221,30 @@
 		border-top: 1px solid @pagingBorderColor;
 		overflow: hidden;
 		width: 100%;
+	}
+}
+// IE8
+.ie8 {
+	.z-treecol {
+		position: static;
+		background: @baseGradientEnd;
+		&-hover {
+			background: @hoverGradientEnd;
+		}
+	}
+	.z-treerow {
+		&:hover > .z-treecell {
+			background: @hoverGradientEnd;
+		}
+		&.z-treerow-selected {
+			.z-treecell {
+				position: static;
+				background: @selectedGradientEnd;
+			}
+			&:hover > .z-treecell {
+				position: static;
+				background: @selectedHoverGradientEnd;
+			}
+		}
 	}
 }

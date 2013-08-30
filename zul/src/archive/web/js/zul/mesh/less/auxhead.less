@@ -5,15 +5,19 @@
 		border-left: none;
 	}
 }
+
 .z-auxheader {
-	.verGradient();
-	background-clip: padding-box;
 	overflow: hidden;
 	white-space: nowrap;
 	padding: 0;
 	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
+	background-clip: padding-box;
 	position: relative;
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
+
 	&-content {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
@@ -23,4 +27,9 @@
 		padding: 4px 5px 3px;
 		line-height: @baseButtonHeight;
 	}
+}
+
+.ie8 .z-auxheader{
+	position: static;
+	background: @baseGradientEnd;
 }

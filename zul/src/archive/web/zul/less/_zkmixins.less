@@ -70,7 +70,7 @@
 }
 .resetGradient() {
 	background: none;
-	<c:if test="${zk.ie > 0}">filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);</c:if>
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 // border-radius utility
 .topBorderRadius(@size: @baseBorderRadius) {
@@ -106,33 +106,4 @@
 	text-decoration: inherit;
 	-webkit-font-smoothing: antialiased;
 	*margin-right: .3em; // fixes ie7 issues
-}
-
-//---------------------------------------------
-// IE 8 only
-//---------------------------------------------
-.minWidthIE8(@size) {
-	<c:if test="${zk.ie == 8}">
-		min-width: @size;
-	</c:if>
-}
-.minHeightIE8(@size) {
-	<c:if test="${zk.ie == 8}">
-		min-height: @size;
-	</c:if>
-}
-.rgbColorIE8(@color) {
-	<c:if test="${zk.ie == 8}">
-		color: @color;
-	</c:if>
-}
-.rgbBorderIE8(@color) {
-	<c:if test="${zk.ie == 8}">
-		border-color: @color;
-	</c:if>
-}
-.rgbBackgroundIE8(@color) {
-	<c:if test="${zk.ie == 8}">
-		background: @color;
-	</c:if>
 }

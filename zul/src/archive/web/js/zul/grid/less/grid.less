@@ -77,9 +77,13 @@
 	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
-	.verGradient();
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
 	&-hover {
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		</c:if>
 	}
 }
 .z-column {
@@ -139,7 +143,9 @@
 	&:hover {
 		> .z-row-inner,
 		> .z-cell {
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			</c:if>
 			background-clip: padding-box;
 			position: relative;
 		}
@@ -148,11 +154,12 @@
 //Group
 .z-group {
 	&-inner {
-		.verGradient(@groupGradientStart, @groupGradientEnd);
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@groupGradientStart, @groupGradientEnd);
+		</c:if>
 		position: relative;
-		border: 1px solid @tableTitleBorderColor;
-		border-left: none;
-		border-right: none;
+		border-top: 1px solid @tableTitleBorderColor;
+		border-bottom: 1px solid @tableTitleBorderColor;
 		overflow: hidden;
 		.z-group-content,
 		.z-cell {
@@ -182,8 +189,9 @@
 	}
 }
 .z-groupfoot-inner {
-	.verGradient(@groupGradientEnd, @groupGradientStart);
-	position: relative;
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@groupGradientEnd, @groupGradientStart);
+	</c:if>
 	overflow: hidden;
 }
 //content
@@ -242,4 +250,27 @@
 }
 .z-columns-menudescending .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowdown.png');
+}
+// IE 8
+.ie8 {
+	.z-column {
+		position: static;
+		background: @baseGradientEnd;
+		&-hover {
+			background: @hoverGradientEnd;
+		}
+	}
+	.z-row:hover {
+		> .z-row-inner,
+		> .z-cell {
+			position: static;
+			background: @hoverGradientEnd;
+		}
+	}
+	.z-group-inner {
+		background: @groupGradientEnd;
+	}
+	.z-groupfoot-inner {
+		background: average(@groupGradientStart, @groupGradientEnd);
+	}
 }

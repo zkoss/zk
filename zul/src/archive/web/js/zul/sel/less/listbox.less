@@ -24,6 +24,7 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
+		.verGradient();
 	}
 	&-header-border {
 		position: relative;
@@ -72,9 +73,13 @@
 	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
 	position: relative;
-	.verGradient();
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
 	&-hover {
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		</c:if>
 	}
 	&-sort {
 		.z-listheader-content {
@@ -146,7 +151,9 @@
 		cursor: pointer;
 	}
 	&:hover > .z-listcell {
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		</c:if>
 		background-clip: padding-box;
 		position: relative;
 	}
@@ -169,12 +176,16 @@
 	//selected list cell
 	&.z-listitem-selected {
 		.z-listcell {
-			.verGradient(@selectedGradientStart, @selectedGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@selectedGradientStart, @selectedGradientEnd);
+			</c:if>
 			background-clip: padding-box;
 			position: relative;
 		}
 		&:hover > .z-listcell {
-			.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+			</c:if>
 			position: relative;
 		}
 	}
@@ -217,7 +228,9 @@
 //Group
 .z-listgroup {
 	&-inner {
-		.verGradient(@groupGradientStart, @groupGradientEnd);
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@groupGradientStart, @groupGradientEnd);
+		</c:if>
 		position: relative;
 		border: 1px solid @tableTitleBorderColor;
 		border-left: none;
@@ -252,8 +265,9 @@
 	}
 }
 .z-listgroupfoot-inner {
-	.verGradient(@groupGradientEnd, @groupGradientStart);
-	position: relative;
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@groupGradientEnd, @groupGradientStart);
+	</c:if>
 	overflow: hidden;
 }
 //content
@@ -310,4 +324,35 @@
 .z-select {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
+}
+// IE8
+.ie8 {
+	.z-listheader {
+		position: static;
+		background: @baseGradientEnd;
+		&-hover {
+			background: @hoverGradientEnd;
+		}
+	}
+	.z-listitem {
+		&:hover > .z-listcell {
+			background: @hoverGradientEnd;
+		}
+		&.z-listitem-selected {
+			.z-listcell {
+				position: static;
+				background: @selectedGradientEnd;
+			}
+			&:hover > .z-listcell {
+				position: static;
+				background: @selectedHoverGradientEnd;
+			}
+		}
+	}
+	.z-listgroup-inner {
+		background: @groupGradientEnd;
+	}
+	.z-listgroupfoot-inner {
+		background: average(@groupGradientStart, @groupGradientEnd);
+	}
 }
