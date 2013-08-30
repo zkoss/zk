@@ -9,12 +9,11 @@
 		<label id="msg"/>
 		<script type="text/javascript" defer="true"><![CDATA[
 		    var arr = [
-				"zk.load('zkex.cmsp');zk.afterLoad(function(){zkex.cmsp.start",
-				"zk.afterLoad(function(){zkex.cmsp.stop"];
+				"cmsp.start",
+				"cmsp.stop"];
 		    var i = 0,
 		    	result = true;
 	        zAu.cmd0.script = function (script)  {
-	        	zk.log(script);
 	       		result = result && (script.indexOf(arr[i]) != -1);
 	       		i = i + 1;
 				if (i == 2) 
