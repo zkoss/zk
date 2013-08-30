@@ -1,7 +1,6 @@
 <window border="none" width="100%" height="100%" id="test">
     <zscript><![CDATA[
     void setModel(){
-    	listbox.removeEventListener("onLater",this);
     	ListModelList model = new ListModelList();
     	for(int i=0;i<100;i++){
     		model.add("A"+i);
