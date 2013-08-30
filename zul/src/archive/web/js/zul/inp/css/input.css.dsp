@@ -320,6 +320,7 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-errbox-center {
 	color: #990000;
 	padding: 5px 3px;
+	word-wrap: break-word; 
 }
 .z-errbox-left {
 	background-image: url(${c:encodeThemeURL('~./zul/img/errbox/error-icon.png')});

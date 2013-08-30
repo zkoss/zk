@@ -40,9 +40,11 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
-			val = parseInt(info.raw, 10);
+			val = parseInt(info.raw, 10),
+			sval = new zk.BigDecimal(info.raw).$toString();
 		
-		if (isNaN(val) || (info.raw != ''+val && info.raw != '-'+val))
+		// B65-ZK-1907: Avoid scientific notation for large numbers
+		if (isNaN(val) || (info.raw != sval && info.raw != '-'+sval))
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
 			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−2147483648 - 2147483647)')};
