@@ -59,11 +59,15 @@
 
 		&:hover {
 			border-color: @hoverBorderColor;
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			</c:if>
 		}
 		&:active {
 			border-color: @activeBorderColor;
-			.verGradient(@activeGradientStart, @activeGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@activeGradientStart, @activeGradientEnd);
+			</c:if>
 			.boxShadow('inset 1px 1px 1px #91AAB7');
 		}
 		input[disabled] + & {
@@ -164,11 +168,15 @@
 		}
 		&:hover {
 			border-color: @hoverBorderColor;
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			</c:if>	
 		}
 		&:active {
 			border-color: @activeBorderColor;
-			.verGradient(@activeGradientStart, @activeGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@activeGradientStart, @activeGradientEnd);
+			</c:if>	
 			.boxShadow('inset 1px 1px 1px #91AAB7');
 		}
 	}
@@ -270,13 +278,19 @@
 	text-decoration: none;
 }
 .z-comboitem-selected {
-	.verGradient(@selectedGradientStart, @selectedGradientEnd);
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@selectedGradientStart, @selectedGradientEnd);
+	</c:if>
 }
 .z-comboitem:hover {
-	.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	</c:if>
 }
 .z-comboitem-selected:hover {
-	.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+	</c:if>
 }
 .z-comboitem-image {
 	margin-right: 3px;
@@ -328,4 +342,49 @@
 .z-datebox-shadow {
 	.borderRadius(@borderRadiusSmall);
 	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
+}
+
+.ie8 {
+	.z-combobox,
+	.z-bandbox,
+	.z-datebox,
+	.z-timebox,
+	.z-spinner,
+	.z-doublespinner {
+		&-button {
+			&:hover {
+				.gradientHoverFallback();
+			}
+			&:active {
+				.gradientActiveFallback();
+			}
+		}
+	}
+
+	.z-timebox,
+	.z-spinner,
+	.z-doublespinner {
+		&-button {
+			& > a {
+				&:hover {
+					.gradientHoverFallback();
+				}
+				&:active {
+					.gradientActiveFallback();
+				}
+			}
+		}
+	}
+
+	.z-comboitem {
+		&-selected {			
+			.gradientSelectedFallback();		
+		}
+		&:hover {
+			.gradientHoverFallback();
+		}
+		&-selected:hover {
+			.gradientSelectedHoverFallback();
+		}
+	}
 }

@@ -79,7 +79,9 @@
 		margin: auto 1px;
 		cursor: pointer;
 		display: block;
-		.verGradient();
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
 		.borderRadius();
 		border: 1px solid @baseBorderColor;
 		float: right;
@@ -93,11 +95,6 @@
 			color: @iconHoverColor;
 		}
 
-		<c:if test="${zk.ie == 8}">
-		.z-icon-minus, .z-icon-fullscreen {
-			margin-left: 1px;			
-		}
-		</c:if>
 	}
 	
 	&-maximize, &-minimize, &-close, &-expand {
@@ -207,4 +204,12 @@
 	border: 1px solid @baseBorderColor;
 	position: relative;
 	.defaultOverflowZoom();
+}
+
+.ie8 .z-panel-icon {
+	.gradientFallback();
+
+	.z-icon-minus, .z-icon-fullscreen {
+		margin-left: 1px;			
+	}
 }

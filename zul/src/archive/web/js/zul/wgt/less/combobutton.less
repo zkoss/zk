@@ -3,20 +3,16 @@
 .z-combobutton {
 	display: inline-block;
 	min-height: @baseButtonHeight;
-	<c:if test="${zk.ie == 8}">
-		min-height: @baseButtonHeight - 10;
-	</c:if>
 	
 	&-content {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
 		padding: 4px 30px 4px 5px;
-		.verGradient();
 		border: 1px solid @buttonBorderColor;
 		min-height: @baseButtonHeight;
-		<c:if test="${zk.ie == 8}">
-			min-height: @baseButtonHeight - 10;
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
 		</c:if>
 		line-height: @baseLineHeight;
 		.borderRadius(@borderRadiusSmall);
@@ -65,7 +61,9 @@
 		.z-combobutton-content,
 		.z-combobutton-button {
 			border-color: @hoverBorderColor;
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			</c:if>
 		}
 	}
 	&:focus {
@@ -109,6 +107,22 @@
 				border-color: @hoverBorderColor;
 				.verGradient(@hoverGradientStart, @hoverGradientEnd);
 			}
+		}
+	}
+}
+
+.ie8 .z-combobutton {
+	min-height: @baseButtonHeight - 10;
+	
+	&-content {
+		.gradientFallback();
+		min-height: @baseButtonHeight - 10;
+	}
+
+	&:hover {
+		.z-combobutton-content,
+		.z-combobutton-button {
+			background: @hoverGradientEnd;
 		}
 	}
 }

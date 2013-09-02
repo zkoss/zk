@@ -50,7 +50,9 @@
 		overflow: hidden;
 		margin: auto 1px;
 		display: block;
-		.verGradient();
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
 		.borderRadius();
 		border: 1px solid @baseBorderColor;
 		float: right;
@@ -64,12 +66,6 @@
 			background: @hoverBackgroundColor;
 			color: @iconHoverColor;
 		}
-
-		<c:if test="${zk.ie == 8}">
-		.z-icon-minus, .z-icon-fullscreen {
-			margin-left: 1px;			
-		}
-		</c:if>
 	}
 	
 	&-maximize, &-minimize, &-close {
@@ -235,5 +231,12 @@
 	
 	&-error {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
+	}
+}
+
+.ie8 .z-window-icon {
+	.gradientFallback();
+	.z-icon-minus, .z-icon-fullscreen {
+		margin-left: 1px;			
 	}
 }
