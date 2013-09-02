@@ -155,12 +155,20 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				if (chdex) {
 					//ZK-1679: clear height only vflex != min, clear width only hflex != min
 					if (vert && kid._nvflex && kid.getVflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
+						var n;
+						if (zk.ie == 8 && (n == kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+							;// do nothing Bug ZK-1885 IE8: scrollable div (with vflex) and tooltip
+						else
+							kid.setFlexSize_({height:'', width:''});
 						if (chdex)
 							chdex.style.height = '';
 					}
 					if (!vert && kid._nhflex && kid.getHflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
+						var n;
+						if (zk.ie == 8 && (n == kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+							;// do nothing Bug ZK-1885 IE8: scrollable div (with vflex) and tooltip
+						else
+							kid.setFlexSize_({height:'', width:''});
 						if (chdex)
 							chdex.style.width = '';
 					}
