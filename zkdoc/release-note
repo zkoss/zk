@@ -45,6 +45,8 @@ ZK 6.5.4
   ZK-1904: Datebox doesn't sync dropdown stackup well (IE only)
   ZK-1908: Databinding Load order causing problems on Paging component.
   ZK-1909: Set maxlength attribute to the doublebox conponent, the maxlength checking is not correct
+  ZK-1913: AuResponse of stop comet server push would override the request of start in some situation
+  ZK-1907: Validation error style, long words overlapping box
 
   --------
 ZK 6.5.3
