@@ -44,9 +44,8 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 			sval;
 		if (info.raw.length < 17) 
 			sval = val.toString();
-		// Parse raw input by big decimal to avoid scientific notation
 		else 
-			sval = new zk.BigDecimal(info.raw).$toString();
+			sval = new zk.BigDecimal(info.raw).$toString(); // Parse raw input by big decimal to avoid scientific notation
 	
 		// B65-ZK-1907: Should compare raw input string instead of parsed number(may contain scientific notation)
 		if (isNaN(val) || (info.raw != sval && info.raw != '-'+sval))
