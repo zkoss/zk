@@ -19,25 +19,10 @@ function (out) {
 		uuid = this.uuid,
 		icon = this.$s('icon'),
 		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-remove ' + icon + '"></i>',
-		self = this,
-		outputTab = function(tag) {
-			out.push('<', tag, ' ', self.domAttrs_(), '>');
-			var c = self.firstChild,
-				hasCaption = c ? c.$instanceof(zul.wgt.Caption) : false;
-			if (!hasCaption) 
-				out.push('<a id="', self.uuid, '-cave" class="', self.$s('content'), '" >');
-	
-			if (self.isClosable())
-				out.push('<div id="', uuid , '-btn" class="', self.$s('button'), '">', removeIcon, '</div>');
-	
-			self.contentRenderer_(out);
-			
-			if (!hasCaption)
-				out.push('</a>');
-			out.push('</', tag, '>');
-		};
+		isAccordion = tbx.inAccordionMold(),
+		tag = isAccordion ? 'div' : 'li';
 	 
-	if (tbx.inAccordionMold()) {//Accordion
+	if (isAccordion) {//Accordion
 		var panel = this.getLinkedPanel(),
 			n = panel? panel.$n() : null,
 			c = n? n.firstChild : null;
@@ -53,12 +38,24 @@ function (out) {
 			return;
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
+	}
 
-		outputTab('div');
+	out.push('<', tag, ' ', this.domAttrs_(), '>');
+	var c = this.firstChild,
+		hasCaption = c ? c.$instanceof(zul.wgt.Caption) : false;
+	if (!hasCaption) 
+		out.push('<a id="', uuid, '-cave" class="', this.$s('content'), '" >');
 
-		if (n) // panel already rendered, do insert
-			jq(n).prepend(out.join(''));
-	} else 
-		outputTab('li');
+	if (this.isClosable())
+		out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">', removeIcon, '</div>');
+
+	this.contentRenderer_(out);
+		
+	if (!hasCaption)
+		out.push('</a>');
+	out.push('</', tag, '>');
+
+	if (isAccordion && n) // panel already rendered, do insert
+		jq(n).prepend(out.join(''));
 	
 }
