@@ -785,9 +785,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<!--ZK-1908 Databinding Load order causing problems on Paging component.
-			introduce(6.5.4) a new spec of annotation on attribute, now allow to add a priority(large number is higher,default 0)
-			after property name('property:priority')-->
-			<property-name>activePage:-1</property-name>
+			System annotation shouldn't effect the annotation sequence.
+			after 6.5.4, add a ZKBIND prefix so it won't effect original property 
+			-->
+			<property-name>ZKBIND$activePage</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>

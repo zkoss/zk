@@ -1,6 +1,7 @@
 <zk>
 	<label multiline="true">
-		you should see there are 10 page and currently at page 4.
+		1.you should see there are 10 page and currently at page 4.
+		2.change the page, the label should change to corresponding page also.
 	</label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('searchvm') @init('org.zkoss.zktest.bind.issue.B01908DatabindingOnPaging')">
@@ -8,5 +9,6 @@
 			totalSize="@load(searchvm.totalSize)"
 			activePage="@bind(searchvm.activePage)"
 			onPaging="@command('onPaging')" />
+		<label id="lab1" value="@bind(searchvm.activePage)"/>
 	</vlayout>
 </zk>

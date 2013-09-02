@@ -821,7 +821,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String initExpr, Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs) {
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl, attr);
 		String loadrep = null;
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
@@ -857,7 +857,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	private String getSystemConverter(Component comp, String attr) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl,attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl,attr);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 			return AnnotationUtil.testString(attrs.get(Binder.CONVERTER),ann); //system converter if exists
@@ -867,7 +867,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private String getSystemValidator(Component comp, String attr) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl, attr);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 			return AnnotationUtil.testString(attrs.get(Binder.VALIDATOR),ann); //system validator if exists
@@ -882,7 +882,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, null, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl, null);
 		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		
 		if (attrs != null) {
@@ -930,7 +930,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		//check attribute _accessInfo natural characteristics to register Command event listener
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl, attr);
 		//check which attribute of component should load to component on which event.
 		//the event is usually a engine lifecycle event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onAfterRender'
@@ -1018,7 +1018,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		//check attribute _accessInfo natural characteristics to register Command event listener 
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl, attr);
 		//check which attribute of component should fire save on which event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onSelect'
 		//ex, checkbox's 'checked' should be saved to bean on 'onCheck'
