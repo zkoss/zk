@@ -156,8 +156,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					//ZK-1679: clear height only vflex != min, clear width only hflex != min
 					if (vert && kid._nvflex && kid.getVflex() != 'min') {
 						var n;
-						if (zk.ie == 8 && (n == kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
-							;// do nothing Bug ZK-1885 IE8: scrollable div (with vflex) and tooltip
+						if (n = kid.$n() && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+							;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 						else
 							kid.setFlexSize_({height:'', width:''});
 						if (chdex)
@@ -165,8 +165,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					}
 					if (!vert && kid._nhflex && kid.getHflex() != 'min') {
 						var n;
-						if (zk.ie == 8 && (n == kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
-							;// do nothing Bug ZK-1885 IE8: scrollable div (with vflex) and tooltip
+						if (n = kid.$n() && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+							;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 						else
 							kid.setFlexSize_({height:'', width:''});
 						if (chdex)
