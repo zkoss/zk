@@ -157,7 +157,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'onSize', arguments);
 		var self = this;
 		setTimeout(function () {
-			if (self.desktop && !this.inSelectMold() && !self._nativebar) {
+			if (self.desktop && !self.inSelectMold() && !self._nativebar) {
 				if (!self._scrollbar)
 					self._scrollbar = zul.mesh.Scrollbar.init(self);
 				if (!self._listbox$rod || self.inPagingMold()) {
@@ -202,6 +202,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
+		
 	},
 	unbind_: function () {
 		this.destoryBar_();
