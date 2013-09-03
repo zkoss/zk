@@ -1,5 +1,21 @@
 @import "~./zul/less/_header.less";
 
+//reset table
+.resetTable() {
+	border-spacing: 0;
+	th, td {
+		background-clip: padding-box;
+		padding: 0;
+	}
+	th {
+		text-align: inherit;
+	}
+}
+
+.z-hbox, .z-vbox {
+	.resetTable();
+}
+
 .z-hbox-separator,
 .z-vbox-separator {
 	padding: 0;
