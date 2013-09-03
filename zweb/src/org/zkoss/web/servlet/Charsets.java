@@ -29,7 +29,6 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
-
 import org.zkoss.web.Attributes;
 
 /**
@@ -206,10 +205,35 @@ public class Charsets {
 			if (s != null)
 				return Locales.getLocale(s);
 		}
-
-		final Locale l = request.getLocale();
-		return l != null ? l: Locale.getDefault();
+		
+		Locale l = request.getLocale();
+		// B65-ZK-1916: convert zh_HANS-XX and zh_HANT-XX to zh_XX
+		return l != null ? fixZhLocale(l): Locale.getDefault();
 	}
+	
+	/** fix zh_HANS-XX and zh_HANT-XX, and return zh_XX */
+	private static Locale fixZhLocale(Locale locale) {
+		final String country = locale.getCountry();
+		if (new Locale("zh").getLanguage().equals(locale.getLanguage()) && !country.isEmpty()) {
+			if (country.startsWith("HANS")) {
+				if (country.endsWith("SG"))
+					return new Locale("zh", "SG");
+				else 
+					return Locale.SIMPLIFIED_CHINESE;
+			} else if (country.startsWith("HANT")) {
+				if (country.endsWith("TW"))
+					return Locale.TAIWAN;
+				else if (country.endsWith("HK"))
+					return new Locale("zh", "HK");
+				else if (country.endsWith("MO"))
+					return new Locale("zh", "MO");
+				else 
+					return Locale.TRADITIONAL_CHINESE;
+			}
+		 }
+		 return locale;
+	}
+	
 	/** The previous attribute name (backward compatible prior to 5.0.3. */
 	private static final String PX_PREFERRED_LOCALE = "px_preferred_locale";
 	private static void logLocaleError(Object v) {
