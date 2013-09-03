@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	//Bug 1926480: opera failed to add listheader dynamically (since hdfakerflex introduced)
-	var _fixOnChildChanged = zk.opera || (zk.ie == 8) ? function (head) {
+	var _fixOnChildChanged = zk.opera ? function (head) {
 		return (head = head.parent) && head.rerender(); //later
 	}: zk.$void;
 
