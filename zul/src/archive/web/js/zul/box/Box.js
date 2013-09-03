@@ -393,7 +393,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						var chdex = kid.$n('chdex');
 						if (chdex) {
 							var n;
-							if (n = kid.$n() && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+							if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
 								;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 							else {
 								chdex.style.height = szes && k < szes.length ? szes[k] : '';
@@ -411,7 +411,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						var chdex = kid.$n('chdex');
 						if (chdex) {
 							var n;
-							if (n = kid.$n() && (n.scrollTop || n.scrollLeft)) // keep the scroll status
+							if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
 								;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 							else {
 								chdex.style.width = szes && k < szes.length ? szes[k] : '';
