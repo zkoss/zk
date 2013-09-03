@@ -13,7 +13,9 @@
 		height: @baseIconHeight;
 		border: 1px solid @sliderBorderColor;
 		.borderRadius(@borderRadiusSmall);
-		.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
+		<c:if test="${zk.ie != 8}">
+			.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
+		</c:if>
 		position: relative;
 		cursor: pointer;
 
@@ -33,7 +35,9 @@
 		height: @baseBarHeight;
 
 		.z-slider-center {
-			.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
+			<c:if test="${zk.ie != 8}">
+				.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
+			</c:if>	
 			height: @baseHeight - 2;
 			width: 100%;
 			position: relative;
@@ -58,7 +62,9 @@
 		}
 
 		.z-slider-center {
-			.gradient('hor', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
+			<c:if test="${zk.ie != 8}">
+				.gradient('hor', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
+			</c:if>
 			height: 100%;
 			width: @baseWidth - 2;
 			margin: auto;
@@ -89,5 +95,16 @@
 
 	&-scale {
 		.encodeThemeURL(background-image, '~./zul/img/slider/ticks.gif');
+	}
+}
+
+.ie8 .z-slider {
+	&-button {
+		.gradientFallback(#FFFFFF, #EFEFEF);
+	}
+
+	&-vertical .z-slider-center, 
+	&-horizontal .z-slider-center {
+		.gradientFallback(rgb(157,157,157), rgb(215,215,215));
 	}
 }
