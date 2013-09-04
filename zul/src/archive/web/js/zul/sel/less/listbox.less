@@ -78,7 +78,7 @@
 	</c:if>
 	&-hover {
 		<c:if test="${zk.ie != 8}">
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			.verGradient(@tableTitleHoverStart, @tableTitleHoverEnd);
 		</c:if>
 	}
 	&-sort {
@@ -125,11 +125,11 @@
 		line-height: @baseBarHeight;
 		text-decoration: none;
 		text-align: center;
-		border-left: 1px solid darken(@hoverGradientStart, 15%);
+		border-left: 1px solid darken(@tableTitleHoverStart, 15%);
 		.boxShadow('inset 1px 0 #FFFFFF');
 		color: @iconColor;
 		&:hover {
-			.verGradient(darken(@hoverGradientStart, 5%), darken(@hoverGradientEnd, 10%));
+			.verGradient(darken(@tableTitleHoverStart, 5%), darken(@tableTitleHoverEnd, 10%));
 		}
 	}
 	&-sizing,
@@ -150,12 +150,18 @@
 		overflow: hidden;
 		cursor: pointer;
 	}
-	&:hover > .z-listcell {
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
-		</c:if>
-		background-clip: padding-box;
-		position: relative;
+	&:hover {
+		> .z-listcell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@tableContentHoverStart, @tableContentHoverEnd);
+			</c:if>
+			border-color: @tableContentHoverStart;
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-listcell-content {
+			color: @hoverColor;
+		}
 	}
 	//check mark
 	&-checkable {
@@ -179,14 +185,24 @@
 			<c:if test="${zk.ie != 8}">
 				.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			</c:if>
+			border-color: @selectedGradientStart;
 			background-clip: padding-box;
 			position: relative;
 		}
-		&:hover > .z-listcell {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-			</c:if>
-			position: relative;
+		.z-listcell-content {
+			color: @selectedColor;
+		}
+		&:hover {
+			> .z-listcell {
+				<c:if test="${zk.ie != 8}">
+					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+				</c:if>
+				border-color: @selectedHoverGradientStart;
+				position: relative;
+			}
+			.z-listcell-content {
+				color: @selectedHoverColor;
+			}
 		}
 	}
 	//selected check mark
@@ -331,7 +347,7 @@
 		position: static;
 		background: @baseGradientEnd;
 		&-hover {
-			background: @hoverGradientEnd;
+			background: @tableTitleHoverEnd;
 		}
 	}
 	.z-listitem {
@@ -341,7 +357,7 @@
 		&.z-listitem-selected {
 			.z-listcell {
 				position: static;
-				background: @selectedGradientEnd;
+				background: @tableContentHoverEnd;
 			}
 			&:hover > .z-listcell {
 				position: static;
