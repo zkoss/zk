@@ -125,8 +125,11 @@
 	top: 8px;
 	right: 8px;
 	padding: 0 1px;
-	.opacity(0.6);
+	<c:if test="${zk.ie != 8}">
+		.opacity(0.6);
+	</c:if>
 	font-size: @fontSizeXSmall;
+	border: 1px solid transparent;
 
 	&:hover {
 		.borderRadius(@borderRadiusSmall - 1);
