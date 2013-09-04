@@ -24,7 +24,9 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-		.verGradient();
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
 	}
 	&-header-border {
 		position: relative;
@@ -121,7 +123,9 @@
 		.boxShadow('inset 1px 0 #FFFFFF');
 		color: @iconColor;
 		&:hover {
-			.verGradient(darken(@hoverGradientStart, 5%), darken(@hoverGradientEnd, 10%));
+			<c:if test="${zk.ie != 8}">
+				.verGradient(darken(@hoverGradientStart, 5%), darken(@hoverGradientEnd, 10%));
+			</c:if>
 		}
 	}
 	&-sizing,
@@ -253,11 +257,18 @@
 }
 // IE 8
 .ie8 {
+	.z-grid-header {
+		background: @baseGradientEnd;
+	}
 	.z-column {
 		position: static;
 		background: @baseGradientEnd;
 		&-hover {
 			background: @hoverGradientEnd;
+		}
+
+		&-button:hover {
+			background: darken(@hoverGradientEnd, 5%);
 		}
 	}
 	.z-row:hover {

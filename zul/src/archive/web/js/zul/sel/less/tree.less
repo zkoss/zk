@@ -24,7 +24,9 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-		.verGradient();
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
 	}
 	&-header-border {
 		position: relative;
@@ -104,7 +106,9 @@
 	&-sort {
 		cursor: pointer;
 		&:hover {
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			</c:if>
 		}
 	}
 	&-sizing,
@@ -225,10 +229,13 @@
 }
 // IE8
 .ie8 {
+	.z-tree-header {
+		background: @baseGradientEnd;
+	}
 	.z-treecol {
 		position: static;
 		background: @baseGradientEnd;
-		&-hover {
+		&-hover, &-sort:hover {
 			background: @hoverGradientEnd;
 		}
 	}
