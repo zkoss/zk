@@ -35,12 +35,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
-				if (open)
+				if (open) {
 					jq(node).removeClass(this.$s('collapsed'));
+					zk(this).redoCSS(-1, {'fixFontIcon': true});
+				}
 				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
 				
 				if (!fromServer) this.fire('onOpen', {open:open});
-			}
+			}			
 		},
 		/** Returns whether user can open or close the group box.
 		 * In other words, if false, users are no longer allowed to
