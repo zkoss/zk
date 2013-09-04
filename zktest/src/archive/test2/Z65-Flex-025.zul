@@ -1,4 +1,18 @@
-<zk><hbox>
+<zk>
+<style>
+table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+			border: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+</style>
+<hbox>
     <window border="normal" height="360px"
         title="minimum Flex: [Tabbox, Vlayout]" width="480px">
         <vlayout height="200px" hflex="min">

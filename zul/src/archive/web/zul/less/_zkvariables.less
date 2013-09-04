@@ -14,7 +14,7 @@
 @baseBarHeight:                @baseHeight * 4; // 32px
 @baseTitleHeight:              @baseHeight * 5; // 40px
 
-// Component width             
+// Component width
 @baseWidth:                    8px;
 @baseIconWidth:                @baseWidth * 2; // 16px
 @baseButtonWidth:              @baseWidth * 3; // 24px
@@ -81,6 +81,8 @@
 // Button (used for button, combobutton)
 // -------------------------------------
 @buttonBorderColor:            #A9A9A9;
+@buttonGradientStart:          #FEFEFE;
+@buttonGradientEnd:            #EEEEEE;
 
 // -------------------------------------
 // Input (used for textbox, intbox, spinner, ...)
@@ -96,6 +98,10 @@
 @tableBackgroundColor:         #FFFFFF;
 @tableStripeBackgroundColor:   #F7F7F7;
 @tableFootBackgroundColor:     #FAFAFA;
+@tableTitleHoverStart:         #F2F9FE;
+@tableTitleHoverEnd:           #D6F0FD;
+@tableContentHoverStart:       #F2F9FE;
+@tableContentHoverEnd:         #D6F0FD;
 
 // -------------------------------------
 // Component State
@@ -134,14 +140,14 @@
 @readonlyBackgroundColor:      #FAFAFA;
 
 // Selected (used on listbox, tree, comboitem)
-@selectedColor:                @baseTextColor;
+@selectedColor:                @textColorGrayLight;
 @selectedBorderColor:          @baseBorderColor;
 @selectedBackgroundColor:      #BEE7FC;
 @selectedGradientStart:        #E5F4FB;
 @selectedGradientEnd:          #D3EDFA;
 
 // Selected Hover (used on listbox, tree, comboitem)
-@selectedHoverColor:           @baseTextColor;
+@selectedHoverColor:           @textColorGrayLight;
 @selectedHoverBorderColor:     @baseBorderColor;
 @selectedHoverBackgroundColor: #C5E7F8;
 @selectedHoverGradientStart:   #CFEBF8;
@@ -189,6 +195,7 @@
 
 // calendar
 @calendarTitleColor:           @textColorGrayLight;
+@calendarTitleHoverColor:      @textColorGrayLight;
 @calendarCellColor:            @textColorGrayLight;
 @weekendColor:                 @textColorOrange;
 @weekendBackgroundColor:       #F2F2F2;
@@ -253,6 +260,7 @@
 @menuPopupBackground:          #FAFAFA;
 @menuSeparatorBorderColor:     #838383;
 @menuSeparatorBackgroundColor: #B8B8B8;
+@menuPopupSeparatorBorder:     #FFFFFF;
 @menuPopupSeparatorBackground: #E0E0E0;
 
 // navbar

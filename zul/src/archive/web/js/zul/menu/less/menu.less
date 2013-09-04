@@ -233,9 +233,9 @@
 		top: 0;
 		left: 31px;
 		z-index: 10;
-		border-top: 3px solid #FFFFFF;
-		border-bottom: 3px solid #FFFFFF;
-		border-right: 1px solid #FFFFFF;
+		border-width: 3px 1px 3px 0;
+		border-style: solid;
+		border-color: @menuPopupSeparatorBorder;
 	}
 	.z-menu-image,
 	.z-menuitem-image {
@@ -267,7 +267,7 @@
 		font-size: 1px;
 		line-height: 1px;
 		background: @menuPopupSeparatorBackground;
-		border-bottom: 1px solid #FFFFFF;
+		border-bottom: 1px solid @menuPopupSeparatorBorder;
 		display: block;
 		width: auto;
 		position: relative;

@@ -8,7 +8,7 @@
 	line-height: @baseLineHeight;
 	border: 1px solid @buttonBorderColor;
 	.borderRadius();
-	.verGradient();
+	.verGradient(@buttonGradientStart, @buttonGradientEnd);
 	text-shadow: 0 1px #FFFFFF;
 	cursor: pointer;
 	min-height: @baseButtonHeight;
@@ -34,7 +34,7 @@
 	&[disabled] {
 		.disabledOpacity();
 		border: 1px solid @buttonBorderColor;
-		.verGradient();
+		.verGradient(@buttonGradientStart, @buttonGradientEnd);
 		.boxShadow('none');
 		cursor: default;
 	}

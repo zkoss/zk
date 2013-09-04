@@ -107,7 +107,7 @@
 		cursor: pointer;
 		&:hover {
 			<c:if test="${zk.ie != 8}">
-				.verGradient(@hoverGradientStart, @hoverGradientEnd);
+				.verGradient(@tableTitleHoverStart, @tableTitleHoverEnd);
 			</c:if>
 		}
 	}
@@ -123,12 +123,17 @@
 		overflow: hidden;
 		cursor: pointer;
 	}
-	&:hover > .z-treecell {
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
-		</c:if>
-		background-clip: padding-box;
-		position: relative;
+	&:hover {
+		> .z-treecell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@tableContentHoverStart, @tableContentHoverEnd);
+			</c:if>
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-treecell-content {
+			color: @hoverColor;
+		}
 	}
 	//check mark
 	&-checkable {
@@ -155,10 +160,18 @@
 			background-clip: padding-box;
 			position: relative;
 		}
-		&:hover > .z-treecell {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-			</c:if>
+		.z-treecell-content {
+			color: @selectedColor;
+		}
+		&:hover {
+			> .z-treecell {
+				<c:if test="${zk.ie != 8}">
+					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+				</c:if>
+			}
+			.z-listcell-content {
+				color: @selectedHoverColor;
+			}
 		}
 	}
 	//selected check mark
@@ -236,12 +249,12 @@
 		position: static;
 		background: @baseGradientEnd;
 		&-hover, &-sort:hover {
-			background: @hoverGradientEnd;
+			background: @tableTitleHoverEnd;
 		}
 	}
 	.z-treerow {
 		&:hover > .z-treecell {
-			background: @hoverGradientEnd;
+			background: @tableContentHoverEnd;
 		}
 		&.z-treerow-selected {
 			.z-treecell {

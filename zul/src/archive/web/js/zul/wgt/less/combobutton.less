@@ -12,7 +12,7 @@
 		border: 1px solid @buttonBorderColor;
 		min-height: @baseButtonHeight;
 		<c:if test="${zk.ie != 8}">
-			.verGradient();
+			.verGradient(@buttonGradientStart, @buttonGradientEnd);
 		</c:if>
 		line-height: @baseLineHeight;
 		.borderRadius(@borderRadiusSmall);
