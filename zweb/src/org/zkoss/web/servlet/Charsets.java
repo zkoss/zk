@@ -211,7 +211,22 @@ public class Charsets {
 		return l != null ? fixZhLocale(l): Locale.getDefault();
 	}
 	
-	/** fix zh_HANS-XX and zh_HANT-XX, and return zh_XX */
+	/* Maps zh_HANS-XX to zh_HANT-XX to zh_XX 
+	 * 
+	 * Mapping rules:
+	 * 
+	 *     zh_HANS     =>  zh_CN
+	 *     zh_HANS-CN  =>  zh_CN
+	 *     zh_HANS-SG  =>  zh_SG
+	 *     
+	 *     zh_HANT     =>  zh_TW
+	 *     zh_HANT-TW  =>  zh_TW
+	 *     zh_HANT-HK  =>  zh_HK
+	 *     zh_HANT-MO  =>  zh_MO
+	 *     zh_HANS-CN  =>  zh_CN
+	 * 
+	 * This function should be deprecated or modified in JDK 1.7 environment or later.
+	 */
 	private static Locale fixZhLocale(Locale locale) {
 		final String country = locale.getCountry();
 		if (new Locale("zh").getLanguage().equals(locale.getLanguage()) && !country.isEmpty()) {
