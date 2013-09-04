@@ -98,10 +98,10 @@
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @checkedBorderColor;
 		display: inline-block;
 		vertical-align: text-top;
-		.verGradient();
+		background: @checkedBackgroundColor;
 		.z-listheader-icon {
 			display: none;
 			cursor: default;
@@ -110,7 +110,7 @@
 			display: block;
 			line-height: @baseLineHeight;
 			padding-left: 1px;
-			color: @textColorBlue;
+			color: @checkedColor;
 		}
 	}
 	&-button {
@@ -167,10 +167,10 @@
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @checkedBorderColor;
 		display: inline-block;
 		vertical-align: text-top;
-		.verGradient();
+		background: @checkedBackgroundColor;
 		&.z-listitem-radio {
 			.borderRadius(8px);
 		}
