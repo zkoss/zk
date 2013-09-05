@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
@@ -28,8 +29,10 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopRecycle;
+import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
@@ -111,30 +114,45 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	}
 	private static void desktopDestroyed(Desktop desktop) {
 		final Session sess = desktop.getSession();
-		final WebApp wapp = desktop.getWebApp();
-		((DesktopCtrl)desktop).invokeDesktopCleanups();
-		final Configuration config = wapp.getConfiguration();
-		config.invokeDesktopCleanups(desktop);
-			//Feature 1767347: call DesktopCleanup before desktopDestroyed
-			//such that app dev has a chance to manipulate the desktop
-		((WebAppCtrl)wapp).getUiEngine().desktopDestroyed(desktop);
+		final Execution exec = new ExecutionImpl(
+				desktop.getWebApp().getServletContext(), null, null, desktop, null);
 
-		final Monitor monitor = desktop.getWebApp().getConfiguration().getMonitor();
-		if (monitor != null) {
-			try {
-				monitor.desktopDestroyed(desktop);
-			} catch (Throwable ex) {
-				log.error(ex);
-			}
-		}
+		try {
+			// For ZK-1890: Can't subscribe eventqueue in desktop cleanup
+			ExecutionsCtrl.setCurrent(exec);
+			final UiVisualizer uv = new UiVisualizer(exec, true, false);
+			final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+			desktopCtrl.setVisualizer(uv);
+			desktopCtrl.setExecution(exec);
 
-		final DesktopRecycle dtrc = config.getDesktopRecycle();
-		if (dtrc != null) {
-			try {
-				dtrc.afterRemove(sess, desktop);
-			} catch (Throwable ex) {
-				log.error(ex);
+
+			final WebApp wapp = desktop.getWebApp();
+			((DesktopCtrl)desktop).invokeDesktopCleanups();
+			final Configuration config = wapp.getConfiguration();
+			config.invokeDesktopCleanups(desktop);
+				//Feature 1767347: call DesktopCleanup before desktopDestroyed
+				//such that app dev has a chance to manipulate the desktop
+			((WebAppCtrl)wapp).getUiEngine().desktopDestroyed(desktop);
+	
+			final Monitor monitor = desktop.getWebApp().getConfiguration().getMonitor();
+			if (monitor != null) {
+				try {
+					monitor.desktopDestroyed(desktop);
+				} catch (Throwable ex) {
+					log.error(ex);
+				}
 			}
+	
+			final DesktopRecycle dtrc = config.getDesktopRecycle();
+			if (dtrc != null) {
+				try {
+					dtrc.afterRemove(sess, desktop);
+				} catch (Throwable ex) {
+					log.error(ex);
+				}
+			}
+		} finally {
+			ExecutionsCtrl.setCurrent(null);
 		}
 	}
 

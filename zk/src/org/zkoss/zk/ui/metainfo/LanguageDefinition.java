@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.CollectionsX;
@@ -34,7 +35,6 @@ import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
-
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
@@ -633,7 +633,6 @@ public class LanguageDefinition {
 	public Collection<JavaScript> getJavaScripts() {
 		return new CollectionsX.ArrayCollection<JavaScript>(_js.toArray());
 	}
-
 	/** Merge a JavaScript package, say pkgFrom, to another package, say pkgTo,
 	 * such that, when loading pkgTo, pkgFrom will be placed in the same WPD file.
 	 * Thus, the number of WPD fields to load will be reduced, and

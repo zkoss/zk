@@ -556,7 +556,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null) //Some client might not have ZK-SID
-			response.setHeader("ZK-SID", sid);
+			response.setHeader("ZK-SID", XMLs.encodeText(sid));
 
 		//parse commands
 		final Configuration config = wapp.getConfiguration();

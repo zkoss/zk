@@ -1,0 +1,24 @@
+<window width="500px" border="1" title="IE only">
+	Click the calendar and select a date, then click the calendar again.
+	The datebox should sync dropdown stackup well
+	<grid width="500px">
+		<columns>
+			<column />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<cell />
+				<datebox id="dt"/>
+			</row>
+			<row>
+				<cell colspan="2">
+					<hlayout>
+						<button label="ok" />
+						<button label="cancel"/>
+					</hlayout>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+</window>

@@ -1,0 +1,23 @@
+<zk>
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01887DetachAttach')"
+		entityVM="@ref(vm.entityVM)" listVM="@ref(vm.listVM)" id="main" >
+	
+		<button id="btn1" label="dyn1" onClick="@command('enableDyn1')" />
+		<button id="btn2" label="dyn2" onClick="@command('enableDyn2')" />
+	
+		<div id="container">
+			<div id="dyn1">
+				DYN1
+				<label value="@init(entityVM)" />
+				<include src="@init(entityVM.inc)" />
+			</div>
+			
+			<div id="dyn2">
+				DYN2
+				<label value="@init(listVM)" />
+				<include src="@init(listVM.inc)" />
+			</div>
+		</div>
+		
+	</div>
+</zk>

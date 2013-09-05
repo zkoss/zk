@@ -2993,6 +2993,10 @@ public class Listbox extends MeshElement {
 					} else {
 						resetDataLoader(); // enforce recreate the dataloader
 						// dataloader
+
+						// Bug ZK-1895
+						//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
+						Executions.getCurrent().removeAttribute("zkoss.Listbox.deferInitModel_"+getUuid());
 					}
 				}
 			} else if (_model != null){ //items in model not init yet
