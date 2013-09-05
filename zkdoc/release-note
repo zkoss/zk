@@ -12,6 +12,7 @@ ZK 7.0.0
   ZK-1725: ExtendletLoader should provide debug information
   ZK-1866: ZK JSON: improve usability by accepting Collection instead of List
   ZK-1912: A component support preserve-blank
+  ZK-1919: ZK Components support static uuid
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
