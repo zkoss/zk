@@ -48,7 +48,9 @@ ZK 6.5.4
   ZK-1913: AuResponse of stop comet server push would override the request of start in some situation
   ZK-1907: Validation error style, long words overlapping box
   ZK-1906: Chosenbox getSelectedObjects() returns empty list if model is ListModel of JavaBean instances instead of ListModel of String
+  ZK-1916: Different language codes for IE10 under Windows 8
   ZK-1918: Serialization issue with Script component
+
 
   --------
 ZK 6.5.3
