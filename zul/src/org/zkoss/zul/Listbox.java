@@ -1628,11 +1628,13 @@ public class Listbox extends MeshElement {
 					if (_jsel < 0) {
 						_jsel = newIndex;
 						_selItems.add(newItem);
+						smartUpdateSelection();
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
 							_jsel = newIndex;
 						}
 						_selItems.add(newItem);
+						smartUpdateSelection();
 					} else { // deselect
 						newItem.setSelectedDirectly(false);
 					}
@@ -1774,6 +1776,8 @@ public class Listbox extends MeshElement {
 				if (_jsel == index) {
 					fixSelectedIndex(index);
 				}
+
+				smartUpdateSelection();
 			} else {
 				if (!isLoadingModel() && _jsel >= index) {
 					--_jsel;
