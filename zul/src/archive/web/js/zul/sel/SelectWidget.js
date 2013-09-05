@@ -54,6 +54,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-checked',
 				$headercm = jq(box._headercm);
 			$headercm[box._isAllSelected() ? 'addClass': 'removeClass'](zcls);
+			zk($headercm).redoCSS(-1, {'fixFontIcon': true});
 		}
 	}
 	function _isButton(evt) {

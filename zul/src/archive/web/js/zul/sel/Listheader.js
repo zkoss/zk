@@ -246,10 +246,12 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	_doClick: function (evt) {
 		this._checked = !this._checked;
 		var box = this.getListbox(),
-			$n = jq(this.$n('cm'));
+			cm = this.$n('cm'),
+			$n = jq(cm);
 		if (this._checked) {
 			$n.addClass(this.$s('checked'));
-			box.selectAll(true, evt)
+			zk(cm).redoCSS(-1, {'fixFontIcon': true});
+			box.selectAll(true, evt);
 		} else {
 			$n.removeClass(this.$s('checked'));
 			box._select(null, evt);

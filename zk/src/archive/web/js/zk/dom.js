@@ -1441,11 +1441,14 @@ jq(el).zk.center(); //same as 'center'
     			style = document.createElement('style'),
     			n = this.jq[0],
     			s = opts['selector'],
-    			id = n ? '#' + n.id : '', 
+    			cls = n ? n.className : '',
+    			idOrCls = n ? (n.id ? '#' + n.id : '.' + cls) : '', 
     			selector = s ? s : '*';
+    		if(idOrCls == '' && selector == '*')
+    			return this;
 			style.type = 'text/css';
 			
-			style.styleSheet.cssText = id + ' ' + selector + ':before{content:"" !important';
+			style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:"" !important';
 			head.appendChild(style);
 			setTimeout(function(){
 			    head.removeChild(style);
