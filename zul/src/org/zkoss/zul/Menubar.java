@@ -27,8 +27,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getZclass}: z-menubar-hor, if {@link #getOrient()} == vertical,
- *  z-menubar-ver will be added.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-menubar
  *
  * @author tomyeh
  */
@@ -122,8 +121,7 @@ public class Menubar extends XulElement {
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-menubar" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
+		return _zclass == null ? "z-menubar" : _zclass;
 	}
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem) && !(child instanceof Menuseparator))

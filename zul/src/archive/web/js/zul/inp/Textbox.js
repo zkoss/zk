@@ -73,46 +73,11 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 				inp.type = type;
 		}
 	},
-	onSize: function() {
-		var width = this.getWidth();
-		if (!width || width.indexOf('%') != -1)
-			this.getInputNode().style.width = '';
-		this.syncWidth();
-	},
-
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
-	},
 	//super//
 	textAttrs_: function () {
 		var html = this.$supers('textAttrs_', arguments);
 		if (this._multiline)
 			html += ' rows="' + this._rows + '"';
 		return html;
-	},
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-textbox" + 
-				(this.inRoundedMold() && !this.isMultiline() ? "-rounded": "");
-	},
-	// override domClass_ for add extra class name as need,
-	// can not use getZclass because InputWidget use it to add/remove class
-	domClass_: function () {
-		var clsnm = this.$supers(zul.inp.Textbox, 'domClass_', arguments);
-		if (this.isMultiline() && this.inRoundedMold())
-			clsnm += ' ' + this.getZclass() + '-ml-rounded';
-		return clsnm;
-	},
-	bind_: function(){
-		this.$supers(zul.inp.Textbox, 'bind_', arguments);
-		if (this.inRoundedMold() && !this.isMultiline()) // B50-ZK-975
-			zWatch.listen({onSize: this});
-	},
-	unbind_: function(){
-		if (this.inRoundedMold() && !this.isMultiline()) // B50-ZK-975
-			zWatch.unlisten({onSize: this});
-		this.$supers(zul.inp.Textbox, 'unbind_', arguments);
 	}
 });

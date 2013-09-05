@@ -5,7 +5,7 @@
 	<groupId>org.zkoss.common</groupId>
 	<artifactId>zweb</artifactId>
 	<packaging>jar</packaging>
-	<version>6.5.4-SNAPSHOT</version>
+	<version>7.0.0-SNAPSHOT</version>
 	<name>The ZKoss Web Library</name>
 	<url>http://www.zkoss.org/web</url>
 	<description>The ZKoss Web library</description>
@@ -83,6 +83,11 @@
 			<groupId>org.zkoss.common</groupId>
 			<artifactId>zcommon</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.8</version>
 		</dependency>
 	</dependencies>
 	<build>

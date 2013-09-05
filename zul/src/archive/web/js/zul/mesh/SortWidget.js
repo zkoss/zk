@@ -16,9 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for a sortable widget.
  */
 zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
-	_sortDirection: "natural",
-	_sortAscending: "none",
-	_sortDescending: "none",
+	_sortDirection: 'natural',
+	_sortAscending: 'none',
+	_sortDescending: 'none',
 
 	$define: {
     	/** Returns the sort direction.
@@ -36,17 +36,15 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
     	 * @param String sortDir one of "ascending", "descending" and "natural"
     	 */
 		sortDirection: function (v) {
-			var n = this.$n();
-			if (n) {
-				var zcls = this.getZclass(),
-					$n = jq(n);
-				$n.removeClass(zcls + "-sort-dsc").removeClass(zcls + "-sort-asc").addClass(zcls + "-sort");
+			if (this.desktop) {
+				var $n = jq(this.$n('sort-icon'));
+				$n.removeClass();
 				switch (v) {
-				case "ascending":
-					$n.addClass(zcls + "-sort-asc");
+				case 'ascending':
+					$n.addClass('z-icon-caret-up');
 					break;
-				case "descending":
-					$n.addClass(zcls + "-sort-dsc");
+				case 'descending':
+					$n.addClass('z-icon-caret-down');
 				}
 			}
 		},
@@ -58,17 +56,15 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		 * @param String sortAscending
 		 */
 		sortAscending: function (v) {
-			if (!v) this._sortAscending = v = "none";
-			var n = this.$n(),
-				zcls = this.getZclass();
-			if (n) {
-				var $n = jq(n);
-				if (v == "none") {
-					$n.removeClass(zcls + "-sort-asc");
-					if (this._sortDescending == "none")
-						$n.removeClass(zcls + "-sort");					
+			if (!v)
+				this._sortAscending = v = 'none';
+			
+			if (this.desktop) {
+				var $n = jq(this.$n('sort-icon'));
+				if (v == 'none') {
+					$n.removeClass();
 				} else
-					$n.addClass(zcls + "-sort");
+					$n.addClass('z-icon-caret-up');
 			}
 		},
 		/** Returns the descending sorter, or null if not available.
@@ -79,17 +75,15 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		 * @param String sortDescending
 		 */
 		sortDescending: function (v) {
-			if (!v) this._sortDescending = v = "none";
-			var n = this.$n(),
-				zcls = this.getZclass();
-			if (n) {
-				var $n = jq(n);
-				if (v == "none") {
-					$n.removeClass(zcls + "-sort-dsc");
-					if (this._sortAscending == "none")
-						$n.removeClass(zcls + "-sort");					
+			if (!v)
+				this._sortDescending = v = 'none';
+			
+			if (this.desktop) {
+				var $n = jq(this.$n('sort-icon'));
+				if (v == 'none') {
+					$n.removeClass();
 				} else
-					$n.addClass(zcls + "-sort");
+					$n.addClass('z-icon-caret-down');
 			}
 		}
 	},
@@ -120,7 +114,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		}
 	},
 	isSortable_: function () {
-		return this._sortAscending != "none" || this._sortDescending != "none";
+		return this._sortAscending != 'none' || this._sortDescending != 'none';
 	},
 	/**
 	 * Sorts the data.
@@ -148,15 +142,15 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	checkClientSort_: function (ascending) {
 		var dir = this.getSortDirection();
 		if (ascending) {
-			if ("ascending" == dir) return false;
+			if ('ascending' == dir) return false;
 		} else {
-			if ("descending" == dir) return false;
+			if ('descending' == dir) return false;
 		}
 
 		var sorter = ascending ? this._sortAscending: this._sortDescending;
-		if (sorter == "fromServer")
+		if (sorter == 'fromServer')
 			return false;
-		else if (sorter == "none") {
+		else if (sorter == 'none') {
 			evt.stop();
 			return false;
 		}
@@ -191,7 +185,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 						};
 					}
 			
-			var dsc = dir == "ascending" ? -1 : 1, fn = this.sorting, isNumber = sorter == "client(number)";
+			var dsc = dir == 'ascending' ? -1 : 1, fn = this.sorting, isNumber = sorter == 'client(number)';
 			d.sort(function(a, b) {
 				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
 				if (v == 0) {
@@ -234,48 +228,48 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	},
 	_fixDirection: function (ascending) {
 		//maintain
-		for (var w = this.parent.firstChild; w; w = w.nextSibling) {
-			w.setSortDirection(
-				w != this ? "natural": ascending ? "ascending": "descending");
-		}
+		var direction = ascending ? 'ascending' : 'descending';
+		for (var w = this.parent.firstChild; w; w = w.nextSibling)
+			w.setSortDirection(w == this ? direction : 'natural');
 	},
 	onSort: function (evt) {
 		var dir = this.getSortDirection();
-		if ("ascending" == dir) this.sort(false, evt);
-		else if ("descending" == dir) this.sort(true, evt);
-		else if (!this.sort(true, evt)) this.sort(false, evt);
+		if ('ascending' == dir)
+			this.sort(false, evt);
+		else if ('descending' == dir)
+			this.sort(true, evt);
+		else if (!this.sort(true, evt))
+			this.sort(false, evt);
 	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
-		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added;
-			if (this._sortAscending != "none" || this._sortDescending != "none") {
-				switch (this._sortDirection) {
-				case "ascending":
-					added = zcls + "-sort " + zcls + "-sort-asc";
-					break;
-				case "descending":
-					added = zcls + "-sort " + zcls + "-sort-dsc";
-					break;
-				default: // "natural"
-					added = zcls + "-sort";
-					break;
-				}
+	bind_: function () {
+		this.$supers(zul.mesh.SortWidget, 'bind_', arguments);
+		if (this._sortAscending != 'none' || this._sortDescending != 'none') {
+			var $n = jq(this.$n()),
+				$sortIcon = jq(this.$n('sort-icon'));
+			$n.addClass(this.$s('sort'));
+			switch (this._sortDirection) {
+			case 'ascending':
+				$sortIcon.addClass('z-icon-caret-up');
+				break;
+			case 'descending':
+				$sortIcon.addClass('z-icon-caret-down');
+				break;
+			default: // "natural"
+				break;
 			}
-			return scls != null ? scls + (added ? ' ' + added : '') : added || '';
 		}
-		return scls;
+	},
+	unbind_: function () {
+		this.$supers(zul.mesh.SortWidget, 'unbind_', arguments);
 	},
 	getColumnMenuPopup_: zk.$void,
 	_doMenuClick: function (evt) {
 		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var pp = this.parent._menupopup,
-				n = this.$n(),
-				btn = this.$n('btn'),
-				zcls = this.getZclass();
-				
-			jq(n).addClass(zcls + "-visi");
+				btn = this.$n('btn');
+			
+			//for not removing hover effect when moving mouse on menupopup
+			jq(this.$n()).addClass(this.$s('visited'));
 			
 			if (pp == 'auto' && this.parent._mpop)
 				pp = this.parent._mpop;

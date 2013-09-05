@@ -27,29 +27,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		 * @param boolean visible
 	 	*/
 		buttonVisible: function (v) {
-			var n = this.$n('btn'),
-				zcls = this.getZclass();
-			if (n) {
-				if (!this.inRoundedMold()) {
-					if (!this._inplace || !v)
-						jq(n)[v ? 'show': 'hide']();
-					else
-						n.style.display = '';
-					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
-				} else {
-					var fnm = v ? 'removeClass': 'addClass';
-					jq(n)[fnm](zcls + '-btn-right-edge');
-					
-					if (zk.ie6_) {						
-						jq(n)[fnm](zcls + 
-							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
-						
-						if (jq(this.getInputNode()).hasClass(zcls + '-text-invalid'))
-							jq(n)[fnm](zcls + '-btn-right-edge-invalid');
-					}
-				}
-				this.onSize();
-			}
+			zul.inp.RoundUtl.buttonVisible(this, v);
 		},
 		/** Returns whether to automatically drop the list if users is changing
 		 * this text box.
@@ -69,10 +47,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	onSize: function () {
-		var width = this.getWidth();
-		if (!width || width.indexOf('%') != -1)
-			this.getInputNode().style.width = '';
-		this.syncWidth();
+		zul.inp.RoundUtl.onSize(this);
 	},
 	
 	onFloatUp: function (ctl) {
@@ -192,10 +167,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			after = jq(inp).position().top + zk(inp).offsetHeight(),
 			realafter = zk.ie > 9 ? Math.round(after) : after;
 		
-		if(realtop < realafter) {
+		if (realtop < realafter)
 			$pp.position(inp, 'before_start');	
 			this._shallSyncPopupPosition = true;
-		}
 		pp.style.display = 'none';
 		pp.style.visibility = '';
 		this.slideDown_(pp);
@@ -289,8 +263,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._open = false;
 		if (opts && opts.focus)
 			this.focus();
-		else
-			jq(this.$n()).removeClass(this.getZclass() + '-focus');
 		
 		var pp = this.getPopupNode_();
 		if (!pp) return;
@@ -308,8 +280,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
-		var n = this.$n('btn');
-		if (n) jq(n).removeClass(this.getZclass() + '-btn-over');
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
@@ -379,42 +349,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	redrawpp_: function (out) {
 	},
-
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
-	},
 	beforeParentMinFlex_: function (attr) { //'w' for width or 'h' for height
 		if ('w' == attr)
-			this.syncWidth();
+			zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	doFocus_: function (evt) {
-		var n = this.$n();
-		if (this._inplace)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-			
 		this.$supers('doFocus_', arguments);
 
-		if (this._inplace) {
-			if (jq(n).hasClass(this.getInplaceCSS())) {
-				jq(n).removeClass(this.getInplaceCSS());
-				this.onSize();
-			}
-		}
+		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
-		var n = this.$n();
-		if (this._inplace && this._inplaceout)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-
 		this.$supers('doBlur_', arguments);
-
-		if (this._inplace && this._inplaceout) {
-			jq(n).addClass(this.getInplaceCSS());
-			this.onSize();
-			n.style.width = this.getWidth() || '';
-		}
+		zul.inp.RoundUtl.doBlur_(this);
 	},
 	afterKeyDown_: function (evt,simulated) {
 		if (!simulated && this._inplace)
@@ -426,11 +372,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
 		var btn, inp = this.getInputNode();
 			
-		if (this._inplace)
-			jq(inp).addClass(this.getInplaceCSS());
-			
 		if (btn = this.$n('btn')) {
-			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 		
@@ -442,8 +384,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		var btn = this.$n('btn');
 		if (btn) {
-			this._auxb.cleanup();
-			this._auxb = null;
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
@@ -452,8 +392,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);
 	},
+	inRoundedMold: function () {
+		return true;
+	},
 	_doBtnClick: function (evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
+		if (!this._buttonVisible) return;
 		if (!this._disabled && !zk.animating()) {		
 			if (this._open) this.close({focus:zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});
 			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});	
@@ -488,7 +431,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var keyCode = evt.keyCode,
 			bOpen = this._open;
 		if ((evt.target == this || !(evt.target.$instanceof(zul.inp.InputWidget)))// Bug ZK-475
-				&& (keyCode == 9 || (zk.safari && keyCode == 0))) { //TAB or SHIFT-TAB (safari)
+				&& (keyCode == 9 || (zk.webkit && keyCode == 0))) { //TAB or SHIFT-TAB (safari)
 			if (bOpen) this.close({sendOnOpen:true});
 			return;
 		}
@@ -527,39 +470,35 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onChildRemoved_: _zkf,
 	onChildVisible_: _zkf,
+	/**
+	 * Returns the icon class for this combo widget. (override by subclass only)
+	 */
+	getIconClass_: zk.$void,
 	/** Utility to implement {@link #redraw}. 
 	 *  @param Array out an array of HTML fragments.
 	 */
 	redraw_: _zkf = function (out) {
 		var uuid = this.uuid,
-			zcls = this.getZclass(),
 			isButtonVisible = this._buttonVisible;
 			
-		out.push('<i', this.domAttrs_({text:true}), '><input id="',
-			uuid, '-real" class="', zcls, '-inp');
-			
-		if(!isButtonVisible)
-			out.push(' ', zcls, '-right-edge');
-			
+		out.push('<span', this.domAttrs_({text:true}), '><input id="',
+			uuid, '-real" class="', this.$s('input'));
+
+		if (!isButtonVisible)
+			out.push(' ', this.$s('rightedge'));
+		
 		out.push('" autocomplete="off"',
-			this.textAttrs_(), '/><i id="', uuid, '-btn" class="',
-			zcls, '-btn');
+			this.textAttrs_(), '/><a id="', uuid, '-btn" class="',
+			this.$s('button'));
 
-		if (this.inRoundedMold()) {
-			if (!isButtonVisible)
-				out.push(' ', zcls, '-btn-right-edge');
-			if (this._readonly)
-				out.push(' ', zcls, '-btn-readonly');	
-			if (zk.ie6_ && !isButtonVisible && this._readonly)
-				out.push(' ', zcls, '-btn-right-edge-readonly');
-		} else if (!isButtonVisible)
-			out.push('" style="display:none');
+		if (!isButtonVisible)
+			out.push(' ', this.$s('disabled'));
 
-		out.push('"><div class="', zcls, '-btn-icon"></div></i>');
+		out.push('"><i class="', this.$s('icon'), ' ', this.getIconClass_(),'"></i></a>');
 
 		this.redrawpp_(out);
 
-		out.push('</i>');
+		out.push('</span>');
 	}
 }, {
 	$redraw: _zkf

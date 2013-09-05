@@ -29,11 +29,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getZclass}: z-menubar-hor, if {@link #getOrient()} == vertical,
- *  z-menubar-ver will be added.
+ * <p>Default {@link #getZclass}: z-menubar
  */
 zul.menu.Menubar = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
+	_orient: 'horizontal',
 
 	$define: {
 		/** Returns the orient.
@@ -73,10 +72,12 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		this.$supers('setWidth', arguments);
 		this._checkScrolling();
 	},
-	
-	getZclass: function () {
-		return this._zclass == null ? "z-menubar" +
-				("vertical" == this.getOrient() ? "-ver" : "-hor") : this._zclass;
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			sc += ' ' + this.$s("vertical" == this.getOrient() ? 'vertical' : 'horizontal');
+		}
+		return sc;
 	},
 	unbind_: function () {
 		if (this.checkScrollable()) {
@@ -84,40 +85,35 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				right = this.$n('right');
 			if (left && right) {
 				this.domUnlisten_(left, 'onClick', '_doScroll')
-					.domUnlisten_(left, 'onMouseover', '_onOver')
-					.domUnlisten_(left, 'onMouseout', '_onOut')
-					.domUnlisten_(right, 'onClick', '_doScroll')
-					.domUnlisten_(right, 'onMouseover', '_onOver')
-					.domUnlisten_(right, 'onMouseout', '_onOut');
+					.domUnlisten_(right, 'onClick', '_doScroll');
 			}
 			zWatch.unlisten({onSize: this});
 		}
+		var n = this.$n();
+		this.domUnlisten_(n, 'onMouseEnter').domUnlisten_(n, 'onMouseLeave');
 
 		this._lastTarget = null;
 		this.$supers(zul.menu.Menubar, 'unbind_', arguments);
 	},
 	bind_: function () {
 		this.$supers(zul.menu.Menubar, 'bind_', arguments);
+		var n = this.$n();
+		this.domListen_(n, 'onMouseEnter').domListen_(n, 'onMouseLeave');
 		if (this.checkScrollable()) {
 			var left = this.$n('left'),
 				right = this.$n('right');
 			if (left && right) {
 				this.domListen_(left, 'onClick', '_doScroll')
-					.domListen_(left, 'onMouseover', '_onOver')
-					.domListen_(left, 'onMouseout', '_onOut')
-					.domListen_(right, 'onClick', '_doScroll')
-					.domListen_(right, 'onMouseover', '_onOver')
-					.domListen_(right, 'onMouseout', '_onOut');
+					.domListen_(right, 'onClick', '_doScroll');
 			}
 			zWatch.listen({onSize: this});
 		}
-		this._syncChdWidth(); //Merge breeze
 	},
 	/** Returns whether the menubar scrolling is enabled in horizontal orient.
 	 * @return boolean
 	 */
 	checkScrollable: function () {
-		return this._scrollable && ("horizontal" == this.getOrient());
+		return this._scrollable && ('horizontal' == this.getOrient());
 	},
 	onSize: function () {
 		this._checkScrolling();
@@ -126,13 +122,11 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();
-		this._syncChdWidth();	//Merge breeze
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_)
 			this._checkScrolling();
-		this._syncChdWidth(); //Merge breeze
 	},
 	
 	_checkScrolling: function () {
@@ -140,8 +134,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		
 		var node = this.$n();
 		if (!node) return;
-		jq(node).addClass(this.getZclass() + "-scroll");
-		if (zk.ie6_) this._doFixWidth(node);
+		jq(node).addClass(this.$s('scroll'));
 		
 		var nodeWidth = zk(node).offsetWidth(),
 			body = this.$n('body'),
@@ -158,47 +151,19 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth <= nodeWidth) {
 				this._scrolling = false;
 				body.scrollLeft = 0;
-				if (zk.ie7_)
-					zk(body).redoCSS();
+				if (body.offsetWidth <= totalWidth)
+					body.style.width = jq.px0(fixedSize);
 			} else {
 				body.style.width = jq.px0(fixedSize);
 				this._fixScrollPos(node);
 			}
-			this._fixButtonPos(node);
 		} else {
 			if (totalWidth > nodeWidth) {
 				this._scrolling = true;
-				this._fixButtonPos(node);
 				body.style.width = jq.px0(fixedSize);
 			}
 		}
-	},
-	/**
-	 * Sync each menu's width
-	 */
-	_syncChdWidth: function () {
-		var max = -1;
-		if (this.getOrient() == 'vertical') {
-			var menus = [];
-			for (var w = this.firstChild; w; w = w.nextSibling) {
-				if (w.$instanceof(zul.menu.Menu)) {
-					var btn = w.$n('b');
-					if (btn) {
-						menus.push(w);
-						var width = btn.clientWidth;
-						if (width > max)
-							max = width;
-					}
-				}
-			}
-			var i = menus.length;
-			while (i-- > 0) {
-				var btn = menus[i].$n('b'),
-					curWidth = btn.clientWidth;
-				if (curWidth < max)
-					jq(btn).css('width', max + 'px');
-			}
-		}
+		this._fixButtonPos(node);
 	},
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
@@ -213,68 +178,28 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			body = this.$n('body'),
 			left = this.$n('left'),
 			right = this.$n('right'),
-			css = this._scrolling ? "addClass" : "removeClass";
-
-		jq(node)[css](zcls + "-scroll");
-		jq(body)[css](zcls + "-body-scroll");
-		jq(left)[css](zcls + "-left-scroll");
-		jq(right)[css](zcls + "-right-scroll");
-	},
-	_doFixWidth: function () {
-		var node = this.$n(),
-			width = node.style.width;
-		if (zk.ie6_ && (!width || "auto" == width))
-			this._forceStyle(node, "100%");
+			css = this._scrolling ? 'addClass' : 'removeClass';
+		
+		body.style.marginLeft = this._scrolling ? jq.px(left.offsetWidth) : '0';
+		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
+		left.style.display = right.style.display = this._scrolling ? 'block' : 'none';
+		jq(node)[css](this.$s('scroll'));
 	},
 	_forceStyle: function (node, value) {
 		if (zk.parseInt(value) < 0)
 			return;
-		node.style.width = zk.ie6_ ? "0px" : "";
 		node.style.width = value;
 	},
-	doMouseOver_: function (evt) {
+	_doMouseEnter: function (evt) {
 		this._bOver = true;
 		this._noFloatUp = false;
-		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (evt) {
+	_doMouseLeave: function (evt) {
 		this._bOver = false;
 		this._closeOnOut();
-		this.$supers('doMouseOut_', arguments);
-	},
-	_onOver: function (evt) {
-		this._bOver = true;
-		if (!this.checkScrollable()) return;
-		var evtNode = evt.domTarget,
-			node = this.$n(),
-			left = this.$n('left'),
-			right = this.$n('right'),
-			zcls = this.getZclass();
-
-		if (left == evtNode) {
-			jq(left).addClass(zcls + "-left-scroll-over");
-		} else if (right == evtNode) {
-			jq(right).addClass(zcls + "-right-scroll-over");
-		}
-	},
-	_onOut: function (evt) {
-		this._bOver = false;
-		if (!this.checkScrollable()) return;
-		var evtNode = evt.domTarget,
-			node = this.$n(),
-			left = this.$n('left'),
-			right = this.$n('right'),
-			zcls = this.getZclass();
-
-	    if (left == evtNode) {
-	    	jq(left).removeClass(zcls + "-left-scroll-over");
-		} else if (right == evtNode) {
-			jq(right).removeClass(zcls + "-right-scroll-over");
-		}
 	},
 	_doScroll: function (evt) {
-		var target = evt.domTarget;
-		this._scroll(target.id.endsWith("left") ? "left" : "right");
+		this._scroll(evt.domTarget == this.$n('left') || evt.domTarget.parentNode == this.$n('left') ? 'left' : 'right');
 	},
 	_scroll: function (direction) {
 		if (!this.checkScrollable() || this._runId) return;
@@ -287,7 +212,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 
 		if (!childLen) return;
 		switch (direction) {
-		case "left":
+		case 'left':
 			for (var i = 0; i < childLen; i++) {
 				// B50-ZK-381: Menu scrolling bug
 				// child width may be larger than body.offsetWidth 
@@ -307,7 +232,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				}
 			}
 			break;
-		case "right":
+		case 'right':
 			var currRight = currScrollLeft + body.offsetWidth;
 			for (var i = 0; i < childLen; i++) {
 				var currChildRight =  childs[i].offsetLeft + childs[i].offsetWidth;
@@ -327,48 +252,38 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		}
 	},
 	_moveTo: function (body, moveDest) {
-		var currPos = body.scrollLeft,
-			step = 5;
-		if (currPos == moveDest) return false;
-
-		if (currPos > moveDest) {
-			var setTo = currPos - step;
-			body.scrollLeft = setTo < moveDest ?  moveDest : setTo;
-			return true;
-		} else {
-			var setTo = currPos + step;
-			body.scrollLeft = setTo > moveDest ? moveDest : setTo;
-			return true;
-		}
-		return false;
+		var currPos = body.scrollLeft;
+		if (currPos == moveDest)
+			return false;
+		
+		var step = 5,
+			delta = currPos > moveDest ? -step : step,
+			setTo = currPos + delta;
+		if ((setTo < moveDest && delta < 0) || (setTo > moveDest && delta > 0))
+			setTo = moveDest;
+		
+		body.scrollLeft = setTo;
+		return true;
 	},
 	insertChildHTML_: function (child, before, desktop) {
+		var vert = 'vertical' == this.getOrient();
 		if (before)
 			jq(before.$n('chdextr') || before.$n()).before(
-				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
+				this.encloseChildHTML_({child: child, vertical: vert}));
 		else
 			jq(this.$n('cave')).append(
-				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
+				this.encloseChildHTML_({child: child, vertical: vert}));
 
 		child.bind(desktop);
 	},
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
-		jq(child.uuid + '-chdextr', zk).remove();
+		jq(child.$n('chdextr')).remove();
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
-			child = opts.child,
-			isVert = opts.vertical;
-		if (isVert) {
-			out.push('<tr id="', child.uuid, '-chdextr"');
-			if (child.getHeight())
-				out.push(' height="', child.getHeight(), '"');
-			out.push('>');
-		}
+			child = opts.child;
 		child.redraw(out);
-		if (isVert)
-			out.push('</tr>');
 		if (!opts.out) return out.join('');
 	},
 

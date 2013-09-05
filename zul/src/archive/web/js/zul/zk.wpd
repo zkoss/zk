@@ -15,8 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="dom.js"/>
 	<script src="Widget.js" jsdoc="true"/>
 	<script src="LabelImageWidget.js" jsdoc="true"/>
-
-	<script src="Auxbutton.js" jsdoc="true"/>
+	
 	<script src="Upload.js" jsdoc="true"/>
 	<script src="WScroll.js" jsdoc="true"/>
+	<script src="Scrollbar.js" jsdoc="true"/>
 </package>

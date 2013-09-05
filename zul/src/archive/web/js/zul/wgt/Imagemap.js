@@ -33,7 +33,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 
 		if (!jq('#zk_hfr_')[0])
 			jq.newFrame('zk_hfr_', null,
-				zk.safari ? 'position:absolute;top:-1000px;left:-1000px;width:0;height:0;display:inline'
+				zk.webkit ? 'position:absolute;top:-1000px;left:-1000px;width:0;height:0;display:inline'
 					: null/*invisible*/);
 			//creates a hidden frame. However, in safari, we cannot use invisible frame
 			//otherwise, safari will open a new window
@@ -41,10 +41,10 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 
 	//super//
 	getImageNode: function () {
-		return this.$n("real");
+		return this.$n('real');
 	},
 	getCaveNode: function () {
-		return this.$n("map");
+		return this.$n('map');
 	},
 	doClick_: function (evt) {
 		//does nothing (so zk.Widget won't fire onClick)
@@ -94,7 +94,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 			url = Imagemap._doneURI;
 		return url ? url:
 			Imagemap._doneURI = zk.IMAGEMAP_DONE_URI ? zk.IMAGEMAP_DONE_URI:
-				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop:this.desktop,au:true});
+				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop:this.desktop, au:true});
 	}
 },{
 	/** Called by imagemap-done.html. */

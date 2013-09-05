@@ -89,6 +89,16 @@ import java.awt.Color;
 		alpha = alpha == 255 ? -1 : alpha * 20 / 51;
 		return '#' + hex + (alpha < 0 ? "" : (" (" + alpha + "%)"));
 	}
+
+	public static String getIEHexString(Color c) {
+		String hex = Integer.toHexString(c.getRGB() & 0x00ffffff).toUpperCase();
+		hex = repeat('0', 6 - hex.length()) + hex;
+		int alpha = c.getAlpha();
+
+		String ah = Integer.toHexString(alpha & 0x00ffffff).toUpperCase();
+		ah = repeat('0', 2 - ah.length()) + ah;
+		return '#' + ah + hex;
+	}
 	
 	private static String repeat(char c, int i) {
 		char[] cs = new char[i];

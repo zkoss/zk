@@ -73,8 +73,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				var pp = this.getPopupNode_();
 				//will update it later in onResponse with _fixsz
 				if (pp) {
-					pp.style.width = "auto";
-					if(zk.safari) this._shallRedoCss = true ;
+					pp.style.width = 'auto';
+					if(zk.webkit) this._shallRedoCss = true ;
 				}
 			}
 			this._repos = false;
@@ -102,7 +102,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (!this._sel || value != this._sel.getLabel()) {
 			if (this._sel) {
 				var n = this._sel.$n();
-				if (n) jq(n).removeClass(this._sel.getZclass() + '-seld');
+				if (n) jq(n).removeClass(this._sel.$s('selected'));
 			}
 			this._sel = this._lastsel = null;
 			for (var w = this.firstChild; w; w = w.nextSibling) {
@@ -153,11 +153,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (oldsel && oldsel.parent == this) { //we don't clear _sel precisely, so...
 			var n = oldsel.$n();
-			if (n) jq(n).removeClass(oldsel.getZclass() + '-seld');
+			if (n) {
+				jq(n).removeClass(oldsel.$s('selected'));
+			}
 		}
 
 		if (sel && !sel.isDisabled())
-			jq(sel.$n()).addClass(sel.getZclass() + '-seld');
+			jq(sel.$n()).addClass(sel.$s('selected'));
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			this._lastsel = sel;
@@ -181,13 +183,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				//purpose: onSelect can retrieve the value correctly
 				//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
 		}
-		// B50-ZK-215: table width will fit to 100% of window width instead of its parent in IE6/7
-		if (zk.ie < 8){
-			var pp = this.getPopupNode_(),
-				wd = pp.style.width;
-			if (pp.firstChild && wd && wd != 'auto')
-				pp.firstChild.style.width = zk(pp).revisedWidth(zk.parseInt(pp.style.width) - 1) + 'px';
-		}
 	},
 	_isStrict: function () {
 		var strict = this.getConstraint();
@@ -195,6 +190,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 
 	//super
+	getIconClass_: function () {
+		return 'z-icon-caret-down';
+	},
 	open: function (opts) {
 		this.$supers('open', arguments);
 		this._hilite(); //after _open is set
@@ -316,7 +314,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					this._select(sel, {sendOnSelect: true});
 			}
 		else
-			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera || zk.safari ? 10 : 0);
+			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera || zk.webkit ? 10 : 0);
 			//use timeout, since, when key down, value not ready yet, opear and safari need extra time to set value to dom
 	},
 	_typeahead: function (bDel, ofs) {
@@ -381,21 +379,16 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
 	},
 	//@Override
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs ? zcs: "z-combobox" + (this.inRoundedMold() ? "-rounded": "");
-	},
-
 	redrawpp_: function (out) {
-		var uuid = this.uuid,zcls = this.getZclass();
-		out.push('<div id="', uuid, '-pp" class="', zcls,
-		'-pp ',this.getSclass(),' " style="display:none" tabindex="-1"><table id="',
-		uuid, '-cave"', zUtl.cellps0, ' class="', zcls,'-cave" >');
+		var uuid = this.uuid;
+		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
+		' ', this.getSclass(), '" style="display:none" tabindex="-1"><ul id="',
+		uuid, '-cave" class="', this.$s('content'), '" >');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 
-		out.push('</table></div>');
+		out.push('</ul></div>');
 	},
 	afterAnima_: function (visible) {
 		// B50-ZK-568: Combobox does not scroll to selected item

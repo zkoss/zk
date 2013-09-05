@@ -99,6 +99,14 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 			s += p.domContent_();
 		return s;
 	},
+	domStyle_: function (no) {
+		var style = this.$supers('domStyle_', arguments);
+		if (this._align)
+			style += ' text-align:' + this._align + ';';
+		if (this._valign)
+			style += ' vertical-align:' + this._valign + ';';
+		return style;
+	},
 	//super//
 	domAttrs_: function (no) {
 		var s = this.$supers('domAttrs_', arguments), v;	
@@ -106,10 +114,6 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 			s += ' colspan="' + v + '"';
 		if ((v = this._rowspan) != 1)
 			s += ' rowspan="' + v + '"';
-		if ((v = this._align))
-			s += ' align="' + v + '"';
-		if ((v = this._valign))
-			s += ' valign="' + v + '"';
 			
 		var m1, m2 = zUtl.parseMap(s, ' ', '"');		
 		switch (this._getParentType()) {

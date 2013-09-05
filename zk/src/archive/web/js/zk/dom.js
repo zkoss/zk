@@ -24,7 +24,7 @@ zjq = function (jq) { //ZK extension
 			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 			'direction', 'word-spacing', 'white-space'],
 		_txtStylesCamel, _txtSizDiv, //inited in textSize
-		_txtStyles2 = ["color", "background-color", "background"],
+		_txtStyles2 = ['color', 'background-color', 'background'],
 		_zsyncs = [],
 		_pendzsync = 0,
 		_vpId = 0, //id for virtual parent's reference node
@@ -76,10 +76,10 @@ zjq = function (jq) { //ZK extension
 	}
 
 	function _dissel() {
-		this.style.MozUserSelect = "none";
+		this.style.MozUserSelect = 'none';
 	}
 	function _ensel() {
-		this.style.MozUserSelect = "";
+		this.style.MozUserSelect = '';
 	}
 
 	function _scrlIntoView(outer, inner, info) {
@@ -87,7 +87,7 @@ zjq = function (jq) { //ZK extension
 			var ooft = zk(outer).revisedOffset(),
 				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
 				top = ioft[1] - ooft[1] +
-						(outer == (zk.safari ? document.body : document.body.parentNode)
+						(outer == (zk.webkit ? document.body : document.body.parentNode)
 								? 0 : outer.scrollTop),
 				ih = info ? info.h : inner.offsetHeight,
 				bottom = top + ih,
@@ -121,10 +121,10 @@ zjq = function (jq) { //ZK extension
 			var p = el.parentNode;
 			while (p && p != document.body && p.nodeType === 1) {
 				var $p = jq(p),
-					style = $p.css("position");
-				if (style == "relative" || style == "absolute") {
-					t += zk.parseInt($p.css("border-top-width"));
-					l += zk.parseInt($p.css("border-left-width"));
+					style = $p.css('position');
+				if (style == 'relative' || style == 'absolute') {
+					t += zk.parseInt($p.css('border-top-width'));
+					l += zk.parseInt($p.css('border-left-width'));
 				}
 				p = p.offsetParent;
 			}
@@ -133,7 +133,7 @@ zjq = function (jq) { //ZK extension
 		do {
 			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
 			var $el = jq(el);
-			if ($el.css("position") == 'fixed') {
+			if ($el.css('position') == 'fixed') {
 				t += jq.innerY() + el.offsetTop;
 				l += jq.innerX() + el.offsetLeft;
 				break;
@@ -155,7 +155,7 @@ zjq = function (jq) { //ZK extension
 		return [l, t];
 	}
 	function _posOffset(el) {
-		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
+		if (zk.webkit && jq.nodeName(el, 'tr') && el.cells.length)
 			el = el.cells[0];
 
 		var t = 0, l = 0;
@@ -166,7 +166,7 @@ zjq = function (jq) { //ZK extension
 			el = zk.gecko && el != document.body ?
 				_ofsParent(el): el.offsetParent;
 			if (el) {
-				if(jq.nodeName(el, "body")) break;
+				if(jq.nodeName(el, 'body')) break;
 				var p = jq(el).css('position');
 				if (p == 'relative' || p == 'absolute') break;
 			}
@@ -200,6 +200,25 @@ zjq = function (jq) { //ZK extension
 		}
 	}
 
+	// since ZK 7.0.0
+	var isHTML5DocType = (function () {
+		var html5;
+		return function () {
+			if (html5 === undefined) {
+			    if (document.doctype === null) return false;
+		
+			    var node = document.doctype;
+			    var doctype_string = '<!DOCTYPE ' + node.name +
+			    		(node.publicId ? ' PUBLIC"' + node.publicId + '"' : '') +
+			    		(!node.publicId && node.systemId ? ' SYSTEM' : '') +
+			    		(node.systemId ? ' "' + node.systemId + '"' : '') + '>';
+		
+			    html5 = doctype_string === '<!DOCTYPE html>';
+			}
+			return html5;
+		}
+	})();
+
 zk.copy(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
 	minWidth: function (el) {
@@ -207,7 +226,6 @@ zk.copy(zjq, {
 	},
 
 	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
-	fixOnResize: zk.$void, //overriden in domie.js to fix the window.onresize issue
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight)
@@ -215,12 +233,11 @@ zk.copy(zjq, {
 		el.className.trim();
 	},
 	_cleanVisi: function (n) { //overriden in domopera.js
-		n.style.visibility = "inherit";
+		n.style.visibility = 'inherit';
 	},
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
 	_fixIframe: zk.$void,
-	_useQS: zk.$void, //overriden in domie.js (used in zAU)
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
 	src0: "", //an empty src; overriden in domie.js
@@ -547,7 +564,7 @@ zjq.prototype = {
 	 */
 	isVisible: function (strict) {
 		var n = this.jq[0];
-		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
+		return n && (!n.style || (n.style.display != 'none' && (!strict || n.style.visibility != 'hidden')));
 	},
 	/** Returns whether the first match element is really visible.
 	 * By real visible we mean the element and all its ancestors are visible. 
@@ -663,7 +680,8 @@ zjq.prototype = {
 		var n;
 		if (n = this.jq[0])
 			return jq.isOverlapped(
-				this.cmOffset(), [n.offsetWidth, n.offsetHeight], zk(el).cmOffset(),
+				// use revisedOffset instead of cmOffset for body's scroll issue
+				this.revisedOffset(), [n.offsetWidth, n.offsetHeight], zk(el).revisedOffset(),
 				    [el.offsetWidth, el.offsetHeight], tolerant);
 	},
 
@@ -686,20 +704,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		}
 		return val;
 	},
-
-	/** Sets the offset height by specifying the inner height. 
-	 * @param int hgh the height without margin and border 
-	 * @return jqzk this object
-	 */
-	setOffsetHeight: function (hgh) {
-		var $jq = this.jq;
-		hgh -= this.padBorderHeight()
-			+ zk.parseInt($jq.css("margin-top"))
-			+ zk.parseInt($jq.css("margin-bottom"));
-		$jq[0].style.height = jq.px0(hgh);
-		return this;
-	},
-
+	
 	/** Returns the revised (i.e., browser's coordinate) offset of the selected
 	 * element.
 	 * In other words, it is the offset of the left-top corner related to
@@ -721,11 +726,11 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
 				var elst, oldvisi;
-				if (zk.ie && el.style.display == "none") {
+				if (zk.ie && el.style.display == 'none') {
 				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
 					oldvisi = (elst = el.style).visibility;
-					elst.visibility = "hidden";
-					elst.display = "";
+					elst.visibility = 'hidden';
+					elst.display = '';
 				}
 
 				var b = el.getBoundingClientRect();
@@ -733,7 +738,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 					b.top + jq.innerY() - el.ownerDocument.documentElement.clientTop];
 
 				if (elst) {
-					elst.display = "none";
+					elst.display = 'none';
 					elst.visibility = oldvisi;
 				}
 				return b;
@@ -750,61 +755,112 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		scrolls[0] -= jq.innerX(); scrolls[1] -= jq.innerY();
 		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	},
-	/** Returns the revised (calibrated) width, which subtracted the width of its CSS border or padding, for the first matched element.
+	/** Returns the revised (calibrated) width, which subtracted the width of
+	 * its CSS border or padding, for the first matched element if the box-sizing
+	 * is not in the border-box mode.
 	 * <p>It is usually used to assign the width to an element (since we have to subtract the padding).
-<pre><code>el.style.width = jq(el).zk.revisedWidth(100);</code></pre>
+<pre><code>el.style.width = zk(parentEL).revisedWidth(100);</code></pre>
 	 *
 	 * @param int size the width to be assigned to the specified element.
 	 * @param boolean excludeMargin whether to subtract the margins, too.
 	 * You rarely need this unless the width is specified in term of the parent's perspective. 
 	 * @return int the revised width
+	 * @see #contentWidth(boolean)
 	 */
 	revisedWidth: function (size, excludeMargin) {
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderWidth();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("lr", jq.margins);
+			size -= this.marginWidth();
 		return size < 0 ? 0: size;
 	},
-	/** Returns the revised (calibrated) height, which subtracted the height of its CSS border or padding, for the first matched element.
-	 * <p>It is usually used to assign the height to an element (since we have to subtract the padding).
-<pre><code>el.style.height = jq(el).zk.revisedHeight(100);</code></pre>
+	/** Returns the revised (calibrated) height, which subtracted the height of
+	 * its CSS border or padding, for the first matched element if the box-sizing
+	 * is not in the border-box mode.
+	 * <p>It is usually used to assign the height to an element
+	 * (since we have to subtract the padding).
+<pre><code>el.style.height = zk(parentEL).revisedHeight(100);</code></pre>
 	 *
 	 * @param int size #  the height to be assigned to the first matched element.
 	 * @param boolean excludeMargin whether to subtract the margins, too.
 	 * You rarely need this unless the height is specified in term of the parent's perspective. 
 	 * @return int the revised height
+	 * @see #contentHeight(boolean)
 	 */
 	revisedHeight: function (size, excludeMargin) {
 		if (this.jq.css('box-sizing') != 'border-box')
 			size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
-			size -= this.sumStyles("tb", jq.margins);
+			size -= this.marginHeight();
 		return size < 0 ? 0: size;
+	},
+	/**
+	 * Returns the content width of the element, which substracted the width of its
+	 * CSS border or padding, unlike {@link #revisedWidth(int, boolean)}, the contentWidth
+	 * will ignore the box-sizing with border-box.
+	 * @param boolean excludeMargin whether to subtract the margins, too.
+	 * @return int the content width.
+	 * @since 7.0.0
+	 */
+	contentWidth: function (excludeMargin) {
+		var size = this.jq[0].offsetWidth;
+		size -= this.padBorderWidth();
+		if (size > 0 && excludeMargin)
+			size -= this.marginWidth();
+		return size < 0 ? 0: size;
+	},
+	/**
+	 * Returns the content height of the element, which substracted the height of its
+	 * CSS border or padding, unlike {@link #revisedHeight(int, boolean)},
+	 * the contentHeight will ignore the box-sizing with border-box.
+	 * @param boolean excludeMargin whether to subtract the margins, too.
+	 * @return int the content height.
+	 * @since 7.0.0
+	 */
+	contentHeight: function (excludeMargin) {
+		var size = this.jq[0].offsetHeight;
+		size -= this.padBorderHeight();
+		if (size > 0 && excludeMargin)
+			size -= this.marginHeight();
+		return size < 0 ? 0: size;
+	},
+	/** Returns the summation of the margin width of the first matched element.
+	 * @return int summation
+	 * @since 7.0.0
+	 */
+	marginWidth: function () {
+		return this.sumStyles('lr', jq.margins);
+	},
+	/** Returns the summation of the margin height of the first matched element.
+	 * @return int summation
+	 * @since 7.0.0
+	 */
+	marginHeight: function () {
+		return this.sumStyles('tb', jq.margins);
 	},
 	/** Returns the summation of the border width of the first matched element.
 	 * @return int summation
 	 */
 	borderWidth: function () {
-		return this.sumStyles("lr", jq.borders);
+		return this.sumStyles('lr', jq.borders);
 	},
 	/** Returns the summation of the border height of the first matched element.
 	 * @return int summation
 	 */
 	borderHeight: function () {
-		return this.sumStyles("tb", jq.borders);
+		return this.sumStyles('tb', jq.borders);
 	},
 	/** Returns the summation of the padding width of the first matched element.
 	 * @return int summation
 	 */
 	paddingWidth: function () {
-		return this.sumStyles("lr", jq.paddings);
+		return this.sumStyles('lr', jq.paddings);
 	},
 	/** Returns the summation of the padding height of the first matched element.
 	 * @return int summation
 	 */
 	paddingHeight: function () {
-		return this.sumStyles("tb", jq.paddings);
+		return this.sumStyles('tb', jq.paddings);
 	},
 	/** Returns the summation of the padding height and the border width of the first matched element. 
 	 * @return int the summation
@@ -869,17 +925,17 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	toStyleOffset: function (x, y) {
 		var el = this.jq[0],
 			oldx = el.style.left, oldy = el.style.top,
-			resetFirst = zk.opera || zk.air || zk.ie8;
+			resetFirst = zk.webkit || zk.opera || zk.air || zk.ie8;
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
 		//test case: Tooltips and Popups
 		//2)we cannot assing "", either
 		//test case: menu
 		//IE/gecko fix: auto causes toStyleOffset incorrect
-		if (resetFirst || el.style.left == "" || el.style.left == "auto")
-			el.style.left = "0";
-		if (resetFirst || el.style.top == "" || el.style.top == "auto")
-			el.style.top = "0";
+		if (resetFirst || el.style.left == '' || el.style.left == 'auto')
+			el.style.left = '0';
+		if (resetFirst || el.style.top == '' || el.style.top == 'auto')
+			el.style.top = '0';
 
 		var ofs1 = this.cmOffset(),
 			x2 = zk.parseInt(el.style.left),
@@ -907,11 +963,11 @@ jq(el).zk.center(); //same as 'center'
 			hghgap = this.offsetHeight();
 
 		if ((!wdgap || !hghgap) && !this.isVisible()) {
-			el.style.left = el.style.top = "-10000px"; //avoid annoying effect
-			el.style.display = "block"; //we need to calculate the size
+			el.style.left = el.style.top = '-10000px'; //avoid annoying effect
+			el.style.display = 'block'; //we need to calculate the size
 			wdgap = this.offsetWidth();
 			hghgap = this.offsetHeight(),
-			el.style.display = "none"; //avoid Firefox to display it too early
+			el.style.display = 'none'; //avoid Firefox to display it too early
 		}
 
 		var left = jq.innerX(), top = jq.innerY();
@@ -919,18 +975,18 @@ jq(el).zk.center(); //same as 'center'
 
 		wdgap = jq.innerWidth() - wdgap;
 		if (!flags) x = left + wdgap / 2;
-		else if (flags.indexOf("left") >= 0) x = left;
-		else if (flags.indexOf("right") >= 0) x = left + wdgap - 1; //just in case
-		else if (flags.indexOf("center") >= 0) x = left + wdgap / 2;
+		else if (flags.indexOf('left') >= 0) x = left;
+		else if (flags.indexOf('right') >= 0) x = left + wdgap - 1; //just in case
+		else if (flags.indexOf('center') >= 0) x = left + wdgap / 2;
 		else {
 			x = 0; skipx = true;
 		}
 
 		hghgap = jq.innerHeight() - hghgap;
 		if (!flags) y = top + hghgap / 2;
-		else if (flags.indexOf("top") >= 0) y = top;
-		else if (flags.indexOf("bottom") >= 0) y = top + hghgap - 1; //just in case
-		else if (flags.indexOf("center") >= 0) y = top + hghgap / 2;
+		else if (flags.indexOf('top') >= 0) y = top;
+		else if (flags.indexOf('bottom') >= 0) y = top + hghgap - 1; //just in case
+		else if (flags.indexOf('center') >= 0) y = top + hghgap / 2;
 		else {
 			y = 0; skipy = true;
 		}
@@ -992,7 +1048,7 @@ jq(el).zk.center(); //same as 'center'
      * @see #center
      */
 	position: function (dim, where, opts) {
-		where = where || "overlap";
+		where = where || 'overlap';
 		
 		if (!dim) {
 			var bd = jq('body')[0];
@@ -1015,88 +1071,88 @@ jq(el).zk.center(); //same as 'center'
 		}
 		*/
 		switch(where) {
-		case "before_start":
+		case 'before_start':
 			y -= hgh;
 			break;
-		case "before_center":
+		case 'before_center':
 			y -= hgh;
 			x += (dim.width - wd) / 2 | 0;
 			break;
-		case "before_end":
+		case 'before_end':
 			y -= hgh;
 			x += dim.width - wd;
 			break;
-		case "after_start":
+		case 'after_start':
 			y += dim.height;
 			break;
-		case "after_center":
+		case 'after_center':
 			y += dim.height;
 			x += (dim.width - wd) / 2 | 0;
 			break;
-		case "after_end":
+		case 'after_end':
 			y += dim.height;
 			x += dim.width - wd;
 			break;
-		case "start_before":
+		case 'start_before':
 			x -= wd;
 			break;
-		case "start_center":
+		case 'start_center':
 			x -= wd;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "start_after":
+		case 'start_after':
 			x -= wd;
 			y += dim.height - hgh;
 			break;
-		case "end_before":
+		case 'end_before':
 			x += dim.width;
 			break;
-		case "end_center":
+		case 'end_center':
 			x += dim.width;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "end_after":
+		case 'end_after':
 			x += dim.width;
 			y += dim.height - hgh;
 			break;
-		case "at_pointer":
+		case 'at_pointer':
 			var offset = zk.currentPointer;
 			x = offset[0];
 			y = offset[1];
 			break;
-		case "after_pointer":
+		case 'after_pointer':
 			var offset = zk.currentPointer;
 			x = offset[0];
 			y = offset[1] + 20;
 			break;
-		case "top_right":
-		case "overlap_end":
+		case 'top_right':
+		case 'overlap_end':
 			x += dim.width - wd;
 			break;
-		case "top_center":
+		case 'top_center':
 			x += (dim.width - wd) / 2 | 0;
 			break;
-		case "middle_left":
+		case 'middle_left':
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "middle_center":
+		case 'middle_center':
 			x += (dim.width - wd) / 2 | 0;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "middle_right":
+		case 'middle_right':
 			x += dim.width - wd;
 			y += (dim.height - hgh) / 2 | 0;
 			break;
-		case "bottom_left":
-		case "overlap_before":
+		case 'bottom_left':
+		case 'overlap_before':
 			y += dim.height - hgh;
 			break;
-		case "bottom_center":
+		case 'bottom_center':
 			x += (dim.width - wd) / 2 | 0;
 			y += dim.height - hgh;
 			break;
-		case "bottom_right":
-		case "overlap_after":
+		case 'bottom_right':
+		case 'overlap_after':
 			x += dim.width - wd;
 			y += dim.height - hgh;
 			break;
@@ -1179,17 +1235,17 @@ jq(el).zk.center(); //same as 'center'
 	cmOffset: function () {
 		//fix safari's bug: TR has no offsetXxx
 		var el = this.jq[0];
-		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
+		if (zk.webkit && jq.nodeName(el, 'tr') && el.cells.length)
 			el = el.cells[0];
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
-		if (!(zk.gecko || zk.safari)
+		if (!(zk.gecko || zk.webkit)
 		|| this.isVisible() || this.offsetWidth())
 			return _cmOffset(el);
 
-		el.style.display = "";
+		el.style.display = '';
 		var ofs = _cmOffset(el);
-		el.style.display = "none";
+		el.style.display = 'none';
 		return ofs;
 	},
 	/**
@@ -1250,7 +1306,20 @@ jq(el).zk.center(); //same as 'center'
 	 * @return int the offset height
 	 */
 	offsetHeight: function () {
-		return this.jq[0].offsetHeight;
+		var n = this.jq[0];
+		// span will causes a special gap between top and bottom
+		// when use HTML5 doctype
+		if (isHTML5DocType() &&
+				jq.nodeName(n, 'SPAN') && this.jq.css('display') != 'block') {
+			var text = n.outerHTML;
+			
+			// replace uuid to speed up the calculation
+			if (zk.Widget.$(n, {exact: 1})) {
+				text = text.replace(/id="[^"]*"/, 'id="zktextsize"');
+			}
+			return zk(document.body).textSize(text)[1];
+		}
+		return n.offsetHeight;
 	},
 	/** Returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation. 
 	 * @return int the offset top
@@ -1295,28 +1364,42 @@ jq(el).zk.center(); //same as 'center'
 	 * @param String text the content text 
 	 * @return Size the size of the text
 	 */
-	textSize: function (txt) {
-		if (!_txtSizDiv) {
-			_txtSizDiv = document.createElement("div");
-			_txtSizDiv.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
-			document.body.appendChild(_txtSizDiv);
+	textSize: (function () {
+		// cache
+		var _txtStylesCamel = [],
+			_txtSizDiv,
+			_defaultStyle = 'left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none;display:none;',
+			_cache = {};
+		return function (txt) {
+			var jq = this.jq;
+			txt = txt || jq[0].innerHTML;
+			if (!_txtSizDiv) {
+				_txtSizDiv = document.createElement('div');
+				_txtSizDiv.style.cssText = _defaultStyle;
+				document.body.appendChild(_txtSizDiv);
 
-			_txtStylesCamel = [];
-			for (var ss = _txtStyles, j = ss.length; j--;)
-				_txtStylesCamel[j] = ss[j].$camel();
-		}
-		_txtSizDiv.style.display = 'none';
-		var jq = this.jq;
-		for (var ss = _txtStylesCamel, j = ss.length; j--;) {
-			var nm = ss[j];
-			_txtSizDiv.style[nm] = jq.css(nm);
-		}
-
-		_txtSizDiv.innerHTML = txt || jq[0].innerHTML;
-		_txtSizDiv.style.display = '';
-		return [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
-	},
-
+				for (var ss = _txtStyles, j = ss.length; j--;)
+					_txtStylesCamel[j] = ss[j].$camel();
+			}
+			var newStyle = '';
+			for (var ss = _txtStylesCamel, j = ss.length; j--;) {
+				var nm = ss[j];
+				newStyle += _txtStyles[j] + ':' + jq.css(nm) + ';';
+			}
+			
+			var result,
+				key = newStyle + txt;
+			if (!(result = _cache[key])) {
+				_txtSizDiv.innerHTML = txt;
+				_txtSizDiv.style.cssText = _defaultStyle + newStyle;
+				_txtSizDiv.style.display = '';
+				result = _cache[key] = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
+				_txtSizDiv.style.display = 'none';
+				_txtSizDiv.innerHTML = ''; //reset
+			}
+			return result;
+		};
+	})(),
 	/** Returns the dimension of the specified element.
 	 * <p>If revised not specified (i.e., not to calibrate), the left and top are the offsetLeft and offsetTop of the element.
 	 * @param boolean revised if revised is true, {@link #revisedOffset} will be
@@ -1352,7 +1435,26 @@ jq(el).zk.center(); //same as 'center'
 	 * 100 is assumed if not specified , -1 means re-applying css right now.
 	 * @return jqzk this object
 	 */
-	redoCSS: function (timeout) {
+	redoCSS: function (timeout, opts) {
+		if ((zk.ie == 8) && opts && opts['fixFontIcon']) {
+			var head = document.getElementsByTagName('head')[0],
+    			style = document.createElement('style'),
+    			n = this.jq[0],
+    			s = opts['selector'],
+    			cls = n ? n.className : '',
+    			idOrCls = n ? (n.id ? '#' + n.id : '.' + cls) : '', 
+    			selector = s ? s : '*';
+    		if(idOrCls == '' && selector == '*')
+    			return this;
+			style.type = 'text/css';
+			
+			style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:"" !important';
+			head.appendChild(style);
+			setTimeout(function(){
+			    head.removeChild(style);
+			}, 0);
+			return this;
+		} 
 		if (timeout == -1){ //timeout -1 means immediately
 			for (var j = this.jq.length; j--;)
 				zjq._fixCSS(this.jq[j]);	
@@ -1414,9 +1516,9 @@ jq(el).zk.center(); //same as 'center'
 			return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
-			agt = document.createElement("span");
+			agt = document.createElement('span');
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
-		agt.style.display = "none";
+		agt.style.display = 'none';
 		
 		// Bug 3049181 and 3092040
 		zjq._fixedVParent(el, true);
@@ -1426,7 +1528,7 @@ jq(el).zk.center(); //same as 'center'
 
 		el.z_vp = p.id; //might be empty
 		var st = el.style;
-		if (!st.top) st.top = "0";
+		if (!st.top) st.top = '0';
 			//B3178359: if no top and parent is relative+absolute, the following
 			//line causes browser crazy
 			//Strange: all browsers have the same behavior
@@ -1534,8 +1636,8 @@ jq(el).zk.center(); //same as 'center'
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange();
 				var rangetwo = inp.createTextRange();
-				var stored_range = "";
-				if(inp.type.toLowerCase() == "text"){
+				var stored_range = '';
+				if(inp.type.toLowerCase() == 'text'){
 					stored_range = rangetwo.duplicate();
 				}else{
 					 stored_range = range.duplicate();
@@ -1628,10 +1730,10 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 		var st = this.jq[0];
 		if (st && (st=st.style))
 			for (var nm in st)
-				if ((!zk.ie || nm != "accelerator")
-				&& st[nm] && typeof st[nm] == "string")
+				if ((!zk.ie || nm != 'accelerator')
+				&& st[nm] && typeof st[nm] == 'string')
 					try {
-						st[nm] = "";
+						st[nm] = '';
 					} catch (e) { //ignore
 					}
 		return this;
@@ -1663,8 +1765,8 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 			len = $jq.length,
 			types = ['text', 'password', 'number', 'tel', 'url', 'email'];
 		for (var j = len, tag, n; j--;)
-			if ((tag = jq.nodeName(n = $jq[j])) != "textarea"
-			&& (tag != "input" || (jq.inArray(n.type, types) == -1)))
+			if ((tag = jq.nodeName(n = $jq[j])) != 'textarea'
+			&& (tag != 'input' || (jq.inArray(n.type, types) == -1)))
 				return false;
 		return len > 0; //false if nothing selected
 	}
@@ -1705,7 +1807,7 @@ zk.copy(jq, {
 	 * @see #px0
 	 */
 	px: function (v) {
-		return (v||0) + "px";
+		return (v||0) + 'px';
 	},
 	/** Converting an integer a string ending with "px".
 	 * <p>Unlike {@link #px}, this method assumes 0 if v is negative.
@@ -1715,7 +1817,7 @@ zk.copy(jq, {
 	 * @see #px
 	 */
 	px0: function (v) {
-		return Math.max(v||0, 0) + "px";
+		return Math.max(v||0, 0) + 'px';
 	},
 
 	/** Returns an array of {@link DOMElement} that matches.
@@ -1786,7 +1888,7 @@ zk.copy(jq, {
 	 * @see #paddings
 	 * @return Map
 	 */
-	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
+	margins: {l: 'margin-left', r: 'margin-right', t: 'margin-top', b: 'margin-bottom'},
 	/** A map of the border style names: {l: 'border-left', t: 'border-top'...}.
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
@@ -1794,7 +1896,7 @@ zk.copy(jq, {
 	 * @see #paddings
 	 * @return Map
 	 */
-	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
+	borders: {l: 'border-left-width', r: 'border-right-width', t: 'border-top-width', b: 'border-bottom-width'},
 	/** A map of the padding style names: {l: 'padding-left', t: 'padding-top'...}. 
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
@@ -1802,15 +1904,15 @@ zk.copy(jq, {
 	 * @see #borders
 	 * @return Map
 	 */
-	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
+	paddings: {l: 'padding-left', r: 'padding-right', t: 'padding-top', b: 'padding-bottom'},
 
 	/** Returns the width of the scrollbar
 	 * @return int
 	 */
 	scrollbarWidth: function () {
 		if (!_sbwDiv) {
-			_sbwDiv = document.createElement("div");
-			_sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
+			_sbwDiv = document.createElement('div');
+			_sbwDiv.style.cssText = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
 			document.body.appendChild(_sbwDiv);
 		}
 		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
@@ -1853,8 +1955,8 @@ zk.copy(jq, {
 	 */
 	clearSelection: function () {
 		try{
-			if (window["getSelection"]) {
-				if (zk.safari) window.getSelection().collapse();
+			if (window['getSelection']) {
+				if (zk.webkit) window.getSelection().collapse();
 				else window.getSelection().removeAllRanges();
 			} else if (document.selection) {
 				if (document.selection.empty) document.selection.empty();
@@ -1892,7 +1994,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 */
 	filterTextStyle: function (style, plus) {
 		if (typeof style == 'string') {
-			var ts = "";
+			var ts = '';
 			if (style)
 				for (var j = 0, k = 0; k >= 0; j = k + 1) {
 					k = style.indexOf(';', j);
@@ -1969,15 +2071,15 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 */
 	newStackup: function (el, id, anchor) {
 		el = jq(el||[], zk)[0];
-		var ifr = document.createElement("iframe");
+		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
-		ifr.style.cssText = "position:absolute;overflow:hidden;opacity:0;filter:alpha(opacity=0)";
-		ifr.frameBorder = "no";
+		ifr.style.cssText = 'position:absolute;overflow:hidden;opacity:0;filter:alpha(opacity=0)';
+		ifr.frameBorder = 'no';
 		ifr.tabIndex = -1;
 		ifr.src = zjq.src0;
 		if (el) {
-			ifr.style.width = el.offsetWidth + "px";
-			ifr.style.height = el.offsetHeight + "px";
+			ifr.style.width = el.offsetWidth + 'px';
+			ifr.style.height = el.offsetHeight + 'px';
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
 			ifr.style.zIndex = el.style.zIndex;
@@ -1992,8 +2094,8 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @return DOMElement
 	 */
 	newHidden: function (nm, val, parent) {
-		var inp = document.createElement("input");
-		inp.type = "hidden";
+		var inp = document.createElement('input');
+		inp.type = 'hidden';
 		inp.name = nm;
 		inp.value = val;
 		if (parent) parent.appendChild(inp);
@@ -2005,7 +2107,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @since 5.0.1
 	 */
 	head: function () {
-		return document.getElementsByTagName("head")[0] || document.documentElement;
+		return document.getElementsByTagName('head')[0] || document.documentElement;
 	},
 
 	//dialog//
@@ -2165,7 +2267,7 @@ this._syncShadow(); //synchronize shadow
 		}
 		a.focus();
 		setTimeout(function () {jq(a).remove();}, 500);
-	}
+	},
 	/**
 	 * An override function that provide a way to get the style value where is
 	 * defined in the CSS file or the style object, rather than the computed value.
@@ -2233,6 +2335,47 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @since 5.0.5
 	 */
 	//j2d: function () {}
+	_syncScroll: {},
+	/** To register one object for the <code>doSyncScroll</code> invocation.
+	 * For example,
+	 * <pre><code>onSyncScroll();</code></pre>
+	 * @param Object wgt the object to register
+	 * @see #doSyncScroll
+	 * @see #unSyncScroll
+	 * @since 6.5.0
+	 */
+	onSyncScroll: function (wgt) {
+		var sync = this._syncScroll;
+		if (!sync[wgt.id])
+			sync[wgt.id] = wgt;
+	},
+	/** To invoke the <code>doSyncScroll</code> method of the registered objects.
+	 * <p><code>doSyncScroll</code> is called automatically when {@link zWatch}
+	 * fires onResponse, onShow or onHide.
+	 * It is useful if you have a Widget that using zul.Scrollbar.
+	 * Then, if you register the widget, the widget's doSyncScroll method will be called when widget add/remove/hide/show its child widget.
+	 * @see #onSyncScroll
+	 * @see #unSyncScroll
+	 * @since 6.5.0
+	 */
+	doSyncScroll: function () {
+		var sync = this._syncScroll;
+		for (var id in sync) {
+			sync[id].doResizeScroll_();
+			delete sync[id];
+		}
+	},
+	/** To unregister one object for the <code>doSyncScroll</code> invocation.
+	 * For example,
+	 * <pre><code>unSyncScroll(wgt);</code></pre>
+	 * @param Object wgt the object to register
+	 * @see #doSyncScroll
+	 * @see #onSyncScroll
+	 * @since 6.5.0
+	 */
+	unSyncScroll: function (wgt) {
+		delete this._syncScroll[wgt.id];
+	}
 });
 
 /** @class jq.Event

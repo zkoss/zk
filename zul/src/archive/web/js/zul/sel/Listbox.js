@@ -18,45 +18,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
 	}
 	function _syncFrozen(wgt) {
-		if (wgt && (wgt = wgt.frozen))
+		if (wgt._nativebar && (wgt = wgt.frozen))
 			wgt._syncFrozen();
 	}
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
+			var $jq = jq(wgt.$n('empty')),
+				colspan = 0;
 			if (wgt._nrows) {
-				jq(wgt.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+				$jq.hide();
 			} else {
-				var $jq = jq(wgt.$n("empty")),
-					colspan = 0;
 				if (wgt.listhead) {
 					for (var w = wgt.listhead.firstChild; w; w = w.nextSibling)
 						if (w.isVisible())
 							colspan++;
 				}
-				
-				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.attr('colspan', colspan || 1);
 				$jq.show();
 			}
 		}
 		wgt._shallFixEmpty = false;
 	}
-/**
- * The theme renderer, which is designed to be overridden
- * @since 6.5.0
- */
-zul.sel.Renderer = {
-	/** Update the size of the column menu button when mouse over
-	 * 
-	 * @param zul.sel.Listheader wgt the listheader
-	 */
-	updateColumnMenuButton: function (wgt) {
-		var n = wgt.$n(), btn;
-		if (btn = wgt.$n('btn')) 
-			btn.style.height = zk.ie6_ || zk.ie7_ ? 
-					n.offsetHeight - 1  + 'px' : n.offsetHeight + "px";
-	}
-};
-	
+
 var Listbox =
 /**
  * A listbox.
@@ -84,17 +67,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @type boolean
 	 */
 	groupSelect: false,
+	_scrollbar: null,
 	$define:{
-		emptyMessage:function(msg){
-			if(this.desktop) jq("td",this.$n("empty")).html(msg);
-			// ZK-1037 start
-			if (zk.ie == 9) {
-				if (msg)
-					this._fixHorScrollbar();
-				else
-					this._removeHorScrollbar();
-			}
-			// ZK-1037 end
+		emptyMessage: function(msg) {
+			if(this.desktop)
+				jq(this.$n('empty')).html(msg);
 		}
 	},	
 	$init: function () {
@@ -129,9 +106,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	nextItem: function (p) {
 		if (p)
-			while ((p = p.nextSibling)
-			&& !p.$instanceof(zul.sel.Listitem))
-				;
+			while ((p = p.nextSibling) && !p.$instanceof(zul.sel.Listitem));
 		return p;
 	},
 	/**
@@ -141,9 +116,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	previousItem: function (p) {
 		if (p)
-			while ((p = p.previousSibling)
-			&& !p.$instanceof(zul.sel.Listitem))
-				;
+			while ((p = p.previousSibling) && !p.$instanceof(zul.sel.Listitem));
 		return p;
 	},
 	/**
@@ -153,7 +126,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @return String
 	 */
 	getOddRowSclass: function () {
-		return this._scOddRow == null ? this.getZclass() + "-odd" : this._scOddRow;
+		return this._scOddRow == null ? this.$s('odd') : this._scOddRow;
 	},
 	/**
 	 * Sets the style class for the odd rows. If the style class doesn't exist,
@@ -177,12 +150,47 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @return boolean
 	 */
 	inSelectMold: function () {
-		return "select" == this.getMold();
+		return 'select' == this.getMold();
 	},
 	// bug ZK-56 for non-ROD to scroll after onSize ready
 	onSize: function () {
-		this.$supers(Listbox, "onSize", arguments);
-		this._syncSelInView();
+		this.$supers(Listbox, 'onSize', arguments);
+		var self = this;
+		setTimeout(function () {
+			if (self.desktop && !self.inSelectMold() && !self._nativebar) {
+				if (!self._scrollbar)
+					self._scrollbar = zul.mesh.Scrollbar.init(self);
+				if (!self._listbox$rod || self.inPagingMold()) {
+					self.refreshBar_();
+					self._syncSelInView();
+				}
+			}
+		}, 200);
+	},
+	refreshBar_: function (showBar, scrollToTop) {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			this._shallShowScrollbar = false;
+			if (scrollToTop)
+				bar.scrollTo(0, 0);
+			else
+				bar.scrollTo(this._currentLeft, this._currentTop);
+			//sync frozen
+			var frozen = this.frozen,
+				start;
+			if (frozen && (start = frozen._start) != 0) {
+				frozen._doScrollNow(start);
+				bar.setBarPosition(start);
+			}
+		}
+	},
+	destoryBar_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
+		}
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
@@ -195,34 +203,25 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		});
 		this._shallScrollIntoView = true;
 		
-		// Bug in B50-ZK-273.zul
-		if (zk.ie6_ && this.getSelectedIndex() > -1)
-			zk(this).redoCSS();
+	},
+	unbind_: function () {
+		this.destoryBar_();
+		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {
 			var index = this.getSelectedIndex();
 			if (index >= 0) { // B50-ZK-56
-				var si;
-				for (var it = this.getBodyWidgetIterator(); index-- >= 0;) 
+				var si, top = jq(this.$n()).offset().top;
+				for (var it = this.getBodyWidgetIterator(); index-- >= 0;)
 					si = it.next();
-				if (si) {
-					zk(si).scrollIntoView(this.ebody);
-					this._tmpScrollTop = this.ebody.scrollTop;
-				}
+				
+				if (si)
+					this._scrollbar.scrollToElement(si.$n());
 			}
 			// do only once
 			this._shallScrollIntoView = false;
 		}
-	},
-	_doScroll: function () {
-		// B50-ZK-56
-		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
-		if (this._tmpScrollTop) {
-			this.ebody.scrollTop = this._tmpScrollTop; 
-			this._tmpScrollTop = null;
-		}
-		this.$super(zul.sel.Listbox, '_doScroll');
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
@@ -230,6 +229,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this.stripe();
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
+			if (opts && opts.rtags.onDataLoading)
+				this._shallShowScrollbar = true;
 		}
 		this.$supers(Listbox, 'onResponse', arguments);
 	},
@@ -243,8 +244,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	stripe: function () {
 		var scOdd = this.getOddRowSclass();
 		if (!scOdd) return;
-		var odd = this._offset & 1;
-		for (var j = 0, even = !odd, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
+		var odd = this._offset & 1,
+			even = !odd,
+			it = this.getBodyWidgetIterator();
+		for (var j = 0, w; w = it.next(); j++) {
 			if (w.isVisible() && w.isStripeable_()) {
 				jq(w.$n())[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
@@ -346,9 +349,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.listhead = null;
 		else if (child == this.paging)
 			this.paging = null;
-		else if (child == this.frozen)
+		else if (child == this.frozen) {
 			this.frozen = null;
-		else if (child == this.listfoot)
+			this.destroyBar_();
+		} else if (child == this.listfoot)
 			this.listfoot = null;
 		else if (!child.$instanceof(zul.mesh.Auxhead)) {
 			if (child == this.firstItem) {
@@ -384,9 +388,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
-		var uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody id="', uuid, '-empty" class="', zcls,
-				'-empty-body" style="display:none"><tr><td>',
+		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="', 
+				this.uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
 	// this function used for Listbox, Listhead
@@ -400,7 +403,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (newc) this._fixOnAdd(newc, true, false, true); //ignoreAll: no sync stripe...
 
 		if ((oldc && oldc.$instanceof(zul.sel.Listitem))
-		|| (newc && newc.$instanceof(zul.sel.Listitem)))
+				|| (newc && newc.$instanceof(zul.sel.Listitem)))
 			this._syncStripe();
 		this._syncSize();
 		if (this.desktop)
@@ -434,33 +437,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			&& (lh = this.listhead) && (lh = lh.firstChild))
 			lh._checked = this._isAllSelected();
 		this.$supers(Listbox, '_updHeaderCM', arguments);
-	},
-	// ZK-1037 start
-	// called by self#emptyMessage and Listitem#setVisible
-	_fixHorScrollbar: (zk.ie == 9) ? function () {
-		var ebody, ebodytbl;
-		if (((ebody = this.ebody) && (ebodytbl = this.ebodytbl))
-			&& (ebody.offsetWidth < ebodytbl.offsetWidth))
-			jq(this.$n('body')).css('overflowX', 'scroll');
-	} : zk.$void,
-	// super
-	// also called by self#emptyMessage and Listitem#setVisible
-	_removeHorScrollbar: (zk.ie) ? function () {
-		if (zk.ie == 8) {
-			this.$supers('_removeHorScrollbar', arguments);
-		} else if (zk.ie == 9) { // ZK-1037
-			var body = this.$n('body');
-			if (!this._emptyMessage	// no empty message and visible listitem
-				&& !this.getBodyWidgetIterator({skipHidden: true}).next()) {
-				setTimeout(function () {
-					body.scrollLeft = 0;
-					jq(body).css('overflowX', 'hidden');
-					
-				}, 0);
-			}
-		}
-	} : zk.$void
-	// ZK-1037 end
+	}
 });
 /**
  * The listitem iterator.

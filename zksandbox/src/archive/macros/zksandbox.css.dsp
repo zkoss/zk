@@ -17,7 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<c:include page="~./zul/css/ext.css.dsp"/>
 ${z:setCSSCacheControl()}
 
 html {overflow:auto;}
@@ -37,19 +36,21 @@ ul {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
-a, a:visited {
-	color:#008bb6;
-}
-ul li	{list-style: url(${c:encodeURL(zk.ie == 6 ? '/img/z-bullet1.gif' : '/img/Centigrade-Widget-Icons/Bullet-10x10.png')}) disc}
+
+ul li	{list-style: url(${c:encodeURL('/img/Centigrade-Widget-Icons/Bullet-10x10.png')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
+
+<%-- ZK gmaps --%>
+.z-gmaps {
+	line-height: normal;
+}
 .demo-header .z-north-body {
 	background:transparent url(${c:encodeURL('/img/category-bg.png')}) repeat-x scroll 0 0;
 }
 .demo-categorybar {
 	position: relative;
 	overflow: hidden;
-	${zk.ie == 6 ? 'float: left;' : ''}
 }
 .demo-categorybar-body {
 	margin: 0px;
@@ -109,7 +110,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 }
 .demo-search-inp {
     padding: 2px 0 1px 18px;
-	background: white url(${c:encodeURL(zk.ie == 6 ? '/img/search.gif' : '/img/search.png')}) no-repeat scroll 0 0;
+	background: white url(${c:encodeURL('/img/search.png')}) no-repeat scroll 0 0;
 }
 .demo-category {
 	margin-top: 10px; float:left; height: 80px; width: 90px;
@@ -229,15 +230,3 @@ a.edition-field:hover {
 .silvertail .demo-categorybar-right-scroll:hover {
 	background-position: 0 0;
 }
-<c:if test="${zk.ie == 6}">
-.breeze .demo-categorybar-left-scroll,
-.silvertail .demo-categorybar-left-scroll {
-	background-image: none;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-left.png')}");
-}
-.breeze .demo-categorybar-right-scroll,
-.silvertail .demo-categorybar-right-scroll {
-	background-image: none;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-right.png')}");
-}
-</c:if>

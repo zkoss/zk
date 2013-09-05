@@ -1,0 +1,128 @@
+// ZK Mixins Utility
+
+// EL Function
+// --------------------------------------------
+
+//---------------------------------------------
+// web/core.dsp.tld
+//---------------------------------------------
+.encodeURL(@property, @url, @rest...) when (@property = background) {
+	background: url(${c:encodeURL('@{url}')}) @rest;
+}
+.encodeURL(@property, @url, @rest...) when (@property = background-image) {
+	background-image: url(${c:encodeURL('@{url}')}) @rest;
+}
+.encodeThemeURL(@property, @url, @rest...) when (@property = background) {
+	background: url(${c:encodeThemeURL('@{url}')}) @rest;
+}
+.encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
+	background-image: url(${c:encodeThemeURL('@{url}')}) @rest;
+}
+
+//---------------------------------------------
+// theme.dsp.tld
+//---------------------------------------------
+// gradient
+.gradient(@direction, @value) {
+	${t:gradient('@{direction}', '@{value}')};
+}
+.gradValue(@direction, @value) {
+	${t:gradValue('@{direction}', '@{value}')};	
+}
+.gradients(@direction, @value) {
+	${t:gradients('@{direction}', '@{value}')};
+}
+// box layout
+.box(@name, @value) {
+	${t:box('@{name}', '@{value}')};
+}
+.box2(@name, @value, @name2, @value2) {
+	${t:box2('@{name}', '@{value}', '@{name2}', '@{value2}')};
+}
+.box3(@name, @value, @name2, @value2, @name3, @value3) {
+	${t:box3('@{name}', '@{value}', '@{name2}', '@{value2}', '@{name3}', '@{value3}')};
+}
+// box-shadow
+.boxShadow(@value) {
+	${t:boxShadow('@{value}')};
+}
+// border-radius
+.borderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('@{size}')};
+}
+// transform
+.transform(@value) {
+	${t:transform('@{value}')};
+}
+// CSS3
+.applyCSS3(@key, @value) {
+	${t:applyCSS3('@{key}', '@{value}')};
+}
+
+//---------------------------------------------
+// Other helpful utilities
+//---------------------------------------------
+// gradient utility
+.horGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	${t:gradient('hor', '@{start} 0%; @{end} 100%')};
+}
+.verGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
+}
+.resetGradient() {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+// IE 8
+.gradientFallback(@start: @baseGradientStart, @end: @baseGradientEnd) {
+	background: average(@start, @end);
+}
+.gradientHoverFallback(@start: @hoverGradientStart, @end: @hoverGradientEnd) {
+	background: average(@start, @end);
+}
+.gradientActiveFallback(@start: @activeGradientStart, @end: @activeGradientEnd) {
+	background: average(@start, @end);
+}
+.gradientSelectedFallback(@start: @selectedGradientStart, @end: @selectedGradientEnd) {
+	background: average(@start, @end);
+}
+.gradientSelectedHoverFallback(@start: @selectedHoverGradientStart, @end: @selectedHoverGradientEnd) {
+	background: average(@start, @end);
+}
+
+// border-radius utility
+.topBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('@{size} @{size} 0 0')};
+}
+.rightBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('0 @{size} @{size} 0')};
+}
+.bottomBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('0 0 @{size} @{size}')};
+}
+.leftBorderRadius(@size: @baseBorderRadius) {
+	${t:borderRadius('@{size} 0 0 @{size}')};
+}
+// transition utility
+.transition(@property, @duration, @timingFunc, @delay: 0) {
+	${t:applyCSS3('transition', '@{property} @{duration} @{timingFunc} @{delay}')};
+}
+// opacity utility
+.opacity(@opacity) {
+	opacity: @opacity;
+	@opacity100: @opacity * 100;
+	filter: ~"alpha(opacity=@{opacity100})";
+}
+.disabledOpacity(@opacity: @disabledOpacity) {
+	.opacity(@opacity)
+}
+// icon font utility
+.baseIconFont() {
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: inherit;
+	-webkit-font-smoothing: antialiased;
+	*margin-right: .3em; // fixes ie7 issues
+}

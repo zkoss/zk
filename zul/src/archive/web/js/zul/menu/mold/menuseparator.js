@@ -13,7 +13,5 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var tagnm = this.isPopup() ? "li" : "td";
-	out.push('<',tagnm, this.domAttrs_(), '><span class="', this.getZclass(),
-			'-inner">&nbsp;</span></',tagnm,'>');
+	out.push('<li', this.domAttrs_(), '>&nbsp;</li>');
 }

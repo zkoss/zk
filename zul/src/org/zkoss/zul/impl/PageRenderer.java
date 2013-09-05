@@ -66,9 +66,9 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		Double number = exec.getBrowser("mobile");
-		if (number == null || number.intValue() == 0) {
-			out.write("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
 
+		out.write("<html");
+		if (number == null || number.intValue() == 0) {
 			Double ie = exec.getBrowser("ie");
 			// let ie <= 8 support VML on javascript
 			if (ie != null && ie < 9)
@@ -80,8 +80,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
-			out.write("<!DOCTYPE html>");
-			out.write("<html");
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
 					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"

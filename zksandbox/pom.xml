@@ -16,13 +16,13 @@
 		<jasperreports.version>4.5.1</jasperreports.version>
 		<jfreechart.version>1.0.14</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
-		<ckez.version>3.3.2_50</ckez.version>
-		<gmapsz.version>3.0.0</gmapsz.version>
+		<ckez.version>4.1.1.0</ckez.version>
+		<gmapsz.version>3.0.1</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
 		<zuljsp.version>1.4.1</zuljsp.version>
 	</properties>
-	<version>6.5.4-SNAPSHOT</version>
+	<version>7.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<licenses>
 		<license>

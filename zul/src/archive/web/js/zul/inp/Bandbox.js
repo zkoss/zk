@@ -27,21 +27,17 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		var bp = this.firstChild, //bandpopup
 			w, h;
 		if (bp) {
-			w = bp._hflex == 'min' && bp._hflexsz ? jq.px0(bp._hflexsz) : bp.getWidth();
-			h = bp._vflex == 'min' && bp._vflexsz ? jq.px0(bp._vflexsz) : bp.getHeight();
+			w = bp._hflex == 'min' && bp._hflexsz ? jq.px0(bp._hflexsz + zk(pp).padBorderWidth()) : bp.getWidth();
+			h = bp._vflex == 'min' && bp._vflexsz ? jq.px0(bp._vflexsz + zk(pp).padBorderHeight()) : bp.getHeight();
 		}
 		return [w||'auto', h||'auto'];
-	},
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-bandbox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 	getCaveNode: function () {
 		return this.$n('pp') || this.$n();
 	},
 	redrawpp_: function (out) {
-		out.push('<div id="', this.uuid, '-pp" class="', this.getZclass(),
-		'-pp" style="display:none" tabindex="-1">');
+		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
+		'" style="display:none" tabindex="-1">');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -49,6 +45,9 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		out.push('</div>');
 	},
 	//@Override
+	getIconClass_: function () {
+		return 'z-icon-search';
+	},
 	open: function (opts) {
 		if (!this.firstChild) { 
 			// ignore when <bandpopup> is absent, but event is still fired
@@ -61,15 +60,6 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	presize_: function () {
 		var bp = this.firstChild;
 		if (bp && (bp._hflex == 'min' || bp._vflex == 'min')) {
-			if (zk.ie < 8) {
-				//for ZK-1430
-				//pp.style.visibility can't be "none" or "hidden". 
-				//If pp.style.visibility is "hidden", fireDown("onFitSize") will not work,
-				//because pp is not visible. (reference: isRealVisible() in domie.js)
-				//TODO refactory ComboWidget.open()
-				var pp = this.getPopupNode_();
-				if (pp) pp.style.visibility = "";
-			}
 			zWatch.fireDown('onFitSize', bp, {reverse: true});	
 			return true;
 		}

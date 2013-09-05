@@ -12,6 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
 /**
  * A treecell.
  *
@@ -56,7 +57,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				//bug#3185657: not span content if given width
 			tc = this.getTreecol();
 			return this.isVisible() && tc && !tc.isVisible() ? style +
-				"display:none;" : style;
+				'display:none;' : style;
 	},
 	/** Returns the tree col associated with this cell, or null if not available.
 	 * @return Treecol
@@ -92,7 +93,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();
-		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
+		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">&nbsp;' + s1 + '</span>' : s1: s2;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -120,52 +121,38 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				if (tree.isCheckmark()) {
 					var chkable = item.isCheckable(),
 						multi = tree.isMultiple(),
-						zcls = item.getZclass(),
-						img = zcls + '-img';
-					sb.push('<span id="', this.parent.uuid, '-cm" class="', img,
-						' ', img, (multi ? '-checkbox' : '-radio'));
+						cmCls = multi ? item.$s('checkbox') : item.$s('radio'),
+						ckCls = multi ? ' z-icon-ok' : ' z-icon-radio';
+					sb.push('<span id="', this.parent.uuid, '-cm" class="',
+							item.$s('checkable'), ' ', cmCls);
 					
 					if (!chkable || item.isDisabled())
-						sb.push(' ', img, '-disd');
+						sb.push(' ', item.$s('disabled'));
 					
 					sb.push('"');
 					if (!chkable)
 						sb.push(' style="visibility:hidden"');
-						
-					sb.push('></span>');
+					
+					sb.push('><i class="', item.$s('icon'), ckCls, '"></i></span>');
 				}
 			}
-			var iconScls = tree ? tree.getZclass() : "",
+			var iconScls = tree ? tree.getZclass() : '',
 				pitems = this._getTreeitems(item, tree);
 			for (var j = 0, k = pitems.length; j < k; ++j)
-				this._appendIcon(sb, iconScls,
-					j == 0 || this._isLastVisibleChild(pitems[j]) ? zul.sel.Treecell.SPACER: zul.sel.Treecell.VBAR, false);
-
+				this._appendIcon(sb, iconScls, 'spacer', false);
+			
 			if (item.isContainer()) {
-				this._appendIcon(sb, iconScls,
-					item.isOpen() ?
-						pitems.length == 0 ? zul.sel.Treecell.ROOT_OPEN:
-							 this._isLastVisibleChild(item) ? zul.sel.Treecell.LAST_OPEN: zul.sel.Treecell.TEE_OPEN:
-						pitems.length == 0 ? zul.sel.Treecell.ROOT_CLOSE:
-							this._isLastVisibleChild(item) ? zul.sel.Treecell.LAST_CLOSE: zul.sel.Treecell.TEE_CLOSE,
-						true);
+				var name = item.isOpen() ? 'open' : 'close';
+				this._appendIcon(sb, iconScls, name, true);
 			} else {
-				this._appendIcon(sb, iconScls,
-					pitems.length == 0 ? zul.sel.Treecell.FIRSTSPACER:
-						this._isLastVisibleChild(item) ? zul.sel.Treecell.LAST: zul.sel.Treecell.TEE, false);
+				this._appendIcon(sb, iconScls, 'spacer', false);
 			}
 			return sb.join('');
 		} else {
 			//To make the tree's height more correct, we have to generate &nbsp;
 			//for empty cell. Otherwise, IE will make the height too small
-			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? "&nbsp;": null;
+			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? '&nbsp;' : null;
 		}
-	},
-	_isLastVisibleChild: function (item) {
-		var parent = item.parent;
-		for (var w = parent.lastChild; w; w = w.previousSibling)
-			if (w._isVisibleInTree()) return w == item; // B50-3314143
-		return false;
 	},
 	_getTreeitems: function (item, tree) {
 		var pitems = [];
@@ -181,32 +168,46 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		return pitems;
 	},
 	_appendIcon: function (sb, iconScls, name, button) {
+		var openCloseIcon = [];
 		sb.push('<span class="');
-		if (name == zul.sel.Treecell.TEE || name == zul.sel.Treecell.LAST || name == zul.sel.Treecell.VBAR || name == zul.sel.Treecell.SPACER) {
-			sb.push(iconScls + "-line ", iconScls, '-', name, '"');
+		if (name == 'spacer') {
+			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
 		} else {
-			sb.push(iconScls + "-ico ", iconScls, '-', name, '"');
+			var id = '';
+			if (button) {
+				var item = this.parent;
+				if (item)
+					id = item.uuid + '-icon';
+			}
+			sb.push(iconScls, '-icon"');
+			var icon = this.getIconOpenClass_();
+			if (name.indexOf('close') > -1)
+				icon = this.getIconCloseClass_();
+			
+			openCloseIcon.push('<i id="', id, '" class="', icon, ' ', iconScls, 
+					'-', name, '"></i>');
 		}
 		if (button) {
 			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd() 
 			if (item)
 				sb.push(' id="', item.uuid, '-open"');
 		}
-
-		sb.push('></span>');
+		sb.push('>', openCloseIcon.join(''), '</span>');
+		openCloseIcon = null;
+	},
+	getIconOpenClass_: function () {
+		return 'z-icon-caret-down';
+	},
+	getIconCloseClass_: function () {
+		return 'z-icon-caret-right';
 	},
 	getWidth: function() {
 		var col = this.getTreecol();
 		return col ? col.getWidth() : null;
 	},
 	domAttrs_: function () {
-		var head = this.getTreecol(),
-			added;
-		if (head)
-			added = head.getColAttrs();
 		return this.$supers('domAttrs_', arguments)
-			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '')
-			+ (added ? ' ' + added : '');
+			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '');
 	},
 	updateDomContent_: function () {
 		this.$supers('updateDomContent_', arguments);
@@ -216,16 +217,5 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}
-}, {
-	ROOT_OPEN: "root-open",
-	ROOT_CLOSE: "root-close",
-	LAST_OPEN: "last-open",
-	LAST_CLOSE: "last-close",
-	TEE_OPEN: "tee-open",
-	TEE_CLOSE: "tee-close",
-	TEE: "tee",
-	LAST: "last",
-	VBAR: "vbar",
-	SPACER: "spacer",
-	FIRSTSPACER: "firstspacer"
 });
+})();

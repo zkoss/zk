@@ -89,20 +89,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		menu.$class._addActive(menu);
 		zWatch.fire('onFloatUp', menu); //notify all
 	}
-	function _toggleMenu(w) {
-		var pp;
-		if ((pp = w.menupopup)) {
-			if (pp.isOpen())
-				pp.close();
-			else
-				pp.open();
-		} else if ((pp = w._contentHandler)) {
-			 if (pp.isOpen())
-				 pp.onHide();
-			 else
-				pp.onShow();
-		}
-	}
 
 /**
  * A container used to display menus. It should be placed inside a
@@ -154,7 +140,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._hideShadow();
 		var menu;
 		if ((menu = _getMenu(this)) && menu.isTopmost())
-			jq(menu.getAnchor_()).removeClass(menu.getZclass() + "-body-seld");
+			jq(menu.$n()).removeClass(menu.$s('selected'));
 
 		var item = _currentChild(this);
 		if (item) item.$class._rmActive(item);
@@ -236,14 +222,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.close({sendOnOpen:true});
 	},
 	onShow: function () {
-		if (zk.ie7_) {
-			var pp = this.$n();
-			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
-				var ul = this.$n('cave');
-				if (ul.childNodes.length)
-					pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-			}
-		}
 		this.zsync();
 		var anc = this.$n('a');
 		if (anc) {
@@ -252,6 +230,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				zk.currentFocus = this; //Bug 2807475: (IE only) s.t. _docMouseDown will focus later (since menupop becomes invisible)
 			}
 		}
+		
+		zk(this).redoCSS(-1, {'fixFontIcon': true});
+		
 	},
 	onHide: function () {
 		if (this.isOpen())
@@ -261,6 +242,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	bind_: function () {
 		this.$supers(zul.menu.Menupopup, 'bind_', arguments);
 		zWatch.listen({onHide: this, onResponse: this});
+
+		var n = this.$n();
+		this.domListen_(n, 'onMouseEnter').domListen_(n, 'onMouseLeave');
 		if (!zk.css3) jq.onzsync(this);
 	},
 	unbind_: function () {
@@ -271,22 +255,15 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (!zk.css3) jq.unzsync(this);
 		this._shadow = null;
 		zWatch.unlisten({onHide: this, onResponse: this});
+
+		var n = this.$n();
+		this.domUnlisten_(n, 'onMouseEnter').domUnlisten_(n, 'onMouseLeave');
+		
 		this.$supers(zul.menu.Menupopup, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (!this.isOpen())
 			return; // Bug 2950364
-		if (zk.ie7_) {
-			var pp = this.$n();
-		
-    		// Bug 2935985
-    		pp.style.width = '';
-    		
-    		// Bug 2105158 and Bug 1911129
-    		var ul = this.$n('cave');
-    		if (ul.childNodes.length) // Bug 2784736
-    			pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-		}
 		this.zsync();
 		
 		this.$supers('onResponse', arguments); //Bug #2870616
@@ -333,7 +310,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			// 1. Open the descendant menupopup if any
 			// 2. jump to the next topmost menu
 			if (w && w.$instanceof(zul.menu.Menu)) {
-				_toggleMenu(w);
+				w._togglePopup();
 			} else {
 				var root = _getRootMenu(this);
 				if (root && (root = root._getNextVisibleMenu()))
@@ -350,7 +327,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				zWatch.fire('onFloatUp', w); //notify all
 				this.close({sendOnOpen:true});
 			} else if (w && w.$instanceof(zul.menu.Menu)) {
-				_toggleMenu(w);
+				w._togglePopup();
 			} else {
 				if ((menu = _getMenu(this))) {
 					this.close();
@@ -409,21 +386,27 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	 * @since 5.0.5
 	 */
 	getMenubar: function () {
-		for (var p = this.parent; p; p = p.parent)
+		for (var p = this.parent; p; p = p.parent) {
 			if (p.$instanceof(zul.menu.Menubar))
 				return p;
+			if (p.$instanceof(zul.menu.Menu))
+				return p.getMenubar();
+			break; // not found
+		}
 		return null;
 	},
-	doMouseOver_: function (evt) {
+	_doMouseEnter: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = true;
 		this._shallClose = false;
-		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (evt) {
+	_doMouseLeave: function (evt) {
 		var menubar = this.getMenubar();
-		if (menubar) menubar._bOver = false;
-		this.$supers('doMouseOut_', arguments);
+		if (menubar) {
+			menubar._bOver = false;
+		 	if (menubar._autodrop)
+		 		menubar._closeOnOut();
+		}
 	}
 }, {
 	_rmActive: function (wgt) {

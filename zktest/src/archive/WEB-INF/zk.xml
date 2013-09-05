@@ -613,4 +613,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	 -->
+	
+	<!-- Turn on if you want to use browser native scrollbar by default
+	<library-property>
+		<name>org.zkoss.zul.nativebar</name>
+		<value>true</value>
+	</library-property>
+	 -->
 </zk>

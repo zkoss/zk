@@ -70,7 +70,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 			if (n) n.media = v;
 		}
 	},
-	bind_: zk.ie < 9 ? function () {
+	bind_: zk.ie8_ ? function () {
 		this.$supers(zul.utl.Style, 'bind_', arguments);
 
 		//test2/Z5-style.zul: we have to re-assign href (setOuter might work well)

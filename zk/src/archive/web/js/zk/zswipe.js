@@ -50,7 +50,7 @@ zk.Swipe = zk.$extends(zk.Object, {
 		this.widget = widget;
 		this.node = node = node ? jq(node, zk)[0]: widget.node || (widget.$n ? widget.$n() : null);
 		if (!node)
-			throw "Handle required for " + widget;
+			throw 'Handle required for ' + widget;
 		
 		this.opts = zk.$default(opts, {
 			scrollThreshold: 5,

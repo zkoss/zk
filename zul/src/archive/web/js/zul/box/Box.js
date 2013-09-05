@@ -31,7 +31,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			spstyle = spacing && spacing != 'auto' ? (vert?'height:':'width:') + spacing: '';
 
 		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
-			'-chdex2" class="', box.getZclass(), '-sep"');
+			'-chdex2" class="', box.$s('separator'), '"');
 
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
@@ -92,7 +92,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//Safari/chrome will not extend the height of td to as tr (B30-2088496.zul)
 		//but cannot always give pixels if size determined by contents (big gap in B30-1769047.zul)
 		var nh;
-		if (zk.safari && !vert && (nh = this.$n().style.height)) {
+		if (zk.webkit && !vert && (nh = this.$n().style.height)) {
 			var td = this.$n('frame');
 			td.style.height = '';
 			td.style.height = nh.indexOf('%') > 0 ? 
@@ -269,7 +269,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	//super//
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: this.isVertical() ? "z-vbox" : "z-hbox";
+		return zcs != null ? zcs: this.isVertical() ? 'z-vbox' : 'z-hbox';
 	},
 
 	onChildVisible_: function (child) {
@@ -282,8 +282,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (child.$instanceof(zul.box.Splitter)) {
 			var n = this._chdextr(child);
 			if (n) {
-				n.style.height = "";
-				n.style.width = "";
+				n.style.height = '';
+				n.style.width = '';
 			}
 			zUtl.fireSized(this, -1); //no beforeSize
 		}
@@ -311,7 +311,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		} else {
 			var n = this.$n('real'), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
-				n.appendChild(document.createElement("tbody"));
+				n.appendChild(document.createElement('tbody'));
 			jq(this.isVertical() ? tbs[0]: tbs[0].rows[0]).append(
 				this.encloseChildHTML_(child, true));
 		}
@@ -378,7 +378,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		for (var j = 0, len = oo.length; j < len; ++j)
 			out.push(oo[j]);
 	},
-	_resetBoxSize: function () {
+	_resetBoxSize: function (vert) {
 		var	vert = this.isVertical(),
 			k = -1,
 			szes = this._sizes;
@@ -422,17 +422,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		
-		//bug 3010663: boxes do not resize when browser window is resized
-		var p = this.$n(),
-			zkp = zk(p),
-			offhgh = p.offsetHeight,
-			offwdh = p.offsetWidth,
-			curhgh = this._vflexsz !== undefined ? this._vflexsz - zkp.sumStyles("tb", jq.margins) : offhgh,
-			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles("lr", jq.margins) : offwdh,
-			hgh = zkp.revisedHeight(curhgh < offhgh ? curhgh : offhgh),
-			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
-		return zkp ? {height: hgh, width: wdh} : {};
 	},
 	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
 	afterResetChildSize_: function () {
@@ -478,12 +467,21 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	_getContentSize: function () {
+		//bug 3010663: boxes do not resize when browser window is resized
+		var p = this.$n(),
+			zkp = zk(p),
+			hgh = this._vflexsz !== undefined ? 
+					this._vflexsz - zkp.padBorderHeight() - zkp.marginHeight()
+					// B50-ZK-286: subtract scroll bar width
+					: zkp.contentHeight(true),
+			wdh = this._hflexsz !== undefined ?
+					this._hflexsz - zkp.padBorderWidth() - zkp.marginWidth()
+					// B50-ZK-286: subtract scroll bar width
+					: zkp.contentWidth(true);
+		return zkp ? {height: hgh, width: wdh} : {height: 0, width: 0};
+	},
 	beforeChildrenFlex_: function(child) {
-		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
-			delete child._flexFixed;
-			return false;
-		}
-		
 		child._flexFixed = true;
 		
 		var	vert = this.isVertical(),
@@ -493,13 +491,26 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			hflexsz = !vert ? 0 : 1,
 			chdex = child.$n('chdex'), 
 			p = chdex ? chdex.parentNode : child.$n().parentNode,
-			zkp = zk(p),
-			psz = this._resetBoxSize(),
+			zkp = zk(this.$n()),
+			psz = this._getContentSize(),
 			hgh = psz.height,
 			wdh = psz.width,
 			xc = p.firstChild,
 			k = -1,
-			szes = this._sizes;
+			szes = this._sizes,
+			scrWdh;
+
+		if (!zk.mounting) { // ignore for the loading time
+			this._resetBoxSize(vert);
+		}
+
+		// Bug 3185686, B50-ZK-452
+		if(zkp.hasVScroll()) //with vertical scrollbar
+			wdh -= (scrWdh = jq.scrollbarWidth());
+			
+		// B50-3312936.zul
+		if(zkp.hasHScroll()) //with horizontal scrollbar
+			hgh -= scrWdh || jq.scrollbarWidth();
 		
 		for (; xc; xc = xc.nextSibling) {
 			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? 
@@ -522,8 +533,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						zk.ie && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
 						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
 					offwdh = fixedSize && !vert ? zk.parseInt(szes[k]) : zkc.offsetWidth(),
-					cwdh = offwdh + zkc.sumStyles("lr", jq.margins),
-					chgh = offhgh + zkc.sumStyles("tb", jq.margins);
+					cwdh = offwdh + zkc.marginWidth(),
+					chgh = offhgh + zkc.marginHeight();
 				
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
@@ -560,26 +571,38 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var cwgt = vflexs.shift(), 
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = vsz;// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0); 
-			cwgt.setFlexSize_({height:isz});
-			cwgt._vflexsz = vsz;
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				var chdex = cwgt.$n('chdex');
-				chdex.style.height = jq.px0(zk(chdex).revisedHeight(vsz, true));
+				isz = vsz,// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex),
+				 minus = $chdex.padBorderHeight();
+			
+			// we need to remove the chdex padding and border for border-box mode
+			cwgt.setFlexSize_({height:isz - minus});
+			cwgt._vflexsz = vsz - minus;
+			
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {				
+				// no need to subtract padding and border for border-box mode
+				chdex.style.height = jq.px0(vsz - $chdex.marginHeight());
 			}
+
 			if (vert) lastsz -= vsz;
 		}
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
 				// B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = lastsz;// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
-
-			cwgt.setFlexSize_({height:isz});
-			cwgt._vflexsz = lastsz;
+				isz = lastsz,// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex),
+				minus = $chdex.padBorderHeight();
+			
+			// we need to remove the chdex padding and border for border-box mode
+			cwgt.setFlexSize_({height:isz - minus});
+			cwgt._vflexsz = lastsz - minus;
+			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				var chdex = cwgt.$n('chdex');
-				chdex.style.height = jq.px0(zk(chdex).revisedHeight(lastsz, true));
+				// no need to subtract padding and border for border-box mode
+				chdex.style.height = jq.px0(lastsz - $chdex.marginHeight());
 			}
 		}
 		
@@ -588,23 +611,35 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		lastsz = wdh > 0 ? wdh : 0;
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
-				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({width:hsz});
-			cwgt._hflexsz = hsz;
+				hsz = (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
+				chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex),
+				minus = $chdex.padBorderWidth();
+			
+			// we need to remove the chdex padding and border for border-box mode
+			cwgt.setFlexSize_({width:hsz - minus});
+			cwgt._hflexsz = hsz - minus;
+			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				var chdex = cwgt.$n('chdex');
-				chdex.style.width = jq.px0(zk(chdex).revisedWidth(hsz, true));
+				// no need to subtract padding and border for border-box mode
+				chdex.style.width = jq.px0(hsz - $chdex.marginWidth());
 			}
 			if (!vert) lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
-			var cwgt = hflexs.shift();
-			cwgt.setFlexSize_({width:lastsz});
-			cwgt._hflexsz = lastsz;
+			var cwgt = hflexs.shift(),
+				chdex = cwgt.$n('chdex'),
+				$chdex = zk(chdex),
+				minus = $chdex.padBorderWidth();
+
+			// we need to remove the chdex padding and border for border-box mode
+			cwgt.setFlexSize_({width:lastsz - minus});
+			cwgt._hflexsz = lastsz - minus;
+			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
-				var chdex = cwgt.$n('chdex');
-				chdex.style.width = jq.px0(zk(chdex).revisedWidth(lastsz, true));
+				// no need to subtract padding and border for border-box mode
+				chdex.style.width = jq.px0(lastsz - $chdex.marginWidth());
 			}
 		}
 		
@@ -612,15 +647,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		child.parent.afterChildrenFlex_(child);
 		child._flexFixed = false;
 		
-		// Bug for B50-3014664.zul
-		if (zk.ie < 8)
-			zk(this).redoCSS();
 		return false; //to skip original _fixFlex
 	},
 	_childOuterAttrs: function (child) {
 		var html = '';
 		if (child.$instanceof(zul.box.Splitter))
-			html = ' class="' + child.getZclass() + '-outer"';
+			html = ' class="' + child.$s('outer') + '"';
 		else if (this.isVertical()) {
 			if (this._isStretchPack()) {
 				var v = this._pack2; 
@@ -637,7 +669,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			vert = this.isVertical(),
 			$Splitter = zul.box.Splitter;
 		if (child.$instanceof($Splitter))
-			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
+			return '';
 				//spliter's display handled in _childOuterAttrs
 
 		if (this._isStretchPack()) {
@@ -720,9 +752,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (child.isVisible() && (c = child.$n())) {
 					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
-						c.style.width = zk(c).revisedWidth(tdsz, !zk.safari) + 'px';
+						c.style.width = zk(c).revisedWidth(tdsz, !zk.webkit) + 'px';
 					else 
-						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.safari) + 'px';
+						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.webkit) + 'px';
 				}
 			}
 		}
@@ -761,24 +793,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
 		
-		//Bug 1916473: with IE, we have make the whole table to fit the table
-		//since IE won't fit it even if height 100% is specified
-	
-		//20090924, Henri: the original bug fix seems fail the zkdemo/test/splitter.zul
-		//in IE7/IE8 (cannot drag splitter to left in IE7/8). I try another fix 
-		//by changing hbox chdex style(TD) to have height:100% and it works!
-/*		if (zk.ie) {
-			var p = node.parentNode;
-			if (jq.nodeName(p, "td")) {
-				var nm = vert ? "height": "width",
-					sz = vert ? p.clientHeight: p.clientWidth;
-				if ((node.style[nm] == "100%" || this._box100) && sz) {
-					node.style[nm] = sz + "px";
-					this._box100 = true;
-				}
-			}
-		}
-*/
 		//Note: we have to assign width/height first
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")
@@ -793,14 +807,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (zk(d).isVisible())
 				if (vert) {
 					var diff = d.offsetHeight;
-					if(d.id && !d.id.endsWith("-chdex2")) { //TR
+					if(d.id && !d.id.endsWith('-chdex2')) { //TR
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
-							c.style.height = zk(c).revisedHeight(i ? diff: total) + "px";
-							d.style.height = ""; //just-in-case
+							c.style.height = zk(c).revisedHeight(i ? diff: total) + 'px';
+							d.style.height = ''; //just-in-case
 						} else {
-							d.style.height = zk(d).revisedHeight(i ? diff: total) + "px";
+							d.style.height = zk(d).revisedHeight(i ? diff: total) + 'px';
 						}
 					}
 					total -= diff;
@@ -808,8 +822,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					var diff = d.offsetWidth;
 					//!sizes  B50-ZK-887: hbox's widths properties specified in Chrome is not precise
 					//if user set the widths , we freeze the with directly 
-					if(!sizes && d.id && !d.id.endsWith("-chdex2")) //TD
-						d.style.width = zk(d).revisedWidth(i ? diff: total) + "px";
+					if(!sizes && d.id && !d.id.endsWith('-chdex2')) //TD
+						d.style.width = zk(d).revisedWidth(i ? diff: total) + 'px';
 					total -= diff;
 				}
 		}
@@ -817,11 +831,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	onHide: _zkf
 },{ //static
 	_toValign: function (v) {
-		return v ? "start" == v ? "top": "center" == v ? "middle":
-			"end" == v ? "bottom": v: null;
+		return v ? 'start' == v ? 'top': 'center' == v ? 'middle':
+			'end' == v ? 'bottom': v: null;
 	},
 	_toHalign: function (v) {
-		return v ? "start" == v ? "left": "end" == v ? "right": v: null;
+		return v ? 'start' == v ? 'left': 'end' == v ? 'right': v: null;
 	}
 });
 

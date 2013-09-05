@@ -12,34 +12,35 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	var _dirMap = {
+		'u': 'up',
+		'd': 'down',
+		'l': 'left',
+		'r': 'right'
+	};
 /**
  * A error message box that is displayed as a popup.
  */
-zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
-	$init: function () {
-		this.$supers('$init', arguments);
-		this.setWidth("260px");
-		this.setSclass('z-errbox');
-	},
-	getZclass: function () {
-		return this._zclass == null ? 'z-popup' : this._zclass;
-	},
-	/** Opens the popup.
-	 * @param zk.Widget owner the owner widget
-	 * @param String msg the error message
-	 * @see zul.wgt.Popup#open
-	 */
-	show: function (owner, msg) {
+zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
+	$init: function (owner, msg) {
 		this.parent = owner; //fake
 		this.parent.__ebox = this;
 		this.msg = msg;
+		this.$supers('$init', [msg, {ref: parent}]);
+	},
+	/** Opens the popup.
+	 * @see zul.wgt.Popup#open
+	 */
+	show: function () {
 		jq(document.body).append(this);
 
 		// Fixed IE6/7 issue in B50-2941554.zul
-		var self = this, cstp = owner._cst && owner._cst._pos;
+		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
 		setTimeout(function() {
 			if (self.parent) //Bug #3067998: if 
-				self.open(owner, null, cstp || "end_before", 
+				self.open(self.parent, null, cstp || 'end_before', 
 						{dodgeRef: !cstp});
 		}, 0);
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
@@ -80,7 +81,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		// bug ZK-1143
 		var drag = this._drag;
 		this._drag = null;
-		drag.destroy();
+		if (drag)
+			drag.destroy();
 		zWatch.unlisten({onScroll: this});
 		
 		// just in case
@@ -88,15 +90,27 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
 		
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
-		this._drag = null;
 	},
 	/** Reset the position on scroll
 	 * @param zk.Widget wgt
 	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
-			if (zk(this.parent).isScrollIntoView()) {// B65-ZK-1632
-				this.position(this.parent, null, "end_before", {overflow:true});
+			var desktop = this.desktop,
+				inp = p = this.parent,
+				bar = null;
+			while (p && p != desktop) {
+				bar = p._scrollbar;
+				if (bar && (bar.hasVScroll() || bar.hasHScroll()))
+					break;
+				bar = null;
+				p = p.parent;
+			}
+			
+			var isInView = bar ? 
+					bar.isScrollIntoView(inp.$n()) : zk(inp).isScrollIntoView();
+			if (isInView) {// B65-ZK-1632
+				this.position(inp, null, 'end_before', {overflow:true});
 				this._fixarrow();
 			} else {
 				this.close();
@@ -108,27 +122,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		var stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '': 'none';
 	},
-	doMouseMove_: function (evt) {
-		var el = evt.domTarget;
-		if (el == this.$n('c')) {
-			var y = evt.pageY,
-				$el = jq(el),
-				size = zk.parseInt($el.css('padding-right')),
-				offs = $el.zk.revisedOffset();
-			if (zul.inp.InputCtrl.isPreservedMouseMove(this))
-				$el[y >= offs[1] && y < offs[1] + size ? 'addClass':'removeClass']('z-errbox-close-over');
-		} else this.$supers('doMouseMove_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var el = evt.domTarget;
-		if (el == this.$n('c'))
-			jq(el).removeClass('z-errbox-close-over');
-		else
-			this.$supers('doMouseOut_', arguments);
-	},
 	doClick_: function (evt) {
 		var p = evt.domTarget;
-		if (p == this.$n('c')) {
+		if (jq.contains(this.$n('cls'), p)) {
 			if ((p = this.parent) && p.clearErrorMessage) {
 				p.clearErrorMessage(true, true);
 				p.focus(0); // Bug #3159848
@@ -144,14 +140,24 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		this.setTopmost();
 		this._fixarrow();
 	},
-	prologHTML_: function (out) {
-		var id = this.uuid;
-		out.push('<div id="', id);
-		out.push('-a" class="z-errbox-left z-arrow" title="')
-		out.push(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD));
-		out.push('"><div id="', id, '-c" class="z-errbox-right z-errbox-close"><div class="z-errbox-center">');
-		out.push(zUtl.encodeXML(this.msg, {multiline:true})); //Bug 1463668: security
-		out.push('</div></div></div>');
+	afterCloseAnima_: function (opts) {
+		this.setVisible(false);
+		this.setFloating_(false);
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open:false});
+	},
+	redraw: function (out) {
+		var uuid = this.uuid,
+			icon = this.$s('icon');
+		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-p" class="',
+				this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
+				icon, ' z-icon-warning-sign"></i><div id="', uuid,
+				'-cave" class="', this.$s('content'), '" title="',
+				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
+				zUtl.encodeXML(this.msg, {multiline:true}),
+				'</div><div id="', uuid, '-cls" class="',
+				this.$s('close'), '"><i class="', icon,
+				' z-icon-remove"></i></div></div>');
 	},
 	onFloatUp: function (ctl) {
 		var wgt = ctl.origin;
@@ -189,7 +195,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 				//we compare bottom because default is located below
 
 			var ofs = zk(node).toStyleOffset(0, y);
-			node.style.top = ofs[1] + "px";
+			node.style.top = ofs[1] + 'px';
 			this._fixarrow();
 		}
 	},
@@ -201,53 +207,77 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 			nodeofs = zk(node).revisedOffset(),
 			dx = nodeofs[0] - ptofs[0], 
 			dy = nodeofs[1] - ptofs[1], 
-			dir;
+			dir,
+			s = node.style
+			pw = 2 + (zk(pointer).borderWidth() / 2) || 0,
+			ph = 2 + (zk(pointer).borderHeight() / 2) || 0;
 		
 		// conditions of direction
-		if (dx >= parent.offsetWidth - 22)
-			dir = dy < 6 - node.offsetHeight ? "ld": dy >= parent.offsetHeight - 7 ? "lu": "l";
-		else if (dx < 20 - node.offsetWidth)
-			dir = dy < 6 - node.offsetHeight ? "rd": dy >= parent.offsetHeight - 7 ? "ru": "r";
+		if (dx >= parent.offsetWidth - pw)
+			dir = dy < ph - node.offsetHeight ? 'ld': dy >= parent.offsetHeight - ph ? 'lu': 'l';
+		else if (dx < pw - node.offsetWidth)
+			dir = dy < ph - node.offsetHeight ? 'rd': dy >= parent.offsetHeight - ph ? 'ru': 'r';
 		else
-			dir = dy < 0 ? "d": "u";
+			dir = dy < 0 ? 'd': 'u';
 		
+		node.style.padding = '0';
 		// for setting the pointer position
-		if(dir == "d" || dir == "u") {
+		if(dir == 'd' || dir == 'u') {
 			var md = (Math.max(dx, 0) + Math.min(node.offsetWidth + dx, parent.offsetWidth))/2 - dx - 6,
 				mx = node.offsetWidth - 11;
-			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + "px";
-			if(dir == "d") { 
+			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
+			if(dir == 'd') { 
 				pointer.style.top = null;
-				pointer.style.bottom = zk.ie6_? "-14px" : "-5px"; 
-			} else 
-				pointer.style.top = "-5px";
+				pointer.style.bottom = '-4px';
+				s.paddingBottom = ph + 'px';
+			} else {
+				pointer.style.top = '-4px';
+				s.paddingTop = ph + 'px';
+			}
 			
-		} else if(dir == "l" || dir == "r") {
+		} else if(dir == 'l' || dir == 'r') {
 			var md = (Math.max(dy, 0) + Math.min(node.offsetHeight + dy, parent.offsetHeight))/2 - dy - 6,
 				mx = node.offsetHeight - 11;
-			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + "px";
-			if(dir == "r") { 
+			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
+			if(dir == 'r') { 
 				pointer.style.left = null;
-				pointer.style.right = "-5px"; 
-			} else
-				pointer.style.left = "-5px";
+				pointer.style.right = '-4px';
+				s.paddingRight = pw + 'px';
+			} else {
+				pointer.style.left = '-4px';
+				s.paddingLeft = pw + 'px';
+			}
 			
 		} else {
-			if(dir == "lu" || dir== "ld")
-				pointer.style.left = "5px";
-			else {
-				pointer.style.left = null;
-				pointer.style.right = "5px";
+			var ps = pointer.style;
+			ps.left = ps.top = ps.right = ps.bottom = null;
+			switch (dir) {
+			case 'lu':
+				ps.left = '0px';
+				ps.top = '-4px';
+				s.paddingTop = ph + 'px';
+				break;
+			case 'ld':
+				ps.left = '0px';
+				ps.bottom = '-4px';
+				s.paddingBottom = ph + 'px';
+				break;
+			case 'ru':
+				ps.right = '0px';
+				ps.top = '-4px';
+				s.paddingTop = ph + 'px';
+				break;
+			case 'rd':
+				ps.right = '0px';
+				ps.bottom = '-4px';
+				s.paddingBottom = ph + 'px';
+				break;
 			}
-			if(dir == "ru" || dir == "lu")
-				pointer.style.top = "-10px";
-			else {
-				pointer.style.top = null;
-				pointer.style.bottom = zk.ie6_? "-14px" : "-10px";
-			}
+			dir = dir == 'ru' || dir == 'lu' ? 'u' : 'd';
 		}
-		
-		pointer.className = 'z-pointer z-pointer-' + dir;
+
+		pointer.className = this.$s('pointer') + (_dirMap[dir] ? ' ' + this.$s(_dirMap[dir]) : '');
+		jq(pointer).show();
 	}
 },{
 	_enddrag: function (dg) {
@@ -260,12 +290,15 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	},
 	_change: function (dg) {
 		var errbox = dg.control,
-			stackup = errbox._stackup;
+			stackup = errbox._stackup,
+			el = errbox.$n();
 		if (stackup) {
-			var el = errbox.$n();
 			stackup.style.top = el.style.top;
 			stackup.style.left = el.style.left;
 		}
 		errbox._fixarrow();
+		if (zk.android)
+			zk(el).redoCSS();
 	}
 });
+})();

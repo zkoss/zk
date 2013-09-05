@@ -62,21 +62,22 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	group: function (ascending, evt) {
 		var dir = this.getSortDirection();
 		if (ascending) {
-			if ("ascending" == dir) return false;
+			if ('ascending' == dir) return false;
 		} else {
-			if ("descending" == dir) return false;
+			if ('descending' == dir) return false;
 		}
 
 		var sorter = ascending ? this._sortAscending: this._sortDescending;
-		if (sorter == "fromServer")
+		if (sorter == 'fromServer')
 			return false;
-		else if (sorter == "none") {
+		else if (sorter == 'none') {
 			evt.stop();
 			return false;
 		}
 		
 		var mesh = this.getMeshWidget();
-		if (!mesh || mesh.isModel() || !zk.feature.pe || !zk.isLoaded('zkex.grid')) return false;
+		if (!mesh || mesh.isModel() || !zk.feature.pe || !zk.isLoaded('zkex.grid'))
+			return false;
 			// if in model, the sort should be done by server
 			
 		var	body = this.getMeshBody();
@@ -102,7 +103,9 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 						};
 					}
 			
-			var dsc = dir == "ascending" ? -1 : 1, fn = this.sorting, isNumber = sorter == "client(number)";
+			var dsc = dir == 'ascending' ? -1 : 1,
+				fn = this.sorting,
+				isNumber = sorter == 'client(number)';
 			d.sort(function(a, b) {
 				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
 				if (v == 0) {
@@ -167,9 +170,12 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	 */
 	onGroup: function (evt) {
 		var dir = this.getSortDirection();
-		if ("ascending" == dir) this.group(false, evt);
-		else if ("descending" == dir) this.group(true, evt);
-		else if (!this.group(true, evt)) this.group(false, evt);
+		if ('ascending' == dir)
+			this.group(false, evt);
+		else if ('descending' == dir)
+			this.group(true, evt);
+		else if (!this.group(true, evt))
+			this.group(false, evt);
 	},
 	bind_: function () {
 		this.$supers(zul.grid.Column, 'bind_', arguments);
@@ -190,18 +196,16 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {
-		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none')) {
-			jq(this.$n()).addClass(this.getZclass() + "-over");
-			zul.grid.Renderer.updateColumnMenuButton(this);
-		}
+		if (this.isSortable_() ||
+				(this.parent._menupopup && this.parent._menupopup != 'none'))
+			jq(this.$n()).addClass(this.$s('hover'));
 	},
 	_doMouseOut: function (evt) {
-		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none')) {
-			var n = this.$n(), $n = jq(n),
-				zcls = this.getZclass();
-			if (!$n.hasClass(zcls + "-visi") &&
-				(!zk.ie || !jq.isAncestor(n, evt.domEvent.relatedTarget || evt.domEvent.toElement)))
-					$n.removeClass(zcls + "-over");
+		if (this.isSortable_() ||
+				(this.parent._menupopup && this.parent._menupopup != 'none')) {
+			var $n = jq(this.$n());
+			if (!$n.hasClass(this.$s('visited')))
+				$n.removeClass(this.$s('hover'));
 		}
 	}
 });

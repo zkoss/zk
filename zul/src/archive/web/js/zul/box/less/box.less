@@ -1,0 +1,170 @@
+@import "~./zul/less/_header.less";
+
+//reset table
+.resetTable() {
+	border-spacing: 0;
+	th, td {
+		background-clip: padding-box;
+		padding: 0;
+	}
+	th {
+		text-align: inherit;
+	}
+}
+
+.z-hbox, .z-vbox {
+	.resetTable();
+}
+
+.z-hbox-separator,
+.z-vbox-separator {
+	padding: 0;
+	margin: 0;
+}
+.z-hbox-separator {
+	width: 0.3em;
+}
+.z-vbox-separator {
+	height: 0.3em;
+	td {
+		line-height: 0;
+	}
+}
+
+// Splitter
+.z-splitter-button {
+	color: @iconColor;
+	vertical-align: top; //vertical-align: make it looks same in diff browsers
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	border: 1px solid @baseBorderColor;
+	&-disabled {
+		border: 0;
+
+		.z-splitter-vertical & {
+			cursor: s-resize;
+		}
+		.z-splitter-horizontal & {
+			cursor: e-resize;
+		}
+	}
+}
+.z-splitter-button .z-splitter-icon {
+	.opacity(0.5);
+	&:hover {
+		.opacity(1);
+	}
+}
+.z-icon-caret-up,
+.z-icon-caret-down,
+.z-icon-caret-right,
+.z-icon-caret-left {
+	.z-splitter-button:hover & {
+		.opacity(1);
+	}
+}
+.z-splitter-horizontal {
+	width: @splitterSize;
+	border-width: 0 1px;
+	cursor: e-resize;
+	.horGradient(@splitterGradientStart, @splitterGradientEnd);
+	& > .z-splitter-button {
+		width: @splitterSize;
+		height: 30px;
+	}
+}
+td.z-splitter-outer {
+	max-width: @splitterSize;
+	width: @splitterSize;
+	padding:0px;
+}
+.z-splitter-vertical {
+	max-height: @splitterSize;
+	<c:if test="${zk.ie == 8}">
+		max-height: @splitterSize - 2;
+	</c:if>
+	height: @splitterSize;
+	border-width: 1px 0;
+	cursor: s-resize;
+}
+tr.z-splitter-outer > td {
+	max-height: @splitterSize;
+	height: @splitterSize;
+}
+.z-splitter-nosplitter {
+	cursor: default;
+}
+
+.z-splitter-vertical,
+.z-splitter-horizontal {
+	border: 1px solid @baseBorderColor;
+	overflow: hidden;
+}
+.z-splitter-vertical > .z-splitter-button {
+	width: 30px;
+	height: @splitterSize;
+}
+.z-splitter-vertical {
+	border-width: 1px 0;
+	.verGradient(@splitterGradientStart, @splitterGradientEnd);
+}
+.z-splitter-horizontal > .z-splitter-button {
+	border-width: 1px 0;
+}
+.z-splitter-vertical > .z-splitter-button {
+	border-width: 0 1px;
+}
+.z-splitter-icon.z-icon-ellipsis-vertical,
+.z-splitter-icon.z-icon-ellipsis-horizontal {
+	opacity: 0.5;
+}
+.z-splitter-horizontal {
+	.z-splitter-icon {
+		position: absolute;
+		font-size: @fontSizeXSmall + 1; // add 1px more
+		top: 9px;
+		left: 1px;
+	}
+	.z-splitter-icon.z-icon-ellipsis-vertical {
+		font-size: @fontSizeXSmall;
+		top: -21px;
+		left: 2px;
+		cursor: e-resize;
+		<c:if test="${zk.ie == 8}">
+			font-size: @baseFontSize;
+		</c:if>
+	}
+	.z-splitter-icon.z-icon-ellipsis-vertical ~
+	.z-splitter-icon.z-icon-ellipsis-vertical {
+		top: 39px;
+		<c:if test="${zk.ie == 8}">
+			top: 37px;
+		</c:if>
+	}
+}
+.z-splitter-vertical {
+	.z-splitter-icon {
+		position: absolute;
+		font-size: @fontSizeXSmall;
+		top: -3px;
+		left: 11px;
+		line-height: normal;
+	}
+	.z-splitter-icon.z-icon-ellipsis-horizontal {
+		top: -2px;
+		left: -20px;
+		cursor: s-resize;
+		<c:if test="${zk.ie == 8}">
+			top: -3px;
+			font-size: @baseFontSize;
+		</c:if>
+	}
+	.z-splitter-icon.z-icon-ellipsis-horizontal ~
+	.z-splitter-icon.z-icon-ellipsis-horizontal {
+		left: 40px;
+		<c:if test="${zk.ie == 8}">
+			left: 38px;
+		</c:if>
+	}
+}

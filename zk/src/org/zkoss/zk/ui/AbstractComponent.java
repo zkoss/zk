@@ -40,6 +40,7 @@ import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Threads;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
 import org.zkoss.util.logging.Log;
@@ -1390,6 +1391,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_page != null) {
 			getAttachedUiEngine().addInvalidate(this);
 		}
+		
 	}
 
 	/** Causes a response to be sent to the client.

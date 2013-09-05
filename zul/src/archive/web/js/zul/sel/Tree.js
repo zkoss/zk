@@ -12,6 +12,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+var scrollPosition = null;
+var Tree =
 /**
  *  A container which can be used to hold a tabular
  * or hierarchical set of rows of elements.
@@ -24,6 +26,37 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree.
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
+	_scrollbar: null,
+	_barPos: null,
+	unbind_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			scrollPosition = bar.getCurrentPosition();
+			bar.destroy();
+			bar = this._scrollbar = null;
+		}
+		this.$supers(Tree, 'unbind_', arguments);
+	},
+	onSize: function () {
+		this.$supers(Tree, 'onSize', arguments);
+		var self = this;
+		setTimeout(function () {
+			if (self.desktop && !self._nativebar) {
+				if (!self._scrollbar)
+					self._scrollbar = zul.mesh.Scrollbar.init(self);
+				self.refreshBar_();
+			}
+		}, 200);
+	},
+	refreshBar_: function (showBar) {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			this._shallShowScrollbar = false;
+			if (scrollPosition)
+				bar.scrollTo(scrollPosition.x, scrollPosition.y);
+		}
+	},
 	/**
 	 * clears the tree children.
 	 */
@@ -181,12 +214,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		return false;
 	},
 	_sizeOnOpen: function () {
+		this._shallShowScrollbar = true;
 		var cols = this.treecols, w, wd;
 		if (!cols || this.isSizedByContent() || this._hflex == 'min')
 			this.syncSize();
 		else {
 			for (w = cols.firstChild; w; w = w.nextSibling)
-				if (w._hflex || !(wd = w._width) || wd == "auto") {
+				if (w._hflex || !(wd = w._width) || wd == 'auto') {
 					this.syncSize();
 					return;
 				}
@@ -253,7 +287,11 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	shallIgnoreSelect_: function (evt/*, row*/) {
 		var n = evt.domTarget;
-		return n && n.id && n.id.endsWith('-open') || (evt.name == 'onRightClick' && !this.rightSelect);
+		if (n) {
+			var id = n.id;
+			return id.endsWith('open') || id.endsWith('icon') ||
+				(evt.name == 'onRightClick' && !this.rightSelect);
+		}
 	}
 });
 /**

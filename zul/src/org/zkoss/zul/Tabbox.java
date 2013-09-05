@@ -248,7 +248,8 @@ public class Tabbox extends XulElement {
 	 *            either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
-		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
+		if (!"horizontal".equals(orient) && !"vertical".equals(orient) 
+				&& !"vertical-right".equals(orient) && !"horizontal-bottom".equals(orient))
 			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
 			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
@@ -264,9 +265,16 @@ public class Tabbox extends XulElement {
 	 * @since 3.0.3
 	 */
 	public boolean isHorizontal() {
+		return getOrient().contains("horizontal");
+	}
+	
+	public boolean isHorizontalTop() {
 		return "horizontal".equals(getOrient());
 	}
-
+	
+	public boolean isHorizontalBottom() {
+		return "horizontal-bottom".equals(getOrient());
+	}
 	/**
 	 * Returns whether it is a vertical tabbox.
 	 *
@@ -275,10 +283,20 @@ public class Tabbox extends XulElement {
 	public boolean isVertical() {
 		return "vertical".equals(getOrient());
 	}
+	
+	public boolean isVerticalLeft() {
+		return "vertical".equals(getOrient());
+	}
+	
+	public boolean isVerticalRight() {
+		return "vertical-right".equals(getOrient());
+	}
 
 	public String getZclass() {
-		return  _zclass == null ? "z-tabbox" + (inAccordionMold() ? "-" + getMold() : isVertical() ? "-ver" : "") :
-			_zclass;
+		String cls = _zclass == null ? "z-tabbox" : _zclass;
+		String orientCls = isHorizontalTop() ? "" : " " + (cls + "-" + this._orient);
+		cls += inAccordionMold() ? " " + (cls + "-" + getMold()) : orientCls;
+		return cls;
 	}
 
 	// -- Component --//

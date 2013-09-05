@@ -1,0 +1,161 @@
+@import "~./zul/less/_header.less";
+
+.z-textbox,
+.z-decimalbox,
+.z-intbox,
+.z-longbox,
+.z-doublebox {
+	background: @inputBackgroundColor;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+	padding: 4px 5px 3px;
+	border: 1px solid @inputBorderColor;
+	margin: 0;
+	min-height: @baseButtonHeight;
+	<c:if test="${zk.ie == 8}">
+		min-height: @baseButtonHeight - 10 + 1;
+	</c:if>	
+	.borderRadius(@borderRadiusSmall);
+	line-height: @baseLineHeight;
+	color: @baseTextColor;
+
+	&:focus {
+		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+	}
+	&[readonly] {
+		background: @readonlyBackgroundColor;
+		border-color: @readonlyBorderColor;
+	}
+	&[readonly]:focus {
+		.boxShadow('none');
+	}
+	&-invalid {
+		background: @baseBackgroundColor;
+		border-color: @invalidBorderColor;
+	}
+	&[disabled] {
+		.disabledOpacity();
+		cursor: default !important;
+		color: @disabledColor !important;
+		background: @disabledBackgroundColor !important;
+	}
+
+	// Inplace editing
+	&-inplace {
+		border: 0;
+		padding: 3px;
+		background: none;
+		resize: none;
+		<c:if test="${zk.ie == 8}">
+			min-height: @baseButtonHeight - 6;
+			line-height: @baseIconHeight;
+		</c:if>
+	}
+}
+
+// error box
+.z-errorbox {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: @errorboxColor;
+	width: 260px;
+	& > .z-errorbox-icon {
+		position: absolute;
+		font-size: 14px;
+		top: 7px;
+		z-index: 2;
+		left: 7px;
+		color: @errorboxColor;
+	}
+}
+.z-errorbox-left + .z-errorbox-icon {
+	left: 15px;
+}
+.z-errorbox-up + .z-errorbox-icon {
+	top: 15px;
+}
+.z-errorbox-content {
+	width: 100%;
+	position: relative;
+	border: 1px solid @errorboxBorderColor;
+	background: @errorboxBackgroundColor;
+	overflow: hidden;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeSmall;
+	font-weight: normal;
+	vertical-align: middle;
+	padding: 5px 20px 5px 26px;
+	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
+	cursor: move;
+}
+
+.z-errorbox-pointer {
+	position: absolute;
+	display: none;
+	width: 0;
+	height: 0;
+	border: 6px solid transparent;
+	z-index: 100;
+}
+// errorbox arrows: base style
+.z-errorbox-left,
+.z-errorbox-right,
+.z-errorbox-up,
+.z-errorbox-down {
+	border: 6px solid transparent;
+}
+.z-errorbox-left {
+	border-right-color: @errorboxBorderColor;
+}
+.z-errorbox-right {
+	border-left-color: @errorboxBorderColor;
+}
+.z-errorbox-up {
+	border-bottom-color: @errorboxBorderColor;
+}
+.z-errorbox-down {
+	border-top-color: @errorboxBorderColor;
+}
+.z-errorbox-close {
+	position: absolute;
+	cursor: pointer;
+	width: @baseIconWidth - 4;
+	height: @baseIconHeight - 4;
+	top: 8px;
+	right: 8px;
+	padding: 0 1px;
+	<c:if test="${zk.ie != 8}">
+		.opacity(0.6);
+	</c:if>
+	font-size: @fontSizeXSmall;
+	border: 1px solid transparent;
+
+	&:hover {
+		.borderRadius(@borderRadiusSmall - 1);
+		border: 1px solid @errorboxBorderColor;
+		.opacity(1);
+	}
+}
+.z-errorbox-icon {
+	position: absolute;
+	top: -1px;
+}
+.z-errorbox-pointer ~ .z-errorbox-close {
+	top: 7px;
+	right: 7px;
+}
+
+.z-errorbox-right ~ .z-errorbox-close {
+	top: 7px;
+	right: 14px;
+}
+
+.z-errorbox-up ~ .z-errorbox-close,
+.z-errorbox-down ~ .z-errorbox-close {
+	right: 7px;
+}
+.z-errorbox-up ~ .z-errorbox-close {
+	top: 15px;
+}

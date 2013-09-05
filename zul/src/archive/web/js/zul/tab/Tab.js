@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	// the condition LinkedPanel.firstChild != this.$n()
 	// will get the wrong result
 	// delete it later for the invalidate() case
-	function _logId (wgt) {
+	function _logId(wgt) {
 		if (!wgt._oldId) {
 			wgt._oldId = wgt.uuid;
 			setTimeout(function () {
@@ -102,16 +102,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	getIndex: function() {
 		return this.getChildIndex();
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tab';
-
-		var mold = tabbox.getMold();
-		return 'z-tab' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
-	},
 	/**
 	 * Returns the panel associated with this tab.
 	 * @return Tabpanel
@@ -126,9 +116,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			this.fire('onClose');
 			evt.stop();
 		}
-	},
-	_toggleBtnOver : function(evt) {
-		jq(evt.domTarget).toggleClass(this.getZclass() + "-close-over");
 	},
 	_sel: function(notify, init) {
 		var tabbox = this.getTabbox();
@@ -152,9 +139,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_setSel: function(tab, toSel, notify, init) {
 		var tabbox = this.getTabbox(),
-			zcls = this.getZclass(),
-			panel = tab.getLinkedPanel(),
-			bound = this.desktop;
+			panel = tab.getLinkedPanel();
 		if (tab.isSelected() == toSel && notify)
 			return;
 
@@ -168,12 +153,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 		tab._selected = toSel;
 		
-		if (!bound) return;
+		if (!this.desktop) return;
 		
 		if (toSel)
-			jq(tab).addClass(zcls + "-seld");
+			jq(tab).addClass(this.$s('selected'));
 		else
-			jq(tab).removeClass(zcls + "-seld");
+			jq(tab).removeClass(this.$s('selected'));
 
 		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
 			panel._sel(toSel, !init);
@@ -185,9 +170,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		
 		if (tab == this) {
 			if (tabbox.isVertical())
-				tabs._scrollcheck("vsel", this);
+				tabs._scrollcheck('vsel', this);
 			else if (!tabbox.inAccordionMold())
-				tabs._scrollcheck("sel", this);
+				tabs._scrollcheck('sel', this);
 		}
 		
 		if (notify)
@@ -196,7 +181,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			this._calcHgh();
+			this._calcHgh();			
 			zUtl.fireSized(this.parent);
 		}
 	},
@@ -207,88 +192,90 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_calcHgh: function () {
 		var n = this.$n(),
-			cnt = this.$n('cnt');
-		if (cnt && (cnt = cnt.parentNode))
-			jq(cnt).height(zk(cnt).revisedHeight(n.offsetHeight) + 'px');
+			tabbox = this.getTabbox();
+		
+		if (!tabbox.isVertical()) {
+			var r = tabbox.$n('right'),
+				l = tabbox.$n('left'),
+				tb = tabbox.toolbar,
+				tabs = tabbox.tabs.$n(),
+				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
+				
+			if (r && l) {
+				r.style.height = l.style.height = hgh;
+			}
+			if (tb && (tb = tb.$n())) {
+				tb.style.height = hgh;
+			}
+		}
 	},
 	//protected
 	doClick_: function(evt) {
-		if (this._disabled)
-			return;
+		if (this._disabled) return;
 		this._sel(true);
 		this.$supers('doClick_', arguments);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added = this.isDisabled() ? zcls + '-disd' : '';
-			if (this.isSelected())
-				added += ' ' + zcls + '-seld';
-			if (added) scls += (scls ? ' ': '') + added;
+			if (this.isDisabled()) scls += ' ' + this.$s('disabled');
+			if (this.isSelected()) scls += ' ' + this.$s('selected');
 		}
 		return scls;
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this.getImage();
+			img = this.getImage(),
+			iconSclass = this.domIcon_();
+		
 		if (!label) label = '&nbsp;';
-		if (!img) return label;
-		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
+		if (!img && !iconSclass) return label;
+		if (!img) {
+			img = iconSclass;
+		} else
+			img = '<img src="' + img + '" class="' + this.$s('image') + '"/>'
+			+ (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tab
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tab, 'setVflex', v);
+		this.$supers('setVflex', arguments);
 	},
 	//bug #3014664
 	setHflex: function (v) { //hflex ignored for Tab
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tab, 'setHflex', v);
+		this.$supers('setHflex', arguments);
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
-		var closebtn = this.isClosable() ? this.$n('close') : null,
+		var closebtn = this.isClosable() ? this.$n('cls') : null,
 			tab = this;
 		if (closebtn) {
-			this.domListen_(closebtn, "onClick", '_doCloseClick');
-			if (zk.ie6_)
-				this.domListen_(closebtn, "onMouseOver", '_toggleBtnOver')
-					.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
+			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
 		}
-
-		after.push(function () {
-			tab.parent._fixHgh();
-			//Bug 3022274: required so it is is called before, say, panel's slideDown
-			//_sel will invoke _fixWidth but it is too late since it uses afterMount
-			
+		if (tab.isSelected()) {
 			zk.afterMount(function () {
-				if (tab.isSelected()) {
-					if (tab.getTabbox().inAccordionMold()) {
-						var panel = tab.getLinkedPanel(),
-							cave = panel? panel.$n('cave') : null;
-						// slide down if the cave node of panel is not visible before select
-						if (cave && cave.style.display == 'none')
-							panel._sel(true, true);
-					}
-					tab._sel(false, true);
+				if (tab.desktop && tab.getTabbox().inAccordionMold()) {
+					var panel = tab.getLinkedPanel(),
+						cave = panel? panel.$n('cave') : null;
+					// slide down if the cave node of panel is not visible before select
+					if (cave && cave.style.display == 'none')
+						panel._sel(true, true);
 				}
+				tab._sel(false, true);
 			});
-		});
+		}
 		
 		if (this.getHeight())
 			this._calcHgh();
 	},
 	unbind_: function () {
-		var closebtn = this.$n('close');
+		var closebtn = this.$n('cls');
 		// ZK-886
 		_logId(this);
 		if (closebtn) {
-			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
-			if (zk.ie6_)
-				this.domUnlisten_(closebtn, "onMouseOver", '_toggleBtnOver')
-					.domUnlisten_(closebtn, "onMouseOut", '_toggleBtnOver');
+			this.domUnlisten_(closebtn, 'onClick', '_doCloseClick');
 		}
 		this.$supers(zul.tab.Tab, 'unbind_', arguments);
 	},
@@ -305,12 +292,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	rerender: function (skipper) {
 		// ZK-886
-		_logId(this);
+		if (this.desktop)
+			_logId(this);
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
 	},
 	contentRenderer_: function (out) {
-		var zcls = this.getZclass();
-		out.push('<span id="', this.uuid, '-cnt" class="', zcls, '-text">', this.domContent_(), '</span>');
+		out.push('<span id="', this.uuid, '-cnt" class="', this.$s('text'), '">', this.domContent_(), '</span>');
 	}
 });
 /** @class zul.tab.TabRenderer

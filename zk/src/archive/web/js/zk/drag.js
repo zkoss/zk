@@ -42,10 +42,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var evt = jq.Event.zk(devt),
 			pt = [evt.pageX, evt.pageY];
+		
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
-		if(_lastPt && _lastPt[0] == pt [0]
-		&& _lastPt[1] == pt [1])
+		if(_lastPt && _lastPt[0] == pt[0]
+		&& _lastPt[1] == pt[1])
 			return;
 
 		_lastPt = pt;
@@ -308,7 +309,7 @@ String scroll; //DOM Element's ID</code></pre>
 		this.control = control;
 		this.node = node = node ? jq(node, zk)[0]: control.node || (control.$n ? control.$n() : null);
 		if (!node)
-			throw "Handle required for "+control;
+			throw 'Handle required for '+control;
 
 		opts = zk.$default(opts, {
 //No default z-index (since caller, such as window, might set it)
@@ -357,14 +358,14 @@ String scroll; //DOM Element's ID</code></pre>
 			this._suicide = true;
 			return;
 		}
-		jq(this.handle).unbind("zmousedown", this.proxy(this._mousedown));
+		jq(this.handle).unbind('zmousedown', this.proxy(this._mousedown));
 
 		//unregister
 		_drags.$remove(this);
 		if(_drags.length == 0)
-			jq(document).unbind("zmouseup", _docmouseup)
-				.unbind("zmousemove", _docmousemove)
-				.unbind("keypress", _dockeypress);
+			jq(document).unbind('zmouseup', _docmouseup)
+				.unbind('zmousemove', _docmousemove)
+				.unbind('keypress', _dockeypress);
 		if (_activedg == this) //just in case
 			_activedg = null;
 
@@ -385,9 +386,9 @@ String scroll; //DOM Element's ID</code></pre>
 		zk(document.body).disableSelection(); // Bug #1820433
 		jq.clearSelection(); // Bug #2721980
 		if (this.opts.overlay) { // Bug #1911280 and 2986227
-			var stackup = document.createElement("div");
+			var stackup = document.createElement('div');
 			document.body.appendChild(stackup);
-			stackup.className = "z-dd-stackup";
+			stackup.className = 'z-dd-stackup';
 			zk(stackup).disableSelection();
 			var st = (this.stackup = stackup).style;
 			st.width = jq.px0(jq(document).width());
@@ -457,10 +458,10 @@ String scroll; //DOM Element's ID</code></pre>
 			var node = this.node,
 				st = this._stackup.style;
 			st.display = 'block';
-			st.left = node.offsetLeft + "px";
-			st.top = node.offsetTop + "px";
-			st.width = node.offsetWidth + "px";
-			st.height = node.offsetHeight + "px";
+			st.left = node.offsetLeft + 'px';
+			st.top = node.offsetTop + 'px';
+			st.width = node.offsetWidth + 'px';
+			st.height = node.offsetHeight + 'px';
 		}
 	},
 
@@ -537,7 +538,7 @@ String scroll; //DOM Element's ID</code></pre>
 				}
 				delete this.orgnode;
 			} else {
-				if (this.z_orgpos != "absolute") { //Bug 1514789
+				if (this.z_orgpos != 'absolute') { //Bug 1514789
 					zk(this.node).relativize();
 					node.style.position = this.z_orgpos;
 				}
@@ -578,7 +579,7 @@ String scroll; //DOM Element's ID</code></pre>
 		var self = this;
 		setTimeout(function(){
 			zk.dragging=false;
-			zWatch.fire("onEndDrag", self, evt);
+			zWatch.fire('onEndDrag', self, evt);
 		}, zk.ios ? 500: 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
@@ -588,13 +589,14 @@ String scroll; //DOM Element's ID</code></pre>
 			evt = jq.Event.zk(devt),
 			target = devt.target;
 		if (_actTmout || _dragging[node] || evt.which != 1
-			|| (zk.safari && jq.nodeName(target, 'select'))
+			|| (zk.webkit && jq.nodeName(target, 'select'))
 			|| (zk(target).isInput() && this.control != zk.Widget.$(target)))
 			return;
 			// Bug B50-3147909: Safari has issue with select and draggable
 			// Now select element is not draggable in Chrome and Safari
 
 		var pt = [evt.pageX, evt.pageY];
+		
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
 			return;
@@ -703,7 +705,7 @@ String scroll; //DOM Element's ID</code></pre>
 				style.top  = jq.px(p[1]);
 		}
 
-		if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
+		if(style.visibility=='hidden') style.visibility = ''; // fix gecko rendering
 	},
 
 	_stopScrolling: function () {
@@ -809,8 +811,8 @@ String scroll; //DOM Element's ID</code></pre>
 	ignoreStop: function (target) { //called by mount
 		//Bug 3310017/3309975: if trigger focus() FF and chrome cannot handle input cursor.
 		return zk(target).isInput()
-				// B65-ZK-1839 ignore select tag for IE9
-				|| (zk.ie9 && jq.nodeName(target, 'select'));
+			// B65-ZK-1839 ignore select tag for IE9, chrome, opera
+			|| ((zk.ie9 || zk.chrome || zk.opera) && jq.nodeName(target, 'select'));
 	}
 });
 })();

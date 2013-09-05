@@ -17,7 +17,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.fn;
 
 import java.awt.Color;
-import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
@@ -50,19 +51,22 @@ public class ThemeFns {
 	}
 
 	private static Browser getBrowser() {
-		Double number = Servlets.getBrowser(ServletFns.getCurrentRequest(),
-				"ff");
+		Double number = Servlets.getBrowser(
+				ServletFns.getCurrentRequest(), "ff");
 		if (number != null && number >= 3.6)
 			return Browser.Firefox;
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ie");
 		if (number != null) {
-			if (number < 10)
+			if (number < 10) {
+				if (number == 9)
+					return Browser.IE9;
 				return Browser.Old_IE;
-			else return Browser.IE;
+			} else return Browser.IE;
 		}
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "webkit");
 		if (number != null) {
-			Double android = Servlets.getBrowser(ServletFns.getCurrentRequest(), "android");
+			Double android = Servlets.getBrowser(
+					ServletFns.getCurrentRequest(), "android");
 			if (android != null && android < 3) {
 				return Browser.Old_WebKit;
 			}
@@ -76,13 +80,13 @@ public class ThemeFns {
 			}
 
 			// B65-ZK-1614: Full Screen iPad Web Apps Missing Component Buttons
-			version = Servlets.getBrowser(ServletFns.getCurrentRequest(),
-					"ios");
+			version = Servlets.getBrowser(
+					ServletFns.getCurrentRequest(), "ios");
 			if (version != null && version >= 500)
 				return Browser.WebKit;
 			
-			version = Servlets.getBrowser(ServletFns.getCurrentRequest(),
-					"safari");
+			version = Servlets.getBrowser(
+					ServletFns.getCurrentRequest(), "safari");
 			if (version != null) {
 				if (version >= 5.1)
 					return Browser.WebKit;
@@ -167,6 +171,29 @@ public class ThemeFns {
 			int len = colorAll.length();
 			if (len > 0)
 				colorAll.delete(len - 1, len);
+		} else if (template == Browser.IE9) {
+			for (String color : colors) {
+				color = color.trim();
+				boolean hex = color.startsWith("#");
+
+				int end = hex ? color.indexOf(" ") + 1 : color.indexOf(")") + 1;
+				if (end == 0 && !color.toLowerCase(java.util.Locale.ENGLISH).contains("transparent"))
+					if (hex)
+						throw new IllegalArgumentException(
+								"The format of hexadecimal is wrong! [" + color
+										+ "]");
+					else throw new IllegalArgumentException(
+							"The format of RGBA is wrong! [" + color + "]");
+
+				String pos = color.substring(end, color.length());
+				color = color.substring(0, end);
+				colorAll.append("<stop stop-color=\"").append(color).append("\" offset=\"")
+						.append(pos).append("\"/>");
+			}
+		
+		} else if (template == Browser.Old_IE) {
+			color1 = toIEHex(colors[0]);
+			color2 = toIEHex(colors[1]);
 		} else {
 			for (String color : colors) {
 				colorAll.append(color).append(',');
@@ -179,8 +206,18 @@ public class ThemeFns {
 		String gradType = "rad".equals(dir) ? "radial" : "linear";
 		int ieGradType = "hor".equals(dir) ? 1 : 0; // IE only supports
 													// ver/hor
-		return String.format(template.getGradient(dir), color1, color2, "",
+		String result = String.format(template.getGradient(dir), color1, color2, "",
 				gradType, ieGradType, colorAll.toString());
+		if (template == Browser.IE9) {
+			try {
+				result = Base64.encodeBase64String(result.getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				result = Base64.encodeBase64String(result.getBytes());
+			}
+			result = "url(data:image/svg+xml;base64," + result + ")";
+		}
+		
+		return result;
 	}
 
 	/**
@@ -209,9 +246,10 @@ public class ThemeFns {
 
 	private static String applyCSS(String styleName, String styleValue) {
 		Browser browser = getBrowser();
-		if (!Strings.isEmpty(browser.getPrefix()))
+		if (!Strings.isEmpty(browser.getPrefix())) {
 			return String.format(CSS_TEMPLATE, browser.getPrefix(), styleName,
 					styleValue);
+		}
 		return String.format(CSS_TEMPLATE_W3C, styleName, styleValue);
 	}
 
@@ -357,6 +395,30 @@ public class ThemeFns {
 			colors.put(color, toHex(toColor(color)));
 		return colors.get(color);
 	}
+
+
+	@SuppressWarnings("unchecked")
+	private static String toIEHex(String color) {
+		color = color.trim();
+		if (color.startsWith("#")) {
+			int end = color.indexOf(" ");
+			if (end > 0)
+				return color.substring(0, end);
+			return color;
+		}
+		int end = color.indexOf(')') + 1;
+		if (end > 0)
+			color = color.substring(0, end);
+
+		Map<String, String> colors = (Map<String, String>) ServletFns
+				.getCurrentRequest().getAttribute("themeFns.IEcolors");
+		if (colors == null)
+			ServletFns.getCurrentRequest().setAttribute("themeFns.IEcolors",
+					colors = new HashMap<String, String>());
+		if (!colors.containsKey(color))
+			colors.put(color, toIEHex(toColor(color)));
+		return colors.get(color);
+	}
 	private static String locate(String path) {
 		try {
 			if (path.startsWith("~./")) {
@@ -389,9 +451,12 @@ public class ThemeFns {
 			log("The properties file is not loaded correctly! [" + path + "]");
 		}
 	}
-	
+
 	private static String toHex(Color color) {
 		return Colors.getHexString(color);
+	}
+	private static String toIEHex(Color color) {
+		return Colors.getIEHexString(color);
 	}
 
 	private static Color toColor(String color) {
@@ -399,10 +464,15 @@ public class ThemeFns {
 	}
 
 	private enum Browser {
-		WebKit("-webkit-", "Chrome10+,Safari5.1+"), W3C("", "W3C"), Firefox(
-				"-moz-", "FF3.6+"), Opera("-o-", "Opera 11.10+"), IE("-ms-",
-				"IE10+"), Old(null, null), Old_IE(null, "IE6-9"), Old_WebKit(
-				"-webkit-", "Chrome,Safari4+");
+		WebKit("-webkit-", "Chrome10+,Safari5.1+"),
+		W3C("", "W3C"),
+		Firefox("-moz-", "FF3.6+"),
+		Opera("-o-", "Opera 11.10+"),
+		IE("-ms-", "IE10+"),
+		IE9("-ms-", "IE9"),
+		Old(null, null),
+		Old_IE(null, "IE6-9"),
+		Old_WebKit("-webkit-", "Chrome,Safari4+");
 
 		private final String _template;
 
@@ -414,9 +484,23 @@ public class ThemeFns {
 			_prefix = prefix;
 			if ("IE6-9".equals(browser)) {
 				_template = new StringBuilder(
-						"\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
+						"\tbackground: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
 						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-9 */\n")
 						.toString();
+			} else if ("IE9".equals(browser)) {
+				_template = new StringBuilder(
+						"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 1 1\" preserveAspectRatio=\"none\">\n")
+						.append("%3$s\n")
+						.append("%6$s\n")
+						.append("</linearGradient>\n")
+						.append("<rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#zkie9)\" /></svg>").toString();
+				_GRAD_TYPE = new HashMap<String, String>();
+				_GRAD_TYPE.put("ver", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"0%%\" y2=\"100%%\">");
+				_GRAD_TYPE.put("hor", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"0%%\">");
+				_GRAD_TYPE.put("diag-", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"100%%\">");
+				_GRAD_TYPE.put("diag+", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"100%%\" x2=\"100%%\" y2=\"0%%\">");
+				_GRAD_TYPE
+						.put("rad", "<radialGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" cx=\"50%%\" cy=\"50%%\" r=\"50%%\">");
 			} else if ("Chrome,Safari4+".equals(browser)) {
 				_template = new StringBuilder().append("\t").append(prefix)
 						.append("gradient(%4$s, %3$s, %6$s); /* ")

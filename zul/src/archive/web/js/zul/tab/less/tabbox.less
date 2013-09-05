@@ -1,0 +1,476 @@
+@import "~./zul/less/_header.less";
+
+.userSelect() {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.verticalStyle() {
+	.z-tabs {
+		float: left;
+		&-content {
+			height: 4096px;
+			border-right: 1px solid @contentBorderColor;
+			display: block;
+		}
+		&-space {
+			float: left;
+			position: relative;
+			width: 0;
+		}
+	}
+	.z-tab {
+		float: none;
+		border-width: 1px 0px 1px 1px;
+		.leftBorderRadius();
+		border-top: 1px solid @baseBorderColor;
+		padding-top: 0px;
+		&-selected {
+			border-bottom: 1px solid @baseBorderColor;
+			.boxShadow('1px 0px 0 #FFFFFF');
+			background: none;
+
+			.z-tab-button {
+				.opacity(1.0);
+			}
+
+			.z-tab-text {
+				cursor: default;
+				font-weight: bold;
+				white-space: nowrap;
+			}
+		}
+
+		&.z-tab-disabled .z-tab-text {
+			cursor: default;
+			color: gray;
+			.disabledOpacity();
+		}
+	}
+
+	&.z-tabbox-scroll {
+		> .z-tabs {
+			margin: 24px 0px 24px 0px;
+		}
+	}		
+
+	.z-tabpanels {
+		border: 1px solid @baseBorderColor;
+		border-left: 0px;
+	}
+
+	.z-tabpanel {
+		padding: 5px;
+		border: 0;
+	}
+}
+
+.z-toolbar.z-toolbar-tabs {
+	overflow: hidden;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	padding: 5px 4px;
+	border-bottom: 1px solid @baseBorderColor;
+	.resetGradient();
+}
+// remove selected tab bottom border
+.z-tabbox-horizontal .z-tab:first-child {
+	&.z-tab-selected {
+		.boxShadow(1px 1px 0 #FFFFFF);
+	}
+	&.z-tab-selected + .z-tab {
+		.boxShadow(0 1px 0 #CFCFCF);
+	}
+}
+// remove selected tab top border
+.z-tabbox-horizontal-bottom .z-tab:first-child {
+	&.z-tab-selected {
+		.boxShadow(1px -1px 0 #FFFFFF);
+	}
+	&.z-tab-selected + .z-tab {
+		.boxShadow(0px -1px 0 #CFCFCF);
+	}
+}
+// remove selected tab right border
+.z-tabbox-vertical .z-tab:first-child {
+	&.z-tab-selected {
+		.boxShadow(1px 1px 0 #FFFFFF);
+	}
+
+	&.z-tab-selected + .z-tab {
+		.boxShadow(0 1px 0 #CFCFCF);
+	}
+}
+// remove selected tab left border
+.z-tabbox-vertical-right .z-tab:first-child {
+	border-left: 0px;
+	&.z-tab-selected {
+		.boxShadow(-1px 1px 0 #FFFFFF);
+	}
+	&.z-tab-selected + .z-tab {
+		.boxShadow(-1px 0px 0 #CFCFCF);
+	}
+}
+
+.z-tabbox { 
+	overflow: hidden;
+	position: relative;
+	// horizontal (default)
+	&-icon {
+		.verGradient();
+		text-align: center;
+		border: 1px solid @baseBorderColor;
+		.topBorderRadius();
+		padding-top: 5px;
+		line-height: @baseButtonHeight;
+		color: @iconColor;
+		cursor: pointer;
+		position: absolute;
+		top: 0;
+		z-index: 25;
+		display: none;
+		.userSelect();
+		> i {
+			.opacity(0.7);
+		}
+		&:hover {
+			color: @iconHoverColor;
+			> i {
+				.opacity(1);
+			}
+		}
+	}
+	&-left,
+	&-right {
+		width: @baseButtonWidth;
+	}
+	&-right {
+		right: 0;
+		padding-left: 1px;
+	}
+	&-up,
+	&-down {
+		height: @baseButtonHeight;
+	}
+	&-down {
+		top: auto;
+		bottom: 0;
+	}
+	// horizontal-bottom
+	&-horizontal-bottom {
+		.z-tabbox-icon {
+			top: auto;
+			bottom: 0;
+			.bottomBorderRadius();
+		}
+		.z-tabs-content {
+			border-bottom: 0;
+			border-top: 1px solid @contentBorderColor;
+		}
+		.z-tab {
+			border-width: 0px 1px 1px 1px;
+			.bottomBorderRadius();
+			&.z-tab-selected {
+				.boxShadow('0px -1px 0 #FFFFFF');
+				background: none;
+			}
+		}
+		.z-tabpanel {
+			border: 1px solid @baseBorderColor;
+			border-bottom: 0;
+		}
+		.z-toolbar-tabs {
+			border-bottom: 0;
+			border-top: 1px solid @baseBorderColor;
+			bottom: 0;
+			top: auto;
+		}
+	}
+	// vertical
+	&-vertical {
+		.z-tabbox-icon {
+			.leftBorderRadius();
+			padding-top: 0;
+		}
+		.verticalStyle();
+
+		.z-tab {
+			&-button {
+				top: 0;
+				left: 0px;
+				& + .z-tab-text {
+					margin-left: 14px;
+					margin-right: 0px;
+				}
+			}
+			&-icon {
+				right: auto;
+				left: 10px;
+			}
+		}
+	}
+
+	// vertical-right
+	&-vertical-right {
+		.z-tabbox-icon {
+			.rightBorderRadius();
+			padding-top: 0;
+			right: 0;
+		}
+		.verticalStyle();
+
+		.z-tabs {
+			float: right;
+			&-content {
+				border-right: 0;
+				border-left: 1px solid @contentBorderColor;
+			}
+			&-space {
+				float: right;
+			}			
+		}
+		.z-tab {
+			border-width: 1px 1px 1px 0px;
+			.rightBorderRadius();
+			&.z-tab-selected {
+				.boxShadow('-1px 0px 0 #FFFFFF');
+				border-left: 0px;
+			}
+		}
+		.z-tabpanels {		
+			border: 1px solid @baseBorderColor;
+			border-right: 0;
+		}
+	}
+
+	// accordion
+	&-accordion {
+		> .z-tabpanels {
+			border-top: 1px solid @baseBorderColor;
+			> .z-tabpanel {
+				padding: 0;
+				border: 0;
+			}
+		}
+		.z-tabpanel > .z-tabpanel-content {
+			padding: 5px;
+			zoom: 1;
+			border: 1px solid @contentBorderColor;
+			border-top: 0;
+		}
+		.z-tabpanel > .z-tab {
+			.borderRadius('0');
+			float: none;
+			zoom: 1;
+			border-width: 0 1px 1px 1px;
+			padding-top: 1px;
+			text-align: left;
+
+			&-selected {
+				.verGradient();
+				.boxShadow('none');
+				cursor: default;
+			}
+			&-disabled {
+				color: @disabledColor;
+				cursor: default;
+				.disabledOpacity();
+
+				.z-tab-button:hover {
+					.disabledOpacity();
+				}
+
+				.z-tab-text {
+					font-style: normal;
+					white-space: nowrap;
+					cursor: default;
+					color: @disabledColor;
+					.disabledOpacity();
+				}
+			}
+		}
+		.z-tab-button {
+			.opacity(0.7);
+			&:hover {
+				color: @iconHoverColor;
+			}
+
+			+ .z-tab-text {
+				margin-right: @baseButtonWidth;
+			}
+		}
+		.z-tab-text {
+			padding: 3px 5px 3px 8px;
+		}
+	}
+
+	// .z-tabbox-scroll
+	&-scroll {
+		> .z-tabs {
+			border: 0;
+			padding-bottom: 0;
+			zoom: 1;
+			margin: 0px 24px 0px 24px;
+		}
+		.z-tabbox-icon {
+			display: block;
+		}
+	}
+}
+
+.z-tabs {
+	overflow: hidden;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	line-height: @baseButtonHeight;
+
+	&-content {
+		padding-left: 0;
+		padding-top: 0;
+		border-bottom: 1px solid @contentBorderColor;
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+		display: table;
+		border-collapse: separate;
+		border-spacing: 0;
+		margin: 0;
+		width: 100%;
+		zoom: 1;
+		clear: both;
+	}
+}
+
+.z-tab {
+	.verGradient();
+	position: relative;	
+	display: block;
+	float: left;
+	padding-top: 1px;
+	margin: 0;
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
+	border: 1px solid @baseBorderColor;
+	border-width: 1px 1px 0px 1px;
+	.topBorderRadius();
+	text-align: center;
+	line-height: @baseButtonHeight + 6;
+	cursor: pointer;
+
+	&-content {
+		display: block;
+	}
+
+	&:hover {
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	}
+
+	&-icon {
+		position: absolute;
+		line-height: normal;
+		margin-top: -6px;
+		top: 50%;
+		left: 5px;
+		display: block;
+		cursor: pointer;
+		<c:if test="${zk.ie == 8}">
+			margin-top: -7px;
+			font-size: 14px;
+		</c:if>
+	}
+
+	&-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: @textColorGray;
+		font-style: normal;
+		white-space: nowrap;
+		display: block;
+		padding: 4px 12px 2px;
+		line-height: @baseButtonHeight;
+	}
+
+	&-image {
+		vertical-align: middle;
+	}
+
+	&-button {
+		.userSelect();
+		display: block;
+		width: @baseButtonHeight;
+		height: 100%;
+		position: absolute;
+		font-size: @fontSizeMedium;
+		right: 0;
+		top: 0;
+		z-index: 15;
+		.opacity(0.7);
+		zoom: 1;
+		color: @iconColor;
+		text-align: center;
+		line-height: normal;
+		&:hover {
+			color: @iconHoverColor;
+		}
+		& + .z-tab-text {
+			margin-right: 14px;
+		}
+	}
+	.z-caption {
+		margin: auto;
+	}
+	&-selected {
+		.resetGradient();
+		background: @baseBackgroundColor;
+		.boxShadow('0 1px 0 #FFFFFF');
+		&:hover {
+			.resetGradient();
+		}
+		.z-tab-button {
+			.opacity(1.0);
+		}
+		.z-tab-text {
+			cursor: default;
+			font-weight: bold;
+		}
+	}
+	&-disabled {
+		color: @disabledColor;
+		cursor: default;
+		.disabledOpacity();
+		&:hover {
+			.resetGradient();
+		}
+		.z-tab-button:hover {
+			.disabledOpacity();
+		}
+		.z-tab-text {
+			font-style: normal;
+			white-space: nowrap;
+			cursor: default;
+			color: @disabledColor;
+			.disabledOpacity();
+		}
+	}
+}
+
+.z-tabpanels {	
+	zoom: 1; 
+	overflow: hidden; 
+	position: relative;
+}
+
+.z-tabpanel {	
+	padding: 5px;
+	zoom: 1;
+	border: 1px solid @baseBorderColor;
+	border-top: 0px;	
+}

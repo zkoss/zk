@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zul.Version</version-class>
-		<version-uid>6.5.4</version-uid>
+		<version-uid>7.0.0</version-uid>
 	</version>
 
 	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
@@ -205,6 +205,7 @@ def alert(m):
 			<mold-uri>mold/a.js</mold-uri>
 			<css-uri>css/a.css.dsp</css-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>absolutechildren</component-name>
@@ -334,7 +335,7 @@ def alert(m):
 		<text-as>label</text-as><!-- treat text within the element as the label property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/button-os.js</mold-uri>
+			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/button.css.dsp</css-uri>
 		</mold>
 		<mold>
@@ -344,7 +345,7 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>os</mold-name>
-			<mold-uri>mold/button-os.js</mold-uri>
+			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/button.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -476,12 +477,12 @@ def alert(m):
 		<widget-class>zul.wgt.Combobutton</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/button.js</mold-uri>
+			<mold-uri>mold/combobutton.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>toolbar</mold-name>
-			<mold-uri>mold/button.js</mold-uri>
+			<mold-uri>mold/combobutton.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -900,6 +901,36 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/menuseparator.js</mold-uri>
+		</mold>
+	</component>
+	
+	<component>
+		<component-name>menubar</component-name>
+		<component-class>org.zkoss.zul.Menubar</component-class>
+		<widget-class>zul.menu.Menubar</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/menubar.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>menuitem</component-name>
+		<component-class>org.zkoss.zul.Menuitem</component-class>
+		<widget-class>zul.menu.Menuitem</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/menuitem.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>menupopup</component-name>
+		<component-class>org.zkoss.zul.Menupopup</component-class>
+		<widget-class>zul.menu.Menupopup</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/menupopup.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

@@ -73,7 +73,6 @@ var Borderlayout =
  * 
  */
 zul.layout.Borderlayout = zk.$extends(zul.Widget, {
-	_ignoreOffsetTop: zk.ie < 8,  //borderlayout in IE6/IE7, will give incorrect offsetTop, ignore it!
 	setResize: function () {
 		this.resize();
 	},
@@ -81,16 +80,23 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		var BL = zul.layout.Borderlayout;
-		if (child.getPosition() == BL.NORTH)
+		switch (child.getPosition()) {
+		case BL.NORTH:
 			this.north = child;
-		else if (child.getPosition() == BL.SOUTH)
+			break;
+		case BL.SOUTH:
 			this.south = child;
-		else if (child.getPosition() == BL.CENTER)
+			break;
+		case BL.CENTER:
 			this.center = child;
-		else if (child.getPosition() == BL.WEST)
+			break;
+		case BL.WEST:
 			this.west = child;
-		else if (child.getPosition() == BL.EAST)
+			break;
+		case BL.EAST:
 			this.east = child;
+			break;
+		}
 		this.resize();
 	},
 	onChildRemoved_: function (child) {
@@ -141,18 +147,6 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (this._isOnSize)
 			this._resize(true);
 	},
-	/*
-	// B50-ZK-309: done by beforeMinFlex_
-	//@Override, region with vflex/hflex, must wait flex resolved then do resize
-	afterChildrenMinFlex_: function() {
-		//region's min vflex/hflex resolved and try the border resize
-		//@see #_resize
-		if (!this._isOnSize) {
-			this._resize(true);
-			this._isOnSize = false;
-		}
-	},
-	*/
 	/**
 	 * Re-sizes this layout component.
 	 */
@@ -191,7 +185,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		// fixed Opera 10.5+ bug
 		if (zk.opera && !height && (!el.style.height || el.style.height == '100%')) {
 			var parent = el.parentNode;
-			center.h = height = zk(parent).revisedHeight(parent.offsetHeight);
+			center.h = height = parent.offsetHeight;
 		}
 		
 		for (var region, ambit, margin,	j = 0; j < k; ++j) {
@@ -216,7 +210,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (wgt._open) {
 			if (!ignoreSplit && wgt.$n('split')) {
 				wgt._fixSplit();
-				 ambit = wgt._reszSplt(ambit);
+				ambit = wgt._reszSplt(ambit);
 			}
 			zk.copy(wgt.$n('real').style, {
 				left: jq.px(ambit.x),
@@ -224,15 +218,15 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			});
 			this._resizeBody(wgt, ambit);
 		} else {
-			wgt.$n('split').style.display = "none";
+			wgt.$n('split').style.display = 'none';
 			var colled = wgt.$n('colled');
 			if (colled) {
 				var $colled = zk(colled);
 				zk.copy(colled.style, {
 					left: jq.px(ambit.x),
 					top: jq.px(ambit.y),
-					width: jq.px0($colled.revisedWidth(ambit.w)),
-					height: jq.px0($colled.revisedHeight(ambit.h))
+					width: jq.px0(ambit.w),
+					height: jq.px0(ambit.h)
 				});
 			}
 			//Bug ZK-1406: resize body after onSize if it is visible but is not open
@@ -257,33 +251,29 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_resizeBody: function (wgt, ambit) {
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
-		var el = wgt.$n('real'),
-			fchild = wgt.isFlex() && wgt.getFirstChild(),
-			bodyEl = fchild ? wgt.getFirstChild().$n() : wgt.$n('cave');
+		var el = wgt.$n('real');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
-			ambit.w = zk(el).revisedWidth(ambit.w);
-			el.style.width = jq.px0(ambit.w);
-			ambit.w = zk(bodyEl).revisedWidth(ambit.w);
-			bodyEl.style.width = jq.px0(ambit.w);
+			var fchild = wgt.isFlex() && wgt.getFirstChild(),
+				bodyEl = fchild ? wgt.getFirstChild().$n() : wgt.$n('cave'),
+				bs = bodyEl.style,
+				$el = zk(el);
 			
-			ambit.h = zk(el).revisedHeight(ambit.h);
+			el.style.width = jq.px0(ambit.w);
+			bs.width = jq.px0($el.contentWidth());
 			el.style.height = jq.px0(ambit.h);
 			if (wgt.$n('cap'))
 				ambit.h = Math.max(0, ambit.h - wgt.$n('cap').offsetHeight);
+			
 			// Bug: B50-3201762: Borderlayout flex has issue with listbox hflex in IE 6 
 			if (fchild) { // B50-ZK-198: always need cave height
 				var cv;
 				if (cv = wgt.$n('cave'))
-					cv.style.height = jq.px0(ambit.h);
+					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
-			ambit.h = zk(bodyEl).revisedHeight(ambit.h);
-			bodyEl.style.height = jq.px0(ambit.h);
-			if (wgt.isAutoscroll()) { 
-				bodyEl.style.overflow = "auto";
-				bodyEl.style.position = "relative";
-			} else {
-				bodyEl.style.overflow = "hidden";
-				bodyEl.style.position = "";
+			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
+			if (wgt._nativebar && wgt.isAutoscroll()) { 
+				bs.overflow = 'auto';
+				bs.position = 'relative';
 			}
 			if (!this._isOnSize)
 				zUtl.fireSized(wgt);
@@ -292,10 +282,11 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_ignoreResize : function(el, w, h) { 
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
-		} else {
-			el._lastSize = {width: w, height: h};
-			return false;
 		}
+		
+		// store fot next time to check
+		el._lastSize = {width: w, height: h};
+		return false;
 	},
 	//zWatch//
 	onSize: function () {
@@ -306,27 +297,27 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	 * The north layout constraint (top of container).
 	 * @type String
 	 */
-	NORTH: "north",
+	NORTH: 'north',
 	/**
 	 * The south layout constraint (bottom of container).
 	 * @type String
 	 */
-	SOUTH: "south",
+	SOUTH: 'south',
 	/**
 	 * The east layout constraint (right side of container).
 	 * @type String
 	 */
-	EAST: "east",
+	EAST: 'east',
 	/**
 	 * The west layout constraint (left side of container).
 	 * @type String
 	 */
-	WEST: "west",
+	WEST: 'west',
 	/**
 	 * The center layout constraint (middle of container).
 	 * @type String
 	 */
-	CENTER: "center"
+	CENTER: 'center'
 });
 
 })();

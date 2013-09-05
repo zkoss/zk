@@ -1,9 +1,9 @@
 /* HeaderWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Dec 29 17:33:15     2008, Created by jumperchen
 
@@ -59,26 +59,34 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == ''
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
-			//updated: need to concern inner padding due to _getContentEdgeWidth
+			//updated: need to concern inner padding due to wgt.getContentEdgeWidth_()
 			//spec in flex.js
 			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
 					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
 			this._hflexWidth = rvw;
 			return {width: rvw};
 		} else
-			return this.$supers('setFlexSize_', arguments);
+			this.$supers('setFlexSize_', arguments);
+	},
+	getContentEdgeHeight_: function () {
+		return zk(this).sumStyles('tb', jq.margins);
+	},
+	getContentEdgeWidth_: function() {
+		return zk(this).sumStyles('lr', jq.margins);
 	},
 	domStyle_: function (no) {
 		var style = '';
 		if (this._hflexWidth) { //handle hflex
 			style = 'width: ' + this._hflexWidth + 'px;';
-			
+
 			if (no) no.width = true;
 			else no = {width:true};
 		}
-		if (zk.ie8 && this._align)
+		if (this._align)
 			style += 'text-align:' + this._align + ';';
-		
+		if (this._valign)
+			style += 'vertical-align:' + this._valign + ';';
+
 		return style + this.$super('domStyle_', no);
 	},
 	/**
@@ -96,32 +104,19 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	isSortable_: function () {
 		return false;
 	},
-	/**
-	 * Returns the column attributes. i.e. {@link #getAlign} and {@link #getValign}
-	 * in HTML format. (Like a="b")
-	 * @return String
-	 */
-	getColAttrs: function () {
-		return (this._align ? ' align="' + this._align + '"' : '')
-			+ (this._valign ? ' valign="' + this._valign + '"' : '') ;
-	},
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
 			this.updateMesh_('visible', visible);
 		}
 	},
-	domAttrs_: function (no) {
-		var attrs = this.$supers('domAttrs_', arguments);
-		return attrs + this.getColAttrs();
-	},
 	getTextNode: function () {
 		return jq(this.$n()).find('>div:first')[0];
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
-		if (this.parent.isSizable()) this._initsz();
-		this.fixFaker_();
+		if (this.parent.isSizable())
+			this._initsz();
 	},
 	unbind_: function () {
 		if (this._dragsz) {
@@ -135,7 +130,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (n && !this._dragsz) {
 			var $Header = this.$class;
 			this._dragsz = new zk.Draggable(this, null, {
-				revert: true, constraint: "horizontal",
+				revert: true,
+				constraint: 'horizontal',
 				ghosting: $Header._ghostsizing,
 				endghosting: $Header._endghostsizing,
 				snap: $Header._snapsizing,
@@ -145,40 +141,19 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			});
 		}
 	},
-	/**
-	 * Fixes the faker (an visible row for adjusting column), if any.
-	 */
-	fixFaker_: function () {
-		var n = this.$n(),
-			index = zk(n).cellIndex(),
-			owner = this.getMeshWidget();
-		for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
-			faker = owner['e' + fs[i]]; // internal element
-			if (faker && !this.$n(fs[i])) 
-				faker[faker.cells.length > index ? "insertBefore" : "appendChild"]
-					(this._createFaker(n, fs[i]), faker.cells[index]);
-		}
-	},
-	_createFaker: function (n, postfix) {
-		var t = document.createElement("th"), 
-			d = document.createElement("div");
-		t.id = n.id + "-" + postfix;
-		t.className = n.className;
-		t.style.cssText = n.style.cssText;
-		d.style.overflow = "hidden";
-		t.appendChild(d);
-		return t;
-	},
 	doClick_: function (evt) {
-		var wgt = zk.Widget.$(evt.domTarget),
+		var tg = evt.domTarget,
+			wgt = zk.Widget.$(tg),
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false;
-		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
-		!jq.nodeName(evt.domTarget, "input") && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
-			this.fire('onSort', "ascending" != this.getSortDirection()); // B50-ZK-266
+			
+		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) 
+				&& this.isSortable_() && !jq.nodeName(tg, 'input') 
+				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
+			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
 		} else {
-			if (jq.nodeName(evt.domTarget, "input"))
+			if (jq.nodeName(tg, 'input'))
 				evt.stop({propagation: true});
 			this.$supers('doClick_', arguments);
 		}
@@ -201,19 +176,20 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			this.$supers('doDoubleClick_', arguments);
 	},
 	doMouseMove_: function (evt) {
-		if (zk.dragging || !this.parent.isSizable()) return;
+		if (zk.dragging || !this.parent.isSizable())
+			return;
 		var n = this.$n(),
 			ofs = zk(n).revisedOffset(); // Bug #1812154
 		if (this._insizer(evt.pageX - ofs[0])) {
-			jq(n).addClass(this.getZclass() + "-sizing");
+			jq(n).addClass(this.$s('sizing'));
 		} else {
-			jq(n).removeClass(this.getZclass() + "-sizing");
+			jq(n).removeClass(this.$s('sizing'));
 		}
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
 			var n = this.$n();
-			jq(n).removeClass(this.getZclass() + "-sizing");
+			jq(n).removeClass(this.$s('sizing'));
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
@@ -225,7 +201,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return false;
 	},
-	//@Override to avoid add child offset 
+	//@Override to avoid add child offset
 	ignoreChildNodeOffset_: function(attr) {
 		return true;
 	},
@@ -235,7 +211,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	beforeMinFlex_: function(o) {
 		if (o == 'w') {
 			var wgt = this.getMeshWidget();
-			if (wgt) { 
+			if (wgt) {
 				wgt._calcMinWds();
 				if (wgt._minWd) {
 					var n = this.$n(), zkn = zk(n),
@@ -252,45 +228,25 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (mw = this.getMeshWidget())
 			mw._clearCachedSize();
 	},
-	//@Override to get width/height of MeshWidget 
+	//@Override to get width/height of MeshWidget
 	getParentSize_: function() {
 		//to be overridden
 		var mw = this.getMeshWidget(),
 			p = mw.$n(),
 			zkp = p ? zk(p) : null;
 		if (zkp) {
-			var w = zkp.revisedWidth(p.offsetWidth);
 			// Bug #3255116
 			if (mw.ebody) {
-				var scroll = zk(mw.ebody).hasVScroll();
-				if (scroll > 11)
-					w -= scroll;
-
 				if (zk.ie) { //Related bugs: ZK-890 and ZK-242
-					//Bug ZK-1642: only IE 6/7 has horizontal scrollbar issue
-					if (zk.ie < 8 && (scroll > 11 || !mw.ebody.clientWidth)) {
-						// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.
-						var hdflex = jq(mw.ehead).find('table>tbody>tr>th:last-child')[0];
-						var clear = true; //Bug ZK-1642 for IE 6/7, only clear hdflex width if all headers have hflex or defined width
-						for (var c = this.parent.firstChild; c; c = c.nextSibling) {
-							if (!(c._hflex || c.$n().style.width)) {
-								clear = false;
-								break;
-							}
-						}
-						if (clear)
-							hdflex.style.width = '';
-						if (mw.ebodytbl)
-							mw.ebodytbl.width = "";
-					} else if (mw.ebodytbl && !mw.ebodytbl.width) {
-						mw.ebodytbl.width = "100%";
+					if (mw.ebodytbl && !mw.ebodytbl.width) {
+						mw.ebodytbl.width = '100%';
 						// reset the width for IE
 					}
 				}
 			}
 			return {
-				height: zkp.revisedHeight(p.offsetHeight),
-				width: w
+				height: zkp.contentHeight(),
+				width: zkp.contentWidth()
 			}
 		}
 		return {};
@@ -299,25 +255,25 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		//Bug 3164504: Hflex will not recalculate when the colum without label
 		//Cause: DIV (parent of HeadWidget) is invisible if all columns have no label
 		var wp;
-		return this._visible && (wp=this.parent) && wp._visible //check this and HeadWidget
-			&& (wp=wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
+		return this._visible && (wp = this.parent) && wp._visible //check this and HeadWidget
+			&& (wp = wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
 	},
 	_insizer: function (x) {
-		return x >= this.$n().offsetWidth - 10;
+		return x >= this.$n().offsetWidth - 8;
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<th', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></th>');
 	}
 }, { //static
-	_faker: ["hdfaker", "bdfaker", "ftfaker"],
-	
+	_faker: ['hdfaker', 'bdfaker', 'ftfaker'],
+
 	//drag
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
 			el = wgt.getMeshWidget().eheadtbl,
 			of = zk(el).revisedOffset(),
 			n = wgt.$n();
-		
+
 		ofs[1] = of[1];
 		ofs[0] += zk(n).offsetWidth();
 		jq(document.body).append(
@@ -332,7 +288,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_snapsizing: function (dg, pointer) {
 		var n = dg.control.$n(), $n = zk(n),
 			ofs = $n.revisedOffset();
-		pointer[0] += $n.offsetWidth(); 
+		pointer[0] += $n.offsetWidth();
 		if (ofs[0] + dg._zmin >= pointer[0])
 			pointer[0] = ofs[0] + dg._zmin;
 		return pointer;
@@ -341,7 +297,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var wgt = dg.control,
 			n = wgt.$n(), $n = zk(n),
 			ofs = $n.revisedOffset(); // Bug #1812154
-			
+
 		if (wgt._insizer(pointer[0] - ofs[0])) {
 			dg._zmin = 10 + $n.padBorderWidth();
 			return false;
@@ -350,150 +306,75 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
-			n = wgt.$n(), $n = zk(n),
 			mesh = wgt.getMeshWidget(),
 			wd = dg._zszofs,
-			table = mesh.eheadtbl,
-			head = table.tBodies[0].rows[0], 
-			rwd = $n.revisedWidth(wd),
-			cidx = $n.cellIndex();
+			hdfaker = mesh.ehdfaker,
+			bdfaker = mesh.ebdfaker,
+			ftfaker = mesh.eftfaker,
+			cidx = zk(wgt.$n()).cellIndex();
+		
+		//1. set resized width to colgroup col
+		var hdcols = hdfaker.childNodes,
+			bdcols = bdfaker.childNodes;
+		hdcols[cidx].style.width = bdcols[cidx].style.width = jq.px(wd);
 			
-		
-		// start of ZK-922/ZK-1024: can remove after FF 13
-		var ff = zk.gecko,
-			ff_10_12 = ff > 9 && ff < 13,
-			meshWgt = wgt.getMeshWidget(),
-			ebody = meshWgt && meshWgt.ebody , 
-			h;
-		if (ff_10_12 && ebody) {
-			if (ebody)
-				h = ebody.style.height;
-			if (h )
-				ebody.style.height = '';
-		}
-		// end of ZK-922/ZK-1024
-		
-		
-		// For Opera, the code of adjusting width must be in front of the adjusting table.
-		// Otherwise, the whole layout in Opera always shows wrong.
-		if (mesh.efoottbl) {
-			mesh.eftfaker.cells[cidx].style.width = wd + "px";
-		}
-		var fixed, disp;
-		if (mesh.ebodytbl) {
-			if (zk.opera && !mesh.ebodytbl.style.tableLayout) {
-				fixed = 'auto';
-				mesh.ebodytbl.style.tableLayout = "fixed";
-			}
-			mesh.ebdfaker.cells[cidx].style.width = wd + "px";
-		}
-		
-		head.cells[cidx].style.width = wd + "px";
-		n.style.width = rwd + "px";
-		var cell = n.firstChild;
-		cell.style.width = zk(cell).revisedWidth(rwd) + "px";
-		
-		//feature#3177275: Listheader should override hflex when sized by end user
-		var hdfakercells = mesh.ehdfaker.cells,
-			bdfakercells = mesh.ebdfaker.cells,
-			wds = [],
-			i = 0;
-		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
-			var stylew = hdfakercells[i].style.width,
+		//2. store resized width
+		var wds = [];
+		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
+			var stylew = hdcols[i].style.width,
 				origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
-			w._width = wds[i] = origWd ? origWd :
-								stylew ? stylew : jq.px0(hdfakercells[i].offsetWidth); //bug#3180189. setWidth() has side effect
-			if (!stylew) //bug#3183228.
-				bdfakercells[i].style.width = hdfakercells[i].style.width = w._width;
-			++i;
+			
+			if (origWd) {
+				w._width = wds[i] = origWd;
+			} else {
+				w._width = wds[i] = stylew ? stylew : jq.px0(w.$n().offsetWidth);
+			}
+			
+			if (!stylew)
+				hdcols[i].style.width = bdcols[i].style.width = w._width;
 		}
+		
+		//3. clear width=100% setting, otherwise it will try to expand to whole width
+		mesh.eheadtbl.width = '';
+		mesh.ebodytbl.width = '';
+		if (mesh.efoottbl)
+			mesh.efoottbl.width = '';
 		
 		delete mesh._span; //no span!
 		delete mesh._sizedByContent; //no sizedByContent!
 		for (var w = mesh.head.firstChild; w; w = w.nextSibling)
 			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
 		
-		//bug#3147926: auto fit. 
-		//Adjust hdfakerflex/bdfakerflex
-		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
-			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0],
-			hdflexVal = hdflex.style.width;
-		
-		hdflex.style.width = '';
-		
-		// fixed for B50-3183228.zul unexpected hor. scrollbar
-		if (zk.ie < 8) {
-			if (hdflex.offsetWidth == 1)
-				hdflex.style.width = hdflexVal;
-		} 
-		if (bdflex) {
-			var bdflexVal = bdflex.style.width;
-			bdflex.style.width = '';
-			
-			// fixed for B50-3183228.zul unexpected hor. scrollbar
-			if (zk.ie < 8) {
-				if (bdflex.offsetWidth == 1)
-					bdflex.style.width = bdflexVal;
-			}
-		}
-		
-		//bug 3061765: unexpected horizontal scrollbar when sizing
-/*		table.style.width = total + wd + "px";
-		
-		if (mesh.efoottbl)
-			mesh.efoottbl.style.width = table.style.width;
-		
-		if (mesh.ebodytbl)
-			mesh.ebodytbl.style.width = table.style.width;
-*/			
-		var meshn = mesh.$n();
-		if (zk.opera) {
-			if(fixed) 
-				mesh.ebodytbl.style.tableLayout = fixed;
-			
-			//bug 3061764: Opera only. Cannot sizing a column with width
-			var olddisp = meshn.style.display; //force redraw
-			meshn.style.display='none';
-			var redrawFix = meshn.offsetHeight;
-			meshn.style.display=olddisp;
-		}
-		
-	    // start of ZK-922/ZK-1024: can remove after FF 13
-  	   if (ff_10_12 && h && ebody)
-	      ebody.style.height = h;
-  	   // end of ZK-922/ZK-1024		
-		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd + "px",
+			width: wd + 'px',
 			widths: wds
 		}, evt.data), null, 0);
 		
 		// bug #2799258 in IE, we have to force to recalculate the size.
-		meshn._lastsz = null;
+		mesh.$n()._lastsz = null;
 		
 		// bug #2799258
 		zUtl.fireSized(mesh, -1); //no beforeSize
-		
-		// fixed for B50-3147926.zul
-		if (zk.ie < 8)
-			zk(mesh).redoCSS();
 	},
 
 	redraw: function (out) {
 		var uuid = this.uuid,
-			zcls = this.getZclass(), 
+			zcls = this.getZclass(),
 			label = this.domContent_();
-		out.push('<th', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
-				zcls, '-cnt"', this.domTextStyleAttr_(), '><div class="', zcls, '-sort-img"></div>', 
-				( (! this.firstChild && label == "" ) ? "&nbsp;" : label));// ZK-805 MenuPopup without columns issue
+		out.push('<th', this.domAttrs_({width: true}), '><div id="',
+			uuid, '-cave" class="', this.$s('content'), '"',
+			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'), 
+			'"><i id="', uuid, '-sort-icon"></i></div>',
+			((!this.firstChild && label == '' ) ? "&nbsp;" : label)); //ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
-			out.push('<a id="', uuid, '-btn"  href="javascript:;" class="', zcls, '-btn"></a>');
-	
+			out.push('<a id="', uuid, '-btn" href="javascript:;" class="',
+				this.$s('button'), '"><i class="z-icon-caret-down"></i></a>');
+
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</div></th>');	
+		out.push('</div></th>');
 	}
 });

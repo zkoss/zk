@@ -267,7 +267,7 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 	dumpWidgetTree: function (wgt) {
 		var out = [], inf = {cnt: 0};
 		_dumpWgt(out, wgt, 0, inf);
-		this._dump("Total: "+inf.cnt, out.join(''));
+		this._dump('Total: '+inf.cnt, out.join(''));
 	},
 	// don't change the function name, otherwise, zkjet will break.
 	dumpWidgetTree4Zul: function (wgt) {

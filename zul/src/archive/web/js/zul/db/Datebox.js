@@ -23,24 +23,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	function _reposition(db, silent) {
 		if (!db.$n()) return;
-		var pp = db.$n("pp"),
+		var pp = db.$n('pp'),
 			inp = db.getInputNode();
 
 		if(pp) {
-			zk(pp).position(inp, "after_start");
+			zk(pp).position(inp, 'after_start');
 			db._pop.syncShadow();
 			if (!silent)
 				zk(inp).focus();
 		}
 	}
 	function _blurInplace(db) {
-		var n;
-		if (db._inplace && db._inplaceout && (n = db.$n())
-		&& !jq(n).hasClass(db.getInplaceCSS())) {
-			jq(n).addClass(db.getInplaceCSS());
-			db.onSize();
-			n.style.width = db.getWidth() || '';
-		}
+		zul.inp.RoundUtl.doBlur_(db);
 	}
 	function _equalDate(d1, d2) {
 		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
@@ -50,7 +44,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (h) o.push(h);
 		if (m) o.push(m);
 		if (s) o.push(s);
-		return o.join(":");
+		return o.join(':');
 	}
 	
 var globallocalizedSymbols = {},
@@ -81,29 +75,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return boolean
 		 */
 		buttonVisible: function (v) {
-			var n = this.$n('btn'),
-				zcls = this.getZclass();
-			if (n) {
-				if (!this.inRoundedMold()) {
-					if (!this._inplace || !v)
-						jq(n)[v ? 'show': 'hide']();
-					else
-						n.style.display = '';
-					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
-				} else {
-					var fnm = v ? 'removeClass': 'addClass';
-					jq(n)[fnm](zcls + '-btn-right-edge');
-
-					if (zk.ie6_) {
-						jq(n)[fnm](zcls +
-							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
-
-						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
-							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
-					}
-				}
-				this.onSize();
-			}
+			zul.inp.RoundUtl.buttonVisible(this, v);
 		},
 		/** Sets the date format.
 		 * <p>The following pattern letters are defined:
@@ -208,7 +180,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		timeZonesReadonly: function (readonly) {
 			var select = this.$n('dtzones');
-			if (select) select.disabled = readonly ? "disabled" : "";
+			if (select) select.disabled = readonly ? 'disabled' : '';
 		},
 		/** Sets a catenation of a list of the time zones' ID, separated by comma,
 		 * that will be displayed at the client and allow user to select.
@@ -221,7 +193,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return Array
 		 */
 		displayedTimeZones: function (dtzones) {
-			this._dtzones = dtzones ? dtzones.split(",") : null;
+			this._dtzones = dtzones ? dtzones.split(',') : null;
 		},
 		/** Sets the unformater function. This method is called from Server side.
 		 * @param String unf the unformater function
@@ -287,6 +259,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this._pop.setWeekOfYear(v);
 		}
 	},
+	getIconClass_: function () {
+		return 'z-icon-calendar';
+	},
+	inRoundedMold: function () {
+		return true;
+	},
 	_setTimeZonesIndex: function () {
 		var select = this.$n('dtzones');
 		if (select && this._timezone) {
@@ -297,15 +275,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 	},
 	onSize: function () {
-		var width = this.getWidth();
-		if (!width || width.indexOf('%') != -1)
-			this.getInputNode().style.width = '';
-		this.syncWidth();
-	},
-
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
+		zul.inp.RoundUtl.onSize(this);
 	},
 	/** Returns the Time format of the specified format
 	 * @return String
@@ -328,7 +298,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			sv = ss > -1 ? 'ss' : '';
 		
 		if (hasHour1) {
-			var time = _prepareTimeFormat(hh < KK ? "KK" : "hh", mv, sv);
+			var time = _prepareTimeFormat(hh < KK ? 'KK' : 'hh', mv, sv);
 			if (aa == -1) 
 				return time;
 			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK)) 
@@ -377,39 +347,21 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function (val) {
 		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols) : '';
 	},
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
-	},
 	doFocus_: function (evt) {
-		var n = this.$n();
-		if (this._inplace)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-
 		this.$supers('doFocus_', arguments);
 
-		if (this._inplace) {
-			if (jq(n).hasClass(this.getInplaceCSS())) {
-				jq(n).removeClass(this.getInplaceCSS());
-				this.onSize();
-			}
-		}
+		zul.inp.RoundUtl.doFocus_(this);
+	},
+	doBlur_: function (evt) {
+		this.$supers('doBlur_', arguments);
+
+		_blurInplace(this);
 	},
 	doClick_: function (evt) {
 		if (this._disabled) return;
 		if (this._readonly && this._buttonVisible && this._pop && !this._pop.isOpen())
 			this._pop.open();
 		this.$supers('doClick_', arguments);
-	},
-	doBlur_: function (evt) {
-		var n = this.$n();
-		if (this._inplace && this._inplaceout)
-			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-
-		this.$supers('doBlur_', arguments);
-
-		_blurInplace(this);
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);
@@ -422,7 +374,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
-		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
+		if (keyCode == 9 || (zk.webkit && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
 			if (bOpen) this._pop.close();
 			return;
 		}
@@ -438,6 +390,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			return;
 		}
 
+		// select current time
+		if (this._pop.isOpen()) {
+			this._pop.doKeyDown_(evt);
+		}
+		
 		//Request 1537962: better responsive
 		if (bOpen && (keyCode == 13 || keyCode == 27)) { //ENTER or ESC
 			if (keyCode == 13) this.enterPressed_(evt);
@@ -448,12 +405,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (keyCode == 18 || keyCode == 27 || keyCode == 13
 		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
-
-		if (this._pop.isOpen()) {
-			var ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
-			if (ofs)
-				this._pop._shift(ofs, {silent: true});
-		}
 	},
 	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
 	 * <p>call the close function
@@ -484,11 +435,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers(Datebox, 'bind_', arguments);
 		var btn, inp = this.getInputNode();
 
-		if (this._inplace)
-			jq(inp).addClass(this.getInplaceCSS());
-
 		if (btn = this.$n('btn')) {
-			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
@@ -501,8 +448,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			btn.close(true);
 
 		if (btn = this.$n('btn')) {
-			this._auxb.cleanup();
-			this._auxb = null;
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
@@ -510,16 +455,16 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
+		if (!this._buttonVisible) return;
 		if (!this._disabled)
-			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
+			this.setOpen(!jq(this.$n('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		evt.stop();
 	},
 	_doTimeZoneChange: function (evt) {
 		var select = this.$n('dtzones'),
 			timezone = select.value;
 		this.updateChange_();
-		this.fire("onTimeZoneChange", {timezone: timezone}, {toServer:true}, 150);
+		this.fire('onTimeZoneChange', {timezone: timezone}, {toServer:true}, 150);
 		if (this._pop) this._pop.close();
 	},
 	onChange: function (evt) {
@@ -530,19 +475,19 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		// B50-ZK-631: Datebox format error message not shown with implements CustomConstraint
 		// pass input value to server for showCustomError
 		if (!data.value && inpValue
-				&& this.getFormat() && this._cst == "[c")
+				&& this.getFormat() && this._cst == '[c')
 			data.value = inpValue;
 	},
 	/** Returns the label of the time zone
 	 * @return String
 	 */
 	getTimeZoneLabel: function () {
-		return "";
+		return '';
 	},
 
 	redrawpp_: function (out) {
-		out.push('<div id="', this.uuid, '-pp" class="', this.getZclass(),
-			'-pp" style="display:none" tabindex="-1">');
+		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
+			'" style="display:none" tabindex="-1">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 
@@ -552,12 +497,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_redrawTimezone: function (out) {
 		var timezones = this._dtzones;
 		if (timezones) {
-			var cls = this.getZclass();
-			out.push('<div class="', cls, '-timezone">');
-			out.push(this.getTimeZoneLabel());
-			out.push('<select id="', this.uuid, '-dtzones" class="', cls, '-timezone-body">');
+			out.push('<div class="', this.$s('timezone'), '">',
+					this.getTimeZoneLabel(),
+					'<select id="', this.uuid, '-dtzones">');
 			for (var i = 0, len = timezones.length; i < len; i++)
-				out.push('<option value="', timezones[i], '" class="', cls, '-timezone-item">', timezones[i], '</option>');
+				out.push('<option value="', timezones[i], '">', timezones[i], '</option>');
 			out.push('</select></div>');
 			// B50-ZK-577: Rendering Issue using Datebox with displayedTimeZones
 		}
@@ -585,7 +529,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	*/
 	close: function (silent) {
 		var db = this.parent,
-			pp = db.$n("pp");
+			pp = db.$n('pp');
 
 		if (!pp || !zk(pp).isVisible()) return;
 		if (this._shadow) {
@@ -593,16 +537,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
-		var zcls = db.getZclass();
-		pp.style.display = "none";
-		pp.className = zcls + "-pp";
+		pp.style.display = 'none';
+		pp.className = db.$s('popup');
 
 		jq(pp).zk.undoVParent();
 		db.setFloating_(false);
-
-		var btn = this.$n("btn");
-		if (btn)
-			jq(btn).removeClass(zcls + "-btn-over");
 
 		if (silent)
 			db.updateChange_();
@@ -610,41 +549,33 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
-		return zk(this.parent.$n("pp")).isVisible();
+		return zk(this.parent.$n('pp')).isVisible();
 	},
 	open: function(silent) {
 		var db = this.parent,
-			dbn = db.$n(), pp = db.$n("pp");
+			dbn = db.$n(), pp = db.$n('pp');
 		if (!dbn || !pp)
 			return;
 
 		db.setFloating_(true, {node:pp});
 		zWatch.fire('onFloatUp', db); //notify all
 		var topZIndex = this.setTopmost();
-		this._setView("day");
+		this._setView('day');
 		var zcls = db.getZclass();
 
-		pp.className = dbn.className + " " + pp.className;
+		pp.className = dbn.className + ' ' + pp.className;
 		jq(pp).removeClass(zcls);
 
-		pp.style.width = pp.style.height = "auto";
-		pp.style.position = "absolute"; //just in case
-		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zksandbox/#f9)
-		pp.style.display = "block";
+		pp.style.width = 'auto'; //reset
+		pp.style.display = 'block';
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1;
 
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
 
-		if (pp.offsetHeight > 200) {
-			//pp.style.height = "200px"; commented by the bug #2796461
-			pp.style.width = "auto"; //recalc
-		} else if (pp.offsetHeight < 10) {
-			pp.style.height = "10px"; //minimal
-		}
 		if (pp.offsetWidth < dbn.offsetWidth) {
-			pp.style.width = dbn.offsetWidth + "px";
+			pp.style.width = dbn.offsetWidth + 'px';
 		} else {
 			var wd = jq.innerWidth() - 20;
 			if (wd < dbn.offsetWidth)
@@ -653,7 +584,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 				pp.style.width = wd;
 		}
 		var inp = db.getInputNode();
-		zk(pp).position(inp, "after_start");
+		zk(pp).position(inp, 'after_start');
 		delete db._shortcut;
 		
 		setTimeout(function() {
@@ -749,7 +680,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		var db = this.parent;
 		var select = db.$n('dtzones');
 		if (select) {
-			select.disabled = db.isTimeZonesReadonly() ? "disable" : "";
+			select.disabled = db.isTimeZonesReadonly() ? 'disable' : '';
 			db.domListen_(select, 'onChange', '_doTimeZoneChange');
 			db._setTimeZonesIndex();
 		}
@@ -760,10 +691,15 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (select)
 			db.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 	},
-	_setView: function (val) {
+	_setView: function (val, force) {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
+
+		// fix shadow ghost for ie9
+		if (zk.ie9_ && force) {
+			zk(this.parent.$n('pp')).redoCSS(500); // wait for animation
+		}
 	}
 });
 zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {

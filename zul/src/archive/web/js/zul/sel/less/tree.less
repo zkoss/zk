@@ -1,0 +1,270 @@
+@import "~./zul/less/_header.less";
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
+
+//tree
+.z-tree {
+	border: 1px solid @baseBorderColor;
+	overflow: hidden;
+	zoom: 1;
+	//tree header div
+	&-header {
+		.resetTable();
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
+	}
+	&-header-border {
+		position: relative;
+		margin-top: -1px;
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
+	//tree body div
+	&-body {
+		overflow: hidden;
+		position: relative;
+		.resetTable();
+	}
+	&-emptybody td {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @disabledColor;
+		font-style: italic;
+		text-align: center;
+	}
+	//tree footer div
+	&-footer {
+		overflow: hidden;
+		background: @tableFootBackgroundColor;
+		border-top: 1px solid @baseBorderColor;
+		.resetTable();
+	}
+}
+//tree open icon and indent space
+.z-tree {
+	&-icon,
+	&-line {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		display: inline-block;
+		vertical-align: middle;
+	}
+	&-icon {
+		cursor: pointer;
+		font-size: @baseFontSize;
+		position: relative;
+	}
+	&-open,
+	&-close {
+		display: inline-block;
+		position: absolute;
+		top: 1px;
+		left: 8px;
+		color: @iconColor;
+		&:hover {
+			color: @iconHoverColor;
+		}
+	}
+	&-open {
+		left: 5px;
+	}
+}
+//treecols
+.z-treecols {
+	th:first-child {
+		border-left: none;
+	}
+	&-bar {
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
+}
+.z-treecol {
+	background-clip: padding-box;
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0;
+	border-left: 1px solid @tableTitleBorderColor;
+	border-bottom: 1px solid @tableTitleBorderColor;
+	position: relative;
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
+	&-sort {
+		cursor: pointer;
+		&:hover {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@tableTitleHoverStart, @tableTitleHoverEnd);
+			</c:if>
+		}
+	}
+	&-sizing,
+	&-sizing .z-treecol-content {
+		cursor: e-resize;
+	}
+}
+//tree row and cell
+.z-treerow {
+	//tree cell
+	.z-treecell {
+		overflow: hidden;
+		cursor: pointer;
+	}
+	&:hover {
+		> .z-treecell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@tableContentHoverStart, @tableContentHoverEnd);
+			</c:if>
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-treecell-content {
+			color: @hoverColor;
+		}
+	}
+	//check mark
+	&-checkable {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		border: 1px solid @checkedBorderColor;
+		display: inline-block;
+		vertical-align: middle;
+		background: @checkedBackgroundColor;
+		&.z-treerow-radio {
+			.borderRadius(8px);
+		}
+		.z-treerow-icon {
+			display: none;
+			cursor: default;
+		}
+	}
+	//selected tree cell
+	&.z-treerow-selected {
+		.z-treecell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@selectedGradientStart, @selectedGradientEnd);
+			</c:if>
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-treecell-content {
+			color: @selectedColor;
+		}
+		&:hover {
+			> .z-treecell {
+				<c:if test="${zk.ie != 8}">
+					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+				</c:if>
+			}
+			.z-listcell-content {
+				color: @selectedHoverColor;
+			}
+		}
+	}
+	//selected check mark
+	&-selected {
+		.z-treerow-icon {
+			display: block;
+			line-height: @baseLineHeight;
+			padding-left: 1px;
+			color: @checkedColor;
+			&.z-icon-ok {} //for checkbox, use font-awesome
+			&.z-icon-radio { //for radio
+				width: 8px;
+				height: 8px;
+				.borderRadius(4px);
+				background: @checkedColor;
+				padding: 0;
+				margin: 3px;
+			}
+		}
+	}
+	//disabled
+	&.z-treerow-disabled {
+		* {
+			color: @disabledColor !important;
+			cursor: default !important;
+		}
+		&:hover > .z-treecell {
+			.resetGradient();
+			position: relative;
+		}
+	}
+}
+//content
+.z-treecol-content,
+.z-treecell-content,
+.z-treefooter-content {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: @textColorGrayLight;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
+}
+.z-treecol-content {
+	font-weight: bold;
+	padding: 4px 5px 3px;
+	position: relative;
+}
+.z-treecell-content {
+	padding: 4px 2px;
+	line-height: @baseLineHeight;
+}
+.z-treecell-text {
+	vertical-align: middle;
+}
+//paging
+.z-tree-paging {
+	&-top {
+		border-bottom: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+// IE8
+.ie8 {
+	.z-tree-header {
+		background: @baseGradientEnd;
+	}
+	.z-treecol {
+		position: static;
+		background: @baseGradientEnd;
+		&-hover, &-sort:hover {
+			background: @tableTitleHoverEnd;
+		}
+	}
+	.z-treerow {
+		&:hover > .z-treecell {
+			background: @tableContentHoverEnd;
+		}
+		&.z-treerow-selected {
+			.z-treecell {
+				position: static;
+				background: @selectedGradientEnd;
+			}
+			&:hover > .z-treecell {
+				position: static;
+				background: @selectedHoverGradientEnd;
+			}
+		}
+	}
+}

@@ -11,6 +11,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
 zul.fud.Submit = zk.$extends(zul.wgt.Button, {
+	getZclass: function () { // keep the button's zclass
+		return this._zclass == null ? 'z-button' : this._zclass;
+	},
 	submit: function () {
 		var f = this.$f('fileupload'),
 			self = this;

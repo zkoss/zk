@@ -25,7 +25,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
     <button label="Click Me" onClick="mywin.setVisible(true)"/>
 After you click the "Click Me" button, the "Ciao 3" label is properly embedded in its border.
 	<window id="mywin" height="90%" border="normal" visible="false">
-		<tabbox height="100%">
+		<tabbox vflex="1">
 			<tabs>
 				<!-- <tab label="Tab 1"/>
 				<tab label="Tab 2"/> -->
@@ -42,9 +42,9 @@ After you click the "Click Me" button, the "Ciao 3" label is properly embedded i
 						<label value="Ciao 2"/>
 					</hbox>
 				</tabpanel> -->
-				<tabpanel height="100%">
-					<hbox pack="stretch" width="100%" height="100%" style="border: red solid 1px">
-						<window border="normal" hflex="1" height="100%" style="border: blue solid 1px">
+				<tabpanel vflex="1">
+					<hbox pack="stretch" width="100%" vflex="1" style="border: red solid 1px">
+						<window border="normal" hflex="1" vflex="1" style="border: blue solid 1px">
 							<label value="Ciao 3"/>
 						</window>
 					</hbox>

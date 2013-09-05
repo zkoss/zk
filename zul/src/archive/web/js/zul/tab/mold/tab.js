@@ -15,13 +15,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 function (out) {
-	var zcls = this.getZclass(),
-		tbx = this.getTabbox(),
-		uuid = this.uuid;
-	if (tbx.inAccordionMold()) {//Accordion
-		var panel = this.getLinkedPanel(),
-			n = panel? panel.$n() : null,
-			c = n? n.firstChild : null;
+	var tbx = this.getTabbox(),
+		uuid = this.uuid,
+		icon = this.$s('icon'),
+		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-remove ' + icon + '"></i>',
+		isAccordion = tbx.inAccordionMold(),
+		tag = isAccordion ? 'div' : 'li', 
+		panel = isAccordion ? this.getLinkedPanel() : null,
+		n = panel? panel.$n() : null;
+	 
+	if (isAccordion) {//Accordion		
+		var c = n? n.firstChild : null;
 		// Bug ZK-419
 		// no linked panel
 		// Bug ZK-674
@@ -34,57 +38,24 @@ function (out) {
 			return;
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
-
-		if (tbx.getMold() == 'accordion-lite') {
-			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
-				'<div align="left" class="', zcls, '-header">');
-			if (this.isClosable())
-				out.push('<a id="', this.uuid, '-close" class="', zcls, '-close"><div class="', zcls, '-close-icon"></div></a>');
-
-			out.push('<div href="javascript:;" id="', this.uuid, '-tl" class="', zcls, '-tl">',
-					'<div class="', zcls, '-tr">',
-					'<span class="', zcls, '-tm">');
-			this.contentRenderer_(out);
-			out.push('</span></div></div></div></div>');
-		} else {
-			var isFrameRequired = zul.tab.TabRenderer.isFrameRequired();
-			if (tbx.getPanelSpacing() && this.getIndex())
-				out.push('<div class="', zcls, '-spacing" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
-
-			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
-					'<div align="left" class="', zcls, '-header" >');
-			if (isFrameRequired)
-				out.push('<div class="', zcls, '-tl" ><div class="', zcls, '-tr" ></div></div>',
-						'<div class="', zcls, '-hl" >',
-						'<div class="', zcls, '-hr" >');
-			out.push('<div class="' + zcls + '-hm" >');
-
-			if (this.isClosable())
-				out.push('<a id="', this.uuid, '-close"  class="', zcls, '-close"><div class="', zcls, '-close-icon"></div></a>');
-
-			this.contentRenderer_(out);
-			
-			out.push('</div></div></div>');
-			
-			if (isFrameRequired)
-				out.push('</div></div>');
-		}
-		if (n) // panel already rendered, do insert
-			jq(n).prepend(out.join(''));
-	} else {
-		out.push('<li ', this.domAttrs_(), '>');
-		if (this.isClosable())
-			out.push('<a id="', uuid, '-close" class="', zcls, '-close"', 'onClick="return false;" ><div class="', zcls, '-close-icon"></div></a>');
-		else if (tbx.isVertical())
-			out.push('<a class="', zcls, '-noclose" ></a>');
-
-		out.push('<div id="', uuid, '-hl" class="', zcls, '-hl"><div id="', uuid, '-hr" class="', zcls, '-hr">');
-		if (this.isClosable())
-			out.push('<div id="', uuid, '-hm" class="', zcls, '-hm ', zcls, '-hm-close">');
-		else
-			out.push('<div id="', uuid, '-hm" class="', zcls, '-hm ">');
-		this.contentRenderer_(out);
-		
-		out.push('</div></div></div></li>');
 	}
+
+	out.push('<', tag, ' ', this.domAttrs_(), '>');
+	var c = this.firstChild,
+		hasCaption = c ? c.$instanceof(zul.wgt.Caption) : false;
+	if (!hasCaption) 
+		out.push('<a id="', uuid, '-cave" class="', this.$s('content'), '" >');
+
+	if (this.isClosable())
+		out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">', removeIcon, '</div>');
+
+	this.contentRenderer_(out);
+		
+	if (!hasCaption)
+		out.push('</a>');
+	out.push('</', tag, '>');
+
+	if (isAccordion && n) // panel already rendered, do insert
+		jq(n).prepend(out.join(''));
+	
 }

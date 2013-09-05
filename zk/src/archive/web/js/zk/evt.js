@@ -315,7 +315,7 @@ zWatch = (function () {
 	function _fn(inf, o, name) {
 		var fn = jq.isArray(inf) ? inf[1]: o[name];
 		if (!fn)
-			throw (o.className || o) + ':' + name + " not found";
+			throw (o.className || o) + ':' + name + ' not found';
 		return fn;
 	}
 	function _sync() {
@@ -335,10 +335,13 @@ zWatch = (function () {
 		return _bindLevel(a[0]) - _bindLevel(b[0]);
 	}
 	zk._zsyncFns = function (name, org) {
-		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
+		if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
 			jq.zsync(org);
 			if (name == 'onSize')
                 setTimeout('zk.doAfterResize()', 20); // invoked after mounted
+		}
+		if (name == 'onResponse')
+			jq.doSyncScroll();
 	};
 	//invoke fns in the reverse order
 	function _reversefns(fns, args) {

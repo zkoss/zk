@@ -50,13 +50,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _saveProp(self, set) {
 		var ele = self.jq;
 		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.data("zk.cache."+set[i], ele[0].style[set[i]]);
+			if(set[i] !== null) ele.data('zk.cache.'+set[i], ele[0].style[set[i]]);
 		return self;
 	}
 	function _restoreProp(self, set) {
 		var ele = self.jq;
 		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.css(set[i], ele.data("zk.cache."+set[i]));
+			if(set[i] !== null) ele.css(set[i], ele.data('zk.cache.'+set[i]));
 		return self;
 	}
 	function _checkAnimated(self, wgt, opts, anima) {
@@ -77,7 +77,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zk.copy(zk, {
 	/** Returns whether there is some animation taking place.
-	 * If you'd like to have a function to be called only when no anitmation
+	 * If you'd like to have a function to be called only when no animation
 	 * is taking place (such as waiting for sliding down to be completed),
 	 * you could use {@link #afterMount}.
 	 * @return boolean
@@ -93,7 +93,7 @@ zk.copy(zk, {
 	 * the function is executed with <code>setTimeout(fn, 0)</code>.
 	 * @param Function fn the function to execute
 	 * @param int delay how many milliseconds to wait before execute if
-	 * there is no animation is taking place. If omiited, 0 is assumed.
+	 * there is no animation is taking place. If omitted, 0 is assumed.
 	 * If negative, the function is executed immediately.
 	 * @return boolean true if this method has been called before return (delay must
 	 * be negative, and no animation); otherwise, undefined is returned.

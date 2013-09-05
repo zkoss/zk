@@ -26,30 +26,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
-
-		// Sometimes, the clientWidth/Height in IE6 is wrong.
-		var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
-			sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
-		if (!floated) {
-			sw -= $op.zk.paddingWidth();
-			sw = zkn.revisedWidth(sw);
-			sh -= $op.zk.paddingHeight();
-			sh = zkn.revisedHeight(sh);
-		}
-
-		s.width = jq.px0(sw);
-		s.height = jq.px0(sh);
+			
+		s.width = jq.px0($op[0].clientWidth - $op.zk.paddingWidth());
+		s.height = jq.px0($op[0].clientHeight - $op.zk.paddingHeight());
 	}
 
 	//drag move
 	function _startmove(dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf("%") >= 0)
-			 el.style.top = el.offsetTop + "px";
-		if(el.style.left && el.style.left.indexOf("%") >= 0)
-			 el.style.left = el.offsetLeft + "px";
-		
+		if(el.style.top && el.style.top.indexOf('%') >= 0)
+			 el.style.top = el.offsetTop + 'px';
+		if(el.style.left && el.style.left.indexOf('%') >= 0)
+			 el.style.left = el.offsetLeft + 'px';
+
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 		//ZK-1662: refix ZK-1309
 		//dg.control._isDragging = true;
@@ -57,26 +47,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _ghostmove(dg, ofs, evt) {
 		var wnd = dg.control,
-			el = dg.node;
-		_hideShadow(wnd);
-		var $el = jq(el),
+			el = dg.node,
+			$el = jq(el),
 			$top = $el.find('>div:first'),
 			top = $top[0],
-			header = $top.nextAll('div:first')[0],
-			fakeT = jq(top).clone()[0],
-			fakeH = jq(header).clone()[0];
+			$fakeT = jq(top).clone(),
+			fakeT = $fakeT[0],
+			zcls = wnd.getZclass();
+		_hideShadow(wnd);
+		
 		jq(document.body).prepend(
-			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
-			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
+			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;' + 
+			'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;' + 
+			'width:' + ($el.width() + zk(el).padBorderWidth()) + 'px;' + 
+			'height:'+ ($el.height() + zk(el).padBorderHeight()) +'px;' + 
+			'z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
-		el.style.visibility = "hidden";
-		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
-		el = jq("#zk_wndghost")[0];
-		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
-		el.insertBefore(fakeT, el.firstChild);
-		el.insertBefore(fakeH, el.lastChild);
+		el.style.visibility = 'hidden';
+		var h = el.offsetHeight - wnd._titleHeight(el);
+		el = jq('#zk_wndghost')[0];
+		
+		var f = el.firstChild;
+		f.style.height = jq.px0(zk(f).revisedHeight(h));
+		
+		el.insertBefore(fakeT, el.lastChild);
 		return el;
 	}
 	function _endghostmove(dg, origin) {
@@ -84,14 +78,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
 		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
 
-		document.body.style.cursor = "";
+		document.body.style.cursor = '';
 		zWatch.fire('onMove'); //Bug ZK-1372: hide applet when overlapped
 	}
 	function _ignoremove(dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control,
 			tar = evt.domTarget, wtar;
-			
+
 		if (!tar.id)
 			tar = tar.parentNode;
 		switch (tar) {
@@ -109,19 +103,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return true;
 	}
 	function _aftermove(dg, evt) {
-		dg.node.style.visibility = "";
+		dg.node.style.visibility = '';
 		var wgt = dg.control;
 
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 		//ZK-1662: refix ZK-1309
 		//delete wgt._isDragging;
-		
+
 		// Bug for ZK-385 clear position value after move
-        if (wgt._position && wgt._position != "parent") {
+        if (wgt._position && wgt._position != 'parent') {
 			wgt._position = null;
 		}
 		wgt.zsync();
 		wgt._fireOnMove(evt.data);
+		zk(wgt).redoCSS(-1, {'fixFontIcon': true});
 	}
 
 	function _doOverlapped(wgt) {
@@ -136,12 +131,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 			if (!n.style.top) {
 				n.style.top = jq.px(xy[1]);
-			}			
-		} else if (pos == "parent")
+			}
+		} else if (pos == 'parent')
 			_posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		wgt.zsync();
 		_updDomPos(wgt);
@@ -152,10 +147,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var pos = wgt._position,
 			n = wgt.$n(),
 			$n = zk(n);
-		if (pos == "parent") _posByParent(wgt);
+		if (pos == 'parent') _posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown('onVParent', this);
 
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
@@ -163,11 +158,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//Note: modal must be visible
 		var realVisible = wgt.isRealVisible();
 		wgt.setTopmost();
-		
+
 		if (!wgt._mask) {
 			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement(): null;
 			wgt._mask = new zk.eff.FullMask({
-				id: wgt.uuid + "-mask",
+				id: wgt.uuid + '-mask',
 				anchor: anchor ? anchor: wgt.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: wgt._zIndex,
@@ -187,13 +182,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_modals.unshift(wgt);
 
 		//We have to use setTimeout:
-		//1) au's focus uses wgt.focus(0), i.e., 
+		//1) au's focus uses wgt.focus(0), i.e.,
 		//   focus might have been changed to its decendant (Z30-focus.zul)
 		//2) setVisible might use animation
 		setTimeout(function () {
 			zk.afterAnimate(function () {
-				if (!zUtl.isAncestor(wgt, zk.currentFocus))
-					wgt.focus();
+				if (!zUtl.isAncestor(wgt, zk.currentFocus)) {
+					if (zk.ie9_)
+						wgt.focus(100);
+					else
+						wgt.focus();
+				}
 			}, -1)});
 	}
 	function _unmarkModal(wgt) {
@@ -245,7 +244,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 
 		var n = wgt.$n(), pos = wgt._position;
-		if (pos == "parent") {
+		if (pos == 'parent') {
 			if (posParent)
 				_posByParent(wgt);
 			return;
@@ -254,20 +253,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 
 		var st = n.style;
-		st.position = "absolute"; //just in case
+		st.position = 'absolute'; //just in case
 		var ol = st.left, ot = st.top;
-		if (pos != "nocenter")
+		if (pos != 'nocenter')
 			zk(n).center(pos);
 		var sdw = wgt._shadowWgt;
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop;
-			if (pos.indexOf("left") >= 0 && opts.left < 0)
+			if (pos.indexOf('left') >= 0 && opts.left < 0)
 				st.left = jq.px(l - opts.left);
-			else if (pos.indexOf("right") >= 0 && opts.right > 0)
+			else if (pos.indexOf('right') >= 0 && opts.right > 0)
 				st.left = jq.px(l - opts.right);
-			if (pos.indexOf("top") >= 0 && opts.top < 0)
+			if (pos.indexOf('top') >= 0 && opts.top < 0)
 				st.top = jq.px(t - opts.top);
-			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+			else if (pos.indexOf('bottom') >= 0 && opts.bottom > 0)
 				st.top = jq.px(t - opts.bottom);
 		}
 
@@ -277,7 +276,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var y1 = top - y;
 				if (y1 > 100) n.style.top = jq.px0(top - (y1 - 100));
 			} else if (top > 100)
-				n.style.top = "100px";
+				n.style.top = '100px';
 		}
 
 		wgt.zsync();
@@ -328,7 +327,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isModal(mode) {
 		return mode == 'modal' || mode == 'highlighted';
 	}
-	
+
 	//Bug ZK-1689: get relative position to parent.
 	function _getPosByParent(wgt, left, top) {
 		var pos = wgt._position,
@@ -356,14 +355,14 @@ var Window =
  * You could retrieve any of them in this space by calling {@link #$f}.
  *
  * <p>If a window X is a descendant of another window Y, X's descendants
- * are not visible in Y's space. To retrieve a descendant, say Z, of X, 
+ * are not visible in Y's space. To retrieve a descendant, say Z, of X,
  * you have to invoke Y.$f('X').$f('Z').
  *
  * <p>Events:<br/>
  * onMove, onOpen, onMaximize, onMinimize, and onClose.<br/>
  * Note: to have better performance, onOpen is sent only if a
  * non-deferrable event listener is registered.
- * 
+ *
  * <p><code>onClose</code> is sent when the close button is pressed
  * (if {@link #isClosable} is true). The window has to detach or hide
  * the window.
@@ -373,7 +372,7 @@ var Window =
  * (such as press ESC). This event is only a notification.
  * In other words, the popup is hidden before the event is sent to the server.
  * The application cannot prevent the window from being hidden.
- * 
+ *
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.
  */
 zul.wnd.Window = zk.$extends(zul.Widget, {
@@ -406,11 +405,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		mode: _zkf = function () {
 			_updDomOuter(this);
 		},
-		/** 
+		/**
 		 * Sets the title.
 		 * @param String title
 		 */
-		/** 
+		/**
 		 * Returns the title.
 		 * Besides this attribute, you could use {@link zul.wgt.Caption} to define
 		 * a more sophisticated caption (aka., title).
@@ -425,11 +424,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else
 				_updDomOuter(this);
 		},
-		/** 
+		/**
 		 * Sets the border (either none or normal).
 		 * @param String border the border. If null or "0", "none" is assumed.
 		 */
-		/** 
+		/**
 		 * Returns the border.
 		 * The border actually controls what the content style class is
 		 * is used. In fact, the name of the border (except "normal")
@@ -479,13 +478,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	     * change to a restore button with the appropriate behavior already built-in
 	     * that will restore the window to its previous size.
 	     * <p>Default: false.
-	     * 
+	     *
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 		 * @param boolean maximizable
 		 */
 		/**
 		 * Returns whether to display the maximizing button and allow the user to maximize
-	     * the window. 
+	     * the window.
 	     * <p>Default: false.
 	     * @return boolean
 		 */
@@ -496,26 +495,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	     * of minimizing a window is implementation-specific, so the MinimizeEvent
 	     * event must be handled and a custom minimize behavior implemented for this
 	     * option to be useful.
-	     * 
-	     * <p>Default: false. 
+	     *
+	     * <p>Default: false.
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 		 * @param boolean minimizable
 		 */
 		/**
 		 * Returns whether to display the minimizing button and allow the user to minimize
-	     * the window. 
+	     * the window.
 	     * <p>Default: false.
 	     * @return boolean
 		 */
 		minimizable: _zkf,
 		/**
-    	 * Sets whether the window is maximized, and then the size of the window will depend 
+    	 * Sets whether the window is maximized, and then the size of the window will depend
     	 * on it to show a appropriate size. In other words, if true, the size of the
     	 * window will count on the size of its offset parent node whose position is
     	 * absolute (by not {@link #doEmbedded()}) or its parent node. Otherwise, its size
     	 * will be original size. Note that the maximized effect will run at client's
     	 * sizing phase not initial phase.
-		 * 
+		 *
 		 * <p>Default: false.
 		 * @param boolean maximized
 		 */
@@ -530,9 +529,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
-				var l, t, w, h, s = node.style, cls = this.getZclass();
+				var l, t, w, h, 
+				s = node.style, 
+				up = 'z-icon-fullscreen',
+				down = 'z-icon-resize-small';				
 				if (maximized) {
-					jq(this.$n('max')).addClass(cls + '-maxd');
+					jq(this.$n('max')).addClass(this.$s('maximized'))
+						.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -542,33 +545,25 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					h = s.height;
 
 					// prevent the scroll bar.
-					s.top = "-10000px";
-					s.left = "-10000px";
-
-					// Sometimes, the clientWidth/Height in IE6 is wrong.
-					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
-						sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
-					if (!floated) {
-						sw -= $op.zk.paddingWidth();
-						sw = $n.revisedWidth(sw);
-						sh -= $op.zk.paddingHeight();
-						sh = $n.revisedHeight(sh);
-					}
-					s.width = jq.px0(sw);
-					s.height = jq.px0(sh);
+					s.top = '-10000px';
+					s.left = '-10000px';
+					
+					s.width = jq.px0($op[0].clientWidth - (!floated ? $op.zk.paddingWidth() : 0));
+					s.height = jq.px0($op[0].clientHeight - (!floated ? $op.zk.paddingHeight() : 0));
 					this._lastSize = {l:l, t:t, w:w, h:h};
 
 					// restore.
-					s.top = "0";
-					s.left = "0";
-					
+					s.top = '0';
+					s.left = '0';
+
 					// resync
 					w = s.width;
 					h = s.height;
 				} else {
 					var max = this.$n('max'),
 						$max = jq(max);
-					$max.removeClass(cls + "-maxd").removeClass(cls + "-maxd-over");
+					$max.removeClass(this.$s('maximized'))
+						.children('.' + down).removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -583,7 +578,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 					var body = this.$n('cave');
 					if (body)
-						body.style.width = body.style.height = "";
+						body.style.width = body.style.height = '';
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
@@ -642,12 +637,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 			}
 		},
-		/** 
+		/**
 		 * Sets the CSS style for the content block of the window.
 		 * <p>Default: null.
 		 * @param String contentStyle
 		 */
-		/** 
+		/**
 		 * Returns the CSS style for the content block of the window.
 		 * @return String
 		 */
@@ -656,7 +651,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * Sets the style class used for the content block.
 		 * @param String contentSclass
 		 */
-		/** 
+		/**
 		 * Returns the style class used for the content block.
 		 * @return String
 		 */
@@ -700,7 +695,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the minimum height in pixels allowed for this window.
 		 * If negative, 100 is assumed.
-		 * <p>Default: 100. 
+		 * <p>Default: 100.
 		 * <p>Note: Only applies when {@link #isSizable()} = true.
 		 * @param int minheight
 		 */
@@ -713,7 +708,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the minimum width in pixels allowed for this window. If negative,
 		 * 200 is assumed.
-		 * <p>Default: 200. 
+		 * <p>Default: 200.
 		 * <p>Note: Only applies when {@link #isSizable()} = true.
 		 * @param int minwidth
 		 */
@@ -827,28 +822,27 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var data = evt.data,
 			node = this.$n(),
 			s = node.style;
-			
+
 		_hideShadow(this);
 		if (data.width != s.width) {
 			s.width = data.width;
-			this._fixWdh();
-		}	
+		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
 		}
-				
+
 		if (data.left != s.left || data.top != s.top) {
 			s.left = data.left;
 			s.top = data.top;
 			this._fireOnMove(evt.keys);
 		}
-		
+
 		this.zsync();
 		var self = this;
 		setTimeout(function() {
 			zUtl.fireSized(self);
-		}, zk.ie6_ ? 800: 0);
+		});
 	},
 	onZIndex: _zkf = function (evt) {
 		this.zsync();
@@ -875,17 +869,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.zsync();
 		}
 	},
-	beforeSize: function() {
-		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized) 
-			this.$n().style.width="";
-	},
 	onSize: function() {
 		_hideShadow(this);
 		if (this._maximized)
 			_syncMaximized(this);
-		this._fixHgh();
-		this._fixWdh();
+		this._fixHgh(true);
 		if (this._mode != 'embedded')
 			_updDomPos(this);
 		this.zsync();
@@ -896,7 +884,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * The reason is prevent zindex of window change(in `setTopmost()`) when dragging,
 		 * it will let full-mask is not visible.
 		 */
-		if (!this._visible || this._mode == 'embedded' || this._mask) 
+		if (!this._visible || this._mode == 'embedded' || this._mask)
 			return; //just in case
 
 		var wgt = ctl.origin;
@@ -920,80 +908,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					return;
 			}
 	},
-	_fixWdh: zk.ie7_ ? function () {
-		if (this._mode != 'embedded' && this._mode != 'popup' && this.isRealVisible()) {
-			var n = this.$n(),
-				cave = this.$n('cave').parentNode,
-				wdh = n.style.width,
-				$n = jq(n),
-				$tl = $n.find('>div:first'),
-				tl = $tl[0],
-				hl = tl && this.$n("cap") ? $tl.nextAll('div:first')[0]: null,
-				bl = $n.find('>div:last')[0];
-
-			if (!wdh || wdh == "auto") {
-				var $cavp = zk(cave.parentNode),
-					diff = $cavp.padBorderWidth() + zk(cave.parentNode.parentNode).padBorderWidth();
-				if (tl) tl.firstChild.style.width = jq.px0(cave.offsetWidth + diff);
-				if (hl) hl.firstChild.firstChild.style.width = jq.px(cave.offsetWidth
-					- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff));
-				if (bl) bl.firstChild.style.width = jq.px0(cave.offsetWidth + diff);
-			} else {
-				if (tl) tl.firstChild.style.width = "";
-				if (hl) hl.firstChild.style.width = "";
-				if (bl) bl.firstChild.style.width = "";
-				
-				// for B50-3317729.zul
-				if (this._hflex == 'min')
-					zk(n).redoCSS();
-			}
-		} else if (zk.ie == 7) {
-			// B50-ZK-589: Window in Hlayout the title bar is gone in IE7
-			// call width() to let browser recalculate
-			var $n = jq(this.$n()),
-				$tl = $n.find('>div:first'),
-				$bl = $n.find('>div:last');
-			if ($tl.width() + $bl.width()) ;
-		}
-	} : zk.$void,
-	_fixHgh: function () {
-		if (this.isRealVisible()) {
+	_fixHgh: function (ignoreVisible/* speed up */) {
+		if (ignoreVisible || this.isRealVisible()) {
 			var n = this.$n(),
 				hgh = n.style.height,
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
-
-			// not effect bug 1944729, check this bug with bug ZK-326 in Panel.js
-			// if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/*bug #1944729*/)
-			//	cave.style.height = "0";
-
-			if (hgh && hgh != "auto") {
-				zk(cave).setOffsetHeight(this._offsetHeight(n));
-			} else if (cvh && cvh != "auto") {
-				if (zk.ie6_) cave.style.height = "0";
-				cave.style.height = "";
+	
+			if (hgh && hgh != 'auto') {
+				cave.style.height = jq.px0(this._offsetHeight(n));
+			} else if (cvh && cvh != 'auto') {
+				cave.style.height = '';
 			}
 		}
 	},
 	_offsetHeight: function (n) {
-		var h = n.offsetHeight - this._titleHeight(n);
-		if(zul.wnd.WindowRenderer.shallCheckBorder(this)) {
-			var cave = this.$n('cave'),
-				bl = jq(n).find('>div:last')[0],
-				cap = this.$n("cap");
-			h -= bl.offsetHeight;
-			if (cave)
-				h -= zk(cave.parentNode).padBorderHeight();
-			if (cap)
-				h -= zk(cap.parentNode).padBorderHeight();
-		}
-		return h - zk(n).padBorderHeight();
+		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();		
 	},
-	_titleHeight: function (n) {
-		var cap = this.$n('cap'),
-			$tl = jq(n).find('>div:first'), tl = $tl[0];
-		return cap ? cap.offsetHeight + tl.offsetHeight:
-			zul.wnd.WindowRenderer.shallCheckBorder(this) ? tl.offsetHeight: 0;
+	_titleHeight: function () {
+		var cap = this.getTitle() || this.caption ? this.$n('cap') : null;
+		return cap ? cap.offsetHeight : 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1055,7 +989,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setZIndex: _zkf = function (zIndex) {
 		var old = this._zIndex;
 		this.$supers('setZIndex', arguments);
-		if (old != zIndex) 
+		if (old != zIndex)
 			this.zsync();
 	},
 	setZindex: _zkf,
@@ -1069,11 +1003,24 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		return cap && cap.focus_(timeout);
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-window-" + this._mode;
+	
+	domClass_: function(no) {
+		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
+			bordercls = this._border;
+		
+		bordercls = 'normal' == bordercls ? '':
+			'none' == bordercls ? 'noborder' : bordercls;
+		
+		if (bordercls)
+			cls += ' ' + this.$s(bordercls);
+		
+		if (!(this.getTitle() || this.caption))
+			cls += ' ' + this.$s('noheader');
+		
+		cls += ' ' + this.$s(this._mode)   
+		return cls;	
 	},
-
+	
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {
@@ -1097,7 +1044,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if ((!no || !no.visible) && this._minimized)
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
-			style = "position:absolute;"+style;
+			style = 'position:absolute;'+style;
 		return style;
 	},
 
@@ -1105,20 +1052,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers(Window, 'bind_', arguments);
 
 		var mode = this._mode;
-		zWatch.listen({onSize: this, onShow: this});
-
-		// Bug 2974370
-		if (zk.ie6_)
-			zWatch.listen({beforeSize: this});
+		zWatch.listen({onSize: this});
 
 		if (mode != 'embedded') {
-			zWatch.listen({onFloatUp: this, onHide: this});
+			zWatch.listen({onFloatUp: this, onHide: this, onShow: this});
 			this.setFloating_(true);
 
 			if (_isModal(mode)) _doModal(this);
 			else _doOverlapped(this);
 		}
-		
+
 		if (this._sizable)
 			_makeSizer(this);
 
@@ -1169,8 +1112,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			onHide: this,
 			onResponse: this
 		});
-		if (zk.ie6_)
-			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
 
 		_unmarkModal(this);
@@ -1183,8 +1124,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this._mode == 'embedded' ? false : this.$n('cap'),
-				zcls = this.getZclass();
+				handle = this._mode == 'embedded' ? false : this.$n('cap');
 			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
@@ -1192,10 +1132,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
 					c == 7 ? 'w-resize': 'nw-resize';
-				if (handle) jq(handle).removeClass(zcls + '-header-move');
+				if (handle) jq(handle).removeClass(this.$s('header-move'));
 			} else {
 				n.style.cursor = this._backupCursor || ''; // bug #2977948
-				if (handle) jq(handle).addClass(zcls + '-header-move');
+				if (handle) jq(handle).addClass(this.$s('header-move'));
 			}
 		}
 	},
@@ -1225,49 +1165,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doClick_', arguments);
 	},
-	doMouseOver_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
-			break;
-		case this.$n('max'):
-			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
-			break;
-		case this.$n('min'):
-			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
-			break;
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var zcls = this.getZclass(),
-			n = evt.domTarget;
-		if (!n.id)
-			n = n.parentNode;
-		var jqn = jq(n);
-		switch (n) {
-		case this.$n('close'):
-			jqn.removeClass(zcls + '-close-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('max'):
-			if (this._maximized)
-				jqn.removeClass(zcls + '-maxd-over');
-			jqn.removeClass(zcls + '-max-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		case this.$n('min'):
-			jqn.removeClass(zcls + '-min-over');
-			jqn.removeClass(zcls + '-icon-over');
-			break;
-		}
-		this.$supers('doMouseOut_', arguments);
-	},
 	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenMinFlex_: function (orient) {
 		this.$supers('afterChildrenMinFlex_', arguments);
@@ -1287,8 +1184,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
-			height += this._titleHeight(n) +
-				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? jq(n).find('>div:last')[0].offsetHeight : 0);
+			height += this._titleHeight(n);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
@@ -1302,7 +1198,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
 	_snapsizing: function (dg, pos) {
-			// snap y only when dragging upper boundary/corners 
+			// snap y only when dragging upper boundary/corners
 		var px = (dg.z_dir >= 6 && dg.z_dir <= 8) ? Math.max(pos[0], 0) : pos[0],
 			// snap x only when dragging left boundary/corners
 			py = (dg.z_dir == 8 || dg.z_dir <= 2) ? Math.max(pos[1], 0) : pos[1];
@@ -1441,12 +1337,12 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
  */
 zul.wnd.WindowRenderer = {
 	/** Returns whether to check the border's height.
-	 * 
+	 *
 	 * @param zul.wnd.Window wgt the window
 	 */
 	shallCheckBorder: function (wgt) {
-		return wgt._mode != 'popup' && 
-			(wgt._mode != 'embedded' || wgt.getBorder() != "none");
+		return wgt._mode != 'popup' &&
+			(wgt._mode != 'embedded' || wgt.getBorder() != 'none');
 	}
 };
 })();

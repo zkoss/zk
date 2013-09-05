@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//Two onclick are fired if clicking on label, so ignore it if so
 	function _shallIgnore(evt) {
 		var v = evt.domEvent;
-		return v && jq.nodeName(v.target, "label");
+		return v && jq.nodeName(v.target, 'label');
 	}
 
 var Checkbox =
@@ -55,9 +55,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		checked: function (v) {
 			var n = this.$n('real');
 			if (n) {
-				// Bug ZK-622
-				n.removeAttribute("checked");
-				n.checked = v;
+				v ? jq(n).attr('checked','checked') : jq(n).removeAttr('checked');
 			}
 		},
 		/** Returns the name of this component.
@@ -93,7 +91,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n('real');
-			if (n) n.tabIndex = v||'';
+			if (n) n.tabIndex = v || '';
 		},
 		/** Returns the value.
 		 * <p>Default: "".
@@ -154,11 +152,12 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 	//super//
 	focus_: function (timeout) {
-		zk(this.$n('real')||this.$n()).focus(timeout);
+		zk(this.$n('real') || this.$n()).focus(timeout);
 		return true;
 	},
 	contentAttrs_: function () {
-		var html = '', v; // cannot use this._name for radio
+		var html = '', 
+			v; // cannot use this._name for radio
 		if (v = this.getName())
 			html += ' name="' + v + '"';
 		if (this._disabled)
@@ -180,20 +179,20 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (n.checked != n.defaultChecked)
 			n.checked = n.defaultChecked;
 
-		this.domListen_(n, "onFocus", "doFocus_")
-			.domListen_(n, "onBlur", "doBlur_");
+		this.domListen_(n, 'onFocus', 'doFocus_')
+			.domListen_(n, 'onBlur', 'doBlur_');
 	},
 	unbind_: function () {
 		var n = this.$n('real');
 		
-		this.domUnlisten_(n, "onFocus", "doFocus_")
-			.domUnlisten_(n, "onBlur", "doBlur_");
+		this.domUnlisten_(n, 'onFocus', 'doFocus_')
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(Checkbox, 'unbind_', arguments);
 	},
 	doSelect_: function (evt) {
 		if (!_shallIgnore(evt))
-			this.$supers("doSelect_", arguments);
+			this.$supers('doSelect_', arguments);
 	},
 	doClick_: function (evt) {
 		if (!_shallIgnore(evt)) {
@@ -202,10 +201,12 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			zul.wgt.ADBS.autodisable(this);
 			var real = this.$n('real'),
 				checked = real.checked;
-			if (checked != this._checked) //changed
-				this.setChecked(checked) //so Radio has a chance to override it
-					.fireOnCheck_(checked);
-			if (zk.safari && !zk.mobile) zk(real).focus();
+			if (checked != this._checked) { //changed
+				this.setChecked(checked); //so Radio has a chance to override it
+				this.fireOnCheck_(checked);
+			}
+			if (zk.webkit && !zk.mobile) 
+				zk(real).focus();
 
 			// B65-ZK-1837
 			evt.stop({propagation: true});
@@ -217,11 +218,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.fire('onCheck', checked);
 	},
 	beforeSendAU_: function (wgt, evt) {
-		if (evt.name != "onClick") //don't stop event if onClick (otherwise, check won't work)
-			this.$supers("beforeSendAU_", arguments);
+		if (evt.name != 'onClick') //don't stop event if onClick (otherwise, check won't work)
+			this.$supers('beforeSendAU_', arguments);
 	},
 	getTextNode: function () {
-		return jq(this.$n()).find('label:first')[0];
+		return this.$n('cnt');
 	}
 });
 

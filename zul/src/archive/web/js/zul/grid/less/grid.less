@@ -1,0 +1,290 @@
+@import "~./zul/less/_header.less";
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
+
+//grid
+.z-grid {
+	border: 1px solid @baseBorderColor;
+	overflow: hidden;
+	zoom: 1;
+	//grid header
+	&-header {
+		.resetTable();
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
+	}
+	&-header-border {
+		position: relative;
+		margin-top: -1px;
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
+	//grid body
+	&-body {
+		margin-top: auto;
+		overflow: hidden;
+		position: relative;
+		.resetTable();
+	}
+	&-emptybody td {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @disabledColor;
+		font-style: italic;
+		text-align: center;
+	}
+	//grid footer
+	&-footer {
+		overflow: hidden;
+		background: @tableFootBackgroundColor;
+		border-top: 1px solid @baseBorderColor;
+		.resetTable();
+		.z-footer {
+			overflow: hidden;
+		}
+	}
+	&-odd > .z-row-inner,
+	&-odd > .z-cell {
+		background: @tableStripeBackgroundColor;
+	}
+}
+//column
+.z-columns {
+	th:first-child {
+		border-left: none;
+	}
+	&-bar {
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
+}
+.z-column {
+	background-clip: padding-box;
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0;
+	border-left: 1px solid @tableTitleBorderColor;
+	border-bottom: 1px solid @tableTitleBorderColor;
+	position: relative;
+	overflow: hidden;
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
+
+	&-hover {
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@tableTitleHoverStart, @tableTitleHoverEnd);
+		</c:if>
+		.z-column-button {
+			display: block;
+		}
+	}
+	.z-column-content {
+		position: relative;
+	}
+	&-sort {
+		.z-column-content {
+			cursor: pointer;
+		}
+		.z-column-sorticon {
+			position: absolute;
+			top: -3px;
+			left: 50%;
+			color: @iconColor;
+		}
+	}
+	&-button {
+		display: none;
+		position: absolute;
+		z-index: 15;
+		cursor: pointer;
+		top: 0;
+		right: 0;
+		width: @baseButtonWidth - 1;
+		height: @baseBarHeight;
+		line-height: @baseBarHeight;
+		text-decoration: none;
+		text-align: center;
+		border-left: 1px solid darken(@tableTitleHoverStart, 15%);
+		.boxShadow('inset 1px 0 #FFFFFF');
+		color: @iconColor;
+		&:hover {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(darken(@tableTitleHoverStart, 5%), darken(@tableTitleHoverEnd, 10%));
+			</c:if>
+		}
+	}
+	&-sizing,
+	&-sizing .z-column-button,
+	&-sizing.z-column-sort .z-column-button {
+		cursor: e-resize;
+	}
+}
+//row and cell
+.z-row {
+	td:first-child {
+		border-left: none;
+	}
+	.z-row-inner,
+	.z-cell {
+		border-left: 1px solid @tableContentBorderColor;
+		overflow: hidden;
+	}
+	&:hover {
+		> .z-row-inner,
+		> .z-cell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@tableContentHoverStart, @tableContentHoverEnd);
+			</c:if>
+			border-color: @tableContentHoverStart;
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-row-content {
+			color: @hoverColor;
+		}
+	}
+}
+//Group
+.z-group {
+	&-inner {
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@groupGradientStart, @groupGradientEnd);
+		</c:if>
+		position: relative;
+		border-top: 1px solid @tableTitleBorderColor;
+		border-bottom: 1px solid @tableTitleBorderColor;
+		overflow: hidden;
+		.z-group-content,
+		.z-cell {
+			padding: 3px 5px;
+		}
+	}
+	&-icon {
+		display: inline-block;
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		cursor: pointer;
+		font-size: @baseFontSize;
+		position: relative;
+	}
+	&-icon-open,
+	&-icon-close {
+		display: inline-block;
+		position: absolute;
+		left: 8px;
+		color: @iconColor;
+		&:hover {
+			color: @iconHoverColor;
+		}
+	}
+	&-icon-open {
+		left: 5px;
+	}
+}
+.z-groupfoot-inner {
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@groupGradientEnd, @groupGradientStart);
+	</c:if>
+	overflow: hidden;
+}
+//content
+.z-column-content,
+.z-row-content,
+.z-group-content,
+.z-groupfoot-content,
+.z-footer-content {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: @textColorGrayLight;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
+}
+.z-column-content {
+	font-weight: bold;
+	padding: 4px 5px 3px;
+}
+.z-group-content,
+.z-groupfoot-content {
+	.z-label {
+		font-weight: bold;
+	}
+}
+//Cell Content
+.z-grid-body .z-cell {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
+}
+//paging
+.z-grid-paging {
+	&-top {
+		border-bottom: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+//column menu
+.z-columns-menugrouping .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-group.png');
+}
+.z-columns-menuungrouping .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-ungroup.png');
+}
+.z-columns-menuascending .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowup.png');
+}
+.z-columns-menudescending .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowdown.png');
+}
+// IE 8
+.ie8 {
+	.z-grid-header {
+		background: @baseGradientEnd;
+	}
+	.z-column {
+		position: static;
+		background: @baseGradientEnd;
+		&-hover {
+			background: @tableTitleHoverEnd;
+		}
+
+		&-button:hover {
+			background: darken(@hoverGradientEnd, 5%);
+		}
+	}
+	.z-row:hover {
+		> .z-row-inner,
+		> .z-cell {
+			position: static;
+			background: @tableContentHoverEnd;
+		}
+	}
+	.z-group-inner {
+		background: @groupGradientEnd;
+	}
+	.z-groupfoot-inner {
+		background: average(@groupGradientStart, @groupGradientEnd);
+	}
+}

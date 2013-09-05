@@ -97,8 +97,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// maybe have to reposition in onResponse if the child changed with onOpen event,
 		this._openInfo = arguments;
 
-		$n.css({position: "absolute"}).zk.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		$n.css({position: 'absolute'}).zk.makeVParent();
+		zWatch.fireDown('onVParent', this);
 
 		if (posInfo)
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
@@ -120,13 +120,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	afterOpenAnima_: function (ref, offset, position, opts) {
 		var node = this.$n();
 		this.setVisible(true);
-		if ((!opts || !opts.disableMask) && this.isListen("onOpen", {asapOnly:true})) {
+		if ((!opts || !opts.disableMask) && this.isListen('onOpen', {asapOnly:true})) {
 			//Racing? Previous onResponse has not been fired and user triggers open again
 			if (this.mask) this.mask.destroy(); 
 			
 			// use a progress bar to hide the popup
 			this.mask = new zk.eff.Mask({
-				id: this.uuid + "-mask",
+				id: this.uuid + '-mask',
 				anchor: node
 			});
 			
@@ -136,13 +136,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		if (this.shallStackup_()) {
 			if (!this._stackup)
-				this._stackup = jq.newStackup(node, node.id + "-stk");
+				this._stackup = jq.newStackup(node, node.id + '-stk');
 			else {
 				var dst, src;
 				(dst = this._stackup.style).top = (src = node.style).top;
 				dst.left = src.left;
 				dst.zIndex = src.zIndex;
-				dst.display = "block";
+				dst.display = 'block';
 			}
 		}
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
@@ -196,7 +196,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				width: 0, height: 0
 			}
 		}
-		if (dim) return {pos: pos, dim: dim};
+		if (dim) {
+			// we should include margin in this case for customizing theme. (since ZK 7.0.0)
+			var $n = zk(this.$n());
+			dim.top += $n.sumStyles('t', jq.margins);
+			dim.left += $n.sumStyles('l', jq.margins);
+			return {pos: pos, dim: dim};
+		}
 	},
 	onResponse: function () {
 		if (this.mask) this.mask.destroy();
@@ -218,7 +224,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 */
 	close: function (opts) {
 		if (this._stackup)
-			this._stackup.style.display = "none";
+			this._stackup.style.display = 'none';
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
 	/** The effect for closing the popup. Override this function to provide
@@ -233,8 +239,15 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 */
 	afterCloseAnima_: function (opts) {
 		this.setVisible(false);
-		zk(this.$n()).undoVParent();
-		zWatch.fireDown("onVParent", this);
+		
+		var node = this.$n();
+		
+		if (zk.ie) { // re-create dom element to remove :hover state style
+			this.replaceHTML(node);
+		}
+		
+		zk(node).undoVParent();
+		zWatch.fireDown('onVParent', this);
 
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open:false});
@@ -282,64 +295,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// B50-ZK-391
 			// should keep openInfo, maybe used in onResponse later.
 		}
-		this._fixWdh();
-		this._fixHgh();
 	},
-	_offsetHeight: function () {
-		var node = this.$n(),
-			isFrameRequired = zul.wgt.PopupRenderer.isFrameRequired(),
-			h = node.offsetHeight - (isFrameRequired ? 1: 0), 
-			bd = this.$n('body');
-		
-		if (isFrameRequired) {
-			var tl = jq(node).find('> div:first-child')[0],
-				bl = jq(node).find('> div:last')[0],
-				n = this.getCaveNode().parentNode,
-				bd = this.$n('body');
-		
-			h -= tl.offsetHeight;
-			h -= bl.offsetHeight;
-			h -= zk(n).padBorderHeight();
-			h -= zk(bd).padBorderHeight();
-		} else {
-			h -= zk(bd).padBorderHeight();
-		}
-		
-		return h;
-	},
-	_fixHgh: function () {
-		var hgh = this.$n().style.height,
-			c = this.getCaveNode();
-		if (zk.ie6_ && ((hgh && hgh != "auto" )|| c.style.height)) c.style.height = "0px";
-		if (hgh && hgh != "auto")
-			zk(c).setOffsetHeight(this._offsetHeight());
-		else 
-			c.style.height = "auto";
-	},
-	_fixWdh: zk.ie7_ ? function () {
-		if (!zul.wgt.PopupRenderer.isFrameRequired()) return;
-		var node = this.$n(),
-			wdh = node.style.width,
-			cn = jq(node).children('div'),
-			fir = cn[0],
-			last = cn[cn.length - 1],
-			n = this.$n('cave').parentNode;
-		
-		if (!wdh || wdh == "auto") { //Popup will disappear when width is null in IE 
-			var diff = zk(n.parentNode).padBorderWidth() + zk(n.parentNode.parentNode).padBorderWidth();
-			if (fir) {
-				fir.firstChild.style.width = jq.px0(n.offsetWidth - (zk(fir).padBorderWidth()
-					+ zk(fir.firstChild).padBorderWidth() - diff));
-			}
-			if (last) {
-				last.firstChild.style.width = jq.px0(n.offsetWidth - (zk(last).padBorderWidth()
-					+ zk(last.firstChild).padBorderWidth() - diff));
-			}
-		} else {
-			if (fir) fir.firstChild.style.width = "";
-			if (last) last.firstChild.style.width = "";
-		}
-	}: zk.$void,
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop)
@@ -355,17 +311,3 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	epilogHTML_: function (out) {
 	}
 });
-/** @class zul.wgt.PopupRenderer
- * The renderer used to render a Popup.
- * It is designed to be overriden
- * @since 5.0.5
- */
-zul.wgt.PopupRenderer = {
-	/** Check the Popup whether to render the frame
-	 * 
-	 * @param zul.wgt.Popup wgt the window
-	 */
-	isFrameRequired: function () {
-		return false;
-	}
-};

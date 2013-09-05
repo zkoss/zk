@@ -1,0 +1,44 @@
+<zk>
+	<vbox>
+		<hlayout>
+			<checkbox label="Vertical orient">
+				<attribute name="onCheck">
+					navbar.orient = self.checked ? "vertical" :  "horizontal";
+				</attribute>
+			</checkbox>
+			<checkbox label="Display detail">
+				<attribute name="onCheck">
+					det.detailed = self.checked ? true : false;
+				</attribute>
+			</checkbox>
+			<checkbox label="Set disabled">
+				<attribute name="onCheck">
+					item.disabled = self.checked ? true : false;
+				</attribute>
+			</checkbox>
+		</hlayout>
+		<navbar id="navbar" orient="horizontal" >
+			<navitem label="Anchor" iconSclass="z-icon-anchor"/>
+			<nav label="Directions" iconSclass="z-icon-th-list" detailed="true">
+				<navitem label="Hands up" iconSclass="z-icon-hand-up"/>
+				<nav label="Arrows" iconSclass="z-icon-circle-blank" detailed="true">
+					<navitem label="Arrow up" iconSclass="z-icon-circle-arrow-up"/>
+					<navitem label="Arrow left" iconSclass="z-icon-circle-arrow-left"/>
+					<navitem label="Arrow down" iconSclass="z-icon-circle-arrow-down"/>
+					<navitem label="Arrow right" iconSclass="z-icon-circle-arrow-right"/>
+				</nav>
+				<navitem label="Hands down" iconSclass="z-icon-hand-down"/>
+				<navitem label="Hands right" iconSclass="z-icon-hand-right"/>
+			</nav>
+			<navitem id="item" label="Freeze" iconSclass="z-icon-asterisk"/>
+			<navitem label="Cog" iconSclass="z-icon-cog"/>
+			<nav id="det" label="Mail" iconSclass="z-icon-envelope">
+					<navitem label="Reply" iconSclass="z-icon-reply"/>
+					<navitem label="Reply all" iconSclass="z-icon-reply-all"/>
+					<navitem label="Inbox" iconSclass="z-icon-inbox"/>
+					<navitem label="Edit" iconSclass="z-icon-edit"/>
+			</nav>
+			<navitem label="Off" iconSclass="z-icon-off"/>
+		</navbar>
+	</vbox>
+</zk>

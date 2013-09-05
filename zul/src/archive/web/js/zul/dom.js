@@ -15,26 +15,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	//handle theme
 	jq(function () {
-		var cookies = document.cookie.split(";"),
-			len = cookies.length,
+		var zktheme = zk.themeName,
 			tname = 'breeze'; // shall sync with default theme name
-		for (var i = 0, c, j; i < len; i++) {
-			c = cookies[i];
-			j = c.indexOf("=");
-			if ("zktheme" == jq.trim(c.substr(0, j))) { // shall sync with zkplus Themes.java
-				tname = jq.trim(c.substr(j+1));
-				break;
-			}
-		}
+		if (zktheme)
+			tname = zktheme;
 		jq(document.body).addClass(tname);
 	});
 
 	var $alert = jq.alert,
-		icons = {QUESTION: "z-msgbox z-msgbox-question",
-			EXCLAMATION: "z-msgbox z-msgbox-exclamation",
-			INFORMATION: "z-msgbox z-msgbox-information",
-			ERROR: "z-msgbox z-msgbox-error",
-			NONE: 'z-msgbox z-msgbox-none'
+		icons = {QUESTION: 'z-messagebox-icon z-messagebox-question',
+			EXCLAMATION: 'z-messagebox-icon z-messagebox-exclamation',
+			INFORMATION: 'z-messagebox-icon z-messagebox-information',
+			ERROR: 'z-messagebox-icon z-messagebox-error',
+			NONE: 'z-messagebox z-messagebox-none'
 		};
 
 	function newButton(nm, f) {
@@ -44,7 +37,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				onClick: function (evt) {
 					if (typeof f == 'function')
 						f.call(this, evt);
+					
+					// backup first
+					var dt = this.desktop;
 					this.$o().detach();
+					
+					// B70-ZK-1683 
+					if (zAu.disabledRequest) {
+						zAu.disabledRequest = false;
+						zAu.sendNow(dt);
+					}
 				}
 			}
 		});
@@ -66,43 +68,65 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		opts = opts || {};
 		zk.load("zul.wnd,zul.wgt,zul.box", function () {
-			var wnd = new zul.wnd.Window({
-				closable: true,
-				width: '250pt',
-				title: opts.title||zk.appName,
-				border: 'normal',
-				children: [
-					new zul.box.Box({
-						mold: 'horizontal',
-						children: [
-							new zul.wgt.Div({sclass: icons[(opts.icon||'').toUpperCase()]||opts.icon||icons.INFORMATION}),
-							new zul.wgt.Div({
-								sclass: 'z-messagebox',
-								width: '210pt',
-								children: [
-									new zul.wgt.Label({
-										value: msg,
-										multiline: true
-									})
-								]
-							})
-						]
-					}),
-					new zul.wgt.Separator({bar: true}),
-					new zul.box.Box({
-						mold: 'horizontal',
-						style: 'margin-left:auto; margin-right:auto',
-						children: getButtons(opts.button)
-					})
-				],
-				mode: opts.mode||'modal'
-			});
+			var wnd = zk.Widget.$(jq('$aualert'));
+			if (!wnd) {
+				var wnd = new zul.wnd.Window({
+					id: 'aualert',
+					closable: true,
+					width: '250pt',
+					title: opts.title||zk.appName,
+					border: 'normal',
+					listeners: {onClose: function () {
 
-			var p = opts.desktop || zk.Desktop.$();
-			if (p && (p = p.firstChild) && p.desktop)
-				p.appendChild(wnd);
-			else
-				jq(document.body).append(wnd);
+						// B70-ZK-1683
+						if (zAu.disabledRequest) {
+							zAu.disabledRequest = false;
+							zAu.sendNow(this.desktop);
+						}
+					}},
+					children: [
+						new zul.box.Box({
+							mold: 'horizontal',
+							children: [
+								new zul.wgt.Div({sclass: icons[(opts.icon||'').toUpperCase()]||opts.icon||icons.INFORMATION}),
+								new zul.wgt.Div({
+									id: 'content',
+									sclass: 'z-messagebox',
+									width: '210pt',
+									style: 'overflow:auto',
+									children: [
+										new zul.wgt.Label({
+											id: 'msg',
+											value: msg,
+											multiline: true
+										})
+									]
+								})
+							]
+						}),
+						new zul.wgt.Separator({bar: true}),
+						new zul.box.Box({
+							mold: 'horizontal',
+							style: 'margin-left:auto; margin-right:auto',
+							children: getButtons(opts.button)
+						})
+					],
+					mode: opts.mode||'modal'
+				});
+				var p = opts.desktop || zk.Desktop.$();
+				if (p && (p = p.firstChild) && p.desktop)
+					p.appendChild(wnd);
+				else
+					jq(document.body).append(wnd);
+			} else {
+				var label = wnd.$f('msg'),
+					p = label.parent,
+					pn = p.$n();
+				label.setValue(label.getValue() + '\n' + msg);
+				if (!pn.style.height && pn.offsetHeight >= jq.innerHeight() * 0.6) {
+					pn.style.height = jq.px0(jq.innerHeight() * 0.6);
+				}
+			}
 		});
   	};
 	zAu.wrongValue_ = function(wgt, msg) {
@@ -115,7 +139,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			efs.errMesg = {destroy: zk.$void};
 			zk.load("zul.inp", function () {
 				if (efs.errMesg) //not destroyed yet
-					(efs.errMesg = new zul.inp.Errorbox()).show(wgt, msg);
+					(efs.errMesg = new zul.inp.Errorbox(wgt, msg)).show();
 			});
 		}
 	};

@@ -13,15 +13,17 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-
+	
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
 	function _syncFrozen(wgt) {
-		if ((wgt = wgt.getGrid()) && (wgt = wgt.frozen))
-			wgt._syncFrozen();
+		var grid = wgt.getGrid(),
+			frozen;
+		if (grid && grid._nativebar && (frozen = grid.frozen))
+			frozen._syncFrozen();
 	}
-
+	
 var Rows =
 /**
  * Defines the rows of a grid.
@@ -67,12 +69,14 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Rows, 'bind_', arguments);
+		var grid = this.getGrid();
+		if (grid) // bind ebodyrows for MeshWidget
+			grid.ebodyrows = this.$n();
 		zWatch.listen({onResponse: this});
 		var w = this;
 		after.push(function () {
 			w.stripe();
 			_syncFrozen(w);
-			//bug# 3092890: Rows.invalidate() does not respect frozen state
 		});
 	},
 	unbind_: function () {
@@ -134,7 +138,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
-			
+		
 		var g = this.getGrid();
 		if (g) g._syncEmpty();
 	},

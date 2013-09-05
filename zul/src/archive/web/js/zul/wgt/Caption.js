@@ -31,20 +31,21 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = this.getLabel(),
 			img = this.getImage(),
-			title = this.parent ? this.parent._title: '';
+			title = this.parent ? this.parent._title: '',
+			iconSclass = this.domIcon_();
 		if (title) label = label ? title + ' - ' + label: title;
 		label = zUtl.encodeXML(label);
-		if (!img) return label;
+		if (!img && !iconSclass) return label;
 
-		img = '<img src="' + img + '" align="absmiddle" />';
+		if (!img) img = iconSclass;
+		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" />' + (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
 	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
-		var p = this.parent,
-			cnt = this.domContent_(),
-			dn = this.$n('cnt');
-		if (dn)
-			dn.innerHTML = cnt ? cnt : '&nbsp;';
+		var cnt = this.domContent_(),
+			dn = this.$n('cave');
+		if (dn) 
+			jq(dn).html(cnt ? cnt : '&nbsp;');
 	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
@@ -53,7 +54,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!parent.$instanceof(zul.wgt.Groupbox))
 			return sc;
 			
-		return sc + (parent._closable ? '': ' ' + this.getZclass() + '-readonly');
+		return sc + (parent._closable ? '': ' ' + this.$s('readonly'));
 	},
 	doClick_: function () {
 		if (this.parent.$instanceof(zul.wgt.Groupbox))
@@ -93,8 +94,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	// ZK-786
 	getImageNode: function () {
 		if (!this._eimg && this._image) {
-			var n = this.$n('cnt');
-			if (n) this._eimg = jq(n).find('img:first')[0];
+			var n = this.$n('img');
+			if (n) this._eimg = n;
 		}
 		return this._eimg;
 	}

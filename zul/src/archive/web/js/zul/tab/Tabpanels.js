@@ -42,16 +42,6 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	getTabbox: function() {
 		return this.parent;
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tabpanels';
-
-		var mold = tabbox.getMold();
-		return 'z-tabpanels' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
-	},
 	setWidth: function (val) {
 		var n = this.$n(),
 			tabbox = this.getTabbox(),
@@ -87,12 +77,12 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabpanels
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tabpanels, 'setVflex', v);
+		this.$supers('setVflex', arguments);
 	},
 	//bug #3014664
 	setHflex: function (v) { //hflex ignored for Tabpanels
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tabpanels, 'setHflex', v);
+		this.$supers('setHflex', arguments);
 	},
 	bind_: function () {
 		this.$supers(zul.tab.Tabpanels, 'bind_', arguments);
@@ -103,12 +93,14 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 			if (n.style.width)
 				this.__width = n.style.width;
 		}
+		zWatch.listen({onResponse: this});
 	},
 	unbind_: function () {
 		if (this._zwatched) {
 			zWatch.unlisten({onSize: this, beforeSize: this});
 			this._zwatched = false;
 		}
+		zWatch.unlisten({onResponse: this});
 		this.$supers(zul.tab.Tabpanels, 'unbind_', arguments);
 	},
 	onSize: function () {
@@ -122,33 +114,32 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		var width = parent.offsetWidth,
 			n = this.$n();
 
-		width -= jq(parent).find('>div:first')[0].offsetWidth
-				+ jq(n).prev()[0].offsetWidth;
+		width -= jq(parent).find('>div:first')[0].offsetWidth;
 
-		n.style.width = jq.px0(zk(n).revisedWidth(width));
+		n.style.width = jq.px0(width);
 	},
 	beforeSize: function () {
 		this.$n().style.width = this.__width || '';
 	},
 	onChildRemoved_: function (child) {
 		this.$supers("onChildRemoved_", arguments);
-		this.tabRemoved = true;
+		this._shallSync = true;
 	},
 	onChildAdded_: function (child) {
-		this.$supers("onChildAdded_", arguments);
+		this.$supers('onChildAdded_', arguments);
 		// sync select status if tabbox not in accordion mold or
 		// the child cave is already visible
 		var tabbox = this.getTabbox(), 
 			cave;
 		if (tabbox && (!tabbox.inAccordionMold()
 				|| (cave = child.$n('cave')) && cave.style.display != 'none'))
-			_syncSelectedPanels(this);
+			this._shallSync = true;
 	},
 	onResponse: function () {
 		//bug B65-ZK-1785 synchronize selection only once in the end after all removes have finished
-		if (this.tabRemoved) {
-			_synchSelectedPanels(this);
-			this.tabRemoved = false;
+		if (this._shallSync) {
+			_syncSelectedPanels(this);
+			this._shallSync = false;
 		}
 	}
 });

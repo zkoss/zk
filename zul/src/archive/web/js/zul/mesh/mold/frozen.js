@@ -13,15 +13,12 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var uuid = this.uuid,
-		zcls = this.getZclass();
-		
-	out.push('<div', this.domAttrs_(), '><div id="', uuid, '-cave" class="', zcls,
-			'-body">');
+	var uuid = this.uuid;
 	
+	out.push('<div', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
+			this.$s('body'), '">');
 	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++)
 		w.redraw(out);
-		
-	out.push('</div><div id="', uuid, '-scrollX" class="', zcls, '-inner" tabindex="-1"><div></div></div>',
-			'<div class="z-clear"></div></div>');
+	out.push('</div><div id="', uuid, '-scrollX" class="', this.$s('inner'), 
+			'" tabindex="-1"><div></div></div><div class="z-clear"></div></div>');
 }

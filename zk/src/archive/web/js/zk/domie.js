@@ -16,8 +16,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//detect </script>
 	function containsScript(html) {
 		if (html)
-			for (var j = 0, len = html.length; (j = html.indexOf("</", j)) >= 0 && j + 8 < len;)
-				if (html.substring(j += 2, j + 6).toLowerCase() == "script")
+			for (var j = 0, len = html.length; (j = html.indexOf('</', j)) >= 0 && j + 8 < len;)
+				if (html.substring(j += 2, j + 6).toLowerCase() == 'script')
 					return true;
 	}
 	function noSkipBfUnload() {
@@ -37,14 +37,14 @@ zk.override(jq.fn, _jq, {
 			//but unable to find what scripts are created since they might not be
 			//children of new created elements
 			if (typeof html == 'string' && (el = this[0])
-			&& !jq.nodeName(el, "td", "th", "table", "tr",
-			"caption", "tbody", "thead", "tfoot", "colgroup","col")
+			&& !jq.nodeName(el, 'td', 'th', 'table', 'tr',
+			'caption', 'tbody', 'thead', 'tfoot', 'colgroup', 'col')
 			&& !containsScript(html)) {
 				var o = zjq._beforeOuter(el);
 
-				jq.cleanData(el.getElementsByTagName("*"));
+				jq.cleanData(el.getElementsByTagName('*'));
 				jq.cleanData([el]);
-				el.innerHTML = ""; //seems less memory leak
+				el.innerHTML = ''; //seems less memory leak
 				el.outerHTML = html;
 				done = true;
 				zjq._afterOuter(o);
@@ -56,7 +56,15 @@ zk.override(jq.fn, _jq, {
 	}
 });
 zk.override(zjq, _zjq, {
-	_fixCSS: function (el) {
+	_fixCSS: zk.ie9_ ? function (el) { // fix for filter gradient issue
+		var old = el.className,
+			oldDisplay = el.style.display;
+		el.className = '';
+		el.style.display = 'none';
+		if (el.offsetHeight);
+		el.className = old;
+		el.style.display = oldDisplay;
+	} : function (el) {
 		var zoom = el.style.zoom;
 		el.style.zoom = 1;
 		_zjq._fixCSS(el);
@@ -66,7 +74,7 @@ zk.override(zjq, _zjq, {
 	}
 });
 zk.copy(zjq, {
-	src0: "javascript:'';",
+	src0: 'javascript:\'\';',
 		//IE: prevent secure/nonsecure warning with HTTPS
 
 	//IE sometimes won't show caret when setting a focus to an input element
@@ -87,7 +95,7 @@ zk.copy(zjq, {
 			if (jq.nodeName(el, 'iframe'))
 				zk(el).redoSrc();
 			else
-				for (var ns = el.getElementsByTagName("iframe"), j = ns.length; j--;)
+				for (var ns = el.getElementsByTagName('iframe'), j = ns.length; j--;)
 					zk(ns[j]).redoSrc();
 		} catch (e) {
 		}
@@ -98,8 +106,8 @@ zk.copy(zjq, {
 		//Bug 1896749: <area>
 		if (zk.confirmClose)
 			for (var n = evt.target; n; n = n.parentNode)
-				if (jq.nodeName(n, "a", "area")) {
-					if (n.href.indexOf("javascript:") >= 0) {
+				if (jq.nodeName(n, 'a', 'area')) {
+					if (n.href.indexOf('javascript:') >= 0) {
 						zk.skipBfUnload = true;
 						setTimeout(noSkipBfUnload, 0); //restore
 					}
@@ -155,70 +163,5 @@ if (zk.ie >= 9)
 	zjq.minWidth = function (el) {
 		return zk(el).offsetWidth() + 1; //IE9/IE10: bug ZK-483: an extra pixel required
 	};
-else if (zk.ie < 8) {
-	zjq.fixOnResize = function (tmout) {
-		//IE6/7: it sometimes fires an "extra" onResize in loading
-		//so we have to filter it out (to improve performance)
-		//The other case is an extra onResize is fired if a position=absolute
-		//element is created (such zk.log) -- but we don't try to fix it
-		//(since it might not be worth; fix it only if really necessary)
-		zk.skipResize = (zk.skipResize||0) + 1;
-		setTimeout(function () {--zk.skipResize;}, tmout);
-	};
-	zjq._useQS = function (reqInf) {
-		var s = reqInf.content, j = s.length, prev, cc;
-		if (j + reqInf.uri.length < 2000) {
-			while (j--) {
-				cc = s.charAt(j);
-				if (cc == '%' && prev >= '8') //%8x, %9x...
-					return false;
-				prev = cc;
-			}
-			return true;
-		}
-		return false;
-	};
-
-	function _visi0($n) {
-		return $n.css('display') != 'none';
-	}
-	function _visi1($n) {
-		return _visi0($n) && $n.css('visibility') != 'hidden';
-	}
-  zk.copy(zjq.prototype, {
-	isRealVisible: function (strict) {
-		var $n = this.jq;
-		if (!$n.length) return false;
-
-		//we cannot use jq().is(':visible') in this case, becuase it is not reliable
-		var fn = strict ? _visi1: _visi0,
-			body = document.body;
-		do {
-			if (!fn($n))
-				return false;
-		} while (($n = $n.parent()) && $n[0] != body); //yes, assign
-		return true;
-	},
-	offsetWidth: function () {
-		var el = this.jq[0];
-		return !jq.nodeName(el, "tr") || this.isRealVisible() ? el.offsetWidth: 0;
-	},
-	offsetHeight: function () {
-		var el = this.jq[0];
-		if (!jq.nodeName(el, "tr"))
-			return el.offsetHeight;
-
-		var hgh = 0;
-		if (this.isRealVisible()) {
-			for (var cells = el.cells, j = cells.length; j--;) {
-				var h = cells[j].offsetHeight;
-				if (h > hgh) 
-					hgh = h;
-			}
-		}
-		return hgh;
-	}
-  });
-}
 
 })();

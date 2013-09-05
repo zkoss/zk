@@ -1,0 +1,385 @@
+@import "~./zul/less/_header.less";
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
+
+//listbox
+.z-listbox {
+	border: 1px solid @baseBorderColor;
+	overflow: hidden;
+	zoom: 1;
+	//listbox header
+	&-header {
+		.resetTable();
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		<c:if test="${zk.ie != 8}">
+			.verGradient();
+		</c:if>
+	}
+	&-header-border {
+		position: relative;
+		margin-top: -1px;
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
+	//listbox body
+	&-body {
+		overflow: hidden;
+		position: relative;
+		.resetTable();
+	}
+	&-emptybody td {
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		color: @disabledColor;
+		font-style: italic;
+		text-align: center;
+	}
+	//listbox footer
+	&-footer {
+		overflow: hidden;
+		background: @tableFootBackgroundColor;
+		border-top: 1px solid @baseBorderColor;
+		.resetTable();
+	}
+
+	&-odd.z-listitem {
+		background: @tableStripeBackgroundColor;
+	}
+}
+//listhead
+.z-listhead {
+	th:first-child {
+		border-left: none;
+	}
+	&-bar {
+		border-bottom: 1px solid @tableTitleBorderColor;
+	}
+}
+.z-listheader {
+	background-clip: padding-box;
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0;
+	border-left: 1px solid @tableTitleBorderColor;
+	border-bottom: 1px solid @tableTitleBorderColor;
+	position: relative;
+	<c:if test="${zk.ie != 8}">
+		.verGradient();
+	</c:if>
+	&-hover {
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@tableTitleHoverStart, @tableTitleHoverEnd);
+		</c:if>
+	}
+	&-sort {
+		.z-listheader-content {
+			cursor: pointer;
+		}
+		.z-listheader-sorticon {
+			position: absolute;
+			top: -3px;
+			left: 50%;
+			color: @iconColor;
+		}
+	}
+	&-hover .z-listheader-button {
+		display: block;
+	}
+	&-checkable {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		border: 1px solid @checkedBorderColor;
+		display: inline-block;
+		vertical-align: text-top;
+		background: @checkedBackgroundColor;
+		.z-listheader-icon {
+			display: none;
+			cursor: default;
+		}
+		&.z-listheader-checked .z-listheader-icon {
+			display: block;
+			line-height: @baseLineHeight;
+			padding-left: 1px;
+			color: @checkedColor;
+		}
+	}
+	&-button {
+		display: none;
+		position: absolute;
+		z-index: 15;
+		cursor: pointer;
+		top: 0;
+		right: 0;
+		width: @baseButtonWidth - 1;
+		height: @baseBarHeight;
+		line-height: @baseBarHeight;
+		text-decoration: none;
+		text-align: center;
+		border-left: 1px solid darken(@tableTitleHoverStart, 15%);
+		.boxShadow('inset 1px 0 #FFFFFF');
+		color: @iconColor;
+		&:hover {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(darken(@tableTitleHoverStart, 5%), darken(@tableTitleHoverEnd, 10%));
+			</c:if>
+		}
+	}
+	&-sizing,
+	&-sizing .z-listheader-button,
+	&-sizing.z-listheader-sort .z-listheader-content {
+		cursor: e-resize;
+	}
+}
+//list item and cell
+.z-listitem {
+	background: @tableBackgroundColor;
+	td:first-child {
+		border-left: none;
+	}
+	//list cell
+	.z-listcell {
+		border-left: 1px solid @tableContentBorderColor;
+		overflow: hidden;
+		cursor: pointer;
+	}
+	&:hover {
+		> .z-listcell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@tableContentHoverStart, @tableContentHoverEnd);
+			</c:if>
+			border-color: @tableContentHoverStart;
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-listcell-content {
+			color: @hoverColor;
+		}
+	}
+	//check mark
+	&-checkable {
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		border: 1px solid @checkedBorderColor;
+		display: inline-block;
+		vertical-align: text-top;
+		background: @checkedBackgroundColor;
+		&.z-listitem-radio {
+			.borderRadius(8px);
+		}
+		.z-listitem-icon {
+			display: none;
+			cursor: default;
+		}
+	}
+	//selected list cell
+	&.z-listitem-selected {
+		.z-listcell {
+			<c:if test="${zk.ie != 8}">
+				.verGradient(@selectedGradientStart, @selectedGradientEnd);
+			</c:if>
+			border-color: @selectedGradientStart;
+			background-clip: padding-box;
+			position: relative;
+		}
+		.z-listcell-content {
+			color: @selectedColor;
+		}
+		&:hover {
+			> .z-listcell {
+				<c:if test="${zk.ie != 8}">
+					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+				</c:if>
+				border-color: @selectedHoverGradientStart;
+				position: relative;
+			}
+			.z-listcell-content {
+				color: @selectedHoverColor;
+			}
+		}
+	}
+	//selected check mark
+	&-selected {
+		.z-listitem-icon {
+			display: block;
+			line-height: @baseLineHeight;
+			padding-left: 1px;
+			color: @checkedColor;
+			&.z-icon-ok {} //for checkbox, use font-awesome
+			&.z-icon-radio { //for radio
+				width: 8px;
+				height: 8px;
+				.borderRadius(4px);
+				background: @checkedColor;
+				padding: 0;
+				margin: 3px;
+			}
+		}
+	}
+	//disabled
+	&.z-listitem-disabled {
+		* {
+			color: @disabledColor !important;
+			cursor: default !important;
+		}
+		&:hover > .z-listcell {
+			.resetGradient();
+			position: relative;
+		}
+		a, a:visited, a:hover {
+			text-decoration: none;
+		}
+	}
+	a, a:visited, a:hover {
+		text-decoration: none;
+	}
+}
+//Group
+.z-listgroup {
+	&-inner {
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@groupGradientStart, @groupGradientEnd);
+		</c:if>
+		position: relative;
+		border: 1px solid @tableTitleBorderColor;
+		border-left: none;
+		border-right: none;
+		overflow: hidden;
+		
+		.z-listcell-content,
+		.z-listgroup-content {
+			padding: 3px 5px;
+		}
+	}
+	&-icon {
+		display: inline-block;
+		width: @baseIconWidth;
+		height: @baseIconHeight;
+		cursor: pointer;
+		font-size: @baseFontSize;
+		position: relative;
+	}
+	&-icon-open,
+	&-icon-close {
+		display: inline-block;
+		position: absolute;
+		left: 8px;
+		color: @iconColor;
+		&:hover {
+			color: @iconHoverColor;
+		}
+	}
+	&-icon-open {
+		left: 5px;
+	}
+}
+.z-listgroupfoot-inner {
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@groupGradientEnd, @groupGradientStart);
+	</c:if>
+	overflow: hidden;
+}
+//content
+.z-listheader-content,
+.z-listcell-content,
+.z-listgroup-content,
+.z-listgroupfoot-content,
+.z-listfooter-content {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: @textColorGrayLight;
+	overflow: hidden;
+	padding: 4px 5px;
+	line-height: @baseButtonHeight;
+}
+.z-listheader-content {
+	font-weight: bold;
+	padding: 4px 5px 3px;
+	position: relative;
+}
+.z-listgroup-content,
+.z-listgroupfoot-content {
+	.z-label {
+		font-weight: bold;
+	}
+}
+//paging
+.z-listbox-paging {
+	&-top {
+		border-bottom: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+//column menu
+.z-listhead-menugrouping .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-group.png');
+}
+.z-listhead-menuungrouping .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-ungroup.png');
+}
+.z-listhead-menuascending .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowup.png');
+}
+.z-listhead-menudescending .z-menuitem-image {
+	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowdown.png');
+}
+//select mold
+.z-select {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+}
+// IE8
+.ie8 {
+	.z-listbox-header {
+		background: @baseGradientEnd;
+	}
+	.z-listheader {
+		position: static;
+		background: @baseGradientEnd;
+		&-hover {
+			background: @tableTitleHoverEnd;
+		}
+
+		&-button:hover {
+			background: darken(@hoverGradientEnd, 5%);
+		}
+	}
+	.z-listitem {
+		&:hover > .z-listcell {
+			background: @hoverGradientEnd;
+		}
+		&.z-listitem-selected {
+			.z-listcell {
+				position: static;
+				background: @tableContentHoverEnd;
+			}
+			&:hover > .z-listcell {
+				position: static;
+				background: @selectedHoverGradientEnd;
+			}
+		}
+	}
+	.z-listgroup-inner {
+		background: @groupGradientEnd;
+	}
+	.z-listgroupfoot-inner {
+		background: average(@groupGradientStart, @groupGradientEnd);
+	}
+}

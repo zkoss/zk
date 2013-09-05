@@ -1,9 +1,9 @@
 /* Select.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jun  1 16:43:51     2009, Created by jumperchen
 
@@ -70,9 +70,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				if (w.$instanceof(zul.sel.Option)) {
     				if (!w.isVisible())
     					j++;
-				} else i--;			
+				} else i--;
 			}
-			
+
 			selectedIndex -= j;
 			if (n)
 				n.selectedIndex = selectedIndex;
@@ -118,7 +118,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 * <p>
 		 * Don't use this method if your application is purely based on ZK's
 		 * event-driven model.
-		 * 
+		 *
 		 * @param String name
 		 *            the name of this component.
 		 */
@@ -168,7 +168,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	/**
 	 * Deselects all of the currently selected items and selects the given item.
-	 * 
+	 *
 	 * @param Option item
 	 *            the item to select. If null, all items are deselected.
 	 */
@@ -202,7 +202,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				this.clearSelection();
 			} else {
 				item._setSelectedDirectly(false);
-				this._selItems.$remove(item);				
+				this._selItems.$remove(item);
 			}
 		}
 	},
@@ -256,7 +256,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		if (this._selectedIndex < 0)
 			this.$n().selectedIndex = -1;
 	},
-	_doChange: function (evt) {		
+	_doChange: function (evt) {
 		var data = [], reference, n = this.$n();
 		if (this._multiple) {
 			var opts = n.options, changed;
@@ -297,9 +297,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		this.fire('onSelect', {items: data, reference: reference});
 	},
 	//Bug 3304408: IE does not fire onchange
-	doBlur_: zk.ie < 9 ? function (evt) { // only apply to IE 6-8
+	doBlur_: zk.ie8_ ? function (evt) { // only apply to IE 8
 		this._doChange(evt);
-		return this.$supers('doBlur_', arguments); 		
+		return this.$supers('doBlur_', arguments);
 	} : zk.$void,
 	//Bug 1756559: ctrl key shall fore it to be sent first
 	beforeCtrlKeys_: function (evt) {

@@ -15,7 +15,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul.impl;
 
+import javax.servlet.ServletRequest;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
@@ -31,7 +35,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	private boolean _sizedByContent;
 	private boolean _autopaging;
 	private String _pagingPosition = "bottom";
-	
+
 	/**
 	 * Return column span hint of this component.
 	 * <p>Default: null
@@ -209,7 +213,12 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public void setActivePage(int pg) throws WrongValueException {
 		pgi().setActivePage(pg);
 	}
-	
+
+	/*package*/ boolean isNativeScrollbar() {
+		boolean isIE8 = Servlets.isBrowser((ServletRequest) Executions.getCurrent().getNativeRequest(), "ie8-");
+		return isIE8 ? true : Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
+	}
+
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -221,5 +230,8 @@ abstract public class MeshElement extends XulElement implements Paginated {
 			renderer.render("autopaging", true);
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
+
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 }

@@ -40,18 +40,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
 <attribute name="value"><![CDATA[
 <hlayout width="100%">
-<vlayout width="120px" if="${zk.mobile == null }">
-	Four style of trees :
-	<radiogroup 
-		onCheck='tree.setZclass("z-"+self.selectedItem.value)'>
-		<vlayout>
-			<radio label="Default" value="tree" selected="true"/>
-			<radio label="Dot Tree" value="dottree" />
-			<radio label="XP Explorer" value="filetree" />
-			<radio label="Vista Explorer" value="vfiletree" />
-		</vlayout>
-	</radiogroup>
-</vlayout>
 <tree id="tree" width="400px" rows="8">
 	<treecols sizable="true">
 		<treecol label="Name" />

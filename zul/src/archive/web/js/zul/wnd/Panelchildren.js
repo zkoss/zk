@@ -49,14 +49,5 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 		this.$supers('updateDomStyle_', arguments);
 		if (this.desktop)
 			zUtl.fireSized(this.parent);
-	},
-	// bug for B50-3312936.zul
-	getParentSize_: function (p) {
-		// ZK-1003
-		var zkp = zk(p);
-		return {
-			height: zkp.revisedHeight(p.offsetHeight),
-			width: zkp.revisedWidth(p.offsetWidth)
-		};
 	}
 });

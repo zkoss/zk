@@ -1,9 +1,9 @@
 /* Groupbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Nov 16 12:39:24     2008, Created by tomyeh
 
@@ -35,11 +35,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
-				if (open && this._isDefault())
-						jq(node).removeClass(this.getZclass() + "-colpsd");
-				zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
+				if (open) {
+					jq(node).removeClass(this.$s('collapsed'));
+					zk(this).redoCSS(-1, {'fixFontIcon': true});
+				}
+				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
+				
 				if (!fromServer) this.fire('onOpen', {open:open});
-			}
+			}			
 		},
 		/** Returns whether user can open or close the group box.
 		 * In other words, if false, users are no longer allowed to
@@ -90,19 +93,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {
-		var html = ' class="', s = this._contentSclass,
-			cap = this.caption,
-			title = this.getTitle(),
-			zcls = this.getZclass();
+		var html = ' class="', s = this._contentSclass;
 		if (s)
 			html += s + ' ';
-		html += zcls + '-cnt';
-		if (!title && !cap)
-			html += ' '+ zcls + '-notitle';
-		html += '"';
+		html += this.$s('content') + '"';
 
 		s = this._contentStyle;
-		if (cap || title) // B60-ZK-987
+		if (this.caption || this.getTitle()) // B60-ZK-987
 			s = 'border-top:0;' + (s||'');
 		if (!this._open)
 			s = 'display:none;' + (s||'');
@@ -112,7 +109,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_redrawCave: function (out, skipper) { //reserve for customizing
 		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
-	
+
 		if (!skipper)
 			for (var w = this.firstChild, cap = this.caption; w; w = w.nextSibling)
 				if (w != cap)
@@ -127,83 +124,45 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
-		if (hgh && hgh != "auto" && this.isOpen()) {
+		if (hgh && hgh != 'auto' && this.isOpen()) {
 			var n;
 			if (n = this.$n('cave')) {
-				if (zk.ie6_) n.style.height = "";
-				var wgt = this,
-					$n = zk(n),
-					fix = function() {
-					// IE6 will count out the height of header in default mold while
-					// calculate revisedHeight if vflex != min
-					var fixh = 0;
-					if (zk.ie6_ && wgt._isDefault() && (wgt.caption || wgt._title)) {
-						fixh += 1;
-					}
-
-					// B50-ZK-487: height isuue in the groupbox (with specified caption)
-					n.style.height = $n.revisedHeight($n.vflexHeight(), true) + fixh + "px";
-				};
-				fix();
-				if (zk.gecko) setTimeout(fix, 0);
+				var $n = zk(n);
+				// B50-ZK-487: height isuue in the groupbox (with specified caption)
+				n.style.height = ($n.revisedHeight($n.vflexHeight(), true) - 
+								 (this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0)) + 'px';
+					//if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
 		}
-	},
-	getParentSize_: zk.ie6_ ? function (p) {
-		var zkp = zk(p),
-			hgh,
-			wdh,
-			s = p.style;
-		if (s.width.indexOf('px') >= 0) {
-			wdh = zk.parseInt(s.width);
-		} else {
-			// Fixed for B50-3357573.zul
-			var n = this.$n(),
-				oldVal = n.style.display;
-			n.style.display = 'none';
-			wdh = zkp.revisedWidth(p.offsetWidth);
-			n.style.display = oldVal;
+		if (this._isDefault()) {
+			var title = this.$n('title'),
+				cap = this.caption;
+			if (cap)
+				cap.$n().style.top = jq.px(zk(cap.$n('cave')).offsetHeight() / 2 * -1);
+			if (title)
+				title.style.top = jq.px(zk(this.$n('title-cnt')).offsetHeight() / 2 * -1);
 		}
-		if (s.height.indexOf('px') >= 0) {
-			hgh = zk.parseInt(s.height);
-		}
-		return {height: hgh || zkp.revisedHeight(p.offsetHeight),
-					width: wdh || zkp.revisedWidth(p.offsetWidth)};
-	} : function(p) {
-		return this.$supers('getParentSize_', arguments);
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		var h = 0, 
-			margins = zkn.sumStyles("tb", jq.margins);
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			var node = this.$n(),
 				c;
+			height = this._isDefault() ? jq(this.$n('header')).outerHeight() : 0;
 			for (c = n.firstChild; c; c = c.nextSibling)
-				h += jq(c).outerHeight();
-		} else
-			h = zkn.revisedHeight(height, true); // excluding margin for F50-3000873.zul and B50-3285635.zul
-		
-		if (zk.ie6_) //IE6 will add inner padding and border height
-			h -= zk(this.getCaveNode()).padBorderHeight();
-		
-		n.style.height = jq.px0(h);
-			
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("tb", jq.margins);
-			if (margins) 
-				n.style.height = jq.px0(h + margins);
+				height += jq(c).outerHeight();
 		}
+
+		this.$supers('setFlexSizeH_', arguments);
 	},
 	//watch//
 	onSize: function () {
 		this._fixHgh();
 		// B50-ZK-487
-		// classicblue is deprecated and 
+		// classicblue is deprecated and
 		// shadow not used in breeze, sapphire and silvertail,
 	},
 	updateDomStyle_: function () {
@@ -219,16 +178,15 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				return true;
 		return cap && cap.focus_(timeout);
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls ? zcls: this._isDefault() ? "z-groupbox": "z-groupbox-3d";
-	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 		zWatch.listen({onSize: this});
 		var tt;
 		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
+		if(zk.ie == 8) 
+			zk(this).redoCSS();
+		
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
@@ -263,16 +221,27 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	domClass_: function () {
-		var html = this.$supers('domClass_', arguments);
-		if (!this._open) {
-			if (html) html += ' ';
-			html += this.getZclass() + '-colpsd';
+		var cls = this.$supers('domClass_', arguments);
+		if (!this._isDefault()) {
+			if (cls) cls += ' ';
+			cls += this.$s('3d');
 		}
-		return html;
+		
+		if (!this.caption && !this.getTitle()) {
+			if (cls) cls += ' ';
+			cls += ' '+ this.$s('notitle');
+		}
+			
+		if (!this._open && this._isDefault()) {
+			if (cls) cls += ' ';
+			cls += this.$s('collapsed');
+		}
+		return cls;
 	},
 	afterAnima_: function (visible) {
 		if (!visible && this._isDefault())
-			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
+			jq(this.$n()).addClass(this.$s('collapsed'));		
+				
 		this.$supers('afterAnima_', arguments);
 	}
 });

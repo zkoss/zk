@@ -16,12 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.zkoss.util.media.Media;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
@@ -30,20 +32,22 @@ import org.zkoss.zul.impl.Utils;
  * An audio clip.
  *
  * <p>An extension to XUL.
+ * Only works for browsers supporting HTML5 audio tag (since ZK 7.0.0).
  *
  * @author tomyeh
  */
 public class Audio extends XulElement {
-	private String _align, _border;
-	protected String _src;
+	protected List<String> _src = new ArrayList<String>();
 	/** The audio. _src and _audio cannot be nonnull at the same time. */
 	private org.zkoss.sound.Audio _audio;
 	/** Count the version of {@link #_audio}. */
 	private byte _audver;
-	private boolean _autostart, _loop;
-
+	private boolean _autoplay, _controls, _loop, _muted;
+	private String _preload;
+	
 	public Audio() {
 	}
+
 	public Audio(String src) {
 		setSrc(src);
 	}
@@ -64,46 +68,10 @@ public class Audio extends XulElement {
 		response("ctrl", new AuInvoke(this, "pause"));
 	}
 
-	/** Returns the alignment.
-	 * <p>Default: null (use browser default).
-	 */
-	public String getAlign() {
-		return _align;
-	}
-	/** Sets the alignment: one of top, texttop, middle, absmiddle,
-	 * bottom, absbottom, baseline, left, right and center.
-	 */
-	public void setAlign(String align) throws WrongValueException {
-		if (align != null && align.length() == 0)
-			align = null;
-
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
-	}
-	/** Returns the width of the border.
-	 * <p>Default: null (use browser default).
-	 */
-	public String getBorder() {
-		return _border;
-	}
-	/** Sets the width of the border.
-	 */
-	public void setBorder(String border) throws WrongValueException {
-		if (border != null && border.length() == 0)
-			border = null;
-
-		if (!Objects.equals(_border, border)) {
-			_border = border;
-			smartUpdate("border", _border);
-		}
-	}
-
 	/** Returns the src.
-	 * <p>Default: null.
+	 * <p>Default: [].
 	 */
-	public String getSrc() {
+	public List<String> getSrc() {
 		return _src;
 	}
 	/** Sets the src.
@@ -114,49 +82,115 @@ public class Audio extends XulElement {
 	 * @see #setContent
 	 */
 	public void setSrc(String src) {
-		if (src != null && src.length() == 0)
-			src = null;
-
-		if (_audio != null || !Objects.equals(_src, src)) {
-			_src = src;
+		List<String> list = new ArrayList<String>();  
+		if (src.contains(",")) {
+			list = new ArrayList<String>(Arrays.asList(src.split("\\s*,\\s*"))); 
+		} else {
+			list.add(src.trim());
+		}
+		if (_audio != null || !_src.equals(list)) {
 			_audio = null;
+			setSrc(list);
+		}
+		
+	}
+	/** Sets the source list.
+	 * 
+	 * @since 7.0.0
+	 */
+	public void setSrc(List<String> src) {
+		if (!src.equals(_src)) {
+			_src = src;
 			smartUpdate("src", new EncodedSrc());
 		}
-	}
-	private String getEncodedSrc() {
-		final Desktop dt = getDesktop();
-		return _audio != null ? getAudioSrc(): //already encoded
-			dt != null ? dt.getExecution().encodeURL(
-					_src != null ? _src: "~./aud/mute.mid"):
-					//mute.mid is required. otherwise, quicktime failed to identify audio
-				"";
 	}
 
 	/** Returns whether to auto start playing the audio.
 	 *
 	 * <p>Default: false;
+	 * @deprecated As of release 7.0.0, use {@link #isAutoplay} instead.
 	 */
 	public boolean isAutostart() {
-		return _autostart;
+		return isAutoplay();
 	}
 	/** Sets whether to auto start playing the audio.
+	 * 
+	 * @deprecated As of release 7.0.0, use {@link #setAutoplay} instead.
 	 */
 	public void setAutostart(boolean autostart) {
-		if (_autostart != autostart) {
-			_autostart = autostart;
-			smartUpdate("autostart", _autostart);
+		setAutoplay(autostart);
+	}
+	/** Returns whether to auto start playing the audio.
+	 *
+	 * <p>Default: false.
+	 * @since 7.0.0
+	 */
+	public boolean isAutoplay() {
+		return _autoplay;
+	}
+	/** Sets whether to auto start playing the audio.
+	 * 
+	 * @since 7.0.0
+	 */
+	public void setAutoplay(boolean autoplay) {
+		if (_autoplay != autoplay) {
+			_autoplay = autoplay;
+			smartUpdate("autoplay", _autoplay);
 		}
 	}
-
+	/** Returns whether and how the audio should be loaded.
+	 * "none" or "metadata" or "auto" or null
+	 * <p>Default: null.
+	 * @since 7.0.0
+	 */
+	public String getPreload() {
+		return _preload;
+	}
+	/** Sets whether and how the audio should be loaded.
+	 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
+	 * @param preload which could be one of "none", "metadata", "auto".
+	 * @since 7.0.0
+	 */
+	public void setPreload(String preload) {
+		if ("none".equalsIgnoreCase(preload)) {
+			preload = "none";
+		} else if ("metadata".equalsIgnoreCase(preload)){
+			preload = "metadata";
+		} else {
+			preload = "auto";
+		}
+		if (!preload.equals(_preload)) {
+			_preload = preload;
+			smartUpdate("preload", _preload);
+		}
+	}
+	/** Returns whether to display the audio controls.
+	 *
+	 * <p>Default: false.
+	 * @since 7.0.0
+	 */
+	public boolean isControls() {
+		return _controls;
+	}
+	/** Sets whether to display the audio controls.
+	 * @since 7.0.0
+	 */
+	public void setControls(boolean controls) {
+		if (_controls != controls) {
+			_controls = controls;
+			smartUpdate("controls", _controls);
+		}
+	}
 	/** Returns whether to play the audio repeatedly.
 	 *
-	 * <p>Default: false;
+	 * <p>Default: false.
 	 * @since 3.6.1
 	 */
 	public boolean isLoop() {
 		return _loop;
 	}
 	/** Sets whether to play the audio repeatedly.
+	 * 
 	 * @since 3.6.1
 	 */
 	public void setLoop(boolean loop) {
@@ -165,13 +199,32 @@ public class Audio extends XulElement {
 			smartUpdate("loop", _loop);
 		}
 	}
-
+	/** Returns whether to mute the audio.
+	 *
+	 * <p>Default: false.
+	 * @since 7.0.0
+	 */
+	public boolean isMuted() {
+		return _muted;
+	}
+	/** Sets whether to mute the audio.
+	 * 
+	 * @since 7.0.0
+	 */
+	public void setMuted(boolean muted) {
+		if (_muted != muted) {
+			_muted = muted;
+			smartUpdate("muted", _muted);
+		}
+	}
 	/** Sets the content directly.
+	 * 
 	 * <p>Default: null.
 	 *
 	 * <p>Calling this method implies setSrc(null).
 	 * In other words, the last invocation of {@link #setContent} overrides
 	 * the previous {@link #setSrc}, if any.
+	 * Note: setContent doesn't support in Chrome.
 	 * @param audio the audio to display.
 	 * @see #setSrc
 	 */
@@ -190,6 +243,19 @@ public class Audio extends XulElement {
 	public org.zkoss.sound.Audio getContent() {
 		return _audio;
 	}
+	
+	private List<String> getEncodedSrc() {
+		final Desktop dt = getDesktop();
+		List<String> list = new ArrayList<String>();
+		if(_audio != null) {
+			list.add(getAudioSrc());
+		} else if (dt != null) {
+			for(String src: _src) {
+				list.add(dt.getExecution().encodeURL(src));
+			}
+		}
+		return list;
+	}
 
 	/** Returns the encoded URL for the current audio content.
 	 * Don't call this method unless _audio is not null;
@@ -199,26 +265,26 @@ public class Audio extends XulElement {
 			this, _audver, _audio.getName(), _audio.getFormat());
 	}
 
-	//super//
+	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "src", getEncodedSrc());
-		render(renderer, "align", _align);
-		render(renderer, "border", _border);
-		render(renderer, "autostart", _autostart);
+		render(renderer, "autoplay", _autoplay);
+		render(renderer, "preload", _preload);
+		render(renderer, "controls", _controls);
 		render(renderer, "loop", _loop);
+		render(renderer, "muted", _muted);
 	}
 
-	//-- Component --//
 	/** Default: not childable.
 	 */
 	protected boolean isChildable() {
 		return false;
 	}
-
-	//-- ComponentCtrl --//
+	
+	// ComponentCtrl
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}

@@ -1,0 +1,194 @@
+@import "~./zul/less/_header.less";
+
+.z-calendar {
+	border: 1px solid @baseBorderColor;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+	min-width: 230px;
+	<c:if test="${zk.ie == 8}">
+		min-width: 224px;
+	</c:if>
+	width: 230px;
+	padding: 2px;
+
+	a {
+		text-decoration: none;
+	}
+	th {
+		font-family: @baseTitleFontFamily;
+		font-weight: bold;
+		padding: 12px 3px;
+		font-size: @fontSizeMedium;
+	}
+
+	table {
+		width: 100%;
+	}
+
+	&-title {
+		width: 100%;
+		text-align: center;
+		font-weight: bold;
+		font-family: @baseTitleFontFamily;
+		font-size: @fontSizeMedium;
+		color: @calendarTitleColor;
+		padding: 5px 24px;
+		line-height: @baseLineHeight;
+
+		&:hover {
+			color: @calendarTitleHoverColor;
+		}
+	}
+
+	&-header {
+		position: relative;
+
+		& > a {
+			display: inline-block;
+			line-height: normal;
+		}
+	}
+
+	&-body {
+		height: 100%;
+	}
+
+	&-decade {
+		min-height: 162px;
+	}
+	&-month,
+	&-year {
+		min-height: 162px;
+
+		.z-calendar-cell {
+			min-height: 48px;
+			line-height: @baseLineHeight * 3;
+		}
+	}
+	&-cell {
+		text-align: center;
+		min-height: @baseButtonHeight;
+		min-width:  @baseButtonWidth;
+		<c:if test="${zk.ie == 8}">
+			min-height: @baseButtonHeight - 6;
+		</c:if>
+		padding: 3px 0;
+		color: @calendarCellColor;
+		background: @baseBackgroundColor;
+		font-size: @fontSizeSmall;
+		line-height: @baseLineHeight + 3;
+		cursor: pointer;
+
+		&:hover {
+			background: @hoverBackgroundColor;
+			.borderRadius();
+		}
+	}
+	&-weekend {
+		color: @weekendColor;
+		background: @weekendBackgroundColor;
+	}
+	&-weekday {
+		color: @weekColor;
+		background: @baseBackgroundColor;
+	}
+	&-outrange {
+		color: @disabledColor;
+		text-shadow: none;
+	}
+	&-weekofyear {
+		background: @weekofyearBackgroundColor;
+		font-style: italic;
+		color: @weekofyearColor;
+		cursor: default;
+		
+		&:hover {
+			background: @weekofyearBackgroundColor;
+			.borderRadius(0);
+			color: @weekofyearColor;
+		}
+	}
+
+	// for transition's animation use only
+	&-anima {
+		overflow: hidden;
+		position: relative;
+	}
+	&-anima-inner {
+		position: absolute;
+		width: 200%;
+
+		table {
+			float: left;
+			width: 50%;
+		}
+	}
+	&-selected {
+		background: @selectedGradientEnd;
+		.borderRadius();
+		color: @hoverColor;
+		
+		&:hover {
+			background: @selectedHoverGradientEnd;
+			color: @hoverColor;
+		}
+	}
+	&-outside {
+		color: @disabledColor;
+		text-shadow: none;
+	}
+	&-icon {
+		position: absolute;
+		color: @iconColor;
+		font-size: 20px;
+		width: @baseButtonWidth;
+		height: @baseButtonHeight;
+		padding: 0 8px;
+
+		&:hover {
+			color: @iconHoverColor;
+		}
+	}
+	&-right {
+		right: 0px;
+	}
+	&-left {
+		left: 0px;
+	}
+
+	&-left[disabled],
+	&-right[disabled],
+	&-disabled {
+		cursor: default !important;
+		text-shadow: none !important;
+		color: @disabledColor !important;
+		.opacity(0.4);
+		&:hover {
+			background: @baseBackgroundColor;
+		}
+	}
+}
+
+.z-datebox-popup {
+	position: absolute;
+
+	.z-calendar {
+		border: 0;
+		& + .z-timebox {
+			margin: 5px;
+		}
+		& ~ .z-datebox-timezone {
+			margin: 0 5px 5px;
+		}
+	}
+
+}
+
+// Calendar and Datebox
+.z-datebox-timezone {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+}
+

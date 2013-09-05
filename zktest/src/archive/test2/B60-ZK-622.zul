@@ -19,6 +19,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<radio id="male1" label="male" checked="true" />
 		<radio id="female" label="female" />
 	</radiogroup>
-	 <button label="show" xmlns:w="client" w:onClick='this.$f("log").setValue(jq("$male1 input").attr("checked")+"");'/>
+	 <button label="show" xmlns:w="client" w:onClick='this.$f("log").setValue(jq("$male1").find("input").attr("checked")+"");'/>
 	 <label id="log"/>
 </window>

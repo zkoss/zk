@@ -33,15 +33,12 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n().style.display = 'none';
 	},
-	getZclass: function() {
-		if (this._zclass != null)
-			return this._zclass;
-			
-		var tabbox = this.getTabbox();
-		if (!tabbox) return 'z-tabpanel';
-		
-		var mold = tabbox.getMold();
-		return 'z-tabpanel' + (mold == "default" ? (tabbox.isVertical() ? '-ver' : '') : '-' + mold);
+	domClass_: function() {
+		var cls = this.$supers('domClass_', arguments),
+			tabbox = this.getTabbox();
+		if (tabbox.inAccordionMold())
+			cls += ' ' + this.$s('content');
+		return cls;
 	},
 	/** Returns the tab associated with this tab panel.
 	 * @return Tab
@@ -49,7 +46,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	getLinkedTab: function() {
 		var tabbox =  this.getTabbox();
 		if (!tabbox) return null;
-		
+
 		var tabs = tabbox.getTabs();
 		return tabs ? tabs.getChildAt(this.getIndex()) : null;
 	},
@@ -81,7 +78,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var accd = tabbox.inAccordionMold();
 
 		if (accd && animation) {
-			var zkp = zk(this.$n("cave"));
+			var zkp = zk(this.$n('cave'));
 			if (toSel) {
 				/* ZK-1441
 				 * When a tabpanel is animating, set tabbox.animating
@@ -90,28 +87,27 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				 */
 				tabbox._animating = true;
 				zkp.slideDown(
-					this, 
-					{"afterAnima": function(){delete tabbox._animating;}}
+					this,
+					{'afterAnima': function(){delete tabbox._animating;}}
 				);
 			} else {
 				zkp.slideUp(this);
 			}
-			//zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
-			var $pl = jq(accd ? this.$n("cave") : this.$n()),
+			var $pl = jq(accd ? this.$n('cave') : this.$n()),
 				vis = $pl.zk.isVisible();
 			if (toSel) {
 				if (!vis) {
 					$pl.show();
 					// Bug ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
-					if (zk.ie >= 8 || zk.safari)
+					if (zk.ie >= 8 || zk.webkit)
 						$pl.scrollTop(this._lastScrollTop);
 					zUtl.fireShown(this);
 				}
 			} else if (vis) {
 				zWatch.fireDown('onHide', this);
 				// Bug ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
-				if (zk.ie >= 8 || zk.safari)
+				if (zk.ie >= 8 || zk.webkit)
 					this._lastScrollTop = $pl.scrollTop();
 				$pl.hide();
 			}
@@ -120,83 +116,56 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	getPanelContentHeight_: function () {
 		var node = this.$n(),
 			tabpanelsNode = this.parent && this.parent.$n(),
-			panelContentHeight = tabpanelsNode && 
+			panelContentHeight = tabpanelsNode &&
 				(tabpanelsNode.scrollHeight + zk(tabpanelsNode).padBorderHeight());
-		
+
 		return Math.max(node && node.offsetHeight,panelContentHeight) ; // B50-ZK-298: concern panel height
-	},	
+	},
 	_fixPanelHgh: function() {
-		var tabbox = this.getTabbox();
-		var tbx = tabbox.$n(),
-		hgh = tbx.style.height;
-		if (hgh && hgh != "auto") {
+		var tabbox = this.getTabbox(),
+			tbx = tabbox.$n(),
+			hgh = tbx.style.height;
+		
+		if (hgh && hgh != 'auto') {
 			if (!tabbox.inAccordionMold()) {
 				var n = this.$n(),
 					isHor = tabbox.isHorizontal();
-				hgh = isHor ?
-					zk(n.parentNode).vflexHeight(): n.parentNode.clientHeight;
-					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
-				if (zk.ie8)
-					hgh -= 1; // show the bottom border
-				zk(n).setOffsetHeight(hgh);
 
-				// Bug ZK-473
-				if (zk.ie6_ && isHor) {
-					var s = this.$n('cave').style,
-					z = s.zoom;
-					s.zoom = 1;
-					s.zoom = z;
-				}
+				hgh = isHor ? zk(tabbox).contentHeight() - zk(tabbox.tabs).offsetHeight() 
+						    : zk(tabbox).contentHeight() - zk(n.parentNode).padBorderHeight();
+					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
+				n.style.height = jq.px0(hgh);
 			} else {
 				var n = this.$n(),
-					hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
-				hgh = zk(n.parentNode).revisedHeight(hgh);
-				
-				// fixed Opera 10.5+ bug
-				if (zk.opera) {
-					var parent;
-					if ((parent = tbx.parentNode) && tbx.style.height == '100%')
-						hgh = zk(parent).revisedHeight(parent.offsetHeight);
-				}
-				
+					hgh = tbx.offsetHeight,
+					zkp = zk(n.parentNode);
+				hgh = hgh - zkp.padBorderHeight();
 				for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
 					if (e != n)
 						hgh -= e.offsetHeight;
 				hgh -= n.firstChild.offsetHeight;
-				hgh = zk(n = n.lastChild).revisedHeight(hgh);
-				if (zk.ie8)
-					hgh -= 1; // show the bottom border
 				var cave = this.$n('cave'),
 					s = cave.style;
 				s.height = jq.px0(hgh);
 			}
 		}
 	},
-	domClass_: function () {
-		var cls = this.$supers('domClass_', arguments);
-		if (this.getTabbox().inAccordionMold())
-			cls += ' ' + this.getZclass() + '-cnt';
-		return cls;
-	},
 	onSize: function() {
 		var tabbox = this.getTabbox();
-		if (tabbox.inAccordionMold() && !zk(this.$n("cave")).isVisible())
+		if (tabbox.inAccordionMold() && !zk(this.$n('cave')).isVisible())
 			return;
 		this._fixPanelHgh();		//Bug 2104974
-		
-		//Bug 2526699 - (add zk.ie7)
-		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS();
 	},
 
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabpanel
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tabpanel, 'setVflex', v);
+		this.$supers('setVflex', arguments);
 	},
 	//bug #3014664
 	setHflex: function (v) { //hflex ignored for Tabpanel
 		if (v != 'min') v = false;
-		this.$super(zul.tab.Tabpanel, 'setHflex', v);
+		this.$supers('setHflex', arguments);
 	},
 	bind_: function(desktop) {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
@@ -204,7 +173,8 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
 		var tab;
 		if (this.getTabbox().inAccordionMold()
-		&& (tab=this.getLinkedTab()))
+				&& (tab=this.getLinkedTab())) {
+			
 			if (!tab.$n())
 				tab.unbind().bind(desktop);
 			else if (!jq.isAncestor(this.$n(), tab.$n())) {
@@ -214,6 +184,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				var cave = this.$n('cave');
 				if (cave) cave.style.display = 'none';
 			}
+		}
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});

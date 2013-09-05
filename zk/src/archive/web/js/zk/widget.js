@@ -36,8 +36,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//Event Handling//
-	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
-		if (typeof fn != "function") {
+	function _domEvtInf(wgt, evtnm, fn, keyword) { //proxy event listener
+		if (typeof fn != 'function') {
 			if (!fn && !(fn = _domevtfnm[evtnm]))
 				_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
 
@@ -50,15 +50,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var domn = _domevtnm[evtnm];
 		if (!domn)
 			domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
-		return [domn, _domEvtProxy(wgt, fn)];
+		return [domn, _domEvtProxy(wgt, fn, evtnm, keyword)];
 	}
-	function _domEvtProxy(wgt, f) {
+	function _domEvtProxy(wgt, f, evtnm, keyword) {
 		var fps = wgt._$evproxs, fp;
 		if (!fps) wgt._$evproxs = fps = {};
+		if (keyword)
+			f.__keyword = keyword;
 		else if (fp = fps[f]) return fp;
-		return fps[f] = _domEvtProxy0(wgt, f);
+		return fps[f] = _domEvtProxy0(wgt, f, keyword);
 	}
-	function _domEvtProxy0(wgt, f) {
+	function _domEvtProxy0(wgt, f, keyword) {
 		return function (evt) {
 			var devt = evt; //make a copy since we will change evt (and arguments) in the following line
 			evt = jq.Event.zk(devt, wgt); //also change arguments[0]
@@ -83,8 +85,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.Draggable.ignoreClick())
 					return;
 			}
-
-			var ret = f.apply(wgt, arguments);
+			
+			// ZK 7.0 support the extra arguments for callback function 
+			var args;
+			if (keyword) {
+				args = [].slice.call(arguments);
+				args.push(keyword);
+			} else
+				args = arguments;
+			var ret = f.apply(wgt, args);
 			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
 			return devt.type == 'dblclick' && ret === undefined ? false: ret;
@@ -235,7 +244,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//insertBefore/appendChild don't (it is called only if attached by au)
 		//NOT CONSISTENT! Better to improve in the future
 		var act;
-		if (wgt._visible && (act = wgt.actions_["hide"])) {
+		if (wgt._visible && (act = wgt.actions_['hide'])) {
 			wgt._rmAftAnm = function () {
 				jq(n).remove();
 			};
@@ -329,17 +338,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (msg != null)  {
 				jq(document.body).append(
 					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
-					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
-				drag._dragImg = jq("#zk_ddghost-img")[0];
-				return jq("#zk_ddghost")[0];
+					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+				drag._dragImg = jq('#zk_ddghost-img')[0];
+				return jq('#zk_ddghost')[0];
 			}
 
 			var dgelm = jq(drag.node).clone()[0];
-			dgelm.id = "zk_ddghost";
+			dgelm.id = 'zk_ddghost';
 			zk.copy(dgelm.style, {
-				position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
+				position: "absolute", left: ofs[0] + 'px', top: ofs[1] + 'px'
 			});
-			jq(dgelm).addClass("z-drag-ghost");
+			jq(dgelm).addClass('z-drag-ghost');
 			document.body.appendChild(dgelm);
 			return dgelm;
 		}
@@ -437,18 +446,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _fullScreenZIndex(zi) {
 		var pseudoFullscreen = null;
 		if (document.fullscreenElement) {
-			pseudoFullscreen = ":fullscreen";
+			pseudoFullscreen = ':fullscreen';
 		} else if (document.mozFullScreen) {
 			//pseudoFullscreen = ":-moz-full-screen";
 			//Firefox return zindex by scientific notation "2.14748e+9"
 			//use zk.parseFloat() will get 2147480000, so return magic number directly.
 			return 2147483648;
 		} else if (document.webkitIsFullScreen) {
-			pseudoFullscreen = ":-webkit-full-screen";
+			pseudoFullscreen = ':-webkit-full-screen';
 		}
 		if (pseudoFullscreen) {
-			var fsZI = jq.css(jq(pseudoFullscreen)[0],"zIndex");
-			return fsZI == "auto" ? 2147483648 : ++fsZI;
+			var fsZI = jq.css(jq(pseudoFullscreen)[0], 'zIndex');
+			return fsZI == 'auto' ? 2147483648 : ++fsZI;
 		}
 		return zi;
 	}
@@ -585,7 +594,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @type String
 	 * @since 5.0.2
 	 */
-	widgetName: "widget",
+	widgetName: 'widget',
 	/** The AU tag of this widget.
 	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
 	 * For instance, if the AU tag is <code>xxx,yyy</code> and the desktop's
@@ -696,6 +705,7 @@ new zul.wnd.Window({
 		this._bklsns = {}; //backup for listners by setListeners
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		this.effects_ = {};
+		this._subzcls = {}; // cache the zclass + subclass name, like zclass + '-hover'
 
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
@@ -788,7 +798,8 @@ new zul.wnd.Window({
 		 * @see #getSclass
 		 * @see #getStyle
 		 */
-		zclass: function (){
+		zclass: function () {
+			this._subzcls = {}; // reset
 			this.rerender();
 		},
 		/** Sets the width of this widget.
@@ -876,11 +887,11 @@ new zul.wnd.Window({
 		 */
 		droppable: [
 			function (v) {
-				return v && "false" != v ? v: null;
+				return v && 'false' != v ? v: null;
 			},
 			function (v) {
 				var dropTypes;
-				if (v && v != "true") {
+				if (v && v != 'true') {
 					dropTypes = v.split(',');
 					for (var j = dropTypes.length; j--;)
 						if (!(dropTypes[j] = dropTypes[j].trim()))
@@ -924,7 +935,7 @@ new zul.wnd.Window({
 				this._nvflex = 0;
 			if (this.desktop) { //if already bind
 				if (!this._nvflex) {
-					this.setFlexSize_({height: ''}); //clear the height
+					this.setFlexSize_({height: 'auto'}); //clear the height
 					delete this._vflexsz;
 					if (!this._nhflex)
 						_unlistenFlex(this);
@@ -1034,11 +1045,11 @@ new zul.wnd.Window({
 							if (fn = zk.eff.Actions[val])
 								this.actions_[nm] = [fn, opts];
 							else
-								zk.error("Unknown action: "+val);
+								zk.error('Unknown action: '+val);
 							continue;
 						}
 					}
-					zk.error("Illegal action: "+v+", "+this.className);
+					zk.error('Illegal action: '+v+', '+this.className);
 				}
 		}
 	},
@@ -1051,7 +1062,7 @@ new zul.wnd.Window({
 		                    //nested inside native component. in this case the nested component
 		                    //is bound earlier, when the native component is reused (mount.js create()) 
 			if (!this._nhflex) {
-				this.setFlexSize_({width: ''}); //clear the width
+				this.setFlexSize_({width: 'auto'}); //clear the width
 				delete this._hflexsz;
 				if (!this._nvflex)
 					_unlistenFlex(this);
@@ -1083,11 +1094,11 @@ new zul.wnd.Window({
 	 * @return zk.Widget this widget
 	 */
 	setDraggable: function (v) {
-		if (!v && v != null) v = "false"; //null means default
+		if (!v && v != null) v = 'false'; //null means default
 		this._draggable = v;
 
 		if (this.desktop && !_dragCtl(this, true))
-			if (v && v != "false") this.initDrag_();
+			if (v && v != 'false') this.initDrag_();
 			else this.cleanDrag_();
 	},
 	/** Returns the identifier of a draggable type for this widget, or null if not draggable.
@@ -1095,7 +1106,7 @@ new zul.wnd.Window({
 	 */
 	getDraggable: function () {
 		var v = this._draggable;
-		return v ? v: _dragCtl(this) ? "true": "false";
+		return v ? v: _dragCtl(this) ? 'true': 'false';
 	},
 	/** Returns the owner of the ID space that this widget belongs to,
 	 * or null if it doesn't belong to any ID space.
@@ -1817,6 +1828,7 @@ wgt.$f().main.setTitle("foo");
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
+			jq.onSyncScroll(this);
 		}
 		return this;
 	},
@@ -1859,10 +1871,10 @@ wgt.$f().main.setTitle("foo");
 	setDomVisible_: function (n, visible, opts) {
 		if (!opts || opts.display) {
 			var act;
-			if (act = this.actions_[visible ? "show": "hide"])
+			if (act = this.actions_[visible ? 'show': 'hide'])
 				act[0].call(this, n, act[1]);
 			else
-				n.style.display = visible ? '': 'none';
+				n.style.display = visible ? '' : 'none';
 		}
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible': 'hidden';
@@ -1875,6 +1887,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
+		jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been removed to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
@@ -1883,6 +1896,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
+		jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been replaced.
 	 * Unlike {@link #onChildAdded_} and {@link #onChildRemoved_}, this
@@ -2127,10 +2141,10 @@ out.push('</div>');
 			if ((f = this.$class.molds) && (f = f[this._mold]))
 				return f.apply(this, arguments);
 
-			zk.error("Mold "+this._mold+" not found in "+this.className);
+			zk.error('Mold '+this._mold+' not found in '+this.className);
 		}
 	},
-	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
+	/** Utilities for handling the so-called render defer ({@link #setRenderdefer}).
 	 * This method is called automatically by {@link #redraw},
 	 * so you only need to use it if you override {@link #redraw}.
 	 * <p>A typical usage is as follows.
@@ -2278,9 +2292,9 @@ redraw: function (out) {
 	domStyle_: function (no) {
 		var out = [], s;
 		if (s = this.z$display) //see au.js
-			out.push("display:", s, ';');
+			out.push('display:', s, ';');
 		else if (!this.isVisible() && (!no || !no.visible))
-			out.push("display:none;");
+			out.push('display:none;');
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
 			s = s.replace(REGEX_DQUOT,'\'');  // B50-ZK-647
@@ -2379,7 +2393,7 @@ function () {
 	 */
 	domTextStyleAttr_: function () {
 		var s = this.getStyle();
-		return s ? zUtl.appendAttr("style", jq.filterTextStyle(s)): s;
+		return s ? zUtl.appendAttr('style', jq.filterTextStyle(s)): s;
 	},
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.
@@ -2706,6 +2720,25 @@ function () {
 		}
 		return n;
 	},
+	/**
+	 * Returns the sub zclass name that cache for this widget.
+	 * It returns the zclass if the subclass is empty or null,
+	 * since it caches the result (and clean up at the {@link #setZclass(String)}).
+	 * <pre><code>var subzcls = wgt.$s('hover'); // z-xxx-hover will be return</code></pre>
+	 * @return String
+	 * @see #getZclass()
+	 * @since 7.0.0
+	 */
+	$s: function (subclass) {
+		if (subclass) {
+			var subcls = this._subzcls[subclass];
+			if (!subcls) {
+				subcls = this._subzcls[subclass] = this.getZclass() + '-' + subclass;
+			}
+			return subcls;
+		}
+		return this.getZclass();
+	},
 	/** Clears the cached nodes (by {@link #$n}). */
 	clearCache: function () {
 		this._node = null;
@@ -2834,7 +2867,7 @@ bind_: function (desktop, skipper, after) {
 		var p = this.parent, v;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
-		if ((v = this._draggable) && v != "false" && !_dragCtl(this))
+		if ((v = this._draggable) && v != 'false' && !_dragCtl(this))
 			this.initDrag_();
 		
 		if (this._nvflex || this._nhflex)
@@ -2988,43 +3021,14 @@ unbind_: function (skipper, after) {
 			else
 				n.style.width = this._width || '';
 		}
-		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		var h = zkn.revisedHeight(height, true), // excluding margin for F50-3000873.zul and B50-3285635.zul 
-			newh = h,
-			margins = zkn.sumStyles("tb", jq.margins);
-		n.style.height = jq.px0(h);
-			
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("tb", jq.margins);
-			if (margins) 
-				n.style.height = jq.px0(h + margins);
-		}
+		// excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.height = jq.px0(height - zkn.marginHeight());
 	},
-	
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
-		var w = zkn.revisedWidth(width, true), // excluding margin for F50-3000873.zul and B50-3285635.zul
-			neww = w,
-			margins = zkn.sumStyles("lr", jq.margins),
-			pb = zkn.padBorderWidth(); 
-		
-		n.style.width = jq.px0(w);
-		
-		// Bug ZK-521
-		if ((zk.linux || zk.mac) && zk.ff && jq.nodeName(n, "select")) {
-			var offset = width - margins,
-				diff = offset - n.offsetWidth;
-			if (diff > 0)
-				n.style.width = jq.px0(w + diff);
-		}
-		// fixed for B50-3317729.zul on webkit
-		if (zk.safari) {
-			margins -= zkn.sumStyles("lr", jq.margins);
-			if (margins) 
-				n.style.width = jq.px0(w + margins);
-		}
+		// excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.width = jq.px0(width - zkn.marginWidth());
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden
@@ -3065,30 +3069,22 @@ unbind_: function (skipper, after) {
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
-		// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
-		var wd = zjq.minWidth(wgt);
-		if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
-			wd = zk(wgt).offsetWidth();
+		if (attr == 'w') {
+			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
+			var wd = zjq.minWidth(wgt);
+			if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
+				wd = zk(wgt).offsetWidth();
+			}
+			return wd;
+		} else {
+			return zk(wgt).offsetHeight();//See also bug ZK-483
 		}
-		return attr == 'h' ? zk(wgt).offsetHeight() : wd; //See also bug ZK-483
 	},
-	getParentSize_: zk.ie6_ ? function (p) {
-		var zkp = zk(p),
-			hgh,
-			wdh,
-			s = p.style;
-		if (s.width.indexOf('px') >= 0) {
-			wdh = zk.parseInt(s.width);
-		}
-		if (s.height.indexOf('px') >= 0) {
-			hgh = zk.parseInt(s.height);
-		}
-		return {height: hgh || zkp.revisedHeight(p.offsetHeight),
-					width: wdh || zkp.revisedWidth(p.offsetWidth)};
-	} : function(p) {
-		//to be overridden
+	// for v/hflex, if the box-sizing is in border-box mode (like ZK 7+),
+	// we should return the content size only (excluding padding and border)
+	getParentSize_: function(p) { //to be overridden
 		var zkp = zk(p);
-		return {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)};
+		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	},
 	getMarginSize_: function (attr) { //'w' for width or 'h' for height
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
@@ -3105,7 +3101,7 @@ unbind_: function (skipper, after) {
 			c = c.parentNode;
 			while (c && c.nodeType == 1 && p != c) {
 				var zkc = zk(c);
-				h += zkc.padBorderHeight() + zkc.sumStyles("tb", jq.margins);
+				h += zkc.padBorderHeight() + zkc.sumStyles('tb', jq.margins);
 				c = c.parentNode;
 			}
 			return h;
@@ -3124,7 +3120,7 @@ unbind_: function (skipper, after) {
 			c = c.parentNode;
 			while (c && c.nodeType == 1 && p != c) {
 				var zkc = zk(c);
-				w += zkc.padBorderWidth() + zkc.sumStyles("lr", jq.margins);
+				w += zkc.padBorderWidth() + zkc.sumStyles('lr', jq.margins);
 				c = c.parentNode;
 			}
 			return w;
@@ -3159,7 +3155,7 @@ unbind_: function (skipper, after) {
 		if (n) { //ZK-1686: should check if DragNode exist
 			this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
 			// B50-3306835.zul
-			if (zk.ie9 && jq.nodeName(n, "img"))
+			if (zk.ie9 && jq.nodeName(n, 'img'))
 				jq(n).bind('mousedown', zk.$void);
 		}
 	},
@@ -3172,7 +3168,7 @@ unbind_: function (skipper, after) {
 		var drag = this._drag;
 		if (drag) {
 			var n;
-			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, "img"))
+			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, 'img'))
 				jq(n).unbind('mousedown', zk.$void);
 
 			this._drag = null;
@@ -3219,7 +3215,7 @@ unbind_: function (skipper, after) {
 			var dropType = this._droppable,
 				dragType = dragged._draggable;
 			if (dropType == 'true') return this;
-			if (dropType && dragType != "true")
+			if (dropType && dragType != 'true')
 				for (var dropTypes = this._dropTypes, j = dropTypes.length; j--;)
 					if (dragType == dropTypes[j])
 						return this;
@@ -3232,14 +3228,14 @@ unbind_: function (skipper, after) {
 	 * @param boolean over whether the user is dragging over (or out, if false) 
 	 */
 	dropEffect_: function (over) {
-		jq(this.$n()||[])[over ? "addClass" : "removeClass"]("z-drag-over");
+		jq(this.$n()||[])[over ? 'addClass' : 'removeClass']('z-drag-over');
 	},
 	/** Returns the message to show when an user is dragging this widget, or null if it prefers to clone the widget with {@link #cloneDrag_}.
 	 * <p>Default, it return the inner text if if {@link #$n} returns a TR, TD, or TH element. Otherwise, it returns null and {@link #cloneDrag_} will be called to create a DOM element to indicate dragging. 
 	 * @return String the message to indicate the dragging, or null if clone is required
 	 */
 	getDragMessage_: function () {
-		if (jq.nodeName(this.getDragNode(), "tr", "td", "th")) {
+		if (jq.nodeName(this.getDragNode(), 'tr', 'td', 'th')) {
 			var n = this.$n('real') || this.getCaveNode();
 			return n ? n.textContent || n.innerText || '': '';
 		}
@@ -3270,13 +3266,13 @@ unbind_: function (skipper, after) {
 		//See also bug 1783363 and 1766244
 
 		var msg = this.getDragMessage_();
-		if (typeof msg == "string" && msg.length > 9)
-			msg = msg.substring(0, 9) + "...";
+		if (typeof msg == 'string' && msg.length > 9)
+			msg = msg.substring(0, 9) + '...';
 
 		var dgelm = zk.DnD.ghost(drag, ofs, msg);
 
 		drag._orgcursor = document.body.style.cursor;
-		document.body.style.cursor = "pointer";
+		document.body.style.cursor = 'pointer';
 		jq(this.getDragNode()).addClass('z-dragged'); //after clone
 		return dgelm;
 	},
@@ -3775,7 +3771,7 @@ wgt.setListeners({
 		}
 		if (fn) {
 			inf[evt] = bklsns[evt]
-				= typeof fn != 'function' ? new Function("var event=arguments[0];"+fn): fn;
+				= typeof fn != 'function' ? new Function('var event=arguments[0];'+fn): fn;
 			this.listen(inf);
 		}
 	},
@@ -3936,6 +3932,8 @@ wgt.setListeners({
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
+	 * @see #doMouseEnter_
+	 * @see #doMouseLeave_
 	 * @see #doMouseOver_
 	 * @see #doMouseOut_
 	 * @see #doMouseDown_
@@ -3957,6 +3955,8 @@ wgt.setListeners({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @see #doMouseMove_
+	 * @see #doMouseEnter_
+	 * @see #doMouseLeave_
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
@@ -3966,6 +3966,53 @@ wgt.setListeners({
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOut_(evt);
+		}
+	},
+	/** Called when the user moves the mouse pointer on top of a widget (or one of its child widget).
+	 * A widget doesn't need to listen the mouseover DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseEnter_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doMouseMove_ 
+	 * @see #doMouseEnter_ 
+	 * @see #doMouseLeave_
+	 * @see #doMouseOver_
+	 * @see #doMouseOut_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+	 * @see #doTooltipOver_
+	 * @since 7.0.0
+     */
+	doMouseEnter_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseEnter_(evt);
+		}
+	},
+	/** Called when the user moves the mouse pointer out of a root widget.
+	 * A widget doesn't need to listen the mouseout DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseLeave_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
+	 * @see #doMouseMove_
+	 * @see #doMouseEnter_
+	 * @see #doMouseLeave_
+	 * @see #doMouseOver_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+	 * @see #doTooltipOut_
+	 * @since 7.0.0
+	 */
+	doMouseLeave_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseLeave_(evt);
 		}
 	},
 	/** Called when the user presses down the mouse button on this widget (or one of its child widget).
@@ -4182,6 +4229,14 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 		}
 	},
 
+	/** Resize zul.Scrollbar size after child added/removed or hide/show.
+	 * @since 6.5.0
+	 */
+	doResizeScroll_: function () {
+		var p = this.parent;
+		if (p) p.doResizeScroll_();
+	},
+	
 	//DOM event handling//
 	/** Registers an DOM event listener for the specified DOM element (aka., node).
 	 * You can use jQuery to listen the DOM event directly, or
@@ -4220,12 +4275,14 @@ _doFooSelect: function (evt) {
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
 	 * _doFocus.
+	 * @param String keyword the extra argumenet for the function, which is passed
+	 * into the callback function. (since 7.0)
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	domListen_: function (n, evtnm, fn) {
+	domListen_: function (n, evtnm, fn, keyword) {
 		if (!this.$weave) {
-			var inf = _domEvtInf(this, evtnm, fn);
+			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).bind(inf[0], inf[1]);
 		}
 		return this;
@@ -4241,12 +4298,14 @@ _doFooSelect: function (evt) {
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
 	 * _doFocus.
+	 * @param String keyword the extra argumenet for the function, which is passed
+	 * into the callback function. (since 7.0)
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	domUnlisten_: function (n, evtnm, fn) {
+	domUnlisten_: function (n, evtnm, fn, keyword) {
 		if (!this.$weave) {
-			var inf = _domEvtInf(this, evtnm, fn);
+			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).unbind(inf[0], inf[1]);
 		}
 		return this;
@@ -4367,7 +4426,7 @@ _doFooSelect: function (evt) {
 			return n;
 
 		var wgt, id;
-		if (typeof n == "string") {
+		if (typeof n == 'string') {
 		//Don't look for DOM (there might be some non-ZK node with same ID)
 			if ((id = n.charAt(0)) == '#') n = n.substring(1);
 			else if (id == '$') {
@@ -4392,8 +4451,8 @@ _doFooSelect: function (evt) {
 
 		for (; n; n = zk(n).vparentNode(true)) {
 			try {
-				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
-				if (id && typeof id == "string") {
+				id = n.id || (n.getAttribute ? n.getAttribute('id') : '');
+				if (id && typeof id == 'string') {
 					wgt = _binds[id]; //try first (since ZHTML might use -)
 					if (wgt)
 						return wgt;
@@ -4629,16 +4688,16 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 	 * @type String
 	 * @since 5.0.3
 	 */
-	className: "zk.RefWidget",
+	className: 'zk.RefWidget',
 	/** The widget name (<code>refWidget</code>).
 	 * @type String
 	 * @since 5.0.3
 	 */
-	widgetName: "refWidget",
+	widgetName: 'refWidget',
 	bind_: function () {
 		var w = Widget.$(this.uuid);
 		if (!w) {
-			zk.error("RefWidget not found: " + this.uuid);
+			zk.error('RefWidget not found: ' + this.uuid);
 			return;
 		}
 
@@ -4673,12 +4732,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Desktop</code>).
 	 * @type String
 	 */
-	className: "zk.Desktop",
+	className: 'zk.Desktop',
 	/** The widget name (<code>desktop</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	widgetName: "desktop",
+	widgetName: 'desktop',
 	/** The request path.
 	 * @type String
 	 */
@@ -4846,7 +4905,7 @@ zk._wgtutl = { //internal utilities
 			for (var ns = document.getElementsByTagName(tns[i]), j = ns.length; j--;) {
 				var n = ns[j], $n = zk(n), visi;
 				if ((!(visi=$n.isVisible(true)) && !_hidden.$contains(n))
-				|| (!i && !n.getAttribute("z_autohide") && !n.getAttribute("z.autohide"))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
+				|| (!i && !n.getAttribute('z_autohide') && !n.getAttribute('z.autohide'))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
 					continue; //ignore
 
 				var tc = _topnode(n);
@@ -4885,16 +4944,16 @@ zk.Page = zk.$extends(zk.Widget, {
 	//a virtual node that might have no DOM node and must be handled specially
 	z_virnd: true,
 
-	_style: "width:100%;height:100%",
+	_style: 'width:100%;height:100%',
 	/** The class name (<code>zk.Page</code>).
 	 * @type String
 	 */
-	className: "zk.Page",
+	className: 'zk.Page',
 	/** The widget name (<code>page</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	widgetName: "page",
+	widgetName: 'page',
 
 	/** Constructor.
 	 * @param Map props the properties to assign to this page
@@ -4954,12 +5013,12 @@ zk.Native = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Native</code>)
 	 * @type String
 	 */
-	className: "zk.Native",
+	className: 'zk.Native',
 	/** The widget name (<code>native</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	widgetName: "native",
+	widgetName: 'native',
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
 	$n: function (subId) {
@@ -4993,7 +5052,7 @@ zk.Native = zk.$extends(zk.Widget, {
 			}
 			// B65-ZK-1836
 			out.push(s.replace(/<\/(?=script>)/ig, '<\\/'));
-			if (this.value && s.startsWith("<textarea"))
+			if (this.value && s.startsWith('<textarea'))
 				out.push(this.value);
 		}
 
@@ -5014,13 +5073,13 @@ zk.Macro = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Macro</code>).
 	 * @type String
 	 */
-	className: "zk.Macro",
+	className: 'zk.Macro',
 	/** The widget name (<code>macro</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	widgetName: "macro",
-	_enclosingTag: "span",
+	widgetName: 'macro',
+	_enclosingTag: 'span',
 
 	$init: function () {
 		this._fellows = {};
@@ -5186,19 +5245,19 @@ function zkopt(opts) {
 	for (var nm in opts) {
 		var val = opts[nm];
 		switch (nm) {
-		case "pd": zk.procDelay = val; break;
-		case "td": zk.tipDelay =  val; break;
-		case "art": zk.resendTimeout = val; break;
-		case "dj": zk.debugJS = val; break;
-		case "kd": zk.keepDesktop = val; break;
-		case "pf": zk.pfmeter = val; break;
-		case "ta": zk.timerAlive = val; break;
-		case "gd": zk.groupingDenied = val; break;
-		case "to":
+		case 'pd': zk.procDelay = val; break;
+		case 'td': zk.tipDelay =  val; break;
+		case 'art': zk.resendTimeout = val; break;
+		case 'dj': zk.debugJS = val; break;
+		case 'kd': zk.keepDesktop = val; break;
+		case 'pf': zk.pfmeter = val; break;
+		case 'ta': zk.timerAlive = val; break;
+		case 'gd': zk.groupingDenied = val; break;
+		case 'to':
 			zk.timeout = val;
 			zAu._resetTimeout();
 			break;
-		case "ed":
+		case 'ed':
 			switch (val) {
 			case 'e':
 				zk.feature.ee = true;

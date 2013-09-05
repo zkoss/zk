@@ -1,4 +1,5 @@
-<zk><hbox>
+<zk>
+<hbox>
     <window border="normal" height="360px"
         title="minimum Flex: [Tabbox, Vlayout]" width="480px">
         <vlayout height="200px" hflex="min">

@@ -19,8 +19,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}: zk.$void;
 
 	function _syncFrozen(wgt) {
-		if ((wgt = wgt.getMeshWidget()) && (wgt = wgt.frozen))
-			wgt._syncFrozen();
+		var mesh = wgt.getMeshWidget(), frozen;
+		if (mesh && (frozen = mesh.frozen)) {
+			var hdfaker;
+			if (mesh._nativebar) {
+				frozen._syncFrozen();
+			} else if ((hdfaker = mesh.ehdfaker)) {
+				//_scrollScale is used in Scrollbar.js
+				frozen._scrollScale = 
+					hdfaker.childNodes.length - frozen._columns - 1;
+			}
+		}
 	}
 
 var HeadWidget =
@@ -34,7 +43,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		this.$supers('$init', arguments);
 		this.listen({onColSize: this}, -1000);
 	},
-
+	
 	$define: {
 		/** Returns whether the width of the child column is sizable.
 		 * @return boolean
@@ -50,7 +59,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
-
+	
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (!this.$instanceof(zul.mesh.Auxhead))
@@ -127,7 +136,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				hdf = hdfaker ? hdfaker.firstChild : null,
 				bdf = bdfaker ? bdfaker.firstChild : null,
 				everFlex = false; 
-			for(var h = this.firstChild; h; h = h.nextSibling) {
+			for (var h = this.firstChild; h; h = h.nextSibling) {
 				if (h._nhflex > 0) { //not min or undefined
 					everFlex = true;
 					if (hdf) hdf.style.width = '';
@@ -136,10 +145,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				if (hdf) hdf = hdf.nextSibling;
 				if (bdf) bdf = bdf.nextSibling;
 			}
-			if (zk.ie < 8 && everFlex) { //ie6/7 will generate horizontal/vertical bar, has to set extra bdfaker to zero pixel(it works) 
-				if (hdf) hdf.style.width='0px';
-				if (bdf) bdf.style.width='0px';
-			}
 		}
 		return true;
 	},
@@ -147,8 +152,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		var wgt = this.parent;
 		if (wgt) {
 			wgt._adjFlexWd();
-			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space 
-			wgt._removeScrollbar(); // 3188023: Unwanted vertical scrollbar
+			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
 		}
 	},
 	deferRedrawHTML_: function (out) {
@@ -156,9 +160,14 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	}
 },{ //static
 	redraw: function (out) {
-		out.push('<tr', this.domAttrs_(), ' align="left">');
+		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
+
+		var mesh = this.getMeshWidget();
+		if (mesh._nativebar && !mesh.frozen)
+			out.push('<th class="', this.$s('bar'), '" />');
+
 		out.push('</tr>');
 	}
 });

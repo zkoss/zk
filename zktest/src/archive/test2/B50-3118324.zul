@@ -2,8 +2,8 @@
 <zk>
 	<style>
 		.z-label, .z-radio { display:block; } tr.z-row td.z-row-inner {
-		padding: 2px 5px; } .z-row-cnt, .z-column-cnt { text-align:
-		center; } .category-center .z-auxheader-cnt { text-align:
+		padding: 2px 5px; } .z-row-cnt, .z-column-content { text-align:
+		center; } .category-center .z-auxheader-content { text-align:
 		center; } .footer_right { text-align:right; }
 		.footer_right_black { text-align:right; background-color:
 		#000000; color:#ffffff; }

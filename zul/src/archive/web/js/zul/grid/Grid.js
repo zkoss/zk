@@ -12,43 +12,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The grid related widgets, such as grid and row.
- */
-//zk.$package('zul.grid');
-
-/** @class zul.grid.Renderer
- * The renderer used to render a grid.
- * It is designed to be overriden
- */
-zul.grid.Renderer = {
-	/** Update the size of the column menu button when mouse over
-	 * 
-	 * @param zul.grid.Column col the column
-	 */
-	updateColumnMenuButton: function (wgt) {
-		var n = wgt.$n(), btn;
-		if (btn = wgt.$n('btn')) 
-			btn.style.height = zk.ie6_ || zk.ie7_ ? 
-					n.offsetHeight - 1  + 'px' : n.offsetHeight + "px";
-	}
-};
-
 (function () {
-	// fix for the empty message shows up or now.
+	// fix for the empty message shows up or not.
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
+			var $jq = jq(wgt.$n('empty')),
+				colspan = 0;
 			if (wgt.rows && wgt.rows.nChildren) {
-				jq(wgt.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+				$jq.hide();
 			} else {
-				var $jq = jq(wgt.$n("empty")),
-					colspan = 0;
 				if (wgt.columns) {
 					for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
 						if (w.isVisible())
 							colspan++;
 				}
-				
-				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.attr('colspan', colspan || 1);
 				$jq.show();
 			}
 		}
@@ -61,18 +39,18 @@ var Grid =
  * It is used to create a grid of elements.
  * Both the rows and columns are displayed at once although only one will
  * typically contain content, while the other may provide size information.
- *
+ * 
  * <p>Default {@link #getZclass}: z-grid.
- *
+ * 
  * <p>To have a grid without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
- *
- * 
  */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
-	$define:{
-		emptyMessage:function(msg){
-			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+	_scrollbar: null,
+	$define: {
+		emptyMessage: function(msg) {
+			if(this.desktop)
+				jq(this.$n('empty')).html(msg);
 		}
 	},
 	/** Returns the specified cell, or null if not available.
@@ -82,9 +60,12 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */	
 	getCell: function (row, col) {
 		var rows;
-		if (!(rows = this.rows)) return null;
-		if (rows.nChildren <= row) return null;
-
+		if (!(rows = this.rows))
+			return null;
+		
+		if (rows.nChildren <= row)
+			return null;
+		
 		var row = rows.getChildAt(row);
 		return row.nChildren <= col ? null: row.getChildAt(col);
 	},
@@ -93,7 +74,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * @return String
 	 */
 	getOddRowSclass: function () {
-		return this._scOddRow == null ? this.getZclass() + "-odd" : this._scOddRow;
+		return this._scOddRow == null ? this.$s('odd') : this._scOddRow;
 	},
 	/** Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
@@ -159,7 +140,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!ignoreDom)
 			this.rerender();
-		if (!_noSync)//bug#3301498: we have to sync even if child is rows
+		if (!_noSync) //bug#3301498: we have to sync even if child is rows
 			this._syncSize();  //sync-size required
 	},
 	onChildRemoved_: function (child) {
@@ -177,9 +158,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.foot = null;
 		else if (child == this.paging) 
 			this.paging = null;
-		else if (child == this.frozen) 
+		else if (child == this.frozen) {
 			this.frozen = null;
-
+			this.destroyBar_();
+		}
 		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
 			this._syncSize();
 	},
@@ -190,9 +172,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
-		var uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody id="', uuid, '-empty" class="', zcls,
-				'-empty-body" style="display:none"><tr><td>',
+		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="'
+				, this.uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {
@@ -202,9 +183,53 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			_fixForEmpty(w);
 		});
 	},
-	onResponse: function () {
+	unbind_: function () {
+		this.destroyBar_();
+		this.$supers(Grid, 'unbind_', arguments);
+	},
+	onSize: function () {
+		this.$supers(Grid, 'onSize', arguments);
+		var self = this;
+		setTimeout(function () {
+			if (self.desktop && !self._nativebar) {
+				if (!self._scrollbar)
+					self._scrollbar = zul.mesh.Scrollbar.init(self);
+				if (!this._grid$rod || this.inPagingMold())
+					self.refreshBar_();
+			}
+		}, 200);
+	},
+	refreshBar_: function (showBar, scrollToTop) {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			this._shallShowScrollbar = false;
+			if (scrollToTop)
+				bar.scrollTo(0, 0);
+			else
+				bar.scrollTo(this._currentLeft, this._currentTop);
+			
+			//sync frozen
+			var frozen = this.frozen,
+				start;
+			if (frozen && (start = frozen._start) != 0) {
+				frozen._doScrollNow(start);
+				bar.setBarPosition(start);
+			}
+		}
+	},
+	destroyBar_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
+		}
+	},
+	onResponse: function (ctl, opts) {
 		if (this._shallFixEmpty) 
 			_fixForEmpty(this);
+		if (this.desktop && opts && opts.rtags.onDataLoading)
+			this._shallShowScrollbar = true;
 		this.$supers(Grid, 'onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns
@@ -224,19 +249,19 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			if (fakerows) {
 				jq(fakerows).replaceWith(child.redrawHTML_());
 				child.bind(desktop);
-				this.ebodyrows = child.$n().rows;
+				this.ebodyrows = child.$n();
 				return;
 			} else {
 				var tpad = this.$n('tpad');
 				if (tpad) {
 					jq(tpad).after(child.redrawHTML_());
 					child.bind(desktop);
-					this.ebodyrows = child.$n().rows;
+					this.ebodyrows = child.$n();
 					return;
 				} else if (this.ebodytbl) {
 					jq(this.ebodytbl).append(child.redrawHTML_());
 					child.bind(desktop);
-					this.ebodyrows = child.$n().rows;
+					this.ebodyrows = child.$n();
 					return;
 				}
 			}

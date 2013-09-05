@@ -13,46 +13,41 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var parent = this.parent,
-		uuid = this.uuid,
-		zcls = this.getZclass(),
+	var p = this.parent,
 		cnt = this.domContent_();
-	if (parent._isDefault && parent._isDefault()) {
-		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt" class="', 
-				zcls, '-cnt">', cnt);
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			w.redraw(out);
-		out.push('</span></div>');
-		return;
-	}
-
-	var puuid = parent.uuid,
-		pzcls = parent.getZclass();
-	out.push('<table', this.domAttrs_(), zUtl.cellps0,
-			' width="100%"><tr valign="middle"><td id="', uuid, '-cnt" align="left" class="',
-			zcls, '-l">', (cnt ? cnt : this._getBlank()), //Bug 1688261: nbsp required
-			'</td><td align="right" class="', zcls,
-			'-r" id="', uuid, '-cave">');
+	out.push('<div', this.domAttrs_(), '>',
+		'<div id="', this.uuid, '-cave" class="', this.$s('content'), 
+		'">', (cnt ? cnt : this._getBlank()), '</div>'); // Bug 1688261: &nbsp required
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
-
-	out.push('</td>');
-	if (this._isCollapsibleVisible())
-		out.push('<td width="16"><div id="', puuid, '-exp" class="',
-				pzcls, '-icon ', pzcls, '-exp"></div></td>');
-	if (this._isMinimizeVisible())
-		out.push('<td width="16"><div id="', puuid, '-min" class="',
-				pzcls, '-icon ', pzcls, '-min"></div></td>');
-	if (this._isMaximizeVisible()) {
-		out.push('<td width="16"><div id="', puuid, '-max" class="',
-				pzcls, '-icon ', pzcls, '-max');
-		if (parent.isMaximized())
-			out.push(' ', pzcls, '-maximized');
-		out.push('"></div></td>');
+	
+	if (p._isDefault && p._isDefault()) {
+		out.push('</div>');
+		return; 
 	}
+	
+	var puuid = p.uuid,
+		picon = p.$s('icon'),
+		getIcon = function(iconClass) {
+			return '<i class="z-icon-' + iconClass + '"></i>';
+		};
+	
 	if (this._isCloseVisible())
-		out.push('<td width="16"><div id="', puuid, '-close" class="',
-				pzcls, '-icon ', pzcls, '-close"></div></td>');
-
-	out.push('</tr></table>');
+		out.push('<div id="', puuid, '-close" class="', picon, ' ', p.$s('close'),
+				'">', getIcon('remove'), '</div>');
+	if (this._isMaximizeVisible()) {
+		out.push('<div id="', puuid, '-max" class="', picon, ' ', p.$s('maximize'));
+		if (p.isMaximized())
+			out.push(' ', p.$s('maximized'));
+		out.push('">', this._maximized ? 
+				getIcon('resize-small') : getIcon('fullscreen'), '</div>');
+	}
+	if (this._isMinimizeVisible())
+		out.push('<div id="', puuid, '-min" class="', picon, ' ', p.$s('minimize'),
+				'">', getIcon('minus'), '</div>');
+	if (this._isCollapsibleVisible())
+		out.push('<div id="', puuid , '-exp" class="', picon, ' ', p.$s('expand'),
+				'" >', p._open ? getIcon('caret-up') : getIcon('caret-down'), '</div>');
+	
+	out.push('</div>');
 }

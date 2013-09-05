@@ -15,15 +15,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _setOpen(wgt, open, opts) {
 		var colps = wgt.getCollapse();
-		if (!colps || "none" == colps) return; //nothing to do
+		if (!colps || 'none' == colps) return; //nothing to do
 
 		var nd = wgt.$n('chdex'),
 			vert = wgt.isVertical(),
 			Splitter = wgt.$class,
-			before = colps == "before",
+			before = colps == 'before',
 			sib = before ? Splitter._prev(nd): Splitter._next(nd),
 			sibwgt = zk.Widget.$(sib),
-			fd = vert ? "height": "width", 
+			fd = vert ? 'height': 'width', 
 			diff = 0;
 		if (sib) {
 			if (!open)
@@ -46,9 +46,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
 		if (sib2) {
 			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
-			diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
-			if (diff < 0) diff = 0;
-			c.style[fd] = diff + "px";
+				sz = c.style[fd];
+			//ZK-1879: set width only if it has width originally
+			if (sz && sz.indexOf('px') > -1) {
+				diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
+				if (diff < 0) diff = 0;
+				c.style[fd] = diff + 'px';
+			}
 		}
 		if (sib && open)
 			zUtl.fireShown(sibwgt);
@@ -81,7 +85,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * 
  */
 zul.box.Splitter = zk.$extends(zul.Widget, {
-	_collapse: "none",
+	_collapse: 'none',
 	_open: true,
 
 	$define: {
@@ -114,7 +118,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	 */
 	getOrient: function () {
 		var p = this.parent;
-		return p ? p.getOrient(): "vertical";
+		return p ? p.getOrient(): 'vertical';
 	},
 
 	/** Returns the collapse of this button.
@@ -144,11 +148,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	getZclass: function () {
-		var zcls = this._zclass,
-			name = this.getMold() == "os" ? "z-splitter-os" : "z-splitter";
-			
-		return zcls ? zcls:	name + (this.isVertical() ? "-ver" : "-hor");
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			sc += ' ' + this.$s('vertical' == this.getOrient() ? 'vertical' : 'horizontal');
+		}
+		return sc;
 	},
 	setZclass: function () {
 		this.$supers('setZclass', arguments);
@@ -172,9 +177,6 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (!this.$weave) {
 			var $btn = jq(this.$n('btn'));
-			if (zk.ie)
-				$btn.mouseover(Splitter.onover)
-					.mouseout(Splitter.onout);
 			$btn.click(Splitter.onclick);
 		}
 
@@ -201,10 +203,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			btn;
 		if (btn = this.$n('btn')) {
 			var $btn = jq(btn);
-			if (zk.ie)
-				$btn.unbind("mouseover", Splitter.onover)
-					.unbind("mouseout", Splitter.onout);
-			$btn.unbind("click", Splitter.onclick);
+			$btn.unbind('click', Splitter.onclick);
 		}
 
 		this._drag.destroy();
@@ -217,83 +216,60 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var node = this.$n(),
 			p = node.parentNode;
 		if (p) {
-			var vert = this.isVertical(),
-				zcls = this.getZclass();;
+			var vert = this.isVertical();
 			if (vert) p = p.parentNode; //TR
-			if (p && p.id.endsWith("-chdex")) {
-				p.className = zcls + "-outer";
-				if (vert)
-					node.parentNode.className = zcls + "-outer-td";
+			if (p && p.id.endsWith('chdex')) {
+				p.className = this.$s('outer');
 			}
 		}
 		if (inner) this._fixbtn();
 	},
 	_fixNSDomClass: function () {
 		jq(this.$n())
-			[this._open ? 'removeClass':'addClass'](this.getZclass()+"-ns");
+			[this._open ? 'removeClass':'addClass'](this.$s('nosplitter'));
 	},
 	_fixbtn: function () {
 		var $btn = jq(this.$n('btn')),
+			$icon = jq(this.$n('icon')),
 			colps = this.getCollapse();
-		if (!colps || "none" == colps) {
-			$btn.hide();
+		if (!colps || 'none' == colps) {
+			$btn.addClass(this.$s('button-disabled'));
+			$icon.hide();
 		} else {
-			var zcls = this.getZclass(),
-				before = colps == "before";
+			var before = colps == 'before';
 			if (!this._open) before = !before;
 
 			if (this.isVertical()) {
-				$btn.removeClass(zcls + "-btn-" + (before ? "b" : "t"));
-				$btn.addClass(zcls + "-btn-" + (before ? "t" : "b"));
+				jq(this.$n('icon')).removeClass(before ? 'z-icon-caret-down' : 'z-icon-caret-up')
+					.addClass(before ? 'z-icon-caret-up' : 'z-icon-caret-down');
 			} else {
-				$btn.removeClass(zcls + "-btn-" + (before ? "r" : "l"));
-				$btn.addClass(zcls + "-btn-" + (before ? "l" : "r"));
+				jq(this.$n('icon')).removeClass(before ? 'z-icon-caret-right' : 'z-icon-caret-left')
+					.addClass(before ? 'z-icon-caret-left' : 'z-icon-caret-right');
 			}
-			$btn.show();
+			$btn.removeClass(this.$s('button-disabled'));
+			$icon.show();
 		}
 	},
 	setBtnPos_: function (ver) {
 		var btn = this.$n('btn'),
 			node = this.$n();
 		if (ver)
-			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2)+"px";
+			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2)+'px';
 		else
-			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2)+"px";
+			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2)+'px';
 	},
 	_fixsz: _zkf = function () {
 		if (!this.isRealVisible()) return;
 
 		var node = this.$n(), pn = node.parentNode;
 		if (pn) {
-			var bfcolps = "before" == this.getCollapse();
+			var bfcolps = 'before' == this.getCollapse();
 			if (this.isVertical()) {
-				//Note: when the browser resizes, it might adjust splitter's wd/hgh
-				//Note: the real wd/hgh might be bigger than 8px (since the width
-				//of total content is smaller than pn's width)
-				//We 'cheat' by align to top or bottom depending on z.colps
-				if (bfcolps) {
-					pn.vAlign = "top";
-					pn.style.backgroundPosition = "top left";
-				} else {
-					pn.vAlign = "bottom";
-					pn.style.backgroundPosition = "bottom left";
-				}
-
-				node.style.width = ""; // clean width
-				node.style.width = pn.clientWidth + "px"; //all wd the same
+				node.style.width = pn.clientWidth + 'px'; //all wd the same
 				this.setBtnPos_(true);
 			} else {
-				if (bfcolps) {
-					pn.align = "left";
-					pn.style.backgroundPosition = "top left";
-				} else {
-					pn.align = "right";
-					pn.style.backgroundPosition = "top right";
-				}
-
-				node.style.height = ""; // clean height
 				node.style.height =
-					(zk.safari ? pn.parentNode.clientHeight: pn.clientHeight)+"px";
+					(zk.webkit ? pn.parentNode.clientHeight: pn.clientHeight)+'px';
 					//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
 				this.setBtnPos_();
 			}
@@ -306,7 +282,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	beforeSize: function () {
-		this.$n().style[this.isVertical() ? "width": "height"] = "";
+		if(zk.ie != 8)
+			this.$n().style[this.isVertical() ? 'width': 'height'] = '';
 	},
 
 	_fixszAll: function () {
@@ -322,14 +299,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 },{
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		jq(wgt.$n('btn')).removeClass(wgt.getZclass() + "-btn-visi");
 		wgt.setOpen(!wgt._open);
 	},
 
 	//drag
 	_ignoresizing: function (draggable, pointer, evt) {
 		var wgt = draggable.control;
-		if (!wgt._open || wgt.$n('btn') == evt.domTarget) return true;
+		if (!wgt._open || wgt.$n('icon') == evt.domTarget) return true;
 
 		var run = draggable.run = {},
 			node = wgt.$n(),
@@ -344,7 +320,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		return false;
 	},
 	_ghostsizing: function (draggable, ofs, evt) {
-		var $node = zk(draggable.node);
+		var $node = zk(draggable.node.parentNode);
 		jq(document.body).append(
 			'<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
@@ -358,19 +334,19 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			node = wgt.$n(),
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
-			bfcolps = "before" == wgt.getCollapse(),
+			bfcolps = 'before' == wgt.getCollapse(),
 			run = draggable.run, diff, fd, w;
 
 		if (vert) {
 			diff = run.z_point[1];
-			fd = "height";
+			fd = 'height';
 
 			//We adjust height of TD if vert
 			if (run.next && run.next.cells.length) run.next = run.next.cells[0];
 			if (run.prev && run.prev.cells.length) run.prev = run.prev.cells[0];
 		} else {
 			diff = run.z_point[0];
-			fd = "width";
+			fd = 'width';
 		}
 		if (!diff) return; //nothing to do
 
@@ -382,14 +358,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			var s = zk.parseInt(w.style[fd]);
 			s -= diff;
 			if (s < 0) s = 0;
-			w.style[fd] = s + "px";
+			w.style[fd] = s + 'px';
 			if (!bfcolps) w.style.overflow = 'hidden';
 		}
 		if (w = run.prev) {
 			var s = zk.parseInt(w.style[fd]);
 			s += diff;
 			if (s < 0) s = 0;
-			w.style[fd] = s + "px";
+			w.style[fd] = s + 'px';
 			if (bfcolps) w.style.overflow = 'hidden';
 		}
 
@@ -449,23 +425,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	}
 });
 
-if (zk.ie) {
-	zul.box.Splitter.onover = function (evt) {
-		var wgt = zk.Widget.$(evt);
-		$(wgt.$n('btn')).addClass(wgt.getZclass() + '-btn-visi');
-	};
-	zul.box.Splitter.onout = function (evt) {
-		var wgt = zk.Widget.$(evt);
-		$(wgt.$n('btn')).removeClass(wgt.getZclass() + '-btn-visi');
-	};
-}
 /* Use fix table layout */
 if (zk.opera) { //only opera needs it
 	zul.box.Splitter._fixLayout = function (wgt) {
 		var box = wgt.parent.$n();
-		if (box.style.tableLayout != "fixed") {
+		if (box.style.tableLayout != 'fixed') {
 			var fl = [box, box.style.tableLayout];
-			box.style.tableLayout = "fixed";
+			box.style.tableLayout = 'fixed';
 			return fl;
 		}
 	};

@@ -21,19 +21,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <li>panel: this mold is used for {@link zul.wnd.Panel} component as its
  * foot toolbar.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-toolbar, if {@link #getMold()} is panel,
- * z-toolbar-panel is assumed.
+ * <p>Default {@link #getZclass}: z-toolbar
  */
 zul.wgt.Toolbar = zk.$extends(zul.Widget, {
-	_orient: "horizontal",
-	_align: "start",
+	_orient: 'horizontal',
+	_align: 'start',
 
 	$define: {
-		/** Returns the alignment.
-		 * <p>Default: null (use browser default).
+		/**
+		 * Returns the alignment of any children added to this toolbar. Valid values
+		 * are "start", "end" and "center".
+		 * <p>Default: "start"
 		 * @return String
 		 */
-		/** Sets the alignment: one of left, center, right, ustify,
+		/**
+		 * Sets the alignment of any children added to this toolbar. Valid values
+		 * are "start", "end" and "center".
+		 * <p>Default: "start", if null, "start" is assumed.
 		 * @param String align
 		 */
 		align: _zkf = function () {
@@ -48,40 +52,35 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		 */
 		orient: _zkf
 	},
-	
-	// ZK-1706: cave size should be same as node width
-	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
-		if (this._orient == 'vertical') {
-			var cave = this.$n('cave');
-			if (cave)
-				n.style.height = cave.style.height = jq.px(height - zkn.padBorderHeight());
-			else
-				n.style.height = jq.px(height - zkn.padBorderHeight());
-		}
-	},
-	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
-		if (this._orient == 'horizontal') {
-			var cave = this.$n('cave');
-			if (cave)
-				n.style.width = cave.style.width = jq.px(width - zkn.padBorderWidth());
-			else
-				n.style.width = jq.px(width - zkn.padBorderWidth());
-		}
-	},
-
 	// super
-	getZclass: function(){
-		var zcls = this._zclass;
-		return zcls ? zcls : "z-toolbar"
-			+ (this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? "-tabs" : "") 
-			+ (this.inPanelMold() ? "-panel" : "");
-	}, 
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			var tabs = this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? this.$s('tabs') : '';
+				
+			if (tabs)
+				sc += ' ' + tabs;
+			if (this.inPanelMold())
+				sc += ' ' + this.$s('panel');
+		}
+		return sc;
+	},
+	// Bug ZK-1706 issue: we have to expand the width of the content div when
+	// align="left", others won't support
+	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+		this.$supers('setFlexSizeW_', arguments);
+		if (!isFlexMin && this.getAlign() == 'start') {
+			var cave = this.$n('cave');
+			if (cave)
+				cave.style.width = jq.px0(zk(this.$n()).contentWidth());
+		}
+	},
 	/**
 	 * Returns whether is in panel mold or not.
 	 * @return boolean
 	 */
 	inPanelMold: function(){
-		return this._mold == "panel";
+		return this._mold == 'panel';
 	},
 	// protected
 	onChildAdded_: function(){
@@ -93,6 +92,5 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_ && this.inPanelMold())
 			this.rerender();
-	}
-	
+	}	
 });
