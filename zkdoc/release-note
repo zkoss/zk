@@ -54,6 +54,24 @@ ZK 6.5.4
   ZK-1875: DateFormatConverter should be serializable
   ZK-1885: IE8 scrollable div (with vflex) and tooltip
   ZK-1884: The slider's value should not be greater then maxpos after clicked its rightmost position
+  ZK-1887: detach - reattach component in ViewModel @AfterCompose, fails to initialize bindings
+  ZK-1888: Grid in paging mold doesn't change pages count
+  ZK-1889: zul.lang.wpd is always loaded twice with some JS package merge configurations
+  ZK-1893: Failure to configure log handler properties
+  ZK-1890: Can't subscribe eventqueue in desktop cleanup
+  ZK-1897: Possible Cross-site Scripting Vulnerability
+  ZK-1896: ZK session timeout on JBoss AS 7 cluster issue
+  ZK-1895: Paging on listbox with onFulfill
+  ZK-1900: Auto-complete Combobox in the bottom of the browser doesn't sync dropdown position well
+  ZK-1891: Combobox with Validator will trigger reload selectedItem when typing
+  ZK-1905: Chosenbox emptyMessage does not re-appear after remove all selected items
+  ZK-1904: Datebox doesn't sync dropdown stackup well (IE only)
+  ZK-1908: Databinding Load order causing problems on Paging component.
+  ZK-1909: Set maxlength attribute to the doublebox conponent, the maxlength checking is not correct
+  ZK-1913: AuResponse of stop comet server push would override the request of start in some situation
+  ZK-1907: Validation error style, long words overlapping box
+  ZK-1906: Chosenbox getSelectedObjects() returns empty list if model is ListModel of JavaBean instances instead of ListModel of String
+  ZK-1916: Different language codes for IE10 under Windows 8
 
 
   --------

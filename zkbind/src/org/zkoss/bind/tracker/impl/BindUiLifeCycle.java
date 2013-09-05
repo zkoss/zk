@@ -108,7 +108,16 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 
 	public void afterComponentDetached(Component comp, Page prevpage) {
-		removeBindings(comp);
+		//ZK-1887 should post the remove as well in detach
+		comp.addEventListener(10000, BinderImpl.ON_BIND_CLEAN, new EventListener<Event>() {
+			public void onEvent(Event event) throws Exception {
+				final Component comp = event.getTarget();
+				comp.removeEventListener(BinderImpl.ON_BIND_CLEAN, this);
+				removeBindings(comp);
+			}
+		});
+		// post ON_BIND_INIT event
+		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
 	}
 
 	public void afterComponentMoved(Component parent, Component child,

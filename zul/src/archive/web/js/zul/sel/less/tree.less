@@ -139,10 +139,10 @@
 	&-checkable {
 		width: @baseIconWidth;
 		height: @baseIconHeight;
-		border: 1px solid @baseBorderColor;
+		border: 1px solid @checkedBorderColor;
 		display: inline-block;
 		vertical-align: middle;
-		.verGradient();
+		background: @checkedBackgroundColor;
 		&.z-treerow-radio {
 			.borderRadius(8px);
 		}

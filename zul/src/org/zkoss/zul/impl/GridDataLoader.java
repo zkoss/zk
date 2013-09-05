@@ -405,6 +405,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 			if (atg >= pgi.getPageCount())
 				atg = pgi.getPageCount() - 1;
 			pgi.setActivePage(atg);
+			if (pgi.getTotalSize() != newsz)
+				pgi.setTotalSize(newsz); //Bug ZK-1888 - Grid in paging mold doesn't change pages count
 		}
 	}
 

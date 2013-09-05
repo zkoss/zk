@@ -14,8 +14,11 @@ package org.zkoss.bind.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -90,9 +93,7 @@ public class AnnotateBinderHelper {
 	}
 	
 	private void processComponentBindings0(Component comp) {
-		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		
-		final List<String> props = compCtrl.getAnnotatedProperties();// look every property has annotation	
+		final List<String> props = AnnotationUtil.getNonSystemProperties(comp);// look every property has annotation
 		for (final Iterator<?> it = props.iterator(); it.hasNext(); ) {
 			final String propName = (String) it.next();
 			if (isEventProperty(propName)) {
@@ -118,7 +119,7 @@ public class AnnotateBinderHelper {
 		//	BinderUtil.markHandling(comp, _binder);
 		//}
 	}
-	
+
 	private boolean isEventProperty(String propName) {
 		return propName.startsWith("on") && propName.length() >= 3 && Character.isUpperCase(propName.charAt(2));
 	}

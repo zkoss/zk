@@ -45,7 +45,7 @@ public class B01787NotifyChangeCase {
 		}else{
 			counts1.put(r, c = c+1);
 		}
-		System.out.println(">>get count1 of "+n+":"+c);
+//		System.out.println(">>get count1 of "+n+":"+c);
 		return n+":"+c;
 	}
 	public String get1x(final Object n){
@@ -56,7 +56,7 @@ public class B01787NotifyChangeCase {
 		}else{
 			counts1x.put(r, c = c+1);
 		}
-		System.out.println(">>get counts1x of "+n+":"+c);
+//		System.out.println(">>get counts1x of "+n+":"+c);
 		return n+":x:"+c;
 	}
 	public String get2(final Object n){
@@ -67,7 +67,7 @@ public class B01787NotifyChangeCase {
 		}else{
 			counts2.put(r, c = c+1);
 		}
-		System.out.println(">>get count2 of "+n+":"+c);
+//		System.out.println(">>get count2 of "+n+":"+c);
 		return n+":"+c;
 	}
 	public String get3(final Object n){
@@ -78,7 +78,7 @@ public class B01787NotifyChangeCase {
 		}else{
 			counts3.put(r, c = c+1);
 		}
-		System.out.println(">>get count3 of "+n+":"+c);
+//		System.out.println(">>get count3 of "+n+":"+c);
 		return n+":"+c;
 	}
 	

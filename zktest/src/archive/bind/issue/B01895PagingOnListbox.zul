@@ -1,0 +1,35 @@
+<window border="none" width="100%" height="100%" id="test"
+    apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01895PageOnListbox')">
+    <tabbox height="100%">
+        <tabs>
+            <tab id="tab1">
+                Direct load
+            </tab>
+            <tab id="tab4">
+                On fulfill - paging
+            </tab>
+        </tabs>
+        <tabpanels>
+            <!-- Tab 1 -->
+            <tabpanel>
+                Click next tab
+            </tabpanel>
+            <!-- Tab 4 -->
+            <tabpanel fulfill="tab4.onSelect" onFulfill="@command('populateList4')">
+                <listbox model="@bind(vm.list4)" vflex="true" mold="paging"
+                    autopaging="true">
+                    <listhead>
+                        <listheader sort="auto">
+                            Title
+                        </listheader>
+                    </listhead>
+                    <template name="model">
+                        <listitem>
+                            <listcell label="${each}" />
+                        </listitem>
+                    </template>
+                </listbox>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+</window>

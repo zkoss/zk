@@ -219,10 +219,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>LOAD_EVENT</attribute-name>
-				<attribute-value>onAfterRender</attribute-value>
-			</attribute>
-			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
@@ -257,10 +253,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
-			</attribute>
-			<attribute>
-				<attribute-name>LOAD_EVENT</attribute-name>
-				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
@@ -792,7 +784,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<extends>paging</extends>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
-			<property-name>activePage</property-name>
+			<!--ZK-1908 Databinding Load order causing problems on Paging component.
+			System annotation shouldn't effect the annotation sequence.
+			after 6.5.4, add a ZKBIND prefix so it won't effect original property 
+			-->
+			<property-name>ZKBIND$activePage</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>

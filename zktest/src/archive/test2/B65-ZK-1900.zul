@@ -1,0 +1,24 @@
+<zk>
+	<zscript><![CDATA[
+		class ItemComparator implements Comparator {
+			public int compare(Object text, Object label) {
+			    String val = text.toString().toLowerCase();
+		
+			    if (val.isEmpty()) return 0;
+			    return label.toString().toLowerCase().startsWith(val)? 0: -1;
+			}
+		}
+		
+		List list = new ArrayList();
+		list.add("01");
+		list.add("02");
+		list.add("03");
+		ListModel model = ListModels.toListSubModel(
+				new ListModelList(list), new ItemComparator(), 10);
+	]]></zscript>
+	When scroll combobox to the bottom and type "01", the dropdown should apears above it and have no blank. 
+	<div height="900px"></div>
+	<combobox model="${model}" 
+		autodrop="true" autocomplete="false">
+	</combobox>
+</zk>
