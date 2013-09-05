@@ -30,6 +30,7 @@ function (out) {
 			out.push('</div>');
 		}
 	}
+
 	//head
 	if (this.treecols) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',

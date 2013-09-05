@@ -86,8 +86,6 @@ function (out) {
 		out.push('</tbody></table></div>');
 	}
 
-	if (zk.ie <= 8)
-		this._nativebar = true;
 	if (this._nativebar && this.frozen) {
 		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
 		this.frozen.redraw(out);

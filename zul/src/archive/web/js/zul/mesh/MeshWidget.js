@@ -633,8 +633,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
-		if (zk.ie <= 8)
-			this._nativebar = true;
 		
 		this._bindDomNode();
 		if (this._hflex != 'min')

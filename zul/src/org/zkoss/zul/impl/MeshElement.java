@@ -15,7 +15,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul.impl;
 
+import javax.servlet.ServletRequest;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
@@ -211,7 +215,8 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	}
 
 	/*package*/ boolean isNativeScrollbar() {
-		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
+		boolean isIE8 = Servlets.isBrowser((ServletRequest) Executions.getCurrent().getNativeRequest(), "ie8-");
+		return isIE8 ? true : Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
