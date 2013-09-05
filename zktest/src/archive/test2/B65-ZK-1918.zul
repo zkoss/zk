@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1918.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Sep 05, 2013 11:50:37 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript>
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.select.SelectorComposer;
+
+public class Serialization1 extends SelectorComposer {
+
+
+	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) {
+        try {
+            // Write the object out to a byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(compInfo);
+            out.flush();
+            out.close();
+            
+            // Make an input stream from the byte array and read
+            // a copy of the object back in.
+            byte[] data = bos.toByteArray();
+            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(data));
+            ComponentInfo restored = (ComponentInfo)in.readObject();
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	throw new RuntimeException("Error seralizing object: "+e.getMessage(), e);
+        }
+		return super.doBeforeCompose(page, parent, compInfo);
+	}
+}
+</zscript>
+If you cannot see any Java Exception, that bug has fixed.
+	<window apply="Serialization1">
+		<script type="text/javascript"><![CDATA[
+			function dummy() {
+				// nothing to do
+			}
+			]]></script>
+	</window>
+</zk>

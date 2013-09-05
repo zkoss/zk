@@ -855,7 +855,17 @@ public class ComponentInfo extends ForEachBranchInfo {
 		final Object v = s.readObject();
 		if (v instanceof String) {
 			final LanguageDefinition langdef = LanguageDefinition.lookup((String)v);
-			_compdef = langdef.getComponentDefinition((String)s.readObject());
+			final String name = (String) s.readObject();
+			try {
+				_compdef = langdef.getComponentDefinition(name);
+			} catch (DefinitionNotFoundException e) {
+				// Bug ZK-1918
+				if ("native".equals(name)) {
+					_compdef = langdef.getNativeDefinition();
+				} else {
+					throw e;
+				}
+			}
 		} else {
 			_compdef = (ComponentDefinition)v;
 		}
