@@ -4,6 +4,7 @@ ZK 6.0.6
 
 * Bugs:
   ZK-1784: client rod with hflex cause js error
+  ZK-1916: Different language codes for IE10 under Windows 8
 
 * Upgrade Notes
 
