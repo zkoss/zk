@@ -116,11 +116,11 @@ public class ThemeFns {
 					+ grad(direction, getBrowser(), colors.split(";"));
 		else {
 			String[] cols = colors.split(";");
-			StringBuilder sb = new StringBuilder("\tbackground:").append(grad(
-					direction, Browser.W3C, cols));
+			StringBuilder sb = new StringBuilder();
 			if (temp != Browser.Old_IE)
-				sb.append("\tbackground:");
-			return sb.append(grad(direction, temp, cols)).toString();
+				sb.append("\tbackground:").append(grad(direction, temp, cols));
+			sb.append("\tbackground:").append(grad(direction, Browser.W3C, cols));
+			return sb.toString();
 		}
 	}
 
