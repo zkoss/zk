@@ -51,6 +51,7 @@ ZK 6.5.4
   ZK-1916: Different language codes for IE10 under Windows 8
   ZK-1918: Serialization issue with Script component
   ZK-1920: after listbox.getItems().clear() and re-assign listitems to the listbox, listitem.setSelected(true) do not work
+  ZK-1925: IE9/10 Chrome vflex issue, with invisible divs
 
 
   --------
