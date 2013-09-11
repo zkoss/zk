@@ -77,6 +77,8 @@
 		}
 	}
 	&[disabled] {
+		cursor: default;
+
 		.z-combobutton-content,
 		.z-combobutton-button {
 			border-color: @buttonBorderColor;
@@ -113,6 +115,7 @@
 			.z-combobutton-button {
 				border-color: transparent;
 				.boxShadow('none');
+				.resetGradient();
 				.disabledOpacity();
 			}
 		}

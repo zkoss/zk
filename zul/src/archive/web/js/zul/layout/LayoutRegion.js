@@ -286,7 +286,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
 	 *
 	 * <p>
-	 * Default: "5,5,5,5".
+	 * Default: "3,3,3,3".
 	 * @return String
 	 */
 	getCmargins: function () {
