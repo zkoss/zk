@@ -507,18 +507,22 @@ span.z-upload input {
 	position: absolute;
 	display: none;
 	.opacity(0);
+
 	//vertical
 	&-vertical {
 		top: 0;
 		right: 0;
 		width: @scrollbarWidth;
 		height: 100%;
-		.z-scrollbar-wrapper {
-			position: absolute;
-			top: @baseIconHeight;
-			left: 0;
-			width: 100%;
-			.z-scrollbar-indicator {
+
+		.z-scrollbar {
+			&-wrapper {
+				position: absolute;
+				top: @baseIconHeight;
+				left: 0;
+				width: 100%;
+			}
+			&-indicator {
 				position: absolute;
 				width: @scrollbarWidth - 2;
 				left: 1px;
@@ -527,21 +531,21 @@ span.z-upload input {
 				.borderRadius(@borderRadiusSmall - 1);
 				.horGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
 				z-index: 100;
-				> .z-icon-reorder:before {
-					width: @baseIconWidth;
-					height: @baseIconHeight;
-					position: absolute;
-					left: -1px;
-					top: 50%;
-					margin-top: -8px;
-					color: @iconColor;
-					.transform('scale(0.6, 0.9)');
-				}
 			}
-			.z-scrollbar-rail {
+			&-rail {
 				height: 100%;
 			    width: 100%;
 			    background: @scrollbarBackgroundColor;
+			}
+			&-icon {
+				width: @baseIconWidth;
+				height: @baseIconHeight;
+				position: absolute;
+				left: -1px;
+				top: 50%;
+				margin-top: -8px;
+				color: @iconColor;
+				.transform('scale(0.5, 0.7)');
 			}
 		}
 		&-embed {
@@ -585,18 +589,22 @@ span.z-upload input {
 			top: 1px;
 		}
 	}
+
 	//horizontal
 	&-horizontal {
 		left: 0;
 		bottom: 0;
 		width: 100%;
 		height: @scrollbarHeight;
-		.z-scrollbar-wrapper {
-			position: absolute;
-			bottom: 0;
-			left: @baseIconWidth;
-			height: 100%;
-			.z-scrollbar-indicator {
+
+		.z-scrollbar {
+			&-wrapper {
+				position: absolute;
+				bottom: 0;
+				left: @baseIconWidth;
+				height: 100%;
+			}
+			&-indicator {
 				position: absolute;
 				height: @scrollbarHeight - 2;
 				top: 1px;
@@ -605,19 +613,19 @@ span.z-upload input {
 				.borderRadius(2px);
 				.verGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
 				z-index: 100;
-				> .z-icon-reorder:before {
-					position: absolute;
-					left: 50%;
-					top: -2px;
-					margin-left: -8px;
-					color: @iconColor;
-					.transform('rotate(90deg) scale(0.5, 0.7)');
-				}
 			}
-			.z-scrollbar-rail {
+			&-rail {
 				width: 100%;
 				height: 100%;
 				background: @scrollbarBackgroundColor;
+			}
+			&-icon {
+				position: absolute;
+				left: 50%;
+				top: -2px;
+				margin-left: -8px;
+				color: @iconColor;
+				.transform('rotate(90deg) scale(0.5, 0.7)');
 			}
 		}
 		&-embed {
