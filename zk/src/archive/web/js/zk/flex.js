@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ps = $prev[0].style;
 			// ZK-700
 			// ignore prev if not displayed
-			if (ps.display == 'none')
+			if (!zk($prev[0]).isRealVisible()) // B65-ZK-1925: Use isRealVisible() to determine it is visible or not
 				ignorePrev = true;
 			else {
 				zs = $zkc[0].style;
@@ -68,7 +68,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ps = $prev[0].style;
 			// ZK-700
 			// ignore prev if not displayed
-			if (ps.display == 'none')
+			if (!zk($prev[0]).isRealVisible())  // B65-ZK-1925: Use isRealVisible() to determine it is visible or not		
 				ignorePrev = true;
 			else {
 				zs = $zkc[0].style;
