@@ -53,6 +53,7 @@ ZK 6.5.4
   ZK-1920: after listbox.getItems().clear() and re-assign listitems to the listbox, listitem.setSelected(true) do not work
   ZK-1925: IE9/10 Chrome vflex issue, with invisible divs
   ZK-1914: Frozen grid with footer: throws error on client console and does not correctly calculate column width, when the frozen area is scrolled
+  ZK-1928: Converter Override (default-binding) causing "Array of attribute values not allowed "
 
 
   --------
