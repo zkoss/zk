@@ -12,7 +12,8 @@
 .z-groupbox .z-caption {
 	cursor: pointer;
 }
-.z-groupbox .z-caption-readonly {
+.z-groupbox .z-caption-readonly,
+.z-groupbox-hm-readonly .z-groupbox-title {
 	cursor: default;
 }
 .z-groupbox-hr {

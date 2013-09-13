@@ -55,6 +55,7 @@ ZK 6.5.4
   ZK-1914: Frozen grid with footer: throws error on client console and does not correctly calculate column width, when the frozen area is scrolled
   ZK-1928: Converter Override (default-binding) causing "Array of attribute values not allowed "
   ZK-1930: A Error occur on class org.zkoss.web.servlet.Servlets method public static boolean isBrowser(String userAgent, String type)
+  ZK-1929: The hover stype of non-closable groupbox are not the same
 
 
   --------
