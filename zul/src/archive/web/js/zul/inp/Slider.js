@@ -306,11 +306,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (this.isVertical()) {
 			btn.style.top = '-' + btn.offsetHeight / 2 + 'px';
 			var het = n.clientHeight;
-			inners.height = het > 0 ? jq.px0(het) : this._height - btn.offsetHeight;
+			inners.height = jq.px0(het > 0 ? het : this._height - btn.offsetHeight);
 		} else { 
 			btn.style.left = '-' + btn.offsetWidth / 2 + 'px';
 			var wd = n.clientWidth;
-			inners.width = wd > 0 ? jq.px0(wd) : this._width - btn.offsetWidth;
+			inners.width = jq.px0(wd > 0 ? wd : this._width - btn.offsetWidth);
 		}
 	},
 	_fixPos: function() {
