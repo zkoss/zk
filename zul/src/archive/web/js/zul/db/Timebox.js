@@ -438,8 +438,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		
 		this._changed = true;
 		delete this._shortcut;
-		
-		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
+
+		// B36-2678340: click btn-up icon first, then click btn-up btn, the value should not be null.
+		if(!zk.ie8_)
+			zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
 		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
 			//datebox, datebox's onblur will find zk.currentFocus is null
 
