@@ -426,8 +426,11 @@ zFlex = { //static methods
 				if (pretxt) {
 					if (!zkpOffset)
 						zkpOffset = zkp.cmOffset();
-					wdh -= _getTextWidth(zkc, zkp, zkpOffset);
-					hgh -= _getTextHeight(zkc, zkp, zkpOffset);
+					if (!cwgt || !cwgt.isExcludedHflex_()) // fixed ZK-1706 sideeffect for B60-ZK-917.zul
+						wdh -= _getTextWidth(zkc, zkp, zkpOffset);
+
+					if (!cwgt || !cwgt.isExcludedVflex_()) // fixed ZK-1706 sideeffect for B60-ZK-917.zul
+						hgh -= _getTextHeight(zkc, zkp, zkpOffset);
 				}
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
