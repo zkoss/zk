@@ -266,8 +266,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		
 		this.scrollTo(this._pos[0], this._pos[1]); //keep scroll position
 		if (showScrollbar) {
-			_showScrollbar(this, 'hor', 0.8);
-			_showScrollbar(this, 'ver', 0.8);
+			_showScrollbar(this, 'hor', 1);
+			_showScrollbar(this, 'ver', 1);
 		}
 	},
 	scrollTo: function (x, y) {
@@ -462,8 +462,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			this.scrollTo(cave.scrollLeft, cave.scrollTop);
 	},
 	_mouseEnter: function (evt) {
-		_showScrollbar(this, 'hor', 0.8);
-		_showScrollbar(this, 'ver', 0.8);
+		_showScrollbar(this, 'hor', 1);
+		_showScrollbar(this, 'ver', 1);
 	},
 	_mouseLeave: function (evt) {
 		if (this.dragging)
@@ -781,7 +781,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			'</div>',
 			'<div id="', uid,'-wrapper" class="z-scrollbar-wrapper">',
 				'<div id="', uid,'-indicator" class="z-scrollbar-indicator">',
-					'<i class="z-icon-reorder"></i></div>',
+					'<i class="z-scrollbar-icon z-icon-reorder"></i></div>',
 				'<div id="', uid,'-rail" class="z-scrollbar-rail"></div>',
 			'</div>',
 			'<div id="', uid, '-', rd, '" class="z-scrollbar-', rd, '">',

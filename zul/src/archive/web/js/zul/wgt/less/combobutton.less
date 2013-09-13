@@ -3,7 +3,8 @@
 .z-combobutton {
 	display: inline-block;
 	min-height: @baseButtonHeight;
-	
+	cursor: pointer;
+
 	&-content {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
@@ -18,7 +19,6 @@
 		.borderRadius(@borderRadiusSmall);
 		color: @baseTextColor;
 		position: relative;
-		cursor: default;
 		display: inline-block;
 		vertical-align: middle;
 		white-space: nowrap;
@@ -27,7 +27,6 @@
 		vertical-align: middle;
 	}
 	&-button {
-		cursor: pointer;
 		border-left: 1px solid @buttonBorderColor;
 		display: block;
 		width: @baseButtonWidth;
@@ -37,14 +36,6 @@
 		right: 0;
 		line-height: normal;
 		font-weight: normal;
-		button[disabled] + & {
-			&:hover,
-			&:active {
-				border-color: @buttonBorderColor;
-				.resetGradient();
-				.boxShadow('none');
-			}
-		}
 	}
 	&-icon {
 		font-size: @fontSizeLarge;
@@ -85,7 +76,18 @@
 			.verGradient(@activeGradientStart, @activeGradientEnd);
 		}
 	}
-	
+	&[disabled] {
+		cursor: default;
+
+		.z-combobutton-content,
+		.z-combobutton-button {
+			border-color: @buttonBorderColor;
+			.resetGradient();
+			.boxShadow('none');
+			.disabledOpacity();
+		}
+	}
+
 	//toolbar mold
 	&-toolbar {
 		.z-combobutton-content,
@@ -108,24 +110,31 @@
 				.verGradient(@hoverGradientStart, @hoverGradientEnd);
 			}
 		}
+		&[disabled] {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				border-color: transparent;
+				.boxShadow('none');
+				.resetGradient();
+				.disabledOpacity();
+			}
+		}
 	}
 }
 
 .ie8 .z-combobutton {
 	min-height: @baseButtonHeight - 10;
-	
+
 	&-content {
 		.gradientFallback();
 		min-height: @baseButtonHeight - 10;
 	}
-
 	&-toolbar {
 		.z-combobutton-content,
 		.z-combobutton-button {
 			background: transparent;
 		}
 	}
-
 	&:hover {
 		.z-combobutton-content,
 		.z-combobutton-button {

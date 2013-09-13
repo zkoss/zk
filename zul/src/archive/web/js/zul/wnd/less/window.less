@@ -1,51 +1,43 @@
 @import "~./zul/less/_header.less";
 
-@framePadding: 4px;
-
 .defaultOverflowZoom() {
 	overflow: hidden;
 	zoom: 1;
 }
 
 .z-window {
-	.defaultOverflowZoom();
 	background: @windowBackgroundColor;
 	border: 1px solid @windowBorderColor;
-	padding: @framePadding;
+	padding: @windowFramePadding;
 	.borderRadius();
-	
+
 	&-shadow {
 		.boxShadow('0 0 4px rgba(0, 0, 0, 0.25)');
 	}
-	
+
 	&-header {
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
 		cursor: default;
-		background: @windowHeaderBackground;
 		color: @textColorGrayDark;
 		line-height: @baseButtonWidth;
-		.defaultOverflowZoom();
 		padding: 3px 0 5px 0;
-		
+		.defaultOverflowZoom();
+
 		&-move {
 			cursor: move;
 		}
 	}
-	
-	> .z-window-content {
-		margin: 0;
+
+	&-content {
+		margin: 0px;
 		padding: 4px;
 		background: @contentBackgroundColor;
 		border: 1px solid @contentBorderColor;
 		.defaultOverflowZoom();
-		
-		&:first-child {
-			height: 100%;
-		}
 	}
-	
+
 	&-icon {
 		overflow: hidden;
 		margin: auto 1px;
@@ -59,7 +51,7 @@
 		cursor: pointer;
 		text-align: center;
 		color: @iconColor;
-		
+
 		&:hover {
 			.resetGradient();
 			border-color: @hoverBorderColor;
@@ -67,23 +59,23 @@
 			color: @iconHoverColor;
 		}
 	}
-	
+
 	&-maximize, &-minimize, &-close {
 		width: @baseButtonWidth + 4;
 		height: @baseButtonHeight;
 		font-size: @fontSizeLarge;
 		line-height: @baseButtonHeight;
 	}
-	
+
 	&-close {
 		font-size: @fontSizeXLarge;
 	    line-height: 23px;
 	}
-	
+
 	&-minimize {
 		padding-top: 5px;
 	}
-	
+
 	&-resize-faker {
 		position: absolute;
 		border: 1px dashed #1854C2;
@@ -94,7 +86,7 @@
 		background: #D7E6F7;
 		.opacity(0.5);
 	}
-	
+
 	&-move-ghost {
 		.topBorderRadius();
 		position: absolute;
@@ -104,7 +96,7 @@
 		.opacity(0.65);
 		cursor: move !important;
 		border: 1px solid #9F9F9F;
-		
+
 		.z-window-header {
 			padding: 7px 4px 5px 4px;
 		}
@@ -114,7 +106,7 @@
 			.opacity(1);
 		}
 		</c:if>
-		
+
 		dl {
 			border-top: 1px solid @outerBorderColor;
 			margin: 0;
@@ -125,62 +117,59 @@
 			font-size: 0;
 		}
 	}
-	
+
 	&-popup {
 		.topBorderRadius();
-		padding: @framePadding @framePadding 0 @framePadding;
+		padding: @windowFramePadding @windowFramePadding 0;
 		
 		> .z-window-content {
 			border-width: 0 0 0 0;
-			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
+			margin: 0px -1*@windowFramePadding -1*@windowFramePadding;
 		}
-		
+
 		&.z-window-noheader {
 			padding-top: 0;
 			
 			> .z-window-content {
-				margin: 0px -1 * @framePadding;
+				margin: 0px -1*@windowFramePadding;
 			}
 		}
 
 		&.z-window-noborder > .z-window-content {
-			margin: 0px -1 * @framePadding -1 * @framePadding -1 * @framePadding;
+			margin: 0px -1*@windowFramePadding -1*@windowFramePadding;
 		}
 	}
-	
+
 	&-modal&-shadow, &-highlighted&-shadow {
 		.borderRadius();
 		.boxShadow('inset 0px 1px 1px #FFFFFF, 0 0 4px rgba(0, 0, 0, 0.7)');
 	}
-	
+
 	&-embedded {
 		.borderRadius(0);
-		
+
 		.z-window-shadow {
 			.boxShadow('none');
-		}		
+		}
 	}
-	
+
 	&-noborder {
 		border: 0px;
-		padding: @framePadding @framePadding 0 @framePadding;
-		
+		padding: @windowFramePadding @windowFramePadding 0;
+
 		> .z-window-content {
-			border: 0;			
-		}
-		
-		& > .z-window-content {
-			margin: 0 -1 * @framePadding;
+			border: 0;
+			margin: 0 -1*@windowFramePadding;
 		}
 
 		&.z-window-noheader {
 			padding: 0;
 
-			> .z-window-content {
+			.z-window-content {
 				margin: 0;
 			}
 		}
-		
+
 		&.z-window-shadow {
 			.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
 		}
@@ -193,18 +182,18 @@
 		padding: 17px;
 		padding-bottom: 15px;
 	}
-	
+
 	.z-label {
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		color: @textColorGrayDark;
 	}
-	
+
 	&-button {
 		min-width: 48px;
 		width: 100%;
 	}
-	
+
 	&-icon {
 		display: inline-block;
 		background-repeat: no-repeat;
@@ -216,19 +205,19 @@
 		font-size: 30px;
 		text-align: center;
 	}
-	
+
 	&-question {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-btn.png');
 	}
-	
+
 	&-exclamation {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-btn.png');
 	}
-	
+
 	&-information {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-btn.png');
 	}
-	
+
 	&-error {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
 	}

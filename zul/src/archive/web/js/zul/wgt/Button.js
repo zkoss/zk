@@ -257,8 +257,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(Button, 'bind_', arguments);
 
 		var n = this.$n();
-		this.domListen_(n, "onFocus", "doFocus_")
-			.domListen_(n, "onBlur", "doBlur_");
+		this.domListen_(n, 'onFocus', 'doFocus_')
+			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!this._disabled && this._upload) _initUpld(this);
 	},
@@ -266,8 +266,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		_cleanUpld(this);
 
 		var n = this.$n();
-		this.domUnlisten_(n, "onFocus", "doFocus_")
-			.domUnlisten_(n, "onBlur", "doBlur_");
+		this.domUnlisten_(n, 'onFocus', 'doFocus_')
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(Button, 'unbind_', arguments);
 	},
@@ -336,7 +336,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					var perm;
 					if (perm = ad.charAt(0) == '+')
 						ad = ad.substring(1);
-					ad = "self" == ad ? wgt: wgt.$f(ad);
+					ad = 'self' == ad ? wgt: wgt.$f(ad);
 					//B50-3304877: autodisable and Upload
 					if (ad == wgt) { //backup uploader before disable
 						uplder = wgt._uplder;

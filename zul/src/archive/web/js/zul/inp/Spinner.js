@@ -208,6 +208,11 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
+		if (zk.ie8_) {
+			var btn = this.$n('btn');
+			if (btn && !this._instant && jq('#' + btn.id + ':hover').length > 0)
+				return; //Bug ZK-460: IE 8 only. If still focus on spinner, should not fire onChange.
+		}
 		this.$supers('doBlur_', arguments);
 		zul.inp.RoundUtl.doBlur_(this);
 	},
