@@ -540,6 +540,9 @@ public class Servlets {
 		if (vtype == null)
 			return true; //not care about version
 		
+		if (vclient == null)
+			return false; //not matched for Bug ZK-1930
+		
 		double v1 = vclient.doubleValue(), v2 = vtype.doubleValue();
 		return equals ? v1 == v2: v1 >= v2;
 	}	
