@@ -397,21 +397,21 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_ondropbtnup: function (evt) {
-		this.domUnlisten_(document.body, "onZMouseup", "_ondropbtnup");
+		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) { // TODO: format the value first
 		if (!this._buttonVisible || this._disabled) return;
 		
-		var btn = this.$n("btn"),
+		var btn = this.$n('btn'),
 			inp = this.getInputNode();
 			
 		if (!zk.dragging) {
 			if (this._currentbtn) // just in case
 				this._ondropbtnup(evt);
 			
-			this.domListen_(document.body, "onZMouseup", "_ondropbtnup");
+			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup');
 			this._currentbtn = btn;
 		}
 		
@@ -571,8 +571,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var btn;
 		
 		if (btn = this.$n('btn'))
-			this.domListen_(btn, "onZMouseDown", "_btnDown")
-				.domListen_(btn, "onZMouseUp", "_btnUp");
+			this.domListen_(btn, 'onZMouseDown', '_btnDown')
+				.domListen_(btn, 'onZMouseUp', '_btnUp');
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
@@ -581,10 +581,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this.timerId = null;
 		}
 		zWatch.unlisten({onSize: this});
-		var btn = this.$n("btn");
+		var btn = this.$n('btn');
 		if (btn) {
-			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")
-				.domUnlisten_(btn, "onZMouseUp", "_btnUp");
+			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
+				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 		}
 		this._changed = false;
 		this.$supers(zul.db.Timebox, 'unbind_', arguments);
@@ -638,7 +638,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					(text == 9) ? -1: 0;
 
 		if (text < 10 && !singleLen)
-			 text = "0" + text;
+			 text = '0' + text;
 		
 		inp.value = val.substring(0, start) + text + val.substring(end);
 		
