@@ -135,7 +135,9 @@
 	&:hover {
 		.borderRadius(@borderRadiusSmall - 1);
 		border: 1px solid @errorboxBorderColor;
-		.opacity(1);
+		<c:if test="${zk.ie != 8}">
+			.opacity(1);
+		</c:if>
 	}
 }
 .z-errorbox-icon {
