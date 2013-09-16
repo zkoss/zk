@@ -611,9 +611,13 @@ public class DataBinder implements java.io.Serializable {
 				String tag = entry.getKey();
 				String[] tagval = entry.getValue();
 				String tagExpr;
-				if (tagval.length != 1)
-					throw new UiException("Array of attribute values not allowed, "+Objects.toString(tagval));
-				tagExpr = tagval[0];
+				
+				// ZK-1928: Converter Override (default-binding) causing "Array of attribute values not allowed "
+//				if (tagval.length != 1)
+//					throw new UiException("Array of attribute values not allowed, "+Objects.toString(tagval));
+				
+				// get the overridden one.
+				tagExpr = tagval[tagval.length-1];
 
 				if ("save-when".equals(tag)) {
 					saveWhenEvents = parseExpression(tagExpr, ",");

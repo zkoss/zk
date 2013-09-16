@@ -311,7 +311,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 							mesh.eftfaker.childNodes[i].style.display = hidden ? 'none' : '';
 							ftcells[i].style.display = hidden ? 'none' : '';
 						}
-						ftcells[i].style.width = cellWidth;
+						if (ftcells.length > i)
+							ftcells[i].style.width = cellWidth;
 					}
 				}
 			}

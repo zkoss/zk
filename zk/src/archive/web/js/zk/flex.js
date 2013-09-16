@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if ($prev.length) {
 			ps = $prev[0].style;
 			// ZK-700 ignore prev if not displayed
-			if (ps.display == 'none')
+			if (!zk($prev[0]).isRealVisible()) // B65-ZK-1925: Use isRealVisible() to determine it is visible or not
 				return pos;
 			else {
 				zs = $zkc[0].style;
@@ -336,8 +336,10 @@ zFlex = { //static methods
 					if (!zkpOffset)
 						zkpOffset = zkp.revisedOffset();
 					var size = _getTextSize(zkc, zkp, zkpOffset);
-					wdh -= size[0];
-					hgh -= size[1];
+					if (!cwgt || !cwgt.isExcludedHflex_()) // fixed ZK-1706 sideeffect 
+						wdh -= size[0];
+					if (!cwgt || !cwgt.isExcludedVflex_()) // fixed ZK-1706 sideeffect for B60-ZK-917.zul
+						hgh -= size[1];
 				}
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1929.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Sep 13, 2013 11:17:54 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please mouse move to Title, and the cursor style should not appear the hand-pointer
+	<groupbox width="300px" height="300px" closable="false">
+		<caption label="Title"/>
+	</groupbox>
+	<groupbox title="Title" width="300px" height="300px" closable="false"/>
+</zk>
