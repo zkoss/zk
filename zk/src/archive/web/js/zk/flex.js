@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ps = $prev[0].style;
 			// ZK-700
 			// ignore prev if not displayed
-			if (!zk($prev[0]).isRealVisible()) // B65-ZK-1925: Use isRealVisible() to determine it is visible or not
+			if (jq($prev[0]).css('display') == 'none') // B65-ZK-1925, B65-ZK-1932: Use jQuery's .css() function to determine the property
 				ignorePrev = true;
 			else {
 				zs = $zkc[0].style;
@@ -68,7 +68,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ps = $prev[0].style;
 			// ZK-700
 			// ignore prev if not displayed
-			if (!zk($prev[0]).isRealVisible())  // B65-ZK-1925: Use isRealVisible() to determine it is visible or not		
+			if (jq($prev[0]).css('display') == 'none')  // B65-ZK-1925, B65-ZK-1932: Use jQuery's .css() function to determine the property	
 				ignorePrev = true;
 			else {
 				zs = $zkc[0].style;
