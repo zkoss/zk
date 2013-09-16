@@ -57,6 +57,7 @@ ZK 6.5.4
   ZK-1930: A Error occur on class org.zkoss.web.servlet.Servlets method public static boolean isBrowser(String userAgent, String type)
   ZK-1929: The hover stype of non-closable groupbox are not the same  
   ZK-1932: Another vflex issue with invisible divs (all browsers)
+  ZK-1934: Tooltip causing error, when positioning, when component is replaced at the same time
 
 
 
