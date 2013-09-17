@@ -99,6 +99,8 @@ zul.Upload = zk.$extends(zk.Object, {
 				this.maxsize = attr.match(new RegExp(/maxsize=([^,]*)/))[1];
 			else if (attr.startsWith('multiple='))
 				this.multiple = attr.match(new RegExp(/multiple=([^,]*)/))[1];
+			else if (attr.startsWith('accept='))
+				this.accept = attr.match(new RegExp(/accept=([^,]*)/))[1];
 			else if (attr == 'native')
 				this.isNative = true;
 			else if (attr != 'true')
@@ -145,6 +147,7 @@ zul.Upload = zk.$extends(zk.Object, {
 				 + '<input name="file" type="file"'
 				// multiple="" for Firefox, multiple for Chrome
 				 + (this.multiple == 'true' ? ' multiple="" multiple' : '')
+				 + (this.accept ? ' accept="' + this.accept + '"' : '')
 				 + ' hidefocus="true" style="height:'
 				 + ref.offsetHeight + 'px"/></form></span>';
 		

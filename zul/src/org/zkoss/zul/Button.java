@@ -246,7 +246,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <code>&lt;button upload="foo.Upload"/&gt;</code>
 	 *
 	 * <p> Another options for the upload can be specified as follows:
-	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,multiple=true,native"</code></pre>
+	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,multiple=true,accept=audio/*|video/*|image/*,native"</code></pre>
 	 *  <ul>
 	 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
 	 * a negative value if no limit.</li>
@@ -254,6 +254,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * image, audio or text files.</li>
 	 *  <li>multiple: treating the file chooser allows multiple files to upload,
 	 *  the setting only works with HTML5 supported browsers (since ZK 6.0.0).</li>
+	 *  <li>accept: specifies the types of files that the server accepts,
+	 *  the setting only works with HTML5 supported browsers (since ZK 7.0.0).</li>
 	 *  </ul>
 	 * 
 	 * <p> Note: if the options of the <code>false</code> or the customized handler
