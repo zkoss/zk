@@ -1,6 +1,6 @@
 <window border="normal" width="400px">
 	<label>
-	Click the button before tooltip popup and stay two seconds, it should not cause anny error or see the tooltip.
+	Click the button, hold one second and release before tooltip pop up, it should not cause anny error.
 	</label>
 	<separator height="20px"/>
 	<popup id="help" onOpen='help.appendChild(new Label("dynamic help text"));' />
