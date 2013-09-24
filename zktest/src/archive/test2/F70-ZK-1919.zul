@@ -1,8 +1,8 @@
 <zk>
 	<label multiline="true">
-	1. Add id-generator-class to "org.zkoss.zk.ui.impl.StaticIdGenerator" in zk.xml
+	1. Add id-generator-class to "org.zkoss.zk.ui.impl.StaticIdGenerator" in zk.xml (restart server)
 	2. Reload page several times, should see uuid remain the same.
-	3. Change id-generator-class to "org.zkoss.zk.ui.impl.RandomIdGenerator" in zk.xml
+	3. Remove id-generator-class of "org.zkoss.zk.ui.impl.StaticIdGenerator" in zk.xml (restart server)
 	4. Reload page several times, should see the prefix of each uuid is different.
 	</label>
 	<window id="win" border="normal" title="Test Uuid Generator">

@@ -60,8 +60,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zk.au.http.UploadInfoService$DesktopInit</listener-class>
 	</listener>
-	
-	<system-config>
-		<id-generator-class>org.zkoss.zk.ui.impl.RandomIdGenerator</id-generator-class>
-	</system-config>
 </config>
