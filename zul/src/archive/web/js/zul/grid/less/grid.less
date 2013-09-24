@@ -260,30 +260,30 @@
 // IE 8
 .ie8 {
 	.z-grid-header {
-		background: @baseGradientEnd;
+		background: @meshBackgroundColor;
 	}
 	.z-column {
 		position: static;
-		background: @baseGradientEnd;
+		background: @meshBackgroundColor;
 		&-hover {
-			background: @tableTitleHoverEnd;
+			background: @meshHoverBackgroundColor;
 		}
 
 		&-button:hover {
-			background: darken(@hoverGradientEnd, 5%);
+			background: darken(@meshHoverBackgroundColor, 3%);
 		}
 	}
 	.z-row:hover {
 		> .z-row-inner,
 		> .z-cell {
 			position: static;
-			background: @tableContentHoverEnd;
+			background: @meshHoverBackgroundColor;
 		}
 	}
 	.z-group-inner {
-		background: @groupGradientEnd;
+		background: @meshGroupBackgroundColor;
 	}
 	.z-groupfoot-inner {
-		background: average(@groupGradientStart, @groupGradientEnd);
+		background: @meshGroupFooterBackgroundColor;
 	}
 }

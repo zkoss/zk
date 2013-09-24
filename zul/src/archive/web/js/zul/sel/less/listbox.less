@@ -345,40 +345,40 @@
 	font-size: @fontSizeMedium;
 }
 // IE8
-.ie8 {
+.ie8 { 
 	.z-listbox-header {
-		background: @baseGradientEnd;
+		background: @meshBackgroundColor;
 	}
 	.z-listheader {
 		position: static;
-		background: @baseGradientEnd;
+		background: @meshBackgroundColor;
 		&-hover {
-			background: @tableTitleHoverEnd;
+			background: @meshHoverBackgroundColor;
 		}
 
 		&-button:hover {
-			background: darken(@hoverGradientEnd, 5%);
+			background: darken(@meshHoverBackgroundColor, 3%);
 		}
 	}
 	.z-listitem {
 		&:hover > .z-listcell {
-			background: @hoverGradientEnd;
+			background: @meshHoverBackgroundColor;
 		}
 		&.z-listitem-selected {
 			.z-listcell {
 				position: static;
-				background: @tableContentHoverEnd;
+				background: @meshSelectedBackgroundColor;
 			}
 			&:hover > .z-listcell {
 				position: static;
-				background: @selectedHoverGradientEnd;
+				background: @meshSelectedHoverBackgroundColor;
 			}
 		}
 	}
 	.z-listgroup-inner {
-		background: @groupGradientEnd;
+		background: @meshGroupBackgroundColor;
 	}
 	.z-listgroupfoot-inner {
-		background: average(@groupGradientStart, @groupGradientEnd);
+		background: @meshGroupFooterBackgroundColor;
 	}
 }
