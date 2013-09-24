@@ -243,27 +243,27 @@
 // IE8
 .ie8 {
 	.z-tree-header {
-		background: @baseGradientEnd;
+		background: @meshBackgroundColor;
 	}
 	.z-treecol {
 		position: static;
-		background: @baseGradientEnd;
+		background: @meshBackgroundColor;
 		&-hover, &-sort:hover {
-			background: @tableTitleHoverEnd;
+			background: @meshHoverBackgroundColor;
 		}
 	}
 	.z-treerow {
 		&:hover > .z-treecell {
-			background: @tableContentHoverEnd;
+			background: @meshHoverBackgroundColor;
 		}
 		&.z-treerow-selected {
 			.z-treecell {
 				position: static;
-				background: @selectedGradientEnd;
+				background: @meshSelectedBackgroundColor;
 			}
 			&:hover > .z-treecell {
 				position: static;
-				background: @selectedHoverGradientEnd;
+				background: @meshSelectedHoverBackgroundColor;
 			}
 		}
 	}
