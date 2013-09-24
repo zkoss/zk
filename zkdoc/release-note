@@ -1,5 +1,6 @@
   --------
-ZK 6.5.4 
+ZK 6.5.4
+Sep 24, 2013
 * Features
 
 * Bugs
@@ -60,7 +61,6 @@ ZK 6.5.4
   ZK-1934: Tooltip causing error, when positioning, when component is replaced at the same time
   ZK-1758: Selectors finds too many components when using CSS child selector
   ZK-1938: Grid/Listbox doesn't bind activePage attribute as default binding
-
 
   --------
 ZK 6.5.3
