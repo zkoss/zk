@@ -163,8 +163,8 @@ import org.zkoss.zul.impl.XulElement;
  * <dd>Specifies the number of items rendered when the Tree first render.
  * 
  * <dt>org.zkoss.zul.tree.maxRodPageSize</dt>. 
- * <dd>Specifies the maximal number of the page size that keeps the items rendered
- * when user navigating the page. (Paging mold only)
+ * <dd>Specifies how many pages (of treeitems) to keep rendered in memory
+ *  (on the server side) when navigating the tree using pagination. (Paging mold only)
  * 
  * <dt>org.zkoss.zul.tree.preloadSize</dt>. 
  * <dd>Specifies the number of items to preload when receiving
@@ -1846,7 +1846,8 @@ public class Tree extends MeshElement {
 	}
 
 	/** 
-	 * Returns the maximal number of the page size that keeps the items rendered.
+	 * Returns Specifies how many pages (of treeitems) to keep rendered in memory
+	 *  (on the server side) when navigating the tree using pagination.
 	 *  <p>
 	 * Default: 1. (Since 7.0.0)
 	 * <p>
