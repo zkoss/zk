@@ -507,8 +507,6 @@ public class Tree extends MeshElement {
 							
 							if (ti.isRendered()) {
 								ti.getChildren().clear();
-								ti.appendChild(new Treerow());
-								ti.getTreerow().appendChild(new Treecell());
 								ti.setRendered(false);
 							}
 								
@@ -1850,7 +1848,7 @@ public class Tree extends MeshElement {
 	/** 
 	 * Returns the maximal number of the page size that keeps the items rendered.
 	 *  <p>
-	 * Default: 3. (Since 7.0.0)
+	 * Default: 1. (Since 7.0.0)
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and in paging mold
 	 * ({@link #getPagingChild}.
