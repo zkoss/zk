@@ -162,6 +162,10 @@ import org.zkoss.zul.impl.XulElement;
  * <dt>org.zkoss.zul.tree.initRodSize</dt>. 
  * <dd>Specifies the number of items rendered when the Tree first render.
  * 
+ * <dt>org.zkoss.zul.tree.maxRodPageSize</dt>. 
+ * <dd>Specifies the maximal number of the page size that keeps the items rendered
+ * when user navigating the page. (Paging mold only)
+ * 
  * <dt>org.zkoss.zul.tree.preloadSize</dt>. 
  * <dd>Specifies the number of items to preload when receiving
  * the rendering request from the client.
@@ -214,6 +218,8 @@ public class Tree extends MeshElement {
 	
 	private static final int INIT_LIMIT = -1; // since 7.0.0
 	private int _preloadsz = 50; // since 7.0.0
+	private int _maxRodpz = 50; // since 7.0.0
+	private transient LinkedList<Integer> _rodPagingIndex;  // since 7.0.0
 	
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -454,13 +460,62 @@ public class Tree extends MeshElement {
 			return null; // skip to clone
 		}
 	}
+	
 	private class PGImpListener implements SerializableEventListener<PagingEvent>,
 			CloneableEventListener<PagingEvent> {
 		public void onEvent(PagingEvent event) {
 			if (inPagingMold()) {
 				if (WebApps.getFeature("ee") && getModel() != null) {
+					if (_rodPagingIndex == null)
+						_rodPagingIndex = new LinkedList<Integer>();
+					
 					int ap =  event.getActivePage();
 					int size = Tree.this.getPaginal().getPageSize();
+					int mps = maxRodPageSize();
+
+					
+					// if mps is less than 0, we don't store the index.
+					if (mps >= 0 && !_rodPagingIndex.contains(ap)) {
+						_rodPagingIndex.add(ap);
+					}	
+					
+					if (mps >= 1 && mps < _rodPagingIndex.size()) {
+						LinkedList<Integer> sortedIndex = new LinkedList<Integer>();
+						mps = _rodPagingIndex.size() - mps;
+						while (mps-- > 0) {
+							sortedIndex.add(_rodPagingIndex.removeFirst());
+						}
+						Collections.sort(sortedIndex);
+						
+						int i = 0;
+						int start = sortedIndex.removeFirst() * size;
+						int end = start + size;
+						
+						for (Treeitem ti : new ArrayList<Treeitem>(Tree.this.getItems())) {
+							if (i < start) {
+								i++;
+								continue;
+							}
+							if (i >= end) {
+								if (sortedIndex.isEmpty()) {
+									break;
+								} else {
+									start = sortedIndex.removeFirst() * size;
+									end = start + size;
+								}
+							}
+							
+							if (ti.isRendered()) {
+								ti.getChildren().clear();
+								ti.appendChild(new Treerow());
+								ti.getTreerow().appendChild(new Treecell());
+								ti.setRendered(false);
+							}
+								
+							i++;
+						}
+					}
+					
 					int start = ap * size;
 					int end = start + size;
 					int i = 0;
@@ -1792,7 +1847,21 @@ public class Tree extends MeshElement {
 		return sz;
 	}
 
-	
+	/** 
+	 * Returns the maximal number of the page size that keeps the items rendered.
+	 *  <p>
+	 * Default: 3. (Since 7.0.0)
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and in paging mold
+	 * ({@link #getPagingChild}.
+	 */
+	private int maxRodPageSize() {
+		if (WebApps.getFeature("ee")) {
+			 return Utils.getIntAttribute(this, "org.zkoss.zul.tree.maxRodPageSize",
+						INIT_LIMIT, true);
+		}
+		return -1;
+	}
 	/** 
 	 * Returns the number of items rendered when the Tree first render.
 	 *  <p>
