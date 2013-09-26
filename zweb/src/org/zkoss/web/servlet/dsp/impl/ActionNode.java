@@ -22,8 +22,10 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;
 
@@ -36,7 +38,7 @@ import org.zkoss.web.servlet.dsp.action.Action;
  * @author tomyeh
  */
 class ActionNode extends Node {
-	private static final Log log = Log.lookup(ActionNode.class);
+	private static final Logger log = LoggerFactory.getLogger(ActionNode.class);
 
 	private final Class<?> _cls;
 	private List<Attr> _attrs;
@@ -73,7 +75,7 @@ class ActionNode extends Node {
 		try {
 			return (Action)_cls.newInstance();
 		} catch (Exception ex) {
-			log.realCauseBriefly(ex); //Web server might 'eat'
+			log.error("", ex); //Web server might 'eat'
 			throw DspException.Aide.wrap(ex, "Failed to create "+_cls);
 		}
 	}
@@ -134,7 +136,7 @@ class ActionNode extends Node {
 				}
 				_method.invoke(action, args);
 			} catch (Exception ex) {
-				log.realCauseBriefly(ex); //Web server might 'eat'
+				log.error("", ex); //Web server might 'eat'
 				throw DspException.Aide.wrap(ex,
 	"Failed to invoke "+_method+" with "+args[0]
 	+(args[0] != null ? " @"+args[0].getClass().getName(): ""));

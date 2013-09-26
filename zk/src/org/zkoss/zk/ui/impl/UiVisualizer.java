@@ -35,7 +35,7 @@ import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -62,7 +62,7 @@ import org.zkoss.zk.au.out.*;
  * @author tomyeh
  */
 /*package*/ class UiVisualizer implements Visualizer {
-//	private static final Log log = Log.lookup(UiVisualizer.class);
+//	private static final Logger log = LoggerFactory.getLogger(UiVisualizer.class);
 
 	/** The parent exec info. */
 	private final UiVisualizer _parent;
@@ -554,7 +554,7 @@ import org.zkoss.zk.au.out.*;
 		if (_pgRemoved == null) _pgRemoved = new LinkedHashSet<Page>();
 		_pgRemoved.add(page);
 		if (_pgInvalid != null) _pgInvalid.remove(page);
-//		if (log.debugable()) log.debug("Page removed: "+page);
+//		if (log.isDebugEnabled()) log.debug("Page removed: "+page);
 	}
 	/** Clears components if it belongs to invalidated or removed page. */
 	private void clearInInvalidPage(Collection<Component> coll) {
@@ -750,7 +750,7 @@ import org.zkoss.zk.au.out.*;
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
-//		if (log.debugable()) log.debug("Return responses: "+responses);
+//		if (log.isDebugEnabled()) log.debug("Return responses: "+responses);
 //		System.out.println("Return responses: "+responses);
 		return responses;
 	}

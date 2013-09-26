@@ -14,8 +14,8 @@ package org.zkoss.zk.ui.util;
 
 import java.lang.reflect.Method;
 
-import org.zkoss.util.logging.Log;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.IdSpace;
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.event.Events;
  * @since 6.0.0
  */
 public class ConventionWires {
-	private static final Log log = Log.lookup(ConventionWires.class);
+	private static final Logger log = LoggerFactory.getLogger(ConventionWires.class);
 
 	/** Wire fellow components and space owner ancestors of the specified 
 	 * Id space into a controller Java object. This implementation checks the 
@@ -326,7 +326,7 @@ public class ConventionWires {
 									srccomp = page.getXelVariable(null, null, srccompid, true);
 							}
 							if (srccomp == null || !(srccomp instanceof Component)) {
-								if (log.debugable())
+								if (log.isDebugEnabled())
 									log.debug("Cannot find the associated component to forward event: "+mdname);
 								break;
 							} else {

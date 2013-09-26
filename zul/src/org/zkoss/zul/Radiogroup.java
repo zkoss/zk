@@ -16,17 +16,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.MutableInteger;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -52,7 +53,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Radiogroup extends XulElement {
-	private static final Log log = Log.lookup(Radiogroup.class);
+	private static final Logger log = LoggerFactory.getLogger(Radiogroup.class);
 	
 	private static final String ZUL_RADIOGROUP_ON_INITRENDER = "zul.Radiogroup.ON_INITRENDER";
 	private String _orient = "horizontal";
@@ -613,7 +614,7 @@ public class Radiogroup extends XulElement {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
-					log.error(t);
+					log.error("", t);
 				}			
 				throw ex;
 			}

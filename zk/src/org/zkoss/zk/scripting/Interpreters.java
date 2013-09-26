@@ -16,18 +16,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.LinkedHashSet;
-
-import org.zkoss.lang.Classes;
 import static org.zkoss.lang.Generics.cast;
-import org.zkoss.util.logging.Log;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
-
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -42,7 +43,7 @@ import org.zkoss.zk.ui.UiException;
  * @author tomyeh
  */
 public class Interpreters {
-	private static final Log log = Log.lookup(Interpreters.class);
+	private static final Logger log = LoggerFactory.getLogger(Interpreters.class);
 
 	/** Map(zslang, Class/String class); */
 	private static final Map<String, Object> _ips = new HashMap<String, Object>();
@@ -137,7 +138,7 @@ public class Interpreters {
 				throw new IllegalArgumentException('\''+cc+"' not allowed in a language name, "+zslang);
 		}
 
-		if (log.debugable()) log.debug("Scripting language is added: "+zslang+", "+ipcls);
+		if (log.isDebugEnabled()) log.debug("Scripting language is added: "+zslang+", "+ipcls);
 		_zslangs.add(zslang);
 
 		final String zsl = zslang.toLowerCase(java.util.Locale.ENGLISH);

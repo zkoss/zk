@@ -16,7 +16,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -31,7 +33,7 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
  * @since 5.0.7
  */
 public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
-	private static Log log = Log.lookup(DesktopRecycles.class);
+	private static Logger log = LoggerFactory.getLogger(DesktopRecycles.class);
 
 	/** Called before serving a HTTP request.
 	 * @return the recycled desktop, or null if no recycled desktop is matched
@@ -49,7 +51,7 @@ public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
 			try {
 				return dtrc.beforeService(exec, getURI(path, request.getQueryString()));
 			} catch (Throwable ex) {
-				log.error(ex);
+				log.error("", ex);
 			} finally {
 				ExecutionsCtrl.setCurrent(olde);
 				SessionsCtrl.setRawCurrent(olds);
@@ -64,7 +66,7 @@ public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
 			try {
 				dtrc.afterService(desktop);
 			} catch (Throwable ex) {
-				log.error(ex);
+				log.error("", ex);
 			}
 		}
 	}

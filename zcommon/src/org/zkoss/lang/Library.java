@@ -16,10 +16,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represent the scope of ZK libraries.
@@ -37,7 +38,7 @@ import org.zkoss.util.logging.Log;
  * @since 3.0.7
  */
 public class Library {
-	private static final Log log = Log.lookup(Library.class);
+	private static final Logger log = LoggerFactory.getLogger(Library.class);
 	private static final Map<String, String> _props = new HashMap<String, String>();
 
 	private Library() {}
@@ -123,7 +124,7 @@ public class Library {
 			try {
 				return Integer.parseInt(val);
 			} catch (Throwable t) {
-				log.warning("Failed to parse "+key+": not an integer, "+val);
+				log.warn("Failed to parse "+key+": not an integer, "+val);
 			}
 		}
 		return defVal;

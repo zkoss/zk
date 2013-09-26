@@ -16,63 +16,107 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.regex.Pattern;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletRequest;
 
-import org.zkoss.lang.Library;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.json.JSONArray;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xel.VariableResolver;
-import org.zkoss.json.JSONArray;
-
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.au.RequestOutOfSequenceException;
+import org.zkoss.zk.au.out.AuAlert;
+import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.*;
-import org.zkoss.zk.ui.sys.*;
-import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.ActivationTimeoutException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.WrongValuesException;
+import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.FulfillEvent;
-import org.zkoss.zk.ui.event.CreateEvent;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.EventThreadInit;
-import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
+import org.zkoss.zk.ui.metainfo.AttributesInfo;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.NativeInfo;
+import org.zkoss.zk.ui.metainfo.NodeInfo;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.Property;
+import org.zkoss.zk.ui.metainfo.TemplateInfo;
+import org.zkoss.zk.ui.metainfo.TextInfo;
+import org.zkoss.zk.ui.metainfo.VariablesInfo;
+import org.zkoss.zk.ui.metainfo.ZScriptInfo;
+import org.zkoss.zk.ui.metainfo.ZkInfo;
+import org.zkoss.zk.ui.sys.AbortingReason;
+import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.FailoverManager;
+import org.zkoss.zk.ui.sys.PageConfig;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.RequestQueue;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.Visualizer;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
-import org.zkoss.zk.ui.util.FullComposer;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.util.ForEach;
-import org.zkoss.zk.ui.util.Template;
-import org.zkoss.zk.ui.util.ExecutionMonitor;
-import org.zkoss.zk.ui.util.PerformanceMeter;
-import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
+import org.zkoss.zk.ui.util.ForEach;
+import org.zkoss.zk.ui.util.FullComposer;
+import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.PerformanceMeter;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.xel.Evaluators;
-import org.zkoss.zk.au.*;
-import org.zkoss.zk.au.out.*;
 
 /**
  * An implementation of {@link UiEngine} to create and update components.
@@ -80,7 +124,7 @@ import org.zkoss.zk.au.out.*;
  * @author tomyeh
  */
 public class UiEngineImpl implements UiEngine {
-	/*package*/ static final Log log = Log.lookup(UiEngineImpl.class);
+	/*package*/ static final Logger log = LoggerFactory.getLogger(UiEngineImpl.class);
 
 	/** The Web application this engine belongs to. */
 	private WebApp _wapp;
@@ -192,7 +236,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void desktopDestroyed(Desktop desktop) {
-//		if (log.debugable()) log.debug("destroy "+desktop);
+//		if (log.isDebugEnabled()) log.debug("destroy "+desktop);
 
 		Execution exec = Executions.getCurrent();
 		if (exec == null) {
@@ -512,7 +556,7 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					abrn.finish();
 				} catch (Throwable t) {
-					log.warning(t);
+					log.warn("", t);
 				}
 			}
 
@@ -612,7 +656,7 @@ public class UiEngineImpl implements UiEngine {
 						try {
 							_ext = (Extension)Classes.newInstanceByThread(clsnm);
 						} catch (Throwable ex) {
-							log.realCauseBriefly("Unable to instantiate "+clsnm, ex);
+							log.error("Unable to instantiate "+clsnm, ex);
 						}
 					}
 					if (_ext == null)
@@ -1061,7 +1105,7 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					((DesktopCtrl)desktop).removePage(page);
 				} catch (Throwable ex) {
-					log.warningBriefly(ex);
+					log.warn("", ex);
 				}
 				((PageCtrl)page).destroy();
 			}
@@ -1174,7 +1218,7 @@ public class UiEngineImpl implements UiEngine {
 			try {
 				monitor.beforeUpdate(desktop, requests);
 			} catch (Throwable ex) {
-				log.error(ex);
+				log.error("", ex);
 			}
 		}
 
@@ -1238,7 +1282,7 @@ public class UiEngineImpl implements UiEngine {
 			out.writeResponseId(desktopCtrl.getResponseId(true));
 			out.write(responses);
 
-//			if (log.debugable())
+//			if (log.isDebugEnabled())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
 //				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
@@ -1265,14 +1309,14 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					abrn.finish();
 				} catch (Throwable t) {
-					log.warning(t);
+					log.warn("", t);
 				}
 			}
 			if (monitor != null) {
 				try {
 					monitor.afterUpdate(desktop);
 				} catch (Throwable ex) {
-					log.error(ex);
+					log.error("", ex);
 				}
 			}
 
@@ -1334,7 +1378,7 @@ public class UiEngineImpl implements UiEngine {
 			try {
 				ui.abrn.finish();
 			} catch (Throwable t) {
-				log.warning(t);
+				log.warn("", t);
 			}
 		}
 
@@ -1359,10 +1403,10 @@ public class UiEngineImpl implements UiEngine {
 			|| ex instanceof org.zkoss.zk.ui.metainfo.PropertyNotFoundException)
 				log.error(Exceptions.getMessage(ex));
 			else
-				log.realCause(ex);//Briefly(ex);
+				log.error("", ex);//Briefly(ex);
 		} else {
 			ex = t;
-			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
+			if (log.isDebugEnabled()) log.debug("", Exceptions.getRealCause(ex));
 		}
 
 		if (ex instanceof WrongValueException) {
@@ -1423,7 +1467,7 @@ public class UiEngineImpl implements UiEngine {
 			responses = new LinkedList<AuResponse>();
 			responses.add(new AuAlert(Exceptions.getMessage(ex)));
 
-			log.error(ex);
+			log.error("", ex);
 		}
 		return responses;
 	}
@@ -1475,7 +1519,7 @@ public class UiEngineImpl implements UiEngine {
 				} while ((event = nextEvent(uv)) != null);
 				return; //done
 			} catch (Throwable ex) {
-				log.realCause("Unable to generate custom error page, "+location, ex);
+				log.error("Unable to generate custom error page, "+location, ex);
 			} finally {
 				// Bug ZK-1144 in JBoss
 				exec.removeAttribute("javax.servlet.error.message");
@@ -1857,7 +1901,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		if (seqId != null) {
-			if (log.debugable()) {
+			if (log.isDebugEnabled()) {
 				final Object req = exec.getNativeRequest();
 				log.debug("replicate request, SID: " + seqId
 					+(req instanceof ServletRequest ? "\n" + Servlets.getDetail((ServletRequest)req): ""));
@@ -1928,7 +1972,7 @@ public class UiEngineImpl implements UiEngine {
 			try {
 				execCtrl.onDeactivate();
 			} catch (Throwable ex) {
-				log.warningBriefly("Failed to deactive", ex);
+				log.warn("Failed to deactive", ex);
 			}
 			ExecutionsCtrl.setCurrent(null);
 			execCtrl.setCurrentPage(null);
@@ -1986,7 +2030,7 @@ public class UiEngineImpl implements UiEngine {
 			try {
 				curCtrl.onDeactivate();
 			} catch (Throwable ex) {
-				log.warningBriefly("Failed to deactive", ex);
+				log.warn("Failed to deactive", ex);
 			}
 
 			final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
@@ -2196,7 +2240,7 @@ public class UiEngineImpl implements UiEngine {
 					try {
 						((DesktopCtrl)exec.getDesktop()).removePage(page);
 					} catch (Throwable ex) {
-						log.warningBriefly(ex);
+						log.warn("", ex);
 					}
 					((PageCtrl)page).destroy();
 				}
@@ -2354,10 +2398,10 @@ public class UiEngineImpl implements UiEngine {
 						y = z + 1;
 					}
 				} catch (NumberFormatException ex) {
-					log.warning("Ingored: unable to parse "+ids);
+					log.warn("Ingored: unable to parse "+ids);
 				} catch (Throwable ex) {
 					if (complete)
-						log.warning("Ingored: failed to invoke "+pfmeter, ex);
+						log.warn("Ingored: failed to invoke "+pfmeter, ex);
 				}
 			}
 
@@ -2385,9 +2429,9 @@ public class UiEngineImpl implements UiEngine {
 						Long.parseLong(hdr.substring(j + 1)));
 					pfmeter.requestStartAtServer(pfReqId, exec, startTime);
 				} catch (NumberFormatException ex) {
-					log.warning("Ingored: failed to parse ZK-Client-Start, "+hdr);
+					log.warn("Ingored: failed to parse ZK-Client-Start, "+hdr);
 				} catch (Throwable ex) {
-					log.warning("Ingored: failed to invoke "+pfmeter, ex);
+					log.warn("Ingored: failed to invoke "+pfmeter, ex);
 				}
 				return pfReqId;
 			}
@@ -2411,7 +2455,7 @@ public class UiEngineImpl implements UiEngine {
 			try {
 				pfmeter.requestCompleteAtServer(pfReqId, exec, time);
 			} catch (Throwable ex) {
-				log.warning("Ingored: failed to invoke "+pfmeter, ex);
+				log.warn("Ingored: failed to invoke "+pfmeter, ex);
 			}
 		}
 
@@ -2431,7 +2475,7 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			pfmeter.requestStartAtServer(pfReqId, exec, startTime);
 		} catch (Throwable ex) {
-			log.warning("Ingored: failed to invoke "+pfmeter, ex);
+			log.warn("Ingored: failed to invoke "+pfmeter, ex);
 		}
 		return pfReqId;
 	}
@@ -2445,7 +2489,7 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			pfmeter.requestCompleteAtServer(pfReqId, exec, System.currentTimeMillis());
 		} catch (Throwable ex) {
-			log.warning("Ingored: failed to invoke "+pfmeter, ex);
+			log.warn("Ingored: failed to invoke "+pfmeter, ex);
 		}
 	}
 

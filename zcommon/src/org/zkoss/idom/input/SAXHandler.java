@@ -15,26 +15,32 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.input;
 
-import java.util.Stack;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Iterator;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
-import org.xml.sax.Locator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.InputSource;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
-import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.ext.DeclHandler;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
-import org.zkoss.util.logging.Log;
+import org.zkoss.idom.Attribute;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.Group;
+import org.zkoss.idom.Item;
+import org.zkoss.idom.Namespace;
 import org.zkoss.util.resource.Locators;
-import org.zkoss.idom.*;
 
 /**
  * The SAX Handler.
@@ -49,7 +55,7 @@ import org.zkoss.idom.*;
  */
 public class SAXHandler extends DefaultHandler
 implements LexicalHandler, DeclHandler {
-	private static final Log log = Log.lookup(SAXHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(SAXHandler.class);
 
 	/** The iDOM factory. */
 	protected IDOMFactory _factory;
@@ -700,7 +706,7 @@ implements LexicalHandler, DeclHandler {
 		if (eh != null) {
 			eh.warning(ex);
 		} else {
-			log.warning(message(ex.getMessage(), _loc));
+			log.warn(message(ex.getMessage(), _loc));
 		}
 	}
 	public void error(SAXParseException ex) throws SAXException {
@@ -717,7 +723,7 @@ implements LexicalHandler, DeclHandler {
 		if (eh != null) {
 			eh.fatalError(ex);
 		} else {
-			if (log.debugable()) log.debug(message(ex.getMessage(), _loc));
+			if (log.isDebugEnabled()) log.debug(message(ex.getMessage(), _loc));
 			throw ex;
 		}
 	}

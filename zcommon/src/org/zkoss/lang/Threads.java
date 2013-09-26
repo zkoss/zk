@@ -16,7 +16,8 @@ Copyright (C) 2003 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thread relevant utilities.
@@ -24,7 +25,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class Threads {
-	private static final Log log = Log.lookup(Threads.class);
+	private static final Logger log = LoggerFactory.getLogger(Threads.class);
 
 	/** Put the current thread to sleep for a while.
 	 * @exception SystemException if it is interrupted.
@@ -44,7 +45,7 @@ public class Threads {
 		try {
 			thd.setPriority(priority);
 		}catch(Exception ex) {
-			log.warningBriefly("Unable to change priority to "+priority, ex);
+			log.warn("Unable to change priority to "+priority, ex);
 		}
 	}
 	/** Sets the priority without throwing any exception but log warning.
@@ -53,7 +54,7 @@ public class Threads {
 		try {
 			thd.setDaemon(daemon);
 		}catch(Exception ex) {
-			log.warningBriefly("Unable to set DAEMON", ex);
+			log.warn("Unable to set DAEMON", ex);
 		}
 	}
 

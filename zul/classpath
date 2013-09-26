@@ -2,3 +2,4 @@
 ../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/ext/servlet-api.jar
+../dist/lib/ext/slf4j-api.jar

@@ -18,8 +18,10 @@ package org.zkoss.zk.ui.impl;
 
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.util.Utils;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.io.Files;
 
 import org.zkoss.zk.Version;
@@ -48,7 +50,7 @@ import org.zkoss.zk.au.AuDecoder;
  * @author tomyeh
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
-	private static final Log log = Log.lookup(AbstractWebApp.class);
+	private static final Logger log = LoggerFactory.getLogger(AbstractWebApp.class);
 
 	private String _appnm;
 	private Configuration _config;
@@ -341,20 +343,20 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		try {
 			getDesktopCacheProvider().sessionDestroyed(sess);
 		} catch (Throwable ex) {
-			log.warning("Failed to cleanup session", ex);
+			log.warn("Failed to cleanup session", ex);
 		}
 
 		try {
 			getSessionCache().remove(sess);
 		} catch (Throwable ex) {
-			log.warning("Failed to cleanup session", ex);
+			log.warn("Failed to cleanup session", ex);
 		}
 
 		try {
 			((SessionCtrl)sess).onDestroyed();
 				//after called, sess.getNativeSession() is null!
 		} catch (Throwable ex) {
-			log.warning("Failed to cleanup session", ex);
+			log.warn("Failed to cleanup session", ex);
 		}
 	}
 

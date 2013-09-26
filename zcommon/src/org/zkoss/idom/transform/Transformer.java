@@ -20,22 +20,22 @@ package org.zkoss.idom.transform;
 
 import java.util.Properties;
 
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.ErrorListener;
-import javax.xml.transform.TransformerException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.idom.DocType;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
-import org.zkoss.idom.DocType;
 import org.zkoss.idom.input.SAXHandler;
-
-import org.zkoss.util.logging.Log;
 
 /**
  * Transforms an iDOM Document.
@@ -44,7 +44,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class Transformer {
-	private static final Log log = Log.lookup(Transformer.class);
+	private static final Logger log = LoggerFactory.getLogger(Transformer.class);
 
 	/** The transformer. */
 	private final javax.xml.transform.Transformer _tfmr;

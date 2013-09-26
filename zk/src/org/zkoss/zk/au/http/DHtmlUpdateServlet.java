@@ -32,12 +32,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Labels;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.json.JSONValue;
 import org.zkoss.xml.XMLs;
 
@@ -109,7 +111,7 @@ import org.zkoss.zk.device.Devices;
  * @author tomyeh
  */
 public class DHtmlUpdateServlet extends HttpServlet {
-	private static final Log log = Log.lookup(DHtmlUpdateServlet.class);
+	private static final Logger log = LoggerFactory.getLogger(DHtmlUpdateServlet.class);
 	private static final String ATTR_UPDATE_SERVLET
 		= "org.zkoss.zk.au.http.updateServlet";
 	private static final String ATTR_AU_PROCESSORS
@@ -162,7 +164,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 			final int k = param.indexOf('=');
 			if (k < 0) {
-				log.warning("Ignore init-param: illegal format, "+param);
+				log.warn("Ignore init-param: illegal format, "+param);
 				continue;
 			}
 
@@ -172,11 +174,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				addAuExtension(prefix,
 					(AuExtension)Classes.newInstanceByThread(clsnm));
 			} catch (ClassNotFoundException ex) {
-				log.warning("Ignore init-param: class not found, "+clsnm);
+				log.warn("Ignore init-param: class not found, "+clsnm);
 			} catch (ClassCastException ex) {
-				log.warning("Ignore: "+clsnm+" not implement "+AuExtension.class);
+				log.warn("Ignore: "+clsnm+" not implement "+AuExtension.class);
 			} catch (Throwable ex) {
-				log.warning("Ignore init-param: failed to add an AU extension, "+param,
+				log.warn("Ignore init-param: failed to add an AU extension, "+param,
 					ex);
 			}
 		}
@@ -187,7 +189,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			} catch (Throwable ex) {
 				final String msg =
 					"Make sure commons-fileupload.jar is installed.";
-				log.warningBriefly("Failed to configure fileupload. "+msg, ex);
+				log.warn("Failed to configure fileupload. "+msg, ex);
 
 				//still add /upload to generate exception when fileupload is used
 				addAuExtension("/upload",
@@ -212,7 +214,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			} catch (Throwable ex) {
 				final String msg =
 						"Make sure commons-fileupload.jar is installed.";
-					log.warningBriefly("Failed to configure fileupload. "+msg, ex);
+					log.warn("Failed to configure fileupload. "+msg, ex);
 
 					//still add /upload to generate exception when fileupload is used
 					addAuExtension("/dropupload",
@@ -238,7 +240,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				aue.destroy();
 			} catch (Throwable ex) {
-				log.warningBriefly("Unable to stop "+aue, ex);
+				log.warn("Unable to stop "+aue, ex);
 			}
 		}
 	}
@@ -339,7 +341,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				old.destroy();
 			} catch (Throwable ex) {
-				log.warningBriefly("Unable to stop "+old, ex);
+				log.warn("Unable to stop "+old, ex);
 			}
 		return old;
 	}
@@ -520,7 +522,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	throws ServletException, IOException {
 		final String errClient = request.getHeader("ZK-Error-Report");
 		if (errClient != null)
-			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+Servlets.getDetail(request));
+			if (log.isDebugEnabled()) log.debug("Error found at client: "+errClient+"\n"+Servlets.getDetail(request));
 
 		//parse desktop ID
 		final WebApp wapp = sess.getWebApp();
@@ -530,7 +532,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		
 		if (dtid == null) {
 			//Bug 1929139: incomplete request (IE only)
-			if (log.debugable()) {
+			if (log.isDebugEnabled()) {
 				final String msg = "Incomplete request\n"+Servlets.getDetail(request);
 				log.debug(msg);
 			}
@@ -574,7 +576,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					break; //done
 			}
 		} catch (Throwable ex) {
-			log.warningBriefly(ex);
+			log.warn("", ex);
 			responseError(request, response, Exceptions.getMessage(ex));
 			return;
 		}
@@ -588,7 +590,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
-//		if (log.debugable()) log.debug("AU request: "+aureqs);
+//		if (log.isDebugEnabled()) log.debug("AU request: "+aureqs);
 		final Execution exec = 
 			new ExecutionImpl(getServletContext(), request, response, desktop, null);
 		if (sid != null)
@@ -600,11 +602,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		try {
 			wappc.getUiEngine().execUpdate(exec, aureqs, out);
 		} catch (ActivationTimeoutException ex) {
-			log.warning(ex.getMessage());
+			log.warn(ex.getMessage());
 			response.setHeader("ZK-SID", sid);
 			response.setIntHeader("ZK-Error", AuResponse.SC_ACTIVATION_TIMEOUT);
 		} catch (RequestOutOfSequenceException ex) {
-			log.warning(ex.getMessage());
+			log.warn(ex.getMessage());
 			response.setHeader("ZK-SID", sid);
 			response.setIntHeader("ZK-Error", AuResponse.SC_OUT_OF_SEQUENCE);
 		}
@@ -652,7 +654,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					final String key;
 					msg = Labels.getLabel(key = msg.substring(6), new Object[] {dtid});
 					if (msg == null)
-						log.warning("Label not found, "+key);
+						log.warn("Label not found, "+key);
 				}
 				if (msg == null)
 					msg = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid);
@@ -670,7 +672,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				return Devices.getDeviceByClient(agt).getType();
 			} catch (Throwable ex) {
-				log.warning("Unknown device for "+agt);
+				log.warn("Unknown device for "+agt);
 			}
 		}
 		return "ajax";

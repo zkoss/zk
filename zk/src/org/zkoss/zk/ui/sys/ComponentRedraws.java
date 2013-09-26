@@ -17,7 +17,9 @@ import java.util.LinkedList;
 import java.io.Writer;
 import java.io.StringWriter;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -33,7 +35,7 @@ import org.zkoss.zk.ui.UiException;
  * @since 5.0.2
  */
 public class ComponentRedraws {
-	private static final Log log = Log.lookup(ComponentRedraws.class);
+	private static final Logger log = LoggerFactory.getLogger(ComponentRedraws.class);
 
 	/** Called before staring the redrawing.
 	 * {@link org.zkoss.zk.ui.AbstractComponent#redraw} calls this method

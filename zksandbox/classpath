@@ -7,3 +7,4 @@
 ../dist/lib/ext/hibernate3.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/jasperreports.jar
+../dist/lib/ext/slf4j-api.jar

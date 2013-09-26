@@ -31,7 +31,9 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Files;
 import org.zkoss.util.media.ContentTypes;
 
@@ -50,7 +52,7 @@ import org.zkoss.util.media.ContentTypes;
  * @see Images#encode
  */
 public class AImage implements Image, java.io.Serializable {
-	private static final Log log = Log.lookup(AImage.class);
+	private static final Logger log = LoggerFactory.getLogger(AImage.class);
 
 	/** The raw data. */
 	private byte[] _data;
@@ -121,7 +123,7 @@ public class AImage implements Image, java.io.Serializable {
 			_format = getFormatByName(name);
 			if (_format == null)
 				throw new IOException("Unknown image format: "+name);
-			log.warning("Unsupported image format: "+_format+"; its width and height are assumed to zero");
+			log.warn("Unsupported image format: "+_format+"; its width and height are assumed to zero");
 			_width = _height = 0;
 		} else { //recognized by J2SDK
 			_format = format;

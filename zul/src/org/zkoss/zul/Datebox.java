@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -36,7 +38,7 @@ import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.WaitLock;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.Components;
@@ -64,7 +66,7 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Datebox extends FormatInputElement {
 	
-	private static final Log log = Log.lookup(Datebox.class);
+	private static final Logger log = LoggerFactory.getLogger(Datebox.class);
 	private static final String DEFAULT_FORMAT = "yyyy/MM/dd";
 
 	private TimeZone _tzone;
@@ -541,7 +543,7 @@ the short time styling.
 
 			//wait because some one is creating the servlet
 			if (!((WaitLock)o).waitUntilUnlock(5*60*1000))
-				log.warning("Take too long to wait loading localized symbol: "+locale
+				log.warn("Take too long to wait loading localized symbol: "+locale
 					+"\nTry to load again automatically...");
 		} //for(;;)
 		

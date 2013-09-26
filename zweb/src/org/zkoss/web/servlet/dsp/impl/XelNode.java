@@ -18,9 +18,10 @@ package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;
-import org.zkoss.util.logging.Log;
 
 /**
  * Represents an expression.
@@ -29,7 +30,7 @@ import org.zkoss.util.logging.Log;
  * @since 3.0.0
  */
 class XelNode extends Node {
-	private static final Log log = Log.lookup(XelNode.class);
+	private static final Logger log = LoggerFactory.getLogger(XelNode.class);
 	private final Expression _expr;
 
 	XelNode(String expr, ParseContext ctx) throws XelException {
@@ -45,7 +46,7 @@ class XelNode extends Node {
 			if (result != null)
 				ic.dc.getOut().write(result);
 		} catch (XelException ex) {
-			log.realCauseBriefly(ex); //Web server might 'eat'
+			log.error("", ex); //Web server might 'eat'
 			throw ex;
 		}
 	}

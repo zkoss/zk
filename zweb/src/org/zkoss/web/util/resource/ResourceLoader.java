@@ -20,8 +20,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.util.resource.Loader;
-import org.zkoss.util.logging.Log;
 
 /**
  * A semi-implemented loader to used with {@link ResourceCaches#get}
@@ -30,7 +31,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
-	private static final Log log = Log.lookup(ResourceLoader.class);
+	private static final Logger log = LoggerFactory.getLogger(ResourceLoader.class);
 
 	protected ResourceLoader() {
 	}
@@ -77,11 +78,11 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 			return parse(src.path, src.url, src.extra);
 
 		if (!src.file.exists()) {
-			if (log.debugable()) log.debug("Not found: "+src.file);
+			if (log.isDebugEnabled()) log.debug("Not found: "+src.file);
 			return null; //File not found
 		}
 
-		if (log.debugable()) log.debug("Loading "+src.file);
+		if (log.isDebugEnabled()) log.debug("Loading "+src.file);
 		try {
 			return parse(src.path, src.file, src.extra);
 		} catch (FileNotFoundException ex) {

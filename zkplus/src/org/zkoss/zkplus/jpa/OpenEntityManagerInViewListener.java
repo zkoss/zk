@@ -18,7 +18,9 @@
 package org.zkoss.zkplus.jpa;
 
 import java.util.List;
-import org.zkoss.util.logging.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.util.ExecutionInit;
@@ -40,7 +42,7 @@ import org.zkoss.zk.ui.util.ExecutionInit;
  */
 public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 		ExecutionInit {
-	private static final Log log = Log.lookup(OpenEntityManagerInViewListener.class);
+	private static final Logger log = LoggerFactory.getLogger(OpenEntityManagerInViewListener.class);
 	
 	//-- ExecutionCleanup --//
 	public void cleanup(Execution exec, Execution parent, List errs)throws Exception{ 

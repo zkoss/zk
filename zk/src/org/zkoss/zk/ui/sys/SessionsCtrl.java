@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import org.zkoss.util.logging.Log;
-import org.zkoss.zk.ui.WebApp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.http.SimpleSession;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
 
@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.util.Monitor;
  * @author tomyeh
  */
 public class SessionsCtrl extends Sessions {
-	private static final Log log = Log.lookup(SessionsCtrl.class);
+	private static final Logger log = LoggerFactory.getLogger(SessionsCtrl.class);
 	
 	protected SessionsCtrl() {} //prevent from instantiation
 
@@ -165,7 +165,7 @@ public class SessionsCtrl extends Sessions {
 			try {
 				monitor.sessionCreated(sess);
 			} catch (Throwable ex) {
-				log.error(ex);
+				log.error("", ex);
 			}
 		}
 		

@@ -12,19 +12,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Map;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.io.IOException;
+import java.util.Map;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
 import org.zkoss.io.Serializables;
-
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
+import org.zkoss.zk.ui.util.ComponentSerializationListener;
 
 /**
  * Used by {@link AbstractComponent} to hold the information of the event listener.
@@ -51,8 +49,8 @@ java.io.Serializable {
 	AbstractComponent comp, Map<String, List<EventListenerInfo>> listeners)
 	throws IOException {
 		if (listeners != null) {
-			final Log logio = Serializables.logio;
-			final boolean debug = logio.debugable();
+			final Logger logio = Serializables.logio;
+			final boolean debug = logio.isDebugEnabled();
 			for (Map.Entry<String, List<EventListenerInfo>> me: listeners.entrySet()) {
 				boolean keyWritten = false;
 				final List<EventListenerInfo> ls = me.getValue();

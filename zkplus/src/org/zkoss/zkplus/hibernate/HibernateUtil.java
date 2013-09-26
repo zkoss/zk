@@ -16,12 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.hibernate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.util.logging.Log;
+
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,7 +62,7 @@ public class HibernateUtil {
 	 * {@link Library#getProperty}. Ignored if none of them is specified.
 	 */
 	public static final String CONFIG = "HibernateUtil.config";
-	private static final Log log = Log.lookup(HibernateUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	
 	private static SessionFactory _factory;
 

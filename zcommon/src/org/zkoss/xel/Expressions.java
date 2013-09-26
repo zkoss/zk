@@ -19,8 +19,9 @@ package org.zkoss.xel;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
 
 /**
  * Utilities to use XEL.
@@ -29,7 +30,7 @@ import org.zkoss.util.logging.Log;
  * @since 3.0.0
  */
 public class Expressions {
-	private static final Log log = Log.lookup(Expressions.class);
+	private static final Logger log = LoggerFactory.getLogger(Expressions.class);
 
 	/** An empty function mapper, i.e., it has no function defined at all.
 	 * It is serializable.

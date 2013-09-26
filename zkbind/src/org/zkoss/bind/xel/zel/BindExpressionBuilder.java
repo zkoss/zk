@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
@@ -29,7 +31,7 @@ import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.ExpressionBuilder;
@@ -45,7 +47,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class BindExpressionBuilder extends ExpressionBuilder {
 	
-	private static final Log _log = Log.lookup(BindExpressionBuilder.class);
+	private static final Logger _log = LoggerFactory.getLogger(BindExpressionBuilder.class);
 	private static final String _isVisitedKey = BindExpressionBuilder.class+"_isVisted";
 	private final BindELContext _ctx;
     public BindExpressionBuilder(String expression, ELContext ctx) throws ELException {
@@ -103,7 +105,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 				
 				if (fieldName != null) {
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
-						if(_log.debugable()){
+						if(_log.isDebugEnabled()){
 							_log.debug("add save-field '%s' to form '%s'", fieldName,formBean);
 						}
 						if(formBean instanceof FormExt ){
@@ -112,7 +114,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding)binding, fieldName);
 					} else if (binding instanceof LoadPropertyBinding 
 							|| binding instanceof LoadChildrenBinding || binding instanceof ReferenceBinding) {
-						if(_log.debugable()){
+						if(_log.isDebugEnabled()){
 							_log.debug("add load-field '%s' to form '%s'", fieldName,formBean);
 						}
 						if(formBean instanceof FormExt){

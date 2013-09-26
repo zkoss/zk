@@ -16,27 +16,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.fn;
 
-import java.util.Iterator;
 import java.io.StringWriter;
 import java.util.Calendar;
+import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
-
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.http.WebManager;
-import org.zkoss.zk.ui.http.ExecutionImpl;
 
 /**
  * Utilities to generate ZK related information in JSP pages.
@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
  * @since 3.5.2
  */
 public class JspFns {
-	private static final Log log = Log.lookup(JspFns.class);
+	private static final Logger log = LoggerFactory.getLogger(JspFns.class);
 	private static long LAST_MODIFIED = new java.util.Date().getTime();
 
 	/** Generates and returns the ZK specific HTML tags such as stylesheet
@@ -96,7 +96,7 @@ public class JspFns {
 					Servlets.include(ctx, request,
 						HttpBufferedResponse.getInstance(response, sw), uri, null, 0);
 				} catch (Throwable ex) {
-					log.realCauseBriefly("Unable to load "+uri, ex);
+					log.error("Unable to load "+uri, ex);
 				}
 			}
 		}
@@ -268,7 +268,7 @@ public class JspFns {
 				hours = Integer.parseInt(s);
 				if (hours <= 0) return false;
 			} catch (Throwable ex) {
-				log.warning("Ingored property "+PROP+": an integer is expected");
+				log.warn("Ingored property "+PROP+": an integer is expected");
 			}
 		if (context != null)
 			return setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", hours);

@@ -16,18 +16,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.io;
 
+import java.io.CharArrayReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.CharArrayReader;
-import java.io.Writer;
 import java.io.StringWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.io.Writer;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
-import org.zkoss.util.logging.Log;
 
 /**
  * {@link RepeatableReader} adds functionality to another reader,
@@ -57,7 +58,7 @@ import org.zkoss.util.logging.Log;
  * @since 3.0.4
  */
 public class RepeatableReader extends Reader implements Repeatable {
-	private static final Log log = Log.lookup(RepeatableReader.class);
+	private static final Logger log = LoggerFactory.getLogger(RepeatableReader.class);
 
 	private Reader _org;
 	private Writer _out;
@@ -249,7 +250,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 				_out = new FileWriter(_f, "UTF-8");
 				_out.write(cnt);
 			} catch (Throwable ex) {
-				log.warning("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
+				log.warn("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
 				disableBuffering();
 			}
 		}
@@ -303,7 +304,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 				try {
 					_out.close();
 				} catch (Throwable ex) {
-					log.warning("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
+					log.warn("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
 					disableBuffering();
 					return;
 				}

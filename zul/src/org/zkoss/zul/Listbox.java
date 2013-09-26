@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.AbstractList;
@@ -23,6 +25,7 @@ import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -32,16 +35,16 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.Comparator;
 
-import static org.zkoss.lang.Generics.cast;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.io.Serializables;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.io.Serializables;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -263,7 +266,7 @@ public class Listbox extends MeshElement {
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
 	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
 
-	private static final Log log = Log.lookup(Listbox.class);
+	private static final Logger log = LoggerFactory.getLogger(Listbox.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
 	private static final String ATTR_ON_PAGING_INIT_RENDERER_POSTED = "org.zkoss.zul.onPagingInitPosted";
 	private static final int INIT_LIMIT = 50;
@@ -352,6 +355,7 @@ public class Listbox extends MeshElement {
 	}
 
 	public Listbox() {
+		log.error("", new NullPointerException("test"));
 		init();
 	}
 
@@ -1557,12 +1561,12 @@ public class Listbox extends MeshElement {
 				throw new UiException("Only one frozen child is allowed: "
 						+ this);
 			if (inSelectMold())
-				log.warning("Mold select ignores frozen");
+				log.warn("Mold select ignores frozen");
 		} else if (newChild instanceof Listfoot) {
 			if (_listfoot != null && _listfoot != newChild)
 				throw new UiException("Only one listfoot is allowed: " + this);
 			if (inSelectMold())
-				log.warning("Mold select ignores listfoot");
+				log.warn("Mold select ignores listfoot");
 		} else if (newChild instanceof Paging) {
 			if (_paging != null && _paging != newChild)
 				throw new UiException("Only one paging is allowed: " + this);
@@ -2668,7 +2672,7 @@ public class Listbox extends MeshElement {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
-					log.error(t);
+					log.error("", t);
 				}
 				item.setLoaded(true);
 				throw ex;

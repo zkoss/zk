@@ -18,23 +18,23 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Information about how to initialize a property (a.k.a., a field of a component).
@@ -45,7 +45,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
  * @author tomyeh
  */
 public class Property extends ConditionValue {
-	private static final Log log = Log.lookup(Property.class);
+	private static final Logger log = LoggerFactory.getLogger(Property.class);
 	private static final long serialVersionUID = 20060622L;
 
 	private final String _name;

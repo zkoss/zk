@@ -16,8 +16,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.http;
 
-import java.io.File;
+import static org.zkoss.lang.Generics.cast;
+
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -36,18 +38,18 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.image.AImage;
-import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.sound.AAudio;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.media.Media;
@@ -72,7 +74,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * @since 3.0.2
  */
 public class AuUploader implements AuExtension {
-	private static final Log log = Log.lookup(AuUploader.class);
+	private static final Logger log = LoggerFactory.getLogger(AuUploader.class);
 
 	private ServletContext _ctx;
 
@@ -189,7 +191,7 @@ public class AuUploader implements AuExtension {
 				size.put(key, alert);
 			}
 		}
-		if (log.finerable()) log.finer(attrs);
+		if (log.isTraceEnabled()) log.trace(Objects.toString(attrs));
 
 		if (nextURI == null || nextURI.length() == 0)
 			nextURI = "~./zul/html/fileupload-done.html.dsp";
@@ -222,7 +224,7 @@ public class AuUploader implements AuExtension {
 	 * @since 3.0.4
 	 */
 	protected String handleError(Throwable ex) {
-		log.realCauseBriefly("Failed to upload", ex);
+		log.error("Failed to upload", ex);
 		return Exceptions.getMessage(ex);
 	}
 
@@ -283,14 +285,14 @@ public class AuUploader implements AuExtension {
 						new AImage(name, fi.getInputStream());
 							//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
-					if (log.debugable()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
 					return fi.isInMemory() ? new AAudio(name, fi.get()):
 						new StreamAudio(name, fi, ctypelc);
 				} catch (Throwable ex) {
-					if (log.debugable()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctypelc.startsWith("text/")) {
 				String charset = getCharset(ctype);
@@ -498,9 +500,9 @@ public class AuUploader implements AuExtension {
 			if (ctlen != null)
 				try {
 					cbtotal = Long.parseLong(ctlen.trim());
-					//if (log.debugable()) log.debug("content-length="+cbtotal);
+					//if (log.isDebugEnabled()) log.debug("content-length="+cbtotal);
 				} catch (Throwable ex) {
-					log.warning(ex);
+					log.warn("", ex);
 				}
 			_cbtotal = cbtotal;
 

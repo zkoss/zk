@@ -16,26 +16,28 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.util;
 
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventThreadInit;
-import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.SystemException;
-import org.zkoss.util.CollectionsX;
-import org.zkoss.util.logging.Log;
 import static org.zkoss.lang.Generics.cast;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadResume;
 
 /**
  * <p>Listener to make sure servlet thread and ZK event thread got the same ThreadLocal values. You 
@@ -87,7 +89,7 @@ import java.util.Collection;
  * @since 2.4.1
  */
 public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
-	private static final Log log = Log.lookup(ThreadLocalListener.class);
+	private static final Logger log = LoggerFactory.getLogger(ThreadLocalListener.class);
 	private Map<String, String[]> _fieldsMap; //(class name, String[] of fields)
 	private Map<String, Object[]> _threadLocalsMap; //(class name, ThreadLocal_Contents[] for fields)
 	private final boolean _enabled; //whether event thread enabled

@@ -16,23 +16,23 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
-import java.util.Map;
-import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
-import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.PortletException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.logging.Log;
-
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ExtendletContext;
 
@@ -42,7 +42,7 @@ import org.zkoss.web.util.resource.ExtendletContext;
  * @author tomyeh
  */
 public class Portlets {
-	private static final Log log = Log.lookup(Portlets.class);
+	private static final Logger log = LoggerFactory.getLogger(Portlets.class);
 
 	/**
 	 * Includes the resource at the specified URI.

@@ -17,19 +17,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.LinkedList;
 
-import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.util.InitiatorExt;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
  * A helper class used to handle {@link Initiator}.
@@ -38,7 +35,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
  * @see org.zkoss.zk.ui.sys.UiEngine
  */
 /*package*/ class Initiators {
-	/*package(inner)*/ static final Log log = Log.lookup(Initiators.class);
+	/*package(inner)*/ static final Logger log = LoggerFactory.getLogger(Initiators.class);
 
 	/** Invokes {@link Initiator#doInit}, if any, and returns
 	 * an instance of{@link Initiators}.
@@ -139,7 +136,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 							if (((InitiatorExt)init).doCatch(t))
 								return true;
 						} catch (Throwable ex) {
-							Initiators.log.error(ex);
+							Initiators.log.error("", ex);
 						}
 					}
 				}
@@ -150,7 +147,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 							if (((InitiatorExt)init).doCatch(t))
 								return true; //ignore and skip all other initiators
 						} catch (Throwable ex) {
-							Initiators.log.error(ex);
+							Initiators.log.error("", ex);
 						}
 					}
 				}
@@ -167,7 +164,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 						try {
 							((InitiatorExt)init).doFinally();
 						} catch (Throwable ex) {
-							Initiators.log.error(ex);
+							Initiators.log.error("", ex);
 							if (t == null) t = ex;
 						}
 					}
@@ -178,7 +175,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 						try {
 							((InitiatorExt)init).doFinally();
 						} catch (Throwable ex) {
-							Initiators.log.error(ex);
+							Initiators.log.error("", ex);
 							if (t == null) t = ex;
 						}
 					}

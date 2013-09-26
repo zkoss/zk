@@ -16,20 +16,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.spring;
 
-import org.zkoss.zkplus.util.ThreadLocals;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventThreadInit;
-import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.zk.ui.event.EventThreadCleanup;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.logging.Log;
-
-import java.util.List;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zkplus.util.ThreadLocals;
 
 /**
  * <p>Listener to make sure each ZK thread got the same ThreadLocal value of the 
@@ -51,7 +52,7 @@ import java.util.List;
  * @author henrichen
  */
 public class SpringTransactionSynchronizationListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
-	private static final Log log = Log.lookup(SpringTransactionSynchronizationListener.class);
+	private static final Logger log = LoggerFactory.getLogger(SpringTransactionSynchronizationListener.class);
 	
 	private Object[] _threadLocals = null;
 	private final boolean _enabled; //whether event thread enabled

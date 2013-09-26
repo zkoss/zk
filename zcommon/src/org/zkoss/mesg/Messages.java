@@ -18,12 +18,13 @@ package org.zkoss.mesg;
 
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.Locales;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.PropertyBundle;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.text.MessageFormats;
+import org.zkoss.util.Locales;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.util.resource.PropertyBundle;
 
 /**
  * The message manager.
@@ -36,7 +37,7 @@ import org.zkoss.text.MessageFormats;
  * @author tomyeh
  */
 public class Messages implements MessageConst {
-	private static final Log log = Log.lookup(Messages.class);
+	private static final Logger log = LoggerFactory.getLogger(Messages.class);
 
 	private static Formatter _formatter;
 
@@ -107,7 +108,7 @@ public class Messages implements MessageConst {
 				MessageFormats.format(s, new Object[] {hexcode}, locale):
 				"Unknown message code: " + hexcode;
 		}catch(Exception ex) {
-			log.realCauseBriefly(ex);
+			log.error("", ex);
 			return "Unknown message code: " + Integer.toHexString(code);
 		}
 	}
@@ -152,7 +153,7 @@ public class Messages implements MessageConst {
 			}
 			return s;
 		}catch(Exception ex) {
-			log.realCause(ex);
+			log.error("", ex);
 			return getNotFound(code, locale);
 		}
 	}

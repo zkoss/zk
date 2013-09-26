@@ -111,7 +111,7 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 					try {
 						_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
 					} catch (Throwable ex) {
-						log.realCauseBriefly("Unable to load "+wi.items[j], ex);
+						log.error("Unable to load "+wi.items[j], ex);
 					}
 				} else { //static method
 					sw.write(invoke(
@@ -130,7 +130,7 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 				try {
 					_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
 				} catch (Throwable ex) {
-					log.realCauseBriefly("Unable to load "+uri, ex);
+					log.error("Unable to load "+uri, ex);
 				}
 			}
 		} finally {
@@ -163,12 +163,12 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 				if (href.length() != 0)
 					items.add(href);
 				else
-					log.warning("Ingored stylesheet: href required, " + el.getLocator()+", "+path);
+					log.warn("Ingored stylesheet: href required, " + el.getLocator()+", "+path);
 			} else if ("function".equals(elnm)) {
 				final MethodInfo mtd = getMethodInfo(el);
 				if (mtd != null) items.add(mtd);
 			} else
-				log.warning("Ignored unknown element, " + el.getLocator()+", "+path);
+				log.warn("Ignored unknown element, " + el.getLocator()+", "+path);
 		}
 		return new WcsInfo(lang, items);
 	}

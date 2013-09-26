@@ -19,9 +19,11 @@ package org.zkoss.web.util.resource;
 import java.net.URL;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.io.Files;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.resource.Loader;
 
 /**
@@ -37,7 +39,7 @@ import org.zkoss.util.resource.Loader;
  * @since 3.0.6
  */
 abstract public class ExtendletLoader<V> implements Loader<String, V> {
-	private static final Log log = Log.lookup(ExtendletLoader.class);
+	private static final Logger log = LoggerFactory.getLogger(ExtendletLoader.class);
 
 	private int _checkPeriod;
 
@@ -83,7 +85,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 		return -1; //reload (might be removed)
 	}
 	public V load(String src) throws Exception {
-		if (log.debugable()) log.debug("Parse "+src);
+		if (log.isDebugEnabled()) log.debug("Parse "+src);
 		final String path = getRealPath(src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {
@@ -93,7 +95,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 				if (real != null)
 					is = real.openStream();
 			} catch (Throwable ex) {
-				log.warningBriefly("Unable to read from URL: "+path, ex);
+				log.warn("Unable to read from URL: "+path, ex);
 			}
 		}
 
@@ -106,7 +108,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 		try {
 			return parse(is, path, src);
 		} catch (Throwable ex) {
-			log.realCauseBriefly("Failed to parse "+src, ex);
+			log.error("Failed to parse "+src, ex);
 			return null; //as non-existent
 		} finally {
 			Files.close(is);

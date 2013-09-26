@@ -20,7 +20,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -42,7 +43,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Tab extends LabelImageElement {
 
-	private static final Log log = Log.lookup(Tab.class);
+	private static final Logger log = LoggerFactory.getLogger(Tab.class);
 			
 	private boolean _selected;
 	/** Whether to show a close button. */
@@ -312,7 +313,7 @@ public class Tab extends LabelImageElement {
 			return false;
 		} else if (child instanceof Label) {// backward compatible
 			_tmpLabel = (Label)child;
-			log.warning("Please use Tab#setLabel(msg) instead! ["+this+"]");
+			log.warn("Please use Tab#setLabel(msg) instead! ["+this+"]");
 		}
 		return super.insertBefore(child, refChild);
 		

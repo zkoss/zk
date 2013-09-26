@@ -17,26 +17,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.IOException;
 import java.net.URL;
 
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.Locator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.idom.Document;
-import org.zkoss.web.util.resource.ServletContextLocator;
-import org.zkoss.web.util.resource.ResourceCaches;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.util.resource.Locator;
 import org.zkoss.web.util.resource.ResourceCache;
+import org.zkoss.web.util.resource.ResourceCaches;
 import org.zkoss.web.util.resource.ResourceLoader;
-
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.metainfo.Parser;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 
 /**
  * Utilities to retrieve page definitions.
@@ -44,7 +43,7 @@ import org.zkoss.zk.ui.metainfo.Parser;
  * @author tomyeh
  */
 public class PageDefinitions {
-	private static final Log log = Log.lookup(PageDefinitions.class);
+	private static final Logger log = LoggerFactory.getLogger(PageDefinitions.class);
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.zk.ui.PageCache";
 
 	/** Returns the page definition of the specified raw content; never null.
@@ -177,9 +176,9 @@ public class PageDefinitions {
 							if (o instanceof ResourceLoader)
 								loader = (ResourceLoader)o;
 							else
-								log.warning(clsnm + " must implement " + ResourceLoader.class.getName());
+								log.warn(clsnm + " must implement " + ResourceLoader.class.getName());
 						} catch (Throwable ex) {
-							log.warningBriefly("Unable to instantiate "+clsnm, ex);
+							log.warn("Unable to instantiate "+clsnm, ex);
 						}
 					}
 

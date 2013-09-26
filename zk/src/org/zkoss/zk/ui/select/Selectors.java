@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -624,7 +624,7 @@ public class Selectors {
 			return "session";
 		if (WebApp.class.equals(cls))
 			return "application";
-		if (Log.class.equals(cls))
+		if (Logger.class.equals(cls))
 			return "log";
 		return null;
 	}

@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.WaitLock;
 
 /**
@@ -38,7 +38,7 @@ import org.zkoss.util.WaitLock;
  * @author tomyeh
  */
 public class ResourceCache<K, V> extends CacheMap<Object, Object> {
-	private static final Log log = Log.lookup(ResourceCache.class);
+	private static final Logger log = LoggerFactory.getLogger(ResourceCache.class);
 
 	/** The loader. */
 	protected final Loader<K, V> _loader;
@@ -123,7 +123,7 @@ public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 				final PotentialDeadLockException ex =
 					new PotentialDeadLockException(
 					"Unable to load from "+src+"\nCause: conflict too long.");
-				log.warningBriefly(ex); //very rare, possibly a bug
+				log.warn("", ex); //very rare, possibly a bug
 				throw ex;
 			}
 		} //for (;;)
@@ -197,7 +197,7 @@ public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 		 * @param src the source
 		 */
 		public Info(K src) throws Exception {
-			//if (log.debugable()) log.debug("Loading from "+src);
+			//if (log.isDebugEnabled()) log.debug("Loading from "+src);
 			_src = src;
 			load();
 		}

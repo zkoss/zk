@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.hibernate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zkplus.util.ThreadLocals;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -26,7 +28,7 @@ import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.util.logging.Log;
+
 import static org.zkoss.lang.Generics.cast;
 
 import java.util.Map;
@@ -55,7 +57,7 @@ import java.util.List;
  * @deprecated As of release 6.0.2, please use the official Hibernate's method instead.
  */
 public class HibernateSessionContextListener implements ExecutionInit, ExecutionCleanup, EventThreadInit, EventThreadResume {
-	private static final Log log = Log.lookup(HibernateSessionContextListener.class);
+	private static final Logger log = LoggerFactory.getLogger(HibernateSessionContextListener.class);
 	private static final String HIBERNATE_SESSION_MAP = "org.zkoss.zkplus.hibernate.SessionMap";
 	private static final Object SOMETHING = new Object();
 

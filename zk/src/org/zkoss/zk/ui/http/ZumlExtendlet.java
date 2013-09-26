@@ -27,8 +27,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.resource.ResourceCache;
 
 import org.zkoss.web.servlet.Servlets;
@@ -57,7 +59,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * @since 2.4.1 (public since 5.0.5)
  */
 public class ZumlExtendlet implements Extendlet {
-	private static final Log log = Log.lookup(ZumlExtendlet.class);
+	private static final Logger log = LoggerFactory.getLogger(ZumlExtendlet.class);
 	private ExtendletContext _webctx;
 	/** PageDefinition cache. */
 	private ResourceCache<String, PageDefinition> _cache;
@@ -182,7 +184,7 @@ public class ZumlExtendlet implements Extendlet {
 					return; //done
 				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
-					log.warning("Failed to load the error page: "+errpg, ex);
+					log.warn("Failed to load the error page: "+errpg, ex);
 				}
 			}
 		}

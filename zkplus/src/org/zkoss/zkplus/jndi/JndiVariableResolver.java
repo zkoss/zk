@@ -23,9 +23,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Maps;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
@@ -36,7 +37,7 @@ import org.zkoss.xel.XelException;
  */
 public class JndiVariableResolver implements VariableResolver {
 	
-	private static final Log log = Log.lookup(JndiVariableResolver.class);
+	private static final Logger log = LoggerFactory.getLogger(JndiVariableResolver.class);
 	
 	private String _jndiPrepend=null;
 	
@@ -136,7 +137,7 @@ public class JndiVariableResolver implements VariableResolver {
 		}catch (NamingException ex)
 		{
 			//Not found, logging
-			if(log.debugable()){
+			if(log.isDebugEnabled()){
 				log.debug("JNDI binding not found: "+ex);
 			}
 		}

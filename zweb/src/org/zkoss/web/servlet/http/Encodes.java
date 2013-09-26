@@ -28,11 +28,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
@@ -45,7 +47,7 @@ import org.zkoss.web.util.resource.ExtendletContext;
  * @see Https
  */
 public class Encodes {
-	private static final Log log = Log.lookup(Encodes.class);
+	private static final Logger log = LoggerFactory.getLogger(Encodes.class);
 
 	protected Encodes() {} //prevent from instantiation
 
@@ -401,7 +403,7 @@ public class Encodes {
 		try {
 			return urlEncoder().encodeURL(ctx, request, response, uri, _urlenc0);
 		} catch (Exception ex) {
-			log.realCauseBriefly(ex);
+			log.error("", ex);
 			throw new ServletException("Unable to encode "+uri, ex);
 		}
 	}
@@ -464,7 +466,7 @@ public class Encodes {
 				final ServletContext newctx = ctx.getContext(ctxroot);
 				if (newctx != null) {
 					ctx = newctx;
-				} else if (log.debugable()) {
+				} else if (log.isDebugEnabled()) {
 					log.debug("Context not found: "+ctxroot);
 				}
 				ctxpathSpecified = true;
@@ -477,7 +479,7 @@ public class Encodes {
 					if (j >= 0) {
 						uri = pgpath.substring(0, j + 1) + uri;
 					} else {
-						log.warning("The current page doesn't contain '/':" + pgpath);
+						log.warn("The current page doesn't contain '/':" + pgpath);
 					}
 				}
 			}

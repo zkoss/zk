@@ -39,7 +39,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class VariableResolverInfo extends ArgumentInfo { //directive
-//	private static final Log log = Log.lookup(VariableResolverInfo.class);
+//	private static final Logger log = LoggerFactory.getLogger(VariableResolverInfo.class);
 
 	/** A class, an ExValue or an VariableResolver. */
 	private Object _resolver;
@@ -130,7 +130,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 		if (_resolver instanceof ExValue) {
 			clsnm = (String)((ExValue)_resolver).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.debugable()) log.debug("Ignore "+_resolver+" due to empty");
+//				if (log.isDebugEnabled()) log.debug("Ignore "+_resolver+" due to empty");
 				return null; //ignore it!!
 			}
 		} else if (_resolver instanceof String) {

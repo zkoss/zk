@@ -21,11 +21,13 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Threads;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -51,7 +53,7 @@ import org.zkoss.zk.ui.sys.EventProcessingThread;
  */
 public class EventProcessingThreadImpl extends Thread
 implements EventProcessingThread {
-	private static final Log log = Log.lookup(EventProcessingThreadImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(EventProcessingThreadImpl.class);
 
 	/** The processor. */
 	private EventProcessor _proc;
@@ -90,7 +92,7 @@ implements EventProcessingThread {
 	private boolean _suspended;
 
 	public EventProcessingThreadImpl() {
-//		if (log.debugable()) log.debug("Starting an event processing thread");
+//		if (log.isDebugEnabled()) log.debug("Starting an event processing thread");
 		Threads.setDaemon(this, true);
 		start();
 	}
@@ -213,7 +215,7 @@ implements EventProcessingThread {
 					try {
 						((ExecutionCtrl)exec).onDeactivate();
 					} catch (Throwable ex) {
-						log.warningBriefly("Ignored deactivate failure", ex);
+						log.warn("Ignored deactivate failure", ex);
 					}
 				}
 
@@ -367,7 +369,7 @@ implements EventProcessingThread {
 						if (!isAlive())
 							throw new UiException("The event processing thread was aborted");
 
-						log.warning("The event processing takes more than "+
+						log.warn("The event processing takes more than "+
 							((System.currentTimeMillis()-begt)/1000)+" seconds: "+proc);
 					}
 				}
@@ -423,7 +425,7 @@ implements EventProcessingThread {
 	}
 	private void checkError() {
 		if (_ex != null) { //failed to process
-//			if (log.debugable()) log.realCause(_ex);
+//			if (log.isDebugEnabled()) log.realCause(_ex);
 			final Throwable ex = _ex;
 			_ex = null;
 			throw UiException.Aide.wrap(ex);
@@ -475,7 +477,7 @@ implements EventProcessingThread {
 							try {
 								((ExecutionCtrl)exec).onDeactivate();
 							} catch (Throwable ex) {
-								log.warningBriefly("Ignored deactivate failure", ex);
+								log.warn("Ignored deactivate failure", ex);
 							}
 						}
 						cleanup();

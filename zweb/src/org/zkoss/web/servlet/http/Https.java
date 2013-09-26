@@ -35,10 +35,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.Media;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
@@ -53,7 +55,7 @@ import org.zkoss.web.util.resource.ExtendletContext;
  * @author tomyeh
  */
 public class Https extends Servlets {
-	private static final Log log = Log.lookup(Https.class);
+	private static final Logger log = LoggerFactory.getLogger(Https.class);
 
 	/** Compresses the content into an byte array, or null
 	 * if the browser doesn't support the compression (accept-encoding).
@@ -328,7 +330,7 @@ public class Https extends Servlets {
 		uri = locate(ctx, request, uri, null);
 		final String encodedUrl =
 			encodeRedirectURL(ctx, request, response, uri, params, mode);
-		//if (log.debugable()) log.debug("redirect to " + encodedUrl);
+		//if (log.isDebugEnabled()) log.debug("redirect to " + encodedUrl);
 		response.sendRedirect(encodedUrl);
 	}
 	/** Encodes an URL such that it can be used with HttpServletResponse.sendRedirect.
@@ -601,7 +603,7 @@ public class Https extends Servlets {
 						}
 					} catch (Throwable ex) { //ignore
 					}
-					if (log.debugable()) log.debug("Failed to parse Range: "+range);
+					if (log.isDebugEnabled()) log.debug("Failed to parse Range: "+range);
 					return null;
 				}
 			}

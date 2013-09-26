@@ -16,37 +16,37 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServlet;
 
-import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.Locator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.io.Files;
-import org.zkoss.xel.taglib.Taglibs;
-import org.zkoss.xml.XMLs;
-
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.resource.Locator;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
-import org.zkoss.web.util.resource.ResourceCaches;
-import org.zkoss.web.util.resource.ResourceCache;
-import org.zkoss.web.util.resource.ResourceLoader;
 import org.zkoss.web.util.resource.ClassWebResource;
+import org.zkoss.web.util.resource.ResourceCache;
+import org.zkoss.web.util.resource.ResourceCaches;
+import org.zkoss.web.util.resource.ResourceLoader;
+import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.xml.XMLs;
 
 /**
  * The servlet used to interpret the DSP file (Potix Dynamic Script Page).
@@ -65,7 +65,7 @@ import org.zkoss.web.util.resource.ClassWebResource;
  * @author tomyeh
  */
 public class InterpreterServlet extends HttpServlet {
-	private static final Log log = Log.lookup(InterpreterServlet.class);
+	private static final Logger log = LoggerFactory.getLogger(InterpreterServlet.class);
 	private String _charset = "UTF-8";
 	private Locator _locator;
 	private boolean _compress = true;
@@ -113,7 +113,7 @@ public class InterpreterServlet extends HttpServlet {
 		Servlets.getBrowser(request); //update request info
 
 		final String path = Https.getThisServletPath(request);
-		if (log.debugable()) log.debug("Get "+path);
+		if (log.isDebugEnabled()) log.debug("Get "+path);
 
 		final Object old = Charsets.setup(request, response, _charset);
 		final ServletContext ctx = getServletContext();
@@ -190,8 +190,8 @@ public class InterpreterServlet extends HttpServlet {
 			try {
 				return parse0(is, Interpreter.getContentType(file.getName()));
 			} catch (Exception ex) {
-				if (log.debugable())
-					log.realCauseBriefly("Failed to parse "+file, ex);
+				if (log.isDebugEnabled())
+					log.error("Failed to parse "+file, ex);
 				else
 					log.error("Failed to parse "+file+"\nCause: "+Exceptions.getMessage(ex)
 						+"\n"+Exceptions.getBriefStackTrace(ex));
@@ -208,8 +208,8 @@ public class InterpreterServlet extends HttpServlet {
 				return parse0(is,
 					Interpreter.getContentType(url.getPath()));
 			} catch (Exception ex) {
-				if (log.debugable())
-					log.realCauseBriefly("Failed to parse "+url, ex);
+				if (log.isDebugEnabled())
+					log.error("Failed to parse "+url, ex);
 				else
 					log.error("Failed to parse "+url+"\nCause: "+Exceptions.getMessage(ex));
 				return null; //as non-existent

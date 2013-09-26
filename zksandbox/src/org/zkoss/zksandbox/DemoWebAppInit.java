@@ -26,7 +26,9 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppInit;
 
@@ -36,7 +38,7 @@ import org.zkoss.zk.ui.util.WebAppInit;
  */
 public class DemoWebAppInit implements WebAppInit {
 
-	private static final Log log = Log.lookup(DemoWebAppInit.class);
+	private static final Logger log = LoggerFactory.getLogger(DemoWebAppInit.class);
 	
 	final static String PATH = "/";
 	final static String CONFIG = "zksandbox.properties";

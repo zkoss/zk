@@ -26,12 +26,14 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.util.WaitLock;
 import org.zkoss.util.FastReadArray;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.VariableResolver;
@@ -79,7 +81,7 @@ import org.zkoss.zk.au.AuDecoder;
  * @author tomyeh
  */
 public class Configuration {
-	private static final Log log = Log.lookup(Configuration.class);
+	private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
 	private static final String PROP_EXPRESS_FACTORY
 		= "org.zkoss.xel.ExpressionFactory.class";
@@ -748,7 +750,7 @@ public class Configuration {
 				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (Throwable ex) {
-				log.realCauseBriefly("Ignored: failed to invoke "+klass, ex);
+				log.error("Ignored: failed to invoke "+klass, ex);
 			}
 		}
 	}
@@ -2298,7 +2300,7 @@ public class Configuration {
 				final PotentialDeadLockException ex =
 					new PotentialDeadLockException(
 					"Unable to load richlet "+name+"\nCause: conflict too long.");
-				log.warningBriefly(ex); //very rare, possibly a bug
+				log.warn("", ex); //very rare, possibly a bug
 				throw ex;
 			}
 		} //for (;;)

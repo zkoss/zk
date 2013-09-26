@@ -27,9 +27,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.theme.StandardTheme;
@@ -436,8 +437,8 @@ public class ThemeFns {
 	}
 	
 	private static void log(String msg) {
-		Log log = Log.lookup("global");
-		if (log.errorable()) log.error(msg);
+		Logger log = LoggerFactory.getLogger("global");
+		if (log.isErrorEnabled()) log.error(msg);
 		else System.err.println(msg);
 	}
 	/**

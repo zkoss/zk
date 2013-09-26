@@ -16,18 +16,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.io;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.List;
-import java.util.LinkedList;
-import java.io.Serializable;
 import java.io.Externalizable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utilities to handle java.io.Serializable.
@@ -40,7 +41,7 @@ public class Serializables {
 	 * and ignored values will be logged.
 	 * @since 5.0.7
 	 */
-	public static final Log logio = Log.lookup("org.zkoss.io.serializable");
+	public static final Logger logio = LoggerFactory.getLogger("org.zkoss.io.serializable");
 
 	private Serializables() {}
 
@@ -50,7 +51,7 @@ public class Serializables {
 	public static <K, V> void smartWrite(ObjectOutputStream s, Map<K, V> map)
 	throws IOException {
 		if (map != null) {
-			final boolean debug = logio.debugable();
+			final boolean debug = logio.isDebugEnabled();
 			for (Map.Entry<K, V> me: map.entrySet()) {
 				final K nm = me.getKey();
 				final V val = me.getValue();
@@ -93,7 +94,7 @@ public class Serializables {
 	public static <T> void smartWrite(ObjectOutputStream s, Collection<T> col)
 	throws IOException {
 		if (col != null) {
-			final boolean debug = logio.debugable();
+			final boolean debug = logio.isDebugEnabled();
 			for (T val: col) {
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
@@ -155,7 +156,7 @@ public class Serializables {
 	public static <T> void smartWrite(ObjectOutputStream s, T[] ary)
 	throws IOException {
 		if (ary != null) {
-			final boolean debug = logio.debugable();
+			final boolean debug = logio.isDebugEnabled();
 			for (int j = 0; j < ary.length; ++j) {
 				final T val = ary[j];
 				if ((val instanceof Serializable)
@@ -182,7 +183,7 @@ public class Serializables {
 		final boolean bser = val instanceof java.io.Serializable
 			|| val instanceof java.io.Externalizable;
 		s.writeObject(bser ? val: null);
-		if (!bser && val != null && logio.debugable())
+		if (!bser && val != null && logio.isDebugEnabled())
 			logio.debug("Skip not-serializable object: "+val);
 	}
 }

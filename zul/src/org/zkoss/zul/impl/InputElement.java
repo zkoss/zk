@@ -18,28 +18,29 @@ package org.zkoss.zul.impl;
 
 import java.util.Map;
 
-import org.zkoss.lang.Objects;
-
-import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.json.JavaScriptValue;
-
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.ext.Scopes;
-import org.zkoss.zk.ui.ext.Disable;
-import org.zkoss.zk.ui.ext.Readonly;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuSelect;
 import org.zkoss.zk.au.out.AuWrongValue;
-
-import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.Constraint;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.ErrorEvent;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.SelectionEvent;
+import org.zkoss.zk.ui.ext.Disable;
+import org.zkoss.zk.ui.ext.Readonly;
+import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.ClientConstraint;
+import org.zkoss.zul.Constraint;
 import org.zkoss.zul.CustomConstraint;
 import org.zkoss.zul.SimpleConstraint;
 import org.zkoss.zul.ext.Constrainted;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * A skeletal implementation of an input box.
@@ -50,7 +51,7 @@ import org.zkoss.zul.ext.Constrainted;
  */
 abstract public class InputElement extends XulElement
 implements Constrainted, Readonly, Disable {
-	private static final Log log = Log.lookup(InputElement.class);
+	private static final Logger log = LoggerFactory.getLogger(InputElement.class);
 
 	static {
 		addClientEvent(InputElement.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
@@ -343,7 +344,7 @@ implements Constrainted, Readonly, Disable {
 						((CustomConstraint)constr).showCustomError(this, null);
 						//not call thru showCustomError(Wrong...) for better performance
 					} catch (Throwable ex) {
-						log.realCauseBriefly(ex);
+						log.error("", ex);
 					}
 				}
 			} finally {
@@ -368,7 +369,7 @@ implements Constrainted, Readonly, Disable {
 			try {
 				((CustomConstraint)_auxinf.constr).showCustomError(this, ex);
 			} catch (Throwable t) {
-				log.realCause(t); //and ignore it
+				log.error("", t); //and ignore it
 			} finally {
 				Scopes.afterInterpret();
 			}

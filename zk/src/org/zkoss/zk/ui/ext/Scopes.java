@@ -15,20 +15,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.ui.ext;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.zkoss.util.logging.Log;
-import org.zkoss.zk.ui.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.impl.SimpleScope;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * Utilities to manage the current scope ({@link Scope}).
@@ -37,7 +38,7 @@ import org.zkoss.zk.ui.impl.SimpleScope;
  * @since 5.0.0
  */
 public class Scopes {
-	private static final Log log = Log.lookup(Scopes.class);
+	private static final Logger log = LoggerFactory.getLogger(Scopes.class);
 
 	/** A stack of implicit objects ({@link Implicit}). */
 	private static final ThreadLocal<List<Implicit>> _implicits = new ThreadLocal<List<Implicit>>();

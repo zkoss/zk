@@ -35,11 +35,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.web.Attributes;
 import org.zkoss.web.portlet.Portlets;
 import org.zkoss.web.portlet.RenderHttpServletRequest;
@@ -95,7 +97,7 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
  * @author tomyeh
  */
 public class DHtmlLayoutPortlet extends GenericPortlet {
-	private static final Log log = Log.lookup(DHtmlLayoutPortlet.class);
+	private static final Logger log = LoggerFactory.getLogger(DHtmlLayoutPortlet.class);
 
 	/** The parameter or attribute to specify the path of the ZUML page. */
 	private static final String ATTR_PAGE = "zk_page";
@@ -238,7 +240,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	protected boolean process(Session sess, RenderRequest request,
 	RenderResponse response, String path, boolean bRichlet)
 	throws PortletException, IOException {
-//		if (log.debugable()) log.debug("Creates from "+path);
+//		if (log.isDebugEnabled()) log.debug("Creates from "+path);
 		final WebManager webman = getWebManager();
 		final WebApp wapp = webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
@@ -390,10 +392,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
 					if (process(sess, request, response, errpg, false))
 						return; //done
-					log.warning("The error page not found: "+errpg);
+					log.warn("The error page not found: "+errpg);
 				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
-					log.warning("Failed to load the error page: "+errpg, ex);
+					log.warn("Failed to load the error page: "+errpg, ex);
 				}
 			}
 

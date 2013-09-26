@@ -37,7 +37,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class InitiatorInfo extends ArgumentInfo { //directive
-//	private static final Log log = Log.lookup(InitiatorInfo.class);
+//	private static final Logger log = LoggerFactory.getLogger(InitiatorInfo.class);
 
 	/** A class, an ExValue or an Initiator. */
 	private Object _init;
@@ -119,7 +119,7 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 		if (_init instanceof ExValue) {
 			clsnm = (String)((ExValue)_init).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.debugable()) log.debug("Ignore "+_init+" due to empty");
+//				if (log.isDebugEnabled()) log.debug("Ignore "+_init+" due to empty");
 				return null; //ignore it!!
 			}
 		} else if (_init instanceof String) {

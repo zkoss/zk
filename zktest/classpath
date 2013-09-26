@@ -14,3 +14,4 @@
 ../dist/lib/ext/javax.inject-1.jar
 ../dist/lib/ext/commons-lang.jar
 ../dist/lib/ext/commons-beanutils.jar
+../dist/lib/ext/slf4j-api.jar

@@ -14,6 +14,7 @@ ZK 7.0.0
   ZK-1912: A component support preserve-blank
   ZK-1919: ZK Components support static uuid
   ZK-1921: ZK Fileupload component support HTML 5 accept attribute
+  ZK-19: Support SLF4J API for logging instead
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
@@ -22,7 +23,8 @@ ZK 7.0.0
   ZK-1911: Text-as with childable cannot work with preserve-blank for component setting
 
 * Upgrade Notes
-
+  + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
+  are deprecated, please use SLF4J API for logging instead.  
   --------
 ZK 6.5.4 
 * Features

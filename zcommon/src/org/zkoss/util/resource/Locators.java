@@ -19,8 +19,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.util.Locales;
-import org.zkoss.util.logging.Log;
 
 /**
  * Utilities to load and locate resources.
@@ -29,7 +30,7 @@ import org.zkoss.util.logging.Log;
  * @see Locator
  */
 public class Locators {
-	private static final Log log = Log.lookup(Locators.class);
+	private static final Logger log = LoggerFactory.getLogger(Locators.class);
 
 	/** The default locator. */
 	private static final Locator _locator = new ClassLocator();
@@ -127,7 +128,7 @@ public class Locators {
 			jul >= 0 && (jdot < 0 || jul < jdot) ? jul:
 			jdot >= 0 ? jdot: file.length());
 
-		if (log.debugable())
+		if (log.isDebugEnabled())
 			log.debug("svl=" + file + " base=" + base + " ext=" + ext);
 
 		//search the existence based on locale

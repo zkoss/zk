@@ -22,15 +22,16 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
-import org.zkoss.util.logging.Log;
 
 /**
  * {@link RepeatableInputStream} adds functionality to another input stream,
@@ -61,7 +62,7 @@ import org.zkoss.util.logging.Log;
  * @since 3.0.4
  */
 public class RepeatableInputStream extends InputStream implements Repeatable {
-	private static final Log log = Log.lookup(RepeatableInputStream.class);
+	private static final Logger log = LoggerFactory.getLogger(RepeatableInputStream.class);
 
 	/*package*/ static final String BUFFER_LIMIT_SIZE = "org.zkoss.io.bufferLimitSize";
 	/*package*/ static final String MEMORY_LIMIT_SIZE = "org.zkoss.io.memoryLimitSize";
@@ -188,7 +189,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 				_out = new BufferedOutputStream(new FileOutputStream(_f));
 				_out.write(bs);
 			} catch (Throwable ex) {
-				log.warning("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
+				log.warn("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
 				disableBuffering();
 			}
 		}
@@ -242,7 +243,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 				try {
 					_out.close();
 				} catch (Throwable ex) {
-					log.warning("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
+					log.warn("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
 					disableBuffering();
 					return;
 				}

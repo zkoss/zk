@@ -16,62 +16,63 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ListIterator;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.io.File;
 import java.io.Reader;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.ClassResolver;
-import org.zkoss.lang.PotentialDeadLockException;
-import org.zkoss.util.CollectionsX;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.Locator;
-import org.zkoss.idom.Namespace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.idom.Attribute;
+import org.zkoss.idom.CData;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
-import org.zkoss.idom.Text;
-import org.zkoss.idom.CData;
 import org.zkoss.idom.Item;
-import org.zkoss.idom.Attribute;
+import org.zkoss.idom.Namespace;
 import org.zkoss.idom.ProcessingInstruction;
+import org.zkoss.idom.Text;
 import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.lang.ClassResolver;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.PotentialDeadLockException;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.xel.util.MethodFunction;
 import org.zkoss.xml.Locators;
-import org.zkoss.web.servlet.Servlets;
-	
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.impl.ZScriptInitiator;
-import org.zkoss.zk.ui.metainfo.impl.*;
+import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
+import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.ConditionImpl;
 
 /**
  * Used to parse the ZUL file
  * @author tomyeh
  */
 public class Parser {
-	private static final Log log = Log.lookup(Parser.class);
+	private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
 	private final WebApp _wapp;
 	private final Locator _locator;
@@ -95,7 +96,7 @@ public class Parser {
 	 * if not available.
 	 */
 	public PageDefinition parse(File file, String path) throws Exception {
-		//if (log.debugable()) log.debug("Parsing "+file);
+		//if (log.isDebugEnabled()) log.debug("Parsing "+file);
 		final PageDefinition pgdef =
 			parse(new SAXBuilder(true, false, true).build(file),
 				Servlets.getExtension(file.getName()));
@@ -109,7 +110,7 @@ public class Parser {
 	 * if not available.
 	 */
 	public PageDefinition parse(URL url, String path) throws Exception {
-		//if (log.debugable()) log.debug("Parsing "+url);
+		//if (log.isDebugEnabled()) log.debug("Parsing "+url);
 		final PageDefinition pgdef =
 			parse(new SAXBuilder(true, false, true).build(url),
 				Servlets.getExtension(url.toExternalForm()));
@@ -126,7 +127,7 @@ public class Parser {
 	 */
 	public PageDefinition parse(Reader reader, String extension)
 	throws Exception {
-		//if (log.debugable()) log.debug("Parsing "+reader);
+		//if (log.isDebugEnabled()) log.debug("Parsing "+reader);
 		return parse(new SAXBuilder(true, false, true).build(reader), extension);
 	}
 	/** Parse the raw content directly from a DOM tree.
@@ -180,7 +181,7 @@ public class Parser {
 						noELnorEmpty(nm, nm, pi);
 						impclses.add(nm);
 					} else {
-						log.warning(message("Ignored unknown attribute for import: "+nm, pi));
+						log.warn(message("Ignored unknown attribute for import: "+nm, pi));
 					}
 				}
 			} else {
@@ -269,10 +270,10 @@ public class Parser {
 			final String uri = params.remove("uri");
 			final String prefix = params.remove("prefix");
 			if (!params.isEmpty())
-				log.warning(message("Ignored unknown attributes: "+params.keySet(), pi));
+				log.warn(message("Ignored unknown attributes: "+params.keySet(), pi));
 			if (uri == null || prefix == null)
 				throw new UiException(message("Both uri and prefix attribute are required", pi));
-			//if (log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
+			//if (log.isDebugEnabled()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 			noEL("prefix", prefix, pi);
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
 			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
@@ -301,14 +302,14 @@ public class Parser {
 			final String ifc = params.remove("if");
 			final String unless = params.remove("unless");
 			if (!params.isEmpty())
-				log.warning(message("Ignored unknown attributes: "+params.keySet(), pi));
+				log.warn(message("Ignored unknown attributes: "+params.keySet(), pi));
 			noEmpty("uri", uri, pi);
 			pgdef.addForwardInfo(
 				new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
 		} else if ("import".equals(target)) { //import
 			throw new UiException(message("The import directive can be used only at the top level", pi));
 		} else {
-			log.warning(message("Unknown processing instruction: "+target, pi));
+			log.warn(message("Unknown processing instruction: "+target, pi));
 		}
 	}
 	/** Process the init directive. */
@@ -369,7 +370,7 @@ public class Parser {
 			final String val = me.getValue();
 			if ("language".equals(nm)) {
 				if (!(pi.getParent() instanceof Document))
-					log.warning(message("Ignored language attribute since the page directive is not at the top level", pi));
+					log.warn(message("Ignored language attribute since the page directive is not at the top level", pi));
 			} else if ("title".equals(nm)) {
 				pgdef.setTitle(val);
 			} else if ("style".equals(nm)) {
@@ -401,7 +402,7 @@ public class Parser {
 			} else if ("complete".equals(nm)) {
 				pgdef.setComplete("true".equals(val));
 			} else {
-				log.warning(message("Ignored unknown attribute: "+nm, pi));
+				log.warn(message("Ignored unknown attribute: "+nm, pi));
 			}
 		}
 	}
@@ -776,7 +777,7 @@ public class Parser {
 			parseItems(pgdef, parseZk(parent, el, annHelper),
 				el.getChildren(), annHelper, bNativeContent);
 		} else {
-			//if (log.debugable()) log.debug("component: "+nm+", ns:"+ns);
+			//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
 			if (isZkSwitch(parent))
 				throw new UiException(message("Only <zk> can be used in <zk switch>", el));
 
@@ -797,7 +798,7 @@ public class Parser {
 			final ComponentInfo compInfo;
 			if (bNative) {
 				if (annHelper.clear())
-					log.warning(message("Annotations are ignored since native doesn't support them", el));
+					log.warn(message("Annotations are ignored since native doesn't support them", el));
 
 				final NativeInfo ni;
 				compInfo = ni = new NativeInfo(
@@ -992,7 +993,7 @@ public class Parser {
 			selfAllowed && "self".equals(nm) ? null: nm, true);
 	}
 	private static void warnWrongZkAttr(Attribute attr) {
-		log.warning(message("Attribute "+attr.getName()+" ignored in <zk>", attr));
+		log.warn(message("Attribute "+attr.getName()+" ignored in <zk>", attr));
 	}
 	private static boolean isZkSwitch(NodeInfo nodeInfo) {
 		return nodeInfo instanceof ZkInfo && ((ZkInfo)nodeInfo).withSwitch();
@@ -1002,7 +1003,7 @@ public class Parser {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException(message("forEach not applicable to <zscript>", el));
 		if (annHelper.clear())
-			log.warning(message("Annotations are ignored since <zscript> doesn't support them", el));
+			log.warn(message("Annotations are ignored since <zscript> doesn't support them", el));
 
 		final String
 			ifc = el.getAttributeValue("if"),
@@ -1097,7 +1098,7 @@ public class Parser {
 		if (parent instanceof PageDefinition)
 			throw new UiException(message("<custom-attributes> must be used under a component", el));
 		if (annHelper.clear())
-			log.warning(message("Annotations are ignored since <custom-attributes> doesn't support them", el)); //old style annotation not supported
+			log.warn(message("Annotations are ignored since <custom-attributes> doesn't support them", el)); //old style annotation not supported
 
 		String ifc = null, unless = null, scope = null, composite = null;
 		final Map<String, String> attrs = new LinkedHashMap<String, String>();
@@ -1140,7 +1141,7 @@ public class Parser {
 		//	throw new UiException(message("Child elements are not allowed for <variables> element", el));
 
 		if (annHelper.clear())
-			log.warning(message("Annotations are ignored since <variables> doesn't support them", el)); //old style annotation not supported here
+			log.warn(message("Annotations are ignored since <variables> doesn't support them", el)); //old style annotation not supported here
 
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
@@ -1187,9 +1188,9 @@ public class Parser {
 	private static TemplateInfo parseTemplate(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		if (annHelper.clear())
-			log.warning(message("Annotations are ignored since <template> doesn't support them", el));
+			log.warn(message("Annotations are ignored since <template> doesn't support them", el));
 		if (el.getAttributeItem("forEach") != null)
-			log.warning(message("forEach is ignored since <template> doesn't support it", el));
+			log.warn(message("forEach is ignored since <template> doesn't support it", el));
 
 		String ifc = null, unless = null,
 			name = null, src = null;
@@ -1226,7 +1227,7 @@ public class Parser {
 	private static ZkInfo parseZk(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		if (annHelper.clear())
-			log.warning(message("Annotations are ignored since <zk> doesn't support them", el));
+			log.warn(message("Annotations are ignored since <zk> doesn't support them", el));
 
 		final ZkInfo zi = new ZkInfo(parent, null);
 		String ifc = null, unless = null,

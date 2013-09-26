@@ -14,8 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.test2;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.*;
 
 /**
@@ -24,7 +26,7 @@ import org.zkoss.zk.ui.*;
  * @author tomyeh
  */
 public class F2790411Thread extends Thread {
-	private static final Log log = Log.lookup(F2790411Thread.class);
+	private static final Logger log = LoggerFactory.getLogger(F2790411Thread.class);
 
 	private final WebApp _wapp;
 	private final String _uri;
@@ -51,7 +53,7 @@ public class F2790411Thread extends Thread {
 		try {
 			_comp = Executions.createComponents(_wapp, _uri, null)[0];
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			log.error("", ex);
 			_errmsg = Exceptions.getMessage(ex);
 		}
 		_done = true;

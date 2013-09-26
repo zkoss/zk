@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.impl.AbstractAnnotatedMethodInvoker;
 import org.zkoss.bind.impl.AnnotationUtil;
@@ -35,7 +37,7 @@ import org.zkoss.bind.tracker.impl.BindUiLifeCycle;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -60,7 +62,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	private static final Log _log = Log.lookup(BindComposer.class);
+	private static final Logger _log = LoggerFactory.getLogger(BindComposer.class);
 	
 	private static final String VM_ID = "$VM_ID$";
 	private static final String BINDER_ID = "$BINDER_ID$";
@@ -286,10 +288,10 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			String scope = AnnotationUtil.testString(initanno.getAttributeValues(QUEUE_SCOPE_ANNO_ATTR),initanno);
 			if(binder!=null){
 				if(name!=null){
-					_log.warning(MiscUtil.formatLocationMessage(QUEUE_NAME_ANNO_ATTR +" is not available if you use custom binder",initanno));
+					_log.warn(MiscUtil.formatLocationMessage(QUEUE_NAME_ANNO_ATTR +" is not available if you use custom binder",initanno));
 				}
 				if(scope!=null){
-					_log.warning(MiscUtil.formatLocationMessage(QUEUE_SCOPE_ANNO_ATTR +" is not available if you use custom binder",initanno));
+					_log.warn(MiscUtil.formatLocationMessage(QUEUE_SCOPE_ANNO_ATTR +" is not available if you use custom binder",initanno));
 				}
 				
 				binder = BindEvaluatorXUtil.eval(evalx,comp,(String)binder,Object.class);

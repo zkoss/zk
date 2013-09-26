@@ -14,14 +14,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Threads;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zul.*;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Separator;
+import org.zkoss.zul.Textbox;
 
 /**
  * Used to test the server-push feature.
@@ -29,7 +32,7 @@ import org.zkoss.zul.*;
  * @author tomyeh
  */
 public class ServerPush {
-	private static final Log log = Log.lookup(ServerPush.class);
+	private static final Logger log = LoggerFactory.getLogger(ServerPush.class);
 
 	public static void start(Component info, Textbox tb) throws InterruptedException {
 		start(null, info, tb);
@@ -85,10 +88,10 @@ public class ServerPush {
 					try {
 						updateInfo(_info, _tb, "comet");
 					} catch (RuntimeException ex) {
-						log.error(ex);
+						log.error("", ex);
 						throw ex;
 					} catch (Error ex) {
-						log.error(ex);
+						log.error("", ex);
 						throw ex;
 					} finally {
 						Executions.deactivate(_desktop);

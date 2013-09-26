@@ -30,8 +30,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.web.servlet.http.Https;
@@ -64,7 +66,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * @author tomyeh
  */
 public class DHtmlLayoutFilter implements Filter {
-	private static final Log log = Log.lookup(DHtmlLayoutFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(DHtmlLayoutFilter.class);
 
 	private ServletContext _ctx;
 	private String _ext = "html";
@@ -77,7 +79,7 @@ public class DHtmlLayoutFilter implements Filter {
 	protected void process(HttpServletRequest request,
 	HttpServletResponse response, String content)
 	throws ServletException, IOException {
-		if (log.debugable()) log.debug("Content to filter:\n"+content);
+		if (log.isDebugEnabled()) log.debug("Content to filter:\n"+content);
 
 		final WebManager webman = WebManager.getWebManager(_ctx);
 		final WebApp wapp = webman.getWebApp();

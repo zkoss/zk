@@ -23,15 +23,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.zkoss.lang.Library;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.TimeZones;
-import org.zkoss.util.logging.Log;
-import org.zkoss.text.DateFormats;
+import org.zkoss.lang.Library;
 import org.zkoss.text.DateFormatInfo;
+import org.zkoss.text.DateFormats;
+import org.zkoss.util.TimeZones;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Charsets;
-
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 
@@ -50,7 +50,7 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
  * @author tomyeh
  */
 public class I18Ns {
-	private static final Log log = Log.lookup(I18Ns.class);
+	private static final Logger log = LoggerFactory.getLogger(I18Ns.class);
 	private static final String ATTR_SETUP = "org.zkoss.zk.ui.http.charset.setup";
 
 	/** Sets up the internationalization attributes, including locale
@@ -174,7 +174,7 @@ public class I18Ns {
 			try {
 				return checkDateFormatInfo(Classes.newInstanceByThread(s));
 			} catch (Throwable ex) {
-				log.realCauseBriefly("Failed to instantiate " + s, ex);
+				log.error("Failed to instantiate " + s, ex);
 			}
 		return null;
 	}
@@ -183,7 +183,7 @@ public class I18Ns {
 	private static final String PX_PREFERRED_TIME_ZONE = "px_preferred_time_zone";
 	private static TimeZone checkTimeZone(Object tz) {
 		if (tz != null && !(tz instanceof TimeZone)) {
-			log.warning(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone required, not "+tz.getClass());
+			log.warn(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone required, not "+tz.getClass());
 			return null;
 		}
 		return (TimeZone)tz;
@@ -198,11 +198,11 @@ public class I18Ns {
 			if (o instanceof Class)
 				return (DateFormatInfo)((Class)o).newInstance();
 		} catch (Throwable ex) {
-			log.warningBriefly(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. Failed to instantiate "+o, ex);
+			log.warn(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. Failed to instantiate "+o, ex);
 			return null;
 		}
 
-		log.warning(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. DateFormatInfo required, not "+o.getClass());
+		log.warn(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. DateFormatInfo required, not "+o.getClass());
 		return null;
 	}
 

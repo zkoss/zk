@@ -12,16 +12,19 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Threads;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zul.*;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Separator;
+import org.zkoss.zul.Textbox;
 
 /**
  * Used to test the server-push's schedule feature.
@@ -29,7 +32,7 @@ import org.zkoss.zul.*;
  * @author tomyeh
  */
 public class ServerPush2 {
-	private static final Log log = Log.lookup(ServerPush2.class);
+	private static final Logger log = LoggerFactory.getLogger(ServerPush2.class);
 
 	public static void start(Component info, Textbox tb) throws InterruptedException {
 		start(null, info, tb);

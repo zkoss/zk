@@ -18,26 +18,27 @@ package org.zkoss.xel.taglib;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Enumeration;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import org.zkoss.lang.Classes;
-import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.ResourceCache;
-import org.zkoss.util.resource.AbstractLoader;
-import org.zkoss.util.resource.ClassLocator;
-import org.zkoss.util.logging.Log;
-import org.zkoss.idom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.resource.AbstractLoader;
+import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
@@ -51,7 +52,7 @@ import org.zkoss.xel.util.TaglibMapper;
  * @since 3.0.0
  */
 public class Taglibs {
-	private static final Log log = Log.lookup(Taglibs.class);
+	private static final Logger log = LoggerFactory.getLogger(Taglibs.class);
 
 	//Loading of TLD files//
 	private static final ResourceCache<URL, TaglibDefinition> _reces;
@@ -323,7 +324,7 @@ public class Taglibs {
 				for (Enumeration<URL> en = loc.getResources("metainfo/tld/config.xml");
 				en.hasMoreElements();) {
 					final URL url = en.nextElement();
-					if (log.debugable()) log.debug("Loading "+url);
+					if (log.isDebugEnabled()) log.debug("Loading "+url);
 					try {
 						final Document doc = new SAXBuilder(false, false, true).build(url);
 						if (IDOMs.checkVersion(doc, url))
@@ -333,7 +334,7 @@ public class Taglibs {
 					}
 				}
 			} catch (Exception ex) {
-				log.error(ex); //keep running
+				log.error("", ex); //keep running
 			}
 			if (urls.isEmpty())
 				return _defURLs = Collections.emptyMap();

@@ -27,8 +27,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
@@ -48,7 +50,7 @@ import org.zkoss.zk.ui.WebApp;
  * @since 5.0.0
  */
 /*package*/ abstract class AbstractExtendlet<V> implements Extendlet {
-	static final Log log = Log.lookup(AbstractExtendlet.class);
+	static final Logger log = LoggerFactory.getLogger(AbstractExtendlet.class);
 
 	ExtendletContext _webctx;
 	/** DSP interpretation cache. */
@@ -112,7 +114,7 @@ import org.zkoss.zk.ui.WebApp;
 				
 			return new MethodInfo(mtd, args);
 		} catch (ClassNotFoundException ex) {
-			log.realCauseBriefly("Unable to load class when resolving "+sig+" "+el.getLocator(), ex);
+			log.error("Unable to load class when resolving "+sig+" "+el.getLocator(), ex);
 		} catch (NoSuchMethodException ex) {
 			log.error("Method not found in "+clsnm+": "+sig+" "+el.getLocator());
 		}
@@ -159,7 +161,7 @@ import org.zkoss.zk.ui.WebApp;
 				if (url != null)
 					return url.openStream();
 			} catch (Throwable ex) {
-				log.warningBriefly("Unable to read from URL: "+path, ex);
+				log.warn("Unable to read from URL: "+path, ex);
 			}
 		}
 

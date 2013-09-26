@@ -16,11 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Calendar;
-import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -28,29 +28,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.zkoss.mesg.Messages;
-import org.zkoss.lang.Library;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
-
+import org.zkoss.lang.Library;
+import org.zkoss.mesg.Messages;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
-
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.ext.Includer;
 
 /**
  * A collection of utilities for this package.
@@ -59,7 +58,7 @@ import org.zkoss.zk.ui.ext.Includer;
  * @since 2.4.1
  */
 public class Utils {
-	private static Log log = Log.lookup(Utils.class);
+	private static Logger log = LoggerFactory.getLogger(Utils.class);
 
 	/** Update the status of debug-js.
 	 * It is called by {@link org.zkoss.zk.ui.util.Configuration#setDebugJS}

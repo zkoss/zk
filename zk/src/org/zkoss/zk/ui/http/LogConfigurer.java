@@ -12,22 +12,26 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Properties;
-import java.io.InputStream;
-import java.io.FileInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;
+import org.zkoss.mesg.Messages;
 
 /**
  * Utilities for configure the log.
  * @author tomyeh
  * @since 6.0.0
+ * @deprecated As of release 7.0.0, use SLF4J API for logging instead.
  */
 /*package*/ class LogConfigurer {
-	private static final Log log = Log.lookup(LogConfigurer.class);
+	private static final Logger log = LoggerFactory.getLogger(LogConfigurer.class);
 
 	/*package*/ static void configure() {
 		final String LIBPROP = "org.zkoss.util.logging.config.file";
@@ -48,17 +52,17 @@ import org.zkoss.util.logging.Log;
 						//silent
 					}
 				if (is == null) {
-					log.error(MCommon.FILE_NOT_FOUND, path);
+					log.error(Messages.get(MCommon.FILE_NOT_FOUND, path));
 					return;
 				}
 			}
 
-			log.info(MCommon.FILE_OPENING, path);
+			log.info(Messages.get(MCommon.FILE_OPENING, path));
 			final Properties props = new Properties();
 			props.load(is);
 			Log.configure(props);
 		} catch (Throwable ex) {
-			log.realCauseBriefly("Failed to load "+path, ex);
+			log.error("Failed to load "+path, ex);
 		} finally {
 			if (is != null)
 				try {is.close();} catch (Throwable ex) {}

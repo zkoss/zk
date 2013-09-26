@@ -16,21 +16,22 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
-import org.zkoss.util.logging.Log;
 
 /**
  * Utilities for process Map.
@@ -38,7 +39,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class Maps {
-	private static final Log log = Log.lookup(Maps.class);
+	private static final Logger log = LoggerFactory.getLogger(Maps.class);
 
 	/**
 	 * Reads a property list (key and element pairs) from the input stream,
@@ -135,7 +136,7 @@ public class Maps {
 					continue; //nothing found
 				if (res.separator == (char)0) {
 					if (res.token.length() > 0)
-						log.warning(">>Igored: a key, "+res.token+", without value, line "+lno);
+						log.warn(">>Igored: a key, "+res.token+", without value, line "+lno);
 					continue;
 				}
 				if (res.separator == '{') {
@@ -157,7 +158,7 @@ public class Maps {
 					continue;
 				}
 				if (res.token.length() == 0) {
-					log.warning(">>Ignored: wihout key, line "+lno);
+					log.warn(">>Ignored: wihout key, line "+lno);
 					continue;
 				}
 
@@ -172,7 +173,7 @@ public class Maps {
 						line = in.readLine();
 						++lno;
 						if (line == null){
-							log.warning(
+							log.warn(
 								">>Ignored: invalid multiple-line format: '={' does not have following '}', "+lnoFrom);
 							break;
 						}
@@ -203,7 +204,7 @@ public class Maps {
 		}
 
 		if (!prefixes.isEmpty())
-			log.warning(">>Ignored: unclosed nesting '{': "+prefixes.size());
+			log.warn(">>Ignored: unclosed nesting '{': "+prefixes.size());
 	}
 
 	/**

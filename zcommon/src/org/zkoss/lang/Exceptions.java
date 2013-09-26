@@ -22,9 +22,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
-import org.zkoss.util.logging.Log;
+
 
 /**
  * Utilities for Exceptions.
@@ -32,7 +34,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class Exceptions {
-	private static final Log log = Log.lookup(Exceptions.class);
+	private static final Logger log = LoggerFactory.getLogger(Exceptions.class);
 
 	/**
 	 * Finds the causes of an exception, ex, to see whether
@@ -78,7 +80,7 @@ public class Exceptions {
 //					return ((javax.servlet.jsp.el.ELException)ex).getRootCause();
 				}
 			} catch (Throwable e2) {
-				if (log.debugable()) log.debug("Ignored: unable to resolve " + ex.getClass());
+				if (log.isDebugEnabled()) log.debug("Ignored: unable to resolve " + ex.getClass());
 			}
 		return t;
 	}
@@ -161,7 +163,7 @@ public class Exceptions {
 			return (Throwable)Classes.newInstance(targetExceptCls,
 				new Class[] {Throwable.class}, new Object[] {ex});
 		} catch (Exception e2) {
-			log.warning("Unable to wrap an exception in " + targetExceptCls, e2);
+			log.warn("Unable to wrap an exception in " + targetExceptCls, e2);
 			throw new SystemException(ex);
 				//avoid dead-loop; don't use SystemException.Aide.wrap
 		}
@@ -204,7 +206,7 @@ public class Exceptions {
 				new Class[] {String.class, Throwable.class},
 				new Object[] {msg, ex});
 		} catch (Exception e2) {
-			log.warning("Unable to wrap an exception in " + targetExceptCls, e2);
+			log.warn("Unable to wrap an exception in " + targetExceptCls, e2);
 			throw new SystemException(ex);
 				//avoid dead-loop; don't use SystemException.Aide.wrap
 		}
@@ -227,7 +229,7 @@ public class Exceptions {
 				new Class[] {int.class, Object[].class, Throwable.class},
 				new Object[] {new Integer(code), fmtArgs, ex});
 		} catch (Exception e2) {
-			log.warning("Unable to wrap an exception in " + targetExceptCls, e2);
+			log.warn("Unable to wrap an exception in " + targetExceptCls, e2);
 			throw new SystemException(ex);
 				//avoid dead-loop; don't use SystemException.Aide.wrap
 		}
@@ -250,7 +252,7 @@ public class Exceptions {
 				new Class[] {int.class, Object.class, Throwable.class},
 				new Object[] {new Integer(code), fmtArg, ex});
 		} catch (Exception e2) {
-			log.warning("Unable to wrap an exception in " + targetExceptCls, e2);
+			log.warn("Unable to wrap an exception in " + targetExceptCls, e2);
 			throw new SystemException(ex);
 				//avoid dead-loop; don't use SystemException.Aide.wrap
 		}
@@ -273,7 +275,7 @@ public class Exceptions {
 				new Class[] {int.class, Throwable.class},
 				new Object[] {new Integer(code), ex});
 		} catch (Exception e2) {
-			log.warning("Unable to wrap an exception in " + targetExceptCls, e2);
+			log.warn("Unable to wrap an exception in " + targetExceptCls, e2);
 			throw new SystemException(ex);
 				//avoid dead-loop; don't use SystemException.Aide.wrap
 		}
@@ -299,7 +301,7 @@ public class Exceptions {
 						if (t != null) ex = t;
 					}
 				} catch (Throwable e2) {
-					if (log.debugable()) log.debug("Ignored: unable to resolve " + ex.getClass());
+					if (log.isDebugEnabled()) log.debug("Ignored: unable to resolve " + ex.getClass());
 				}
 //Remove the dependence on EL
 /*				try {
@@ -309,7 +311,7 @@ public class Exceptions {
 						if (t != null) ex = t;
 					}
 				} catch (Throwable e2) {
-					if (log.debugable()) log.debug("Ignored: unable to resolve " + ex.getClass());
+					if (log.isDebugEnabled()) log.debug("Ignored: unable to resolve " + ex.getClass());
 				}*/
 				return ex;
 			}

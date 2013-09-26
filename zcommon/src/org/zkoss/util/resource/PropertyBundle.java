@@ -15,16 +15,18 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
-import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
+import org.zkoss.util.CacheMap;
 import org.zkoss.util.Maps;
-import org.zkoss.util.logging.Log;
 
 /**
  * The property bundle.
@@ -52,7 +54,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class PropertyBundle {
-	private static final Log log = Log.lookup(PropertyBundle.class);
+	private static final Logger log = LoggerFactory.getLogger(PropertyBundle.class);
 
 	/** The cache to hold bundles (Key, PropertyBundle). */
 	private static final Cache<Key, PropertyBundle> _cache;

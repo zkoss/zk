@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.math.BigDecimals;
 import org.zkoss.math.BigIntegers;
 import org.zkoss.mesg.MCommon;
@@ -36,7 +38,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.util.Cache;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.FastReadCache;
-import org.zkoss.util.logging.Log;
+
 
 /**
  * Utilities to handle java.lang.Class
@@ -44,7 +46,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class Classes {
-	private static final Log log = Log.lookup(Classes.class);
+	private static final Logger log = LoggerFactory.getLogger(Classes.class);
 
 	private static final Object NOT_FOUND = new Object();
 	

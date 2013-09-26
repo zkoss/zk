@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
@@ -36,7 +38,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.web.fn.ThemeFns;
@@ -64,7 +66,7 @@ import org.zkoss.zk.ui.util.URIInfo;
  * @author tomyeh
  */
 public class ConfigParser {
-	private static final Log log = Log.lookup(ConfigParser.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigParser.class);
 
 	/** The number of segments in a version.
 	 */
@@ -118,7 +120,7 @@ public class ConfigParser {
 		}
 		
 		if (clsnm.length() == 0)
-			log.warning("Ignored: empty version-class, "+el.getLocator());
+			log.warn("Ignored: empty version-class, "+el.getLocator());
 
 		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
 		final Class cls = Classes.forNameByThread(clsnm);
@@ -169,7 +171,7 @@ public class ConfigParser {
 			final List<XMLResourcesLocator.Resource> xmls = locator.getDependentXMLResources(
 				"metainfo/zk/config.xml", "config-name", "depends");
 			for (XMLResourcesLocator.Resource res: xmls) {
-				if (log.debugable()) log.debug("Loading "+res.url);
+				if (log.isDebugEnabled()) log.debug("Loading "+res.url);
 				try {
 					if (checkVersion(res.url, res.document)) {
 						final Element el = res.document.getRootElement();
@@ -443,7 +445,7 @@ public class ConfigParser {
 				parseTimeoutURI(config, el);
 					//deprecated since 3.6.3, but to be backward-compatible
 			} else if ("log".equals(elnm)) {
-				log.warning("Ingored. Use the library property called org.zkoss.util.logging.config.file instead");
+				log.warn("Ingored. Use the library property called org.zkoss.util.logging.config.file instead");
 			} else if ("error-page".equals(elnm)) {
 			//error-page
 				final Class cls =
@@ -556,7 +558,7 @@ public class ConfigParser {
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
 					_customThemeProvider = true;
-				if (log.debugable()) log.debug("ThemeProvider: " + cls.getName());
+				if (log.isDebugEnabled()) log.debug("ThemeProvider: " + cls.getName());
 				config.setThemeProvider((ThemeProvider)cls.newInstance());
 			}
 		}
@@ -568,7 +570,7 @@ public class ConfigParser {
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
 					_customThemeRegistry = true;
-				if (log.debugable()) log.debug("ThemeRegistry: " + cls.getName());
+				if (log.isDebugEnabled()) log.debug("ThemeRegistry: " + cls.getName());
 				ThemeFns.setThemeRegistry((ThemeRegistry)cls.newInstance());
 			}
 		}
@@ -580,7 +582,7 @@ public class ConfigParser {
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
 					_customThemeResolver = true;
-				if (log.debugable()) log.debug("ThemeResolver: " + cls.getName());
+				if (log.isDebugEnabled()) log.debug("ThemeResolver: " + cls.getName());
 				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
 			}
 		}

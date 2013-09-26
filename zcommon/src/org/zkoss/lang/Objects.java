@@ -16,15 +16,16 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
-import java.lang.reflect.Method;
 import java.rmi.MarshalledObject;
+import java.util.Date;
 
-import org.zkoss.util.ArraysX;
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.text.DateFormats;
+import org.zkoss.util.ArraysX;
 
 /**
  * Utilities related to the Object class.
@@ -32,7 +33,7 @@ import org.zkoss.text.DateFormats;
  * @author tomyeh
  */
 public class Objects {
-	private static final Log log = Log.lookup(Objects.class);
+	private static final Logger log = LoggerFactory.getLogger(Objects.class);
 
 	/** Denotes unknown. It is useful if both null and unknown is required.
 	 */
@@ -429,7 +430,7 @@ public class Objects {
 				try {
 					return kls.getMethod("clone").invoke(o);
 				} catch (NoSuchMethodException ex) {
-					if (log.debugable()) log.debug("No clone() for "+kls);
+					if (log.isDebugEnabled()) log.debug("No clone() for "+kls);
 				}
 			}
 

@@ -14,33 +14,34 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource.impl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Enumeration;
-import java.util.Collections;
-import java.net.URL;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.FilterMap;
-import org.zkoss.util.Maps;
 import org.zkoss.util.Locales;
+import org.zkoss.util.Maps;
+import org.zkoss.util.WaitLock;
+import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.resource.LabelLocator;
 import org.zkoss.util.resource.LabelLocator2;
-import org.zkoss.util.resource.ClassLocator;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.WaitLock;
-import org.zkoss.xel.Expressions;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.Expressions;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.util.SimpleXelContext;
@@ -58,7 +59,7 @@ import org.zkoss.xel.util.SimpleXelContext;
  * @author tomyeh
  */
 public class LabelLoader {
-	private static final Log log = Log.lookup(LabelLoader.class);
+	private static final Logger log = LoggerFactory.getLogger(LabelLoader.class);
 
 	/** A map of (Locale l, Map(String key, ExValue label)).
 	 * We use two maps to speed up the access of labels.
@@ -177,7 +178,7 @@ public class LabelLoader {
 
 		synchronized (_locators) {
 			if (!_locators.add(locator))
-				log.warning("Replace the old one, because it is replicated: "+locator);
+				log.warn("Replace the old one, because it is replicated: "+locator);
 		}
 
 		reset(); //Labels might be loaded before, so...
@@ -214,7 +215,7 @@ public class LabelLoader {
 
 			//wait because some one is creating the servlet
 			if (!((WaitLock)o).waitUntilUnlock(5*60*1000))
-				log.warning("Take too long to wait loading labels: "+locale
+				log.warn("Take too long to wait loading labels: "+locale
 					+"\nTry to load again automatically...");
 		} //for(;;)
 

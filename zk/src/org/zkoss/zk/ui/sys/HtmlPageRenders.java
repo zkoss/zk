@@ -64,7 +64,7 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  * @since 5.0.0
  */
 public class HtmlPageRenders {
-//	private static final Log log = Log.lookup(HtmlPageRenders.class);
+//	private static final Logger log = LoggerFactory.getLogger(HtmlPageRenders.class);
 
 	/** Denotes whether style sheets are generated for this request. */
 	private static final String ATTR_LANG_CSS_GENED

@@ -16,7 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -30,7 +32,7 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  */
 public class AbortByRemoveDesktop implements AbortingReason {
-	private static final Log log = Log.lookup(AbortByRemoveDesktop.class);
+	private static final Logger log = LoggerFactory.getLogger(AbortByRemoveDesktop.class);
 
 	public AbortByRemoveDesktop() {
 	}

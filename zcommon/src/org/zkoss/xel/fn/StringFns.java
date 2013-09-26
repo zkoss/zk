@@ -16,11 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.fn;
 
-import java.util.regex.Pattern;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
-import org.zkoss.util.logging.Log;
 
 /**
  * Functions to manipulate strings in EL.
@@ -28,7 +27,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class StringFns {
-	private static Log log = Log.lookup(StringFns.class);
+	private static Logger log = LoggerFactory.getLogger(StringFns.class);
 
 	/** Concatenates two strings.
 	 * Note: null is considered as empty.
@@ -158,7 +157,7 @@ public class StringFns {
 			final char cc = s.charAt(j);
 			if (cc == '\'' || cc == '"') {
 				if (sb == null) {
-					log.warning("JavaScript Injection? Unexpected string detected: "+s);
+					log.warn("JavaScript Injection? Unexpected string detected: "+s);
 					sb = new StringBuffer(len);
 					if (j > 0) sb.append(s.substring(0, j));
 				}

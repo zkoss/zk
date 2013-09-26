@@ -14,10 +14,12 @@ package org.zkoss.bind.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.validator.DeferredValidator;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -26,7 +28,7 @@ import org.zkoss.zk.ui.UiException;
  * @since 6.0.1
  */
 public class SystemValidators {
-	private static final Log _log = Log.lookup(SystemValidators.class);
+	private static final Logger _log = LoggerFactory.getLogger(SystemValidators.class);
 	private static final Map<String, Validator> _validators = new HashMap<String, Validator>();
 	private static boolean _init = false;
 	
@@ -54,7 +56,7 @@ public class SystemValidators {
 	}
 	
 	static private void set0(String name,Validator validator){
-		if(_log.debugable()){
+		if(_log.isDebugEnabled()){
 			_log.debug("set validator [%s]=[%s]",name,validator);
 		}
 		synchronized(_validators){

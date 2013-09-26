@@ -23,9 +23,11 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
-import org.zkoss.util.logging.Log;
+import org.zkoss.mesg.Messages;
 
 /**
  * Utilities relevant to content types.
@@ -33,7 +35,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class ContentTypes {
-	private static final Log log = Log.lookup(ContentTypes.class);
+	private static final Logger log = LoggerFactory.getLogger(ContentTypes.class);
 
 	/** A map of (String format, String contentType). */
 	private static final Map<String, String> _fmt2ct = new HashMap<String, String>(64);
@@ -120,7 +122,7 @@ public class ContentTypes {
 		final String flnm =
 			"/metainfo/org/zkoss/util/media/contentTypes.properties";
 		if (!load(flnm))
-			log.warning(MCommon.FILE_NOT_FOUND, flnm);
+			log.warn(Messages.get(MCommon.FILE_NOT_FOUND, flnm));
 		load("/contentTypes.properties"); //override!
 	}
 	private static final boolean load(String flnm) {
@@ -139,14 +141,14 @@ public class ContentTypes {
 				if (j < 0) {
 					final int k = Strings.skipWhitespaces(line, 0);
 					if (k < line.length() && line.charAt(k) != '#')
-						log.warning("Ignored error;  illgal format: "+line);
+						log.warn("Ignored error;  illgal format: "+line);
 					continue;
 				}
 
 				final String format = line.substring(0, j).trim();
 				final String ctype = line.substring(j + 1).trim();
 				if (format.length() == 0 || ctype.length() == 0) {
-					log.warning("Ignored error;  illgal format: "+line);
+					log.warn("Ignored error;  illgal format: "+line);
 					continue;
 				}
 
@@ -154,7 +156,7 @@ public class ContentTypes {
 				_ct2fmt.put(ctype, format);
 			}
 		} catch (IOException ex) {
-			log.warning("Ingored error: Unable to read "+flnm, ex);
+			log.warn("Ingored error: Unable to read "+flnm, ex);
 		} finally {
 			if (in != null) {
 				try {in.close();} catch (IOException e) {}

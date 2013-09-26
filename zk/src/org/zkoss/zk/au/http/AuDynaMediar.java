@@ -26,10 +26,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.media.Media;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.web.servlet.http.Https;
 
 import org.zkoss.zk.mesg.MZk;
@@ -56,7 +58,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
  * @since 3.0.2
  */
 public class AuDynaMediar implements AuExtension {
-	private static final Log log = Log.lookup(AuDynaMediar.class);
+	private static final Logger log = LoggerFactory.getLogger(AuDynaMediar.class);
 
 	private ServletContext _ctx;
 
@@ -72,7 +74,7 @@ public class AuDynaMediar implements AuExtension {
 	 */
 	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
-//		if (log.debugable()) log.debug("View "+pi);
+//		if (log.isDebugEnabled()) log.debug("View "+pi);
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
@@ -141,7 +143,7 @@ public class AuDynaMediar implements AuExtension {
 				if (!errs.isEmpty()) {
 					for (Iterator it = errs.iterator(); it.hasNext();) {
 						final Throwable t = (Throwable)it.next();
-						log.realCauseBriefly("Failed to load media, "+pi, t);
+						log.error("Failed to load media, "+pi, t);
 						errmsg.append('\n').append(Exceptions.getMessage(t));
 					}
 				}

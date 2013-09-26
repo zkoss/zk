@@ -24,7 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -40,7 +41,7 @@ import org.zkoss.zk.ui.WebApp;
  */
 public class JpaUtil {
 
-	private static final Log log = Log.lookup(JpaUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(JpaUtil.class);
 
 	public static final String CONFIG = "JpaUtil.PersistenceUnitName";
 

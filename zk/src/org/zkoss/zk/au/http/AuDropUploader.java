@@ -40,12 +40,14 @@ import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.image.AImage;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.sound.AAudio;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.media.Media;
@@ -65,7 +67,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * @since 6.5.0
  */
 public class AuDropUploader implements AuExtension {
-	private static final Log log = Log.lookup(AuDropUploader.class);
+	private static final Logger log = LoggerFactory.getLogger(AuDropUploader.class);
 
 	public AuDropUploader() {}
 		
@@ -134,7 +136,7 @@ public class AuDropUploader implements AuExtension {
 				return;
 			}
 		}
-		if (log.finerable()) log.finer(attrs);		
+		if (log.isTraceEnabled()) log.trace(Objects.toString(attrs));		
 	}
 	
 
@@ -164,7 +166,7 @@ public class AuDropUploader implements AuExtension {
 	 * @since 3.0.4
 	 */
 	protected String handleError(Throwable ex) {
-		log.realCauseBriefly("Failed to upload", ex);
+		log.error("Failed to upload", ex);
 		return Exceptions.getMessage(ex);
 	}
 
@@ -228,14 +230,14 @@ public class AuDropUploader implements AuExtension {
 						new AImage(name, fi.getInputStream());
 							//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
-					if (log.debugable()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
 					return fi.isInMemory() ? new AAudio(name, fi.get()):
 						new StreamAudio(name, fi, ctypelc);
 				} catch (Throwable ex) {
-					if (log.debugable()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctypelc.startsWith("text/")) {
 				String charset = getCharset(ctype);

@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import static org.zkoss.lang.Generics.cast;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.au.AuRequest;
@@ -90,7 +92,7 @@ import org.zkoss.zul.ext.Selectable;
  * @see Comboitem
  */
 public class Combobox extends Textbox {
-	private static final Log log = Log.lookup(Combobox.class);
+	private static final Logger log = LoggerFactory.getLogger(Combobox.class);
 	private boolean _autodrop, _autocomplete = true, _btnVisible = true, _open;
 	//Note: _selItem is maintained loosely, i.e., its value might not be correct
 	//unless syncValueToSelection is called. So call getSelectedItem/getSelectedIndex
@@ -471,7 +473,7 @@ public class Combobox extends Textbox {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
-					log.error(t);
+					log.error("", t);
 				}			
 				throw ex;
 			}

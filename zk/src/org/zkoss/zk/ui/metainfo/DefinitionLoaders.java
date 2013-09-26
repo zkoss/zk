@@ -27,10 +27,12 @@ import java.util.LinkedHashMap;
 import java.util.Enumeration;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.idom.Document;
@@ -61,7 +63,7 @@ import org.zkoss.zk.device.Device;
  * @author tomyeh
  */
 public class DefinitionLoaders {
-	private static final Log log = Log.lookup(DefinitionLoaders.class);
+	private static final Logger log = LoggerFactory.getLogger(DefinitionLoaders.class);
 
 	/** List<Object[Locator, URL]> */
 	private static volatile List<Object[]> _addons;
@@ -170,7 +172,7 @@ public class DefinitionLoaders {
 		for (Enumeration en = locator.getResources("metainfo/zk/lang.xml");
 		en.hasMoreElements();) {
 			final URL url = (URL)en.nextElement();
-			if (log.debugable()) log.debug("Loading "+url);
+			if (log.isDebugEnabled()) log.debug("Loading "+url);
 			try {
 				final Document doc = new SAXBuilder(true, false, true).build(url);
 				if (ConfigParser.checkVersion(url, doc, true))
@@ -199,7 +201,7 @@ public class DefinitionLoaders {
 				if (ConfigParser.checkVersion(res.url, res.document, true))
 					parseLang(res.document, locator, res.url, true);
 			} catch (Exception ex) {
-				log.realCauseBriefly("Failed to load "+res.url, ex);
+				log.error("Failed to load "+res.url, ex);
 				//keep running
 			}
 		}
@@ -221,7 +223,7 @@ public class DefinitionLoaders {
 				try {
 					LanguageDefinition.addExtension(ext, lang);
 				} catch (DefinitionNotFoundException ex) {
-					log.warning("Extension "+ext+" ignored since language "+lang+" not found");
+					log.warn("Extension "+ext+" ignored since language "+lang+" not found");
 				}
 			}
 			_exts = null;
@@ -247,7 +249,7 @@ public class DefinitionLoaders {
 		final LanguageDefinition langdef;
 		final Device device;
 		if (addon) {
-			if (log.debugable()) log.debug("Addon language to "+lang+" from "+root.getElementValue("addon-name", true));
+			if (log.isDebugEnabled()) log.debug("Addon language to "+lang+" from "+root.getElementValue("addon-name", true));
 			langdef = LanguageDefinition.lookup(lang);
 			device = Devices.getDevice(langdef.getDeviceType());
 
@@ -259,7 +261,7 @@ public class DefinitionLoaders {
 			final String deviceType =
 				IDOMs.getRequiredElementValue(root, "device-type");
 
-			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
+			//if (log.isDebugEnabled()) log.debug("Load language: "+lang+", "+ns);
 
 			PageRenderer pageRenderer = (PageRenderer)
 				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class"), PageRenderer.class)
@@ -317,7 +319,7 @@ public class DefinitionLoaders {
 				//ondemand means to cancel the previous definition (merge or not)
 			if (pkg != null) {
 				if (src != null)
-					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
+					log.warn("The src attribute ignored because package is specified, "+el.getLocator());
 				if (!ondemand && !merge) {
 					src = "~." + device.packageToPath(pkg);
 					pkg = null;
@@ -342,7 +344,7 @@ public class DefinitionLoaders {
 			} else if (ctn != null && ctn.length() > 0) {
 				js = new JavaScript(ctn);
 			} else {
-				log.warning("Ignored: none of the src or package attribute, or the content specified, "+el.getLocator());
+				log.warn("Ignored: none of the src or package attribute, or the content specified, "+el.getLocator());
 				continue;
 			}
 			langdef.addJavaScript(js);
@@ -407,10 +409,10 @@ public class DefinitionLoaders {
 					try {
 						cls = locateClass(clsnm, Component.class);
 					} catch (Throwable ex) { //Feature 1873426
-						log.warning("Component "+name+" ignored. Reason: unable to load "+clsnm+" due to "
+						log.warn("Component "+name+" ignored. Reason: unable to load "+clsnm+" due to "
 							+ex.getClass().getName()+": "+ex.getMessage()
 							+(ex instanceof NoClassDefFoundError?"":"\n"+el.getLocator()));
-						log.debug(ex);
+						log.debug("", ex);
 						//keep processing (Feature 2060367)
 					}
 				} else {
@@ -422,7 +424,7 @@ public class DefinitionLoaders {
 			final ComponentDefinitionImpl compdef;
 			boolean extend = false;
 			if (macroURI != null && macroURI.length() != 0) {
-				if (log.finerable()) log.finer("macro component definition: "+name);
+				if (log.isTraceEnabled()) log.trace("macro component definition: "+name);
 
 				final String inline = el.getElementValue("inline", true);
 				compdef = (ComponentDefinitionImpl)
@@ -440,10 +442,10 @@ public class DefinitionLoaders {
 				extend = true;
 
 				final String extnm = el.getElementValue("extends", true);
-				if (log.finerable()) log.finer("Extends component definition, "+name+", from "+extnm);
+				if (log.isTraceEnabled()) log.trace("Extends component definition, "+name+", from "+extnm);
 				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
 				if (ref == null) {
-					log.warning("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
+					log.warn("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
 						//not throw exception since the derived component might be
 						//ignored due to class-not-found
 					continue;
@@ -468,7 +470,7 @@ public class DefinitionLoaders {
 				langdef.addComponentDefinition(compdef);
 					//Note: setImplementationClass before addComponentDefinition
 			} else {
-				if (log.finerable()) log.finer("Add component definition: name="+name);
+				if (log.isTraceEnabled()) log.trace("Add component definition: name="+name);
 
 				if (cls == null && clsnm == null)
 					throw new UiException(message("component-class is required", el));
@@ -621,13 +623,13 @@ public class DefinitionLoaders {
 				final String uri = params.remove("uri");
 				final String prefix = params.remove("prefix");
 				if (!params.isEmpty())
-					log.warning("Ignored unknown attribute: "+params+", "+pi.getLocator());
+					log.warn("Ignored unknown attribute: "+params+", "+pi.getLocator());
 				if (uri == null || prefix == null)
 					throw new UiException(message("Both uri and prefix attribute are required", pi));
-				if (log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
+				if (log.isDebugEnabled()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 				langdef.addTaglib(new Taglib(prefix, uri));
 			} else {
-				log.warning("Unknown processing instruction: "+target);
+				log.warn("Unknown processing instruction: "+target);
 			}
 		}
 	}
@@ -732,9 +734,9 @@ public class DefinitionLoaders {
 				final int v = Integer.parseInt(val);
 				if (!positiveOnly || v > 0)
 					return new Integer(v);
-				log.warning("Ignored: the "+subnm+" element must be a positive number, not "+val+", at "+el.getLocator());
+				log.warn("Ignored: the "+subnm+" element must be a positive number, not "+val+", at "+el.getLocator());
 			} catch (NumberFormatException ex) { //eat
-				log.warning("Ignored: the "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
+				log.warn("Ignored: the "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
 			}
 		}
 		return null;

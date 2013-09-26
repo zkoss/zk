@@ -331,7 +331,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 						write(reqctx, out, mtd);
 					}
 			} else {
-				log.warning("Unknown element "+elnm+", "+el.getLocator()+", "+path);
+				log.warn("Unknown element "+elnm+", "+el.getLocator()+", "+path);
 			}
 		}
 		if (zk) {

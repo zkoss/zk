@@ -18,14 +18,15 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A layout region in a border layout.
@@ -41,7 +42,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public abstract class LayoutRegion extends XulElement {
 	
-	private static final Log log = Log.lookup(LayoutRegion.class);
+	private static final Logger log = LoggerFactory.getLogger(LayoutRegion.class);
 
 	private String _border = "normal";
 	private int[] _margins = new int[] { 0, 0, 0, 0 };
@@ -119,7 +120,7 @@ public abstract class LayoutRegion extends XulElement {
 	 * 
 	 */
 	public void setFlex(boolean flex) {
-		log.warning("The flex attribute is deprecated, use setHflex and setVflex on child component instead.");
+		log.warn("The flex attribute is deprecated, use setHflex and setVflex on child component instead.");
 		if (_flex != flex) {
 			_flex = flex;
 			smartUpdate("flex", _flex);

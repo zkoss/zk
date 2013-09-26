@@ -31,10 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
@@ -77,7 +78,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * @author tomyeh
  */
 public class WebManager {
-	private static final Log log = Log.lookup(WebManager.class);
+	private static final Logger log = LoggerFactory.getLogger(WebManager.class);
 
 	/** A context attribute for storing an instance of this class. */
 	/*package*/ static final String ATTR_WEB_MANAGER
@@ -102,7 +103,7 @@ public class WebManager {
 	 * @since 3.6.0
 	 */
 	public WebManager(ServletContext ctx, String updateURI) {
-		if (log.debugable()) log.debug("Starting WebManager at "+ctx);
+		if (log.isDebugEnabled()) log.debug("Starting WebManager at "+ctx);
 
 		if (ctx == null || updateURI == null)
 			throw new IllegalArgumentException("null");
@@ -161,7 +162,7 @@ public class WebManager {
 				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx, true));
 					//accept URL, so zk.xml could contain URL
 		} catch (Throwable ex) {
-			log.realCauseBriefly("Unable to load " + XML, ex);
+			log.error("Unable to load " + XML, ex);
 		}
 
 		LogConfigurer.configure();
@@ -178,7 +179,7 @@ public class WebManager {
 				else
 					log.error("File not found: " + XML);
 			} catch (Throwable ex) {
-				log.realCauseBriefly("Unable to load " + XML, ex);
+				log.error("Unable to load " + XML, ex);
 			} finally {
 				if (is != null)
 					try {is.close();} catch (Throwable t) {}
@@ -253,7 +254,7 @@ public class WebManager {
 				try {
 					it.next().didActivate(this);
 				} catch (Throwable ex) {
-					log.realCause(ex);
+					log.error("", ex);
 				}
 			}
 		}
@@ -460,7 +461,7 @@ public class WebManager {
 	ServletResponse response, String path, boolean autocreate) {
 		Desktop desktop = (Desktop)request.getAttribute(ATTR_DESKTOP);
 		if (desktop == null && autocreate) {
-			if (log.debugable()) log.debug("Create desktop for "+path);
+			if (log.isDebugEnabled()) log.debug("Create desktop for "+path);
 			request.setAttribute(ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, response, path));
 		}

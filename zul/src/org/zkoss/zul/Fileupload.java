@@ -19,9 +19,11 @@ package org.zkoss.zul;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.media.Media;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zk.ui.Execution;
@@ -63,7 +65,7 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * @see Filedownload
  */
 public class Fileupload extends Button { //not XulElement since not applicable
-	private static final Log log = Log.lookup(Fileupload.class);
+	private static final Logger log = LoggerFactory.getLogger(Fileupload.class);
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 	
 	public Fileupload() {
@@ -364,7 +366,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 			try {
 				dlg.detach();
 			} catch (Throwable ex2) {
-				log.warningBriefly("Failed to detach when recovering from an error", ex2);
+				log.warn("Failed to detach when recovering from an error", ex2);
 			}
 			throw UiException.Aide.wrap(ex);
 		}

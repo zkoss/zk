@@ -15,30 +15,36 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.util;
 
-import java.lang.reflect.Field;
-import java.io.PrintWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
-import java.net.URL;
-import javax.xml.transform.stream.StreamResult;
+import java.util.Map;
+
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
 
-import org.zkoss.mesg.MCommon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.idom.Attribute;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.Group;
+import org.zkoss.idom.Item;
+import org.zkoss.idom.Text;
+import org.zkoss.idom.transform.Transformer;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.mesg.MCommon;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.idom.*;
-import org.zkoss.idom.transform.Transformer;
 
 /**
  * The iDOM relevant utilities.
@@ -48,7 +54,7 @@ import org.zkoss.idom.transform.Transformer;
  * @see org.zkoss.idom.Group
  */
 public class IDOMs {
-	private static final Log log = Log.lookup(IDOMs.class);
+	private static final Logger log = LoggerFactory.getLogger(IDOMs.class);
 
 	/** Returns the required element.
 	 * @param elemnm the element name

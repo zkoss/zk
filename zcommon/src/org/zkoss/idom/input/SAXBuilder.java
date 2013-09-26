@@ -15,24 +15,24 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.input;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.InputSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import org.zkoss.lang.Exceptions;
-import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Document;
+import org.zkoss.lang.Exceptions;
 
 /**
  * The builder based on SAX parsers.
@@ -44,7 +44,7 @@ import org.zkoss.idom.Document;
  * @see SAXHandler
  */
 public class SAXBuilder {
-	private static final Log log = Log.lookup(SAXBuilder.class);
+	private static final Logger log = LoggerFactory.getLogger(SAXBuilder.class);
 
 	/** The parser. */
 	private final SAXParser _parser;
@@ -106,7 +106,7 @@ public class SAXBuilder {
 		} catch (Throwable ex) {
 			//IGNORE IT (crimson doesn't support ...validation/schema)
 			if (feature.startsWith("http://xml.org"))
-				log.warning("Ignored: "+fty+" doesn't support "+feature+". Cause: "+Exceptions.getMessage(ex));
+				log.warn("Ignored: "+fty+" doesn't support "+feature+". Cause: "+Exceptions.getMessage(ex));
 		}
 	}
 	/**
@@ -389,6 +389,6 @@ public class SAXBuilder {
 		}
 
 		if (name.startsWith("http://xml.org"))
-			log.warning("Ignored: "+_parser+" doesn't support "+name+". Cause: "+Exceptions.getMessage(ex));
+			log.warn("Ignored: "+_parser+" doesn't support "+name+". Cause: "+Exceptions.getMessage(ex));
 	}
 }

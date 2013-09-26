@@ -12,24 +12,25 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Map;
-import java.util.HashMap;
+import static org.zkoss.lang.Generics.cast;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-import static org.zkoss.lang.Generics.cast;
-import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.util.resource.ClassLocator;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Composer;
 
 /**
  * Utilities to implement ZK.
@@ -37,7 +38,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
  * @since 5.0.7
  */
 public class Utils {
-	private static final Log log = Log.lookup(Utils.class);
+	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
 	/** Marks the per-desktop information of the given key will be generated,
 	 * and returns true if the information is not generated yet
@@ -61,7 +62,7 @@ public class Utils {
 				try {
 					return _xmlloc = (XMLResourcesLocator)Classes.newInstanceByThread(clsnm);
 				} catch (Throwable ex) {
-					log.warningBriefly("Unable to load "+clsnm, ex);
+					log.warn("Unable to load "+clsnm, ex);
 				}
 			}
 			_xmlloc = new ClassLocator();

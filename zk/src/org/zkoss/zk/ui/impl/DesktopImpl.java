@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -36,7 +38,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -112,7 +114,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  * @author tomyeh
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
-	private static final Log log = Log.lookup(DesktopImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(DesktopImpl.class);
     private static final long serialVersionUID = 20101123L;
 
 	/** Represents media stored with {@link #getDownloadMediaURI}.
@@ -273,7 +275,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					monitor.desktopCreated(this);
 				} catch (Throwable ex) {
-					log.error(ex);
+					log.error("", ex);
 				}
 			}
 		} finally {
@@ -803,7 +805,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//We have to synchronize it due to getPage allows concurrent access
 		synchronized (_pages) {
 			_pages.add(page);
-//			if (log.debugable()) log.debug("After added, pages: "+_pages);
+//			if (log.isDebugEnabled()) log.debug("After added, pages: "+_pages);
 		}
 		afterPageAttached(page, this);
 		_wapp.getConfiguration().afterPageAttached(page, this);
@@ -815,7 +817,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				//Both UiVisualizer.getResponses and Include.setChildPage
 				//might call removePage
 
-//			if (log.debugable()) log.debug("After removed, pages: "+_pages);
+//			if (log.isDebugEnabled()) log.debug("After removed, pages: "+_pages);
 		}
 		removeComponents(page.getRoots());
 
@@ -882,7 +884,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			try {
 				sp.stop();
 			} catch (Throwable ex) {
-				log.warning("Failed to stop server-push, "+sp, ex);
+				log.warn("Failed to stop server-push, "+sp, ex);
 			}
 		}
 
@@ -893,11 +895,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					((PageCtrl)page).destroy();
 				} catch (Throwable ex) {
-					log.warning("Failed to destroy "+page, ex);
+					log.warn("Failed to destroy "+page, ex);
 				}
 			}
 		} catch (Throwable ex) {
-			log.warning("Failed to clean up pages of "+this, ex);
+			log.warn("Failed to clean up pages of "+this, ex);
 		}
 
 		if (execmon != null)
@@ -1641,7 +1643,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					if (v > 0)
 						_maxSchedTime = ((long)v) * 1000;
 				} catch (Throwable t) {
-					log.warning("Ignored library property, "+PROP+": not a number, "+val);
+					log.warn("Ignored library property, "+PROP+": not a number, "+val);
 				}
 			}
 			if (_maxSchedTime == null)

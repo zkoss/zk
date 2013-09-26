@@ -14,43 +14,41 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.io.Files;
+import org.zkoss.json.JavaScriptValue;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
-import org.zkoss.io.Files;
-import org.zkoss.util.logging.Log;
-
 import org.zkoss.web.Attributes;
-import org.zkoss.json.JavaScriptValue;
-
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.sys.ComponentRedraws;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.ext.Includer;
-import org.zkoss.zk.ui.ext.DynamicPropertied;
-import org.zkoss.zk.ui.ext.AfterCompose;
-
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -184,7 +182,7 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Include extends XulElement
 implements Includer, DynamicPropertied, AfterCompose, IdSpace {
-	private static final Log log = Log.lookup(Include.class);
+	private static final Logger log = LoggerFactory.getLogger(Include.class);
 	private static final String ATTR_RENDERED =
 		"org.zkoss.zul.Include.rendered";
 	private String _src;
@@ -618,7 +616,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					return; //done
 				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
-					log.warning("Failed to load the error page: "+errpg, ex);
+					log.warn("Failed to load the error page: "+errpg, ex);
 				}
 			}
 

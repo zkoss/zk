@@ -16,13 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.lang.reflect.Method;
+import static org.zkoss.lang.Generics.cast;
+
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -31,20 +34,17 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Comparator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.io.Serializables;
-import org.zkoss.lang.Exceptions;
-import static org.zkoss.lang.Generics.*;
-
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
@@ -56,9 +56,8 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
-import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.util.ForEachStatus;
-import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
@@ -176,7 +175,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tree extends MeshElement {
-	private static final Log log = Log.lookup(Tree.class);
+	private static final Logger log = LoggerFactory.getLogger(Tree.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
 		"org.zkoss.zul.Tree.onInitLaterPosted";
 
@@ -2004,7 +2003,7 @@ public class Tree extends MeshElement {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
-					log.error(t);
+					log.error("", t);
 				}
 				throw ex;
 			}
@@ -2030,7 +2029,7 @@ public class Tree extends MeshElement {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
-					log.error(t);
+					log.error("", t);
 				}
 				throw ex;
 			}

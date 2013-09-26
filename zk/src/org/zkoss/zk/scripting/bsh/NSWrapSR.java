@@ -12,19 +12,19 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.bsh;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
-import java.io.Serializable;
 import java.io.Externalizable;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import bsh.NameSpace;
-import bsh.BshMethod;
-
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
 import org.zkoss.zk.ui.ext.Scope;
+
+import bsh.BshMethod;
+import bsh.NameSpace;
 
 /** Serializable Namespace wrapper.
  * Used to prevent to serialize NameSpace directly.
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.ext.Scope;
  * @author tomyeh
  */
 /*package*/ class NSWrapSR extends NSWrap implements Serializable {
-	private static final Log log = BSHInterpreter.log;
+	private static final Logger log = BSHInterpreter.log;
 	private Map<String, Object> _vars;
 	private List<BshMethod> _mtds;
 	private List<String> _clses;
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.ext.Scope;
 					try {
 						_bshns.setVariable(me.getKey(), me.getValue(), false);
 					} catch (Throwable ex) {
-						log.warning("Ignored failure of set "+me.getKey(), ex);
+						log.warn("Ignored failure of set "+me.getKey(), ex);
 					}
 				}
 				_vars = null;
@@ -62,7 +62,7 @@ import org.zkoss.zk.ui.ext.Scope;
 					try {
 						_bshns.setMethod(mtd.getName(), mtd);
 					} catch (Throwable ex) {
-						log.warning("Ignored failure of set "+mtd, ex);
+						log.warn("Ignored failure of set "+mtd, ex);
 					}
 				}
 				_mtds = null;
@@ -72,7 +72,7 @@ import org.zkoss.zk.ui.ext.Scope;
 					try {
 						_bshns.importClass(name);
 					} catch (Throwable ex) {
-						log.warning("Ignored failure of import class "+name, ex);
+						log.warn("Ignored failure of import class "+name, ex);
 					}
 				}
 				_clses = null;
@@ -82,7 +82,7 @@ import org.zkoss.zk.ui.ext.Scope;
 					try {
 						_bshns.importPackage(name);
 					} catch (Throwable ex) {
-						log.warning("Ignored failure of import package "+name, ex);
+						log.warn("Ignored failure of import package "+name, ex);
 					}
 				}
 				_pkgs = null;

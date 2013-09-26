@@ -24,11 +24,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.web.Attributes;
 
 /**
@@ -37,7 +39,7 @@ import org.zkoss.web.Attributes;
  * @author tomyeh
  */
 public class Charsets {
-	private static final Log log = Log.lookup(Charsets.class);
+	private static final Logger log = LoggerFactory.getLogger(Charsets.class);
 	private static final String ATTR_SETUP = "org.zkoss.web.charset.setup";
 
 	private static final String _uriCharset;
@@ -99,7 +101,7 @@ public class Charsets {
 				try {
 					final String v = response.getCharacterEncoding();
 					if (!Objects.equals(v, charset))
-						log.warningBriefly("Unable to set response's charset: "+charset+" (current="+v+')', ex);
+						log.warn("Unable to set response's charset: "+charset+" (current="+v+')', ex);
 				} catch (Throwable t) { //just in case
 				}
 			}
@@ -112,7 +114,7 @@ public class Charsets {
 			} catch (Throwable ex) {
 				final String v = request.getCharacterEncoding();
 				if (!Objects.equals(v, charset))
-					log.warning("Unable to set request's charset: "+charset+" (current="+v+"): "+Exceptions.getMessage(ex));
+					log.warn("Unable to set request's charset: "+charset+" (current="+v+"): "+Exceptions.getMessage(ex));
 			}
 		}
 
@@ -252,7 +254,7 @@ public class Charsets {
 	/** The previous attribute name (backward compatible prior to 5.0.3. */
 	private static final String PX_PREFERRED_LOCALE = "px_preferred_locale";
 	private static void logLocaleError(Object v) {
-		log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
+		log.warn(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
 	}
 	/** Returns the preferred locale of the specified request.
 	 * It is the same as getPreferredLocale(request.getSession(false), request).

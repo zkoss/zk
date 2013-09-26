@@ -12,7 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
@@ -27,7 +29,7 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
  * @since 5.0.7
  */
 public class DesktopRecycles {
-	private static final Log log = Log.lookup(DesktopRecycles.class);
+	private static final Logger log = LoggerFactory.getLogger(DesktopRecycles.class);
 
 	/** Called to remove the desktop.
 	 * If {@link DesktopRecycle} is configured, {@link DesktopRecycle#beforeRemove}
@@ -46,7 +48,7 @@ public class DesktopRecycles {
 					return false; //recycled
 				}
 			} catch (Throwable ex) {
-				log.error(ex);
+				log.error("", ex);
 			}
 		}
 		((WebAppCtrl)wapp).getDesktopCache(dt.getSession()).removeDesktop(dt);

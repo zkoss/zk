@@ -25,7 +25,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -37,8 +36,9 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.io.Files;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
@@ -65,7 +65,7 @@ import org.zkoss.zul.Window;
  * @author jumperchen
  */
 public class MainLayout extends Borderlayout {
-	private static final Log log = Log.lookup(MainLayout.class);
+	private static final Logger log = LoggerFactory.getLogger(MainLayout.class);
 
 	ListModelList fileModel = new ListModelList();
 	Map relatedFileModel = new LinkedHashMap();
@@ -92,7 +92,7 @@ public class MainLayout extends Borderlayout {
 			prop = new Properties();
 			prop.load(new FileInputStream(new File(context.getRealPath(PATH + CONFIG))));
 		} catch (IOException ex) {
-			log.warning("Ingored: failed to load a properties file, \nCause: "
+			log.warn("Ingored: failed to load a properties file, \nCause: "
 					+ ex.getMessage());
 		}
 		iframe = (Iframe) getFellow("ifr");

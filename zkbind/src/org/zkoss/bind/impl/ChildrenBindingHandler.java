@@ -18,12 +18,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.InitChildrenBinding;
 import org.zkoss.bind.sys.LoadChildrenBinding;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -34,7 +36,7 @@ import org.zkoss.zk.ui.Component;
 /*package*/ class ChildrenBindingHandler extends AbstractBindingHandler{
 	private static final long serialVersionUID = 1L;
 
-	private static final Log _log = Log.lookup(ChildrenBindingHandler.class);
+	private static final Logger _log = LoggerFactory.getLogger(ChildrenBindingHandler.class);
 	
 	private final Map<BindingKey, List<InitChildrenBinding>> _initBindings; //comp+_fieldExpr -> bindings (load when init)
 	private final Map<BindingKey, List<LoadChildrenBinding>> _loadPromptBindings; //comp+_fieldExpr -> bindings (load _prompt | load on property change)
@@ -108,7 +110,7 @@ import org.zkoss.zk.ui.Component;
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
 		}
 		try { 
-			if(_log.debugable()){
+			if(_log.isDebugEnabled()){
 				_log.debug("doLoadChildrenBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);

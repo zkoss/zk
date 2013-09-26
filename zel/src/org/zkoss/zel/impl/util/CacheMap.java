@@ -64,7 +64,7 @@ import java.lang.ref.ReferenceQueue;
  */
 public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable, Cloneable {
 	private static final long serialVersionUID = 20070907L;
-	//private static final Log log = Log.lookup(CacheMap.class);
+	//private static final Logger log = LoggerFactory.getLogger(CacheMap.class);
 
 	/** The map to store the mappings. */
 	private Map<K, Value<V>> _map; //it is OK to serialized

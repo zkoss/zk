@@ -22,10 +22,12 @@ import java.util.HashMap;
 import java.util.Enumeration;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.idom.input.SAXBuilder;
@@ -44,7 +46,7 @@ import org.zkoss.xel.VariableResolverX;
  * @since 3.0.0
  */
 public class Evaluators {
-	private static final Log log = Log.lookup(Evaluators.class);
+	private static final Logger log = LoggerFactory.getLogger(Evaluators.class);
 
 	/** Map(name, Class/String class); */
 	private static final Map<String, Object> _evals = new HashMap<String, Object>(8);
@@ -116,7 +118,7 @@ public class Evaluators {
 		|| evalcls == null || evalcls.length() == 0)
 			throw new IllegalArgumentException("emty or null");
 
-		if (log.debugable()) log.debug("Evaluator is added: "+name+", "+evalcls);
+		if (log.isDebugEnabled()) log.debug("Evaluator is added: "+name+", "+evalcls);
 
 		final String evalnm = name.toLowerCase(java.util.Locale.ENGLISH);
 		final Object old;
@@ -161,7 +163,7 @@ public class Evaluators {
 			for (Enumeration en = loc.getResources("metainfo/xel/config.xml");
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
-				if (log.debugable()) log.debug("Loading "+url);
+				if (log.isDebugEnabled()) log.debug("Loading "+url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
 					if (IDOMs.checkVersion(doc, url))
@@ -171,7 +173,7 @@ public class Evaluators {
 				}
 			}
 		} catch (Exception ex) {
-			log.error(ex); //keep running
+			log.error("", ex); //keep running
 		} finally {
 			_loaded = true;
 		}

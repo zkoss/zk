@@ -27,11 +27,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Init;
-import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -48,8 +49,8 @@ import org.zkoss.zk.ui.UiException;
  */
 public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 	
-	private static final Log _log = 
-		Log.lookup(AbstractAnnotatedMethodInvoker.class);
+	private static final Logger _log = 
+		LoggerFactory.getLogger(AbstractAnnotatedMethodInvoker.class);
 	
 	private final Map<Class<?>, List<Method>> annoMethodCache;
 
@@ -128,7 +129,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 					//check if overrode the same annotated method
 					sign = MiscUtil.toSimpleMethodSignature(currm);
 					if(signs.contains(sign)){
-						_log.warning("more than one %s method that has same signature '%s' " +
+						_log.warn("more than one %s method that has same signature '%s' " +
 								"in the hierarchy of '%s', the method in extended class will be call " +
 								"more than once ", annotationClass.getSimpleName(), sign, vmClass);
 					}else{

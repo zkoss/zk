@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.Property;
@@ -25,7 +27,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
@@ -38,7 +40,7 @@ import org.zkoss.zk.ui.event.Event;
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final Log _log = Log.lookup(FormBindingHandler.class);
+	private static final Logger _log = LoggerFactory.getLogger(FormBindingHandler.class);
 	
 	private final Map<BindingKey, List<InitFormBinding>> _initFormBindings; //comp+formid -> bindings (load form _prompt)
 	private final Map<BindingKey, List<LoadFormBinding>> _loadFormPromptBindings; //comp+formid -> bindings (load form _prompt)
@@ -133,7 +135,7 @@ import org.zkoss.zk.ui.event.Event;
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 		//TODO converter args when we support converter in form
 		try {
-			if(_log.debugable()){
+			if(_log.isDebugEnabled()){
 				_log.debug("doSaveFormBinding:binding.save() comp=[%s],binding=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,binding,command,evt,notifys);
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
@@ -156,7 +158,7 @@ import org.zkoss.zk.ui.event.Event;
 		}
 		//TODO converter args when we support converter in form
 		try {
-			if(_log.debugable()){
+			if(_log.isDebugEnabled()){
 				_log.debug("doLoadFormBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);

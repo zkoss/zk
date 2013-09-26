@@ -72,6 +72,7 @@ import org.zkoss.mesg.Messages;
  *}</code></pre>
  *
  * @author tomyeh
+ * @deprecated As of release 7.0.0, use SLF4J API for logging instead.
  */
 public class Log {
 	/** All levels. */

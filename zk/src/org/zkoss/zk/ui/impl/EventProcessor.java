@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import org.zkoss.util.logging.Log;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.sys.EventProcessingThread;
  * @author tomyeh
  */
 public class EventProcessor {
-	private static final Log log = Log.lookup(EventProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(EventProcessor.class);
 
 	/** The desktop that the component belongs to. */
 	private final Desktop _desktop;

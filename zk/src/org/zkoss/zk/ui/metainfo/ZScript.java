@@ -18,10 +18,12 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.ContentLoader;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -36,7 +38,7 @@ import org.zkoss.zk.scripting.Interpreters;
  * @author tomyeh
  */
 public class ZScript implements java.io.Serializable {
-	private static final Log log = Log.lookup(ZScript.class);
+	private static final Logger log = LoggerFactory.getLogger(ZScript.class);
 
 	private EvaluatorRef _evalr;
 	private String _zslang;
@@ -98,7 +100,7 @@ public class ZScript implements java.io.Serializable {
 							content = content.substring(j + 1);
 							break;
 						} else {
-							log.warning("Ignored: unknown scripting language, "+zslang);
+							log.warn("Ignored: unknown scripting language, "+zslang);
 						}
 					}
 					break;

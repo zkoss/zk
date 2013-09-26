@@ -15,6 +15,8 @@ package org.zkoss.bind.tracker.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.AnnotateBinder;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
@@ -23,7 +25,7 @@ import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -39,7 +41,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  */
 public class BindUiLifeCycle implements UiLifeCycle {
 	
-	static final Log log = Log.lookup(BindUiLifeCycle.class);
+	static final Logger log = LoggerFactory.getLogger(BindUiLifeCycle.class);
 	private static Extension _ext;
 	
 	public void afterComponentAttached(Component comp, Page page) {
@@ -169,7 +171,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 						try {
 							_ext = (Extension)Classes.newInstanceByThread(clsnm);
 						} catch (Throwable ex) {
-							log.realCauseBriefly("Unable to instantiate "+clsnm, ex);
+							log.error("Unable to instantiate "+clsnm, ex);
 						}
 					}
 					if (_ext == null)

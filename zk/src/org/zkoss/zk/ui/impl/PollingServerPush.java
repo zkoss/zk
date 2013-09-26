@@ -14,22 +14,23 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.List;
 import java.util.LinkedList;
-import org.zkoss.util.logging.Log;
+import java.util.List;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.zk.au.out.AuScript;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.sys.Scheduler;
-import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.au.out.AuScript;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * A server-push implementation that is based on client-polling.
@@ -57,7 +58,7 @@ import org.zkoss.zk.au.out.AuScript;
  * @since 5.0.0
  */
 public class PollingServerPush implements ServerPush {
-	private static final Log log = Log.lookup(PollingServerPush.class);
+	private static final Logger log = LoggerFactory.getLogger(PollingServerPush.class);
 	/** Denote a server-push thread gives up the activation (timeout). */
 	private static final int GIVEUP = -99;
 
@@ -147,7 +148,7 @@ public class PollingServerPush implements ServerPush {
 			try {
 				return Integer.parseInt(s);
 			} catch (NumberFormatException ex) {
-				log.warning("Not a number specified at "+key);
+				log.warn("Not a number specified at "+key);
 			}
 		}
 		return -1;
@@ -170,7 +171,7 @@ public class PollingServerPush implements ServerPush {
 	}
 	public void start(Desktop desktop) {
 		if (_desktop != null) {
-			log.warning("Ignored: Sever-push already started");
+			log.warn("Ignored: Sever-push already started");
 			return;
 		}
 
@@ -191,7 +192,7 @@ public class PollingServerPush implements ServerPush {
 	
 	public void stop() {
 		if (_desktop == null) {
-			log.warning("Ignored: Sever-push not started");
+			log.warn("Ignored: Sever-push not started");
 			return;
 		}
 

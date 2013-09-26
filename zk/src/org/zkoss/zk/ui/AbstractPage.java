@@ -23,7 +23,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import org.zkoss.zk.ui.sys.PageCtrl;
 
@@ -35,7 +37,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
  */
 abstract public class AbstractPage
 implements Page, PageCtrl, java.io.Serializable {
-	private static final Log log = Log.lookup(AbstractPage.class);
+	private static final Logger log = LoggerFactory.getLogger(AbstractPage.class);
 
 	/** The first root component. */
 	private transient AbstractComponent _firstRoot;
@@ -124,7 +126,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		final AbstractComponent nc = (AbstractComponent)comp;
 		for (AbstractComponent ac = _firstRoot; ac != null; ac = ac._next) {
 			if (ac == nc) {
-				log.warning("Ignored adding "+comp+" twice");
+				log.warn("Ignored adding "+comp+" twice");
 				return; //found and ignore
 			}
 		}

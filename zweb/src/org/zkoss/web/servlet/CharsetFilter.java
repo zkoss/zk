@@ -41,7 +41,7 @@ import javax.servlet.ServletException;
  * @author tomyeh
  */
 public class CharsetFilter implements Filter {
-	//private static final Log log = Log.lookup(CharsetFilter.class);
+	//private static final Logger log = LoggerFactory.getLogger(CharsetFilter.class);
 	private String _charset = "UTF-8";
 
 	//-- Filter --//

@@ -14,6 +14,8 @@ package org.zkoss.bind.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
@@ -21,7 +23,7 @@ import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.UiException;
 /**
  * To keep system level converters, the built-in converters are initialized when first accessing.
@@ -29,7 +31,7 @@ import org.zkoss.zk.ui.UiException;
  * @since 6.0.1
  */
 public class SystemConverters {
-	private static final Log _log = Log.lookup(SystemConverters.class);
+	private static final Logger _log = LoggerFactory.getLogger(SystemConverters.class);
 	private static final Map<String, Converter> _converters = new HashMap<String, Converter>();
 	private static boolean _init = false;
 	
@@ -68,7 +70,7 @@ public class SystemConverters {
 		set0(name,converter);
 	}
 	static private void set0(String name,Converter converter){
-		if(_log.debugable()){
+		if(_log.isDebugEnabled()){
 			_log.debug("set converter [%s]=[%s]",name,converter);
 		}
 		synchronized(_converters){

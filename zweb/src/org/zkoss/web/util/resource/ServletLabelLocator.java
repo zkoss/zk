@@ -16,15 +16,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
-import java.util.Locale;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.LabelLocator;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 
 /**
@@ -33,7 +35,7 @@ import org.zkoss.web.servlet.Servlets;
  * @author tomyeh
  */
 public class ServletLabelLocator implements LabelLocator {
-	private static final Log log = Log.lookup(ServletLabelLocator.class);
+	private static final Logger log = LoggerFactory.getLogger(ServletLabelLocator.class);
 
 	private final ServletContext _ctx;
 	private final String _path;

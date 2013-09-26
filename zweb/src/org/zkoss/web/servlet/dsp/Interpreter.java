@@ -39,7 +39,7 @@ import org.zkoss.web.servlet.dsp.impl.Parser;
  * @author tomyeh
  */
 public class Interpreter {
-//	private static final Log log = Log.lookup(Interpreter.class);
+//	private static final Logger log = LoggerFactory.getLogger(Interpreter.class);
 
 	/** Returns the content type by specifying a path, or null
 	 * if no content type is available or path is null.

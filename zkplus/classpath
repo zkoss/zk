@@ -14,3 +14,4 @@
 ../dist/lib/ext/el-api.jar
 ../dist/lib/ext/cdi-api.jar
 ../dist/lib/ext/portlet-api.jar
+../dist/lib/ext/slf4j-api.jar

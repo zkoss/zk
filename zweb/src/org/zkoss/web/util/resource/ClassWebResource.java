@@ -35,13 +35,14 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.io.WriterOutputStream;
 import org.zkoss.util.FastReadArray;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
@@ -73,7 +74,7 @@ import org.zkoss.xml.XMLs;
  * @author tomyeh
  */
 public class ClassWebResource {
-	private static final Log log = Log.lookup(ClassWebResource.class);
+	private static final Logger log = LoggerFactory.getLogger(ClassWebResource.class);
 
 	private final ServletContext _ctx;
 	/** mapping URI including PATH_PREFIX. */
@@ -179,7 +180,7 @@ public class ClassWebResource {
 	private static final long _expires;
 	static {
 		final Calendar cal = Calendar.getInstance();
-		cal.add(cal.DAY_OF_YEAR, 365);
+		cal.add(Calendar.DAY_OF_YEAR, 365);
 		_expires = cal.getTime().getTime();
 	}
 
@@ -241,7 +242,7 @@ public class ClassWebResource {
 	HttpServletResponse response)
 	throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-//		if (log.debugable()) log.debug("Path info: "+pi);
+//		if (log.isDebugEnabled()) log.debug("Path info: "+pi);
 		if (pi != null)
 			service(request, response, pi.substring(PATH_PREFIX.length()));
 	}
@@ -556,7 +557,7 @@ public class ClassWebResource {
 		if (pi.startsWith(ZVER)) {
 			final int j = pi.indexOf('/', ZVER.length());
 			if (j >= 0) pi = pi.substring(j);
-			else log.warning("Unknown path info: "+pi);
+			else log.warn("Unknown path info: "+pi);
 		} else if (_encURLPrefix != null && pi.startsWith(_encURLPrefix)) {
 			final int len1 = pi.length(), len2 = _encURLPrefix.length();
 			if (len1 > len2 && pi.charAt(len2) == '/')
@@ -635,7 +636,7 @@ public class ClassWebResource {
 					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
-				response.sendError(response.SC_NOT_FOUND, XMLs.escapeXML(pi));
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(pi));
 				return;
 			}
 		} else {
@@ -661,7 +662,7 @@ public class ClassWebResource {
 				try {
 					out = response.getOutputStream();
 				} catch (Throwable t) {
-					log.warning("getOutputStream: failed" + Exceptions.getMessage(t));
+					log.warn("getOutputStream: failed" + Exceptions.getMessage(t));
 					throw ex;
 				}
 			}
@@ -673,7 +674,7 @@ public class ClassWebResource {
 				try {
 					out = new WriterOutputStream(response.getWriter(), "UTF-8");
 				} catch (Throwable t) {
-					log.warning("getWriter: failed" + Exceptions.getMessage(t));
+					log.warn("getWriter: failed" + Exceptions.getMessage(t));
 					throw ex;
 				}
 			}
@@ -789,7 +790,7 @@ public class ClassWebResource {
 				_mappingURI + uri, params, mode);
 		}
 		public RequestDispatcher getRequestDispatcher(String uri) {
-//			if (log.debugable()) log.debug("getRequestDispatcher: "+uri);
+//			if (log.isDebugEnabled()) log.debug("getRequestDispatcher: "+uri);
 			return _ctx.getRequestDispatcher(_mappingURI + uri);
 		}
 		public void include(HttpServletRequest request,

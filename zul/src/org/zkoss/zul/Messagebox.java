@@ -16,25 +16,24 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.mesg.Messages;
-import org.zkoss.zul.mesg.MZul;
-import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
-
 import org.zkoss.zul.impl.MessageboxDlg;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * Represents the message box.
@@ -46,7 +45,7 @@ import org.zkoss.zul.impl.MessageboxDlg;
  * @author tomyeh
  */
 public class Messagebox {
-	private static final Log log = Log.lookup(Messagebox.class);
+	private static final Logger log = LoggerFactory.getLogger(Messagebox.class);
 	private static String _templ = "~./zul/html/messagebox.zul";
 
 	/** A symbol consisting of a question mark in a circle.
@@ -187,7 +186,7 @@ public class Messagebox {
 				try {
 					dlg.detach();
 				} catch (Throwable ex2) {
-					log.warningBriefly("Failed to detach when recovering from an error", ex2);
+					log.warn("Failed to detach when recovering from an error", ex2);
 				}
 				throw UiException.Aide.wrap(ex);
 			}

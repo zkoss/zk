@@ -34,11 +34,13 @@ import bsh.Primitive;
 import bsh.EvalError;
 import bsh.UtilEvalError;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -85,7 +87,7 @@ import org.zkoss.zk.scripting.HierachicalAware;
  */
 public class BSHInterpreter extends GenericInterpreter
 implements SerializableAware, HierachicalAware {
-	/*package*/ static final Log log = Log.lookup(BSHInterpreter.class);
+	/*package*/ static final Logger log = LoggerFactory.getLogger(BSHInterpreter.class);
 
 	/** A variable in {@link Scope}. The value is an instance of
 	 * BeanShell's NameSpace.
@@ -577,7 +579,7 @@ implements SerializableAware, HierachicalAware {
 				} catch (IOException ex) {
 					throw ex;
 				} catch (Throwable ex) {
-					log.warning("Ignored failure to write "+nm, ex);
+					log.warn("Ignored failure to write "+nm, ex);
 				}
 			}
 		}
@@ -607,7 +609,7 @@ implements SerializableAware, HierachicalAware {
 					} catch (IOException ex) {
 						throw ex;
 					} catch (Throwable ex) {
-						log.warning("Ignored failure to write "+nm, ex);
+						log.warn("Ignored failure to write "+nm, ex);
 					} finally {
 						if (f != null) Fields.setAccessible(f, acs);
 					}
@@ -633,7 +635,7 @@ implements SerializableAware, HierachicalAware {
 		} catch (IOException ex) {
 			throw ex;
 		} catch (Throwable ex) {
-			log.warning("Ignored failure to write imported classes", ex);
+			log.warn("Ignored failure to write imported classes", ex);
 		} finally {
 			if (f != null) Fields.setAccessible(f, acs);
 		}
@@ -657,7 +659,7 @@ implements SerializableAware, HierachicalAware {
 		} catch (IOException ex) {
 			throw ex;
 		} catch (Throwable ex) {
-			log.warning("Ignored failure to write imported packages", ex);
+			log.warn("Ignored failure to write imported packages", ex);
 		} finally {
 			if (f != null) Fields.setAccessible(f, acs);
 		}
@@ -695,7 +697,7 @@ implements SerializableAware, HierachicalAware {
 			} catch (IOException ex) {
 				throw ex;
 			} catch (Throwable ex) {
-				log.warning("Ignored failure to read", ex);
+				log.warn("Ignored failure to read", ex);
 			}
 		}
 
@@ -719,7 +721,7 @@ implements SerializableAware, HierachicalAware {
 			} catch (IOException ex) {
 				throw ex;
 			} catch (Throwable ex) {
-				log.warning("Ignored failure to read", ex);
+				log.warn("Ignored failure to read", ex);
 			}
 		}
 
@@ -732,7 +734,7 @@ implements SerializableAware, HierachicalAware {
 			} catch (IOException ex) {
 				throw ex;
 			} catch (Throwable ex) {
-				log.warning("Ignored failure to read", ex);
+				log.warn("Ignored failure to read", ex);
 			}
 		}
 
@@ -745,7 +747,7 @@ implements SerializableAware, HierachicalAware {
 			} catch (IOException ex) {
 				throw ex;
 			} catch (Throwable ex) {
-				log.warning("Ignored failure to read", ex);
+				log.warn("Ignored failure to read", ex);
 			}
 		}
 	}

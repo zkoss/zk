@@ -17,10 +17,13 @@ package org.zkoss.zk.ui.util;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
+
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -120,7 +123,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
-	private static Log log = Log.lookup(GenericAutowireComposer.class);
+	private static Logger log = LoggerFactory.getLogger(GenericAutowireComposer.class);
 	
 	/** Implicit Object; the applied component itself. 
 	 * @since 3.0.7

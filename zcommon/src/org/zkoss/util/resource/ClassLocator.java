@@ -29,8 +29,10 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
@@ -49,7 +51,7 @@ import org.zkoss.idom.input.SAXBuilder;
  * @author tomyeh
  */
 public class ClassLocator implements XMLResourcesLocator {
-	private static final Log log = Log.lookup(ClassLocator.class);
+	private static final Logger log = LoggerFactory.getLogger(ClassLocator.class);
 
 	public ClassLocator() {
 	}
@@ -77,14 +79,14 @@ public class ClassLocator implements XMLResourcesLocator {
 			final XMLResource xr = new XMLResource(url, elName, elDepends);
 			final XMLResource old = rcmap.put(xr.name, xr);
 			if (old != null)
-				log.warning("Replicate resource: "+xr.name
+				log.warn("Replicate resource: "+xr.name
 					+"\nOverwrite "+old.url+"\nwith "+xr.url);
 			//it is possible if zcommon.jar is placed in both
 			//WEB-INF/lib and shared/lib, i.e., appear twice in the class path
 			//We overwrite because the order is the parent class loader first
 			//so WEB-INF/lib is placed after
 		}
-//		if (rcmap.isEmpty() && log.debugable()) log.debug("No resource is found for "+name);
+//		if (rcmap.isEmpty() && log.isDebugEnabled()) log.debug("No resource is found for "+name);
 
 		final List<Resource> rcs = new LinkedList<Resource>(); //a list of Document
 		final Set<String> resolving = new LinkedHashSet<String>();
@@ -112,7 +114,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		rcs.add(new Resource(xr.url, xr.document));
 		resolving.remove(xr.name);
 
-		if (log.debugable()) log.debug("Adding resolved resource: "+xr.name);
+		if (log.isDebugEnabled()) log.debug("Adding resolved resource: "+xr.name);
 	}
 	/** Info used with getDependentXMLResource. */
 	private static class XMLResource {
@@ -123,7 +125,7 @@ public class ClassLocator implements XMLResourcesLocator {
 
 		private XMLResource(URL url, String elName, String elDepends)
 		throws IOException{
-			if (log.debugable()) log.debug("Loading "+url);
+			if (log.isDebugEnabled()) log.debug("Loading "+url);
 			try {
 				this.document = new SAXBuilder(false, false, true).build(url);
 			} catch (Exception ex) {
@@ -143,7 +145,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			} else {
 				this.depends = new LinkedList<String>();
 				CollectionsX.parse(this.depends, deps, ',');
-				if (log.finerable()) log.finer(this.name+" depends on "+this.depends);
+				if (log.isTraceEnabled()) log.trace(this.name+" depends on "+this.depends);
 			}
 		}
 		public String toString() {

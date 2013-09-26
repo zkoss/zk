@@ -21,12 +21,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Executions;
@@ -52,7 +54,7 @@ import org.zkoss.zk.ui.Execution;
  * @author ashish
  */
 public class DelegatingVariableResolver implements VariableResolver, java.io.Serializable {
-	private static final Log log = Log.lookup(DelegatingVariableResolver.class);
+	private static final Logger log = LoggerFactory.getLogger(DelegatingVariableResolver.class);
 
 	/**
 	 * Holds list of variable resolvers for Spring core (3.0RC and later),
@@ -81,7 +83,7 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 						_variableResolvers.add(o);
 					}
 				} catch (Throwable e) {
-					log.warningBriefly("Ignored: failed to instantiate "+vrClss[i], e);
+					log.warn("Ignored: failed to instantiate "+vrClss[i], e);
 				}
 			}
 		} else {

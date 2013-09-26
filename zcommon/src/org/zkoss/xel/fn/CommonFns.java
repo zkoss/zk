@@ -32,13 +32,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.resource.Labels;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.text.DateFormats;
 import org.zkoss.text.MessageFormats;
 
@@ -48,7 +50,7 @@ import org.zkoss.text.MessageFormats;
  * @author tomyeh
  */
 public class CommonFns {
-	private static final Log log = Log.lookup(CommonFns.class);
+	private static final Logger log = LoggerFactory.getLogger(CommonFns.class);
 
 	protected CommonFns() {}
 
@@ -119,13 +121,13 @@ public class CommonFns {
 					final Field fld = cls.getField(fldnm);
 					return Messages.get(((Integer)fld.get(null)).intValue());
 				} catch (ClassNotFoundException ex) {
-					log.warning("Class not found: "+clsnm, ex);
+					log.warn("Class not found: "+clsnm, ex);
 				} catch (NoSuchFieldException ex) {
-					log.warning("Field not found: "+fldnm, ex);
+					log.warn("Field not found: "+fldnm, ex);
 				} catch (IllegalAccessException ex) {
-					log.warning("Field not accessible: "+fldnm, ex);
+					log.warn("Field not accessible: "+fldnm, ex);
 				}
-			} else if (log.debugable()) {
+			} else if (log.isDebugEnabled()) {
 				log.debug("Not a valid format: "+key);
 			}
 		}

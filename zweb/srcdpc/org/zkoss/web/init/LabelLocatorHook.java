@@ -21,7 +21,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
-//import org.zkoss.util.logging.Log;
+//
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.util.resource.ServletLabelLocator;
 import org.zkoss.web.util.resource.ServletRequestResolver;
@@ -47,13 +47,13 @@ import org.zkoss.web.util.resource.ServletRequestResolver;
  * @author tomyeh
  */
 public class LabelLocatorHook implements ServletContextListener {
-	//private static final Log log = Log.lookup(LabelLocatorHook.class);
+	//private static final Logger log = LoggerFactory.getLogger(LabelLocatorHook.class);
 
 	public void contextDestroyed(ServletContextEvent sce) {
 	}
 	public void contextInitialized(ServletContextEvent sce) {
 		final ServletContext ctx = sce.getServletContext();
-		//if (log.debugable()) log.debug("Hook label locator for "+ctx);
+		//if (log.isDebugEnabled()) log.debug("Hook label locator for "+ctx);
 
 		Labels.register(new ServletLabelLocator(ctx));
 		Labels.setVariableResolver(new ServletRequestResolver());

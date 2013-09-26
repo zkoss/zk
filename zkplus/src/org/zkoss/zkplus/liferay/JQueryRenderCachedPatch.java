@@ -15,7 +15,8 @@ package org.zkoss.zkplus.liferay;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.zkoss.util.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used to patch the rendering result of a ZK portlet for Liferay.
@@ -32,7 +33,7 @@ import org.zkoss.util.logging.Log;
  * @since 5.0.1
  */
 public class JQueryRenderCachedPatch extends JQueryRenderPatch {
-	private static final Log log = Log.lookup(JQueryRenderCachedPatch.class);
+	private static final Logger log = LoggerFactory.getLogger(JQueryRenderCachedPatch.class);
 	
 	
 	protected String getBrowserDelay() {

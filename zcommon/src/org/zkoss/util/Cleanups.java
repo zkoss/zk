@@ -15,7 +15,9 @@ package org.zkoss.util;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
-import org.zkoss.util.logging.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utilities to clean up resources when the application is stopping.
@@ -34,7 +36,7 @@ import org.zkoss.util.logging.Log;
  * @since 3.6.5
  */
 public class Cleanups {
-	private static final Log log = Log.lookup(Cleanups.class);
+	private static final Logger log = LoggerFactory.getLogger(Cleanups.class);
 	private static final List<Cleanup> _cleanups = new LinkedList<Cleanup>();
 
 	/** Registers a cleanup.

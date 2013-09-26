@@ -12,19 +12,20 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event.impl;
 
-import java.util.Map;
 import java.util.HashMap;
-import org.zkoss.util.logging.Log;
+import java.util.Map;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.util.DesktopCleanup;
-import org.zkoss.zk.au.AuService;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * The default implementation of the server-push based event queue
@@ -34,7 +35,7 @@ import org.zkoss.zk.au.AuRequest;
  * @since 5.0.0
  */
 public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, java.io.Serializable {
-	private static final Log log = Log.lookup(ServerPushEventQueue.class);
+	private static final Logger log = LoggerFactory.getLogger(ServerPushEventQueue.class);
 
 	/** Map(desktop, DesktopInfo). */
 	private final Map<Desktop, DesktopInfo> _dtInfos = new HashMap<Desktop, DesktopInfo>();
@@ -184,7 +185,7 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 						try {
 							_desktop.enableServerPush(false);
 						} catch (Throwable ex) {
-							log.warningBriefly("Ingored: unable to stop server push", ex);
+							log.warn("Ingored: unable to stop server push", ex);
 						}
 				}
 				//if not current desktop, it is handled by EQService

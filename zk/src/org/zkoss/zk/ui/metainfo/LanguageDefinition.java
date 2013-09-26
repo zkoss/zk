@@ -17,36 +17,37 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.LinkedList;
-import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.util.FastReadArray;
-import org.zkoss.util.CollectionsX;
-import org.zkoss.util.resource.Locator;
-import org.zkoss.util.logging.Log;
-import org.zkoss.xel.taglib.Taglibs;
-import org.zkoss.xel.taglib.Taglib;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.FastReadArray;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.xel.taglib.Taglib;
+import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.zk.device.DeviceNotFoundException;
+import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.sys.PageRenderer;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.impl.SimpleEvaluator;
-import org.zkoss.zk.xel.EvaluatorRef;
-import org.zkoss.zk.device.Devices;
-import org.zkoss.zk.device.DeviceNotFoundException;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
+import org.zkoss.zk.ui.sys.PageRenderer;
+import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
 /**
  * A definition of a language, such as xul.
@@ -54,7 +55,7 @@ import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
  * @author tomyeh
  */
 public class LanguageDefinition {
-	private static final Log log = Log.lookup(LanguageDefinition.class);
+	private static final Logger log = LoggerFactory.getLogger(LanguageDefinition.class);
 	//static//
 	/** A map of (String name or namespace, LanguageDefinition). */
 	private static final Map<String, LanguageDefinition> _ldefByName = new HashMap<String, LanguageDefinition>();
@@ -370,7 +371,7 @@ public class LanguageDefinition {
 				if (ldefs != null) ldefs.remove(old);
 
 				replWarned = true;
-				log.warning("Replicated language: "+name+", overriden by "+this);
+				log.warn("Replicated language: "+name+", overriden by "+this);
 			//it is possible if zcommon.jar is placed in both
 			//WEB-INF/lib and shared/lib, i.e., appear twice in the class path
 			//We overwrite because shared/lib appears first due to
@@ -382,7 +383,7 @@ public class LanguageDefinition {
 				for (String ext: extensions) {
 					final LanguageDefinition old = _ldefsByExt.put(ext, this);
 					if (!replWarned && old != null)
-						log.warning("Extension "+ext+", overriden by "+this);
+						log.warn("Extension "+ext+", overriden by "+this);
 				}
 			}
 			_exts = Collections.unmodifiableList(extensions);
@@ -852,7 +853,7 @@ public class LanguageDefinition {
 	 */
 	public void setDynamicTagInfo(String compnm, Set<String> reservedAttrs) {
 		if (compnm != null && _dyntagnm != null)
-			log.warning("Overwriting the definition of dynamic tag. Previous="+_dyntagnm+" New="+compnm+" for "+this);
+			log.warn("Overwriting the definition of dynamic tag. Previous="+_dyntagnm+" New="+compnm+" for "+this);
 		_dyntagnm = compnm;
 		_dyntagDefn = null;
 		_dyntagRvAttrs = compnm == null || reservedAttrs.isEmpty() ? null:

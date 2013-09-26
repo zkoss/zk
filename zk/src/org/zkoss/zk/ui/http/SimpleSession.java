@@ -16,36 +16,36 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.Externalizable;
+import java.io.Serializable;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.io.Serializable;
-import java.io.Externalizable;
 
+import javax.portlet.PortletSession;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.portlet.PortletSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.xel.AttributesMap;
-
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.ScopeListener;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.DesktopCache;
-import org.zkoss.zk.ui.util.Monitor;
-import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.SessionSerializationListener;
-import org.zkoss.zk.ui.util.SessionActivationListener;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.ScopeListeners;
+import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.SessionActivationListener;
+import org.zkoss.zk.ui.util.SessionSerializationListener;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
  * 
@@ -59,7 +59,7 @@ import org.zkoss.zk.ui.impl.ScopeListeners;
  * @author tomyeh
  */
 public class SimpleSession implements Session, SessionCtrl {
-	private static final Log log = Log.lookup(SimpleSession.class);
+	private static final Logger log = LoggerFactory.getLogger(SimpleSession.class);
 
 	/** The attribute used to hold a set of serializable attributes that are written
 	 * thru {@link #setAttribute}.
@@ -409,7 +409,7 @@ public class SimpleSession implements Session, SessionCtrl {
 			try {
 				monitor.sessionDestroyed(this);
 			} catch (Throwable ex) {
-				log.error(ex);
+				log.error("", ex);
 			}
 		}
 

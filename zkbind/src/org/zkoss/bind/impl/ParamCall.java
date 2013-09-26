@@ -14,6 +14,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.BindingParam;
@@ -31,7 +33,7 @@ import org.zkoss.bind.annotation.ScopeParam;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -44,7 +46,7 @@ import org.zkoss.zk.ui.select.Selectors;
  */
 public class ParamCall {
 
-	private static final Log _log = Log.lookup(ParamCall.class);
+	private static final Logger _log = LoggerFactory.getLogger(ParamCall.class);
 	
 	private Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
 	private List<Type> _types;//to map class type directly, regardless the annotation
@@ -114,10 +116,10 @@ public class ParamCall {
 			//using original exception is much meaningful.
 			Throwable c = invokEx.getCause();
 			if(c == null) c = invokEx;
-			_log.error(c);
+			_log.error("", c);
 			throw UiException.Aide.wrap(c);
 		} catch (Exception e) {
-			_log.error(e);
+			_log.error("", e);
 			throw UiException.Aide.wrap(e);
 		}
 	}

@@ -11,6 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.validator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -18,7 +20,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.ValidationMessages;
-import org.zkoss.util.logging.Log;
+
 
 /**
  * A abstract validator the handling validation message
@@ -29,7 +31,7 @@ import org.zkoss.util.logging.Log;
  */
 public abstract class AbstractValidator implements Validator {
 
-	private final static Log _log = Log.lookup(AbstractValidator.class); 
+	private final static Logger log = LoggerFactory.getLogger(AbstractValidator.class); 
 	
 	/**
 	 * add a message to validation context, when you call this method, it also set context invalid.
@@ -81,7 +83,7 @@ public abstract class AbstractValidator implements Validator {
 				vmsgs.addMessages(ctx.getBindContext().getComponent(),attr, key, messages);
 			}
 		}else{
-			_log.warning("ValidationMessages not found on binder "+ctx.getBindContext().getBinder() + ", please init it");
+			log.warn("ValidationMessages not found on binder "+ctx.getBindContext().getBinder() + ", please init it");
 		}
 	}
 	

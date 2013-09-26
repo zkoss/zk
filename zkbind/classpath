@@ -6,3 +6,4 @@
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/portlet-api.jar
 ../dist/lib/ext/validation-api.jar
+../dist/lib/ext/slf4j-api.jar

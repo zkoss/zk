@@ -29,7 +29,7 @@ import org.zkoss.web.servlet.dsp.*;
  * @author tomyeh
  */
 class RootNode extends Node implements Interpretation {
-//	private static final Log log = Log.lookup(RootNode.class);
+//	private static final Logger log = LoggerFactory.getLogger(RootNode.class);
 
 	private FunctionMapper _mapper;
 
