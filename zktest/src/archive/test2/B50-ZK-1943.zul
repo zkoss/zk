@@ -1,0 +1,8 @@
+<window>
+	<label>
+<![CDATA[
+	enter the following url should not show <script> tag:
+	http://127.0.0.1:8080/zktest/zkau/web/>'<script>alert(123)</script><'/js/zuljsp.js
+]]>
+	</label>
+</window>

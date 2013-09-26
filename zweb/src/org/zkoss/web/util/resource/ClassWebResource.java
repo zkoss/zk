@@ -51,6 +51,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.xml.XMLs;
 
 /**
  * Used to access resources located in class path and under /web.
@@ -600,8 +601,9 @@ public class ClassWebResource {
 		if (is == null) {
 			if ("js".equals(ext)) {
 				//Don't sendError. Reason: 1) IE waits and no onerror fired
-				//2) better to debug (user will tell us what went wrong)
-				data = ("(window.zk&&zk.error?zk.error:alert)('"+pi+" not found');").getBytes("UTF-8");
+				//2) better to debug (user will tell us what went wrong)				
+				// ZK-1943 XSS Vulnerability: It's possible to pass JavaScript over URL
+				data = ("(window.zk&&zk.error?zk.error:alert)('"+ XMLs.encodeText(pi) +" not found');").getBytes("UTF-8");
 					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
