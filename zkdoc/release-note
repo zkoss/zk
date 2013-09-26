@@ -1,4 +1,11 @@
   --------
+ZK 6.5.5
+* Features
+
+* Bugs
+  ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM
+
+  --------
 ZK 6.5.4
 Sep 24, 2013
 * Features

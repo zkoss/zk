@@ -1294,9 +1294,11 @@ public class Classes {
 			if (val == null) {
 				return null;
 			} else if (val instanceof Double) {
-				return new BigDecimal(((Double)val).doubleValue());
+				// B65-ZK-1944: Use String constructor to get the predictable value
+				return new BigDecimal(Double.toString((Double)val));
 			} else if (val instanceof Float) {
-				return new BigDecimal(((Float)val).doubleValue());
+				// B65-ZK-1944: Use  String constructor to get the predictable value
+				return new BigDecimal(Float.toString((Float)val));
 			} else if (val instanceof BigInteger) {
 				return new BigDecimal((BigInteger)val);
 			} else if (val instanceof Number) {
