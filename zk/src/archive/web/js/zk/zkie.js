@@ -87,7 +87,8 @@ if (!zk.css3) {
 			var opts = this.opts,
 				l = node.offsetLeft, t = node.offsetTop,
 				w = node.offsetWidth, h = node.offsetHeight,
-				wd = Math.max(0, w - opts.left + opts.right),
+				// B65-ZK-1948: Shadow's should be inside the screen
+				wd = Math.max(0, l + w + opts.right > jq.innerWidth() ? w - opts.left : w - opts.left + opts.right),
 				hgh = Math.max(0, h - opts.top + opts.bottom),
 				st = shadow.style;
 			st.left = jq.px(l + opts.left);
