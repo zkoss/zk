@@ -7,6 +7,7 @@ ZK 6.5.5
   ZK-1946: The select mold listbox with multiple attribute in a draggable listitem will be disabled (Chrome, IE10)
   ZK-1949: Clear the input value in a spinner with binding integer value will cause UiException
   ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
+  ZK-1947: Can not download files if <max-desktops-per-session> is set to 1 in zk.xml
 
   --------
 ZK 6.5.4
