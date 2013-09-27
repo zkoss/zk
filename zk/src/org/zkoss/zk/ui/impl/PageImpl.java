@@ -29,6 +29,8 @@ import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
+import javax.servlet.ServletRequest;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Library;
@@ -39,6 +41,7 @@ import org.zkoss.util.DualCollection;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
@@ -801,11 +804,22 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (!au && !exec.isIncluded()
 		&& ((ctl=ExecutionsCtrl.getPageRedrawControl(exec)) == null
 			|| "desktop".equals(ctl))) {
-			if (!au && shallIE7Compatible())
+			boolean ie7compat;
+			if (!au && ((ie7compat = shallIE7Compatible()) || !shallDisableAutoCompatible()))
 				try {
 					if (exec.getBrowser("ie") >= 8
-					&& !exec.containsResponseHeader("X-UA-Compatible"))
-						exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
+					&& !exec.containsResponseHeader("X-UA-Compatible")) {
+						if (ie7compat) {
+							exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
+						} else {
+							double[] ieCompatibilityInfo = Servlets.getIECompatibilityInfo((ServletRequest) exec.getNativeRequest());
+							if(ieCompatibilityInfo != null) {
+								if(ieCompatibilityInfo[0] != ieCompatibilityInfo[2]) {
+									exec.addResponseHeader("X-UA-Compatible", "IE=" + (int)ieCompatibilityInfo[2]);
+								}
+							}
+						}
+					}
 				} catch (Throwable ex) { //ignore (it might not be allowed)
 				}
 
@@ -862,13 +876,20 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				exec.removeAttribute(Attributes.PAGE_RENDERING);
 		}
 	}
+	private static Boolean _ie7compat;
+	private static Boolean _ieAutoCompat;
 	private static boolean shallIE7Compatible() {
 		if (_ie7compat == null)
 			_ie7compat = Boolean.valueOf("true".equals(
 				Library.getProperty("org.zkoss.zk.ui.EmulateIE7")));
 		return _ie7compat.booleanValue();
 	}
-	private static Boolean _ie7compat;
+	private static boolean shallDisableAutoCompatible() {
+		if (_ieAutoCompat == null)
+			_ieAutoCompat = Boolean.valueOf("true".equals(
+				Library.getProperty("org.zkoss.zk.ui.IEAutoCompatible.disabled")));
+		return _ieAutoCompat.booleanValue();
+	}
 
 	public void interpret(String zslang, String script, Scope scope) {
 		if (script != null && script.length() > 0) //optimize for better performance
