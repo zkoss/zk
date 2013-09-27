@@ -35,7 +35,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.zkoss.zel.ELException;
-import org.zkoss.zel.impl.util.Classes;
+import org.zkoss.zel.impl.util.ClassUtil;
 import org.zkoss.zel.impl.util.MessageFactory;
 
 
@@ -546,7 +546,7 @@ public class ELSupport {
 		if(obj instanceof Collection){
 			//try the construct first
 			try {
-				return Classes.newInstance(type, new Object[]{obj});
+				return ClassUtil.newInstance(type, new Object[]{obj});
 			} catch (Throwable e) {/*eat*/}			
 			
 			//try the common java.lang collections

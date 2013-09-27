@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.zkoss.zel.impl.util.Classes;
+import org.zkoss.zel.impl.util.ClassUtil;
 
 public class BeanELResolver extends ELResolver {
 
@@ -377,7 +377,7 @@ public class BeanELResolver extends ELResolver {
                     //here we chosen a possible method by the getter type
                     if (this.write == null) {
                     	try {
-                    		final Method m = Classes.getCloseMethod(this.owner, mname, new Class[]{parameterTypes});
+                    		final Method m = ClassUtil.getCloseMethod(this.owner, mname, new Class[]{parameterTypes});
                     		this.write = getMethod(this.owner, m);
                     	} catch (SecurityException e) {
     						//ignore
