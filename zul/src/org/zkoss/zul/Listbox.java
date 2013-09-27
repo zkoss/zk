@@ -355,7 +355,6 @@ public class Listbox extends MeshElement {
 	}
 
 	public Listbox() {
-		log.error("", new NullPointerException("test"));
 		init();
 	}
 
