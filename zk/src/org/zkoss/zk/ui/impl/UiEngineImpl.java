@@ -1801,6 +1801,9 @@ public class UiEngineImpl implements UiEngine {
 		final int tmout = timeout >= 0 ? timeout: getRetryTimeout();
 		synchronized (uvlock) {
 			for (boolean tried = false;;) {
+				if (!desktop.isAlive())
+					throw new org.zkoss.zk.ui.DesktopUnavailableException("Unable to activate destroyed desktop, "+desktop);
+
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
 				if (tried) {
@@ -1829,9 +1832,6 @@ public class UiEngineImpl implements UiEngine {
 					throw UiException.Aide.wrap(ex);
 				}
 			}
-
-			if (!desktop.isAlive())
-				throw new org.zkoss.zk.ui.DesktopUnavailableException("Unable to activate destroyed desktop, "+desktop);
 
 			//grant
 			desktopCtrl.setVisualizer(uv = new UiVisualizer(exec, asyncupd, recovering));

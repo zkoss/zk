@@ -61,8 +61,12 @@ else
 	fi
 fi
 
-tomcat_home="$CATALINA_HOME"
-if [ ! -d "$tomcat_home" ]; then
+tomcat_home=$(grep '^tomcat=' $setting)
+tomcat_home=${tomcat_home#tomcat=}
+if [ "$tomcat_home" = "" ] ; then
+	tomcat_home="$CATALINA_HOME"
+fi
+if [ ! -d "$tomcat_home" ] ; then
   tomcat_home=/usr/tomcat
 fi
 if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
