@@ -217,7 +217,6 @@ public class Tree extends MeshElement {
 	
 	private static final int INIT_LIMIT = -1; // since 7.0.0
 	private int _preloadsz = 50; // since 7.0.0
-	private int _maxRodpz = 50; // since 7.0.0
 	private transient LinkedList<Integer> _rodPagingIndex;  // since 7.0.0
 	
 	static {
