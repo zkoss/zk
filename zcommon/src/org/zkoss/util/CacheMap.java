@@ -192,8 +192,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * @see #shallExpunge
 	 */
 	protected int canExpunge(int size, Value<V> v) {
-		//Bug ZK-1841: current desktopCache size should also check if equal to max desktop per session size
-		return size >= getMaxSize()
+		return size > getMaxSize()
 			|| (System.currentTimeMillis() - v.access) > getLifetime() ?
 			(EXPUNGE_YES|EXPUNGE_CONTINUE): (EXPUNGE_NO|EXPUNGE_STOP);
 	}
@@ -424,8 +423,9 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		return false;
 	}
 	public V put(K key, V value) {
-		tryExpunge();
 		final Value<V> v = _map.put(key, new Value<V>(value));
+		//Bug ZK-1841: current desktopCache size should also check if equal to max desktop per session size
+		tryExpunge();
 		return v != null ? v.value: null;
 	}
 	public void putAll(java.util.Map<? extends K,? extends V> map) {

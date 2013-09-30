@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -78,7 +79,9 @@ public class Servlets {
 		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
 		_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
 		_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
-		_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*");
+		_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*"),
+		_rtrident = Pattern.compile("trident/([0-9\\.]+)");
+				
 
 	private static final boolean _svl24, _svl23, _svl3;
 	static {
@@ -736,7 +739,31 @@ public class Servlets {
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("zk") >= 0 && userAgent.indexOf("rhil") >= 0;
 	}
-
+	
+	/**
+	 * Returns the IE compatibility information.
+	 * @param request
+	 * @return three double values in array [ie version, trident version, ie real version]
+	 * @since 6.5.5
+	 */
+	public static double[] getIECompatibilityInfo(ServletRequest request) {
+		final String s = ((HttpServletRequest)request).getHeader("user-agent");
+		if (isBrowser(s, "ie")) {
+			final String ua = s.toLowerCase(Locale.ENGLISH);
+			Matcher tridentMatcher = _rtrident.matcher(ua);
+			if(tridentMatcher.find()) {
+				double tridentVersion = Double.parseDouble(tridentMatcher.group(1));
+				Matcher msieMatcher = _rmsie.matcher(ua);
+				if (msieMatcher.matches()) {
+					double ieVersion = getVersion(msieMatcher);
+					double ieVersionReal = tridentVersion + 4.0;
+					return new double[]{ieVersion, tridentVersion, ieVersionReal};
+				}
+			}
+		}
+		return null;
+	}
+	
 	/** Returns the user-agent header, which indicates what the client is,
 	 * or an empty string if not available.
 	 *
@@ -744,23 +771,14 @@ public class Servlets {
 	 * the client is with {@link String#indexOf}.
 	 *
 	 * @since 3.0.2
-	 */
+	 */	
 	public static final String getUserAgent(ServletRequest req) {
 		if (req instanceof HttpServletRequest) {
 			final String s = ((HttpServletRequest)req).getHeader("user-agent");
 			if (s != null) {
-				if (isBrowser(s, "ie")) {
-					Cookie[] cookies = ((HttpServletRequest)req).getCookies();
-					if (cookies == null) 
-						return s;
-					for (Cookie c : cookies) {
-						// the key of zkie-compatibility is the same as in zk.js
-						if ("zkie-compatibility".equals(c.getName())) {
-							String value = c.getValue();
-							if (value != null) 
-								return s + "; MSIE " + value + ".0";
-						}
-					}
+				double[] ieCompatibilityInfo = getIECompatibilityInfo(req);
+				if(ieCompatibilityInfo != null) {
+					return s + "; MSIE " + ieCompatibilityInfo[2];
 				}
 				return s;
 			}

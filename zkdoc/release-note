@@ -25,8 +25,23 @@ ZK 7.0.0
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
   are deprecated, please use SLF4J API for logging instead.  
+
   --------
-ZK 6.5.4 
+ZK 6.5.5
+* Features
+
+* Bugs
+  ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM
+  ZK-1946: The select mold listbox with multiple attribute in a draggable listitem will be disabled (Chrome, IE10)
+  ZK-1949: Clear the input value in a spinner with binding integer value will cause UiException
+  ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
+  ZK-1947: Can not download files if <max-desktops-per-session> is set to 1 in zk.xml
+  ZK-1948: IE8 Menupopup Shadow causes horizontal scrollbar
+
+  --------
+
+ZK 6.5.4
+Sep 24, 2013
 * Features
 
 * Bugs
@@ -84,8 +99,9 @@ ZK 6.5.4
   ZK-1930: A Error occur on class org.zkoss.web.servlet.Servlets method public static boolean isBrowser(String userAgent, String type)
   ZK-1929: The hover stype of non-closable groupbox are not the same  
   ZK-1932: Another vflex issue with invisible divs (all browsers)
-
-
+  ZK-1934: Tooltip causing error, when positioning, when component is replaced at the same time
+  ZK-1758: Selectors finds too many components when using CSS child selector
+  ZK-1938: Grid/Listbox doesn't bind activePage attribute as default binding
 
   --------
 ZK 6.5.3
