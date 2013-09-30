@@ -24,7 +24,6 @@ public class ClassReflect implements org.zkoss.zel.impl.util.ClassReflect {
 	 * Gets one of the close methods -- a close method is a method
 	 * with the same name and the compatible argument type.
 	 */
-	@Override
 	public Method
 	getCloseMethod(Class<?> cls, String name, Class<?>[] argTypes)
 	throws NoSuchMethodException {
@@ -35,7 +34,6 @@ public class ClassReflect implements org.zkoss.zel.impl.util.ClassReflect {
 	 * Instantiates a new instance of the specified class with the
 	 * specified argument.
 	 */
-	@Override
 	public Object newInstance(Class<?> cls, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, IllegalAccessException {
