@@ -1,0 +1,12 @@
+<window border="normal" width="400px">
+	<label>
+	Click the button, hold one second and release before tooltip pop up, it should not cause anny error.
+	</label>
+	<separator height="20px"/>
+	<popup id="help" onOpen='help.appendChild(new Label("dynamic help text"));' />
+	<div id="container">
+		<button tooltip="help, after_start" label="Click me" 
+			onClick='container.getChildren().clear(); container.appendChild(new Label("Stay two seconds"));' >
+		</button>
+	</div>
+</window>

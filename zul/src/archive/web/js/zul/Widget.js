@@ -70,7 +70,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_tt_inf = null;
 
 			var n = _tt_ref.$n();
-			if (n && !zk(n).isRealVisible()) //gone
+			// B65-ZK-1934: If reference's dom is null or not visible, then just return.
+			if (!n || !zk(n).isRealVisible()) //gone
 				return _tt_tip = _tt_ref = null;
 
 			var params = inf.params,

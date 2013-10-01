@@ -185,8 +185,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 					
 				if (ref) {
 					var refn = zul.Widget.isInstance(ref) ? ref.$n() : ref;
-					pos = position;
-					dim = zk(refn).dimension(true);
+					// B65-ZK-1934: Make sure refn is not null
+					if (refn) {
+						pos = position;
+						dim = zk(refn).dimension(true);
+					} else 
+						return {pos: position};
 				}
 			} else
 				return {pos: position};

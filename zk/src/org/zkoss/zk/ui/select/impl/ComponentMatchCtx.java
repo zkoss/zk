@@ -58,6 +58,15 @@ public class ComponentMatchCtx {
 	/*package*/ void moveToNextSibling() {
 		_comp = _comp.getNextSibling();
 		_compChildIndex++;
+		// reset status for Bug ZK-1758: Selectors finds too many components when using CSS child selector
+		if (_parent == null) {
+			for(int i = 0; i < _qualified.length; i++) {
+				for(int j = 0; j < _qualified[i].length; j++) {
+					_qualified[i][j] = false;
+				}
+			}
+				
+		}
 	}
 	
 	
