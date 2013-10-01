@@ -242,7 +242,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		var node = this.$n();
 		
-		if (zk.ie) { // re-create dom element to remove :hover state style
+		if (zk.ie && !opts.sendOnOpen) { // re-create dom element to remove :hover state style
 			this.replaceHTML(node);
 		}
 		
