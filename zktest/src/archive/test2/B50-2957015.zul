@@ -15,11 +15,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <window title="Hello World!!" border="normal" width="300px"
 	height="200px">
-	<grid>
+	<grid id="grid1">
 		<rows>
 			<row>
-				<detail>
-					<grid>
+				<detail id="detail">
+					<grid id="grid">
 						<columns>
 							<column width="15%" />
 							<column width="35%" />
