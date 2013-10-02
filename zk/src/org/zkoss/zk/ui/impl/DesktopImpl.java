@@ -913,7 +913,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//_wapp = null; => SimpleDesktopCache.desktopDestroyed depends on it
 
 		//Wake up all pending requests (and they will be killed because of !isAlive())
-		getActivationLock().notifyAll();
+		final Object lock = getActivationLock();
+		if (lock != null) {
+			synchronized (lock) {
+				lock.notifyAll();
+			}
+		}
 	}
 
 	public Collection<EventProcessingThread> getSuspendedThreads() {
