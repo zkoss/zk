@@ -37,6 +37,7 @@ ZK 6.5.5
   ZK-1878: IE Compatibility View issue when using Meta tag with IE=edge
   ZK-1947: Can not download files if <max-desktops-per-session> is set to 1 in zk.xml
   ZK-1948: IE8 Menupopup Shadow causes horizontal scrollbar
+  ZK-1951: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 10
 
   --------
 
