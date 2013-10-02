@@ -101,6 +101,17 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		after.push(function () {
 			_syncFrozen(w);
 		});
+		this.fixBorder_();
+	},
+	fixBorder_: function() {
+		var fc = jq(this).children(':first-child'),
+			rowspan = fc.attr('rowspan'),
+			times = parseInt(rowspan) - 1;
+		if (rowspan && times > 0) {
+			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--) 
+				jq(head.firstChild).css('border-left', '1px solid #CFCFCF')
+		}
+		
 	},
 	unbind_: function () {
 		jq(this.hdfaker).remove();
