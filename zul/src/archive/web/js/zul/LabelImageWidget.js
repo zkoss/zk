@@ -97,7 +97,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 * @since 7.0.0
 	 */
 	domIcon_: function () {
-		var icon = this._iconSclass;
+		var icon = this.getIconSclass(); // use getIconSclass() to allow overriding
 		return icon ? '<i class="' + icon + '"></i>': '';
 	},
 	/**
