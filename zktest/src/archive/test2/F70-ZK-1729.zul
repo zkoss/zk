@@ -1,4 +1,4 @@
-<window apply="org.zkoss.zktest.test2.B70_ZK_1729">
+<window apply="org.zkoss.zktest.test2.F70_ZK_1729">
 	<div>
 	click the 'click me' button and should not throw an exception 
 	</div>
