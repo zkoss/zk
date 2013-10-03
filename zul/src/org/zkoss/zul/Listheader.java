@@ -521,7 +521,7 @@ public class Listheader extends HeaderElement {
 				for (Listitem item : children) {
 					if (previous == null || compare(cmprx, previous, item) != 0) {
 						//new group
-						final List<Component> cells = item.getChildren();
+						final List<Component> cells = (List<Component>) item.getChildren();
 						if (cells.size() < index)
 							throw new IndexOutOfBoundsException(
 									"Index: "+index+" but size: "+ cells.size());

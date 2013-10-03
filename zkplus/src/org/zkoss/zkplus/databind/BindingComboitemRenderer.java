@@ -46,7 +46,7 @@ import org.zkoss.zul.Comboitem;
 
 	public void render(Comboitem item, Object bean, int index) throws Exception {
 		final List<Component> kids = cast((List) item.getAttribute(KIDS));
-		item.getChildren().addAll(kids);
+		((List<Component>)item.getChildren()).addAll(kids);
 		//item.removeAttribute(KIDS);
 			
 		//remove template mark of cloned component and its descendants

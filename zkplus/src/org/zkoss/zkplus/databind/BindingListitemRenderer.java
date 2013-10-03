@@ -81,7 +81,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 	//-- ListitemRenderer --//
 	public void render(Listitem item, java.lang.Object bean, int index) {
 		final List<Component> kids = cast((List) item.getAttribute(KIDS));
-		item.getChildren().addAll(kids);
+		((List<Component>)item.getChildren()).addAll(kids);
 		//item.removeAttribute(KIDS);
 			
 		//remove template mark of cloned component and its decendant

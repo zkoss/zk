@@ -118,7 +118,7 @@ public class Components {
 	 */
 	public static
 	void replaceChildren(Component parent, Collection<Component> newChildren) {
-		final Collection<Component> children = parent.getChildren();
+		final Collection<Component> children = (Collection<Component>) parent.getChildren();
 		children.clear();
 		children.addAll(newChildren);
 	}
@@ -230,7 +230,7 @@ public class Components {
 	 * <p>The performance of the returned collection's size() is NO GOOD.
 	 */
 	public static Collection<Component> getVisibleChildren(Component comp) {
-		final Collection<Component> children = comp.getChildren();
+		final Collection<Component> children = (Collection<Component>) comp.getChildren();
 		return new AbstractCollection<Component>() {
 			public int size() {
 				int size = 0;

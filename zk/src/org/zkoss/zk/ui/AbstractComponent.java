@@ -1332,7 +1332,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 * <p>Default: instantiates and returns an instance of {@link Children}.
 	 */
-	public List<Component> getChildren() {
+	public List<? extends Component> getChildren() {
 		return new Children();
 	}
 	/** Returns the root of the specified component.

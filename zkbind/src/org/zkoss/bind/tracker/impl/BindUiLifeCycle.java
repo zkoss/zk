@@ -140,7 +140,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 	private void removeBindings(Component comp) {
 		removeBindings0(comp);
-		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
+		for(final Iterator<Component> it = (Iterator<Component>) comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
 			if (kid != null) {
 				removeBindings(kid); //recursive

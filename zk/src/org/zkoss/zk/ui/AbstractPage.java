@@ -260,7 +260,7 @@ implements Page, PageCtrl, java.io.Serializable {
 			if (compId.length() > 0)
 				addFellow(comp);
 			if (!(comp instanceof IdSpace))
-				fixFellows(comp.getChildren()); //recursive
+				fixFellows((Collection<Component>) comp.getChildren()); //recursive
 		}
 	}
 

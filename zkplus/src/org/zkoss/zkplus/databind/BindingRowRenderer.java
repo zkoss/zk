@@ -80,7 +80,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	//-- RowRenderer --//
 	public void render(Row row, java.lang.Object bean, int index) {
 		final List<Component> kids = cast((List) row.getAttribute(KIDS));
-		row.getChildren().addAll(kids);
+		((List<Component>)row.getChildren()).addAll(kids);
 //			row.removeAttribute(KIDS);
 			
 		//remove template mark of cloned component and its descendant

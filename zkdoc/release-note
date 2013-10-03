@@ -15,6 +15,8 @@ ZK 7.0.0
   ZK-1919: ZK Components support static uuid
   ZK-1921: ZK Fileupload component support HTML 5 accept attribute
   ZK-19: Support SLF4J API for logging instead
+  ZK-1729: Change generic code
+
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception

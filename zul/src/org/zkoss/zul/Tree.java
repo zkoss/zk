@@ -302,7 +302,7 @@ public class Tree extends MeshElement {
 
 		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
 		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
-		getVisibleItemsDFS(getChildren(), map, data);
+		getVisibleItemsDFS((List<Component>) getChildren(), map, data);
 		return map;
 	}
 	/**
@@ -326,7 +326,7 @@ public class Tree extends MeshElement {
 							map.put(item, Boolean.TRUE);
 						}
 						if (item.isOpen()) {
-							if (!getVisibleItemsDFS(item.getChildren(), map, data)) {
+							if (!getVisibleItemsDFS((List<Component>) item.getChildren(), map, data)) {
 								return false;
 							} else {
 								// the children may be visible.
@@ -336,7 +336,7 @@ public class Tree extends MeshElement {
 					}
 				}
 			} else if (cmp instanceof Treechildren) {
-				if(!getVisibleItemsDFS(cmp.getChildren(), map, data)) return false;
+				if(!getVisibleItemsDFS((List<Component>) cmp.getChildren(), map, data)) return false;
 			}
 		}
 		return true;
@@ -1472,7 +1472,7 @@ public class Tree extends MeshElement {
 
 		//B50-ZK-721
 		if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
-			List<Component> siblings = tc.getChildren();
+			List<Component> siblings = (List<Component>) tc.getChildren();
 			// if there is no sibling or new item is inserted at end.
 			tc.insertBefore(newTi,
 					// Note: we don't use index >= size(); reason: it detects bug
@@ -1487,7 +1487,7 @@ public class Tree extends MeshElement {
 	 */
 	private void onTreeDataRemoved(Component parent,Object node, int index){
 		final Treechildren tc = treechildrenOf(parent);
-		final List<Component> items = tc.getChildren();
+		final List<Component> items = (List<Component>) tc.getChildren();
 		if (items.size() > index) {
 			((Treeitem) items.get(index)).detach();
 		} else if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
@@ -1499,7 +1499,7 @@ public class Tree extends MeshElement {
 	 * Handle event that child's content is changed
 	 */
 	private void onTreeDataContentChange(Component parent,Object node, int index){
-		List<Component> items = treechildrenOf(parent).getChildren();
+		List<Component> items = (List<Component>) treechildrenOf(parent).getChildren();
 
 		/*
 		 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
@@ -1553,7 +1553,7 @@ public class Tree extends MeshElement {
 	private static Treeitem getChildTreeitem(Treechildren tc, int i) {
 		if (tc == null)
 			return null;
-		List<Component> cs = tc.getChildren();
+		List<Component> cs = (List<Component>) tc.getChildren();
 		return i < 0 || i >= cs.size() ? null : (Treeitem) cs.get(i);
 	}
 	/*
@@ -2249,7 +2249,7 @@ public class Tree extends MeshElement {
 			return null;
 		// Start from root-Tree
 		Treeitem ti = null;
-		List<Component> children = this.getTreechildren().getChildren();
+		List<Component> children = (List<Component>) this.getTreechildren().getChildren();
 		/*
 		 * Go through each stop in path and render corresponding treeitem
 		 */
@@ -2262,7 +2262,7 @@ public class Tree extends MeshElement {
 				ti.setOpen(true);
 
 			if (ti.getTreechildren() != null) {
-				children = ti.getTreechildren().getChildren();
+				children = (List<Component>) ti.getTreechildren().getChildren();
 			} else {
 				if (i != path.length - 1) {
 					return null;
@@ -2519,7 +2519,7 @@ public class Tree extends MeshElement {
 	/** An iterator used by _heads.
 	 */
 	private class Iter implements Iterator<Component> {
-		private final ListIterator<Component> _it = getChildren().listIterator();
+		private final ListIterator<Component> _it = (ListIterator<Component>) getChildren().listIterator();
 
 		public boolean hasNext() {
 			while (_it.hasNext()) {
