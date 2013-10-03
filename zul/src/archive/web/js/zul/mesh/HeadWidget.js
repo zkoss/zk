@@ -101,6 +101,19 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		after.push(function () {
 			_syncFrozen(w);
 		});
+		// B50-3306729: the first header should have border-left when the first column is covered with other header
+		this.fixBorder_();
+	},
+	// B50-3306729: the first header should have border-left when the first column is covered with other header
+	fixBorder_: function() {
+		var fc = jq(this).children(':first-child'),
+			rspan = fc.attr('rowspan'),
+			times = parseInt(rspan) - 1;
+		if (rspan && times > 0) {
+			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--) 
+				jq(head.firstChild).addClass(this.$s('border'))
+		}
+		
 	},
 	unbind_: function () {
 		jq(this.hdfaker).remove();

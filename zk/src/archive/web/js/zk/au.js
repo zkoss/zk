@@ -1328,7 +1328,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var w = Widget.$(id);
 			if (w) w.scrollIntoView();
 			else zk(id).scrollIntoView();
-		}, 50);
+		}, zk.ie8_ ? 0 : 50);
 	}
 };
 /** @class zk.AuCmd1
