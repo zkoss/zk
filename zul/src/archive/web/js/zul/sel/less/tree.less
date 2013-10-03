@@ -87,6 +87,11 @@
 .z-treecols {
 	th:first-child {
 		border-left: none;
+
+		// B50-3306729: the first header should have border-left when the first column is covered with other header
+		&.z-treecols-border {
+			border-left: 1px solid @tableTitleBorderColor;
+		}
 	}
 	&-bar {
 		border-left: 1px solid @tableTitleBorderColor;
