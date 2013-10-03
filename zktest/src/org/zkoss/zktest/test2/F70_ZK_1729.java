@@ -10,7 +10,7 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 
-public class B70_ZK_1729 extends SelectorComposer<Component> {
+public class F70_ZK_1729 extends SelectorComposer<Component> {
 	
 	@Wire
 	Listhead head;
