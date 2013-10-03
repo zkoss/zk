@@ -17,7 +17,7 @@ function (out) {
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	var mesh = this.getMeshWidget();
-	if (mesh._nativebar && !mesh.frozen)
+	if (mesh && mesh._nativebar && !mesh.frozen)
 		out.push('<th class="', this.$s('bar'), '" />');
 	out.push('</tr>');
 }
