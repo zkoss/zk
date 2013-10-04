@@ -23,6 +23,7 @@ ZK 7.0.0
   ZK-1853: Audio component doesn't work with Chrome and Firefox
   ZK-1879: collapse and open the splitter makes the hbox width no effect in zksandbox combobox case
   ZK-1911: Text-as with childable cannot work with preserve-blank for component setting
+  ZK-1959: The height of arrow should not change when the tabbox add tab
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property

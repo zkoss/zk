@@ -273,8 +273,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (tabbox.isTabscroll()) {
 			var cls = tabbox.$s('scroll');
 			jq(tabbox).removeClass(cls);
-			if (show)
+			if (show) {
+				// ZK-1959: the height of arrow should not change when the tabbox add tab
+				if(!tabbox.isVertical() && !tabbox.inAccordionMold()) {					
+					var tb = tabbox.toolbar;
+					tabbox.$n('left').style.height =  tabbox.$n('right').style.height = '';
+					if (tb) 
+						tb.$n().style.height = '';
+				}
+				
 				jq(tabbox).addClass(cls);
+			}
 		}
 	},
 	_fixWidth: function() {
