@@ -503,7 +503,7 @@ public class Tree extends MeshElement {
 								}
 							}
 							
-							if (ti.isRendered()) {
+							if (!ti.isOpen()) {
 								ti.getChildren().clear();
 								ti.setRendered(false);
 							}
