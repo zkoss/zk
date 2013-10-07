@@ -11,6 +11,7 @@ ZK 5.0.13
   ZK-1868: TypeError: $tipOff is null in function _tt_close()
   ZK-1916: Different language codes for IE10 under Windows 8
   ZK-1961: XSS Vulnerability: It's possible to pass JavaScript over URL
+  ZK-1949: Clear the input value in a spinner with binding integer value will cause UiException
   
 * Upgrade Notes
 
