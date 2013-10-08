@@ -245,16 +245,15 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setVisible(false);
 		
 		var node = this.$n();
-		
-		if (zk.ie && !opts.sendOnOpen) { // re-create dom element to remove :hover state style
-			this.replaceHTML(node);
-		}
-		
 		zk(node).undoVParent();
 		zWatch.fireDown('onVParent', this);
 
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open:false});
+		
+		if (zk.ie) { // re-create dom element to remove :hover state style
+			this.replaceHTML(node); // see also ZK-1216, ZK-1124
+		}
 	},
 	onFloatUp: function(ctl){
 		if (!this.isVisible()) 

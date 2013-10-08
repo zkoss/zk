@@ -189,12 +189,13 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	onSize: function () {
 		this.$supers(Grid, 'onSize', arguments);
-		var self = this;
+		var self = this,
+			canInitScrollbar = this.desktop && !this._nativebar;
+		if (!this._scrollbar && canInitScrollbar)
+			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
 		setTimeout(function () {
-			if (self.desktop && !self._nativebar) {
-				if (!self._scrollbar)
-					self._scrollbar = zul.mesh.Scrollbar.init(self);
-				if (!this._grid$rod || this.inPagingMold())
+			if (canInitScrollbar) {
+				if (!self._grid$rod || self.inPagingMold())
 					self.refreshBar_();
 			}
 		}, 200);
