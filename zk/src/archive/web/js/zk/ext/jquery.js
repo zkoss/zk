@@ -2624,14 +2624,29 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 				dirkey = dirruns + " " + doneName;
 			
 			if (hasZTag || hasZID) {
-				var wgt = zk.Widget.$(elem);
-				if (dir === "parentNode")
-					return wgt.parent;
-				else
-					return wgt[ dir ];
-			}
-			// We can't set arbitrary data on XML nodes, so they don't benefit from dir caching
-			if ( xml ) {
+				var wgt = zk.Widget.$(elem),
+					getParent = function (wgt) {
+						if (dir === "parentNode")
+							return wgt.parent;
+						else
+							return wgt[ dir ];
+					};
+				
+				while ((wgt = getParent(wgt)) && (elem = wgt.$n())) {
+					outerCache = elem[ expando ] || (elem[ expando ] = {});
+					if ( (cache = outerCache[ dir ]) && cache[0] === dirkey ) {
+						if ( (data = cache[1]) === true || data === cachedruns ) {
+							return data === true;
+						}
+					} else {
+						cache = outerCache[ dir ] = [ dirkey ];
+						cache[1] = matcher( elem, context, xml ) || cachedruns;
+						if ( cache[1] === true ) {
+							return true;
+						}
+					}
+				}
+			} else if ( xml ) {// We can't set arbitrary data on XML nodes, so they don't benefit from dir caching
 				while ( (elem = elem[ dir ]) ) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
 						if ( matcher( elem, context, xml ) ) {
