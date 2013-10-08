@@ -9,8 +9,7 @@
 	}
 
 	&-button {
-		width: @baseIconWidth;
-		height: @baseIconHeight;
+		.size(@baseIconWidth, @baseIconHeight);
 		border: 1px solid @sliderBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		<c:if test="${zk.ie != 8}">
@@ -35,14 +34,13 @@
 		height: @baseBarHeight;
 
 		.z-slider-center {
+			.size(100%, @baseHeight - 2);
+			margin-top: -3px;
 			<c:if test="${zk.ie != 8}">
 				.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
 			</c:if>	
-			height: @baseHeight - 2;
-			width: 100%;
 			position: relative;
 			top: 50%;
-			margin-top: -3px;
 		}
 
 		.z-slider-button {
@@ -52,22 +50,21 @@
 	}
 
 	&-vertical {
+		font-size: 0;
 		width: @baseBarWidth;
 		margin-right: 0px;
 		line-height: 0;
-		font-size: 0;
 
 		.z-slider-button {
 			left: -5px;
 		}
 
 		.z-slider-center {
+			.size(@baseWidth - 2, 100%);
+			margin: auto;
 			<c:if test="${zk.ie != 8}">
 				.gradient('hor', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
 			</c:if>
-			height: 100%;
-			width: @baseWidth - 2;
-			margin: auto;
 		}
 	}
 
@@ -75,9 +72,9 @@
 		font-family: @baseContentFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
+		padding: 2px;
 		text-shadow: 0 1px #FFFFFF;
 		.boxShadow('0 0 10px rgba(0, 0, 0, 0.35)');
-		padding: 2px;
 	}
 
 	&-sphere {

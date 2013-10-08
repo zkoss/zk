@@ -16,22 +16,21 @@
 }
 
 .z-borderlayout {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	background: @baseBackgroundColor;
+	.size(100%, 100%);
 	border: 0;
+	background: @baseBackgroundColor;
+	overflow: hidden;
 
 	&-icon {
+		.iconFontStyle(@fontSizeLarge + 1, @iconColor);
 		margin: 2px 2px 0 0;
+		line-height: @baseLineHeight + 3;
+		.opacity(0.5);
+		position: relative;
 		overflow: hidden;
 		cursor: pointer;
-		position: relative;
 		float: right;
-		line-height: @baseLineHeight + 3;
-		font-size: @fontSizeLarge + 1;
-		color: @iconColor;
-		.opacity(0.5);
+		
 		&:hover {
 			.opacity(1);
 		}
@@ -44,26 +43,23 @@
 .z-center,
 .z-east {
 	border: 1px solid @baseBorderColor;
+	background: @baseBackgroundColor;
 	position: absolute;
 	overflow: hidden;
-	background: @baseBackgroundColor;
 
 	&-noborder {
 		border: 0;
 	}
 	&-header {
-		color: @textColorGray;
-		font-size: @fontSizeMedium;
-		font-family: @baseTitleFontFamily;
-		font-weight: bold;
-		padding: 5px;
+		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, bold, @textColorGray);
+		height: @baseBarHeight;
 		border-bottom: 1px solid @baseBorderColor;
-		white-space: nowrap;
+		padding: 5px;
+		line-height: @baseBarHeight - 10; // 22px = 32 - padding-top/bottom
+		.verGradient(@baseGradientStart, @baseGradientEnd);
 		overflow: hidden;
 		cursor: default;
-		.verGradient();
-		line-height: @baseLineHeight + 8; // 22px = 32 - padding-top/bottom
-		height: @baseBarHeight;
+		white-space: nowrap;
 	}
 
 	&-body {
@@ -71,14 +67,13 @@
 	}
 
 	&-collapsed {
-		background: @collapsedBackgroundColor;
-		width: @baseBarWidth;
-		height: @baseBarHeight;
-	 	cursor: pointer; // ios issue
-		padding: 5px;
+		.size(@baseBarWidth, @baseBarHeight);
 		border: 1px solid @collapsedBorderColor;
-		overflow: hidden;
+		padding: 5px;
+		background: @collapsedBackgroundColor;
 		position: absolute;
+		overflow: hidden;
+	 	cursor: pointer; // ios issue
 	}
 
 	&-caption {
@@ -88,15 +83,12 @@
 .z-north,
 .z-south,
 .z-center {
-	width: 100%;
-	// Fixed for B30-1902533.zul
+	width: 100%; // Fixed for B30-1902533.zul
 }
 .z-west,
 .z-east {
-	height: 100%;
-	// Fixed for B30-1902533.zul
+	height: 100%; // Fixed for B30-1902533.zul
 }
-
 
 .z-west,
 .z-west-collapsed,
@@ -126,23 +118,21 @@
 .z-west,
 .z-north,
 .z-south {
-
 	&-splitter {
+		.size(@baseWidth, @baseHeight);
 		.horGradient(@splitterGradientStart, @splitterGradientEnd);
-		height: @baseHeight;
-		width: @baseWidth;
 		position: absolute;
-		cursor: e-resize;
 		overflow: hidden;
+		cursor: e-resize;
 
 		// splitter-button
 		&-button {
 			color: @iconColor;
-			vertical-align: top;// vertical-align: make it looks same in diff browsers
 			display: inline-block;
-			cursor: pointer;
-			position: relative;
 			border: 1px solid @baseBorderColor;
+			vertical-align: top;// vertical-align: make it looks same in diff browsers
+			position: relative;
+			cursor: pointer;
 		}
 		&-button-disabled {
 			border: 0;
@@ -150,18 +140,18 @@
 	}
 
 	&-icon {
-		position: absolute;
 		font-size: @fontSizeXSmall;
 		line-height: @baseLineHeight;
 		.opacity(0.5);
+		position: absolute;
 	}
 }
 .z-north-splitter,
 .z-south-splitter {
-	.verGradient(@splitterGradientStart, @splitterGradientEnd);
-	cursor: s-resize;
 	border-left: 1px solid @baseBorderColor;
 	border-right: 1px solid @baseBorderColor;
+	.verGradient(@splitterGradientStart, @splitterGradientEnd);
+	cursor: s-resize;
 }
 
 <c:if test="${zk.ie == 8}">
@@ -238,15 +228,13 @@
 
 .z-west-splitter-button,
 .z-east-splitter-button {
+	.size(8px, 30px);
 	border-width: 1px 0;
-	width: 8px;
-	height: 30px;
 }
 .z-north-splitter-button,
 .z-south-splitter-button {
+	.size(30px, 8px);
 	border-width: 0 1px;
-	width: 30px;
-	height: 8px;
 }
 
 .ie8 .z-borderlayout > div {

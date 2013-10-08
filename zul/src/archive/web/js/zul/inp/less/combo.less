@@ -11,25 +11,22 @@
 	white-space: nowrap;
 
 	&-input {
-		background: @inputBackgroundColor;
-		font-family: @baseContentFontFamily;
-		font-size: @fontSizeMedium;
-		font-weight: normal;
-		padding: 4px 5px;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+		height: @baseButtonHeight;
 		border: 1px solid @inputBorderColor;
 		border-right: 0;
-		margin: 0;
-		height: @baseButtonHeight;
 		.leftBorderRadius(@borderRadiusSmall);
+		margin: 0;
+		padding: 4px 5px;
 		line-height: @baseLineHeight;
-		color: @baseTextColor;
+		background: @inputBackgroundColor;
 
 		&:focus {
-		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 		}
 		&[readonly] {
-			background: @readonlyBackgroundColor;
 			border-color: @readonlyBorderColor;
+			background: @readonlyBackgroundColor;
 		}
 		&[readonly]:focus {
 			.boxShadow('none');
@@ -37,25 +34,22 @@
 	}
 
 	&-button {
-		background: @inputBackgroundColor;
-		vertical-align: middle;
-		cursor: pointer;
-		padding: 4px;
-		border: 1px solid @inputBorderColor;
-		overflow: hidden;
+		.iconFontStyle(@baseFontSize, @iconColor);
 		display: inline-block;
-		font-size: @baseFontSize;
-		font-weight: normal;
-		font-family: none;
-		line-height: @baseLineHeight;
 		min-width: @baseButtonWidth;
 		<c:if test="${zk.ie == 8}">
 			min-width: @baseButtonWidth - 10;
 		</c:if>
 		height: @baseButtonHeight;
-		color: @iconColor;
+		border: 1px solid @inputBorderColor;
 		.rightBorderRadius(@borderRadiusSmall);
+		padding: 4px;
+		line-height: @baseLineHeight;
+		background: @inputBackgroundColor;
 		text-align: left;
+		vertical-align: middle;
+		overflow: hidden;
+		cursor: pointer;
 
 		&:hover {
 			border-color: @hoverBorderColor;
@@ -81,24 +75,24 @@
 	}
 
 	&-disabled {
-		.disabledOpacity();
+		.opacity(@disabledOpacity);
 		& * {
-			cursor: default !important;
 			color: @disabledColor !important;
 			background: @disabledBackgroundColor !important;
+			cursor: default !important;
 		}
 	}
 
 	&-invalid {
-		background: @baseBackgroundColor;
 		border: 1px solid @invalidBorderColor !important;
 		margin-right: -1px;
+		background: @baseBackgroundColor;
 	}
 
 	&-readonly:focus {
-		background: transparent repeat-x 0 0;
 		border-color: @readonlyBorderColor;
 		border-right-width: 0;
+		background: transparent repeat-x 0 0;
 		cursor: default;
 		.boxShadow(none);
 	}
@@ -120,13 +114,13 @@
 
 .z-combobox-button {
 	font-size: @fontSizeLarge;
-	padding-left: 7px;
-	padding-top: 5px;
 	min-height: @baseButtonHeight;
 	<c:if test="${zk.ie == 8}">
-		min-height: @baseButtonWidth - 11;
 		min-width: @baseButtonHeight - 13;
+		min-height: @baseButtonWidth - 11;
 	</c:if>	
+	padding-left: 7px;
+	padding-top: 5px;
 }
 
 .z-datebox-button,
@@ -137,11 +131,11 @@
 .z-timebox-button,
 .z-spinner-button,
 .z-doublespinner-button {
-	padding: 0;
-	position: relative;
 	<c:if test="${zk.ie == 8}">
 		min-width: @baseButtonWidth - 2;
 	</c:if>	
+	padding: 0;
+	position: relative;
 
 	&:hover,
 	&:active {
@@ -150,15 +144,14 @@
 	}
 
 	& > a {
-		padding: 0 7px;
 		color: @iconColor;
-		text-decoration: none;
+		.size(@baseButtonWidth, @baseButtonHeight / 2);
+		padding: 0 7px;
+		background: @baseBackgroundColor;
 		position: absolute;
 		left: 0;
-		width: @baseButtonWidth;
-		height: @baseButtonHeight / 2;
 		overflow: hidden;
-		background: @baseBackgroundColor;
+		text-decoration: none;
 
 		&:first-child {// up icon
 			top: -1px;
@@ -186,12 +179,11 @@
 		z-index: 2; // greater than arrow icon
 	}
 	&:hover > i {
-		height: 1px;
+		.size(@baseButtonWidth, 1px);
 		border-top: 1px solid @hoverBorderColor;
 		position: absolute;
 		top: 11px;
 		left: 0;
-		width: @baseButtonWidth;
 	}
 	& > a ~ a {// bottom icon
 		bottom: -1px;
@@ -234,8 +226,8 @@
 .z-timebox-inplace .z-timebox-input,
 .z-spinner-inplace .z-spinner-input,
 .z-doublespinner-inplace .z-doublespinner-input {
-	padding: 3px;
 	border: 0;
+	padding: 3px;
 	background: none;
 
 	&:focus {
@@ -255,20 +247,19 @@
 // Comboitem
 .z-comboitem,
 .z-comboitem-button {
-	white-space: nowrap;
 	font-size: @fontSizeMedium;
+	white-space: nowrap;
 	cursor: pointer;
 }
 .z-comboitem {
-	text-shadow: 0 1px #FFFFFF;
+	display: block;
 	padding: 3px 2px;
 	position: relative;
-	display: block;
+	text-shadow: 0 1px #FFFFFF;
 }
 .z-comboitem-inner,
 .z-comboitem-content {//description
-	color: @textColorGray;
-	font-size: @fontSizeXSmall;
+	.iconFontStyle(@fontSizeXSmall, @textColorGray);
 }
 .z-comboitem,
 .z-comboitem a,
@@ -294,9 +285,10 @@
 	</c:if>
 }
 .z-comboitem-image {
+	margin-top: -4px;
 	margin-right: 3px;
 	float: left;
-	margin-top: -4px;
+	
 	&:empty {
 		margin-right: 0px;
 	}
@@ -306,14 +298,14 @@
 .z-bandbox-popup,
 .z-datebox-popup,
 .z-timebox-popup {
-	display: block;
-	position: absolute;
-	background: @popupBackgroundColor;
-	border: 1px solid @popupBorderColor;
-	padding: 2px;
 	font-family: @baseContentFontFamily;
 	font-weight: normal;
 	font-size: @fontSizeMedium;
+	display: block;
+	border: 1px solid @popupBorderColor;
+	padding: 2px;
+	background: @popupBackgroundColor;
+	position: absolute;
 	overflow: hidden;
 }
 
@@ -327,10 +319,10 @@
 }
 
 .z-combobox-content {
-	background: transparent none repeat 0 0;
 	border: 0;
 	padding: 0;
 	margin: 0;
+	background: transparent none repeat 0 0;
 	position: relative;
 	list-style-image: none;
 	list-style-position: outside;
@@ -354,10 +346,10 @@
 	.z-doublespinner {
 		&-button {
 			&:hover {
-				.gradientHoverFallback();
+				.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
 			}
 			&:active {
-				.gradientActiveFallback();
+				.gradientFallback(@activeGradientStart, @activeGradientEnd);
 			}
 		}
 	}
@@ -368,10 +360,10 @@
 		&-button {
 			& > a {
 				&:hover {
-					.gradientHoverFallback();
+					.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
 				}
 				&:active {
-					.gradientActiveFallback();
+					.gradientFallback(@activeGradientStart, @activeGradientEnd);
 				}
 			}
 		}
@@ -379,13 +371,13 @@
 
 	.z-comboitem {
 		&-selected {			
-			.gradientSelectedFallback();		
+			.gradientFallback(@selectedGradientStart, @selectedGradientEnd);
 		}
 		&:hover {
-			.gradientHoverFallback();
+			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
 		}
 		&-selected:hover {
-			.gradientSelectedHoverFallback();
+			.gradientFallback(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 		}
 	}
 }

@@ -1,12 +1,12 @@
 @import "~./zul/less/_header.less";
 
 .z-toolbar {
+	display: block;
 	border-color: @baseBorderColor;
 	border-style: solid;
 	border-width: 0 0 1px;
-	display: block;
 	padding: 4px 4px 3px;
-	.verGradient();
+	.verGradient(@baseGradientStart, @baseGradientEnd);
 	position: relative;
 }
 .z-caption .z-toolbar {
@@ -36,9 +36,9 @@
 }
 // Toolbar Panel Mold
 .z-toolbar-panel {
-	.resetGradient();
 	border-width: 0;
 	padding: 5px;
+	.resetGradient();
 }
 
 .z-toolbar-panel .z-toolbar-horizontal,
@@ -56,14 +56,14 @@
 // Toolbarbutton
 .z-toolbarbutton {
 	display: inline-block;
-	position: relative;
-	cursor: pointer;
-	margin: 0 2px;
 	height: @baseButtonHeight;
-	padding: 1px 0;
-	line-height: @baseLineHeight;
 	border: 1px solid transparent;
 	.borderRadius(@borderRadiusSmall);
+	margin: 0 2px;
+	padding: 1px 0;
+	line-height: @baseLineHeight;
+	position: relative;
+	cursor: pointer;
 
 	&:hover {
 		border-color: @hoverBorderColor;
@@ -76,10 +76,10 @@
 	}
 	&[disabled] {
 		color: @disabledColor !important;
-		cursor: default !important;
-		.disabledOpacity();
 		border: 1px solid transparent;
 		.resetGradient();
+		.opacity(@disabledOpacity);
+		cursor: default !important;
 		.boxShadow('none');
 	}
 }
@@ -90,14 +90,11 @@
 	.verGradient(@checkedGradientStart, @checkedGradientEnd);
 }
 .z-toolbarbutton-content {
+	.fontStyle(@baseTitleFontFamily, @fontSizeSmall, normal, @baseTextColor);
 	padding: 2px;
-	position: relative;
-	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeSmall;
-	font-weight: normal;
-	text-shadow: 0 1px #FFFFFF;
 	line-height: @baseLineHeight + 6; // 20px for IE to v-align center
 	vertical-align: middle;
+	position: relative;
+	text-shadow: 0 1px #FFFFFF;
 	white-space:nowrap;
 }
-

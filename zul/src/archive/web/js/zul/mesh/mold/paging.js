@@ -23,17 +23,17 @@ function (out) {
 	
 	out.push('<div name="', uuid, '"', this.domAttrs_(), '><ul>',
 			'<li><a name="', uuid, '-first" class="', btn, ' ', this.$s('first'),
-				'"><i class="z-icon-step-backward"></i></a></li>',
+				'"><i class="z-paging-icon z-icon-double-angle-left"></i></a></li>',
 			'<li><a name="', uuid, '-prev" class="', btn, ' ', this.$s('previous'),
-				'"><i class="z-icon-caret-left"></i></a></li>',
+				'"><i class="z-paging-icon z-icon-angle-left"></i></a></li>',
 			'<li><input name="',
 				uuid, '-real" class="', this.$s('input'), '" type="text" value="',
 				this.getActivePage() + 1, '" size="3"></input><span class="',
 				this.$s('text'), '"> / ', this.getPageCount(), '</span></li>',
 			'<li><a name="', uuid, '-next" class="', btn, ' ', this.$s('next'),
-				'"><i class="z-icon-caret-right"></i></a></li>',
+				'"><i class="z-paging-icon z-icon-angle-right"></i></a></li>',
 			'<li><a name="', uuid, '-last" class="', btn, ' ', this.$s('last'),
-				'"><i class="z-icon-step-forward"></i></a></li></ul>');
+				'"><i class="z-paging-icon z-icon-double-angle-right"></i></a></li></ul>');
 	
 	if (this.isDetailed())
 		this._infoTags(out);

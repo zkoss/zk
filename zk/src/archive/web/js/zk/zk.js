@@ -1637,14 +1637,14 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 			click = zk.mobild ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
  			html = ['<div class="z-error" id="', id, '">',
- 			        '<div class="messagecontent"><div class="messages">',
- 			        zUtl.encodeXML(msg, {multiline : true}), '</div></div>',
- 			        '<div id="', id, '-p"><div class="errornumbers">',
- 					'<i class="z-icon-warning-sign"/>&nbsp;', ++_errcnt, ' Errors</div>',
+ 			        '<div id="', id, '-p">',
+ 			        '<div class="errornumbers">', ++_errcnt, ' Errors</div>',
  					'<div class="button"', click, '="zk._Erbx.remove()">',
  					'<i class="z-icon-remove"/></div>',
  					'<div class="button"', click, '="zk._Erbx.redraw()">',
- 					'<i class="z-icon-refresh"/></div></div></div>'];
+ 					'<i class="z-icon-refresh"/></div></div>',
+ 					'<div class="messagecontent"><div class="messages">',
+ 			        zUtl.encodeXML(msg, {multiline : true}), '</div></div></div>'];
 
 		jq(document.body).append(html.join(''));
 		_erbx = this;
@@ -1676,9 +1676,9 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 
 		var id = _erbx.id;
 		jq('#' + id + ' .errornumbers')
-			.html('<i class="z-icon-warning-sign"/>&nbsp;'+ ++_errcnt + ' Errors');
+			.html(++_errcnt + ' Errors');
 		jq('#' + id + ' .messages')
-			.prepend('<div class="newmessage">' + msg + '</hr></div>');
+			.append('<div class="newmessage">' + msg + '</hr></div>');
 		jq('#' + id + ' .newmessage')
 			.removeClass('newmessage').addClass('message').slideDown(600)
 	},

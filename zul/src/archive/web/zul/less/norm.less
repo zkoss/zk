@@ -38,14 +38,15 @@ textarea:focus {
 }
 
 fieldset { 
-	border: 1px solid #c0c0c0; 
-	margin: 0 2px; 
-	padding: 0px; 
-	border-radius: 0px; 
+	border: 1px solid #c0c0c0;
+	border-radius: 0;
+	margin: 0 2px;
+	padding: 0px;
 }
 
 legend {
-	border: 0; padding: 0; 
+	border: 0;
+	padding: 0;
 }
 
 <c:if test="${zk.gecko > 0}">
@@ -55,40 +56,41 @@ button::-moz-focus-inner {
 </c:if>
 <c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
-	margin: 0; padding: 0 5px;
+	margin: 0;
+	padding: 0 5px;
 }
 </c:if>
 
 //mobile
 .mobile * {
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 //ZK JavaScript debug box
 .z-error {
 	display: none;
-	z-index: 9999999;
+	width: 450px;
+	border: 1px solid @errorboxBorderColor;
+	padding: 3px 5px 3px 3px;
+	background: @errorboxBackgroundColor;
 	position: absolute;
 	top: 0;
 	left: 40%;
-	width: 450px;
-	padding: 3px 5px 3px 3px;
-	border: 1px solid @errorboxBorderColor;
 	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
-	background: @errorboxBackgroundColor;
+	z-index: 9999999;
 	
 	.messagecontent {
-		padding: 0;
 		border: 1px solid @errorboxBorderColor;
+		padding: 0;
 		background: @baseBackgroundColor;
 	}
 	.messages {
 		padding: 2px 3px 15px;
 		word-wrap: break-word;
 		overflow: auto;
+		
 		.message {
 			padding: 3px 0 2px;
-			border-bottom: 1px solid @errorboxBorderColor;
 		}
 	}
 	.newmessage {
@@ -96,32 +98,37 @@ body {
 		display: none;
 	}
 	.button {
-		cursor: pointer;	
 		color: @errorboxColor;
-		width: @baseIconWidth;
-		height: @baseIconHeight;
+		.size(@baseIconWidth, @baseIconHeight);
 		margin-left: 4px;
+		cursor: pointer;	
 		float: right;
+		
 		> .z-icon-remove {
 			font-size: @fontSizeXLarge;
 		}
 	}
 	#zk_err-p {
-		cursor: move;
+		height: 24px;
 		padding-top: 6px;
+		cursor: move;
 	}
 	.errornumbers {
-		padding-left: 4px;
-		color: @errorboxColor;
 		font-weight: bold;
+		color: @errorboxColor;
+		padding-left: 4px;
 		float: left;
 	}
 }
 
 //zk.log box
 div.z-log {
-	text-align:right; width:50%; right:10px; bottom:5px;
-	position:absolute; z-index: 99000;
+	width: 50%;
+	text-align: right;  
+	position: absolute;
+	right: 10px;
+	bottom: 5px;
+	z-index: 99000;
 	
 	textarea {
 		width: 100%;
@@ -136,24 +143,23 @@ div.z-log {
 
 //General
 .noscript { //the content of noscript
-	width: 100%;
-	height: 100%;
+	.size(100%, 100%);
+	background: #E0E1E3;
+	.opacity(0.6);
+	text-align: center;
 	position: absolute;
-	z-index: 32000;
 	top: 0;
 	left: 0;
-	.opacity(0.6);
 	zoom: 1;
-	text-align: center;
-	background: #E0E1E3;
+	z-index: 32000;
 
 	p {
-		background: white;
 		font-weight: bold;
 		color: black;
+		border: 1px solid black;
 		margin: 10% 15%;
 		padding: 10px 0;
-		border: 1px solid black;
+		background: white;
 		.opacity(1.0);
 	}
 }
@@ -187,24 +193,22 @@ input[type="checkbox"] {
 
 .z-temp,
 .z-modal-mask {
-	width: 100%;
-	height: 100%;
+	.size(100%, 100%);
+	background: @maskBackgroundColor;
+	.opacity(0.6);
 	position: absolute;
 	top: 0;
 	left: 0;
-	.opacity(0.6);
-	background: @maskBackgroundColor;
 }
 
 .z-initing {
-	width: 60px;
-	height: 60px;
+	.size(60px, 60px);
+	background: transparent no-repeat center;
+	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkpowered.png")}');
 	position: absolute;
 	right: 10px;
 	bottom: 10px;
 	z-index: 32000;
-	background: transparent no-repeat center;
-	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkpowered.png")}');
 }
 .z-uptime {
 	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkuptime.png")}');
@@ -212,62 +216,60 @@ input[type="checkbox"] {
 
 .z-loading,
 .z-apply-loading {
+	border: 1px solid @baseBorderColor;
+	padding: 3px;
+	background: @loadingBackgroundColor;
 	position: absolute;
 	cursor: wait;
-	background: @loadingBackgroundColor;
-	border: 1px solid @baseBorderColor;
 	white-space: nowrap;
-	padding: 3px;
 }
 .z-loading {
-	z-index: 31000;
-	left: 0;
 	top: 0;
+	left: 0;
+	z-index: 31000;
 }
 .z-apply-loading {
-	z-index: 89500;
 	overflow: hidden;
+	z-index: 89500;
 }
 .z-loading-indicator,
 .z-apply-loading-indicator {
+	color: @textColorGrayDark;
 	border: 1px solid @baseBorderColor;
 	background: @baseBackgroundColor;
-	color: @textColorGrayDark;
 	white-space: nowrap;
 }
 .z-loading-indicator {
 	padding: 6px;
 }
 .z-apply-loading-indicator {
-	padding: 2px;
 	font: normal @fontSizeMedium @baseTitleFontFamily;
+	padding: 2px;
 }
 .z-apply-loading-icon,
 .z-loading-icon,
 .z-renderdefer {
-	height: 16px;
-	width: 16px;
+	.size(16px, 16px);
 	background: transparent no-repeat center;
 	.encodeThemeURL(background-image, '~./zul/img/misc/progress.gif');
 }
 .z-apply-loading-icon,
 .z-loading-icon {
-	vertical-align:top;
-	display:inline-block;
+	display: inline-block;
+	vertical-align: top;
 }
 .z-apply-mask {
-	width: 100%;
-	height: 100%;
+	.size(100%, 100%);
 	background: @maskBackgroundColor;
+	.opacity(0.6);
 	position: absolute;
-	z-index: 89000;
 	top: 0;
 	left: 0;
-	.opacity(0.6);
+	z-index: 89000;
 }
 .z-inline-block { //used with label/checkbox and others to ensure the dimension
-	vertical-align:top; //vertical-align: make it looks same in diff browsers
-	display:inline-block;
+	display: inline-block;
+	vertical-align: top; //vertical-align: make it looks same in diff browsers
 }
 .z-word-wrap {
 	word-wrap: break-word;
@@ -279,19 +281,18 @@ input[type="checkbox"] {
 	overflow: hidden;
 }
 .z-dd-stackup {
-	height: 100%;
-	width: 100%;
+	.size(100%, 100%);
+	.encodeURL(background-image, '~./img/spacer.gif');
 	position: absolute;
 	left: 0;
 	top: 0;
 	z-index: 16800;
-	.encodeURL(background-image, '~./img/spacer.gif');
 }
 
 .z-temp * { //temporary
+	font-size: 5px;
 	color: #FFFFFF;
 	background: #FFFFFF;
-	font-size: 5px;
 	text-decoration: none;
 }
 .z-temp {
@@ -308,48 +309,47 @@ input[type="checkbox"] {
 
 //Fix float issue for CSS
 .z-clear {
-	clear: both;
-	height: 0;
-	width: 0;
-	line-height: 0;
 	font-size: 0;
+	.size(0, 0);
+	line-height: 0;
 	overflow: hidden;
+	clear: both;
 }
 
 //Shadow for not CSS3
 <c:if test="${zk.ie < 9}">
 .z-shadow {
-	position: absolute;
 	display: none;
+	position: absolute;
 	left: 0;
 	top: 0;
 	overflow: hidden;
 }
 .z-shadow-wrapper {
-	padding-bottom: 6px;
 	height: 100%;
+	padding-bottom: 6px;
 }
 .z-shadow .z-shadow-cl {
+	height: 100%;
+	padding-left: 6px;
 	background: transparent repeat-y 0 0;
 	.encodeThemeURL(background-image, '~./zul/img/shadow-cl.png');
-	padding-left: 6px;
 	overflow: hidden;
-	height: 100%;
 	zoom: 1;
 }
 .z-shadow .z-shadow-cr {
+	height: 100%;
+	padding-right: 6px;
 	background: transparent repeat-y right;
 	.encodeThemeURL(background-image, '~./zul/img/shadow-cr.png');
-	padding-right: 6px;
 	overflow: hidden;
-	height: 100%;
 	zoom: 1;
 }
 .z-shadow .z-shadow-cm {
+	height: 100%;
 	background: transparent repeat 0 0;
 	.encodeThemeURL(background-image, '~./zul/img/shadow-m.png');
 	overflow: hidden;
-	height: 100%;
 	zoom: 1;
 }
 
@@ -357,11 +357,11 @@ input[type="checkbox"] {
 .z-shadow .z-shadow-tr,
 .z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br {
-	background: transparent no-repeat 0 top;
 	font-size: 0;
 	height: 6px;
-	line-height: 0;
 	margin-right: 6px;
+	line-height: 0;
+	background: transparent no-repeat 0 top;
 	zoom: 1;
 }
 .z-shadow .z-shadow-tr,
@@ -382,75 +382,71 @@ input[type="checkbox"] {
 
 //Drag-Drop
 .z-dragged {
-	background: none no-repeat scroll 0 0 @dragBackgroundColor;
 	color: @dragColor;
+	background: none no-repeat scroll 0 0 @dragBackgroundColor;
 }
-.z-drag-over {
-	background: none no-repeat scroll 0 0 @dragHoverBackgroundColor;
+.z-drag {
+	&-over {
+		background: @dragHoverBackgroundColor;
+	}
+	&-ghost {
+		list-style: none;
+	}
 }
-span.z-drop-allow, span.z-drop-disallow {
-	background: none no-repeat scroll 0 0 @baseBackgroundColor;
-	vertical-align: top;
-	display: inline-block;
-	width: @baseIconWidth;
-	min-height: @baseIconHeight;
-	height: @baseIconHeight;
-}
-div.z-drop-ghost {
-	border: 1px solid @baseBorderColor;
-}
-div.z-drop-content {
-	background: none no-repeat scroll 0 0 @baseBackgroundColor;
-	width: 120px;
-	height: @baseButtonHeight - 2; // minus border height
-	padding: 3px;
-	font-size: @fontSizeMedium;
-	font-weight: normal;
-	font-family: @baseContentFontFamily;
-}
-//5.0.4
-div.z-drop-allow {
-	border: 1px solid @dragAllowBorderColor;
-}
-div.z-drop-disallow {
-	border: 1px solid @dragAllowBackgroundColor;
-}
-div.z-drop-allow div.z-drop-content,
-span.z-drop-allow {
-	background: none no-repeat scroll 0 0 @dragAllowBackgroundColor;
-}
-span.z-drop-allow {
-	.encodeThemeURL(background-image, '~./zul/img/misc/drag-allow.png');
-}
-div.z-drop-disallow div.z-drop-content,
-span.z-drop-disallow {
-	background: none no-repeat scroll 0 0 @dragDisAllowBackgroundColor;
-}
-span.z-drop-disallow {
-	.encodeThemeURL(background-image, '~./zul/img/misc/drag-disallow.png');
-}
-.z-drag-ghost {
-	list-style: none;
+.z-drop {
+	&-allow {
+		background: @dragAllowBackgroundColor;
+
+		.z-drop-icon {
+			color: @dragAllowBackgroundColor;
+		}
+	}
+	&-disallow {
+		background: @dragDisAllowBackgroundColor;
+
+		.z-drop-icon {
+			color: @dragDisAllowBackgroundColor;
+		}
+	}
+	&-content {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @dragColor);
+		.size(120px, @baseButtonHeight);
+		padding: 4px;
+		padding-left: @baseIconWidth + 8; // for icon
+		line-height: @baseButtonHeight - 8;
+		position: relative;
+	}
+	&-icon {
+		font-size: @fontSizeMedium;
+		.size(@baseIconWidth, @baseIconHeight);
+		.borderRadius(@baseIconWidth / 2);
+		line-height: @baseIconHeight;
+		background: @baseBackgroundColor;
+		text-align: center;
+		position: absolute;
+		top: 4px;
+		left: 6px;
+	}
 }
 
 // Focus Anchor
 .z-focus-a {
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding: 0 !important;
-	margin: 0 !important;
-	border: 0 !important;
-	background: transparent !important;
 	font-size: 0 !important;
+	.size(1px, 1px) !important;
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 	line-height: 0 !important;
-	width: 1px !important;
-	height: 1px !important;
+	background: transparent !important;
+	position: absolute;
+	top: 0;
+	left: 0;
 	-moz-outline: 0 none;
 	outline: 0 none;
 	-moz-user-select: text;
 	-khtml-user-select: text;
 	overflow: hidden;
+	
 	&:focus {
 		-moz-outline: 0 none;
 		outline: 0 none;
@@ -459,35 +455,32 @@ span.z-drop-disallow {
 
 //upload button
 span.z-upload {
-	position: relative;
-	padding: 0;
-	margin: 0;
 	font-size: 0;
-	width: 0;
-	height: 0;
-	display: inline-block;
+	.displaySize(inline-block, 0, 0);
+	margin: 0;
+	padding: 0;
+	position: relative;
 }
 span.z-upload input {
-	position: absolute;
-	cursor: pointer;
 	font-size: 45pt;
-	z-index: 1;
 	margin: 0;
 	padding: 0;
 	.opacity(0);
+	position: absolute;
+	cursor: pointer;
+	z-index: 1;
 }
 .z-upload-icon {
-	overflow: hidden;
 	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter.png');
+	overflow: hidden;
 }
 
 //fileupload dialog
 .z-fileupload-add,
 .z-fileupload-remove {
-	cursor: pointer;
-	width: 16px;
-	height: 17px;
 	color: #1096BC;
+	.size(16px, 17px);
+	cursor: pointer;
 }
 .z-fileupload-progress {
 	width: 300px;
@@ -504,76 +497,69 @@ span.z-upload input {
 
 //scrollbar
 .z-scrollbar {
-	position: absolute;
 	display: none;
 	.opacity(0);
+	position: absolute;
 
 	//vertical
 	&-vertical {
+		.size(@scrollbarWidth, 100%);
 		top: 0;
 		right: 0;
-		width: @scrollbarWidth;
-		height: 100%;
 
 		.z-scrollbar {
 			&-wrapper {
+				width: 100%;
 				position: absolute;
 				top: @baseIconHeight;
 				left: 0;
-				width: 100%;
 			}
 			&-indicator {
-				position: absolute;
 				width: @scrollbarWidth - 2;
+				border: 1px solid @scrollbarBorderColor;
+				.borderRadius(2px);
+				.horGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
+				position: absolute;
 				left: 1px;
 				cursor: pointer;
-				border: 1px solid @scrollbarBorderColor;
-				.borderRadius(@borderRadiusSmall - 1);
-				.horGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
 				z-index: 100;
 			}
 			&-rail {
-				height: 100%;
-			    width: 100%;
+				.size(100%, 100%);
 			    background: @scrollbarBackgroundColor;
 			}
 			&-icon {
-				width: @baseIconWidth;
-				height: @baseIconHeight;
+				color: @iconColor;
+				.size(@baseIconWidth, @baseIconHeight);
+				margin-top: -8px;
 				position: absolute;
 				left: -1px;
 				top: 50%;
-				margin-top: -8px;
-				color: @iconColor;
 				.transform('scale(0.5, 0.7)');
 			}
 		}
 		&-embed {
-			width: @scrollbarWidth / 2;
-			height: 100%;
+			.size(@scrollbarWidth / 2, 100%);
+			.borderRadius(@baseBorderRadius);
 			background: #000000;
+			.opacity(0.2);
 			position: absolute;
 			top: 0;
 			right: 0;
-			.borderRadius();
-			.opacity(0.2);
 			.boxShadow('inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07)');
 		}
 	}
 	&-up,
 	&-down {
-		position: absolute;
-		width: @baseIconWidth;
-		height: @baseIconHeight;
-		cursor: pointer;
-		font-size: @baseFontSize;
-		color: @iconColor;
+		.iconFontStyle(@baseFontSize, @iconColor);
+		.size(@baseIconWidth, @baseIconHeight);
 		background: @scrollbarBackgroundColor;
+		position: absolute;
+		cursor: pointer;
 	}
 	&-up {
 		> .z-icon-caret-up:before {
-			width: @baseIconWidth;
-			height: @baseIconHeight;
+			.size(@baseIconWidth, @baseIconHeight);
 			position: absolute;
 			left: 4px;
 			top: -1px;
@@ -582,8 +568,7 @@ span.z-upload input {
 	&-down {
 		bottom: 0;
 		> .z-icon-caret-down:before {
-			width: @baseIconWidth;
-			height: @baseIconHeight;
+			.size(@baseIconWidth, @baseIconHeight);
 			position: absolute;
 			left: 4px;
 			top: 1px;
@@ -592,64 +577,59 @@ span.z-upload input {
 
 	//horizontal
 	&-horizontal {
+		.size(100%, @scrollbarHeight);
 		left: 0;
 		bottom: 0;
-		width: 100%;
-		height: @scrollbarHeight;
 
 		.z-scrollbar {
 			&-wrapper {
+				height: 100%;
 				position: absolute;
 				bottom: 0;
 				left: @baseIconWidth;
-				height: 100%;
 			}
 			&-indicator {
-				position: absolute;
 				height: @scrollbarHeight - 2;
-				top: 1px;
-				cursor: pointer;
 				border: 1px solid @scrollbarBorderColor;
 				.borderRadius(2px);
 				.verGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
+				position: absolute;
+				top: 1px;
+				cursor: pointer;
 				z-index: 100;
 			}
 			&-rail {
-				width: 100%;
-				height: 100%;
+				.size(100%, 100%);
 				background: @scrollbarBackgroundColor;
 			}
 			&-icon {
+				color: @iconColor;
+				margin-left: -8px;
 				position: absolute;
 				left: 50%;
 				top: -2px;
-				margin-left: -8px;
-				color: @iconColor;
 				.transform('rotate(90deg) scale(0.5, 0.7)');
 			}
 		}
 		&-embed {
-			width: 100%;
-			height: @scrollbarHeight / 2;
+			.size(100%, @scrollbarHeight / 2);
+			.borderRadius(@baseBorderRadius);
 			background: #000000;
+			.opacity(0.2);
 			position: absolute;
 			bottom: 0;
 			left: 0;
-			.borderRadius();
-			.opacity(0.2);
 			.boxShadow('inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07)');
 		}
 	}
 	&-left,
 	&-right {
-		position: absolute;
-		width: @baseIconWidth;
-		height: @baseIconHeight;
+		.iconFontStyle(@baseFontSize, @iconColor);
+		.size(@baseIconWidth, @baseIconHeight);
 		padding: 1px 6px 0 5px;
-		cursor: pointer;
-		font-size: @baseFontSize;
-		color: @iconColor;
 		background: @scrollbarBackgroundColor;
+		position: absolute;
+		cursor: pointer;
 	}
 	&-right {
 		right: 0;

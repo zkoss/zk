@@ -338,7 +338,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (msg != null)  {
 				jq(document.body).append(
 					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
-					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>&nbsp;'+msg+'</div></div>');
 				drag._dragImg = jq('#zk_ddghost-img')[0];
 				return jq('#zk_ddghost')[0];
 			}
@@ -392,12 +392,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var dragImg = drag._dragImg;
 		if (dragImg) {
-			if (found)
+			if (found) {
 				jq(drag.node).removeClass('z-drop-disallow').addClass('z-drop-allow');
-			else
+				dragImg.removeClass('z-icon-remove').addClass('z-icon-ok');
+			} else {
 				jq(drag.node).removeClass('z-drop-allow').addClass('z-drop-disallow');
-			
-			dragImg.className = found ? 'z-drop-allow': 'z-drop-disallow';
+				dragImg.removeClass('z-icon-ok').addClass('z-icon-remove');
+			}
 		}
 
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop

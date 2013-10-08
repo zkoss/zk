@@ -12,43 +12,45 @@
 .verticalStyle() {
 	.z-tabs {
 		float: left;
+		
 		&-content {
+			display: block;
 			height: 4096px;
 			border-right: 1px solid @contentBorderColor;
-			display: block;
 		}
 		&-space {
-			float: left;
-			position: relative;
 			width: 0;
+			position: relative;
+			float: left;
 		}
 	}
 	.z-tab {
-		float: none;
 		border-width: 1px 0px 1px 1px;
-		.leftBorderRadius();
 		border-top: 1px solid @baseBorderColor;
+		.leftBorderRadius(@baseBorderRadius);
 		padding-top: 0px;
+		float: none;
+		
 		&-selected {
 			border-bottom: 1px solid @baseBorderColor;
-			.boxShadow('1px 0px 0 #FFFFFF');
 			background: none;
+			.boxShadow('1px 0px 0 #FFFFFF');
 
 			.z-tab-button {
 				.opacity(1.0);
 			}
 
 			.z-tab-text {
-				cursor: default;
 				font-weight: bold;
+				cursor: default;
 				white-space: nowrap;
 			}
 		}
 
 		&.z-tab-disabled .z-tab-text {
-			cursor: default;
 			color: gray;
-			.disabledOpacity();
+			.opacity(@disabledOpacity);
+			cursor: default;
 		}
 	}
 
@@ -64,20 +66,20 @@
 	}
 
 	.z-tabpanel {
-		padding: 5px;
 		border: 0;
+		padding: 5px;
 	}
 }
 
 .z-toolbar.z-toolbar-tabs {
-	overflow: hidden;
+	border-bottom: 1px solid @baseBorderColor;
+	padding: 4px 4px;
+	.resetGradient();
 	position: absolute;
 	right: 0;
 	top: 0;
+	overflow: hidden;
 	z-index: 1;
-	padding: 4px 4px;
-	border-bottom: 1px solid @baseBorderColor;
-	.resetGradient();
 }
 // remove selected tab bottom border
 .z-tabbox-horizontal .z-tab:first-child {
@@ -118,25 +120,26 @@
 	}
 }
 
-.z-tabbox { 
-	overflow: hidden;
+.z-tabbox {
 	position: relative;
+	overflow: hidden;
 	// horizontal (default)
 	&-icon {
-		.verGradient();
-		text-align: center;
+		color: @iconColor;
+		display: none;
 		border: 1px solid @baseBorderColor;
-		.topBorderRadius();
+		.topBorderRadius(@baseBorderRadius);
 		padding-top: 5px;
 		padding-bottom: 2px;
 		line-height: @baseButtonHeight;
-		color: @iconColor;
-		cursor: pointer;
+		.verGradient(@baseGradientStart, @baseGradientEnd);
+		text-align: center;
 		position: absolute;
 		top: 0;
+		cursor: pointer;
 		z-index: 25;
-		display: none;
 		.userSelect();
+		
 		> i {
 			.opacity(0.7);
 		}
@@ -152,8 +155,8 @@
 		width: @baseButtonWidth;
 	}
 	&-right {
-		right: 0;
 		padding-left: 1px;
+		right: 0;
 	}
 	&-up,
 	&-down {
@@ -166,17 +169,18 @@
 	// horizontal-bottom
 	&-horizontal-bottom {
 		.z-tabbox-icon {
+			.bottomBorderRadius(@baseBorderRadius);
 			top: auto;
 			bottom: 0;
-			.bottomBorderRadius();
 		}
 		.z-tabs-content {
-			border-bottom: 0;
 			border-top: 1px solid @contentBorderColor;
+			border-bottom: 0;
 		}
 		.z-tab {
 			border-width: 0px 1px 1px 1px;
-			.bottomBorderRadius();
+			.bottomBorderRadius(@baseBorderRadius);
+			
 			&.z-tab-selected {
 				.boxShadow('0px -1px 0 #FFFFFF');
 				background: none;
@@ -187,16 +191,16 @@
 			border-bottom: 0;
 		}
 		.z-toolbar-tabs {
-			border-bottom: 0;
 			border-top: 1px solid @baseBorderColor;
-			bottom: 0;
+			border-bottom: 0;
 			top: auto;
+			bottom: 0;
 		}
 	}
 	// vertical
 	&-vertical {
 		.z-tabbox-icon {
-			.leftBorderRadius();
+			.leftBorderRadius(@baseBorderRadius);
 			padding-top: 0;
 		}
 		.verticalStyle();
@@ -211,8 +215,8 @@
 				}
 			}
 			&-icon {
-				right: auto;
 				left: 10px;
+				right: auto;
 			}
 		}
 	}
@@ -220,7 +224,7 @@
 	// vertical-right
 	&-vertical-right {
 		.z-tabbox-icon {
-			.rightBorderRadius();
+			.rightBorderRadius(@baseBorderRadius);
 			padding-top: 0;
 			right: 0;
 		}
@@ -228,9 +232,10 @@
 
 		.z-tabs {
 			float: right;
+			
 			&-content {
-				border-right: 0;
 				border-left: 1px solid @contentBorderColor;
+				border-right: 0;
 			}
 			&-space {
 				float: right;
@@ -238,7 +243,8 @@
 		}
 		.z-tab {
 			border-width: 1px 1px 1px 0px;
-			.rightBorderRadius();
+			.rightBorderRadius(@baseBorderRadius);
+			
 			&.z-tab-selected {
 				.boxShadow('-1px 0px 0 #FFFFFF');
 				border-left: 0px;
@@ -254,45 +260,46 @@
 	&-accordion {
 		> .z-tabpanels {
 			border-top: 1px solid @baseBorderColor;
+			
 			> .z-tabpanel {
-				padding: 0;
 				border: 0;
+				padding: 0;
 			}
 		}
 		.z-tabpanel > .z-tabpanel-content {
-			padding: 5px;
-			zoom: 1;
 			border: 1px solid @contentBorderColor;
 			border-top: 0;
+			padding: 5px;
+			zoom: 1;
 		}
 		.z-tabpanel > .z-tab {
-			.borderRadius('0');
-			float: none;
-			zoom: 1;
 			border-width: 0 1px 1px 1px;
+			.borderRadius(0);
 			padding-top: 1px;
 			text-align: left;
+			float: none;
+			zoom: 1;
 
 			&-selected {
-				.verGradient();
+				.verGradient(@baseGradientStart, @baseGradientEnd);
 				.boxShadow('none');
 				cursor: default;
 			}
 			&-disabled {
 				color: @disabledColor;
 				cursor: default;
-				.disabledOpacity();
+				.opacity(@disabledOpacity);
 
 				.z-tab-button:hover {
-					.disabledOpacity();
+					.opacity(@disabledOpacity);
 				}
 
 				.z-tab-text {
 					font-style: normal;
-					white-space: nowrap;
-					cursor: default;
 					color: @disabledColor;
-					.disabledOpacity();
+					.opacity(@disabledOpacity);
+					cursor: default;
+					white-space: nowrap;
 				}
 			}
 		}
@@ -315,9 +322,9 @@
 	&-scroll {
 		> .z-tabs {
 			border: 0;
+			margin: 0px 24px 0px 24px;
 			padding-bottom: 0;
 			zoom: 1;
-			margin: 0px 24px 0px 24px;
 		}
 		.z-tabbox-icon {
 			display: block;
@@ -326,45 +333,46 @@
 }
 
 .z-tabs {
-	overflow: hidden;
 	border: 0;
-	padding: 0;
 	margin: 0;
-	position: relative;
+	padding: 0;
 	line-height: @baseButtonHeight;
+	overflow: hidden;
+	position: relative;
 
 	&-content {
+		display: table;
+		width: 100%;
+		border-collapse: separate;
+		border-spacing: 0;
+		border-bottom: 1px solid @contentBorderColor;
+		margin: 0;
 		padding-left: 0;
 		padding-top: 0;
-		border-bottom: 1px solid @contentBorderColor;
 		list-style-image: none;
 		list-style-position: outside;
 		list-style-type: none;
-		display: table;
-		border-collapse: separate;
-		border-spacing: 0;
-		margin: 0;
-		width: 100%;
 		zoom: 1;
 		clear: both;
 	}
 }
 
 .z-tab {
-	.verGradient();
-	position: relative;	
-	display: block;
-	float: left;
-	padding-top: 1px;
-	margin: 0;
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeMedium;
+	display: block;
 	border: 1px solid @baseBorderColor;
 	border-width: 1px 1px 0px 1px;
-	.topBorderRadius();
-	text-align: center;
+	.topBorderRadius(@baseBorderRadius);
+	margin: 0;
+	padding-top: 1px;
 	line-height: @baseButtonHeight + 6;
+	.verGradient(@baseGradientStart, @baseGradientEnd);
+	text-align: center;
+	position: relative;
 	cursor: pointer;
+	float: left;
+	
 
 	&-content {
 		display: block;
@@ -375,12 +383,12 @@
 	}
 
 	&-icon {
-		position: absolute;
-		line-height: normal;
+		display: block;
 		margin-top: -6px;
+		line-height: normal;
+		position: absolute;
 		top: 50%;
 		left: 5px;
-		display: block;
 		cursor: pointer;
 		<c:if test="${zk.ie == 8}">
 			margin-top: -7px;
@@ -389,14 +397,14 @@
 	}
 
 	&-text {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		color: @textColorGray;
 		font-style: normal;
-		white-space: nowrap;
+		color: @textColorGray;
 		display: block;
 		padding: 4px 12px 2px;
 		line-height: @baseButtonHeight;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	&-image {
@@ -404,20 +412,18 @@
 	}
 
 	&-button {
-		.userSelect();
-		display: block;
-		width: @baseButtonHeight;
-		height: 100%;
+		.iconFontStyle(@fontSizeMedium, @iconColor);
+		.displaySize(block, @baseButtonHeight, 100%);
+		line-height: normal;
+		.opacity(0.7);
+		text-align: center;
 		position: absolute;
-		font-size: @fontSizeMedium;
 		right: 0;
 		top: 0;
 		z-index: 15;
-		.opacity(0.7);
 		zoom: 1;
-		color: @iconColor;
-		text-align: center;
-		line-height: normal;
+		.userSelect();
+		
 		&:hover {
 			color: @iconHoverColor;
 		}
@@ -436,7 +442,7 @@
 			.resetGradient();
 		}
 		.z-tab-button {
-			.opacity(1.0);
+			.opacity(1);
 		}
 		.z-tab-text {
 			cursor: default;
@@ -445,33 +451,34 @@
 	}
 	&-disabled {
 		color: @disabledColor;
+		.opacity(@disabledOpacity);
 		cursor: default;
-		.disabledOpacity();
+		
 		&:hover {
 			.resetGradient();
 		}
 		.z-tab-button:hover {
-			.disabledOpacity();
+			.opacity(@disabledOpacity);
 		}
 		.z-tab-text {
 			font-style: normal;
-			white-space: nowrap;
-			cursor: default;
 			color: @disabledColor;
-			.disabledOpacity();
+			.opacity(@disabledOpacity);
+			cursor: default;
+			white-space: nowrap;
 		}
 	}
 }
 
-.z-tabpanels {	
-	zoom: 1; 
-	overflow: hidden; 
+.z-tabpanels {
+	zoom: 1;
+	overflow: hidden;
 	position: relative;
 }
 
-.z-tabpanel {	
+.z-tabpanel {
+	border: 1px solid @baseBorderColor;
+	border-top: 0px;
 	padding: 5px;
 	zoom: 1;
-	border: 1px solid @baseBorderColor;
-	border-top: 0px;	
 }
