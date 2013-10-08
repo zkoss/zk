@@ -11,6 +11,7 @@ ZK 6.5.5
   ZK-1948: IE8 Menupopup Shadow causes horizontal scrollbar
   ZK-1951: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 10
   ZK-1964: Datebox with time cannot be selected when use tablet's device
+  ZK-1960: save binding to an array throws ClassCastException
 
   --------
 ZK 6.5.4
