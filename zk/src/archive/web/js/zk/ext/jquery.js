@@ -2622,7 +2622,14 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 		function( elem, context, xml ) {
 			var data, cache, outerCache,
 				dirkey = dirruns + " " + doneName;
-
+			
+			if (hasZTag || hasZID) {
+				var wgt = zk.Widget.$(elem);
+				if (dir === "parentNode")
+					return wgt.parent;
+				else
+					return wgt[ dir ];
+			}
 			// We can't set arbitrary data on XML nodes, so they don't benefit from dir caching
 			if ( xml ) {
 				while ( (elem = elem[ dir ]) ) {
