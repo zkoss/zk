@@ -132,7 +132,7 @@ public class BindELResolver extends XelELResolver {
 	}
 
 	//update dependency and notify changed
-	private void tieValue(ELContext elCtx, Object base, Object propName, Object value, boolean allownotify) {
+	private void tieValue(ELContext elCtx, Object base, Object property, Object value, boolean allownotify) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
@@ -142,7 +142,8 @@ public class BindELResolver extends XelELResolver {
         	final Path path = getPathList(ctx);
         	
         	String script = null;
-        	
+        	//ZK-1960 save binding to an array throws ClassCastException
+        	String propName = property==null?null:property.toString();
         	boolean isForm = base instanceof Form;
         	//ZK-1189, form shouldn't count on property directly
         	String formFieldName = null;
@@ -177,7 +178,7 @@ public class BindELResolver extends XelELResolver {
 								
 								//notify indirect form properties that have same expression, 
 								//ex: bean[a.b.c] of fx, whose expression is 'bean[a.b.c]'
-								BindELContext.addNotifys(base, (String) script, value, bctx); 
+								BindELContext.addNotifys(base, script, value, bctx); 
 								//notify form property whose value equals expression result, 
 								//ex, bean[a.b.c] of fx, if a.b.c is 'prop', them it notify bean.prop of fx 
 								if(!script.equals(formFieldName)){
