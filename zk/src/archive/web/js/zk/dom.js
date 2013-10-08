@@ -1436,24 +1436,28 @@ jq(el).zk.center(); //same as 'center'
 	 * @return jqzk this object
 	 */
 	redoCSS: function (timeout, opts) {
-		if ((zk.ie == 8) && opts && opts['fixFontIcon']) {
-			var head = document.getElementsByTagName('head')[0],
-    			style = document.createElement('style'),
-    			n = this.jq[0],
-    			s = opts['selector'],
-    			cls = n ? n.className : '',
-    			idOrCls = n ? (n.id ? '#' + n.id : '.' + cls) : '', 
-    			selector = s ? s : '*';
-    		if(idOrCls == '' && selector == '*')
-    			return this;
-			style.type = 'text/css';
-			
-			style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:"" !important';
-			head.appendChild(style);
-			setTimeout(function(){
-			    head.removeChild(style);
-			}, 0);
-			return this;
+		if (opts && opts['fixFontIcon']) {
+			if (zk.ie8_) {
+				var head = document.getElementsByTagName('head')[0],
+	    			style = document.createElement('style'),
+	    			n = this.jq[0],
+	    			s = opts['selector'],
+	    			cls = n ? n.className : '',
+	    			idOrCls = n ? (n.id ? '#' + n.id : '.' + cls) : '', 
+	    			selector = s ? s : '*';
+	    		if(idOrCls == '' && selector == '*')
+	    			return this;
+				style.type = 'text/css';
+				
+				style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:"" !important';
+				head.appendChild(style);
+				setTimeout(function(){
+				    head.removeChild(style);
+				}, 0);
+				return this;
+			} else {
+				return this;
+			}
 		} 
 		if (timeout == -1){ //timeout -1 means immediately
 			for (var j = this.jq.length; j--;)
