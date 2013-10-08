@@ -155,11 +155,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	// bug ZK-56 for non-ROD to scroll after onSize ready
 	onSize: function () {
 		this.$supers(Listbox, 'onSize', arguments);
-		var self = this;
+		var self = this,
+			canInitScrollbar =  this.desktop && !this.inSelectMold() && !this._nativebar;
+		if (!this._scrollbar & canInitScrollbar)
+			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scrollbar here
 		setTimeout(function () {
-			if (self.desktop && !self.inSelectMold() && !self._nativebar) {
-				if (!self._scrollbar)
-					self._scrollbar = zul.mesh.Scrollbar.init(self);
+			if (canInitScrollbar) {
 				if (!self._listbox$rod || self.inPagingMold()) {
 					self.refreshBar_();
 					self._syncSelInView();

@@ -881,6 +881,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			var bar = this._scrollbar;
 			if (bar)
 				bar.scrollToElement(lastrow.$n());
+			else {
+				// 1823278: key up until selection is out of view port, then it should scroll.
+				zk(lastrow.$n()).scrollIntoView(this.ebody);
+			} 
+				
 		}
 
 		return _afterChildKey(evt);
