@@ -2132,7 +2132,7 @@ Expr = Sizzle.selectors = {
 
 		/* Jumper Chen, Potix, 20100318*/
 		"ZID": function(selector) {
-			var id = selector.substring(1);
+			var id = selector.startsWith('$') ? selector.substring(1) : selector;
 			return function ( elem ) {
 				var wgt = zk.Widget.$(elem);
 				return wgt ? wgt.id === id : false;
