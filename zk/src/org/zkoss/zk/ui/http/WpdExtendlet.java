@@ -88,10 +88,20 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	// Set this library property to true to disable tablet UI
 	private final static String TABLET_UI_DISABLED_KEY = "org.zkoss.zkmax.tablet.ui.disabled";
 	// The following javascript should be loaded when tablet UI is disabled.
-	private final static Set<String> IGNORE_TABLET_UI_DISABLED_JS = new HashSet<String>((Arrays.asList( new String [] {
-		"domtouch.js", "zswipe.js", "touch/domtouch.js", "touch/iscroll.js", "touch/grid-touch.js", "touch/layoutregion-touch.js",
-		"touch/listbox-touch.js", "touch/listcell-touch.js", "touch/listheader-touch.js", "touch/meshwidget-touch.js",
-		"touch/nav-touch.js", "touch/navitem-touch.js", "touch/tree-touch.js", "touch/treecol-touch.js"})));
+	private static Set<String> _ignoreTouchJS = new HashSet<String>();
+	static {
+		_ignoreTouchJS.add("domtouch.js");
+		_ignoreTouchJS.add("touch/domtouch.js");
+		_ignoreTouchJS.add("touch/iscroll.js"); // to make iScroll available
+		_ignoreTouchJS.add("touch/grid-touch.js"); // to make iScroll available
+		_ignoreTouchJS.add("touch/layoutregion-touch.js");
+		_ignoreTouchJS.add("touch/listbox-touch.js"); // to make iScroll available
+		_ignoreTouchJS.add("touch/meshwidget-touch.js"); // to make iScroll available
+		_ignoreTouchJS.add("touch/nav-touch.js");
+		_ignoreTouchJS.add("touch/navitem-touch.js");
+		_ignoreTouchJS.add("touch/tree-touch.js"); // to make iScroll available
+		_ignoreTouchJS.add("touch/treecol-touch.js"); // to make iScroll available
+	}
 	
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
@@ -376,7 +386,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	}
 	private boolean isTabletUiDisabled(ServletRequest request, String jspath) {
 		return "true".equals(Library.getProperty(TABLET_UI_DISABLED_KEY, "false")) && 
-				Servlets.isBrowser(request, "mobile") && !IGNORE_TABLET_UI_DISABLED_JS.contains(jspath);
+				Servlets.isBrowser(request, "mobile") && !_ignoreTouchJS.contains(jspath);
 	}
 	private boolean isWpdContentRequired(String pkg, Element root) {
 		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(getDeviceType()))
