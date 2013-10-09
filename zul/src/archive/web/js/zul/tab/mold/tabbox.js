@@ -22,7 +22,7 @@ function (out) {
 		tabpanels = this.tabpanels,
 		toolbar = this.toolbar,
 		getIcon = function(fontIconCls) {
-			return '<i class="z-icon-caret-' + fontIconCls + '"></i>';
+			return '<i class="z-icon-chevron-' + fontIconCls + '"></i>';
 		};
 	out.push('<div ', this.domAttrs_(), '>');
 	if (this.isHorizontal()) { // horizontal

@@ -531,7 +531,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 				var l, t, w, h, 
 				s = node.style, 
-				up = 'z-icon-fullscreen',
+				up = 'z-icon-resize-full',
 				down = 'z-icon-resize-small';				
 				if (maximized) {
 					jq(this.$n('max')).addClass(this.$s('maximized'))

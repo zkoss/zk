@@ -858,13 +858,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var BL = zul.layout.Borderlayout;
 		switch(this.getPosition()) {
 		case BL.NORTH:
-			return collapsed ? 'z-icon-chevron-sign-down' : 'z-icon-chevron-sign-up';
+			return collapsed ? 'z-icon-chevron-down' : 'z-icon-chevron-up';
 		case BL.SOUTH:
-			return collapsed ? 'z-icon-chevron-sign-up' : 'z-icon-chevron-sign-down';
+			return collapsed ? 'z-icon-chevron-up' : 'z-icon-chevron-down';
 		case BL.WEST:
-			return collapsed ? 'z-icon-chevron-sign-right' : 'z-icon-chevron-sign-left';
+			return collapsed ? 'z-icon-chevron-right' : 'z-icon-chevron-left';
 		case BL.EAST:
-			return collapsed ? 'z-icon-chevron-sign-left' : 'z-icon-chevron-sign-right';
+			return collapsed ? 'z-icon-chevron-left' : 'z-icon-chevron-right';
 		}
 		return ''; // no icon
 	},

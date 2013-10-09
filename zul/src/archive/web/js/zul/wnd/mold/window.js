@@ -43,7 +43,7 @@ function (out, skipper) {
 						this.$s('maximize'));
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
-				out.push('">', maxd ? getIcon('resize-small') : getIcon('fullscreen')
+				out.push('">', maxd ? getIcon('resize-small') : getIcon('resize-full')
 						, '</div>');
 			}
 			if (this._minimizable) {
