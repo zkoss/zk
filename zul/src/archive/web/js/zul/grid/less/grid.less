@@ -1,4 +1,5 @@
 @import "~./zul/less/_header.less";
+
 //reset table
 .resetTable() {
 	table {
@@ -20,39 +21,38 @@
 	zoom: 1;
 	//grid header
 	&-header {
-		.resetTable();
-		position: relative;
-		overflow: hidden;
 		width: 100%;
 		<c:if test="${zk.ie != 8}">
-			.verGradient();
+			.verGradient(@baseGradientStart, @baseGradientEnd);
 		</c:if>
+		position: relative;
+		overflow: hidden;
+		.resetTable();
 	}
 	&-header-border {
-		position: relative;
-		margin-top: -1px;
 		border-bottom: 1px solid @tableTitleBorderColor;
+		margin-top: -1px;
+		position: relative;
 	}
 	//grid body
 	&-body {
 		margin-top: auto;
-		overflow: hidden;
 		position: relative;
+		overflow: hidden;
 		.resetTable();
 	}
 	&-emptybody td {
-		font-family: @baseContentFontFamily;
-		font-size: @fontSizeMedium;
-		color: @disabledColor;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
 		font-style: italic;
 		text-align: center;
 	}
 	//grid footer
 	&-footer {
-		overflow: hidden;
-		background: @tableFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
+		background: @tableFootBackgroundColor;
+		overflow: hidden;
 		.resetTable();
+		
 		.z-footer {
 			overflow: hidden;
 		}
@@ -78,17 +78,16 @@
 	}
 }
 .z-column {
-	background-clip: padding-box;
-	overflow: hidden;
-	white-space: nowrap;
-	padding: 0;
 	border-left: 1px solid @tableTitleBorderColor;
 	border-bottom: 1px solid @tableTitleBorderColor;
+	padding: 0;
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@baseGradientStart, @baseGradientEnd);
+	</c:if>
+	background-clip: padding-box;
 	position: relative;
 	overflow: hidden;
-	<c:if test="${zk.ie != 8}">
-		.verGradient();
-	</c:if>
+	white-space: nowrap;
 
 	&-hover {
 		<c:if test="${zk.ie != 8}">
@@ -106,27 +105,27 @@
 			cursor: pointer;
 		}
 		.z-column-sorticon {
+			color: @iconColor;
 			position: absolute;
 			top: -3px;
 			left: 50%;
-			color: @iconColor;
 		}
 	}
 	&-button {
+		color: @iconColor;
 		display: none;
+		.size(@baseButtonWidth - 1, @baseBarHeight);
+		border-left: 1px solid darken(@tableTitleHoverStart, 15%);
+		line-height: @baseBarHeight;
+		text-align: center;
 		position: absolute;
-		z-index: 15;
-		cursor: pointer;
 		top: 0;
 		right: 0;
-		width: @baseButtonWidth - 1;
-		height: @baseBarHeight;
-		line-height: @baseBarHeight;
+		z-index: 15;
+		cursor: pointer;
 		text-decoration: none;
-		text-align: center;
-		border-left: 1px solid darken(@tableTitleHoverStart, 15%);
 		.boxShadow('inset 1px 0 #FFFFFF');
-		color: @iconColor;
+		
 		&:hover {
 			<c:if test="${zk.ie != 8}">
 				.verGradient(darken(@tableTitleHoverStart, 5%), darken(@tableTitleHoverEnd, 10%));
@@ -166,32 +165,33 @@
 //Group
 .z-group {
 	&-inner {
+		border-top: 1px solid @tableTitleBorderColor;
+		border-bottom: 1px solid @tableTitleBorderColor;
 		<c:if test="${zk.ie != 8}">
 			.verGradient(@groupGradientStart, @groupGradientEnd);
 		</c:if>
 		position: relative;
-		border-top: 1px solid @tableTitleBorderColor;
-		border-bottom: 1px solid @tableTitleBorderColor;
 		overflow: hidden;
+		
 		.z-group-content,
 		.z-cell {
 			padding: 3px 5px;
 		}
 	}
 	&-icon {
-		display: inline-block;
-		width: @baseIconWidth;
-		height: @baseIconHeight;
-		cursor: pointer;
 		font-size: @baseFontSize;
+		display: inline-block;
+		.size(@baseIconWidth, @baseIconHeight);
 		position: relative;
+		cursor: pointer;
 	}
 	&-icon-open,
 	&-icon-close {
+		color: @iconColor;
 		display: inline-block;
 		position: absolute;
 		left: 8px;
-		color: @iconColor;
+		
 		&:hover {
 			color: @iconHoverColor;
 		}
@@ -215,9 +215,9 @@
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	color: @textColorGrayLight;
-	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
+	overflow: hidden;
 }
 .z-column-content {
 	font-weight: bold;
@@ -233,21 +233,21 @@
 .z-grid-body .z-cell {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
-	overflow: hidden;
 	padding: 4px 5px;
 	line-height: @baseButtonHeight;
+	overflow: hidden;
 }
 //paging
 .z-grid-paging {
 	&-top {
+		width: 100%;
 		border-bottom: 1px solid @pagingBorderColor;
 		overflow: hidden;
-		width: 100%;
 	}
 	&-bottom {
+		width: 100%;
 		border-top: 1px solid @pagingBorderColor;
 		overflow: hidden;
-		width: 100%;
 	}
 }
 //column menu

@@ -10,13 +10,13 @@
 	background: url(${c:encodeURL('@{url}')}) @rest;
 }
 .encodeURL(@property, @url, @rest...) when (@property = background-image) {
-	background-image: url(${c:encodeURL('@{url}')}) @rest;
+	background-image: url(${c:encodeURL('@{url}')});
 }
 .encodeThemeURL(@property, @url, @rest...) when (@property = background) {
 	background: url(${c:encodeThemeURL('@{url}')}) @rest;
 }
 .encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
-	background-image: url(${c:encodeThemeURL('@{url}')}) @rest;
+	background-image: url(${c:encodeThemeURL('@{url}')});
 }
 
 //---------------------------------------------
@@ -47,7 +47,7 @@
 	${t:boxShadow('@{value}')};
 }
 // border-radius
-.borderRadius(@size: @baseBorderRadius) {
+.borderRadius(@size) {
 	${t:borderRadius('@{size}')};
 }
 // transform
@@ -63,60 +63,52 @@
 // Other helpful utilities
 //---------------------------------------------
 // gradient utility
-.horGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+.horGradient(@start, @end) when (@start = @end) {
+	background: @start;
+}
+.horGradient(@start, @end) when not (@start = @end) {
 	${t:gradient('hor', '@{start} 0%; @{end} 100%')};
 }
-.verGradient(@start: @baseGradientStart, @end: @baseGradientEnd) {
+.verGradient(@start, @end) when (@start = @end) {
+	background: @start;
+}
+.verGradient(@start, @end) when not (@start = @end) {
 	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
+}
+.gradientFallback(@start, @end) {
+	background: average(@start, @end);
 }
 .resetGradient() {
 	background: none;
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
-// IE 8
-.gradientFallback(@start: @baseGradientStart, @end: @baseGradientEnd) {
-	background: average(@start, @end);
-}
-.gradientHoverFallback(@start: @hoverGradientStart, @end: @hoverGradientEnd) {
-	background: average(@start, @end);
-}
-.gradientActiveFallback(@start: @activeGradientStart, @end: @activeGradientEnd) {
-	background: average(@start, @end);
-}
-.gradientSelectedFallback(@start: @selectedGradientStart, @end: @selectedGradientEnd) {
-	background: average(@start, @end);
-}
-.gradientSelectedHoverFallback(@start: @selectedHoverGradientStart, @end: @selectedHoverGradientEnd) {
-	background: average(@start, @end);
-}
-
 // border-radius utility
-.topBorderRadius(@size: @baseBorderRadius) {
+.topBorderRadius(@size) {
 	${t:borderRadius('@{size} @{size} 0 0')};
 }
-.rightBorderRadius(@size: @baseBorderRadius) {
+.rightBorderRadius(@size) {
 	${t:borderRadius('0 @{size} @{size} 0')};
 }
-.bottomBorderRadius(@size: @baseBorderRadius) {
+.bottomBorderRadius(@size) {
 	${t:borderRadius('0 0 @{size} @{size}')};
 }
-.leftBorderRadius(@size: @baseBorderRadius) {
+.leftBorderRadius(@size) {
 	${t:borderRadius('@{size} 0 0 @{size}')};
 }
+
 // transition utility
 .transition(@property, @duration, @timingFunc, @delay: 0) {
 	${t:applyCSS3('transition', '@{property} @{duration} @{timingFunc} @{delay}')};
 }
+
 // opacity utility
 .opacity(@opacity) {
 	opacity: @opacity;
 	@opacity100: @opacity * 100;
 	filter: ~"alpha(opacity=@{opacity100})";
 }
-.disabledOpacity(@opacity: @disabledOpacity) {
-	.opacity(@opacity)
-}
+
 // icon font utility
 .baseIconFont() {
 	font-family: FontAwesome;
@@ -125,4 +117,31 @@
 	text-decoration: inherit;
 	-webkit-font-smoothing: antialiased;
 	*margin-right: .3em; // fixes ie7 issues
+}
+
+// other utility
+.size(@width, @height) {
+	width: @width;
+	height: @height;
+}
+.displaySize(@display, @width, @height) {
+	display: @display;
+	.size(@width, @height);
+}
+.fontStyle(@family, @size, @weight, @color) {
+	font-family: @family;
+	font-size: @size;
+	font-weight: @weight;
+	font-style: normal;
+	color: @color;
+}
+.fontStyle(@family, @size, @weight) {
+	font-family: @family;
+	font-size: @size;
+	font-weight: @weight;
+	font-style: normal;
+}
+.iconFontStyle(@size, @color) {
+	font-size: @size;
+	color: @color;
 }

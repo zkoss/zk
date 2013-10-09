@@ -4,23 +4,19 @@
 	padding-top: 16px;
 
 	> .z-groupbox-header {
+		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
+		.size(100%, @baseIconHeight);
 		border: 1px solid @contentBorderColor;
 		border-bottom: 0;
-		width: 100%;
-		font-weight: normal;
-		color: @textColorGrayDark;
-		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
-		line-height: @baseLineHeight;
-		height: @baseIconHeight;
 		padding-left: 10px;
+		line-height: @baseLineHeight;
 		zoom: 1;
 
 		.z-groupbox-title {
 			font-size: 12px;
-			white-space: nowrap;
 			height: auto;
 			min-height: 24px;
+			white-space: nowrap;
 		}
 
 		.z-groupbox-title-content {
@@ -33,13 +29,13 @@
 			cursor: default;			
 		}
 		.z-caption, .z-groupbox-title {
-			padding: 0px 4px;
-			background: @baseBackgroundColor;
-			width: auto;
 			display: inline;
-			cursor: pointer;
-			position: relative;
+			width: auto;
+			padding: 0px 4px;
 			line-height: @baseIconHeight;
+			background: @baseBackgroundColor;
+			position: relative;
+			cursor: pointer;
 
 			&-readonly {
 				cursor: default;
@@ -52,12 +48,12 @@
 	}
 
 	&-content {
-		overflow: hidden;
+		display: block;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
-		padding: 5px;
 		border: 1px solid @contentBorderColor;
 		border-top: 0;
-		display: block;
+		padding: 5px;
+		overflow: hidden;
 		zoom: 1;
 	}
 
@@ -78,24 +74,24 @@
 		padding: 0;
 
 		> .z-groupbox-header {
-			padding: 3px 4px;
-			border-bottom: 1px solid @contentBorderColor;
 			font-weight: bold;
-			.verGradient();
+			height: auto;
 			min-height: @baseBarHeight;
 			<c:if test="${zk.ie == 8}">
 				min-height: @baseBarHeight - 8;
 			</c:if>
-			height: auto;			
+			border-bottom: 1px solid @contentBorderColor;
+			padding: 3px 4px;
+			.verGradient(@baseGradientStart, @baseGradientEnd);
 
 			.z-caption, .z-groupbox-title {
+				display: inline-block;
+				width: 100%;
 				margin: 0;
 				padding: 0;
-				background: none;
-				width: 100%;
-				top: 0px;
-				display: inline-block;
 				line-height: @baseButtonHeight;
+				background: none;
+				top: 0px;
 			}
 
 			.z-caption-content {

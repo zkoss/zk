@@ -1,15 +1,12 @@
 @import "~./zul/less/_header.less";
 
 .z-calendar {
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayLight);
 	border: 1px solid @baseBorderColor;
-	font-family: @baseContentFontFamily;
-	font-size: @fontSizeMedium;
-	font-weight: normal;
 	min-width: 230px;
 	<c:if test="${zk.ie == 8}">
 		min-width: 224px;
 	</c:if>
-	width: 230px;
 	padding: 2px;
 
 	a {
@@ -19,7 +16,6 @@
 		font-family: @baseTitleFontFamily;
 		font-weight: bold;
 		padding: 12px 3px;
-		font-size: @fontSizeMedium;
 	}
 
 	table {
@@ -27,14 +23,13 @@
 	}
 
 	&-title {
-		width: 100%;
-		text-align: center;
-		font-weight: bold;
 		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
+		font-weight: bold;
 		color: @calendarTitleColor;
+		width: 100%;
 		padding: 5px 24px;
 		line-height: @baseLineHeight;
+		text-align: center;
 
 		&:hover {
 			color: @calendarTitleHoverColor;
@@ -67,22 +62,22 @@
 		}
 	}
 	&-cell {
-		text-align: center;
-		min-height: @baseButtonHeight;
+		font-size: @fontSizeSmall;
+		color: @calendarCellColor;
 		min-width:  @baseButtonWidth;
+		min-height: @baseButtonHeight;
 		<c:if test="${zk.ie == 8}">
 			min-height: @baseButtonHeight - 6;
 		</c:if>
 		padding: 3px 0;
-		color: @calendarCellColor;
-		background: @baseBackgroundColor;
-		font-size: @fontSizeSmall;
 		line-height: @baseLineHeight + 3;
+		background: @baseBackgroundColor;
+		text-align: center;
 		cursor: pointer;
 
 		&:hover {
+			.borderRadius(@baseBorderRadius);
 			background: @hoverBackgroundColor;
-			.borderRadius();
 		}
 	}
 	&-weekend {
@@ -98,15 +93,15 @@
 		text-shadow: none;
 	}
 	&-weekofyear {
-		background: @weekofyearBackgroundColor;
 		font-style: italic;
 		color: @weekofyearColor;
+		background: @weekofyearBackgroundColor;
 		cursor: default;
 		
 		&:hover {
-			background: @weekofyearBackgroundColor;
-			.borderRadius(0);
 			color: @weekofyearColor;
+			.borderRadius(0);
+			background: @weekofyearBackgroundColor;
 		}
 	}
 
@@ -116,22 +111,22 @@
 		position: relative;
 	}
 	&-anima-inner {
-		position: absolute;
 		width: 200%;
+		position: absolute;
 
 		table {
-			float: left;
 			width: 50%;
+			float: left;
 		}
 	}
 	&-selected {
-		background: @selectedGradientEnd;
-		.borderRadius();
 		color: @calendarSelectedColor;
+		.borderRadius(@baseBorderRadius);
+		background: @selectedGradientEnd;
 		
 		&:hover {
-			background: @selectedHoverGradientEnd;
 			color: @calendarSelectedHoverColor;
+			background: @selectedHoverGradientEnd;
 		}
 	}
 	&-outside {
@@ -139,12 +134,10 @@
 		text-shadow: none;
 	}
 	&-icon {
-		position: absolute;
-		color: @iconColor;
-		font-size: 20px;
-		width: @baseButtonWidth;
-		height: @baseButtonHeight;
+		.iconFontStyle(20px, @iconColor);
+		.size(@baseButtonWidth, @baseButtonHeight);
 		padding: 0 8px;
+		position: absolute;
 
 		&:hover {
 			color: @iconHoverColor;
@@ -160,10 +153,11 @@
 	&-left[disabled],
 	&-right[disabled],
 	&-disabled {
-		cursor: default !important;
-		text-shadow: none !important;
 		color: @disabledColor !important;
 		.opacity(0.4);
+		text-shadow: none !important;
+		cursor: default !important;
+
 		&:hover {
 			background: @baseBackgroundColor;
 		}
@@ -191,4 +185,3 @@
 	font-size: @fontSizeMedium;
 	font-weight: normal;
 }
-

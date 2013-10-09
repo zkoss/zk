@@ -22,9 +22,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var dragImg = drag._dragImg;
 		if (dragImg) {
 			// update drag image
-			var cls = jq(drag.node).hasClass('z-drop-allow')? 'z-drop-allow': 'z-drop-disallow';
-			for (var len = 0; len < dragImg.length; len ++)
-				dragImg[len].className = cls;
+			var allow = jq(drag.node).hasClass('z-drop-allow');
+			for (var len = 0; len < dragImg.length; len ++) {
+				if (allow)
+					jq(dragImg[len]).removeClass('z-icon-remove').addClass('z-icon-ok');
+				else
+					jq(dragImg[len]).removeClass('z-icon-ok').addClass('z-icon-remove');
+			}
 		}
 	}
 /**

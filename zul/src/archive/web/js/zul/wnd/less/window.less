@@ -6,24 +6,21 @@
 }
 
 .z-window {
-	background: @windowBackgroundColor;
 	border: 1px solid @windowBorderColor;
+	.borderRadius(@baseBorderRadius);
 	padding: @windowFramePadding;
-	.borderRadius();
+	background: @windowBackgroundColor;
 
 	&-shadow {
 		.boxShadow('0 0 4px rgba(0, 0, 0, 0.25)');
 	}
 
 	&-header {
-		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
-		font-weight: normal;
-		cursor: default;
-		color: @textColorGrayDark;
-		line-height: @baseButtonWidth;
+		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
 		padding: 3px 0 5px 0;
+		line-height: @baseButtonWidth;
 		.defaultOverflowZoom();
+		cursor: default;
 
 		&-move {
 			cursor: move;
@@ -31,39 +28,38 @@
 	}
 
 	&-content {
+		border: 1px solid @contentBorderColor;
 		margin: 0px;
 		padding: 4px;
 		background: @contentBackgroundColor;
-		border: 1px solid @contentBorderColor;
 		.defaultOverflowZoom();
 	}
 
 	&-icon {
-		overflow: hidden;
-		margin: auto 1px;
-		display: block;
-		<c:if test="${zk.ie != 8}">
-			.verGradient();
-		</c:if>
-		.borderRadius();
-		border: 1px solid @baseBorderColor;
-		float: right;
-		cursor: pointer;
-		text-align: center;
 		color: @iconColor;
+		display: block;
+		border: 1px solid @baseBorderColor;
+		.borderRadius(@baseBorderRadius);
+		margin: auto 1px;
+		<c:if test="${zk.ie != 8}">
+			.verGradient(@baseGradientStart, @baseGradientEnd);
+		</c:if>
+		text-align: center;
+		overflow: hidden;
+		cursor: pointer;
+		float: right;
 
 		&:hover {
-			.resetGradient();
-			border-color: @hoverBorderColor;
-			background: @hoverBackgroundColor;
 			color: @iconHoverColor;
+			border-color: @hoverBorderColor;
+			.resetGradient();
+			background: @hoverBackgroundColor;
 		}
 	}
 
 	&-maximize, &-minimize, &-close {
-		width: @baseButtonWidth + 4;
-		height: @baseButtonHeight;
 		font-size: @fontSizeLarge;
+		.size(@baseButtonWidth + 4, @baseButtonHeight);
 		line-height: @baseButtonHeight;
 	}
 
@@ -77,25 +73,25 @@
 	}
 
 	&-resize-faker {
-		position: absolute;
 		border: 1px dashed #1854C2;
-		overflow: hidden;
-		z-index: 60000;
-		left: 0;
-		top: 0;
 		background: #D7E6F7;
 		.opacity(0.5);
+		position: absolute;
+		left: 0;
+		top: 0;
+		overflow: hidden;
+		z-index: 60000;
 	}
 
 	&-move-ghost {
-		.topBorderRadius();
-		position: absolute;
-		background: #D7E6F7;
-		overflow: hidden;
-		padding: 0;
-		.opacity(0.65);
-		cursor: move !important;
 		border: 1px solid #9F9F9F;
+		.topBorderRadius(@baseBorderRadius);
+		padding: 0;
+		background: #D7E6F7;
+		.opacity(0.65);
+		position: absolute;
+		overflow: hidden;
+		cursor: move !important;
 
 		.z-window-header {
 			padding: 7px 4px 5px 4px;
@@ -108,40 +104,40 @@
 		</c:if>
 
 		dl {
+			font-size: 0;
+			display: block;
 			border-top: 1px solid @outerBorderColor;
 			margin: 0;
 			padding: 0;
-			overflow: hidden;
-			display: block;
 			line-height: 0;
-			font-size: 0;
+			overflow: hidden;
 		}
 	}
 
 	&-popup {
-		.topBorderRadius();
+		.topBorderRadius(@baseBorderRadius);
 		padding: @windowFramePadding @windowFramePadding 0;
 		
 		> .z-window-content {
-			border-width: 0 0 0 0;
-			margin: 0px -1*@windowFramePadding -1*@windowFramePadding;
+			border-width: 0;
+			margin: 0 -1*@windowFramePadding -1*@windowFramePadding;
 		}
 
 		&.z-window-noheader {
 			padding-top: 0;
 			
 			> .z-window-content {
-				margin: 0px -1*@windowFramePadding;
+				margin: 0 -1*@windowFramePadding;
 			}
 		}
 
 		&.z-window-noborder > .z-window-content {
-			margin: 0px -1*@windowFramePadding -1*@windowFramePadding;
+			margin: 0 -1*@windowFramePadding -1*@windowFramePadding;
 		}
 	}
 
 	&-modal&-shadow, &-highlighted&-shadow {
-		.borderRadius();
+		.borderRadius(@baseBorderRadius);
 		.boxShadow('inset 0px 1px 1px #FFFFFF, 0 0 4px rgba(0, 0, 0, 0.7)');
 	}
 
@@ -154,7 +150,7 @@
 	}
 
 	&-noborder {
-		border: 0px;
+		border: 0;
 		padding: @windowFramePadding @windowFramePadding 0;
 
 		> .z-window-content {
@@ -190,20 +186,18 @@
 	}
 
 	&-button {
-		min-width: 48px;
 		width: 100%;
+		min-width: 48px;
 	}
 
 	&-icon {
-		display: inline-block;
+		font-size: 30px;
+		.displaySize(inline-block, @baseBarWidth, @baseBarHeight);
+		border: 0;
 		background-repeat: no-repeat;
+		text-align: center;
 		vertical-align: top;
 		cursor: pointer;
-		border: 0;
-		width: @baseBarWidth;
-		height: @baseBarHeight;
-		font-size: 30px;
-		text-align: center;
 	}
 
 	&-question {
@@ -224,7 +218,7 @@
 }
 
 .ie8 .z-window-icon {
-	.gradientFallback();
+	.gradientFallback(@baseGradientStart, @baseGradientEnd);
 	.z-icon-minus, .z-icon-fullscreen {
 		margin-left: 1px;			
 	}

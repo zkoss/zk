@@ -9,7 +9,7 @@
 .activeStyle() {
 	border-color: @menuActiveBorderColorTR @menuActiveBorderColorBL @menuActiveBorderColorBL @menuActiveBorderColorTR;
 	<c:if test="${zk.ie != 8}">
-		.verGradient();
+		.verGradient(@baseGradientStart, @baseGradientEnd);
 	</c:if>
 	.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 }
@@ -26,32 +26,32 @@
 
 // define common font property
 .z-menubar {
-	position: relative;
 	display: block;
-	padding: 3px 0;
 	border-top: 1px solid @baseBorderColor;
 	border-bottom: 1px solid @baseBorderColor;
-	.verGradient();
+	padding: 3px 0;
+	.verGradient(@baseGradientStart, @baseGradientEnd);
+	position: relative;
 
 	ul {
 		overflow: hidden;
 		.restUl();
 	}
 	li {
+		display: block;
 		padding: 0;
 		position: relative;
-		display: block;
 	}
 
 	&-horizontal {
 		li {
-			float: left;
 			margin: 0 2px;
+			float: left;
 		}
 		.z-menuseparator {
-			border-left: 1px solid @menuSeparatorBorderColor;
-			width: 1px;
 			display: block;
+			width: 1px;
+			border-left: 1px solid @menuSeparatorBorderColor;
 			line-height: @baseButtonHeight;
 		}
 	}
@@ -66,10 +66,10 @@
 			}
 		}
 		.z-menuseparator {
-			border-top: 1px solid @menuSeparatorBorderColor;
-			line-height: 0;
 			height: 0;
 			min-height: 0;
+			border-top: 1px solid @menuSeparatorBorderColor;
+			line-height: 0;
 		}
 		.z-menu {
 			&-icon {
@@ -89,16 +89,16 @@
 .z-menuitem {
 	.restUl(); //avoid using none default zclass
 	&-text {
-		display: inline-block;
 		font-family: @baseTitleFontFamily;
 		font-size: @fontSizeMedium;
 		font-weight: normal;
+		display: inline-block;
 		line-height: @baseIconHeight;
 		text-shadow: 0 1px #FFFFFF;
 		
 		// align for img + text
 		img ~ & {
-		  vertical-align: middle;
+			vertical-align: middle;
 		}
 		&:empty {
 			display: none;
@@ -110,18 +110,16 @@
 	}
 	&-content {
 		color: @textColorGray;
-		cursor: pointer;
-		border: 1px solid transparent;
-		.borderRadius();
-		line-height: @baseLineHeight - 2;
-		padding: 3px 6px 3px;
 		display: block;
+		border: 1px solid transparent;
+		.borderRadius(@baseBorderRadius);
+		padding: 3px 6px 3px;
+		line-height: @baseLineHeight - 2;
+		position: relative;
+		cursor: pointer;
 		text-decoration: none;
 		white-space: nowrap;
-
-		// the 20 is greater than menupopup-separator's z-index
-		z-index: 20;
-		position: relative;
+		z-index: 20; // the 20 is greater than menupopup-separator's z-index
 
 		&:hover {
 			.hoverStyle();
@@ -133,10 +131,10 @@
 			.activeStyle();
 		}
 		&[disabled] {
-			.disabledOpacity();
+			.opacity(@disabledOpacity);
 			border: 1px solid transparent;
-			cursor: default;
 			.resetGradient();
+			cursor: default;
 			.boxShadow('none');
 		}
 	}
@@ -152,10 +150,9 @@
 	}
 	&-clickable {
 		.z-menu-separator {
-			position: absolute;
-			width: 1px;
-			height: 100%;
+			.size(1px, 100%);
 			background: @hoverBorderColor;
+			position: absolute;
 			top: 0;
 			right: 18px;
 		}
@@ -214,53 +211,49 @@
 }
 
 .z-menu-content-popup {
-	display: none;
+	.displaySize(none, auto, auto);
 	position: absolute;
 	overflow: auto;
-	width: auto;
-	height: auto;
 	z-index: @basePopupZIndex;
 }
 .z-menupopup {
-	background: @menuPopupBackground;
 	border: 1px solid @baseBorderColor;
 	padding: 3px;
-	z-index: @basePopupZIndex;
+	background: @menuPopupBackground;
 	left: 0;
 	top: 0;
 	white-space: nowrap;
+	z-index: @basePopupZIndex;
 
 	ul {
 		.restUl();
 	}
 	&-separator {
-		height: 100%;
-		width: 2px;
+		.size(2px, 100%);
+		border-width: 3px 1px 3px 0;
+		border-style: solid;
+		border-color: @menuPopupSeparatorBorder;
 		background: @menuPopupSeparatorBackground;
 		position: absolute;
 		top: 0;
 		left: 31px;
 		z-index: 10;
-		border-width: 3px 1px 3px 0;
-		border-style: solid;
-		border-color: @menuPopupSeparatorBorder;
 	}
 	.z-menu-image,
 	.z-menuitem-image {
-		margin-right: 9px;
 		min-width:  @menuImageSize;
 		min-height:  @menuImageSize;
+		margin-right: 9px;
 	}
 	.z-menuitem-icon {
-		position: absolute;
-		color: @checkedColor;
-		font-size: 14px;
+		.iconFontStyle(14px, @checkedColor);
 		display: none;
-		left: 7px;
+		position: absolute;
 		top: 5px;
+		left: 7px;
 		<c:if test="${zk.ie == 8}">
-			left: 8px;
 			top: 6px;
+			left: 8px;
 		</c:if>
 	}
 	.z-menu-content {
@@ -268,25 +261,25 @@
 	}
 	.z-menu-icon {
 		position: absolute;
-		right: 5px;
 		top: 5px;
+		right: 5px;
 	}
 	.z-menuseparator {
 		font-size: 1px;
-		line-height: 1px;
-		background: @menuPopupSeparatorBackground;
-		border-bottom: 1px solid @menuPopupSeparatorBorder;
 		display: block;
 		width: auto;
-		position: relative;
-		padding: 0px;
 		min-height: 2px;
+		border-bottom: 1px solid @menuPopupSeparatorBorder;
+		padding: 0px;
+		line-height: 1px;
+		background: @menuPopupSeparatorBackground;
+		position: relative;
 	}
 }
 //define checked menuitem effect in menupopup
 .z-menuitem-checkable .z-menuitem-image {
-	background: @checkedBackgroundColor;
 	border: 1px solid @checkedBorderColor;
+	background: @checkedBackgroundColor;
 }
 .z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
 	display: block;
@@ -299,76 +292,75 @@
 	}
 	&-body {
 		width: 100%;
-		position: relative;
-		overflow: hidden;
 		margin-left: 32px;
 		margin-right: 32px;
+		position: relative;
+		overflow: hidden;
 	}
 	&-content {
 		width: 5000px;
 	}
 	&-icon {
 		color: @iconColor;
-		text-shadow: 1px 0 #DFDFDF;
 		.opacity(0.7);
 		position: absolute;
 		top: 7px;
 		left: 12px;
+		text-shadow: 1px 0 #DFDFDF;
 	}
 	&-left,
 	&-right {
 		width: @baseBarWidth;
-		position: absolute;
 		padding: 5px 11px;
+		position: absolute;
 
 		&:active {
 			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 		}
 		&:hover {
 			> .z-menubar-icon {
-				opacity: 1;
 				color: @iconHoverColor;
+				opacity: 1;
 				text-shadow: 1px 0 #C2E0F9;
 			}
 		}
 	}
 	&-left {
-		left: 0;
 		padding: 5px 12px;
+		left: 0;
 	}
 	&-scrollable {
+		.size(@baseBarWidth, 100%);
 		border: 1px solid @baseBorderColor;
 		border-width: 0 1px;
-		.verGradient();
+		line-height: normal;
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		position: absolute;
 		top: 0;
 		right: 0;
-		width: @baseBarWidth;
-		height: 100%;
 		cursor: pointer;
-		position: absolute;
 		z-index: 25;
-		line-height: normal;
 	}
 }
 
 .ie8 {
 	.z-menu-hover > .z-menu-content, 
 	.z-menuitem-hover > .z-menuitem-content {
-		.gradientHoverFallback();
+		.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
 	}
 
 	.z-menu, .z-menuitem { 
 		&-content {
 			&:hover, &:focus {
-				.gradientHoverFallback();
+				.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
 			}
 			&:active {
-				.gradientFallback();
+				.gradientFallback(@baseGradientStart, @baseGradientEnd);
 			}
 		}
 
 		&-selected > &-content {
-			.gradientFallback();
+			.gradientFallback(@baseGradientStart, @baseGradientEnd);
 		}
 	}
 
