@@ -375,6 +375,27 @@
 				background: @meshSelectedHoverBackgroundColor;
 			}
 		}
+		// radio icon fallback
+		.z-icon-radio {
+			.displaySize(block, 13px, 13px);
+			.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
+			position: relative;
+			top: 2px;
+			left: 2px;
+		}
+		&-radio {
+			border-width: 0;
+			background: transparent;
+
+			.z-icon-radio {
+				background-position: 0 -13px;
+			}
+		}
+		&-selected .z-icon-radio {
+			border-width: 0;
+			margin: 0;
+			background-position: -26px -13px;
+		}
 	}
 	.z-listgroup-inner {
 		background: @meshGroupBackgroundColor;
