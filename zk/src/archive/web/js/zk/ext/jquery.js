@@ -2655,7 +2655,8 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 					}
 				}
 			} else {
-				while ( (elem = elem[ dir ]) ) {
+				elem = elem[ dir ];
+				while (elem) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
 						outerCache = elem[ expando ] || (elem[ expando ] = {});
 						if ( (cache = outerCache[ dir ]) && cache[0] === dirkey ) {
@@ -2670,6 +2671,10 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 							}
 						}
 					}
+					if (dir == 'parentNode')
+						elem = zk(elem).vparentNode(true);
+					else
+						elem = elem[ dir ];
 				}
 			}
 		};

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z70-ZK-Selector-001.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Oct 09, 2013 11:04:53 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="client">
+	<script><![CDATA[
+		function testcase() {
+			var t1 = jq('div $l11'),
+				failure = false;
+			if (!(t1.length == 1 && t1.html() == 'abc'))
+				failure = true;
+			
+			t1 = jq('#'+ zk.Desktop._dt.firstChild.uuid + ' $l11');
+			if (!(t1.length == 1 && t1.html() == 'abc'))
+				failure = true;
+
+			t1 = jq('$w2 $l11');
+			if (!(t1.length == 1 && t1.html() == 'abc'))
+				failure = true;
+
+			t1 = jq('$w1 $l11');
+			if (t1.length)
+				failure = true;
+
+			t1 = zk.Widget.$(jq('@combobox'));
+
+			if (t1)
+				jq(t1.$n('btn')).trigger('click');
+
+			setTimeout(function () {
+				t1 = jq('@combobox @comboitem');
+
+				if (t1.length != 3)
+					failure = true;
+
+				t1 = jq('#'+ zk.Desktop._dt.firstChild.uuid + ' @comboitem');
+
+				if (t1.length != 3)
+					failure = true;
+
+				t1 = zk.Widget.$(jq('@combobox'));
+
+				if (t1)
+					t1.close();
+
+
+				t1 = jq('@combobox @comboitem');
+
+				if (t1.length != 3)
+					failure = true;
+
+				jq('$msg').html(failure ? 'Failure' : 'OK');
+			}, 200); // wait popup's animation
+
+
+		}
+
+	]]></script>
+	<label style="font-weight: bold" multiline="true">
+		1. Click the "Test Button", and you should see a text with "OK".
+	</label>
+	<button label="Test Button" h:onClick="testcase();"/>
+	<label id="msg"/>
+	<div style="padding-top: 10px;border: 2px red solid">
+<combobox id="combobox" width="100px">
+  <attribute name="onCreate"><![CDATA[
+   List list2 = new ArrayList();
+   list2.add("David");
+   list2.add("Thomas");
+   list2.add("Steven");
+   ListModelList lm2 = new ListModelList(list2);
+   lm2.addToSelection(lm2.get(0));
+   combobox.setModel(lm2);
+  ]]></attribute>
+ </combobox>
+
+<!--<page style="width:100%;height:100%">-->
+	<box align="start" pack="start" sizedByContent="true" zclass="z-vbox" id="box" mold="vertical">
+		<button dir="normal" orient="horizontal" type="button" label="create compoents" id="btn1" mold="trendy"/>
+		<window mode="embedded" border="none" minheight="100" minwidth="200" shadow="true" zclass="z-window-embedded" id="w1"/>
+		<window mode="embedded" border="none" minheight="100" minwidth="200" shadow="true" zclass="z-window-embedded" id="w2">
+			<button dir="normal" orient="horizontal" type="button" label="do include" id="btn2" mold="trendy"/>
+			<!--<include id="inc">-->
+				<box align="start" pack="start" sizedByContent="true" zclass="z-vbox" mold="vertical">
+					<box align="start" pack="start" sizedByContent="true" zclass="z-vbox" mold="vertical">
+						<box align="start" pack="start" sizedByContent="true" zclass="z-hbox" mold="horizontal">
+							<label value="abc" maxlength="0" id="l11"/>
+							<label value=" = foo|abc" maxlength="0"/>
+						</box>
+						<box align="start" pack="start" sizedByContent="true" zclass="z-hbox" mold="horizontal">
+							<label value="goo" maxlength="0" id="l12"/>
+							<label value=" = bar|goo" maxlength="0"/>
+						</box>
+						<button dir="normal" orient="horizontal" type="button" label="cmd1" id="cmd1" mold="trendy"/>
+						<button dir="normal" orient="horizontal" type="button" label="Dump" mold="trendy"/>
+					</box>
+				</box>
+			<!--</include>-->
+		</window>
+	</box>
+<!--</page>-->
+	</div>
+</zk>
