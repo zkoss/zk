@@ -2604,16 +2604,33 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 		function( elem, context, xml ) {
 			//Jumper Chen, Potix 20130509
 			if (hasZTag || hasZID) {
-				var wgt = zk.Widget.$(elem);
-				if (dir === "parentNode")
-					return wgt.parent;
-				else
-					return wgt[ dir ];
+				var wgt = zk.Widget.$(elem),
+				getParent = function (wgt) {
+					if (dir === "parentNode")
+						return wgt.parent;
+					else
+						return wgt[ dir ];
+				};
+			
+				// we cannot use dom elem for treechildren, treeitem, and treerow
+				while ((wgt = getParent(wgt)) && (elem = zk.isLoaded('zul.sel') &&
+						wgt.$instanceof(zul.sel.Treechildren, zul.sel.Treeitem) ?
+						elem : wgt.$n())) {
+					// don't use cache in this case
+					if (matcher( elem, context, xml, wgt ))
+						return true;
+				}
 			} else {
-				while ( (elem = elem[ dir ]) ) {
+				elem = elem[ dir ];
+				while ( elem ) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
 						return matcher( elem, context, xml );
 					}
+
+					if (dir == 'parentNode')
+						elem = zk(elem).vparentNode(true);
+					else
+						elem = elem[ dir ];
 				}
 			}
 		} :
@@ -2633,7 +2650,9 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 					};
 				
 				// we cannot use dom elem for treechildren, treeitem, and treerow
-				while ((wgt = getParent(wgt))) {
+				while ((wgt = getParent(wgt)) && (elem = zk.isLoaded('zul.sel') &&
+						wgt.$instanceof(zul.sel.Treechildren, zul.sel.Treeitem) ?
+						elem : wgt.$n())) {
 					// don't use cache in this case
 					if (matcher( elem, context, xml, wgt ))
 						return true;
