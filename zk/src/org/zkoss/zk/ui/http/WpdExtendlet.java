@@ -19,15 +19,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -80,6 +84,15 @@ import org.zkoss.zk.ui.util.URIInfo;
  * @since 5.0.0
  */
 public class WpdExtendlet extends AbstractExtendlet<Object> {
+	
+	// Set this library property to true to disable tablet UI
+	private final static String TABLET_UI_DISABLED_KEY = "org.zkoss.zkmax.tablet.ui.disabled";
+	// The following javascript should be loaded when tablet UI is disabled.
+	private final static Set<String> IGNORE_TABLET_UI_DISABLED_JS = new HashSet<String>((Arrays.asList( new String [] {
+		"domtouch.js", "zswipe.js", "touch/domtouch.js", "touch/iscroll.js", "touch/grid-touch.js", "touch/layoutregion-touch.js",
+		"touch/listbox-touch.js", "touch/listcell-touch.js", "touch/listheader-touch.js", "touch/meshwidget-touch.js",
+		"touch/nav-touch.js", "touch/navitem-touch.js", "touch/tree-touch.js", "touch/treecol-touch.js"})));
+	
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
 		config.addCompressExtension("wpd");
@@ -309,7 +322,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 						move(wc, out);
 						wc.add(jspath, browser);
 					} else {
-						if (browser != null && !Servlets.isBrowser(reqctx.request, browser))
+						if (browser != null && (!Servlets.isBrowser(reqctx.request, browser) ||
+								// F70-ZK-1956: Check whether the js should be loaded when disabled tablet UI
+								isTabletUiDisabled(reqctx.request, jspath))) 
 							continue;
 						if (!writeResource(reqctx, out, jspath, dir, true))
 							log.error(jspath+" not found, "+el.getLocator()+", "+path);
@@ -358,6 +373,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			return wc;
 		}
 		return new ByteContent(out.toByteArray(), cacheable);
+	}
+	private boolean isTabletUiDisabled(ServletRequest request, String jspath) {
+		return "true".equals(Library.getProperty(TABLET_UI_DISABLED_KEY, "false")) && 
+				Servlets.isBrowser(request, "mobile") && !IGNORE_TABLET_UI_DISABLED_JS.contains(jspath);
 	}
 	private boolean isWpdContentRequired(String pkg, Element root) {
 		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(getDeviceType()))
@@ -668,8 +687,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					write(reqctx, out, (MethodInfo)o);
 				} else if (o instanceof String[]) {
 					final String[] inf = (String[])o;
-					if (inf[1] != null) {
-						if (request != null && !Servlets.isBrowser(request, inf[1]))
+					if (inf[1] != null && request != null) {
+						if (!Servlets.isBrowser(request, inf[1]) || 
+								 // F70-ZK-1956: Check whether the js should be loaded when disabled tablet UI
+								isTabletUiDisabled(reqctx.request, inf[0]))
 							continue;
 					}
 					if (!writeResource(reqctx, out, inf[0], _dir, true))
