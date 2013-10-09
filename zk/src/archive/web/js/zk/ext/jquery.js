@@ -2124,8 +2124,8 @@ Expr = Sizzle.selectors = {
 		/* Jumper Chen, Potix, 20100325*/
 		"ZTAG": function(selector) {
 			var tag = selector.substring(1);
-			return function ( elem ) {
-				var wgt = zk.Widget.$(elem, {exact: true}) || false;
+			return function ( elem, context, xml, wgt ) {
+				wgt = wgt ? wgt : zk.Widget.$(elem, {exact: true}) || false;
 				return wgt && wgt.className.toLowerCase().endsWith(tag);
 			}
 		},
@@ -2133,8 +2133,8 @@ Expr = Sizzle.selectors = {
 		/* Jumper Chen, Potix, 20100318*/
 		"ZID": function(selector) {
 			var id = selector.startsWith('$') ? selector.substring(1) : selector;
-			return function ( elem ) {
-				var wgt = zk.Widget.$(elem);
+			return function ( elem, context, xml, wgt  ) {
+				wgt = wgt ? wgt : zk.Widget.$(elem);
 				return wgt ? wgt.id === id : false;
 			}
 		},
@@ -2632,20 +2632,26 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 							return wgt[ dir ];
 					};
 				
-				while ((wgt = getParent(wgt)) && (elem = wgt.$n())) {
-					outerCache = elem[ expando ] || (elem[ expando ] = {});
-					if ( (cache = outerCache[ dir ]) && cache[0] === dirkey ) {
-						if ( (data = cache[1]) === true || data === cachedruns ) {
-							return data === true;
-						}
-					} else {
-						cache = outerCache[ dir ] = [ dirkey ];
-						cache[1] = matcher( elem, context, xml ) || cachedruns;
-						if ( cache[1] === true ) {
-							return true;
-						}
-					}
+				// we cannot use dom elem for treechildren, treeitem, and treerow
+				while ((wgt = getParent(wgt))) {
+					// don't use cache in this case
+					if (matcher( elem, context, xml, wgt ))
+						return true;
 				}
+//				while ((wgt = getParent(wgt)) && (elem = wgt.$n())) {
+//					outerCache = elem[ expando ] || (elem[ expando ] = {});
+//					if ( (cache = outerCache[ dir ]) && cache[0] === dirkey ) {
+//						if ( (data = cache[1]) === true || data === cachedruns ) {
+//							return data === true;
+//						}
+//					} else {
+//						cache = outerCache[ dir ] = [ dirkey ];
+//						cache[1] = matcher( elem, context, xml ) || cachedruns;
+//						if ( cache[1] === true ) {
+//							return true;
+//						}
+//					}
+//				}
 			} else if ( xml ) {// We can't set arbitrary data on XML nodes, so they don't benefit from dir caching
 				while ( (elem = elem[ dir ]) ) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
@@ -2682,10 +2688,10 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 
 function elementMatcher( matchers ) {
 	return matchers.length > 1 ?
-		function( elem, context, xml ) {
+		function( elem, context, xml, wgt/*added by Potix 10/09/2013*/) {
 			var i = matchers.length;
 			while ( i-- ) {
-				if ( !matchers[i]( elem, context, xml ) ) {
+				if ( !matchers[i]( elem, context, xml, wgt/*added by Potix 10/09/2013*/ ) ) {
 					return false;
 				}
 			}
