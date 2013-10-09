@@ -1,0 +1,14 @@
+<zk>
+	<window id="w1" border="none" vflex="1" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01960BindArray')">
+
+		<grid hflex="1" model="@bind(vm.testArray)">
+			<template name="model">
+				<row>
+					<textbox value="@bind(each)" />
+					<label value="@bind(each)" />
+				</row>
+			</template>
+		</grid>
+	</window>
+</zk>
