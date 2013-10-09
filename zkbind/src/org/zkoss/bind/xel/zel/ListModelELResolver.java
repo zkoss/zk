@@ -22,6 +22,8 @@ import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelList;
 
 /**
  * ELResolver for {@link ListModel}.
@@ -81,6 +83,28 @@ public class ListModelELResolver extends ELResolver {
             ELException {
         if (context == null) {
             throw new NullPointerException();
+        }
+        
+        if (base instanceof ListModel<?>) {
+            ListModel<?> listmodel = (ListModel<?>) base;
+            Integer idx = coerce(property);
+            if (idx==null) { // property is not a legal number format
+                return ; // unresolved null
+            }
+            context.setPropertyResolved(true);
+            
+            //ZK-1960 save back to listmodel
+            if (idx >= 0 && idx < listmodel.getSize()) {
+            	if(base instanceof ListModelArray){
+            		((ListModelArray)base).set(idx, value);
+            	}else if(base instanceof ListModelList<?>){
+            		((ListModelList)base).set(idx, value);
+            	}else{
+            		throw new PropertyNotWritableException("can't write property "+property+" to ListModel:"+base);
+            	}
+            }else{
+            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+            }
         }
     }
 
