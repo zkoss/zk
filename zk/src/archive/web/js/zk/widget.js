@@ -2722,6 +2722,14 @@ function () {
 		return n;
 	},
 	/**
+	 * Returns whether the widget has its own element bound to HTML DOM tree.
+	 * @return boolean
+	 * @since 7.0.0
+	 */
+	isRealElement: function () {
+		return true;
+	},
+	/**
 	 * Returns the sub zclass name that cache for this widget.
 	 * It returns the zclass if the subclass is empty or null,
 	 * since it caches the result (and clean up at the {@link #setZclass(String)}).

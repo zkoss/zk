@@ -2650,27 +2650,12 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 					};
 				
 				// we cannot use dom elem for treechildren, treeitem, and treerow
-				while ((wgt = getParent(wgt)) && (elem = zk.isLoaded('zul.sel') &&
-						wgt.$instanceof(zul.sel.Treechildren, zul.sel.Treeitem) ?
-						elem : wgt.$n())) {
+				while ((wgt = getParent(wgt)) && (elem = wgt.isRealElement() ?
+						wgt.$n() : elem)) {
 					// don't use cache in this case
 					if (matcher( elem, context, xml, wgt ))
 						return true;
 				}
-//				while ((wgt = getParent(wgt)) && (elem = wgt.$n())) {
-//					outerCache = elem[ expando ] || (elem[ expando ] = {});
-//					if ( (cache = outerCache[ dir ]) && cache[0] === dirkey ) {
-//						if ( (data = cache[1]) === true || data === cachedruns ) {
-//							return data === true;
-//						}
-//					} else {
-//						cache = outerCache[ dir ] = [ dirkey ];
-//						cache[1] = matcher( elem, context, xml ) || cachedruns;
-//						if ( cache[1] === true ) {
-//							return true;
-//						}
-//					}
-//				}
 			} else if ( xml ) {// We can't set arbitrary data on XML nodes, so they don't benefit from dir caching
 				while ( (elem = elem[ dir ]) ) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
