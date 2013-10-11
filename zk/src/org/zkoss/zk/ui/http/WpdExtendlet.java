@@ -101,6 +101,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		_ignoreTouchJS.add("touch/navitem-touch.js");
 		_ignoreTouchJS.add("touch/tree-touch.js"); // to make iScroll available
 		_ignoreTouchJS.add("touch/treecol-touch.js"); // to make iScroll available
+		_ignoreTouchJS.add("touch/wscroll-touch.js"); // to to make wscroll available
 	}
 	
 	public void init(ExtendletConfig config) {

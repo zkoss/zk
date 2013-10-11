@@ -379,8 +379,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 		$drag.children('div')
 			.mouseover(self.proxy(self._mouseOver))
 			.mouseout(self.proxy(self._mouseOut))
-			.bind(zk.mobile ? 'touchend' : 'mouseup', self.proxy(self._mouseUp))
-			.bind(zk.mobile ? 'touchstart' : 'mousedown', self.proxy(self._mouseDown)); //bind for touch device
+			.bind('mouseup', self.proxy(self._mouseUp))
+			.bind('mousedown', self.proxy(self._mouseDown));
 		$drag.click(zk.$void);
 	},
 	_unlistenMouseEvent: function () {
@@ -394,8 +394,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 		$drag.children('div')
 			.unbind('mouseover', self.proxy(self._mouseOver))
 			.unbind('mouseout', self.proxy(self._mouseOut))
-			.unbind(zk.mobile ? 'touchend' : 'mouseup', self.proxy(self._mouseUp))
-			.unbind(zk.mobile ? 'touchstart' : 'mousedown', self.proxy(self._mouseDown)); //bind for touch device
+			.unbind('mouseup', self.proxy(self._mouseUp))
+			.unbind('mousedown', self.proxy(self._mouseDown));
 		$drag.unbind('click', zk.$void);
 	},
 	_mouseOver: function (evt) {
