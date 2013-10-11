@@ -54,6 +54,10 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return this.parent && this.parent.$instanceof(zul.sel.Tree);
 	},
 	//@Override
+	isRealElement: function () {
+		return false; // fixed for ZK Client selector issue
+	},
+	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
 		var oldsib = _prevsib(child);
 		if (this.$supers('insertBefore', arguments)) {

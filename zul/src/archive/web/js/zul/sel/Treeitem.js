@@ -322,6 +322,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers("beforeParentChanged_", arguments);
 	},
 	//@Override
+	isRealElement: function () {
+		return false; // fixed for ZK Client selector issue
+	},
+	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling,
 		ignoreDom || (!this.z_rod && child.$instanceof(zul.sel.Treechildren)))) {

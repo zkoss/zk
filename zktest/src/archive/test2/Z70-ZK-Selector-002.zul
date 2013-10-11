@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z70-ZK-Selector-002.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Oct 11, 2013 11:05:57 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="client">
+	<script><![CDATA[
+		function testcase() {
+			var t1 = jq('@tree $ti1 @treecell:first-child'),
+				failure = false;
+			if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == '&nbsp;Item 1'))
+				failure = true;
+			
+			t1 = jq('@tree $ti1 @treecell');
+			if (!(t1.length == 2))
+				failure = true;
+
+			var uuid = jq('@tree $ti1')[0].id;
+			t1 = jq('@tree #' + uuid + ' @treecell');
+			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == '&nbsp;Item 1'))
+				failure = true;
+
+			jq('$msg').html(failure ? 'Failure' : 'OK');
+
+		}
+
+	]]></script>
+	<label style="font-weight: bold" multiline="true">
+		1. Click the "Test Button", and you should see a text with "OK".
+	</label>
+	<button label="Test Button" h:onClick="testcase();"/>
+	<label id="msg"/>
+<tree id="tree" width="400px" rows="8">
+	<treecols sizable="true">
+		<treecol label="Name" />
+		<treecol label="Description" />
+	</treecols>
+	<treechildren>
+		<treeitem id="ti1">
+			<treerow>
+				<treecell label="Item 1" />
+				<treecell label="Item 1 description" />
+			</treerow>
+		</treeitem>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 2" />
+				<treecell label="Item 2 description" />
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.1" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.1" />
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.2" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.2" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.2.1" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3" />
+	</treechildren>
+</tree>
+</zk>
