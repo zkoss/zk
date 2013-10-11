@@ -28,10 +28,10 @@ function (out) {
 				
 			out.push('<div id="', uuid, '-left" class="', this.$s('left'), ' ',
 						scrollableCls, '"><i class="', scrollIcon,
-						' z-icon-caret-left"></i></div>',
+						' z-icon-chevron-left"></i></div>',
 					'<div id="', uuid, '-right" class="', this.$s('right'), ' ',
 						scrollableCls, '"><i class="', scrollIcon,
-						' z-icon-caret-right"></i></div>',
+						' z-icon-chevron-right"></i></div>',
 					'<div id="', uuid, '-body" class="', this.$s('body'), '">',
 					'<div id="', uuid, '-cnt" class="', this.$s('content'), '">');
 		}

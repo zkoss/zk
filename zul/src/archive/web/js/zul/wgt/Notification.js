@@ -49,7 +49,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 				this._msg, '</div>');
 		if (this._closable)
 			out.push('<div id="', uuid, '-cls" class="', this.$s('close'),
-					'"><i class="', icon, ' z-icon-remove"></i></div>');
+					'"><i id="', uuid, '-clsIcon" class="', icon, ' z-icon-remove"></i></div>');
 		out.push('</div>'); // not encoded to support HTML
 	},
 	domClass_: function (no) {
@@ -62,7 +62,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	},
 	doClick_: function (evt) {
 		var p = evt.domTarget;
-		if (jq.contains(this.$n('cls'), p))
+		if (p == this.$n('cls') || p == this.$n('clsIcon')) //may click on font-icon
 			this.close();
 		else
 			this.$supers('doClick_', arguments);

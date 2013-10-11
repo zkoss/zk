@@ -125,7 +125,7 @@
 	overflow: hidden;
 	// horizontal (default)
 	&-icon {
-		color: @iconColor;
+		.iconFontStyle(@fontSizeMedium, @iconColor);
 		display: none;
 		border: 1px solid @baseBorderColor;
 		.topBorderRadius(@baseBorderRadius);
@@ -285,23 +285,6 @@
 				.boxShadow('none');
 				cursor: default;
 			}
-			&-disabled {
-				color: @disabledColor;
-				cursor: default;
-				.opacity(@disabledOpacity);
-
-				.z-tab-button:hover {
-					.opacity(@disabledOpacity);
-				}
-
-				.z-tab-text {
-					font-style: normal;
-					color: @disabledColor;
-					.opacity(@disabledOpacity);
-					cursor: default;
-					white-space: nowrap;
-				}
-			}
 		}
 		.z-tab-button {
 			.opacity(0.7);
@@ -455,14 +438,13 @@
 		cursor: default;
 		
 		&:hover {
-			.resetGradient();
+			.verGradient(@baseGradientStart, @baseGradientEnd);
 		}
 		.z-tab-button:hover {
 			.opacity(@disabledOpacity);
 		}
 		.z-tab-text {
 			font-style: normal;
-			color: @disabledColor;
 			.opacity(@disabledOpacity);
 			cursor: default;
 			white-space: nowrap;

@@ -172,6 +172,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		sb.push('<span class="');
 		if (name == 'spacer') {
 			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
+			openCloseIcon.push('&nbsp;');
 		} else {
 			var id = '';
 			if (button) {

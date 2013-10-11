@@ -179,25 +179,16 @@
 		}
 	}
 	&-icon {
-		font-size: @baseFontSize;
-		display: inline-block;
-		.size(@baseIconWidth, @baseIconHeight);
+		.iconFontStyle(@baseFontSize, @iconColor);
+		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
+		line-height: @baseIconHeight;
+		text-align: center;
 		position: relative;
 		cursor: pointer;
-	}
-	&-icon-open,
-	&-icon-close {
-		color: @iconColor;
-		display: inline-block;
-		position: absolute;
-		left: 8px;
 		
 		&:hover {
 			color: @iconHoverColor;
 		}
-	}
-	&-icon-open {
-		left: 5px;
 	}
 }
 .z-groupfoot-inner {

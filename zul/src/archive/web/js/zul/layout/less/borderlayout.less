@@ -23,13 +23,14 @@
 
 	&-icon {
 		.iconFontStyle(@baseFontSize, @iconColor);
-		margin: 2px 2px 0 0;
-		line-height: @baseLineHeight + 3;
+		.displaySize(block, @baseButtonWidth, @baseButtonHeight);
+		line-height: @baseButtonHeight;
 		.opacity(0.5);
-		position: relative;
+		text-align: center;
+		position: absolute;
+		right: 3px;
 		overflow: hidden;
 		cursor: pointer;
-		float: right;
 		
 		&:hover {
 			.opacity(1);
@@ -54,8 +55,8 @@
 		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, bold, @textColorGray);
 		height: @baseBarHeight;
 		border-bottom: 1px solid @baseBorderColor;
-		padding: 5px;
-		line-height: @baseBarHeight - 10; // 22px = 32 - padding-top/bottom
+		padding: 4px 4px 3px;
+		line-height: @baseBarHeight - 8; // 24px = 32 - (padding + border)
 		.verGradient(@baseGradientStart, @baseGradientEnd);
 		overflow: hidden;
 		cursor: default;
