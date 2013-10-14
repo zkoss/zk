@@ -297,7 +297,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			stackup.style.left = el.style.left;
 		}
 		errbox._fixarrow();
-		if (zk.android)
+		if (zk.mobile)
 			zk(el).redoCSS();
 	}
 });

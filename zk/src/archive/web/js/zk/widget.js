@@ -402,6 +402,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
+		
+		if (zk.mobile)
+			zk(drag.node).redoCSS();
 	}
 	function DD_ghosting(drag, ofs, evt) {
 		return drag.control.cloneDrag_(drag, DD_pointer(evt, jq(drag.node).height()));
