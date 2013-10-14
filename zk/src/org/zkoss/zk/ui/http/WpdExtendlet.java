@@ -19,19 +19,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +37,7 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.io.Files;
 import org.zkoss.json.JSONArray;
 import org.zkoss.json.JSONObject;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
@@ -84,25 +81,6 @@ import org.zkoss.zk.ui.util.URIInfo;
  * @since 5.0.0
  */
 public class WpdExtendlet extends AbstractExtendlet<Object> {
-	
-	// Set this library property to true to disable tablet UI
-	private final static String TABLET_UI_DISABLED_KEY = "org.zkoss.zkmax.tablet.ui.disabled";
-	// The following javascript should be loaded when tablet UI is disabled.
-	private static Set<String> _ignoreTouchJS = new HashSet<String>();
-	static {
-		_ignoreTouchJS.add("domtouch.js");
-		_ignoreTouchJS.add("touch/domtouch.js");
-		_ignoreTouchJS.add("touch/iscroll.js"); // to make iScroll available
-		_ignoreTouchJS.add("touch/grid-touch.js"); // to make iScroll available
-		_ignoreTouchJS.add("touch/layoutregion-touch.js");
-		_ignoreTouchJS.add("touch/listbox-touch.js"); // to make iScroll available
-		_ignoreTouchJS.add("touch/meshwidget-touch.js"); // to make iScroll available
-		_ignoreTouchJS.add("touch/nav-touch.js");
-		_ignoreTouchJS.add("touch/navitem-touch.js");
-		_ignoreTouchJS.add("touch/tree-touch.js"); // to make iScroll available
-		_ignoreTouchJS.add("touch/treecol-touch.js"); // to make iScroll available
-		_ignoreTouchJS.add("touch/wscroll-touch.js"); // to to make wscroll available
-	}
 	
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
@@ -334,8 +312,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 						wc.add(jspath, browser);
 					} else {
 						if (browser != null && (!Servlets.isBrowser(reqctx.request, browser) ||
-								// F70-ZK-1956: Check whether the js should be loaded when disabled tablet UI
-								isTabletUiDisabled(reqctx.request, jspath))) 
+								// F70-ZK-1956: Check whether the script should be loaded or ignored.
+								getScriptManager().isScriptIgnored(reqctx.request, jspath))) 
 							continue;
 						if (!writeResource(reqctx, out, jspath, dir, true))
 							log.error(jspath+" not found, "+el.getLocator()+", "+path);
@@ -385,10 +363,26 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 		return new ByteContent(out.toByteArray(), cacheable);
 	}
-	private boolean isTabletUiDisabled(ServletRequest request, String jspath) {
-		return "true".equals(Library.getProperty(TABLET_UI_DISABLED_KEY, "false")) && 
-				Servlets.isBrowser(request, "mobile") && !_ignoreTouchJS.contains(jspath);
+	private ScriptManager getScriptManager() {
+		if (_smanager == null) {
+			synchronized (this) {
+				if (_smanager == null) {
+					String clsnm = Library.getProperty("org.zkoss.zk.ui.http.ScriptManager.class");
+					if (clsnm != null) {
+						try {
+							_smanager = (ScriptManager) Classes.newInstanceByThread(clsnm);
+						} catch (Throwable ex) {
+							log.error("Unable to instantiate "+clsnm, ex);
+						}
+					}
+					if (_smanager == null)
+						_smanager = new ScriptManagerImpl();
+				}
+			}
+		}
+		return _smanager;
 	}
+	private static volatile ScriptManager _smanager;
 	private boolean isWpdContentRequired(String pkg, Element root) {
 		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(getDeviceType()))
 			if (langdef.getJavaScriptPackagesWithMerges().contains(pkg))
@@ -700,8 +694,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					final String[] inf = (String[])o;
 					if (inf[1] != null && request != null) {
 						if (!Servlets.isBrowser(request, inf[1]) || 
-								 // F70-ZK-1956: Check whether the js should be loaded when disabled tablet UI
-								isTabletUiDisabled(reqctx.request, inf[0]))
+								 // F70-ZK-1956: Check whether the script should be loaded or ignored.
+								getScriptManager().isScriptIgnored(reqctx.request, inf[0]))
 							continue;
 					}
 					if (!writeResource(reqctx, out, inf[0], _dir, true))
