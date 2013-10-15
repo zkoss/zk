@@ -15,7 +15,7 @@
 		<jgroovy.version>1.5.6</jgroovy.version>
 		<jruby.version>1.1.2</jruby.version>
 		<jython.version>2.2.1</jython.version>
-		<js.version>1.7R1</js.version>
+		<js.version>1.7R4</js.version>
 		<poi.version>3.7</poi.version>
 		<jxl.version>2.6.12</jxl.version>		
 		<jasperreports.version>4.5.1</jasperreports.version>
@@ -204,8 +204,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>rhino</groupId>
-			<artifactId>js</artifactId>
+			<groupId>org.mozilla</groupId>
+			<artifactId>rhino</artifactId>
 			<version>${js.version}</version>
 			<scope>runtime</scope>
 		</dependency>
