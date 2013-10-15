@@ -554,11 +554,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 		}
 		
-		var bar = this._scrollbar;
-		if (bar) {
-			bar.destroy();
-			bar = this._scrollbar = null;
-		}
+		this.destroyBar_();
+		
 		if (this.$n('split')) {
 			if (this._drag) {
 				this._drag.destroy();
@@ -576,12 +573,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		setTimeout(function () {
 			if (wgt.desktop) {
 				if (!wgt._scrollbar && !wgt._nativebar)
-					wgt._scrollbar = wgt._initScrollbar();
+					wgt._scrollbar = wgt.initScrollbar_();
 				wgt.refreshBar_();
 			}
 		}, 200);
 	},
-	_initScrollbar: function () {
+	initScrollbar_: function () {
 		var wgt = this,
 			embed = jq(wgt.$n('real')).data('embedscrollbar'),
 			cave = wgt.$n('cave');
@@ -620,6 +617,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				if (scrollToTop)
 					bar.scrollTo(0, 0);
 			}
+		}
+	},
+	destroyBar_: function () {
+		var bar = this._scrollbar;
+		if (bar) {
+			bar.destroy();
+			bar = this._scrollbar = null;
 		}
 	},
 	doResizeScroll_: function () {
