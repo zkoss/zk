@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.fn;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 
 /**
@@ -73,6 +74,15 @@ public class ZkFns {
 	 */
 	public static String getEdition() {
 		return WebApps.getEdition();
+	}
+	
+	/**
+	 * Returns the edition whether valid or invalid.
+	 * @since 6.5.5
+	 */
+	public static boolean isEditionValid() {
+		WebApp current = WebApps.getCurrent();
+		return !("CE".equals(getEdition()) || current == null || current.getAttribute("org.zkoss.zk.ui.notice") == null);
 	}
 
 	/** Returns the string encoded with ZK.

@@ -197,11 +197,15 @@ div.z-log button {
 	position: absolute; right: 10px; bottom: 10px;
 	z-index: 32000;
 	background: transparent no-repeat center;
+	<c:if test="${z:isEditionValid()}">
 	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkpowered.png")}');
+	</c:if>
 }
+<c:if test="${z:isEditionValid()}">
 .z-uptime {
 	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkuptime.png")}');
 }
+</c:if>
 .z-loading, .z-apply-loading {
 	position: absolute;
 	cursor: wait;
