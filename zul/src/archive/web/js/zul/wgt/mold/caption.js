@@ -40,7 +40,7 @@ function (out) {
 		if (p.isMaximized())
 			out.push(' ', p.$s('maximized'));
 		out.push('">', this._maximized ? 
-				getIcon('resize-small') : getIcon('fullscreen'), '</div>');
+				getIcon('resize-small') : getIcon('resize-full'), '</div>');
 	}
 	if (this._isMinimizeVisible())
 		out.push('<div id="', puuid, '-min" class="', picon, ' ', p.$s('minimize'),
