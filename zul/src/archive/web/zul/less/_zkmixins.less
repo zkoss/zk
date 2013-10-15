@@ -18,7 +18,12 @@
 .encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
 	background-image: url(${c:encodeThemeURL('@{url}')});
 }
-
+.encodeURL-horGradient(@url, @start, @end) {
+	background: url(${c:encodeURL('@{url}')}), ${t:gradValue('hor', '@{start} 0%; @{end} 100%')};
+}
+.encodeURL-verGradient(@url, @start, @end) {
+	background: url(${c:encodeURL('@{url}')}), ${t:gradValue('ver', '@{start} 0%; @{end} 100%')};
+}
 //---------------------------------------------
 // theme.dsp.tld
 //---------------------------------------------
@@ -27,7 +32,7 @@
 	${t:gradient('@{direction}', '@{value}')};
 }
 .gradValue(@direction, @value) {
-	${t:gradValue('@{direction}', '@{value}')};	
+	background: ${t:gradValue('@{direction}', '@{value}')};
 }
 .gradients(@direction, @value) {
 	${t:gradients('@{direction}', '@{value}')};
