@@ -42,6 +42,7 @@ public class B65_ZK_1739_Composer extends GenericForwardComposer<Window> {
 	public void onClick$start() {
 		thread.start();
 	}
+	@SuppressWarnings("deprecation")
 	public void onClick$toggle() {
 		thread.stop();
 	}

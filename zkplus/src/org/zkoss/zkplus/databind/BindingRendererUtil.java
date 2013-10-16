@@ -44,8 +44,8 @@ public class BindingRendererUtil {
 			clone.setAttribute(DataBinder.TEMPLATE, template);
 		}
 		
-		final Iterator<Component> itt = (Iterator<Component>) template.getChildren().iterator();
-		final Iterator<Component> itc = (Iterator<Component>) clone.getChildren().iterator();
+		final Iterator<? extends Component> itt = template.getChildren().iterator();
+		final Iterator<? extends Component> itc = clone.getChildren().iterator();
 		while (itt.hasNext()) {
 			final Component t = itt.next();
 			final Component c = itc.next();

@@ -86,7 +86,7 @@ public class AnnotateBinderHelper {
 		}
 		
 		processComponentBindings0(comp);
-		for(final Iterator<Component> it = (Iterator<Component>) comp.getChildren().iterator(); it.hasNext();) {
+		for(final Iterator<? extends Component> it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
 			processAllComponentsBindings(kid); //recursive to each child
 		}

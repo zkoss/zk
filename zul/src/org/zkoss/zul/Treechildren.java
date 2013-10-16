@@ -95,7 +95,7 @@ public class Treechildren extends XulElement {
 			}
 			public Iterator<Treeitem> iterator() {
 				return new Iterator<Treeitem>() {
-					private final Iterator<Component> _it = (Iterator<Component>) getChildren().iterator();
+					private final Iterator<? extends Component> _it = getChildren().iterator();
 					private Iterator<Treeitem> _sub;
 					public boolean hasNext() {
 						return (_sub != null && _sub.hasNext()) || _it.hasNext();
