@@ -56,7 +56,6 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
-import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * Used to process the request for a ZUML page. Though it is called
@@ -76,6 +75,7 @@ import org.zkoss.zk.ui.sys.Attributes;
  * </dl>
  * @author tomyeh
  */
+@SuppressWarnings("deprecation")
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final org.slf4j.Logger log = LoggerFactory.getLogger(DHtmlLayoutServlet.class);
 

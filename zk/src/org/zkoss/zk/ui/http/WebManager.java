@@ -102,6 +102,7 @@ public class WebManager {
 	 * so you rarely need to create it manually.
 	 * @since 3.6.0
 	 */
+	@SuppressWarnings("deprecation")
 	public WebManager(ServletContext ctx, String updateURI) {
 		if (log.isDebugEnabled()) log.debug("Starting WebManager at "+ctx);
 
