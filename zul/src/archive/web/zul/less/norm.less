@@ -204,15 +204,20 @@ input[type="checkbox"] {
 .z-initing {
 	.size(60px, 60px);
 	background: transparent no-repeat center;
+
+<c:if test="${z:isEditionValid()}">
 	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkpowered.png")}');
+</c:if>
 	position: absolute;
 	right: 10px;
 	bottom: 10px;
 	z-index: 32000;
 }
+<c:if test="${z:isEditionValid()}">
 .z-uptime {
 	background-image: url('http://www.zkoss.org/zk/img/${z:encodeWithZK("zkuptime.png")}');
 }
+</c:if>
 
 .z-loading,
 .z-apply-loading {

@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.idom.Document;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
@@ -237,6 +238,10 @@ public class Wpds {
 		ampm[1] = df.format(cal.getTime());
 		appendJavaScriptArray(sb, "APM", ampm);
 
+		//since ZK 6.5.5
+		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.processMask.enabled")))
+			sb.append("zk.processMask=true;\n");
+			
 		return sb.toString();
 	}
 	private static final void appendJavaScriptArray(StringBuffer sb,
