@@ -79,6 +79,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 	}
 	
 	//-- ListitemRenderer --//
+	@SuppressWarnings("unchecked")
 	public void render(Listitem item, java.lang.Object bean, int index) {
 		final List<Component> kids = cast((List) item.getAttribute(KIDS));
 		((List<Component>)item.getChildren()).addAll(kids);

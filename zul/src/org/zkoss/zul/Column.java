@@ -502,7 +502,7 @@ public class Column extends HeaderElement {
 					it.remove();
 					if (previous == null || compare(cmprx, previous, row) != 0) {
 						//new group
-						final List<Component> cells = (List<Component>) row.getChildren();
+						final List<? extends Component> cells = row.getChildren();
 						if (cells.size() < index)
 							throw new IndexOutOfBoundsException(
 									"Index: "+index+" but size: "+ cells.size());

@@ -116,6 +116,7 @@ public class Components {
 	 *</code></pre>
 	 * @since 3.5.2
 	 */
+	@SuppressWarnings("unchecked")
 	public static
 	void replaceChildren(Component parent, Collection<Component> newChildren) {
 		final Collection<Component> children = (Collection<Component>) parent.getChildren();
@@ -230,7 +231,7 @@ public class Components {
 	 * <p>The performance of the returned collection's size() is NO GOOD.
 	 */
 	public static Collection<Component> getVisibleChildren(Component comp) {
-		final Collection<Component> children = (Collection<Component>) comp.getChildren();
+		final Collection<? extends Component> children = comp.getChildren();
 		return new AbstractCollection<Component>() {
 			public int size() {
 				int size = 0;
@@ -242,7 +243,7 @@ public class Components {
 			}
 			public Iterator<Component> iterator() {
 				return new Iterator<Component>() {
-					final Iterator<Component> _it = children.iterator();
+					final Iterator<? extends Component> _it = children.iterator();
 					Component _next;
 					public boolean hasNext() {
 						if (_next != null) return true;

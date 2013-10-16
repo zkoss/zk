@@ -78,6 +78,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	}
 		
 	//-- RowRenderer --//
+	@SuppressWarnings("unchecked")
 	public void render(Row row, java.lang.Object bean, int index) {
 		final List<Component> kids = cast((List) row.getAttribute(KIDS));
 		((List<Component>)row.getChildren()).addAll(kids);
