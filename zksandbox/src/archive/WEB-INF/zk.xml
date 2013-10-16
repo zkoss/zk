@@ -36,6 +36,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!-- Turn on if you want to always enable the process mask.
+	<library-property>
+		<name>org.zkoss.zk.ui.processMask.enabled</name>
+		<value>true</value>
+	</library-property>
+	-->
+
 	<!-- Turn on if you want to cache by etag for dynamic resource.
 	<library-property>
 		<name>org.zkoss.web.classWebResource.cache.etag</name>

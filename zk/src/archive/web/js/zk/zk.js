@@ -112,7 +112,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			setTimeout(showprgbInit, 10);
 	}
 	function showprgb() { //When passed to FF's setTimeout, 1st argument is not null
-		_showprgb();
+		_showprgb(zk.processMask);
 	}
 	function _showprgb(mask, icon) {
 		var $jq;

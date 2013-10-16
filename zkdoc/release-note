@@ -2,6 +2,7 @@
 ZK 6.5.5
 * Features
   ZK-1971: ZK wcs file shall exclude the css with zk logo image
+  ZK-1973: Server processing effect can be configurable
 
 * Bugs
   ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM
