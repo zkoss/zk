@@ -24,7 +24,6 @@ import javax.servlet.ServletRequest;
  * @author RaymondChao
  * @since 7.0.0
  */
-
 public class ScriptManagerImpl implements ScriptManager {
 	public boolean isScriptIgnored(ServletRequest request, String jspath) {
 		// Do nothing.
