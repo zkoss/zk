@@ -488,7 +488,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (child instanceof Treerow) {
 			_treerow = null;
 		} else if (child instanceof Treechildren) {
-			addVisibleItemCount(-_treechildren.getVisibleItemCount());
+			if (isOpen())
+				addVisibleItemCount(-_treechildren.getVisibleItemCount());
 			_treechildren = null;
 		}
 		super.onChildRemoved(child);

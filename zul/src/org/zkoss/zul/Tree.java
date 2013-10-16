@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -503,9 +504,10 @@ public class Tree extends MeshElement {
 								}
 							}
 							
-							if (!ti.isOpen()) {
+							if (!ti.isOpen() && ti.getDesktop() != null) {
 								ti.getChildren().clear();
 								ti.setRendered(false);
+								ti.setLoaded(false);
 							}
 								
 							i++;
