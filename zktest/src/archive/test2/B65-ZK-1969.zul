@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1969.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Oct 15, 2013 11:19:58 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Search" width="600px" border="normal" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_1969.mvvm.SearchViewModel')">
+	<vbox>
+	<label multiline="true">
+	1. Please click the "Search" button
+	2. Select the last item and press Down key
+	3. The page should jump to next page and select the first item of the second page.
+	</label>
+	<hbox align="center">
+		Keyword:
+		<textbox value="@bind(vm.keyword)" />
+		<button label="Search" onClick="@command('search')" />
+	</hbox>
+
+ <listbox id="listSection"  sizedByContent="true" span="true" model="@load(vm.carList)" emptyMessage="ssssss" selectedItem="@bind(vm.selectedCar)"
+                    hflex="true" pagingPosition="bottom" mold="paging" vflex="1"
+                    focus="@load(not(vm.carList eq null) and vm.carList.size() > 0 )">
+                    
+        <listhead menupopup="auto" sizable="true">
+			<listheader label="Model" />
+			<listheader label="Make" />
+			<listheader label="Price" width="20%"/>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@bind(item.model)"></listcell>
+				<listcell label="@bind(item.make)"></listcell>
+				<listcell>$<label value="@bind(item.price)" /></listcell>
+			</listitem>
+		</template>
+	</listbox>
+    </vbox>
+</window>
+

@@ -1,6 +1,8 @@
   --------
 ZK 6.5.5
 * Features
+  ZK-1971: ZK wcs file shall exclude the css with zk logo image
+  ZK-1973: Server processing effect can be configurable
 
 * Bugs
   ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM
@@ -12,6 +14,7 @@ ZK 6.5.5
   ZK-1951: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 10
   ZK-1964: Datebox with time cannot be selected when use tablet's device
   ZK-1960: save binding to an array throws ClassCastException
+  ZK-1969: listbox rod with paging mold causes incorrect keyboard navigation
 
   --------
 ZK 6.5.4

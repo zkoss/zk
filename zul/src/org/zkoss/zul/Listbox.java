@@ -3520,7 +3520,9 @@ public class Listbox extends MeshElement {
 			final int tsz = getItemCount();
 			final int toUI = Math.min(to, tsz - 1); // capped by size
 			if (!isMultiple() || shift == 0) {
-				if (index >= tsz)
+				
+				// B65-ZK-1969 and B65-1715
+				if ((_model == null && index >= tsz) || (_model != null && index >= _model.getSize()))
 					index = tsz - 1;
 				setSelectedIndex(index);
 				setFocusIndex(offset < 0 ? pageSize - 1 : offset);

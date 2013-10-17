@@ -21,7 +21,11 @@ import org.zkoss.zk.ui.Component;
 /**
  * A hbox.
  * <p>Default {@link #getZclass}: z-hbox.(since 3.5.0)
- *
+ * 
+ * Note: when use {@link #setHflex(String)} or {@link #setVflex(String)} in some
+ * cases, it will not work well, because the hbox is made by HTML Table element,
+ * which will increase its size according to its content. If so, please use Hlayout
+ * component instead. 
  * @author tomyeh
  */
 public class Hbox extends Box {
