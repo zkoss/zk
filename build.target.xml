@@ -113,6 +113,7 @@ if="deploy.tomcat.required">
 		<classpath>
 			<pathelement path="${src.archive.dir}"/>
 			<pathelement path="${maindir}/zul/${src.archive.dir}"/>
+			<pathelement path="${maindir}/zkmax/${src.archive.dir}"/>
 			<pathelement location="${dist.lib.ext.dir}/zkless.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/lesscss-engine.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/js.jar"/>
