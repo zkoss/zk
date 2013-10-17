@@ -167,9 +167,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			after = jq(inp).position().top + zk(inp).offsetHeight(),
 			realafter = zk.ie > 9 ? Math.round(after) : after;
 		
-		if (realtop < realafter)
+		if (realtop < realafter) {
 			$pp.position(inp, 'before_start');	
 			this._shallSyncPopupPosition = true;
+		}
 		pp.style.display = 'none';
 		pp.style.visibility = '';
 		this.slideDown_(pp);
