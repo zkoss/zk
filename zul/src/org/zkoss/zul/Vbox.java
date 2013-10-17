@@ -22,6 +22,10 @@ import org.zkoss.zk.ui.Component;
  * A vbox.
  * <p>Default {@link #getZclass}: z-vbox.(since 3.5.0)
  *
+ * Note: when use {@link #setHflex(String)} or {@link #setVflex(String)} in some
+ * cases, it will not work well, because the vbox is made by HTML Table element,
+ * which will increase its size according to its content. If so, please use Vlayout
+ * component instead.
  * @author tomyeh
  */
 public class Vbox extends Box {
