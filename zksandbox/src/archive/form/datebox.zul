@@ -42,13 +42,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 Calendar:<calendar/>
 <separator/>
-Timebox: <timebox id="tb" cols="14" format="a hh:mm:ss" onCreate="self.value = new Date()" mold="rounded"/>
-<checkbox label="Use rounded timebox" checked="true"
-	onCheck='tb.mold=self.checked? "rounded": "default"'/>
+Timebox: <timebox id="tb" cols="14" format="a hh:mm:ss" onCreate="self.value = new Date()"/>
 <separator/>
-Datebox: <datebox id="db" cols="20" format="yyyy/MM/dd a hh:mm:ss"  onCreate="self.value = new Date()" mold="rounded"/>
-<checkbox label="Use rounded datebox" checked="true"
-	onCheck='db.mold=self.checked? "rounded": "default"'/>
+Datebox: <datebox id="db" cols="20" format="yyyy/MM/dd a hh:mm:ss"  onCreate="self.value = new Date()"/>
 <separator/>
 </zk>
 ]]></attribute>
