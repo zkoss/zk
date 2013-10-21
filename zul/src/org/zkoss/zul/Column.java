@@ -162,6 +162,13 @@ public class Column extends HeaderElement {
 	 * are called with {@link FieldComparator}, if
 	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
 	 * If you assigned a comparator to them, it won't be affected.
+	 * The auto created comparator is case-sensitive.
+	 * 
+	 * <p>If "auto(LOWER(FIELD_NAME))" or "auto(UPPER(FIELD_NAME))" is specified,
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link FieldComparator}, if
+	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
+	 * If you assigned a comparator to them, it won't be affected.
 	 * The auto created comparator is case-insensitive.
 	 *
 	 * <p>If "auto(<i>number</i>)" is specified, 
