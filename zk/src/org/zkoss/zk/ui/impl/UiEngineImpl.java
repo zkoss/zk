@@ -393,7 +393,8 @@ public class UiEngineImpl implements UiEngine {
 							desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 							config.invokeExecutionCleanups(exec, oldexec, errs);
 						}
-					} else {
+					} else {						
+						exec.setAttribute(org.zkoss.zk.ui.impl.Attributes.PAGE_CREATED, Boolean.TRUE);
 						comps = uv.isAborting() || exec.isVoided() ?
 							new Component[0]:
 							execCreate(new CreateInfo(
