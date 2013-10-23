@@ -254,13 +254,13 @@ implements Page, PageCtrl, java.io.Serializable {
 
 		fixFellows(getRoots());
 	}
-	private final void fixFellows(Collection<? extends Component> c) {
+	private final void fixFellows(Collection<Component> c) {
 		for (Component comp: c) {
 			final String compId = comp.getId();
 			if (compId.length() > 0)
 				addFellow(comp);
 			if (!(comp instanceof IdSpace))
-				fixFellows(((Collection<? extends Component>) comp.getChildren())); //recursive
+				fixFellows(comp.getChildren()); //recursive
 		}
 	}
 

@@ -264,7 +264,7 @@ public class Group extends Row {
 	 * An iterator used by _items.
 	 */
 	private class IterItems implements Iterator<Row> {
-		private final Iterator<? extends Component> _it = getParent().getChildren().listIterator(getIndex()+1);
+		private final Iterator<Component> _it = getParent().getChildren().listIterator(getIndex()+1);
 		private int _j;
 
 		public boolean hasNext() {

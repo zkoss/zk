@@ -68,9 +68,9 @@ public class Footer  extends FooterElement {
 			final Columns cs = grid.getColumns();
 			if (cs != null) {
 				final int j = getColumnIndex();
-				final List<? extends Component> cschs = cs.getChildren();
+				final List<Column> cschs = cs.getChildren();
 				if (j < cschs.size())
-					return (Column)cschs.get(j);
+					return cschs.get(j);
 			}
 		}
 		return null;

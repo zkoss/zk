@@ -7,10 +7,15 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
+import org.zkoss.zul.Listitem;
 
 public class F70_ZK_1729 extends SelectorComposer<Component> {
+	
+	@Wire
+	Listbox box;
 	
 	@Wire
 	Listhead head;
@@ -20,7 +25,7 @@ public class F70_ZK_1729 extends SelectorComposer<Component> {
 	
 	@Listen("onClick=#btn")
 	public void onClick() {
-		List<Listheader> headers = (List<Listheader>) head.getChildren();
+		List<Listheader> headers = head.getChildren();
 		
 		StringBuffer headerinfo = new StringBuffer("");
 		for(Listheader header: headers) {
@@ -28,5 +33,7 @@ public class F70_ZK_1729 extends SelectorComposer<Component> {
 		}
 		
 		lbl.setValue(headerinfo.toString());
+		
+		box.getChildren().add(new Listitem("new item"));
 	}
 }

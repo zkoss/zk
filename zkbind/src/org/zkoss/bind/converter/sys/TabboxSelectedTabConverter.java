@@ -37,7 +37,7 @@ public class TabboxSelectedTabConverter implements Converter, java.io.Serializab
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
 		if (val != null) {
 			//iterate to find the selected radio via the value
-			for (Iterator<? extends Component> it = ((Tabbox)component).getTabs().getChildren().iterator(); it.hasNext();) {
+			for (Iterator<Component> it = ((Tabbox)component).getTabs().getChildren().iterator(); it.hasNext();) {
 				final Component child = it.next();
 				if (child instanceof Tab) {
 					if (val.equals(((Tab)child).getLabel())) {

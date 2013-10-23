@@ -1643,7 +1643,7 @@ public class Grid extends MeshElement {
 	/** An iterator used by _heads.
 	 */
 	private class Iter implements Iterator<Component> {
-		private final ListIterator<? extends Component> _it = getChildren().listIterator();
+		private final ListIterator<Component> _it = getChildren().listIterator();
 
 		public boolean hasNext() {
 			while (_it.hasNext()) {
