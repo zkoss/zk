@@ -15,6 +15,8 @@ ZK 6.5.5
   ZK-1964: Datebox with time cannot be selected when use tablet's device
   ZK-1960: save binding to an array throws ClassCastException
   ZK-1969: listbox rod with paging mold causes incorrect keyboard navigation
+  ZK-1979: Server push doesn't work when open 2 browser tab
+  ZK-1955: Impossible to use onblur or onfocus on composite component
 
   --------
 ZK 6.5.4

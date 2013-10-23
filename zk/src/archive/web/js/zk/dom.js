@@ -1458,15 +1458,16 @@ jq(el).zk.center(); //same as 'center'
 				} else
 					p.appendChild(el);
 				
-				var cf, p;
+				var cf, p, a;
 				// ZK-851
 				if ((zk.ff || zk.opera) && (cf = zk._prevFocus) && 
 					(p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf)) { 
 					if (cf.getInputNode)
 						jq(cf.getInputNode()).trigger('blur');
-					
-					// ZK-1324: Trendy button inside bandbox popup doesn't lose focus when popup is closed
-					if (cf.$instanceof(zul.wgt.Button))
+					else if ((a = cf.$n('a')) // ZK-1955
+							&& jq.nodeName(a, 'button', 'input', 'textarea', 'a', 'select', 'iframe'))
+						jq(a).trigger('blur');
+					else if (cf.$instanceof(zul.wgt.Button)) // ZK-1324: Trendy button inside bandbox popup doesn't lose focus when popup is closed
 						jq(cf.$n('btn') || cf.$n()).trigger('blur');
 				}
 			}

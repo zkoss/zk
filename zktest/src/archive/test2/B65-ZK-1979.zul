@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1979.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Oct 21, 2013  4:22:58 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="test of long operation" border="normal">
+	<label multiline="true">
+	1. Please open another Tab with the same url and then go back to the first Tab. (ZK EE only)
+	2. Click the "async long op" button, and check with the message below.
+	3. Go to the second Tab and test the step 2 again.
+	</label>
+	    <zscript><![CDATA[
+			EventQueue eq = EventQueues.lookup("longop"); //create a queue
+			String result;
+			
+			//subscribe async listener to handle long operation
+			eq.subscribe(new EventListener() {
+			  public void onEvent(Event evt) { //asynchronous
+			    org.zkoss.lang.Threads.sleep(2000); //simulate a long operation
+			    result = "success"; //store the result
+			  }
+			}, new EventListener() { //callback
+			  public void onEvent(Event evt) {
+			    print(result); //show the result to the browser
+//			    EventQueues.remove("longop");
+			  }
+			});
+			 
+			 void print(String msg) {
+			     new Label(msg).setParent(inf);
+			 }
+	    ]]></zscript>
+	    <button label="async long op">
+	        <attribute name="onClick"><![CDATA[
+			   print("You should see \"success\" after 2 seconds, otherwise, it's a bug.");
+			   eq.publish(new Event("whatever")); //kick off the long operation
+	        ]]></attribute>
+	    </button>
+	    <vbox id="inf"/>
+	</window>
+	
+</zk>

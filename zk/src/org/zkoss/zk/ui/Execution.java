@@ -362,8 +362,12 @@ public interface Execution extends Scope {
 	 * you forward to other servlet by use javax.servlet.RequestDispatcher
 	 * directly.
 	 *
-	 * <p>The other case to invoke this method is if you'd likd to redirect
+	 * <p>The other case to invoke this method is if you'd like to redirect
 	 * to another (by specifying the refresh header).
+	 * 
+     * <p>If the ZK page has already been created, this method throws
+     * an IllegalStateException, i.e. you cannot invoke this method in
+     * {@link  org.zkoss.zk.ui.util.Composer#doAfterCompose(Component)}. (@since 6.5.5)
 	 *
 	 * @since 2.4.1
 	 */
