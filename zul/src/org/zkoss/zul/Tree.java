@@ -309,8 +309,8 @@ public class Tree extends MeshElement {
 	/**
 	 * Prepare the map of the visible items recursively in deep-first order.
 	 */
-	private boolean getVisibleItemsDFS(List<? extends Component> list, Map<Treeitem, Boolean> map, int[] data) {
-		for (Component cmp: list) {
+	private <T extends Component> boolean getVisibleItemsDFS(List<T> list, Map<Treeitem, Boolean> map, int[] data) {
+		for (T cmp: list) {
 			if (cmp instanceof Treeitem) {
 				if (data[4] >= data[0]) return false; // full
 				final Treeitem item = (Treeitem) cmp;

@@ -617,8 +617,8 @@ public class Rows extends XulElement {
 		int offset = s.readInt();
 		afterUnmarshal(offset);
 	}
-	public List<Component> getChildren() {
-		return new Children();
+	public <T extends Component> List<T> getChildren() {
+		return (List<T>) new Children();
 	}
 	protected class Children extends XulElement.Children {
 		protected void removeRange(int fromIndex, int toIndex) {

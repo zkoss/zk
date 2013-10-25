@@ -569,7 +569,7 @@ w:use="foo.MyWindow"&gt;
 	/** Returns a live list of children.
 	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 */
-	public List<? extends Component> getChildren();
+	public <T extends Component> List<T> getChildren();
 	/** Returns the root of this component.
 	 */
 	public Component getRoot();

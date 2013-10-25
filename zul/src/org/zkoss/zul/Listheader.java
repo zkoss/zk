@@ -528,12 +528,12 @@ public class Listheader extends HeaderElement {
 				for (Listitem item : children) {
 					if (previous == null || compare(cmprx, previous, item) != 0) {
 						//new group
-						final List<? extends Component> cells = item.getChildren();
+						final List<Listcell> cells = item.getChildren();
 						if (cells.size() < index)
 							throw new IndexOutOfBoundsException(
 									"Index: "+index+" but size: "+ cells.size());
 						Listgroup group;
-						Listcell cell = (Listcell)cells.get(index);
+						Listcell cell = cells.get(index);
 						if (cell.getLabel() != null) {
 							group = new Listgroup(cell.getLabel());
 						} else {

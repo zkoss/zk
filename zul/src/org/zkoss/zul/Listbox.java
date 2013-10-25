@@ -447,8 +447,8 @@ public class Listbox extends MeshElement {
 		return index - (offset < 0 ? 0 : offset);
 	}
 
-	public List<Component> getChildren() {
-		return new Children();
+	public <T extends Component> List<T> getChildren() {
+		return (List<T>) new Children();
 	}
 
 	protected class Children extends AbstractComponent.Children {

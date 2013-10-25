@@ -69,9 +69,9 @@ public class Listfooter extends FooterElement {
 			final Listhead lcs = listbox.getListhead();
 			if (lcs != null) {
 				final int j = getColumnIndex();
-				final List<? extends Component> lcschs = lcs.getChildren();
+				final List<Listheader> lcschs = lcs.getChildren();
 				if (j < lcschs.size())
-					return (Listheader)lcschs.get(j);
+					return lcschs.get(j);
 			}
 		}
 		return null;

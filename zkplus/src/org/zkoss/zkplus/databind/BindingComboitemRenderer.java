@@ -44,10 +44,9 @@ import org.zkoss.zul.Comboitem;
 		_binder = binder;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void render(Comboitem item, Object bean, int index) throws Exception {
 		final List<Component> kids = cast((List) item.getAttribute(KIDS));
-		((List<Component>)item.getChildren()).addAll(kids);
+		item.getChildren().addAll(kids);
 		//item.removeAttribute(KIDS);
 			
 		//remove template mark of cloned component and its descendants

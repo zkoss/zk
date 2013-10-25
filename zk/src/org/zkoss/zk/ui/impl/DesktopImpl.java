@@ -826,7 +826,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		((PageCtrl)page).destroy();
 	}
-	private void removeComponents(Collection<? extends Component> comps) {
+	private void removeComponents(Collection<Component> comps) {
 		for (Component comp: comps) {
 			removeComponents(comp.getChildren()); //recursive
 			removeComponent(comp, true);

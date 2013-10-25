@@ -45,7 +45,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Threads;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
-
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
@@ -1332,8 +1331,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 * <p>Default: instantiates and returns an instance of {@link Children}.
 	 */
-	public List<? extends Component> getChildren() {
-		return new Children();
+	public <T extends Component> List<T> getChildren() {
+		return (List<T>) new Children();
 	}
 	/** Returns the root of the specified component.
 	 */

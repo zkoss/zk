@@ -104,7 +104,7 @@ public class Composition implements Initiator, InitiatorExt {
 		// resolve insert components
 		final Map<String, Component> insertMap = new HashMap<String, Component>(); //(insert name, insert component)
 		final Component parent = (Component) exec.getAttribute(PARENT);
-		final Collection<? extends Component> roots = (parent == null ? page.getRoots() : parent.getChildren());
+		final Collection<Component> roots = (parent == null ? page.getRoots() : parent.getChildren());
 		resolveInsertComponents(roots, insertMap);
 
 		if (!roots.isEmpty()) {
@@ -128,7 +128,7 @@ public class Composition implements Initiator, InitiatorExt {
 		}
 	}
 	
-	private void resolveInsertComponents(Collection<? extends Component> comps, Map<String, Component> map) {
+	private void resolveInsertComponents(Collection<Component> comps, Map<String, Component> map) {
 		for (Component comp: comps) {
 			final Annotation annt = ((ComponentCtrl)comp).getAnnotation(null, "insert");
 			if (annt != null) {
