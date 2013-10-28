@@ -122,7 +122,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 					var chkable = item.isCheckable(),
 						multi = tree.isMultiple(),
 						cmCls = multi ? item.$s('checkbox') : item.$s('radio'),
-						ckCls = multi ? ' z-icon-ok' : ' z-icon-radio';
+						ckCls = multi ? ' z-icon-check' : ' z-icon-radio';
 					sb.push('<span id="', this.parent.uuid, '-cm" class="',
 							item.$s('checkable'), ' ', cmCls);
 					

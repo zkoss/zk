@@ -35,7 +35,7 @@ function (out, skipper) {
 			
 			if (this._closable) {
 				out.push('<div id="', uuid , '-close" class="', icon, ' ',
-						this.$s('close'), '">' , getIcon('remove'), '</div>');
+						this.$s('close'), '">' , getIcon('times'), '</div>');
 			}
 			if (this._maximizable) {
 				var maxd = this._maximized;

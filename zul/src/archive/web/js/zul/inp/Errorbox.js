@@ -157,7 +157,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				zUtl.encodeXML(this.msg, {multiline:true}),
 				'</div><div id="', uuid, '-cls" class="',
 				this.$s('close'), '"><i class="', icon,
-				' z-icon-remove"></i></div></div>');
+				' z-icon-times"></i></div></div>');
 	},
 	onFloatUp: function (ctl) {
 		var wgt = ctl.origin;

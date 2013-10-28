@@ -527,7 +527,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 									sclass: 'z-fileupload-progress'
 								})
 								, new zul.wgt.Div({
-									sclass: 'z-fileupload-remove z-icon-remove',
+									sclass: 'z-fileupload-remove z-icon-times',
 									listeners: {
 										onClick: function () {
 											var uuid = id.substring(0, id.indexOf('_uplder_'));

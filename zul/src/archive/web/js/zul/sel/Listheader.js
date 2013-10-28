@@ -274,7 +274,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		if (box != null && this.parent.firstChild == this 
 				&& box._checkmark && box._multiple && !box._listbox$noSelectAll) // B50-ZK-873
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable') + 
-				'"><i class="' + this.$s('icon') + ' z-icon-ok"></i></span>'
+				'"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
 				+ (s ? '&nbsp;' + s:'');
 		return s;
 	},

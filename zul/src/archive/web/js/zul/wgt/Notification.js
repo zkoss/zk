@@ -14,9 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _iconMap = {
-		'warning': 'z-icon-exclamation-sign',
-		'info': 'z-icon-info-sign',
-		'error': 'z-icon-remove-sign'
+		'warning': 'z-icon-exclamation-circle',
+		'info': 'z-icon-info-circle',
+		'error': 'z-icon-times-circle'
 	};
 	var _dirMap = {
 		'u': 'up',
@@ -49,7 +49,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 				this._msg, '</div>');
 		if (this._closable)
 			out.push('<div id="', uuid, '-cls" class="', this.$s('close'),
-					'"><i id="', uuid, '-clsIcon" class="', icon, ' z-icon-remove"></i></div>');
+					'"><i id="', uuid, '-clsIcon" class="', icon, ' z-icon-times"></i></div>');
 		out.push('</div>'); // not encoded to support HTML
 	},
 	domClass_: function (no) {

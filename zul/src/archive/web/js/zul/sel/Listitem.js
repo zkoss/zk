@@ -25,9 +25,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var allow = jq(drag.node).hasClass('z-drop-allow');
 			for (var len = 0; len < dragImg.length; len ++) {
 				if (allow)
-					jq(dragImg[len]).removeClass('z-icon-remove').addClass('z-icon-ok');
+					jq(dragImg[len]).removeClass('z-icon-times').addClass('z-icon-check');
 				else
-					jq(dragImg[len]).removeClass('z-icon-ok').addClass('z-icon-remove');
+					jq(dragImg[len]).removeClass('z-icon-check').addClass('z-icon-times');
 			}
 		}
 	}
