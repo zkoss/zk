@@ -28,7 +28,6 @@ import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.idom.Document;
 
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.servlet.http.Encodes;
 
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.Scope;
@@ -362,7 +361,7 @@ public interface Execution extends Scope {
 	 * you forward to other servlet by use javax.servlet.RequestDispatcher
 	 * directly.
 	 *
-	 * <p>The other case to invoke this method is if you'd likd to redirect
+	 * <p>The other case to invoke this method is if you'd liked to redirect
 	 * to another (by specifying the refresh header).
 	 *
 	 * @since 2.4.1
@@ -981,6 +980,19 @@ public interface Execution extends Scope {
 	 * is used.
 	 */
 	public void sendRedirect(String uri, String target);
+
+	/**
+	 * Send a redirect to the given url in the application the redirect is done
+	 * via status 302 by {@link #AuRedirect} if respRedirect is set to true. If
+	 * respRedirect is set to false, it is the same with
+	 * {@link #sendRedirect(String)}.
+	 * 
+	 * @param uri  the URI to redirect to, or null to reload the same page
+	 * @param target the name of the browser window that send-redirect will
+	 * @param respRedirect whether to send redirect by HttpResponse or not
+	 * @since 7.0.0
+	 */
+	public void sendRedirect(String uri, boolean respRedirect);
 
 	/** Returns the parameters (aka., arg) if {@link #pushArg} is called recently,
 	 * or an empty map if not available.

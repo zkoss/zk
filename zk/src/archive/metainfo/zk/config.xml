@@ -60,4 +60,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zk.au.http.UploadInfoService$DesktopInit</listener-class>
 	</listener>
+	<listener>
+		<listener-class>org.zkoss.zk.au.http.AuRedirect</listener-class>
+	</listener>
 </config>

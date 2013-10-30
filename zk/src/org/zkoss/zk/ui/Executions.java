@@ -26,7 +26,6 @@ import java.net.MalformedURLException;
 import org.zkoss.idom.Document;
 import org.zkoss.xel.ExpressionFactory;
 
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -35,8 +34,6 @@ import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
  * Utilities to access {@link Execution}.
