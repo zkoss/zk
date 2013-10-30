@@ -980,7 +980,6 @@ public interface Execution extends Scope {
 	 * is used.
 	 */
 	public void sendRedirect(String uri, String target);
-
 	/**
 	 * Send a redirect to the given url in the application the redirect is done
 	 * via status 302 by {@link #AuRedirect} if respRedirect is set to true. If
@@ -988,7 +987,6 @@ public interface Execution extends Scope {
 	 * {@link #sendRedirect(String)}.
 	 * 
 	 * @param uri  the URI to redirect to, or null to reload the same page
-	 * @param target the name of the browser window that send-redirect will
 	 * @param respRedirect whether to send redirect by HttpResponse or not
 	 * @since 7.0.0
 	 */
