@@ -17,6 +17,7 @@ ZK 7.0.0
   ZK-19: Support SLF4J API for logging instead
   ZK-1729: Change generic code
   ZK-1956: Support toggle switch to enable or disable tablet UI
+  ZK-1721: support redirect with 302 in ZK AU Responses
   ZK-1687: Portallayout supports row based orientation
   
 * Bugs
@@ -48,6 +49,8 @@ ZK 6.5.5
   ZK-1960: save binding to an array throws ClassCastException
   ZK-1969: listbox rod with paging mold causes incorrect keyboard navigation
   ZK-1979: Server push doesn't work when open 2 browser tab
+  ZK-1955: Impossible to use onblur or onfocus on composite component
+  ZK-1985: strict client site date parsing allows certain characters
 
   --------
 
