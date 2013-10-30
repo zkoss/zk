@@ -89,7 +89,12 @@ zjq = function (jq) { //ZK extension
 				top = ioft[1] - ooft[1] +
 						(outer == (zk.safari ? document.body : document.body.parentNode)
 								? 0 : outer.scrollTop),
+				left = ioft[0] - ooft[0] +
+						(outer == (zk.safari ? document.body : document.body.parentNode)
+								? 0 : outer.scrollLeft),
 				ih = info ? info.h : inner.offsetHeight,
+				iw = info ? info.w : inner.offsetWidth,
+				right = left + iw,
 				bottom = top + ih,
 				updated;
 			//for fix the listbox(livedate) keydown select always at top
@@ -100,16 +105,27 @@ zjq = function (jq) { //ZK extension
 				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
 				updated = true;
 			}
+			
+			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position
+			if (outer.scrollLeft > left) {
+				outer.scrollLeft = left;
+				updated = true;
+			} else if (right > outer.clientWidth + outer.scrollLeft) {
+				outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
+				updated = true;
+			}
+			
 			if (updated || !info) {
 				if (!info)
 					info = {
 						oft: ioft,
 						h: inner.offsetHeight,
+						w: inner.offsetWidth,
 						el: inner
 					};
 				else info.oft = zk(info.el).revisedOffset();
 			}
-			outer.scrollTop = outer.scrollTop;
+			
 			return info; 
 		}
 	}
