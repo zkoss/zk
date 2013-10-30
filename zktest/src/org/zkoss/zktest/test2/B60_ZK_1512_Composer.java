@@ -20,7 +20,7 @@ public class B60_ZK_1512_Composer extends SelectorComposer<Window> {
 	
 	@Listen("onClick = #btn3")
 	public void pop() {
-		Window win = (Window) Executions.createComponents("B60-ZK-1512-1.zul", null, null);
+		Window win = (Window) Executions.createComponents("/test2/B60-ZK-1512-1.zul", null, null);
 		win.setClosable(true);
 		win.doModal();
 	}
