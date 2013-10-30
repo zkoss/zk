@@ -978,6 +978,21 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (!wgt.$instanceof(zul.wgt.Caption))
 			return this.$supers('getChildMinSize_', arguments);
 	},
+	isExcludedHflex_: function () {
+		if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
+			var p = this.parent;
+			if (p.parent)
+				return p.parent.isVertical();
+		}
+	},
+
+	isExcludedVflex_: function () {
+		if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
+			var p = this.parent;
+			if (p.parent)
+				return !(p.parent.isVertical());
+		}
+	},
 	getCollapseOpenIconClass_: function () {
 		return 'z-icon-caret-up';
 	},
