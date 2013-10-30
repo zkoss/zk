@@ -17,6 +17,7 @@ ZK 7.0.0
   ZK-19: Support SLF4J API for logging instead
   ZK-1729: Change generic code
   ZK-1956: Support toggle switch to enable or disable tablet UI
+  ZK-1721: support redirect with 302 in ZK AU Responses
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
