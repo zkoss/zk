@@ -1,0 +1,8 @@
+<window title="Click Navitem Label" border="normal" width="300px" height="300px">
+<navbar id="nb" collapsed="false">
+	<navitem label="Click me!" onClick='msg.appendChild(new Label("[click]"));' iconSclass="z-icon-flag"/>
+</navbar>
+Click on the "Click me!", it would show [click] once:
+<div id="msg">
+</div>
+</window>
