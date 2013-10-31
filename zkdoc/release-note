@@ -29,7 +29,8 @@ ZK 7.0.0
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
-  are deprecated, please use SLF4J API for logging instead.  
+  are deprecated, please use SLF4J API for logging instead. 
+  + rename the orient of tabbox "horizontal" to "top", "vertical" to "left" and add extra two orients named "bottom" and "right" 
 
   --------
 ZK 6.5.5
