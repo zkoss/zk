@@ -2367,6 +2367,7 @@ public class Tree extends MeshElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
+			final Set<Treeitem> prevSeldItems = new LinkedHashSet<Treeitem>(_selItems);
 			SelectEvent<Treeitem, ?> evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Treeitem>() {
 				public Set<Object> getObjects(Set<Treeitem> items) {
@@ -2376,6 +2377,10 @@ public class Tree extends MeshElement {
 					for (Treeitem i : items)
 						objs.add(_model.getChild(getTreeitemPath(Tree.this, i)));
 					return objs;
+				}
+
+				public Set<Treeitem> getPreviousSelectedItems() {
+					return prevSeldItems;
 				}
 			});
 			Set<Treeitem> selItems = evt.getSelectedItems();

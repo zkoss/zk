@@ -3370,6 +3370,7 @@ public class Listbox extends MeshElement {
 			if (_rod && Executions.getCurrent().getAttribute(
 					"zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
+			final Set<Listitem> prevSeldItems = new LinkedHashSet<Listitem>(_selItems);
 			SelectEvent evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Listitem>() {
 				public Set<Object> getObjects(Set<Listitem> items) {
@@ -3379,6 +3380,10 @@ public class Listbox extends MeshElement {
 					for (Listitem i : items)
 						objs.add(_model.getElementAt(i.getIndex()));
 					return objs;
+				}
+
+				public Set<Listitem> getPreviousSelectedItems() {
+					return prevSeldItems;
 				}
 			});
 			Set<Listitem> selItems = cast(evt.getSelectedItems());

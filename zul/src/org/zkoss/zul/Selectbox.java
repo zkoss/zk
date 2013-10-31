@@ -445,6 +445,7 @@ public class Selectbox extends HtmlBasedComponent {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
+			final Object prevSelected = _jsel >= 0 ? _model.getElementAt(_jsel) : null;
 			_jsel = ((Integer) request.getData().get("")).intValue();
 			final Integer index = ((Integer)request.getData().get(""));
 			final Set<Object> selObjs = new LinkedHashSet<Object>();
@@ -455,8 +456,15 @@ public class Selectbox extends HtmlBasedComponent {
 			if (_model != null)
 				getSelectableModel().setSelection(selObjs);;
 			
-			Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-					selObjs, null, index, 0));
+			if (prevSelected != null) {
+				final Set<Object> prevSet = new LinkedHashSet<Object>(1);
+				prevSet.add(prevSelected);
+				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
+						prevSet, selObjs, null, index, 0));
+			} else {
+				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
+						null, selObjs, null, index, 0));
+			}
 		} else // ZK-1053
 			super.service(request, everError);
 	}

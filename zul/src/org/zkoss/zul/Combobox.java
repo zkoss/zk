@@ -760,6 +760,8 @@ public class Combobox extends Textbox {
 			_open = evt.isOpen();
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
+			final Set<Comboitem> prevSelectedItems = new LinkedHashSet();
+			prevSelectedItems.add(_selItem);
 			SelectEvent evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Comboitem>() {
 				public Set<Object> getObjects(Set<Comboitem> items) {
@@ -769,6 +771,10 @@ public class Combobox extends Textbox {
 					for (Comboitem i : items)
 						objs.add(_model.getElementAt(i.getIndex()));
 					return objs;
+				}
+
+				public Set<Comboitem> getPreviousSelectedItems() {
+					return prevSelectedItems;
 				}
 			});
 			Set selItems = evt.getSelectedItems();

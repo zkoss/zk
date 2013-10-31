@@ -36,6 +36,7 @@ import org.zkoss.zk.au.AuRequests;
  */
 public class SelectEvent<T extends Component, E> extends Event {
 	private final Set<T> _selectedItems;
+	private final Set<T> _prevSelectedItems;
 	private final Set<E> _selectedObjects;
 	private final T _ref;
 	private final int _keys;
@@ -71,9 +72,10 @@ public class SelectEvent<T extends Component, E> extends Event {
 		final Desktop desktop = request.getDesktop();
 		final List<String> sitems = cast((List)data.get("items"));
 		final Set<T> items = AuRequests.convertToItems(desktop, sitems);
+		final Set<T> prevItems = (Set<T>) (handler == null ? null : handler.getPreviousSelectedItems());
 		final Set<E> objs = (Set<E>) (handler == null ? null : handler.getObjects(items));
 		return new SelectEvent<T,E>(request.getCommand(), request.getComponent(),
-			items, objs, (T) desktop.getComponentByUuidIfAny((String)data.get("reference")),
+			items, prevItems, objs, (T) desktop.getComponentByUuidIfAny((String)data.get("reference")),
 			null, AuRequests.parseKeys(data));
 	}
 	
@@ -86,6 +88,11 @@ public class SelectEvent<T extends Component, E> extends Event {
 		 * Return selected objects from selected items if possible.
 		 */
 		public Set<Object> getObjects(Set<T> items);
+		/**
+		 * Return the previous selected items from the target component.
+		 * @since 7.0.0
+		 */		
+		public Set<T> getPreviousSelectedItems();
 	}
 	
 	/** Constructs a selection event.
@@ -108,7 +115,7 @@ public class SelectEvent<T extends Component, E> extends Event {
 	 * @since 3.6.0
 	 */
 	public SelectEvent(String name, Component target, Set<T> selectedItems, T ref, int keys) {
-		this(name, target, selectedItems, null, ref, null, keys);
+		this(name, target, selectedItems, null, null, ref, null, keys);
 	}
 	
 	/** Constructs a selection event containing the data objects that model
@@ -122,12 +129,16 @@ public class SelectEvent<T extends Component, E> extends Event {
 	 * @since 6.0.0
 	 */
 	public SelectEvent(String name, Component target, Set<T> selectedItems,
-			Set<E> selectedObjects, T ref, Object data, int keys) {
+			Set<T> previousSelectedItems, Set<E> selectedObjects, T ref, Object data, int keys) {
 		super(name, target, data);
 
 		if (selectedItems != null)
 			_selectedItems = selectedItems;
 		else _selectedItems = Collections.emptySet();
+		
+		if (previousSelectedItems != null)
+			_prevSelectedItems = previousSelectedItems;
+		else _prevSelectedItems = Collections.emptySet();
 		
 		if (selectedObjects != null)
 			_selectedObjects = selectedObjects;
@@ -141,6 +152,15 @@ public class SelectEvent<T extends Component, E> extends Event {
 	 */
 	public final Set<T> getSelectedItems() {
 		return _selectedItems;
+	}
+	
+	/** Returns the previous selected items or objects(never null).
+	 * <p> The returning objects is only for the target component has no children components.
+	 * such as Chosenbox, Selectbox, and Biglistbox.
+	 * @since 7.0.0
+	 */
+	public final Set<T> getPreviousSelectedItems() {
+		return _prevSelectedItems;
 	}
 	
 	/** Returns the selected objects (never null). The information is available
