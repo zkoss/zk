@@ -136,7 +136,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 					s += ' style="visibility:hidden"';
 				
 				s += '><i class="' + p.$s('icon') + ' ' 
-					+ (multi ? 'z-icon-ok' : 'z-icon-radio') + '"></i></span>';
+					+ (multi ? 'z-icon-check' : 'z-icon-radio') + '"></i></span>';
 			}
 			// insert toggle icon
 			if (isGrp) {

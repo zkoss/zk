@@ -23,33 +23,28 @@ function (out, skipper) {
 				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {
-			var	icon = this.$s('icon'),
-				getIcon = function(iconClass) {
-					return '<i class="z-icon-' + iconClass + '"></i>';
-				};
-			
+			var	icon = this.$s('icon');
 			if (this._closable) {
 				out.push('<div id="', uuid , '-close" class="', icon, ' ',
-						this.$s('close'), '">' , getIcon('remove') ,  '</div>');
+					this.$s('close'), '"><i class="', this.getClosableIconClass_(), '" /></div>');
 			}
 			if (this._maximizable) {
 				var maxd = this._maximized;
-				out.push('<div id="', uuid , '-max" class="', icon, ' ',
-						this.$s('maximize'));
+				out.push('<div id="', uuid, '-max" class="', icon, ' ', this.$s('maximize'));
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
-				out.push('">', maxd ? getIcon('resize-small') : getIcon('resize-full'),
-						'</div>');
+				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
+				out.push('"><i class="', maxIcon, '" /></div>');
 			}
 			if (this._minimizable) {
 				out.push('<div id="', uuid , '-min" class="', icon, ' ',
-						this.$s('minimize'), '" >', getIcon('minus'), '</div>');
+						this.$s('minimize'), '" ><i class="',
+						this.getMinimizableIconClass_(), '" /></div>');
 			}
 			if (this._collapsible) {
+				var openIcon = this._open ? this.getCollapseOpenIconClass_() : this.getCollapseCloseIconClass_();
 				out.push('<div id="', uuid , '-exp" class="', icon, ' ',
-						this.$s('expand'), '" >',
-						this._open ? getIcon('caret-up') : getIcon('caret-down'),
-						'</div>');
+						this.$s('expand'), '" ><i class="', openIcon, '" /></div>');
 			}
 			out.push(zUtl.encodeXML(title));
 		}

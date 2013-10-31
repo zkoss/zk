@@ -23,7 +23,7 @@ function (out) {
 	
 	out.push('<div name="', uuid, '"', this.domAttrs_(), '><ul>',
 			'<li><a name="', uuid, '-first" class="', btn, ' ', this.$s('first'),
-				'"><i class="z-paging-icon z-icon-double-angle-left"></i></a></li>',
+				'"><i class="z-paging-icon z-icon-angle-double-left"></i></a></li>',
 			'<li><a name="', uuid, '-prev" class="', btn, ' ', this.$s('previous'),
 				'"><i class="z-paging-icon z-icon-angle-left"></i></a></li>',
 			'<li><input name="',
@@ -33,7 +33,7 @@ function (out) {
 			'<li><a name="', uuid, '-next" class="', btn, ' ', this.$s('next'),
 				'"><i class="z-paging-icon z-icon-angle-right"></i></a></li>',
 			'<li><a name="', uuid, '-last" class="', btn, ' ', this.$s('last'),
-				'"><i class="z-paging-icon z-icon-double-angle-right"></i></a></li></ul>');
+				'"><i class="z-paging-icon z-icon-angle-double-right"></i></a></li></ul>');
 	
 	if (this.isDetailed())
 		this._infoTags(out);

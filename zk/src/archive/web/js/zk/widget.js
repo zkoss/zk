@@ -394,10 +394,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (dragImg) {
 			if (found) {
 				jq(drag.node).removeClass('z-drop-disallow').addClass('z-drop-allow');
-				dragImg.removeClass('z-icon-remove').addClass('z-icon-ok');
+				dragImg.removeClass('z-icon-times').addClass('z-icon-check');
 			} else {
 				jq(drag.node).removeClass('z-drop-allow').addClass('z-drop-disallow');
-				dragImg.removeClass('z-icon-ok').addClass('z-icon-remove');
+				dragImg.removeClass('z-icon-check').addClass('z-icon-times');
 			}
 		}
 

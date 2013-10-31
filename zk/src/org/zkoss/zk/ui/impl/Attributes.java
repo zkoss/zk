@@ -43,4 +43,8 @@ public class Attributes extends org.zkoss.zk.ui.sys.Attributes {
 	//Session//
 	
 	//Execution//
+	/** An execution attribute used to store whether the page has been created.
+	 * @since 6.5.5
+	 */
+	public static final String PAGE_CREATED = "org.zkoss.zk.ui.page.created";
 }

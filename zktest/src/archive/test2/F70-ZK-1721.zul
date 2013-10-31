@@ -1,0 +1,4 @@
+<zk>
+	Click the button it should redirect to F70-ZK-1721-1.zul correctly.
+	<button label="redirect" onClick='Executions.getCurrent().sendRedirect("F70-ZK-1721-1.zul", true)' />
+</zk>

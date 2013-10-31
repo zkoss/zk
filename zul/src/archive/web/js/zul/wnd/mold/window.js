@@ -28,14 +28,11 @@ function (out, skipper) {
 		
 		if (caption) caption.redraw(out);
 		else {
-			var icon = this.$s('icon'),
-				getIcon = function(iconClass) {
-					return '<i class="z-icon-' + iconClass + '"></i>';
-				};
-			
+			var icon = this.$s('icon');
 			if (this._closable) {
 				out.push('<div id="', uuid , '-close" class="', icon, ' ',
-						this.$s('close'), '">' , getIcon('remove'), '</div>');
+						this.$s('close'), '"><i class="',
+						this.getClosableIconClass_(), '" /></div>');
 			}
 			if (this._maximizable) {
 				var maxd = this._maximized;
@@ -43,12 +40,13 @@ function (out, skipper) {
 						this.$s('maximize'));
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
-				out.push('">', maxd ? getIcon('resize-small') : getIcon('resize-full')
-						, '</div>');
+				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
+				out.push('"><i class="', maxIcon, '" /></div>');
 			}
 			if (this._minimizable) {
 				out.push('<div id="', uuid , '-min" class="', icon, ' ',
-						this.$s('minimize'), '" >', getIcon('minus'), '</div>');
+						this.$s('minimize'), '" ><i class="',
+						this.getMinimizableIconClass_(), '" /></div>');
 			}
 			out.push(zUtl.encodeXML(title));
 		}

@@ -226,7 +226,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = '<span class="' + this.$s('text') + '">' + 
 				(zUtl.encodeXML(this.getLabel())) + '</span>',
-			icon = '<i class="' + this.$s('icon') + ' z-icon-ok"></i>',
+			icon = '<i class="' + this.$s('icon') + ' z-icon-check"></i>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
 		

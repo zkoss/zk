@@ -977,6 +977,10 @@ public class Components {
 			exec().sendRedirect(uri, target);
 		}
 
+		public void sendRedirect(String uri, boolean respRedirect) {
+			exec().sendRedirect(uri, respRedirect);
+		}
+
 		public Object setAttribute(String name, Object value) {
 			return exec().setAttribute(name, value);
 		}
