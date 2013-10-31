@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -202,7 +203,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 	/** Holds desktops. */
 	private static class Cache extends CacheMap<String, Desktop> { //serializable
-		private boolean _expungeDisabled;
+		private AtomicBoolean _expungeDisabled = new AtomicBoolean(false);
 		private Cache(Configuration config) {
 			super(16);
 
@@ -212,13 +213,11 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			v = config.getDesktopMaxInactiveInterval();
 			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE / 4);
 		}
-		synchronized private boolean disableExpunge(boolean disable) {
-			boolean old = _expungeDisabled;
-			_expungeDisabled = disable;
-			return old;
+		private boolean disableExpunge(boolean disable) {
+			return _expungeDisabled.getAndSet(disable);
 		}
 		protected boolean shallExpunge() {
-			return !_expungeDisabled
+			return !_expungeDisabled.get()
 				&& (super.shallExpunge()
 					|| sizeWithoutExpunge() > (getMaxSize() / 2));
 			//2012-12-07 Ian: expunge should been triggered often  
