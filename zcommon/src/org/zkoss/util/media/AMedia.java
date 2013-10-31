@@ -65,6 +65,9 @@ public class AMedia implements Media, java.io.Serializable {
 	private String _format;
 	/** The name (usually filename). */
 	private String _name;
+	/** Whether to allow Content-Disposition 
+	 * or not when writing the media to response header. */
+	private boolean _cntDisposition = true;
 
 	/** Construct with name, format, content type and binary data.
 	 *
@@ -278,6 +281,14 @@ public class AMedia implements Media, java.io.Serializable {
 		_ctype = ctype;
 	}
 
+	/** Set whether to allow Content-Disposition 
+	 * or not when writing the media to response header.
+	 * @since 7.0.0
+	 */
+	public void setContentDisposition(boolean cntDisposition) {
+		_cntDisposition = cntDisposition;
+	}
+
 	//-- Media --//
 	public boolean isBinary() {
 		return _bindata != null || _isdata != null;
@@ -359,6 +370,9 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	public String getContentType() {
 		return _ctype;
+	}
+	public boolean isContentDisposition() {
+		return _cntDisposition;
 	}
 
 	//-- Object --//

@@ -217,6 +217,9 @@ public class AImage implements Image, java.io.Serializable {
 	public final ImageIcon toImageIcon() {
 		return new ImageIcon(_data, _format);
 	}
+	public boolean isContentDisposition() {
+		return true;
+	}
 
 	//-- Object --//
 	/* 20041014: Tom Yeh: Due to performance and usability, it is no sense

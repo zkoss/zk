@@ -21,6 +21,7 @@ ZK 7.0.0
   ZK-1687: Portallayout supports row based orientation
   ZK-1992: Multiple selection component(listbox, chosenbox) support extra information for find out added item/removed item
   ZK-1924: Clients.scrollIntoView(Component comp) could also adjust horizontal scroll position
+  ZK-1991: AMedia FileDownload support ignore add Content-Disposition to header
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception

@@ -106,4 +106,11 @@ public interface Media {
 	 * @see #getFormat
 	 */
 	public String getContentType();
+	
+	/** Whether to allow Content-Disposition or not when writing the media to response header.
+	 * <p>
+	 * Default: true
+	 * @since 7.0.0
+	 */
+	public boolean isContentDisposition();
 }

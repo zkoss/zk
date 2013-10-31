@@ -439,7 +439,8 @@ public class Https extends Servlets {
 					flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
 					value += ";filename=" + encodeFilename(flnm);
-				response.setHeader("Content-Disposition", value);
+				if (media.isContentDisposition())
+					response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
 			}
 
