@@ -42,7 +42,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * @import zul.wgt.Toolbar
  */
 zul.tab.Tabbox = zk.$extends(zul.Widget, {
-	_orient: 'horizontal',
+	_orient: 'top',
 	_tabscroll: true,
 	/* ZK-1441
 	 * Reference: _sel() in Tab.js, Tabpanel.js
@@ -76,9 +76,15 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		 * Sets the orient.
 		 *
 		 * @param String orient
-		 *            either "horizontal" or "vertical".
+		 *            "horizontal" same as "top", "vertical" same as "left", "bottom, "right".
 		 */
-		orient: _zkf,
+		orient: function (orient) {
+			if (orient == 'horizontal')
+				this._orient = 'top';
+			else if (orient == 'vertical')
+				this._orient = 'left';
+			this.rerender();
+		},
 		/**
 		 * Returns the spacing between {@link Tabpanel}. This is used by certain
 		 * molds, such as accordion.
@@ -128,26 +134,46 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	isHorizontal: function() {
-		return this.getOrient().indexOf('horizontal') != -1;
+		var orient = this.getOrient();
+		return 'horizontal' == orient || 'top' == orient || 'bottom' == orient;
 	},
-	isHorizontalTop: function() {
-		return 'horizontal' == this.getOrient();
+	/**
+	 * Returns whether it is the top orientation.
+	 * @return boolean
+	 */
+	isTop: function() {
+		var orient = this.getOrient();
+		return 'horizontal' == orient || 'top' == orient;
 	},
-	isHorizontalBottom: function() {
-		return 'horizontal-bottom' == this.getOrient();
+	/**
+	 * Returns whether it is the bottom orientation.
+	 * @return boolean
+	 */
+	isBottom: function() {
+		return 'bottom' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is a vertical tabbox.
 	 * @return boolean
 	 */
 	isVertical: function() {
-		return this.getOrient().indexOf('vertical') != -1;
+		var orient = this.getOrient();
+		return 'vertical' == orient || 'left' == orient || 'right' == orient;
 	},
-	isVerticalRight: function() {
-		return 'vertical-right' == this.getOrient();
+	/**
+	 * Returns whether it is the right orientation.
+	 * @return boolean
+	 */
+	isRight: function() {
+		var orient = this.getOrient();
+		return 'vertical' == orient || 'left' == orient;
 	},
-	isVerticalLeft: function() {
-		return 'vertical' == this.getOrient();
+	/**
+	 * Returns whether it is the left orientation.
+	 * @return boolean
+	 */
+	isLeft: function() {
+		return 'left' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is in the accordion mold.
