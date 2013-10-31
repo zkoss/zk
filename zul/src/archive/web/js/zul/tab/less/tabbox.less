@@ -82,7 +82,7 @@
 	z-index: 1;
 }
 // remove selected tab bottom border
-.z-tabbox-horizontal .z-tab:first-child {
+.z-tabbox-top .z-tab:first-child {
 	&.z-tab-selected {
 		.boxShadow(1px 1px 0 #FFFFFF);
 	}
@@ -91,7 +91,7 @@
 	}
 }
 // remove selected tab top border
-.z-tabbox-horizontal-bottom .z-tab:first-child {
+.z-tabbox-bottom .z-tab:first-child {
 	&.z-tab-selected {
 		.boxShadow(1px -1px 0 #FFFFFF);
 	}
@@ -100,7 +100,7 @@
 	}
 }
 // remove selected tab right border
-.z-tabbox-vertical .z-tab:first-child {
+.z-tabbox-left .z-tab:first-child {
 	&.z-tab-selected {
 		.boxShadow(1px 1px 0 #FFFFFF);
 	}
@@ -110,7 +110,7 @@
 	}
 }
 // remove selected tab left border
-.z-tabbox-vertical-right .z-tab:first-child {
+.z-tabbox-right .z-tab:first-child {
 	border-left: 0px;
 	&.z-tab-selected {
 		.boxShadow(-1px 1px 0 #FFFFFF);
@@ -150,24 +150,24 @@
 			}
 		}
 	}
-	&-left,
-	&-right {
+	&-left-scroll,
+	&-right-scroll {
 		width: @baseButtonWidth;
 	}
-	&-right {
+	&-right-scroll {
 		padding-left: 1px;
 		right: 0;
 	}
-	&-up,
-	&-down {
+	&-up-scroll,
+	&-down-scroll {
 		height: @baseButtonHeight;
 	}
-	&-down {
+	&-down-scroll {
 		top: auto;
 		bottom: 0;
 	}
-	// horizontal-bottom
-	&-horizontal-bottom {
+	// bottom
+	&-bottom {
 		.z-tabbox-icon {
 			.bottomBorderRadius(@baseBorderRadius);
 			top: auto;
@@ -197,8 +197,8 @@
 			bottom: 0;
 		}
 	}
-	// vertical
-	&-vertical {
+	// left
+	&-left {
 		.z-tabbox-icon {
 			.leftBorderRadius(@baseBorderRadius);
 			padding-top: 0;
@@ -221,8 +221,8 @@
 		}
 	}
 
-	// vertical-right
-	&-vertical-right {
+	// right
+	&-right {
 		.z-tabbox-icon {
 			.rightBorderRadius(@baseBorderRadius);
 			padding-top: 0;
