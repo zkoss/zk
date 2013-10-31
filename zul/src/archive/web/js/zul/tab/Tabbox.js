@@ -66,7 +66,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		 * Returns the orient.
 		 *
 		 * <p>
-		 * Default: "horizontal".
+		 * Default: "top".
 		 *
 		 * <p>
 		 * Note: only the default mold supports it (not supported if accordion).
@@ -75,8 +75,8 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the orient.
 		 *
-		 * @param String orient
-		 *            "horizontal" same as "top", "vertical" same as "left", "bottom, "right".
+		 * @param orient either "top", "left", "bottom or "right".
+		 * @since 7.0.0 "horizontal" is renamed to "top" and "vertical" is renamed to "left".
 		 */
 		orient: function (orient) {
 			if (orient == 'horizontal')
