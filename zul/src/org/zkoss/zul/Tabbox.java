@@ -244,8 +244,8 @@ public class Tabbox extends XulElement {
 	/**
 	 * Sets the orient.
 	 *
-	 * @param orient
-	 *            "horizontal" same as "top", "vertical" same as "left", "bottom, "right".
+	 * @param orient either "top", "left", "bottom or "right".
+	 * @since 7.0.0 "horizontal" is renamed to "top" and "vertical" is renamed to "left".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"top".equals(orient) && !"bottom".equals(orient) 
