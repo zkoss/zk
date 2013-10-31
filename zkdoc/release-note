@@ -20,6 +20,7 @@ ZK 7.0.0
   ZK-1721: support redirect with 302 in ZK AU Responses
   ZK-1687: Portallayout supports row based orientation
   ZK-1924: Clients.scrollIntoView(Component comp) could also adjust horizontal scroll position
+  ZK-1991: AMedia FileDownload support ignore add Content-Disposition to header
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception

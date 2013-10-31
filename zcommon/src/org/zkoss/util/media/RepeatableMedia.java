@@ -138,4 +138,10 @@ public class RepeatableMedia implements Media, java.io.Serializable {
 		return _media.isBinary();
 	}
 
+	/**
+	 * @see Media#isContentDisposition()
+	 */
+	public boolean isContentDisposition() {
+		return _media.isContentDisposition();
+	}
 }

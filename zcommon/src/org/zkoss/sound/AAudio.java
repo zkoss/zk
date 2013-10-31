@@ -281,4 +281,7 @@ public class AAudio implements Audio, java.io.Serializable {
 		}
 		return _ctype;
 	}
+	public boolean isContentDisposition() {
+		return true;
+	}
 }
