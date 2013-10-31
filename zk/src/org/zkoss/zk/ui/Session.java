@@ -78,11 +78,13 @@ public interface Session extends Scope {
 	 * (to improve performance), this method returns the dotted-string form of
 	 * the IP address.
 	 * @since 3.0.1
+	 * @deprecated as of release 7.0.0, use {@link Executions.getCurrent().getRemoteHost()} instead.
 	 */
 	public String getRemoteHost();
 	/**  Returns the Internet Protocol (IP) address of the client or last
 	 * proxy that sent the first request creating this session.
 	 * @since 3.0.1
+	 * @deprecated as of release 7.0.0, use {@link Executions.getCurrent().getRemoteAddr()} instead.
 	 */
 	public String getRemoteAddr();
 	/** Returns the host name of the server to which the first request was sent
@@ -92,6 +94,7 @@ public interface Session extends Scope {
 	 *
 	 * @see #getLocalName
 	 * @since 3.0.1
+	 * @deprecated as of release 7.0.0, use {@link Executions.getCurrent().getServerName()} instead.
 	 */
 	public String getServerName();
 	/** Returns the host name of the Internet Protocol (IP) interface
@@ -102,11 +105,13 @@ public interface Session extends Scope {
 	 *
 	 * @see #getServerName
 	 * @since 3.0.1
+	 * @deprecated as of release 7.0.0, use {@link Executions.getCurrent().getLocalName()} instead.
 	 */
 	public String getLocalName();
 	/** Returns the Internet Protocol (IP) address of the interface on which
 	 * the first request was received (and creates this session).
 	 * @since 3.0.1
+	 * @deprecated as of release 7.0.0, use {@link Executions.getCurrent().getLocalAddr()} instead.
 	 */
 	public String getLocalAddr();
 
