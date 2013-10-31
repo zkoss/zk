@@ -60,7 +60,7 @@ public class Tabbox extends XulElement {
 	private transient Tabpanels _tabpanels;
 	private transient Tab _seltab;
 	private String _panelSpacing;
-	private String _orient = "horizontal";
+	private String _orient = "top";
 	private boolean _tabscroll = true;
 	/** The event listener used to listen onSelect for each tab. */
 	/* package */transient EventListener<Event> _listener;
@@ -121,7 +121,7 @@ public class Tabbox extends XulElement {
 			smartUpdate("tabscroll", _tabscroll);
 		}
 	}
-
+	
 	/**
 	 * Returns the spacing between {@link Tabpanel}. This is used by certain
 	 * molds, such as accordion.
@@ -216,13 +216,13 @@ public class Tabbox extends XulElement {
 	 * Returns the orient.
 	 *
 	 * <p>
-	 * Default: "horizontal".
+	 * Default: "top".
 	 *
 	 * <p>
 	 * Note: only the default mold supports it (not supported if accordion).
 	 */
 	public String getOrient() {
-		return _orient;
+		return this._orient;
 	}
 	/**
 	 * Sets the mold.
@@ -245,16 +245,21 @@ public class Tabbox extends XulElement {
 	 * Sets the orient.
 	 *
 	 * @param orient
-	 *            either "horizontal" or "vertical".
+	 *            "horizontal" same as "top", "vertical" same as "left", "bottom, "right".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
-		if (!"horizontal".equals(orient) && !"vertical".equals(orient) 
-				&& !"vertical-right".equals(orient) && !"horizontal-bottom".equals(orient))
+		if (!"horizontal".equals(orient) && !"top".equals(orient) && !"bottom".equals(orient) 
+				&& !"vertical".equals(orient) && !"right".equals(orient) && !"left".equals(orient))
 			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
 			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
 		if (!Objects.equals(_orient, orient)) {
-			_orient = orient;
+			if ("horizontal".equals(orient))
+				this._orient = "top";
+			else if ("vertical".equals(orient))
+				this._orient = "left";
+			else
+				this._orient = orient;
 			smartUpdate("orient", _orient);
 		}
 	}
@@ -265,15 +270,25 @@ public class Tabbox extends XulElement {
 	 * @since 3.0.3
 	 */
 	public boolean isHorizontal() {
-		return getOrient().contains("horizontal");
+		String orient = getOrient();
+		return "horizontal".equals(orient) || "top".equals(orient) || "bottom".equals(orient);
 	}
 	
-	public boolean isHorizontalTop() {
-		return "horizontal".equals(getOrient());
+	/**
+	 * Returns whether it is the top orientation.
+	 * @since 7.0.0
+	 */
+	public boolean isTop() {
+		String orient = getOrient();
+		return "horizontal".equals(orient) || "top".equals(orient);
 	}
 	
-	public boolean isHorizontalBottom() {
-		return "horizontal-bottom".equals(getOrient());
+	/**
+	 * Returns whether it is the bottom orientation.
+	 * @since 7.0.0
+	 */
+	public boolean isBottom() {
+		return "bottom".equals(getOrient());
 	}
 	/**
 	 * Returns whether it is a vertical tabbox.
@@ -281,20 +296,32 @@ public class Tabbox extends XulElement {
 	 * @since 3.0.3
 	 */
 	public boolean isVertical() {
-		return "vertical".equals(getOrient());
+		String orient = getOrient();
+		return "vertical".equals(orient) || "right".equals(orient) || "left".equals(orient);
 	}
 	
-	public boolean isVerticalLeft() {
-		return "vertical".equals(getOrient());
+	/**
+	 * Returns whether it is the left orientation.
+	 *
+	 * @since 7.0.0
+	 */
+	public boolean isLeft() {
+		String orient = getOrient();
+		return "vertical".equals(orient) || "left".equals(orient);
 	}
 	
-	public boolean isVerticalRight() {
-		return "vertical-right".equals(getOrient());
+	/**
+	 * Returns whether it is the right orientation.
+	 *
+	 * @since 7.0.0
+	 */
+	public boolean isRight() {
+		return "right".equals(getOrient());
 	}
 
 	public String getZclass() {
 		String cls = _zclass == null ? "z-tabbox" : _zclass;
-		String orientCls = isHorizontalTop() ? "" : " " + (cls + "-" + this._orient);
+		String orientCls = isTop() ? "" : " " + (cls + "-" + this._orient);
 		cls += inAccordionMold() ? " " + (cls + "-" + getMold()) : orientCls;
 		return cls;
 	}
@@ -455,7 +482,7 @@ public class Tabbox extends XulElement {
 		super.renderProperties(renderer);
 		if (_panelSpacing != null )
 			render(renderer, "panelSpacing", _panelSpacing);
-		if (!"horizontal".equals(_orient))
+		if (!isTop())
 			render(renderer, "orient", _orient);
 		if (!_tabscroll)
 			renderer.render("tabscroll", _tabscroll);

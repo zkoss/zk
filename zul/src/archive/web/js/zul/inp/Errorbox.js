@@ -151,7 +151,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			icon = this.$s('icon');
 		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-p" class="',
 				this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
-				icon, ' z-icon-warning-sign"></i><div id="', uuid,
+				icon, ' z-icon-exclamation-triangle"></i><div id="', uuid,
 				'-cave" class="', this.$s('content'), '" title="',
 				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
 				zUtl.encodeXML(this.msg, {multiline:true}),

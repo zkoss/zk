@@ -96,8 +96,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
-		<checkbox label="Use light mold" if="${zk.mobile == null}" 
-		 onCheck='tb.mold=self.checked?"accordion-lite":"accordion"'/>
 	</vbox>
 </hbox>
 ]]></attribute>

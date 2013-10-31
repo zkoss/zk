@@ -20,6 +20,7 @@ ZK 7.0.0
   ZK-1721: support redirect with 302 in ZK AU Responses
   ZK-1687: Portallayout supports row based orientation
   ZK-1992: Multiple selection component(listbox, chosenbox) support extra information for find out added item/removed item
+  ZK-1924: Clients.scrollIntoView(Component comp) could also adjust horizontal scroll position
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
@@ -27,6 +28,7 @@ ZK 7.0.0
   ZK-1879: collapse and open the splitter makes the hbox width no effect in zksandbox combobox case
   ZK-1911: Text-as with childable cannot work with preserve-blank for component setting
   ZK-1959: The height of arrow should not change when the tabbox add tab
+  ZK-1996: Navitem onClick event would trigger twice
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
