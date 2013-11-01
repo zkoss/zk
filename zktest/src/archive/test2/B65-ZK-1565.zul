@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1565.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Nov 01, 2013 11:01:16 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. Please drag the item of "ZK GWT".
+	2. Drop the dragged item into the same item "ZK GWT".
+	3. The result of the list won't be changed.
+	</label>
+	<hlayout>
+		<listbox id="left" height="250px" width="200px"
+			onDrop="move(event.dragged)" droppable="true" oddRowSclass="non-odd">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK Forge" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)"> 
+				<listcell label="ZK Mobile" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK GWT" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK JSF" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK JSP" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK Spring" />
+			</listitem>
+		</listbox>
+		<separator orient="vertical" spacing="8px" />
+		<listbox id="right" height="250px" width="200px" 
+			onDrop="move(event.dragged)" droppable="true" oddRowSclass="non-odd">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell label="ZK Studio" />
+			</listitem>
+		</listbox>
+	</hlayout>
+	<zscript><![CDATA[
+		void move(Component dragged) {
+			if (self instanceof Listitem) {
+				self.parent.insertBefore(dragged, self);
+			} else {
+				self.appendChild(dragged);
+			}
+		}
+	]]></zscript>
+</zk>

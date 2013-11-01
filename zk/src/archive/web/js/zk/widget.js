@@ -3223,7 +3223,9 @@ unbind_: function (skipper, after) {
 	 * @return zk.Widget the widget to drop to.
 	 */
 	getDrop_: function (dragged) {
-		if (this != dragged) {
+		if (this == dragged) {
+			return null; //non-matched if the same target. Bug for ZK-1565
+		} else {
 			var dropType = this._droppable,
 				dragType = dragged._draggable;
 			if (dropType == 'true') return this;
