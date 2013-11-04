@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zktest.test2.B65_ZK_1998Composer.FoodGroupModel.FoodGroupInfo;
 import org.zkoss.zul.GroupComparator;
 import org.zkoss.zul.GroupsModelArray;
 import org.zkoss.zul.Label;
@@ -44,7 +43,7 @@ public class B65_ZK_1998Composer extends SelectorComposer<Window> {
 
 	private static final long serialVersionUID = 20131104123419L;
 
-	static class Food {
+	private class Food {
 		private String category;
 		private String name;
 		private String topNutrients;
@@ -80,21 +79,19 @@ public class B65_ZK_1998Composer extends SelectorComposer<Window> {
 		}
 	}
 
-	static class FoodData {
-		private static List<Food> foods = new ArrayList<Food>();
-		static {
+	private class FoodData {
+		private List<Food> foods = new ArrayList<Food>();
+
+		public List<Food> getAllFoods() {
 			foods.add(new Food("Vegetables", "Asparagus", "Vitamin K"));
 			foods.add(new Food("Vegetables", "Beets", "Folate"));
 			foods.add(new Food("Seafood", "Salmon", "Tryptophan"));
 			foods.add(new Food("Seafood", "Shrimp", "Tryptophan"));
-		}
-
-		public static List<Food> getAllFoods() {
 			return foods;
 		}
 	}
 
-	static class FoodGroupComparator implements GroupComparator<Food> {
+	private class FoodGroupComparator implements GroupComparator<Food> {
 		public int compareGroup(Food food1, Food food2) {
 			return Math.abs(compare(food1, food2));
 		}
@@ -104,7 +101,33 @@ public class B65_ZK_1998Composer extends SelectorComposer<Window> {
 		}
 	}
 
-	static class FoodGroupModel extends GroupsModelArray<Food, FoodGroupModel.FoodGroupInfo, Object, Object> {
+	private class FoodGroupInfo {
+		private Food firstChild;
+		private int groupIndex;
+		private int columnIndex;
+
+		public FoodGroupInfo(Food firstChild, int groupIndex,
+				int columnIndex) {
+			this.firstChild = firstChild;
+			this.groupIndex = groupIndex;
+			this.columnIndex = columnIndex;
+		}
+
+		public Food getFirstChild() {
+			return firstChild;
+		}
+
+		@SuppressWarnings("unused")
+		public int getGroupIndex() {
+			return groupIndex;
+		}
+
+		public int getColumnIndex() {
+			return columnIndex;
+		}
+	}
+
+	private class FoodGroupModel extends GroupsModelArray<Food, FoodGroupInfo, Object, Object> {
 		private static final long serialVersionUID = 1L;
 
 		public FoodGroupModel(Food[] data, Comparator<Food> compr) {
@@ -119,34 +142,9 @@ public class B65_ZK_1998Composer extends SelectorComposer<Window> {
 		protected Object createGroupFoot(Food[] groupData, int index, int column) {
 			return groupData.length;
 		}
-
-		static class FoodGroupInfo {
-			private Food firstChild;
-			private int groupIndex;
-			private int columnIndex;
-
-			public FoodGroupInfo(Food firstChild, int groupIndex,
-					int columnIndex) {
-				this.firstChild = firstChild;
-				this.groupIndex = groupIndex;
-				this.columnIndex = columnIndex;
-			}
-
-			public Food getFirstChild() {
-				return firstChild;
-			}
-
-			public int getGroupIndex() {
-				return groupIndex;
-			}
-
-			public int getColumnIndex() {
-				return columnIndex;
-			}
-		}
 	}
 
-	static class FoodGroupRenderer implements ListitemRenderer<Object> {
+	private class FoodGroupRenderer implements ListitemRenderer<Object> {
 		public void render(Listitem item, Object obj, int index)
 				throws Exception {
 			if (item instanceof Listgroup) {
@@ -195,7 +193,7 @@ public class B65_ZK_1998Composer extends SelectorComposer<Window> {
 		super.doAfterCompose(comp);
 		org.zkoss.lang.Library.setProperty("org.zkoss.zul.listbox.rod", "false");
 
-		Food[] foods = FoodData.getAllFoods().toArray(new Food[] {});
+		Food[] foods = new FoodData().getAllFoods().toArray(new Food[] {});
 		groupModel = new FoodGroupModel(foods, new FoodGroupComparator());
 		groupModel.setMultiple(true);
 		for (Food food : foods)
