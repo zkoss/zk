@@ -62,6 +62,7 @@ public class Tabbox extends XulElement {
 	private String _panelSpacing;
 	private String _orient = "top";
 	private boolean _tabscroll = true;
+	private boolean _maximalHeight = false;
 	/** The event listener used to listen onSelect for each tab. */
 	/* package */transient EventListener<Event> _listener;
 
@@ -119,6 +120,30 @@ public class Tabbox extends XulElement {
 		if (_tabscroll != tabscroll) {
 			_tabscroll = tabscroll;
 			smartUpdate("tabscroll", _tabscroll);
+		}
+	}
+	
+	/**
+	 * Returns whether to use maximum height of all tabpanel in initial phase or not.
+	 * <p> 
+	 * Default: false.
+	 * @since 7.0.0
+	 */
+	public boolean isMaximalHeight() {
+		return _maximalHeight;
+	}
+
+	/**
+	 * Sets whether to use maximum height of all tabpanel in initial phase or not.
+	 * <p>
+	 * The Client ROD feature will be disabled if it is set to true.
+	 * @param boolean maximalHeight
+	 * @since 7.0.0
+	 */
+	public void setMaximalHeight(boolean maximalHeight) {
+		if (_maximalHeight != maximalHeight) {
+			_maximalHeight = maximalHeight;
+			smartUpdate("maximalHeight", _maximalHeight);
 		}
 	}
 	
@@ -486,5 +511,9 @@ public class Tabbox extends XulElement {
 			render(renderer, "orient", _orient);
 		if (!_tabscroll)
 			renderer.render("tabscroll", _tabscroll);
+		if (_maximalHeight) {
+			renderer.render("z$rod", false);
+			renderer.render("maximalHeight", _maximalHeight);
+		}
 	}
 }

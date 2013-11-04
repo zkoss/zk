@@ -1,0 +1,111 @@
+<zk>
+	<div>
+		1. for each rod or in accordion mold tabbox, all heights of
+		tabpanels should be same
+	</div>
+	<div>
+		2. click 'add', then the height of 4th tabpanel should not be
+		same as other's height
+	</div>
+	<hbox>
+		<window title="rod" border="normal" height="400px">
+			<tabbox id="rod" maximalHeight="true" width="300px">
+				<tabs id="tabs0">
+					<tab label="Tab1" />
+					<tab label="Tab2" />
+					<tab label="Tab3" />
+				</tabs>
+				<tabpanels id="pnls0">
+					<tabpanel>
+						<div>Tabpanel Content 1</div>
+						<div>Tabpanel Content 1</div>
+						<div>Tabpanel Content 1</div>
+					</tabpanel>
+					<tabpanel>
+						<div>Tabpanel Content 2</div>
+						<div>Tabpanel Content 2</div>
+					</tabpanel>
+					<tabpanel>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+			<button label="add tab and tabpanel">
+				<attribute name="onClick"><![CDATA[
+	Tab tab = new Tab("Tab4");
+	tab.setParent(tabs0);
+	Tabpanel tp = new Tabpanel();
+	tp.setHeight("600");
+
+	for (int i = 0; i < 6; i++) {
+		Div d = new Div();
+		d.appendChild(new Label("Tabpanel Content 4"));
+		tp.appendChild(d);
+	}
+	tp.setParent(pnls0);
+]]></attribute>
+			</button>
+
+		</window>
+		<window title="accordion" border="normal" height="400px">
+			<tabbox maximalHeight="true" mold="accordion"
+				width="300px">
+				<tabs>
+					<tab label="Tab1" />
+					<tab label="Tab2" />
+					<tab label="Tab3" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<div>Tabpanel Content 1</div>
+						<div>Tabpanel Content 1</div>
+						<div>Tabpanel Content 1</div>
+					</tabpanel>
+					<tabpanel>
+						<div>Tabpanel Content 2</div>
+						<div>Tabpanel Content 2</div>
+					</tabpanel>
+					<tabpanel>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+		<window title="non rod" border="normal" height="400px">
+			<tabbox width="300px">
+				<tabs>
+					<tab label="Tab1" />
+					<tab label="Tab2" />
+					<tab label="Tab3" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<div>Tabpanel Content 1</div>
+						<div>Tabpanel Content 1</div>
+						<div>Tabpanel Content 1</div>
+					</tabpanel>
+					<tabpanel>
+						<div>Tabpanel Content 2</div>
+						<div>Tabpanel Content 2</div>
+					</tabpanel>
+					<tabpanel>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+						<div>Tabpanel Content 3</div>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+	</hbox>
+</zk>
