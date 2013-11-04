@@ -25,13 +25,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletSession;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;

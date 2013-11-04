@@ -760,7 +760,7 @@ public class Combobox extends Textbox {
 			_open = evt.isOpen();
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
-			final Set<Comboitem> prevSelectedItems = new LinkedHashSet();
+			final Set<Comboitem> prevSelectedItems = new LinkedHashSet<Comboitem>();
 			prevSelectedItems.add(_selItem);
 			SelectEvent evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Comboitem>() {
