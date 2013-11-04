@@ -13,6 +13,12 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	function _isListgroup(w) {
+		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroup);
+	}
+	function _isListgroupfoot(w) {
+		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroupfoot);
+	}
 /**
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
@@ -132,8 +138,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			var zcls = this.getZclass();
 			if (this.isDisabled())
 				scls += (scls ? ' ': '') + this.$s('disabled');
-			if (this.isSelected())
-				scls += (scls ? ' ': '') + this.$s('selected');
+			//Bug ZK-1998: only apply selected style if groupSelect is true
+			if (_isListgroup(this) || _isListgroupfoot(this)) {
+				if (this.getMeshWidget().groupSelect && this.isSelected())
+					scls += (scls ? ' ': '') + this.$s('selected');
+			} else {
+				if (this.isSelected())
+					scls += (scls ? ' ': '') + this.$s('selected');
+			}
 		}
 		return scls;
 	},
