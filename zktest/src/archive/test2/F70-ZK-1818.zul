@@ -1,7 +1,7 @@
 <zk>
 	You should see tabs on the bottom in first tabbox,
 	and tabs on the	right in second tabbox.
-	<tabbox height="300px" width="400px" orient="horizontal-bottom">
+	<tabbox height="300px" width="400px" orient="bottom">
 		<tabs>
 			<tab label="Tab1" closable="true" />
 			<tab label="Tab2" closable="true" />
@@ -13,8 +13,8 @@
 			<tabpanel>Tabpanel Content 3</tabpanel>
 		</tabpanels>
 	</tabbox>
-	<tabbox height="300px" width="400px" orient="vertical-right">
-		<tabs>
+	<tabbox height="300px" width="400px" orient="right">
+		<tabs width="80px">
 			<tab label="Tab1" closable="true" />
 			<tab label="Tab2" closable="true" />
 			<tab label="Tab3" />
