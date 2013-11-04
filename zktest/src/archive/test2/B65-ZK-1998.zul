@@ -1,0 +1,12 @@
+<zk>
+	Should see checkbox in Header is checked.
+	<window apply="org.zkoss.zktest.test2.B65_ZK_1998Composer">
+		<listbox id="listbox">
+			<listhead>
+				<listheader label="Category" />
+				<listheader label="Name" />
+				<listheader label="Top Nutrients" />
+			</listhead>
+		</listbox>
+	</window>
+</zk>

@@ -73,6 +73,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _fixReplace(w) {
 		return w && (w = w.uuid) ? zk.Widget.$(w): null;
 	}
+	function _isListgroup(w) {
+		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroup);
+	}
+	function _isListgroupfoot(w) {
+		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroupfoot);
+	}
 
 var SelectWidget =
 /**
@@ -1220,9 +1226,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.$supers('_syncBodyHeight', arguments);
 	},
 	_isAllSelected: function () {
-		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
+		var isGroupSelect = this.groupSelect;
+		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is true
+			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
+				continue;
 			if (!w.isDisabled() && !w.isSelected())
 				return false;
+		}
 		return true;
 	},
 	_ignoreHghExt: function () {

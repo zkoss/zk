@@ -19,6 +19,7 @@ ZK 6.5.5
   ZK-1955: Impossible to use onblur or onfocus on composite component
   ZK-1985: strict client site date parsing allows certain characters
   ZK-1924: Clients.scrollIntoView(Component comp) could also adjust horizontal scroll position
+  ZK-1998: Listbox using GroupsModel sometimes would not update the select all status.
 
   --------
 ZK 6.5.4
