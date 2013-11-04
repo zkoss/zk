@@ -6,7 +6,7 @@
 	> .z-groupbox-header {
 		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
 		.size(100%, @baseIconHeight);
-		border: 1px solid @contentBorderColor;
+		border: 1px solid @baseBorderColor;
 		border-bottom: 0;
 		padding-left: 10px;
 		line-height: @baseLineHeight;
@@ -50,7 +50,7 @@
 	&-content {
 		display: block;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
-		border: 1px solid @contentBorderColor;
+		border: 1px solid @baseBorderColor;
 		border-top: 0;
 		padding: 5px;
 		overflow: hidden;
@@ -61,7 +61,7 @@
 		padding: 0;
 
 		.z-groupbox-content {
-			border-top: 1px solid @contentBorderColor;
+			border-top: 1px solid @baseBorderColor;
 		}
 	}
 
@@ -80,7 +80,7 @@
 			<c:if test="${zk.ie == 8}">
 				min-height: @baseBarHeight - 8;
 			</c:if>
-			border-bottom: 1px solid @contentBorderColor;
+			border-bottom: 1px solid @baseBorderColor;
 			padding: 3px 4px;
 			.verGradient(@baseGradientStart, @baseGradientEnd);
 

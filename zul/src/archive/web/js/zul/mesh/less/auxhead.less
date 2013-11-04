@@ -6,18 +6,18 @@
 
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
 		&.z-auxhead-border {
-			border-left: 1px solid @tableTitleBorderColor;
+			border-left: 1px solid @meshTitleBorderColor;
 		}
 	}
 
 	&-bar {
-		border-left: 1px solid @tableTitleBorderColor;
+		border-left: 1px solid @meshTitleBorderColor;
 	}
 }
 
 .z-auxheader {
-	border-left: 1px solid @tableTitleBorderColor;
-	border-bottom: 1px solid @tableTitleBorderColor;
+	border-left: 1px solid @meshTitleBorderColor;
+	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	<c:if test="${zk.ie != 8}">
 		.verGradient(@baseGradientStart, @baseGradientEnd);

@@ -18,7 +18,7 @@
 	}
 	
 	&-head {
-		border: 1px solid @headerBorderColor;
+		border: 1px solid @panelBorderColor;
 		border-bottom-color: @baseBorderColor;
 		.topBorderRadius(@baseBorderRadius);
 		padding: 5px 5px 1px;
@@ -41,7 +41,7 @@
 	}
 	
 	&-body {
-		border: 1px solid @bodyBorderColor;
+		border: 1px solid @panelBorderColor;
 		border-top-width: 0;
 		.bottomBorderRadius(@baseBorderRadius);
 		margin: 0;
@@ -147,7 +147,7 @@
 		dl {
 			font-size: 0;			
 			display: block;
-			border: 1px solid @outerBorderColor;
+			border: 1px solid @baseBorderColor;
 			border-top: 0;
 			margin: 0;
 			padding: 0;
@@ -172,7 +172,7 @@
 	}
 	
 	&-noheader &-body {
-		border-top: 1px solid @bodyBorderColor;
+		border-top: 1px solid @panelBorderColor;
 		.borderRadius(@baseBorderRadius);
 	}
 	
