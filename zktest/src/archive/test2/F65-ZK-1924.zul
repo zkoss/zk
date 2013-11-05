@@ -1,0 +1,25 @@
+<zk>
+<div>
+Click 'scroll to bottom-right', then you should see red area contains bottomRight text.
+Click 'scroll to top-left', then you should see green area contains topLeft text.
+</div>
+	<div height="200px" width="200px" style="overflow: auto">
+		<div height="400px" width="400px">
+			<box width="200px" height="200px" id="topLeft" pack="start"
+				align="start" style="background-color: green;">
+				topLeft
+			</box>
+			<hbox>
+				<div width="200px" height="200px" />
+				<box width="200px" height="200px" id="bottomRight"
+					pack="end" align="end" style="background-color: red;">
+					bottomRight
+				</box>
+			</hbox>
+		</div>
+	</div>
+	<button label="scroll to bottom-right"
+		onClick='Clients.scrollIntoView(bottomRight);' />
+	<button label="scroll to top-left"
+		onClick='Clients.scrollIntoView(topLeft);' />
+</zk>
