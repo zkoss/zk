@@ -1640,9 +1640,9 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
  			        '<div id="', id, '-p">',
  			        '<div class="errornumbers">', ++_errcnt, ' Errors</div>',
  					'<div class="button"', click, '="zk._Erbx.remove()">',
- 					'<i class="z-icon-times"/></div>',
+ 					'<i class="z-icon-times"></i></div>',
  					'<div class="button"', click, '="zk._Erbx.redraw()">',
- 					'<i class="z-icon-refresh"/></div></div>',
+ 					'<i class="z-icon-refresh"></i></div></div>',
  					'<div class="messagecontent"><div class="messages">',
  			        zUtl.encodeXML(msg, {multiline : true}), '</div></div></div>'];
 

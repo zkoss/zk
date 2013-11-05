@@ -32,7 +32,7 @@ function (out, skipper) {
 			if (this._closable) {
 				out.push('<div id="', uuid , '-close" class="', icon, ' ',
 						this.$s('close'), '"><i class="',
-						this.getClosableIconClass_(), '" /></div>');
+						this.getClosableIconClass_(), '"></i></div>');
 			}
 			if (this._maximizable) {
 				var maxd = this._maximized;
@@ -41,12 +41,12 @@ function (out, skipper) {
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
 				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
-				out.push('"><i class="', maxIcon, '" /></div>');
+				out.push('"><i class="', maxIcon, '"></i></div>');
 			}
 			if (this._minimizable) {
 				out.push('<div id="', uuid , '-min" class="', icon, ' ',
 						this.$s('minimize'), '" ><i class="',
-						this.getMinimizableIconClass_(), '" /></div>');
+						this.getMinimizableIconClass_(), '"></i></div>');
 			}
 			out.push(zUtl.encodeXML(title));
 		}
