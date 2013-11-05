@@ -182,6 +182,7 @@ public class Tree extends MeshElement {
 
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
+	private transient Frozen _frozen;
 	private transient Treechildren _treechildren;
 	/** A list of selected items. */
 	private transient Set<Treeitem> _selItems;
@@ -243,6 +244,7 @@ public class Tree extends MeshElement {
 				if (_treechildren != null) --sz;
 				if (_treefoot != null) --sz;
 				if (_paging != null) --sz;
+				if (_frozen != null) --sz;
 				return sz;
 			}
 			public Iterator<Component> iterator() {
@@ -633,6 +635,13 @@ public class Tree extends MeshElement {
 	 */
 	public Treefoot getTreefoot() {
 		return _treefoot;
+	}
+	/**
+	 * Returns the frozen child.
+	 * @since 7.0.0
+	 */
+	public Frozen getFrozen() {
+		return _frozen;
 	}
 	/** Returns the treechildren that this tree owns (might null).
 	 */
@@ -1092,6 +1101,9 @@ public class Tree extends MeshElement {
 		} else if (newChild instanceof Treefoot) {
 			if (_treefoot != null && _treefoot != newChild)
 				throw new UiException("Only one treefoot is allowed: "+this);
+		} else if (newChild instanceof Frozen) {
+			if (_frozen != null && _frozen != newChild)
+				throw new UiException("Only one frozen child is allowed: "+this);
 		} else if (newChild instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != newChild)
 				throw new UiException("Only one treechildren is allowed: "+this);
@@ -1117,6 +1129,11 @@ public class Tree extends MeshElement {
 			refChild = _paging; //the last two: listfoot and paging
 			if (super.insertBefore(newChild, refChild)) {
 				_treefoot = (Treefoot)newChild;
+				return true;
+			}
+		} else if (newChild instanceof Frozen) {
+			if (super.insertBefore(newChild, refChild)) {
+				_frozen = (Frozen)newChild;
 				return true;
 			}
 		} else if (newChild instanceof Treechildren) {
@@ -1273,6 +1290,7 @@ public class Tree extends MeshElement {
 		int cnt = 0;
 		if (_treecols != null) ++cnt;
 		if (_treefoot != null) ++cnt;
+		if (_frozen != null) ++cnt;
 		if (_treechildren != null) ++cnt;
 		if (_paging != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
@@ -1301,6 +1319,9 @@ public class Tree extends MeshElement {
 			for (Component child : getChildren()) {
 				if (child instanceof Treecols) {
 					_treecols = (Treecols)child;
+					if (--cnt == 0) break;
+				} else if (child instanceof Frozen) {
+					_frozen = (Frozen)child;
 					if (--cnt == 0) break;
 				} else if (child instanceof Treefoot) {
 					_treefoot = (Treefoot)child;
