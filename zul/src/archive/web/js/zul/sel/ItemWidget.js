@@ -39,6 +39,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		});
 	}
+	function _isListgroup(w) {
+		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroup);
+	}
+	function _isListgroupfoot(w) {
+		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroupfoot);
+	}
 /**
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
@@ -157,8 +163,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			var zcls = this.getZclass();
 			if (this.isDisabled())
 				scls += (scls ? ' ': '') + zcls + '-disd';
-			if (this.isSelected())
-				scls += (scls ? ' ': '') + zcls + '-seld';
+			//Bug ZK-1998: only apply selected style if groupSelect is true
+			if (_isListgroup(this) || _isListgroupfoot(this)) {
+				if (this.getMeshWidget().groupSelect && this.isSelected())
+					scls += (scls ? ' ': '') + zcls + '-seld';
+			} else {
+				if (this.isSelected())
+					scls += (scls ? ' ': '') + zcls + '-seld';
+			}
 		}
 		return scls;
 	},

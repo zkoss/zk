@@ -40,7 +40,7 @@ public class B60_ZK_1160_TabController extends BindComposer<Component> {
 		tab.setClosable(true);
 		tab.setSelected(true);
 		tab.setLabel("person");
-		Include inc = new Include("B60-ZK-1160_Person.zul");
+		Include inc = new Include("/test2/B60-ZK-1160_Person.zul");
 		inc.setProgressing(true);
 		inc.setWidth("100%");
 		inc.setHeight("100%");
