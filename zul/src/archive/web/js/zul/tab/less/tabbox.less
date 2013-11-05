@@ -33,7 +33,6 @@
 		
 		&-selected {
 			border-bottom: 1px solid @baseBorderColor;
-			background: none;
 			.boxShadow('1px 0px 0 #FFFFFF');
 
 			.z-tab-button {
@@ -183,7 +182,6 @@
 			
 			&.z-tab-selected {
 				.boxShadow('0px -1px 0 #FFFFFF');
-				background: none;
 			}
 		}
 		.z-tabpanel {
@@ -419,10 +417,11 @@
 	}
 	&-selected {
 		.resetGradient();
-		background: @baseBackgroundColor;
+		background: @tabSelectedBackgroundColor;
 		.boxShadow('0 1px 0 #FFFFFF');
 		&:hover {
 			.resetGradient();
+			background: @tabSelectedBackgroundColor;
 		}
 		.z-tab-button {
 			.opacity(1);
