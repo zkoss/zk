@@ -26,7 +26,7 @@ function (out, skipper) {
 			var	icon = this.$s('icon');
 			if (this._closable) {
 				out.push('<div id="', uuid , '-close" class="', icon, ' ',
-					this.$s('close'), '"><i class="', this.getClosableIconClass_(), '" /></div>');
+					this.$s('close'), '"><i class="', this.getClosableIconClass_(), '"></i></div>');
 			}
 			if (this._maximizable) {
 				var maxd = this._maximized;
@@ -34,17 +34,17 @@ function (out, skipper) {
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
 				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
-				out.push('"><i class="', maxIcon, '" /></div>');
+				out.push('"><i class="', maxIcon, '"></i></div>');
 			}
 			if (this._minimizable) {
 				out.push('<div id="', uuid , '-min" class="', icon, ' ',
 						this.$s('minimize'), '" ><i class="',
-						this.getMinimizableIconClass_(), '" /></div>');
+						this.getMinimizableIconClass_(), '"></i></div>');
 			}
 			if (this._collapsible) {
 				var openIcon = this._open ? this.getCollapseOpenIconClass_() : this.getCollapseCloseIconClass_();
 				out.push('<div id="', uuid , '-exp" class="', icon, ' ',
-						this.$s('expand'), '" ><i class="', openIcon, '" /></div>');
+						this.$s('expand'), '" ><i class="', openIcon, '"></i></div>');
 			}
 			out.push(zUtl.encodeXML(title));
 		}
