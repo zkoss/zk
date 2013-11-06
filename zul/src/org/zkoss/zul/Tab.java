@@ -18,10 +18,12 @@ package org.zkoss.zul;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -51,6 +53,7 @@ public class Tab extends LabelImageElement {
 
 	private boolean _disabled;
 	private transient Caption _caption;
+	private transient Object _value;
 	
 	static {
 		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
@@ -66,6 +69,28 @@ public class Tab extends LabelImageElement {
 		super(label, image);
 	}
 
+	/** Returns the value.
+	 * <p>Default: null.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 7.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T)_value;
+	}
+	/** Sets the value.
+	 * @param value the value.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 7.0.0
+	 */
+	public <T> void setValue(T value) {
+		if (!Objects.equals(_value, value)) {
+			_value = value;
+		}
+	}
+	
 	/** Returns the caption of this tab.
 	 * @since 6.5.0
 	 */
@@ -367,11 +392,31 @@ public class Tab extends LabelImageElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
-			final SelectEvent evt = SelectEvent.getSelectEvent(request);
+			final Tabbox tabbox = getTabbox();
+			final Set<Tab> prevSeldItems = new LinkedHashSet<Tab>();
+			if (tabbox.getSelectedTab() != null)
+				prevSeldItems.add(tabbox.getSelectedTab());
+			final SelectEvent evt = SelectEvent.getSelectEvent(request,
+					new SelectEvent.SelectedObjectHandler<Tab>() {
+				public Set<Object> getObjects(Set<Tab> items) {
+					if (items == null || items.isEmpty() || tabbox.getModel() == null)
+						return null;
+					Set<Object> objs = new LinkedHashSet<Object>();
+					ListModel model = tabbox.getModel();
+					for (Tab i : items)
+						objs.add(model.getElementAt(i.getIndex()));
+					return objs;
+				}
+
+				public Set<Tab> getPreviousSelectedItems() {
+					return prevSeldItems;
+				}
+			});
+			
 			final Set selItems = evt.getSelectedItems();
 			if (selItems == null || selItems.size() != 1)
 				throw new UiException("Exactly one selected tab is required: " + selItems); // debug purpose
-			final Tabbox tabbox = getTabbox();
+			
 			if (tabbox != null)
 				tabbox.selectTabDirectly((Tab) selItems.iterator().next(), true);
 
