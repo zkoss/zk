@@ -55,6 +55,14 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._shallShowScrollbar = false;
 			if (scrollPosition)
 				bar.scrollTo(scrollPosition.x, scrollPosition.y);
+			
+			//sync frozen
+			var frozen = this.frozen,
+				start;
+			if (frozen && (start = frozen._start) != 0) {
+				frozen._doScrollNow(start);
+				bar.setBarPosition(start);
+			}
 		}
 	},
 	/**
@@ -89,6 +97,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this.paging = child;
 		else if (child.$instanceof(zul.sel.Treefoot))
 			this.treefoot = child;
+		else if (child.$instanceof(zul.mesh.Frozen)) 
+			this.frozen = child;
 		if (!ignoreDom)
 			this.rerender();
 		if (!_noSync)
@@ -107,6 +117,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._sel = null;
 		} else if (child == this.paging)
 			this.paging = null;
+		else if (child == this.frozen) {
+			this.frozen = null;
+			this.destroyBar_();
+		}
 
 		if (!this.childReplacing_) //NOT called by onChildReplaced_
 			this._syncSize();

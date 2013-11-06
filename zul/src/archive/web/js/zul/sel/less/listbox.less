@@ -340,31 +340,31 @@
 // IE8
 .ie8 { 
 	.z-listbox-header {
-		background: @meshBackgroundColor;
+		background: @meshBackgroundColorIE8;
 	}
 	.z-listheader {
 		position: static;
-		background: @meshBackgroundColor;
+		background: @meshBackgroundColorIE8;
 		&-hover {
-			background: @meshHoverBackgroundColor;
+			background: @meshHoverBackgroundColorIE8;
 		}
 
 		&-button:hover {
-			background: darken(@meshHoverBackgroundColor, 3%);
+			background: darken(@meshHoverBackgroundColorIE8, 3%);
 		}
 	}
 	.z-listitem {
 		&:hover > .z-listcell {
-			background: @meshHoverBackgroundColor;
+			background: @meshHoverBackgroundColorIE8;
 		}
 		&.z-listitem-selected {
 			.z-listcell {
 				position: static;
-				background: @meshSelectedBackgroundColor;
+				background: @meshSelectedBackgroundColorIE8;
 			}
 			&:hover > .z-listcell {
 				position: static;
-				background: @meshSelectedHoverBackgroundColor;
+				background: @meshSelectedHoverBackgroundColorIE8;
 			}
 		}
 		// radio icon fallback
@@ -390,9 +390,9 @@
 		}
 	}
 	.z-listgroup-inner {
-		background: @meshGroupBackgroundColor;
+		background: @meshGroupBackgroundColorIE8;
 	}
 	.z-listgroupfoot-inner {
-		background: @meshGroupFooterBackgroundColor;
+		background: @meshGroupFooterBackgroundColorIE8;
 	}
 }
