@@ -145,11 +145,18 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var tg = evt.domTarget,
 			wgt = zk.Widget.$(tg),
 			n = this.$n(),
-			ofs = this._dragsz ? zk(n).revisedOffset() : false;
-			
+			ofs = this._dragsz ? zk(n).revisedOffset() : false,
+			btn = wgt.$n('btn'),
+			ignoreSort = false;
+		
+		//IE will trigger doClick during closing menupopup
+		if (zk.ie && btn && !zk(btn).isRealVisible())
+			ignoreSort = true;
+		
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) 
 				&& this.isSortable_() && !jq.nodeName(tg, 'input') 
-				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
+				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0])) 
+				&& !ignoreSort) {
 			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
 		} else {
