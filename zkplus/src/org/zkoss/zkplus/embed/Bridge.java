@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.json.JSONArray;
+import org.zkoss.web.servlet.Charsets;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
@@ -44,6 +45,7 @@ import org.zkoss.zk.ui.http.WebManager;
 public class Bridge {
 	private Execution _exec;
 	private Object _updctx;
+	private Object _locale;
 
 	/** Starts an execution.
 	 * After returned, the execution is activated and the caller is free to access
@@ -56,7 +58,7 @@ public class Bridge {
 	public static Bridge start(ServletContext svlctx, HttpServletRequest request,
 	HttpServletResponse response, Desktop desktop) {
 		try {
-			return new Bridge(svlctx, request, response, desktop);
+			return new Bridge(svlctx, request, response, desktop, Charsets.setup(request, response, "utf-8"));
 		} catch (Exception ex) { //not possible
 			throw UiException.Aide.wrap(ex);
 		}
@@ -76,9 +78,10 @@ public class Bridge {
 	 * Don't invoke this directly. Rather, use {@link #start} instead.
 	 */
 	protected Bridge(ServletContext svlctx, HttpServletRequest request,
-	HttpServletResponse response, Desktop desktop) throws Exception {
+	HttpServletResponse response, Desktop desktop, Object locale) throws Exception {
 		_exec = new ExecutionImpl(svlctx, request, response, desktop, null);
 		_updctx = ((WebAppCtrl)desktop.getWebApp()).getUiEngine().startUpdate(_exec);
+		_locale = locale;
 	}
 	/** Returns the execution.
 	 */
@@ -107,12 +110,16 @@ public class Bridge {
 	 * to be accessed any more.
 	 */
 	public void close() {
+		final HttpServletRequest request = (HttpServletRequest) _exec.getNativeRequest();
 		try {
 			((WebAppCtrl)_exec.getDesktop().getWebApp()).getUiEngine().closeUpdate(_updctx);
 			_updctx = null;
 			_exec = null;
 		} catch (Exception ex) { //not possible
 			throw UiException.Aide.wrap(ex);
+		} finally {
+			Charsets.cleanup(request, _locale);
+			_locale = null;
 		}
 	}
 }
