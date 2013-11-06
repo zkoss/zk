@@ -112,7 +112,8 @@ public class Tabs extends XulElement {
 
 			if (sel)
 				if (tabbox != null) {
-					tabbox.setSelectedTab(newtab);
+					if (tabbox.getModel() == null || tabbox.getSelectableModel().isSelectionEmpty())
+						tabbox.setSelectedTab(newtab);
 				} else {
 					newtab.setSelectedDirectly(true);
 					if (desel)

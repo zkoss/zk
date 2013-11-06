@@ -23,6 +23,7 @@ ZK 7.0.0
   ZK-1924: Clients.scrollIntoView(Component comp) could also adjust horizontal scroll position
   ZK-1991: AMedia FileDownload support ignore add Content-Disposition to header
   ZK-1974: Tabbox support take maximal size of all children tabpanels
+  ZK-2002: Tabbox support ListModel
   ZK-1856: Tree support frozen as grid
   
 * Bugs
