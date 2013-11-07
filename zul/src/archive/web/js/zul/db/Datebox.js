@@ -547,6 +547,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			db.updateChange_();
 		else if (zul.db.DateboxCtrl.isPreservedFocus(this))
 			zk(db.getInputNode()).focus();
+		//remove extra CSS class
+		jq(pp).removeClass(db.$s('open'));
 	},
 	isOpen: function () {
 		return zk(this.parent.$n('pp')).isVisible();
@@ -611,6 +613,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		} else {
 			db._tm.setVisible(false);
 		}
+		//add extra CSS class for easy customize
+		jq(pp).addClass(db.$s('open'));
 	},
 	syncShadow: function () {
 		if (!this._shadow)
