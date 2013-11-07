@@ -106,6 +106,7 @@ public class Tabbox extends XulElement {
 	 *            previous model.
 	 * @exception UiException
 	 *                if failed to initialize with the model
+	 * @since 7.0.0
 	 */
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
@@ -168,6 +169,7 @@ public class Tabbox extends XulElement {
 	/**
 	 * Returns the renderer to render each tab and tabpanel, or null if the default renderer
 	 * is used.
+	 * @since 7.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> TabboxRenderer<T> getTabboxRenderer() {
@@ -187,6 +189,7 @@ public class Tabbox extends XulElement {
 	 *            the renderer, or null to use the default.
 	 * @exception UiException
 	 *                if failed to initialize with the model
+	 * @since 7.0.0
 	 */
 	public void setTabboxRenderer(TabboxRenderer<?> renderer) {
 		if (_renderer != renderer) {
@@ -198,6 +201,9 @@ public class Tabbox extends XulElement {
 	/**
 	 * Sets the renderer by use of a class name. It creates an instance
 	 * automatically.
+	 * 
+	 * @since 7.0.0
+	 * @see #setTabboxRenderer(TabboxRenderer)
 	 */
 	public void setTabboxRenderer(String clsnm) throws ClassNotFoundException,
 			NoSuchMethodException, IllegalAccessException,
@@ -205,6 +211,7 @@ public class Tabbox extends XulElement {
 		if (clsnm != null)
 			setTabboxRenderer((TabboxRenderer) Classes.newInstanceByThread(clsnm));
 	}
+	
 	@SuppressWarnings("unchecked")
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
@@ -212,17 +219,26 @@ public class Tabbox extends XulElement {
 		invalidate();
 	}
 	
+	/**
+	 * Returns the empty tab for model to use.
+	 * @since 7.0.0
+	 */
 	protected Tab newUnloadedTab() {
 		Tab tab = new Tab();
 		tab.applyProperties();
 		return tab;
 	}
-	
+
+	/**
+	 * Returns the empty tabpanel for model to use.
+	 * @since 7.0.0
+	 */
 	protected Tabpanel newUnloadedTabpanel() {
 		Tabpanel tab = new Tabpanel();
 		tab.applyProperties();
 		return tab;
 	}
+	
 	private void doInitRenderer() {
 		final Renderer renderer = new Renderer();
 		try {
@@ -239,10 +255,15 @@ public class Tabbox extends XulElement {
 			for (int i = 0, j = _model.getSize(); i < j; i++) {
 				renderer.render(this, _model.getElementAt(i), i);
 			}
+			
+			if (_seltab == null && _model.getSize() > 0) {// select the first one
+				setSelectedTab((Tab)getTabs().getFirstChild());
+			}
+				
 		} catch (Throwable ex) {
 			log.error("", ex);
 		}
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tabbox when items have been rendered.
 		
 	}
 
