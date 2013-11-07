@@ -197,23 +197,20 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 				_inf.listener.onEvent(_event);
 	
 				if (_inf.callback != null || _pendingEvents != null) {
+					Executions.activate(_desktop);
 					try {
-						Executions.activate(_desktop);
-						try {
-							if (_pendingEvents != null)
-								for (T evt: _pendingEvents)
-									_que.publish(evt);
+						if (_pendingEvents != null)
+							for (T evt: _pendingEvents)
+								_que.publish(evt);
 
-							if (_inf.callback != null)
-								_inf.callback.onEvent(_event);
-						} finally {
-							Executions.deactivate(_desktop);
-						}
-					} catch (Throwable ex) {
-						log.error("", ex);
+						if (_inf.callback != null)
+							_inf.callback.onEvent(_event);
+					} finally {
+						Executions.deactivate(_desktop);
 					}
 				}
 			} catch (DesktopUnavailableException ex) {
+				log.warn("", ex);
 				//ignore
 			} catch (Throwable ex) {
 				log.error("", ex);
