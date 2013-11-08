@@ -267,6 +267,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			return;
 		var wgt = ctl.origin;
 		
+		// F70-ZK-2007: If popup belongs to widget's ascendant then return
+		for (w = wgt; w; w= w.parent) {
+			if (this._equalsPopId(w._popup) || this._equalsPopId(w._context))
+				return;
+		}
+		
 		for (var floatFound; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound) 
@@ -278,6 +284,30 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			floatFound = floatFound || wgt.isFloating_();
 		}
 		this.close({sendOnOpen:true});
+	},
+	// F70-ZK-2007: Check if widget's popup id equals to popup
+	_equalsPopId: function(params) {
+		if (!params)
+			return false;
+		// parse popup id from params 
+		var index = params.indexOf(','),
+			start = params.indexOf('='),
+			p = params,
+			id;
+		if (start != -1)
+			p = params.substring(0, params.substring(0, start).lastIndexOf(','));
+		
+		if (index != -1) {
+			id = p.substring(0, index).trim();
+		} else {
+			id = params.trim();
+		}
+		// If param id is 'uuid(an_uuid)', when compare it with uuid
+		if (id.startsWith('uuid(') && id.endsWith(')')) {
+			return this.uuid == id.substring(5, id.length - 1);
+		} else {
+			return this.id == id;
+		}
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);

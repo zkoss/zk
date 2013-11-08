@@ -525,9 +525,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
-				setTimeout(function() {
-					popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
-				}, 0);
+				// F70-ZK-2007: When type=toggle, close the popup
+				if (params.type && params.type == 'toggle' && popup.isOpen()) {
+					popup.close({sendOnOpen:true});
+				} else {
+					setTimeout(function() {
+						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
+					}, 0);
+				}
 				evt.stop({dom:true});
 			}
 		}
@@ -545,9 +550,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
-				setTimeout(function() {
-					ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true}); //Bug #2870620
-				}, 0);
+				// F70-ZK-2007: When type=toggle, close the popup
+				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
+					ctx.close({sendOnOpen:true});
+				} else {
+					setTimeout(function() {
+						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true}); //Bug #2870620
+					}, 0);
+				}
 				evt.stop({dom:true}); //prevent default context menu to appear
 			}
 		}
