@@ -61,6 +61,13 @@ function (out) {
 			'-a"  onclick="return false;" href="javascript:;" class="z-focus-a"></',
 			tag, '>');
 	out.push("</div>");
+	
+	if (this._nativebar && this.frozen) {
+		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
+		this.frozen.redraw(out);
+		out.push('</div>');
+	}
+	
 	//foot
 	if (this.treefoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
@@ -71,12 +78,6 @@ function (out) {
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.treefoot.redraw(out);
 		out.push('</tbody></table></div>');
-	}
-	
-	if (this._nativebar && this.frozen) {
-		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
-		this.frozen.redraw(out);
-		out.push('</div>');
 	}
 	
 	//bottom paging
