@@ -166,10 +166,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					self._syncSelInView();
 				}
 			}
-		}, 200);
+		}, 300);
 	},
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
+		console.log(this._shallShowScrollbar);
+		console.trace();
 		if (bar) {
 			bar.syncSize(showBar || this._shallShowScrollbar);
 			this._shallShowScrollbar = false;
@@ -203,7 +205,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
-		
 	},
 	unbind_: function () {
 		this.destoryBar_();
@@ -224,13 +225,18 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._shallScrollIntoView = false;
 		}
 	},
+	_onRender: function () {
+		this.$supers(Listbox, '_onRender', arguments);
+		this._shallShowScrollbar = true;
+	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
 			if (this._shallStripe)
 				this.stripe();
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
-			if (opts && opts.rtags.onDataLoading)
+			var rtags = opts ? opts.rtags : null;
+			if (rtags && rtags.onDataLoading)
 				this._shallShowScrollbar = true;
 		}
 		this.$supers(Listbox, 'onResponse', arguments);
@@ -259,7 +265,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	rerender: function () {
 		this.$supers(Listbox, 'rerender', arguments);
-		this._syncStripe();		
+		this._syncStripe();
 		return this;
 	},
 
