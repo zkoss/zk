@@ -3,9 +3,6 @@
 .z-button {
 	.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @baseTextColor);
 	min-height: @baseButtonHeight;
-	<c:if test="${zk.ie == 8}">
-		min-height: @baseButtonHeight - 8; //minus padding border height
-	</c:if>
 	border: 1px solid @buttonBorderColor;
 	.borderRadius(@baseBorderRadius);
 	padding: 3px 12px;
@@ -30,7 +27,7 @@
 		.verGradient(@activeGradientStart, @activeGradientEnd);
 	}
 	&[disabled] {
-		border: 1px solid @buttonBorderColor;
+		border-color: @buttonBorderColor;
 		.verGradient(@buttonGradientStart, @buttonGradientEnd);
 		.opacity(@disabledOpacity);
 		.boxShadow('none');
@@ -39,4 +36,8 @@
 	img {
 		vertical-align: middle;
 	}
+}
+
+.ie8 .z-button {
+	min-height: @baseButtonHeight - 8; //minus padding border height
 }
