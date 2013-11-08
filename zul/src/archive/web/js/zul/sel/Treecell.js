@@ -105,6 +105,24 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
+	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+		//sync frozen
+		var tree = this.getTree(),
+		frozen = tree ? tree.frozen : null,
+		tbody = tree && tree.rows ? tree.rows.$n() : null,
+		td, tds;
+		if (frozen && tbody) {
+			tds = jq(evt.domTarget).parents('td');
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if (td.parentNode.parentNode == tbody) {
+					tree._moveToHidingFocusCell(td.cellIndex);
+					break;
+				}
+			}
+		}
+	},
 	_syncIcon: function () {
 		this.rerender();
 		var p;
