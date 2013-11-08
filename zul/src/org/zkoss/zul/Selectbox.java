@@ -128,7 +128,7 @@ public class Selectbox extends HtmlBasedComponent {
 	 * <p>
 	 * Note: changing a render will not cause the selectbox to re-render. If you
 	 * want it to re-render, you could assign the same model again (i.e.,
-	 * setModel(getModel())), or fire an {@link ListDataEvent} event.
+	 * setModel(null) and than setModel(oldModel)), or fire an {@link ListDataEvent} event.
 	 * 
 	 * @param renderer
 	 *            the renderer, or null to use the default.

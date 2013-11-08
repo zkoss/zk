@@ -147,6 +147,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
+		//add extra CSS class for easy customize
+		jq(node).addClass(this.$s('open'));
 	},
 	/** Returns whether to instantiate a stackup when {@link #open}
 	 * is called.
@@ -257,6 +259,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			if (zk.ie) // re-create dom element to remove :hover state style
 				that.replaceHTML(node); // see also ZK-1216, ZK-1124, ZK-318
 		}, 50);
+		//remove extra CSS class
+		jq(node).removeClass(this.$s('open'));
 	},
 	onFloatUp: function(ctl){
 		if (!this.isVisible()) 

@@ -259,10 +259,11 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	//@Override
 	doClick_: function (evt) {
-		var box = this.getListbox();
+		var box = this.getListbox(),
+			cm = this.$n('cm');
 		if (box && box._checkmark) {
 			var n = evt.domTarget;
-			if (n.id && n.id.endsWith('-cm'))
+			if (n == cm || n.parentNode == cm) //may click on font-awesome element
 				return; //ignore it (to avoid sort or other activity)
 		}
 		this.$supers('doClick_', arguments);
