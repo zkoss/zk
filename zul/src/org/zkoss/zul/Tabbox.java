@@ -82,6 +82,7 @@ public class Tabbox extends XulElement {
 	private transient ListDataListener _dataListener;
 	private transient TabboxRenderer<?> _renderer;
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
+	private static final String ATTR_CHANGING_SELECTION = "org.zkoss.zul.tabbox.changingSelection";
 	
 	public Tabbox() {
 		init();
@@ -154,7 +155,8 @@ public class Tabbox extends XulElement {
 				public void onChange(ListDataEvent event) {
 					switch (event.getType()) {
 					case ListDataEvent.SELECTION_CHANGED:
-						doSelectionChanged();
+						if (getAttribute(ATTR_CHANGING_SELECTION) == null)
+							doSelectionChanged();
 						return; //nothing changed so need to rerender
 					case ListDataEvent.MULTIPLE_CHANGED:
 						return; //nothing to do
@@ -615,14 +617,22 @@ public class Tabbox extends XulElement {
 			if (_seltab != null)
 				_seltab.setSelectedDirectly(false);
 
-			_seltab = tab;
-			_seltab.setSelectedDirectly(true);
-			if (_model != null) {
-				Selectable sm = getSelectableModel();
-				if (!sm.isSelected(_model.getElementAt(_seltab.getIndex()))) {
-					sm.clearSelection();
-					sm.addToSelection(_model.getElementAt(_seltab.getIndex()));
+			try {
+				// avoid recursive invoking
+				if (getAttribute(ATTR_CHANGING_SELECTION) == null) {
+					setAttribute(ATTR_CHANGING_SELECTION, Boolean.TRUE);
+					_seltab = tab;
+					_seltab.setSelectedDirectly(true);
+					if (_model != null) {
+						Selectable sm = getSelectableModel();
+						if (!sm.isSelected(_model.getElementAt(_seltab.getIndex()))) {
+							sm.clearSelection();
+							sm.addToSelection(_model.getElementAt(_seltab.getIndex()));
+						}
+					}
 				}
+			} finally {
+				removeAttribute(ATTR_CHANGING_SELECTION);
 			}
 			if (!byClient)
 				smartUpdate("selectedTab", _seltab);
