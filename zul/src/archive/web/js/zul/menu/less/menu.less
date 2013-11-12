@@ -303,13 +303,14 @@
 	&-icon {
 		.iconFontStyle(@fontSizeMedium, @iconColor);
 		.opacity(0.7);
+		margin-top: -@fontSizeMedium/2;
+		margin-left: -@fontSizeMedium/2 + 2;
+		position: absolute;
+		top: 50%;
+		left: 50%;
 	}
 	&-left,
 	&-right {
-		width: @baseBarWidth;
-		padding: 5px 11px;
-		position: absolute;
-
 		&:active {
 			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 		}
@@ -322,7 +323,6 @@
 		}
 	}
 	&-left {
-		padding: 5px 12px;
 		left: 0;
 	}
 	&-scrollable {
