@@ -675,7 +675,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
 		var alwaysSelect,
-			cmClicked = this._checkmark && evt.domTarget == row.$n('cm');
+			tg = evt.domTarget,
+			cm = row.$n('cm'),
+			cmClicked = this._checkmark && (tg == cm || tg.parentNode == cm);
 		if (zk.dragging || (!cmClicked && (this._shallIgnore(evt, true)
 		|| ((alwaysSelect = this.shallIgnoreSelect_(evt, row))
 			&& !(alwaysSelect = alwaysSelect < 0)))))

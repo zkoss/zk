@@ -219,6 +219,7 @@
 			display: block;
 			padding-left: 1px;
 			line-height: @baseLineHeight;
+			cursor: pointer;
 			
 			&.z-icon-check {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
@@ -265,11 +266,39 @@
 			padding: 3px 5px;
 		}
 	}
+	//check mark
+	&-checkable {
+		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
+		border: 1px solid @checkedBorderColor;
+		margin-right: 2px;
+		background: @checkedBackgroundColor;
+		vertical-align: text-top;
+		
+		.z-listgroup-icon {
+			display: none;
+			cursor: default;
+		}
+	}
+	//selected check mark
+	&-selected &-checkable {
+		.z-listgroup-icon {
+			.iconFontStyle(@fontSizeMedium, @checkedColor);
+			display: inline-block;
+			padding-right: 2px;
+			line-height: @baseLineHeight;
+			cursor: pointer;
+			
+			&:hover {
+				color: @checkedColor;
+			}
+		}
+	}
 	&-icon {
 		.iconFontStyle(@baseFontSize, @iconColor);
 		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
 		line-height: @baseIconHeight;
 		text-align: center;
+		vertical-align: text-top;
 		position: relative;
 		cursor: pointer;
 		

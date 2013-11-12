@@ -148,7 +148,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 						zk(this.$n('left')).offsetWidth() -
 						zk(this.$n('right')).offsetWidth();
 		if (this._scrolling) {
-			if (totalWidth <= nodeWidth) {
+			if (totalWidth < nodeWidth) {
 				this._scrolling = false;
 				body.scrollLeft = 0;
 				if (body.offsetWidth <= totalWidth)
@@ -158,7 +158,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				this._fixScrollPos(node);
 			}
 		} else {
-			if (totalWidth > nodeWidth) {
+			if (totalWidth >= nodeWidth) {
 				this._scrolling = true;
 				body.style.width = jq.px0(fixedSize);
 			}

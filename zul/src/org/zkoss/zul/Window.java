@@ -829,7 +829,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 			//render mode as the last property
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-window-" + getMode() : _zclass;
+		return _zclass == null ? "z-window" : _zclass;
 	}
 
 	//-- Component --//

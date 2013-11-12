@@ -285,11 +285,7 @@ public class Tab extends LabelImageElement {
 
 	// -- super --//
 	public String getZclass() {
-		if (_zclass != null) return _zclass;
-		final Tabbox tabbox = getTabbox();
-		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
-			tabbox.isVertical() ? "-ver" : "" : "";
-		return "z-tab" + added;
+		return _zclass == null ? "z-tab" : _zclass;
 	}
 
 	// -- Component --//
