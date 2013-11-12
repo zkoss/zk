@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2013.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Nov 12, 2013  4:51:55 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<vbox>
+<label multiline="true">
+1. Click "Add" button, you should see the "Y" tab is added at the end of the tabs.
+2. The create time of the "B" tab shoud not be changed.
+3. Select the "Y" tab and see its "create time" is the latest one which is different from "B" tab.
+4. Click "Remove" button, the "C" tab will be remove and the "create time" of the "Y" tab is the same as before.
+</label>
+<zscript><![CDATA[
+ListModelList model = new ListModelList();
+model.add("A");
+model.add("B");
+model.add("C");
+]]></zscript>
+<tabbox onCreate='self.setModel(model);model.addToSelection("B")'>
+	<template name="model:tab">
+		<tab label="${each} ${count}"></tab>
+	</template>
+	<template name="model:tabpanel">
+		<tabpanel>Panel ${each} ${count}
+			<button label="click me ${each}" onClick="//do nothing"></button>
+			<include src="B70-ZK-2013_1.zul"/>
+		</tabpanel>
+	</template>
+</tabbox>
+<button label="click me out side" onClick="//do nothing"></button>
+<button label="Add" onClick='model.add("Y")'></button>
+<button label="Remove" onClick='model.remove("C")'></button>
+</vbox>
