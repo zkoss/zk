@@ -35,6 +35,7 @@ ZK 7.0.0
   ZK-1959: The height of arrow should not change when the tabbox add tab
   ZK-1996: Navitem onClick event would trigger twice
   ZK-1565: Dragging listitem to itself will result in the listbox being set as the target
+  ZK-2008: Dragging between grids causes JavaScript error
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
