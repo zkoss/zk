@@ -65,6 +65,12 @@ public class EventQueues {
 	 * can be passed around to any desktops of the same application.
 	 * <p>Notice that this feature will enable the server push
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}.
+	 * <p>Note: according to the ServletContext javadoc - 
+	 * http://docs.oracle.com/javaee/6/api/javax/servlet/ServletContext.html
+	 * the application scope cannot support under cluster environment.
+	 * When information needs to be shared between servlets running in a distributed
+	 * environment, the information should be placed into a session scope.
+	 * 
 	 */
 	public static final String APPLICATION = "application";
 	/** Represents the event queue in the sessions cope.
