@@ -134,13 +134,16 @@ zul.inp.RoundUtl = {
 			var n = wgt.$n();
 			jq(n).addClass(wgt.getInplaceCSS());
 			wgt.onSize();
-			n.style.width = wgt.getWidth() || '';
+			// should not clear node width if hflex is true
+			if (!wgt.getHflex())
+				n.style.width = wgt.getWidth() || '';
 		}
 	},
 	// @since 7.0.0
 	onSize: function (wgt) {
 		var width = wgt.getWidth();
-		if (!width || width.indexOf('%') != -1)
+		// should not clear input node width if hflex is true
+		if (!wgt.getHflex() && (!width || width.indexOf('%') != -1))
 			wgt.getInputNode().style.width = '';
 		this.syncWidth(wgt, wgt.$n('btn'));
 	}

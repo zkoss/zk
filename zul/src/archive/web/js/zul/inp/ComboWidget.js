@@ -361,10 +361,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
-
 		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
+		if (this._inplace && this._open)
+			return; // prevent blur if popup is opened
 		this.$supers('doBlur_', arguments);
 		zul.inp.RoundUtl.doBlur_(this);
 	},

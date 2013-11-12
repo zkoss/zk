@@ -87,6 +87,7 @@
 		border: 1px solid @invalidBorderColor !important;
 		margin-right: -1px;
 		background: @baseBackgroundColor;
+		.boxShadow(inset -1px 0 0 @invalidBorderColor);
 	}
 
 	&-readonly:focus {
@@ -277,20 +278,26 @@
 	color: @baseTextColor;
 	text-decoration: none;
 }
-.z-comboitem-selected {
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@selectedGradientStart, @selectedGradientEnd);
-	</c:if>
-}
 .z-comboitem:hover {
 	<c:if test="${zk.ie != 8}">
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
 	</c:if>
 }
+.z-comboitem-selected {
+	<c:if test="${zk.ie != 8}">
+		.verGradient(@selectedGradientStart, @selectedGradientEnd);
+	</c:if>
+	.z-comboitem-text {
+		color: @selectedColor;
+	}
+}
 .z-comboitem-selected:hover {
 	<c:if test="${zk.ie != 8}">
 		.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 	</c:if>
+	.z-comboitem-text {
+		color: @selectedHoverColor;
+	}
 }
 .z-comboitem-image {
 	margin-top: -4px;

@@ -353,8 +353,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
+		if (this._inplace && this._pop && this._pop.isOpen())
+			return; // prevent blur if popup is opened
 		this.$supers('doBlur_', arguments);
-
 		_blurInplace(this);
 	},
 	doClick_: function (evt) {
