@@ -170,8 +170,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
-		console.log(this._shallShowScrollbar);
-		console.trace();
 		if (bar) {
 			bar.syncSize(showBar || this._shallShowScrollbar);
 			this._shallShowScrollbar = false;
