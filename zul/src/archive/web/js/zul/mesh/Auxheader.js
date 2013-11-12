@@ -52,10 +52,6 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 			}
 		}
 	},
-	/**
-	 * Nothing to do in the function
-	 */
-	fixFaker_: zk.$void, //do nothing
 	//super//
 	domAttrs_: function () {
 		var s = this.$supers('domAttrs_', arguments), v;
