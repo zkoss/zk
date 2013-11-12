@@ -748,10 +748,7 @@ public class Tabbox extends XulElement {
 	}
 
 	public String getZclass() {
-		String cls = _zclass == null ? "z-tabbox" : _zclass;
-		String orientCls = isTop() ? "" : " " + (cls + "-" + this._orient);
-		cls += inAccordionMold() ? " " + (cls + "-" + getMold()) : orientCls;
-		return cls;
+		return _zclass == null ? "z-tabbox" : _zclass;
 	}
 
 	// -- Component --//
