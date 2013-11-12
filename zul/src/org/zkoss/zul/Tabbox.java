@@ -155,7 +155,8 @@ public class Tabbox extends XulElement {
 				public void onChange(ListDataEvent event) {
 					switch (event.getType()) {
 					case ListDataEvent.SELECTION_CHANGED:
-						if (getAttribute(ATTR_CHANGING_SELECTION) == null)
+						if (getAttribute(ATTR_CHANGING_SELECTION) == null
+								&& getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null /* Bug ZK-2011*/)
 							doSelectionChanged();
 						return; //nothing changed so need to rerender
 					case ListDataEvent.MULTIPLE_CHANGED:
@@ -196,7 +197,7 @@ public class Tabbox extends XulElement {
 	public void setTabboxRenderer(TabboxRenderer<?> renderer) {
 		if (_renderer != renderer) {
 			_renderer = renderer;
-			invalidate();
+			postOnInitRender();
 		}
 	}
 
@@ -623,7 +624,7 @@ public class Tabbox extends XulElement {
 					setAttribute(ATTR_CHANGING_SELECTION, Boolean.TRUE);
 					_seltab = tab;
 					_seltab.setSelectedDirectly(true);
-					if (_model != null) {
+					if (byClient && _model != null) {
 						Selectable sm = getSelectableModel();
 						if (!sm.isSelected(_model.getElementAt(_seltab.getIndex()))) {
 							sm.clearSelection();
