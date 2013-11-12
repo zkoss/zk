@@ -1,0 +1,19 @@
+<zk>
+	<div>click chosenbox, then the listitem should not be selected</div>
+	<listbox width="500px">
+		<listhead>
+			<listheader label="col" />
+			<listheader label="col" />
+			<listheader label="col" />
+		</listhead>
+		<listitem forEach="1,2">
+			<listcell label="Item ${each}" />
+			<listcell>
+				<textbox />
+			</listcell>
+			<listcell>
+				<chosenbox width="100px" />
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>
