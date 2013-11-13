@@ -3567,7 +3567,9 @@ public class Listbox extends MeshElement {
 					"onSelect", this, getSelectedItems(), 
 					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
 			Events.postEvent(evt);
-			
+		} else if (cmd.equals("onCheckSelectAll")) { // F65-ZK-2014
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}
