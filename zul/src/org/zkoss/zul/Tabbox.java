@@ -668,7 +668,7 @@ public class Tabbox extends XulElement {
 					_seltab = tab;
 					_seltab.setSelectedDirectly(true);
 					if (byClient && _model != null) {
-						Selectable sm = getSelectableModel();
+						Selectable<Object> sm = getSelectableModel();
 						if (!sm.isSelected(_model.getElementAt(_seltab.getIndex()))) {
 							sm.clearSelection();
 							sm.addToSelection(_model.getElementAt(_seltab.getIndex()));
