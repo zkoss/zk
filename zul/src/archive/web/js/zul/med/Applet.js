@@ -110,7 +110,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 	/** Invokes the function of the applet running at the client.
 	 */
-	invoke: zk.ie ? function() {
+	invoke: zk.ie < 11 ? function() {
 		var n = this.$n(),
 			len = arguments.length;
 		if (n && len >= 1) {

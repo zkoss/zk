@@ -348,7 +348,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		//Bug in B30-1926094-1.zul
-		if (zk.ie)
+		if (zk.ie < 11)
 			this._syncFocus(this._focusItem);
 
 		this._calcHgh();
@@ -404,7 +404,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
                 this.ebody.style.height = (hgh < 0 ? 0 : hgh) + "px";
 
 				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
-				if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
+				if (zk.ie < 11 && this.ebody.offsetHeight) {} // bug #1812001.
 				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
 				// and IE7 at initializing phase.
 				return; //done
@@ -434,7 +434,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.isVflex()) {
 				hgh = this._vflexSize(n.style.height);
 
-				if (zk.ie && this._cachehgh != hgh) {
+				if (zk.ie < 11 && this._cachehgh != hgh) {
 					hgh -= 1; // need to display the bottom border.
 					this._cachehgh = hgh;
 				}
@@ -459,7 +459,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight();
 					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
-				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
+				if (zk.ie < 11) hgh += diff; //strange in IE (or scrollbar shown)
 			}
 
 			// Fixed for B50-3315594.zul
@@ -480,7 +480,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				zk(this.ebody).redoCSS();	
 			
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
-			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
+			if (zk.ie < 11 && this.ebody.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
 			// and IE7 at initializing phase.
 			// 2008/03/28 The unnecessary scroll bar will appear when the vflex is true.
@@ -491,7 +491,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 				// Bug #2129992 somethings the size of the offsetHeight in IE6,
 				// IE7, and IE7 in compatible mode is wrong.
-				if (zk.ie && !zk.ie8 && this.ebodytbl) {
+				if (zk.ie < 11 && !zk.ie8 && this.ebodytbl) {
 					var ow = this.ebody.offsetWidth,
 						cw = this.ebody.clientWidth,
 						w = ow - cw;
@@ -516,7 +516,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
 			hgh = n.style.height;
-			if (zk.ie && (!hgh || hgh == "auto") && zk(this.ebody).hasVScroll()) {
+			if (zk.ie < 11 && (!hgh || hgh == "auto") && zk(this.ebody).hasVScroll()) {
 				if (!nVisiRows) this.ebody.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
 				else this.ebody.style.height =
 						(this.ebody.offsetHeight * 2 - this.ebody.clientHeight) + "px";

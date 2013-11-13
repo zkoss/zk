@@ -237,7 +237,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			if (evt.name == 'onMouseOver')
 				zul.sel.Renderer.updateColumnMenuButton(this);
 			else if (!$n.hasClass(zcls + "-visi") &&
-				(!zk.ie || !jq.isAncestor($n.first(), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
+				(!(zk.ie < 11) || !jq.isAncestor($n.first(), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
 					$n.removeClass(zcls + "-over");
 		}
 	},

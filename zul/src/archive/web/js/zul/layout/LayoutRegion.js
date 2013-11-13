@@ -401,7 +401,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);
 				if (cap) // B50-ZK-236: add header height
 					hgh +=  cap.offsetHeight;
-				if (zk.ie) n.style.height = '';
+				if (zk.ie < 11) n.style.height = '';
 				n.style.height = jq.px0(hgh);
 			}
 		}
@@ -412,7 +412,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				n.style.width = this._width ? this._width : '';
 			else {
 				var wdh = zk(n).revisedWidth(sz.width, true);
-				if (zk.ie) n.style.width = '';
+				if (zk.ie < 11) n.style.width = '';
 				n.style.width = jq.px0(wdh);
 			}
 		}

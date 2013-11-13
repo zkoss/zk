@@ -231,7 +231,7 @@ function zkamn(pkg, fn) {
 			if (zk.loading)
 				return zk.afterLoad(mtBL0);
 
-			if (zk.ie && !jq.isReady) //3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
+			if (zk.ie < 11 && !jq.isReady) //3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
 				return jq(mtBL0);
 
 			var inf = _crInfBL1.shift();
@@ -574,7 +574,7 @@ jq(function() {
 		
 		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
 		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
-		if (old && zk.ie) {
+		if (old && zk.ie < 11) {
 			var n = jq(old)[0];
 			if (n)
 				setTimeout(function () {
@@ -675,14 +675,14 @@ jq(function() {
 
 		var wgt = Widget.$(evt, {child:true});
 		if (wgt) {
-			if (zk.ie)
+			if (zk.ie < 11)
 				evt.which = 3;
 			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
 		}
-		return !zk.ie || evt.returnValue;
+		return !(zk.ie < 11) || evt.returnValue;
 	})
 	.bind('zmousedown', function(evt){
 		if (zk.mobile) {
@@ -786,7 +786,7 @@ jq(function() {
 		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
-		var delay = zk.ie || zk.android ? 250: 50;
+		var delay = (zk.ie < 11) || zk.android ? 250: 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
 

@@ -439,6 +439,13 @@ public class Servlets {
 							}
 						}
 					}
+					
+					// ie11~
+					if (ua.contains("trident")) {
+						browserInfo(zk, "ie", version);
+						return;
+					}
+					
 					//the version after gecko/* is confusing, so we
 					//use firefox's version instead
 					browserInfo(zk, "gecko", version);
@@ -751,9 +758,11 @@ public class Servlets {
 			Matcher tridentMatcher = _rtrident.matcher(ua);
 			if(tridentMatcher.find()) {
 				double tridentVersion = Double.parseDouble(tridentMatcher.group(1));
-				Matcher msieMatcher = _rmsie.matcher(ua);
-				if (msieMatcher.matches()) {
-					double ieVersion = getVersion(msieMatcher);
+				Matcher msie = _rmsie.matcher(ua);
+				Matcher ie = _rmozilla.matcher(ua); // ie11~
+				Matcher ieMatcher = msie.matches() ? msie : (ie.matches() ? ie : null);
+				if (ieMatcher != null) {
+					double ieVersion = getVersion(ieMatcher);
 					double ieVersionReal = tridentVersion + 4.0;
 					return new double[]{ieVersion, tridentVersion, ieVersionReal};
 				}

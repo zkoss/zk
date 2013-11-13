@@ -54,7 +54,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ps.marginRight = oldVal[3];
 			}
 		}
-		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
+		return !(zk.ie < 11) ? Math.max(0, start) : start; // ie may have a wrong gap
 		
 	}
 	
@@ -102,7 +102,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ps.marginBottom = oldVal[3];
 			}
 		}
-		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
+		return !(zk.ie < 11) ? Math.max(0, start) : start; // ie may have a wrong gap
 	}
 	
 	// check whether the two elements are the same baseline, if so, we need to

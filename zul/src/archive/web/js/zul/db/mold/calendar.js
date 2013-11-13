@@ -19,7 +19,7 @@ function (out) {
 		uuid = this.uuid,
 		view = this._view,
 		zcls = this.getZclass(),
-		tagnm = zk.ie || zk.gecko ? "a" : "button",
+		tagnm = zk.ie < 11 || zk.gecko ? "a" : "button",
 		localizedSymbols = this.getLocalizedSymbols();
 
 	// header

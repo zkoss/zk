@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
-		tags = zk.ie || zk.gecko ? 'a' : 'button';
+		tags = zk.ie < 11 || zk.gecko ? 'a' : 'button';
 	out.push('<div', this.domAttrs_(), '><', tags, ' id="', uuid,
 			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
 			' class="z-focus-a"></',

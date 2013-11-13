@@ -361,7 +361,7 @@ zk.copy(zjq.prototype, {
 		opts.afterAnima = function () {
 			if (prop) _restoreProp(self, prop);
 			if (visible) {
-				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
+				if (zk.ie < 11) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
 				zUtl.fireShown(wgt);
 			} else {
 				self.jq.hide();

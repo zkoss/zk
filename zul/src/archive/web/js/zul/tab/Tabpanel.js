@@ -185,7 +185,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		this._fixPanelHgh();		//Bug 2104974
 		
 		//Bug 2526699 - (add zk.ie7)
-		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS();
+		if (zk.ie < 11 && !zk.ie8) zk(tabbox.$n()).redoCSS();
 	},
 
 	//bug #3014664

@@ -149,7 +149,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			};
 			
 		if (p = this.parent) {
-			if (zk.ie)
+			if (zk.ie < 11)
 				setTimeout(fn, 0);
 			else fn();
 		}
