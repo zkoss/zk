@@ -99,7 +99,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			// 
 			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
 			// IE10: Bug ZK-1519
-	    	if (zk.ie > 9 || zk.ff) {
+	    	if ((zk.ie > 9 && zk.ie < 11) || zk.ff) {
 				var $tip = jq(tip.$n()),
 					$tipOff = $tip.offset(),
 					pointer = zk.currentPointer;
@@ -648,7 +648,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			evt.stop({dom:true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
 		//Bug 2041347
-		if (zk.ie && keyCode == 112) {
+		if (zk.ie < 11 && keyCode == 112) {
 			zk._oldOnHelp = window.onhelp;
 			window.onhelp = function () {return false;}
 			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);

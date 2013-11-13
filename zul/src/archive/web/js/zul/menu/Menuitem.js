@@ -290,7 +290,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 				this.fireX(evt);
 			} else {
-				if (zk.ie && topmost && this.$n().id != anc.id)
+				if (zk.ie < 11 && topmost && this.$n().id != anc.id)
 					zUtl.go(anc.href, {target: anc.target});
 					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
@@ -324,7 +324,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_canActivate: function (evt) {
-		return !this.isDisabled() && (!zk.ie || !this.isTopmost() || this._uplder
+		return !this.isDisabled() && (!(zk.ie < 11) || !this.isTopmost() || this._uplder
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	},
 	_getUploadRef: function () {
@@ -350,7 +350,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			menubar._closeOnOut();
 		}
 		if (!this.isDisabled()) {
-			var deact = !zk.ie;
+			var deact = !(zk.ie < 11);
 			if (!deact) {
 				var n = this.$n('a'),
 					xy = zk(n).revisedOffset(),
@@ -358,7 +358,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					y = evt.pageY,
 					diff = this.isTopmost() ? 1 : 0;
 				deact = x - diff <= xy[0] || x > xy[0] + n.offsetWidth
-					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight + (zk.ie ? -1 : 0);
+					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight + (zk.ie < 11 ? -1 : 0);
 			}
 			if (deact)
 				this.$class._rmActive(this);

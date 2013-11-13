@@ -445,7 +445,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	} : zk.$void,
 	// super
 	// also called by self#emptyMessage and Listitem#setVisible
-	_removeHorScrollbar: (zk.ie) ? function () {
+	_removeHorScrollbar: (zk.ie < 11) ? function () {
 		if (zk.ie == 8) {
 			this.$supers('_removeHorScrollbar', arguments);
 		} else if (zk.ie == 9) { // ZK-1037

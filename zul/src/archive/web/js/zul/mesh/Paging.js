@@ -473,7 +473,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		var target = evt.target,
 			$table = jq(target).parents("table:first"),
 			wgt = zk.Widget.$(target);
-		if(!zk.ie || !jq.isAncestor($table[0], evt.relatedTarget || evt.toElement))
+		if(!(zk.ie < 11) || !jq.isAncestor($table[0], evt.relatedTarget || evt.toElement))
 			$table.removeClass(wgt.getZclass() + "-btn-over");
 	},
 	_domMouseDown: function (evt) {

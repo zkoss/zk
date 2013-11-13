@@ -133,7 +133,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.ie < 8 && max < wd) {
 					max = wd;
 					maxj = i;
-				} else if (zk.ff > 4 || zk.ie >= 9) {// firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
+				} else if (zk.ff > 4 || (zk.ie >= 9 && zk.ie < 11)) {// firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				}
 				if (zk.ie < 8) // B50-ZK-206
@@ -153,7 +153,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (zk.ie < 8 && max < wd) {
 						max = wd;
 						maxj = i;
-					} else if (zk.ff > 4 || zk.ie >= 9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
+					} else if (zk.ff > 4 || (zk.ie >= 9 && zk.ie < 11)) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 						++wds[i];
 					if (zk.ie < 8) // B50-ZK-206
 						wds[i] += 2;
@@ -1121,7 +1121,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var h = this._vflexSize(hgh); 
 			if (h < 0) h = 0;
 
-			if (!zk.ie || zk.ie8 || this._vflex != "min")
+			if (!(zk.ie < 11) || zk.ie8 || this._vflex != "min")
 				ebodyStyle.height = h + "px";
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
 			if (zk.ie && ebody.offsetHeight) // bug #1812001.
@@ -1138,9 +1138,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (hgh && hgh.indexOf('%') > 0) {
 				var h = this._vflexSize(n.offsetHeight + 'px'); 
 				if (h < 0) h = 0;
-				if (!zk.ie || zk.ie8 || this._vflex != "min")
+				if (!(zk.ie < 11) || zk.ie8 || this._vflex != "min")
 					ebodyStyle.height = h + "px";
-				if (zk.ie && ebody.offsetHeight) // bug #1812001
+				if ((zk.ie < 11) && ebody.offsetHeight) // bug #1812001
 					;
 			}
 		}
@@ -1183,7 +1183,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var tblwd = this._getEbodyWd(),
 			hgh = this.getHeight() || n.style.height, // bug in B36-2841185.zul
 			sizedByContent = this.isSizedByContent();
-		if (zk.ie) {//By experimental: see zk-blog.txt
+		if (zk.ie < 11) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl && this.eheadtbl.offsetWidth != this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset
 				 
@@ -1275,7 +1275,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 		}
 	} : zk.$void,
-	_removeScrollbar: zk.ie ? function() { //see HeadWidget#afterChildrenFlex_
+	_removeScrollbar: zk.ie < 11 ? function() { //see HeadWidget#afterChildrenFlex_
 		if (this._vflex) return;
 		
 		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
@@ -1458,7 +1458,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		//ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
 		// B50-ZK-1038: in IE, when body has 0 height, it has 0 client width
-		var useOffset = zk.ie && (bdtable.parentNode.offsetHeight == 0 || 
+		var useOffset = zk.ie < 11 && (bdtable.parentNode.offsetHeight == 0 || 
 			(zk.ie < 8 && !this.getHeight() && !this.$n().style.height));
 		//Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
 		var	total = bdtable.parentNode[useOffset ? 'offsetWidth' : 'clientWidth'] - (zk.ie < 8 ? 1 : 0), 

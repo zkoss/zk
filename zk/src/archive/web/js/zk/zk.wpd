@@ -29,7 +29,7 @@ window.$eval=function(s){return eval(s);};
         signature="java.lang.String outFeature()"/>
 	<script src="js.js"/>
 	<script src="dom.js" jsdoc="true"/>
-	<script src="domie.js" browser="ie"/>
+	<script src="domie.js" browser="ie6-,ie7-,ie8-,ie9-,ie10-"/>
 	<script src="domie6.js" browser="ie6-"/>
 	<script src="domgecko.js" browser="gecko"/>
 	<script src="domsafari.js" browser="safari"/>

@@ -25,7 +25,7 @@ function (out) {
 	btn += '></button>';
 
 	var wd = "100%", hgh = "100%";
-	if (zk.ie && !zk.ie8) {
+	if (zk.ie < 11 && !zk.ie8) {
 		//Not to generate 100% in IE6/7 (or the width will be 100%)
 		if (!this._width) wd = "";
 		if (!this._height) hgh = "";
@@ -33,10 +33,10 @@ function (out) {
 	out.push('<span', this.domAttrs_(),
 			'><table id="', uuid, '-box" style="width:', wd, ';height:', hgh, '"', zUtl.cellps0,
 			(tabi && !zk.gecko && !zk.safari ? tabi : ''),
-			'><tr><td class="', zcls, '-tl">', (!zk.ie ? btn : ''),
+			'><tr><td class="', zcls, '-tl">', (!(zk.ie < 11) ? btn : ''),
 			'</td><td class="', zcls, '-tm"></td>', '<td class="', zcls,
 			'-tr"></td></tr>', '<tr><td class="', zcls, '-cl">',
-			(zk.ie ? btn : ''),
+			(zk.ie < 11 ? btn : ''),
 			'</td><td class="', zcls, '-cm"',
 			this.domTextStyleAttr_(), '>', this.domContent_(),
 			'</td><td class="', zcls, '-cr"><div>');

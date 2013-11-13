@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
-		btn = zk.ie && !zk.ie8 ? 'input' : 'button',
+		btn = zk.ie < 11 && !zk.ie8 ? 'input' : 'button',
 		target = this.getTarget(),
 		img = this.getImage();
 

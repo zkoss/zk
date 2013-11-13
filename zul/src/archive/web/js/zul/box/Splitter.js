@@ -172,7 +172,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (!this.$weave) {
 			var $btn = jq(this.$n('btn'));
-			if (zk.ie)
+			if (zk.ie < 11)
 				$btn.mouseover(Splitter.onover)
 					.mouseout(Splitter.onout);
 			$btn.click(Splitter.onclick);
@@ -201,7 +201,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			btn;
 		if (btn = this.$n('btn')) {
 			var $btn = jq(btn);
-			if (zk.ie)
+			if (zk.ie < 11)
 				$btn.unbind("mouseover", Splitter.onover)
 					.unbind("mouseout", Splitter.onout);
 			$btn.unbind("click", Splitter.onclick);
@@ -449,7 +449,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	}
 });
 
-if (zk.ie) {
+if (zk.ie < 11) {
 	zul.box.Splitter.onover = function (evt) {
 		var wgt = zk.Widget.$(evt);
 		$(wgt.$n('btn')).addClass(wgt.getZclass() + '-btn-visi');

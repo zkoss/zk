@@ -16,7 +16,7 @@ zk.bmk = (function () { //used internally
 	var _curbk = "", _initbk = "";
 
 	/** bookmark iframe */
-	var _bkIframe = zk.ie && !zk.ie8 ? function (nm, oldnm) {
+	var _bkIframe = (zk.ie < 11) && !zk.ie8 ? function (nm, oldnm) {
 		//Bug 2019171: we have to create iframe frist
 		var url = zk.ajaxURI("/web/js/zk/bookmark.html", {au:true,ignoreSession:true}),
 			ifr = jq('#zk_histy')[0];
@@ -89,7 +89,7 @@ zk.bmk = (function () { //used internally
 			(zk.bmk.bookmark = _bookmark)(nm, replace);
 	},
 	/** called when bookmark.html is loaded*/
-	onIframeLoaded: zk.ie ? function (src) {
+	onIframeLoaded: (zk.ie < 11) ? function (src) {
 		var j = src.indexOf('?'),
 			nm = j >= 0 ? src.substring(j + 1): '';
 		location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';

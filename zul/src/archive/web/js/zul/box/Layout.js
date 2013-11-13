@@ -330,7 +330,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var cwgt = vflexs.shift(), 
 				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) | 0, //cast to integer
 				offtop = cwgt.$n().offsetTop,
-				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2)
+				isz = vsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2)
 							: /* B50-3236331.zul */(zk.ie < 8 ? 1 : 0));
 			 
 			cwgt.setFlexSize_({height:isz});
@@ -344,7 +344,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
 				offtop = cwgt.$n().offsetTop,
-				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2)
+				isz = lastsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2)
 							: /* B50-3236331.zul */(zk.ie < 8 ? 1 : 0));
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = lastsz;

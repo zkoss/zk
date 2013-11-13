@@ -409,7 +409,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var	topmost = this.isTopmost();
 		if(topmost)
 			_toggleClickableCSS(this);
-		if (topmost && zk.ie && !jq.isAncestor(this.getAnchor_(), evt.domTarget))
+		if (topmost && zk.ie < 11 && !jq.isAncestor(this.getAnchor_(), evt.domTarget))
 				return; // don't activate
 
 		if (this.menupopup)
@@ -437,7 +437,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = false;
 		this._updateHoverImage(); // remove hover image if any
-		if (!zk.ie && jq.isAncestor(this.getAnchor_(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (!(zk.ie < 11) && jq.isAncestor(this.getAnchor_(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
 	
 		var topmost = this.isTopmost(),

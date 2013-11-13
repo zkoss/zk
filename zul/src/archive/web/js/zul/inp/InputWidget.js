@@ -58,14 +58,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	var _keyIgnorable = zk.ie ? function () {return true;}:
+	var _keyIgnorable = zk.ie < 11 ? function () {return true;}:
 		zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
 		}: function (code) {
 			return code >= 32;
 		},
 
-		_fixInput = zk.ie ? function (wgt) { //ZK-426
+		_fixInput = zk.ie < 11 ? function (wgt) { //ZK-426
 			setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
 				if (wgt == zk.currentFocus)
 					zjq.fixInput(wgt.getInputNode());
@@ -709,7 +709,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (navigator.appVersion.indexOf('Mac')!=-1 && event.metaKey)
 			return;
 		else {
-			var code = (zk.ie||zk.opera) ? evt.keyCode : evt.charCode;
+			var code = (zk.ie < 11||zk.opera) ? evt.keyCode : evt.charCode;
 			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
 			&& keys.indexOf(String.fromCharCode(code)) < 0) {
 				evt.stop();

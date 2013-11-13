@@ -500,7 +500,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._onChanging();
 		this._stopAutoIncProc();
 		
-		if ((zk.ie || zk.safari) && this._lastPos)
+		if ((zk.ie < 11 || zk.safari) && this._lastPos)
 			zk(inp).setSelectionRange(this._lastPos, this._lastPos);
 	},
 	_btnOut: function(evt) {
@@ -579,7 +579,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var self = this,
 			fn = up ? '_doUp' : '_doDown';
 		this.timerId = setInterval(function() {
-			if ((zk.ie || zk.safari) && self._lastPos)
+			if ((zk.ie < 11 || zk.safari) && self._lastPos)
 				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);

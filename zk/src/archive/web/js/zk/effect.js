@@ -318,7 +318,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		}
 		
 		// IE bug
-		if (zk.ie && !zk.ie8)
+		if ((zk.ie < 11) && !zk.ie8)
 			zi = zi == 0 ? 1 : zi;
 		
 		if (zi != 'auto') { //Bug ZK-1381: only apply z-index when it is not auto
@@ -440,10 +440,10 @@ jq(function() {
 			_useSKU = false;
 		else {
 			_callback = zk.safari || zk.opera;
-			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
+			_useSKU = !_callback || (zk.ie < 11); // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)
-		_useSKU = zk.ie; // ZK-1748 should include all ie
+		_useSKU = zk.ie < 11 ? zk.ie : false; // ZK-1748 should include all ie
 
 	if (_callback) {
 		var w2hide = function (name) {

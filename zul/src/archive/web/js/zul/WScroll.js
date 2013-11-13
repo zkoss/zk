@@ -371,7 +371,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		var self = this;
 		if (self._isVer) {
 			jq(self.control).mousewheel(self.proxy(self._mousewheelY));
-		} else if (!zk.ie || !zk.opera) { // ie and opera unsupported
+		} else if (!(zk.ie < 11) || !zk.opera) { // ie and opera unsupported
 			jq(self.control).mousewheel(self.proxy(self._mousewheelX));
 		}
 
@@ -387,7 +387,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		var self = this;
 		if (self._isVer)
 			jq(self.control).unmousewheel(self.proxy(self._mousewheelY));
-		else if (!zk.ie || !zk.opera) // ie and opera unsupported
+		else if (!(zk.ie < 11) || !zk.opera) // ie and opera unsupported
 			jq(self.control).unmousewheel(self.proxy(self._mousewheelX));
 		
 		var $drag = jq(self.edrag);

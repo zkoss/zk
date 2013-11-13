@@ -28,7 +28,7 @@ function (out) {
 	//IE and Safari need to set height, or the table height will shrink to as high as inner table
 	//FF2 should not set this, or the td will stretch the parent table height.
 	//FF3 is OK to set or not set
-	if (zk.ie || zk.safari) out.push(';height:100%');
+	if (zk.ie < 11 || zk.safari) out.push(';height:100%');
 	out.push('"');
 	
 	var v = this.getAlign();

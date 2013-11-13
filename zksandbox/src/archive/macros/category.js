@@ -98,7 +98,7 @@ zksandbox.Category = zk.$extends(zul.wgt.Button, {
 		jq(this.$n()).addClass("demo-over");
 	},
 	doMouseOut_: function (evt) {
-		if (zk.ie && jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (zk.ie < 11 && jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; //nothing to do
 		jq(this.$n()).removeClass("demo-over");
 	},

@@ -45,7 +45,7 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 			if (!v) this._scrolling = v = "auto";
 			var n = this.$n();
 			if (n) {
-				if (zk.ie || zk.safari)
+				if (zk.ie < 11 || zk.safari)
 					this.rerender();
 				else
 					n.scrolling = v;
