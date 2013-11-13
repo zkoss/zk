@@ -267,6 +267,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				.addClass(zcls + '-img-over');
 			box._select(null, evt);
 		}
+		box.fire('onCheckSelectAll', this._checked);
 	},
 	//@Override
 	doClick_: function (evt) {
