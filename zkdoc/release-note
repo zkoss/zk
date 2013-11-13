@@ -43,6 +43,8 @@ ZK 7.0.0
   + rename the orient of tabbox "horizontal" to "top", "vertical" to "left" and add extra two orients named "bottom" and "right"
   + deprecated Session's getRemoteHost(), getRemoteAddr(), getServerName(), getLocalName(), and getLocalAddr() methods,
   please use these methods from Executions.getCurrent() instead.
+  + deprecated to enable event-thread, according to Java Servlet Specification deprecated to enable event-thread, according to Java Servlet
+  Specification that some of high-end application servers may prohibit the creation of new threads.
 
   --------
 ZK 6.5.5
