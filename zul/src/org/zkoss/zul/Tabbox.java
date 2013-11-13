@@ -159,6 +159,49 @@ public class Tabbox extends XulElement {
 								&& getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null /* Bug ZK-2011*/)
 							doSelectionChanged();
 						return; //nothing changed so need to rerender
+					case ListDataEvent.INTERVAL_ADDED:
+						if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+							int min = event.getIndex0(), max = event.getIndex1();
+							
+							final Renderer renderer = new Renderer();
+							try {
+								if (getTabs() == null)
+									new Tabs().setParent(Tabbox.this);
+								
+								if (getTabpanels() == null)
+									new Tabpanels().setParent(Tabbox.this);
+								
+								for (int i = min, j = max; i <= j; i++) {
+									renderer.render(Tabbox.this, _model.getElementAt(i), i);
+								}
+							} catch (Throwable ex) {
+								log.error("", ex);
+							}
+							return;
+						}
+						break;
+					case ListDataEvent.INTERVAL_REMOVED:
+						if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+							int min = event.getIndex0(), max = event.getIndex1();
+							
+							final Renderer renderer = new Renderer();
+							try {	
+								Iterator it = Tabbox.this.getTabs().getChildren().iterator();
+								int i = 0;
+								while (it.hasNext()) {
+									it.next();
+									if (i >= min && i <= max)
+										it.remove();
+									i++;
+									if (i > max)
+										break;
+								}
+							} catch (Throwable ex) {
+								log.error("", ex);
+							}
+							return;
+						}
+						break;
 					case ListDataEvent.MULTIPLE_CHANGED:
 						return; //nothing to do
 					}
@@ -625,7 +668,7 @@ public class Tabbox extends XulElement {
 					_seltab = tab;
 					_seltab.setSelectedDirectly(true);
 					if (byClient && _model != null) {
-						Selectable sm = getSelectableModel();
+						Selectable<Object> sm = getSelectableModel();
 						if (!sm.isSelected(_model.getElementAt(_seltab.getIndex()))) {
 							sm.clearSelection();
 							sm.addToSelection(_model.getElementAt(_seltab.getIndex()));
@@ -748,10 +791,7 @@ public class Tabbox extends XulElement {
 	}
 
 	public String getZclass() {
-		String cls = _zclass == null ? "z-tabbox" : _zclass;
-		String orientCls = isTop() ? "" : " " + (cls + "-" + this._orient);
-		cls += inAccordionMold() ? " " + (cls + "-" + getMold()) : orientCls;
-		return cls;
+		return _zclass == null ? "z-tabbox" : _zclass;
 	}
 
 	// -- Component --//

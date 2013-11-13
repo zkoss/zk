@@ -54,10 +54,6 @@ public class Tabpanels extends XulElement {
 	 * <p>Note: the default style class is always "z-tabpanels".
 	 */
 	public String getZclass() {
-		if (_zclass != null) return _zclass;
-		final Tabbox tabbox = getTabbox();
-		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
-			tabbox.isVertical() ? "-ver" : "" : "";
-		return "z-tabpanels" + added;
+		return _zclass == null ? "z-tabpanels" : _zclass;
 	}	
 }

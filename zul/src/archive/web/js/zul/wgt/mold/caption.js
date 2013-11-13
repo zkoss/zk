@@ -27,27 +27,29 @@ function (out) {
 	}
 	
 	var puuid = p.uuid,
-		picon = p.$s('icon'),
-		getIcon = function(iconClass) {
-			return '<i class="z-icon-' + iconClass + '"></i>';
-		};
-	
-	if (this._isCloseVisible())
-		out.push('<div id="', puuid, '-close" class="', picon, ' ', p.$s('close'),
-				'">', getIcon('remove'), '</div>');
-	if (this._isMaximizeVisible()) {
-		out.push('<div id="', puuid, '-max" class="', picon, ' ', p.$s('maximize'));
-		if (p.isMaximized())
-			out.push(' ', p.$s('maximized'));
-		out.push('">', this._maximized ? 
-				getIcon('resize-small') : getIcon('resize-full'), '</div>');
+		picon = p.$s('icon');
+	if (this._isCloseVisible()) {
+		out.push('<div id="', puuid , '-close" class="', picon, ' ',
+			p.$s('close'), '"><i class="', p.getClosableIconClass_(), '"></i></div>');
 	}
-	if (this._isMinimizeVisible())
-		out.push('<div id="', puuid, '-min" class="', picon, ' ', p.$s('minimize'),
-				'">', getIcon('minus'), '</div>');
-	if (this._isCollapsibleVisible())
-		out.push('<div id="', puuid , '-exp" class="', picon, ' ', p.$s('expand'),
-				'" >', p._open ? getIcon('caret-up') : getIcon('caret-down'), '</div>');
+	if (this._isMaximizeVisible()) {
+		var maxd = this._maximized;
+		out.push('<div id="', puuid, '-max" class="', picon, ' ', p.$s('maximize'));
+		if (maxd)
+			out.push(' ', p.$s('maximized'));
+		var maxIcon = maxd ? p.getMaximizedIconClass_() : p.getMaximizableIconClass_();
+		out.push('"><i class="', maxIcon, '"></i></div>');
+	}
+	if (this._isMinimizeVisible()) {
+		out.push('<div id="', puuid , '-min" class="', picon, ' ',
+				p.$s('minimize'), '" ><i class="',
+				p.getMinimizableIconClass_(), '"></i></div>');
+	}
+	if (this._isCollapsibleVisible()) {
+		var openIcon = p._open ? p.getCollapseOpenIconClass_() : p.getCollapseCloseIconClass_();
+		out.push('<div id="', puuid , '-exp" class="', picon, ' ',
+			p.$s('expand'), '"><i class="', openIcon, '"></i></div>');
+	}
 	
 	out.push('</div>');
 }

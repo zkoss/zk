@@ -44,7 +44,7 @@ function (out, skipper) {
 			if (this._collapsible) {
 				var openIcon = this._open ? this.getCollapseOpenIconClass_() : this.getCollapseCloseIconClass_();
 				out.push('<div id="', uuid , '-exp" class="', icon, ' ',
-						this.$s('expand'), '" ><i class="', openIcon, '"></i></div>');
+						this.$s('expand'), '"><i class="', openIcon, '"></i></div>');
 			}
 			out.push(zUtl.encodeXML(title));
 		}

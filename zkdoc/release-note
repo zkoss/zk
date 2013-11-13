@@ -43,12 +43,15 @@ ZK 7.0.0
   + rename the orient of tabbox "horizontal" to "top", "vertical" to "left" and add extra two orients named "bottom" and "right"
   + deprecated Session's getRemoteHost(), getRemoteAddr(), getServerName(), getLocalName(), and getLocalAddr() methods,
   please use these methods from Executions.getCurrent() instead.
+  + deprecated to enable event-thread, according to Java Servlet Specification deprecated to enable event-thread, according to Java Servlet
+  Specification that some of high-end application servers may prohibit the creation of new threads.
 
   --------
 ZK 6.5.5
 * Features
   ZK-1971: ZK wcs file shall exclude the css with zk logo image
   ZK-1973: Server processing effect can be configurable
+  ZK-2014: Listbox component support selectAll/unSelectAll event when check/uncheck on select all checkbox
 
 * Bugs
   ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM

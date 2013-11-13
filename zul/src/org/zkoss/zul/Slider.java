@@ -66,16 +66,7 @@ public class Slider extends XulElement {
 	
 	// super
 	public String getZclass() {
-		final String name = "z-slider";
-		if (_zclass == null) {
-			if (inScaleMold())
-				return name + "-scale";
-			else if (inSphereMold())			  
-				return name + ("horizontal".equals(getOrient()) ? "-sphere-hor" : "-sphere-ver");
-			else
-				return name + ("horizontal".equals(getOrient()) ? "-hor" : "-ver");
-		}
-		return _zclass;
+		return _zclass == null ? "z-slider" : _zclass;
 	}
 	
 	/** Returns the orient.
