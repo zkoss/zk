@@ -352,6 +352,8 @@ public class Listbox extends MeshElement {
 		
 		// since 6.0.0/5.0.11, B50-ZK-798
 		addClientEvent(Listbox.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		// since 6.5.5 F65-ZK-2014
+		addClientEvent(Listbox.class, "onCheckSelectAll", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Listbox() {
