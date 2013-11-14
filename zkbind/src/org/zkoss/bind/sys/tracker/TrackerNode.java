@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys.tracker;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.sys.Binding;
@@ -102,4 +103,24 @@ public interface TrackerNode {
 	 * @return associated field script of this TrackerNode.
 	 */
 	public Object getFieldScript();
+
+	/** add associated TrackerNode with this node
+	 * @param srcnode
+	 * @since 6.5.5
+	 */
+	public void addAssociate(TrackerNode srcnode);
+
+	/**
+	 * tie property with script of this node.
+	 * @param propName
+	 * @param script
+	 * @since 6.5.5
+	 */
+	public void tieProperty(Object propName, Object script);
+	
+	/**
+	 * get property, script mapping map
+	 * @since 6.5.5
+	 */
+	public Map<Object, Object> getPropNameMapping();
 }

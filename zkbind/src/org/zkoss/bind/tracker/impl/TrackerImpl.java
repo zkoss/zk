@@ -58,7 +58,7 @@ public class TrackerImpl implements Tracker, Serializable {
 			return;
 		}
 		
-		final TrackerNodeImpl node = (TrackerNodeImpl) getOrCreateTrackerNode(comp, series);
+		final TrackerNode node = getOrCreateTrackerNode(comp, series);
 		
 		//node is leaf of this series, add the binding to it
 		node.addBinding(binding);
@@ -72,7 +72,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		if (dependsOnComp == null) {
 			dependsOnComp = srcComp; //share same component context for @DependsOn case
 		}
-		final TrackerNodeImpl dependsOnNode = (TrackerNodeImpl) getOrCreateTrackerNode(dependsOnComp, dependsOnSeries);
+		final TrackerNode dependsOnNode = getOrCreateTrackerNode(dependsOnComp, dependsOnSeries);
 		//bug# 1: depends-on is not working in nested C->B->A when A changed
 		final TrackerNode srcnode =  getOrCreateTrackerNode(srcComp, srcSeries);
 		dependsOnNode.addAssociate(srcnode); 
@@ -91,19 +91,24 @@ public class TrackerImpl implements Tracker, Serializable {
 			if (parentNode == null) { //head node
 				node = nodes.get(script);
 				if (node == null) {
-					node = new TrackerNodeImpl(script);
+					node = newTrackerNode(script);
 					nodes.put(script, node);
 				}
 			} else {
 				node = parentNode.getDependent(script);
 				if (node == null) {
-					node = new TrackerNodeImpl(script);
+					node = newTrackerNode(script);
 				}
 				parentNode.addDependent(script, node);
 			}
 			parentNode = node;
 		}
 		return parentNode;
+	}
+	
+	//ZSS-1989, sub-class could override this method to provide better tracker-node impl.
+	protected TrackerNode newTrackerNode(Object script){
+		return new TrackerNodeImpl(script); 
 	}
 	
 	public void removeTrackings(Component comp) {
@@ -210,7 +215,7 @@ public class TrackerImpl implements Tracker, Serializable {
 					}
 					propNodes.add(node);
 					if (BindELContext.isBracket((String)script)) {
-						((TrackerNodeImpl)baseNode).tieProperty(propName, script);
+						baseNode.tieProperty(propName, script);
 					}
 				}
 
@@ -699,9 +704,9 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	private void dumpPropNameMapping(TrackerNode node, int spaces) {
-		if(((TrackerNodeImpl)node).getPropNameMapping().size()==0) return;//don't dump if empty
+		if(node.getPropNameMapping().size()==0) return;//don't dump if empty
 		System.out.println(dumpSpace(spaces)+"[propertys:");
-		for(Entry<Object, Object> entry : ((TrackerNodeImpl)node).getPropNameMapping().entrySet()) {
+		for(Entry<Object, Object> entry : node.getPropNameMapping().entrySet()) {
 			dumpEntry(entry, spaces+4);
 		}
 		System.out.println(dumpSpace(spaces)+"]");
