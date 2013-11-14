@@ -3067,7 +3067,7 @@ unbind_: function (skipper, after) {
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
 		// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
 		var wd = zjq.minWidth(wgt);
-		if(zk.ie < 11 && zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
+		if(zk.ie9 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
 			wd = zk(wgt).offsetWidth();
 		}
 		return attr == 'h' ? zk(wgt).offsetHeight() : wd; //See also bug ZK-483

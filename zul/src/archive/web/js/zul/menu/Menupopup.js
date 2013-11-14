@@ -395,7 +395,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			var root = _getRootMenu(this);
 			if (root) {
 				// a trick way to jump to the next menu.
-				root.focus_(undefined, zk.ie < 11 ? zk.ie : false);
+				root.focus_(undefined, zk.ie < 11);
 			}
 			this.close();
 			break;
