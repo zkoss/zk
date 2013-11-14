@@ -77,12 +77,15 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 		Template template = comp.getTemplate(name);
 		return template==null?lookupTemplate(comp.getParent(),name):template;
 	}
-
-	
 	protected Object evaluateTemplate(Component eachComp,final Object eachData, final int index, final int size){
+		return evaluateTemplate(eachComp, eachData, index, size, null);
+	}
+	protected Object evaluateTemplate(Component eachComp,final Object eachData, final int index, final int size, final String subType){
 		Object oldEach = null;
 		Object oldStatus = null;
 		try {
+			//TODO set subtype to evaluation context, so can use it as a condition.
+			
 			//prepare each and eachStatus
 			oldEach = eachComp.setAttribute(EACH_VAR, eachData);
 			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){
@@ -115,12 +118,16 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	}
 	
 	public Template resolveTemplate(Component eachComp, final Object eachData, final int index, final int size) {
-			final Object value = evaluateTemplate(eachComp,eachData,index,size);
+		return resolveTemplate(eachComp, eachData, index, size, null);
+	}
+	
+	public Template resolveTemplate(Component eachComp, final Object eachData, final int index, final int size, final String subType) {
+			final Object value = evaluateTemplate(eachComp,eachData,index,size,subType);
 			if(value instanceof Template){
 				return (Template) value;
 			}else if(value instanceof String){
 				//lookup from each, to allow put template in rows
-				Template template = lookupTemplate(eachComp,(String)value);
+				Template template = lookupTemplate(eachComp,subType==null?(String)value:(String)value+":"+subType);
 				if (template == null && ((String)value).indexOf('.') > 0) { //might be a class path
 					try {
 						template = (Template) _comp.getPage().resolveClass(((String)value)).newInstance();

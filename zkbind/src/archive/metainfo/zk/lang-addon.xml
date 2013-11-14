@@ -1155,6 +1155,21 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<extends>tabbox</extends>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
+			<attribute>
+				<attribute-name>RENDERER</attribute-name>
+				<attribute-value>tabboxRenderer:org.zkoss.bind.impl.BindTabboxRenderer</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.TabboxModelConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedTab</property-name>
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
@@ -1191,6 +1206,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.TabboxSelectedIndexConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
