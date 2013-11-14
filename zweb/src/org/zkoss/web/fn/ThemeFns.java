@@ -107,7 +107,9 @@ public class ThemeFns {
 	 * @param direction
 	 *            "ver", "hor", "diag-", "diag+", "rad"
 	 * @param colors
-	 *            the colors with stops, which are separated by semicolon ";"
+	 *            the colors with stops, which are separated by semicolon ";".
+	 *        For example,
+	 *        <pre><code>ThemeFns.gradient("ver", "#fefefe 0%; #eeeeee 100%");</code></pre>
 	 * @return A specific CSS gradient rules String
 	 */
 	public static String gradient(String direction, String colors) {
@@ -133,6 +135,8 @@ public class ThemeFns {
 	 *            "ver", "hor", "diag-", "diag+", "rad"
 	 * @param colors
 	 *            the colors with stops, which are separated by semicolon ";"
+	 *        For example,
+	 *        <pre><code>ThemeFns.gradValue("ver", "#fefefe 0%; #eeeeee 100%");</code></pre>
 	 * @return A specific CSS gradient rules String without the words
 	 *         "background:".
 	 */
