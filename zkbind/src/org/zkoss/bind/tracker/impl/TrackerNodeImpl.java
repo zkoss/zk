@@ -47,7 +47,7 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		_brackets = new HashMap<Object, Object>(4);
 		_associates = new HashSet<TrackerNode>(4);
 	}
-	/*package*/ void addAssociate(TrackerNode node) {
+	 public void addAssociate(TrackerNode node) {
 		_associates.add(node);
 	}
 	
@@ -70,7 +70,7 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		_dependents.put(script, dependent);
 	}
 	
-	/*package*/ void tieProperty(Object property, Object script) {
+	public void tieProperty(Object property, Object script) {
 		final Object oldscript = _brackets.get(property);
 		if (script.equals(oldscript)) {
 			return;
@@ -166,7 +166,7 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		return _script;
 	}
 	
-	/*package*/ Map<Object, Object> getPropNameMapping() {
+	public Map<Object, Object> getPropNameMapping() {
 		return _brackets;
 	}
 	

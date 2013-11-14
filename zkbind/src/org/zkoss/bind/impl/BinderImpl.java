@@ -2047,7 +2047,17 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	public Tracker getTracker() {
 		if (_tracker == null) {
-			_tracker = new TrackerImpl();
+			String clznm = Library.getProperty("org.zkoss.bind.Tracker.class");
+			if(clznm!=null){
+				Class<Tracker> clz;
+				try {
+					clz = (Class<Tracker>)Classes.forNameByThread(clznm);
+					_tracker = clz.newInstance();
+				} catch (Exception e) {
+					throw new UiException("Can't initialize tracker",e);
+				} 
+			}else
+				_tracker = new TrackerImpl();
 		}
 		return _tracker;
 	}

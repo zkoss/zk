@@ -336,6 +336,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// B50-ZK-391
 			// should keep openInfo, maybe used in onResponse later.
 		}
+		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
