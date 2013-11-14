@@ -1,0 +1,5 @@
+<zk>
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('detailVM') @init('org.zkoss.zktest.bind.issue.F01845TabboxModelDetail')">
+		<label value="@load(detailVM)"/>
+	</div>
+</zk>
