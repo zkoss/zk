@@ -231,7 +231,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this._stopAutoIncProc();
 
 		var inp = this.getInputNode();
-		if (zk.ie) {
+		if (zk.ie < 11) {
 			var len = inp.value.length;
 			zk(inp).setSelectionRange(len, len);
 		}

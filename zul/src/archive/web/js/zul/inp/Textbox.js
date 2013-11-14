@@ -65,7 +65,7 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		 * Unlike XUL, "timed" is redudant because it is enabled as long as
 		 * onChanging is added.
 		 */
-		type: zk.ie ? function () {
+		type: zk.ie < 11 ? function () {
 			this.rerender(); //though IE9 allows type to change but value is reset
 		}: function (type) {
 			var inp = this.getInputNode();

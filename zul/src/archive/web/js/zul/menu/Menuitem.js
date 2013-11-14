@@ -298,7 +298,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 				this.fireX(evt);
 			} else {
-				if (zk.ie && topmost && this.$n().id != anc.id)
+				if (zk.ie < 11 && topmost && this.$n().id != anc.id)
 					zUtl.go(anc.href, {target: anc.target});
 					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
@@ -330,7 +330,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_canActivate: function (evt) {
-		return !this.isDisabled() && (!zk.ie || !this.isTopmost() || this._uplder
+		return !this.isDisabled() && (!zk.ie < 11 || !this.isTopmost() || this._uplder
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	},
 	_getUploadRef: function () {

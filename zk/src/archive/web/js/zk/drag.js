@@ -27,7 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_actTmout = setTimeout(function () { 
 			_actTmout = null; 
 			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
-			if (!zk.ie || !_activedg || _activedg.node == dg.node)
+			if (!(zk.ie < 11) || !_activedg || _activedg.node == dg.node)
 				_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
@@ -614,7 +614,7 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = ofs;
 		_activate(this, devt, pt);
 		
-		if ((!zk.ie || zk.ie9 || zk.ie8_) && !zk.mobile) {
+		if ((!(zk.ie < 11) || zk.ie9 || zk.ie8_) && !zk.mobile) {
 			if (!zk.Draggable.ignoreStop(target)) // Bug B65-ZK-1839 we should ignore select tag on IE9
 				devt.stop();
 			//IE8: if not stop, onclick won't be fired (B50-ZK-909.zul)

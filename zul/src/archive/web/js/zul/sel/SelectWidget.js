@@ -351,7 +351,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		//Bug in B30-1926094-1.zul
-		if (zk.ie)
+		if (zk.ie < 11)
 			this._syncFocus(this._focusItem);
 
 		this._calcHgh();
@@ -431,7 +431,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.isVflex()) {
 				hgh = this._vflexSize(n.style.height);
 
-				if (zk.ie && this._cachehgh != hgh) {
+				if (zk.ie < 11 && this._cachehgh != hgh) {
 					hgh -= 1; // need to display the bottom border.
 					this._cachehgh = hgh;
 				}

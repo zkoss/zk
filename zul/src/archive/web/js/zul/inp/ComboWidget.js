@@ -163,9 +163,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// B65-ZK-1588: bandbox popup should drop up 
 		//   when the space between the bandbox and the bottom of browser is not enough  
 		var top = jq(pp).position().top + (zk.chrome ? 1 : 0), // chrome alignement issue: -1px margin-top
-			realtop = zk.ie > 9 ? Math.round(top) : top,
+			realtop = zk.ie == 10 ? Math.round(top) : top,
 			after = jq(inp).position().top + zk(inp).offsetHeight(),
-			realafter = zk.ie > 9 ? Math.round(after) : after;
+			realafter = zk.ie == 10 ? Math.round(after) : after;
 		
 		if (realtop < realafter) {
 			$pp.position(inp, 'before_start');	
@@ -449,7 +449,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
 			var opts = {propagation:true};
-			if (zk.ie) opts.dom = true;
+			if (zk.ie < 11) opts.dom = true;
 			evt.stop(opts);
 			return;
 		}
