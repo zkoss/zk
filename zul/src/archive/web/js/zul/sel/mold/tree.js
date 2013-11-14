@@ -18,7 +18,7 @@ function (out) {
 		width = innerWidth == '100%' ? ' width="100%"' : '',
 		wdStyle =  innerWidth != '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos,
-		tag = zk.ie || zk.gecko ? 'a' : 'button';
+		tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
 		
 	out.push('<div', this.domAttrs_(), '>');
 	//top paging

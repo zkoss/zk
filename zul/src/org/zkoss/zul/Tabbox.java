@@ -20,23 +20,21 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
-import org.zkoss.zk.ui.util.ForEachStatus;
-import org.zkoss.zk.ui.util.Template;
-
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.impl.TabboxEngine;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -62,6 +60,32 @@ import org.zkoss.zul.impl.XulElement;
  *  
  * <p>Default {@link #getZclass}: z-tabbox. (since 3.5.0)
  *
+ * <p>
+ * Besides creating {@link Tab}  and {@link Tabpanel} programmatically, you could
+ * assign a data model (a {@link ListModel} to a Tabbox via {@link #setModel(ListModel)}
+ * and then the tabbox will retrieve data via {@link ListModel#getElementAt} when
+ * necessary. (since 7.0.0) [ZK EE]
+ *
+ * <p>
+ * Besides assign a list model, you could assign a renderer (a
+ * {@link TabboxRenderer} instance) to a Tabbox, such that the Tabbox will
+ * use this renderer to render the data returned by
+ * {@link ListModel#getElementAt}. If not assigned, the default renderer, which
+ * assumes a label per Tab and Tabpanel, is used. In other words, the default renderer
+ * adds a label to a Tab and Tabpanel by calling toString against the object returned by
+ * {@link ListModel#getElementAt}  (since 7.0.0) [ZK EE]
+ *
+ * <p>To retrieve what are selected in Tabbox with a {@link Selectable}
+ * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what
+ * is currently selected object in {@link ListModel} rather than using
+ * {@link Tabbox#getSelectedTab()}. That is, you shall operate on the data of
+ * the {@link ListModel} rather than on the {@link Tab} of the {@link Tabbox}
+ * if you use the {@link Selectable} {@link ListModel}.  (since 7.0.0) [ZK EE]
+ *
+ * <pre><code>
+ * Set selection = ((Selectable)getModel()).getSelection();
+ * </code></pre>
+ * 
  * @author tomyeh
  */
 public class Tabbox extends XulElement {
@@ -81,8 +105,7 @@ public class Tabbox extends XulElement {
 	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
 	private transient TabboxRenderer<?> _renderer;
-	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
-	private static final String ATTR_CHANGING_SELECTION = "org.zkoss.zul.tabbox.changingSelection";
+	private TabboxEngine _engine;
 	
 	public Tabbox() {
 		init();
@@ -92,15 +115,77 @@ public class Tabbox extends XulElement {
 		_listener = new Listener();
 	}
 
+	/** Returns the implementation tabbox engine.
+	 * @exception UiException if failed to load the engine.
+	 * @since 7.0.0
+	 */
+	public TabboxEngine getEngine() throws UiException {
+		if (_engine == null)
+			_engine = newTabboxEngine();
+		return _engine;
+	}
+	
+	/** Sets the tabbox engine for {@link ListModel}
+	 * @since 7.0.0
+	 */
+	public void setEngine(TabboxEngine engine) {
+		if (_engine != engine) {
+			_engine = engine;
+		}
+		
+		//Always redraw, if any
+		postOnInitRender();
+	}
+	/** Instantiates the default tabbox engine.
+	 * It is called, if {@link #setEngine} is not called with non-null
+	 * engine.
+	 *
+	 * <p>By default, it looks up the library property called
+	 * org.zkoss.zul.tabbox.engine.class.
+	 * If found, the value is assumed to be
+	 * the class name of the tabbox engine (it must implement
+	 * {@link TabboxEngine}).
+	 * If not found, {@link UiException} is thrown.
+	 *
+	 * <p>Derived class might override this method to provide your
+	 * own default class.
+	 *
+	 * @exception UiException if failed to instantiate the engine
+	 * @since 7.0.0
+	 */
+	protected TabboxEngine newTabboxEngine() throws UiException {
+		final String PROP = "org.zkoss.zul.tabbox.engine.class";
+		final String klass = Library.getProperty(PROP);
+		if (klass == null)
+			throw new UiException("Library property,  "+PROP+", required");
+
+		final Object v;
+		try {
+			v = Classes.newInstanceByThread(klass);
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+		if (!(v instanceof TabboxEngine))
+			throw new UiException(TabboxEngine.class + " must be implemented by "+v);
+		return (TabboxEngine)v;
+	}
+
 	@SuppressWarnings("unchecked")
-	/*package*/ Selectable<Object> getSelectableModel() {
+	/**
+	 * Returns the selectable model, if any.
+	 * @since 7.0.0
+	 */
+	public Selectable<Object> getSelectableModel() {
 		return (Selectable<Object>)_model;
 	}
 
+	private static boolean disableFeature() {
+		return !WebApps.getFeature("ee");
+	}
 	/**
 	 * Sets the list model associated with this t. If a non-null model
 	 * is assigned, no matter whether it is the same as the previous, it will
-	 * always cause re-render.
+	 * always cause re-render. [ZK EE]
 	 * 
 	 * @param model
 	 *            the list model to associate, or null to dissociate any
@@ -110,6 +195,8 @@ public class Tabbox extends XulElement {
 	 * @since 7.0.0
 	 */
 	public void setModel(ListModel<?> model) {
+		if (disableFeature())
+			throw new IllegalAccessError("ZK EE version only!");
 		if (model != null) {
 			if (!(model instanceof Selectable))
 				throw new UiException(model.getClass() + " must implement "+Selectable.class);
@@ -129,83 +216,12 @@ public class Tabbox extends XulElement {
 			invalidate();
 		}
 	}
-	private void doSelectionChanged() {
-		final Selectable<Object> smodel = getSelectableModel();
-		if (smodel.isSelectionEmpty()) {
-			if (_seltab != null)
-				setSelectedIndex(0);
-			return;
-		}
-
-		if (_seltab != null && smodel.isSelected(_model.getElementAt(_seltab.getIndex())))
-			return; //nothing changed
-
-		for (int i = 0, sz = _model.getSize(); i < sz; i++) {
-			if (smodel.isSelected(_model.getElementAt(i))) {
-				setSelectedIndex(i);
-				return; //done
-			}
-		}
-		setSelectedIndex(0); //just in case
-	}
 
 	private void initDataListener() {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					switch (event.getType()) {
-					case ListDataEvent.SELECTION_CHANGED:
-						if (getAttribute(ATTR_CHANGING_SELECTION) == null
-								&& getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null /* Bug ZK-2011*/)
-							doSelectionChanged();
-						return; //nothing changed so need to rerender
-					case ListDataEvent.INTERVAL_ADDED:
-						if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
-							int min = event.getIndex0(), max = event.getIndex1();
-							
-							final Renderer renderer = new Renderer();
-							try {
-								if (getTabs() == null)
-									new Tabs().setParent(Tabbox.this);
-								
-								if (getTabpanels() == null)
-									new Tabpanels().setParent(Tabbox.this);
-								
-								for (int i = min, j = max; i <= j; i++) {
-									renderer.render(Tabbox.this, _model.getElementAt(i), i);
-								}
-							} catch (Throwable ex) {
-								log.error("", ex);
-							}
-							return;
-						}
-						break;
-					case ListDataEvent.INTERVAL_REMOVED:
-						if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
-							int min = event.getIndex0(), max = event.getIndex1();
-							
-							final Renderer renderer = new Renderer();
-							try {	
-								Iterator it = Tabbox.this.getTabs().getChildren().iterator();
-								int i = 0;
-								while (it.hasNext()) {
-									it.next();
-									if (i >= min && i <= max)
-										it.remove();
-									i++;
-									if (i > max)
-										break;
-								}
-							} catch (Throwable ex) {
-								log.error("", ex);
-							}
-							return;
-						}
-						break;
-					case ListDataEvent.MULTIPLE_CHANGED:
-						return; //nothing to do
-					}
-					postOnInitRender();
+					getEngine().doDataChange(Tabbox.this, event);
 				}
 			};
 		_model.addListDataListener(_dataListener);
@@ -224,7 +240,7 @@ public class Tabbox extends XulElement {
 
 	/**
 	 * Sets the renderer which is used to render each tab and tabpanel if {@link #getModel}
-	 * is not null.
+	 * is not null. [ZK EE]
 	 * 
 	 * <p>
 	 * Note: changing a render will not cause the tabbox to re-render. If you
@@ -238,6 +254,8 @@ public class Tabbox extends XulElement {
 	 * @since 7.0.0
 	 */
 	public void setTabboxRenderer(TabboxRenderer<?> renderer) {
+		if (disableFeature())
+			throw new IllegalAccessError("ZK EE version only!");
 		if (_renderer != renderer) {
 			_renderer = renderer;
 			postOnInitRender();
@@ -246,7 +264,7 @@ public class Tabbox extends XulElement {
 
 	/**
 	 * Sets the renderer by use of a class name. It creates an instance
-	 * automatically.
+	 * automatically. [ZK EE]
 	 * 
 	 * @since 7.0.0
 	 * @see #setTabboxRenderer(TabboxRenderer)
@@ -260,62 +278,28 @@ public class Tabbox extends XulElement {
 	
 	@SuppressWarnings("unchecked")
 	public void onInitRender() {
-		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+		if (disableFeature())
+			throw new IllegalAccessError("ZK EE version only!");
+		removeAttribute(TabboxEngine.ATTR_ON_INIT_RENDER_POSTED);
 		doInitRenderer();
 		invalidate();
 	}
 	
-	/**
-	 * Returns the empty tab for model to use.
-	 * @since 7.0.0
-	 */
-	protected Tab newUnloadedTab() {
-		Tab tab = new Tab();
-		tab.applyProperties();
-		return tab;
-	}
-
-	/**
-	 * Returns the empty tabpanel for model to use.
-	 * @since 7.0.0
-	 */
-	protected Tabpanel newUnloadedTabpanel() {
-		Tabpanel tab = new Tabpanel();
-		tab.applyProperties();
-		return tab;
-	}
-	
 	private void doInitRenderer() {
-		final Renderer renderer = new Renderer();
-		try {
-			if (getTabs() == null)
-				new Tabs().setParent(this);
-			else
-				getTabs().getChildren().clear();
-			
-			if (getTabpanels() == null)
-				new Tabpanels().setParent(this);
-			else
-				getTabpanels().getChildren().clear();
-			
-			for (int i = 0, j = _model.getSize(); i < j; i++) {
-				renderer.render(this, _model.getElementAt(i), i);
-			}
-			
-			if (_seltab == null && _model.getSize() > 0) {// select the first one
-				setSelectedTab((Tab)getTabs().getFirstChild());
-			}
-				
-		} catch (Throwable ex) {
-			log.error("", ex);
-		}
+		if (disableFeature())
+			throw new IllegalAccessError("ZK EE version only!");
+		getEngine().doInitRenderer(this);
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tabbox when items have been rendered.
 		
 	}
 
-	private void postOnInitRender() {
-		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
-			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
+	/**
+	 * Component internal use only.
+	 * @since 7.0.0
+	 */
+	public void postOnInitRender() {
+		if (getAttribute(TabboxEngine.ATTR_ON_INIT_RENDER_POSTED) == null) {
+			setAttribute(TabboxEngine.ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
 		}
 	}
@@ -329,179 +313,7 @@ public class Tabbox extends XulElement {
 		return (ListModel) _model;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> TabboxRenderer<T> getRealRenderer() {
-		final TabboxRenderer renderer = getTabboxRenderer();
-		return renderer != null ? renderer : _defRend;
-	}
-
-
-
-	/** Used to render listitem if _model is specified. */
-	/* package */class Renderer { // use package for easy to call (if override)
-		private final TabboxRenderer _renderer;
-
-		/* package */Renderer() {
-			_renderer = (TabboxRenderer) getRealRenderer();
-		}
-
-		/* package */@SuppressWarnings("unchecked")
-		void render(Tabbox tabbox, Object value, int index) throws Throwable {
-			
-			final boolean selected = ((Selectable) _model).isSelected(value);
-			Tab tab = newUnloadedTab();
-			tabbox.getTabs().appendChild(tab);
-			try {
-				_renderer.renderTab(tab, value, index);
-				Object v = tab.getAttribute("org.zkoss.zul.model.renderAs");
-				if (v != null)
-					tab = (Tab)v;
-			} catch (Throwable ex) {
-				try {
-					tab.setLabel(Exceptions.getMessage(ex));
-				} catch (Throwable t) {
-					log.error("", t);
-				}
-				throw ex;
-			}
-			
-			if (selected)
-				setSelectedTab(tab);
-			
-			Tabpanel tabpanel = newUnloadedTabpanel();
-			tabbox.getTabpanels().appendChild(tabpanel);
-			
-			try {
-				_renderer.renderTabpanel(tabpanel, value, index);
-				Object v = tab.getAttribute("org.zkoss.zul.model.renderAs");
-				if (v != null)
-					tabpanel = (Tabpanel)v;
-			} catch (Throwable ex) {
-				try {
-					tabpanel.appendChild(new Label(Exceptions.getMessage(ex)));
-				} catch (Throwable t) {
-					log.error("", t);
-				}
-				throw ex;
-			}
-			
-		}
-	}
-	private static final TabboxRenderer<Object> _defRend = new TabboxRenderer<Object>() {
-		
-		public void renderTab(Tab tab, final Object data, final int index) throws Exception {
-			final Tabbox tabbox = tab.getTabbox();
-			final Template tm = tabbox.getTemplate("model:tab");
-			if (tm == null)
-				tab.setLabel(Objects.toString(data));
-			else {
-				final Component[] items = tm.create(tabbox.getTabs(), tab,
-						new VariableResolver() {
-							public Object resolveVariable(String name) {
-								if ("each".equals(name)) {
-									return data;
-								} else if ("forEachStatus".equals(name)) {
-									return new ForEachStatus() {
-										
-										public ForEachStatus getPrevious() {
-											return null;
-										}
-										
-										public Object getEach() {
-											return data;
-										}
-										
-										public int getIndex() {
-											return index;
-										}
-										
-										public Integer getBegin() {
-											return 0;
-										}
-										
-										public Integer getEnd() {
-											return ((Tabbox)tabbox).getModel().getSize();
-										}
-									};
-								} else {
-									return null;
-								}
-							}
-						}, null);
-				if (items.length != 1)
-					throw new UiException(
-							"The model template must have exactly one item, not "
-									+ items.length);
-				if (!(items[0] instanceof Tab))
-					throw new UiException(
-							"The model template can only support Tab component, not "
-									+ items[0]);
-
-				final Tab ntab = (Tab)items[0];
-				if (ntab.getValue() == null) //template might set it
-					ntab.setValue(data);
-				tab.setAttribute("org.zkoss.zul.model.renderAs", ntab);
-					//indicate a new item is created to replace the existent one
-				tab.detach();
-			}
-		}
-
-		public void renderTabpanel(Tabpanel tabpanel, final Object data, final int index)
-				throws Exception {
-			final Tabbox tabbox = tabpanel.getTabbox();
-			final Template tm = tabbox.getTemplate("model:tabpanel");
-			if (tm == null)
-				tabpanel.appendChild(new Label(Objects.toString(data)));
-			else {
-				final Component[] items = tm.create(tabbox.getTabpanels(), tabpanel,
-						new VariableResolver() {
-							public Object resolveVariable(String name) {
-								if ("each".equals(name)) {
-									return data;
-								} else if ("forEachStatus".equals(name)) {
-									return new ForEachStatus() {
-										
-										public ForEachStatus getPrevious() {
-											return null;
-										}
-										
-										public Object getEach() {
-											return data;
-										}
-										
-										public int getIndex() {
-											return index;
-										}
-										
-										public Integer getBegin() {
-											return 0;
-										}
-										
-										public Integer getEnd() {
-											return ((Tabbox)tabbox).getModel().getSize();
-										}
-									};
-								} else {
-									return null;
-								}
-							}
-						}, null);
-				if (items.length != 1)
-					throw new UiException(
-							"The model template must have exactly one item, not "
-									+ items.length);
-				if (!(items[0] instanceof Tabpanel))
-					throw new UiException(
-							"The model template can only support Tabpanel component, not "
-									+ items[0]);
-
-				final Tabpanel ntabpanel = (Tabpanel)items[0];
-				tabpanel.setAttribute("org.zkoss.zul.model.renderAs", ntabpanel);
-					//indicate a new item is created to replace the existent one
-				tabpanel.detach();
-			}
-		}
-	};
+	
 	/**
 	 * Returns whether it is in the accordion mold.
 	 */
@@ -663,8 +475,8 @@ public class Tabbox extends XulElement {
 
 			try {
 				// avoid recursive invoking
-				if (getAttribute(ATTR_CHANGING_SELECTION) == null) {
-					setAttribute(ATTR_CHANGING_SELECTION, Boolean.TRUE);
+				if (getAttribute(TabboxEngine.ATTR_CHANGING_SELECTION) == null) {
+					setAttribute(TabboxEngine.ATTR_CHANGING_SELECTION, Boolean.TRUE);
 					_seltab = tab;
 					_seltab.setSelectedDirectly(true);
 					if (byClient && _model != null) {
@@ -676,7 +488,7 @@ public class Tabbox extends XulElement {
 					}
 				}
 			} finally {
-				removeAttribute(ATTR_CHANGING_SELECTION);
+				removeAttribute(TabboxEngine.ATTR_CHANGING_SELECTION);
 			}
 			if (!byClient)
 				smartUpdate("selectedTab", _seltab);

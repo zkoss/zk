@@ -254,7 +254,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false});
 		
-		if (zk.ie) { // re-create dom element to remove :hover state style
+		if (zk.ie < 11) { // re-create dom element to remove :hover state style
 			var that = this;
 			setTimeout(function() {
 				that.replaceHTML(node); // see also ZK-1216, ZK-1124, ZK-318

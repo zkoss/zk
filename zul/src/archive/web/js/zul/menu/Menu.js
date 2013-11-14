@@ -402,7 +402,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var	topmost = this.isTopmost();
 		if(topmost)
 			_toggleClickableCSS(this);
-		if (topmost && zk.ie && !jq.isAncestor(this.getAnchor_(), evt.domTarget))
+		if (topmost && zk.ie < 11 && !jq.isAncestor(this.getAnchor_(), evt.domTarget))
 				return; // don't activate
 
 		if (this.menupopup)

@@ -530,7 +530,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					}
 				}
 				var offhgh = fixedSize && vert ? zk.parseInt(szes[k]) : 
-						zk.ie && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
+						zk.ie < 11 && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
 						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
 					offwdh = fixedSize && !vert ? zk.parseInt(szes[k]) : zkc.offsetWidth(),
 					cwdh = offwdh + zkc.marginWidth(),
@@ -754,7 +754,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (vert)
 						c.style.width = zk(c).revisedWidth(tdsz, !zk.webkit) + 'px';
 					else 
-						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.webkit) + 'px';
+						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie < 11 && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.webkit) + 'px';
 				}
 			}
 		}
