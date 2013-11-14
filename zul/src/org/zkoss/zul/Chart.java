@@ -825,7 +825,7 @@ public class Chart extends Imagemap {
 		}
 	}
 
-	/** Returns the implemetation chart engine.
+	/** Returns the implementation chart engine.
 	 * @exception UiException if failed to load the engine.
 	 */
 	public ChartEngine getEngine() throws UiException {
