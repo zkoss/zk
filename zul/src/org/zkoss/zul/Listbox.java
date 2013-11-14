@@ -35,6 +35,7 @@ import java.util.Set;
 import java.util.Comparator;
 
 import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
@@ -50,6 +51,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -349,6 +351,8 @@ public class Listbox extends MeshElement {
 		
 		// since 6.0.0/5.0.11, B50-ZK-798
 		addClientEvent(Listbox.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		// since 6.5.5 F65-ZK-2014
+		addClientEvent(Listbox.class, "onCheckSelectAll", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Listbox() {
@@ -3559,7 +3563,9 @@ public class Listbox extends MeshElement {
 					"onSelect", this, getSelectedItems(), 
 					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
 			Events.postEvent(evt);
-			
+		} else if (cmd.equals("onCheckSelectAll")) { // F65-ZK-2014
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}
