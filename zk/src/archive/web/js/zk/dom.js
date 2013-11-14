@@ -742,7 +742,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
 				var elst, oldvisi;
-				if (zk.ie && el.style.display == 'none') {
+				if (zk.ie < 11 && el.style.display == 'none') {
 				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
 					oldvisi = (elst = el.style).visibility;
 					elst.visibility = 'hidden';
@@ -1751,7 +1751,7 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 		var st = this.jq[0];
 		if (st && (st=st.style))
 			for (var nm in st)
-				if ((!zk.ie || nm != 'accelerator')
+				if ((!(zk.ie < 11) || nm != 'accelerator')
 				&& st[nm] && typeof st[nm] == 'string')
 					try {
 						st[nm] = '';
@@ -2275,7 +2275,7 @@ this._syncShadow(); //synchronize shadow
 	 * because it has no effect for browsers other than IE.
 	 * @since 5.0.1
 	 */
-	focusOut: zk.ie ? function () {
+	focusOut: zk.ie < 11 ? function () {
 		window.focus();
 	}: function () {
 		var a = jq('#z_focusOut')[0];

@@ -15,9 +15,7 @@ zksandbox.Categorybar = zk.$extends(zul.wgt.Div, {
 		zWatch.unlisten({onSize: this, beforeSize: this});
 		this.$supers('unbind_', arguments);
 	},
-	beforeSize: zk.ie6_ ? function () {
-		jq(this.$n("body")).css("width", "").removeClass("demo-categorybar-body-scroll");
-	}: zk.$void,
+	beforeSize: zk.$void,
 	onSize: function(){
 		var width = this.$n().offsetWidth;
 		//with scorll or not
@@ -98,7 +96,7 @@ zksandbox.Category = zk.$extends(zul.wgt.Button, {
 		jq(this.$n()).addClass("demo-over");
 	},
 	doMouseOut_: function (evt) {
-		if (zk.ie && jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (zk.ie < 11 && jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; //nothing to do
 		jq(this.$n()).removeClass("demo-over");
 	},

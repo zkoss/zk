@@ -386,7 +386,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
 			var opts = {propagation:true};
-			if (zk.ie) opts.dom = true;
+			if (zk.ie < 11) opts.dom = true;
 			evt.stop(opts);
 			return;
 		}

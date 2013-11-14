@@ -62,7 +62,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				n.value = this.valueEnter_ != null ? this.valueEnter_ : this._value || '';
 				
 				// Fixed bug 2944355
-				if (zk.ie && n.value) {
+				if (zk.ie < 11 && n.value) {
 					ofs = n.value.length;
 					ofs = [ofs, ofs];
 				}

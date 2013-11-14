@@ -33,7 +33,7 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 			var n = this.$n();
 			if (n) {
 				n.colSpan = v;
-				if (zk.ie) this.rerender(); //IE's limitation
+				if (zk.ie < 11) this.rerender(); //IE's limitation
 			}
 		},
 		/** Returns number of rows to span this header.
@@ -48,7 +48,7 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 			var n = this.$n();
 			if (n) {
 				n.rowSpan = v;
-				if (zk.ie) this.rerender(); //IE's limitation
+				if (zk.ie < 11) this.rerender(); //IE's limitation
 			}
 		}
 	},
