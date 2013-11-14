@@ -25,6 +25,8 @@ ZK 7.0.0
   ZK-1974: Tabbox support take maximal size of all children tabpanels
   ZK-2002: Tabbox support ListModel
   ZK-1856: Tree support frozen as grid
+  ZK-2007: Popup support toggle type
+  ZK-1845: Tabbox - enhance performance with dynamic tabs using MVVM
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
@@ -34,6 +36,7 @@ ZK 7.0.0
   ZK-1959: The height of arrow should not change when the tabbox add tab
   ZK-1996: Navitem onClick event would trigger twice
   ZK-1565: Dragging listitem to itself will result in the listbox being set as the target
+  ZK-2008: Dragging between grids causes JavaScript error
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
@@ -41,12 +44,16 @@ ZK 7.0.0
   + rename the orient of tabbox "horizontal" to "top", "vertical" to "left" and add extra two orients named "bottom" and "right"
   + deprecated Session's getRemoteHost(), getRemoteAddr(), getServerName(), getLocalName(), and getLocalAddr() methods,
   please use these methods from Executions.getCurrent() instead.
+  + deprecated to enable event-thread, according to Java Servlet Specification deprecated to enable event-thread, according to Java Servlet
+  Specification that some of high-end application servers may prohibit the creation of new threads.
 
   --------
 ZK 6.5.5
 * Features
   ZK-1971: ZK wcs file shall exclude the css with zk logo image
   ZK-1973: Server processing effect can be configurable
+  ZK-2014: Listbox component support selectAll/unSelectAll event when check/uncheck on select all checkbox
+  ZK-2012: zk.ie supports ie11
 
 * Bugs
   ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM
@@ -65,6 +72,8 @@ ZK 6.5.5
   ZK-1985: strict client site date parsing allows certain characters
   ZK-1924: Clients.scrollIntoView(Component comp) could also adjust horizontal scroll position
   ZK-1998: Listbox using GroupsModel sometimes would not update the select all status
+  ZK-1990: Can't get expected Locale in Bridge
+  ZK-2001: Focus to a chosenbox that place in a listbox shall not change listbox selection
 
   --------
 

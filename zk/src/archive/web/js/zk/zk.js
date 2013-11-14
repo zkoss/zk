@@ -1321,7 +1321,8 @@ zk.log('value is", value);
 	var browser = jq.browser,
 		agent = zk.agent = navigator.userAgent.toLowerCase();
 	zk.opera = browser.opera && _ver(browser.version);
-	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
+	zk.ff = zk.gecko = browser.mozilla 
+		&& (agent.indexOf('trident') < 0) && _ver(browser.version);
 	zk.linux = agent.indexOf('linux') >= 0;
 	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
 	zk.webkit = browser.webkit;
@@ -1331,6 +1332,7 @@ zk.log('value is", value);
 	zk.android = zk.webkit && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;
+	var ie11 = browser.mozilla && (agent.indexOf('trident') >= 0) && _ver(browser.version);
 	
 	zk.vendor = zk.webkit ? 'webkit' : '';
 
@@ -1348,13 +1350,17 @@ zk.log('value is", value);
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 			//zk.iex is the Browser Mode (aka., Compatibility View)
 			//while zk.ie is the Document Mode
+		if (!zk.iex && ie11) 
+			zk.iex = ie11;
+		
 		if (zk.iex) {
 			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
 				zk.ie = 6; //assume quirk mode
-			zk.ie7 = zk.ie >= 7; //ie7 or later
-			zk.ie8 = zk.ie >= 8; //ie8 or later
-			zk.css3 = zk.ie9 = zk.ie >= 9; //ie9 or later
-			zk.ie10 = zk.ie >= 10; //ie10 or later
+			zk.ie7 = zk.ie >= 7 && zk.ie < 11; //ie7 or later but before ie11 
+			zk.ie8 = zk.ie >= 8 && zk.ie < 11; //ie8 or later but before ie11
+			zk.ie9 = zk.ie >= 9 && zk.ie < 11; //ie9 or later but before ie11
+			zk.css3 = zk.ie >= 9;
+			zk.ie10 = zk.ie == 10; //ie9 or later but before ie11
 			zk.ie6_ = zk.ie < 7;
 			zk.ie7_ = zk.ie == 7;
 			zk.ie8_ = zk.ie == 8;

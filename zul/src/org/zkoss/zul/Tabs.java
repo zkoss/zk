@@ -80,10 +80,7 @@ public class Tabs extends XulElement {
 			super.invalidate();
 	}
 	public String getZclass() {
-		if (_zclass != null) return _zclass;
-		final Tabbox tabbox = getTabbox();
-		final String added = tabbox != null && tabbox.isVertical() ? "-ver" : ""; 
-		return "z-tabs" + added;
+		return _zclass == null ? "z-tabs" : _zclass;
 	}
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {

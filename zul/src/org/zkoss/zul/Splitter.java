@@ -158,8 +158,7 @@ public class Splitter extends XulElement {
 		if (!"none".equals(_collapse)) render(renderer, "collapse", _collapse);
 	}
 	public String getZclass() {
-		return _zclass != null ? _zclass:
-			"z-splitter" + (isVertical() ? "-ver" : "-hor");
+		return _zclass != null ? _zclass: "z-splitter";
 	}
 
 	//-- ComponentCtrl --//

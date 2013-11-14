@@ -1,0 +1,22 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01845TabboxModel')">
+		
+		<label id="msg" value="@load(vm.selectedIndex)"/>
+		<tabbox id="tbox" model="@bind(vm.tabInfos)" selectedIndex="@bind(vm.selectedIndex)">
+			
+			<template name="model:tab">
+		        <tab iconSclass="z-icon-user" label="@load(each.title)"/>
+		    </template>
+		    <template name="model:tabpanel">
+		        <tabpanel>
+		            <include src="@load(each.path)"></include>
+		        </tabpanel>
+		    </template>
+			
+		</tabbox>
+		
+		<button id="add" label="add" onClick="@command('addTab')"/>
+		<button id="remove" label="remove" onClick="@command('removeTab')"/>
+	</window>
+</zk>

@@ -2009,6 +2009,8 @@ public class Configuration {
 					throw new IllegalStateException("Unable to disable due to suspended threads");
 			}
 		}
+		if (enable)
+			log.warn("Enable event thread has deprecated!");
 		_evtThdEnabled = enable;
 	}
 	/** Returns whether to use the event processing thread.

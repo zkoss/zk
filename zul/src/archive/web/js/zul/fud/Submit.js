@@ -29,7 +29,7 @@ zul.fud.Submit = zk.$extends(zul.wgt.Button, {
 		self._tmp = setInterval(t, 800);
 		this.setDisabled(true);
 		this.nextSibling.setDisabled(true);
-		if (zk.ie)
+		if (zk.ie < 11)
 			this.$f('btns').rerender();
 	},
 	revert: function () {	
@@ -37,7 +37,7 @@ zul.fud.Submit = zk.$extends(zul.wgt.Button, {
 		this._tmp = undefined;
 		this.setDisabled(false);
 		this.nextSibling.setDisabled(false);
-		if (zk.ie)
+		if (zk.ie < 11)
 			this.$f('btns').rerender();
 	}
 });

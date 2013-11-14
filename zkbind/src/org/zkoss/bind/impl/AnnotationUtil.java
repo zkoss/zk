@@ -56,7 +56,7 @@ public class AnnotationUtil {
 	 * @since 6.5.4
 	 */
 	//can't use ':' to compatible with @ComponentAnnotation
-	public static final String ZKBIND_REFIX = Binder.ZKBIND+"$";
+	public static final String ZKBIND_PREFIX = Binder.ZKBIND+"$";
 	//ZK-1908 Databinding Load order causing problems on Paging component.
 	//System annotation shouldn't effect the annotation sequence
 	/**
@@ -69,7 +69,7 @@ public class AnnotationUtil {
 		if(annos.size()<=0){
 			if(propName==null) 
 				return null;
-			annos = compCtrl.getAnnotations(ZKBIND_REFIX+propName, Binder.ZKBIND);
+			annos = compCtrl.getAnnotations(ZKBIND_PREFIX+propName, Binder.ZKBIND);
 			if(annos.size()<=0) return null;
 		}
 		//TODO decide which one should use, currently I use the last one
@@ -85,18 +85,16 @@ public class AnnotationUtil {
 	}
 	
 	//ZK-1908 Databinding Load order causing problems on Paging component.
-	//introduce(6.5.4) a new spec of annotation on attribute, now allow to add a priority(large number is higher,default 0)
-	//after property name('property:priority')
 	public static List<String> getNonSystemProperties(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		List<String> props = compCtrl.getAnnotatedProperties();
 		
 		if(props==null || props.size()==0)
 			return Collections.emptyList();
-		//'prop:priority' -> object[]{'prop',priority}
+		
 		List<String> propsList = new ArrayList<String>(props.size());
 		for(String p:props){//
-			if(p.startsWith(ZKBIND_REFIX))
+			if(p.startsWith(ZKBIND_PREFIX))
 				continue;
 			propsList.add(p);	
 		}

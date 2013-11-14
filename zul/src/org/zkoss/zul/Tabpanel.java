@@ -78,11 +78,7 @@ public class Tabpanel extends XulElement {
 	 * @since 3.5.0
 	 */
 	public String getZclass() {
-		if (_zclass != null) return _zclass;
-		final Tabbox tabbox = getTabbox();
-		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
-				tabbox.isVertical() ? "-ver" : "" : "";
-		return "z-tabpanel" + added;
+		return _zclass == null ? "z-tabpanel" : _zclass;
 	}
 
 	//-- Component --//

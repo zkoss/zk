@@ -216,7 +216,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 
 	/*package*/ boolean isNativeScrollbar() {
 		boolean isIE8 = Servlets.isBrowser((ServletRequest) Executions.getCurrent().getNativeRequest(), "ie8-");
-		return isIE8 ? true : Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
+		return isIE8 ? true : Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, true);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

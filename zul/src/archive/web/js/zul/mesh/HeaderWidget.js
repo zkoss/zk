@@ -117,6 +117,21 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
 		if (this.parent.isSizable())
 			this._initsz();
+		var mesh = this.getMeshWidget();
+		if (mesh) {
+			var $faker = jq(this.$n('hdfaker')),
+				w = this.getWidth();
+			if (!this.isVisible()) {
+				$faker.css('display', '');
+				$faker.css('visiblity', 'hidden');
+				$faker.css('width', zk.chrome ? '0.1px' : '0');
+			} else {
+				$faker.css('visiblity', '');
+				if (w) {
+					$faker.css('width', w);
+				}
+			}
+		}
 	},
 	unbind_: function () {
 		if (this._dragsz) {
@@ -150,7 +165,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			ignoreSort = false;
 		
 		//IE will trigger doClick during closing menupopup
-		if (zk.ie && btn && !zk(btn).isRealVisible())
+		if (zk.ie < 11 && btn && !zk(btn).isRealVisible())
 			ignoreSort = true;
 		
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) 
@@ -244,7 +259,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (zkp) {
 			// Bug #3255116
 			if (mw.ebody) {
-				if (zk.ie) { //Related bugs: ZK-890 and ZK-242
+				if (zk.ie < 11) { //Related bugs: ZK-890 and ZK-242
 					if (mw.ebodytbl && !mw.ebodytbl.width) {
 						mw.ebodytbl.width = '100%';
 						// reset the width for IE

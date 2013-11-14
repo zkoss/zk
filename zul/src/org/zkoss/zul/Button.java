@@ -319,8 +319,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		//does nothing since generated in renderProperties
 	}
 	public String getZclass() {
-		return _zclass != null ? _zclass:
-			!"trendy".equals(getMold()) ? "z-button-os": "z-button";
+		return _zclass != null ? _zclass : "z-button";
 	}
 
 	//Cloneable//

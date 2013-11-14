@@ -1,0 +1,46 @@
+<window apply="org.zkoss.zktest.bind.basic.CollectionIndexTabboxComposer">
+	<custom-attributes composerName="vm"/>
+	<label id="msg" value="@bind(vm.message1)"/>
+	<tabbox id="outerbox" width="700px" model="@bind(vm.items)">
+		<template name="model:tab" >
+			<tab label="@load(vm.cat(forEachStatus.index,each.name))" >
+			</tab>
+		</template>
+		<template name="model:tabpanel" var="item" status="s">
+			<tabpanel>
+				<hbox>
+					<label value="@bind(s.index)"/>
+					<label value="@bind(item.name)"/>
+				</hbox>
+				<hbox>
+					<tabbox hflex="1" model="@bind(item.options)">
+						<template name="model:tab" var="option">
+							<tab label="@bind(vm.cat(optionStatus.index,s.index, option))"/>
+						</template>
+						<template name="model:tabpanel" var="option">
+							<tabpanel>
+								<hbox>
+									<label value="@bind(optionStatus.index)"/>
+									<label value="@bind(s.index)"/>
+									<label value="@bind(option)"/>
+								</hbox>
+							</tabpanel>
+						</template>
+					</tabbox>				
+					<hbox >
+						<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+						<button label="Delete" onClick="@command('delete', item=item)"/>
+						<button label="Add After" onClick="@command('addAfter', item=item)"/>
+						<button label="Add Before" onClick="@command('addBefore', item=item)"/>
+					</hbox>
+				</hbox>
+			</tabpanel>
+		</template>
+	</tabbox>
+
+	<hbox>
+		<button label="reload" onClick="@command('reload')" />
+		<button label="invalidate" onClick="outerbox.invalidate()" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

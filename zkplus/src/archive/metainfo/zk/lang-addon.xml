@@ -573,6 +573,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>tabbox</component-name>
 		<extends>tabbox</extends>
+		
+		<annotation>
+			<!-- a empty annotation to make model annotation always load first when running in zkbind2 with selectedIndex or selectedTab -->
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>model</property-name>
+		</annotation>
 		<annotation>
 			<annotation-name>default-bind</annotation-name>
 			<property-name>selectedTab</property-name>

@@ -270,7 +270,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _bkRange(wgt) {
-		if (zk.ie && zk.cfrg) { //Bug ZK-1377
+		if (zk.ie < 11 && zk.cfrg) { //Bug ZK-1377
 			var cfrg = zk.cfrg;
 			delete zk.cfrg;
 			return cfrg;
@@ -394,10 +394,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (dragImg) {
 			if (found) {
 				jq(drag.node).removeClass('z-drop-disallow').addClass('z-drop-allow');
-				dragImg.removeClass('z-icon-times').addClass('z-icon-check');
+				// ZK-2008: should use jQuery
+				jq(dragImg).removeClass('z-icon-times').addClass('z-icon-check');
 			} else {
 				jq(drag.node).removeClass('z-drop-allow').addClass('z-drop-disallow');
-				dragImg.removeClass('z-icon-check').addClass('z-icon-times');
+				// ZK-2008: should use jQuery
+				jq(dragImg).removeClass('z-icon-check').addClass('z-icon-times');
 			}
 		}
 
@@ -3084,7 +3086,7 @@ unbind_: function (skipper, after) {
 		if (attr == 'w') {
 			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
 			var wd = zjq.minWidth(wgt);
-			if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
+			if(zk.ie9 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
 				wd = zk(wgt).offsetWidth();
 			}
 			return wd;
@@ -5200,7 +5202,7 @@ Object skip(zk.Widget wgt);
 			var cf = zk.currentFocus,
 				iscf = cf && cf.getInputNode;
 			
-			if (iscf && zk.ie) //Bug ZK-1377 IE will lost input selection range after remove node
+			if (iscf && zk.ie < 11) //Bug ZK-1377 IE will lost input selection range after remove node
 				zk.cfrg = zk(cf.getInputNode()).getSelectionRange();
 			
 			skip.parentNode.removeChild(skip);

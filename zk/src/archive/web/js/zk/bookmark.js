@@ -74,7 +74,7 @@ zk.bmk = (function () { //used internally
 			(zk.bmk.bookmark = _bookmark)(nm, replace);
 	},
 	/** called when bookmark.html is loaded*/
-	onIframeLoaded: zk.ie ? function (src) {
+	onIframeLoaded: zk.ie < 11 ? function (src) {
 		var j = src.indexOf('?'),
 			nm = j >= 0 ? src.substring(j + 1): '';
 		location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';

@@ -47,8 +47,10 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		Template template = comp.getTemplate(name);
 		return template==null?lookupTemplate(comp.getParent(),name):template;
 	}
-	
 	protected Template resoloveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName) {
+		return resoloveTemplate(templateComp,comp,data,index,size,defaultName,null);
+	}
+	protected Template resoloveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName, String subType) {
 		//a detached component(ex,grid.onInitRender) will still call the render, see test case collection-template-grid.zul
 		//TODO need to check is this a zk bug and report it
 		if(comp.getPage()==null) return null;//no template
@@ -57,12 +59,12 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
 		Template template = null;
 		if(resolver!=null){
-			template = resolver.resolveTemplate(comp,data,index,size);
+			template = resolver.resolveTemplate(comp,data,index,size,subType);
 			if(template==null){
 				throw new UiException("template not found for component "+comp+" by resolver "+resolver);
 			}
 		}else{
-			template = lookupTemplate(comp, defaultName);
+			template = lookupTemplate(comp, subType==null?defaultName:defaultName+":"+subType);
 		}
 		return template;
 	}

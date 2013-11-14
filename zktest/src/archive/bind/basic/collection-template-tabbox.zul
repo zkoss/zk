@@ -1,0 +1,78 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CollectionTemplateTabboxVM')">
+	<label id="msg" value="@bind(vm.message1)"/>
+	<tabbox id="outerbox" width="700px" model="@bind(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')" >
+		<template name="model1:tab" >
+			<tab label="@load(vm.cat(forEachStatus.index,each.name,'Model1'))"/>
+		</template>
+		<template name="model1:tabpanel" var="item" status="s">
+			<tabpanel>
+				<hbox>
+				<label value="@bind(s.index)"/>
+				<label value="@bind(item.name)"/>
+				Model1
+				</hbox>
+				<hbox>
+					<tabbox hflex="1" model="@bind(item.options)">
+						<template name="model:tab" var="option">
+							<tab label="@load(vm.cat(optionStatus.index,s.index,option))"/>
+						</template>
+						<template name="model:tabpanel" var="option">
+							<tabpanel>
+								<hbox>
+									<label value="@bind(optionStatus.index)"/>
+									<label value="@bind(s.index)"/>
+									<label value="@bind(option)"/>
+								</hbox>
+							</tabpanel>
+						</template>
+					</tabbox>				
+					<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+					<button label="Delete" onClick="@command('delete', item=item)"/>
+					<button label="Add After" onClick="@command('addAfter', item=item)"/>
+					<button label="Add Before" onClick="@command('addBefore', item=item)"/>
+				</hbox>
+			</tabpanel>
+		</template>
+		<template name="model2:tab" >
+			<tab label="@load(vm.cat(forEachStatus.index,each.name,'Model2'))"/>
+		</template>
+		<template name="model2:tabpanel" var="item" status="s">
+			<tabpanel>
+				<hbox>
+				<label value="@bind(s.index)"/>
+				<label value="@bind(item.name)"/>
+				Model2
+				</hbox>
+				<hbox>
+					<tabbox hflex="1" model="@bind(item.options)">
+						<template name="model:tab" var="option">
+							<tab label="@load(vm.cat(optionStatus.index,s.index,option))"/>
+						</template>
+						<template name="model:tabpanel" var="option">
+							<tabpanel>
+								<hbox>
+									<label value="@bind(optionStatus.index)"/>
+									<label value="@bind(s.index)"/>
+									<label value="@bind(option)"/>
+								</hbox>
+							</tabpanel>
+						</template>
+					</tabbox>				
+					<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+					<button label="Delete" onClick="@command('delete', item=item)"/>
+					<button label="Add After" onClick="@command('addAfter', item=item)"/>
+					<button label="Add Before" onClick="@command('addBefore', item=item)"/>
+				</hbox>
+			</tabpanel>
+		</template>
+		
+	</tabbox>
+
+	<hbox>
+		<button label="reload" onClick="@command('reload')" />
+		<button label="change1" onClick="@command('change1')" />
+		<button label="change2" onClick="@command('change2')" />		
+		<button label="invalidate" onClick="outerbox.invalidate()" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

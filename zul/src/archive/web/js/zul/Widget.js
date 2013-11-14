@@ -99,7 +99,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			// 
 			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
 			// IE10: Bug ZK-1519
-	    	if (zk.ie > 9 || zk.ff) {
+	    	if (zk.ie == 10 || zk.ff) {
 				var $tip = jq(tip.$n()),
 					$tipOff = $tip.offset(),
 					pointer = zk.currentPointer;
@@ -525,9 +525,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
-				setTimeout(function() {
-					popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
-				}, 0);
+				// F70-ZK-2007: When type=toggle, close the popup
+				if (params.type && params.type == 'toggle' && popup.isOpen()) {
+					popup.close({sendOnOpen:true});
+				} else {
+					setTimeout(function() {
+						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
+					}, 0);
+				}
 				evt.stop({dom:true});
 			}
 		}
@@ -545,9 +550,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
-				setTimeout(function() {
-					ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true}); //Bug #2870620
-				}, 0);
+				// F70-ZK-2007: When type=toggle, close the popup
+				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
+					ctx.close({sendOnOpen:true});
+				} else {
+					setTimeout(function() {
+						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true}); //Bug #2870620
+					}, 0);
+				}
 				evt.stop({dom:true}); //prevent default context menu to appear
 			}
 		}
@@ -648,7 +658,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			evt.stop({dom:true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
 		//Bug 2041347
-		if (zk.ie && keyCode == 112) {
+		if (zk.ie < 11 && keyCode == 112) {
 			zk._oldOnHelp = window.onhelp;
 			window.onhelp = function () {return false;}
 			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);

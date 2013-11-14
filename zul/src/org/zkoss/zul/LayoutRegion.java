@@ -351,7 +351,7 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	/*package*/ boolean isNativeScrollbar() {
-		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, false);
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", false, true);
 	}
 
 	public String getZclass() {

@@ -22,8 +22,9 @@
 	}
 	&-button {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
-		.displaySize(inline-block, @baseButtonWidth, @baseButtonHeight);
+		display: inline-block;
 		min-width: @baseButtonWidth;
+		height: @baseButtonHeight;
 		border: 1px solid @pagingBorderColor;
 		.borderRadius(@borderRadiusSmall);
 		margin-right: 6px;
@@ -34,6 +35,7 @@
 		vertical-align: top;
 		cursor: pointer;
 		text-decoration: none;
+		white-space: nowrap;
 		
 		&:hover {
 			border-color: @pagingActiveBorderColor;
@@ -116,8 +118,4 @@
 		top: 4px;
 		right: 10px;
 	}
-}
-
-.ie8 .z-paging-button {
-	min-width: @baseButtonWidth - 10; // minus padding border width
 }

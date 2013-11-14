@@ -353,8 +353,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		zul.inp.RoundUtl.doFocus_(this);
 	},
 	doBlur_: function (evt) {
+		if (this._inplace && this._pop && this._pop.isOpen())
+			return; // prevent blur if popup is opened
 		this.$supers('doBlur_', arguments);
-
 		_blurInplace(this);
 	},
 	doClick_: function (evt) {
@@ -385,7 +386,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
 			var opts = {propagation:true};
-			if (zk.ie) opts.dom = true;
+			if (zk.ie < 11) opts.dom = true;
 			evt.stop(opts);
 			return;
 		}

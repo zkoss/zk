@@ -133,7 +133,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (ftwd > wd)
 					wd = ftwd;
 				wds[i] = wd;
-				if (zk.ff > 4 || zk.ie >= 9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
+				if (zk.ff > 4 || zk.ie9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w)
@@ -148,7 +148,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				for (var cells = tr.cells, i = cells.length; i--;) {
 					var wd = cells[i].offsetWidth;
 					wds[i] = wd;
-					if (zk.ff > 4 || zk.ie >= 9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
+					if (zk.ff > 4 || zk.ie9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 						++wds[i];
 					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				}
@@ -637,7 +637,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._bindDomNode();
 		if (this._hflex != 'min')
 			this._fixHeaders();
-		if ((zk.webkit || zk.ie) && this.ehead) //sync scroll for input tab key scroll
+		if ((zk.webkit || zk.ie < 11) && this.ehead) //sync scroll for input tab key scroll
 			this.domListen_(this.ehead, 'onScroll', '_doSyncScroll');
 		
 		var ebody = this.ebody;
@@ -652,7 +652,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, onResponse: this});
-		if ((zk.webkit || zk.ie) && this.ehead) //sync scroll for input tab key scroll
+		if ((zk.webkit || zk.ie < 11) && this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
 		var ebody = this.ebody;
 		if (this._nativebar && ebody && this.efrozen)

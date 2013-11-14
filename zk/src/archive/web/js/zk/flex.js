@@ -63,7 +63,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		zk.copy(zs, coldVal);
 		zk.copy(ps, poldVal);
 			
-		return !zk.ie ? [Math.max(0, pos[0]), Math.max(0, pos[1])] : pos; // ie may have a wrong gap
+		return !(zk.ie < 11) ? [Math.max(0, pos[0]), Math.max(0, pos[1])] : pos; // ie may have a wrong gap
 	}
 	
 	// check whether the two elements are the same baseline, if so, we need to
@@ -72,12 +72,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (vertical) {
 			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
 				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
-			return !(zk.ie > 9) ? cur.top >= hgh || cur.left < wdh : 
+			return !(zk.ie == 10) ? cur.top >= hgh || cur.left < wdh : 
 				Math.round(cur.top) >= hgh || Math.round(cur.left) < wdh;
 		} else {
 			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
 				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
-			return !(zk.ie > 9) ? cur.left >= wdh || cur.top < hgh : 
+			return !(zk.ie == 10) ? cur.left >= wdh || cur.top < hgh : 
 				Math.round(cur.left) >= wdh || Math.round(cur.top) < hgh;
 		}
 	}

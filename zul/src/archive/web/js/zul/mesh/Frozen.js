@@ -216,7 +216,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			};
 		if (p) {
-			if (zk.ie)
+			if (zk.ie < 11)
 				setTimeout(fn, 0);
 			else
 				fn();
@@ -285,7 +285,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				} else if (force || n.offsetWidth != 0) { //hide
 					var faker = jq('#' + n.id + '-hdfaker')[0];
 					hdWgt._origWd = hdWgt._origWd || faker.style.width;
-					cellWidth = '0px';
+					cellWidth = zk.chrome ? '0.1px' : '0px';
 					shallUpdate = true;
 				}
 				

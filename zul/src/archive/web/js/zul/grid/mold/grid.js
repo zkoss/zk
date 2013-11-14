@@ -68,6 +68,12 @@ function (out) {
 	
 	out.push('</div>');
 	
+	if (this._nativebar && this.frozen) {
+		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
+		this.frozen.redraw(out);
+		out.push('</div>');
+	}
+	
 	if (this.foot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
 			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
@@ -77,12 +83,6 @@ function (out) {
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.foot.redraw(out);
 		out.push('</tbody></table></div>');
-	}
-
-	if (this._nativebar && this.frozen) {
-		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
-		this.frozen.redraw(out);
-		out.push('</div>');
 	}
 
 	if (pgpos == 'bottom' || pgpos == 'both') {

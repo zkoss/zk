@@ -19,7 +19,7 @@ function (out) {
 		wdAttr = innerWidth == '100%' ? ' width="100%"' : '',
 		wdStyle =  innerWidth != '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos,
-		tag = zk.ie || zk.gecko ? 'a' : 'button';
+		tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
 
 	out.push('<div', this.domAttrs_(), '>');
 
@@ -74,6 +74,12 @@ function (out) {
 	out.push('<', tag, ' id="', uuid, 
 			'-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 			tag, '>', "</div>");
+	
+	if (this._nativebar && this.frozen) {
+		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
+		this.frozen.redraw(out);
+		out.push('</div>');
+	}
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
@@ -84,12 +90,6 @@ function (out) {
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.listfoot.redraw(out);
 		out.push('</tbody></table></div>');
-	}
-
-	if (this._nativebar && this.frozen) {
-		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
-		this.frozen.redraw(out);
-		out.push('</div>');
 	}
 
 	if (pgpos == 'bottom' || pgpos == 'both') {

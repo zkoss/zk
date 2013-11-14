@@ -226,11 +226,18 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			bar = this._scrollbar = null;
 		}
 	},
+	_onRender: function () {
+		this.$supers(Grid, '_onRender', arguments);
+		this._shallShowScrollbar = true;
+	},
 	onResponse: function (ctl, opts) {
-		if (this._shallFixEmpty) 
-			_fixForEmpty(this);
-		if (this.desktop && opts && opts.rtags.onDataLoading)
-			this._shallShowScrollbar = true;
+		if (this.desktop) {
+			if (this._shallFixEmpty) 
+				_fixForEmpty(this);
+			var rtags = opts ? opts.rtags : null;
+			if (rtags && rtags.onDataLoading)
+				this._shallShowScrollbar = true;
+		}
 		this.$supers(Grid, 'onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns

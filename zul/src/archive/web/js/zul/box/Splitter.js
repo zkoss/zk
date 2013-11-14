@@ -282,8 +282,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	beforeSize: function () {
-		if(zk.ie != 8)
-			this.$n().style[this.isVertical() ? 'width': 'height'] = '';
+		this.$n().style[this.isVertical() ? 'width': 'height'] = '';
 	},
 
 	_fixszAll: function () {
