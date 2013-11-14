@@ -26,6 +26,7 @@ ZK 7.0.0
   ZK-2002: Tabbox support ListModel
   ZK-1856: Tree support frozen as grid
   ZK-2007: Popup support toggle type
+  ZK-1845: Tabbox - enhance performance with dynamic tabs using MVVM
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
