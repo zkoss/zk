@@ -35,8 +35,17 @@ public interface TemplateResolver {
 	 * @param eachData the data for resolver
 	 * @param index the index of each
 	 * @param size the size of data set
+	 * @param subType the sub-type of template should be resolved
 	 * @return the template if exist.
+	 * @since 7.0.0
 	 */
+	Template resolveTemplate(Component eachComp, Object eachData, int index, int size, String subType);
+	
+	/**
+	 * @deprecated since 7.0.0
+	 * use {@link #resolveTemplate(Component, Object, int, int, String)}
+	 */
+	@Deprecated
 	Template resolveTemplate(Component eachComp, Object eachData, int index, int size);
 	
 	/**
