@@ -86,6 +86,7 @@ import org.zkoss.zul.impl.XulElement;
  * <li>{@link org.zkoss.zk.ui.event.SelectEvent} is sent when user changes the
  * selection.</li>
  * <li>onAfterRender is sent when the model's data has been rendered.(since 5.0.4)</li>
+ * <li>onCheckSelectAll is sent when user click on selectAll checkbox.(since 6.5.5)</li>
  * </ol>
  *
  * <p>
