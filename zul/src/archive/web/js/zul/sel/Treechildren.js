@@ -27,11 +27,38 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				p._syncIcon();
 		}
 	}
-
+	
+	function _syncFrozen(wgt) {
+		var tree = wgt.getTree(),
+			frozen;
+		if (tree && tree._nativebar && (frozen = tree.frozen))
+			frozen._syncFrozen();
+	}
+var Treechildren =
 /**
  * A treechildren.
  */
 zul.sel.Treechildren = zk.$extends(zul.Widget, {
+	bind_: function (desktop, skipper, after) {
+		this.$supers(Treechildren, 'bind_', arguments);
+		zWatch.listen({onResponse: this});
+		var w = this;
+		after.push(function () {
+			_syncFrozen(w);
+		});
+	},
+	unbind_: function () {
+		zWatch.unlisten({onResponse: this});
+		this.$supers(Treechildren, 'unbind_', arguments);
+	},
+	onResponse: function () {
+		if (this.desktop){
+			if (tree = this.getTree()) {
+				tree._shallSyncFrozen = true;
+				tree.onSize();
+			}
+		}
+	},
 	/** Returns the {@link Tree} instance containing this element.
 	 * @return Tree
 	 */
@@ -176,6 +203,8 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return old;
 	},
 	$n: function (nm) {
+		if(this.isTopmost())
+			return this.getTree().$n('rows');
 		if (this.firstChild)
 			return nm ? this.firstChild.$n(nm) : this.firstChild.$n();
 		return null;
