@@ -1356,16 +1356,15 @@ zk.log('value is", value);
 		if (zk.iex) {
 			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
 				zk.ie = 6; //assume quirk mode
-			zk.ie7 = zk.ie >= 7 && zk.ie < 11; //ie7 or later but before ie11 
-			zk.ie8 = zk.ie >= 8 && zk.ie < 11; //ie8 or later but before ie11
-			zk.ie9 = zk.ie >= 9 && zk.ie < 11; //ie9 or later but before ie11
+			// zk.ien: the version n or later but less than 11
+			if (zk.ie < 11 && zk.ie > 6) {
+				zk.ie7 = zk.ie >= 7;
+				zk.ie8 = zk.ie >= 8;
+				zk.ie9 = zk.ie >= 9;
+				zk.ie10 = zk.ie >= 10;
+			}
+			zk['ie' + zk.ie + '_'] = true;
 			zk.css3 = zk.ie >= 9;
-			zk.ie10 = zk.ie == 10; //ie9 or later but before ie11
-			zk.ie6_ = zk.ie < 7;
-			zk.ie7_ = zk.ie == 7;
-			zk.ie8_ = zk.ie == 8;
-			zk.ie9_ = zk.ie == 9;
-			zk.ie10_ = zk.ie == 10;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
 			zk.vendor = 'ms';
 		} else {
