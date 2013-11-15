@@ -575,6 +575,7 @@
 			<xs:element ref="hbox" />
 			<xs:element ref="hlayout" />
 			<xs:element ref="html" />
+			<xs:element ref="idspace" />
 			<xs:element ref="iframe" />
 			<xs:element ref="image" />
 			<xs:element ref="imagemap" />
@@ -658,6 +659,7 @@
 				<xs:element ref="hbox" />
 				<xs:element ref="hlayout" />
 				<xs:element ref="html" />
+				<xs:element ref="idspace" />
 				<xs:element ref="iframe" />
 				<xs:element ref="image" />
 				<xs:element ref="imagemap" />
@@ -1215,7 +1217,7 @@
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 	</xs:complexType>
-    
+
     <!-- div -->
 	<xs:element name="div" type="divType" />
 	<xs:complexType name="divType" mixed="true">
@@ -1613,6 +1615,14 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+    <!-- idspace -->
+	<xs:element name="idspace" type="idspaceType" />
+	<xs:complexType name="idspaceType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- iframe -->

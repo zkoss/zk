@@ -37,6 +37,8 @@ ZK 7.0.0
   ZK-1996: Navitem onClick event would trigger twice
   ZK-1565: Dragging listitem to itself will result in the listbox being set as the target
   ZK-2008: Dragging between grids causes JavaScript error
+  ZK-1521: support content assist for <template> tag of ZK
+  ZK-1709: no <idspace> tag definition in zul.xsd
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
