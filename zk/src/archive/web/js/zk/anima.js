@@ -365,7 +365,7 @@ zk.copy(zjq.prototype, {
 				 * fixed a bug of the finished animation for IE
 				 * refix for ZK-568: Open combobox then select last item. reopen combobox then you should see selected item without scroll 
 				 */
-				if (zk.ie < 11 && !zk.ie9_) zk(self.jq[0]).redoCSS(); 
+				if (zk.ie == 8 || zk.ie == 10) zk(self.jq[0]).redoCSS(); 
 				zUtl.fireShown(wgt);
 			} else {
 				self.jq.hide();

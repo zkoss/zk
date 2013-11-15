@@ -614,7 +614,7 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = ofs;
 		_activate(this, devt, pt);
 		
-		if ((!(zk.ie < 11) || zk.ie9 || zk.ie8_) && !zk.mobile) {
+		if ((!(zk.ie < 11) || zk.ie8) && !zk.mobile) {
 			if (!zk.Draggable.ignoreStop(target)) // Bug B65-ZK-1839 we should ignore select tag on IE9
 				devt.stop();
 			//IE8: if not stop, onclick won't be fired (B50-ZK-909.zul)
