@@ -1150,7 +1150,7 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>accordion-lite</mold-name>
-			<mold-uri>mold/tabbox-accd-lite.js</mold-uri>
+			<mold-uri>mold/tabbox-accd.js</mold-uri>
 			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 	</component>
