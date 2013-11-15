@@ -225,22 +225,26 @@
 					<button label="Change pageSize"
 						onClick='d1.height="100px"; tree1.pageSize = 3;' />
 					<div id="d1" style="overflow:auto;">
-						<listbox id="tree1" mold="paging" pageSize="1">
+						<tree id="tree1" mold="paging" pageSize="1">
 							<custom-attributes
 								org.zkoss.zul.nativebar="true" />
 							<frozen columns="1" />
-							<listhead>
-								<listheader label="Index" />
-								<listheader label="Head 1" />
-								<listheader label="Head 2" />
-								<listheader label="Head 3" />
-							</listhead>
-								<listitem forEach="1,1,1">
-										<listcell forEach="1,2,3,4">
+							<treecols>
+								<treecol label="Index" />
+								<treecol label="Head 1" />
+								<treecol label="Head 2" />
+								<treecol label="Head 3" />
+							</treecols>
+							<treechildren>
+								<treeitem forEach="1,1,1">
+									<treerow>
+										<treecell forEach="1,2,3,4">
 											item ${each}
-										</listcell>
-								</listitem>
-						</listbox>
+										</treecell>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</tree>
 					</div>
 				</div>
 				<div>the footer can be scroll too</div>
