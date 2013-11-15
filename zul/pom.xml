@@ -104,6 +104,23 @@
 				</executions>
 			</plugin>-->
 			<plugin>
+				<groupId>org.zkoss.maven</groupId>
+				<artifactId>zkless-engine-maven-plugin</artifactId>
+				<version>0.8.3</version>
+				<executions>
+					<execution>
+						<id>compile-less</id>
+						<goals>
+							<goal>lessc</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/archive</sourceDirectory>
+							<outputDirectory>${project.basedir}/src/archive</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
