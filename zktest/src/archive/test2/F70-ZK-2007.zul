@@ -1,4 +1,4 @@
-<window title="Click Navitem Label" border="normal" width="300px" height="300px">
+<window title="Toggle Popup" border="normal" width="300px" height="300px">
 	<vlayout>
 		<button label="Left click me" popup="pp, position=after_end, type=toggle"/>
 		<button label="Right click me" context="ct, position=after_end, type=toggle"/>
