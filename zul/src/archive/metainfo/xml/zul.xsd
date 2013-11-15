@@ -790,9 +790,27 @@
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="border" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="preload" type="audioPreloadAttrType" use="optional" />
+		<xs:attribute name="controls" type="booleanType" use="optional" />
+		<xs:attribute name="loop" type="booleanType" use="optional" />
 		<xs:attribute name="autostart" type="booleanType" use="optional" />
+		<xs:attribute name="autoplay" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
+	<xs:simpleType name="audioPreloadAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none" />
+					<xs:enumeration value="auto" />
+					<xs:enumeration value="metadata" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
     <!-- auxhead -->
 	<xs:element name="auxhead" type="auxheadType" />
 	<xs:complexType name="auxheadType">
@@ -1963,6 +1981,8 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="collapsed" type="booleanType" use="optional" />
+		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- navitem -->
@@ -1974,6 +1994,12 @@
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
+	</xs:complexType>
+    <!-- navseparator -->
+	<xs:element name="navseparator" type="navseparatorType" />
+	<xs:complexType name="navseparatorType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
     <!-- north -->
 	<xs:element name="north" type="northType" />
@@ -2101,6 +2127,7 @@
 			<xs:element ref="portalchildren" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 	</xs:complexType>
     <!-- progressmeter -->
 	<xs:element name="progressmeter" type="progressmeterType" />
@@ -2333,11 +2360,27 @@
 		<xs:attribute name="selectedIndex" type="intType" use="optional" />
 		<xs:attribute name="selectedTab" type="xs:string" use="optional" />
 		<xs:attribute name="selectedPanel" type="xs:string" use="optional" />
-		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="orient" type="tabOrientAttrType" use="optional" />
+		<xs:attribute name="maximalHeight" type="booleanType" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
+	<xs:simpleType name="tabOrientAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="top" />
+					<xs:enumeration value="left" />
+					<xs:enumeration value="right" />
+					<xs:enumeration value="down" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
     <!-- tabpanel -->
 	<xs:element name="tabpanel" type="tabpanelType" />
 	<xs:complexType name="tabpanelType" mixed="true">
@@ -2466,6 +2509,7 @@
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:group ref="baseGroup" />
 				<xs:element ref="auxhead" />
+				<xs:element ref="frozen" />
 			</xs:choice>
 			<xs:choice>
 				<xs:sequence>
@@ -2898,6 +2942,9 @@
 			<xs:element ref="menu" />
 			<xs:element ref="menuitem" />
 			<xs:element ref="menuseparator" />
+			<xs:element ref="nav" />
+			<xs:element ref="navitem" />
+			<xs:element ref="navseparator" />
 			<xs:element ref="north" />
 			<xs:element ref="rows" />
 			<xs:element ref="row" />
