@@ -3,11 +3,23 @@
 	<vlayout>
 	<label value="When clikc the button, you should hear the guitar sound."/>
 	<label value="Only works for browsers supporting HTML5 audio tag"/>
-	<button label="play">
-		<attribute name="onClick"><![CDATA[
-			audio.play();
-		]]></attribute>
-	</button>
+	<hlayout>
+		<button label="play">
+			<attribute name="onClick"><![CDATA[
+				audio.play();
+			]]></attribute>
+		</button>
+		<button label="pause">
+			<attribute name="onClick"><![CDATA[
+				audio.pause();
+			]]></attribute>
+		</button>
+		<button label="stop">
+			<attribute name="onClick"><![CDATA[
+				audio.stop();
+			]]></attribute>
+		</button>
+	</hlayout>
 	<html>
 		<div xmlns:cc="http://creativecommons.org/ns#" about="urn:sha1:LJTEPSYNUVZNTPWFJO2OSXZ7SOGM54JB">
 			The playing audio is from
