@@ -34,7 +34,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	},
 	onSize: function () {
 		this.$supers(Tree, 'onSize', arguments);
-		var self = this;
+		var self = this, 
+			frozen = this.frozen;
+		if (this._shallSyncFrozen && frozen && this._nativebar)
+			frozen.onSize();
 		setTimeout(function () {
 			if (self.desktop && !self._nativebar) {
 				if (!self._scrollbar)

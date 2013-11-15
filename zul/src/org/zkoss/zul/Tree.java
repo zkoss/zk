@@ -544,14 +544,7 @@ public class Tree extends MeshElement {
 						renderer.doFinally();
 					}
 				}
-			}
-			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
-			else if (_treechildren != null) {
-				_treechildren.invalidate();
-				
-				// Bug 3218078
-				if (_frozen != null)
-					_frozen.invalidate();
+				invalidate();
 			}
 		}
 

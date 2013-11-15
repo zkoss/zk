@@ -110,7 +110,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		//sync frozen
 		var tree = this.getTree(),
 		frozen = tree ? tree.frozen : null,
-		tbody = tree && tree.rows ? tree.rows.$n() : null,
+		tbody = tree && tree._treechildren ? tree._treechildren.$n() : null,
 		td, tds;
 		if (frozen && tbody) {
 			tds = jq(evt.domTarget).parents('td');
