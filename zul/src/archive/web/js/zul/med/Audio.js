@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	
 	function _invoke(wgt, fn, unbind) {
-		//Note: setSrc will rerender, so we need to delay the invocation of play
+		// Note: setSrc will rerender, so we need to delay the invocation of play
 		if (unbind)
 			_invoke2(wgt, fn, unbind);
 		else
@@ -33,13 +33,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else 	
 					n[fn]();
 			} catch (e) {
-				if (!unbind)
-					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message);
+				// Do not show alert if the browser did not support the source format.
+				/* if (!unbind)
+					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message); */
 			}
 		}
 	}
 
-	
 var Audio =
 /**
  * An audio clip.
@@ -132,9 +132,9 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	/** Stops the audio at the client.
 	 */
-	stop: function () {
-		_invoke(this, 'stop');		
-	},
+    stop: function (_unbind_) {
+        _invoke(this, 'stop',_unbind_);
+    },
 	/** Pauses the audio at the client.
 	 */
 	pause: function () {
