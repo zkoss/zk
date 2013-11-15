@@ -37,7 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn) {
-			if (zk.ie8_ || zk.ie9)
+			if (zk.ie8)
 				wgt._wsbak = ws; // B50-ZK-432
 			if (zk.ie < 8)
 				jq(wgtn).addClass('z-word-nowrap'); // B50-ZK-333
@@ -133,7 +133,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.ie < 8 && max < wd) {
 					max = wd;
 					maxj = i;
-				} else if (zk.ff > 4 || (zk.ie >= 9 && zk.ie < 11)) {// firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
+				} else if (zk.ff > 4 || zk.ie9) {// firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				}
 				if (zk.ie < 8) // B50-ZK-206
@@ -153,7 +153,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (zk.ie < 8 && max < wd) {
 						max = wd;
 						maxj = i;
-					} else if (zk.ff > 4 || (zk.ie >= 9 && zk.ie < 11)) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
+					} else if (zk.ff > 4 || zk.ie9) // firefox4 & IE9 & IE10 still cause break line in case B50-3147926 column 1
 						++wds[i];
 					if (zk.ie < 8) // B50-ZK-206
 						wds[i] += 2;
@@ -191,7 +191,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgtn) {
 			if (zk.ie < 8)
 				jq(wgtn).removeClass('z-word-nowrap'); // B50-ZK-333
-			else if (!(zk.ie8_ || zk.ie9)) // B50-ZK-432: restore later for IE 8
+			else if (!(zk.ie8)) // B50-ZK-432: restore later for IE 8
 				wgtn.style.whiteSpace = ws;
 		}
 		return {width: width, wds: wds};
@@ -938,7 +938,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (_fixPageSize(this, rows))
 				return; //need to reload with new page size
 		
-		if ((zk.ie8_ || zk.ie9) && (this._wsbak !== undefined)) { // B50-ZK-432
+		if ((zk.ie8) && (this._wsbak !== undefined)) { // B50-ZK-432
 			this.$n().style.whiteSpace = this._wsbak;
 			delete this._wsbak;
 		}

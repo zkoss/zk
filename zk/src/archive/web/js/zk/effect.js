@@ -443,7 +443,7 @@ jq(function() {
 			_useSKU = !_callback || (zk.ie < 11); // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)
-		_useSKU = zk.ie < 11 ? zk.ie : false; // ZK-1748 should include all ie
+		_useSKU = zk.ie < 11; // ZK-1748 should include all ie
 
 	if (_callback) {
 		var w2hide = function (name) {
