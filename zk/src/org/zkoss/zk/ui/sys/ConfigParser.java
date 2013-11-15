@@ -524,18 +524,11 @@ public class ConfigParser {
 			config.setAutomaticTimeout(deviceType, !"false".equals(s));
 	}
 
-	// ZK-1671: ThemeProvider defined in metainfo/zk/zk.xml from jar file doesn't work
-	//		Depends on the jar file loading order, user-defined theme provider may be 
-	//		overridden by StandardThemeProvider
-	private static boolean _customThemeProvider = false;
-	private static boolean _customThemeRegistry = false;
-	private static boolean _customThemeResolver = false;
-	
 	/** Parses desktop-config. */
 	private static void parseDesktopConfig(Configuration config, Element conf)
 	throws Exception {
 		//theme-uri
-		for (Iterator it = conf.getElements("theme-uri").iterator();
+		for (Iterator<Element> it = conf.getElements("theme-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String uri = el.getText(true);
@@ -543,7 +536,7 @@ public class ConfigParser {
 		}
 
 		//disable-theme-uri
-		for (Iterator it = conf.getElements("disable-theme-uri").iterator();
+		for (Iterator<Element> it = conf.getElements("disable-theme-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String uri = el.getText(true);
@@ -551,13 +544,13 @@ public class ConfigParser {
 		}
 
 		// ZK-1671
-		Class cls = null;
+		Class<?> cls = null;
 		//theme-provider-class
-		if (!_customThemeProvider) {
+		if (!config.isCustomThemeProvider()) {
 			cls = parseClass(conf, "theme-provider-class", ThemeProvider.class);
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
-					_customThemeProvider = true;
+					config.setCustomThemeProvider(true);
 				if (log.isDebugEnabled()) log.debug("ThemeProvider: " + cls.getName());
 				config.setThemeProvider((ThemeProvider)cls.newInstance());
 			}
@@ -565,11 +558,11 @@ public class ConfigParser {
 		
 		//theme-registry-class
 		//since 6.5.2
-		if (!_customThemeRegistry) {
+		if (!config.isCustomThemeRegistry()) {
 			cls = parseClass(conf, "theme-registry-class", ThemeRegistry.class);
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
-					_customThemeRegistry = true;
+					config.setCustomThemeRegistry(true);
 				if (log.isDebugEnabled()) log.debug("ThemeRegistry: " + cls.getName());
 				ThemeFns.setThemeRegistry((ThemeRegistry)cls.newInstance());
 			}
@@ -577,11 +570,11 @@ public class ConfigParser {
 		
 		//theme-resolver-class
 		//since 6.5.2
-		if (!_customThemeResolver) {
+		if (!config.isCustomThemeResolver()) {
 			cls = parseClass(conf, "theme-resolver-class", ThemeResolver.class);
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
-					_customThemeResolver = true;
+					config.setCustomThemeResolver(true);
 				if (log.isDebugEnabled()) log.debug("ThemeResolver: " + cls.getName());
 				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
 			}

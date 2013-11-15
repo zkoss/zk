@@ -16,58 +16,57 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
-import org.zkoss.util.WaitLock;
 import org.zkoss.util.FastReadArray;
-
+import org.zkoss.util.WaitLock;
+import org.zkoss.web.theme.ThemeRegistry;
+import org.zkoss.web.theme.ThemeResolver;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.VariableResolver;
-
+import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.RichletConfig;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.impl.EventInterceptors;
+import org.zkoss.zk.ui.impl.MultiComposer;
+import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.WebAppFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.sys.SEORenderer;
 import org.zkoss.zk.ui.sys.SessionCache;
-import org.zkoss.zk.ui.impl.RichletConfigImpl;
-import org.zkoss.zk.ui.impl.EventInterceptors;
-import org.zkoss.zk.ui.impl.MultiComposer;
-import org.zkoss.zk.au.AuDecoder;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.WebAppFactory;
 
 /**
  * The ZK configuration.
@@ -138,7 +137,7 @@ public class Configuration {
 	private Set<String> _disThemeURIs;
 	/** A list of client packages. */
 	private final FastReadArray<String> _clientpkgs = new FastReadArray<String>(String.class);
-	private Class _wappcls, _wappftycls, _uiengcls, _dcpcls, _uiftycls,
+	private Class<?> _wappcls, _wappftycls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls, _sesscachecls, _audeccls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
@@ -167,6 +166,12 @@ public class Configuration {
 	private boolean _crawlable;
 	/** Whether to use the same UUID sequence. */
 	private boolean _repeatUuid;
+	// ZK-1671: ThemeProvider defined in metainfo/zk/zk.xml from jar file doesn't work
+	//		Depends on the jar file loading order, user-defined theme provider may be 
+	//		overridden by StandardThemeProvider
+	private boolean _customThemeProvider = false;
+	private boolean _customThemeRegistry = false;
+	private boolean _customThemeResolver = false;
 
 	/** Constructor.
 	 */
@@ -221,7 +226,6 @@ public class Configuration {
 	 * and/or {@link EventInterceptor} interfaces.
 	 * @see Desktop#addListener
 	 */
-	@SuppressWarnings("unchecked")
 	public void addListener(Class<?> klass) throws Exception {
 		boolean added = false;
 		Object listener = null;
@@ -372,7 +376,7 @@ public class Configuration {
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
 	}
-	private static final String onlyOnce(Class cls) {
+	private static final String onlyOnce(Class<?> cls) {
 		return cls + " can be assigned only once";
 	}
 	private static Object getInstance(Class<?> klass, Object listener)
@@ -382,7 +386,6 @@ public class Configuration {
 	/** Removes a listener class.
 	 * @see Desktop#removeListener
 	 */
-	@SuppressWarnings("unchecked")
 	public void removeListener(final Class<?> klass) {
 		if (_monitor != null && _monitor.getClass().equals(klass))
 			_monitor = null;
@@ -514,7 +517,7 @@ public class Configuration {
 
 		final List<EventThreadCleanup> cleanups = new LinkedList<EventThreadCleanup>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				final EventThreadCleanup cleanup =
 					(EventThreadCleanup)klass.newInstance();
@@ -581,7 +584,7 @@ public class Configuration {
 
 		final List<EventThreadSuspend> suspends = new LinkedList<EventThreadSuspend>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				final EventThreadSuspend suspend =
 					(EventThreadSuspend)klass.newInstance();
@@ -645,7 +648,7 @@ public class Configuration {
 
 		final List<EventThreadResume> resumes = new LinkedList<EventThreadResume>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				final EventThreadResume resume =
 					(EventThreadResume)klass.newInstance();
@@ -698,9 +701,9 @@ public class Configuration {
 	 * @param evt the event to process
 	 */
 	public void invokeEventThreadResumeAborts(Component comp, Event evt) {
-		final Class[] ary = _evtResus.toArray();
+		final Class<?>[] ary = _evtResus.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				((EventThreadResume)klass.newInstance())
 					.abortResume(comp, evt);
@@ -722,9 +725,9 @@ public class Configuration {
 	 * Rather, it only logs them.
 	 */
 	public void invokeWebAppInits() throws UiException {
-		final Class[] ary = _appInits.toArray();
+		final Class<?>[] ary = _appInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				((WebAppInit)klass.newInstance()).init(_wapp);
 			} catch (Throwable ex) {
@@ -743,9 +746,9 @@ public class Configuration {
 	 * <p>It never throws an exception.
 	 */
 	public void invokeWebAppCleanups() {
-		final Class[] ary = _appCleans.toArray();
+		final Class<?>[] ary = _appCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
@@ -771,9 +774,9 @@ public class Configuration {
 	 */
 	public void invokeSessionInits(Session sess, Object request)
 	throws UiException {
-		final Class[] ary = _sessInits.toArray();
+		final Class<?>[] ary = _sessInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				final SessionInit fn = (SessionInit)klass.newInstance();
 				fn.init(sess, request);
@@ -796,9 +799,9 @@ public class Configuration {
 	 * @param sess the session that is being destroyed
 	 */
 	public void invokeSessionCleanups(Session sess) {
-		final Class[] ary = _sessCleans.toArray();
+		final Class<?>[] ary = _sessCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				((SessionCleanup)klass.newInstance()).cleanup(sess);
 			} catch (Throwable ex) {
@@ -823,9 +826,9 @@ public class Configuration {
 	 */
 	public void invokeDesktopInits(Desktop desktop, Object request)
 	throws UiException {
-		final Class[] ary = _dtInits.toArray();
+		final Class<?>[] ary = _dtInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				final DesktopInit fn = (DesktopInit)klass.newInstance();
 				fn.init(desktop, request);
@@ -848,7 +851,7 @@ public class Configuration {
 	 * @param desktop the desktop that is being destroyed
 	 */
 	public void invokeDesktopCleanups(Desktop desktop) {
-		final Class[] ary = _dtCleans.toArray();
+		final Class<?>[] ary = _dtCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				((DesktopCleanup)ary[j].newInstance()).cleanup(desktop);
@@ -872,7 +875,7 @@ public class Configuration {
 	 */
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
-		final Class[] ary = _execInits.toArray();
+		final Class<?>[] ary = _execInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				((ExecutionInit)ary[j].newInstance()).init(exec, parent);
@@ -983,7 +986,7 @@ public class Configuration {
 	 * and a single composer is returned to represent them all.
 	 * @since 5.0.1
 	 */
-	public Composer getComposer(Page page) throws Exception {
+	public Composer<?> getComposer(Page page) throws Exception {
 		return MultiComposer.getComposer(page, _composers.toArray());
 	}
 
@@ -993,13 +996,12 @@ public class Configuration {
 	 * @since 5.0.7
 	 */
 	public Initiator[] getInitiators() {
-		final Class[] initclses = _initiators.toArray();
+		final Class<?>[] initclses = _initiators.toArray();
 		if (initclses.length == 0)
 			return new Initiator[0];
 
 		final List<Initiator> inits = new LinkedList<Initiator>();
 		for (int j = 0; j < initclses.length; ++j) {
-			final Initiator init;
 			try {
 				inits.add((Initiator)initclses[j].newInstance());
 			} catch (Throwable ex) {
@@ -1016,13 +1018,12 @@ public class Configuration {
 	 * @since 5.0.7
 	 */
 	public SEORenderer[] getSEORenderers() {
-		final Class[] sdclses = _seoRends.toArray();
+		final Class<?>[] sdclses = _seoRends.toArray();
 		if (sdclses.length == 0)
 			return new SEORenderer[0];
 
 		final List<SEORenderer> sds = new LinkedList<SEORenderer>();
 		for (int j = 0; j < sdclses.length; ++j) {
-			final SEORenderer sd;
 			try {
 				sds.add((SEORenderer)sdclses[j].newInstance());
 			} catch (Throwable ex) {
@@ -1038,7 +1039,7 @@ public class Configuration {
 	 * @since 5.0.4
 	 */
 	public void init(Page page) {
-		final Class[] classes = _resolvers.toArray();
+		final Class<?>[] classes = _resolvers.toArray();
 		for (int j = 0; j < classes.length; ++j) {
 			try {
 				page.addVariableResolver((VariableResolver)classes[j].newInstance());
@@ -1208,7 +1209,7 @@ public class Configuration {
 	 * use the default.
 	 * It must implement {@link UiEngine}.
 	 */
-	public void setUiEngineClass(Class cls) {
+	public void setUiEngineClass(Class<?> cls) {
 		if (cls != null && !UiEngine.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
 		_uiengcls = cls;
@@ -1217,7 +1218,7 @@ public class Configuration {
 	 * or null if default is used.
 	 * It must implement {@link UiEngine}.
 	 */
-	public Class getUiEngineClass() {
+	public Class<?> getUiEngineClass() {
 		return _uiengcls;
 	}
 
@@ -1228,7 +1229,7 @@ public class Configuration {
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
 	 */
-	public void setWebAppClass(Class cls) {
+	public void setWebAppClass(Class<?> cls) {
 		if (cls != null && (!WebApp.class.isAssignableFrom(cls)
 		|| !WebAppCtrl.class.isAssignableFrom(cls)))
 			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: "+cls);
@@ -1238,7 +1239,7 @@ public class Configuration {
 	 * or null if default is used.
 	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 */
-	public Class getWebAppClass() {
+	public Class<?> getWebAppClass() {
 		return _wappcls;
 	}
 
@@ -1251,7 +1252,7 @@ public class Configuration {
 	 * @param cls the class that implements {@link WebAppFactory}.
 	 * @since 6.0.0
 	 */
-	public void setWebAppFactoryClass(Class cls) {
+	public void setWebAppFactoryClass(Class<?> cls) {
 		if (cls != null && !WebAppFactory.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("WebAppFactory not implemented: "+cls);
 		_wappftycls = cls;
@@ -1262,7 +1263,7 @@ public class Configuration {
 	 * <p>Note: {@link #getWebAppClass} has the higher priority if not null.
 	 * @since 6.0.0
 	 */
-	public Class getWebAppFactoryClass() {
+	public Class<?> getWebAppFactoryClass() {
 		return _wappftycls;
 	}
 
@@ -1273,7 +1274,7 @@ public class Configuration {
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
 	 */
-	public void setDesktopCacheProviderClass(Class cls) {
+	public void setDesktopCacheProviderClass(Class<?> cls) {
 		if (cls != null && !DesktopCacheProvider.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("DesktopCacheProvider not implemented: "+cls);
 		_dcpcls = cls;
@@ -1282,7 +1283,7 @@ public class Configuration {
 	 * if default is used.
 	 * It must implement {@link DesktopCacheProvider}.
 	 */
-	public Class getDesktopCacheProviderClass() {
+	public Class<?> getDesktopCacheProviderClass() {
 		return _dcpcls;
 	}
 
@@ -1293,7 +1294,7 @@ public class Configuration {
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
 	 */
-	public void setUiFactoryClass(Class cls) {
+	public void setUiFactoryClass(Class<?> cls) {
 		if (cls != null && !UiFactory.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("UiFactory not implemented: "+cls);
 		_uiftycls = cls;
@@ -1302,7 +1303,7 @@ public class Configuration {
 	 * or null if default is used.
 	 * It must implement {@link UiFactory},
 	 */
-	public Class getUiFactoryClass() {
+	public Class<?> getUiFactoryClass() {
 		return _uiftycls;
 	}
 
@@ -1313,7 +1314,7 @@ public class Configuration {
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
 	 */
-	public void setFailoverManagerClass(Class cls) {
+	public void setFailoverManagerClass(Class<?> cls) {
 		if (cls != null && !FailoverManager.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("FailoverManager not implemented: "+cls);
 		_failmancls = cls;
@@ -1322,7 +1323,7 @@ public class Configuration {
 	 * or null if no custom failover mechanism.
 	 * It must implement {@link FailoverManager}.
 	 */
-	public Class getFailoverManagerClass() {
+	public Class<?> getFailoverManagerClass() {
 		return _failmancls;
 	}
 
@@ -1334,7 +1335,7 @@ public class Configuration {
 	 * Otherwise, it won't have any effect.
 	 * @since 2.4.1
 	 */
-	public void setIdGeneratorClass(Class cls) {
+	public void setIdGeneratorClass(Class<?> cls) {
 		if (cls != null && !IdGenerator.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("IdGenerator not implemented: "+cls);
 		_idgencls = cls;
@@ -1344,7 +1345,7 @@ public class Configuration {
 	 * It must implement {@link IdGenerator}
 	 * @since 2.4.1
 	 */
-	public Class getIdGeneratorClass() {
+	public Class<?> getIdGeneratorClass() {
 		return _idgencls;
 	}
 
@@ -1356,7 +1357,7 @@ public class Configuration {
 	 * Otherwise, it won't have any effect.
 	 * @since 3.0.5
 	 */
-	public void setSessionCacheClass(Class cls) {
+	public void setSessionCacheClass(Class<?> cls) {
 		if (cls != null && !SessionCache.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("SessionCache not implemented: "+cls);
 		_sesscachecls = cls;
@@ -1366,7 +1367,7 @@ public class Configuration {
 	 * It must implement {@link SessionCache}.
 	 * @since 3.0.5
 	 */
-	public Class getSessionCacheClass() {
+	public Class<?> getSessionCacheClass() {
 		return _sesscachecls;
 	}
 
@@ -1378,7 +1379,7 @@ public class Configuration {
 	 * Otherwise, it won't have any effect.
 	 * @since 5.0.4
 	 */
-	public void setAuDecoderClass(Class cls) {
+	public void setAuDecoderClass(Class<?> cls) {
 		if (cls != null && !AuDecoder.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("AuDecoder not implemented: "+cls);
 		_audeccls = cls;
@@ -1388,7 +1389,7 @@ public class Configuration {
 	 * It must implement {@link AuDecoder}.
 	 * @since 5.0.4
 	 */
-	public Class getAuDecoderClass() {
+	public Class<?> getAuDecoderClass() {
 		return _audeccls;
 	}
 
@@ -2197,7 +2198,7 @@ public class Configuration {
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String name, Class richletClass, Map<String, String> params) {
+	public Object addRichlet(String name, Class<?> richletClass, Map<String, String> params) {
 		if (!Richlet.class.isAssignableFrom(richletClass))
 			throw new IllegalArgumentException("A richlet class, "+richletClass+", must implement "+Richlet.class.getName());
 
@@ -2279,6 +2280,7 @@ public class Configuration {
 	/** Returns an instance of richlet of the specified name, or null
 	 * if not found.
 	 */
+	@SuppressWarnings("unchecked")
 	public Richlet getRichlet(String name) {
 		WaitLock lock = null;
 		final Object[] info;
@@ -2317,12 +2319,12 @@ public class Configuration {
 				}
 			}
 
-			final Object o = ((Class)info[0]).newInstance();
+			final Object o = ((Class<?>)info[0]).newInstance();
 			if (!(o instanceof Richlet))
 				throw new UiException(Richlet.class+" must be implemented by "+info[0]);
 
 			final Richlet richlet = (Richlet)o;
-			richlet.init(newRichletConfig((Map)info[1]));
+			richlet.init(newRichletConfig((Map<String, String>)info[1]));
 
 			synchronized (_richlets) {
 				_richlets.put(name, richlet);
@@ -2337,8 +2339,7 @@ public class Configuration {
 			lock.unlock();
 		}
 	}
-	@SuppressWarnings("unchecked")
-	private RichletConfig newRichletConfig(Map params) {
+	private RichletConfig newRichletConfig(Map<String, String> params) {
 		return new RichletConfigImpl(_wapp, params);
 	}
 
@@ -2373,7 +2374,7 @@ public class Configuration {
 	 */
 	public void detroyRichlets() {
 		synchronized (_richlets) {
-			for (Iterator it = _richlets.values().iterator(); it.hasNext();) {
+			for (Iterator<Object> it = _richlets.values().iterator(); it.hasNext();) {
 				final Object o = it.next();
 				if (o instanceof Richlet)
 					destroy((Richlet)o);
@@ -2634,7 +2635,7 @@ public class Configuration {
 	 * defined yet.
 	 * @since 2.4.1
 	 */
-	public String addErrorPage(String deviceType, Class type, String location) {
+	public String addErrorPage(String deviceType, Class<?> type, String location) {
 		if (!Throwable.class.isAssignableFrom(type))
 			throw new IllegalArgumentException("Throwable or derived is required: "+type);
 		if (location == null || deviceType == null)
@@ -2650,8 +2651,8 @@ public class Configuration {
 		String previous = null;
 		synchronized (l) {
 			//remove the previous definition
-			for (Iterator it = l.iterator(); it.hasNext();) {
-				final ErrorPage errpg = (ErrorPage)it.next();
+			for (Iterator<ErrorPage> it = l.iterator(); it.hasNext();) {
+				final ErrorPage errpg = it.next();
 				if (errpg.type.equals(type)) {
 					previous = errpg.location;
 					it.remove();
@@ -2676,8 +2677,8 @@ public class Configuration {
 			}
 			if (l != null) {
 				synchronized (l) {
-					for (Iterator it = l.iterator(); it.hasNext();) {
-						final ErrorPage errpg = (ErrorPage)it.next();
+					for (Iterator<ErrorPage> it = l.iterator(); it.hasNext();) {
+						final ErrorPage errpg = it.next();
 						if (errpg.type.isInstance(error))
 							return errpg.location;
 					}
@@ -2687,9 +2688,9 @@ public class Configuration {
 		return null;
 	}
 	private static class ErrorPage {
-		private final Class type;
+		private final Class<?> type;
 		private final String location;
-		private ErrorPage(Class type, String location) {
+		private ErrorPage(Class<?> type, String location) {
 			this.type = type;
 			this.location = location;
 		}
@@ -2697,9 +2698,9 @@ public class Configuration {
 	/** Used with {@link FastReadArray} to check if an object is
 	 * the same class as specified.
 	 */
-	private static class SameClass implements Comparable {
-		private final Class _klass;
-		private SameClass(Class klass) {
+	private static class SameClass implements Comparable<Object> {
+		private final Class<?> _klass;
+		private SameClass(Class<?> klass) {
 			_klass = klass;
 		}
 		public int compareTo(Object o) {
@@ -2727,5 +2728,70 @@ public class Configuration {
 		private TimeoutURIInfo(String uri, int type) {
 			super(uri, type);
 		}
+	}
+
+	/**
+	 * Returns whether to use custom {@link ThemeProvider}. If true, it means
+	 * the default ThemeProvider shall be ignored. It is set to true if declare
+	 * custom ThemeProvider in zk.xml
+	 * <p>
+	 * Default: false
+	 * @since 7.0.0
+	 */
+	public boolean isCustomThemeProvider() {
+		return _customThemeProvider;
+	}
+	/**
+	 * Sets whether to use custom {@link ThemeProvider}.
+	 * <p>Default: false.
+	 * <p>It is set to true if declare custom ThemeProvider in zk.xml
+	 * <p>Note: internal use only
+	 * @param customThemeProvider whether to use custom {@link ThemeProvider}.
+	 * @since 7.0.0
+	 */
+	public void setCustomThemeProvider(boolean customThemeProvider) {
+		_customThemeProvider = customThemeProvider;
+	}
+	/**
+	 * Returns whether to use custom {@link ThemeRegistry}. If true, it means
+	 * the default ThemeRegistry shall be ignored. It is set to true if declare
+	 * custom ThemeRegistry in zk.xml
+	 * <p>Default: false
+	 * @since 7.0.0
+	 */
+	public boolean isCustomThemeRegistry() {
+		return _customThemeRegistry;
+	}
+	/**
+	 * Sets whether to use custom {@link ThemeRegistry}.
+	 * <p>Default: false.
+	 * <p>It is set to true if declare custom ThemeRegistry in zk.xml.
+	 * <p>Note: internal use only
+	 * @param customThemeRegistry whether to use custom {@link ThemeRegistry}.
+	 * @since 7.0.0
+	 */
+	public void setCustomThemeRegistry(boolean customThemeRegistry) {
+		_customThemeRegistry = customThemeRegistry;
+	}
+	/**
+	 * Returns whether to use custom {@link ThemeResolver}. If true, it means
+	 * the default ThemeResolver shall be ignored. It is set to true if declare
+	 * custom ThemeResolver in zk.xml
+	 * <p>Default: false
+	 * @since 7.0.0
+	 */
+	public boolean isCustomThemeResolver() {
+		return _customThemeResolver;
+	}
+	/**
+	 * Sets whether to use custom {@link ThemeResolver}.
+	 * <p>Default: false.
+	 * <p>It is set to true if declare custom ThemeResolver in zk.xml.
+	 * <p>Note: internal use only
+	 * @param customThemeResolver whether to use custom {@link ThemeResolver}.
+	 * @since 7.0.0
+	 */
+	public void setCustomThemeResolver(boolean customThemeResolver) {
+		_customThemeResolver = customThemeResolver;
 	}
 }
