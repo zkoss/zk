@@ -2587,6 +2587,9 @@ public class Listbox extends MeshElement {
 					}
 				}
 			}
+			if (_model.getSize() == 0) { // Bug ZK-1834: model is empty
+				resetDataLoader(true);
+			}
 		}
 	}
 	/** Called when SELECTION_CHANGED is received. */
