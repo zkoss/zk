@@ -25,6 +25,7 @@ ZK 6.5.5
   ZK-1998: Listbox using GroupsModel sometimes would not update the select all status
   ZK-1990: Can't get expected Locale in Bridge
   ZK-2001: Focus to a chosenbox that place in a listbox shall not change listbox selection
+  ZK-1834: Listbox scroll bug (re-fix)
 
   --------
 ZK 6.5.4
