@@ -67,7 +67,7 @@ public class Tabpanel extends XulElement {
 		if (tabpanels == null)
 			return -1;
 		int j = 0;
-		for (Iterator it = tabpanels.getChildren().iterator();; ++j)
+		for (Iterator<Component> it = tabpanels.getChildren().iterator();; ++j)
 			if (it.next() == this)
 				return j;
 	}

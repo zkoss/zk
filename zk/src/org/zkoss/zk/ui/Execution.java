@@ -16,25 +16,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Map;
-import java.util.Date;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.io.IOException;
 import java.security.Principal;
+import java.util.Date;
+import java.util.Map;
 
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.ExpressionFactory;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+
 import org.zkoss.idom.Document;
-
 import org.zkoss.web.servlet.Servlets;
-
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xml.Locator;
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.http.AuRedirect;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.au.AuResponse;
 
 /**
  * An execution of a client request (e.g., ServletRequest).
@@ -986,7 +989,7 @@ public interface Execution extends Scope {
 	public void sendRedirect(String uri, String target);
 	/**
 	 * Send a redirect to the given url in the application the redirect is done
-	 * via status 302 by {@link #AuRedirect} if respRedirect is set to true. If
+	 * via status 302 by {@link AuRedirect} if respRedirect is set to true. If
 	 * respRedirect is set to false, it is the same with
 	 * {@link #sendRedirect(String)}.
 	 * 

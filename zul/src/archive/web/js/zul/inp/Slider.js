@@ -44,11 +44,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 /**
  * A slider.
- *  <p>Default {@link #getZclass} as follows:
- *  <ol>
- *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-slider-ver" is assumed</li>
- *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-slider-hor" is assumed</li>
- *  </ol>
+ *  <p>Default {@link #getZclass}: z-slider.
  */
 zul.inp.Slider = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',

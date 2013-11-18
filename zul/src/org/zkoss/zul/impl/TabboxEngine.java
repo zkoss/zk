@@ -11,6 +11,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.event.ListDataEvent;
 

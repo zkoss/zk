@@ -278,7 +278,7 @@ public class Tab extends LabelImageElement {
 		if (tabs == null)
 			return -1;
 		int j = 0;
-		for (Iterator it = tabs.getChildren().iterator();; ++j)
+		for (Iterator<Component> it = tabs.getChildren().iterator();; ++j)
 			if (it.next() == this)
 				return j;
 	}
@@ -362,7 +362,7 @@ public class Tab extends LabelImageElement {
 		return clone;
 	}
 	private void afterUnmarshal() {
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+		for (Iterator<Component> it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Caption) {
 				_caption = (Caption)child;
@@ -392,13 +392,13 @@ public class Tab extends LabelImageElement {
 			final Set<Tab> prevSeldItems = new LinkedHashSet<Tab>();
 			if (tabbox.getSelectedTab() != null)
 				prevSeldItems.add(tabbox.getSelectedTab());
-			final SelectEvent evt = SelectEvent.getSelectEvent(request,
+			final SelectEvent<Tab, Object> evt = SelectEvent.getSelectEvent(request,
 					new SelectEvent.SelectedObjectHandler<Tab>() {
 				public Set<Object> getObjects(Set<Tab> items) {
 					if (items == null || items.isEmpty() || tabbox.getModel() == null)
 						return null;
 					Set<Object> objs = new LinkedHashSet<Object>();
-					ListModel model = tabbox.getModel();
+					ListModel<Object> model = tabbox.getModel();
 					for (Tab i : items)
 						objs.add(model.getElementAt(i.getIndex()));
 					return objs;
@@ -409,7 +409,7 @@ public class Tab extends LabelImageElement {
 				}
 			});
 			
-			final Set selItems = evt.getSelectedItems();
+			final Set<Tab> selItems = evt.getSelectedItems();
 			if (selItems == null || selItems.size() != 1)
 				throw new UiException("Exactly one selected tab is required: " + selItems); // debug purpose
 			

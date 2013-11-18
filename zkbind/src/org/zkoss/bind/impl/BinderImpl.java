@@ -80,7 +80,6 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
-
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -2045,6 +2044,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	public Tracker getTracker() {
 		if (_tracker == null) {
 			String clznm = Library.getProperty("org.zkoss.bind.Tracker.class");

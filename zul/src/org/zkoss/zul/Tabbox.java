@@ -17,8 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 import java.util.Iterator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -26,10 +24,10 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
@@ -89,8 +87,6 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tabbox extends XulElement {
-	private static final Logger log = LoggerFactory.getLogger(Tabbox.class);
-	
 	private transient Tabs _tabs;
 	private transient Toolbar _toolbar;
 	private transient Tabpanels _tabpanels;
@@ -235,7 +231,7 @@ public class Tabbox extends XulElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> TabboxRenderer<T> getTabboxRenderer() {
-		return (TabboxRenderer) _renderer;
+		return (TabboxRenderer<T>) _renderer;
 	}
 
 	/**
@@ -273,10 +269,9 @@ public class Tabbox extends XulElement {
 			NoSuchMethodException, IllegalAccessException,
 			InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
-			setTabboxRenderer((TabboxRenderer) Classes.newInstanceByThread(clsnm));
+			setTabboxRenderer((TabboxRenderer<?>) Classes.newInstanceByThread(clsnm));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void onInitRender() {
 		if (disableFeature())
 			throw new IllegalAccessError("ZK EE version only!");
@@ -310,7 +305,7 @@ public class Tabbox extends XulElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
-		return (ListModel) _model;
+		return (ListModel<T>) _model;
 	}
 
 	
@@ -364,7 +359,7 @@ public class Tabbox extends XulElement {
 	}
 	
 	/**
-	 * Returns whether to use maximum height of all tabpanel in initial phase or not.
+	 * Returns whether to use maximum height of all tabpanel in initial phase.
 	 * <p> 
 	 * Default: false.
 	 * @since 7.0.0
@@ -374,10 +369,9 @@ public class Tabbox extends XulElement {
 	}
 
 	/**
-	 * Sets whether to use maximum height of all tabpanel in initial phase or not.
+	 * Sets whether to use maximum height of all tabpanel in initial phase.
 	 * <p>
 	 * The Client ROD feature will be disabled if it is set to true.
-	 * @param boolean maximalHeight
 	 * @since 7.0.0
 	 */
 	public void setMaximalHeight(boolean maximalHeight) {
@@ -626,7 +620,7 @@ public class Tabbox extends XulElement {
 		if (child instanceof Tabs) {
 			if (super.insertBefore(child, refChild)) {
 				_tabs = (Tabs) child;
-				for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+				for (Iterator<Component> it = _tabs.getChildren().iterator(); it.hasNext();) {
 					final Tab tab = (Tab) it.next();
 					if (tab.isSelected()) {
 						_seltab = tab;
@@ -670,7 +664,7 @@ public class Tabbox extends XulElement {
 	/** Removes _listener from all {@link Tab} instances. */
 	private void removeTabsListeners() {
 		if (_tabs != null) {
-			for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+			for (Iterator<Component> it = _tabs.getChildren().iterator(); it.hasNext();) {
 				final Tab tab = (Tab) it.next();
 				tab.removeEventListener(Events.ON_SELECT, _listener);
 			}
@@ -680,7 +674,7 @@ public class Tabbox extends XulElement {
 	/** Adds _listener to all {@link Tab} instances. */
 	private void addTabsListeners() {
 		if (_tabs != null) {
-			for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+			for (Iterator<Component> it = _tabs.getChildren().iterator(); it.hasNext();) {
 				final Tab tab = (Tab) it.next();
 				tab.addEventListener(Events.ON_SELECT, _listener);
 			}
@@ -712,11 +706,11 @@ public class Tabbox extends XulElement {
 	}
 
 	private void afterUnmarshal(int cnt) {
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+		for (Iterator<Component> it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Tabs) {
 				_tabs = (Tabs) child;
-				for (Iterator e = _tabs.getChildren().iterator(); e.hasNext();) {
+				for (Iterator<Component> e = _tabs.getChildren().iterator(); e.hasNext();) {
 					final Tab tab = (Tab) e.next();
 					if (tab.isSelected()) {
 						_seltab = tab;
