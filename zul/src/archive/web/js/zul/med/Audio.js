@@ -132,7 +132,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	/** Stops the audio at the client.
 	 */
-    stop: function (unbind) {
+    stop: function () {
         _invoke(this, 'stop');
     },
 	/** Pauses the audio at the client.
