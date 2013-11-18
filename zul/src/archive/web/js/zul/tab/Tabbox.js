@@ -76,7 +76,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		/**
 		 * Sets the orient.
 		 *
-		 * @param orient either "top", "left", "bottom or "right".
+		 * @param String orient either "top", "left", "bottom or "right".
 		 * @since 7.0.0 "horizontal" is renamed to "top" and "vertical" is renamed to "left".
 		 */
 		orient: function (orient) {
