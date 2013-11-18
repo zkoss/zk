@@ -373,7 +373,7 @@ var Window =
  * In other words, the popup is hidden before the event is sent to the server.
  * The application cannot prevent the window from being hidden.
  *
- * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.
+ * <p>Default {@link #getZclass}: z-window.
  */
 zul.wnd.Window = zk.$extends(zul.Widget, {
 	_mode: 'embedded',

@@ -70,7 +70,7 @@ import org.zkoss.zul.impl.XulElement;
  * In other words, the popup is hidden before the event is sent to the server.
  * The application cannot prevent the window from being hidden.
  * 
- * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-window.(since 3.5.0)
  * @author tomyeh
  */
 public class Window extends XulElement implements Framable, IdSpace {
