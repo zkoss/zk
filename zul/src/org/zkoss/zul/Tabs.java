@@ -114,7 +114,7 @@ public class Tabs extends XulElement {
 				} else {
 					newtab.setSelectedDirectly(true);
 					if (desel)
-						for (Iterator it = getChildren().iterator(); it.hasNext();) {
+						for (Iterator<Component> it = getChildren().iterator(); it.hasNext();) {
 							final Tab tab = (Tab)it.next();
 							if (tab != newtab && tab.isSelected()) {
 								tab.setSelectedDirectly(false);
