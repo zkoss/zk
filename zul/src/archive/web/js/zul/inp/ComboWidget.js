@@ -324,6 +324,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			pp.style.height = '350px';
 		} else if (pp.offsetHeight < 10) {
 			pp.style.height = '10px'; //minimal
+			// B65-ZK-2021: Only need to manually sync shadow when there is no item matched.
+			if (this._shadow)
+				this._shadow.sync();
 		}
 
 		if (ppofs[0] == 'auto') {
@@ -522,11 +525,13 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		else if (keyCode == 40) this.dnPressed_(evt);
 		else this.otherPressed_(evt);
 	},
+	/* B65-ZK-2021: Too many unnecessary shadow sync calls.
 	onChildAdded_: _zkf = function (child) {
 		if (this._shadow) this._shadow.sync();
 	},
 	onChildRemoved_: _zkf,
 	onChildVisible_: _zkf,
+	*/
 	/** Utility to implement {@link #redraw}. 
 	 *  @param Array out an array of HTML fragments.
 	 */
