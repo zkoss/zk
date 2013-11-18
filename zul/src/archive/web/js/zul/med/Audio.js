@@ -14,16 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	
-	function _invoke(wgt, fn, unbind) {
-		//Note: setSrc will rerender, so we need to delay the invocation of play
-		if (unbind)
-			_invoke2(wgt, fn, unbind);
+	function _invoke(wgt, fn) {
+		// Note: setSrc will rerender, so we need to delay the invocation of play
+		if (wgt._isUnbinded)
+			_invoke2(wgt, fn);
 		else
 			setTimeout(function () {
 				_invoke2(wgt, fn);
 			}, 200);
 	}
-	function _invoke2(wgt, fn, unbind) { 
+	function _invoke2(wgt, fn) { 
 		var n = wgt.$n();
 		if (n) {
 			try {
@@ -33,13 +33,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else 	
 					n[fn]();
 			} catch (e) {
-				if (!unbind)
-					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message);
+				// Do not show alert if the browser did not support the source format.
+				/* if (!wgt._isUnbinded)
+					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message); */
 			}
 		}
 	}
 
-	
 var Audio =
 /**
  * An audio clip.
@@ -132,16 +132,17 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	/** Stops the audio at the client.
 	 */
-	stop: function () {
-		_invoke(this, 'stop');		
-	},
+    stop: function (unbind) {
+        _invoke(this, 'stop');
+    },
 	/** Pauses the audio at the client.
 	 */
 	pause: function () {
 		_invoke(this, 'pause');		
 	},
 	unbind_: function () {
-		this.stop(true);
+		this._isUnbinded = true;
+		this.stop();
 		this.$supers(Audio, 'unbind_', arguments);
 	},
 	domAttrs_: function(no){
