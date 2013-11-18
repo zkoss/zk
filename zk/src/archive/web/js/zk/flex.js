@@ -335,7 +335,7 @@ zFlex = { //static methods
 				//Bug Flex-138: skip if width exists
 				if (offwdh == 0 && cwgt && zk.isLoaded('zul.mesh')
 						&& cwgt.$instanceof(zul.mesh.HeaderWidget))
-					offwdh = zkc.jq.width();
+					offwdh = jq(cwgt.$n('hdfaker')).width(); //use faker width
 				
 				//Bug ZK-1706: should consider all text node size
 				if (pretxt) {
