@@ -40,9 +40,30 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
 public class BindUiLifeCycle implements UiLifeCycle {
 	
 	static final Log log = Log.lookup(BindUiLifeCycle.class);
+	private static final String ON_ZKBIND_LATER = "onZKBindLater";
+	private static final String REMOVE_MARK = "$$RemoveMark$$";
 	private static Extension _ext;
 	
 	public void afterComponentAttached(Component comp, Page page) {
+		handleComponentAttached(comp);
+	}
+	
+	protected void handleComponentAttached(Component comp){
+		//ZK-2022, check if this component is in queue for removal 
+		//if yes, then post and do processing later
+		boolean removeMark = Boolean.TRUE.equals(comp.getAttribute(REMOVE_MARK));
+		if(removeMark){
+			//handle later
+			comp.addEventListener(10000, ON_ZKBIND_LATER, new EventListener<Event>() {
+				public void onEvent(Event event) throws Exception {
+					final Component comp = event.getTarget();
+					comp.removeEventListener(ON_ZKBIND_LATER, this);
+					handleComponentAttached(comp);
+				}
+			});
+			Events.postEvent(new Event(ON_ZKBIND_LATER, comp));
+			return;
+		}
 		if (comp.getDesktop() != null) {
 			//check if this component already binded
 			Binder selfBinder = BinderUtil.getBinder(comp);
@@ -108,14 +129,20 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 
 	public void afterComponentDetached(Component comp, Page prevpage) {
+		handleComponentDetached(comp);
+	}
+	protected void handleComponentDetached(Component comp) {
 		//ZK-1887 should post the remove as well in detach
 		comp.addEventListener(10000, BinderImpl.ON_BIND_CLEAN, new EventListener<Event>() {
 			public void onEvent(Event event) throws Exception {
 				final Component comp = event.getTarget();
+				comp.removeAttribute(REMOVE_MARK);
 				comp.removeEventListener(BinderImpl.ON_BIND_CLEAN, this);
 				removeBindings(comp);
 			}
 		});
+		//ZK-2022, make it is in queue of remove.
+		comp.setAttribute(REMOVE_MARK, Boolean.TRUE);
 		// post ON_BIND_INIT event
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
 	}
