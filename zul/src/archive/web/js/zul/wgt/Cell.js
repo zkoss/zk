@@ -137,6 +137,13 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		}
 		return ' ' + zUtl.mapToString(m1);
 	},
+	setVisible: function(visible) {
+		this.$supers('setVisible', arguments);
+		// B65-ZK-2015: redoCSS in IE10 to make sure component will show when visible is true
+		if (zk.ie10_ && visible)
+			zk(this.$n()).redoCSS();
+			
+	},
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}

@@ -27,6 +27,7 @@ ZK 6.5.5
   ZK-2001: Focus to a chosenbox that place in a listbox shall not change listbox selection
   ZK-1834: Listbox scroll bug (re-fix)
   ZK-2021: Combobox autocomplete performance degrading quadratically with increasing number of comboitems
+  ZK-2015: Change the visible of cell component sometimes will fail (IE10 only)
 
   --------
 ZK 6.5.4
