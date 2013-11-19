@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.util.SessionSerializationListener;
  *
  * @author tomyeh
  */
+@SuppressWarnings("deprecation")
 public class SimpleSession implements Session, SessionCtrl {
 	private static final Logger log = LoggerFactory.getLogger(SimpleSession.class);
 
