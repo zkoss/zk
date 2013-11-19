@@ -83,6 +83,7 @@ ZK 6.5.5
   ZK-1834: Listbox scroll bug (re-fix)
   ZK-2021: Combobox autocomplete performance degrading quadratically with increasing number of comboitems
   ZK-2015: Change the visible of cell component sometimes will fail (IE10 only)
+  ZK-2022: appending a component after its removal fails to initialize bindings
 
   --------
 
