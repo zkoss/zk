@@ -33,6 +33,7 @@ import java.util.Map;
  * @see BindingListModelExt
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelMap
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class BindingListModelMap<K, V> extends ListModelMap<K, V>
 implements BindingListModelExt<Map.Entry<K, V>>, java.io.Serializable {

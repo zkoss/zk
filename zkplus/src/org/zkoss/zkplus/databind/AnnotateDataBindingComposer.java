@@ -10,6 +10,7 @@ import org.zkoss.zk.ui.util.Composer;
  * A component can apply many composers, remember to apply this composer at the last.
  * For example:
  * &lt;window apply="xxx.MyComposer,org.zkoss.zkplus.databind.AnnotateDataBindingComposer"&gt;
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  *
  */
 public class AnnotateDataBindingComposer implements Composer, java.io.Serializable {

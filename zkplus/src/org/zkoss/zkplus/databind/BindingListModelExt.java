@@ -36,6 +36,7 @@ package org.zkoss.zkplus.databind;
  * </code></pre>
  * @author henrichen
  * @since 3.5.0
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public interface BindingListModelExt<E> extends BindingListModel<E> {
 	/** Returns indexes of the given object inside a ListModel.

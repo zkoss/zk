@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.Component;
  * state since it is shared by the whole application.
  *
  * @author Henri Chen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public interface TypeConverter {
 	/** Special Value, when returned in {@link #coerceToBean} or {@link #coerceToUi},

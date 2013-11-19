@@ -44,6 +44,7 @@ import java.util.ArrayList;
  * <p>This implementation would automatically remove the added eventlistener from the target component.</p>
  * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
+ * @deprecated As of release 7.0.0
  */
 public class ShowWindowEventListener<T extends Event> implements SerializableEventListener<T> {
 	@SuppressWarnings("unchecked")

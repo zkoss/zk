@@ -27,6 +27,7 @@ import org.zkoss.zul.ListModel;
 /**
  * @author jumperchen
  * @since 3.0.2
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 /* package */ class ComboitemCollectionItem implements CollectionItemExt, java.io.Serializable {
 	private static final long serialVersionUID = 200808191454L;

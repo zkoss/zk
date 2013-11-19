@@ -30,6 +30,7 @@ import org.zkoss.zul.Comboitem;
 
 /**
  * @author jumperchen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 3.0.2
  */
 /*package*/ class BindingComboitemRenderer implements org.zkoss.zul.ComboitemRenderer, org.zkoss.zul.ComboitemRendererExt, Serializable {

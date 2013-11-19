@@ -575,8 +575,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<extends>tabbox</extends>
 		
 		<annotation>
-			<!-- a empty annotation to make model annotation always load first when running in zkbind2 with selectedIndex or selectedTab -->
-			<annotation-name>ZKBIND</annotation-name>
+			<!-- a empty annotation to make model annotation always load first when running in zkbind2 with selectedIndex or selectedTab 
+			DON'T use ZKBIND key word. it will cause CONVERTER information lost in some environment
+			-->
+			<annotation-name>$$default-bind$$</annotation-name>
 			<property-name>model</property-name>
 		</annotation>
 		<annotation>

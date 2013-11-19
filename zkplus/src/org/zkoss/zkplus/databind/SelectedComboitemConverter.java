@@ -35,6 +35,7 @@ import org.zkoss.zul.ext.Selectable;
  * Convert the selected item of combobox to bean.
  * @author jumperchen
  * @since 3.0.2
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class SelectedComboitemConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808191437L;

@@ -45,6 +45,7 @@ import org.zkoss.zul.impl.InputElement;
  *
  * @author Henri
  * @since 3.0.0
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class Binding implements java.io.Serializable {
 	private static final long serialVersionUID = 200808191512L;

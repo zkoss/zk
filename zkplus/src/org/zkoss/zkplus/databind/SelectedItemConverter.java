@@ -52,6 +52,7 @@ import org.zkoss.zul.ext.Selectable;
  *	</library-property>
  * </pre></code>
  * @author Henri Chen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class SelectedItemConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808191439L;

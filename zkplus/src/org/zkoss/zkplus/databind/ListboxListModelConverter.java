@@ -20,6 +20,7 @@ import org.zkoss.zul.ext.Selectable;
  * The {@link TypeConverter} implementation for converting collection to ListModel of a listbox
  * @author dennis
  * @since 6.0.1
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class ListboxListModelConverter extends ListModelConverter{
 

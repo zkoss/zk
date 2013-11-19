@@ -267,6 +267,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * @author Henri Chen
  * @see AnnotateDataBinderInit
  * @see DataBinder
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class AnnotateDataBinder extends DataBinder {
 	private static final long serialVersionUID = 200808191510L;

@@ -28,6 +28,9 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Row;
 
+/**
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
+ */
 /*package*/ class BindingRowRenderer 
 implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable {
 	private static final long serialVersionUID = 200808191425L;

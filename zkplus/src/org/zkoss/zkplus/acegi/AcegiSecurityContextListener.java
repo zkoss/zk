@@ -62,6 +62,7 @@ import org.zkoss.zkplus.spring.SpringUtil;
  * <p>Applicable to Acegi Security version 1.0.3</p>
  *
  * @author henrichen
+ * @deprecated As of release 7.0.0
  */
 public class AcegiSecurityContextListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Logger log = LoggerFactory.getLogger(AcegiSecurityContextListener.class);

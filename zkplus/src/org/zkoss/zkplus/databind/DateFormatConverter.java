@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * 
  * @author Henri Chen
  * @since 3.0.9
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class DateFormatConverter implements TypeConverter, java.io.Serializable  {
 

@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
  * @see ZkAuthenticationProcessingFilter
  * @see ShowWindowEventListener
  * @author Henri
+ * @deprecated As of release 7.0.0
  */
 public class ZkAuthenticationEntryPoint extends AuthenticationProcessingFilterEntryPoint {
 	/*package*/ static final String ON_ACEGILOGIN = "onAcegiLogin";

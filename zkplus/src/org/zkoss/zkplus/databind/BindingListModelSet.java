@@ -32,6 +32,7 @@ import java.util.Set;
  * @see BindingListModel
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelSet
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class BindingListModelSet<E> extends ListModelSet<E>
 implements BindingListModelExt<E>, java.io.Serializable {

@@ -19,6 +19,7 @@ import org.zkoss.zul.Selectbox;
  * The {@link TypeConverter} implementation for converting collection to ListModel of a grid
  * @author dennis
  * @since 6.0.1
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class SelectboxListModelConverter extends ListModelConverter{
 

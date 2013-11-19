@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see ZkAuthenticationEntryPoint
  * @see ShowWindowEventListener
  * @author Henri
+ * @deprecated As of release 7.0.0
  */
 public class ZkAuthenticationProcessingFilter extends AuthenticationProcessingFilter {
 	/** If end user login successfully, an ON_LOGIN_OK is fired. Register an associated event 
