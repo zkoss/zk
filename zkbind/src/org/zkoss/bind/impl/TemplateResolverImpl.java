@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.util.Template;
  * @author dennis
  * @since 6.0.0
  */
+@SuppressWarnings("deprecation")
 public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Serializable{//implement binding for tieValue
 	private static final long serialVersionUID = 1L;
 	private final String _templateExpr;
