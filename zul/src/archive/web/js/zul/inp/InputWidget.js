@@ -792,8 +792,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	//super//
 	focus_: function (timeout) {
-		// ZK-2020: should given timeout for ie11  
-		zk(this.getInputNode()).focus(!zk.ie11_ ? timeout : (timeout ? timeout : 0));
+		// ZK-2020: should give timeout for ie11
+		if(zk.ie11_ && !timeout)
+			timeout = 0;
+		zk(this.getInputNode()).focus(timeout);
 		return true;
 	},
 	domClass_: function (no) {
