@@ -91,6 +91,7 @@ import org.springframework.beans.factory.InitializingBean;
  * </code></pre>
  * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author henrichen
+ * @deprecated As of release 7.0.0
  */
 public class ZkEventExceptionFilter implements Filter, InitializingBean {
 	private static final Logger log = LoggerFactory.getLogger(ZkEventExceptionFilter.class);

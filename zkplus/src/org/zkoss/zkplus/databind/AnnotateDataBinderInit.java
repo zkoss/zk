@@ -74,6 +74,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  *
  * @author Henri Chen
  * @see AnnotateDataBinder
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
  public class AnnotateDataBinderInit implements Initiator, InitiatorExt {
 	private static final String COMPATIBLE = "org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible";

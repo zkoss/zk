@@ -30,6 +30,7 @@ import org.zkoss.zul.Row;
 
 /**
  * @author simonpai
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 5.0.7
  */
 public class BindingRendererUtil {

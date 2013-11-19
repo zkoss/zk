@@ -28,6 +28,7 @@ import org.zkoss.zul.ListModel;
  * 
  * @author jumperchen
  * @see DataBinder
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 3.0.0
  */
 public interface CollectionItem {

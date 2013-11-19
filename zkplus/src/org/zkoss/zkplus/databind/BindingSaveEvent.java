@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * Event used when DataBinder send "onBindingSave" events.
  * @author henrichen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 3.0.0
  */
 public class BindingSaveEvent extends Event {

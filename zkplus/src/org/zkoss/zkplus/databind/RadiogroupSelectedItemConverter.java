@@ -26,6 +26,7 @@ import org.zkoss.zul.Radiogroup;
  * Convert Radiogroup selected item to radio value and vice versa.
  *
  * @author Henri
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class RadiogroupSelectedItemConverter implements TypeConverter, java.io.Serializable {
   	private static final long serialVersionUID = 200808191534L;

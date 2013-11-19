@@ -34,6 +34,7 @@ import org.zkoss.zul.ListModelArray;
  * @see BindingListModel
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelArray
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class BindingListModelArray<E> extends ListModelArray<E>
 implements BindingListModelExt<E>, java.io.Serializable {

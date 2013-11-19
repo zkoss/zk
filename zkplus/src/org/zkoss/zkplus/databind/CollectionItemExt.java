@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  * @see CollectionItem
  * @see DataBinder
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 3.0.6
  */
 public interface CollectionItemExt extends CollectionItem {

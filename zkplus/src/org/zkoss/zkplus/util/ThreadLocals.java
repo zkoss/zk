@@ -27,6 +27,7 @@ import org.zkoss.lang.reflect.Fields;
  *
  * @author henrichen
  * @since 3.0.6
+ * @deprecated As of release 7.0.0
  */
 public class ThreadLocals {
 	/** Given class name and static ThreadLocal field name, return the associated ThreadLocal.

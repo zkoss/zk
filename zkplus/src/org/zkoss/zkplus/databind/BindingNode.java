@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.UiException;
  * BindingNode that forms a databinding bean path dependent tree.
  *
  * @author Henri
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 /*package*/ class BindingNode implements java.io.Serializable {
 	private static final long serialVersionUID = 200808191424L;

@@ -35,6 +35,7 @@ import org.zkoss.zul.ext.Selectable;
  *
  * @author peterkuo
  * @since 5.0.8
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class BindingListModelListModel<E> implements BindingListModel<E>, Selectable<E>, java.io.Serializable ,BindingListModelExt<E>{
 	

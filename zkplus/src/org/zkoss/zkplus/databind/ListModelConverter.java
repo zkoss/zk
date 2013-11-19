@@ -31,6 +31,7 @@ import org.zkoss.zul.ext.Selectable;
  * The {@link TypeConverter} implementation for converting collection to ListModel and vice versa. <p/>
  * Since zk 6.0.1 This class doesn't handle setMultiple and Selectable, you should use corresponding new converter for different component if it has selection.
  * @author Henri Chen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class ListModelConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808191433L;

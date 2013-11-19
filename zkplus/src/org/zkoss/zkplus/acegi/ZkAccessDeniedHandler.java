@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
  * must be a Window that can be doModel.
  * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
+ * @deprecated As of release 7.0.0
  */
 public class ZkAccessDeniedHandler implements AccessDeniedHandler {
 	private static final String ON_ACCESSDENIED = "onAccessDenied";

@@ -87,6 +87,7 @@ import org.zkoss.zk.ui.event.EventThreadResume;
  *
  * @author henrichen
  * @since 2.4.1
+ * @deprecated As of release 7.0.0
  */
 public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Logger log = LoggerFactory.getLogger(ThreadLocalListener.class);

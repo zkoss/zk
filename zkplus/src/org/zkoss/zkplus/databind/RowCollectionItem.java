@@ -26,6 +26,9 @@ import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Row;
 
+/**
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
+ */
 /* package */class RowCollectionItem implements CollectionItemExt, java.io.Serializable {
 	static final long serialVersionUID = 200808191436L;
 

@@ -62,6 +62,7 @@ import org.zkoss.zul.Row;
  * The DataBinder used for binding ZK UI component and the backend data bean.
  *
  * @author Henri Chen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class DataBinder implements java.io.Serializable {
 	public static final String LOAD_ON_SAVE_TRIGGER_COMPONENT = "zkoss.DataBinder.LOAD_ON_SAVE_TRIGGER_COMPONENT";

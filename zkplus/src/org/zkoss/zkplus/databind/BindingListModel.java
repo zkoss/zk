@@ -26,6 +26,7 @@ import org.zkoss.zul.ListModel;
  * @see BindingListModelSet
  * @see BindingListModelMap
  * @see org.zkoss.zul.ListModel
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public interface BindingListModel<E> extends ListModel<E> {
 	/** Returns index of the given object inside a ListModel.

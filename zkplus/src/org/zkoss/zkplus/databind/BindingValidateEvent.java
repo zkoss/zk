@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * Event used when DataBinder send "onBindingValidate" events.
  * @author jumperchen
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 5.0.7
  */
 public class BindingValidateEvent extends Event {

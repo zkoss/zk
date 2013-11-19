@@ -49,6 +49,8 @@ ZK 7.0.0
   please use these methods from Executions.getCurrent() instead.
   + deprecated to enable event-thread, according to Java Servlet Specification deprecated to enable event-thread, according to Java Servlet
   Specification that some of high-end application servers may prohibit the creation of new threads.
+  + deprecated all the classes under org.zkoss.zkplus.databind package
+  + deprecated all the classes under org.zkoss.zkplus.acegi package
 
   --------
 ZK 6.5.5

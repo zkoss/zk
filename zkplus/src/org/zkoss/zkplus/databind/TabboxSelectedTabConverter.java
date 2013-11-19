@@ -27,6 +27,7 @@ import org.zkoss.zul.Tabbox;
  *
  * @author Henri
  * @since 3.0.1
+ * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class TabboxSelectedTabConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808190445L;
