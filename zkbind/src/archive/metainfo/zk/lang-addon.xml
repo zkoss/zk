@@ -28,8 +28,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<!-- The name of this addon. It must be unique -->
 	<addon-name>zkbind</addon-name>
 	<!-- Specifies what other addon this depends
-	<depends></depends>
 	-->
+	<depends>zul</depends>
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
