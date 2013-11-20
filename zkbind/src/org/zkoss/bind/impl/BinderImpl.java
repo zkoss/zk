@@ -888,7 +888,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		//only set up renderer when has model binding. (or will get error in no-model + selectedTab case
 		final String installAttr = "model";//TODO make it configurable in lang-addon.xml
-		if (installAttr.equals(attr)) {
+		if (attrs!=null && installAttr.equals(attr)) {
 			final String rendererName = AnnotationUtil.testString(attrs.get(Binder.RENDERER),ann); //renderer if any
 			//setup renderer
 			if (rendererName != null) { //there was system renderer
