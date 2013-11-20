@@ -124,6 +124,10 @@ public class Tab extends LabelImageElement {
 	 * <p>
 	 * You can intercept the default behavior by either overriding
 	 * {@link #onClose}, or listening the onClose event.
+	 * 
+	 * <p>If {@link Tabbox#getModel()} is assigned, there is no an action to do with {@link #onClose},
+	 * i.e. developer has to listen onClose event to delete that item in model not
+	 * component itself. (since 7.0.0)
 	 */
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
@@ -142,7 +146,8 @@ public class Tab extends LabelImageElement {
 	}
 
 	/** Closes this tab and the linked tabpanel.
-	 * This method detaches this component and the linked {@link Tabpanel}).
+	 * This method detaches this component and the linked {@link Tabpanel}), only if
+	 * {@link Tabbox#getModel()} is null. (since 7.0.0)
 	 * @since 5.0.0
 	 */
 	public void close() {
@@ -154,6 +159,11 @@ public class Tab extends LabelImageElement {
 				Events.postEvent(new SelectEvent<Tab, Object>(Events.ON_SELECT, tab, selItems));
 			}
 		}
+		Tabbox tabbox = getTabbox();
+		
+		// Nothing to do according to ZK-2027 issue, let application developer to do so.
+		if (tabbox != null && tabbox.getModel() != null)
+			return;
 		
 		//Cache panel before detach , or we couldn't get it after tab is detached.
 		final Tabpanel panel = getLinkedPanel();
