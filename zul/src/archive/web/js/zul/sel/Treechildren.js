@@ -53,7 +53,8 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	},
 	onResponse: function () {
 		if (this.desktop){
-			if (tree = this.getTree()) {
+			var tree = this.getTree();
+			if (tree && tree.frozen) {
 				tree._shallSyncFrozen = true;
 				tree.onSize();
 			}
