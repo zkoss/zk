@@ -68,6 +68,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	groupSelect: false,
 	_scrollbar: null,
+	_firstLoad: true,
 	$define:{
 		emptyMessage: function(msg) {
 			if(this.desktop)
@@ -225,7 +226,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_onRender: function () {
 		this.$supers(Listbox, '_onRender', arguments);
-		this._shallShowScrollbar = true;
+		if (!this._firstLoad)
+			this._shallShowScrollbar = true;
+		
+		this._firstLoad = false;
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
