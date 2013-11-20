@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -84,7 +83,7 @@ import org.zkoss.zul.impl.XulElement;
  * <li>onAfterRender is sent when the model's data has been rendered.(since 5.0.4)</li>
  * </ol>
  *
- * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-tree. (since 3.5.0)
  *
  * <p>Custom Attributes:
  * <dl>
