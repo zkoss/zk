@@ -52,6 +52,7 @@ ZK 7.0.0
   Specification that some of high-end application servers may prohibit the creation of new threads.
   + deprecated all the classes under org.zkoss.zkplus.databind package
   + deprecated all the classes under org.zkoss.zkplus.acegi package
+  + change the addon-name of zkplus jar from 'databind' to 'zkplus'
 
   --------
 ZK 6.5.5

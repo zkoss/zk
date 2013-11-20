@@ -15,7 +15,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <language-addon>
 	<!-- The name of this addon. It must be unique -->
-	<addon-name>databind</addon-name>
+	<addon-name>zkplus</addon-name>
 	<!-- Specifies what other addon this depends
 	-->
 	<depends>zkbind,zkex,zkmax</depends>
