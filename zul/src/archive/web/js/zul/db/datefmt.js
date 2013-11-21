@@ -205,7 +205,8 @@ zk.fmt.Date = {
 			hasHour1 = hasAM && (fmt.indexOf('h') > -1 || fmt.indexOf('K') > -1),
 			isAM,
 			ts = _parseTextToArray(txt, fmt),
-			isNumber = !isNaN(txt);
+			isNumber = !isNaN(txt),
+			regexp = /.*\D.*/;
 
 		if (!ts || !ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
@@ -221,12 +222,12 @@ zk.fmt.Date = {
 					var c2 = fmt.charAt(k);
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 				}
-				
-				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
+				// ZK-2026: Fix for 'MM.yyyy' issue
+				var token = (nosep && isNumber) ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
-					// ZK-1985:	token's length is less than the expected if has the parse error  
-					if (token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
+					if (strict && token && (token.length < len))
 						return;
 					
 					if (nosep) {
@@ -237,8 +238,8 @@ zk.fmt.Date = {
 						}
 					}
 					
-					// ZK-1985:	token contains non-digital word if has the parse error
-					if (token && token.match(/.*\D.*/))
+					// ZK-1985:	Determine if token contains non-digital word when strict is true.
+					if (strict && token && regexp.test(token))
 						return;
 
 					if (!isNaN(nv = _parseInt(token))) {
@@ -301,15 +302,15 @@ zk.fmt.Date = {
 						_parseToken(token, ts, --i, len);
 					break;
 				case 'd':
-					// ZK-1985:	token's length is less than expected if has the parse error
-					if (token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than expected when strict is true.
+					if (strict && token && (token.length < len))
 						return;
 					
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 					
-					// ZK-1985:	token contains non-digital word if has the parse error
-					if (token && token.match(/.*\D.*/))
+					// ZK-1985:	Determine if token contains non-digital word when strict is true.
+					if (strict && token && regexp.test(token))
 						return;
 					
 					if (!isNaN(nv = _parseInt(token))) {
@@ -323,8 +324,8 @@ zk.fmt.Date = {
 				case 'h':
 				case 'K':
 				case 'k':
-					// ZK-1985:	token's length is less than expected if has the parse error
-					if (token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
+					if (strict && token && (token.length < len))
 						return;
 					
 					if (hasHour1 ? (cc == 'H' || cc == 'k'): (cc == 'h' || cc == 'K'))
@@ -332,8 +333,8 @@ zk.fmt.Date = {
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 					
-					// ZK-1985:	token contains non-digital word if has the parse error
-					if (token && token.match(/.*\D.*/))
+					// ZK-1985:	Determine if token contains non-digital word when strict is true.
+					if (strict && token && regexp.test(token))
 						return;
 					
 					if (!isNaN(nv = _parseInt(token)))
@@ -343,15 +344,15 @@ zk.fmt.Date = {
 				case 'm':
 				case 's':
 				case 'S':
-					// ZK-1985:	token's length is less than expected if has the parse error
-					if (token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
+					if (strict && token && (token.length < len))
 						return;
 					
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 					
-					// ZK-1985:	token contains non-digital word if has the parse error
-					if (token && token.match(/.*\D.*/))
+					// ZK-1985:	Determine if token contains non-digital word when strict is true.
+					if (strict && token && regexp.test(token))
 						return;
 					
 					if (!isNaN(nv = _parseInt(token))) {
