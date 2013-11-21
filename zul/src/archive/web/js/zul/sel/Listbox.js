@@ -68,6 +68,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	groupSelect: false,
 	_scrollbar: null,
+	_firstLoad: true,
 	$define:{
 		emptyMessage: function(msg) {
 			if(this.desktop)
@@ -212,12 +213,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (this._shallScrollIntoView) {
 			var index = this.getSelectedIndex();
 			if (index >= 0) { // B50-ZK-56
-				var si, top = jq(this.$n()).offset().top;
-				for (var it = this.getBodyWidgetIterator(); index-- >= 0;)
-					si = it.next();
-				
-				if (si)
-					this._scrollbar.scrollToElement(si.$n());
+				var si, bar = this._scrollbar;
+				if (bar) {
+					for (var it = this.getBodyWidgetIterator(); index-- >= 0;)
+						si = it.next();
+					
+					if (si)
+						bar.scrollToElement(si.$n());
+				}
 			}
 			// do only once
 			this._shallScrollIntoView = false;
@@ -225,7 +228,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_onRender: function () {
 		this.$supers(Listbox, '_onRender', arguments);
-		this._shallShowScrollbar = true;
+		if (!this._firstLoad)
+			this._shallShowScrollbar = true;
+		
+		this._firstLoad = false;
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {

@@ -12,7 +12,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-var scrollPosition = null;
 var Tree =
 /**
  *  A container which can be used to hold a tabular
@@ -23,7 +22,7 @@ var Tree =
  * <li>onSelect event is sent when user changes the selection.</li>
  * </ol>
  *
- * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree.
+ * <p>Default {@link #getZclass}: z-tree.
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	_scrollbar: null,
@@ -51,10 +50,19 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	refreshBar_: function (showBar) {
 		var bar = this._scrollbar;
 		if (bar) {
+			var scrollPosition;
+			//open/close tree node in paging mold will invalidate
+			//  keep scroll position before sync scrollbar size
+			if (this.inPagingMold() && (this._currentLeft || this._currentTop)) {
+				scrollPosition = {l: this._currentLeft, t: this._currentTop};
+				showBar = true;
+			}
 			bar.syncSize(showBar || this._shallShowScrollbar);
 			this._shallShowScrollbar = false;
-			if (scrollPosition)
-				bar.scrollTo(scrollPosition.x, scrollPosition.y);
+			if (scrollPosition) {
+				bar.scrollTo(scrollPosition.l, scrollPosition.t);
+				scrollPosition = null;
+			}
 			
 			//sync frozen
 			var frozen = this.frozen,

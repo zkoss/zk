@@ -119,10 +119,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			this._initsz();
 		var mesh = this.getMeshWidget();
 		if (mesh) {
-			var $faker = jq(this.$n('hdfaker')),
-				$n = jq(this.$n()),
+			var $n = jq(this.$n()),
+				$faker = jq(this.$n('hdfaker')),
 				w = this.getWidth();
 			if (!this.isVisible()) {
+				$n.css('display', '');
 				$faker.css('display', '');
 				$faker.css('visibility', 'hidden');
 				$faker.css('width', zk.chrome ? '0.1px' : '0');
@@ -131,7 +132,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				$n.css('visibility', 'hidden');
 			} else {
 				$faker.css('visibility', '');
-				$n.css('visibility', '');
 				if (w) {
 					$faker.css('width', w);
 				}
