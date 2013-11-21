@@ -213,12 +213,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (this._shallScrollIntoView) {
 			var index = this.getSelectedIndex();
 			if (index >= 0) { // B50-ZK-56
-				var si, top = jq(this.$n()).offset().top;
-				for (var it = this.getBodyWidgetIterator(); index-- >= 0;)
-					si = it.next();
-				
-				if (si)
-					this._scrollbar.scrollToElement(si.$n());
+				var si, bar = this._scrollbar;
+				if (bar) {
+					for (var it = this.getBodyWidgetIterator(); index-- >= 0;)
+						si = it.next();
+					
+					if (si)
+						bar.scrollToElement(si.$n());
+				}
 			}
 			// do only once
 			this._shallScrollIntoView = false;
