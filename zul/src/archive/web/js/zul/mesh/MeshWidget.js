@@ -1348,7 +1348,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			// sizedByContent shall not override column width
 			if (hwgt._width || wds[i] == 0) {
 				if (wds[i] == 0) {
-					hdcol.style.width = bdcol.style.width = '0px';
+					hdcol.style.width = zk.chrome ? '0.1px' : '0px';
+					bdcol.style.width = '0px';
 					if (ftcol)
 						ftcol.style.width = '0px';
 				}

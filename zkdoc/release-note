@@ -27,6 +27,7 @@ ZK 7.0.0
   ZK-1856: Tree support frozen as grid
   ZK-2007: Popup support toggle type
   ZK-1845: Tabbox - enhance performance with dynamic tabs using MVVM
+  ZK-1989: A way to reduce zkbind tracker node memory consumption.
   
 * Bugs
   ZK-1683: endless loop AU-loop in Grid, on Render Exception
@@ -42,6 +43,7 @@ ZK 7.0.0
   ZK-1902: zk.xml theme-provider-class not invoked
   ZK-2020: Textbox became unmodifiable in IE11 when invalidated
   ZK-2027: Tabbox model binding (close tab issue)
+  ZK-2026: Datebox always displays the current year when blurred if format = "MM.yyyy"
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
