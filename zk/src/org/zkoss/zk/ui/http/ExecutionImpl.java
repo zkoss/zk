@@ -316,7 +316,8 @@ public class ExecutionImpl extends AbstractExecution {
 	public void setVoided(boolean voided) {
 		Object created = getAttribute(org.zkoss.zk.ui.impl.Attributes.PAGE_CREATED);
 		if (created instanceof Boolean && ((Boolean)created).booleanValue())
-			throw new IllegalStateException("The page has been created, so the execution cannot be voided!");
+			if (!getDesktop().getComponents().isEmpty())
+				throw new IllegalStateException("The page has been created, so the execution cannot be voided!");
 		_voided = voided;
 	}
 
