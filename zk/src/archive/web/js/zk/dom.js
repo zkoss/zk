@@ -752,6 +752,10 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 					elst.display = "none";
 					elst.visibility = oldvisi;
 				}
+				if (zk.ie11_) {// fix ie11 float number issue for ZTL B50-3298164
+					b[0] = Math.ceil(b[0]);
+					b[1] = Math.ceil(b[1]);
+				}
 				return b;
 				// IE adds the HTML element's border, by default it is medium which is 2px
 				// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
