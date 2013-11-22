@@ -144,6 +144,9 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		for (var i = childs.length; i-- ;)
 			totalWidth += childs[i].offsetWidth;
 
+		if (zk.ie) // child width (text node) is not integer in IE 
+			totalWidth += childs.length;
+
 		var fixedSize = nodeWidth -
 						zk(this.$n('left')).offsetWidth() -
 						zk(this.$n('right')).offsetWidth();
