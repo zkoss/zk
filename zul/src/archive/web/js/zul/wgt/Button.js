@@ -120,12 +120,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    	}
 		    }
 		],
+		/*	 B70-ZK-2031: Use LabelImageWidget's define instead
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			var n = this.getImageNode();
 			if (n) 
 				n.src = v || '';
-		},
+		},*/
 		/** Returns the tab order of this component.
 		 * <p>Default: -1 (means the same as browser's default).
 		 * @return int

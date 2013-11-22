@@ -45,6 +45,7 @@ ZK 7.0.0
   ZK-2027: Tabbox model binding (close tab issue)
   ZK-2026: Datebox always displays the current year when blurred if format = "MM.yyyy"
   ZK-2029: Can't see sub-list of navbar component if orient is horizontal
+  ZK-2031: setIimage() doesn't work on Button
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
