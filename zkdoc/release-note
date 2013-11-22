@@ -46,6 +46,7 @@ ZK 7.0.0
   ZK-2026: Datebox always displays the current year when blurred if format = "MM.yyyy"
   ZK-2029: Can't see sub-list of navbar component if orient is horizontal
   ZK-2031: setIimage() doesn't work on Button
+  ZK-2033: Improve Component interface Javadocs to state it is not recommended to implement this interface by the custom component developers
 
 * Upgrade Notes
   + org.zkoss.util.logging.Log class and org.zkoss.util.logging.config.file library-property
