@@ -1,0 +1,14 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenNavVM')">
+	<label value="@bind(vm.message)"/>
+	<navbar id="mbar" orient="vertical" children="@bind(vm.nodes) @template(empty each.children?'navitem':'nav')">
+		<template name="nav" var="node">
+			<nav label="@bind(node.name)" children="@bind(node.children) @template(empty each.children?'navitem':'nav')" iconSclass="z-icon-th-list">
+			</nav>
+		</template>
+		<template name="navitem" var="node">
+			<navitem label="@bind(node.name)" onClick="@command('menuClicked',node=node)" />
+		</template>
+	</navbar>
+	
+	
+</window>
