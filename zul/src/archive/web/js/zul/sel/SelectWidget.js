@@ -1156,7 +1156,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_isAllSelected: function () {
 		var isGroupSelect = this.groupSelect;
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
-			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is true
+			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;
 			if (!w.isDisabled() && !w.isSelected())
