@@ -908,8 +908,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				items.push(w);
 			}
 		}
-		if (items.length)
+		if (items.length) {
+			this._shallFireOnRender = true;
 			this.fire('onRender', {items: items}, {implicit:true});
+		}
 	},
 	onSize: function () {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
