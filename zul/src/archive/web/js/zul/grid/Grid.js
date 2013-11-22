@@ -47,7 +47,6 @@ var Grid =
  */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	_scrollbar: null,
-	_firstLoad: true,
 	$define: {
 		emptyMessage: function(msg) {
 			if(this.desktop)
@@ -229,10 +228,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_onRender: function () {
 		this.$supers(Grid, '_onRender', arguments);
-		if (!this._firstLoad)
+		if (this._shallFireOnRender)
 			this._shallShowScrollbar = true;
-		
-		this._firstLoad = false;
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
