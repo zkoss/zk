@@ -31,31 +31,43 @@ import org.zkoss.zk.au.AuService;
 
 /**
  * An UI component.
- *
- * <p>There are two kind of life-cycles: one is page creations and the other
- * is asynchronous updates.
- *
+ * 
+ * <p>
+ * There are two kind of life-cycles: one is page creations and the other is
+ * asynchronous updates.
+ * 
  * <h3>The Page Creation</h3>
- * <p>The page creation occurs when a page is about to render at the first
- * time. The detailed phases can be found in the devloper's guide.
- *
+ * <p>
+ * The page creation occurs when a page is about to render at the first time.
+ * The detailed phases can be found in the devloper's guide.
+ * 
  * <h3>The Asynchronous Update</h3>
- * <p>The asynchronous update occurs when users does something on the browser,
- * such as changing the content of input, clicking buttons and so on.
- * Such behaviors are packed as requests, queue in the browser, and then
- * send to the server at the proper time. The detailed phases
- * can be found in the developer's guide.
- *
+ * <p>
+ * The asynchronous update occurs when users does something on the browser, such
+ * as changing the content of input, clicking buttons and so on. Such behaviors
+ * are packed as requests, queue in the browser, and then send to the server at
+ * the proper time. The detailed phases can be found in the developer's guide.
+ * 
  * <h3>No Synchronization Required</h3>
- * <p>To simplify the development of components and applications,
- * invocations of methods of components and event listener are all serialized.
- * In other words, application and component developers need not worry
- * synchronization and other thread issues (unless you are developing
- * background thread to handle long operations).
- *
- * <p>It also implies a limitation that you cannot access components
- * belonging to other desktops when processing an event.
- *
+ * <p>
+ * To simplify the development of components and applications, invocations of
+ * methods of components and event listener are all serialized. In other words,
+ * application and component developers need not worry synchronization and other
+ * thread issues (unless you are developing background thread to handle long
+ * operations).
+ * 
+ * <p>
+ * It also implies a limitation that you cannot access components belonging to
+ * other desktops when processing an event.
+ * 
+ * <h3>Develop Component</h3>
+ * <p>
+ * It is not recommended to implements this interface while developing custom
+ * component. Instead is is recommended to extend from {@link AbstractComponent}
+ * or its specialized base component classes. Refer to <a href=
+ * "http://books.zkoss.org/wiki/ZK_Component_Development_Essentials/Creating_a_simple_ZK_Component"
+ * >Creating a simple ZK Component</a>
+ * 
  * @author tomyeh
  */
 public interface Component extends Scope, java.io.Serializable, Cloneable {
