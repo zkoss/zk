@@ -31,6 +31,7 @@ ZK 6.5.5
   ZK-2022: appending a component after its removal fails to initialize bindings
   ZK-2025: Extends ZK component with lang-addon.xml file, zkbind feature doesn't work
   ZK-2028: When deleted one selected item in chosenbox with ListSubModel, it would remove all the selection
+  ZK-2019: Chosenbox work incorrectly when using ListSubModel and Comparator
 
   --------
 ZK 6.5.4
