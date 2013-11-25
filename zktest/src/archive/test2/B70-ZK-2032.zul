@@ -1,0 +1,19 @@
+<window border="normal" width="300px" title="Caption and Errorbox">
+	<label multiline="true">
+	  1. Click on the textbox.
+	  2. Blur the textbox without typing anything.
+	  3. It will show an errorbox and a popup groupbox.
+	  4. The groupbox's caption should appear in the right position (in the line).
+	</label>
+	<textbox id="tb" hflex="1" constraint="no empty" onBlur='pp.open(tb, "after_end");'/>
+	<popup id="pp">
+		<groupbox >
+			<caption>
+				<label>
+				Caption Caption Caption Caption Caption Caption 
+				</label>
+			</caption>
+			<label>Content Content Content Content Content</label>
+		</groupbox>
+	</popup>
+</window>
