@@ -93,7 +93,7 @@ After loading the page, you should not see any error.
 		</columnlayout>
 	</panelchildren>
 	<toolbar>
-		<menubar id="menubar" width="200px">
+		<menubar id="menubar" width="210px">
 			<menu label="Project" src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
 				<menupopup>
 					<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"
