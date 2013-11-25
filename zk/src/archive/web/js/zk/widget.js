@@ -1814,12 +1814,12 @@ wgt.$f().main.setTitle("foo");
 						//after setDomVisible_ and before onShow (Box depends on it)
 					
 					this.fire('onShow');
-					if (!zk.animating())
-						zUtl.fireShown(this);
+					// B70-ZK-2032: Fire shown after animate
+					zk.afterAnimate(zUtl.fireShown(this));
 				} else {
 					this.fire('onHide');
-					if (!zk.animating())
-						zWatch.fireDown('onHide', this);
+					// B70-ZK-2032: Fire down onHide after animate
+					zk.afterAnimate(zWatch.fireDown('onHide', this));
 
 					for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
 						var w = _floatings[j].widget;

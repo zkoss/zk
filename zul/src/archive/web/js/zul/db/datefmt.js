@@ -205,8 +205,9 @@ zk.fmt.Date = {
 			hasHour1 = hasAM && (fmt.indexOf('h') > -1 || fmt.indexOf('K') > -1),
 			isAM,
 			ts = _parseTextToArray(txt, fmt),
-			isNumber = !isNaN(txt),
-			regexp = /.*\D.*/;
+			regexp = /.*\D.*/,
+			// ZK-2026: Don't use isNaN(), it will treat float as number.
+			isNumber = !regexp.test(txt);
 
 		if (!ts || !ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
@@ -222,8 +223,7 @@ zk.fmt.Date = {
 					var c2 = fmt.charAt(k);
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 				}
-				// ZK-2026: Fix for 'MM.yyyy' issue
-				var token = (nosep && isNumber) ? ts[0].substring(j - offs, k - offs) : ts[i++];
+				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
 					// ZK-1985:	Determine if token's length is less than the expected when strict is true.

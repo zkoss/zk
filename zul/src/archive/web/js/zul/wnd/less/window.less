@@ -36,11 +36,13 @@
 	}
 
 	&-icon {
+		font-size: @fontSizeLarge;
 		color: @iconColor;
-		display: block;
+		.displaySize(block, @baseButtonWidth + 4, @baseButtonHeight);
 		border: 1px solid @baseBorderColor;
 		.borderRadius(@baseBorderRadius);
 		margin: auto 1px;
+		line-height: @baseButtonHeight;
 		<c:if test="${zk.ie != 8}">
 			.verGradient(@baseGradientStart, @baseGradientEnd);
 		</c:if>
@@ -55,12 +57,6 @@
 			.resetGradient();
 			background: @hoverBackgroundColor;
 		}
-	}
-
-	&-maximize, &-minimize, &-close {
-		font-size: @fontSizeLarge;
-		.size(@baseButtonWidth + 4, @baseButtonHeight);
-		line-height: @baseButtonHeight;
 	}
 
 	&-close {
