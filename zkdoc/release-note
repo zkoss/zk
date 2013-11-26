@@ -44,7 +44,6 @@ ZK 7.0.0
   ZK-2020: Textbox became unmodifiable in IE11 when invalidated
   ZK-2027: Tabbox model binding (close tab issue)
   ZK-2026: Datebox always displays the current year when blurred if format = "MM.yyyy"
-  ZK-2029: Can't see sub-list of navbar component if orient is horizontal
   ZK-2031: setIimage() doesn't work on Button
   ZK-2033: Improve Component interface Javadocs to state it is not recommended to implement this interface by the custom component developers
   ZK-2032: Caption in Groupbox appear in wrong position when showing with constraint error
