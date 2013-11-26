@@ -242,7 +242,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					this.$s('image') + '" align="absmiddle" />';
 			}
 		}
-		return img + (this.isCheckmark() ? icon : '') + ' ' + label;
+		return img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + ' ' + label;
 	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar

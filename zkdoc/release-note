@@ -1,6 +1,6 @@
   --------
 ZK 7.0.0
-
+Nov 26, 2013
 * Features
   ZK-1898: Tree support render on demand
   ZK-1813: LabelImageElement support icon font CSS class instead of Image
