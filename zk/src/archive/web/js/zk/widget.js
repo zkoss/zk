@@ -1815,11 +1815,11 @@ wgt.$f().main.setTitle("foo");
 					
 					this.fire('onShow');
 					// B70-ZK-2032: Fire shown after animate
-					zk.afterAnimate(zUtl.fireShown(this));
+					zk.afterAnimate(function() {zUtl.fireShown(this);}, -1);
 				} else {
 					this.fire('onHide');
 					// B70-ZK-2032: Fire down onHide after animate
-					zk.afterAnimate(zWatch.fireDown('onHide', this));
+					zk.afterAnimate(function() {zWatch.fireDown('onHide', this);}, -1);
 
 					for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
 						var w = _floatings[j].widget;
