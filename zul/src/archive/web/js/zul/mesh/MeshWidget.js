@@ -135,7 +135,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					maxj = i;
 				} else if (zk.ff > 4 || zk.ie > 8) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 					++wds[i];
-				}
+				
 				if (zk.ie < 8) // B50-ZK-206
 					wds[i] += 2;
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
