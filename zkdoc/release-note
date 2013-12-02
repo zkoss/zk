@@ -1,4 +1,9 @@
   --------
+ZK 7.0.1
+* Features
+* Bugs
+  ZK-2042: Button's autodisable="self" will cause to stop the form request processing
+  --------
 ZK 7.0.0
 Nov 26, 2013
 * Features

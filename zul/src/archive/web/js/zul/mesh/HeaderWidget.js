@@ -127,6 +127,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				$faker.css('display', '');
 				$faker.css('visibility', 'hidden');
 				$faker.css('width', zk.chrome ? '0.1px' : '0');
+				
+				$n.css('display', '');
+				$n.css('visibility', 'hidden');
 			} else {
 				$faker.css('visibility', '');
 				if (w) {
