@@ -177,7 +177,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    	return v;
 		    }, 
 		    function (v, opts) {
-		    	if (this._mold == "os") {
+		    	var mold = this._mold;
+		    	if (mold == "os" || mold == "default") {
 		    		var n = this.$n(),
 						zclass = this.getZclass(),
 						self = this,
@@ -187,19 +188,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    					jq(n)[updateClass](zclass + "-disd");
 		    				}
 		    			};
-		    		if (zclass) {
-		    			// ZK-2042: delay the setting when the button's type is submit
-		    			if (this._type == 'submit') 
-		    				setTimeout(doDisable, 50);
-		    			else
-		    				doDisable();
-		    		}
-		    	} else if (this.desktop) {
-	    			var msec = opts && opts.skip ? -1 : 0;
-	    			
-	    			// ZK-2042: delay the setting when the button's type is submit
-	    			this.rerender(this._type == 'submit' ? 50 : msec); //bind and unbind required (because of many CSS classes to update)
-		    	}
+		    		// ZK-2042: delay the setting when the button's type is submit
+		    		if (this._type == 'submit') 
+		    			setTimeout(doDisable, 50);
+		    		else
+		    			doDisable();
+		    	} else if (this.desktop)
+	    			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind required (because of many CSS classes to update)
+		    	
 		    }
 		],
 		image: function (v) {
