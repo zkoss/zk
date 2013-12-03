@@ -179,9 +179,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    function (v, opts) {
 		    	if (this._mold == "os") {
 		    		var n = this.$n(),
-						zclass = this.getZclass(), 
+						zclass = this.getZclass(),
+						self = this,
 						doDisable = function() {
-		    				if (this.desktop) {
+		    				if (self.desktop) {
 		    					var updateClass = (n.disabled = v) ? "addClass": "removeClass";
 		    					jq(n)[updateClass](zclass + "-disd");
 		    				}
