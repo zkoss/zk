@@ -115,13 +115,18 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    	return v;
 		    }, 
 		    function (v) {
-		    	if (this.desktop) {
-		    		// ZK-2042: delay the setting when the button's type is submit 
-		    		if(this._type == 'submit')
-		    			setTimeout(function() { this.$n().disabled = v; }, 50);
-		    		else
-		    			this.$n().disabled = v;	
-		    	}
+		    	var self = this,
+		    		doDisable = function() { 
+			    		if (self.desktop) {
+			    			self.$n().disabled = v; 
+			    		}
+			    	};
+		    	
+		    	// ZK-2042: delay the setting when the button's type is submit 
+		    	if (this._type == 'submit')
+		    		setTimeout(doDisable, 50);
+		    	else
+		    		doDisable();
 		    }
 		],
 		/*	 B70-ZK-2031: Use LabelImageWidget's define instead
