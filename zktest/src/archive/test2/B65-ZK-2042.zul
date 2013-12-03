@@ -1,0 +1,10 @@
+<window xmlns:n="native">
+	<div>click each 'submit', then should show john</div>
+	<n:form action="" method="get">
+		<textbox name="name" value="John" />
+		<button mold="os" label="submit" type="submit" autodisable="self" />
+		<button mold="trendy" label="submit" type="submit" autodisable="self" />
+		<button mold="default" label="submit" type="submit" autodisable="self" />
+	</n:form>
+	<div if="${param.name != null}">${param.name}</div>
+</window>
