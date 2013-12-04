@@ -475,8 +475,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var zcls = this.getZclass();
 			jq(this.$n('box')).addClass(zcls + "-clk")
 				.addClass(zcls + "-over")
-			if (!(zk.ie < 11) || !this._uplder) zk(this.$n('btn')).focus(30);
-				//change focus will disable upload in IE
+			if (!zk.ie || !this._uplder) zk(this.$n('btn')).focus(30);
+				// ZK-2044: change focus will disable upload in IE
 		}
 		zk.mouseCapture = this; //capture mouse up
 		this.$supers('doMouseDown_', arguments);

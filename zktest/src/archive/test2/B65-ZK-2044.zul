@@ -1,0 +1,11 @@
+<?page title="IE11 Upload Issue" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window title="Click 'select a file', then should show upload dialog in ie11" border="normal" width="200px">
+         <button upload="true" label="Select a File"> 
+             <attribute name="onUpload"><![CDATA[
+		 Object media = event.getMedia();
+		 alert("file uploaded");
+             ]]></attribute>
+         </button>
+    </window>
+</zk>
