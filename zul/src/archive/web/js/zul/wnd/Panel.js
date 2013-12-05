@@ -859,9 +859,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			var node = this.$n(),
 				oldinfo;
 
-			// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 10, 11
+			// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE > 9
 			// A workaround is to hide the iframe before remove
-			if (zk.ie10_ || zk.ie11_) {
+			if (zk.ie > 9) {
 				var $jq = jq(this.$n()).find('iframe');
 				if ($jq.length)
 					$jq.hide().remove();
