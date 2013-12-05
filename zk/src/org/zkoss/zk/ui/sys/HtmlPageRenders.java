@@ -1051,7 +1051,10 @@ public class HtmlPageRenders {
 		boolean included) {
 			this.temp = temp;
 			this.perm = perm;
-			this.crawlable = crawlable;
+			if (crawlable && WebApps.getFeature("ee")) {
+				this.crawlable = crawlable;
+			} else
+				this.crawlable = false;
 			this.included = included;
 		}
 	}

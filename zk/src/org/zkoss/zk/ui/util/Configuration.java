@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.RichletConfig;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadInit;
@@ -1629,10 +1630,14 @@ public class Configuration {
 	}
 	/** Sets whether this Web application is crawlable.
 	 * Make a Web application that allows search engines to crawl the application.
-	 * Notice that there is some performance loss for huge web pages.
+	 * Notice that there is some performance loss for huge web pages. (EE only)
 	 * @since 5.0.0
 	 */
 	public void setCrawlable(boolean crawlable) {
+		if (crawlable && !WebApps.getFeature("ee")) {
+			log.warn("The crawlable setting is for EE edtion only!");
+			return;
+		}
 		_crawlable = crawlable;
 	}
 
