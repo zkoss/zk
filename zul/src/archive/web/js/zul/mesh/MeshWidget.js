@@ -889,9 +889,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var t = zul.mesh.Scrollbar.getScrollPosV(this),
 			l = ebody.scrollLeft,
 			scrolled = (t != this._currentTop || l != this._currentLeft);
-		if (scrolled && 
-				// Bug ZK-353 ignore in rod
-				!this._listbox$rod && !this._grid$rod) {
+		
+		// ZK-2046: should sync currentTop in rod mode see also Bug ZK-353
+		if (scrolled /* && !this._listbox$rod && !this._grid$rod*/) {
 			this._currentTop = t; 
 		}
 		
@@ -905,9 +905,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		if (scrolled)
 			this._fireOnScrollPos();
-		
-		// ZK-2046: should sync currentTop
-		this._currentTop = this.ebody.scrollTop;
 	},
 	_timeoutId: null,
 	_fireOnScrollPos: function (time) { //overriden in zkmax
