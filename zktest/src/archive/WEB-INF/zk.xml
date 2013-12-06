@@ -613,4 +613,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	 -->
+    <listener>
+        <description>Monitor the statistic</description>
+        <listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
+    </listener>
 </zk>
