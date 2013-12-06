@@ -1,0 +1,7 @@
+<window title="Remove desktop when refresh browser" border="normal">
+   <label multiline="true">
+     1. Refresh the browser.
+     2. The Active Desktops and should not exceed 2 per browser,
+     3. Active Desktops: ${desktop.webApp.configuration.monitor.activeDesktopCount}.
+   </label>
+</window>
