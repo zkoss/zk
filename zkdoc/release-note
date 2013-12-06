@@ -32,8 +32,9 @@ ZK 6.5.5
   ZK-2025: Extends ZK component with lang-addon.xml file, zkbind feature doesn't work
   ZK-2042: Button's autodisable="self" will cause to stop the form request processing
   ZK-2044: Upload button does not always display the file selection dialog on IE11
-  ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 11  
+  ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 11
   ZK-2051: Chrome rmDesktop not working reliably, causing a memory leak in Session
+  ZK-2046: Scroll position is reset to top if resize column of a grid with rod  
 
   --------
 ZK 6.5.4
