@@ -1,3 +1,10 @@
+ZK 5.0.14
+* Features
+  
+* Bugs
+  ZK-2046: Scroll position is reset to top if resize column of a grid with rod
+
+	--------
 ZK 5.0.13
 Oct 08, 2013
 * Features
