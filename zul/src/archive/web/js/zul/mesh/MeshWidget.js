@@ -1031,6 +1031,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 	},
 	onSize: function () {
+		
+		// ZK-2046: should sync currentTop
+		this._currentTop = this.ebody.scrollTop;
+		
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
