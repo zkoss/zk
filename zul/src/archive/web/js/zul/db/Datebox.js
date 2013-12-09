@@ -302,7 +302,20 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-
+	onVParent: function() {
+		this._fixedVParent();
+	},
+	_fixedVParent: function() {
+		// ZK-1904: fix the position of stackup
+		var pp = this._pop;
+		if (pp) 
+			if ((sdw = pp._shadow) && sdw.stackup) {
+				var $stackup = jq(stackup = sdw.stackup);
+				$stackup.remove();
+				jq(stackup).insertBefore(this.$n('pp'));
+			}
+		
+	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
@@ -576,13 +589,12 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	setLocalizedSymbols: function (symbols) {
 		this._localizedSymbols = symbols;
 	},
-	//B65-ZK-1904: Does not need to sync shadow in rerender, it syncs in _reposition function
-	/*
+	// ZK-2047: should sync shadow when shiftView
 	rerender: function () {
 		this.$supers('rerender', arguments);
 		if (this.desktop) this.syncShadow();
 	},
-	*/
+	
 	close: function (silent) {
 		var db = this.parent,
 			pp = db.$n("pp");
@@ -598,6 +610,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.className = zcls + "-pp";
 
 		jq(pp).zk.undoVParent();
+		zWatch.fireDown("onVParent", this.parent);
 		db.setFloating_(false);
 
 		var btn = this.$n("btn");
@@ -636,6 +649,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
+		zWatch.fireDown("onVParent", this.parent);
 
 		if (pp.offsetHeight > 200) {
 			//pp.style.height = "200px"; commented by the bug #2796461

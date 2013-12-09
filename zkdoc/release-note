@@ -35,6 +35,7 @@ ZK 6.5.5
   ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 11
   ZK-2051: Chrome rmDesktop not working reliably, causing a memory leak in Session
   ZK-2046: Scroll position is reset to top if resize column of a grid with rod  
+  ZK-2047: IE Datebox calendar overlapping pdf problem
 
   --------
 ZK 6.5.4

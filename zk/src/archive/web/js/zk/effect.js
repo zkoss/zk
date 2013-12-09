@@ -39,6 +39,10 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = zk.eff._skuOpts(opts);
 		this.node = element;
+		
+		// ZK-1904: listen onVParent
+		if (this.wgt.onVParent)
+			zWatch.listen({ onVParent: this.wgt });
 	},
 	destroy: function () {
 		jq(this.stackup).remove();
@@ -77,7 +81,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.top = jq.px(t);
 			st.width = jq.px0(w);
 			st.height = jq.px0(h);
-			st.zIndex = zk.parseInt($node.css("zIndex"));
+			st.zIndex = zk.parseInt($node.css("zIndex")); 
 			st.display = "block";
 		}
 		return true;
@@ -440,12 +444,12 @@ jq(function() {
 			_useSKU = false;
 		else {
 			_callback = zk.safari || zk.opera;
-			_useSKU = !_callback || (zk.ie < 11); // ZK-1748 should include all ie
+			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)
-		_useSKU = zk.ie < 11; // ZK-1748 should include all ie
+		_useSKU = zk.ie; // ZK-1748 should include all ie
 
-	if (_callback) {
+	 // if (_callback) { all browser should support autohide
 		var w2hide = function (name) {
 			if (name == 'onSize' || name == 'onMove'
 			|| name == 'onShow' || name == 'onHide'
@@ -463,7 +467,7 @@ jq(function() {
 			}
 		});
 		zWatch.listen({onFloatUp: ['', _onFloatUp]});
-	}
+	// }
 }); //jq
 
 })();
