@@ -196,6 +196,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 		// check if org belongs to the popup
 		for (var floatFound, wgt = org; wgt; wgt = wgt.parent) {
+			//F70-Zk-2049:check widget popup and menupopup have same id then return;
+			if (this._equalsPopId(wgt._popup) || this._equalsPopId(wgt._context))
+				return;
 			if (wgt == this || (wgt.menupopup == this && !this._shallClose)) {
 				if (!floatFound)
 					this.setTopmost();

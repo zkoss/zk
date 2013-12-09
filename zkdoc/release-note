@@ -1,6 +1,7 @@
   --------
 ZK 7.0.1
 * Features
+  ZK-2049: Menupopup support toggle type
 * Bugs
   ZK-2042: Button's autodisable="self" will cause to stop the form request processing  
   --------
