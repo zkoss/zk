@@ -302,7 +302,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
@@ -576,13 +575,12 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	setLocalizedSymbols: function (symbols) {
 		this._localizedSymbols = symbols;
 	},
-	//B65-ZK-1904: Does not need to sync shadow in rerender, it syncs in _reposition function
-	/*
+	// ZK-2047: should sync shadow when shiftView
 	rerender: function () {
 		this.$supers('rerender', arguments);
 		if (this.desktop) this.syncShadow();
 	},
-	*/
+	
 	close: function (silent) {
 		var db = this.parent,
 			pp = db.$n("pp");
@@ -656,8 +654,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		zk(pp).position(inp, "after_start");
 		delete db._shortcut;
 		
+		var self = this;
 		setTimeout(function() {
 			_reposition(db, silent);
+			zWatch.fireDown('onVParent', self.parent.$n('pp'), { shadow: self._shadow });
 		}, 150);
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
