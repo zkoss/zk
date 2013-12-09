@@ -1,0 +1,262 @@
+<window sclass="ie8" title="IE8 Only" border="normal">
+	<label multiline="true">
+		1. Select the checkmark in the listhead.
+		2. All the listitem should be selected.
+		3. Scroll to the bottom, all the checkmark should not out of position.
+	</label>
+	<listbox mold="paging" autopaging="true" multiple="true" checkmark="true" height="780px">
+    <custom-attributes org.zkoss.zul.listbox.rod="false"/>
+		<listhead>
+			<listheader label="aaa"></listheader>
+			<listheader label="aaa"></listheader>
+			<listheader label="aaa"></listheader>
+			<listheader label="aaa"></listheader>
+		</listhead>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+			<listcell label="askdjfhk"></listcell>
+		</listitem>
+	</listbox>
+</window>
