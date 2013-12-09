@@ -832,7 +832,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		
 		// ZK-2046: should sync currentTop in rod mode see also Bug ZK-353
-		if (scrolled /* && !this._listbox$rod && !this._grid$rod*/) {
+		if (scrolled /* && !this._listbox$rod && !this._grid$rod*/)
 			this._currentTop = t;
 
 		if (scrolled) // always sync for B30-1737660.zul
