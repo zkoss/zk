@@ -4504,8 +4504,9 @@ _doFooSelect: function (evt) {
 	 * at the document level.
 	 * @param zk.Widget wgt the widget that receives the mouse-down event
 	 * @param boolean noFocusChange whether zk.currentFocus shall be changed to wgt. 
+	 * @param int which the button number that was pressed.
 	 */
-	mimicMouseDown_: function (wgt, noFocusChange) { //called by mount
+	mimicMouseDown_: function (wgt, noFocusChange, which) { //called by mount
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;
@@ -4522,8 +4523,8 @@ _doFooSelect: function (evt) {
 					//turn it off later since onBlur_ needs it
 			}
 
-			if (wgt)
-				zWatch.fire('onFloatUp', wgt); //notify all
+			if (wgt) // F70-ZK-2007: Add the button number information.
+				zWatch.fire('onFloatUp', wgt, {triggerByClick: which}); //notify all
 			else
 				for (var dtid in zk.Desktop.all)
 					zWatch.fire('onFloatUp', zk.Desktop.all[dtid]); //notify all

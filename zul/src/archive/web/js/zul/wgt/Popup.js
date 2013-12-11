@@ -96,9 +96,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// should keep openInfo each time,
 		// maybe have to reposition in onResponse if the child changed with onOpen event,
 		this._openInfo = arguments;
+		
+		//F70-ZK-2007: Check if it is toggle type.
+		this._shallToggle = opts.type == 'toggle';
 
 		$n.css({position: 'absolute'}).zk.makeVParent();
-		zWatch.fireDown('onVParent', this);
+		
+		// F70-ZK-2007: Fire to all the widgets that listen onVParent.
+		zWatch.fire('onVParent', this);
 
 		if (posInfo)
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
@@ -231,6 +236,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	close: function (opts) {
 		if (this._stackup)
 			this._stackup.style.display = 'none';
+		// F70-ZK-2007: Clear toggle type.
+		this._shallToggle = false;
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
 	/** The effect for closing the popup. Override this function to provide
@@ -263,17 +270,24 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		//remove extra CSS class
 		jq(node).removeClass(this.$s('open'));
 	},
-	onFloatUp: function(ctl){
+	onFloatUp: function(ctl, opts){
+		if (!this.isVisible()) 
+			return;
+		var openInfo = this._openInfo,
+			length = ctl.args.length;
+		
+		// F70-ZK-2007: If popup belongs to widget's ascendant then return.
+		if (this._shallToggle && openInfo && opts && (
+				opts.triggerByClick === undefined || (
+				openInfo[3].which == opts.triggerByClick && zUtl.isAncestor(this._openInfo[0], ctl.origin)))) {
+				return;
+		}
+		this._doFloatUp(ctl);
+	},
+	_doFloatUp: function (ctl) {
 		if (!this.isVisible()) 
 			return;
 		var wgt = ctl.origin;
-		
-		// F70-ZK-2007: If popup belongs to widget's ascendant then return
-		for (w = wgt; w; w= w.parent) {
-			if (this._equalsPopId(w._popup) || this._equalsPopId(w._context))
-				return;
-		}
-		
 		for (var floatFound; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound) 
@@ -286,33 +300,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		this.close({sendOnOpen:true});
 	},
-	// F70-ZK-2007: Check if widget's popup id equals to popup
-	_equalsPopId: function(params) {
-		if (!params)
-			return false;
-		// parse popup id from params 
-		var index = params.indexOf(','),
-			start = params.indexOf('='),
-			p = params,
-			id;
-		if (start != -1)
-			p = params.substring(0, params.substring(0, start).lastIndexOf(','));
-		
-		if (index != -1) {
-			id = p.substring(0, index).trim();
-		} else {
-			id = params.trim();
-		}
-		// If param id is 'uuid(an_uuid)', when compare it with uuid
-		if (id.startsWith('uuid(') && id.endsWith(')')) {
-			return this.uuid == id.substring(5, id.length - 1);
-		} else {
-			return this.id == id;
-		}
-	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);
-		zWatch.listen({onFloatUp: this, onShow: this});
+		zWatch.listen({onFloatUp: this, onShow: this, onVParent: [this, this._doFloatUp]});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -323,7 +313,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		if (this._openInfo)
 			this._openInfo = null;
-		zWatch.unlisten({onFloatUp: this, onShow: this});
+		this._shallToggle = null;
+		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: [this, this._doFloatUp]});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
