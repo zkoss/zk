@@ -1,0 +1,21 @@
+<window>
+<div>
+1. run the attached example
+2. open the calendar widget above the pdf (left side)
+3. click the year or month to change the view in the calendar popup
+-> the calendar popup gets hidden below the pdf in the iframe
+</div>
+	<hlayout>
+		<vlayout>
+			<datebox></datebox>
+			<textbox></textbox>
+			<iframe height="500px" width="500px" src="B1896797.pdf"></iframe>
+		</vlayout>
+		<vlayout>
+			<datebox></datebox>
+			<textbox></textbox>
+			<iframe height="500px" width="500px" src=".">
+			</iframe>
+		</vlayout>
+	</hlayout>
+</window>

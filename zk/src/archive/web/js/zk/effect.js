@@ -29,7 +29,15 @@ zk.eff = {
 	_skuOpts: function (opts) {
 		return zk.$default(opts,
 			_defSKUOpts || (_defSKUOpts = {stackup: zk.eff.shallStackup()}));
-	}
+	},
+	// ZK-1904: stackup should be moved from wgt to document.body
+	_onVParent: function(evt, opts) {
+		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) { 
+			var $stk = jq(stackup);
+			if ($stk.parent()[0] != document.body);
+				$stk.insertBefore(sdw.node);
+		}
+	}	
 };
 
 /** The shadow effect.
@@ -39,11 +47,14 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = zk.eff._skuOpts(opts);
 		this.node = element;
+		// ZK-1904: listen onVParent
+		zWatch.listen({ onVParent: [this.node, zk.eff._onVParent] });
 	},
 	destroy: function () {
 		jq(this.stackup).remove();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
 		this.wgt = this.node = this.stackup = null;
+		zWatch.unlisten({ onVParent: [this.node, zk.eff._onVParent] });
 	},
 	hide: function(){
 		jq(this.stackup).hide();
@@ -437,12 +448,12 @@ jq(function() {
 			_useSKU = false;
 		else {
 			_callback = zk.webkit || zk.opera;
-			_useSKU = !_callback || zk.ie < 11; // ZK-1748 should include all ie
+			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)
-		_useSKU = zk.ie < 11; // ZK-1748 should include all ie
+		_useSKU = zk.ie; // ZK-1748 should include all ie
 
-	if (_callback) {
+	 // if (_callback) { all browser should support autohide
 		var w2hide = function (name) {
 			if (name == 'onSize' || name == 'onMove'
 			|| name == 'onShow' || name == 'onHide'
@@ -460,7 +471,7 @@ jq(function() {
 			}
 		});
 		zWatch.listen({onFloatUp: ['', _onFloatUp]});
-	}
+	// }
 }); //jq
 
 })();
