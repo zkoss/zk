@@ -1,13 +1,59 @@
-<window title="Toggle Popup" border="normal" width="300px" height="300px">
-	<vlayout>
-		<button label="Left click me" popup="pp, position=after_end, type=toggle"/>
-		<button label="Right click me" context="ct, position=after_end, type=toggle"/>
-		Click the button will open the popup, click again it will close.
-	</vlayout>
-	<popup id="pp">
-		<label value="I am Pop."/>
+<window title="Toggle Popup" border="normal" width="500px" height="300px">
+	<label multiline="true">
+	1. Right click Item will open the context menu, click again it will close.
+	2. Left click Item1 will open the popup, click again it will close.
+	3. Right click Item2 will open the context menu, click again it will close.
+	</label>
+	<tree context="tc, type=toggle">
+			<treecols sizable="false">
+				<treecol/>
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item"/>
+					</treerow>
+					<treechildren>
+						<treeitem popup="mp, type=toggle">
+							<treerow>
+								<treecell label="Item1"/>
+							</treerow>
+							<treechildren>
+								<treeitem context="mc, type=toggle">
+									<treerow>
+										<treecell label="Item2"/>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</tree>
+	<popup id="tc">
+		<label value="Tree Context"/>
 	</popup>
-	<popup id="ct">
-		<label value="I am Context."/>
-	</popup>
+	<menupopup id="mp">
+		<menuitem label="Tree1 Popup"/>
+        <menu label="Next">
+	        <menupopup>
+	            <menuitem label="Tree11 Popup"/>
+	            <menuitem label="Tree12 Popup"/>
+	        </menupopup>
+         </menu>
+	</menupopup>
+	<menupopup id="mc">
+		<menuitem label="Tree2 Context"/>
+        <menu label="Next">
+	        <menupopup>
+	            <menuitem label="Tree21 Context"/>
+	            <menuitem label="Tree22 Context"/>
+	        </menupopup>
+         </menu>
+	</menupopup>
 </window>

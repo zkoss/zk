@@ -184,7 +184,22 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('setTopmost', arguments);
 		this.zsync();
 	},
-	onFloatUp: function(ctl) {
+	onFloatUp: function(ctl, opts) {
+		if (!this.isVisible())
+			return;
+		
+		var openInfo = this._openInfo;
+		
+		// F70-ZK-2049: If popup belongs to widget's ascendant then return.
+		if (this._shallToggle && openInfo && opts && (
+				opts.triggerByClick === undefined || (
+				openInfo[3].which == opts.triggerByClick && zUtl.isAncestor(this._openInfo[0], ctl.origin)))) {
+				return;
+		}
+
+		this._doFloatUp(ctl);
+	},
+	_doFloatUp: function (ctl) {
 		if (!this.isVisible())
 			return;
 
@@ -196,9 +211,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 		// check if org belongs to the popup
 		for (var floatFound, wgt = org; wgt; wgt = wgt.parent) {
-			//F70-Zk-2049:check widget popup and menupopup have same id then return;
-			if (this._equalsPopId(wgt._popup) || this._equalsPopId(wgt._context))
-				return;
 			if (wgt == this || (wgt.menupopup == this && !this._shallClose)) {
 				if (!floatFound)
 					this.setTopmost();
