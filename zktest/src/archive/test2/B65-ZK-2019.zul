@@ -1,0 +1,11 @@
+<window title="Chosenbox with comparator in ListSubModel" border="normal" width="400px" height="150px" 
+apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_2019')">
+	<vlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_2019')">
+		<label multiline="true">
+			1. Enter "oh".
+			2. Your will see "John (john@company.org)" option.
+		</label>
+		<separator/>
+		<chosenbox  model="@load(vm.model)" hflex="1"/>
+	</vlayout>
+</window>
