@@ -8,7 +8,8 @@ ZK 7.0.1
   ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE 11  
   ZK-2051: Chrome rmDesktop not working reliably, causing a memory leak in Session
   ZK-2050: Listbox select all formatting
-
+  ZK-2053: Listgroup checkmark wrong display
+  
   --------
 ZK 7.0.0
 Nov 26, 2013
