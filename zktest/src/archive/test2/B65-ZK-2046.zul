@@ -1,0 +1,37 @@
+<zk>
+	<div>
+		1. Resize browser window until the vertical bar appears 
+		2. Scroll down 
+		3. Resize any grid column
+
+		The scroll bar would move to the very top.
+	</div>
+	<zscript><![CDATA[
+	public class MyRowRenderer implements RowRenderer {
+		public void render(Row row, Object obj, int index) {
+			Object[] data = (Object[]) obj;
+			row.appendChild(new Label(data[0].toString()));
+			row.appendChild(new Label(data[1].toString()));
+			row.appendChild(new Label(data[2].toString()));
+		}
+	}
+	ListModelList model = new ListModelList();
+	for (int i = 0; i < 30; i++)
+		model.add(new Object[] { "Row" + i, 0.00, 0.00 });
+	RowRenderer renderer = new MyRowRenderer();
+]]></zscript>
+	<window title="ZK ${desktop.webApp.version}" width="80%"
+		height="100%" closable="true" sizable="true" maximizable="true"
+		border="normal">
+
+		<custom-attributes org.zkoss.zul.grid.rod="true" />
+		<grid id="grid" vflex="true" mold="paging" model="${model}"
+			rowRenderer="${renderer}">
+			<columns sizable="true">
+				<column></column>
+				<column>Col1</column>
+				<column>Col2</column>
+			</columns>
+		</grid>
+	</window>
+</zk>

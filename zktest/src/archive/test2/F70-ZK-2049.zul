@@ -2,7 +2,7 @@
 <zk>
 <window title="F70-ZK-2049" border="normal">
 	<vlayout>
-		Click the button will open the menupopup,click angin it will close.
+		Click the button will open the menupopup, click again it will close.
 		<button label="left click" popup="mp, type=toggle"/>
 		<button label="right click" context="ct, type=toggle"/>
 	</vlayout>

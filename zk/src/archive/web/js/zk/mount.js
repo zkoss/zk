@@ -805,6 +805,13 @@ jq(function() {
 	.unload(function () {
 		zk.unloading = true; //to disable error message
 
+		// B65-ZK-2051: Remove desktop if is IE.
+		if (zk.ie) {
+			rmDesktop();
+		}
+	});
+	
+	function rmDesktop () {
 		//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
 		//to remove the desktop.
 		//Good news: Opera preserves the most udpated content, when BACK to
@@ -818,7 +825,7 @@ jq(function() {
 			} catch (e) { //silent
 			}
 		}
-	});
+	};
 
 	var _oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = function () {
@@ -838,6 +845,11 @@ jq(function() {
 		}
 
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
+		
+		// B65-ZK-2051: Remove desktop if not IE.
+		if (!zk.ie) {
+			rmDesktop();
+		}
 		//Return nothing
 	};
 

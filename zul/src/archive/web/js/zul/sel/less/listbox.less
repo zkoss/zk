@@ -283,7 +283,7 @@
 	&-selected &-checkable {
 		.z-listgroup-icon {
 			.iconFontStyle(@fontSizeMedium, @checkedColor);
-			display: inline-block;
+			display: block;
 			padding-right: 2px;
 			line-height: @baseLineHeight;
 			cursor: pointer;
@@ -382,6 +382,30 @@
 			background: darken(@meshHoverBackgroundColorIE8, 3%);
 		}
 	}
+	.z-listheader,
+	.z-listgroup,
+	.z-listitem {
+		&-checkable {
+			border-width: 0;
+			background: transparent;
+			.z-icon-check {
+				.displaySize(block, 13px, 13px);
+				.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
+				position: relative;
+				top: 2px;
+				left: 2px;
+				background-position: 0 0;
+				&:before {
+					display: none;
+				}
+			}
+		}
+	}
+	.z-listheader-checked .z-icon-check,
+	.z-listgroup-selected .z-icon-check {
+		margin: 0;
+		background-position: -26px 0px;
+	}
 	.z-listitem {
 		&:hover > .z-listcell {
 			background: @meshHoverBackgroundColorIE8;
@@ -397,17 +421,16 @@
 			}
 		}
 		// radio icon fallback
-		.z-icon-radio {
-			.displaySize(block, 13px, 13px);
-			.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
-			position: relative;
-			top: 2px;
-			left: 2px;
+		&-checkable {
+			.z-icon-radio {
+				.displaySize(block, 13px, 13px);
+				.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
+				position: relative;
+				top: 2px;
+				left: 2px;
+			}
 		}
 		&-radio {
-			border-width: 0;
-			background: transparent;
-
 			.z-icon-radio {
 				background-position: 0 -13px;
 			}
@@ -416,6 +439,10 @@
 			border-width: 0;
 			margin: 0;
 			background-position: -26px -13px;
+		}
+		&-selected .z-icon-check {
+			margin: 0;
+			background-position: -26px 0px;
 		}
 	}
 	.z-listgroup-inner {
