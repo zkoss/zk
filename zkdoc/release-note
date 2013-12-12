@@ -14,6 +14,7 @@ ZK 7.0.1
   ZK-2047: IE Datebox calendar overlapping pdf problem
   ZK-2053: Listgroup checkmark wrong display
   ZK-2004: The selected Objects of the Chosenbox is incorrect after replace model
+  ZK-2038: Grid is missing the bottom border for certain layout in IE9~11
   
   --------
 ZK 7.0.0

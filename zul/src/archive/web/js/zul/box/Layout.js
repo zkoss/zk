@@ -297,8 +297,12 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 							hgh = hgh - zkxc.marginHeight();
 						}
 					}
-				} else if (vert)
-					hgh -= cp.offsetHeight + zkxc.marginHeight();
+				} else if (vert) {
+					// ZK-2038: fix the height of some div/span is not integer issue in ie
+					var isIssueComp = cwgt.$instanceof(zul.wgt.Label) || cwgt.$instanceof(zul.wgt.Span) ||
+							cwgt.$instanceof(zul.wgt.Div) || cwgt.$instanceof(zul.wgt.A);
+					hgh -= (isIssueComp && zk.ie > 8 ? 1 : 0) + cp.offsetHeight + zkxc.marginHeight();
+				}
 
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
