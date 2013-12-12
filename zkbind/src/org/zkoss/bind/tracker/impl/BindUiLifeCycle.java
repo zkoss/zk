@@ -57,6 +57,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			comp.addEventListener(10000, ON_ZKBIND_LATER, new EventListener<Event>() {
 				public void onEvent(Event event) throws Exception {
 					final Component comp = event.getTarget();
+					comp.removeAttribute(REMOVE_MARK);
 					comp.removeEventListener(ON_ZKBIND_LATER, this);
 					handleComponentAttached(comp);
 				}
