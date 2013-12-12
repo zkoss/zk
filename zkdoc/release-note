@@ -13,6 +13,7 @@ ZK 7.0.1
   ZK-2046: Scroll position is reset to top if resize column of a grid with rod  
   ZK-2047: IE Datebox calendar overlapping pdf problem
   ZK-2053: Listgroup checkmark wrong display
+  ZK-2004: The selected Objects of the Chosenbox is incorrect after replace model
   
   --------
 ZK 7.0.0

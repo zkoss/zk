@@ -1,0 +1,23 @@
+<window title="Chosebox model replacement" border="normal" width="300px">
+	<zscript><![CDATA[
+        int i = 0;
+        List list = Arrays.asList(new String[]{"AA", "BB", "CC", "DD", "EE"});
+        ListModelList model = new ListModelList(list);
+    ]]></zscript>
+	<label multiline="true">
+		1. Choose "DD", "BB", "EE" in the box.
+		2. Click replace the selected items won't change.
+		3. Type "New0" in the box and choose it.
+		4. Click replace it will only show "DD", "BB", "EE".
+	</label>
+ 	<chosenbox id="box" model="${model}" width="200px"></chosenbox>
+ 	<separator/>
+    <button label="Replace">
+    	<attribute name="onClick"><![CDATA[
+			List list = Arrays.asList(new String[]{"AA", "BB", "CC", "DD", "EE", "New" + i});
+			i ++;
+			ListModelList model = new ListModelList(list);
+			box.setModel(ListModels.toListSubModel(model));
+    	]]></attribute>
+    </button>
+</window>
