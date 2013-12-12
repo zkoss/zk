@@ -3386,9 +3386,11 @@ focus_: function (timeout) {
 			this.setTopmost();
 			return true;
 		}
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w.isVisible() && w.focus_(timeout))
+		for (var w = this.firstChild; w; w = w.nextSibling) {
+			//B65-ZK-2035: make sure the DOM element of child is real visible
+			if (w.isRealVisible() && w.focus_(timeout))
 				return true;
+		}
 		return false;
 	},
 	/** Checks if this widget can be activated (gaining focus and so on).

@@ -1,0 +1,15 @@
+<?page title="Panel button" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Panel button" border="normal">
+		click panel button, then content will hide with no error message.
+		<panel title="Panel" border="normal"
+			collapsible="true" width="150px">
+			<attribute name="onOpen"><![CDATA[
+				self.invalidate();
+			]]></attribute>
+			<panelchildren>
+				<button label="test button" />
+			</panelchildren>
+		</panel>
+	</window>
+</zk>

@@ -38,6 +38,7 @@ ZK 6.5.5
   ZK-2051: Chrome rmDesktop not working reliably, causing a memory leak in Session
   ZK-2046: Scroll position is reset to top if resize column of a grid with rod  
   ZK-2047: IE Datebox calendar overlapping pdf problem
+  ZK-2035: Invalidate a Panel component with a button will cause a js error
 
   --------
 ZK 6.5.4
