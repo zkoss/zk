@@ -117,6 +117,7 @@ ZK 6.5.5
   ZK-2051: Chrome rmDesktop not working reliably, causing a memory leak in Session
   ZK-2046: Scroll position is reset to top if resize column of a grid with rod  
   ZK-2047: IE Datebox calendar overlapping pdf problem
+  ZK-2004: The selected Objects of the Chosenbox is incorrect after replace model
   ZK-2055: the page stop running when listitem or row bind with object
 
   --------
