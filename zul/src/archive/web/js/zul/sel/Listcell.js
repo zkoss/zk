@@ -121,7 +121,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if (box != null && p.firstChild == this) {
 			var isGrp = _isListgroup(p);
 			// insert checkmark
-			//B70-ZK-2053:make sure checkmark won't display on muiltble listgroup
+			//B70-ZK-2053:make sure checkmark won't display on multiple listgroup
 			if (box.isCheckmark() && !_isListgroupfoot(p) 
 					&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
 				var chkable = p.isCheckable(),
