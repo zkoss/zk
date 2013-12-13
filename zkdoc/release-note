@@ -41,6 +41,7 @@ ZK 6.5.5
   ZK-2004: The selected Objects of the Chosenbox is incorrect after replace model
   ZK-2055: the page stop running when listitem or row bind with object
   ZK-1552: Combobox and Datebox scroll position in Borderlayout
+  ZK-2035: Invalidate a Panel component with a button will cause a js error
 
   --------
 ZK 6.5.4
