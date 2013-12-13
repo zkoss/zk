@@ -88,6 +88,16 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._fixsz(pz);
 		}
 	},
+	onScroll: function (wgt) {
+		// ZK-1552: fix the position of popup when scroll
+		if (wgt) {
+			var inp = this.getInputNode();
+			if (zk(inp).isScrollIntoView())
+				zk(this.getPopupNode_()).position(inp, "after_start");
+			else
+				this.close();
+		}
+	},
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
 	 * @param boolean open
 	 * @param Map opts the options.
@@ -386,7 +396,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 		
-		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this});
+		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.onzsync(this);
 	},
 	unbind_: function () {
@@ -397,7 +407,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
-		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this});
+		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.unzsync(this);
 		
 		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);
