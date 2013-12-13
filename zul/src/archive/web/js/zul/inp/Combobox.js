@@ -329,8 +329,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			return this._hilite({strict:true});
 
 		var sel = this._findItem(val, true);
-		if (sel || bDel || !this._autocomplete)
+		if (sel || bDel || !this._autocomplete) {
+			// ZK-2024: the value should have same case with selected label if autocomplete is enabled
+			if (sel && sel.getLabel().toLowerCase().startsWith(val.toLowerCase()) && this._autocomplete)
+				inp.value = sel.getLabel();
 			return this._hilite2(sel);
+		}
 
 		//autocomplete
 		val = val.toLowerCase();

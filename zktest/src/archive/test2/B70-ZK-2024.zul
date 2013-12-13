@@ -1,0 +1,25 @@
+<zk>
+	<div>
+		<div>
+			1. type 'se' in the combobox 
+		</div>
+		<div>
+			2. focus on the textbox, then the label should show 'Sverige' and the value should show 'SE'.
+		</div>
+	</div>
+	<hbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2024_ViewModel')">
+		<combobox model="@init(vm.countries)"
+			selectedItem="@bind(vm.country)" autodrop="true"
+			autocomplete="true">
+			<template name="model">
+				<comboitem value="${each.code}" label="${each.code}"
+					description="${each.name}" />
+			</template>
+		</combobox>
+		<cell width="8em" valign="middle">
+			<label value="@load(vm.country.name)" />
+		</cell>
+		<textbox />
+	</hbox>
+</zk>
