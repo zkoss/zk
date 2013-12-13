@@ -491,7 +491,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
-		zWatch.listen({onSize: this});
+		zWatch.listen({onSize: this, onScroll: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
@@ -505,7 +505,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 		}
 
-		zWatch.unlisten({onSize: this});
+		zWatch.unlisten({onSize: this, onScroll: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
@@ -531,6 +531,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!data.value && inpValue
 				&& this.getFormat() && this._cst == "[c")
 			data.value = inpValue;
+	},
+	onScroll: function (wgt) {
+		// ZK-1552: fix the position of popup when scroll
+		if (wgt && (pp = this._pop))
+			if (zk(this).isScrollIntoView())
+				_reposition(this, true);
+			else
+				pp.close();
 	},
 	/** Returns the label of the time zone
 	 * @return String
