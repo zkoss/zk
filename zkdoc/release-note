@@ -17,6 +17,7 @@ ZK 7.0.1
   ZK-2038: Grid is missing the bottom border for certain layout in IE9~11
   ZK-2024: combobox bound selectedItem not updated on blur event
   ZK-2048: ZK7 TreeDataEvent.SELECTION_CHANGED never raised
+  ZK-2036: ZK Listbox Aux Headers does not work properly with the visible attribute
   
   --------
 ZK 7.0.0

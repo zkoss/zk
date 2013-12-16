@@ -51,8 +51,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
-			if (wgt)
+			if (wgt) {
+				// B70-ZK-2036: Clear min width cache before rerender.
+				wgt._minWd = null;
 				wgt.rerender();
+			}
 		}
 	},
 	setFlexSize_: function (sz) {
@@ -123,13 +126,19 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				$faker = jq(this.$n('hdfaker')),
 				w = this.getWidth();
 			if (!this.isVisible()) {
+				// B70-ZK-2036: Set width to 1px if browser is safari.
+				var wd = zk.chrome ? '0.1px' : zk.safari ? '1px' : '0';
 				$n.css('display', '');
+				// B70-ZK-2036: Change the header width.
+				$n.css('width', wd);
+				$n.css('visibility', 'hidden');
 				$faker.css('display', '');
 				$faker.css('visibility', 'hidden');
-				$faker.css('width', zk.chrome ? '0.1px' : '0');
+				$faker.css('width', wd);
 			} else {
 				$faker.css('visibility', '');
-				if (w) {
+				// B70-ZK-2036: Check if header has hflex width first.
+				if (!this._hflexWidth && w) {
 					$faker.css('width', w);
 				}
 			}
