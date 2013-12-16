@@ -1177,7 +1177,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//   this._focusItem still remain the removed one, 
 			//   set it with the newly rendered one to prevent keyboard navigation jump back to top
 			var n, offs;
-			if (this._focusItem != child && (n = child.$n())) {
+			// ZK-2048: should ignore Treechildren
+			if (this._focusItem != child && (n = child.$n()) && !child.$instanceof(zul.sel.Treechildren)) {
 				offs = zk(n).revisedOffset();
 				offs = this._toStyleOffset(this.$n('a'), offs[0] + this.ebody.scrollLeft, offs[1]);
 				if (offs[0] == this._anchorLeft && offs[1] == this._anchorTop)

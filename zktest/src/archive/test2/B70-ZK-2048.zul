@@ -1,0 +1,17 @@
+<window id="updatepkg"
+	apply="org.zkoss.zktest.test2.B70_ZK_2048_Controller">
+	<div>
+		should not see js error in jsconsole
+	</div>
+	<vlayout id="pnUpdate" width="1210px" visible="false">
+		<hlayout>
+			<tree id="treeEgipto" height="300px" width="700px" rows="8">
+				<treecols sizable="false">
+					<treecol label="Componente" hflex="1" />
+					<treecol label="desc" hflex="2" />
+				</treecols>
+			</tree>
+		</hlayout>
+	</vlayout>
+	<button id="btOk" label="Visible" />
+</window>
