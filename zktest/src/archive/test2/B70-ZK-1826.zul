@@ -1,0 +1,10 @@
+<zk>
+	<div>
+		Resize the window and then click the button, the width and height should
+		not change.
+	</div>
+	<window id="win" title="orig" border="normal" mode="overlapped"
+		sizable="true">
+		<button label="set title to ZK" onClick='win.setTitle("ZK");' />
+	</window>
+</zk>

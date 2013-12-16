@@ -228,8 +228,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		try {
 			var last = wgt._lastSize;
 			wgt.rerender(wgt._skipper);
-			if (last)
+			if (last) {
 				wgt._lastSize = last;
+				
+				// ZK-1826: should resotre width and height
+				if (n = wgt.$n()) {
+					var s = n.style;
+					s.height = last.h;
+					s.width = last.w;
+					wgt._fixHgh();
+				}
+			}
 			var cf;
 			if (cf = wgt._updDOFocus) //asked by unbind_
 				cf.focus(10);
@@ -381,6 +390,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_minheight: 100,
 	_minwidth: 200,
 	_shadow: true,
+	_lastSize: {},
 
 	$init: function () {
 		this._fellows = {};
@@ -826,10 +836,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		_hideShadow(this);
 		if (data.width != s.width) {
 			s.width = data.width;
+			// ZK-1826: should save width
+			this._lastSize.w = s.width;
 		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
+			// ZK-1826: should save height
+			this._lastSize.h = s.height;
 		}
 
 		if (data.left != s.left || data.top != s.top) {
