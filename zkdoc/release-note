@@ -19,6 +19,7 @@ ZK 7.0.1
   ZK-2048: ZK7 TreeDataEvent.SELECTION_CHANGED never raised
   ZK-1826: Overlapped window resizes after setTitle(String)
   ZK-2036: ZK Listbox Aux Headers does not work properly with the visible attribute
+  ZK-1980: Toolbarbutton click failed when draggable true
   
   --------
 ZK 7.0.0

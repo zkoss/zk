@@ -814,6 +814,7 @@ String scroll; //DOM Element's ID</code></pre>
 		return zk(target).isInput()
 			// B65-ZK-1839 ignore select tag for IE9, chrome, opera
 			|| ((zk.ie9 || zk.chrome || zk.opera) && jq.nodeName(target, 'select'))
+			|| jq.nodeName(target, 'span') || jq.nodeName(target, 'a') // ZK-1980: ignore span and a tag
 				|| jq.nodeName(target, 'option'); // B65-ZK-1946: ignore option tag 
 	}
 });
