@@ -742,7 +742,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				ftcol = ftfaker.firstChild;
 			
 			for (var w = head.firstChild, wd; w; w = w.nextSibling) {
-				if ((wd = w._hflexWidth) !== undefined) {
+				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
+				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
 					bdcol.style.width = zk(bdcol).revisedWidth(wd) + 'px';
 					hdcol.style.width = bdcol.style.width;
 					if (ftcol)
@@ -1123,9 +1124,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var head = this.head;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
-			var wd = w._hflexWidth || w.getWidth(),
-				wd = wd ? 'width: ' + wd + ';' : '',
+			var wd = w._hflexWidth ? w._hflexWidth + 'px' : w.getWidth(),
 				visible = !w.isVisible() ? 'display:none;' : '';
+			// B70-ZK-2036: Style width should end with 'px'.
+			wd = wd ? 'width: ' + wd + ';' : '';
 			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
 		}
 		if (this._nativebar && !this.frozen && (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0))

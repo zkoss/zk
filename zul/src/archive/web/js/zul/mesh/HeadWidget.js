@@ -150,7 +150,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				bdf = bdfaker ? bdfaker.firstChild : null,
 				everFlex = false; 
 			for (var h = this.firstChild; h; h = h.nextSibling) {
-				if (h._nhflex > 0) { //not min or undefined
+				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
+				if (h.isVisible() && h._nhflex > 0) { //not min or undefined
 					everFlex = true;
 					if (hdf) hdf.style.width = '';
 					if (bdf) bdf.style.width = '';
