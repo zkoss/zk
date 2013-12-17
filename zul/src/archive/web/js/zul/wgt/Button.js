@@ -119,6 +119,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    		doDisable = function() { 
 			    		if (self.desktop) {
 			    			self.$n().disabled = v; 
+			    			// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
+			    			if (self._upload)
+			    				v ? _cleanUpld(self) : _initUpld(self);
 			    		}
 			    	};
 		    	
