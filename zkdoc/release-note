@@ -12,6 +12,7 @@ ZK 7.0.1
   ZK-2019: Chosenbox work incorrectly when using ListSubModel and Comparator
   ZK-2046: Scroll position is reset to top if resize column of a grid with rod  
   ZK-2047: IE Datebox calendar overlapping pdf problem
+  ZK-2057: ZK 7 checkbox, cannot set to "is checked" after setChecked(false)
 
   --------
 ZK 7.0.0

@@ -1,0 +1,21 @@
+<?page title="checkbox setChecked" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. Click 'checked',then the checkbox will be checked;
+		2. Click 'unChecked',then the checkbox will be unchecked;
+		3  Click 'checked',then the checkbox will be checked;
+	</label>
+	<window title="checkbox setChecked" border="normal">
+		<checkbox id="testBox"></checkbox>
+		<button label="checked" id="trueBtn" onClick="checkTrueClick()"/>
+		<button label="unChecked" id="fasleBtn" onClick="checkFalseClick()"/>
+		<zscript><![CDATA[
+			void checkTrueClick() {
+				testBox.setChecked(true);
+			}
+			void checkFalseClick() {
+				testBox.setChecked(false);
+			}
+		]]></zscript>
+	</window>
+</zk>
