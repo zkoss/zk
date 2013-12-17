@@ -23,7 +23,8 @@ ZK 7.0.1
   ZK-2059: Upload button doesn't work if it is disabled at the beginning
   ZK-2060: Tabs in a nested tabbox don't display properly if scrolling enabled in parent tabbox
   ZK-1829: Selector org.zkoss.zk.ui.select.impl.Tokenizer implementation problem
-  
+  ZK-2003: When resizing using splitter in borderlayout visible popup windows do not close (bandbox popup, combobox popup)
+
   --------
 ZK 7.0.0
 Nov 26, 2013
