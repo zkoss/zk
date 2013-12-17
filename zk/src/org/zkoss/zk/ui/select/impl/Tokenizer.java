@@ -36,7 +36,9 @@ public class Tokenizer {
 			protected void init() {
 				getState(State.MAIN)
 					.setReturningAll(true)
-					.addMinorTransition('[', State.IN_ATTRIBUTE);
+					// B70-ZK-1829: Use Enumeration.
+					.addTransition(CharClass.OPEN_BRACKET, State.IN_ATTRIBUTE);
+					//.addMinorTransition('[', State.IN_ATTRIBUTE);
 				
 				setState(State.IN_ATTRIBUTE, 
 						new StateCtx<State, CharClass, Character>(){
@@ -49,7 +51,9 @@ public class Tokenizer {
 							_inSingleQuote = !_inSingleQuote;
 					}})
 					.setReturningAll(true)
-					.addMinorTransition(']', State.MAIN);
+					// B70-ZK-1829: Use Enumeration.
+					.addTransition(CharClass.CLOSE_BRACKET, State.MAIN);
+					//.addMinorTransition(']', State.MAIN);
 				
 				// TODO: IN_PARAM
 				
@@ -119,7 +123,16 @@ public class Tokenizer {
 				if(_inSingleQuote && (_escaped || c != '\''))
 					return CharClass.LITERAL;
 				
-				// TODO: check this
+				// B70-ZK-1829: Return the enumeration from corresponding character.
+				if( _current == State.MAIN && c == '['){
+					return CharClass.OPEN_BRACKET;
+				}
+
+				if( _current == State.IN_ATTRIBUTE && 
+						!_inDoubleQuote && !_inSingleQuote && c== ']'){
+					return CharClass.CLOSE_BRACKET;
+				}
+				
 				if(_inParam && c != ',' && c != ')')
 					return Character.isWhitespace(c)? CharClass.OTHER : CharClass.LITERAL;
 				
@@ -133,6 +146,11 @@ public class Tokenizer {
 				if(Character.isWhitespace(c))
 					return CharClass.WHITESPACE;
 				
+				//TODO: additional spec of a.b.c='sdf'
+				if('.' == c.charValue() && _current == State.IN_ATTRIBUTE){
+					return CharClass.LITERAL;
+				}
+				
 				return c == '\\' ? CharClass.ESCAPE : CharClass.OTHER;
 			}
 			
@@ -140,6 +158,11 @@ public class Tokenizer {
 					CharClass inputClass) {
 				
 				if(input == '[') return State.IN_ATTRIBUTE;
+				
+				if(super._current == State.IN_ATTRIBUTE){
+					if(_inDoubleQuote||_inSingleQuote)
+						return State.IN_ATTRIBUTE;
+				}
 				if(inputClass == CharClass.ESCAPE) _escaped = true;
 				return State.MAIN;
 			}
@@ -180,8 +203,9 @@ public class Tokenizer {
 					return Type.CBN_GENERAL_SIBLING;
 				case '#':
 					return Type.NTN_ID;
-				case '.':
-					return Type.NTN_CLASS;
+				case '.': //TODO
+					return (inputClass == CharClass.ATTR_GETTER_OP) ? 
+							Type.IDENTIFIER : Type.NTN_CLASS;
 				case ':':
 					return Type.NTN_PSDOCLS;
 				case '\'':
@@ -233,7 +257,8 @@ public class Tokenizer {
 	}
 	
 	private enum CharClass {
-		LITERAL(true), WHITESPACE(true), ESCAPE, OTHER;
+		// B70-ZK-1829: Add additional Type.
+		LITERAL(true), WHITESPACE(true), ESCAPE, OTHER, ATTR_GETTER_OP, OPEN_BRACKET, CLOSE_BRACKET;
 		
 		private boolean _multiple;
 		
