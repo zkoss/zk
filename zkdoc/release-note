@@ -21,6 +21,7 @@ ZK 7.0.1
   ZK-2036: ZK Listbox Aux Headers does not work properly with the visible attribute
   ZK-1980: Toolbarbutton click failed when draggable true
   ZK-2059: Upload button doesn't work if it is disabled at the beginning
+  ZK-2060: Tabs in a nested tabbox don't display properly if scrolling enabled in parent tabbox
   
   --------
 ZK 7.0.0
