@@ -613,4 +613,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	 -->
+	<!-- for B65-ZK-2061: Hide the ZK version info  -->
+ 	<library-property>
+		<name>org.zkoss.zk.ui.versionInfo.enabled</name>
+		<value>false</value>
+	</library-property> 
 </zk>
