@@ -55,7 +55,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		checked: function (v) {
 			var n = this.$n('real');
 			if (n) {
-				v ? jq(n).attr('checked','checked') : jq(n).removeAttr('checked');
+				//B70-ZK-2057: prop() method can access right property values;
+				jq(n).prop('checked', v);
 			}
 		},
 		/** Returns the name of this component.

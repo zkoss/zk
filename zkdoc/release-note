@@ -24,6 +24,7 @@ ZK 7.0.1
   ZK-2060: Tabs in a nested tabbox don't display properly if scrolling enabled in parent tabbox
   ZK-1829: Selector org.zkoss.zk.ui.select.impl.Tokenizer implementation problem
   ZK-2003: When resizing using splitter in borderlayout visible popup windows do not close (bandbox popup, combobox popup)
+  ZK-2057: ZK 7 checkbox, cannot set to "is checked" after setChecked(false)
 
   --------
 ZK 7.0.0
