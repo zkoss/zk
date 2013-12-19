@@ -165,6 +165,7 @@ Jul 02, 2013
   ZK-1822: Turkish locale problem during browser detection (on server side)
   ZK-1827: Component inside native component js error
   ZK-1834: Listbox scroll bug
+  ZK-2026: Datebox always displays the current year when blurred if format = "MM.yyyy"
   
   --------
 ZK 6.5.2
