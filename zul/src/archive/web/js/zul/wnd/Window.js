@@ -136,7 +136,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown('onVParent', this);
+		// B70-ZK-2067: Should pass widget as parameter not DOM element.
+		zWatch.fireDown('onVParent', wgt);
 
 		wgt.zsync();
 		_updDomPos(wgt);
@@ -150,7 +151,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (pos == 'parent') _posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown('onVParent', this);
+		// B70-ZK-2067: Should pass widget as parameter not DOM element.
+		zWatch.fireDown('onVParent', wgt);
 
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
