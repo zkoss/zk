@@ -141,7 +141,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown("onVParent", wgt);
 
 		wgt.zsync();
 		_updDomPos(wgt);
@@ -155,7 +155,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (pos == "parent") _posByParent(wgt);
 
 		$n.makeVParent();
-		zWatch.fireDown("onVParent", this);
+		zWatch.fireDown("onVParent", wgt);
 
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
