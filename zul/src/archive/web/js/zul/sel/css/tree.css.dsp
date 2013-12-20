@@ -538,12 +538,11 @@ div.z-vfiletree-header th.z-treecol, div.z-vfiletree-header th.z-auxheader {
 div.z-treecol-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-treefooter-cnt, div.z-treecol-cnt,
 <c:if test="${!(zk.ie >= 8)}">
+div.z-treecol-cnt,
 div.z-treecell-cnt, 
 </c:if>
-div.z-treefooter-cnt,
-div.z-treecell-cnt {
+div.z-treefooter-cnt {
 	width: 100%;
 }
 div.z-tree-body, div.z-dottree-body,
