@@ -82,6 +82,9 @@
 	padding-left: 0;
 	background: transparent no-repeat right -14px;
 	background-image: url(${c:encodeThemeURL('~./zul/img/menu/btn-arrow.gif')});
+	<c:if test="${zk.ie > 8}"> <%-- B65-ZK-1880: Add line height to prevent image getting cut off on IE9/IE10/IE11 --%>
+		line-height: 17px;
+	</c:if>
 }
 .z-menubar-hor .z-menu-body-clk .z-menu-inner-m  div,
 .z-menubar-ver .z-menu-body-clk .z-menu-inner-m  div {

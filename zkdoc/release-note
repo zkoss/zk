@@ -43,7 +43,8 @@ ZK 6.5.5
   ZK-2055: the page stop running when listitem or row bind with object
   ZK-1552: Combobox and Datebox scroll position in Borderlayout
   ZK-2035: Invalidate a Panel component with a button will cause a js error
-
+  ZK-1880: The images of the menu are cut in zksandbox window case
+  
   --------
 ZK 6.5.4
 Sep 24, 2013
