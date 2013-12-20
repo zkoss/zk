@@ -98,7 +98,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this._openInfo = arguments;
 		
 		//F70-ZK-2007: Check if it is toggle type.
-		this._shallToggle = opts.type == 'toggle';
+		this._shallToggle = opts && opts.type == 'toggle';
 
 		$n.css({position: 'absolute'}).zk.makeVParent();
 		
