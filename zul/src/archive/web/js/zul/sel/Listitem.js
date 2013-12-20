@@ -176,7 +176,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('setVisible', arguments);
 		// ZK-1037 start
 		var box;
-		if (zk.ie == 9 && (box = this.getListbox())
+		if (zk.ie > 8 && (box = this.getListbox())
 			&& box.$n()) {
 			if (visible)
 				box._fixHorScrollbar();

@@ -88,7 +88,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		emptyMessage:function(msg){
 			if(this.desktop) jq("td",this.$n("empty")).html(msg);
 			// ZK-1037 start
-			if (zk.ie == 9) {
+			if (zk.ie > 8) {
 				if (msg)
 					this._fixHorScrollbar();
 				else
@@ -437,7 +437,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	// ZK-1037 start
 	// called by self#emptyMessage and Listitem#setVisible
-	_fixHorScrollbar: (zk.ie == 9) ? function () {
+	_fixHorScrollbar: zk.ie > 8 ? function () {
 		var ebody, ebodytbl;
 		if (((ebody = this.ebody) && (ebodytbl = this.ebodytbl))
 			&& (ebody.offsetWidth < ebodytbl.offsetWidth))
@@ -445,10 +445,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	} : zk.$void,
 	// super
 	// also called by self#emptyMessage and Listitem#setVisible
-	_removeHorScrollbar: (zk.ie < 11) ? function () {
+	_removeHorScrollbar: zk.ie ? function () {
 		if (zk.ie == 8) {
 			this.$supers('_removeHorScrollbar', arguments);
-		} else if (zk.ie == 9) { // ZK-1037
+		} else if (zk.ie > 8) { // ZK-1037
 			var body = this.$n('body');
 			if (!this._emptyMessage	// no empty message and visible listitem
 				&& !this.getBodyWidgetIterator({skipHidden: true}).next()) {
