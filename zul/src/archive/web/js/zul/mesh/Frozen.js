@@ -247,7 +247,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			// set fixed size
 			var totalCols = mesh.head.nChildren,
 				hdrows = mesh.eheadrows.rows,
-				hdcells = mesh.eheadrows.rows[hdrows.length - 1].cells,
+				// B70-ZK-2071: Use mesh.head to get columns.
+				hdcells = mesh.head.$n().cells,
 				hdcol = mesh.ehdfaker.firstChild,
 				ftrows = mesh.foot ? mesh.efootrows : null,
 				ftcells = ftrows ? ftrows.rows[0].cells : null;
@@ -264,8 +265,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			
-			for (var i = c; i < totalCols; i++) {
+			// B70-ZK-2071: Use mesh.head to get column.
+			for (var i = c, faker; i < totalCols; i++) {
 				var n = hdcells[i],
 					hdWgt = zk.Widget.$(n),
 					isVisible = hdWgt && hdWgt.isVisible(),
@@ -283,7 +284,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						shallUpdate = true;
 					}
 				} else if (force || n.offsetWidth != 0) { //hide
-					var faker = jq('#' + n.id + '-hdfaker')[0];
+					faker = jq('#' + n.id + '-hdfaker')[0];
 					hdWgt._origWd = hdWgt._origWd || faker.style.width;
 					cellWidth = zk.chrome ? '0.1px' : '0px';
 					shallUpdate = true;

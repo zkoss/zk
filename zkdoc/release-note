@@ -27,6 +27,7 @@ ZK 7.0.1
   ZK-2057: ZK 7 checkbox, cannot set to "is checked" after setChecked(false)
   ZK-2067: When window contains opened popup, set its mode to modal or overlapped would cause js error
   ZK-2065: W3C validation error for macro component
+  ZK-2071: frozen scrollbar not working when auxhead is below listhead/columns/treecols
 
   --------
 ZK 7.0.0
