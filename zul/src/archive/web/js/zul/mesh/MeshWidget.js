@@ -1275,7 +1275,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 		}
 	} : zk.$void,
-	_removeScrollbar: zk.ie < 11 ? function() { //see HeadWidget#afterChildrenFlex_
+	// ZK-1037: should show scrollbar when row showed in ie11
+	_removeScrollbar: zk.ie ? function() { //see HeadWidget#afterChildrenFlex_
 		if (this._vflex) return;
 		
 		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
