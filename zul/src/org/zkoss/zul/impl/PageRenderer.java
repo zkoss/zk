@@ -76,14 +76,16 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
-					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
-					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
+				// B70-ZK-2065: Remove meta for validation.
+				//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
+				//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
 			write(out, pageCtrl.getRootAttributes());
-			out.write(">\n<head>\n"
-					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
-					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n");
+			out.write(">\n<head>\n");
+				// B70-ZK-2065: Remove meta for validation.
+				//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
+				//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n");
 			
 			String viewport = page.getViewport();
 			if (!"auto".equals(viewport))

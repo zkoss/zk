@@ -5100,7 +5100,8 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: 'macro',
-	_enclosingTag: 'span',
+	// B70-ZK-2065: Replace span with div, because block-level element inside an inline element is not valid.
+	_enclosingTag: 'div',
 
 	$init: function () {
 		this._fellows = {};
@@ -5108,7 +5109,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 	},
 	$define: {
 		/** Returns the tag name for this macro widget.
-		 * <p>Default: span
+		 * <p>Default: div (since 7.0.1)
 		 * @return String the tag name (such as div or span)
 		 * @since 5.0.3
 		 */
@@ -5122,8 +5123,8 @@ zk.Macro = zk.$extends(zk.Widget, {
 	},
 
 	/** Generates the HTML fragment for this macro component.
-	 * <p>Default: it generate SPAN to enclose the HTML fragment
-	 * of all child widgets.
+	 * <p>Default: it generate DIV to enclose the HTML fragment
+	 * of all child widgets (since 7.0.1).
 	 * @param Array out an array of HTML fragments (String).
 	 */
 	redraw: function (out) {

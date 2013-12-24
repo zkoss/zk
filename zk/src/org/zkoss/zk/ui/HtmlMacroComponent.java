@@ -77,7 +77,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * It is used only if {@link #isInline}
 	 */
 	private Component[] _inlines;
-	private String _tag = "span";
+	// B70-ZK-2065: Replace span with div, because block-level element inside an inline element is not valid.
+	private String _tag = "div";
 	/** A list of resolvers (never null). A variable resolver is added automatically if
 	 * {@link org.zkoss.zk.ui.select.annotation.VariableResolver} was annotated.
 	 */
@@ -103,14 +104,14 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	}
 
 	/** Returns the name of the enclosing tag for this macro component.
-	 * <p>Default: span
+	 * <p>Default: div (since 7.0.1)
 	 * @since 5.0.3
 	 */
 	public String getEnclosingTag() {
 		return _tag;
 	}
 	/**Sets the the name of the enclosing tag for this macro component.
-	 * <p>Default: span
+	 * <p>Default: div (since 7.0.1)
 	 * @since 5.0.3
 	 */
 	public void setEnclosingTag(String tag) {
@@ -333,7 +334,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (!"span".equals(_tag))
+		// B70-ZK-2065: Replace span with div, because block-level element inside an inline element is not valid.
+		if (!"div".equals(_tag))
 			renderer.render("enclosingTag", _tag);
 	}
 }
