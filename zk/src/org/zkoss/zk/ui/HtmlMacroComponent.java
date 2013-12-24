@@ -104,14 +104,14 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	}
 
 	/** Returns the name of the enclosing tag for this macro component.
-	 * <p>Default: div
+	 * <p>Default: div (since 7.0.1)
 	 * @since 5.0.3
 	 */
 	public String getEnclosingTag() {
 		return _tag;
 	}
 	/**Sets the the name of the enclosing tag for this macro component.
-	 * <p>Default: div
+	 * <p>Default: div (since 7.0.1)
 	 * @since 5.0.3
 	 */
 	public void setEnclosingTag(String tag) {

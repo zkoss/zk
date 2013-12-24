@@ -5109,7 +5109,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 	},
 	$define: {
 		/** Returns the tag name for this macro widget.
-		 * <p>Default: span
+		 * <p>Default: div (since 7.0.1)
 		 * @return String the tag name (such as div or span)
 		 * @since 5.0.3
 		 */
@@ -5123,7 +5123,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 	},
 
 	/** Generates the HTML fragment for this macro component.
-	 * <p>Default: it generate DIV to enclose the HTML fragment
+	 * <p>Default: it generate DIV (since 7.0.1) to enclose the HTML fragment
 	 * of all child widgets.
 	 * @param Array out an array of HTML fragments (String).
 	 */
