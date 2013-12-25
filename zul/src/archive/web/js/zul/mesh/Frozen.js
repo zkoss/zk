@@ -20,11 +20,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _fixaux(cells, from, to) {
 		for (var j = 0, k = 0, cl = cells.length; j < cl; ++j) {
 			var ke = k + _colspan( zk.Widget.$(cells[j]));
-			if (from >= k && ke > from) { //found
+			// B70-ZK-2071: Calculate the colspan when scroll back.
+			if ((from >= k && ke > from) || (to <= k && ke > to)) { //found
 				for (; j < cl && k < to; ++j, k = ke) {
 					var cell = cells[j],
 						ke = k + _colspan(cell),
-						v = from - k, v2 = ke - to;
+						v = k - from, v2 = ke - to;
 					v = (v > 0 ? v: 0) + (v2 > 0 ? v2: 0);
 					if (v) {
 						cell.style.display = '';
@@ -37,10 +38,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				for (; j < cl; ++j) {
 					var cell = cells[j];
-					if (parseInt(cell.style.width) != 0)
+					if (zk.parseInt(cell.style.width) != 0)
 						break; //done
 					cell.style.display = '';
 					cell.style.width = '';
+					// B70-ZK-2071: Reset the colspan when the previous cell is in viewport.
+					cell.colSpan = _colspan(cell);
 				}
 				return;
 			}
@@ -324,7 +327,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					hdrs = mesh.eheadrows.rows;
 				for (var i = hdrs.length, r; i--;) {
 					if ((r = hdrs[i]) != hdr) //skip Column
-						_fixaux(r.cells, c, c + num);
+						_fixaux(r.cells, c + this._start, c + num); // B70-ZK-2071: Count start position.
 				}
 			}
 			

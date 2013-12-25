@@ -1,330 +1,83 @@
-<zk>
+<window title="MeshWidget X Frozen X Scrollbar" border="normal" width="550px">
 	<label multiline="true">
 		1. Scroll all scrollbar in the meshwidget to the rightmost.
 		2. Auxheadd and listhead/columns/treecols position should be aligned.
 	</label>
-<grid width="500px">
-	<frozen columns="1"></frozen>
-	<columns>
-		<column label="A"/>
-		<column label="B"/>
-		<column label="C"/>
-		<column label="D"/>
-	</columns>
-	<auxhead>
-		<auxheader label="A aux"></auxheader>
-		<auxheader label="BC aux" colspan="2"></auxheader>
-		<auxheader label="D aux"></auxheader>
-	</auxhead>
-	<rows>
-		<row>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-		</row>
-		<row>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-		</row>
-	</rows>
-</grid>
-<grid width="500px">
-	<frozen columns="1"></frozen>
-	<columns>
-		<column label="A"/>
-		<column label="B"/>
-		<column label="C"/>
-		<column label="D"/>
-	</columns>
-	<auxhead>
-		<auxheader label="A aux"></auxheader>
-		<auxheader label="B aux"></auxheader>
-		<auxheader label="C aux"></auxheader>
-		<auxheader label="D aux"></auxheader>
-	</auxhead>
-	<rows>
-		<row>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-		</row>
-		<row>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-		</row>
-	</rows>
-</grid>
-<grid width="500px">
-	<frozen columns="1"></frozen>
-	<auxhead>
-		<auxheader label="A aux"></auxheader>
-		<auxheader label="BC aux" colspan="2"></auxheader>
-		<auxheader label="D aux"></auxheader>
-	</auxhead>
-	<columns>
-		<column label="A"/>
-		<column label="B"/>
-		<column label="C"/>
-		<column label="D"/>
-	</columns>
-	<rows>
-		<row>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-		</row>
-		<row>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-			<cell>asasdf</cell>
-		</row>
-	</rows>
-</grid>
-<listbox width="500px">
-	<frozen columns="1"></frozen>
-	<listhead>
-		<listheader label="A"></listheader>
-		<listheader label="B"></listheader>
-		<listheader label="C"></listheader>
-		<listheader label="D"></listheader>
-	</listhead>
-	<auxhead>
-		<auxheader label="A aux"></auxheader>
-		<auxheader label="BC aux" colspan="2"></auxheader>
-		<auxheader label="D aux"></auxheader>
-	</auxhead>
-	<listitem>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-	</listitem>
-	<listitem>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-	</listitem>
-</listbox>
-<listbox width="500px">
-	<frozen columns="1"></frozen>
-	<listhead>
-		<listheader label="A"></listheader>
-		<listheader label="B"></listheader>
-		<listheader label="C"></listheader>
-		<listheader label="D"></listheader>
-	</listhead>
-	<auxhead>
-		<auxheader label="A aux"></auxheader>
-		<auxheader label="B aux"></auxheader>
-		<auxheader label="C aux"></auxheader>
-		<auxheader label="D aux"></auxheader>
-	</auxhead>
-	<listitem>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-	</listitem>
-	<listitem>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-	</listitem>
-</listbox>
-<listbox width="500px">
-	<frozen columns="1"></frozen>
-	<auxhead>
-		<auxheader label="A aux"></auxheader>
-		<auxheader label="BC aux" colspan="2"></auxheader>
-		<auxheader label="D aux"></auxheader>
-	</auxhead>
-	<listhead>
-		<listheader label="A"></listheader>
-		<listheader label="B"></listheader>
-		<listheader label="C"></listheader>
-		<listheader label="D"></listheader>
-	</listhead>
-	<listitem>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-	</listitem>
-	<listitem>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-		<listcell>asasdf</listcell>
-	</listitem>
-</listbox>
-<tree id="tree" width="30%" rows="8">
-	<frozen columns="1"></frozen>
-    <treecols sizable="true">
-        <treecol label="Name" />
-        <treecol label="Description" />
-        <treecol label="Description" />
-        <treecol label="Description" />
-    </treecols>
-    <auxhead>
-    	<auxheader label="A"/>
-    	<auxheader label="B"/>
-    	<auxheader label="C"/>
-    	<auxheader label="D"/>
-    </auxhead>
-    <treechildren>
-        <treeitem>
-            <treerow>
-                <treecell label="Item 1" />
-                <treecell label="Item 1 description" />
-                <treecell label="Item 1 description" />
-                <treecell label="Item 1 description" />
-            </treerow>
-        </treeitem>
-        <treeitem>
-            <treerow>
-                <treecell label="Item 2" />
-                <treecell label="Item 2 description" />
-                <treecell label="Item 2 description" />
-                <treecell label="Item 2 description" />
-            </treerow>
-            <treechildren>
-                <treeitem>
-                    <treerow>
-                        <treecell label="Item 2.1" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-                    </treerow>
-                    <treechildren>
-                        <treeitem>
-                            <treerow>
-                                <treecell label="Item 2.1.1" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-                            </treerow>
-                        </treeitem>
-                        <treeitem>
-                            <treerow>
-                                <treecell label="Item 2.1.2" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-                            </treerow>
-                        </treeitem>
-                    </treechildren>
-                </treeitem>
-                <treeitem>
-                    <treerow>
-                        <treecell label="Item 2.2" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-                    </treerow>
-                    <treechildren>
-                        <treeitem>
-                            <treerow>
-                                <treecell label="Item 2.2.1" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-                            </treerow>
-                        </treeitem>
-                    </treechildren>
-                </treeitem>
-            </treechildren>
-        </treeitem>
-        <treeitem label="Item 3" />
-    </treechildren>
-</tree>
-<tree id="tree2" width="30%" rows="8">
-	<frozen columns="1"></frozen>
-    <auxhead>
-    	<auxheader label="A"/>
-    	<auxheader label="B"/>
-    	<auxheader label="C"/>
-    	<auxheader label="D"/>
-    </auxhead>
-    <treecols sizable="true">
-        <treecol label="Name" />
-        <treecol label="Description" />
-        <treecol label="Description" />
-        <treecol label="Description" />
-    </treecols>
-    <treechildren>
-        <treeitem>
-            <treerow>
-                <treecell label="Item 1" />
-                <treecell label="Item 1 description" />
-                <treecell label="Item 1 description" />
-                <treecell label="Item 1 description" />
-            </treerow>
-        </treeitem>
-        <treeitem>
-            <treerow>
-                <treecell label="Item 2" />
-                <treecell label="Item 2 description" />
-                <treecell label="Item 2 description" />
-                <treecell label="Item 2 description" />
-            </treerow>
-            <treechildren>
-                <treeitem>
-                    <treerow>
-                        <treecell label="Item 2.1" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-                    </treerow>
-                    <treechildren>
-                        <treeitem>
-                            <treerow>
-                                <treecell label="Item 2.1.1" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-                            </treerow>
-                        </treeitem>
-                        <treeitem>
-                            <treerow>
-                                <treecell label="Item 2.1.2" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-                            </treerow>
-                        </treeitem>
-                    </treechildren>
-                </treeitem>
-                <treeitem>
-                    <treerow>
-                        <treecell label="Item 2.2" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-		                <treecell label="Item 2 description" />
-                    </treerow>
-                    <treechildren>
-                        <treeitem>
-                            <treerow>
-                                <treecell label="Item 2.2.1" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-				                <treecell label="Item 2 description" />
-                            </treerow>
-                        </treeitem>
-                    </treechildren>
-                </treeitem>
-            </treechildren>
-        </treeitem>
-        <treeitem label="Item 3" />
-    </treechildren>
-</tree>
-</zk>
+	<grid width="500px">
+		<custom-attributes org.zkoss.zul.nativebar="true"/> 
+		<frozen columns="1"></frozen>
+		<columns>
+			<column label="A"/>
+			<column label="B"/>
+			<column label="C"/>
+			<column label="D"/>
+			<column label="E"/>
+			<column label="F"/>
+			<column label="G"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A aux"></auxheader>
+			<auxheader label="B aux"></auxheader>
+			<auxheader label="CDE aux" colspan="3"></auxheader>
+			<auxheader label="FG aux" colspan="2"></auxheader>
+		</auxhead>
+		<rows>
+			<row>
+				<cell>A cell</cell>
+				<cell>B cell</cell>
+				<cell>C cell</cell>
+				<cell>D cell</cell>
+				<cell>E cell</cell>
+				<cell>F cell</cell>
+				<cell>G cell</cell>
+			</row>
+			<row>
+				<cell>A cell</cell>
+				<cell>B cell</cell>
+				<cell>C cell</cell>
+				<cell>D cell</cell>
+				<cell>E cell</cell>
+				<cell>F cell</cell>
+				<cell>G cell</cell>
+			</row>
+		</rows>
+	</grid>
+	<grid width="500px">
+		<frozen columns="1"></frozen>
+		<columns>
+			<column label="A"/>
+			<column label="B"/>
+			<column label="C"/>
+			<column label="D"/>
+			<column label="E"/>
+			<column label="F"/>
+			<column label="G"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A aux"></auxheader>
+			<auxheader label="B aux"></auxheader>
+			<auxheader label="CDE aux" colspan="3"></auxheader>
+			<auxheader label="FG aux" colspan="2"></auxheader>
+		</auxhead>
+		<rows>
+			<row>
+				<cell>A cell</cell>
+				<cell>B cell</cell>
+				<cell>C cell</cell>
+				<cell>D cell</cell>
+				<cell>E cell</cell>
+				<cell>F cell</cell>
+				<cell>G cell</cell>
+			</row>
+			<row>
+				<cell>A cell</cell>
+				<cell>B cell</cell>
+				<cell>C cell</cell>
+				<cell>D cell</cell>
+				<cell>E cell</cell>
+				<cell>F cell</cell>
+				<cell>G cell</cell>
+			</row>
+		</rows>
+	</grid>
+</window>
