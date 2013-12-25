@@ -3086,9 +3086,9 @@ unbind_: function (skipper, after) {
 	// you can just add 1 px more for the offsetWidth
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
 		if (attr == 'w') {
-			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10
+			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10/11
 			var wd = zjq.minWidth(wgt);
-			if(zk.ie9 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
+			if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
 				wd = zk(wgt).offsetWidth();
 			}
 			return wd;

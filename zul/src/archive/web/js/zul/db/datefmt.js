@@ -226,7 +226,7 @@ zk.fmt.Date = {
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
-					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
+					// ZK-1985: Determine if token's length is less than the expected when strict is true. 
 					if (strict && token && (token.length < len))
 						return;
 					

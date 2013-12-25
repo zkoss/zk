@@ -50,7 +50,8 @@ zul.wgt.Area = zk.$extends(zk.Widget, {
 		 * <p>Note: (0, 0) is the upper-left corner.
 		 * @param String coords
 		 */
-		coords: function (coords) {
+		coords: function (v) {
+			// ZK-1892 rename the argument
 			var n = this.$n();
 			if (n) n.coords = v || '';
 		}

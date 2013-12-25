@@ -446,7 +446,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			}
 
 				// IE9+ bug ZK-483
-				if (zk.ie9 && this._hflexsz)
+				if ((zk.ie > 8) && this._hflexsz)
 					total = Math.max(this._hflexsz, total);
 
     			n.style.width = jq.px0(total);
@@ -459,7 +459,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			}
     			
     			// IE9+ bug ZK-483
-				if (zk.ie9 && this._hflexsz)
+				if ((zk.ie > 8)&& this._hflexsz)
 					max = Math.max(this._hflexsz, max);
 				
     			n.style.width = jq.px0(max);

@@ -7,15 +7,7 @@
 			<button label="Add" />
 			<button label="Delete" />
 			<textbox hflex="1" value="Enter something to search..." />
-			<button label="Go" hflex="1" />
+			<button label="Go" width="0px" hflex="1" />
 		</toolbar>
-		<panelchildren>
-			<hlayout hflex="1">
-				<button label="Add" />
-				<button label="Delete" />
-				<textbox hflex="1" value="Enter something to search..." />
-				<button label="Go" hflex="1" />
-			</hlayout>
-		</panelchildren>
 	</panel>
 </zk>

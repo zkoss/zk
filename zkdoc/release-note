@@ -30,6 +30,8 @@ ZK 7.0.1
   ZK-2067: When window contains opened popup, set its mode to modal or overlapped would cause js error
   ZK-2065: W3C validation error for macro component
   ZK-2071: frozen scrollbar not working when auxhead is below listhead/columns/treecols
+  ZK-1880: The images of the menu are cut in zksandbox window case
+  ZK-1892: Error when calling setCoords() in Area widget
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
@@ -105,6 +107,7 @@ ZK 6.5.5
   ZK-1973: Server processing effect can be configurable
   ZK-2014: Listbox component support selectAll/unSelectAll event when check/uncheck on select all checkbox
   ZK-2012: zk.ie supports ie11
+  ZK-2061: Security Issue: Version number inserted on each page
 
 * Bugs
   ZK-1944: AUTO scale does not work if the value of decimalebox is bind form VM
@@ -142,7 +145,10 @@ ZK 6.5.5
   ZK-2055: the page stop running when listitem or row bind with object
   ZK-1552: Combobox and Datebox scroll position in Borderlayout
   ZK-2035: Invalidate a Panel component with a button will cause a js error
-
+  ZK-1880: The images of the menu are cut in zksandbox window case
+  ZK-1892: Error when calling setCoords() in Area widget
+  ZK-1954: Vertical scroll appear when remove last listitem from Listbox
+  
   --------
 
 ZK 6.5.4
@@ -265,6 +271,7 @@ Jul 02, 2013
   ZK-1822: Turkish locale problem during browser detection (on server side)
   ZK-1827: Component inside native component js error
   ZK-1834: Listbox scroll bug
+  ZK-2026: Datebox always displays the current year when blurred if format = "MM.yyyy"
   
   --------
 ZK 6.5.2

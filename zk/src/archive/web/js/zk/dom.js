@@ -237,8 +237,11 @@ zjq = function (jq) { //ZK extension
 
 zk.copy(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
-	minWidth: function (el) {
+	minWidth: (!zk.ie11_) ? function (el) {
 		return zk(el).offsetWidth();
+	}: function (el) {
+		// B65-ZK-1526: IE11 required an extra pixel as IE9/IE10
+		return zk(el).offsetWidth() + 1;
 	},
 
 	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
