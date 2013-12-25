@@ -31,6 +31,11 @@ ZK 7.0.1
   ZK-2065: W3C validation error for macro component
   ZK-2071: frozen scrollbar not working when auxhead is below listhead/columns/treecols
 
+* Upgrade Notes
+  + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
+  to org.zkoss.util.resource.impl.LabelLoaderImpl and create an interface named
+  org.zkoss.util.resource.impl.LabelLoader instead.
+  
   --------
 ZK 7.0.0
 Nov 26, 2013
