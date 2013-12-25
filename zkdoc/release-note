@@ -45,6 +45,7 @@ ZK 6.5.5
   ZK-2035: Invalidate a Panel component with a button will cause a js error
   ZK-1880: The images of the menu are cut in zksandbox window case
   ZK-1892: Error when calling setCoords() in Area widget
+  ZK-1954: Vertical scroll appear when remove last listitem from Listbox
   
   --------
 ZK 6.5.4
