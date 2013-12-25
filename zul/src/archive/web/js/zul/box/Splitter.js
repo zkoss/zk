@@ -280,7 +280,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				}
 
 				node.style.width = ""; // clean width
-				node.style.width = pn.clientWidth + "px"; //all wd the same
+				node.style.width = "100%"; // Sandbox-Splitter: the width should be same as parent 
 				this.setBtnPos_(true);
 			} else {
 				if (bfcolps) {
