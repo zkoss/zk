@@ -16,8 +16,13 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.impl.LabelLoader;
 import org.zkoss.text.MessageFormats;
@@ -30,10 +35,20 @@ import org.zkoss.xel.VariableResolver;
  * @author tomyeh
  */
 public class Labels {
+	private static final Logger log = LoggerFactory.getLogger(Labels.class);
 	private Labels() {} //prevent form misuse
 
-	private static final LabelLoader _loader = new LabelLoader();
+	private static LabelLoader _loader;
 
+	static {
+		try {
+			_loader = (LabelLoader) Classes.newInstanceByThread(Library.getProperty("org.zkoss.util.resource.LabelLoader.class", "org.zkoss.util.resource.impl.LabelLoader"));
+		} catch (Exception e) {
+			log.warn("", e);
+			if (_loader == null)
+				_loader = new LabelLoader();
+		}
+	}
 	/** Returns the label of the specified key based
 	 * on the current Locale, or null if no found.
 	 *

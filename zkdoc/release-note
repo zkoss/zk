@@ -2,6 +2,8 @@
 ZK 7.0.1
 * Features
   ZK-2049: Menupopup support toggle type
+  ZK-2075: provide the possibility to display or log missing labels
+
 * Bugs
   ZK-2042: Button's autodisable="self" will cause to stop the form request processing  
   ZK-2044: Upload button does not always display the file selection dialog on IE11

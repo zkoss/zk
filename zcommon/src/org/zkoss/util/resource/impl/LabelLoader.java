@@ -55,7 +55,8 @@ import org.zkoss.xel.util.SimpleXelContext;
  * is assumed to be UTF-8. If it is not the case, please refer to 
  * <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_library-property_Element/Library_Properties#org.zkoss.util.label.web.charset">ZK Configuration Reference</a>
  * for more information.
- *
+ * <p> Specify the library property of 'org.zkoss.util.resource.LabelLoader.class'
+ * in zk.xml to provide a customized label loader for debugging purpose. (since 7.0.1)
  * @author tomyeh
  */
 public class LabelLoader {
@@ -87,8 +88,13 @@ public class LabelLoader {
 	public LabelLoader() {
 		_fmfilter = new FilterMap.Filter() {
 			public Object filter(Object key, Object value) {
-				return value instanceof ExValue ?
+				Object o = value instanceof ExValue ?
 					((ExValue)value).getValue(): value;
+				if (o == null && log.isWarnEnabled()) {
+					// it's possible like missing a label.
+					log.warn("The key of [" + key + "] is not found in labels!");
+				}
+				return o;
 			}
 		};
 		_expf = Expressions.newExpressionFactory();
