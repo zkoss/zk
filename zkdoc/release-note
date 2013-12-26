@@ -32,6 +32,7 @@ ZK 7.0.1
   ZK-2071: frozen scrollbar not working when auxhead is below listhead/columns/treecols
   ZK-1880: The images of the menu are cut in zksandbox window case
   ZK-1892: Error when calling setCoords() in Area widget
+  ZK-1852: Processing indicator briefly displayed in non-localized text
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
@@ -149,6 +150,7 @@ ZK 6.5.5
   ZK-1892: Error when calling setCoords() in Area widget
   ZK-1954: Vertical scroll appear when remove last listitem from Listbox
   ZK-1965: zksandbox service.zul throw method getNamespace() not found exception
+  ZK-1852: Processing indicator briefly displayed in non-localized text
   
   --------
 
