@@ -1,0 +1,6 @@
+<window border="normal"
+	apply="org.zkoss.zktest.test2.B50_ZK_2073_Composer">
+	<div>Shift + Click 'item 1', should not show exception</div>
+	<listbox id="lb" vflex="1" hflex="1" multiple="true"
+		checkmark="true" />
+</window>

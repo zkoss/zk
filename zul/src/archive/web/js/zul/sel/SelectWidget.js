@@ -761,7 +761,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 			this._syncFocus(row);
 			if (this._multiple) {
-				if (evt.data.shiftKey)
+				// ZK-2073: trigger _selectUpto function if has selected item
+				if (evt.data.shiftKey && this.getSelectedItem())
 					this._selectUpto(row, evt, skipFocus);
 				else if (evt.data.ctrlKey || evt.data.metaKey)
 					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
