@@ -2130,7 +2130,7 @@ out.push('</div>');
 			zk.error("Mold "+this._mold+" not found in "+this.className);
 		}
 	},
-	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
+	/** Utilities for handling the so-called render defer ({@link #setRenderdefer}).
 	 * This method is called automatically by {@link #redraw},
 	 * so you only need to use it if you override {@link #redraw}.
 	 * <p>A typical usage is as follows.

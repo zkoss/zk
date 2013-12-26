@@ -92,7 +92,7 @@ public class AnnotationUtil {
 		List<String> props = compCtrl.getAnnotatedProperties();
 		
 		if(props==null || props.size()==0)
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		//'prop:priority' -> object[]{'prop',priority}
 		List<String> propsList = new ArrayList<String>(props.size());
 		for(String p:props){//

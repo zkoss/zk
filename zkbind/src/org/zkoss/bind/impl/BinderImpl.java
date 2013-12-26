@@ -2040,7 +2040,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_templateResolvers.remove(comp);
 	}
 	
-
+	@SuppressWarnings("unchecked")
 	public Tracker getTracker() {
 		if (_tracker == null) {
 			String clznm = Library.getProperty("org.zkoss.bind.Tracker.class");

@@ -298,7 +298,7 @@ public class Selectbox extends HtmlBasedComponent {
 			final boolean old = _childable;
 			try {
 				_childable = true;
-				final ItemRenderer renderer = getRealRenderer();
+				final ItemRenderer<Object> renderer = getRealRenderer();
 				final Selectable<Object> smodel = getSelectableModel();
 				_jsel = -1;
 				for (int i = 0, sz = _model.getSize(); i < sz; i++) {
