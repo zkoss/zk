@@ -1,0 +1,15 @@
+<?page title="Checkmark Listhead Listbox" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Checkmark Listhead Listbox" border="normal">
+		<label value="Listhead's checkmark should be unchecked "/>
+		<div>
+		    <listbox width="300px" checkmark="true" multiple="true">
+		        <listhead>
+		            <listheader>
+		                <label value="Can an empty list be all selected?"/>
+		            </listheader>
+		        </listhead>
+		    </listbox>
+		</div>
+	</window>
+</zk>
