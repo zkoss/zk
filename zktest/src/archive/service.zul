@@ -82,7 +82,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		try {
 			Component cmp = page.getFellowIfAny("error_window");
 			if (cmp != null) cmp.detach();
-			page.interpret("java", data, self.getNamespace());
+			// ZK-1965 should not use deprecated API
+			page.interpret("java", data, self.getSpaceOwner());
 		} catch (Exception e) {
 			CatchError(data, "Some Error caused by the zscript!", e);
 		}
