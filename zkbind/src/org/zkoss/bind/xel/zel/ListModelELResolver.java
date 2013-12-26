@@ -96,9 +96,9 @@ public class ListModelELResolver extends ELResolver {
             //ZK-1960 save back to listmodel
             if (idx >= 0 && idx < listmodel.getSize()) {
             	if(base instanceof ListModelArray){
-            		((ListModelArray)base).set(idx, value);
+            		((ListModelArray<Object>)base).set(idx, value);
             	}else if(base instanceof ListModelList<?>){
-            		((ListModelList)base).set(idx, value);
+            		((ListModelList<Object>)base).set(idx, value);
             	}else{
             		throw new PropertyNotWritableException("can't write property "+property+" to ListModel:"+base);
             	}
