@@ -70,6 +70,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var scroll = wgt.$n('scrollX'),
 				width = parent.$n('body').offsetWidth;
 			
+			// B70-ZK-2074: Resize forzen's width as meshwidget's body.
+			parent.$n('frozen').style.width = jq.px0(width);
 			width -= leftWidth;
 			scroll.style.width = jq.px0(width);
 			var scrollScale = totalcols - columns - 1; /* fixed a bug related to the feature #3025419*/

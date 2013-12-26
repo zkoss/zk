@@ -34,6 +34,7 @@ ZK 7.0.1
   ZK-1892: Error when calling setCoords() in Area widget
   ZK-1852: Processing indicator briefly displayed in non-localized text
   ZK-1953: Checkmark in listheader is checked when nothing in the listbox
+  ZK-2074: native scroll bar disappearing with frozen on browser resize
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader

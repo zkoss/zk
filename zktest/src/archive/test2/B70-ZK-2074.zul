@@ -1,0 +1,29 @@
+<window title="Frozen X Native Srollbar" border="normal">
+	<label multiline="true">
+		1. Resize the browser's width slowly.
+		2. After resizing, the native scrollbar should still appear.
+	</label>
+	<separator/>
+	<custom-attributes org.zkoss.zul.nativebar="true"/>
+	<listbox width="30%">
+		<frozen columns="1"></frozen>
+		<listhead>
+			<listheader label="A" width="100px"></listheader>
+			<listheader label="B" width="100px"></listheader>
+			<listheader label="C" width="100px"></listheader>
+			<listheader label="D" width="100px"></listheader>
+		</listhead>
+		<listitem>
+			<listcell>asasdf</listcell>
+			<listcell>asasdf</listcell>
+			<listcell>asasdf</listcell>
+			<listcell>asasdf</listcell>
+		</listitem>
+		<listitem>
+			<listcell>asasdf</listcell>
+			<listcell>asasdf</listcell>
+			<listcell>asasdf</listcell>
+			<listcell>asasdf</listcell>
+		</listitem>
+	</listbox>
+</window>
