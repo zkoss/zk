@@ -32,6 +32,7 @@ ZK 7.0.1
   ZK-2071: frozen scrollbar not working when auxhead is below listhead/columns/treecols
   ZK-1880: The images of the menu are cut in zksandbox window case
   ZK-1892: Error when calling setCoords() in Area widget
+  ZK-1953: Checkmark in listheader is checked when nothing in the listbox
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader

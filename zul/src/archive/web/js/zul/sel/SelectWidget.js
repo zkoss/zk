@@ -1154,6 +1154,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 	},
 	_isAllSelected: function () {
+		//B70-ZK-1953: if selectedItems is empty return false;
+		if (!this._selItems.length)
+			return false;
 		var isGroupSelect = this.groupSelect;
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
