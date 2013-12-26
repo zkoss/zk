@@ -380,7 +380,7 @@ function zkamn(pkg, fn) {
 		return wgt;
 	}
 
-	/** Schedules fn for later execution if it takes too long to boot up,
+	/* Schedules fn for later execution if it takes too long to boot up,
 	 * so progressbox has a chance to show
 	 */
 	function breathe(fn) {
