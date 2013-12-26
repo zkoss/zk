@@ -46,7 +46,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	void check(Window w, String nm) {
 		if (w.getFellow(nm) == null)
 			alert("Failed to clone: fellow");
-		if (w.getNamespace().getVariable(nm, true) == null)
+		// ZK-1965 should not use deprecated API
+		if (w.getSpaceOwner().getFellow(nm, true) == null)
 			alert("Failed to clone: getVariable");
 	}
 	</zscript>
