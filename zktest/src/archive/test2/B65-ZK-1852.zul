@@ -1,0 +1,14 @@
+<window>
+	Click the button, should show "處理中".
+	<separator/>
+	<button label="Click">
+		<attribute name="onClick"><![CDATA[
+			Locale locale = org.zkoss.util.Locales.getLocale("zh_TW");
+		    session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, locale);
+		    execution.sendRedirect(null);
+		]]></attribute>
+	</button>
+	<script><![CDATA[
+		zk.log(jq(".z-temp .z-loading-indicator").text());
+	]]></script>
+</window>

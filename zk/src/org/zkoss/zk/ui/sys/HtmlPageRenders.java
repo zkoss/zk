@@ -25,12 +25,15 @@ import java.util.Collection;
 import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
+import org.zkoss.mesg.Messages;
 import org.zkoss.io.Files;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.html.JavaScript;
@@ -111,6 +114,9 @@ public class HtmlPageRenders {
 	* @since 6.5.5
 	*/
 	private final static String ZK_VERSION_INFO_ENABLED_KEY = "org.zkoss.zk.ui.versionInfo.enabled";
+	
+	private static volatile int msgCode = -1;
+	
 
 
 	/** Sets the content type to the specified execution for the given page.
@@ -661,7 +667,22 @@ public class HtmlPageRenders {
 	throws IOException {
 		out.write("<div");
 		writeAttr(out, "id", uuid);
-		out.write(" class=\"z-temp\"><div id=\"zk_proc\" class=\"z-loading\"><div class=\"z-loading-indicator\"><span class=\"z-loading-icon\"></span>Processing...</div></div>");
+		out.write(" class=\"z-temp\"><div id=\"zk_proc\" class=\"z-loading\"><div class=\"z-loading-indicator\">" + 
+				// B65-ZK-1852: Displays localized loading label.
+				"<span class=\"z-loading-icon\"></span>" + getLoadingLabel() + "</div></div>");
+	}
+	private static String getLoadingLabel() {
+		if (msgCode == -1) {
+			try {
+				Class<?> msgClass = Classes.forNameByThread("org.zkoss.zul.mesg.MZul");
+				Field msgField = msgClass.getField("PLEASE_WAIT");
+				msgCode = msgField.getInt(null);
+			} catch (Throwable ex) {
+				return "Processing...";
+			}
+		}
+		// B70-ZK-1852: Returns the localized label.
+		return msgCode != -1 ? Messages.get(msgCode) : "Processing...";
 	}
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
