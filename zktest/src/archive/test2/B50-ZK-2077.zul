@@ -1,0 +1,14 @@
+<window id="win" border="normal"
+	apply="org.zkoss.zktest.test2.B50_ZK_2077_Composer">
+	<div>
+		<div>1. Switch to page 2</div>
+		<div>2. Select "Name 3"</div>
+		<div>3. Select "Name 4"</div>
+		<div>4. Deselect "Name 4"</div>
+		<div>5. Click "OK" button</div>
+		<div>6. should see 'Name 3' in messagebox</div>
+	</div>
+	<listbox id="lb" vflex="1" hflex="1" model="${win$composer.model}"
+		multiple="true" checkmark="true" mold="paging" pageSize="3" />
+	<button id="okBtn" label="OK" forward="onClick=onOK" />
+</window>

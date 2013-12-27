@@ -1052,6 +1052,11 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				if (inSelectMold()) {
 					item.smartUpdate("selected", false);
 				} else {
+					// ZK-2077: should set correct selected index after removing selected item in rod case
+					if (!_selItems.isEmpty() && _rod) {
+						_jsel = getIndexOfItem((Listitem) _selItems.iterator().next());
+					}
+						
 					smartUpdateSelection();
 				}
 			}
