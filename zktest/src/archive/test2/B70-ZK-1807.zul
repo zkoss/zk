@@ -1,0 +1,25 @@
+<?page title="Bandbox Style Change" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Bandbox Style Change" border="normal">
+		<label>
+		Click "test", each component width won't change.
+		</label>
+		<vbox width="500px">
+			<bandbox hflex="1" id="bandbox"/>
+			<datebox hflex="min" id="datebox"/>
+			<spinner id="spinner"/>
+			<combobox width="300px" id="combobox">
+				<comboitem label="value"/>
+			</combobox>
+			<button label="test" onClick="doClick()"/>
+			<zscript>
+				void doClick() {
+					bandbox.setStyle("background-color:yellow;");
+					datebox.setStyle("background-color:yellow;");
+					spinner.setStyle("background-color:yellow;");
+					combobox.setStyle("background-color:yellow;");
+				}
+			</zscript>
+		</vbox>
+	</window>
+</zk>

@@ -2255,9 +2255,10 @@ redraw: function (out) {
 	_domTextStyle: function (t, s) {
 		// B50-3355680
 		s = jq.filterTextStyle(s);
-		if (!s.width && this._hflex)
+		// B70-ZK-1807: reserve style width and height,it will make sure that textnode has correct size.
+		if (t.style.width)
 			s.width = t.style.width;
-		if (!s.height && this._vflex)
+		if (t.style.height)
 			s.height = t.style.height;
 		return s;
 	},
