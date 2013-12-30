@@ -35,6 +35,7 @@ ZK 7.0.1
   ZK-1852: Processing indicator briefly displayed in non-localized text
   ZK-1953: Checkmark in listheader is checked when nothing in the listbox
   ZK-2074: native scroll bar disappearing with frozen on browser resize
+  ZK-2068: In Portallayout, width property set via a controller is reset to the value at page load on browser window resize
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
