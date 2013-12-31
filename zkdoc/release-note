@@ -38,6 +38,7 @@ ZK 7.0.1
   ZK-2068: In Portallayout, width property set via a controller is reset to the value at page load on browser window resize
   ZK-2081: Can not customize the text of the tooltip when scrolling the slider
   ZK-2072: template composition not working as described
+  ZK-1807: bandbox - messed display after its style changed
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
