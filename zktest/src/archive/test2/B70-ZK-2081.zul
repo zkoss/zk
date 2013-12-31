@@ -1,0 +1,8 @@
+<zk>
+	<label multiline="true">
+		1. Drag the slider.
+		2. The tooltip should show like "Here is a position : 11".
+	</label>
+	<slider slidingtext="Here is a position : {0}"/>
+	<slider/>
+</zk>

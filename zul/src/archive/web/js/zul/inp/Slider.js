@@ -53,7 +53,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_curpos: 0,
 	_maxpos: 100,
 	_pageIncrement: 10,
-	_slidingtext: '0',
+	_slidingtext: '{0}',
 	_pageIncrement: -1,
 	
 	$define: {
@@ -96,11 +96,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			}
 		},
 		/** Returns the sliding text.
-		 * <p>Default : "0"
+		 * <p>Default : "{0}"
 		 * @return String
 		 */
 		/** Sets the sliding text.
-		 * The syntax "0" will be replaced with the position at client side.
+		 * The syntax "{0}" will be replaced with the position at client side.
 		 * @param String slidingtext
 		 */
 		slidingtext: null,
@@ -260,8 +260,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			if (pos > widget._maxpos) 
 				pos = widget._maxpos;
 			widget.slidepos = pos;
-			if (widget.slidetip) 
-				widget.slidetip.innerHTML = widget._slidingtext = pos;
+			if (widget.slidetip) // B70-ZK-2081: Replace "{0}" with the position.
+				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, pos);
 			widget.fire('onScrolling', pos);
 		}
 		widget._fixPos();
