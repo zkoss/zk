@@ -106,23 +106,27 @@ public class Composition implements Initiator, InitiatorExt {
 		final Component parent = (Component) exec.getAttribute(PARENT);
 		final Collection<Component> roots = (parent == null ? page.getRoots() : parent.getChildren());
 		resolveInsertComponents(roots, insertMap);
-
-		if (!roots.isEmpty()) {
-			Component comp = roots.iterator().next();
-			
+		//B65-ZK-2072: Resolves define components recursively.
+		resolveDefineComponents(roots, insertMap);
+	}
+	
+	private void resolveDefineComponents(Collection<Component> comps, Map<String, Component> map) {
+		if (!comps.isEmpty()) {
+			Component comp = comps.iterator().next();
 			// join "define" components as children of "insert" component
 			do {
 				final Component nextRoot = comp.getNextSibling();
 				final Annotation annt = ((ComponentCtrl)comp).getAnnotation(null, "define");
 				if (annt != null) {
 					final String joinId = annt.getAttribute("value");
-					final Component insertComp = insertMap.get(joinId);
+					final Component insertComp = map.get(joinId);
 					if (insertComp != null) {
 						comp.setParent(insertComp);
 					} else {
 						comp.detach(); //no where to insert
 					}
 				}
+				resolveDefineComponents(comp.getChildren(), map);
 				comp = nextRoot;
 			} while (comp != null);
 		}

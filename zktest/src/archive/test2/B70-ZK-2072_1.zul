@@ -1,0 +1,8 @@
+<vbox>
+  <label multiline="true">
+	1. window1 and window2 should in the red box
+	2. window3 should be in the blue box
+  </label>
+  <hlayout self="@insert(content)" style="border: 1px solid red;"/>
+  <hlayout self="@insert(detail)"  style="border: 1px solid blue;"/>
+</vbox>
