@@ -106,6 +106,7 @@ Nov 26, 2013
 
   --------
 ZK 6.5.5
+Dec 30, 2013
 * Features
   ZK-1971: ZK wcs file shall exclude the css with zk logo image
   ZK-1973: Server processing effect can be configurable
