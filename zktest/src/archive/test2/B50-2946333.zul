@@ -24,7 +24,7 @@ flex="true">
                 <button label="75%" onClick="north.height = self.label" />
             </hbox>
         </north>
-        <center title="Details" flex="true"></center>
+        <center title="Details" vflex="1"></center>
     </borderlayout>
 </zk>
 

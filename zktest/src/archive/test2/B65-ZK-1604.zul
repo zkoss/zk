@@ -15,8 +15,8 @@
 	]]></zscript>
 	<button label="setOld" onClick="setModelOld()"/>
 	<borderlayout width="300px" height="300px">
-		<center flex="true">
-			<columnlayout>
+		<center>
+			<columnlayout vflex="1">
 				<columnchildren hflex="1">
 					<listbox id="lb" model="${model}" hflex="1">
 						<template name="model">
