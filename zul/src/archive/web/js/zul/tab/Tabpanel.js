@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * A tab panel.
  * <p>Default {@link #getZclass}: z-tabpanel.
  */
-zul.tab.Tabpanel = zk.$extends(zul.Widget, {
+zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 	/** Returns the tabbox owns this component.
 	 * @return Tabbox
 	 */

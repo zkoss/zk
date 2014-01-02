@@ -649,7 +649,7 @@ zjq.prototype = {
 			} while (el);
 			return [le, te];
 		}
-		return function () {
+		return function (wgt) {
 			var vOffset = this.viewportOffset(),
 				x = vOffset[0],
 				y = vOffset[1],
@@ -660,7 +660,8 @@ zjq.prototype = {
 			
 			// browser's viewport
 			if (x >= 0 && y >= 0 && x1 <= jq.innerWidth() && y1 <= jq.innerHeight()) {
-				var oel = _overflowElement(this),
+				//B70-ZK-2069: Get the wgt, which is in scrolling.
+				var oel = wgt ? [wgt.getCaveNode(), wgt.getCaveNode()] : _overflowElement(this),
 				lex = zk(oel[0].parentNode).viewportOffset()[0],
 				tey = zk(oel[1].parentNode).viewportOffset()[1];
 				
