@@ -142,8 +142,18 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format,
 			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
+		
+		// ZK-2084: fix display for different step
+		if (typeof value === 'number' && value % 1 == 0) { // is integer
+			var precision = 1;
+			if (this._step && (decimal = (this._step + '').split('.')[1])) {
+				precision = decimal.length;
+			}
+			value = parseFloat(value).toFixed(precision);
+		}
+			
 		return value == null ? '' : fmt ? 
-			zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols) : 
+			zk.fmt.Number.format(fmt, parseFloat(value), this._rounding, this._localizedSymbols) : 
 				DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
 	onSize: function () {
