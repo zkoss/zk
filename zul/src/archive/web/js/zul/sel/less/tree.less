@@ -259,24 +259,33 @@
 				background: @meshSelectedHoverBackgroundColorIE8;
 			}
 		}
-		// radio icon fallback
-		.z-icon-radio {
+	}
+	// check and radio icon fallback
+	.z-treerow-checkable {
+		border-width: 0;
+		background: transparent;
+		.z-treerow-icon {
 			.displaySize(block, 13px, 13px);
 			.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
 			position: relative;
 			top: 2px;
 			left: 2px;
 		}
-		&-radio {
-			border-width: 0;
-			background: transparent;
-
-			.z-icon-radio {
-				background-position: 0 -13px;
+		.z-icon-check {
+			background-position: 0 0;
+			&:before {
+				display: none;
 			}
 		}
-		&-selected .z-icon-radio {
-			border-width: 0;
+		.z-icon-radio {
+			background-position: 0 -13px;
+		}
+	}
+	.z-treerow-selected .z-treerow-checkable {
+		.z-icon-check {
+			background-position: -26px 0px;
+		}
+		.z-icon-radio {
 			margin: 0;
 			background-position: -26px -13px;
 		}

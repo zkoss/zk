@@ -250,7 +250,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			$n = jq(cm);
 		if (this._checked) {
 			$n.addClass(this.$s('checked'));
-			zk(cm).redoCSS(-1, {'fixFontIcon': true});
+			// B70-ZK-2050: Replace icon with image in IE8.
+			//zk(cm).redoCSS(-1, {'fixFontIcon': true});
 			box.selectAll(true, evt);
 		} else {
 			$n.removeClass(this.$s('checked'));

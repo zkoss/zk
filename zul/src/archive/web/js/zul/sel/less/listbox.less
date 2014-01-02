@@ -382,30 +382,6 @@
 			background: darken(@meshHoverBackgroundColorIE8, 3%);
 		}
 	}
-	.z-listheader,
-	.z-listgroup,
-	.z-listitem {
-		&-checkable {
-			border-width: 0;
-			background: transparent;
-			.z-icon-check {
-				.displaySize(block, 13px, 13px);
-				.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
-				position: relative;
-				top: 2px;
-				left: 2px;
-				background-position: 0 0;
-				&:before {
-					display: none;
-				}
-			}
-		}
-	}
-	.z-listheader-checked .z-icon-check,
-	.z-listgroup-selected .z-icon-check {
-		margin: 0;
-		background-position: -26px 0px;
-	}
 	.z-listitem {
 		&:hover > .z-listcell {
 			background: @meshHoverBackgroundColorIE8;
@@ -420,35 +396,50 @@
 				background: @meshSelectedHoverBackgroundColorIE8;
 			}
 		}
-		// radio icon fallback
-		&-checkable {
-			.z-icon-radio {
-				.displaySize(block, 13px, 13px);
-				.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
-				position: relative;
-				top: 2px;
-				left: 2px;
-			}
-		}
-		&-radio {
-			.z-icon-radio {
-				background-position: 0 -13px;
-			}
-		}
-		&-selected .z-icon-radio {
-			border-width: 0;
-			margin: 0;
-			background-position: -26px -13px;
-		}
-		&-selected .z-icon-check {
+	}
+	// check icon fallback
+	.ie8-checkable-icon(z-listheader);
+	.ie8-checkable-icon(z-listgroup);
+	.ie8-checkable-icon(z-listitem);
+	.z-listheader-checkable.z-listheader-checked,
+	.z-listgroup-selected .z-listgroup-checkable,
+	.z-listitem-selected .z-listitem-checkable  {
+		.z-icon-check {
 			margin: 0;
 			background-position: -26px 0px;
 		}
+	}
+	// radio icon fallback
+	.z-listitem-checkable .z-icon-radio {
+		background-position: 0 -13px;
+	}
+	.z-listitem-selected .z-listitem-checkable .z-icon-radio {
+		margin: 0;
+		background-position: -26px -13px;
 	}
 	.z-listgroup-inner {
 		background: @meshGroupBackgroundColorIE8;
 	}
 	.z-listgroupfoot-inner {
 		background: @meshGroupFooterBackgroundColorIE8;
+	}
+}
+.ie8-checkable-icon(@comp) {
+	.@{comp}-checkable {
+		border-width: 0;
+		background: transparent;
+		.@{comp}-icon {
+			.displaySize(block, 13px, 13px);
+			.encodeThemeURL(background, '~./zul/img/common/check-sprite.gif', no-repeat);
+			position: relative;
+			top: 2px;
+			left: 2px;
+		}
+		.z-icon-check {
+			background-position: 0 0;
+			&:before {
+				display: none;
+			}
+		}
 	}
 }
