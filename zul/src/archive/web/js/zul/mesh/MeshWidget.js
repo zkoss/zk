@@ -821,16 +821,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ehead = this.ehead,
 			efoot = this.efoot;
 
-		if (this._nativebar && !(this.fire('onScroll', ebody.scrollLeft).stopped)) {
+		//B70-ZK-2070: if scrolled, the scrollbar need fire onScroll event.
+		if (scrolled && !(this.fire('onScroll', ebody.scrollLeft).stopped) && this._nativebar)
 			if (this._currentLeft != ebody.scrollLeft) {
 				if (ehead)
 					ehead.scrollLeft = ebody.scrollLeft;
 				if (efoot)
 					efoot.scrollLeft = ebody.scrollLeft;
 			}
-		}
-
-
 		
 		// ZK-2046: should sync currentTop in rod mode see also Bug ZK-353
 		if (scrolled /* && !this._listbox$rod && !this._grid$rod*/)

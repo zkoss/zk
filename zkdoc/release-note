@@ -39,6 +39,7 @@ ZK 7.0.1
   ZK-2081: Can not customize the text of the tooltip when scrolling the slider
   ZK-2072: template composition not working as described
   ZK-1807: bandbox - messed display after its style changed
+  ZK-2070: grid onScroll client-side event not working in 7.0
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
