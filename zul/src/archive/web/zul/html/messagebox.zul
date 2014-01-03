@@ -12,7 +12,7 @@ messagebox.zul
 
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 -->
-<window title="${arg.title}" sclass="z-messagebox-window"
+<window title="${arg.title}" sclass="z-messagebox-window ${arg.sclass}"
  border="normal" width="260pt" closable="true"
  use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="client">
 	<hbox>
