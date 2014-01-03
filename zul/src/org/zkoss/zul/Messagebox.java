@@ -145,7 +145,7 @@ public class Messagebox {
 	 * recognized. For the default template, typical parameters are<br/>
 	 * <code>width</code>: the width of the dialog.<br/>
 	 * <code>icon</code>: the URI of the icon
-	 * <code>sclass</code>: the CSS class name of the top level Window
+	 * <code>sclass</code>: the CSS class name of the top level Window (since 7.0.1)
 	 * @since 6.0.0
 	 */
 	public static Button show(String message, String title,

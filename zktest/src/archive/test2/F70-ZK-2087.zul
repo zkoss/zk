@@ -1,0 +1,12 @@
+<window apply="org.zkoss.zktest.test2.F70_ZK_2087">
+	<label multiline="true">
+		1. Click the button.
+		2. Should see a messagebox with red border.
+	</label>
+	<button label="Click" id="btn"/>
+	<style>
+	.myMessagebox {
+		border-color: red;
+	}
+	</style>
+</window>
