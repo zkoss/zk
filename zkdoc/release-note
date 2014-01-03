@@ -41,6 +41,7 @@ ZK 7.0.1
   ZK-2072: template composition not working as described
   ZK-1807: bandbox - messed display after its style changed
   ZK-2070: grid onScroll client-side event not working in 7.0
+  ZK-2084: Doublespinner should display float value
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader

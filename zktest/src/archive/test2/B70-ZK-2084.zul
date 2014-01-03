@@ -1,0 +1,6 @@
+<zk>
+	<div>click 'up' and 'down' in each double spinner, then should see '0.0', '0.0', '0.00'</div>
+	<doublespinner />
+	<doublespinner step="0.1" />
+	<doublespinner step="0.01" />
+</zk>
