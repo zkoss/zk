@@ -49,6 +49,7 @@ Dec 30, 2013
   ZK-1954: Vertical scroll appear when remove last listitem from Listbox
   ZK-1965: zksandbox service.zul throw method getNamespace() not found exception
   ZK-1852: Processing indicator briefly displayed in non-localized text
+  ZK-2080: Chosenbox with ListSubModel not working if using template to render data
   
   --------
 ZK 6.5.4
