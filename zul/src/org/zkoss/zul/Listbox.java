@@ -305,7 +305,7 @@ public class Listbox extends MeshElement {
 	 */
 	private transient Paging _paging;
 	private EventListener<PagingEvent> _pgListener;
-	private EventListener<Event> _pgImpListener, _modelInitListener;
+	private EventListener<Event> _pgImpListener, _modelInitListener, _initListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	private int _tabindex;
@@ -1224,10 +1224,9 @@ public class Listbox extends MeshElement {
 				if (old != null)
 					removePagingListener(old);
 				if (_pgi == null) {
-					if (_paging != null)
+					if (_paging != null) {
 						_pgi = _paging;
-					else
-						newInternalPaging();
+					} else newInternalPaging();
 				} else { // _pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null)
@@ -1241,7 +1240,7 @@ public class Listbox extends MeshElement {
 			}
 		}
 	}
-
+	
 	/**
 	 * Creates the internal paging component.
 	 */
@@ -1249,12 +1248,12 @@ public class Listbox extends MeshElement {
 //		assert inPagingMold() : "paging mold only";
 //		assert (_paging == null && _pgi == null);
 
-		final Paging paging = new Paging();
-		paging.setAutohide(true);
+		final Paging paging = new InternalPaging(true);
 		paging.setDetailed(true);
 		paging.applyProperties();
 		paging.setTotalSize(getDataLoader().getTotalSize());
 		paging.setParent(this);
+		
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
@@ -1285,6 +1284,7 @@ public class Listbox extends MeshElement {
 				}
 				postOnPagingInitRender();
 			}
+			
 			invalidate();
 		}
 		
@@ -2516,6 +2516,8 @@ public class Listbox extends MeshElement {
 		} finally {
 			renderer.doFinally();
 		}
+		Executions.getCurrent().setAttribute("zkoss.Listbox.deferInitPaging_"+getUuid(), Boolean.TRUE);
+		
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
 	}
 	private static Listitem nextListitem(Listitem item) {
@@ -2957,7 +2959,9 @@ public class Listbox extends MeshElement {
 			exec.setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
 			// prepare a right moment to init Listbox (must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
+			this.addEventListener("onInitPaging", _initListener = new InitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
+			Events.postEvent(15000, new Event("onInitPaging", this));
 		}
 	}
 
@@ -2982,6 +2986,30 @@ public class Listbox extends MeshElement {
 			_anchorLeft = 0 ;
 			_topPad = 0;
 		}
+	}
+	
+	private class InitListener implements SerializableEventListener<Event>,
+	CloneableEventListener<Event> {
+
+		public void onEvent(Event event) throws Exception {
+			if (_initListener != null) {
+				Listbox.this.removeEventListener(
+						"onInitPaging", _initListener);
+				_initListener = null;
+			}
+			init();
+		}
+		
+		private void init() {
+			if (_pgi instanceof InternalPaging && !((InternalPaging) _pgi).isAutohideModify()) {
+				_pgi.setAutohide(isAutohidePaging());
+			}
+		}
+
+		public Object willClone(Component comp) {
+			return null; // skip to clone
+		}
+		
 	}
 
 	private class ModelInitListener implements SerializableEventListener<Event>,
@@ -3249,6 +3277,10 @@ public class Listbox extends MeshElement {
 	 */
 	private boolean isRightSelect() {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rightSelect", true, true);
+	}
+	
+	protected boolean isAutohidePaging() {
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.autohidePaging", false, true);
 	}
 	
 	/** Returns whether to sort all of item when model or sort direction be changed.

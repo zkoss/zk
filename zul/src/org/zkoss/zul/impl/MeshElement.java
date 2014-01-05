@@ -21,6 +21,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 
@@ -165,6 +166,42 @@ abstract public class MeshElement extends XulElement implements Paginated {
 			smartUpdate("pagingPosition", pagingPosition);
 		}
 	}
+	
+	public class InternalPaging extends Paging {
+		private boolean autohideModify = false;
+		private boolean firstTime = true;
+		
+		public InternalPaging(boolean autohide) {
+			super.setAutohide(autohide);
+		}
+		
+		public boolean isAutohide() {
+			if (autohideModify || firstTime) {
+				firstTime = false;
+				return super.isAutohide();
+			}
+			else
+				return isAutohidePaging();
+		}
+		
+		public void setAutohide(boolean autohide) {
+			autohideModify = true;
+			super.setAutohide(autohide);
+		}
+		
+		protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+				throws java.io.IOException {
+			super.renderProperties(renderer);
+			render(renderer, "autohide", isAutohide());
+		}
+		
+		public boolean isAutohideModify() {
+			return autohideModify;
+		}
+		
+	}
+	
+	protected abstract boolean isAutohidePaging();
 
 	/**
 	 * Returns how to position the paging of mesh element at the client screen.
