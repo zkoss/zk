@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<div>
+		<div>
+			1. Test each of the following component's selection that the
+			unselection will show after that component when you change
+			the selection. (ps. test shift click also)
+		</div>
+	</div>
+	<vlayout>
+		<zscript>
+	ListModelList Cmodel = new ListModelList();
+	Cmodel.add("test1");
+	Cmodel.add("test2");
+	Cmodel.add("test3");
+	ListModelList Cmodel1 = new ListModelList();
+	Cmodel1.add("test1");
+	Cmodel1.add("test2");
+	Cmodel1.add("test3");
+	ListModelList Smodel = new ListModelList();
+	Smodel.add("test1");
+	Smodel.add("test2");
+	Smodel.add("test3");
+	ListModelList Lmodel = new ListModelList();
+	Lmodel.add("test1");
+	Lmodel.add("test2");
+	Lmodel.add("test3");
+	ListModelList Lmodel1 = new ListModelList();
+	Lmodel1.add("test1");
+	Lmodel1.add("test2");
+	Lmodel1.add("test3");
+	Lmodel1.add("test4");
+	Lmodel1.add("test5");
+	Lmodel1.add("test6");
+	Lmodel1.add("test7");
+	ListModelList Lmodel2 = new ListModelList();
+	Lmodel2.add("test1");
+	Lmodel2.add("test2");
+	Lmodel2.add("test3");
+	ListModelList Lmodel3 = new ListModelList();
+	Lmodel3.add("test1");
+	Lmodel3.add("test2");
+	Lmodel3.add("test3");
+	Lmodel3.add("test4");
+	Lmodel3.add("test5");
+	Lmodel3.add("test6");
+	Lmodel3.add("test7");
+	ListModelList node = new ListModelList();
+	node.add(new DefaultTreeNode("test2.1"));
+	DefaultTreeModel Tmodel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+			Arrays.asList(new DefaultTreeNode[] {
+					new DefaultTreeNode("test 1"),
+					new DefaultTreeNode("test 2", node) })));
+	ListModelList node1 = new ListModelList();
+	node1.add(new DefaultTreeNode("test2.1"));
+	DefaultTreeModel Tmodel1 = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+			Arrays.asList(new DefaultTreeNode[] {
+					new DefaultTreeNode("test 1"),
+					new DefaultTreeNode("test 2", node1),
+					new DefaultTreeNode("test 3"),
+					new DefaultTreeNode("test 4"),
+					new DefaultTreeNode("test 5") })));
+</zscript>
+		<hlayout>
+			Chosen Box:
+			<chosenbox width="150px" model="${Cmodel}"
+				onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())' />
+			<label />
+
+			Select Box:
+			<selectbox model="${Smodel}"
+				onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())' />
+			<label />
+
+			ComboBox:
+			<combobox model="${Cmodel1}"
+				onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())' />
+			<label />
+		</hlayout>
+		<hlayout>
+			<tabbox>
+				<tabs>
+					<tab label="Listbox with no rod"></tab>
+					<tab label="Listbox with rod"></tab>
+					<tab label="Tree"></tab>
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<hlayout>
+							<vlayout>
+								<vlayout width="300px">
+									<listbox id="box" model="${Lmodel}"
+										width="300px" multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.rod="false" />
+										<listhead>
+											<listheader>
+												test with model
+											</listheader>
+										</listhead>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box1" width="300px"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.rod="false" />
+										<listhead>
+											<listheader>
+												test with no model
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box2" width="300px"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.rod="false" />
+										<listhead>
+											<listheader>
+												test with unselectable
+												listgroup and no model
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+										<listgroup>
+											<listcell>test4</listcell>
+										</listgroup>
+									</listbox>
+
+									<label />
+								</vlayout>
+							</vlayout>
+							<vlayout>
+								<vlayout width="300px">
+									<listbox id="box3" width="300px"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.rod="false"
+											org.zkoss.zul.listbox.groupSelect="true" />
+
+										<listhead>
+											<listheader>
+												test with selectable
+												listgroup and no model
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+										<listgroup>
+											<listcell>test4</listcell>
+										</listgroup>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box4"
+										model="${Lmodel1}" width="300px" mold="paging" pageSize="3"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.rod="false" />
+										<listhead>
+											<listheader>
+												test with model and
+												paging
+											</listheader>
+										</listhead>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box5" width="300px"
+										mold="paging" pageSize="3" multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.rod="false" />
+										<listhead>
+											<listheader>
+												test with no model and
+												paging
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test4</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test5</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test6</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test7</listcell>
+										</listitem>
+									</listbox>
+
+									<label />
+								</vlayout>
+							</vlayout>
+
+						</hlayout>
+					</tabpanel>
+					<tabpanel>
+						<hlayout>
+							<vlayout>
+								<vlayout width="300px">
+									<listbox id="box6"
+										model="${Lmodel2}" width="300px" multiple="true"
+										checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<listhead>
+											<listheader>
+												test with model
+											</listheader>
+										</listhead>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box7" width="300px"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<listhead>
+											<listheader>
+												test with no model
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box8" width="300px"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<listhead>
+											<listheader>
+												test with unselectable
+												listgroup and no model
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+										<listgroup>
+											<listcell>test4</listcell>
+										</listgroup>
+									</listbox>
+
+									<label />
+								</vlayout>
+							</vlayout>
+							<vlayout>
+								<vlayout width="300px">
+									<listbox id="box9" width="300px"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<custom-attributes
+											org.zkoss.zul.listbox.groupSelect="true" />
+
+										<listhead>
+											<listheader>
+												test with selectable
+												listgroup and no model
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+										<listgroup>
+											<listcell>test4</listcell>
+										</listgroup>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box10"
+										model="${Lmodel3}" width="300px" mold="paging" pageSize="3"
+										multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<listhead>
+											<listheader>
+												test with model and
+												paging
+											</listheader>
+										</listhead>
+									</listbox>
+
+									<label />
+								</vlayout>
+								<vlayout width="300px">
+									<listbox id="box11" width="300px"
+										mold="paging" pageSize="3" multiple="true" checkmark="true"
+										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										<listhead>
+											<listheader>
+												test with no model and
+												paging
+											</listheader>
+										</listhead>
+										<listitem>
+											<listcell>test1</listcell>
+										</listitem>
+										<listitem disabled="true">
+											<listcell>test2</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test3</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test4</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test5</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test6</listcell>
+										</listitem>
+										<listitem>
+											<listcell>test7</listcell>
+										</listitem>
+									</listbox>
+
+									<label />
+								</vlayout>
+							</vlayout>
+						</hlayout>
+					</tabpanel>
+					<tabpanel>
+						<vlayout>
+							<tree model="${Tmodel}" width="300px"
+								multiple="true" checkmark="true"
+								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<treecols sizable="true">
+									<treecol label="test with model" />
+								</treecols>
+							</tree>
+
+							<label />
+						</vlayout>
+						<vlayout>
+							<tree width="300px" multiple="true"
+								checkmark="true"
+								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<treecols sizable="true">
+									<treecol label="test with no model" />
+								</treecols>
+								<treechildren>
+									<treeitem>
+										<treerow>
+											<treecell label="test 1" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="test 2" />
+										</treerow>
+										<treechildren>
+											<treeitem>
+												<treerow>
+													<treecell
+														label="test 2.1" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</treeitem>
+								</treechildren>
+							</tree>
+
+							<label />
+						</vlayout>
+						<vlayout>
+							<tree model="${Tmodel1}" width="300px"
+								multiple="true" checkmark="true" mold="paging" pageSize="3"
+								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<treecols sizable="true">
+									<treecol
+										label="test with model and paging" />
+								</treecols>
+							</tree>
+
+							<label />
+						</vlayout>
+						<vlayout>
+							<tree width="300px" multiple="true"
+								checkmark="true" mold="paging" pageSize="3"
+								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<treecols sizable="true">
+									<treecol
+										label="test with no model and paging" />
+								</treecols>
+								<treechildren>
+									<treeitem>
+										<treerow>
+											<treecell label="test 1" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="test 2" />
+										</treerow>
+										<treechildren>
+											<treeitem>
+												<treerow>
+													<treecell
+														label="test 2.1" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="test 3" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="test 4" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="test 5" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</tree>
+
+							<label />
+						</vlayout>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+		</hlayout>
+	</vlayout>
+</zk>

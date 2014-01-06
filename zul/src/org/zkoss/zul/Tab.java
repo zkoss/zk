@@ -417,6 +417,11 @@ public class Tab extends LabelImageElement {
 				public Set<Tab> getPreviousSelectedItems() {
 					return prevSeldItems;
 				}
+
+				// in single selection, getPreviousSelectedItems() is same as getPreviousSelectedItems()
+				public Set<Tab> getUnselectedItems() {
+					return getPreviousSelectedItems();
+				}
 			});
 			
 			final Set<Tab> selItems = evt.getSelectedItems();

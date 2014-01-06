@@ -2384,7 +2384,7 @@ public class Tree extends MeshElement {
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */
-	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(final org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
 			final Set<Treeitem> prevSeldItems = new LinkedHashSet<Treeitem>(_selItems);
@@ -2401,6 +2401,14 @@ public class Tree extends MeshElement {
 
 				public Set<Treeitem> getPreviousSelectedItems() {
 					return prevSeldItems;
+				}
+				
+				public Set<Treeitem> getUnselectedItems() {
+					Set<Treeitem> _unselItems = new LinkedHashSet<Treeitem>();
+					Treeitem ref = (Treeitem) request.getDesktop().getComponentByUuidIfAny((String)request.getData().get("reference"));
+					if (ref != null && ref.isSelected() && prevSeldItems.contains(ref))
+						_unselItems.add(ref);
+					return _unselItems;
 				}
 			});
 			Set<Treeitem> selItems = evt.getSelectedItems();

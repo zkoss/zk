@@ -460,10 +460,10 @@ public class Selectbox extends HtmlBasedComponent {
 				final Set<Object> prevSet = new LinkedHashSet<Object>(1);
 				prevSet.add(prevSelected);
 				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-						prevSet, selObjs, null, index, 0));
+						prevSet, prevSet, selObjs, null, index, 0));
 			} else {
 				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-						null, selObjs, null, index, 0));
+						null, null, selObjs, null, index, 0));
 			}
 		} else // ZK-1053
 			super.service(request, everError);

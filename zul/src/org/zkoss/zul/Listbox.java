@@ -3327,6 +3327,14 @@ public class Listbox extends MeshElement {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.groupSelect", false, true);
 	}
 	
+	private Set collectUnseldItems(Set previousSelection, Set currentSelection) {
+		Set prevSeldItems = previousSelection != null ? (Set) Objects.clone(new LinkedHashSet(previousSelection)) : 
+			new LinkedHashSet();
+		if (currentSelection != null && prevSeldItems.size() > 0)
+			prevSeldItems.removeAll(currentSelection);
+		return prevSeldItems;
+	}
+	
 	/**
 	 * Processes an AU request.
 	 *
@@ -3336,7 +3344,7 @@ public class Listbox extends MeshElement {
 	 *
 	 * @since 5.0.0
 	 */
-	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(final org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
 			if (_rod) {
@@ -3376,7 +3384,17 @@ public class Listbox extends MeshElement {
 			if (_rod && Executions.getCurrent().getAttribute(
 					"zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
+			
 			final Set<Listitem> prevSeldItems = new LinkedHashSet<Listitem>(_selItems);
+			
+			// ZK-2089: prevSeldItems should skip listgroup if listgroup is not selectable
+			if (!isListgroupSelectable() && prevSeldItems.size() > 0) {
+				for (Object item : prevSeldItems.toArray()) {
+					if (item instanceof Listgroup)
+						prevSeldItems.remove(item);
+				}
+			}
+			
 			SelectEvent evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Listitem>() {
 				public Set<Object> getObjects(Set<Listitem> items) {
@@ -3390,6 +3408,52 @@ public class Listbox extends MeshElement {
 
 				public Set<Listitem> getPreviousSelectedItems() {
 					return prevSeldItems;
+				}
+				
+				public Set<Listitem> getUnselectedItems() {
+					List<String> sitems = cast((List)request.getData().get("items"));
+					Set<Listitem> curSeldItems = AuRequests.convertToItems(request.getDesktop(), sitems);
+					boolean paging = inPagingMold();
+					Set realCurSeldItems = (Set) Objects.clone(curSeldItems);
+					if (realCurSeldItems == null)
+						realCurSeldItems = new LinkedHashSet();
+					
+					if (_rod) {
+						Map<String, Object> m = cast((Map) request.getData().get("range"));
+						if (m != null) {
+							int start = AuRequests.getInt(m, "start", -1);
+							int end = AuRequests.getInt(m, "end", -1);
+							for (Iterator it = _items.iterator(); it.hasNext();) {
+								Listitem item = (Listitem)it.next();
+								int index = item.getIndex();
+								if (index >= start && index <= end) {							
+									if (!item.isDisabled()) 
+										realCurSeldItems.add(item);
+								}
+							}
+						}
+					}
+					
+					if (!paging) {
+						return collectUnseldItems(prevSeldItems, curSeldItems);
+					} else {
+						int from, to;
+						final Paginal pgi = getPaginal();
+						int pgsz = pgi.getPageSize();
+						from = pgi.getActivePage() * pgsz;
+						to = from + pgsz; // excluded
+						
+						Set realPrevSeldItems = (Set) Objects.clone(prevSeldItems);
+							
+						// remove the selction in other page
+						for (Object item : realPrevSeldItems.toArray()) {
+							int index = ((Listitem) item).getIndex();
+							if (index >= to || index < from)
+								realPrevSeldItems.remove(item);
+						}
+						
+						return collectUnseldItems(realPrevSeldItems, realCurSeldItems);
+					}
 				}
 			});
 			Set<Listitem> selItems = cast(evt.getSelectedItems());

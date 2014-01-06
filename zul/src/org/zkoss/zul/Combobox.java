@@ -761,7 +761,9 @@ public class Combobox extends Textbox {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
 			final Set<Comboitem> prevSelectedItems = new LinkedHashSet<Comboitem>();
-			prevSelectedItems.add(_selItem);
+			// ZK-2089: should skip when selected item is null 
+			if (_selItem != null)
+				prevSelectedItems.add(_selItem);
 			SelectEvent evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Comboitem>() {
 				public Set<Object> getObjects(Set<Comboitem> items) {
@@ -775,6 +777,11 @@ public class Combobox extends Textbox {
 
 				public Set<Comboitem> getPreviousSelectedItems() {
 					return prevSelectedItems;
+				}
+				
+				// in single selection, getPreviousSelectedItems() is same as getPreviousSelectedItems()
+				public Set<Comboitem> getUnselectedItems() {
+					return getPreviousSelectedItems();
 				}
 			});
 			Set selItems = evt.getSelectedItems();
