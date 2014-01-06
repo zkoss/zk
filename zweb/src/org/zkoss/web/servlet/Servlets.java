@@ -385,12 +385,16 @@ public class Servlets {
 				double version;
 				browserInfo(zk, "webkit", version = getVersion(m));
 
+				//B70-ZK-2088: make sure Browser is not chrome
+				boolean matchChrome = false;
 				m = _rchrome.matcher(ua);
-				if (m.matches())
+				if (m.matches()) {
 					zk.put("chrome", getVersion(m));
+					matchChrome = true;
+				}
 
 				m = _rsafari.matcher(ua);
-				if (m.matches())
+				if (!matchChrome && m.matches())
 					zk.put("safari", getVersion(m));
 				
 				m = _randroid.matcher(ua);
