@@ -30,6 +30,7 @@ import org.zkoss.zk.au.AuRequests;
  */
 public class ScrollEvent extends Event {
 	private final int _pos;
+	private final double _dPos;
 	private boolean _outBound;
 
 	/** Converts an AU request to a scroll event.
@@ -37,13 +38,24 @@ public class ScrollEvent extends Event {
 	 */
 	public static final ScrollEvent getScrollEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
+		Object decimal = data.get("decimal");
+		int pos;
+		double dPos = 0;
+		
+		if (decimal != null) {
+			dPos = AuRequests.getDouble(data, "decimal", 0);
+			pos = (int) dPos;
+		} else {
+			pos = AuRequests.getInt(data, "", 0);
+			dPos = pos;
+		}
 		Object outBound = data.get("outBound");
 		if (outBound != null)
 			return new ScrollEvent(request.getCommand(), request.getComponent(),
-				AuRequests.getInt(data, "", 0), (Boolean)outBound);
+				dPos, (Boolean)outBound);
 		else
 			return new ScrollEvent(request.getCommand(), request.getComponent(),
-				AuRequests.getInt(data, "", 0));
+				dPos);
 	}
 
 	/** Constructs an scroll-relevant event.
@@ -52,6 +64,16 @@ public class ScrollEvent extends Event {
 	public ScrollEvent(String name, Component target, int pos) {
 		super(name, target);
 		_pos = pos;
+		_dPos = pos;
+	}
+	/** Constructs an scroll-relevant event.
+	 * @param pos the new position
+	 * @since 7.0.1
+	 */
+	public ScrollEvent(String name, Component target, double pos) {
+		super(name, target);
+		_pos = (int) pos;
+		_dPos = pos;
 	}
 	/** Constructs an scroll-relevant event.
 	 * @param pos the new position
@@ -60,12 +82,30 @@ public class ScrollEvent extends Event {
 	public ScrollEvent(String name, Component target, int pos, boolean outBound) {
 		super(name, target);
 		_pos = pos;
+		_dPos = pos;
+		_outBound = outBound;
+	}
+	/** Constructs an scroll-relevant event.
+	 * @param pos the new position
+	 * @param outBound the position is outside the boundary or not (only used on tablet/mobile device)
+	 * @since 7.0.1
+	 */
+	public ScrollEvent(String name, Component target, double dPos, boolean outBound) {
+		super(name, target);
+		_pos = (int) dPos;
+		_dPos = dPos;
 		_outBound = outBound;
 	}
 	/** Returns the position.
 	 */
 	public final int getPos() {
 		return _pos;
+	}
+	/** Returns the position.
+	 * @since 7.0.1
+	 */
+	public final double getPosInDouble() {
+		return _dPos;
 	}
 	/** Return true if the scroll position is outside of boundary on tablet/mobile device.
 	 * @since 6.5.0

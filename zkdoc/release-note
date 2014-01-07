@@ -4,6 +4,7 @@ ZK 7.0.1
   ZK-2049: Menupopup support toggle type
   ZK-2075: provide the possibility to display or log missing labels
   ZK-2087: Add sclass to messagebox
+  ZK-2085: Slider support minimal position and decimal mode
 
 * Bugs
   ZK-2042: Button's autodisable="self" will cause to stop the form request processing  

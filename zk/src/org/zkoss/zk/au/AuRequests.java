@@ -105,6 +105,15 @@ public class AuRequests {
 		final Object o = data.get(key);
 		return o != null ? ((Number)o).longValue(): defVal;
 	}
+	/** Returns the double value of the specified key in the data.
+	 * It is the same as <code>getDouble(data, key, defVal, false)</code>.
+	 * @param defVal the default value; used if not found.
+	 * @since 7.0.1
+	 */
+	public static double getDouble(Map<String, Object> data, String key, long defVal) {
+		final Object o = data.get(key);
+		return o != null ? ((Number)o).doubleValue(): defVal;
+	}
 	/** Returns the integer value of the specified key in the data.
 	 * @param defVal the default value; used if not found.
 	 * @param silent whether not to throw an exception if failed to convert
@@ -132,6 +141,20 @@ public class AuRequests {
 				return defVal;
 			}
 		return getLong(data, key, defVal);
+	}
+	/** Returns the double value of the specified key in the data.
+	 * @param defVal the default value; used if not found.
+	 * @param silent whether not to throw an exception if failed to convert
+	 * @since 7.0.1
+	 */
+	public static double getDouble(Map<String, Object> data, String key, long defVal, boolean silent) {
+		if (silent)
+			try {
+				return getDouble(data, key, defVal);
+			} catch (Throwable ex) {
+				return defVal;
+			}
+		return getDouble(data, key, defVal);
 	}
 	/** Returns whether the specified key is defined.
 	 */
