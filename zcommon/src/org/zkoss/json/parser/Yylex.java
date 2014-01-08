@@ -661,8 +661,13 @@ int getPosition(){
           	String yyt = yytext();
           	try {
           		val = Integer.valueOf(yyt);
-          	} catch (NumberFormatException ex) {
-          		val = Long.valueOf(yyt);
+          	} catch (NumberFormatException ex1) {
+              	try {
+              		val = Long.valueOf(yyt);
+              	} catch (NumberFormatException ex2) {
+              		// B65-ZK-2091: In case yyt cannot not be interpreted to Long.
+              		val = Double.valueOf(yyt);
+              	}
           	}
           	return new Yytoken(Yytoken.TYPE_VALUE, val);
           }
