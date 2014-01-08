@@ -23,16 +23,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return Math.round(v * mul) / mul;
 	}
 	function _getBtnNewPos(wgt) {
-		var btn = wgt.$n('btn');
+		var btn = wgt.$n('btn'),
+			curpos = wgt._curpos,
+			isDecimal = wgt.isDecimal();
 		
-		btn.title = wgt._curpos;
-		wgt.updateFormData(wgt._curpos);
+		btn.title = isDecimal ? curpos.toFixed(_digitsAfterDecimal(_getStep(wgt))) : curpos;
+		wgt.updateFormData(curpos);
 		
 		var isVertical = wgt.isVertical(),
 			ofs = zk(wgt.$n()).cmOffset(),
 			totalLen = isVertical ? wgt._getHeight(): wgt._getWidth(), 
-			x = totalLen > 0 ? ((wgt._curpos - wgt._minpos) * totalLen) / (wgt._maxpos - wgt._minpos) : 0;
-		if(!wgt.isDecimal())
+			x = totalLen > 0 ? ((curpos - wgt._minpos) * totalLen) / (wgt._maxpos - wgt._minpos) : 0;
+		if(!isDecimal)
 			x = Math.round(x);
 	
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
@@ -51,6 +53,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_getBtnNewPos(wgt));
 		
 		return newPosition;
+	}
+	function _getStep(wgt) {
+		var step = wgt._step;
+		return (!wgt.isDecimal() || step != -1) ? step : 0.1;
 	}
 	
 /**
@@ -90,9 +96,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 * {@link #getMaxpos} is assumed.
 		 * @param double curpos
 		 */
-		curpos: _zkf = function () {
+		curpos: function () {
 			if (this.desktop) {
-				this._fixStep();
 				this._fixPos();
 			}
 		},
@@ -103,14 +108,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		/** Sets the minimum position of the slider.
 		 * @param double minpos (since 7.0.1)
 		 */
-		minpos: function() {
-			if (this._curpos < this._minpos) {
-				this._curpos = this._minpos;
+		minpos: function(minpos) {
+			if (this._curpos < minpos) {
+				this._curpos = minpos;
 			}
-			if (this.desktop) {
-				this._fixStep();
+			this._fixStep();
+			if (this.desktop)
 				this._fixPos();
-			}
 		},
 		/** Returns the maximum position of the slider.
 		 * <p>Default: 100.
@@ -119,14 +123,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		/** Sets the maximum position of the slider.
 		 * @param double maxpos (since 7.0.1)
 		 */
-		maxpos: function() {
-			if (this._curpos > this._maxpos) {
-				this._curpos = this._maxpos;
+		maxpos: function(maxpos) {
+			if (this._curpos > maxpos) {
+				this._curpos = maxpos;
 			}
-			if (this.desktop) {
-				this._fixStep();
+			this._fixStep();
+			if (this.desktop)
 				this._fixPos();
-			}
 		},
 		/** Returns the sliding text.
 		 * <p>Default : "{0}"
@@ -155,10 +158,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 */
 		/** Sets the step of slider
 		 * <p>Default: -1 (means it will scroll to the position the user clicks).
+		 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
 		 * @param double step
 		 * @since 7.0.1
 		 */
-		step: _zkf,
+		step: function () {
+			this._fixStep();
+		},
 		/** Returns the name of this component.
 		 * <p>Default: null.
 		 * <p>The name is used only to work with "legacy" Web application that
@@ -195,7 +201,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 * "integer", "decimal".
 		 * @since 7.0.1
 		 */
-		mode: _zkf
+		mode: function () {
+			this._fixStep();
+			if(this.desktop) {
+				this._fixPos();
+			}
+		}
 	},
 	domClass_: function() {
 		var scls = this.$supers('domClass_', arguments),
@@ -231,7 +242,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			pos = $btn.zk.revisedOffset(),
 			wgt = this,
 			pageIncrement = this._pageIncrement,
-			moveToCursor = pageIncrement < 0 && this._step <= 0,
+			moveToCursor = pageIncrement < 0 && _getStep(this) < 0,
 			isVertical = this.isVertical(),
 			height = this._getHeight(),
 			width = this._getWidth(),
@@ -241,8 +252,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		
 		if (!moveToCursor) {
 			if (pageIncrement > 0) {
-				this._curpos += offset > 0 ? pageIncrement: - pageIncrement;
-				this._curpos = _roundDecimal(this._curpos, _digitsAfterDecimal(pageIncrement));
+				var curpos = this._curpos + (offset > 0 ? pageIncrement: - pageIncrement);
+				this._curpos = _roundDecimal(this._constraintPos(curpos), _digitsAfterDecimal(pageIncrement));
 			} else {
 				var total = isVertical ? height : width,
 					to = (offset / total) * (this._maxpos - this._minpos);
@@ -258,10 +269,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			nextPos.left = jq.px0(width);
 		$btn.animate(nextPos, 'slow', function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
-			if (pos < wgt._minpos) 
-				pos = wgt._minpos;
-			if (pos > wgt._maxpos) 
-				pos = wgt._maxpos;
+			pos = wgt._constraintPos(pos);
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
 			if (moveToCursor)
 				wgt._fixPos();
@@ -275,8 +283,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				snap: opt,
 				change: this._dragging,
 				endeffect: this._endDrag
-				}; 
-		if (this._step > 0)
+				};
+		if (_getStep(this) > 0)
 			opt.snap = this._getStepOffset();
 		this._drag = new zk.Draggable(this, this.$n('btn'), opt);
 	},
@@ -327,18 +335,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			isDecimal = widget.isDecimal(),
 			pos = widget._realpos();
 		if (pos != widget.slidepos) {
-			if (pos < widget._minpos) 
-				pos = widget._minpos;
-			if (pos > widget._maxpos) 
-				pos = widget._maxpos;
-			widget.slidepos = pos;
-			var step = widget._step,
-				text = pos;
-			if (step > 0 && isDecimal) {
-				var precision = _digitsAfterDecimal(step);
-				pos = _roundDecimal(pos, precision);
-				text = pos.toFixed(precision);
-			}
+			widget.slidepos = pos = widget._constraintPos(pos);
+			var text = isDecimal ? pos.toFixed(_digitsAfterDecimal(_getStep(widget))) : pos;
 			if (widget.slidetip) // B70-ZK-2081: Replace "{0}" with the position.
 				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, text);
 			widget.fire('onScrolling', isDecimal ? {decimal: pos} : pos);
@@ -346,7 +344,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget._fixPos();
 	},
 	_endDrag: function(dg) {
-		var widget = dg.control, pos = widget._realpos();
+		var widget = dg.control,
+			pos = widget._realpos();
 		
 		widget.fire('onScroll', widget.isDecimal() ? {decimal: pos} : pos);
 		
@@ -359,7 +358,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			refofs = zk(this.$n()).revisedOffset(),
 			maxpos = this._maxpos,
 			minpos = this._minpos,
-			step = this._step,
+			step = _getStep(this),
 			pos;
 		if (this.isVertical()) {
 			var ht = this._getHeight();
@@ -370,19 +369,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 		if (!this.isDecimal())
 			pos = Math.round(pos);
-		if (step > 0)
-			return this._curpos = (pos > 0 ? _roundDecimal(pos,  _digitsAfterDecimal(step)) : 0 ) + minpos;
+		if (step > 0) {
+			return this._curpos = pos > 0 ? _roundDecimal(pos + minpos, _digitsAfterDecimal(step)) : minpos;
+		}
 		else 
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	},
+	_constraintPos: function(pos) {
+		return pos < this._minpos ? this._minpos : (pos > this._maxpos ? this._maxpos : pos);
+	},
 	_getSteppedPos: function(pos) {
 		var minpos = this._minpos,
-			step = this._step,
+			step = _getStep(this),
 			mul = 1,
 			rmdPos;
 		pos -= minpos;
-		if (this.isDecimal()) 
-			pos = _roundDecimal(pos, _digitsAfterDecimal(step));
+		if (this.isDecimal()) {
+			mul = Math.pow(10, _digitsAfterDecimal(step));
+			pos *= mul;
+			step *= mul
+		}
 		rmdPos = pos % step;
 		return (pos - rmdPos + Math.round((rmdPos) / step) * step) / mul + minpos;
 	},
@@ -394,9 +400,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	_getStepOffset: function() {
 		var totalLen = this.isVertical() ? this._getHeight(): this._getWidth(),
-				ofs = [0, 0];
-		if (this._step > 0)
-			ofs[(this.isVertical() ? 1: 0)] = totalLen > 0 ? totalLen * this._step / (this._maxpos - this._minpos) : 0;
+			step = _getStep(this),
+			ofs = [0, 0];
+		if (step)
+			ofs[(this.isVertical() ? 1: 0)] = totalLen > 0 ? totalLen * step / (this._maxpos - this._minpos) : 0;
 		return ofs;
 	},
 	_fixSize: function() {
@@ -417,15 +424,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this.$n('btn').style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
 	_fixStep: function() {
+		var step = _getStep(this);
 		if (this._drag) {
-			if (this._step <= 0) {
+			if (step <= 0) {
 				if(this._drag.opts.snap)
 					delete this._drag.opts.snap;
 			} else
 				this._drag.opts.snap = this._getStepOffset();
-		}
-		if (this._step > 0) {
-			this._curpos = this._getSteppedPos(this._curpos);
 		}
 	},
 	onSize: function() {

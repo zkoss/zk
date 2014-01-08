@@ -37,7 +37,14 @@ public class Slider extends XulElement {
 	private String _name;
 	private String _slidingtext = "{0}";
 	
+	/** Represent integer slider.
+	 * @since 7.0.1
+	 */
 	public static final String INTEGER = "integer";
+	
+	/** Represent decimal slider.
+	 * @since 7.0.1
+	 */
 	public static final String DECIMAL = "decimal";
 
 	static {
@@ -116,7 +123,7 @@ public class Slider extends XulElement {
 	public int getCurpos() {
 		return _curpos.intValue();
 	}
-	/** Returns the current position of the slider.
+	/** Returns the double value of slider's current position.
 	 *
 	 * <p>Default: 0.
 	 * @since 7.0.1
@@ -156,7 +163,7 @@ public class Slider extends XulElement {
 		return _minpos.intValue();
 	}
 	
-	/** Returns the minimum position of the slider.
+	/** Returns the double value of slider's minimum position.
 	 *
 	 * <p>Default: 0.
 	 * @since 7.0.1
@@ -179,12 +186,12 @@ public class Slider extends XulElement {
 	 */
 	public void setMinpos(double minpos)
 	throws WrongValueException {
-		if (minpos <= 0)
+		if (minpos < 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+minpos);
 
 		if (Double.compare(_minpos, minpos) != 0) {
 			if (_curpos < minpos)
-				setCurpos(minpos);
+				_curpos = minpos;
 			_minpos = minpos;
 			smartUpdate("minpos", _minpos);
 		}
@@ -198,7 +205,7 @@ public class Slider extends XulElement {
 		return _maxpos.intValue();
 	}
 	
-	/** Returns the maximum position of the slider.
+	/** Returns the double value of slider's maximum position.
 	 *
 	 * <p>Default: 100.
 	 * @since 7.0.1
@@ -227,7 +234,7 @@ public class Slider extends XulElement {
 
 		if (Double.compare(_maxpos, maxpos) != 0) {
 			if (_curpos > maxpos)
-				setCurpos(maxpos);
+				_curpos = maxpos;
 			_maxpos = maxpos;
 			smartUpdate("maxpos", _maxpos);
 		}
@@ -268,7 +275,7 @@ public class Slider extends XulElement {
 	 * to the position that user clicks.
 	 */
 	public void setPageIncrement(int pginc) {
-		setPageIncrement((int) pginc);
+		setPageIncrement((double) pginc);
 	}
 	
 	/** Sets the amount that the value of {@link #getCurpos}
@@ -290,6 +297,7 @@ public class Slider extends XulElement {
 	 * Returns the step of slider
 	 * 
 	 * <p>Default: -1 (means it will scroll to the position the user clicks).
+	 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
 	 * @since 7.0.1
 	 */
 	public int getStep() {
@@ -300,6 +308,7 @@ public class Slider extends XulElement {
 	 * Returns the step of slider
 	 * 
 	 * <p>Default: -1 (means it will scroll to the position the user clicks).
+	 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
 	 * @since 7.0.1
 	 */
 	public double getStepInDouble() {
@@ -322,12 +331,14 @@ public class Slider extends XulElement {
 	 */
 	public void setStep(double step)
 	throws WrongValueException {
+		if (step <= 0)
+			step = -1;
 		if (Double.compare(_step, step) != 0) {
 			_step = step;
 			smartUpdate("step", _step);
 		}
 	}
-
+	
 	/** Returns the name of this component.
 	 * <p>Default: null.
 	 * <p>The name is used only to work with "legacy" Web application that
