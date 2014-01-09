@@ -46,6 +46,7 @@ ZK 7.0.1
   ZK-2088: zk.safari show version number on Chrome
   ZK-2080: Chosenbox with ListSubModel not working if using template to render data
   ZK-2091: Copy-paste large value in doublebox get error.
+  ZK-2101: Frozen Tree - Display problem with Auxheaders and Hidden TreeCols
 
 
 * Upgrade Notes
