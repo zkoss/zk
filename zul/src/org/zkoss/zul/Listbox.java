@@ -23,6 +23,7 @@ import java.util.AbstractCollection;
 import java.util.AbstractList;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +48,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -3327,7 +3329,7 @@ public class Listbox extends MeshElement {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.groupSelect", false, true);
 	}
 	
-	private Set collectUnseldItems(Set previousSelection, Set currentSelection) {
+	private Set collectUnselectedItems(Set previousSelection, Set currentSelection) {
 		Set prevSeldItems = previousSelection != null ? (Set) Objects.clone(new LinkedHashSet(previousSelection)) : 
 			new LinkedHashSet();
 		if (currentSelection != null && prevSeldItems.size() > 0)
@@ -3385,7 +3387,7 @@ public class Listbox extends MeshElement {
 					"zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
 			
-			final Set<Listitem> prevSeldItems = new LinkedHashSet<Listitem>(_selItems);
+			Set<Listitem> prevSeldItems = new LinkedHashSet<Listitem>(_selItems);
 			
 			// ZK-2089: prevSeldItems should skip listgroup if listgroup is not selectable
 			if (!isListgroupSelectable() && prevSeldItems.size() > 0) {
@@ -3395,74 +3397,42 @@ public class Listbox extends MeshElement {
 				}
 			}
 			
-			SelectEvent evt = SelectEvent.getSelectEvent(request, 
-					new SelectEvent.SelectedObjectHandler<Listitem>() {
-				public Set<Object> getObjects(Set<Listitem> items) {
-					if (items == null || items.isEmpty() || _model == null)
-						return null;
-					Set<Object> objs = new LinkedHashSet<Object>();
-					for (Listitem i : items)
-						objs.add(_model.getElementAt(i.getIndex()));
-					return objs;
+			final int from, to;
+			final Paginal pgi = getPaginal();
+			if (pgi != null) {
+				int pgsz = pgi.getPageSize();
+				from = pgi.getActivePage() * pgsz;
+				to = from + pgsz; // excluded
+			} else {
+				from = 0;
+				to = 0;
+			}
+			
+			Map data = request.getData();
+			final boolean selectAll = Boolean.parseBoolean(data.get("selectAll") + "");
+			final List<String> sitems = cast((List) data.get("items"));
+			final Desktop desktop = request.getDesktop();
+			Set<Listitem> curSeldItems = AuRequests.convertToItems(request.getDesktop(), sitems);
+			
+			final boolean paging = inPagingMold();
+			
+			final Set<Listitem> realPrevSeldItems = (Set) Objects.clone(prevSeldItems);
+			
+			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) // remove the selction in other page
+				for (Object item : realPrevSeldItems.toArray()) {
+					int index = ((Listitem) item).getIndex();
+					if (index >= to || index < from)
+						realPrevSeldItems.remove(item);
 				}
-
-				public Set<Listitem> getPreviousSelectedItems() {
-					return prevSeldItems;
-				}
-				
-				public Set<Listitem> getUnselectedItems() {
-					List<String> sitems = cast((List)request.getData().get("items"));
-					Set<Listitem> curSeldItems = AuRequests.convertToItems(request.getDesktop(), sitems);
-					boolean paging = inPagingMold();
-					Set realCurSeldItems = (Set) Objects.clone(curSeldItems);
-					if (realCurSeldItems == null)
-						realCurSeldItems = new LinkedHashSet();
-					
-					if (_rod) {
-						Map<String, Object> m = cast((Map) request.getData().get("range"));
-						if (m != null) {
-							int start = AuRequests.getInt(m, "start", -1);
-							int end = AuRequests.getInt(m, "end", -1);
-							for (Iterator it = _items.iterator(); it.hasNext();) {
-								Listitem item = (Listitem)it.next();
-								int index = item.getIndex();
-								if (index >= start && index <= end) {							
-									if (!item.isDisabled()) 
-										realCurSeldItems.add(item);
-								}
-							}
-						}
-					}
-					
-					if (!paging) {
-						return collectUnseldItems(prevSeldItems, curSeldItems);
-					} else {
-						int from, to;
-						final Paginal pgi = getPaginal();
-						int pgsz = pgi.getPageSize();
-						from = pgi.getActivePage() * pgsz;
-						to = from + pgsz; // excluded
-						
-						Set realPrevSeldItems = (Set) Objects.clone(prevSeldItems);
-							
-						// remove the selction in other page
-						for (Object item : realPrevSeldItems.toArray()) {
-							int index = ((Listitem) item).getIndex();
-							if (index >= to || index < from)
-								realPrevSeldItems.remove(item);
-						}
-						
-						return collectUnseldItems(realPrevSeldItems, realCurSeldItems);
-					}
-				}
-			});
-			Set<Listitem> selItems = cast(evt.getSelectedItems());
-			if (selItems == null)
-				selItems = new HashSet<Listitem>(); //just in case
+			
+			Set prevSeldObjects = _model != null ? new LinkedHashSet(getSelectableModel().getSelection()) : new LinkedHashSet();
+			
+			if (curSeldItems == null)
+				curSeldItems = new HashSet<Listitem>(); //just in case
 			if (_rod) { // Bug: ZK-592
 				Map<String, Object> m = cast((Map) request.getData().get("range"));
 				if (m != null) {
-					selItems.addAll(_selItems); // keep other selected items.
+					curSeldItems.addAll(_selItems); // keep other selected items.
 					int start = AuRequests.getInt(m, "start", -1);
 					int end = AuRequests.getInt(m, "end", -1);
 					for (Iterator it = _items.iterator(); it.hasNext();) {
@@ -3472,27 +3442,30 @@ public class Listbox extends MeshElement {
 							// the same logic come from JS file (SelectWidget)
 							// for Bug: 2030986
 							if (!item.isDisabled()) 
-								selItems.add(item);
+								curSeldItems.add(item);
 						}
 					}
 				}
 			}
-
+			
 			disableClientUpdate(true);
 			final boolean oldIDSE = _ignoreDataSelectionEvent;
 			_ignoreDataSelectionEvent = true;
+			
+			// fine tune with B50-ZK-547.
+			final Selectable<Object> smodel =
+				_model != null ? getSelectableModel(): null;
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
 					if (_model != null)
 						((Selectable)_model).clearSelection();
 				}
-
-				final boolean paging = inPagingMold();
+				
 				if (!_multiple
-				|| (_model == null && !_rod && !paging && selItems.size() <= 1)) {
+				|| (_model == null && !_rod && !paging && curSeldItems.size() <= 1)) {
 				//If _model, selItems is only a subset (so we can't optimize it)
-					final Listitem item = selItems.size() > 0 ? selItems
+					final Listitem item = curSeldItems.size() > 0 ? curSeldItems
 							.iterator().next() : null;
 					selectItem(item);
 					if (_model != null) {
@@ -3502,29 +3475,16 @@ public class Listbox extends MeshElement {
 						getSelectableModel().setSelection(selObjs);
 					}
 				} else {
-					int from, to;
-					if (paging) {
-						final Paginal pgi = getPaginal();
-						int pgsz = pgi.getPageSize();
-						from = pgi.getActivePage() * pgsz;
-						to = from + pgsz; // excluded
-					} else {
-						from = to = 0;
-					}
 
-					// fine tune with B50-ZK-547.
-					final Set<Listitem> oldSelItems = new LinkedHashSet<Listitem>(_selItems);
-					final Selectable<Object> smodel =
-						_model != null ? getSelectableModel(): null;
-					for (final Listitem item: selItems) {
+					for (final Listitem item: curSeldItems) {
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
 							if (smodel != null)
 								smodel.addToSelection(_model.getElementAt(item.getIndex()));
 						}
 					}
-					for (final Listitem item: oldSelItems) {
-						if (!selItems.contains(item)) {
+					for (final Listitem item: prevSeldItems) {
+						if (!curSeldItems.contains(item)) {
 							final int index = item.getIndex();
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
@@ -3538,6 +3498,29 @@ public class Listbox extends MeshElement {
 				_ignoreDataSelectionEvent = oldIDSE;
 				disableClientUpdate(false);
 			}
+			
+			Set<Listitem> unselectedItems;
+			if (_model != null && paging) {
+				prevSeldItems = null;
+				unselectedItems = null;
+			} else {
+				unselectedItems = collectUnselectedItems(realPrevSeldItems, curSeldItems);
+			}
+			
+			Set<Object> unselectedObjects;
+			Set<Object> selectedObjects = new LinkedHashSet<Object>();
+			if (_model == null) {
+				prevSeldObjects = null;
+				unselectedObjects = null;
+			} else {
+				for (Listitem i : curSeldItems)
+					selectedObjects.add(_model.getElementAt(i.getIndex()));
+				unselectedObjects = collectUnselectedItems(prevSeldObjects, smodel.getSelection());
+			}
+			if (sitems == null || sitems.isEmpty() || _model == null)
+				selectedObjects = null;
+			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems, selectedObjects, 
+						prevSeldObjects, unselectedObjects, desktop.getComponentByUuidIfAny((String)data.get("reference")),  null, AuRequests.parseKeys(data));
 			Events.postEvent(evt);
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);

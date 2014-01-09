@@ -457,13 +457,14 @@ public class Selectbox extends HtmlBasedComponent {
 				getSelectableModel().setSelection(selObjs);;
 			
 			if (prevSelected != null) {
-				final Set<Object> prevSet = new LinkedHashSet<Object>(1);
-				prevSet.add(prevSelected);
+				final Set<Object> prevSeldObjs = new LinkedHashSet<Object>(1);
+				prevSeldObjs.add(prevSelected);
+
 				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-						prevSet, prevSet, selObjs, null, index, 0));
+						null, null, selObjs, prevSeldObjs, prevSeldObjs, null, index, 0));
 			} else {
 				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-						null, null, selObjs, null, index, 0));
+						null, null, selObjs, null, null, null, index, 0));
 			}
 		} else // ZK-1053
 			super.service(request, everError);

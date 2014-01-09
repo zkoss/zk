@@ -9,42 +9,24 @@
 	</div>
 	<vlayout>
 		<zscript>
-	ListModelList Cmodel = new ListModelList();
-	Cmodel.add("test1");
-	Cmodel.add("test2");
-	Cmodel.add("test3");
-	ListModelList Cmodel1 = new ListModelList();
-	Cmodel1.add("test1");
-	Cmodel1.add("test2");
-	Cmodel1.add("test3");
-	ListModelList Smodel = new ListModelList();
-	Smodel.add("test1");
-	Smodel.add("test2");
-	Smodel.add("test3");
-	ListModelList Lmodel = new ListModelList();
-	Lmodel.add("test1");
-	Lmodel.add("test2");
-	Lmodel.add("test3");
-	ListModelList Lmodel1 = new ListModelList();
-	Lmodel1.add("test1");
-	Lmodel1.add("test2");
-	Lmodel1.add("test3");
-	Lmodel1.add("test4");
-	Lmodel1.add("test5");
-	Lmodel1.add("test6");
-	Lmodel1.add("test7");
-	ListModelList Lmodel2 = new ListModelList();
-	Lmodel2.add("test1");
-	Lmodel2.add("test2");
-	Lmodel2.add("test3");
-	ListModelList Lmodel3 = new ListModelList();
-	Lmodel3.add("test1");
-	Lmodel3.add("test2");
-	Lmodel3.add("test3");
-	Lmodel3.add("test4");
-	Lmodel3.add("test5");
-	Lmodel3.add("test6");
-	Lmodel3.add("test7");
+	import org.zkoss.lang.Objects;
+	ListModelList model3 = new ListModelList();
+	model3.add("test1");
+	model3.add("test2");
+	model3.add("test3");
+	model3.setMultiple(true);
+	ListModelList model7 = new ListModelList();
+	model7.add("test1");
+	model7.add("test2");
+	model7.add("test3");
+	model7.add("test4");
+	model7.add("test5");
+	model7.add("test6");
+	model7.add("test7");
+	model7.setMultiple(true);
+	ListModelList getModel(ListModelList model) {
+		return (ListModelList) Objects.clone(model);
+	}
 	ListModelList node = new ListModelList();
 	node.add(new DefaultTreeNode("test2.1"));
 	DefaultTreeModel Tmodel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
@@ -62,36 +44,31 @@
 					new DefaultTreeNode("test 5") })));
 </zscript>
 		<hlayout>
-			Chosen Box:
-			<chosenbox width="150px" model="${Cmodel}"
-				onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())' />
-			<label />
-
-			Select Box:
-			<selectbox model="${Smodel}"
-				onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())' />
-			<label />
-
-			ComboBox:
-			<combobox model="${Cmodel1}"
-				onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())' />
-			<label />
-		</hlayout>
-		<hlayout>
 			<tabbox>
 				<tabs>
 					<tab label="Listbox with no rod"></tab>
 					<tab label="Listbox with rod"></tab>
 					<tab label="Tree"></tab>
+					<tab label="Selectable Component"></tab>
 				</tabs>
 				<tabpanels>
 					<tabpanel>
 						<hlayout>
 							<vlayout>
-								<vlayout width="300px">
-									<listbox id="box" model="${Lmodel}"
-										width="300px" multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox
+										onCreate="self.model=getModel(model3)" width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.rod="false" />
 										<listhead>
@@ -102,11 +79,23 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box1" width="300px"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.rod="false" />
 										<listhead>
@@ -126,11 +115,23 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box2" width="300px"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.rod="false" />
 										<listhead>
@@ -154,13 +155,25 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
 							</vlayout>
 							<vlayout>
-								<vlayout width="300px">
-									<listbox id="box3" width="300px"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.rod="false"
 											org.zkoss.zul.listbox.groupSelect="true" />
@@ -186,12 +199,24 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box4"
-										model="${Lmodel1}" width="300px" mold="paging" pageSize="3"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox
+										onCreate="self.model=getModel(model7)" width="500px"
+										mold="paging" pageSize="3" multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.rod="false" />
 										<listhead>
@@ -203,11 +228,23 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box5" width="300px"
-										mold="paging" pageSize="3" multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox width="500px" mold="paging"
+										pageSize="3" multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.rod="false" />
 										<listhead>
@@ -240,6 +277,9 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
 							</vlayout>
 
@@ -248,11 +288,20 @@
 					<tabpanel>
 						<hlayout>
 							<vlayout>
-								<vlayout width="300px">
+								<vlayout width="500px">
 									<listbox id="box6"
-										model="${Lmodel2}" width="300px" multiple="true"
-										checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										onCreate="self.model=getModel(model3)" width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<listhead>
 											<listheader>
 												test with model
@@ -261,11 +310,23 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box7" width="300px"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox id="box7" width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<listhead>
 											<listheader>
 												test with no model
@@ -283,11 +344,23 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box8" width="300px"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox id="box8" width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<listhead>
 											<listheader>
 												test with unselectable
@@ -309,13 +382,25 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
 							</vlayout>
 							<vlayout>
-								<vlayout width="300px">
-									<listbox id="box9" width="300px"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox id="box9" width="500px"
+										multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<custom-attributes
 											org.zkoss.zul.listbox.groupSelect="true" />
 
@@ -340,12 +425,24 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
+								<vlayout width="500px">
 									<listbox id="box10"
-										model="${Lmodel3}" width="300px" mold="paging" pageSize="3"
-										multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+										onCreate="self.model=getModel(model7)" width="500px"
+										mold="paging" pageSize="3" multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<listhead>
 											<listheader>
 												test with model and
@@ -355,11 +452,23 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
-								<vlayout width="300px">
-									<listbox id="box11" width="300px"
-										mold="paging" pageSize="3" multiple="true" checkmark="true"
-										onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+								<vlayout width="500px">
+									<listbox id="box11" width="500px"
+										mold="paging" pageSize="3" multiple="true" checkmark="true">
+										<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 										<listhead>
 											<listheader>
 												test with no model and
@@ -390,26 +499,50 @@
 									</listbox>
 
 									<label />
+									<label />
+									<label />
+									<label />
 								</vlayout>
 							</vlayout>
 						</hlayout>
 					</tabpanel>
 					<tabpanel>
 						<vlayout>
-							<tree model="${Tmodel}" width="300px"
-								multiple="true" checkmark="true"
-								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+							<tree model="${Tmodel}" width="500px"
+								multiple="true" checkmark="true">
+								<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 								<treecols sizable="true">
 									<treecol label="test with model" />
 								</treecols>
 							</tree>
 
 							<label />
+							<label />
+							<label />
+							<label />
 						</vlayout>
 						<vlayout>
-							<tree width="300px" multiple="true"
-								checkmark="true"
-								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+							<tree width="500px" multiple="true"
+								checkmark="true">
+								<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 								<treecols sizable="true">
 									<treecol label="test with no model" />
 								</treecols>
@@ -436,11 +569,23 @@
 							</tree>
 
 							<label />
+							<label />
+							<label />
+							<label />
 						</vlayout>
 						<vlayout>
-							<tree model="${Tmodel1}" width="300px"
-								multiple="true" checkmark="true" mold="paging" pageSize="3"
-								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+							<tree model="${Tmodel1}" width="500px"
+								multiple="true" checkmark="true" mold="paging" pageSize="3">
+								<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 								<treecols sizable="true">
 									<treecol
 										label="test with model and paging" />
@@ -448,11 +593,23 @@
 							</tree>
 
 							<label />
+							<label />
+							<label />
+							<label />
 						</vlayout>
 						<vlayout>
-							<tree width="300px" multiple="true"
-								checkmark="true" mold="paging" pageSize="3"
-								onSelect='self.nextSibling.setValue("Unselection: " + event.getUnselectedItems())'>
+							<tree width="500px" multiple="true"
+								checkmark="true" mold="paging" pageSize="3">
+								<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
 								<treecols sizable="true">
 									<treecol
 										label="test with no model and paging" />
@@ -495,6 +652,74 @@
 							</tree>
 
 							<label />
+							<label />
+							<label />
+							<label />
+						</vlayout>
+					</tabpanel>
+					<tabpanel>
+						<vlayout>
+							<hlayout>
+								Chosen Box:
+								<chosenbox width="150px"
+									onCreate="self.model=getModel(model3)">
+									<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
+								</chosenbox>
+								<label />
+								<label />
+								<label />
+								<label />
+							</hlayout>
+
+							<hlayout>
+								Select Box:
+								<selectbox
+									onCreate="self.model=getModel(model3)">
+									<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
+								</selectbox>
+								<label />
+								<label />
+								<label />
+								<label />
+							</hlayout>
+							<hlayout>
+								ComboBox:
+								<combobox
+									onCreate="self.model=getModel(model3)">
+									<attribute name="onSelect">
+	self.nextSibling.setValue("Unselection items: "
+			+ event.getUnselectedItems());
+	self.nextSibling.nextSibling.setValue("Previous items: "
+			+ event.getPreviousSelectedItems());
+	self.nextSibling.nextSibling.nextSibling.setValue("Unselection objects: "
+			+ event.getUnselectedObjects());
+	self.nextSibling.nextSibling.nextSibling.nextSibling
+			.setValue("Previous objects: " + event.getPreviousSelectedObjects());
+</attribute>
+								</combobox>
+								<label />
+								<label />
+								<label />
+								<label />
+							</hlayout>
 						</vlayout>
 					</tabpanel>
 				</tabpanels>

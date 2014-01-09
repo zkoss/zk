@@ -783,6 +783,22 @@ public class Combobox extends Textbox {
 				public Set<Comboitem> getUnselectedItems() {
 					return getPreviousSelectedItems();
 				}
+
+				public Set<Object> getPreviousSelectedObjects() {
+					Set items = getPreviousSelectedItems();
+					if (_model == null && items.size() < 1)
+						return null;
+					else {
+						Set s = new LinkedHashSet();
+						s.add(_model.getElementAt(((Comboitem)items.iterator().next()).getIndex()));
+						return s;
+					}
+				}
+
+				// in single selection, getUnselectedObjects() is same as getPreviousSelectedObjects()
+				public Set<Object> getUnselectedObjects() {
+					return getPreviousSelectedObjects();
+				}
 			});
 			Set selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?

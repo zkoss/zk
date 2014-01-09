@@ -1080,14 +1080,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				data.push(it[j]);
 
 		var edata, keep = true;
+		var checkSelectAll = evt.domTarget.id && evt.domTarget.id.endsWith('-cm');
 		if (evt) {
 			edata = evt.data;
 			if (this._multiple) // B50-ZK-421
 				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || 
-					(this._checkmark && (!this._cdo || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'))));
+					(this._checkmark && (!this._cdo || checkSelectAll));
 		}
 
-		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
+		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll}, edata));
 	},
 	/* Changes the specified row as focused. */
 	_focus: function (row) {

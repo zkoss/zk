@@ -418,9 +418,26 @@ public class Tab extends LabelImageElement {
 					return prevSeldItems;
 				}
 
-				// in single selection, getPreviousSelectedItems() is same as getPreviousSelectedItems()
+				// in single selection, getUnselectedItems() is same as getPreviousSelectedItems()
 				public Set<Tab> getUnselectedItems() {
 					return getPreviousSelectedItems();
+				}
+
+				public Set<Object> getPreviousSelectedObjects() {
+					ListModel<Object> model = tabbox.getModel();
+					Set items = getPreviousSelectedItems();
+					if (model == null || items.size() < 1)
+						return null;
+					else {
+						Set s = new LinkedHashSet();
+						s.add(model.getElementAt(((Tab)items.iterator().next()).getIndex()));
+						return s;
+					}
+				}
+
+				// in single selection, getUnselectedObjects() is same as getPreviousSelectedObjects()
+				public Set<Object> getUnselectedObjects() {
+					return getPreviousSelectedObjects();
 				}
 			});
 			

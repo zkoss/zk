@@ -45,6 +45,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
@@ -65,6 +66,7 @@ import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
@@ -2378,6 +2380,13 @@ public class Tree extends MeshElement {
 	}
 	private static Boolean _ckDeselectOther;
 
+	private Set collectUnselectedItems(Set previousSelection, Set currentSelection) {
+		Set prevSeldItems = previousSelection != null ? (Set) Objects.clone(new LinkedHashSet(previousSelection)) : 
+			new LinkedHashSet();
+		if (currentSelection != null && prevSeldItems.size() > 0)
+			prevSeldItems.removeAll(currentSelection);
+		return prevSeldItems;
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -2387,32 +2396,42 @@ public class Tree extends MeshElement {
 	public void service(final org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
-			final Set<Treeitem> prevSeldItems = new LinkedHashSet<Treeitem>(_selItems);
-			SelectEvent<Treeitem, ?> evt = SelectEvent.getSelectEvent(request, 
-					new SelectEvent.SelectedObjectHandler<Treeitem>() {
-				public Set<Object> getObjects(Set<Treeitem> items) {
-					if (items == null || items.isEmpty() || _model == null)
-						return null;
-					Set<Object> objs = new LinkedHashSet<Object>();
-					for (Treeitem i : items)
-						objs.add(_model.getChild(getTreeitemPath(Tree.this, i)));
-					return objs;
+			
+			// B50-ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
+			Set<Treeitem> prevSeldItems = new LinkedHashSet<Treeitem>(_selItems);
+			
+			final boolean paging = inPagingMold();
+			
+			final int from, to;
+			final Paginal pgi = getPaginal();
+			if (pgi != null) {
+				int pgsz = pgi.getPageSize();
+				from = pgi.getActivePage() * pgsz;
+				to = from + pgsz; // excluded
+			} else {
+				from = 0;
+				to = 0;
+			}
+			
+			Map data = request.getData();
+			final boolean selectAll = Boolean.parseBoolean(data.get("selectAll") + "");
+			List<String> sitems = cast((List)request.getData().get("items"));
+			final Desktop desktop = request.getDesktop();
+			final Set<Treeitem> curSeldItems = AuRequests.convertToItems(request.getDesktop(), sitems);
+			final Treeitem ref = (Treeitem) request.getDesktop().getComponentByUuidIfAny((String)request.getData().get("reference"));
+			Set prevSeldObjects = _model != null ? new LinkedHashSet(((Selectable)_model).getSelection()) : new LinkedHashSet();
+			final Set<Treeitem> realPrevSeldItems = (Set) Objects.clone(prevSeldItems);
+			
+			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) // remove the selction in other page
+				for (Object item : realPrevSeldItems.toArray()) {
+					int index = ((Treeitem) item).getIndex();
+					if (index >= to || index < from)
+						realPrevSeldItems.remove(item);
 				}
-
-				public Set<Treeitem> getPreviousSelectedItems() {
-					return prevSeldItems;
-				}
-				
-				public Set<Treeitem> getUnselectedItems() {
-					Set<Treeitem> _unselItems = new LinkedHashSet<Treeitem>();
-					Treeitem ref = (Treeitem) request.getDesktop().getComponentByUuidIfAny((String)request.getData().get("reference"));
-					if (ref != null && ref.isSelected() && prevSeldItems.contains(ref))
-						_unselItems.add(ref);
-					return _unselItems;
-				}
-			});
-			Set<Treeitem> selItems = evt.getSelectedItems();
+			
 			disableClientUpdate(true);
+			// fine tune with B50-ZK-547.
+			final Selectable<Object> smodel = _model != null ? (Selectable) _model : null;
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
@@ -2420,11 +2439,10 @@ public class Tree extends MeshElement {
 						((TreeSelectableModel)_model).clearSelection();
 				}
 				
-				final boolean paging = inPagingMold();
-				if (!_multiple || (!paging && (selItems == null || selItems.size() <= 1))) {
+				if (!_multiple || (!paging && (curSeldItems == null || curSeldItems.size() <= 1))) {
 					final Treeitem item =
-						selItems != null && selItems.size() > 0 ?
-							selItems.iterator().next(): null;
+							curSeldItems != null && curSeldItems.size() > 0 ?
+								curSeldItems.iterator().next(): null;
 					selectItem(item);
 					if (_model instanceof TreeSelectableModel) {
 						TreeSelectableModel tsm = (TreeSelectableModel) _model;
@@ -2434,26 +2452,15 @@ public class Tree extends MeshElement {
 					}
 					
 				} else {
-					int from, to;
-					if (paging) {
-						final Paginal pgi = getPaginal();
-						int pgsz = pgi.getPageSize();
-						from = pgi.getActivePage() * pgsz;
-						to = from + pgsz; //excluded
-					} else {
-						from = to = 0;
-					}
 
-					// B50-ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
-					Set<Treeitem> oldSelItems = new LinkedHashSet<Treeitem>(_selItems);
-					for (Treeitem item : selItems)
+					for (Treeitem item : curSeldItems)
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
 							if (_model instanceof TreeSelectableModel)
 								((TreeSelectableModel)_model).addSelectionPath(getTreeitemPath(this, item));
 						}
-					for (Treeitem item : oldSelItems)
-						if (!selItems.contains(item)) {
+					for (Treeitem item : prevSeldItems)
+						if (!curSeldItems.contains(item)) {
 							final int index = getVisibleIndexOfItem(item);
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
@@ -2466,6 +2473,28 @@ public class Tree extends MeshElement {
 				disableClientUpdate(false);
 			}
 
+			Set<Treeitem> unselectedItems;
+			if (_model != null && paging) {
+				prevSeldItems = null;
+				unselectedItems = null;
+			} else {
+				unselectedItems = collectUnselectedItems(realPrevSeldItems, curSeldItems);
+			}
+			
+			Set<Object> unselectedObjects;
+			Set<Object> selectedObjects = new LinkedHashSet<Object>();
+			if (_model == null) {
+				prevSeldObjects = null;
+				unselectedObjects = null;
+			} else {
+				for (Treeitem i : curSeldItems)
+					selectedObjects.add(_model.getChild(getTreeitemPath(Tree.this, i)));
+				unselectedObjects = collectUnselectedItems(prevSeldObjects, smodel.getSelection());
+			}
+			if (sitems == null || sitems.isEmpty() || _model == null)
+				selectedObjects = null;
+			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems, selectedObjects, 
+					prevSeldObjects, unselectedObjects, desktop.getComponentByUuidIfAny((String)data.get("reference")),  null, AuRequests.parseKeys(data));
 			Events.postEvent(evt);
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map<String, Object> data = request.getData();
