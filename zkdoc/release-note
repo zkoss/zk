@@ -47,6 +47,7 @@ ZK 7.0.1
   ZK-2080: Chosenbox with ListSubModel not working if using template to render data
   ZK-2091: Copy-paste large value in doublebox get error.
   ZK-2101: Frozen Tree - Display problem with Auxheaders and Hidden TreeCols
+  ZK-2096: Tree with Native Scrollbar wrong position of scrollbar column header
 
 
 * Upgrade Notes
