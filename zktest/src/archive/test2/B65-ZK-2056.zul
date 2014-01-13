@@ -1,0 +1,18 @@
+<zk>
+	<button label="Upload Image" upload="true,maxsize=300">
+		<attribute name="onUpload"><![CDATA[
+	org.zkoss.util.media.Media media = event.getMedia();
+	if (media instanceof org.zkoss.image.Image) {
+		org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+		image.setContent(media);
+		image.setParent(pics);
+	} else {
+		Messagebox.show("Not an image: " + media, "Error", Messagebox.OK,
+				Messagebox.ERROR);
+		break;
+	}
+]]></attribute>
+	</button>
+	<separator />
+	<vlayout id="pics" height="360px" style="overflow:auto" />
+</zk>
