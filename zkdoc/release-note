@@ -48,6 +48,7 @@ ZK 7.0.1
   ZK-2091: Copy-paste large value in doublebox get error.
   ZK-2101: Frozen Tree - Display problem with Auxheaders and Hidden TreeCols
   ZK-2056: XSS Vulnerability in AuUploader
+  ZK-2098: Tree cells lose width when replacing column headers
   ZK-2096: Tree with Native Scrollbar wrong position of scrollbar column header
 
 
