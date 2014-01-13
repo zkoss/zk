@@ -167,34 +167,24 @@ abstract public class MeshElement extends XulElement implements Paginated {
 		}
 	}
 	
-	public class InternalPaging extends Paging {
+	protected class InternalPaging extends Paging {
 		private boolean autohideModify = false;
-		private boolean firstTime = true;
 		
-		public InternalPaging(boolean autohide) {
-			super.setAutohide(autohide);
+		public InternalPaging() {
 		}
 		
 		public boolean isAutohide() {
-			if (autohideModify || firstTime) {
-				firstTime = false;
-				return super.isAutohide();
-			}
-			else
+			if (!autohideModify)
 				return isAutohidePaging();
+			else
+				return super.isAutohide();
 		}
 		
 		public void setAutohide(boolean autohide) {
 			autohideModify = true;
 			super.setAutohide(autohide);
 		}
-		
-		protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-				throws java.io.IOException {
-			super.renderProperties(renderer);
-			render(renderer, "autohide", isAutohide());
-		}
-		
+				
 		public boolean isAutohideModify() {
 			return autohideModify;
 		}

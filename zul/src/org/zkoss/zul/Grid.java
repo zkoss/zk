@@ -239,7 +239,7 @@ public class Grid extends MeshElement {
 	 */
 	private transient Paging _paging;
 	private EventListener<PagingEvent> _pgListener;
-	private EventListener<Event> _pgImpListener, _modelInitListener, _initListener;
+	private EventListener<Event> _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
@@ -252,7 +252,6 @@ public class Grid extends MeshElement {
 	
 	private transient boolean _rod;
 	private String _emptyMessage;
-	private boolean isInternalPaging;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -288,9 +287,7 @@ public class Grid extends MeshElement {
 			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_"+getUuid(), Boolean.TRUE);
 			//prepare a right moment to init Grid(must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
-			this.addEventListener("onInitPaging", _initListener = new InitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
-			Events.postEvent(15000, new Event("onInitPaging", this));
 		}
 	}
 	
@@ -313,30 +310,6 @@ public class Grid extends MeshElement {
 			_currentLeft = 0;
 			_topPad = 0;
 		}
-	}
-	
-	private class InitListener implements SerializableEventListener<Event>,
-	CloneableEventListener<Event> {
-
-		public void onEvent(Event event) throws Exception {
-			if (_initListener != null) {
-				Grid.this.removeEventListener(
-						"onInitPaging", _initListener);
-				_initListener = null;
-			}
-			init();
-		}
-		
-		private void init() {
-			if (_pgi instanceof InternalPaging && !((InternalPaging) _pgi).isAutohideModify()) {
-				_pgi.setAutohide(isAutohidePaging());
-			}
-		}
-
-		public Object willClone(Component comp) {
-			return null; // skip to clone
-		}
-		
 	}
 	
 	private class ModelInitListener implements SerializableEventListener<Event>,
@@ -522,7 +495,6 @@ public class Grid extends MeshElement {
 				if (_pgi == null) {
 					if (_paging != null) {
 						_pgi = _paging;
-						isInternalPaging = false;
 					} else newInternalPaging();
 				} else { //_pgi != null
 					if (_pgi != _paging) {
@@ -542,13 +514,12 @@ public class Grid extends MeshElement {
 //		assert inPagingMold(): "paging mold only";
 //		assert (_paging == null && _pgi == null);
 
-		final Paging paging = new InternalPaging(true);
+		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 		paging.setParent(this);
 		
-		isInternalPaging = true;
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
@@ -578,10 +549,6 @@ public class Grid extends MeshElement {
 				}
 				postOnPagingInitRender();
 			}
-			
-			// ZK-2079: set autohide after paging init
-			if (isInternalPaging && inPagingMold())
-				_pgi.setAutohide(isAutohidePaging());
 			
 			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
 			else if (_rows != null) {
@@ -1315,7 +1282,7 @@ public class Grid extends MeshElement {
 	}
 	
 	protected boolean isAutohidePaging() {
-		return Utils.testAttribute(this, "org.zkoss.zul.grid.autohidePaging", false, true);
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.autohidePaging", true, true);
 	}
 	
 	/*package*/ boolean evalRod() {

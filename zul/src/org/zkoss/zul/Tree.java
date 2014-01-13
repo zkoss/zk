@@ -208,7 +208,7 @@ public class Tree extends MeshElement {
 	 */
 	private transient Paging _paging;
 	private EventListener<PagingEvent> _pgListener, _pgImpListener;
-	private EventListener<Event> _modelInitListener, _initListener;
+	private EventListener<Event> _modelInitListener;
 
 	private int _currentTop = 0; // since 5.0.8 scroll position
 	private int _currentLeft = 0;
@@ -219,7 +219,6 @@ public class Tree extends MeshElement {
 	private static final int INIT_LIMIT = -1; // since 7.0.0
 	private int _preloadsz = 50; // since 7.0.0
 	private transient LinkedList<Integer> _rodPagingIndex;  // since 7.0.0
-	private boolean isInternalPaging;
 	
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -257,34 +256,8 @@ public class Tree extends MeshElement {
 		if (oldpage == null) {
 			//prepare a right moment to init Tree(must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
-			this.addEventListener("onInitPaging", _initListener = new InitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
-			Events.postEvent(15000, new Event("onInitPaging", this));
 		}
-	}
-	
-	private class InitListener implements SerializableEventListener<Event>,
-	CloneableEventListener<Event> {
-
-		public void onEvent(Event event) throws Exception {
-			if (_initListener != null) {
-				Tree.this.removeEventListener(
-						"onInitPaging", _initListener);
-				_initListener = null;
-			}
-			init();
-		}
-		
-		private void init() {
-			if (_pgi instanceof InternalPaging && !((InternalPaging) _pgi).isAutohideModify()) {
-				_pgi.setAutohide(isAutohidePaging());
-			}
-		}
-
-		public Object willClone(Component comp) {
-			return null; // skip to clone
-		}
-		
 	}
 	
 	private class ModelInitListener implements SerializableEventListener<Event>,
@@ -445,7 +418,6 @@ public class Tree extends MeshElement {
 				if (_pgi == null) {
 					if (_paging != null) {
 						_pgi = _paging;
-						isInternalPaging = false;
 					} else newInternalPaging();
 				} else { //_pgi != null
 					if (_pgi != _paging) {
@@ -465,13 +437,12 @@ public class Tree extends MeshElement {
 //		assert inPagingMold(): "paging mold only";
 //		assert (_paging == null && _pgi == null);
 
-		final Paging paging = new InternalPaging(true);
+		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
 		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
 		
-		isInternalPaging = true;
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
@@ -576,9 +547,6 @@ public class Tree extends MeshElement {
 				invalidate();
 			}
 			
-			// ZK-2079: set autohide after paging init
-			if (isInternalPaging && inPagingMold())
-				_pgi.setAutohide(isAutohidePaging());
 		}
 
 		
@@ -2381,7 +2349,7 @@ public class Tree extends MeshElement {
 	}
 	
 	protected boolean isAutohidePaging() {
-		return Utils.testAttribute(this, "org.zkoss.zul.tree.autohidePaging", false, true);
+		return Utils.testAttribute(this, "org.zkoss.zul.tree.autohidePaging", true, true);
 	}
 	/** Returns whether to sort all of item when model or sort direction be changed.
 	 * @since 5.0.7
