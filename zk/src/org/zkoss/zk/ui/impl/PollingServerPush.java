@@ -227,6 +227,9 @@ public class PollingServerPush implements ServerPush {
 	}
 
 	public void onPiggyback() {
+		// B65-ZK-2105: Need to check if desktop is null.
+		if (_desktop == null)
+			return;
 		final Configuration config = _desktop.getWebApp().getConfiguration();
 		long tmexpired = 0;
 		for (int cnt = 0; !_pending.isEmpty();) {

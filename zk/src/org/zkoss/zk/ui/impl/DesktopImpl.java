@@ -1374,7 +1374,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		synchronized(enablers) {
 			boolean enablersEmptyBefore = enablers.isEmpty();
 			if(enable) {
-				if(!enablers.add(enabler)) {
+				// B76-ZK-2105: Do not add null enabler.
+				if(enabler != null && !enablers.add(enabler)) {
 					log.debug("trying to enable already enabled serverpush by: " + enabler);
 					return false;
 				}
@@ -1382,7 +1383,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					return enableServerPush0(serverPush, enable);
 				}
 			} else { 
-				if(!enablers.remove(enabler)) {
+				// B76-ZK-2105: Do not remove null enabler.
+				if(enabler != null && !enablers.remove(enabler)) {
 					log.debug("trying to disable already disabled serverpush by: " + enabler);
 					return false;
 				}
