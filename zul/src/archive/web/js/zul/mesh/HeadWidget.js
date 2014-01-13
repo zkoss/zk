@@ -14,9 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	//Bug 1926480: opera failed to add listheader dynamically (since hdfakerflex introduced)
-	var _fixOnChildChanged = zk.opera ? function (head) {
-		return (head = head.parent) && head.rerender(); //later
-	}: zk.$void;
+	var _fixOnChildChanged = function (head) {
+		// ZK-2096: should refresh this.$s('bar') if children change with databinding 
+		var mesh = head.getMeshWidget();
+		if (zk.opera || (mesh._nativebar && !mesh.frozen))
+			return (head = head.parent) && head.rerender(); //later
+	};
 
 	function _syncFrozen(wgt) {
 		var mesh = wgt.getMeshWidget(), frozen;

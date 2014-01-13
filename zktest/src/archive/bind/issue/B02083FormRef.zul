@@ -1,0 +1,34 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B02083FormRef')">
+		<div form="@id('fx')@load(vm.product) @save(vm.product,before='save')">
+			<vlayout item="@ref(fx.item)" name2="@ref(fx.item.name2)">
+				<div>
+					fx.item.name: <textbox value="@bind(fx.item.name)"/>
+				</div>
+				<div>
+					item.name1: <textbox value="@bind(item.name1)"/>(value are save to item directly)
+				</div>
+				<div>
+					name2: <textbox value="@bind(name2)"/>(value is not update after save)
+				</div>
+			</vlayout>
+		</div>
+		<vlayout>
+			<div>
+				vm.product.item.name
+				<label value="@bind(vm.product.item.name)" />
+			</div>
+			<div>
+				vm.product.item.name1
+				<label value="@bind(vm.product.item.name1)" />
+			</div>
+			<div>
+				vm.product.item.name2
+				<label value="@bind(vm.product.item.name2)" />
+			</div>
+		</vlayout>
+		<button label="save" onClick="@command('save')"/>
+		<button label="dump" onClick="binder.getTracker().dump()"/>
+	</window>
+</zk>

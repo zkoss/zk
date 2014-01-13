@@ -741,7 +741,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (ftfaker)
 				ftcol = ftfaker.firstChild;
 			
-			for (var w = head.firstChild, wd; w; w = w.nextSibling) {
+			// ZK-2098: should skip if bdcol doesn't exist
+			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
 					bdcol.style.width = zk(bdcol).revisedWidth(wd) + 'px';

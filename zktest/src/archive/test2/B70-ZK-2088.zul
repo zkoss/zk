@@ -1,0 +1,9 @@
+<?page title="zk.safari Chrome" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="zk.safari Chrome" border="normal">
+		<label multiline="true">
+			Nothing will show up under this line on Chrome, but version number will be displayed on Safari.
+			${zk.safari}
+		</label>
+	</window>
+</zk>

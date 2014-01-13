@@ -5,6 +5,7 @@ ZK 7.0.1
   ZK-2075: provide the possibility to display or log missing labels
   ZK-2087: Add sclass to messagebox
   ZK-2079: prevent autohiding of the paging control the paging mold
+  ZK-2085: Slider support minimal position and decimal mode
 
 * Bugs
   ZK-2042: Button's autodisable="self" will cause to stop the form request processing  
@@ -43,6 +44,15 @@ ZK 7.0.1
   ZK-1807: bandbox - messed display after its style changed
   ZK-2070: grid onScroll client-side event not working in 7.0
   ZK-2084: Doublespinner should display float value
+  ZK-2088: zk.safari show version number on Chrome
+  ZK-2080: Chosenbox with ListSubModel not working if using template to render data
+  ZK-2091: Copy-paste large value in doublebox get error.
+  ZK-2101: Frozen Tree - Display problem with Auxheaders and Hidden TreeCols
+  ZK-2056: XSS Vulnerability in AuUploader
+  ZK-2098: Tree cells lose width when replacing column headers
+  ZK-2096: Tree with Native Scrollbar wrong position of scrollbar column header
+  ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
+
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
@@ -111,6 +121,16 @@ Nov 26, 2013
   + deprecated all the classes under org.zkoss.zkplus.acegi package
   + change the addon-name of zkplus jar from 'databind' to 'zkplus'
 
+    --------
+ZK 6.5.6
+* Features
+
+* Bugs
+  ZK-2080: Chosenbox with ListSubModel not working if using template to render data
+  ZK-2091: Copy-paste large value in doublebox get error.
+  ZK-2056: XSS Vulnerability in AuUploader
+  ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
+  
   --------
 ZK 6.5.5
 Dec 30, 2013
@@ -162,6 +182,7 @@ Dec 30, 2013
   ZK-1954: Vertical scroll appear when remove last listitem from Listbox
   ZK-1965: zksandbox service.zul throw method getNamespace() not found exception
   ZK-1852: Processing indicator briefly displayed in non-localized text
+
   
   --------
 
