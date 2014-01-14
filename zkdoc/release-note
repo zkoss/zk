@@ -51,6 +51,7 @@ ZK 7.0.1
   ZK-2098: Tree cells lose width when replacing column headers
   ZK-2096: Tree with Native Scrollbar wrong position of scrollbar column header
   ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
+  ZK-2095: Column sizable curser problem with sortable column
 
 
 * Upgrade Notes
