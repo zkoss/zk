@@ -54,6 +54,7 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.media.Media;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -103,9 +104,11 @@ public class AuUploader implements AuExtension {
 		try {
 			if (!isMultipartContent(request)) {
 				if ("uploadInfo".equals(request.getParameter("cmd"))) {
-					uuid = request.getParameter("wid");
-					sid = request.getParameter("sid");
-					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(request.getParameter("dtid"));
+					// ZK-2056: XSS Vulnerability
+					uuid = XMLs.encodeText(request.getParameter("wid"));
+					sid = XMLs.encodeText(request.getParameter("sid"));
+					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(XMLs.encodeText(request.getParameter("dtid")));
+					
 					Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
 					Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
 					final String key = uuid + '_' + sid;
@@ -124,15 +127,18 @@ public class AuUploader implements AuExtension {
 				} else 
 					alert = "enctype must be multipart/form-data";
 			} else {
-				uuid = request.getParameter("uuid");
-				sid = request.getParameter("sid");
+				// ZK-2056: XSS Vulnerability
+				uuid = XMLs.encodeText(request.getParameter("uuid"));
+				sid = XMLs.encodeText(request.getParameter("sid"));
+				
 				if (uuid == null || uuid.length() == 0) {
 					alert = "uuid is required!";
 				} else {
 					attrs.put("uuid", uuid);
 					attrs.put("sid", sid);
 
-					final String dtid = request.getParameter("dtid");
+					// ZK-2056: XSS Vulnerability
+					final String dtid = XMLs.encodeText(request.getParameter("dtid"));
 					if (dtid == null || dtid.length() == 0) {
 						alert = "dtid is required!";
 					} else {

@@ -291,9 +291,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				} else if (force || n.offsetWidth != 0) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					hdWgt._origWd = hdWgt._origWd || faker.style.width;
-					cellWidth = zk.chrome ? '0.1px' : '0px';
+					cellWidth = '0px';
 					shallUpdate = true;
 				}
+				
+				// ZK-2101: should give 0.1px for chrome
+				if (zk.chrome && cellWidth && (parseInt(cellWidth) == 0))
+					cellWidth = '0.1px';
 				
 				if (force || shallUpdate) {
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
