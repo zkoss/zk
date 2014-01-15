@@ -2380,8 +2380,8 @@ public class Tree extends MeshElement {
 	}
 	private static Boolean _ckDeselectOther;
 
-	private Set collectUnselectedItems(Set previousSelection, Set currentSelection) {
-		Set prevSeldItems = previousSelection != null ? (Set) Objects.clone(new LinkedHashSet(previousSelection)) : 
+	private Set collectUnselectedObjects(Set previousSelection, Set currentSelection) {
+		Set prevSeldItems = previousSelection != null ? new LinkedHashSet(previousSelection) : 
 			new LinkedHashSet();
 		if (currentSelection != null && prevSeldItems.size() > 0)
 			prevSeldItems.removeAll(currentSelection);
@@ -2478,7 +2478,7 @@ public class Tree extends MeshElement {
 				prevSeldItems = null;
 				unselectedItems = null;
 			} else {
-				unselectedItems = collectUnselectedItems(realPrevSeldItems, curSeldItems);
+				unselectedItems = collectUnselectedObjects(realPrevSeldItems, curSeldItems);
 			}
 			
 			Set<Object> unselectedObjects;
@@ -2489,7 +2489,7 @@ public class Tree extends MeshElement {
 			} else {
 				for (Treeitem i : curSeldItems)
 					selectedObjects.add(_model.getChild(getTreeitemPath(Tree.this, i)));
-				unselectedObjects = collectUnselectedItems(prevSeldObjects, smodel.getSelection());
+				unselectedObjects = collectUnselectedObjects(prevSeldObjects, smodel.getSelection());
 			}
 			if (sitems == null || sitems.isEmpty() || _model == null)
 				selectedObjects = null;

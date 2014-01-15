@@ -3329,8 +3329,8 @@ public class Listbox extends MeshElement {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.groupSelect", false, true);
 	}
 	
-	private Set collectUnselectedItems(Set previousSelection, Set currentSelection) {
-		Set prevSeldItems = previousSelection != null ? (Set) Objects.clone(new LinkedHashSet(previousSelection)) : 
+	private Set collectUnselectedObjects(Set previousSelection, Set currentSelection) {
+		Set prevSeldItems = previousSelection != null ? new LinkedHashSet(previousSelection) : 
 			new LinkedHashSet();
 		if (currentSelection != null && prevSeldItems.size() > 0)
 			prevSeldItems.removeAll(currentSelection);
@@ -3504,7 +3504,7 @@ public class Listbox extends MeshElement {
 				prevSeldItems = null;
 				unselectedItems = null;
 			} else {
-				unselectedItems = collectUnselectedItems(realPrevSeldItems, curSeldItems);
+				unselectedItems = collectUnselectedObjects(realPrevSeldItems, curSeldItems);
 			}
 			
 			Set<Object> unselectedObjects;
@@ -3515,7 +3515,7 @@ public class Listbox extends MeshElement {
 			} else {
 				for (Listitem i : curSeldItems)
 					selectedObjects.add(_model.getElementAt(i.getIndex()));
-				unselectedObjects = collectUnselectedItems(prevSeldObjects, smodel.getSelection());
+				unselectedObjects = collectUnselectedObjects(prevSeldObjects, smodel.getSelection());
 			}
 			if (sitems == null || sitems.isEmpty() || _model == null)
 				selectedObjects = null;
