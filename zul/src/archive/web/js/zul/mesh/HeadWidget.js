@@ -131,6 +131,19 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 			_syncFrozen(this);
 			this.parent._minWd = null;
+			
+			// ZK-2098: recovery the header faker if not exists
+			var head = this;
+			['hdfaker', 'bdfaker', 'ftfaker'].forEach(function(faker) {
+				var $faker = jq(head.getMeshWidget()['e' + faker]);
+				if ($faker[0] != null && $faker.find(child.$n(faker))[0] == null) {
+					var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
+						visible = !child.isVisible() ? 'display:none;' : '';
+					wd = wd ? 'width: ' + wd + ';' : '';
+					var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>';
+					$faker.append(html);
+				}
+			});
 		}
 	},
 	onChildRemoved_: function () {

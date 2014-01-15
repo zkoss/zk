@@ -257,8 +257,8 @@ public class Tree extends MeshElement {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) {
 			//prepare a right moment to init Tree(must be as early as possible)
-			addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
-			Events.postEvent(20000, new Event("onInitModel", this));
+			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
+			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
 	}
 	
@@ -418,8 +418,9 @@ public class Tree extends MeshElement {
 			if (inPagingMold()) {
 				if (old != null) removePagingListener(old);
 				if (_pgi == null) {
-					if (_paging != null) _pgi = _paging;
-					else newInternalPaging();
+					if (_paging != null) {
+						_pgi = _paging;
+					} else newInternalPaging();
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
@@ -438,12 +439,12 @@ public class Tree extends MeshElement {
 //		assert inPagingMold(): "paging mold only";
 //		assert (_paging == null && _pgi == null);
 
-		final Paging paging = new Paging();
-		paging.setAutohide(true);
+		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
 		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
+		
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
@@ -547,6 +548,7 @@ public class Tree extends MeshElement {
 				}
 				invalidate();
 			}
+			
 		}
 
 		
@@ -2346,6 +2348,10 @@ public class Tree extends MeshElement {
 	 */
 	private boolean isRightSelect() {
 		return Utils.testAttribute(this, "org.zkoss.zul.tree.rightSelect", true, true);
+	}
+	
+	protected boolean isAutohidePaging() {
+		return Utils.testAttribute(this, "org.zkoss.zul.tree.autohidePaging", true, true);
 	}
 	/** Returns whether to sort all of item when model or sort direction be changed.
 	 * @since 5.0.7

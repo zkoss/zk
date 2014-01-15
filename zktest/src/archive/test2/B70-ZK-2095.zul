@@ -1,0 +1,15 @@
+<?page title="Column Sortable" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label value="Risize grid header, the sizable cursor will be displayed."/>
+	<groupbox hflex="1">
+		<grid hflex="1">
+			<columns sizable="true">
+				<column label="A" sort="auto"/>
+				<column label="B" sort="auto"/>
+				<column label="C" sort="auto"/>
+				<column label="D" sort="auto"/>
+			</columns>
+			<rows/>
+		</grid>
+	</groupbox>
+</zk>

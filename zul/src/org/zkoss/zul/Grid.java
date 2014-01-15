@@ -287,7 +287,7 @@ public class Grid extends MeshElement {
 			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_"+getUuid(), Boolean.TRUE);
 			//prepare a right moment to init Grid(must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
-			Events.postEvent(20000, new Event("onInitModel", this));
+			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
 	}
 	
@@ -493,8 +493,9 @@ public class Grid extends MeshElement {
 			if (inPagingMold()) {
 				if (old != null) removePagingListener(old);
 				if (_pgi == null) {
-					if (_paging != null) _pgi = _paging;
-					else newInternalPaging();
+					if (_paging != null) {
+						_pgi = _paging;
+					} else newInternalPaging();
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
@@ -513,12 +514,12 @@ public class Grid extends MeshElement {
 //		assert inPagingMold(): "paging mold only";
 //		assert (_paging == null && _pgi == null);
 
-		final Paging paging = new Paging();
-		paging.setAutohide(true);
+		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 		paging.setParent(this);
+		
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
@@ -548,6 +549,7 @@ public class Grid extends MeshElement {
 				}
 				postOnPagingInitRender();
 			}
+			
 			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
 			else if (_rows != null) {
 				_rows.invalidate();
@@ -1277,6 +1279,10 @@ public class Grid extends MeshElement {
 			if (_pgi == child) _pgi = null;
 		}
 		return true;
+	}
+	
+	protected boolean isAutohidePaging() {
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.autohidePaging", true, true);
 	}
 	
 	/*package*/ boolean evalRod() {

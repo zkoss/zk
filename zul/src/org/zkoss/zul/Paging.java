@@ -194,7 +194,7 @@ public class Paging extends XulElement implements Paginal {
 		if (_npg != 1) renderer.render("pageCount", _npg);
 		if (_pginc != 10) renderer.render("pageIncrement", _pginc);
 		render(renderer, "detailed", _detailed);
-		render(renderer, "autohide", _autohide);
+		render(renderer, "autohide", isAutohide());
 	}
 	
 	public String getZclass() {

@@ -54,6 +54,22 @@ import org.zkoss.zk.ui.event.EventListener;
  * @see Paginated
  */
 public interface Paginal extends Pageable {
+	
+	/**
+	 * Returns whether to automatically hide the paging if
+	 * there is only one page available.
+	 * 
+	 * @since 7.0.1
+	 */
+	public boolean isAutohide();
+	/**
+	 * Sets whether to automatically hide the paging if
+	 * there is only one page available.
+	 * 
+	 * @since 7.0.1
+	 */
+	public void setAutohide(boolean autohide);
+	
 	/** Returns the total number of items.
 	 */
 	public int getTotalSize();

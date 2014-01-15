@@ -5,6 +5,7 @@ ZK 7.0.1
   ZK-2075: provide the possibility to display or log missing labels
   ZK-2087: Add sclass to messagebox
   ZK-2089: SelectEvent support get UnselectedItems
+  ZK-2079: prevent autohiding of the paging control the paging mold
   ZK-2085: Slider support minimal position and decimal mode
 
 * Bugs
@@ -52,6 +53,7 @@ ZK 7.0.1
   ZK-2098: Tree cells lose width when replacing column headers
   ZK-2096: Tree with Native Scrollbar wrong position of scrollbar column header
   ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
+  ZK-2095: Column sizable curser problem with sortable column
 
 
 * Upgrade Notes
