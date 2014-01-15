@@ -91,6 +91,7 @@ import org.zkoss.zul.ext.Selectable;
  * @author tomyeh
  * @see Comboitem
  */
+@SuppressWarnings("serial")
 public class Combobox extends Textbox {
 	private static final Logger log = LoggerFactory.getLogger(Combobox.class);
 	private boolean _autodrop, _autocomplete = true, _btnVisible = true, _open;
@@ -129,7 +130,7 @@ public class Combobox extends Textbox {
 		if (val.length() > 0 && constr != null && 
 				constr instanceof SimpleConstraint && (((SimpleConstraint)constr)
 						.getFlags() & SimpleConstraint.STRICT) != 0) {
-			for (Iterator it = getItems().iterator(); it.hasNext();) {
+			for (Iterator<Comboitem> it = getItems().iterator(); it.hasNext();) {
 				final String label = ((Comboitem)it.next()).getLabel();
 				if(val.equalsIgnoreCase(label))
 					return label;
@@ -145,7 +146,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.2
 	 * @see ListSubModel#getSubModel(Object, int)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ListModel<T> getModel() {
 		return (ListModel)_model;
 	}
@@ -276,7 +277,7 @@ public class Combobox extends Textbox {
 	 * renderer is used.
 	 * @since 3.0.2
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ComboitemRenderer<T> getItemRenderer() {
 		return (ComboitemRenderer)_renderer;
 	}
@@ -300,6 +301,7 @@ public class Combobox extends Textbox {
 	 * It creates an instance automatically.
 	 *@since 3.0.2
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setItemRenderer(String clsnm)
 	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
@@ -342,6 +344,7 @@ public class Combobox extends Textbox {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 * @since 3.0.2
 	 */
+	@SuppressWarnings("rawtypes")
 	public void onInitRender(Event data) {
   		//Bug #2010389
 		removeAttribute("zul.Combobox.ON_INITRENDER"); //clear syncModel flag
@@ -381,6 +384,7 @@ public class Combobox extends Textbox {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
 		public void render(final Comboitem item, final Object data, final int index) {
 			final Combobox cb = (Combobox)item.getParent();
@@ -443,6 +447,7 @@ public class Combobox extends Textbox {
 
 	/** Used to render comboitem if _model is specified. */
 	private class Renderer implements java.io.Serializable {
+		@SuppressWarnings("rawtypes")
 		private final ComboitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
@@ -761,10 +766,11 @@ public class Combobox extends Textbox {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
 			final Set<Comboitem> prevSelectedItems = new LinkedHashSet<Comboitem>();
+			Comboitem prevSeld = (Comboitem) request.getDesktop().getComponentByUuidIfAny((String)request.getData().get("prevSeld"));
 			// ZK-2089: should skip when selected item is null 
-			if (_selItem != null)
-				prevSelectedItems.add(_selItem);
-			SelectEvent evt = SelectEvent.getSelectEvent(request, 
+			if (prevSeld != null)
+				prevSelectedItems.add(prevSeld);
+			SelectEvent<Comboitem, Object> evt = SelectEvent.getSelectEvent(request, 
 					new SelectEvent.SelectedObjectHandler<Comboitem>() {
 				public Set<Object> getObjects(Set<Comboitem> items) {
 					if (items == null || items.isEmpty() || _model == null)
@@ -785,11 +791,11 @@ public class Combobox extends Textbox {
 				}
 
 				public Set<Object> getPreviousSelectedObjects() {
-					Set items = getPreviousSelectedItems();
-					if (_model == null && items.size() < 1)
+					Set<Comboitem> items = getPreviousSelectedItems();
+					if (_model == null || items.size() < 1)
 						return null;
 					else {
-						Set s = new LinkedHashSet();
+						Set<Object> s = new LinkedHashSet<Object>();
 						s.add(_model.getElementAt(((Comboitem)items.iterator().next()).getIndex()));
 						return s;
 					}
@@ -800,7 +806,7 @@ public class Combobox extends Textbox {
 					return getPreviousSelectedObjects();
 				}
 			});
-			Set selItems = evt.getSelectedItems();
+			Set<Comboitem> selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
 			_lastCkVal = getValue(); //onChange is sent before onSelect
@@ -809,8 +815,8 @@ public class Combobox extends Textbox {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGE)) {
 			super.service(request, everError);
-			//Bug ZK-1492: synchronize the input value to selection
-			syncValueToSelection();
+			// Bug ZK-1492: synchronize the input value to selection
+			 syncValueToSelection();
 		} else
 			super.service(request, everError);
 	}
@@ -873,6 +879,7 @@ public class Combobox extends Textbox {
 	}
 
 	//Cloneable//
+	@SuppressWarnings("rawtypes")
 	public Object clone() {
 		final Combobox clone = (Combobox)super.clone();
 		clone._selItem = null;

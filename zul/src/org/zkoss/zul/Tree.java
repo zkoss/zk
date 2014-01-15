@@ -176,6 +176,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author tomyeh
  */
+@SuppressWarnings("serial")
 public class Tree extends MeshElement {
 	private static final Logger log = LoggerFactory.getLogger(Tree.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
@@ -1363,7 +1364,7 @@ public class Tree extends MeshElement {
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
@@ -1636,7 +1637,7 @@ public class Tree extends MeshElement {
 			smartUpdate("model", false);
 		}
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private final void setModelDirectly(TreeModel model) {
 		_model = model;
 	}
@@ -1663,7 +1664,7 @@ public class Tree extends MeshElement {
 	 * @return the list model associated with this tree
 	 * @since 3.0.0
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> TreeModel<T> getModel(){
 		return (TreeModel)_model;
 	}
@@ -1706,6 +1707,7 @@ public class Tree extends MeshElement {
 	 * automatically.
 	 * @since 6.5.2
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setItemRenderer(String clsnm) throws ClassNotFoundException,
 			NoSuchMethodException, IllegalAccessException,
 			InstantiationException, java.lang.reflect.InvocationTargetException {
@@ -1720,7 +1722,7 @@ public class Tree extends MeshElement {
 	 * @return the renderer to render each item, or null if the default
 	 * @since 5.0.6
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> TreeitemRenderer<T> getItemRenderer(){
 		return (TreeitemRenderer)_renderer;
 	}
@@ -1914,9 +1916,11 @@ public class Tree extends MeshElement {
 
 	/** Returns the renderer used to render items.
 	 */
+	@SuppressWarnings("rawtypes")
 	private TreeitemRenderer getRealRenderer() {
 		return _renderer != null ? _renderer: _defRend;
 	}
+	@SuppressWarnings("rawtypes")
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
 		public void render(Treeitem ti, final Object node, final int index){
 			Tree tree = ti.getTree();
@@ -1982,6 +1986,7 @@ public class Tree extends MeshElement {
 
 	/** Used to render treeitem if _model is specified. */
 	private class Renderer implements java.io.Serializable {
+		@SuppressWarnings("rawtypes")
 		private final TreeitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
 		private Renderer() {
@@ -2386,9 +2391,9 @@ public class Tree extends MeshElement {
 	}
 	private static Boolean _ckDeselectOther;
 
-	private Set collectUnselectedObjects(Set previousSelection, Set currentSelection) {
-		Set prevSeldItems = previousSelection != null ? new LinkedHashSet(previousSelection) : 
-			new LinkedHashSet();
+	private <T> Set<T> collectUnselectedObjects(Set<T> previousSelection, Set<T> currentSelection) {
+		Set<T> prevSeldItems = previousSelection != null ? new LinkedHashSet<T>(previousSelection) : 
+			new LinkedHashSet<T>();
 		if (currentSelection != null && prevSeldItems.size() > 0)
 			prevSeldItems.removeAll(currentSelection);
 		return prevSeldItems;
@@ -2399,17 +2404,26 @@ public class Tree extends MeshElement {
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */
-	public void service(final org.zkoss.zk.au.AuRequest request, boolean everError) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
 			
+			Desktop desktop = request.getDesktop();
+			Map data = request.getData();
+			List<String> sitems = cast((List)request.getData().get("items"));
+			boolean selectAll = Boolean.parseBoolean(data.get("selectAll") + "");
+			boolean paging = inPagingMold();
 			// B50-ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
 			Set<Treeitem> prevSeldItems = new LinkedHashSet<Treeitem>(_selItems);
+			Set<Treeitem> curSeldItems = AuRequests.convertToItems(desktop, sitems);
+			Set<Treeitem> realPrevSeldItems = new LinkedHashSet<Treeitem>(prevSeldItems);
+			Set<Object> prevSeldObjects = _model != null ? new LinkedHashSet<Object>(((Selectable)_model).getSelection()) : new LinkedHashSet<Object>();
+			// fine tune with B50-ZK-547.
+			Selectable<Object> smodel = _model != null ? (Selectable) _model : null;
 			
-			final boolean paging = inPagingMold();
-			
-			final int from, to;
-			final Paginal pgi = getPaginal();
+			int from, to;
+			Paginal pgi = getPaginal();
 			if (pgi != null) {
 				int pgsz = pgi.getPageSize();
 				from = pgi.getActivePage() * pgsz;
@@ -2419,25 +2433,19 @@ public class Tree extends MeshElement {
 				to = 0;
 			}
 			
-			Map data = request.getData();
-			final boolean selectAll = Boolean.parseBoolean(data.get("selectAll") + "");
-			List<String> sitems = cast((List)request.getData().get("items"));
-			final Desktop desktop = request.getDesktop();
-			final Set<Treeitem> curSeldItems = AuRequests.convertToItems(request.getDesktop(), sitems);
-			final Treeitem ref = (Treeitem) request.getDesktop().getComponentByUuidIfAny((String)request.getData().get("reference"));
-			Set prevSeldObjects = _model != null ? new LinkedHashSet(((Selectable)_model).getSelection()) : new LinkedHashSet();
-			final Set<Treeitem> realPrevSeldItems = (Set) Objects.clone(prevSeldItems);
-			
-			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) // remove the selction in other page
+			// remove the selection in other page
+			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) {
+				// use toArray() to prevent java.util.ConcurrentModificationException
 				for (Object item : realPrevSeldItems.toArray()) {
 					int index = ((Treeitem) item).getIndex();
 					if (index >= to || index < from)
 						realPrevSeldItems.remove(item);
 				}
+			}
+				
 			
 			disableClientUpdate(true);
-			// fine tune with B50-ZK-547.
-			final Selectable<Object> smodel = _model != null ? (Selectable) _model : null;
+			
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();

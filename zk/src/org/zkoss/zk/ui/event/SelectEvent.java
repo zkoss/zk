@@ -34,6 +34,7 @@ import org.zkoss.zk.au.AuRequests;
  * 
  * @author tomyeh
  */
+@SuppressWarnings("serial")
 public class SelectEvent<T extends Component, E> extends Event {
 	private final Set<T> _selectedItems;
 	private final Set<T> _prevSelectedItems;
@@ -68,7 +69,7 @@ public class SelectEvent<T extends Component, E> extends Event {
 	/** Converts an AU request to a select event.
 	 * @since 6.0.0
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static final <T extends Component, E> SelectEvent<T,E> 
 			getSelectEvent(AuRequest request, SelectedObjectHandler<T> handler) {
 		final Map<String, Object> data = request.getData();

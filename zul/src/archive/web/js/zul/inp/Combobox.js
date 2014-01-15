@@ -179,7 +179,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 
-			this.fire('onSelect', {items: sel?[sel]:[], reference: sel});
+			this.fire('onSelect', {items: sel?[sel]:[], reference: sel, prevSeld: oldsel});
 				//spec change (diff from zk 3): onSelect fired after onChange
 				//purpose: onSelect can retrieve the value correctly
 				//If we want to change this spec, we have to modify Combobox.java about _lastCkVal

@@ -23,7 +23,6 @@ import java.util.AbstractCollection;
 import java.util.AbstractList;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -393,7 +392,7 @@ public class Listbox extends MeshElement {
 			 * @since 3.5.1
 			 */
 			protected void removeRange(int fromIndex, int toIndex) {
-				ListIterator it = listIterator(toIndex);
+				ListIterator<Listitem> it = listIterator(toIndex);
 				for (int n = toIndex - fromIndex; --n >= 0 && it.hasPrevious();) {
 					it.previous();
 					it.remove();
@@ -452,6 +451,7 @@ public class Listbox extends MeshElement {
 		return index - (offset < 0 ? 0 : offset);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends Component> List<T> getChildren() {
 		return (List<T>) new Children();
 	}
@@ -739,6 +739,7 @@ public class Listbox extends MeshElement {
 	 * <p>Notice that, if a model is assigned, it will change the model's
 	 * state (by {@link Selectable#setMultiple}).
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
 			_multiple = multiple;
@@ -896,6 +897,7 @@ public class Listbox extends MeshElement {
 	 * Deselects all of the currently selected items and selects the item with
 	 * the given index.
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setSelectedIndex(int jsel) {
 		final int isz = _items.size();
 		final int tsz = _model != null ? _model.getSize() : isz;
@@ -1127,12 +1129,12 @@ public class Listbox extends MeshElement {
 	 *
 	 * @since 3.6.0
 	 */
-	public void setSelectedItems(Set listItems) {
+	public void setSelectedItems(Set<Listitem> listItems) {
 		if (!isMultiple())
 			throw new WrongValueException(
 					"Listbox must allow multiple selections.");
-		for (Iterator it = listItems.iterator(); it.hasNext();) {
-			addItemToSelection((Listitem) it.next());
+		for (Iterator<Listitem> it = listItems.iterator(); it.hasNext();) {
+			addItemToSelection(it.next());
 		}
 	}
 
@@ -1260,6 +1262,7 @@ public class Listbox extends MeshElement {
 			addPagingListener(_pgi);
 	}
 
+	@SuppressWarnings("serial")
 	private class PGListener implements SerializableEventListener<PagingEvent>,
 			CloneableEventListener<PagingEvent> {
 		public void onEvent(PagingEvent event) {
@@ -1274,6 +1277,7 @@ public class Listbox extends MeshElement {
 			return null; // skip to clone
 		}
 	}
+	@SuppressWarnings("serial")
 	private class PGImpListener implements SerializableEventListener<Event>,
 			CloneableEventListener<Event> {
 		public void onEvent(Event event) {
@@ -1935,8 +1939,9 @@ public class Listbox extends MeshElement {
 	/**
 	 * An iterator used by visible children.
 	 */
+	@SuppressWarnings("rawtypes")
 	private class VisibleChildrenIterator implements Iterator {
-		private final ListIterator _it = getItems().listIterator();
+		private final ListIterator<Listitem> _it = getItems().listIterator();
 		private int _count = 0;
 		private boolean _isBeginning = false;
 
@@ -2215,7 +2220,7 @@ public class Listbox extends MeshElement {
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ListModel<T> getModel() {
 		return (ListModel)_model;
 	}
@@ -2228,7 +2233,7 @@ public class Listbox extends MeshElement {
 	 * @since 3.5.0
 	 * @see #setModel(ListModel)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ListModel<T> getListModel() {
 		return _model instanceof GroupsListModel ? null : (ListModel)_model;
 	}
@@ -2241,7 +2246,7 @@ public class Listbox extends MeshElement {
 	 * @since 3.5.0
 	 * @see #setModel(GroupsModel)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <D, G, F> GroupsModel<D, G, F> getGroupsModel() {
 		return _model instanceof GroupsListModel ? ((GroupsListModel) _model)
 				.getGroupsModel() : null;
@@ -2315,7 +2320,7 @@ public class Listbox extends MeshElement {
 	private static boolean doSort(Listbox listbox) {
 		Listhead hds = listbox.getListhead();
 		if (!listbox.isAutosort() || hds == null) return false;
-		for (Iterator it = hds.getChildren().iterator();
+		for (Iterator<Component> it = hds.getChildren().iterator();
 		it.hasNext();) {
 			final Listheader hd = (Listheader)it.next();
 			String dir = hd.getSortDirection();
@@ -2344,6 +2349,7 @@ public class Listbox extends MeshElement {
 	 * @see #setModel(ListModel)
 	 * @see #getGroupsModel()
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setModel(GroupsModel<?, ?, ?> model) {
 		setModel((ListModel) (model != null ? GroupsListModel.toListModel(model) : null));
 	}
@@ -2354,7 +2360,7 @@ public class Listbox extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListitemRenderer<T> getItemRenderer() {
-		return (ListitemRenderer)_renderer;
+		return (ListitemRenderer<T>)_renderer;
 	}
 
 	/**
@@ -2401,6 +2407,7 @@ public class Listbox extends MeshElement {
 	 * Sets the renderer by use of a class name. It creates an instance
 	 * automatically.
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setItemRenderer(String clsnm) throws ClassNotFoundException,
 			NoSuchMethodException, IllegalAccessException,
 			InstantiationException, java.lang.reflect.InvocationTargetException {
@@ -2469,6 +2476,7 @@ public class Listbox extends MeshElement {
 		doInitRenderer();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void doInitRenderer() {
 		// sync the multiple status from model
 		if (_model != null)
@@ -2545,6 +2553,7 @@ public class Listbox extends MeshElement {
 	/**
 	 * Handles when the list model's content changed.
 	 */
+	@SuppressWarnings("rawtypes")
 	private void onListDataChange(ListDataEvent event) {
 		//sort when add
 		int type = event.getType();
@@ -2629,19 +2638,21 @@ public class Listbox extends MeshElement {
 	}
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
-		return (Selectable)_model;
+		return (Selectable<Object>)_model;
 	}
 
 	/** Used to render listitem if _model is specified. */
 	/* package */class Renderer { // use package for easy to call (if override)
+		@SuppressWarnings("rawtypes")
 		private final ListitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
-		/* package */Renderer() {
+		/* package */@SuppressWarnings("rawtypes")
+		Renderer() {
 			_renderer = (ListitemRenderer) getDataLoader().getRealRenderer();
 		}
 
-		/* package */@SuppressWarnings("unchecked")
+		/* package */@SuppressWarnings({ "unchecked", "rawtypes" })
 		void render(Listitem item, int index) throws Throwable {
 			if (item.isLoaded())
 				return; // nothing to do
@@ -2849,6 +2860,7 @@ public class Listbox extends MeshElement {
 		return _zclass == null ? "z-listbox" : _zclass;
 	}
 
+	@SuppressWarnings("serial")
 	private class ItemIter implements ListIterator<Listitem>, java.io.Serializable {
 		private ListIterator<Listitem> _it;
 		private int _j;
@@ -2987,6 +2999,7 @@ public class Listbox extends MeshElement {
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	private class ModelInitListener implements SerializableEventListener<Event>,
 		CloneableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
@@ -3040,6 +3053,7 @@ public class Listbox extends MeshElement {
 	}
 
 	// Cloneable//
+	@SuppressWarnings("rawtypes")
 	public Object clone() {
 		final Listbox clone = (Listbox) super.clone();
 		clone.init();
@@ -3081,7 +3095,7 @@ public class Listbox extends MeshElement {
 	}
 
 	private void afterUnmarshal(int index) {
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+		for (Iterator<Component> it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Listitem) {
 				final Listitem li = (Listitem) child;
@@ -3129,6 +3143,7 @@ public class Listbox extends MeshElement {
 			s.writeObject(_groupsInfo);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
@@ -3334,9 +3349,9 @@ public class Listbox extends MeshElement {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.groupSelect", false, true);
 	}
 	
-	private Set collectUnselectedObjects(Set previousSelection, Set currentSelection) {
-		Set prevSeldItems = previousSelection != null ? new LinkedHashSet(previousSelection) : 
-			new LinkedHashSet();
+	private <T> Set<T> collectUnselectedObjects(Set<T> previousSelection, Set<T> currentSelection) {
+		Set<T> prevSeldItems = previousSelection != null ? new LinkedHashSet<T>(previousSelection) : 
+			new LinkedHashSet<T>();
 		if (currentSelection != null && prevSeldItems.size() > 0)
 			prevSeldItems.removeAll(currentSelection);
 		return prevSeldItems;
@@ -3351,7 +3366,8 @@ public class Listbox extends MeshElement {
 	 *
 	 * @since 5.0.0
 	 */
-	public void service(final org.zkoss.zk.au.AuRequest request, boolean everError) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
 			if (_rod) {
@@ -3392,18 +3408,31 @@ public class Listbox extends MeshElement {
 					"zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
 			
+			Desktop desktop = request.getDesktop();
+			Map data = request.getData();
+			List<String> sitems = cast((List) data.get("items"));
+			boolean selectAll = Boolean.parseBoolean(data.get("selectAll") + "");
+			boolean paging = inPagingMold();
 			Set<Listitem> prevSeldItems = new LinkedHashSet<Listitem>(_selItems);
+			Set<Listitem> curSeldItems = AuRequests.convertToItems(desktop, sitems);
+			Set<Listitem> realPrevSeldItems = new LinkedHashSet<Listitem>(prevSeldItems);
+			Set<Object> prevSeldObjects = _model != null ? new LinkedHashSet<Object>(getSelectableModel().getSelection()) : new LinkedHashSet<Object>();
+			// fine tune with B50-ZK-547.
+			Selectable<Object> smodel = _model != null ? getSelectableModel(): null;
 			
 			// ZK-2089: prevSeldItems should skip listgroup if listgroup is not selectable
 			if (!isListgroupSelectable() && prevSeldItems.size() > 0) {
+				// use toArray() to prevent java.util.ConcurrentModificationException 
 				for (Object item : prevSeldItems.toArray()) {
-					if (item instanceof Listgroup)
+					if (item instanceof Listgroup) {
 						prevSeldItems.remove(item);
+						realPrevSeldItems.remove(item);
+					}
 				}
 			}
-			
-			final int from, to;
-			final Paginal pgi = getPaginal();
+						
+			int from, to;
+			Paginal pgi = getPaginal();
 			if (pgi != null) {
 				int pgsz = pgi.getPageSize();
 				from = pgi.getActivePage() * pgsz;
@@ -3413,35 +3442,26 @@ public class Listbox extends MeshElement {
 				to = 0;
 			}
 			
-			Map data = request.getData();
-			final boolean selectAll = Boolean.parseBoolean(data.get("selectAll") + "");
-			final List<String> sitems = cast((List) data.get("items"));
-			final Desktop desktop = request.getDesktop();
-			Set<Listitem> curSeldItems = AuRequests.convertToItems(request.getDesktop(), sitems);
-			
-			final boolean paging = inPagingMold();
-			
-			final Set<Listitem> realPrevSeldItems = (Set) Objects.clone(prevSeldItems);
-			
-			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) // remove the selction in other page
+			// remove the selection in other page
+			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) { 
+				// use toArray() to prevent java.util.ConcurrentModificationException
 				for (Object item : realPrevSeldItems.toArray()) {
 					int index = ((Listitem) item).getIndex();
 					if (index >= to || index < from)
 						realPrevSeldItems.remove(item);
 				}
-			
-			Set prevSeldObjects = _model != null ? new LinkedHashSet(getSelectableModel().getSelection()) : new LinkedHashSet();
+			}
 			
 			if (curSeldItems == null)
 				curSeldItems = new HashSet<Listitem>(); //just in case
 			if (_rod) { // Bug: ZK-592
-				Map<String, Object> m = cast((Map) request.getData().get("range"));
+				Map<String, Object> m = cast((Map) data.get("range"));
 				if (m != null) {
 					curSeldItems.addAll(_selItems); // keep other selected items.
 					int start = AuRequests.getInt(m, "start", -1);
 					int end = AuRequests.getInt(m, "end", -1);
-					for (Iterator it = _items.iterator(); it.hasNext();) {
-						Listitem item = (Listitem)it.next();
+					for (Iterator<Listitem> it = _items.iterator(); it.hasNext();) {
+						Listitem item = it.next();
 						int index = item.getIndex();
 						if (index >= start && index <= end) {							
 							// the same logic come from JS file (SelectWidget)
@@ -3457,9 +3477,6 @@ public class Listbox extends MeshElement {
 			final boolean oldIDSE = _ignoreDataSelectionEvent;
 			_ignoreDataSelectionEvent = true;
 			
-			// fine tune with B50-ZK-547.
-			final Selectable<Object> smodel =
-				_model != null ? getSelectableModel(): null;
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
