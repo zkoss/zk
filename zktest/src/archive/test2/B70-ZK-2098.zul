@@ -3,7 +3,7 @@
 <div style="height:200px" apply="org.zkoss.bind.BindComposer" 
     viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2098_ViewModel')">
     <div>
-    	Click second button then should not see error message
+    	Click second button then should not see error message, the cell should align correct.
     </div>
   <tree model="@load(vm.treeModel)" id="tree" width="30%" vflex="1" rows="8">
 <!--     <custom-attributes org.zkoss.zul.nativebar="true"/> -->
