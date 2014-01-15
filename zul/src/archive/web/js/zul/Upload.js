@@ -155,8 +155,13 @@ zul.Upload = zk.$extends(zk.Object, {
 		delete this._formDetached;
 
 		//B50-3304877: autodisable and Upload
-		if (!wgt._autodisable_self)
-			this.sync();
+		if (!wgt._autodisable_self) {
+			var self = this;
+			//B65-ZK-2111: Sync later to prevent the external style change button offset height/width.
+			setTimeout(function () {
+				self.sync();
+			}, 50);
+		}
 
 		var outer = this._outer = parent ? parent.lastChild : ref.nextSibling,
 			inp = outer.firstChild.firstChild;
