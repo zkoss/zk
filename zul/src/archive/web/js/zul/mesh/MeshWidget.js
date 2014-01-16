@@ -939,7 +939,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (this.efoot) 
 						this.efoot.scrollLeft = this._currentLeft;
 				}
+				
+				// ZK-2114: should not show the bar if vertical scrollbar doesn't exists
+				if (!this.frozen) {
+					var head = this.head,
+					    display = zk(this.ebody).hasVScroll() ? '' : 'none'
+					head.$n('hdfaker-bar').style.display = head.$n('bar').style.display = display;
+				}
 			}
+			
 			this._shallSize = false;
 		}
 	},

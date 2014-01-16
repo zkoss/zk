@@ -1,0 +1,69 @@
+<zk>
+	<div>
+		<div>
+			resize the browser height until a scrollbar appears in the
+			grid/listbox,
+		</div>
+		<div>
+			and resize the browser height again until the scrollbars
+			disappear.
+		</div>
+		<div>then should not show the head bar in head</div>
+	</div>
+	<window border="normal" title="native" width="30%" height="30%">
+		<custom-attributes org.zkoss.zul.nativebar="true" />
+		<div hflex="1" vflex="1">
+			<grid vflex="1" hflex="1">
+				<columns>
+					<column label="bla"></column>
+					<column label="blubb"></column>
+				</columns>
+				<rows>
+					<row>
+						<cell>askdfhaskldf</cell>
+						<cell>askdfhaskldf</cell>
+					</row>
+					<row>
+						<cell>askdfhaskldf</cell>
+						<cell>askdfhaskldf</cell>
+					</row>
+					<row>
+						<cell>askdfhaskldf</cell>
+						<cell>askdfhaskldf</cell>
+					</row>
+					<row>
+						<cell>askdfhaskldf</cell>
+						<cell>askdfhaskldf</cell>
+					</row>
+				</rows>
+			</grid>
+		</div>
+	</window>
+	<window border="normal" title="native" width="30%" height="30%">
+		<custom-attributes org.zkoss.zul.nativebar="true" />
+		<div hflex="1" vflex="1">
+			<listbox vflex="1" hflex="1">
+				<listhead>
+					<listheader label="bla" />
+					<listheader label="blubb" />
+				</listhead>
+				<listitem>
+					<listcell>askdfhaskldf</listcell>
+					<listcell>askdfhaskldf</listcell>
+				</listitem>
+				<listitem>
+					<listcell>askdfhaskldf</listcell>
+					<listcell>askdfhaskldf</listcell>
+				</listitem>
+				<listitem>
+					<listcell>askdfhaskldf</listcell>
+					<listcell>askdfhaskldf</listcell>
+				</listitem>
+				<listitem>
+					<listcell>askdfhaskldf</listcell>
+					<listcell>askdfhaskldf</listcell>
+				</listitem>
+			</listbox>
+		</div>
+	</window>
+</zk>

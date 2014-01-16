@@ -196,7 +196,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 		var mesh = this.getMeshWidget();
 		if (mesh._nativebar && !mesh.frozen)
-			out.push('<th class="', this.$s('bar'), '" />');
+			out.push('<th id="', this.uuid, '-bar" class="', this.$s('bar'), '" />');
 
 		out.push('</tr>');
 	}
