@@ -55,7 +55,7 @@ ZK 7.0.1
   ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
   ZK-2095: Column sizable curser problem with sortable column
   ZK-2114: Native scrollbar remaining header column in grid/listbox
-
+  ZK-2111: Button fileupload sometimes not work when using strong CSS font style
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
@@ -133,6 +133,7 @@ ZK 6.5.6
   ZK-2091: Copy-paste large value in doublebox get error.
   ZK-2056: XSS Vulnerability in AuUploader
   ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
+  ZK-2111: Button fileupload sometimes not work when using strong CSS font style
   
   --------
 ZK 6.5.5
