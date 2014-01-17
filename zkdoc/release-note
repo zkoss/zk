@@ -56,6 +56,7 @@ ZK 7.0.1
   ZK-2095: Column sizable curser problem with sortable column
   ZK-2114: Native scrollbar remaining header column in grid/listbox
   ZK-2111: Button fileupload sometimes not work when using strong CSS font style
+  ZK-2110: The size of detail is wrong when first column invisible
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader

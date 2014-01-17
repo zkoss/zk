@@ -1,0 +1,22 @@
+<zk>
+	<div>Click the row then the detail should not show</div>
+	<grid hflex="1" vflex="1">
+		<columns sizable="true">
+			<column label="Detail" visible="false" />
+			<column label="1" />
+			<column label="2" />
+			<column label="3" />
+		</columns>
+		<rows>
+			<row onClick="detail.setOpen(!detail.isOpen());">
+				<detail id="detail">
+					<div hflex="1" height="100px"
+						style="background-color: #0092D2;" />
+				</detail>
+				<label value="Click here to open Detail" />
+				<label value="2" />
+				<label value="3" />
+			</row>
+		</rows>
+	</grid>
+</zk>
