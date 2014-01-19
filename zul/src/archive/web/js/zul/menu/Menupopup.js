@@ -142,6 +142,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			if ((zk(n).isOverlapped(m, 1) && nol < mol + mwd / 2) || (mp && mp._shallSync)) {
 				this._shallSync = true;
 				n.style.left = jq.px0(mol - nwd);
+				// ZK-2119: should sync again for ie
+				if (zk.ie)
+					this.onShow();
 			}
 		}
 	},
