@@ -6,6 +6,8 @@
 }
 
 .z-window {
+	// ZK-2115: the style should apply [overflow: hidden]
+	.defaultOverflowZoom();
 	border: 1px solid @windowBorderColor;
 	.borderRadius(@baseBorderRadius);
 	padding: @windowFramePadding;

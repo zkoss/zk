@@ -1,0 +1,7 @@
+<zk>
+	<div>
+		try many times to resize the browser height then should not see
+		the empty margin at the right side of browser.
+	</div>
+	<window border="normal" hflex="1" vflex="1"></window>
+</zk>
