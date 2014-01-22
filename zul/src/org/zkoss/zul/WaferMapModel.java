@@ -85,7 +85,7 @@ public class WaferMapModel extends AbstractChartModel {
 	public void setXsize(int xsize) {
 		if (xsize != _xsize) {
 			_xsize = xsize;
-			fireEvent(ChartDataEvent.CHANGED, null, null);
+			fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class WaferMapModel extends AbstractChartModel {
 	public void setYsize(int ysize) {
 		if (ysize != _ysize) {
 			_ysize = ysize;
-			fireEvent(ChartDataEvent.CHANGED, null, null);
+			fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class WaferMapModel extends AbstractChartModel {
 			_values = new HashMap<IntPair, Number>();
 		}
 		_values.put(new IntPair(x, y), new Integer(value));
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
 	
 	/** Internal Use Only. The entrySet of the added values.
@@ -154,7 +154,7 @@ public class WaferMapModel extends AbstractChartModel {
 		if (_values != null) {
 			final Number old = _values.remove(new IntPair(x, y));
 			if (old != null) {
-				fireEvent(ChartDataEvent.REMOVED, null, null);
+				fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 			}
 		}
 	}
@@ -165,7 +165,7 @@ public class WaferMapModel extends AbstractChartModel {
 	public void clear() {
 		if (_values != null && !_values.isEmpty()) {
 			_values.clear();
-			fireEvent(ChartDataEvent.REMOVED, null, null);
+			fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 		}
 	}
 

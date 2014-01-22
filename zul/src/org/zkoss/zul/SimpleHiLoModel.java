@@ -78,35 +78,39 @@ public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 	}
 	
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
-		addValue0(date, open, high, low, close, volume, index);
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		int i = addValue0(date, open, high, low, close, volume, index);
+		fireEvent(ChartDataEvent.ADDED, null, date, 0, i, _hlTuples.get(i).toNumbers());
 	}
 
 	public void setValue(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
 		removeValue0(index);
 		addValue0(date, open, high, low, close, volume, index);
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, date, 0, index, _hlTuples.get(index).toNumbers());
 	}
 	
-	private void addValue0(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
+	private int addValue0(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
+		int i = index;
 		if (index >= 0)
 			_hlTuples.add(index, new HiLoTuple(date, open, high, low, close, volume));
-		else
+		else {
+			i = _hlTuples.size();
 			_hlTuples.add(new HiLoTuple(date, open, high, low, close, volume));
+		}
+		return i;
 	}
 	
 	public void removeValue(int index) {
-		removeValue0(index);
-		fireEvent(ChartDataEvent.REMOVED, null, null);
+		HiLoTuple value = removeValue0(index);
+		fireEvent(ChartDataEvent.REMOVED, null, null, 0, index, value.toNumbers());
 	}
 	
-	private void removeValue0(int index) {
-		_hlTuples.remove(index);
+	private HiLoTuple removeValue0(int index) {
+		return _hlTuples.remove(index);
 	}
 	
 	public void clear() {
 		_hlTuples.clear();
-		fireEvent(ChartDataEvent.REMOVED, null, null);
+		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 	}
 	
 	//-- internal class --//
@@ -128,6 +132,9 @@ public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 			_volume = volume;
 		}
 		
+		private Number[] toNumbers() {
+			return new Number[] {_open, _high, _low, _close, _volume}; 
+		}
 		private Date getDate() {
 			return _date;
 		}

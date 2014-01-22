@@ -53,7 +53,7 @@ public class GanttModel extends AbstractChartModel {
 		task.setSeries(series);
 		task.setOwner(this);
 		tasks.add(task);
-		fireEvent(ChartDataEvent.ADDED, series, task);
+		fireEvent(ChartDataEvent.ADDED, series, null, -1, -1, task);
 	}
 	
 	public void removeValue(Comparable<?> series, GanttTask task) {
@@ -64,7 +64,7 @@ public class GanttModel extends AbstractChartModel {
 		tasks.remove(task);
 		task.setSeries(null);
 		task.setOwner(null);
-		fireEvent(ChartDataEvent.REMOVED, series, task);
+		fireEvent(ChartDataEvent.REMOVED, series, null, -1, -1, task);
 	}
 
 	/** Return all series of this GanttModel.
@@ -75,7 +75,7 @@ public class GanttModel extends AbstractChartModel {
 		return allseries.toArray(new Comparable[allseries.size()]);
 	}
 	
-	public GanttTask[] getTasks(Comparable series) {
+	public GanttTask[] getTasks(Comparable<?> series) {
 		final List<GanttTask> tasks = _taskMap.get(series);
 		return tasks == null ? new GanttTask[0] : tasks.toArray(new GanttTask[tasks.size()]);
 	}
@@ -88,7 +88,7 @@ public class GanttModel extends AbstractChartModel {
 	 */
 	public static class GanttTask implements java.io.Serializable {
 		private static final long serialVersionUID = 20091008183314L;
-		private Comparable _series;
+		private Comparable<?> _series;
 		private Date _start;
 		private Date _end;
 		private String _description;
@@ -145,7 +145,7 @@ public class GanttModel extends AbstractChartModel {
 			if (Double.compare(percent, _percent) != 0) {
 				this._percent = percent;
 				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+					_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 			}
 		}
 
@@ -157,7 +157,7 @@ public class GanttModel extends AbstractChartModel {
 			task.setOwner(_owner);
 			_subtasks.add(task);
 			if (_owner != null)
-				_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 		}
 		
 		public void removeSubtask(GanttTask task) {
@@ -165,7 +165,7 @@ public class GanttModel extends AbstractChartModel {
 				task.setSeries(null);
 				task.setOwner(null);
 				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+					_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 			}
 		}
 		
@@ -173,11 +173,11 @@ public class GanttModel extends AbstractChartModel {
 			return _subtasks.toArray(new GanttTask[_subtasks.size()]);
 		}
 		
-		private Comparable getSeries() {
+		private Comparable<?> getSeries() {
 			return _series;
 		}
 		
-		private void setSeries(Comparable series) {
+		private void setSeries(Comparable<?> series) {
 			_series = series;
 		}
 		
@@ -187,7 +187,7 @@ public class GanttModel extends AbstractChartModel {
 		
 		protected void fireChartChange() {
 			if (_owner != null)
-				_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 		}
 	}
 

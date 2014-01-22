@@ -67,7 +67,7 @@ public class DialModel extends AbstractChartModel {
 	public DialModelScale newScale() {
 		final DialModelScale entry = new DialModelScale(this);
 		_series.add(entry);
-		fireEvent(ChartDataEvent.ADDED, null, null);
+		fireEvent(ChartDataEvent.ADDED, null, null, -1, -1, null);
 		return entry;
 	}
 	
@@ -85,7 +85,7 @@ public class DialModel extends AbstractChartModel {
 		final DialModelScale entry = new DialModelScale(this);
 		_series.add(entry);
 		entry.setScale(lowerBound, upperBound, startAngle, extent, majorTickInterval, minorTickCount);
-		fireEvent(ChartDataEvent.ADDED, null, null);
+		fireEvent(ChartDataEvent.ADDED, null, null, -1, -1, null);
 		return entry;
 	}
 	
@@ -113,7 +113,7 @@ public class DialModel extends AbstractChartModel {
 	 */
 	public void removeScale(DialModelScale scale) {
 		_series.remove(scale);
-		fireEvent(ChartDataEvent.REMOVED, null, null);
+		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public class DialModel extends AbstractChartModel {
 	public void clear() {
 		if (!_series.isEmpty()) {
 			_series.clear();
-			fireEvent(ChartDataEvent.REMOVED, null, null);
+			fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 		}
 	}
 
@@ -155,7 +155,7 @@ public class DialModel extends AbstractChartModel {
 			alpha = 255;
 		}
 		_bgAlpha = alpha;
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class DialModel extends AbstractChartModel {
 			_bgRGB = new int[3];
 			Chart.decode(_bgColor, _bgRGB);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
 	
 	/**
@@ -214,7 +214,7 @@ public class DialModel extends AbstractChartModel {
 			_fgRGB = new int[3];
 			Chart.decode(_fgColor, _fgRGB);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
 	
 	/**
@@ -248,7 +248,7 @@ public class DialModel extends AbstractChartModel {
 			_bgRGB1 = new int[3];
 			Chart.decode(_bgColor1, _bgRGB1);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
 	
 	/**
@@ -282,7 +282,7 @@ public class DialModel extends AbstractChartModel {
 			_bgRGB2 = new int[3];
 			Chart.decode(_bgColor2, _bgRGB2);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null);
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
 	
 	/**
@@ -307,7 +307,7 @@ public class DialModel extends AbstractChartModel {
 	 */
 	public void setGradientDirection(String direction) {
 		_gdirection = direction;
-		fireEvent(ChartDataEvent.CHANGED, null, null); //ZK-1693
+		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null); //ZK-1693
 	}
 	
 	/**

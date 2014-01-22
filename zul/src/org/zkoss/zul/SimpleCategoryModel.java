@@ -95,16 +95,29 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 				_seriesMap.put(series, new Integer(count.intValue()+1));
 
 			}
+			
+			_valueMap.put(key, value);
+
+			final int cIndex = _categoryList.indexOf(category);
+			final int sIndex = _seriesList.indexOf(series);
+			
+			//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
+			fireEvent(ChartDataEvent.ADDED, series, category, sIndex, cIndex, value);
 		} else {
 			Number ovalue = _valueMap.get(key);
 			if (Objects.equals(ovalue, value)) {
 				return;
 			}
+			
+			_valueMap.put(key, value);
+
+
+			final int cIndex = _categoryList.indexOf(category);
+			final int sIndex = _seriesList.indexOf(series);
+			
+			//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
+			fireEvent(ChartDataEvent.CHANGED, series, category, sIndex, cIndex, value);
 		}
-		
-		_valueMap.put(key, value);
-		//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
-		fireEvent(ChartDataEvent.CHANGED, series, category);
 	}
 	
 	public void removeValue(Comparable<?> series, Comparable<?> category) {
@@ -114,6 +127,9 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 						
 		if (_valueMap.remove(key) == null)
 			return;
+		final int cIndex = _categoryList.indexOf(category);
+		final int sIndex = _seriesList.indexOf(series);
+		final Number value = getValue(series, category);
 		
 		int ccount = _categoryMap.get(category).intValue();
 		if (ccount > 1) {
@@ -132,7 +148,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		}
 		
 		//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
-		fireEvent(ChartDataEvent.REMOVED, series, category);
+		fireEvent(ChartDataEvent.REMOVED, series, category, sIndex, cIndex, value);
 	}
 	
 	public void clear() {
@@ -141,7 +157,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		_categoryMap.clear();
 		_categoryList.clear();
 		_valueMap.clear();
-		fireEvent(ChartDataEvent.REMOVED, null, null);
+		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 	}
 	
 	public Object clone() {

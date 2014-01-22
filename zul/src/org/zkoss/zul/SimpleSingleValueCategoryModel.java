@@ -54,27 +54,34 @@ public class SimpleSingleValueCategoryModel extends AbstractChartModel implement
 
 	public void setValue(Comparable<?> category, Number value) {
 		if (!_categoryMap.containsKey(category)) {
+			final int cIndex = _categoryList.size();
 			_categoryList.add(category);
+			_categoryMap.put(category, value);
+			fireEvent(ChartDataEvent.ADDED, null, category, 0, cIndex, value);
 		} else {
 			Number ovalue = _categoryMap.get(category);
 			if (Objects.equals(ovalue, value)) {
 				return;
 			}
+			final int cIndex = _categoryList.indexOf(category);
+			_categoryMap.put(category, value);
+			fireEvent(ChartDataEvent.CHANGED, null, category, 0, cIndex, value);
 		}
-		_categoryMap.put(category, value);
-		fireEvent(ChartDataEvent.CHANGED, null, category);
 	}
 	
 	public void removeValue(Comparable<?> category) {
 		_categoryMap.remove(category);
-		_categoryList.remove(category);
-		fireEvent(ChartDataEvent.REMOVED, null, category);
+
+		final int cIndex = _categoryList.indexOf(category);
+		
+		Comparable<?> value = _categoryList.remove(category);
+		fireEvent(ChartDataEvent.REMOVED, null, category, 0, cIndex, value);
 	}
 	
 	public void clear() {
 		_categoryMap.clear();
 		_categoryList.clear();
-		fireEvent(ChartDataEvent.REMOVED, null, null);
+		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 	}
 
 	

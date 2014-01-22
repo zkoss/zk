@@ -65,39 +65,46 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	
 	public void setValue(Comparable<?> series, Number x, Number y, Number z, int index) {
 		removeValue0(series, index);
-		addValue0(series, x, y, z, index);
-		fireEvent(ChartDataEvent.CHANGED, series, null);
+		int cIndex = addValue0(series, x, y, z, index);
+		fireEvent(ChartDataEvent.CHANGED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex, _seriesMap.get(series).get(cIndex).toNumbers());
 	}
 	
 	public void addValue(Comparable<?> series, Number x, Number y, Number z, int index) {
-		addValue0(series, x, y, z, index);
-		fireEvent(ChartDataEvent.CHANGED, series, null);
+		int cIndex = addValue0(series, x, y, z, index);
+		fireEvent(ChartDataEvent.ADDED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex, _seriesMap.get(series).get(cIndex).toNumbers());
 	}
 	
-	private void addValue0(Comparable<?> series, Number x, Number y, Number z, int index) {
+	private int addValue0(Comparable<?> series, Number x, Number y, Number z, int index) {
 		List<XYPair> xyzTuples = _seriesMap.get(series);
 		if (xyzTuples == null) {
 			xyzTuples = new ArrayList<XYPair>();
 			_seriesMap.put(series, xyzTuples);
 			_seriesList.add(series);
 		}
+		int cIndex = index;
 		if (index >= 0)
 			xyzTuples.add(index, new XYZTuple(x, y, z));
-		else
+		else {
+			cIndex = xyzTuples.size();
 			xyzTuples.add(new XYZTuple(x, y, z));
+		}
+		return cIndex;
 	}
 
 	public void removeValue(Comparable<?> series, int index) {
-		removeValue0(series, index);
-		fireEvent(ChartDataEvent.REMOVED, series, null);
+		XYZTuple xyz = removeValue0(series, index);
+		if (xyz != null)
+			fireEvent(ChartDataEvent.REMOVED, series, (Comparable<?>)xyz.getX(), _seriesList.indexOf(series), index, xyz.toNumbers());
+		else
+			fireEvent(ChartDataEvent.REMOVED, series, null, _seriesList.indexOf(series), -1, null);
 	}
 	
-	private void removeValue0(Comparable<?> series, int index) {
+	private XYZTuple removeValue0(Comparable<?> series, int index) {
 		List<XYPair> xyzTuples = _seriesMap.get(series);
 		if (xyzTuples == null) {
-			return;
+			return null;
 		}
-		xyzTuples.remove(index);
+		return (XYZTuple) xyzTuples.remove(index);
 	}
 	
 	//-- internal class --//
@@ -112,6 +119,10 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 		
 		public Number getZ() {
 			return _z;
+		}
+		
+		public Number[] toNumbers() {
+			return new Number[] {getX(), getY(), _z};
 		}
 	}
 }
