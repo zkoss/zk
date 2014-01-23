@@ -23,6 +23,8 @@ import java.util.List;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.event.ChartDataListener;
+import org.zkoss.zul.event.DialChartDataEvent;
 
 /**
  * A data model to be used with dial chart.
@@ -67,7 +69,7 @@ public class DialModel extends AbstractChartModel {
 	public DialModelScale newScale() {
 		final DialModelScale entry = new DialModelScale(this);
 		_series.add(entry);
-		fireEvent(ChartDataEvent.ADDED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.ADDED, DialChartDataEvent.SCALE, entry);
 		return entry;
 	}
 	
@@ -85,7 +87,7 @@ public class DialModel extends AbstractChartModel {
 		final DialModelScale entry = new DialModelScale(this);
 		_series.add(entry);
 		entry.setScale(lowerBound, upperBound, startAngle, extent, majorTickInterval, minorTickCount);
-		fireEvent(ChartDataEvent.ADDED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.ADDED, DialChartDataEvent.SCALE, entry);
 		return entry;
 	}
 	
@@ -112,8 +114,9 @@ public class DialModel extends AbstractChartModel {
 	 * @param scale
 	 */
 	public void removeScale(DialModelScale scale) {
+		int index = _series.indexOf(scale);
 		_series.remove(scale);
-		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.REMOVED, DialChartDataEvent.SCALE, index);
 	}
 	
 	/**
@@ -139,7 +142,7 @@ public class DialModel extends AbstractChartModel {
 	public void clear() {
 		if (!_series.isEmpty()) {
 			_series.clear();
-			fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
+			fireEvent(ChartDataEvent.REMOVED, DialChartDataEvent.SCALE, -1); // -1 means all
 		}
 	}
 
@@ -155,7 +158,7 @@ public class DialModel extends AbstractChartModel {
 			alpha = 255;
 		}
 		_bgAlpha = alpha;
-		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_ALPHA, alpha);
 	}
 	
 	/**
@@ -180,7 +183,7 @@ public class DialModel extends AbstractChartModel {
 			_bgRGB = new int[3];
 			Chart.decode(_bgColor, _bgRGB);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_COLOR, color);
 	}
 	
 	/**
@@ -214,7 +217,7 @@ public class DialModel extends AbstractChartModel {
 			_fgRGB = new int[3];
 			Chart.decode(_fgColor, _fgRGB);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_FG_COLOR, color);
 	}
 	
 	/**
@@ -248,7 +251,7 @@ public class DialModel extends AbstractChartModel {
 			_bgRGB1 = new int[3];
 			Chart.decode(_bgColor1, _bgRGB1);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_COLOR_1, color);
 	}
 	
 	/**
@@ -282,7 +285,7 @@ public class DialModel extends AbstractChartModel {
 			_bgRGB2 = new int[3];
 			Chart.decode(_bgColor2, _bgRGB2);
 		}
-		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_COLOR_2, color);
 	}
 	
 	/**
@@ -307,7 +310,7 @@ public class DialModel extends AbstractChartModel {
 	 */
 	public void setGradientDirection(String direction) {
 		_gdirection = direction;
-		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null); //ZK-1693
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.GRADIENT_DIRECTION, direction); //ZK-1693
 	}
 	
 	/**
@@ -324,6 +327,7 @@ public class DialModel extends AbstractChartModel {
 	 */
 	public void setCapRadius(double radius) {
 		_capRadius = radius;
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.CAP_RADIUS, radius);
 	}
 	
 	/**
@@ -333,8 +337,20 @@ public class DialModel extends AbstractChartModel {
 	public double getCapRadius() {
 		return _capRadius;
 	}
-	
-	
+
+	/**
+	 * Fire the chart data event with the given property key.
+	 * @param type
+	 * @param propertyKey
+	 * @param data
+	 * @since 7.0.1
+	 */
+	protected void fireEvent(int type, String propertyKey, Object data) {
+		final ChartDataEvent evt = new DialChartDataEvent(this, type, propertyKey, data);
+		for (ChartDataListener l: _listeners)
+			l.onChange(evt);
+	}
+
 	public Object clone() {
 		DialModel clone = (DialModel) super.clone();
 		if (_bgRGB != null)

@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.event.DialChartDataEvent;
 
 /**
  * A set of information of a scale in a Dial chart. You cannot new a DialModelScale
@@ -87,7 +88,7 @@ public class DialModelScale implements Serializable {
 	public void setValue(double val) {
 		if (Double.compare(_value, val) != 0) {
 			_value = val;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE_VALUE, val);
 		}
 	}
 	
@@ -105,7 +106,7 @@ public class DialModelScale implements Serializable {
 	public void setText(String text) {
 		if (!Objects.equals(text, _text)) {
 			_text = text;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE_TEXT, text);
 		}
 	}
 	/**
@@ -123,7 +124,7 @@ public class DialModelScale implements Serializable {
 	public void setTextFont(Font font) {
 		if (!Objects.equals(font, _textFont)) {
 			_textFont = font;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE_FONT, font);
 		}
 	}
 	
@@ -142,7 +143,7 @@ public class DialModelScale implements Serializable {
 	public void setTextRadius(double radius) {
 		if (Double.compare(_textRadius, radius) != 0) {
 			_textRadius = radius;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TEXT_RADIUS, radius);
 		}
 	}
 	
@@ -161,7 +162,7 @@ public class DialModelScale implements Serializable {
 	public void setValueFont(Font font) {
 		if (!Objects.equals(font, _valueFont)) {
 			_valueFont = font;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.VALUE_FONT, font);
 		}
 	}
 	
@@ -180,7 +181,7 @@ public class DialModelScale implements Serializable {
 	public void setValueRadius(double radius) {
 		if (Double.compare(_valueRadius, radius) != 0) {
 			_valueRadius = radius;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.VALUE_RADIUS, radius);
 		}
 	}	
 
@@ -199,7 +200,7 @@ public class DialModelScale implements Serializable {
 	public void setValueAngle(double angle) {
 		if (Double.compare(_valueAngle, angle) != 0) {
 			_valueAngle = angle;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.VALUE_ANGLE, angle);
 		}
 	}
 	
@@ -226,7 +227,7 @@ public class DialModelScale implements Serializable {
 			_extent = extent;
 			_majorTickInterval = majorTickInterval;
 			_minorTickCount = minorTickCount;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE, this);
 		}
 	}
 	
@@ -293,7 +294,7 @@ public class DialModelScale implements Serializable {
 	public void setTickFont(Font font) {
 		if (!Objects.equals(font, _tickFont)) {
 			_tickFont = font;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_FONT, font);
 		}
 	}
 	
@@ -312,7 +313,7 @@ public class DialModelScale implements Serializable {
 	public void setTickRadius(double radius) {
 		if (Double.compare(_tickRadius, radius) != 0) {
 			_tickRadius = radius;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_RADIUS, radius);
 		}
 	}
 	
@@ -331,7 +332,7 @@ public class DialModelScale implements Serializable {
 	public void setTickLabelOffset(double tickLabelOffset) {
 		if (Double.compare(_tickLabelOffset, tickLabelOffset) != 0) {
 			_tickLabelOffset = tickLabelOffset;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_LABEL_OFFSET, tickLabelOffset);
 		}
 	}
 	
@@ -350,7 +351,7 @@ public class DialModelScale implements Serializable {
 			_tickRGB = new int[3];
 			Chart.decode(_tickColor, _tickRGB);
 		}
-		fireEvent(ChartDataEvent.CHANGED);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_COLOR, color);
 	}
 
 	/**
@@ -381,7 +382,7 @@ public class DialModelScale implements Serializable {
 		final DialModelRange range = new DialModelRange(this);
 		range.setRange(lower, upper, color, innerRadius, outerRadius);
 		_ranges.add(range);
-		fireEvent(ChartDataEvent.CHANGED);
+		fireEvent(ChartDataEvent.ADDED, DialChartDataEvent.RANGE, range);
 		return range;
 	}
 
@@ -407,8 +408,9 @@ public class DialModelScale implements Serializable {
 	 * @param range the range to be removed.
 	 */
 	public void removeRange(DialModelRange range) {
+		int index = _ranges.indexOf(range); 
 		_ranges.remove(range);
-		fireEvent(ChartDataEvent.CHANGED);
+		fireEvent(ChartDataEvent.REMOVED, DialChartDataEvent.RANGE, index);
 	}
 
 	/**
@@ -426,7 +428,7 @@ public class DialModelScale implements Serializable {
 	public void setNeedleType(String type) {
 		if (!Objects.equals(_needleType, type)) {
 			_needleType = type;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.NEEDLE_TYPE, type);
 		}
 	}
 	
@@ -445,7 +447,7 @@ public class DialModelScale implements Serializable {
 			_needleRGB = new int[3];
 			Chart.decode(_needleColor, _needleRGB);
 		}
-		fireEvent(ChartDataEvent.CHANGED);
+		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.NEEDLE_COLOR, color);
 	}
 
 	/**
@@ -471,7 +473,7 @@ public class DialModelScale implements Serializable {
 	public void setNeedleRadius(double radius) {
 		if (Double.compare(_needleRadius, radius) != 0) {
 			_needleRadius = radius;
-			fireEvent(ChartDataEvent.CHANGED);
+			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.NEEDLE_RADIUS, radius);
 		}
 	}
 	
@@ -486,8 +488,8 @@ public class DialModelScale implements Serializable {
 	 * Utility method to delegate event to {@link DialModel}
 	 * @param evt the {@link ChartDataEvent}.
 	 */
-	/*package*/ void fireEvent(int evt) {
+	/*package*/ void fireEvent(int evt, String propertyKey, Object data) {
 		if (_model != null)
-			_model.fireEvent(evt, null, null);
+			_model.fireEvent(evt, propertyKey, data);
 	}
 }

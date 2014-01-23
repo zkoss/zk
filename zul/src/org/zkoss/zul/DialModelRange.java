@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.event.DialChartDataEvent;
 
 /**
  * Color range to be marked in {@link DialModelScale}.
@@ -71,7 +72,7 @@ public class DialModelRange implements Serializable {
 			_RGB = new int[3];
 			Chart.decode(_color, _RGB);
 		}
-		_scale.fireEvent(ChartDataEvent.CHANGED);
+		_scale.fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.RANGE_COLOR, color);
 	}
 	
 	/**
@@ -96,6 +97,7 @@ public class DialModelRange implements Serializable {
 	 */
 	public void setInnerRadius(double radius) {
 		_innerRadius = radius;
+		_scale.fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.INNER_RADIUS, radius);
 	}
 	
 	/**
@@ -112,6 +114,7 @@ public class DialModelRange implements Serializable {
 	 */
 	public void setOuterRadius(double radius) {
 		_outerRadius = radius;
+		_scale.fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.OUTER_RADIUS, radius);
 	}
 	
 	/**
@@ -137,7 +140,7 @@ public class DialModelRange implements Serializable {
 	public void setLowerBound(double lower) {
 		if (Double.compare(_lower, lower) != 0) {
 			_lower = lower;
-			_scale.fireEvent(ChartDataEvent.CHANGED);
+			_scale.fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.LOWER_BOUND, lower);
 		}
 	}
 	
@@ -157,7 +160,7 @@ public class DialModelRange implements Serializable {
 	public void setUpperBound(double upper) {
 		if (Double.compare(_upper, upper) != 0) {
 			_upper = upper;
-			_scale.fireEvent(ChartDataEvent.CHANGED);
+			_scale.fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.UPPER_BOUND, upper);
 		}
 	}
 }
