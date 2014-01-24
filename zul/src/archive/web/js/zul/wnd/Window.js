@@ -236,8 +236,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				// ZK-1826: should resotre width and height
 				if (n = wgt.$n()) {
 					var s = n.style;
-					s.height = last.h;
-					s.width = last.w;
+					
+					// ZK-2041: should skip undefined value, or throws exception in ie8
+					if (last.h)
+						s.height = last.h;
+					if (last.w)
+						s.width = last.w;
 					wgt._fixHgh();
 				}
 			}

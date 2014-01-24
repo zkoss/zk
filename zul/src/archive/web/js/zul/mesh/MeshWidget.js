@@ -1031,6 +1031,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			efoot = this.efoot,
 			efootrows = this.efootrows;
 		
+		// ZK-2041: will lost width in ie9 if the mesh is inside a modal window   
+		if (zk.ie9_ && ebody && tblwd)
+			ebody.style.width = tblwd + 'px';
+		
 		if (ehead) {
 			if (tblwd) {
 				ehead.style.width = tblwd + 'px';
