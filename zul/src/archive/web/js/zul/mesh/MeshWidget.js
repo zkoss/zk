@@ -941,9 +941,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 				
 				// ZK-2114: should not show the bar if vertical scrollbar doesn't exists
-				if (!this.frozen) {
-					var head = this.head,
-					    display = zk(this.ebody).hasVScroll() ? '' : 'none'
+				// ZK-2131: should skip if head doesn't exist
+				if (!this.frozen && (head = this.head)) {
+					var display = zk(this.ebody).hasVScroll() ? '' : 'none'
 					head.$n('hdfaker-bar').style.display = head.$n('bar').style.display = display;
 				}
 			}
