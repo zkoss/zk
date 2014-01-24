@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -36,10 +37,9 @@ import java.util.Collection;
  */
 public class SimpleCategoryModel extends AbstractChartModel implements CategoryModel {
 	private static final long serialVersionUID = 20091008183445L;
-	private Map<Comparable<?>, Integer> _seriesMap = new HashMap<Comparable<?>, Integer>(); // (series, usecount)
+	private Map<Comparable<?>, LinkedList<Comparable<?>>> _seriesMap = new HashMap<Comparable<?>, LinkedList<Comparable<?>>>(); // (series, category)
 	private List<Comparable<?>> _seriesList = new ArrayList<Comparable<?>>();
 
-	private Map<Comparable<?>, Integer> _categoryMap = new HashMap<Comparable<?>, Integer>(); // (category, usecount)
 	private List<Comparable<?>> _categoryList = new ArrayList<Comparable<?>>();
 	
 	private Map<List<Comparable<?>>, Number> _valueMap = new LinkedHashMap<List<Comparable<?>>, Number>();
@@ -79,26 +79,22 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		key.add(category);
 		
 		if (!_valueMap.containsKey(key)) {
-			if (!_categoryMap.containsKey(category)) {
-				_categoryMap.put(category, new Integer(1));
+			if (!_categoryList.contains(category))
 				_categoryList.add(category);
-			} else {
-				Integer count = _categoryMap.get(category);
-				_categoryMap.put(category, new Integer(count.intValue()+1));
-			}
 			
-			if (!_seriesMap.containsKey(series)) {
-				_seriesMap.put(series, new Integer(1));
+			LinkedList<Comparable<?>> list = _seriesMap.get(series);
+			if (list == null) {
+				list = new LinkedList<Comparable<?>>();
+				list.add(category);
+				_seriesMap.put(series, list);
 				_seriesList.add(series);
 			} else {
-				Integer count = _seriesMap.get(series);
-				_seriesMap.put(series, new Integer(count.intValue()+1));
-
+				list.add(category);
 			}
 			
 			_valueMap.put(key, value);
 
-			final int cIndex = _categoryList.indexOf(category);
+			final int cIndex = list.indexOf(category);
 			final int sIndex = _seriesList.indexOf(series);
 			
 			//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
@@ -112,7 +108,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 			_valueMap.put(key, value);
 
 
-			final int cIndex = _categoryList.indexOf(category);
+			final int cIndex = _seriesMap.get(series).indexOf(category);
 			final int sIndex = _seriesList.indexOf(series);
 			
 			//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
@@ -127,25 +123,27 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 						
 		if (_valueMap.remove(key) == null)
 			return;
-		final int cIndex = _categoryList.indexOf(category);
+		final List<Comparable<?>> cateList =  _seriesMap.get(series);
+		final int cIndex =  cateList.indexOf(category);
 		final int sIndex = _seriesList.indexOf(series);
 		final Number value = getValue(series, category);
 		
-		int ccount = _categoryMap.get(category).intValue();
-		if (ccount > 1) {
-			_categoryMap.put(category, new Integer(ccount-1));
-		} else {
-			_categoryMap.remove(category);
-			_categoryList.remove(category);
+		cateList.remove(cIndex);
+		if (cateList.isEmpty()) {
+			_seriesList.remove(series);
+			_seriesMap.remove(series);
 		}
 		
-		int scount = _seriesMap.get(series).intValue();
-		if (scount > 1) {
-			_seriesMap.put(series, new Integer(scount-1));
-		} else {
-			_seriesMap.remove(series);
-			_seriesList.remove(series);
+		boolean clear = true;
+		for (List<Comparable<?>> cate : _seriesMap.values()) {
+			if (cate.contains(category)) {
+				clear = false;
+				break;
+			}
 		}
+		
+		if (clear)
+			_categoryList.remove(category);
 		
 		//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
 		fireEvent(ChartDataEvent.REMOVED, series, category, sIndex, cIndex, value);
@@ -154,7 +152,6 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 	public void clear() {
 		_seriesMap.clear();
 		_seriesList.clear();
-		_categoryMap.clear();
 		_categoryList.clear();
 		_valueMap.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
@@ -163,11 +160,9 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 	public Object clone() {
 		SimpleCategoryModel clone = (SimpleCategoryModel) super.clone();
 		if (_seriesMap != null)
-			clone._seriesMap = new HashMap<Comparable<?>, Integer>(_seriesMap);
+			clone._seriesMap = new HashMap<Comparable<?>, LinkedList<Comparable<?>>>(_seriesMap);
 		if (_seriesList != null)
 			clone._seriesList = new ArrayList<Comparable<?>>(_seriesList);
-		if (_categoryMap != null)
-			clone._categoryMap = new HashMap<Comparable<?>, Integer>(_categoryMap);
 		if (_categoryList != null)
 			clone._categoryList = new ArrayList<Comparable<?>>(_categoryList);
 		if (_valueMap != null)
