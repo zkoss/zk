@@ -207,8 +207,10 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 					.fireOnCheck_(checked);
 			if (zk.safari && !zk.mobile) zk(real).focus();
 
-			// B65-ZK-1837
-			evt.stop({propagation: true});
+			// B65-ZK-2127: should skip radiogroup
+			// B65-ZK-1837: should stop propagation
+			if (!(this.$instanceof(zul.wgt.Radio) && this.getRadiogroup()))
+				evt.stop({propagation: true});
 
 			return this.$supers('doClick_', arguments);
 		}

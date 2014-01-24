@@ -9,6 +9,7 @@ ZK 6.5.6
   ZK-2105: EventQueue still sending request even it is removed by EventQueues.remove() API when using PollingServerPush
   ZK-2111: Button fileupload sometimes not work when using strong CSS font style
   ZK-2119: Second level menupopup opened and closed immdiately when moving mouse in IE10
+  ZK-2127: Annotation data binding doesn't work properly with ZK 6.5.3 and later
   
   --------
 ZK 6.5.5
