@@ -236,23 +236,23 @@ public class Maps {
 	/**
 	 * Parses a string into a map.
 	 * It is the same as<br/>
-	 * <pre><code>parse(map, src, separator, quote, false, false, false);</code></pre>
+	 * <pre><code>parse(map, src, '=', separator, quote, false, false, false);</code></pre>
 	 *
-	 * @see #parse(Map, String, char, char, boolean, boolean)
+	 * @see #parse(Map, String, char, char, char, boolean, boolean)
 	 * @see #parseMultiple
 	 */
 	@SuppressWarnings("unchecked")
 	public static final Map<? super String, ? super String> 
 	parse(Map<? super String, ? super String> map, String src, char separator, char quote)
 	throws IllegalSyntaxException {
-		return parse0(map, src, separator, quote, false, false, false);
+		return parse0(map, src, '=', separator, quote, false, false, false);
 	}
 	/**
 	 * Parses a string into a map.
 	 * It is the same as<br/>
-	 * <pre><code>parse(map, src, separator, quote, asValue, false, false);</code></pre>
+	 * <pre><code>parse(map, src, '=', separator, quote, asValue, false, false);</code></pre>
 	 *
-	 * @see #parse(Map, String, char, char, boolean, boolean)
+	 * @see #parse(Map, String, char, char, char, boolean, boolean)
 	 * @see #parseMultiple
 	 * @since 2.4.0
 	 */
@@ -260,7 +260,38 @@ public class Maps {
 	public static final Map<? super String, ? super String> 
 	parse(Map<? super String, ? super String> map, String src, char separator, char quote, boolean asValue)
 	throws IllegalSyntaxException {
-		return parse0(map, src, separator, quote, asValue, false, false);
+		return parse0(map, src, '=', separator, quote, asValue, false, false);
+	}
+	/**
+	 * Parses a string into a map.
+	 * It is the same as<br/>
+	 * <pre><code>parse(map, src, pairSeparator, separator, quote, false, false, false);</code></pre>
+	 *
+	 * @see #parse(Map, String, char, char, char, boolean, boolean)
+	 * @see #parseMultiple
+	 * @since 7.0.1
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Map<? super String, ? super String> 
+	parse(Map<? super String, ? super String> map, String src, char pairSeparator, char separator, char quote)
+	throws IllegalSyntaxException {
+		return parse0(map, src, pairSeparator, separator, quote, false, false, false);
+	}
+	/**
+	 * Parses a string into a map.
+	 * It is the same as<br/>
+	 * <pre><code>parse(map, src, '=', separator, quote, asValue, parenthesis, false);</code></pre>
+	 *
+	 * @see #parse(Map, String, char, char, char, boolean, boolean)
+	 * @see #parseMultiple
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Map<? super String, ? super String>
+	parse(Map<? super String, ? super String> map,
+	String src, char separator, char quote, boolean asValue,
+	boolean parenthesis) throws IllegalSyntaxException {
+		return parse0(map, src, '=', separator, quote, asValue, parenthesis, false);
 	}
 	/**
 	 * Parse a string into a map.
@@ -283,6 +314,7 @@ public class Maps {
 	 * @param map the map to put parsed results to; null to create a
 	 * new hash map.
 	 * @param src the string to parse
+	 * @param pairSeparator the separator of key and value, e.g., '=' or ':'.
 	 * @param separator the separator, e.g., ' ' or ','.
 
 	 * @param quote the quote character to surround the value.
@@ -310,14 +342,31 @@ public class Maps {
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see CollectionsX#parse
 	 * @see #toString(Map, char, char)
-	 * @since 6.0.0
+	 * @since 7.0.1
 	 */
 	@SuppressWarnings("unchecked")
 	public static final Map<? super String, ? super String>
 	parse(Map<? super String, ? super String> map,
+	String src,char pairSeparator, char separator, char quote, boolean asValue,
+	boolean parenthesis) throws IllegalSyntaxException {
+		return parse0(map, src, pairSeparator, separator, quote, asValue, parenthesis, false);
+	}
+	/**
+	 * Parse a string into a map that allows multiple values..
+	 * It is the same as<br/>
+	 * <pre><code>parseMultiple(map, src, '=', separator, quote, asValue, false, false);</code></pre>
+	 *
+	 * @see #parseMultiple(Map, String, char, char, char, boolean, boolean)
+	 * @see CollectionsX#parse
+	 * @see #toString(Map, char, char)
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Map<? super String, Collection<String>>
+	parseMultiple(Map<? super String, Collection<String>> map,
 	String src, char separator, char quote, boolean asValue,
 	boolean parenthesis) throws IllegalSyntaxException {
-		return parse0(map, src, separator, quote, asValue, parenthesis, false);
+		return parse0(map, src, '=', separator, quote, asValue, parenthesis, true);
 	}
 	/**
 	 * Parse a string into a map that allows multiple values.
@@ -345,6 +394,7 @@ public class Maps {
 	 * @param map the map to put parsed results to; null to create a
 	 * new hash map.
 	 * @param src the string to parse
+	 * @param pairSeparator the separator of key and value, e.g., '=' or ':'.
 	 * @param separator the separator, e.g., ' ' or ','.
 
 	 * @param quote the quote character to surround the value.
@@ -372,15 +422,15 @@ public class Maps {
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see CollectionsX#parse
-	 * @see #toString(Map, char, char)
-	 * @since 6.0.0
+	 * @see #toString(Map, char, char, char)
+	 * @since 7.0.1
 	 */
 	@SuppressWarnings("unchecked")
 	public static final Map<? super String, Collection<String>>
 	parseMultiple(Map<? super String, Collection<String>> map,
-	String src, char separator, char quote, boolean asValue,
+	String src, char pairSeparator, char separator, char quote, boolean asValue,
 	boolean parenthesis) throws IllegalSyntaxException {
-		return parse0(map, src, separator, quote, asValue, parenthesis, true);
+		return parse0(map, src, pairSeparator, separator, quote, asValue, parenthesis, true);
 	}
 	/** @deprecated As of release 6.0.0, replaced with
 	 * {@link #parse(Map, String, char, char, boolean, boolean)} and
@@ -389,11 +439,11 @@ public class Maps {
 	public static final Map
 	parse(Map map, String src, char separator, char quote, boolean asValue,
 	boolean multiple, boolean parenthesis) throws IllegalSyntaxException {
-		return parse0(map, src, separator, quote, asValue, parenthesis, multiple);
+		return parse0(map, src, '=', separator, quote, asValue, parenthesis, multiple);
 	}
 	
 	private static final Map
-	parse0(Map map, String src, char separator, char quote, boolean asValue,
+	parse0(Map map, String src, char pairSeparator, char separator, char quote, boolean asValue,
 	boolean parenthesis, boolean multiple)
 	throws IllegalSyntaxException {
 		if (separator == (char)0)
@@ -417,7 +467,7 @@ public class Maps {
 			}
 
 			delimValue = delimsb.toString();
-			delimKey = delimsb.append('=').toString();
+			delimKey = delimsb.append(pairSeparator).toString();
 		}
 
 		//parse
@@ -427,34 +477,33 @@ public class Maps {
 //			if (log.finerable()) log.finer("name: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			String name = tk.token;
-			switch (tk.cc) {
-			case '=':
+			if (tk.cc == pairSeparator) {
 				if (name.length() == 0)
 					throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, tk.cc, src);
 				++j; //skip =
-				break;
-			case (char)0:
+			} else if( tk.cc == (char) 0) {
 //				assert tk.next >= len;
 				if (name.length() > 0)
 					if (asValue) put(map, null, name, multiple);
 					else put(map, name, null, multiple);
 				return map;//done
-			default:
+			} else {
 				if (quote != (char)0
 				&& (tk.cc == quote || (sngldblquote && tk.cc == '\''))) {
 					name = null;
-					break; //value only
+					//value only
+				} else {
+					//If separator is ' ', tk.cc can be anything; see next()
+					if ((separator != ' ' && tk.cc != separator)
+					|| name.length() == 0)
+						throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, tk.cc, src);
+	
+					if (asValue) put(map, null, name, multiple);
+					else put(map, name, null, multiple);
+					if (tk.cc == separator)
+						++j; //skip separator
+					continue;
 				}
-				//If separator is ' ', tk.cc can be anything; see next()
-				if ((separator != ' ' && tk.cc != separator)
-				|| name.length() == 0)
-					throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, tk.cc, src);
-
-				if (asValue) put(map, null, name, multiple);
-				else put(map, name, null, multiple);
-				if (tk.cc == separator)
-					++j; //skip separator
-				continue;
 			}
 
 			//handle value
@@ -593,21 +642,48 @@ public class Maps {
 	/**
 	 * Converts a map to a string.
 	 *
+	 * It is the same as<br/>
+	 * <pre><code>toString(map, quote, separator, '=');</code></pre>
+	 *
+	 * @see #toString(Map, String, char, char, char)
+	 * @see #parse(Map, String, char, char, char)
+	 */
+	public static final String toString(Map<? super String, ? super String> map, char quote, char separator) {
+		return toString(map, quote, separator, '=');
+	}
+	/**
+	 * Converts a map to a string.
+	 *
 	 * @param map the map to convert from
 	 * @param quote the quotation character; 0 means no quotation surrounding
 	 * the value
 	 * @param separator the separator between two name=value pairs
-	 * @see #parse(Map, String, char, char)
+	 * @param pairSeparator the separator between name and value
+	 * @see #parse(Map, String, char, char, char)
+	 * @since 7.0.1
 	 */
-	public static final String toString(Map<? super String, ? super String> map, char quote, char separator) {
-		return toStringBuffer(new StringBuffer(64), map, quote, separator)
+	public static final String toString(Map<? super String, ? super String> map, char quote, char separator, char pairSeparator) {
+		return toStringBuffer(new StringBuffer(64), map, quote, separator, pairSeparator)
 			.toString();
 	}
 	/** Converts a map to string and append to a string buffer.
-	 * @see #toString
+	 * 
+	 * It is the same as<br/>
+	 * <pre><code>toStringBuffer(sb, map, quote, separator, '=');</code></pre>
+	 * 
+	 * @see #toStringBuffer(Map, String, char, char, char)
+	 * @see #toString(Map, String, char, char, char)
 	 */
 	public static final StringBuffer
 	toStringBuffer(StringBuffer sb, Map<? super String, ? super String> map, char quote, char separator) {
+		return 	toStringBuffer(sb, map, quote, separator, '=');
+	}
+	/** Converts a map to string and append to a string buffer.
+	 * @see #toString(Map, String, char, char, char)
+	 * @since 7.0.1
+	 */
+	public static final StringBuffer
+	toStringBuffer(StringBuffer sb, Map<? super String, ? super String> map, char quote, char separator, char pairSeparator) {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
 		if (map.isEmpty())
@@ -620,7 +696,7 @@ public class Maps {
 			if (quote != (char)0 && quote != '\'' && quote != '"')
 				escsb.append(quote);
 			escValue = escsb.toString();
-			escKey = escsb.append('=').toString();
+			escKey = escsb.append(pairSeparator).toString();
 		}
 
 		//convert one-by-one
@@ -638,7 +714,7 @@ public class Maps {
 
 			final Object val = me.getValue();
 			if (val != null) {
-				sb.append('=');
+				sb.append(pairSeparator);
 				if (quote != (char)0)
 					sb.append(quote);
 				encode(sb, val.toString(), escValue);
