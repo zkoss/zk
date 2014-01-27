@@ -156,6 +156,31 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				this.rerender();
 		}
 	},
+	
+	// ZK-2133: should sync all items
+	setChgSel: function (val) { //called from the server
+	    var sels = {};
+	    for (var j = 0;;) {
+	    	var k = val.indexOf(',', j),
+	        s = (k >= 0 ? val.substring(j, k): val.substring(j)).trim();
+	    	if (s) sels[s] = true;
+	    	if (k < 0) break;
+	    	j = k + 1;
+	    }
+	    for (var w = this.firstChild; w; w = w.nextSibling)
+	    	this._changeSelect(w, sels[w.uuid] == true);
+	},
+	  
+	/* Changes the selected status of an item without affecting other items
+	 * and return true if the status is really changed.
+	 */
+	_changeSelect: function (option, toSel) {
+		var changed = !!option.isSelected() != toSel;
+		if (changed) {
+			option.setSelected(toSel);
+		}
+		return changed;
+	},
 	/**
 	 * If the specified item is selected, it is deselected. If it is not
 	 * selected, it is selected. Other items in the list box that are selected
