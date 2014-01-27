@@ -999,11 +999,14 @@ public class Listbox extends MeshElement {
 					item.setSelectedDirectly(true);
 					_selItems.add(item);
 				}
-				if (inSelectMold()) {
-					item.smartUpdate("selected", true);
-				} else {
-					smartUpdateSelection();
-				}
+				
+				// ZK-2113: should be same as normal mold
+//				if (inSelectMold()) {
+//					item.smartUpdate("selected", true);
+//				} else {
+//				}
+				
+				smartUpdateSelection();
 			}
 		}
 	}
@@ -1026,11 +1029,14 @@ public class Listbox extends MeshElement {
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
 				fixSelectedIndex(0);
-				if (inSelectMold()) {
-					item.smartUpdate("selected", false);
-				} else {
-					smartUpdateSelection();
-				}
+				
+				// ZK-2113: should be same as normal mold
+//				if (inSelectMold()) {
+//					item.smartUpdate("selected", false);
+//				} else {
+//				}
+				
+				smartUpdateSelection();
 			}
 		}
 	}
