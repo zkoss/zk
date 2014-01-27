@@ -14,12 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	//Bug 1926480: opera failed to add listheader dynamically (since hdfakerflex introduced)
-	var _fixOnChildChanged = function (head) {
-		// ZK-2096: should refresh this.$s('bar') if children change with databinding 
-		var mesh = head.getMeshWidget();
-		if (zk.opera || (mesh._nativebar && !mesh.frozen))
-			return (head = head.parent) && head.rerender(); //later
-	};
+	var _fixOnChildChanged = zk.opera ? function (head) {
+		return (head = head.parent) && head.rerender(); //later
+	} : zk.$void;
 
 	function _syncFrozen(wgt) {
 		var mesh = wgt.getMeshWidget(), frozen;
@@ -135,16 +132,51 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			// ZK-2098: recovery the header faker if not exists
 			var head = this;
 			['hdfaker', 'bdfaker', 'ftfaker'].forEach(function(faker) {
-				var $faker = jq(head.getMeshWidget()['e' + faker]);
+				var mesh = head.getMeshWidget(),
+					$faker = jq(mesh['e' + faker]);
 				if ($faker[0] != null && $faker.find(child.$n(faker))[0] == null) {
 					var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
 						visible = !child.isVisible() ? 'display:none;' : '';
 					wd = wd ? 'width: ' + wd + ';' : '';
-					var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>';
+					var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>',
+						$bar = jq(mesh).find('.' + head.$s('bar')), // head.$n('bar') still exists after remove
+						bar = $bar[0],
+						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
+						hdfakerbar = $hdfakerbar[0],
+						barstyle = '', hdfakerbarstyle ='';
+	        
+					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding 
+					if ((faker == 'hdfaker') && bar) {
+						var s;
+						if (s = bar.style) {
+							barstyle = s.display ? 'display:' + s.display + ';' : '';
+							barstyle += s.width ? 'width:' + s.width + ';' : '';
+						}
+						$bar.remove();
+		            
+						if (hdfakerbar && (s = hdfakerbar.style)) {
+							hdfakerbarstyle = s.display ? 'display:' + s.display + ';' : '';
+							hdfakerbarstyle += s.width ? 'width:' + s.width + ';' : '';
+						}
+						$hdfakerbar.remove();
+					}
+	          
 					$faker.append(html);
+	          
+					// resync var
+					$bar = jq(mesh).find('.' + head.$s('bar'));
+					bar = $bar[0];
+					$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]');
+					hdfakerbar = $hdfakerbar[0];
+	          
+					if ((faker == 'hdfaker') && !bar) {
+						if (!hdfakerbar)
+							jq(head.$n('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" />')
+						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" />');
+					}
 				}
 			});
-		}
+	    }
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);

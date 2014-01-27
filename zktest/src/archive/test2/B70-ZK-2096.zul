@@ -1,6 +1,7 @@
 <zk>
 	<div>
-		Click button then the z-treecols-bar should not be in front of treecol
+		Click button then the z-treecols-bar should not be in front of treecol, 
+		please try to click in many times and the tree should not flicker
 	</div>
 	<div style="height:200px" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2096_ViewModel')">
