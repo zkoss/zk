@@ -180,6 +180,18 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			return;
 		var self = this;
 		self._syncFrozen(); // B65-ZK-1470
+		
+		//B70-ZK-2129: prevent height changed by scrolling
+		var p = this.parent, 
+			phead = p.head, 
+			firstHdcell, fhcs;
+		if (p._nativebar && phead) {
+			firstHdcell = phead.$n().cells[0];
+			fhcs = firstHdcell.style;
+			if (!fhcs.height)
+				fhcs.height = firstHdcell.offsetHeight+'px';
+		}
+		
 		// Bug 3218078, to do the sizing after the 'setAttr' command
 		setTimeout(function () {
 			_onSizeLater(self);
