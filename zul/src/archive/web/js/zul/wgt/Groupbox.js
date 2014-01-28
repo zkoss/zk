@@ -274,5 +274,17 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if (!visible && this._isDefault())
 			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
 		this.$supers('afterAnima_', arguments);
+		
+		// ZK-2138: parent should resize if parent has child with vflex
+		var p = this.parent;
+		for (var c = p.firstChild; c; c = c.nextSibling) {
+			if (c == this)
+				continue;
+			var vflex = c.getVflex();
+			if (vflex && vflex != 'min') {
+				zUtl.fireSized(p);
+				break;
+			}
+		}
 	}
 });
