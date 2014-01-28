@@ -139,7 +139,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			foot = p.$n('foot');
 		
 		if (p._nativebar) {
-			zWatch.listen({onSize: this, beforeSize: this});
+			//B70-ZK-2130: No need to reset when beforeSize, ZK-343 with native bar works fine too.
+			zWatch.listen({onSize: this});
 			var scroll = this.$n('scrollX');
 			this.$n().style.height = this.$n('cave').style.height = scroll.style.height
 				 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
@@ -161,7 +162,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (p._nativebar) {
 			this.domUnlisten_(this.$n('scrollX'), 'onScroll');
 			p.unlisten({onScroll: this.proxy(this._onScroll)});
-			zWatch.unlisten({onSize: this, beforeSize: this});
+			zWatch.unlisten({onSize: this});
 		}
 		
 		if (body)
@@ -169,11 +170,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (foot)
 			jq(foot).removeClass('z-word-nowrap');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
-	},
-	// timing issue for B50-ZK-343.zul in ztltest
-	beforeSize: function () {
-		if (this._start != 0)
-			this._doScrollNow(0, true); //reset
 	},
 	onSize: function () {
 		if (!this._columns)

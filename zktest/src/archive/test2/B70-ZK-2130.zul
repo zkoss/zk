@@ -1,0 +1,20 @@
+<?page title="Frozen Tree Columns" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1.Scroll to column_3.
+		2.Resize browser width, columns won't flicker, and width won't change.
+	</label>
+	<tree height="125px" width="300px">
+	    <custom-attributes org.zkoss.zul.nativebar="true"/>
+	    <frozen columns="1"/>
+	    <treecols sizable="false">
+	    	<treecol width="100px" label="Fixed Column"/>
+	    	<treecol width="100px" label="column_1"/>
+	    	<treecol width="100px" label="column_2"/>
+	    	<treecol width="100px" label="column_3"/>
+	    </treecols>
+      	<treechildren>
+      		<treeitem></treeitem>
+    	</treechildren>
+	</tree>
+</zk>

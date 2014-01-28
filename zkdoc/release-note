@@ -63,6 +63,7 @@ ZK 7.0.1
   ZK-2131: Tree with Native Scrollbar JS error
   ZK-2127: Annotation data binding doesn't work properly with ZK 6.5.3 and later
   ZK-2129: Frozen Tree - column headers changing height (with native scrollbar)
+  ZK-2130: Frozen Tree - columns flicker and width changes when resizing the browser
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
