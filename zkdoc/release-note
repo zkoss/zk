@@ -11,6 +11,7 @@ ZK 6.5.6
   ZK-2119: Second level menupopup opened and closed immdiately when moving mouse in IE10
   ZK-2127: Annotation data binding doesn't work properly with ZK 6.5.3 and later
   ZK-2138: vflex="1" not working properly with groupbox
+  ZK-2140: Multiple select with Shift key does not work properly
   
   --------
 ZK 6.5.5

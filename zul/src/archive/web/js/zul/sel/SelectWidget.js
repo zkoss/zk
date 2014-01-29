@@ -1126,8 +1126,29 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		this._changeSelect(row, toSel);
-		if (!skipFocus)
-			this._focus(row);
+		if (!skipFocus) {
+			
+			// ZK-2140: should focus closest selected item after deselecting item 
+			var rowIndex = this.indexOfItem(row), 
+				min = Number.MAX_VALUE, 
+				closestSelItem;
+			for (var i = 0; i < this._selItems.length; ++i) {
+				var item = this._selItems[i],
+					index = this.indexOfItem(item),
+					diff = rowIndex - index,
+					oldmin = min;
+				if ((diff <= 0) && closestSelItem) 
+					break;
+				min = Math.min(diff, min);
+				if (min != oldmin)
+					closestSelItem = item;
+			}
+			
+			if (toSel || !closestSelItem)
+				this._focus(row);
+			else 
+				this._focus(closestSelItem);
+		}
 
 		//notify server
 		this.fireOnSelect(row, evt);

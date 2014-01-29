@@ -1,0 +1,18 @@
+<zk>
+	<zscript><![CDATA[
+	List l = new ArrayList();
+	for (int i = 0; i < 15; i++) {
+		l.add("Item __" + i);
+	}
+	ListModelList model = new ListModelList(l);
+	((org.zkoss.zul.ext.Selectable) model).setMultiple(true);
+]]></zscript>
+	<div>
+		<div>1. Select first item.</div>
+		<div>2. Select third item.</div>
+		<div>3. Deselect third item.</div>
+		<div>4. Shift-select fifth item.</div>
+		<div>The second item should be selected.</div>
+	</div>
+	<listbox checkmark="true" model="${model}" />
+</zk>
