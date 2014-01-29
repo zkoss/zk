@@ -796,6 +796,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var shadow = this._shadow;
 		if (shadow) shadow.hide();
 	},
+	
+	afterAnima_: function (visible) {
+		this.$supers('afterAnima_', arguments);
+		// ZK-2138: parent should resize if parent has child with vflex
+		var p = this.parent;
+		for (var c = p.firstChild; c; c = c.nextSibling) {
+			if (c == this)
+				continue;
+			var vflex = c.getVflex();
+			if (vflex && vflex != 'min') {
+				zUtl.fireSized(p);
+				break;
+			}
+		}
+	},
+	
 	//super//
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.wnd.Panel, 'bind_', arguments);

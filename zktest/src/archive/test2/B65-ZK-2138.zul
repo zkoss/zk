@@ -1,0 +1,23 @@
+<zk>
+	Open/close groupbox, the div should adjust its size
+	<window vflex="1" hflex="1" border="normal">
+		<groupbox title="groupbox">
+			<div height="100px" width="100px"
+				style="border: 1px solid red;" />
+		</groupbox>
+		<div vflex="1" style="border: 1px solid green">
+			div vflex="1"
+		</div>
+	</window>
+	<window vflex="1" hflex="1" border="normal">
+		<panel title="panel" collapsible="true" border="normal">
+			<panelchildren>
+				<div height="75px" width="100px"
+					style="border: 1px solid red;" />
+			</panelchildren>
+		</panel>
+		<div vflex="1" style="border: 1px solid green">
+			div vflex="1"
+		</div>
+	</window>
+</zk>
