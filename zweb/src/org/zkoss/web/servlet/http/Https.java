@@ -19,7 +19,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -438,7 +440,7 @@ public class Https extends Servlets {
 				} else
 					flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
-					value += ";filename=" + encodeFilename(flnm);
+					value += ";filename=" + encodeFilename(request, flnm);
 				if (media.isContentDisposition())
 					response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
@@ -566,8 +568,25 @@ public class Https extends Servlets {
 	 * Refer to http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html
 	 * and http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html
 	*/
-	private static String encodeFilename(String flnm) {
-		return '"' + Strings.escape(flnm, "\"") + '"';
+	private static String encodeFilename(HttpServletRequest request, String filename) {
+		// ZK-2143: should access Chinese filename
+		String agent = request.getHeader("USER-AGENT");
+		if (agent != null) {
+			try {
+				if (agent.contains("Trident")) {
+					filename = URLEncoder.encode(filename, "UTF-8");
+				} else if (agent.contains("Mozilla")) {
+					filename = "";
+	                for (byte b: filename.getBytes("UTF-8")) {
+	                	filename += (char)(b & 0xff);
+	                }
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return '"' + Strings.escape(filename, "\"") + '"';
 	}
 	static private String getCharset(String contentType) {
 		if (contentType != null) {
