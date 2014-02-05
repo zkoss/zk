@@ -1,0 +1,13 @@
+<zk>
+	<div>Click button, then should see the Chinese filename</div>
+	<button label="Download 中文.jpg">
+		<attribute name="onClick"><![CDATA[
+	java.io.InputStream is = desktop.getWebApp().getResourceAsStream(
+			"/img/sun.jpg");
+	if (is != null)
+		Filedownload.save(is, "image/*", "中文.jpg");
+	else
+		alert("/img/sun.jpg not found");
+]]></attribute>
+	</button>
+</zk>
