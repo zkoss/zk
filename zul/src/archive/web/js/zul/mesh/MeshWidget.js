@@ -945,7 +945,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var head;
 				if (!this.frozen && (head = this.head)) {
 					var display = zk(this.ebody).hasVScroll() ? '' : 'none'
-					head.$n('hdfaker-bar').style.display = head.$n('bar').style.display = display;
+					// hdfaker-bar occupy space in ie8
+					if (display == 'none' && !zk.ie8_)
+						head.$n('hdfaker-bar').style.display = display;
+					head.$n('bar').style.display = display;
 				}
 			}
 			
