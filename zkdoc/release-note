@@ -67,6 +67,7 @@ ZK 7.0.1
   ZK-2138: vflex="1" not working properly with groupbox
   ZK-2140: Multiple select with Shift key does not work properly
   ZK-2143: Filedownload should support chinese file name
+  ZK-2128: Frozen Tree - cells disappearing after replacing the columns twice
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader

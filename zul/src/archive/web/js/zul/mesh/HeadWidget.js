@@ -129,6 +129,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			_syncFrozen(this);
 			this.parent._minWd = null;
 			
+			// B70-ZK-2128: Auxhead doesn't have to add faker.
+			if (this.$instanceof(zul.mesh.Auxhead))
+				return;
+			
 			// ZK-2098: recovery the header faker if not exists
 			var head = this;
 			['hdfaker', 'bdfaker', 'ftfaker'].forEach(function(faker) {
