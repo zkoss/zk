@@ -745,6 +745,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
+					//B70-ZK-2130: clean table width to prevent incorrect width
+					this.eheadtbl.style.width = '';
+					this.ebodytbl.style.width = '';
 					bdcol.style.width = zk(bdcol).revisedWidth(wd) + 'px';
 					hdcol.style.width = bdcol.style.width;
 					if (ftcol)

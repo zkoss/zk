@@ -142,15 +142,18 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 					var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
 						visible = !child.isVisible() ? 'display:none;' : '';
 					wd = wd ? 'width: ' + wd + ';' : '';
+					//B70-ZK-2130: virtual bar doesn't have to add fakerbar
+					//fkaker bar need recover if native bar has vscrollbar
 					var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>',
 						$bar = jq(mesh).find('.' + head.$s('bar')), // head.$n('bar') still exists after remove
 						bar = $bar[0],
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
-						barstyle = '', hdfakerbarstyle ='';
-	        
+						barstyle = '', hdfakerbarstyle ='',
+						recoverFakerbar = mesh._nativebar ? zk(mesh.ebody).hasVScroll() : false;
+
 					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding 
-					if ((faker == 'hdfaker') && bar) {
+					if ((faker == 'hdfaker') && bar && recoverFakerbar) {
 						var s;
 						if (s = bar.style) {
 							barstyle = s.display ? 'display:' + s.display + ';' : '';
@@ -173,7 +176,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 					$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]');
 					hdfakerbar = $hdfakerbar[0];
 	          
-					if ((faker == 'hdfaker') && !bar) {
+					if ((faker == 'hdfaker') && !bar && recoverFakerbar) {
 						if (!hdfakerbar)
 							jq(head.$n('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" />')
 						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" />');
