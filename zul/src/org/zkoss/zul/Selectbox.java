@@ -444,16 +444,18 @@ public class Selectbox extends HtmlBasedComponent {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
-			final Object prevSelected = _jsel >= 0 ? _model.getElementAt(_jsel) : null;
+			// ZK-2148: should check if model exists
+			final Object prevSelected = _jsel >= 0 && _model != null ? _model.getElementAt(_jsel) : null;
 			_jsel = ((Integer) request.getData().get("")).intValue();
 			final Integer index = ((Integer)request.getData().get(""));
 			final Set<Object> selObjs = new LinkedHashSet<Object>();
 			
-			if (index >= 0)
-				selObjs.add(_model.getElementAt(index));
-			
-			if (_model != null)
-				getSelectableModel().setSelection(selObjs);;
+			// ZK-2148: should check if model exists
+			if (_model != null) {
+				if (index >= 0)
+					selObjs.add(_model.getElementAt(index));
+				getSelectableModel().setSelection(selObjs);
+			}
 			
 			if (prevSelected != null) {
 				final Set<Object> prevSeldObjs = new LinkedHashSet<Object>(1);
