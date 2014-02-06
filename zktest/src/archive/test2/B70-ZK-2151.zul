@@ -1,0 +1,57 @@
+<zk>
+	select the outer listitem / treeitem, then the inner radio buttons should not be selected
+	<listbox checkmark="true" width="400px">
+		<listitem>
+			<listcell>col 1 row 1 (click)</listcell>
+			<listcell>
+				<listbox checkmark="true">
+					<listitem>
+						<listcell>nested item 1</listcell>
+					</listitem>
+					<listitem>
+						<listcell>nested item 2</listcell>
+					</listitem>
+					<listitem>
+						<listcell>nested item 3</listcell>
+					</listitem>
+				</listbox>
+			</listcell>
+		</listitem>
+	</listbox>
+	<tree checkmark="true" width="400px">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>col 1 row 1 (click)</treecell>
+					<treecell>
+						<tree checkmark="true">
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell>
+											nested item 1
+										</treecell>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell>
+											nested item 2
+										</treecell>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell>
+											nested item 3
+										</treecell>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</tree>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

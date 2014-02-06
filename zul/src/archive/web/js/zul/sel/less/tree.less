@@ -171,7 +171,9 @@
 	}
 	//selected check mark
 	&-selected {
-		.z-treerow-icon {
+		// ZK-2151: use strict selector to prevent nest problem
+		> .z-treecell > .z-treecell-content 
+			> .z-treerow-checkable > .z-treerow-icon {
 			color: @checkedColor;
 			display: block;
 			padding-left: 1px;
