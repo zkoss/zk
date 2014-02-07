@@ -146,6 +146,7 @@
 		cursor: e-resize;
 	}
 }
+// ZK-2151: use strict selector to prevent nest problem
 //list item and cell
 .z-listitem {
 	background: @meshBackgroundColor;
@@ -166,9 +167,10 @@
 			</c:if>
 			background-clip: padding-box;
 			position: relative;
-		}
-		.z-listcell-content {
-			color: @hoverColor;
+
+			> .z-listcell-content {
+				color: @hoverColor;
+			}
 		}
 	}
 	//check mark
@@ -188,17 +190,19 @@
 	}
 	//selected list cell
 	&.z-listitem-selected {
-		.z-listcell {
+		> .z-listcell {
 			border-color: @selectedGradientStart;
 			<c:if test="${zk.ie != 8}">
 				.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			</c:if>
 			background-clip: padding-box;
 			position: relative;
+
+			> .z-listcell-content {
+				color: @selectedColor;
+			}
 		}
-		.z-listcell-content {
-			color: @selectedColor;
-		}
+		
 		&:hover {
 			> .z-listcell {
 				border-color: @selectedHoverGradientStart;
@@ -213,10 +217,9 @@
 		}
 	}
 	//selected check mark
-	&-selected {
-		// ZK-2151: use strict selector to prevent nest problem
+	&-selected {		
 		> .z-listcell > .z-listcell-content 
-			> .z-listitem-checkable > .z-listitem-icon {
+			> .z-listitem-checkable .z-listitem-icon {
 			color: @checkedColor;
 			display: block;
 			padding-left: 1px;
@@ -368,6 +371,8 @@
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 }
+
+// ZK-2151: use strict selector to prevent nest problem
 // IE8
 .ie8 { 
 	.z-listbox-header {
@@ -389,7 +394,7 @@
 			background: @meshHoverBackgroundColorIE8;
 		}
 		&.z-listitem-selected {
-			.z-listcell {
+			> .z-listcell {
 				position: static;
 				background: @meshSelectedBackgroundColorIE8;
 			}
@@ -404,18 +409,24 @@
 	.ie8-checkable-icon(z-listgroup);
 	.ie8-checkable-icon(z-listitem);
 	.z-listheader-checkable.z-listheader-checked,
-	.z-listgroup-selected .z-listgroup-checkable,
-	.z-listitem-selected .z-listitem-checkable  {
+	.z-listgroup-selected > .z-listcell 
+		> .z-listcell-content > .z-listgroup-checkable,
+	.z-listitem-selected > .z-listcell 
+		> .z-listcell-content > .z-listitem-checkable  {
 		.z-icon-check {
 			margin: 0;
 			background-position: -26px 0px;
 		}
 	}
 	// radio icon fallback
-	.z-listitem-checkable .z-icon-radio {
+	.z-listitem > .z-listcell > .z-listcell-content 
+		> .z-listitem-checkable .z-icon-radio {
+
 		background-position: 0 -13px;
 	}
-	.z-listitem-selected .z-listitem-checkable .z-icon-radio {
+	.z-listitem-selected > .z-listcell > .z-listcell-content 
+			> .z-listitem-checkable .z-icon-radio {
+		.displaySize(block, 13px, 13px);
 		margin: 0;
 		background-position: -26px -13px;
 	}
@@ -427,7 +438,9 @@
 	}
 }
 .ie8-checkable-icon(@comp) {
-	.@{comp}-checkable {
+	.@{comp} > .z-listcell 
+		> .z-listcell-content > .@{comp}-checkable {
+
 		border-width: 0;
 		background: transparent;
 		.@{comp}-icon {
