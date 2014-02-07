@@ -318,7 +318,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					var cw = zk.parseInt(cellWidth),
 						hidden = cw == 0;
 					
-					if (mesh._nativebar) {
+					//B70-ZK-2130: display none will cause width won't change on browser resizing.
+					if (mesh._nativebar && (!hdWgt._hflex || hdWgt._hflex == 'min')) {
 						mesh.ehdfaker.childNodes[i].style.display = hidden ? 'none' : '';
 						hdcells[i].style.display = hidden ? 'none' : '';
 					}
