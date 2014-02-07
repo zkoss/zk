@@ -107,8 +107,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				p = p.parent;
 			}
 			
+			//B70-ZK-2069: isScrollIntoView should know that, which component fire the onScroll event.
 			var isInView = bar ? 
-					bar.isScrollIntoView(inp.$n()) : zk(inp).isScrollIntoView();
+					bar.isScrollIntoView(inp.$n()) : zk(inp).isScrollIntoView(wgt.origin);
 			if (isInView) {// B65-ZK-1632
 				this.position(inp, null, 'end_before', {overflow:true});
 				this._fixarrow();

@@ -70,6 +70,7 @@ ZK 7.0.1
   ZK-2128: Frozen Tree - cells disappearing after replacing the columns twice
   ZK-2146: NullPointerException in Selectbox after set its model to null
   ZK-2151: Nested listboxes selection issue
+  ZK-2069: Validation error message does not scroll with component.
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader

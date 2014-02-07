@@ -1,0 +1,43 @@
+<?page title="Validation Scroll" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:ca="client/attribute" >
+	<label multiline="true">
+		1.Click the text box, then tab away to lose focus and produce the validation error message.
+		2.Scroll down, if text box leaved display area,then errorbox should be closed.
+		3.repeat above action step to test each container.
+	</label>
+	<window height="100px" contentStyle="overflow:auto" ca:data-scrollable="true" width="500px">
+		<div height="200px">
+			<textbox constraint="no empty"/>
+		</div>
+	</window>
+	<groupbox contentStyle="overflow:auto" ca:data-scrollable="true" id="gb3" height="100px" width="500px">
+		<attribute name="onOpen">
+			<![CDATA[arrow.setSclass("open-" + self.isOpen());]]>
+		</attribute>
+		<caption label="Enable Backups">
+			<span id="arrow" class="open-true"/>
+		</caption>
+		<hbox height="200px">
+			<textbox constraint="no empty"/>
+		</hbox>
+	</groupbox>
+	<tabbox width="500px">
+		<tabs>
+            <tab label="Tab 1" />
+        </tabs>
+		<tabpanels>
+			<tabpanel style="overflow:auto" ca:data-scrollable="true" height="100px">
+				<hbox height="200px">
+					<textbox constraint="no empty"/>
+				</hbox>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<panel height="100px" width="500px">
+		<panelchildren style="overflow:auto" ca:data-scrollable="true">
+			<div height="200px">
+				<textbox constraint="no empty"/>
+			</div>
+		</panelchildren>
+	</panel>
+</zk>
