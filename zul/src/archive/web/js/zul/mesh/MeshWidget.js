@@ -1087,7 +1087,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var hdtbl = this.eheadtbl,
 				bdtbl = this.ebodytbl,
 				fttbl = this.efoottbl;
-			if (hdtbl) {
+			
+			// ZK-2157: should skip if the mesh has no children
+			if (hdtbl && (!(zk.isLoaded('zul.sel') && this.$instanceof(zul.sel.Tree)) && !this.$n('empty') 
+					|| (this.ebodyrows && this.ebodyrows.firstChild))) {
 				var wd = 0;
 				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
 					if (w.style.display != 'none')
