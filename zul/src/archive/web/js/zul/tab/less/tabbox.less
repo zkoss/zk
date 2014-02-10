@@ -463,3 +463,12 @@
 	padding: 5px;
 	zoom: 1;
 }
+
+// ZK-2158: Tab should not be click on blank area next to last tab
+.ie9 .z-tabs {
+    line-height: 1px;
+
+    > .z-tabs-content {
+	    display: inline-block;
+	}
+}
