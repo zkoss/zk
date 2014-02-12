@@ -5,9 +5,7 @@ zul.ContainerWidget = zk.$extends(zul.Widget, {
 		// B70-ZK-2069: some widget need fire onScroll event, which has
 		// characteristic of container
 		if (jq(this).data('scrollable')) {
-			var cave = this.getCaveNode();
-			cave.style.overflow = 'auto';
-			this.domListen_(cave, 'onScroll');
+			this.domListen_(this.getCaveNode(), 'onScroll');
 		}
 	},
 
