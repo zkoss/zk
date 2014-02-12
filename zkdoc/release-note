@@ -71,6 +71,8 @@ ZK 7.0.1
   ZK-2146: NullPointerException in Selectbox after set its model to null
   ZK-2151: Nested listboxes selection issue
   ZK-2069: Validation error message does not scroll with component.
+  ZK-2158: Tab can be click on blank area next to last tab (IE9 only)
+  ZK-2157: Listheaders not showing if no listitems and Listbox is sized by content
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
