@@ -822,6 +822,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ehead = this.ehead,
 			efoot = this.efoot;
 
+		// ZK-2069: fire onScroll if has scrollable property
+		if (jq(this).data('scrollable'))
+			zWatch.fireDown('onScroll', this);
+		
 		//B70-ZK-2070: if scrolled, the scrollbar need fire onScroll event.
 		if (scrolled && !(this.fire('onScroll', ebody.scrollLeft).stopped) && this._nativebar)
 			if (this._currentLeft != ebody.scrollLeft) {

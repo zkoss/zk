@@ -35,14 +35,11 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	 */
 	show: function () {
 		jq(document.body).append(this);
-
-		// Fixed IE6/7 issue in B50-2941554.zul
-		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
-		setTimeout(function() {
-			if (self.parent) //Bug #3067998: if 
-				self.open(self.parent, null, cstp || 'end_before', 
-						{dodgeRef: !cstp});
-		}, 0);
+		var cstp = this.parent._cst && this.parent._cst._pos;
+		// ZK-2069: only show in view
+		if (this.parent && this.isInView(this)) //Bug #3067998
+			this.open(this.parent, null, cstp || 'end_before',	{dodgeRef: !cstp});
+		
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
 	/** 
@@ -91,27 +88,38 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
 	},
+	
+	isInView: function(wgt) {
+		var desktop = this.desktop,
+			inp = p = this.parent,
+			bar = null, 
+			inView = true,
+			cntNode = null;
+		
+		// ZK-2069: check if the errorbox can be seen in every parent widget
+		while (p && p != desktop) {
+			bar = p._scrollbar;
+			cntNode = zk(p.ebody || p.getCaveNode());
+			if ((bar && (bar.hasVScroll() || bar.hasHScroll())) || 
+				(jq(p).data('scrollable') && (cntNode.hasVScroll() || cntNode.hasHScroll()))) {
+				inView = inView && zk(inp).isScrollIntoView(p);
+				if (!inView)
+					return inView;
+			}
+			bar = null;
+			p = p.parent;
+		}
+		
+		return inView;
+	},
+	
 	/** Reset the position on scroll
 	 * @param zk.Widget wgt
 	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
-			var desktop = this.desktop,
-				inp = p = this.parent,
-				bar = null;
-			while (p && p != desktop) {
-				bar = p._scrollbar;
-				if (bar && (bar.hasVScroll() || bar.hasHScroll()))
-					break;
-				bar = null;
-				p = p.parent;
-			}
-			
-			//B70-ZK-2069: isScrollIntoView should know that, which component fire the onScroll event.
-			var isInView = bar ? 
-					bar.isScrollIntoView(inp.$n()) : zk(inp).isScrollIntoView(wgt.origin);
-			if (isInView) {// B65-ZK-1632
-				this.position(inp, null, 'end_before', {overflow:true});
+			if (this.isInView(wgt)) {// B65-ZK-1632
+				this.position(this.parent, null, 'end_before', {overflow:true});
 				this._fixarrow();
 			} else {
 				this.close();

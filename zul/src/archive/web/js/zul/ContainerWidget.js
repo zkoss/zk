@@ -1,29 +1,25 @@
-(function () {
 zul.ContainerWidget = zk.$extends(zul.Widget, {
-	_contentNode: null,
-	bind_: function () {
+	bind_ : function() {
 		this.$supers(zul.ContainerWidget, 'bind_', arguments);
-		
-		//B70-ZK-2069: some widget need fire onScroll event, which has characteristic of container
-		if (jq(this).data('scrollable'))
-			this.bindScroll_();
-	},
-	bindScroll_: function () {
-		_contentNode = jq(this.getContentNode());
-		if (_contentNode) {
-			var wgt = this;
-			_contentNode.bind('scroll', function () {
-				zWatch.fireDown('onScroll', wgt);
-			});
+
+		// B70-ZK-2069: some widget need fire onScroll event, which has
+		// characteristic of container
+		if (jq(this).data('scrollable')) {
+			var cave = this.getCaveNode();
+			cave.style.overflow = 'auto';
+			this.domListen_(cave, 'onScroll');
 		}
 	},
-	getContentNode: function () {
-		return this.getCaveNode();
+
+	_doScroll : function() {
+		if (jq(this).data('scrollable'))
+			zWatch.fireDown('onScroll', this);
 	},
-	unbind_: function () {
-		if (_contentNode)
-			_contentNode.unbind('onScroll');
+
+	unbind_ : function() {
+		if (jq(this).data('scrollable')) {
+			this.domUnlisten_(this.getCaveNode(), 'onScroll');
+		}
 		this.$supers(zul.ContainerWidget, 'unbind_', arguments);
 	}
 });
-})();

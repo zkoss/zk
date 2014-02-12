@@ -660,10 +660,16 @@ zjq.prototype = {
 			
 			// browser's viewport
 			if (x >= 0 && y >= 0 && x1 <= jq.innerWidth() && y1 <= jq.innerHeight()) {
-				//B70-ZK-2069: Get the wgt, which is in scrolling.
-				var oel = wgt ? [wgt.getCaveNode(), wgt.getCaveNode()] : _overflowElement(this),
-				lex = zk(oel[0].parentNode).viewportOffset()[0],
-				tey = zk(oel[1].parentNode).viewportOffset()[1];
+				
+				var oel;
+				// ZK-2069: get content node from wgt
+				if (wgt) {
+					var node = wgt.ebody || wgt.getCaveNode();
+					oel = [node, node];
+				} else
+					oel = _overflowElement(this);
+				var lex = zk(oel[0].parentNode).viewportOffset()[0],
+					tey = zk(oel[1].parentNode).viewportOffset()[1];
 				
 				// scrollbar's viewport
 				return (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
