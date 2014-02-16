@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Events: onOpen.
  *
  */
-zul.wgt.Groupbox = zk.$extends(zul.Widget, {
+zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	_open: true,
 	_closable: true,
 

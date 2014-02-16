@@ -26,7 +26,6 @@
 						Name
 						<textbox value="@bind(item.name)" width="90%" />
 					</listcell>
-					<listcell />
 					<listcell>
 						<hlayout>
 							<label id="delPerson_${itemStatus.index}" 
@@ -59,7 +58,6 @@
 							constraint="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/: Invalid URL"
 							value="@bind(item.url)" width="90%" />
 					</listcell>
-					<listcell />
 					<listcell>
 						<hlayout>
 							<label id="delUrl_${itemStatus.index}" 

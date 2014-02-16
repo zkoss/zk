@@ -112,8 +112,10 @@
 		cursor: e-resize;
 	}
 }
+// ZK-2151: use strict selector to prevent nest problem
 //tree row and cell
 .z-treerow {
+	background: @meshBackgroundColor;
 	//tree cell
 	.z-treecell {
 		overflow: hidden;
@@ -126,9 +128,10 @@
 			</c:if>
 			background-clip: padding-box;
 			position: relative;
-		}
-		.z-treecell-content {
-			color: @hoverColor;
+
+			> .z-treecell-content {
+				color: @hoverColor;
+			}
 		}
 	}
 	//check mark
@@ -148,32 +151,34 @@
 	}
 	//selected tree cell
 	&.z-treerow-selected {
-		.z-treecell {
+		> .z-treecell {
 			<c:if test="${zk.ie != 8}">
 				.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			</c:if>
 			background-clip: padding-box;
 			position: relative;
+
+			> .z-treecell-content {
+				color: @selectedColor;
+			}
 		}
-		.z-treecell-content {
-			color: @selectedColor;
-		}
+		
 		&:hover {
 			> .z-treecell {
 				<c:if test="${zk.ie != 8}">
 					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				</c:if>
-			}
-			.z-listcell-content {
-				color: @selectedHoverColor;
+
+				> .z-treecell-content {
+					color: @selectedHoverColor;
+				}
 			}
 		}
 	}
 	//selected check mark
 	&-selected {
-		// ZK-2151: use strict selector to prevent nest problem
 		> .z-treecell > .z-treecell-content 
-			> .z-treerow-checkable > .z-treerow-icon {
+			> .z-treerow-checkable .z-treerow-icon {
 			color: @checkedColor;
 			display: block;
 			padding-left: 1px;
@@ -235,6 +240,7 @@
 		width: 100%;
 	}
 }
+// ZK-2151: use strict selector to prevent nest problem
 // IE8
 .ie8 {
 	.z-tree-header {
@@ -252,7 +258,7 @@
 			background: @meshHoverBackgroundColorIE8;
 		}
 		&.z-treerow-selected {
-			.z-treecell {
+			> .z-treecell {
 				position: static;
 				background: @meshSelectedBackgroundColorIE8;
 			}
@@ -263,7 +269,8 @@
 		}
 	}
 	// check and radio icon fallback
-	.z-treerow-checkable {
+	.z-treerow > .z-treecell 
+		> .z-treecell-content > .z-treerow-checkable {
 		border-width: 0;
 		background: transparent;
 		.z-treerow-icon {
@@ -283,7 +290,13 @@
 			background-position: 0 -13px;
 		}
 	}
-	.z-treerow-selected .z-treerow-checkable {
+	.z-treerow-selected > .z-treecell 
+		> .z-treecell-content > .z-treerow-checkable {
+		
+		.z-treerow-icon {
+			.displaySize(block, 13px, 13px);
+		}
+
 		.z-icon-check {
 			background-position: -26px 0px;
 		}

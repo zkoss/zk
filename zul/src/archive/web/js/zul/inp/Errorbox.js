@@ -35,13 +35,14 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	 */
 	show: function () {
 		jq(document.body).append(this);
-
+		var cstp = this.parent._cst && this.parent._cst._pos;
+		
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
-		setTimeout(function() {
-			if (self.parent) //Bug #3067998: if 
-				self.open(self.parent, null, cstp || 'end_before', 
-						{dodgeRef: !cstp});
+		// ZK-2068: show only if is in view
+		setTimeout(function(){
+			if (self.parent && self.isInView()) //Bug #3067998: if 
+				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
 		}, 0);
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
@@ -91,26 +92,37 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
 	},
+	
+	isInView: function() {
+		var desktop = this.desktop,
+			inp = p = this.parent,
+			n = inp.$n(),
+			bar = null, 
+			inView = true;
+		
+		// ZK-2069: check whether the input is shown in parents' viewport.
+		while (p && p != desktop) {
+			bar = p._scrollbar;
+			if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+				inView = bar.isScrollIntoView(n);
+				if (!inView)
+					return inView;
+			}
+			bar = null;
+			p = p.parent;
+		}
+		
+		// ZK-2069: should check native and fake scrollbar case
+		return inView && zk(inp).isScrollIntoView(true);
+	},
+	
 	/** Reset the position on scroll
 	 * @param zk.Widget wgt
 	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
-			var desktop = this.desktop,
-				inp = p = this.parent,
-				bar = null;
-			while (p && p != desktop) {
-				bar = p._scrollbar;
-				if (bar && (bar.hasVScroll() || bar.hasHScroll()))
-					break;
-				bar = null;
-				p = p.parent;
-			}
-			
-			var isInView = bar ? 
-					bar.isScrollIntoView(inp.$n()) : zk(inp).isScrollIntoView();
-			if (isInView) {// B65-ZK-1632
-				this.position(inp, null, 'end_before', {overflow:true});
+			if (this.isInView()) {// B65-ZK-1632
+				this.position(this.parent, null, 'end_before', {overflow:true});
 				this._fixarrow();
 			} else {
 				this.close();

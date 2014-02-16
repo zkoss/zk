@@ -825,6 +825,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ehead = this.ehead,
 			efoot = this.efoot;
 
+		// ZK-2069: fire onScroll if has scrollable property
+		if (jq(this).data('scrollable'))
+			zWatch.fireDown('onScroll', this);
+		
 		//B70-ZK-2070: if scrolled, the scrollbar need fire onScroll event.
 		if (scrolled && !(this.fire('onScroll', ebody.scrollLeft).stopped) && this._nativebar)
 			if (this._currentLeft != ebody.scrollLeft) {
@@ -1090,7 +1094,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var hdtbl = this.eheadtbl,
 				bdtbl = this.ebodytbl,
 				fttbl = this.efoottbl;
-			if (hdtbl) {
+			
+			// ZK-2157: should skip if the mesh has no children
+			if (hdtbl && (!(zk.isLoaded('zul.sel') && this.$instanceof(zul.sel.Tree)) && !this.$n('empty') 
+					|| (this.ebodyrows && this.ebodyrows.firstChild))) {
 				var wd = 0;
 				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
 					if (w.style.display != 'none')

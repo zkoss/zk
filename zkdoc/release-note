@@ -70,11 +70,16 @@ ZK 7.0.1
   ZK-2128: Frozen Tree - cells disappearing after replacing the columns twice
   ZK-2146: NullPointerException in Selectbox after set its model to null
   ZK-2151: Nested listboxes selection issue
+  ZK-2069: Validation error message does not scroll with component.
+  ZK-2158: Tab can be click on blank area next to last tab (IE9 only)
+  ZK-2157: Listheaders not showing if no listitems and Listbox is sized by content
+  ZK-2169: CometServerPush.getStartScript() should include org.zkoss.zkex.ui.comet.smartconnection.disabled in ee version
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
   to org.zkoss.util.resource.impl.LabelLoaderImpl and create an interface named
   org.zkoss.util.resource.impl.LabelLoader instead.
+  + the default value of org.zkoss.zkex.ui.comet.smartconnection.disabled changes from false to true
   
   --------
 ZK 7.0.0
@@ -153,6 +158,7 @@ ZK 6.5.6
   ZK-2138: vflex="1" not working properly with groupbox
   ZK-2140: Multiple select with Shift key does not work properly
   ZK-2143: Filedownload should support chinese file name
+  ZK-2169: CometServerPush.getStartScript() should include org.zkoss.zkex.ui.comet.smartconnection.disabled in ee version
   
   --------
 ZK 6.5.5

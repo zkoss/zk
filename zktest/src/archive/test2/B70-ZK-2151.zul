@@ -1,5 +1,13 @@
 <zk>
-	select the outer listitem / treeitem, then the inner radio buttons should not be selected
+	<div>
+		hover the outer listitem / treeitem, then the inner listitem /
+		treeitem should not have hover color
+	</div>
+	<div>
+		select the outer listitem / treeitem, then the inner listitem /
+		treeitem should not be selected
+	</div>
+
 	<listbox checkmark="true" width="400px">
 		<listitem>
 			<listcell>col 1 row 1 (click)</listcell>
@@ -18,13 +26,67 @@
 			</listcell>
 		</listitem>
 	</listbox>
-	<tree checkmark="true" width="400px">
+	<listbox multiple="true" checkmark="true" width="400px">
+		<listitem>
+			<listcell>col 1 row 1 (click)</listcell>
+			<listcell>
+				<listbox multiple="true" checkmark="true">
+					<listitem>
+						<listcell>nested item 1</listcell>
+					</listitem>
+					<listitem>
+						<listcell>nested item 2</listcell>
+					</listitem>
+					<listitem>
+						<listcell>nested item 3</listcell>
+					</listitem>
+				</listbox>
+			</listcell>
+		</listitem>
+	</listbox>
+	<tree  checkmark="true" width="400px">
 		<treechildren>
 			<treeitem>
 				<treerow>
 					<treecell>col 1 row 1 (click)</treecell>
 					<treecell>
 						<tree checkmark="true">
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell>
+											nested item 1
+										</treecell>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell>
+											nested item 2
+										</treecell>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell>
+											nested item 3
+										</treecell>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</tree>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<tree multiple="true" checkmark="true" width="400px">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>col 1 row 1 (click)</treecell>
+					<treecell>
+						<tree multiple="true" checkmark="true">
 							<treechildren>
 								<treeitem>
 									<treerow>

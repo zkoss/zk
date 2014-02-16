@@ -631,9 +631,9 @@ zjq.prototype = {
 	 * @since 6.5.2
 	 */
 	isScrollIntoView: (function () {
-		function _overflowElement(self) {
+		function _overflowElement(self, recursive) {
 			var el = self.jq[0],
-				te, le;
+				te, le, oels = [];
 			do {
 				if (!te) {
 					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowY == 'auto')
@@ -643,13 +643,19 @@ zjq.prototype = {
 					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto')
 						le = el;
 				}
-				if (te && le)
-					break;
+				if (te && le) {
+					oels.push([le, te]);
+					if (!recursive)
+						break;
+					te = le = null;
+				}
 				el = el.parentNode;
-			} while (el);
-			return [le, te];
+			} while (el && (el != document));
+				
+			return oels;
 		}
-		return function () {
+		// ZK-2069: can check whether the element is shown in parents' viewport.
+		return function (recursive) {
 			var vOffset = this.viewportOffset(),
 				x = vOffset[0],
 				y = vOffset[1],
@@ -660,12 +666,19 @@ zjq.prototype = {
 			
 			// browser's viewport
 			if (x >= 0 && y >= 0 && x1 <= jq.innerWidth() && y1 <= jq.innerHeight()) {
-				var oel = _overflowElement(this),
-				lex = zk(oel[0].parentNode).viewportOffset()[0],
-				tey = zk(oel[1].parentNode).viewportOffset()[1];
+				var oels = _overflowElement(this, recursive),
+					inView = true;
+				for (var i = 0; i < oels.length; i++) {
+					var oel = oels[i],
+						lex = zk(oel[0].parentNode).viewportOffset()[0],
+						tey = zk(oel[1].parentNode).viewportOffset()[1];
 				
-				// scrollbar's viewport
-				return (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
+					// scrollbar's viewport
+					inView = (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
+					if (!inView)
+						return inView;
+				}
+				return inView;
 			}
 			return false;		
 		};
