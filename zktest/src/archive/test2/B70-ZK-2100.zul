@@ -1,0 +1,39 @@
+<zk>
+	should show correct
+	<tabbox id="outer" orient="left" width="400px" height="300px">
+		<tabs width="70px">
+			<tab forEach="1,2,3,4,5,6,7,8,9,10" label="Tab 1" closable="true" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<tabbox id="inner" orient="top" hflex="1" vflex="1">
+					<tabs width="70px">
+						<tab forEach="1,2,3,4,5,6,7,8,9,10" label="Tab 1" closable="true" />
+					</tabs>
+					<tabpanels>
+						<tabpanel forEach="1,2,3,4,5,6,7,8,9,10">Panel 1</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</tabpanel>
+			<tabpanel forEach="1,2,3,4,5,6,7,8,9">Panel 1</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<hlayout>
+		<label value="outer orient" />
+		<combobox onSelect="outer.orient=self.value">
+			<comboitem label="top" />
+			<comboitem label="left" />
+			<comboitem label="right" />
+			<comboitem label="bottom" />
+		</combobox>
+	</hlayout>
+	<hlayout>
+		<label value="inner orient" />
+		<combobox onSelect="inner.orient=self.value">
+			<comboitem label="top" />
+			<comboitem label="left" />
+			<comboitem label="right" />
+			<comboitem label="bottom" />
+		</combobox>
+	</hlayout>
+</zk>
