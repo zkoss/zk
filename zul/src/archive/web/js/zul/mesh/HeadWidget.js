@@ -57,6 +57,19 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		 */
 		sizable: function () {
 			this.rerender();
+		},
+		
+		visible: function () {
+			this.rerender();
+			var mesh = this.getMeshWidget();
+			setTimeout(function() {
+				if (mesh) {
+					// ZK-2130: should fix ebody height
+					var hgh = zk(mesh).contentHeight() - mesh.$n('head').offsetHeight 
+						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n().offsetHeight : 0) 
+					mesh.ebody.style.height = jq.px0(hgh);
+				}
+			}, 0);
 		}
 	},
 	
@@ -128,20 +141,25 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 			_syncFrozen(this);
 			this.parent._minWd = null;
+			var mesh = this.getMeshWidget();
 			
 			// B70-ZK-2128: Auxhead doesn't have to add faker.
-			if (this.$instanceof(zul.mesh.Auxhead))
+			if (this.$instanceof(zul.mesh.Auxhead)) {
+				var frozen = mesh ? mesh.frozen : null;
+				if (frozen) {
+					frozen.onSize();
+				}
 				return;
+			}
 			
 			// ZK-2098: recovery the header faker if not exists
 			var head = this;
 			['hdfaker', 'bdfaker', 'ftfaker'].forEach(function(faker) {
-				var mesh = head.getMeshWidget(),
-					$faker = jq(mesh['e' + faker]);
+				var $faker = jq(mesh['e' + faker]);
 				if ($faker[0] != null && $faker.find(child.$n(faker))[0] == null) {
 					var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
 						visible = !child.isVisible() ? 'display:none;' : '';
-					wd = wd ? 'width: ' + wd + ';' : '';
+					wd = wd ? 'width:' + wd + ';' : '';
 					//B70-ZK-2130: virtual bar doesn't have to add fakerbar
 					//fkaker bar need recover if native bar has vscrollbar
 					var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>',
@@ -150,7 +168,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
 						barstyle = '', hdfakerbarstyle ='',
-						recoverFakerbar = mesh._nativebar ? zk(mesh.ebody).hasVScroll() : false;
+						recoverFakerbar = mesh._nativebar && !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false;
 
 					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding 
 					if ((faker == 'hdfaker') && bar && recoverFakerbar) {

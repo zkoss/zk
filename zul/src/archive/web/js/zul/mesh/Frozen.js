@@ -36,12 +36,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						cell.style.width = '0px';
 					}
 				}
+				
+				// ZK-2130: should reset all columns 
+				j = 1;
 				for (; j < cl; ++j) {
 					var cell = cells[j];
 					if (zk.parseInt(cell.style.width) != 0)
 						break; //done
-					cell.style.display = '';
-					cell.style.width = '';
+					if (j >= to)
+						cell.style.display = cell.style.width = '';
+					else {
+						cell.style.display = 'none';
+						cell.style.width = '0px';
+					}
 					// B70-ZK-2071: Reset the colspan when the previous cell is in viewport.
 					cell.colSpan = _colspan(cell);
 				}
@@ -55,7 +62,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var parent = wgt.parent,
 			bdfaker = parent.ebdfaker;
 		
-		if (parent.eheadtbl) {
+		// ZK-2130: should skip fake scroll bar
+		if (parent.eheadtbl && parent._nativebar) {
 			var cells = parent._getFirstRowCells(parent.eheadrows),
 				totalcols = cells.length,
 				columns = wgt._columns,
