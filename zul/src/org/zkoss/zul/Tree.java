@@ -1897,14 +1897,12 @@ public class Tree extends MeshElement {
 	 */
 	private int initRodSize() {
 		if (WebApps.getFeature("ee")) {
-			 final int sz = Utils.getIntAttribute(this, "org.zkoss.zul.tree.initRodSize",
-						INIT_LIMIT, true);
-			 if (inPagingMold()) {
-				 if (getPageSize() < sz) {
-					 return getPageSize();
-				 }
-			 }
-			 return sz;
+			 // ZK-2165: should return page size in paging mold
+			 if (inPagingMold())
+				 return getPageSize();
+			 else
+				 return Utils.getIntAttribute(this, "org.zkoss.zul.tree.initRodSize", 
+					 INIT_LIMIT, true);
 		}
 		return -1;
 	}

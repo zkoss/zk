@@ -75,6 +75,7 @@ ZK 7.0.1
   ZK-2157: Listheaders not showing if no listitems and Listbox is sized by content
   ZK-2169: CometServerPush.getStartScript() should include org.zkoss.zkex.ui.comet.smartconnection.disabled in ee version
   ZK-2100: Layout broken when using nested tabboxs with different orients
+  ZK-2165: Some items are not displayed in paging tree
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
