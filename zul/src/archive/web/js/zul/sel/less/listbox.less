@@ -408,7 +408,7 @@
 	.ie8-checkable-icon(z-listheader);
 	.ie8-checkable-icon(z-listgroup);
 	.ie8-checkable-icon(z-listitem);
-	.z-listheader-checkable.z-listheader-checked,
+	.z-listheader > .z-listheader-content > .z-listheader-checkable.z-listheader-checked,
 	.z-listgroup-selected > .z-listcell 
 		> .z-listcell-content > .z-listgroup-checkable,
 	.z-listitem-selected > .z-listcell 
@@ -439,7 +439,8 @@
 }
 .ie8-checkable-icon(@comp) {
 	.@{comp} > .z-listcell 
-		> .z-listcell-content > .@{comp}-checkable {
+		> .z-listcell-content > .@{comp}-checkable,
+		.@{comp} > .@{comp}-content > .@{comp}-checkable {
 
 		border-width: 0;
 		background: transparent;
