@@ -1,20 +1,287 @@
 <?page title="Frozen Tree Columns" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<label multiline="true">
-		1.Scroll to column_3.
-		2.Resize browser width, columns won't flicker, and width won't change.
+		1. Scroll to the right bound, then scoll renturn to col_1. 
+		2. Resize the broswer width. 
+		3. Scroll to the col_2. 
+		4. Resize the broswer width. 
+		5. The column should not flickering on step 2,4.
 	</label>
-	<tree height="125px" width="300px">
-	    <custom-attributes org.zkoss.zul.nativebar="true"/>
-	    <frozen columns="1"/>
-	    <treecols sizable="false">
-	    	<treecol width="100px" label="Fixed Column"/>
-	    	<treecol width="100px" label="column_1"/>
-	    	<treecol width="100px" label="column_2"/>
-	    	<treecol width="100px" label="column_3"/>
-	    </treecols>
-      	<treechildren>
-      		<treeitem></treeitem>
-    	</treechildren>
-	</tree>
+	<hlayout>
+		<vlayout hflex="1">
+			<div height="350px" width="100%"
+				apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				<vlayout>
+					<tree height="300px" model="@load(vm.treeModel)"
+						id="treeNativeScrollbar" hflex="1" rows="8">
+						<custom-attributes
+							org.zkoss.zul.nativebar="true" />
+						<frozen columns="1" />
+						<treecols sizable="false"
+							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">
+							<template name="col0" var="node">
+								<treecol label="Fixed Column"
+									width="160px" />
+							</template>
+							<template name="col" var="node">
+								<treecol width="60px"
+									visible="@load(vm.isVisible(node))">
+									<label value="@load(node)" />
+									<div>multi-line</div>
+								</treecol>
+							</template>
+							<template name="fill">
+								<treecol id="flex" hflex="1" />
+							</template>
+						</treecols>
+
+						<auxhead
+							children="@load(vm.cols)  @template(vm.auxTemplate(forEachStatus.index))"
+							visible="@load(vm.showAux)">
+							<template name="aux0">
+								<auxheader>Fixed Aux</auxheader>
+							</template>
+							<template name="aux" var="node">
+								<auxheader>X</auxheader>
+							</template>
+							<template name="fill">
+								<auxheader />
+							</template>
+						</auxhead>
+
+						<template name="model" var="row">
+							<treeitem>
+								<treerow
+									children="@load(vm.items) @template(vm.cellTemplate(forEachStatus.index))">
+									<template name="cell0">
+										<treecell label="fixed cell" />
+									</template>
+									<template name="cell" var="node">
+										<treecell>
+											<label value="@load(node)" />
+										</treecell>
+									</template>
+									<template name="fill">
+										<treecell />
+									</template>
+								</treerow>
+							</treeitem>
+						</template>
+					</tree>
+					<hlayout>
+						<checkbox label="toggle aux header"
+							checked="@bind(vm.showAux)" />
+						<button label="do something"
+							onClick="@command('doSomething')" />
+					</hlayout>
+				</vlayout>
+			</div>
+
+			<div height="350px" width="100%"
+				apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				<vlayout>
+					<tree height="300px" model="@load(vm.treeModel)"
+						id="treeFakeScrollbar" hflex="1" rows="8">
+						<frozen columns="1" />
+						<treecols sizable="false"
+							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">
+							<template name="col0" var="node">
+								<treecol label="Fixed Column"
+									width="160px" />
+							</template>
+							<template name="col" var="node">
+								<treecol width="60px"
+									visible="@load(vm.isVisible(node))">
+									<label value="@load(node)" />
+									<div>multi-line</div>
+								</treecol>
+							</template>
+							<template name="fill">
+								<treecol hflex="1" />
+							</template>
+						</treecols>
+
+						<auxhead
+							children="@load(vm.cols)  @template(vm.auxTemplate(forEachStatus.index))"
+							visible="@load(vm.showAux)">
+							<template name="aux0">
+								<auxheader>Fixed Aux</auxheader>
+							</template>
+							<template name="aux" var="node">
+								<auxheader>X</auxheader>
+							</template>
+							<template name="fill">
+								<auxheader />
+							</template>
+						</auxhead>
+
+						<template name="model" var="row">
+							<treeitem>
+								<treerow
+									children="@load(vm.items) @template(vm.cellTemplate(forEachStatus.index))">
+									<template name="cell0">
+										<treecell label="fixed cell" />
+									</template>
+									<template name="cell" var="node">
+										<treecell>
+											<label value="@load(node)" />
+										</treecell>
+									</template>
+									<template name="fill">
+										<treecell />
+									</template>
+								</treerow>
+							</treeitem>
+						</template>
+					</tree>
+
+					<hlayout>
+						<checkbox label="toggle aux header"
+							checked="@bind(vm.showAux)" />
+						<button label="do something"
+							onClick="@command('doSomething')" />
+					</hlayout>
+				</vlayout>
+			</div>
+		</vlayout>
+		<vlayout hflex="1">
+			<div height="350px" width="100%"
+				apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				<vlayout>
+					<tree model="@load(vm.treeModel)"
+						id="treeNativeScrollbar1" hflex="1" rows="4">
+						<custom-attributes
+							org.zkoss.zul.nativebar="true" />
+						<frozen columns="1" />
+						<treecols sizable="false"
+							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">
+							<template name="col0" var="node">
+								<treecol label="Fixed Column"
+									width="160px" />
+							</template>
+							<template name="col" var="node">
+								<treecol width="60px"
+									visible="@load(vm.isVisible(node))">
+									<label value="@load(node)" />
+									<div>multi-line</div>
+								</treecol>
+							</template>
+							<template name="fill">
+								<treecol id="flex1" hflex="1" />
+							</template>
+						</treecols>
+
+						<auxhead
+							children="@load(vm.cols)  @template(vm.auxTemplate(forEachStatus.index))"
+							visible="@load(vm.showAux)">
+							<template name="aux0">
+								<auxheader>Fixed Aux</auxheader>
+							</template>
+							<template name="aux" var="node">
+								<auxheader>X</auxheader>
+							</template>
+							<template name="fill">
+								<auxheader />
+							</template>
+						</auxhead>
+
+						<template name="model" var="row">
+							<treeitem>
+								<treerow
+									children="@load(vm.items) @template(vm.cellTemplate(forEachStatus.index))">
+									<template name="cell0">
+										<treecell label="fixed cell" />
+									</template>
+									<template name="cell" var="node">
+										<treecell>
+											<label value="@load(node)" />
+										</treecell>
+									</template>
+									<template name="fill">
+										<treecell />
+									</template>
+								</treerow>
+							</treeitem>
+						</template>
+					</tree>
+					<hlayout>
+						<checkbox label="toggle aux header"
+							checked="@bind(vm.showAux)" />
+						<button label="do something"
+							onClick="@command('doSomething')" />
+					</hlayout>
+				</vlayout>
+			</div>
+
+			<div height="350px" width="100%"
+				apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				<vlayout>
+					<tree model="@load(vm.treeModel)"
+						id="treeFakeScrollbar1" hflex="1" rows="4">
+						<frozen columns="1" />
+						<treecols sizable="false"
+							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">
+							<template name="col0" var="node">
+								<treecol label="Fixed Column"
+									width="160px" />
+							</template>
+							<template name="col" var="node">
+								<treecol width="60px"
+									visible="@load(vm.isVisible(node))">
+									<label value="@load(node)" />
+									<div>multi-line</div>
+								</treecol>
+							</template>
+							<template name="fill">
+								<treecol hflex="1" />
+							</template>
+						</treecols>
+
+						<auxhead
+							children="@load(vm.cols)  @template(vm.auxTemplate(forEachStatus.index))"
+							visible="@load(vm.showAux)">
+							<template name="aux0">
+								<auxheader>Fixed Aux</auxheader>
+							</template>
+							<template name="aux" var="node">
+								<auxheader>X</auxheader>
+							</template>
+							<template name="fill">
+								<auxheader />
+							</template>
+						</auxhead>
+
+						<template name="model" var="row">
+							<treeitem>
+								<treerow
+									children="@load(vm.items) @template(vm.cellTemplate(forEachStatus.index))">
+									<template name="cell0">
+										<treecell label="fixed cell" />
+									</template>
+									<template name="cell" var="node">
+										<treecell>
+											<label value="@load(node)" />
+										</treecell>
+									</template>
+									<template name="fill">
+										<treecell />
+									</template>
+								</treerow>
+							</treeitem>
+						</template>
+					</tree>
+					<hlayout>
+						<checkbox label="toggle aux header"
+							checked="@bind(vm.showAux)" />
+						<button label="do something"
+							onClick="@command('doSomething')" />
+					</hlayout>
+				</vlayout>
+			</div>
+		</vlayout>
+	</hlayout>
 </zk>
