@@ -354,11 +354,11 @@ public class Maps {
 	/**
 	 * Parse a string into a map that allows multiple values..
 	 * It is the same as<br/>
-	 * <pre><code>parseMultiple(map, src, '=', separator, quote, asValue, false, false);</code></pre>
+	 * <pre><code>parseMultiple(map, src, '=', separator, quote, asValue, parenthesis);</code></pre>
 	 *
 	 * @see #parseMultiple(Map, String, char, char, char, boolean, boolean)
 	 * @see CollectionsX#parse
-	 * @see #toString(Map, char, char)
+	 * @see #toString(Map, char, char, char)
 	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
@@ -645,7 +645,7 @@ public class Maps {
 	 * It is the same as<br/>
 	 * <pre><code>toString(map, quote, separator, '=');</code></pre>
 	 *
-	 * @see #toString(Map, String, char, char, char)
+	 * @see #toString(Map, char, char, char)
 	 * @see #parse(Map, String, char, char, char)
 	 */
 	public static final String toString(Map<? super String, ? super String> map, char quote, char separator) {
@@ -671,15 +671,15 @@ public class Maps {
 	 * It is the same as<br/>
 	 * <pre><code>toStringBuffer(sb, map, quote, separator, '=');</code></pre>
 	 * 
-	 * @see #toStringBuffer(Map, String, char, char, char)
-	 * @see #toString(Map, String, char, char, char)
+	 * @see #toStringBuffer(StringBuffer, Map, char, char, char)
+	 * @see #toString(Map, char, char, char)
 	 */
 	public static final StringBuffer
 	toStringBuffer(StringBuffer sb, Map<? super String, ? super String> map, char quote, char separator) {
 		return 	toStringBuffer(sb, map, quote, separator, '=');
 	}
 	/** Converts a map to string and append to a string buffer.
-	 * @see #toString(Map, String, char, char, char)
+	 * @see #toString(Map, char, char, char)
 	 * @since 7.0.1
 	 */
 	public static final StringBuffer

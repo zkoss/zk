@@ -86,7 +86,7 @@ public class ScrollEvent extends Event {
 		_outBound = outBound;
 	}
 	/** Constructs an scroll-relevant event.
-	 * @param pos the new position
+	 * @param dPos the new position
 	 * @param outBound the position is outside the boundary or not (only used on tablet/mobile device)
 	 * @since 7.0.1
 	 */
