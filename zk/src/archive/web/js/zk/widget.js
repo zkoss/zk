@@ -3054,6 +3054,11 @@ unbind_: function (skipper, after) {
 	afterChildrenFlex_: function(kid) {
 		//to be overridden
 	},
+	// @since 7.0.1
+	afterChildMinFlexChanged_: function (kid, attr) { //attr 'w' for width or 'h' for height
+		//to be overridden, after each of my children fix the minimum flex (both width and height),
+		// only if when myself is not in min flex.
+	},
 	ignoreFlexSize_: function(attr) { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore widget dimension in vflex/hflex calculation 
 		return false;

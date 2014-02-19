@@ -568,6 +568,18 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},
+	afterChildMinFlexChanged_: function (wgt, o) {
+		if (this.desktop) {
+			var cave = this.$n('cave'),
+				real = this.$n('real');
+			if (cave)
+				cave.style[o == 'h' ? 'height' : 'width'] = '';
+			if (real)
+				real.style[o == 'h' ? 'height' : 'width'] = '';
+			// resize again
+			this.parent._resize();
+		}
+	},
 	onSize: function () {
 		var wgt = this;
 		setTimeout(function () {

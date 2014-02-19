@@ -235,6 +235,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (sz && sz[sizePos] >= 0)
 					wgt[flexsz] = sz[sizePos] + margin;
 				wgt.afterChildrenMinFlex_(o);
+				
+				// notify my parent when my size has been changed and my parent is not in min flex
+				// Bug ZK-2117
+				if (wgt.parent && wgt.parent[flex] != 'min')
+					wgt.parent.afterChildMinFlexChanged_(wgt, o);
 			}
 			return wgt[flexsz];
 		}
