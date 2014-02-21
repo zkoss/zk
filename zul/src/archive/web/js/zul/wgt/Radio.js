@@ -63,19 +63,6 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			this._fixName();
 		}
 	},
-	/* 
-	 * ZK-2181: fix the radio wrong status,
-	 * caused by https://github.com/zkoss/zk/blob/v7.0.0/zk/src/archive/web/js/zk/dom.js#L1413
-	 */  
-	onSize: function() {
-		var p = this.$n().parentNode;
-		if (p && jq.nodeName(p, 'SPAN') && p.style.display != 'block') {
-			var real = this.$n('real');
-			if (this._checked && real && !real.checked) {
-				real.checked = true;
-			}
-		}	
-	},
 	bind_: function(){
 		this.$supers(zul.wgt.Radio, 'bind_', arguments);
 		if(this._group && this.desktop && !this._attachExternal){
