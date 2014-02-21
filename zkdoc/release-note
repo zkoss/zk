@@ -78,6 +78,7 @@ ZK 7.0.1
   ZK-2165: Some items are not displayed in paging tree
   ZK-2172: Biglistbox with frozenCols missing data
   ZK-2117: South does not calculate correct size
+  ZK-2184: Navitem does not fire onClick event when clicked in tablet
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
