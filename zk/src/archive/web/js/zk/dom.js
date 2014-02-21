@@ -1351,7 +1351,7 @@ jq(el).zk.center(); //same as 'center'
 			
 			// replace uuid to speed up the calculation
 			if (zk.Widget.$(n, {exact: 1})) {
-				text = text.replace(/id="[^"]*"/, 'id="zktextsize"');
+				text = text.replace(/id="[^"]*"/g, '');
 			}
 			return zk(document.body).textSize(text)[1];
 		}
@@ -1426,7 +1426,8 @@ jq(el).zk.center(); //same as 'center'
 			var result,
 				key = newStyle + txt;
 			if (!(result = _cache[key])) {
-				_txtSizDiv.innerHTML = txt;
+				// ZK-2181: remove name attritube to prevent the radio has wrong status
+				_txtSizDiv.innerHTML = txt.replace(/name="[^"]*"/g, '');
 				_txtSizDiv.style.cssText = _defaultStyle + newStyle;
 				_txtSizDiv.style.display = '';
 				result = _cache[key] = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
