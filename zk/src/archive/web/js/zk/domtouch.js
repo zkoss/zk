@@ -171,6 +171,10 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				this._startTap(this);
 			}
 		}
+		// ZK-2179: should skip row widget
+		var p = zk.Widget.$(evt.target).parent;
+		if (p && (!zk.isLoaded('zul.grid') || !p.$instanceof(zul.grid.Row)) 
+			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow)))) 
 		tevt.stopPropagation();
 	},
 	_dblTapEnd: function(evt) {
@@ -247,7 +251,12 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		var	changedTouch = tevt.changedTouches[0];
 		this._pt = [changedTouch.clientX, changedTouch.clientY];
 		this._startHold(evt);
-		tevt.stopPropagation();
+		
+		// ZK-2179: should skip row widget
+		var p = zk.Widget.$(evt.target).parent;
+		if (p && (!zk.isLoaded('zul.grid') || !p.$instanceof(zul.grid.Row)) 
+			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow)))) 
+			tevt.stopPropagation();
 	},
 	_tapHoldMove: function (evt) {
 		var tevt = evt.originalEvent,
