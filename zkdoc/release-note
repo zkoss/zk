@@ -79,6 +79,7 @@ ZK 7.0.1
   ZK-2172: Biglistbox with frozenCols missing data
   ZK-2117: South does not calculate correct size
   ZK-2184: Navitem does not fire onClick event when clicked in tablet
+  ZK-2181: Flex cause wrong status of radio
 
 * Upgrade Notes
   + Rename the implemetation class of label loader from org.zkoss.util.resource.impl.LabelLoader
