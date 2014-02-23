@@ -68,7 +68,7 @@ ZK 7.0.1
   ZK-2140: Multiple select with Shift key does not work properly
   ZK-2143: Filedownload should support chinese file name
   ZK-2128: Frozen Tree - cells disappearing after replacing the columns twice
-  ZK-2146: NullPointerException in Selectbox after set its model to null
+  ZK-2148: NullPointerException in Selectbox after set its model to null
   ZK-2151: Nested listboxes selection issue
   ZK-2069: Validation error message does not scroll with component.
   ZK-2158: Tab can be click on blank area next to last tab (IE9 only)
