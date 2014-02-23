@@ -750,7 +750,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			// ZK-2098: should skip if bdcol doesn't exist
 			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
 				// ZK-2130: should save the header width
-				var wwd = parseInt(w.$n().style.width);
+				// ZK-2071: use offsetWidth instead of style.width
+				var wwd = w.$n().offsetWidth;
 				if (w.isVisible() && wwd > 0.1)
 					w._origWd = jq.px0(wwd);
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
