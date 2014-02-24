@@ -1092,9 +1092,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._afterCalcSize();
 	},
 	_beforeCalcSize: function () {
+		var ebody = this.ebody;
+		if (!this._nativebar && (ebody.scrollLeft || ebody.scrollTop)) {
+			// ZK-2046: Keep ebody scroll position before calculated size, _setHgh would reset it to 0.
+			this._ebodyScrollPos = {l: ebody.scrollLeft, t: ebody.scrollTop};
+		}
 		this._setHgh(this.$n().style.height);
 	},
 	_afterCalcSize: function () {
+		if (this._ebodyScrollPos) {
+			// ZK-2046: Restore ebody scroll position after calculated size.
+			this.ebody.scrollLeft = this._ebodyScrollPos.l;
+			this.ebody.scrollTop = this._ebodyScrollPos.t;
+			this._ebodyScrollPos = null;
+		}
 		// Set style width to table to avoid colgroup width not working 
 		// because of width attribute (width="100%") on table 
 		if (this._isAllWidths()) {

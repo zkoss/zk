@@ -203,12 +203,16 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;
 		if (bar) {
+			// ZK-355: Keep scroll position before sync scrollbar size
+			var currentLeft = this._currentLeft,
+				currentTop = this._currentTop;
+			
 			bar.syncSize(showBar || this._shallShowScrollbar);
 			this._shallShowScrollbar = false;
 			if (scrollToTop)
 				bar.scrollTo(0, 0);
 			else
-				bar.scrollTo(this._currentLeft, this._currentTop);
+				bar.scrollTo(currentLeft, currentTop);
 			
 			//sync frozen
 			var frozen = this.frozen,

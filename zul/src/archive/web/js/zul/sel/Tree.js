@@ -51,14 +51,18 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		var bar = this._scrollbar;
 		if (bar) {
 			var scrollPosition;
+			if (this._currentLeft || this._currentTop) {
+				scrollPosition = {l: this._currentLeft, t: this._currentTop};
+			}
 			//open/close tree node in paging mold will invalidate
 			//  keep scroll position before sync scrollbar size
-			if (this.inPagingMold() && (this._currentLeft || this._currentTop)) {
-				scrollPosition = {l: this._currentLeft, t: this._currentTop};
+			if (this.inPagingMold() && scrollPosition) {
 				showBar = true;
 			}
 			bar.syncSize(showBar || this._shallShowScrollbar);
 			this._shallShowScrollbar = false;
+			
+			// ZK-355: Scroll to current position
 			if (scrollPosition) {
 				bar.scrollTo(scrollPosition.l, scrollPosition.t);
 				scrollPosition = null;
