@@ -39,7 +39,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
-		// ZK-2068: show only if is in view
+		// ZK-2069: show only if is in view
 		setTimeout(function(){
 			if (self.parent && self.isInView()) //Bug #3067998: if 
 				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
@@ -101,16 +101,17 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			inView = true;
 		
 		// ZK-2069: check whether the input is shown in parents' viewport.
-		while (p && p != desktop) {
-			bar = p._scrollbar;
-			if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
-				inView = bar.isScrollIntoView(n);
-				if (!inView)
-					return inView;
+		if (!zk.ie8_) // fine tune for ie8
+			while (p && p != desktop) {
+				bar = p._scrollbar;
+				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+					inView = bar.isScrollIntoView(n);
+					if (!inView)
+						return inView;
+				}
+				bar = null;
+				p = p.parent;
 			}
-			bar = null;
-			p = p.parent;
-		}
 		
 		// ZK-2069: should check native and fake scrollbar case
 		return inView && zk(inp).isScrollIntoView(true);
