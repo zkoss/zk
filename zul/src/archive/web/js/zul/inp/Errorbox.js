@@ -43,7 +43,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		setTimeout(function(){
 			if (self.parent && self.isInView()) //Bug #3067998: if 
 				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
-		}, 0);
+		}, 50); // B36-2935398: add time
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
 	/** 
