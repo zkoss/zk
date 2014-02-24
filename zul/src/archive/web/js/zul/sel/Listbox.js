@@ -189,7 +189,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			}
 		}
 	},
-	destoryBar_: function () {
+	destroyBar_: function () {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
@@ -208,7 +208,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this._shallScrollIntoView = true;
 	},
 	unbind_: function () {
-		this.destoryBar_();
+		this.destroyBar_();
 		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	_syncSelInView: function () {
