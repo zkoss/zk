@@ -958,11 +958,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				// ZK-2131: should skip if head doesn't exist
 				var head;
 				if (!this.frozen && (head = this.head)) {
-					var display = zk(this.ebody).hasVScroll() ? '' : 'none'
-					// hdfaker-bar occupy space in ie8
-					if (display == 'none' && !zk.ie8_)
-						head.$n('hdfaker-bar').style.display = display;
-					head.$n('bar').style.display = display;
+					// ZK-2114: fix width instead of display
+					var width = zk(this.ebody).hasVScroll() ? '15px' : '0.1px'
+					head.$n('hdfaker-bar').style.width = width;
 				}
 			}
 			
