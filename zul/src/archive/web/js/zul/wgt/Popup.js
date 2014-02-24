@@ -139,7 +139,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// the response from server.
 			zWatch.listen({onResponse: this});		
 		}
-		if (this.shallStackup_()) {
+		
+		// B30-1819264 : should skip null
+		if (this.shallStackup_() && node) {
 			if (!this._stackup)
 				this._stackup = jq.newStackup(node, node.id + '-stk');
 			else {

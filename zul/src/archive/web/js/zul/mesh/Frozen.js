@@ -28,13 +28,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						v = k - from, v2 = ke - to;
 					v = (v > 0 ? v: 0) + (v2 > 0 ? v2: 0);
 					if (v) {
-						cell.style.display = '';
-						cell.style.width = '';
+						// ZK-2071: display causes wrong in colspan case
+						// cell.style.display = '';
+						// cell.style.width = '';
 						cell.colSpan = v;
-					} else {
-						cell.style.display = 'none';
-						cell.style.width = '0px';
-					}
+					} 
+					// ZK-2071: display causes wrong in colspan case
+					// else {
+					//	cell.style.display = 'none';
+					//	cell.style.width = '0px';
+					// }
 				}
 				
 				// ZK-2130: should reset all columns 
@@ -43,12 +46,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					var cell = cells[j];
 					if (zk.parseInt(cell.style.width) != 0)
 						break; //done
-					if (j >= to)
-						cell.style.display = cell.style.width = '';
-					else {
-						cell.style.display = 'none';
-						cell.style.width = '0px';
-					}
+					// ZK-2071: display causes wrong in colspan case
+					// if (j >= to)
+					//	cell.style.display = cell.style.width = '';
+					// else {
+					// 	cell.style.display = 'none';
+					//	cell.style.width = '0px';
+					// }
+					
 					// B70-ZK-2071: Reset the colspan when the previous cell is in viewport.
 					cell.colSpan = _colspan(cell);
 				}
@@ -297,9 +302,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ? n.offsetWidth : 0,
 						nativebar = mesh._nativebar;
+					// ZK-2071: nativebar behavior should be same as fakebar
 					if (force
-							|| (!nativebar && (wd == 0 || wd == 1)) 
-							|| (nativebar && n.style.display == 'none')) {
+							|| (!nativebar && (wd == 0 || wd == 0.1)) 
+							|| (nativebar && (wd == 0 || wd == 0.1))) {
 						cellWidth = hdWgt._origWd || jq.px(wd);
 						hdWgt._origWd = null;
 						shallUpdate = true;
@@ -323,21 +329,24 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
 						faker.style.width = cellWidth;
 
-					var cw = zk.parseInt(cellWidth),
-						hidden = cw == 0;
+					// ZK-2071: display causes wrong in colspan case
+					// var cw = zk.parseInt(cellWidth),
+					//	hidden = cw == 0;
+					//
+					// if (mesh._nativebar && (!hdWgt._hflex || hdWgt._hflex == 'min')) {
+					//	mesh.ehdfaker.childNodes[i].style.display = hidden ? 'none' : '';
+					//	hdcells[i].style.display = hidden ? 'none' : '';
+					// } 
 					
-					//B70-ZK-2130: display none will cause width won't change on browser resizing.
-					if (mesh._nativebar && (!hdWgt._hflex || hdWgt._hflex == 'min')) {
-						mesh.ehdfaker.childNodes[i].style.display = hidden ? 'none' : '';
-						hdcells[i].style.display = hidden ? 'none' : '';
-					}
 					hdcells[i].style.width = cellWidth;
 					// foot
 					if (ftcells) {
-						if (mesh._nativebar) {
-							mesh.eftfaker.childNodes[i].style.display = hidden ? 'none' : '';
-							ftcells[i].style.display = hidden ? 'none' : '';
-						}
+						// ZK-2071: display causes wrong in colspan case
+						// 
+						// if (mesh._nativebar) {
+						//	mesh.eftfaker.childNodes[i].style.display = hidden ? 'none' : '';
+						//	ftcells[i].style.display = hidden ? 'none' : '';
+						// }
 						if (ftcells.length > i)
 							ftcells[i].style.width = cellWidth;
 					}
