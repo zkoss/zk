@@ -153,8 +153,11 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			}
 			
 			// ZK-2098: recovery the header faker if not exists
-			var head = this;
-			['hdfaker', 'bdfaker', 'ftfaker'].forEach(function(faker) {
+			var head = this,
+				fakers = ['hdfaker', 'bdfaker', 'ftfaker'];
+			// B30-1926480: ie8 does not support array.forEach
+			for (var i = 0; i < fakloers.length; i++) {
+				faker = fakers[i];
 				var $faker = jq(mesh['e' + faker]);
 				if ($faker[0] != null && $faker.find(child.$n(faker))[0] == null) {
 					var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
@@ -168,25 +171,32 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
 						barstyle = '', hdfakerbarstyle ='',
-						recoverFakerbar = mesh._nativebar && !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false;
+						recoverFakerbar = mesh._nativebar && !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false,
+						index = child.getChildIndex();
 
 					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding 
-					if ((faker == 'hdfaker') && bar && recoverFakerbar) {
+					// B30-1926480: the bar should be removed
+					if ((faker == 'hdfaker') && bar) {
 						var s;
 						if (s = bar.style) {
-							barstyle = s.display ? 'display:' + s.display + ';' : '';
+							// ZK-2114: should not store display
+							// barstyle = s.display ? 'display:' + s.display + ';' : '';
 							barstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
 						$bar.remove();
 		            
-						if (hdfakerbar && (s = hdfakerbar.style)) {
+						if (recoverFakerbar && hdfakerbar && (s = hdfakerbar.style)) {
 							hdfakerbarstyle = s.display ? 'display:' + s.display + ';' : '';
 							hdfakerbarstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
 						$hdfakerbar.remove();
 					}
-	          
-					$faker.append(html);
+					
+					// B30-1926480: child can be added after any brother node 
+					if (index > 0)
+						jq($faker.find('col')[index - 1]).after(html);
+					else 
+						$faker.append(html);
 	          
 					// resync var
 					$bar = jq(mesh).find('.' + head.$s('bar'));
@@ -200,7 +210,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" />');
 					}
 				}
-			});
+			}
 	    }
 	},
 	onChildRemoved_: function () {
