@@ -156,7 +156,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			var head = this,
 				fakers = ['hdfaker', 'bdfaker', 'ftfaker'];
 			// B30-1926480: ie8 does not support array.forEach
-			for (var i = 0; i < fakloers.length; i++) {
+			for (var i = 0; i < fakers.length; i++) {
 				faker = fakers[i];
 				var $faker = jq(mesh['e' + faker]);
 				if ($faker[0] != null && $faker.find(child.$n(faker))[0] == null) {
