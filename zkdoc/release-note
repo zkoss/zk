@@ -1,3 +1,11 @@
+ZK 7.0.2
+* Features
+
+* Bugs
+  ZK-2192: Combobox button does not work when other component is animating
+
+* Upgrade Notes
+
   --------
 ZK 7.0.1
 Feb 25, 2014
