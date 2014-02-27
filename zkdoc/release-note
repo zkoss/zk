@@ -16,6 +16,7 @@ ZK 6.5.6
   ZK-2169: CometServerPush.getStartScript() should include org.zkoss.zkex.ui.comet.smartconnection.disabled in ee version
   ZK-2172: Biglistbox with frozenCols missing data
   ZK-2178: NullPointerException showed when biglistbox doesn't provide any MatrixModel
+  ZK-2185: Setting listitems draggable&droppable makes inner listbox not showing correctly in mold=select
   
   --------
 ZK 6.5.5
