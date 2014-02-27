@@ -73,7 +73,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onResponse: function (ctl, opts) {
 		if ((opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
-			if (zk.animating()) {
+			// ZK-2192: Only need to determine if popup is animating
+			if (jq(this.getPopupNode_()).is(':animated')) {
 				var self = this;
 				setTimeout(function() {self.onResponse(ctl, opts);}, 50);
 				return;
@@ -270,7 +271,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!this._open) return;
 
 		var self = this;
-		if (zk.animating()) {
+		// ZK-2192: Only need to determine if popup is animating
+		if (jq(this.getPopupNode_()).is(':animated')) {
 			setTimeout(function() {self.close(opts);}, 50);
 			return;
 		}
@@ -417,7 +419,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	_doBtnClick: function (evt) {
 		if (!this._buttonVisible) return;
-		if (!this._disabled && !zk.animating()) {		
+		// ZK-2192: Only need to determine if popup is animating
+		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {		
 			if (this._open) this.close({focus:zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});
 			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});	
 		}
