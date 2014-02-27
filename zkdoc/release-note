@@ -3,6 +3,7 @@ ZK 7.0.2
 
 * Bugs
   ZK-2192: Combobox button does not work when other component is animating
+  ZK-2178: NullPointerException showed when biglistbox doesn't provide any MatrixModel
 
 * Upgrade Notes
 
@@ -176,6 +177,7 @@ ZK 6.5.6
   ZK-2143: Filedownload should support chinese file name
   ZK-2169: CometServerPush.getStartScript() should include org.zkoss.zkex.ui.comet.smartconnection.disabled in ee version
   ZK-2172: Biglistbox with frozenCols missing data
+  ZK-2178: NullPointerException showed when biglistbox doesn't provide any MatrixModel
   
   --------
 ZK 6.5.5

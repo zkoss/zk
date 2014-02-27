@@ -275,7 +275,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this.uid = this.widget.uuid;
 		this.zcls = this.widget.getZclass();
 		this._isVer = opts.orient == 'vertical';
-		if (!opts.viewportSize)
+		// ZK-2178: viewportSize is 0 if biglistbox has not model
+		if (!opts.viewportSize && opts.viewportSize != 0)
 			throw "Handle required for a viewport size: {viewportSize: size}";
 		this.redraw(this.anchor);
 		this._initDragdrop();
