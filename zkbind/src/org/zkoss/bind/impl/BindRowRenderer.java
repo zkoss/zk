@@ -66,10 +66,10 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			// parse parameters from template
 			Map<String, Object> params = tm.getParameters();
 			
-			final String var = params != null ? (String) params.get(EACH_ATTR) : null;
-			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
-			final String itervar = params != null ? (String) params.get(STATUS_ATTR) : null;
-			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
+			final String var = params != null ? (String) params.get(Template.EACH_ATTR) : null;
+			final String varnm = var == null ? Template.EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = params != null ? (String) params.get(Template.STATUS_ATTR) : null;
+			final String itervarnm = itervar == null ? ( var==null ? Template.EACH_STATUS_VAR : varnm + STATUS_POST_VAR) : itervar; //provide default value if not specified
 			
 			//bug 1188, EL when nested var and itervar
 			Object oldVar = grid.getAttribute(varnm);

@@ -238,7 +238,7 @@ public class ForEachImpl implements ForEach {
 		&& _it.hasNext()) {
 			++_status.index;
 			_status.each = _it.next();
-			getScope().setAttribute("each", _status.each);
+			getScope().setAttribute(Template.EACH_VAR, _status.each);
 			return true;
 		}
 
@@ -249,20 +249,20 @@ public class ForEachImpl implements ForEach {
 	}
 	private void setupStatus() {
 		final Scope scope = getScope();
-		_oldEach = scope.getAttribute("each", true);
-		_status = new Status(scope.getAttribute("forEachStatus", true));
-		scope.setAttribute("forEachStatus", _status);
+		_oldEach = scope.getAttribute(Template.EACH_VAR, true);
+		_status = new Status(scope.getAttribute(Template.EACH_STATUS_VAR, true));
+		scope.setAttribute(Template.EACH_STATUS_VAR, _status);
 	}
 	private void restoreStatus() {
 		final Scope scope = getScope();
 		if (_status.previous != null)
-			scope.setAttribute("forEachStatus", _status.previous);
+			scope.setAttribute(Template.EACH_STATUS_VAR, _status.previous);
 		else
-			scope.removeAttribute("forEachStatus");
+			scope.removeAttribute(Template.EACH_STATUS_VAR);
 		if (_oldEach != null)
-			scope.setAttribute("each", _oldEach);
+			scope.setAttribute(Template.EACH_VAR, _oldEach);
 		else
-			scope.removeAttribute("each");
+			scope.removeAttribute(Template.EACH_VAR);
 		_it = null; _status = null; //recycle (just in case)
 	}
 	private Scope getScope() {

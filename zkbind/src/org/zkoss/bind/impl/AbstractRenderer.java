@@ -29,11 +29,28 @@ import org.zkoss.zk.ui.util.Template;
 public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializable {
 	private static final long serialVersionUID = 3738037033671761825L;
 
-	protected static final String EACH_ATTR = TemplateResolver.EACH_ATTR;
-	protected static final String EACH_VAR = TemplateResolver.EACH_VAR;
-	protected static final String STATUS_ATTR = TemplateResolver.STATUS_ATTR;
+	/**
+	 * @deprecated use {@link Template#EACH_ATTR} instead
+	 */
+	@Deprecated
+	protected static final String EACH_ATTR = Template.EACH_ATTR;
+	
+	/**
+	 * @deprecated use {@link Template#EACH_VAR} instead
+	 */
+	protected static final String EACH_VAR = Template.EACH_VAR;
+	
+	/**
+	 * @deprecated use {@link Template#STATUS_ATTR} instead
+	 */
+	protected static final String STATUS_ATTR = Template.STATUS_ATTR;
+	
 	protected static final String STATUS_POST_VAR = "Status";
-	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
+	
+	/**
+	 * @deprecated use {@link Template#EACH_VAR} instead
+	 */
+	protected static final String EACH_STATUS_VAR = Template.EACH_STATUS_VAR;
 	
 	private String _attributeName;
 	
@@ -77,8 +94,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		Object old = null;
 		Object oldStatus = null;
 		try {
-			old = eachComp.setAttribute(EACH_VAR, data); //kept the value for template resolving
-			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){//provide iteration status in this context
+			old = eachComp.setAttribute(Template.EACH_VAR, data); //kept the value for template resolving
+			oldStatus = eachComp.setAttribute(Template.EACH_STATUS_VAR, new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
 				
 				public int getIndex() {
@@ -98,8 +115,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			});
 			resolver.addTemplateTracking(eachComp,data,index,size);
 		} finally {
-			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
-			eachComp.setAttribute(TemplateResolver.EACH_VAR, old);
+			eachComp.setAttribute(Template.EACH_STATUS_VAR, oldStatus);
+			eachComp.setAttribute(Template.EACH_VAR, old);
 		}
 	}
 	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List

@@ -24,6 +24,11 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public interface Template {
+    public static final String EACH_ATTR = "var";
+    public static final String EACH_VAR = "each";
+    public static final String STATUS_ATTR = "status";
+    public static final String EACH_STATUS_VAR = "forEachStatus";
+
 	/** Creates the components defined in this template.
 	 * @param parent the parent to assign the new component to.
 	 * Unlike {@link org.zkoss.zk.ui.Execution#createComponents(PageDefinition, Component, Map)}
