@@ -363,6 +363,33 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="chartsTypeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="area" />
+					<xs:enumeration value="arearange" />
+					<xs:enumeration value="areaspline" />
+					<xs:enumeration value="areasplinerange" />
+					<xs:enumeration value="bar" />
+					<xs:enumeration value="bubble" />
+					<xs:enumeration value="column" />
+					<xs:enumeration value="columnrange" />
+					<xs:enumeration value="errorbar" />
+					<xs:enumeration value="funnel" />
+					<xs:enumeration value="gauge" />
+					<xs:enumeration value="line" />
+					<xs:enumeration value="pie" />
+					<xs:enumeration value="scatter" />
+					<xs:enumeration value="spline" />
+					<xs:enumeration value="waterfall" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<xs:simpleType name="chartPeriodAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -520,6 +547,17 @@
 		<xs:attribute name="valign" type="valignAttrType" use="optional" />
 		<xs:attribute name="span" type="intType" use="optional" />
 	</xs:attributeGroup>
+	<xs:attributeGroup name="plotAttrGroup">
+		<xs:attribute name="onPlotClick" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotCheckboxClick" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotDrillDown" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotDrillUp" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotHide" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotLegendItemClick" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotMouseOut" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotMouseOver" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotShow" type="xs:string" use="optional" />
+	</xs:attributeGroup>
     <!--
     ELEMENTGROUP
     -->
@@ -550,6 +588,7 @@
 			<xs:element ref="cardlayout" />
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
+			<xs:element ref="charts" />
 			<xs:element ref="checkbox" />
 			<xs:element ref="ckeditor" />
 			<xs:element ref="chosenbox" />
@@ -634,6 +673,7 @@
 				<xs:element ref="cardlayout" />
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
+				<xs:element ref="charts" />
 				<xs:element ref="checkbox" />
 				<xs:element ref="chosenbox" />
 				<xs:element ref="ckeditor" />
@@ -1035,6 +1075,66 @@
 		<xs:attribute name="areaListener" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="mouseAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- ZK Charts -->
+	<xs:element name="charts" type="chartsType" />
+	<xs:complexType name="chartsType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="abstractComponentAttrGroup" />
+		<xs:attribute name="type" type="chartsTypeAttrType" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attribute name="subtitle" type="xs:string" use="optional" />
+		<xs:attribute name="width" type="xs:string" use="optional" />
+		<xs:attribute name="height" type="xs:string" use="optional" />
+		<xs:attribute name="alignTicks" type="booleanType" use="optional" />
+		<xs:attribute name="animation" type="booleanType" use="optional" />
+		<xs:attribute name="backgroundColor" type="xs:string" use="optional" />
+		<xs:attribute name="borderColor" type="xs:string" use="optional" />
+		<xs:attribute name="borderRadius" type="xs:string" use="optional" />
+		<xs:attribute name="borderWidth" type="xs:string" use="optional" />
+		<xs:attribute name="chart" type="xs:string" use="optional" />
+		<xs:attribute name="colors" type="xs:string" use="optional" />
+		<xs:attribute name="credits" type="xs:string" use="optional" />
+		<xs:attribute name="enableZoomSelection" type="booleanType" use="optional" />
+		<xs:attribute name="exporting" type="xs:string" use="optional" />
+		<xs:attribute name="ignoreHiddenSeries" type="booleanType" use="optional" />
+		<xs:attribute name="inverted" type="booleanType" use="optional" />
+		<xs:attribute name="labels" type="xs:string" use="optional" />
+		<xs:attribute name="legend" type="xs:string" use="optional" />
+		<xs:attribute name="margin" type="xs:string" use="optional" />
+		<xs:attribute name="marginBottom" type="xs:string" use="optional" />
+		<xs:attribute name="marginLeft" type="xs:string" use="optional" />
+		<xs:attribute name="marginRight" type="xs:string" use="optional" />
+		<xs:attribute name="marginTop" type="xs:string" use="optional" />
+		<xs:attribute name="navigation" type="xs:string" use="optional" />
+		<xs:attribute name="options" type="xs:string" use="optional" />
+		<xs:attribute name="pinchType" type="xs:string" use="optional" />
+		<xs:attribute name="plotBackgroundColor" type="xs:string" use="optional" />
+		<xs:attribute name="plotBackgroundImage" type="xs:string" use="optional" />
+		<xs:attribute name="plotBorderColor" type="xs:string" use="optional" />
+		<xs:attribute name="plotBorderWidth" type="xs:string" use="optional" />
+		<xs:attribute name="plotOptions" type="xs:string" use="optional" />
+		<xs:attribute name="plotShadow" type="booleanType" use="optional" />
+		<xs:attribute name="polar" type="booleanType" use="optional" />
+		<xs:attribute name="reflow" type="booleanType" use="optional" />
+		<xs:attribute name="selectionMarkerFill" type="xs:string" use="optional" />
+		<xs:attribute name="shadow" type="booleanType" use="optional" />
+		<xs:attribute name="showAxes" type="booleanType" use="optional" />
+		<xs:attribute name="spacing" type="xs:string" use="optional" />
+		<xs:attribute name="spacingBottom" type="xs:string" use="optional" />
+		<xs:attribute name="spacingLeft" type="xs:string" use="optional" />
+		<xs:attribute name="spacingRight" type="xs:string" use="optional" />
+		<xs:attribute name="spacingTop" type="xs:string" use="optional" />
+		<xs:attribute name="style" type="xs:string" use="optional" />
+		<xs:attribute name="theme" type="xs:string" use="optional" />
+		<xs:attribute name="tooltip" type="xs:string" use="optional" />
+		<xs:attribute name="zclass" type="xs:string" use="optional" />
+		<xs:attribute name="zoomType" type="xs:string" use="optional" />
+		<xs:attribute name="onSelection" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="mouseAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attributeGroup ref="plotAttrGroup" />
 	</xs:complexType>
     <!-- checkbox -->
 	<xs:element name="checkbox" type="checkboxType" />
