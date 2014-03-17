@@ -51,7 +51,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	
 	onFloatUp: function (ctl) {
-		if (jq(this.getPopupNode_()).is(':animated') || (!this._inplace && !this.isOpen()))
+		if ((!this._inplace && !this.isOpen()) || jq(this.getPopupNode_()).is(':animated'))
 			return;
 		var wgt = ctl.origin;
 		if (!zUtl.isAncestor(this, wgt)) {
@@ -90,13 +90,16 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	onScroll: function (wgt) {
-		// ZK-1552: fix the position of popup when scroll
-		if (wgt) {
-			var inp = this.getInputNode();
-			if (zk(inp).isScrollIntoView())
-				zk(this.getPopupNode_()).position(inp, "after_start");
-			else
-				this.close();
+		// ZK-2211 Popup position not properly fixed in listbox
+		if (this.isOpen()) {
+			// ZK-1552: fix the position of popup when scroll
+			if (wgt) {
+				var inp = this.getInputNode();
+				if (zk(inp).isScrollIntoView())
+					zk(this.getPopupNode_()).position(inp, "after_start");
+				else
+					this.close();
+			}
 		}
 	},
 	/** Drops down or closes the list of combo items ({@link Comboitem}.

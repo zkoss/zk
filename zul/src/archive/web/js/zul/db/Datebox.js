@@ -480,12 +480,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			data.value = inpValue;
 	},
 	onScroll: function (wgt) {
-		// ZK-1552: fix the position of popup when scroll
-		if (wgt && (pp = this._pop))
-			if (zk(this).isScrollIntoView())
-				_reposition(this, true);
-			else
-				pp.close();
+		// ZK-2211 Popup position not properly fixed in listbox
+		if (this.isOpen()) {
+			// ZK-1552: fix the position of popup when scroll
+			if (wgt && (pp = this._pop))
+				if (zk(this).isScrollIntoView())
+					_reposition(this, true);
+				else
+					pp.close();
+		}
 	},
 	/** Returns the label of the time zone
 	 * @return String
@@ -668,11 +671,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		evt.stop();
 	},
 	onFloatUp: function (ctl) {
-		var db = this.parent;
-		if (!zUtl.isAncestor(db, ctl.origin)) {
-			this.close(true);
-			db._inplaceout = true;
-			_blurInplace(db);
+		if (this.isOpen()) {
+			var db = this.parent;
+			if (!zUtl.isAncestor(db, ctl.origin)) {
+				this.close(true);
+				db._inplaceout = true;
+				_blurInplace(db);
+			}
 		}
 	},
 	bind_: function () {
