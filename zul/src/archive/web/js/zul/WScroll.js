@@ -159,14 +159,14 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		}
 		var move;
 		if (dg._isVer) {
-			move = dg._epos.offsetTop,
+			move = zk.parseInt(dg._epos.style.top),
 				end = dg._end;
 			if (move > end)
 				move = end;
 			jq(dg.node).animate({top: move + 'px'}, 400, 'swing');
 			
 		} else {
-			move = dg._epos.offsetLeft,
+			move = zk.parseInt(dg._epos.style.left),
 				end = dg._end;
 			if (move > end)
 				move = end;
