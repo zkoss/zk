@@ -1,0 +1,36 @@
+<window>
+	<div>1. when drag file into zul, the dropupload should be overlay listbox</div>
+	<div>2. click 'clear anchor', then drag file into zul, the dropupload should be below the button</div>
+	<vlayout style="padding:10px">
+		<label value="Drop files to upload" />
+		<listbox id="fileList">
+			<listhead>
+				<listheader label="Filename" />
+				<listheader label="Size" />
+				<listheader label="Date" />
+			</listhead>
+			<listitem>
+				<listcell label="word.doc" />
+				<listcell label="12,000 bytes" />
+				<listcell label="2014-01-12 12:12" />
+			</listitem>
+			<listitem>
+				<listcell label="excel.xls" />
+				<listcell label="24,2320 bytes" />
+				<listcell label="2014-03-10 10:12" />
+			</listitem>
+			<listitem>
+				<listcell label="text.txt" />
+				<listcell label="123 bytes" />
+				<listcell label="2014-01-01 02:12" />
+			</listitem>
+
+		</listbox>
+	</vlayout>
+	<button label="clear anchor" onClick="upload.setAnchor(null)"></button>
+
+	<dropupload width="200px" id="upload" />
+	<zscript>
+		upload.setAnchor(fileList);
+	</zscript>
+</window>

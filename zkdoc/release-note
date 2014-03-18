@@ -1,5 +1,6 @@
 ZK 7.0.2
 * Features
+  ZK-2207: Dropupload Component support anchor
 
 * Bugs
   ZK-2192: Combobox button does not work when other component is animating
