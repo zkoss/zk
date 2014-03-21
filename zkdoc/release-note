@@ -8,6 +8,7 @@ ZK 7.0.2
   ZK-2185: Setting listitems draggable&droppable makes inner listbox not showing correctly in mold=select
   ZK-2211: Popup position not properly fixed in listbox
   ZK-2221: Biglistbox JS errors, when the Matrix model returns zero sizes
+  ZK-2220: Biglistbox with frozen horizontal scrollbar problems
 
 * Upgrade Notes
 
