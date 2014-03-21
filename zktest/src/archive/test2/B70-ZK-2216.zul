@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2216.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Mar 21, 2014  4:48:14 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+The page should be displayed in 10 seconds
+<zscript><![CDATA[
+List l = new ArrayList();
+	for (int i = 0; i < 300; i++) {
+		l.add("item" + i);
+	}
+ListModelList _model = new ListModelList(l);
+]]></zscript>
+	<div hflex="1" vflex="1">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<custom-attributes org.zkoss.zul.listbox.initRodSize="100"/>
+		<listbox model="${_model}"
+			hflex="1" vflex="1">
+			<listhead>
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+				<listheader width="200px" hflex="1" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell>
+						<combobox  width="200px" inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true" buttonVisible="false">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox  hflex="1"  inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox inplace="true">
+							<comboitem label="item 1" />
+						</combobox>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>

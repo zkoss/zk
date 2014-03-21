@@ -80,38 +80,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.RoundUtl = {
 	/** Synchronizes the input element's width of this component
 	*/
-	syncWidth: function (wgt, rightElem) {
+	syncWidth: function (wgt, rightElem, isOnSize/*speed up*/) {
 		var node = wgt.$n();
-		if (!zk(node).isRealVisible() || (!wgt._inplace && !node.style.width))
+		if ((!wgt._inplace && !node.style.width) || (!isOnSize && !zk(node).isRealVisible()))
 			return;
 		
-		var inp = wgt.getInputNode(),
-			ns = node.style;
-
-		if (!ns.width && wgt._inplace &&
-			wgt._buttonVisible !== false) {
-			ns.width = jq.px0(this.getOuterWidth(wgt, true));
+		// fixed for ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
+		// calculate only when the width has size
+		if (node.style.width) {
+			var width = node.offsetWidth,
+				// ignore left border, as it is countered by margin-left
+				rightElemWidth = rightElem ? rightElem.offsetWidth : 0;
+			wgt.getInputNode().style.width = jq.px0(width - rightElemWidth);
 		}
-
-		var width = this.getOuterWidth(wgt, wgt.inRoundedMold()),
-			// ignore left border, as it is countered by margin-left
-			rightElemWidth = rightElem ? rightElem.offsetWidth : 0;
-		inp.style.width = jq.px0(width - rightElemWidth);
-	},
-	getOuterWidth: function(wgt, rmInplace) {
-		var node = wgt.$n(),
-			width = node.offsetWidth,
-			$n = jq(node),
-			inc = wgt.getInplaceCSS(),
-			shallClean = $n.hasClass(inc);
-
-		if (rmInplace && shallClean) {
-    		$n.removeClass(inc).addClass(inc);
-		}
-		if (!wgt.getWidth() && !wgt.getHflex()) {
-			width = wgt.$n('real').offsetWidth + wgt.$n('btn').offsetWidth;
-		}
-		return width;
 	},
 	// @since 7.0.0
 	buttonVisible: function (wgt, v) {
@@ -145,7 +126,7 @@ zul.inp.RoundUtl = {
 		// should not clear input node width if hflex is true
 		if (!wgt.getHflex() && (!width || width.indexOf('%') != -1))
 			wgt.getInputNode().style.width = '';
-		this.syncWidth(wgt, wgt.$n('btn'));
+		this.syncWidth(wgt, wgt.$n('btn'), true);
 	}
 };
 var InputWidget =
