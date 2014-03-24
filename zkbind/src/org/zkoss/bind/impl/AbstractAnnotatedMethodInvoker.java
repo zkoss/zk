@@ -129,8 +129,8 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 					//check if overrode the same annotated method
 					sign = MiscUtil.toSimpleMethodSignature(currm);
 					if(signs.contains(sign)){
-						_log.warn("more than one %s method that has same signature '%s' " +
-								"in the hierarchy of '%s', the method in extended class will be call " +
+						_log.warn("more than one {} method that has same signature '{}' " +
+								"in the hierarchy of '{}', the method in extended class will be call " +
 								"more than once ", annotationClass.getSimpleName(), sign, vmClass);
 					}else{
 						signs.add(sign);

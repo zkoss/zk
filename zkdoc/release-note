@@ -13,6 +13,7 @@ ZK 7.0.2
   ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
   ZK-2195: Focus input in modal window in IE
   ZK-2194: Clients.scrollIntoView() not working on a listitem within a listbox without scrollbar, but the enclosing page has a scrollbar
+  ZK-2218: Buggy log message '%s'
 
 * Upgrade Notes
 
