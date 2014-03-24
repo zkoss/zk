@@ -11,6 +11,7 @@ ZK 7.0.2
   ZK-2220: Biglistbox with frozen horizontal scrollbar problems
   ZK-2219: Header getting sometimes out of synch with cells in Biglistbox
   ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
+  ZK-2195: Focus input in modal window in IE
 
 * Upgrade Notes
 

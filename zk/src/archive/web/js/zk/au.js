@@ -1455,8 +1455,17 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param zk.Widget wgt the widget.
 	 */
 	focus: function (wgt) {
-		if (wgt)
-			wgt.focus(0); //wgt.focus() failed in FF
+		if (wgt) {
+			// bug in ZK-2195, the focus command executed after window's doModal() for IE
+			// so we have to do the same as that code in Window.js
+			setTimeout(function () {
+				zk.afterAnimate(function () {
+					if (zk.ie9_)
+						wgt.focus(100);
+					else
+						wgt.focus(0); //wgt.focus() failed in FF
+				}, -1)});
+		}
 	},
 	/** Selects all text of the specified widget.
 	 * It invokes the <code>select</code> method, if any, of the widget.
