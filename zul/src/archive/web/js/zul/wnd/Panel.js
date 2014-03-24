@@ -579,10 +579,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		this._hideShadow();
 		if (data.width != s.width) {
-			s.width = data.width;
+			this._width = s.width = data.width;
 		}
 		if (data.height != s.height) {
-			s.height = data.height;
+			this._height = s.height = data.height;
 			this._fixHgh(true);
 		}
 
@@ -885,7 +885,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
 	},
 	_doMouseMove: function (evt) {
-		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
+		if (this._sizer && zUtl.isAncestor(this, evt.target)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this.isMovable() ? this.$n('head') : false;
@@ -1067,7 +1067,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var el = dg.node,
 			wgt = dg.control;
 
-		if (wgt._maximized || !wgt._open || (evt.target != wgt && evt.target != wgt.panelchildren)) return true;
+		if (wgt._maximized || !wgt._open) return true;
 
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);

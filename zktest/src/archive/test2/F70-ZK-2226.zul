@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F70-ZK-2226.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Mar 24, 2014  6:33:31 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. When you resize panel's width, all of the width in the same column will be updated.
+<separator/>
+2. After resize the panel's width and height, you can move it to another place by drag and drop, the size of that panel should keep the same as before dragged.
+<portallayout>
+    <portalchildren width="30%">
+        <panel id="p1" height="150px" title="Panel 1" sizable="true" border="normal">
+            <panelchildren>
+                <div width="100%" height="100%" style="background-color: blue"/>
+            </panelchildren>
+        </panel>
+        <panel id="p2" height="300px" title="Panel 2" sizable="true" border="normal">
+            <panelchildren>
+                <div width="100%" height="100%" style="background-color: green"/>
+            </panelchildren>
+        </panel>
+    </portalchildren>
+    <portalchildren width="70%">
+        <panel id="p3" height="150px" title="Panel 3" sizable="true">
+            <panelchildren>
+                <div width="100%" height="100%" style="background-color: red"/>
+            </panelchildren>
+        </panel>
+    </portalchildren>
+</portallayout>
+</zk>

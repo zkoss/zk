@@ -1,6 +1,7 @@
 ZK 7.0.2
 * Features
   ZK-2207: Dropupload Component support anchor
+  ZK-2226: Portallayout should support resizable portalchildren
 
 * Bugs
   ZK-2192: Combobox button does not work when other component is animating
@@ -14,6 +15,7 @@ ZK 7.0.2
   ZK-2195: Focus input in modal window in IE
   ZK-2194: Clients.scrollIntoView() not working on a listitem within a listbox without scrollbar, but the enclosing page has a scrollbar
   ZK-2218: Buggy log message '%s'
+  ZK-1235: Resizing of Panels in Portal Layout is very buggy
 
 * Upgrade Notes
 

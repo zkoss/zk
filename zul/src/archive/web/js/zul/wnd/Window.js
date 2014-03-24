@@ -843,13 +843,13 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (data.width != s.width) {
 			s.width = data.width;
 			// ZK-1826: should save width
-			this._lastSize.w = s.width;
+			this._width = this._lastSize.w = s.width;
 		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
 			// ZK-1826: should save height
-			this._lastSize.h = s.height;
+			this._height = this._lastSize.h = s.height;
 		}
 
 		if (data.left != s.left || data.top != s.top) {
