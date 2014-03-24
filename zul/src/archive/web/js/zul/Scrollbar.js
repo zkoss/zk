@@ -337,6 +337,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		}
 		//onScrollEnd callback
 		this._onScrollEnd();
+
+		// Bug ZK-2194
+		// always sync with native scrollbar, if any.
+		zk(dom).scrollIntoView();
 	},
 	isScrollIntoView: function (dom) {
 		var cave = this.cave,
