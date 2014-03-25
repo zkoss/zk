@@ -1,6 +1,7 @@
   --------
 ZK 6.5.6
 * Features
+  ZK-2227: ZK Messages support Polish lang
 
 * Bugs
   ZK-2080: Chosenbox with ListSubModel not working if using template to render data
