@@ -1140,9 +1140,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					ftfakerbar.style.width = vScroll + 'px';
 			}
 		}
-		// Bug in B36-2841185.zul
-		if (zk.ie8 && this.isModel() && this.inPagingMold())
-			zk(this).redoCSS();
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {

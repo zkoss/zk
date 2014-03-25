@@ -18,6 +18,7 @@ ZK 7.0.2
   ZK-2218: Buggy log message '%s'
   ZK-1235: Resizing of Panels in Portal Layout is very buggy
   ZK-2210: improve zk portlet 2 integration
+  ZK-2228: Scroll position is reset after resizing column headers of listbox or grid with native scrollbar [IE9]
 
 * Upgrade Notes
 
