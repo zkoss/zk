@@ -103,6 +103,7 @@ public class HtmlPageRenders {
 	private static final String ATTR_DESKTOP_VISIBILITYCHANGE = "org.zkoss.desktop.visibilitychange.enabled";
 	/** Support Portlet 2.0 */
 	private static final String ATTR_PORTLET2_RESOURCEURL = "org.zkoss.portlet2.resourceURL";
+	private static final String ATTR_PORTLET2_NAMESPACE = "org.zkoss.portlet2.namespace";
 	
 	/**
 	* Set this library property to false to hide the zk version info.
@@ -692,12 +693,16 @@ public class HtmlPageRenders {
 				dt.removeAttribute(ATTR_DESKTOP_VISIBILITYCHANGE);
 				out.write("<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
 			}
-			String resourceURL = (String) page.getAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
+			String resourceURL = (String) page.getAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE),
+					namespace = (String) page.getAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
 			if(resourceURL != null) {
 				page.removeAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
-				out.write("<script type=\"text/javascript\">zk.portlet2AjaxURI = '");
-				out.write(resourceURL);
-				out.write("';</script>");
+				page.removeAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
+				// B65-ZK-2210: store url and namespace per desktop.
+				out.write("<script type=\"text/javascript\">if(!zk.portlet2Data) zk.portlet2Data = {};\n" +
+						"zk.portlet2Data['" + dt.getId() + "'] = {" +
+						"resourceURL: '" + resourceURL + "', " +
+						"namespace: '" + namespace + "'};</script>");
 			}
 		}
 		outSEOContent(page, out);

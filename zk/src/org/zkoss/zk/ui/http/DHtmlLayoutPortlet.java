@@ -292,6 +292,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					if (isJSR286) {
 						ResourceURL url = response.createResourceURL();
 						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
+						page.setAttribute("org.zkoss.portlet2.namespace", response.getNamespace(), Page.PAGE_SCOPE);
 					}
 					wappc.getUiEngine().execNewPage(exec, richlet, page,
 						out != null ? out: response.getWriter());
@@ -307,6 +308,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					if (isJSR286) {
 						ResourceURL url = response.createResourceURL();
 						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
+						page.setAttribute("org.zkoss.portlet2.namespace", response.getNamespace(), Page.PAGE_SCOPE);
 					}
 					wappc.getUiEngine().execNewPage(exec, pagedef, page,
 						out != null ? out: response.getWriter());

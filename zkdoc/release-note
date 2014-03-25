@@ -2,6 +2,7 @@ ZK 7.0.2
 * Features
   ZK-2207: Dropupload Component support anchor
   ZK-2226: Portallayout should support resizable portalchildren
+  ZK-2227: ZK Messages support Polish lang
 
 * Bugs
   ZK-2192: Combobox button does not work when other component is animating
@@ -16,6 +17,7 @@ ZK 7.0.2
   ZK-2194: Clients.scrollIntoView() not working on a listitem within a listbox without scrollbar, but the enclosing page has a scrollbar
   ZK-2218: Buggy log message '%s'
   ZK-1235: Resizing of Panels in Portal Layout is very buggy
+  ZK-2210: improve zk portlet 2 integration
 
 * Upgrade Notes
 
@@ -175,6 +177,7 @@ Nov 26, 2013
     --------
 ZK 6.5.6
 * Features
+  ZK-2227: ZK Messages support Polish lang
 
 * Bugs
   ZK-2080: Chosenbox with ListSubModel not working if using template to render data
@@ -192,6 +195,7 @@ ZK 6.5.6
   ZK-2178: NullPointerException showed when biglistbox doesn't provide any MatrixModel
   ZK-2185: Setting listitems draggable&droppable makes inner listbox not showing correctly in mold=select
   ZK-2211: Popup position not properly fixed in listbox
+  ZK-2210: improve zk portlet 2 integration
   
   --------
 ZK 6.5.5

@@ -631,6 +631,11 @@ zAu = {
 			async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome. 
 				// conservative, though it shall be (!zk.safari || zk.ff >= 4)
 		}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
+		
+		// B65-ZK-2210: clean up portlet2 data when desktop removed. 
+		if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id]) {
+			delete zk.portlet2Data[dt.id];
+		}
 	},
 
 	////Ajax////
@@ -790,22 +795,28 @@ zAu.beforeSend = function (uri, req, dt) {
 	encode: function (j, aureq, dt) {
 		var target = aureq.target,
 			opts = aureq.opts||{},
-			content = j ? '': 'dtid='+dt.id;
+			portlet2Namespace = '';
+			
+		// B65-ZK-2210: add porlet namespace
+		if(zk.portlet2Data && zk.portlet2Data[dt.id]) {
+			portlet2Namespace = zk.portlet2Data[dt.id].namespace || '';
+		}
+		var content = j ? '': portlet2Namespace + 'dtid='+dt.id;
 
-		content += '&cmd_'+j+'='+aureq.name
+		content += '&' + portlet2Namespace + 'cmd_'+j+'='+aureq.name;
 		if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
-			content += '&opt_'+j+'=i';
+			content += '&' + portlet2Namespace + 'opt_'+j+'=i';
 			//thus, the server will ignore it if session timeout
 
 		if (target && target.className != 'zk.Desktop')
-			content += "&uuid_"+j+"="+target.uuid;
+			content += '&' + portlet2Namespace + 'uuid_'+j+'='+target.uuid;
 
 		var data = aureq.data, dtype = typeof data;
 		if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
 		|| jq.isArray(data))
 			data = {'':data};
 		if (data)
-			content += '&data_'+j+'='+encodeURIComponent(toJSON(target, data));
+			content += '&' + portlet2Namespace + 'data_'+j+'='+encodeURIComponent(toJSON(target, data));
 		return content;
 	},
 
@@ -877,8 +888,14 @@ zAu.beforeSend = function (uri, req, dt) {
 			content += zAu.encode(j, aureq, dt);
 			zk.copy(rtags, (aureq.opts||{}).rtags);
 		}
-		if (zk.portlet2AjaxURI)
-			requri = zk.portlet2AjaxURI;
+		
+		// B65-ZK-2210: get resourceURL by desktop id
+		if(zk.portlet2Data && zk.portlet2Data[dt.id]) {
+			requri = zk.portlet2Data[dt.id].resourceURL;
+		}
+		
+		//if (zk.portlet2AjaxURI)
+			//requri = zk.portlet2AjaxURI;
 		if (content)
 			ajaxSendNow({
 				sid: seqId, uri: requri, dt: dt, content: content,
