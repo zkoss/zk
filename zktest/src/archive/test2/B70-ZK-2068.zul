@@ -13,7 +13,7 @@
 		</portallayout>
 		<zscript>
 			public void click(){
-			  	child1.setWidth(25+"px");
+			  	child1.setWidth("25px");
 			}
 		</zscript>
 	</window>
