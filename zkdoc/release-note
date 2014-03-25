@@ -18,6 +18,7 @@ ZK 6.5.6
   ZK-2178: NullPointerException showed when biglistbox doesn't provide any MatrixModel
   ZK-2185: Setting listitems draggable&droppable makes inner listbox not showing correctly in mold=select
   ZK-2211: Popup position not properly fixed in listbox
+  ZK-2210: improve zk portlet 2 integration
   
   --------
 ZK 6.5.5
