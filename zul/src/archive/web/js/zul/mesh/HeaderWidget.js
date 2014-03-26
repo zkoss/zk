@@ -340,32 +340,36 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
 			mesh = wgt.getMeshWidget(),
-			wd = dg._zszofs,
+			wd = jq.px(dg._zszofs),
 			hdfaker = mesh.ehdfaker,
 			bdfaker = mesh.ebdfaker,
 			ftfaker = mesh.eftfaker,
 			cidx = zk(wgt.$n()).cellIndex();
 		
-		//1. set resized width to colgroup col
 		var hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes;
-		hdcols[cidx].style.width = bdcols[cidx].style.width = jq.px(wd);
-			
-		//2. store resized width
+		
+		//1. store resized width
+		// B70-ZK-2199: convert percent width to fixed width
 		var wds = [];
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			var stylew = hdcols[i].style.width,
-				origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
-			
+				origWd = w._origWd, // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
+				isFixedWidth = stylew && stylew.indexOf('%') < 0;
+
 			if (origWd) {
 				w._width = wds[i] = origWd;
 			} else {
-				w._width = wds[i] = stylew ? stylew : jq.px0(w.$n().offsetWidth);
+				w._width = wds[i] = isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth);
 			}
-			
-			if (!stylew)
+			if (!isFixedWidth)
 				hdcols[i].style.width = bdcols[i].style.width = w._width;
 		}
+
+		//2. set resized width to colgroup col
+		if (!wgt.origWd)
+			wgt._width = wds[cidx] = wd;
+		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
 		
 		//3. clear width=100% setting, otherwise it will try to expand to whole width
 		mesh.eheadtbl.width = '';
@@ -381,7 +385,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd + 'px',
+			width: wd ,
 			widths: wds
 		}, evt.data), null, 0);
 		
