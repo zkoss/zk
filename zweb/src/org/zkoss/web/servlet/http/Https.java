@@ -576,8 +576,9 @@ public class Https extends Servlets {
 				if (agent.contains("Trident")) {
 					filename = URLEncoder.encode(filename, "UTF-8");
 				} else if (agent.contains("Mozilla")) {
+					byte[] bytes = filename.getBytes("UTF-8");
 					filename = "";
-	                for (byte b: filename.getBytes("UTF-8")) {
+	                for (byte b: bytes) {
 	                	filename += (char)(b & 0xff);
 	                }
 				}
