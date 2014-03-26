@@ -391,11 +391,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			return;
 		}
 
-		// select current time
-		if (this._pop.isOpen()) {
-			this._pop.doKeyDown_(evt);
-		}
-		
 		//Request 1537962: better responsive
 		if (bOpen && (keyCode == 13 || keyCode == 27)) { //ENTER or ESC
 			if (keyCode == 13) this.enterPressed_(evt);
@@ -406,6 +401,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (keyCode == 18 || keyCode == 27 || keyCode == 13
 		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
+		
+		// ZK-2202: should not trigger too early when key code is ENTER
+		// select current time
+		if (this._pop.isOpen()) {
+			this._pop.doKeyDown_(evt);
+		}
 	},
 	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
 	 * <p>call the close function

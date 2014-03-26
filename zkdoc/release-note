@@ -19,6 +19,7 @@ ZK 7.0.2
   ZK-1235: Resizing of Panels in Portal Layout is very buggy
   ZK-2210: improve zk portlet 2 integration
   ZK-2228: Scroll position is reset after resizing column headers of listbox or grid with native scrollbar [IE9]
+  ZK-2202: Datebox is not updated properly when enter pressed in inner timebox
 
 * Upgrade Notes
 
