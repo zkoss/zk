@@ -1,0 +1,39 @@
+<zk>
+	<div>1. Scroll browser window should not be slow.</div>
+	<div>2. Scroll to the middle of listbox and click combobox button or datebox button, 
+		then scroll up util the combobox or datebox is out of view, the popup should close.</div>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2211_ViewModel')">
+		<div height="400px" style="border: 1px solid red;">
+			something before groupbox
+		</div>
+		<listbox id="the-large-listbox" model="@load(vm.model)"
+			height="200px" xmlns:a="client/attribute" a:data-scrollable="true">
+			<listhead>
+				<listheader width="200px" />
+				<listheader width="200px" />
+				<listheader width="200px" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell>
+						<textbox value="123"></textbox>
+					</listcell>
+					<listcell>
+						<datebox />
+					</listcell>
+					<listcell>
+						<combobox>
+							<comboitem label="item 1" />
+							<comboitem label="item 2" />
+							<comboitem label="item 3" />
+						</combobox>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<div height="600px" style="border: 1px solid red;">
+			something after groupbox
+		</div>
+	</div>
+</zk>

@@ -906,7 +906,31 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @type boolean
 	 * @since 5.0.1
 	 */
-	onChangingForced: true
+	onChangingForced: true,
+	
+	// for errorbox, datebox, combowidget
+	_isInView: function(wgt) {
+		var desktop = wgt.desktop,
+			p = wgt.parent,
+			n = wgt.getInputNode(),
+			bar = null, 
+			inView = true;
+	
+		// ZK-2069: check whether the input is shown in parents' viewport.
+		if (!zk.ie8_) // fine tune for ie8
+			while (p && p != desktop) {
+				bar = p._scrollbar;
+				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+					inView = bar.isScrollIntoView(n);
+					if (!inView)
+						return inView;
+				}
+				bar = null;
+				p = p.parent;
+			}
+		// ZK-2069: should check native and fake scrollbar case
+		return inView && zk(n).isScrollIntoView(true);
+	}
 });
 
 /** @class zul.inp.InputCtrl
