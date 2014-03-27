@@ -426,9 +426,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
 	afterResetChildSize_: function () {
 		for (var kid = this.firstChild, vert = this.isVertical(); kid; kid = kid.nextSibling) {				
-			var chdex = vert ? kid.$n('chdex').firstChild : kid.$n('chdex');
-			if (chdex)
-				chdex.style.minWidth = '1px';
+			// ZK-2231: kid may not bind to desktop yet (client rod enabled)
+			if (kid.desktop) { 
+				var chdex = vert ? kid.$n('chdex').firstChild : kid.$n('chdex');
+				if (chdex)
+					chdex.style.minWidth = '1px';
+			}
 		}
 	},
 	//bug#3042306
