@@ -21,6 +21,7 @@ ZK 6.5.6
   ZK-2211: Popup position not properly fixed in listbox
   ZK-2210: improve zk portlet 2 integration
   ZK-2214: [IE8] grid frozen no show horizontal scroll bar when column visible = "false"
+  ZK-2200: Navigate combobox drop down list by "down" key not work correctly if contains empty string
   ZK-2231: Invisible window inside vbox cause js error when calculating flex size
   
   --------
