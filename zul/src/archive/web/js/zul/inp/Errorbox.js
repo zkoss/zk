@@ -41,7 +41,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
 		// ZK-2069: show only if is in view
 		setTimeout(function(){
-			if (self.parent && self.isInView()) //Bug #3067998: if 
+			if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if 
 				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
 		}, 50); // B36-2935398: add time
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
@@ -92,37 +92,15 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
 	},
-	
-	isInView: function() {
-		var desktop = this.desktop,
-			inp = p = this.parent,
-			n = inp.$n(),
-			bar = null, 
-			inView = true;
-		
-		// ZK-2069: check whether the input is shown in parents' viewport.
-		if (!zk.ie8_) // fine tune for ie8
-			while (p && p != desktop) {
-				bar = p._scrollbar;
-				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
-					inView = bar.isScrollIntoView(n);
-					if (!inView)
-						return inView;
-				}
-				bar = null;
-				p = p.parent;
-			}
-		
-		// ZK-2069: should check native and fake scrollbar case
-		return inView && zk(inp).isScrollIntoView(true);
+	getInputNode: function() {
+		return this.parent ? this.parent.$n() : null;
 	},
-	
 	/** Reset the position on scroll
 	 * @param zk.Widget wgt
 	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
-			if (this.isInView()) {// B65-ZK-1632
+			if (zul.inp.InputWidget._isInView(this)) {// B65-ZK-1632
 				this.position(this.parent, null, 'end_before', {overflow:true});
 				this._fixarrow();
 			} else {

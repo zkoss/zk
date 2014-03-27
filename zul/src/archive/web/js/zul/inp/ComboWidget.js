@@ -90,12 +90,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	onScroll: function (wgt) {
-		// ZK-2211 Popup position not properly fixed in listbox
 		if (this.isOpen()) {
 			// ZK-1552: fix the position of popup when scroll
 			if (wgt) {
 				var inp = this.getInputNode();
-				if (zk(inp).isScrollIntoView())
+				// ZK-2211: should close when the input is out of view
+				if (inp && zul.inp.InputWidget._isInView(this))
 					zk(this.getPopupNode_()).position(inp, "after_start");
 				else
 					this.close();

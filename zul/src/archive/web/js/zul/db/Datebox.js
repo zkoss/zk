@@ -480,11 +480,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			data.value = inpValue;
 	},
 	onScroll: function (wgt) {
-		// ZK-2211 Popup position not properly fixed in listbox
 		if (this.isOpen()) {
 			// ZK-1552: fix the position of popup when scroll
 			if (wgt && (pp = this._pop))
-				if (zk(this).isScrollIntoView())
+				// ZK-2211: should close when the input is out of view
+				if (this.getInputNode() && zul.inp.InputWidget._isInView(this))
 					_reposition(this, true);
 				else
 					pp.close();
