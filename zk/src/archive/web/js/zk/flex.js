@@ -223,13 +223,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var margin = wgt.getMarginSize_(o);
 				if (zk.webkit && margin < 0) 
 					margin = 0;
+
 				
+				// ZK-970: refixed for caption 
 				var map = {},
 					n = wgt.$n(), 
 					hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0,
-					cavesz = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : 0;
+					size = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : max;
 
-				map[sizePos] = max + cavesz + wgt[contentPos]() + margin;
+				map[sizePos] = size + wgt[contentPos]() + margin;
 				var s = wgt.setFlexSize_(map, true);
 				sz = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
 				if (sz && sz[sizePos] >= 0)

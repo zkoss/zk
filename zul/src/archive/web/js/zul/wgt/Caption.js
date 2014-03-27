@@ -41,11 +41,22 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" />' + (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label: img;
 	},
-	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
+	updateDomContent_: function () {
 		var cnt = this.domContent_(),
-			dn = this.$n('cave');
-		if (dn) 
-			jq(dn).html(cnt ? cnt : '&nbsp;');
+			dn = this.$n('cave'),
+			size = this.nChildren,
+			total = jq(dn).contents().length,
+			index = 0;
+		
+		 // B50-ZK-313: only replace dom content
+		if (dn) {
+			// remove dom content
+			jq(dn).contents().filter(function(){
+			    return (size + index++) < total;
+			}).remove();
+			
+			jq(dn).prepend(cnt ? cnt : '&nbsp;');
+		} 
 	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
