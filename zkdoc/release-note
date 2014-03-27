@@ -20,6 +20,7 @@ ZK 6.5.6
   ZK-2185: Setting listitems draggable&droppable makes inner listbox not showing correctly in mold=select
   ZK-2211: Popup position not properly fixed in listbox
   ZK-2210: improve zk portlet 2 integration
+  ZK-2231: Invisible window inside vbox cause js error when calculating flex size
   
   --------
 ZK 6.5.5
