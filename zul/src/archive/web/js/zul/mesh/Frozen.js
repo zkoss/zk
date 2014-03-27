@@ -53,8 +53,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		if (bdfaker) {
 			var leftWidth = 0;
-			for (var i = wgt._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling)
-				leftWidth += n.offsetWidth;
+			for (var i = wgt._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling) {
+				// B65-ZK-2214: invisible dom's width does not equal to 0 in IE8.
+				if (!zk.ie8_ || jq(n).is(':visible'))
+					leftWidth += n.offsetWidth;
+			}
 
 			wgt.$n('cave').style.width = jq.px0(leftWidth);
 			var scroll = wgt.$n('scrollX'),
