@@ -961,7 +961,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (ctrl) this._focus(lastrow);
 			else this._select(lastrow, evt);
 			this._syncFocus(lastrow);
-			zk(lastrow).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
+			// ZK-2193: should exclude horizontal
+			zk(lastrow).scrollIntoView(this.ebody, true); // Bug #1823947 and #1823278
 		}
 
 		return _afterChildKey(evt);
