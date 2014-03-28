@@ -82,7 +82,7 @@ zjq = function (jq) { //ZK extension
 		this.style.MozUserSelect = '';
 	}
 
-	function _scrlIntoView(outer, inner, info) {
+	function _scrlIntoView(outer, inner, info, excludeHorizontal) {
 		if (outer && inner) {
 			var ooft = zk(outer).revisedOffset(),
 				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
@@ -106,14 +106,16 @@ zjq = function (jq) { //ZK extension
 				updated = true;
 			}
 			
-			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position
-			if (outer.scrollLeft > left) {
-				outer.scrollLeft = left;
-				updated = true;
-			} else if (right > outer.clientWidth + outer.scrollLeft) {
-				outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
-				updated = true;
-			}
+			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position.
+			// ZK-2193: scrollIntoView support exclude horizontal
+			if (!excludeHorizontal)
+				if (outer.scrollLeft > left) {
+					outer.scrollLeft = left;
+					updated = true;
+				} else if (right > outer.clientWidth + outer.scrollLeft) {
+					outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
+					updated = true;
+				}
 			
 			if (updated || !info) {
 				if (!info)
@@ -614,14 +616,15 @@ zjq.prototype = {
 	/** Causes the first matched element to scroll into view.
 	 * @param DOMElement parent scrolls the first matched element into the parent's view,
 	 * if any. Otherwise, document.body is assumed. 
+	 * @param boolean if true, it means only vertical orient works.
 	 * @return jqzk this object
 	 */
-	scrollIntoView: function (parent) {
+	scrollIntoView: function (parent, excludeHorizontal) {
 		var n = this.jq[0];
 		if (n) {
 			parent = parent || document.body.parentNode;
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
-				c = _scrlIntoView(p, n, c);
+				c = _scrlIntoView(p, n, c, excludeHorizontal);
 		}
 		return this;
 	},
