@@ -1301,7 +1301,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		if (this._nspan < 0) { //span to all columns
 			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
-				if (!zk(hdcol).isVisible()) {
+				// ZK-2222: should check visibility
+				if (!zk(hdcol).isVisible(true)) {
 					bdcol = bdcol.nextSibling;
 					if (ftcol)
 						ftcol = ftcol.nextSibling;

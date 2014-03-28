@@ -26,6 +26,7 @@ ZK 7.0.2
   ZK-2231: Invisible window inside vbox cause js error when calculating flex size
   ZK-2193: Listbox will scroll in horizontal direction when navigation by keyboard
   ZK-2116: possible XSS Vulnerability for Listcell
+  ZK-2222: listhead not aligned with listitem
 
 * Upgrade Notes
 
