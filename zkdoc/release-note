@@ -25,6 +25,7 @@ ZK 7.0.2
   ZK-2200: Navigate combobox drop down list by "down" key not work correctly if contains empty string
   ZK-2231: Invisible window inside vbox cause js error when calculating flex size
   ZK-2193: Listbox will scroll in horizontal direction when navigation by keyboard
+  ZK-2116: possible XSS Vulnerability for Listcell
 
 * Upgrade Notes
 
@@ -207,6 +208,7 @@ ZK 6.5.6
   ZK-2200: Navigate combobox drop down list by "down" key not work correctly if contains empty string
   ZK-2231: Invisible window inside vbox cause js error when calculating flex size
   ZK-2193: Listbox will scroll in horizontal direction when navigation by keyboard
+  ZK-2116: possible XSS Vulnerability for Listcell
   
   --------
 ZK 6.5.5

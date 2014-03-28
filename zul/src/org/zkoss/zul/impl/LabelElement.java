@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import org.zkoss.json.JSONValue;
+import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Objects;
 
 /**
@@ -41,7 +43,7 @@ abstract public class LabelElement extends XulElement {
 		if (label == null) label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
-			smartUpdate("label", _label);
+			smartUpdate("label", new JavaScriptValue(JSONValue.toJSONString(_label)));
 		}
 	}
 
@@ -50,7 +52,7 @@ abstract public class LabelElement extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "label", _label);
+		render(renderer, "label", new JavaScriptValue(JSONValue.toJSONString(_label)));
 		renderCrawlable(_label);
 	}
 	/** Renders the crawlable information.
