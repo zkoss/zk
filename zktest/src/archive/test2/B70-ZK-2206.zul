@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2206.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Mar 31, 2014  5:26:21 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript>
+Treechildren tc = new Treechildren();
+tc.setId("abc");
+</zscript>
+You should not see any java exception and then 
+
+<button label="Click this to see the log with a word 'true'">
+<attribute name="onClick">
+tree.appendChild(tc);
+Clients.evalJavaScript("zk.log(zk.Widget.$('$abc') != null)");
+</attribute>
+</button>
+<tree id="tree"/>
+</zk>

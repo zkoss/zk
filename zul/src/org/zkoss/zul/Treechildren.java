@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,10 +31,10 @@ import static org.zkoss.lang.Generics.cast;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -219,10 +220,26 @@ public class Treechildren extends XulElement {
 			Treerow tr = ((Treeitem)comp).getTreerow();
 			if (tr != null)
 				tr.smartUpdate(name, value);
-		} else
+		} else if (comp instanceof Tree) {
 			((Tree)comp).smartUpdate(name, value);
+		} else {
+			// do it later for bug ZK-2206
+			Map<String, Object> attributes = (Map<String, Object>) getAttribute("org.zkoss.zul.Treechildren_smartUpdate");
+			if (attributes == null) {
+				attributes = new LinkedHashMap<String, Object>(3);
+				setAttribute("org.zkoss.zul.Treechildren_smartUpdate", attributes);
+			}
+			attributes.put(name, value);
+		}
 	}
 
+	public void onPageAttached(Page newpage, Page oldpage) {
+		Map<String, Object> attributes = (Map<String, Object>) removeAttribute("org.zkoss.zul.Treechildren_smartUpdate");
+		if (attributes != null) {
+			for (Map.Entry<String, Object> me : attributes.entrySet())
+				smartUpdate(me.getKey(), me.getValue());
+		}
+	}
 	/**
 	 * An iterator used by visible children.
 	 */

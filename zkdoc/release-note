@@ -28,6 +28,7 @@ ZK 7.0.2
   ZK-2116: possible XSS Vulnerability for Listcell
   ZK-2235: Grid / Listbox ROD JS errors
   ZK-2191: Open detail cause infinite loop when overrided icon sclass
+  ZK-2206: Getting exception while adding id to TreeChild by using setId api
 
 * Upgrade Notes
 
