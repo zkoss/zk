@@ -27,6 +27,7 @@ ZK 7.0.2
   ZK-2193: Listbox will scroll in horizontal direction when navigation by keyboard
   ZK-2116: possible XSS Vulnerability for Listcell
   ZK-2235: Grid / Listbox ROD JS errors
+  ZK-2191: Open detail cause infinite loop when overrided icon sclass
 
 * Upgrade Notes
 
