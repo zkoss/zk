@@ -290,7 +290,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					if (isJSR286) {
 						ResourceURL url = response.createResourceURL();
 						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
-						page.setAttribute("org.zkoss.portlet2.namespace", response.getNamespace(), Page.PAGE_SCOPE);
+						page.setAttribute("org.zkoss.portlet2.namespace", getNamespace(response), Page.PAGE_SCOPE);
 					}
 					wappc.getUiEngine().execNewPage(exec, richlet, page,
 						out != null ? out: response.getWriter());
@@ -306,7 +306,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					if (isJSR286) {
 						ResourceURL url = response.createResourceURL();
 						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
-						page.setAttribute("org.zkoss.portlet2.namespace", response.getNamespace(), Page.PAGE_SCOPE);
+						page.setAttribute("org.zkoss.portlet2.namespace", getNamespace(response), Page.PAGE_SCOPE);
 					}
 					wappc.getUiEngine().execNewPage(exec, pagedef, page,
 						out != null ? out: response.getWriter());
@@ -322,6 +322,19 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 		return true; //success
 	}
+	
+	/** Returns the namespace for resource request parameters
+	 * <p>
+	 * Default: "".
+	 * @since 6.5.6
+	 */
+	protected String getNamespace(RenderResponse response) {
+		final String s = Library.getProperty("org.zkoss.zk.portlet2.namespacedParameter.enabled");
+		if (s == null || "false".equals(s))
+			return "";
+		return response.getNamespace();
+	}
+	
 	private static PageRenderPatch getRenderPatch() {
 		if (_prpatch != null)
 			return _prpatch;
