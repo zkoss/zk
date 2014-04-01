@@ -1,0 +1,15 @@
+<window>
+	<div>listhead should align with listitem</div>
+	<listbox span="true" width="200px">
+		<listhead sizable="true">
+			<listheader label="1" width="40px" />
+			<listheader label="2" width="40px" visible="false" />
+			<listheader label="3" width="40px" />
+		</listhead>
+		<listitem height="28px">
+			<listcell label="1" />
+			<listcell label="2" />
+			<listcell label="3" />
+		</listitem>
+	</listbox>
+</window>
