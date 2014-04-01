@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2106.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Apr 01, 2014  9:19:33 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window title="test" border="normal" height="100%" >
+Please resize the browser's window to shrink the width, the second columnlayout should not be put at the different line.
+<div style="padding:10px; background:yellow" width="50%">
+        <columnlayout  width="100%" style="background:trasparent; " height="250px">      	      		
+			<columnchildren width="50%" height="100px" style="background:green">
+				<textbox value="Test 1" width="275px"/>
+			</columnchildren>	      
+			<columnchildren width="50%" height="100px" style="background:red">
+				  <textbox value="Test 2" width="275px"/>							
+			</columnchildren>	   
+      </columnlayout>      
+</div>
+</window>
+
