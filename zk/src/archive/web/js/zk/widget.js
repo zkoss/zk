@@ -1832,6 +1832,13 @@ wgt.$f().main.setTitle("foo");
 					}
 
 					this.setDomVisible_(node, false);
+					
+					// Bug ZK-2236 we need to inform its parent to do the resize.
+					if (wgt._nvflex || wgt._nhflex)
+						zk.afterAnimate(function() {
+							if (wgt.parent)
+								zUtl.fireSized(wgt.parent);
+						}, -1);
 				}
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
