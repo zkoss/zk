@@ -63,9 +63,14 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			this.rerender();
 			var mesh = this.getMeshWidget();
 			setTimeout(function() {
-				if (mesh) {
+				// ZK-2217: fix height if mesh.desktop exists
+				if (mesh && mesh.desktop) {
 					// ZK-2130: should fix ebody height
-					var hgh = zk(mesh).contentHeight() - mesh.$n('head').offsetHeight 
+					// ZK-2217: should contain foot and paging
+					var foot = mesh.$n('foot'),
+						pgib = mesh.$n('pgib'),
+						hgh = zk(mesh).contentHeight() - mesh.$n('head').offsetHeight 
+						- (foot ? foot.offsetHeight : 0) - (pgib ? pgib.offsetHeight : 0)
 						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n().offsetHeight : 0) 
 					mesh.ebody.style.height = jq.px0(hgh);
 				}

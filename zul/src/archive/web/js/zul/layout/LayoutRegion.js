@@ -584,7 +584,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var wgt = this;
 		setTimeout(function () {
 			if (wgt.desktop) {
-				if (!wgt._scrollbar && !wgt._nativebar)
+				// ZK-2217: should init scrollbar if the cave first child exists
+				var cave = wgt.$n('cave');
+				if (!wgt._scrollbar && !wgt._nativebar && cave && cave.firstChild)
 					wgt._scrollbar = wgt.initScrollbar_();
 				wgt.refreshBar_();
 			}

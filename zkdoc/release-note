@@ -32,6 +32,7 @@ ZK 7.0.2
   ZK-2206: Getting exception while adding id to TreeChild by using setId api
   ZK-2106: Columnlayout resize problem
   ZK-1799: Panel width is too small when content is small and title is big
+  ZK-2217: listfoot and paging disappears when loading data
   ZK-2236: client side Widget.hide() does not recalculate flex (while Widget.hide() does)
   ZK-2215: Fileupload.get() doesn't implement the accept attribute
 
