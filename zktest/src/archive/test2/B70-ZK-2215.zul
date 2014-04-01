@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2215.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Apr 01, 2014  4:10:44 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<div onUpload="processMedia(event.getMedias());">
+    <zscript deferred="true"><![CDATA[
+    import org.zkoss.util.media.Media;
+  
+    public void processMedia(Media[] media) {
+        if (media != null) {
+            for (int i = 0; i < media.length; i++) {
+                if (media[i] instanceof org.zkoss.image.Image) {
+                    image.setContent(media[i]);
+                }
+            }
+        }
+    }
+]]></zscript>
+    <vbox>
+    	You can only choose the image type file in the file chooser
+        <button label="Upload" onClick='Fileupload.get(new HashMap(8), null, "test", "image/*", -1, -1, false, null)' />
+        <image id="image" />
+    </vbox>
+</div>
