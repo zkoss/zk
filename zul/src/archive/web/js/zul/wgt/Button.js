@@ -251,6 +251,17 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zk(btn).focus(timeout);
 		return true;
 	},
+	
+	setVisible: function(v) {
+		this.$super('setVisible', v);
+		// ZK-2233: should update upload when setVisible
+		var n = this.$n();
+		if (n && !this._disabled) {
+			_cleanUpld(this);
+			var u = this._upload;
+			if (u && u != 'false' && v) _initUpld(this);
+		}
+	},
 
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),

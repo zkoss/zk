@@ -33,6 +33,7 @@ ZK 7.0.2
   ZK-2106: Columnlayout resize problem
   ZK-1799: Panel width is too small when content is small and title is big
   ZK-2236: client side Widget.hide() does not recalculate flex (while Widget.hide() does)
+  ZK-2233: problems with fileupload button in ZK7
 
 * Upgrade Notes
 
