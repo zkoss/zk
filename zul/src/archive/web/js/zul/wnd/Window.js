@@ -1206,8 +1206,44 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	},
 	//@Override, Bug ZK-1524: caption children should not considered.
 	getChildMinSize_: function (attr, wgt) {
-		if (!wgt.$instanceof(zul.wgt.Caption))
+		var including = true;
+		if (wgt == this.caption) {
+			if (attr == 'w') {
+				including = !!(wgt.$n().style.width);
+			} else {
+				including = !!(wgt.$n().style.height);
+			}
+		}
+		if (including) {
 			return this.$supers('getChildMinSize_', arguments);
+		} else {
+			return 0;
+		}
+	},
+	//@Override, related to Bug ZK-1799
+	getContentEdgeWidth_: function (width) {
+		if (this.caption && (width == this.caption.$n().offsetWidth)) {
+			// use caption's edge width
+
+			var p = this.$n(),
+				fc = this.caption,
+				c = fc ? fc.$n() : p.firstChild,
+				zkp = zk(p),
+				w = zkp.padBorderWidth();
+			
+			if (c) {
+				c = c.parentNode;
+				while (c && c.nodeType == 1 && p != c) {
+					var zkc = zk(c);
+					w += zkc.padBorderWidth() + zkc.sumStyles('lr', jq.margins);
+					c = c.parentNode;
+				}
+				return w;
+			}
+			return 0;
+		} else {
+			return this.$supers('getContentEdgeWidth_', arguments);
+		}
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		if (isFlexMin) {

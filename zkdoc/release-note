@@ -31,6 +31,7 @@ ZK 7.0.2
   ZK-2191: Open detail cause infinite loop when overrided icon sclass
   ZK-2206: Getting exception while adding id to TreeChild by using setId api
   ZK-2106: Columnlayout resize problem
+  ZK-1799: Panel width is too small when content is small and title is big
 
 * Upgrade Notes
 

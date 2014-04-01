@@ -101,6 +101,28 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (o == 'w')
 			this.$n().width = '';
 	},
+	// override for the bug ZK-1799
+	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+		if (isFlexMin) {
+			if (this._isCloseVisible()) {
+				var close = this.parent.$n('close');
+				width += close.offsetWidth + zk(close).marginWidth();
+			}
+			if (this._isMaximizeVisible()) {
+				var max = this.parent.$n('max');
+				width += max.offsetWidth + zk(max).marginWidth();
+			}
+			if (this._isMinimizeVisible()) {
+				var min = this.parent.$n('min');
+				width += min.offsetWidth + zk(min).marginWidth();
+			}
+			if (this._isCollapsibleVisible()) {
+				var exp = this.parent.$n('exp');
+				width += exp.offsetWidth + zk(exp).marginWidth();		
+			}
+		}
+		this.$supers('setFlexSizeW_', arguments);
+	},
 	// override
 	// ZK-786
 	getImageNode: function () {

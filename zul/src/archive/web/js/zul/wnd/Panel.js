@@ -608,6 +608,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
+	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+		if (isFlexMin && this.caption) {
+			if (width == this.caption.$n().offsetWidth) {
+				width += zk(this.$n('head')).padBorderWidth();
+			}
+		}
+		this.$supers('setFlexSizeW_', arguments);
+	},
 	beforeSize: function() {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// have to clear width here if not listen to flex
@@ -991,8 +999,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	//@Override, Bug ZK-1524: caption children should not considered.
 	getChildMinSize_: function (attr, wgt) {
-		if (!wgt.$instanceof(zul.wgt.Caption))
+		var including = true;
+		if (wgt == this.caption) {
+			if (attr == 'w') {
+				including = !!(wgt.$n().style.width);
+			} else {
+				including = !!(wgt.$n().style.height);
+			}
+		}
+		if (including) {
 			return this.$supers('getChildMinSize_', arguments);
+		} else {
+			return 0;
+		}
 	},
 	isExcludedHflex_: function () {
 		if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
