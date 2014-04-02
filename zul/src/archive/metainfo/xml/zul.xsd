@@ -2145,6 +2145,8 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="border" type="panelBorderAttrType"
 			use="optional" />
+		<xs:attribute name="sizable" type="booleanType" use="optional" />
+		<xs:attribute name="framable" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="collapsible" type="booleanType" use="optional" />
 		<xs:attribute name="floatable" type="booleanType" use="optional" />
