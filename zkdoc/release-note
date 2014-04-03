@@ -36,6 +36,7 @@ ZK 7.0.2
   ZK-2236: client side Widget.hide() does not recalculate flex (while Widget.hide() does)
   ZK-2215: Fileupload.get() doesn't implement the accept attribute
   ZK-2149: zul.xsd is incomplete. Panel tag missing attributes "sizable" and "framable"
+  ZK-2243: Listboxes with width=100% and hflex=1 placed inside TableLayout do not resize correctly
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate

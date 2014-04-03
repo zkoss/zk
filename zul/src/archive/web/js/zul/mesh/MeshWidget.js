@@ -1204,6 +1204,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		else if (child.$instanceof(zul.mesh.Frozen))
 			this.efrozen = null;
 	},
+	// Bug ZK-2243
+	resetSize_: function(orient) {
+		this.$supers('resetSize_', arguments);
+		if (orient == 'w') {
+			if (this.ehead)
+				this.ehead.style.width = '';
+			if (this.ebody)
+				this.ebody.style.width = '';
+			if (this.efoot)
+				this.efoot.style.width = '';
+		}
+	},
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 	beforeMinFlex_: function (orient) {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
