@@ -646,7 +646,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._nativebar && ebody) {
 			this.domListen_(ebody, 'onScroll', '_doScroll');
 			ebody.style.overflow = 'auto';
-			ebody.style.position = 'static'; //IE8: avoid scrollbar missing
+			
+			// ZK-2238: the z-focus-a should be inside mesh widget
+			// ebody.style.position = 'static'; //IE8: avoid scrollbar missing
 			if (this.efrozen)
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
 		}
