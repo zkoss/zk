@@ -1,0 +1,12 @@
+<window id="executeActionWindow" width="400px" height="200px"
+	border="normal">
+	<div>1. Click fist button</div>
+	<div>2. Click second button</div>
+	<div>3. Should show fileupload</div>
+	<vlayout spacing="30px">
+		<button label="Make third upload button visible"
+			onClick="upload.setVisible(true)" />
+		<button id="upload" upload="true"
+			label="Try to upload, but it doesn't work :-(" visible="false" />
+	</vlayout>
+</window>

@@ -35,6 +35,7 @@ ZK 7.0.2
   ZK-2217: listfoot and paging disappears when loading data
   ZK-2236: client side Widget.hide() does not recalculate flex (while Widget.hide() does)
   ZK-2215: Fileupload.get() doesn't implement the accept attribute
+  ZK-2233: problems with fileupload button in ZK7
   ZK-2149: zul.xsd is incomplete. Panel tag missing attributes "sizable" and "framable"
   ZK-2243: Listboxes with width=100% and hflex=1 placed inside TableLayout do not resize correctly
   ZK-2238: Tree with native scrollbar problem when opening nodes further down
