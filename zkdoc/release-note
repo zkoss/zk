@@ -39,6 +39,7 @@ ZK 7.0.2
   ZK-2149: zul.xsd is incomplete. Panel tag missing attributes "sizable" and "framable"
   ZK-2243: Listboxes with width=100% and hflex=1 placed inside TableLayout do not resize correctly
   ZK-2238: Tree with native scrollbar problem when opening nodes further down
+  ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
@@ -224,6 +225,7 @@ ZK 6.5.6
   ZK-2231: Invisible window inside vbox cause js error when calculating flex size
   ZK-2193: Listbox will scroll in horizontal direction when navigation by keyboard
   ZK-2116: possible XSS Vulnerability for Listcell
+  ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
   
   --------
 ZK 6.5.5
