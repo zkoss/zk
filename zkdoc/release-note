@@ -38,6 +38,8 @@ ZK 7.0.2
   ZK-2149: zul.xsd is incomplete. Panel tag missing attributes "sizable" and "framable"
 
 * Upgrade Notes
+  + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
+    the API by throwing out an UnsupportedOperationException since 7.0.2 release
 
   --------
 ZK 7.0.1
