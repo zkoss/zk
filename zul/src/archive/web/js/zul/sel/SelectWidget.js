@@ -185,7 +185,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						w = it.next();
 					if (w) {
 						this._selectOne(w, true);
-						zk(w).scrollIntoView(this.ebody);
+						// ZK-2193: should exclude horizontal
+						zk(w).scrollIntoView(this.ebody, true);
 						if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
 							// B50-ZK-440: ebody can be null when ROD
 							this._currentTop = this.ebody.scrollTop; 
@@ -282,8 +283,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._selectOne(item, true);
 			
 			// Bug ZK-1483: Jumpy scrollbar for listbox with rod when items are selected
+			// ZK-2193: should exclude horizontal
 			if (!this._listbox$rod)
-				zk(item).scrollIntoView(this.ebody);
+				zk(item).scrollIntoView(this.ebody, true);
 			
 			if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
