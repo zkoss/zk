@@ -43,7 +43,7 @@ ZK 7.0.2
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
-    the API by throwing out an UnsupportedOperationException since 7.0.2 release
+    the API of setHflex() and setVflex() with numerical value since 7.0.2 release. Only the following values are supported: min, 0, and false.
 
   --------
 ZK 7.0.1
