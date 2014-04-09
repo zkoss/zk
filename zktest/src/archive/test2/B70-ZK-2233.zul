@@ -1,12 +1,62 @@
-<window id="executeActionWindow" width="400px" height="200px"
+<window id="executeActionWindow" width="800px" height="600px"
 	border="normal">
 	<div>1. Click fist button</div>
 	<div>2. Click second button</div>
 	<div>3. Should show fileupload</div>
-	<vlayout spacing="30px">
-		<button label="Make third upload button visible"
+	<vlayout spacing="20px">
+		<button label="Make upload button visible"
 			onClick="upload.setVisible(true)" />
-		<button id="upload" upload="true"
-			label="Try to upload, but it doesn't work :-(" visible="false" />
+		<button id="upload" upload="true" label="should show fileupload"
+			visible="false" />
 	</vlayout>
+
+	<div>1. Click second tab</div>
+	<div>2. Click button</div>
+	<div>3. Should show fileupload</div>
+	<tabbox maximalHeight="true">
+		<tabs>
+			<tab label="1" />
+			<tab label="2" />
+
+		</tabs>
+		<tabpanels>
+			<tabpanel id="pics1">
+				<button label="Upload Image tab panel 1"
+					upload="true,maxsize=300000">
+					<attribute name="onUpload"><![CDATA[
+	org.zkoss.util.media.Media media = event.getMedia();
+	if (media instanceof org.zkoss.image.Image) {
+		org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+		image.setContent(media);
+		image.setParent(pics1);
+	} else {
+		Messagebox.show("Not an image: " + media, "Error", Messagebox.OK,
+				Messagebox.ERROR);
+		break;
+	}
+]]></attribute>
+				</button>
+				<separator />
+			</tabpanel>
+			<tabpanel id="pics2">
+
+				<button label="Upload Image tab panel 5"
+					upload="true,maxsize=300000">
+					<attribute name="onUpload"><![CDATA[
+	org.zkoss.util.media.Media media = event.getMedia();
+	if (media instanceof org.zkoss.image.Image) {
+		org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+		image.setContent(media);
+		image.setParent(pics2);
+	} else {
+		Messagebox.show("Not an image: " + media, "Error", Messagebox.OK,
+				Messagebox.ERROR);
+		break;
+	}
+]]></attribute>
+				</button>
+				<separator />
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
 </window>

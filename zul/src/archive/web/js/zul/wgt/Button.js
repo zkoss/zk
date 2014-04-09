@@ -252,16 +252,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return true;
 	},
 	
-	setVisible: function(v) {
-		this.$super('setVisible', v);
-		// ZK-2233: should update upload when setVisible
-		var n = this.$n();
-		if (n && !this._disabled) {
-			if (this._uplder)
-				this._uplder.sync();
-		}
-	},
-
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
@@ -276,12 +266,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;
 	},
+	onShow: function() {
+		// ZK-2233: should sync upload position when button showed
+		if (this.$n() && !this._disabled && this._uplder) {
+			this._uplder.sync();
+		}
+	},
 	bind_: function () {
 		this.$supers(Button, 'bind_', arguments);
 
 		var n = this.$n();
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
+		zWatch.listen({onShow: this});
 
 		if (!this._disabled && this._upload) _initUpld(this);
 	},
@@ -291,6 +288,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		var n = this.$n();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
+		zWatch.unlisten({onShow: this});
 
 		this.$supers(Button, 'unbind_', arguments);
 	},
