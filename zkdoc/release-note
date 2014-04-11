@@ -41,6 +41,7 @@ ZK 7.0.2
   ZK-2238: Tree with native scrollbar problem when opening nodes further down
   ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
   ZK-2213: Possible problem with invalidate in groupbox for mobile version
+  ZK-1749: Paste broken on a Timebox component
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate

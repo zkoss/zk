@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-1749.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Apr 11, 2014  4:08:47 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<window>
+<vlayout>
+<label value=" 1 - Input a valid time here, and copy the value (CTRL + A and CTRL + C)"/>
+<timebox/>
+<space/>
+<label value=" 2 - Try to paste here"/>
+<timebox/>
+<space/>
+<button label="3 - Click here to lose focus of the second timebox, the value of the second timebox should be the same as the first one"/>
+</vlayout>
+</window>
+</zk>

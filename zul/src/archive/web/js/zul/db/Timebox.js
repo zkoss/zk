@@ -388,6 +388,22 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				break
 			case 13: case 27://enter,esc,tab
 				break;
+			case 86: // ctrl + c
+				// Bug ZK-1749
+				if (evt.ctrlKey) {
+					var self = this,
+						curVal = inp.value;
+					setTimeout(function () {
+						var inpNode = self.getInputNode();
+						if (inpNode) {
+							if (curVal != inpNode.value) {
+								self._changed = true;
+							}
+						}
+					}, 0);
+					break;
+				}
+				// no need to break here, let it run with 'default' case
 			default:
 				if (!(code >= 112 && code <= 123) //F1-F12
 				&& !evt.ctrlKey && !evt.altKey)
