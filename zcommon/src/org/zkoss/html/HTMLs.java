@@ -209,4 +209,115 @@ public class HTMLs {
 		for (int j = orphans.length; --j >= 0;)
 			_orphans.add(orphans[j]);
 	}
+
+	// Since 7.0.2
+	// The following implementation for encoding JavaScript is referred from
+	// https://code.google.com/p/owasp-esapi-java/
+	// which is licensed under New BSD License - http://opensource.org/licenses/BSD-3-Clause
+	private static char[] IMMUNE_JAVASCRIPT = { ',', '.', '_' };
+	private static final String[] hex = new String[256];
+
+	private static boolean containsCharacter(char c, char[] array) {
+		for (char ch : array) {
+			if (c == ch)
+				return true;
+		}
+		return false;
+	}
+
+	static {
+		for (char c = 0; c < 0xFF; c++) {
+			if (c >= 0x30 && c <= 0x39 || c >= 0x41 && c <= 0x5A || c >= 0x61
+					&& c <= 0x7A) {
+				hex[c] = null;
+			} else {
+				hex[c] = toHex(c).intern();
+			}
+		}
+	}
+
+	private static String toHex(char c) {
+		return Integer.toHexString(c);
+	}
+
+	private static String getHexForNonAlphanumeric(char c) {
+		if (c < 0xFF)
+			return hex[c];
+		return toHex(c);
+	}
+
+	/**
+	 * Encodes the JavaScript content for <a href=
+	 * "https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.233_-_JavaScript_Escape_Before_Inserting_Untrusted_Data_into_JavaScript_Data_Values"
+	 * > XSS vulnerabilities</a>, the implementation is referred from <a
+	 * href="https://code.google.com/p/owasp-esapi-java/">owasp-esapi-java</a>
+	 * <p>
+	 * Returns backslash encoded numeric format. Does not use backslash
+	 * character escapes such as, \" or \' as these may cause parsing problems.
+	 * For example, if a javascript attribute, such as onmouseover, contains a
+	 * \" that will close the entire attribute and allow an attacker to inject
+	 * another script attribute.
+	 * 
+	 * @since 7.0.2
+	 */
+	public static String encodeJavaScript(String input) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			sb.append(encodeCharacter(IMMUNE_JAVASCRIPT, c));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Encodes the JavaScript content for <a href=
+	 * "https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.233_-_JavaScript_Escape_Before_Inserting_Untrusted_Data_into_JavaScript_Data_Values"
+	 * > XSS vulnerabilities</a>, the implementation is referred from <a
+	 * href="https://code.google.com/p/owasp-esapi-java/">owasp-esapi-java</a>
+	 * <p>
+	 * Returns backslash encoded numeric format. Does not use backslash
+	 * character escapes such as, \" or \' as these may cause parsing problems.
+	 * For example, if a javascript attribute, such as onmouseover, contains a
+	 * \" that will close the entire attribute and allow an attacker to inject
+	 * another script attribute.
+	 * 
+	 * @since 7.0.2
+	 */
+	public static String encodeCharacter(char[] immune, Character c) {
+
+		// check for immune characters
+		if (containsCharacter(c, immune)) {
+			return "" + c;
+		}
+
+		// check for alphanumeric characters
+		String hex = getHexForNonAlphanumeric(c);
+		if (hex == null) {
+			return "" + c;
+		}
+
+		// Do not use these shortcuts as they can be used to break out of a
+		// context
+		// if ( ch == 0x00 ) return "\\0";
+		// if ( ch == 0x08 ) return "\\b";
+		// if ( ch == 0x09 ) return "\\t";
+		// if ( ch == 0x0a ) return "\\n";
+		// if ( ch == 0x0b ) return "\\v";
+		// if ( ch == 0x0c ) return "\\f";
+		// if ( ch == 0x0d ) return "\\r";
+		// if ( ch == 0x22 ) return "\\\"";
+		// if ( ch == 0x27 ) return "\\'";
+		// if ( ch == 0x5c ) return "\\\\";
+
+		// encode up to 256 with \\xHH
+		String temp = Integer.toHexString(c);
+		if (c < 256) {
+			String pad = "00".substring(temp.length());
+			return "\\x" + pad + temp.toUpperCase();
+		}
+
+		// otherwise encode with \\uHHHH
+		String pad = "0000".substring(temp.length());
+		return "\\u" + pad + temp.toUpperCase();
+	}
 }

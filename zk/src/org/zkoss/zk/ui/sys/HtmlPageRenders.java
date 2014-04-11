@@ -771,9 +771,13 @@ public class HtmlPageRenders {
 		if (sb.length() > 0) sb.append(',');
 		sb.append(name).append(':');
 		boolean quote = value instanceof String;
-		if (quote) sb.append('\'');
-		sb.append(value); //no escape, so use with care
-		if (quote) sb.append('\'');
+		if (quote) {
+			sb.append('\'');
+			sb.append(HTMLs.encodeJavaScript((String)value));
+			if (quote) sb.append('\'');
+		} else {
+			sb.append(value); //no escape, so use with care
+		}
 	}
 
 	/** Generates the special JavaScript code, such as the application's name.

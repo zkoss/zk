@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-1750.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Apr 11, 2014  5:12:04 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+Please view the browser source, the value of the 'cu', 'uu', and 'ru', JS variable will starts with '\x2F' to solves the XSS attack
+</label>
+<a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.233_-_JavaScript_Escape_Before_Inserting_Untrusted_Data_into_JavaScript_Data_Values"> For more information about the XSS</a>
+</zk>
