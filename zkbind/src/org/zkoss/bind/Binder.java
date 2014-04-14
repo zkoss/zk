@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.zk.ui.Component;
@@ -303,6 +304,13 @@ public interface Binder {
 	 * @param comp
 	 */
 	public void removeBindings(Component comp);
+	
+	/**
+	 * Remove all managed bindings that associated with the specified components.
+	 * @param comps
+	 * @since 7.0.2
+	 */
+	public void removeBindings(Set<Component> comps);
 	
 	/**
 	 * Remove all managed Binding that associated with the specified 

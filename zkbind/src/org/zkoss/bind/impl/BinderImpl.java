@@ -1886,11 +1886,27 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	}
 	
+	
+	public void removeBindings(Set<Component> comps) {
+		for(Component comp:comps){
+			removeBindings0(comp);
+		}
+		//remove tracking batchly
+		TrackerImpl tracker = (TrackerImpl) getTracker();
+		tracker.removeTrackings(comps);
+	}
 	/**
 	 * Remove all bindings that associated with the specified component.
 	 * @param comp the component
 	 */
 	public void removeBindings(Component comp) {
+		removeBindings0(comp);
+		//remove tracking
+		TrackerImpl tracker = (TrackerImpl) getTracker();
+		tracker.removeTrackings(comp);
+	}
+	
+	private void removeBindings0(Component comp) {
 		checkInit();
 		if(_rootComp==comp){
 			//the binder component was detached, unregister queue
@@ -1921,10 +1937,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(_refBindingHandler!=null){
 			_refBindingHandler.removeReferenceBinding(comp);
 		}
-		
-		//remove trackings
-		TrackerImpl tracker = (TrackerImpl) getTracker();
-		tracker.removeTrackings(comp);
 
 		BinderUtil.unmarkHandling(comp);
 	}

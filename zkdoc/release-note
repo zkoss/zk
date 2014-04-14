@@ -40,6 +40,7 @@ ZK 7.0.2
   ZK-2243: Listboxes with width=100% and hflex=1 placed inside TableLayout do not resize correctly
   ZK-2238: Tree with native scrollbar problem when opening nodes further down
   ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
+  ZK-2224: Column/cell removal times in listbox scales quadraticly on server side
   ZK-2213: Possible problem with invalidate in groupbox for mobile version
   ZK-1749: Paste broken on a Timebox component
   ZK-1750: Veracode report security flaw
