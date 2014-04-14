@@ -238,12 +238,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 		private void readObject(java.io.ObjectInputStream s)
 		throws java.io.IOException, ClassNotFoundException {
-			final boolean old = disableExpunge(true);
-			try {
-				s.defaultReadObject();
-			} finally {
-				disableExpunge(old);
-			}
+			s.defaultReadObject();
+			disableExpunge(false);
 		}
 		private synchronized void writeObject(java.io.ObjectOutputStream s)
 		throws java.io.IOException {
