@@ -43,6 +43,7 @@ ZK 7.0.2
   ZK-2213: Possible problem with invalidate in groupbox for mobile version
   ZK-1749: Paste broken on a Timebox component
   ZK-1750: Veracode report security flaw
+  ZK-2254: Tree with more than 50 root nodes problem
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate

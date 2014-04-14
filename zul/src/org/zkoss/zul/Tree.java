@@ -2093,6 +2093,13 @@ public class Tree extends MeshElement {
 		if(_model != null) {
 			final Renderer renderer = new Renderer();
 			try {
+				// render the item itself first for Bug ZK-2254
+				if (!item.isRendered()) {
+					Treechildren parent = (Treechildren) item.getParent();
+					Object childNode = getAssociatedNode(item, this);
+					renderChildren0(renderer, parent, item, childNode, item.getIndex());
+					item = (Treeitem) item.getAttribute("org.zkoss.zul.model.renderAs");
+				}
 				renderItem0(renderer, item);
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
