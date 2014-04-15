@@ -96,14 +96,13 @@ public interface XYModel extends ChartModel {
 	public boolean isAutoSort();
 	
 	/**
-	/**
 	 * Remove data of a specified series.
 	 * @param series the series
 	 */
 	public void removeSeries(Comparable<?> series);
 
 	/**
-	 * Remove (x,Y) value of a specified series and data index.
+	 * Remove (x,y) value of a specified series and data index.
 	 * @param series the series.
 	 * @param index the data index.
 	 */	
