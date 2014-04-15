@@ -124,6 +124,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt && cwgt.desktop){ //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
 						var first = cwgt,
 							refDim;
+						
+						// ZK-2248: ignore widget dimension in vflex/hflex calculation
+						while (first && first.ignoreFlexSize_(o))
+							first = first.nextSibling;
+						
 						for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout
 							if (!cwgt.ignoreFlexSize_(o)) {
 								var c = cwgt.$n();

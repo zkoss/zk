@@ -286,9 +286,12 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			return;
 		this._musin = true;
 		var n = this.$n();
+		
+		// ZK-2250: all children should apply -moz-user-select: none
 		if (n && zk.gecko && this._draggable && 
-				!jq.nodeName(evt.domTarget, 'input', 'textarea'))
-			n.firstChild.style.MozUserSelect = 'none';
+				!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			jq(n).addClass('z-draggable-over');
+		}
 		
 		this.$supers('doMouseOver_', arguments);
 	},
@@ -301,8 +304,12 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			return;
 		}
 		this._musin = false;
-		if (n && zk.gecko && this._draggable)
-			n.firstChild.style.MozUserSelect = 'none';
+		
+		// ZK-2250: all children should unapply -moz-user-select: none 
+		if (n && zk.gecko && this._draggable &&
+				!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			jq(n).removeClass('z-draggable-over');
+		}
 		
 		this.$supers('doMouseOut_', arguments);
 	},

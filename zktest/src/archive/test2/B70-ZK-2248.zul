@@ -1,0 +1,10 @@
+<zk>
+	<div>should see groupbox inside window</div>
+	<window border="normal" hflex="min" vflex="min">
+		<script>console.log("hello 1");</script>
+		<script>console.log("hello 2");</script>
+		<groupbox id="box" width="200px">
+			<div id="image" />
+		</groupbox>
+	</window>
+</zk>

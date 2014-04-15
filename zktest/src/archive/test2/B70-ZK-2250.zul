@@ -1,0 +1,18 @@
+<zk>
+	Dragging the column's cell label to hover
+	the drop area should work fine
+	<grid xmlns:w="client" width="400px">
+		<rows>
+			<row draggable="true">
+				<cell>First Item</cell>
+				<cell>Second Item</cell>
+				<cell><div>Inner div</div></cell>
+			</row>
+		</rows>
+	</grid>
+	<div droppable="true" style="background-color: green" width="100px"
+		height="100px">
+		DROP HERE
+	</div>
+
+</zk>

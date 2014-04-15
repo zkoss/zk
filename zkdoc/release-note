@@ -40,6 +40,15 @@ ZK 7.0.2
   ZK-2243: Listboxes with width=100% and hflex=1 placed inside TableLayout do not resize correctly
   ZK-2238: Tree with native scrollbar problem when opening nodes further down
   ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
+  ZK-2213: Possible problem with invalidate in groupbox for mobile version
+  ZK-1749: Paste broken on a Timebox component
+  ZK-1750: Veracode report security flaw
+  ZK-2254: Tree with more than 50 root nodes problem
+  ZK-2253: Serialization and Deserialization of SimpleDesktopCache throws NPE
+  ZK-2250: Firefox Grid Drag'n'Drop issues
+  ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
+  ZK-2146: Combobutton does not change appearance when disabled state is toggled
+  ZK-2248: Window Hflex="min" client side error with <script> tag
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
@@ -226,6 +235,7 @@ ZK 6.5.6
   ZK-2193: Listbox will scroll in horizontal direction when navigation by keyboard
   ZK-2116: possible XSS Vulnerability for Listcell
   ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
+  ZK-2213: Possible problem with invalidate in groupbox for mobile version
   
   --------
 ZK 6.5.5

@@ -400,6 +400,15 @@ input[type="checkbox"] {
 		list-style: none;
 	}
 }
+
+// ZK-2250: all children inside row should apply '-moz-user-select: none' when mouse over
+.z-draggable-over {
+	<c:if test="${zk.gecko > 0}">
+	* {
+		-moz-user-select: none;
+	}
+	</c:if>
+}
 .z-drop {
 	&-allow {
 		background: @dragAllowBackgroundColor;
