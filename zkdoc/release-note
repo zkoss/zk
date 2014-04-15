@@ -5,6 +5,7 @@ ZK 6.0.6
 * Bugs:
   ZK-1784: client rod with hflex cause js error
   ZK-1916: Different language codes for IE10 under Windows 8
+  ZK-2247: nested iframe reloading content when detached parent window
 
 * Upgrade Notes
 

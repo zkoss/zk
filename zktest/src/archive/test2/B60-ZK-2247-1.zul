@@ -1,0 +1,9 @@
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<?script content="zk.useStackup = true;"?>
+	<window id="viewerWindow" border="normal" width="100%" vflex="1"
+		onCreate='System.out.println("CREATE")'>
+		<html>
+			<b>I AM THE IFRAME</b>
+		</html>
+	</window>
+</zk>
