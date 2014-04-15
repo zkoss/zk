@@ -1,0 +1,29 @@
+<zk>
+	Dragging the cell label to hover the drop area should work fine
+	<tree width="400px">
+		<treechildren>
+			<treeitem>
+				<treerow draggable="true">
+					<treecell label="First Item" />
+					<treecell label="Second Item" />
+					<treecell>
+						<div>Inner div</div>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<listbox width="400px">
+		<listitem draggable="true">
+			<listcell label="First Item" />
+			<listcell label="Second Item" />
+			<listcell>
+				<div>Inner div</div>
+			</listcell>
+		</listitem>
+	</listbox>
+	<div droppable="true" style="background-color: green" width="100px"
+		height="100px">
+		DROP HERE
+	</div>
+</zk>

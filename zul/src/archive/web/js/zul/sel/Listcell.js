@@ -162,17 +162,22 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			box._moveToHidingFocusCell(node.cellIndex);
 	},
 	doMouseOver_: function(evt) {
-		if (zk.gecko && (this._draggable || this.parent._draggable)
-		&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
-			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = 'none';
+		var n = this.$n();
+		
+		// ZK-2136: all children should apply -moz-user-select: none
+		if (n && zk.gecko && (this._draggable || this.parent._draggable)
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			jq(n).addClass('z-draggable-over');
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		if (zk.gecko && (this._draggable || this.parent._draggable)) {
-			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = ''; // Bug ZK-580
+		var n = this.$n();
+		
+		// ZK-2136: all children should apply -moz-user-select: none
+		if (n && zk.gecko && (this._draggable || this.parent._draggable)
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			jq(n).removeClass('z-draggable-over'); // Bug ZK-580
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
