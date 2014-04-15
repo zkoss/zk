@@ -27,7 +27,8 @@ ZK 6.5.6
   ZK-2116: possible XSS Vulnerability for Listcell
   ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
   ZK-2213: Possible problem with invalidate in groupbox for mobile version
-  
+  ZK-2247: nested iframe reloading content when detached parent window
+
   --------
 ZK 6.5.5
 Dec 30, 2013
