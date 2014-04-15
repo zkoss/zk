@@ -81,7 +81,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			}
 			var pp = this.getPopupNode_(),
 				pz = this.getPopupSize_(pp);
-			pp.style.height = pz[1];
+			pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
 			
 			// Bug 2941343, 2936095, and 3189142
 			if (zk.ie8)
