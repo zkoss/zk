@@ -118,7 +118,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    	var self = this,
 		    		doDisable = function() { 
 			    		if (self.desktop) {
-			    			self.$n().disabled = v; 
+			    			jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146 
 			    			// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
 			    			if (self._upload)
 			    				v ? _cleanUpld(self) : _initUpld(self);
