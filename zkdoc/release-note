@@ -47,6 +47,7 @@ ZK 7.0.2
   ZK-2253: Serialization and Deserialization of SimpleDesktopCache throws NPE
   ZK-2250: Firefox Grid Drag'n'Drop issues
   ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
+  ZK-2248: Window Hflex="min" client side error with <script> tag
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate

@@ -95,7 +95,10 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 			zk.loadScript(this._src, null, this._charset);
 		}
 	},
-
+	ignoreFlexSize_: function (attr) {
+		// ZK-2248: ignore widget dimension in vflex/hflex calculation
+		return true;
+	},
 	//super//
 	redraw: function () {
 	},

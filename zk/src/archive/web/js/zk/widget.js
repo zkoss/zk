@@ -3120,9 +3120,15 @@ unbind_: function (skipper, after) {
 	},
 	getContentEdgeHeight_: function (height/*current calculated height*/) {
 		var p = this.$n(),
-			fc = this.firstChild,
-			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
-			c = fc ? fc.$n() : p.firstChild,
+		fc = this.firstChild,
+		// ZK-1524: Caption should be ignored
+		fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc;
+	
+		// ZK-2248: skip widget which does not have dimension
+		while (fc && fc.ignoreFlexSize_('h'))
+			fc = fc.nextSibling;
+		
+		var c = fc ? fc.$n() : p.firstChild,
 			zkp = zk(p),
 			h = zkp.padBorderHeight();
 		
@@ -3139,9 +3145,15 @@ unbind_: function (skipper, after) {
 	},
 	getContentEdgeWidth_: function (width/*current calculated width*/) {
 		var p = this.$n(),
-			fc = this.firstChild,
-			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
-			c = fc ? fc.$n() : p.firstChild,
+		fc = this.firstChild,
+		// ZK-1524: Caption should be ignored
+		fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc;
+	
+		// ZK-2248: skip widget which does not have dimension
+		while (fc && fc.ignoreFlexSize_('w'))
+			fc = fc.nextSibling;
+		
+		var	c = fc ? fc.$n() : p.firstChild,
 			zkp = zk(p),
 			w = zkp.padBorderWidth();
 		
