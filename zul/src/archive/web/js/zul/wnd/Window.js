@@ -1098,6 +1098,15 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			zWatch.listen({onResponse: this});
 		}
 	},
+	detach: function() {
+		// ZK-2247: remove iframe to prevent load twice
+		if (zk.ie > 8 || zk.chrome) {
+			var $jq = jq(this.$n()).find('iframe');
+			if ($jq.length)
+				$jq.hide().remove();
+		}
+		this.$supers(Window, 'detach', arguments);
+	},
 	unbind_: function () {
 		var node = this.$n();
 		zk(node).beforeHideOnUnbind();

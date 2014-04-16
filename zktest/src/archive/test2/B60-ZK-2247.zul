@@ -1,0 +1,12 @@
+<zk xmlns:w="client">
+	<div id="remove">
+		<div>1. Click 'open' button, then click 'remove' button</div>
+		<div>2. Should not see 'CREATE' twice in server log</div>
+		<window id="win" visible="false">
+			<iframe id="iframe" src="" />
+			<button label="remove" onClick="win.detach()" />
+		</window>
+		<button label="open"
+			onClick='win.doModal(); win.getFellow("iframe").setSrc("B60-ZK-2247-1.zul");' />
+	</div>
+</zk>
