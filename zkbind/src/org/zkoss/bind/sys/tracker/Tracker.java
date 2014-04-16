@@ -45,6 +45,13 @@ public interface Tracker {
 	 * @param comp the associated component
 	 */
 	public void removeTrackings(Component comp);
+	
+	/**
+	 * Remove all tracking associated with the specified {@link Component} set.
+	 * @param comps the associated component set
+	 * @since 7.0.2
+	 */
+	public void removeTrackings(Set<Component> comps);
 
 	/**
 	 * Tie a property to its corresponding value under the specified {@link Component}.

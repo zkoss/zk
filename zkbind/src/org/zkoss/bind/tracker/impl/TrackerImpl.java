@@ -111,6 +111,23 @@ public class TrackerImpl implements Tracker, Serializable {
 		return new TrackerNodeImpl(script); 
 	}
 	
+	public void removeTrackings(Set<Component> comps) {
+		final Set<TrackerNode> removed = new HashSet<TrackerNode>();
+		for(Component comp:comps){
+			final Map<Object, TrackerNode> nodesMap = _compMap.remove(comp);
+			if (nodesMap != null) {
+				final Collection<TrackerNode> nodes = nodesMap.values();
+				for (TrackerNode node : nodes) {
+					removed.add(node);
+					removed.addAll(node.getDependents());
+				}
+			}
+		}
+		if(removed.size()>0){
+			removeAllFromBeanMap(removed);
+			removeNodes(_nullMap.values(), removed);
+		}
+	}
 	public void removeTrackings(Component comp) {
 		final Map<Object, TrackerNode> nodesMap = _compMap.remove(comp);
 		if (nodesMap != null) {
@@ -592,50 +609,62 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	//------ debug dump ------//
+	public void dumpLess() {
+		dumpCompMap(false);
+		dumpBeanMap(false);
+		dumpNullMap(false);
+		dumpEqualBeansMap();
+	}
 	public void dump() {
-		dumpCompMap();
-		dumpBeanMap();
-		dumpNullMap();
+		dumpCompMap(true);
+		dumpBeanMap(true);
+		dumpNullMap(true);
 		dumpEqualBeansMap();
 	}
 	
-	private void dumpBeanMap() {
+	private void dumpBeanMap(boolean dumpNodes) {
 		System.out.println("******* _beanMap: *********");
 		System.out.println("******* size: "+_beanMap.size());
 		for(Object bean : _beanMap.keySet()) {
 			System.out.println("bean:"+bean+"------------");
-			Set<TrackerNode> nodes = _beanMap.get(bean);
-			if(_beanMap!=null){
-				for(TrackerNode node : nodes) {
-					dumpNodeTree(node, 4);
-				}	
-			}else{
-				System.out.println("NO TrackerNode bound to this bean.");
+			if(dumpNodes){
+				Set<TrackerNode> nodes = _beanMap.get(bean);
+				if(nodes!=null){
+					for(TrackerNode node : nodes) {
+						dumpNodeTree(node, 4);
+					}	
+				}else{
+					System.out.println("NO TrackerNode bound to this bean.");
+				}
 			}
 		}
 	}
 	
-	private void dumpCompMap() {
+	private void dumpCompMap(boolean dumpNodes) {
 		System.out.println("******* _compMap: *********");
 		System.out.println("******* size: "+_compMap.size());
 		for(Component comp: _compMap.keySet()) {
 			System.out.println("comp:"+comp+"------------");
-			Map<Object, TrackerNode> nodes = _compMap.get(comp);
-			for(Entry<Object, TrackerNode> entry : nodes.entrySet()) {
-				System.out.println("----field:"+entry.getKey()+"");
-				dumpNodeTree(entry.getValue(), 4);
+			if(dumpNodes){
+				Map<Object, TrackerNode> nodes = _compMap.get(comp);
+				for(Entry<Object, TrackerNode> entry : nodes.entrySet()) {
+					System.out.println("----field:"+entry.getKey()+"");
+					dumpNodeTree(entry.getValue(), 4);
+				}
 			}
 		}
 	}
 
-	private void dumpNullMap() {
+	private void dumpNullMap(boolean dumpNodes) {
 		System.out.println("******* _nullMap: *********");
 		System.out.println("******* size: "+_nullMap.size());
 		for(Object field: _nullMap.keySet()) {
 			System.out.println("field:"+field+"------");
-			Set<TrackerNode> nodes = _nullMap.get(field);
-			for(TrackerNode node : nodes) {
-				dumpNodeTree(node, 4);
+			if(dumpNodes){
+				Set<TrackerNode> nodes = _nullMap.get(field);
+				for(TrackerNode node : nodes) {
+					dumpNodeTree(node, 4);
+				}
 			}
 		}
 	}
@@ -645,9 +674,9 @@ public class TrackerImpl implements Tracker, Serializable {
 		System.out.println("******* size: "+_equalBeansMap.size());
 		
 		for(Entry<Object, EqualBeans> entry: _equalBeansMap.entrySet()) {
-			System.out.println("proxy:"+entry.getKey());
-			System.out.println("val:"+entry.getValue().getBeans());
-			System.out.println("----");
+			System.out.print("proxy:["+entry.getKey());
+			System.out.print("], val:["+entry.getValue().getBeans());
+			System.out.println("]----");
 		}
 	}
 

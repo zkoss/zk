@@ -14,6 +14,11 @@ package org.zkoss.bind.tracker.impl;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +30,6 @@ import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -167,17 +171,27 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			removeBindings(comp); 
 		}
 	}
+	
 	private void removeBindings(Component comp) {
-		removeBindings0(comp);
+		//ZK-2224 batch remove component and it kids to enhance performance.
+		Map<Binder,Set<Component>> batchRemove = new LinkedHashMap<Binder, Set<Component>>();
+		removeBindingsRecursively(comp,batchRemove);
+		for(Entry<Binder,Set<Component>> entry:batchRemove.entrySet()){
+			entry.getKey().removeBindings(entry.getValue());
+		}
+	}
+	
+	private void removeBindingsRecursively(Component comp,Map<Binder,Set<Component>> batchRemove) {
+		removeBindings0(comp,batchRemove);
 		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
 			if (kid != null) {
-				removeBindings(kid); //recursive
+				removeBindingsRecursively(kid,batchRemove); //recursive
 			}
 		}
 	}
 	
-	private void removeBindings0(Component comp) {
+	private void removeBindings0(Component comp,Map<Binder,Set<Component>> batchRemove) {
 		//A component with renderer; might need to remove $MODEL$
 		final Object installed = comp.removeAttribute(BinderImpl.RENDERER_INSTALLED); 
 		if (installed != null) { 
@@ -185,7 +199,16 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		}
 		final Binder binder = BinderUtil.getBinder(comp);
 		if (binder != null) {
-			binder.removeBindings(comp);
+			if(batchRemove!=null){
+				//ZK-2224 batch remove component and it kids to enhance performance.
+				Set<Component> components = batchRemove.get(binder);
+				if(components==null){
+					batchRemove.put(binder, components = new LinkedHashSet<Component>());
+				}
+				components.add(comp);
+			}else{
+				binder.removeBindings(comp);
+			}
 		}
 		
 		getExtension().removeLifeCycleHandling(comp);
