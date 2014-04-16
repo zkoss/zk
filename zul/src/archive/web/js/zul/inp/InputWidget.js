@@ -706,7 +706,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_shallIgnore: function (evt, keys) {
 		// ZK-1736 add metakey on mac
-		if (navigator.appVersion.indexOf('Mac')!=-1 && event.metaKey)
+		if (zk.mac && evt.metaKey)
 			return;
 		else {
 			var code = (zk.ie < 11||zk.opera) ? evt.keyCode : evt.charCode;
