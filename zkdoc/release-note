@@ -55,6 +55,7 @@ ZK 7.0.2
   ZK-2160: menupopup shifts position when timer event occurs
   ZK-2255: Custom scrollbar in Grid/Listbox with ROD enabled not work correcly after resizing browser width
   ZK-2257: Popup shows at wrong position in the first time when it contains lots of data
+  ZK-1746: Chosen box with huge data - Performance issue
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
@@ -244,6 +245,7 @@ ZK 6.5.6
   ZK-2213: Possible problem with invalidate in groupbox for mobile version
   ZK-2247: nested iframe reloading content when detached parent window
   ZK-2255: Custom scrollbar in Grid/Listbox with ROD enabled not work correcly after resizing browser width
+  ZK-1746: Chosen box with huge data - Performance issue
 
   --------
 ZK 6.5.5

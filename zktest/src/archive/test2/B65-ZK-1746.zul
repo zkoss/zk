@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1746.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 17, 2014  4:13:03 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+Steps to reproduce:
+1. focus the chosenbox inputcomponent
+2. type "aa" (dropdown appears, with 10 items ("aa0" - "aa9") -> OK - getElementAt() called for these 10 items)
+3. select e.g. "aa3" using keyboard press [return]-key to delete the selection of "aa3"
+4. press [tab] so enter the next input component
+5. press [shift+tab] to return to the chosenbox component (if the bug exists, it will show the following result.)
+--> getElementAt() will be called 50000 times (the return value of getSize() of ListModel) !!!
+--> getElementAt() will be called again 13324 times (basically called from 0 through index of previously selected item)
+
+6. start typing again e.g. "b" (if the bug exists, it will show the following result.)
+--> getElementAt() in list model will be called another 13324 times
+
+--> (dropdown appears, with 10 items -> OK - getElementAt() called for these 10 items)
+</label>
+	<zscript><![CDATA[
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zul.AbstractListModel;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.ListSubModel;
+
+public class ChosenboxViewModel {
+	private ListModel chosenboxModel = new BigDataListModel();
+	private ListModel comboboxModel = new BigDataListModel();
+
+	public ListModel getComboboxModel() {
+		return comboboxModel;
+	}
+	
+	public ListModel getChosenboxModel() {
+		return chosenboxModel;
+	}
+	
+	class BigDataListModel extends AbstractListModel implements ListSubModel {
+
+		public Object getElementAt(int index) {
+			String string = Integer.valueOf(index).toString(index, 36);
+			Clients.log("getElementAt called for : " + index + " -> " + string);
+			return string;
+		}
+
+		public int getSize() {
+			return 50000;
+		}
+		
+		public ListModel getSubModel(Object value, int nRows) {
+			Clients.log(String.format("sublist called: \"%s\", %d", new Object[]{ value, nRows}));
+			ListModelList subList = new ListModelList();
+			if("".equals(value)) {
+				return subList;
+			}
+			for(int i = 0; i < 10; i++) {
+				long number = Long.parseLong((String)value + i, 36);
+				if(number > getSize()) {
+					break;
+				}
+				subList.add(getElementAt((int)number));
+			}
+			Clients.log(subList.toString());
+			return subList;
+		}
+		
+	}
+}
+]]></zscript>
+	<window title="new page title" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('ChosenboxViewModel')">
+		<vlayout>
+			<chosenbox model="@load(vm.chosenboxModel)" width="400px" />
+			<!-- <combobox model="@load(vm.comboboxModel)" width="400px" autodrop="true" /> -->
+		</vlayout>
+	</window>
+</zk>
