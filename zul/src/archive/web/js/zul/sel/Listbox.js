@@ -161,10 +161,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scrollbar here
 		setTimeout(function () {
 			if (canInitScrollbar) {
-				if (!self._listbox$rod || self.inPagingMold()) {
-					self.refreshBar_();
-					self._syncSelInView();
-				}
+				self.refreshBar_();
+				self._syncSelInView();
 			}
 		}, 300);
 	},

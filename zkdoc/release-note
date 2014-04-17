@@ -53,6 +53,7 @@ ZK 7.0.2
   ZK-2136: Drag and Drop on Tree
   ZK-2247: nested iframe reloading content when detached parent window
   ZK-2160: menupopup shifts position when timer event occurs
+  ZK-2255: Custom scrollbar in Grid/Listbox with ROD enabled not work correcly after resizing browser width
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
