@@ -147,6 +147,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
+
+		// resync position if the content is not calculated. Bug ZK-2257
+		var openInfo = this._openInfo;
+		if (openInfo) {
+			this.position.apply(this, openInfo);
+		}
 	},
 	/** Returns whether to instantiate a stackup when {@link #open}
 	 * is called.
