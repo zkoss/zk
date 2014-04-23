@@ -45,7 +45,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 ]]></zscript>
 	<label multiline="true">
 		Case1 - Test just the Move
-		1.Click Move 3 to X, the node 3 should move to node X and with correct Open State()
+		1.Click Move 3 to X, the node 3 should move to node X and without the Open State() (ZK spec.)
 		2.if the bug is not fixed, you will see Node 3 doesn't have correct state (currently, it was closed but has opened icon)
 		3.Click Move 3 to 2, should has same result.
 		Case2 - Test move and with modify

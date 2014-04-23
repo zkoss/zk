@@ -156,6 +156,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 		//add extra CSS class for easy customize
 		jq(node).addClass(this.$s('open'));
+		
+		// resync position if the content is not calculated. Bug ZK-2257
+		var openInfo = this._openInfo;
+		if (openInfo) {
+			this.position.apply(this, openInfo);
+		}
 	},
 	/** Returns whether to instantiate a stackup when {@link #open}
 	 * is called.

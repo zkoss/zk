@@ -195,8 +195,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
 		setTimeout(function () {
 			if (canInitScrollbar) {
-				if (!self._grid$rod || self.inPagingMold())
-					self.refreshBar_();
+				self.refreshBar_();
 			}
 		}, 200);
 	},

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2255.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 17, 2014  9:19:47 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	Object[] col = new Object[25];
+	]]></zscript>
+	<window hflex="1">
+	<label multiline="true">
+Test steps:
+1. Shrink browser width to make sure the horizontal scrollbar showed at first loading.
+2. Extend or shrink browser width
+3. Horizontal scrollbar did not work correctly (if true, that's a bug)
+	</label>
+		<listbox height="300px" emptyMessage="no items">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" />
+			<listhead>
+				<listheader forEach="${col}" label="col ${forEachStatus.index + 1}" hflex="min" />
+			</listhead>
+		</listbox>
+	</window>
+</zk>

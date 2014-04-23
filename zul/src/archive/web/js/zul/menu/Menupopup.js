@@ -293,6 +293,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.zsync();
 		
 		this.$supers('onResponse', arguments); //Bug #2870616
+
+		this._syncPos(); // For Bug ZK-2160, resync position again after invoking supers.
 	},
 	doKeyDown_: function (evt) {
 		var w = _currentChild(this),

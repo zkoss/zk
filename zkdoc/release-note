@@ -52,10 +52,16 @@ ZK 7.0.2
   ZK-2248: Window Hflex="min" client side error with <script> tag
   ZK-2136: Drag and Drop on Tree
   ZK-2247: nested iframe reloading content when detached parent window
+  ZK-2160: menupopup shifts position when timer event occurs
+  ZK-2255: Custom scrollbar in Grid/Listbox with ROD enabled not work correcly after resizing browser width
+  ZK-2257: Popup shows at wrong position in the first time when it contains lots of data
+  ZK-1746: Chosen box with huge data - Performance issue
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
     the API of setHflex() and setVflex() with numerical value since 7.0.2 release. Only the following values are supported: min, 0, and false.
+  + Due to the better user-firendly for the scrollbar layout, we changed the org.zkoss.zul.nativebar of the library property to true by default
+    for Grid, Listbox, Tree and Borderlayout component.
 
   --------
 ZK 7.0.1
@@ -240,6 +246,8 @@ ZK 6.5.6
   ZK-2040: The submenu has no space to unfold to the right and needs to open on the left side.
   ZK-2213: Possible problem with invalidate in groupbox for mobile version
   ZK-2247: nested iframe reloading content when detached parent window
+  ZK-2255: Custom scrollbar in Grid/Listbox with ROD enabled not work correcly after resizing browser width
+  ZK-1746: Chosen box with huge data - Performance issue
 
   --------
 ZK 6.5.5
