@@ -1,7 +1,7 @@
 <window title="Toggle Popup" border="normal" width="500px" height="300px">
 	<label multiline="true">
-	1. Right click Item will open the context menu, click again it will close.
-	2. Left click Item1 will open the popup, click again it will close.
+	1. Right click Item will open the popup, click again it will close.
+	2. Left click Item1 will open the context menu, click again it will close.
 	3. Right click Item2 will open the context menu, click again it will close.
 	</label>
 	<tree context="tc, type=toggle">

@@ -1,11 +1,6 @@
 <zk>
 	<div>
-		<div>
-			1. type 'se' in the combobox 
-		</div>
-		<div>
-			2. focus on the textbox, then the label should show 'Sverige' and the value should show 'SE'.
-		</div>
+		type 'se' + 'TAB' in the combobox then the label should show 'Sverige' and the value should show 'SE'.
 	</div>
 	<hbox apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2024_ViewModel')">

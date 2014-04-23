@@ -42,7 +42,7 @@ public class TestComposer extends GenericForwardComposer{
 }
 
 </zscript>
-1. Please open the first combobox, it should not appear the browser scrollbar into the popup. (same as the second combobox)
+1. Please open the first bandbox, it should not appear the browser scrollbar into the popup. (same as the second bandbox)
   <window border="normal" title="BandBox and ON_OPEN event listener with ZK7" apply="TestComposer">
   	<div></div>
          <bandbox id="bandBox1">

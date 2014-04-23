@@ -14,7 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Please click the "Toggle Status" to see the first three buttons should display as its disabled status.
+Please click the "Toggle Status" to see the first three buttons should display as its enabled status.
     <window vflex="true" border="normal">
         <tabbox vflex="true">
             <tabs>

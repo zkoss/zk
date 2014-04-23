@@ -4,7 +4,7 @@
 		2. Scroll down 
 		3. Resize any grid column
 
-		The scroll bar would move to the very top.
+		The scroll bar would not move to the very top.
 	</div>
 	<zscript><![CDATA[
 	public class MyRowRenderer implements RowRenderer {
