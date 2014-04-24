@@ -144,7 +144,8 @@ if (lb.getSelectedItem() != null) {
 							<listheader label="Date" width="50%" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
 						</listhead>
 						<attribute w:name="onSelect">
-							this.$f("ifr", true).setSrc("");
+							if (zk.ie != 6) // fix IE6's js error
+								this.$f("ifr", true).setSrc("");
 						</attribute>
 						<attribute name="onSelect">
 							codeViewPanel.title=main.getCurrentRealFile().getAbsolutePath();
