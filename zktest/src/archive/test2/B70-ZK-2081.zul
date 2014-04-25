@@ -4,5 +4,4 @@
 		2. The tooltip should show like "Here is a position : 11".
 	</label>
 	<slider slidingtext="Here is a position : {0}"/>
-	<slider/>
 </zk>

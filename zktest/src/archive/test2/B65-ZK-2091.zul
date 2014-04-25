@@ -2,7 +2,7 @@
   	<label multiline="true">
   		1. Copy the following number to the doublebox: 100000000000000000000
   		2. Unfocus the doublebox.
-  		3. Should see any js error.
+  		3. Should not see any js error.
   	</label>
     <doublebox width="200px">
       <attribute name="onChange"><![CDATA[

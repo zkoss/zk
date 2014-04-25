@@ -1,8 +1,6 @@
 <zk>
 	<label multiline="true">
-		1.clicked checkbox of title C,then each checkmark's position should be right.
-		2.Group A,B shouldn't show checkmark
-		3.clicked checkbox of multiple change ,then group A,B will show chackble
+		clicked checkbox of title C,then each checkmark's position should be right.
 	</label>
 	<listbox id="a" checkmark="true"  multiple="true" >
 		<custom-attributes org.zkoss.zul.listbox.groupSelect="true" />
@@ -25,6 +23,10 @@
 			<listcell label="B2"/>
 		</listitem>
 	</listbox>
+	<label multiline="true">
+		1.Group A,B shouldn't show checkmark
+		2.clicked checkbox of multiple change ,then A1,A2,B1,B2 will show chackble
+	</label>
 	<listbox id ="b" checkmark="true"  multiple="false" >
 		<custom-attributes org.zkoss.zul.listbox.rod="true" />
 		<listhead menupopup="auto" >
