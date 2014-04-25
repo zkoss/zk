@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2264.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Apr 25, 2014  2:48:54 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please scroll the scrollbar to the right.
+<separator/>
+2. Click to the next button in the paging bar
+<separator/>
+3. Please scroll the scrollbar to the right or left, the content of the grid should be scrolled as well.
+	<zscript>
+		List rowData = Collections.nCopies(46, "row");
+		List data = Collections.nCopies(20, "column");
+	</zscript>
+<grid mold="paging" pageSize="15">
+	<custom-attributes org.zkoss.zul.nativebar="false"/>
+	<frozen columns="1"/>
+	<columns >
+		<column label="first" width="400px"/>
+		<column forEach="${data}" label="${each} ${forEachStatus.index + 1}" width="200px"/>
+	</columns>
+	<rows>
+		<row forEach="${rowData}" >
+			<label value="${each} ${forEachStatus.index + 1}"></label>
+			<cell forEach="${data}" width="200px">
+				<label value="${each} ${forEachStatus.index + 1}"/> 
+			</cell>
+		</row>
+	</rows>
+</grid>
+
+</zk>

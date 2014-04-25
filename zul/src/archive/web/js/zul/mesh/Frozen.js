@@ -160,6 +160,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			p.listen({onScroll: this.proxy(this._onScroll)}, -1000);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
+		} else {
+			zWatch.listen({onResponse: this});
+			
+			// Bug ZK-2264
+			this._shallSyncScale = true;
 		}
 		
 		if (body)
@@ -176,6 +181,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			this.domUnlisten_(this.$n('scrollX'), 'onScroll');
 			p.unlisten({onScroll: this.proxy(this._onScroll)});
 			zWatch.unlisten({onSize: this});
+		} else {
+			zWatch.unlisten({onResponse: this});
+			this._shallSyncScale = false;
 		}
 		
 		if (body)
@@ -183,6 +191,19 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (foot)
 			jq(foot).removeClass('z-word-nowrap');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
+	},
+	// Bug ZK-2264, we should resync the variable of _scrollScale, which do the same as HeadWidget.js
+	onResponse: function () {
+		if (this.parent._nativebar) {
+			zWatch.unlisten({onResponse: this});
+		} else if (this._shallSyncScale) {
+			var hdfaker = this.parent.ehdfaker;
+			if (hdfaker) {
+				this._scrollScale = 
+					hdfaker.childNodes.length - this._columns - 1;
+			}
+			this._shallSyncScale = false;
+		}
 	},
 	onSize: function () {
 		if (!this._columns)

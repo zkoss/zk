@@ -28,6 +28,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				//_scrollScale is used in Scrollbar.js
 				frozen._scrollScale = 
 					hdfaker.childNodes.length - frozen._columns - 1;
+				
+				// Bug ZK-2264
+				frozen._shallSyncScale = false;
 			}
 		}
 	}

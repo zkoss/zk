@@ -56,6 +56,7 @@ ZK 7.0.2
   ZK-2255: Custom scrollbar in Grid/Listbox with ROD enabled not work correcly after resizing browser width
   ZK-2257: Popup shows at wrong position in the first time when it contains lots of data
   ZK-1746: Chosen box with huge data - Performance issue
+  ZK-2264: After change to the next page, we cannot scroll a frozen grid horizontally
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
