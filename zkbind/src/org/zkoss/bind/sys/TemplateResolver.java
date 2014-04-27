@@ -21,9 +21,25 @@ import org.zkoss.zk.ui.util.Template;
  * @since 6.0.0
  */
 public interface TemplateResolver {
+    /**
+     * @deprecated use {@link Template#EACH_ATTR} instead 
+     */
+    @Deprecated
 	public static final String EACH_ATTR = "var";
+    /**
+     * @deprecated use {@link Template#EACH_VAR}
+     */
+    @Deprecated
 	public static final String EACH_VAR = "each";
+    /**
+     * @deprecated use {@link Template#STATUS_ATTR}
+     */
+    @Deprecated
 	public static final String STATUS_ATTR = "status";
+    /**
+     * @deprecated use {@link Template#EACH_STATUS_VAR}
+     */
+    @Deprecated
 	public static final String EACH_STATUS_VAR = "forEachStatus";
 	
 	//ZK-1787When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again

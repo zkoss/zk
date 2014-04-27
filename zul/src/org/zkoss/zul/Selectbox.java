@@ -348,9 +348,9 @@ public class Selectbox extends HtmlBasedComponent {
 				final Component[] items = tm.create(owner, null,
 						new VariableResolver() {
 							public Object resolveVariable(String name) {
-								if ("each".equals(name)) {
+								if (Template.EACH_VAR.equals(name)) {
 									return data;
-								} else if ("forEachStatus".equals(name)) {
+								} else if (Template.EACH_STATUS_VAR.equals(name)) {
 									return new ForEachStatus() {
 										
 										public ForEachStatus getPrevious() {

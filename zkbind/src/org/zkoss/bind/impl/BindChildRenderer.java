@@ -56,10 +56,10 @@ public class BindChildRenderer extends AbstractRenderer{
 		};
 		
 		final String var = (String) tm.getParameters().get("var");
-		final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+		final String varnm = var == null ? Template.EACH_VAR : var; //var is not specified, default to "each"
 		
-		final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
-		final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
+		final String itervar = (String) tm.getParameters().get(Template.STATUS_ATTR);
+		final String itervarnm = itervar == null ? ( var==null ? Template.EACH_STATUS_VAR : varnm +STATUS_POST_VAR) : itervar; //provide default value if not specified
 
 		//bug 1188, EL when nested var and itervar
 		Object oldVar = owner.getAttribute(varnm);

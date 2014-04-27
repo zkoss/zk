@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
@@ -57,10 +58,13 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 				}
 			};
 			
-			final String var = (String) tm.getParameters().get(EACH_ATTR);
-			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
-			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
-			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
+	         // parse parameters from template
+            Map<String, Object> params = tm.getParameters();
+			
+			final String var = params != null ? (String) params.get(Template.EACH_ATTR) : null;
+			final String varnm = var == null ? Template.EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = params != null ? (String) params.get(Template.STATUS_ATTR) : null;
+			final String itervarnm = itervar == null ? ( var==null ? Template.EACH_STATUS_VAR : varnm + STATUS_POST_VAR) : itervar; //provide default value if not specified
 			
 			//bug 1188, EL when nested var and itervar
 			Object oldVar = owner.getAttribute(varnm);

@@ -50,6 +50,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Grid;
@@ -266,7 +267,7 @@ public class DataBinder implements java.io.Serializable {
 		//After 2.5
 		//<listitem self="@{bind(each='person')}"...>
 		//or <listitem self="@{each='person'}"...>
-		if ("each".equals(attr)) {
+		if (Template.EACH_VAR.equals(attr)) {
 			attr = "_var";
 		}
 			

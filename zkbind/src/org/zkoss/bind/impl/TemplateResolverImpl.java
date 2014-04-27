@@ -31,7 +31,6 @@ import org.zkoss.zk.ui.util.Template;
  * @author dennis
  * @since 6.0.0
  */
-@SuppressWarnings("deprecation")
 public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Serializable{//implement binding for tieValue
 	private static final long serialVersionUID = 1L;
 	private final String _templateExpr;
@@ -88,8 +87,8 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 			//TODO set subtype to evaluation context, so can use it as a condition.
 			
 			//prepare each and eachStatus
-			oldEach = eachComp.setAttribute(EACH_VAR, eachData);
-			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){
+			oldEach = eachComp.setAttribute(Template.EACH_VAR, eachData);
+			oldStatus = eachComp.setAttribute(Template.EACH_STATUS_VAR, new AbstractForEachStatus(){
 				private static final long serialVersionUID = 1L;
 				
 				public int getIndex() {
@@ -113,8 +112,8 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 			final Object value = eval.getValue(ctx, eachComp, _expression);
 			return value;
 		} finally {
-			eachComp.setAttribute(EACH_VAR, oldEach);
-			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
+			eachComp.setAttribute(Template.EACH_VAR, oldEach);
+			eachComp.setAttribute(Template.EACH_STATUS_VAR, oldStatus);
 		}
 	}
 	
