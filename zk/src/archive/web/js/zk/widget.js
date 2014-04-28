@@ -3096,7 +3096,7 @@ unbind_: function (skipper, after) {
 	getContentEdgeHeight_: function () {
 		var p = this.$n(),
 			fc = this.firstChild,
-			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
+			fc = fc && (!zk.ie6_ && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption)) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
 			c = fc ? fc.$n() : p.firstChild,
 			zkp = zk(p),
 			h = zkp.padBorderHeight();
@@ -3115,7 +3115,7 @@ unbind_: function (skipper, after) {
 	getContentEdgeWidth_: function () {
 		var p = this.$n(),
 			fc = this.firstChild,
-			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
+			fc = fc && (!zk.ie6_ && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption)) ? fc.nextSibling : fc, //Bug ZK-1524: Caption should ignored
 			c = fc ? fc.$n() : p.firstChild,
 			zkp = zk(p),
 			w = zkp.padBorderWidth();
