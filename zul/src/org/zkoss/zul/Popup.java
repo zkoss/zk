@@ -63,6 +63,12 @@ public class Popup extends XulElement {
 	 */
 	public void open(String x, String y) {
 		response("popup", new AuInvoke(this, "open", new Object[] {null, new Object[] {x, y}, null}));
+		disableClientUpdate(true);
+		try {
+			super.setVisible(true); // Bug B65-ZK-2267
+		} finally {
+			disableClientUpdate(false);
+		}
 	}
 	/**
 	 * Opens this popup to the specified location at the client.
@@ -140,6 +146,12 @@ public class Popup extends XulElement {
 	 */
 	public void open(Component ref, String position) {
 		response("popup", new AuInvoke(this, "open", new Object[] {ref.getUuid(), null, position}));
+		disableClientUpdate(true);
+		try {
+			super.setVisible(true); // Bug B65-ZK-2267
+		} finally {
+			disableClientUpdate(false);
+		}
 	}
 	/**
 	 * Closes this popup at the client.
@@ -150,6 +162,12 @@ public class Popup extends XulElement {
 	 */
 	public void close() {
 		response("popup", new AuInvoke(this, "close"));
+		disableClientUpdate(true);
+		try {
+			super.setVisible(false); // Bug B65-ZK-2267
+		} finally {
+			disableClientUpdate(false);
+		}
 	}
 
 	//super//
