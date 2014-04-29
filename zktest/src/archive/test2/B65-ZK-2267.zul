@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2267.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Apr 29, 2014  4:16:33 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Please click the following buttons in order.
+	<separator/>
+	2. You should see the messages with "true", "false" and "true" in order. (if the second popup disappear, the "false" is added to the fourth.)
+	<vlayout>
+		<button label="CLICK for popup using default mechanism" popup="defaultPopup"/>
+		<button label="CLICK for manually opened popup" onClick='manualPopup.open(self);Clients.log(manualPopup.isVisible().toString())'/> <!-- shows false -->
+	</vlayout>
+
+	<popup id="defaultPopup" onOpen="Clients.log(self.isVisible().toString());self.close();Clients.log(self.isVisible().toString())">
+		<label value="in default Popup"/>
+	</popup>
+	<popup id="manualPopup" onOpen="Clients.log(self.isVisible().toString())">
+		<label value="in manual Popup"/>
+	</popup>
+</zk>
