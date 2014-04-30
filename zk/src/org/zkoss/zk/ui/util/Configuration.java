@@ -2228,6 +2228,22 @@ public class Configuration {
 
 		return addRichlet0(name, richletClassName, params);
 	}
+	/** Adds the richlet.
+	 *
+	 * <p>If there was a richlet associated with the same name, the
+	 * the old one will be replaced.
+	 *
+	 * @param name the richlet name
+	 * @param richlet the richlet implemetation.
+	 * @return the previous richlet class or class-name with the specified name,
+	 * or null if no previous richlet.
+	 */
+	public Object addRichlet(String name, Richlet richlet) {
+		if (richlet == null)
+			throw new IllegalArgumentException("richletClassName is required");
+
+		return addRichlet0(name, richlet, null);
+	}
 	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
 		final Object o;
 		synchronized (_richlets) {
