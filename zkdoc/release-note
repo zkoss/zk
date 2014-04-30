@@ -60,6 +60,7 @@ ZK 7.0.2
   ZK-2264: After change to the next page, we cannot scroll a frozen grid horizontally
   ZK-2267: Popup is only sometimes "visible" when it is opened
   ZK-2269: Comet Server Push send infinitely request if using Apache as proxy server
+  ZK-2262: JS error showed after moving movable panel
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
