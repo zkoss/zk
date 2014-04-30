@@ -2237,10 +2237,11 @@ public class Configuration {
 	 * @param richlet the richlet implemetation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
+	 * @since 7.0.2
 	 */
 	public Object addRichlet(String name, Richlet richlet) {
 		if (richlet == null)
-			throw new IllegalArgumentException("richletClassName is required");
+			throw new IllegalArgumentException("richlet instance is required");
 
 		return addRichlet0(name, richlet, null);
 	}
