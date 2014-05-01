@@ -2246,15 +2246,91 @@ public class Configuration {
 		return addRichlet0(name, richlet, null);
 	}
 	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
-		final Object o;
-		synchronized (_richlets) {
-			o = _richlets.put(name, new Object[] {richletClass, params});
+		Object o;
+		
+		for (;;) {
+			// remove previous richlet if it exists
+			o = removeRichlet0(name);
+			
+			synchronized (_richlets) {
+				// add new richlet definition only if map does not contain record
+				// with same name
+				if (!(_richlets.containsKey(name))) {
+					if (richletClass instanceof Richlet) {
+						_richlets.put(name, richletClass);
+					} else {
+						_richlets.put(name, new Object[] {richletClass, params});
+					}
+					break;
+				}
+			}
 		}
 
-		if (o == null)
+		return o;
+	}
+	
+	/**
+	 * Removes the richlet and associated richlet mappings.
+	 * 
+	 * @param name the richlet name
+	 * @return the removed richlet class or class-name with the specified name,
+	 * or null if the richlet is not found.
+	 * @since 7.0.2
+	 */
+	public Object removeRichlet(String name) {
+		// remove richlet
+		final Object o = removeRichlet0(name);
+		
+		// remove associated richlet mappings
+		removeRichletMapping(name);
+		
+		return o;
+	}
+	
+	/**
+	 * Removes the richlet.
+	 * 
+	 * @param name the richlet name
+	 * @return the removed richlet class or class-name with the specified name,
+	 * or null if the richlet is not found.
+	 * @since 7.0.2
+	 */
+	private Object removeRichlet0(String name) {
+		if (name == null) {
+			throw new IllegalArgumentException("Name is required");
+		}
+		Object o;
+
+		for (;;) {
+			// remove richlet
+			synchronized (_richlets) {
+				o = _richlets.remove(name);
+			}
+			
+			// verify it sth instancing richlet at the moment
+			if (o instanceof WaitLock) {
+				WaitLock lock = (WaitLock) o;
+				if (!lock.waitUntilUnlock(300 * 1000)) { //5 minute
+					String msg = new StringBuilder("Unable to remove richlet ").
+							append(name).
+							append("\nCause: conflict too long.").
+							toString();
+					final PotentialDeadLockException ex =
+						new PotentialDeadLockException(msg);
+					log.warn(msg, ex); //very rare, possibly a bug
+					throw ex;
+				}
+			} else {
+				break;
+			}
+		}
+		
+		if (o == null) {
 			return null;
+		}
 		if (o instanceof Richlet) {
-			destroy((Richlet)o);
+			// destroy object if it is richlet
+			destroy((Richlet) o);
 			return o.getClass();
 		}
 		return ((Object[])o)[0];
@@ -2269,13 +2345,6 @@ public class Configuration {
 	 * @since 2.4.0
 	 */
 	public void addRichletMapping(String name, String path) {
-		//first, check whether the richlet is defined
-		synchronized (_richlets) {
-			if (!_richlets.containsKey(name))
-				throw new UiException("Richlet not defined: "+name);
-		}
-
-		//richletClass was checked before calling this method
 		//Note: "/" is the same as ""
 		if (path == null || path.length() == 0 || "/".equals(path))
 			path = "";
@@ -2286,12 +2355,41 @@ public class Configuration {
 		if (wildcard) //wildcard
 			path = path.substring(0, path.length() - 2);
 				//note it might be empty
-
-		synchronized (_richletmaps) {
-			_richletmaps.put(
-				path, new Object[] {name, Boolean.valueOf(wildcard)});
+		
+		//richlet mapping cannot be added if richlet is not defined,
+		//so check if richlet with same name exists and then
+		//add richlet mapping
+		synchronized (_richlets) {
+			if (!_richlets.containsKey(name))
+				throw new UiException("Richlet not defined: "+name);
+		
+			synchronized (_richletmaps) {
+				_richletmaps.put(
+					path, new Object[] {name, Boolean.valueOf(wildcard)});
+			}
 		}
 	}
+	
+	/**
+	 * Removes all richlet mappings for the specified richlet.
+	 * 
+	 * @param name the richlet name
+	 */
+	private void removeRichletMapping(String name) {
+		// remove richlet mapping
+		synchronized (_richletmaps) {
+			Iterator<Map.Entry<String, Object[]>> iter = 
+					_richletmaps.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry<String, Object[]> entry = iter.next();
+				String richletName = (String) entry.getValue()[0];
+				if (richletName.equals(name)) {
+					iter.remove();
+				}
+			}
+		}
+	}
+	
 	private static void destroy(Richlet richlet) {
 		try {
 			richlet.destroy();
