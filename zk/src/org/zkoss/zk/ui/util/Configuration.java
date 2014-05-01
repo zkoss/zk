@@ -2248,7 +2248,11 @@ public class Configuration {
 	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
 		final Object o;
 		synchronized (_richlets) {
-			o = _richlets.put(name, new Object[] {richletClass, params});
+			if (richletClass instanceof Richlet) {
+				o = _richlets.put(name, richletClass);
+			} else {
+				o = _richlets.put(name, new Object[] {richletClass, params});
+			}
 		}
 
 		if (o == null)
