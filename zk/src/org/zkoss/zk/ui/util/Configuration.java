@@ -2246,22 +2246,27 @@ public class Configuration {
 		return addRichlet0(name, richlet, null);
 	}
 	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
-		final Object o;
-		synchronized (_richlets) {
-			if (richletClass instanceof Richlet) {
-				o = _richlets.put(name, richletClass);
-			} else {
-				o = _richlets.put(name, new Object[] {richletClass, params});
+		Object o;
+		
+		for (;;) {
+			// remove previous richlet if it exists
+			o = removeRichlet0(name);
+			
+			synchronized (_richlets) {
+				// add new richlet definition only if map does not contain record
+				// with same name
+				if (!(_richlets.containsKey(name))) {
+					if (richletClass instanceof Richlet) {
+						_richlets.put(name, richletClass);
+					} else {
+						_richlets.put(name, new Object[] {richletClass, params});
+					}
+					break;
+				}
 			}
 		}
 
-		if (o == null)
-			return null;
-		if (o instanceof Richlet) {
-			destroy((Richlet)o);
-			return o.getClass();
-		}
-		return ((Object[])o)[0];
+		return o;
 	}
 	
 	/**
