@@ -2335,7 +2335,6 @@ public class Configuration {
 		}
 		return ((Object[])o)[0];
 	}
-	
 	/** Adds a richlet mapping.
 	 *
 	 * @param name the name of the richlet.
@@ -2346,13 +2345,6 @@ public class Configuration {
 	 * @since 2.4.0
 	 */
 	public void addRichletMapping(String name, String path) {
-		//first, check whether the richlet is defined
-		synchronized (_richlets) {
-			if (!_richlets.containsKey(name))
-				throw new UiException("Richlet not defined: "+name);
-		}
-
-		//richletClass was checked before calling this method
 		//Note: "/" is the same as ""
 		if (path == null || path.length() == 0 || "/".equals(path))
 			path = "";
@@ -2363,10 +2355,18 @@ public class Configuration {
 		if (wildcard) //wildcard
 			path = path.substring(0, path.length() - 2);
 				//note it might be empty
-
-		synchronized (_richletmaps) {
-			_richletmaps.put(
-				path, new Object[] {name, Boolean.valueOf(wildcard)});
+		
+		//richlet mapping cannot be added if richlet is not defined,
+		//so check if richlet with same name exists and then
+		//add richlet mapping
+		synchronized (_richlets) {
+			if (!_richlets.containsKey(name))
+				throw new UiException("Richlet not defined: "+name);
+		
+			synchronized (_richletmaps) {
+				_richletmaps.put(
+					path, new Object[] {name, Boolean.valueOf(wildcard)});
+			}
 		}
 	}
 	
