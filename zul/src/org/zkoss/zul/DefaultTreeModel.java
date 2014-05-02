@@ -167,13 +167,11 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	private void sort0(TreeNode<E> node, Comparator<TreeNode<E>> cmpr) {
 		if (node.getChildren() == null) return;
-		if (node instanceof DefaultTreeNode)
-			((TreeNodeChildrenList)node.getChildren()).sort(cmpr);
-		else
-			Collections.sort(node.getChildren(), cmpr);
+
+		Collections.sort(node.getChildren(), cmpr);
+
 		for (TreeNode<E> child: node.getChildren())
 			sort0(child, cmpr);
 	}
