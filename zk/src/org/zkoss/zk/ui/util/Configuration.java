@@ -2196,7 +2196,7 @@ public class Configuration {
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String name, Class<?> richletClass, Map<String, String> params) {
+	public Object addRichlet(String name, Class<? extends Richlet> richletClass, Map<String, String> params) {
 		return _richletContainer.addRichlet(name, richletClass, params);
 	}
 	/** Adds the definition of a richlet.

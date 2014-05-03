@@ -67,9 +67,9 @@ final class RichletContainer {
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String name, Class<?> richletClass, Map<String, String> params) {
-		if (!Richlet.class.isAssignableFrom(richletClass))
-			throw new IllegalArgumentException("A richlet class, "+richletClass+", must implement "+Richlet.class.getName());
+	public Object addRichlet(String name, Class<? extends Richlet> richletClass, Map<String, String> params) {
+		if (richletClass == null)
+			throw new IllegalArgumentException("A richlet class is required");
 
 		return addRichlet0(name, richletClass, params);
 	}
@@ -87,7 +87,7 @@ final class RichletContainer {
 	 * or null if no previous richlet.
 	 */
 	public Object addRichlet(String name, String richletClassName, Map<String, String> params) {
-		if (richletClassName == null || richletClassName.length() == 0)
+		if (richletClassName == null || richletClassName.isEmpty())
 			throw new IllegalArgumentException("richletClassName is required");
 
 		return addRichlet0(name, richletClassName, params);
