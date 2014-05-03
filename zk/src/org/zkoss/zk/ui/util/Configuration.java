@@ -2190,7 +2190,8 @@ public class Configuration {
 	 * <p>If there was a richlet associated with the same name, the
 	 * the old richlet will be replaced.
 	 *
-	 * @param name the richlet name
+	 * @param name the richlet name, or null. If the name is null, the richlet class name
+	 * will be used.
 	 * @param params the initial parameters, or null if no initial parameter at all.
 	 * Once called, the caller cannot access <code>params</code> any more.
 	 * @return the previous richlet class or class-name with the specified name,
@@ -2204,7 +2205,8 @@ public class Configuration {
 	 * <p>If there was a richlet associated with the same name, the
 	 * the old servlet will be replaced.
 	 *
-	 * @param name the richlet name
+	 * @param name the richlet name, or null. If the name is null, the richlet class name
+	 * will be used.
 	 * @param richletClassName the class name. The class will be loaded
 	 * only when the richlet is loaded.
 	 * @param params the initial parameters, or null if no initial parameter at all.
@@ -2220,7 +2222,8 @@ public class Configuration {
 	 * <p>If there was a richlet associated with the same name, the
 	 * the old one will be replaced.
 	 *
-	 * @param name the richlet name
+	 * @param name the richlet name, or null. If the name is null, the richlet class name
+	 * will be used.
 	 * @param richlet the richlet implementation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
@@ -2236,7 +2239,7 @@ public class Configuration {
 	 * the old one will be replaced.
 	 *
 	 * @param richlet the richlet implementation.
-	 * @return the previous richlet class or class-name with the specified name,
+	 * @return the previous richlet class or class-name with the same class name,
 	 * or null if no previous richlet.
 	 * @since 7.0.2
 	 */
@@ -2247,8 +2250,8 @@ public class Configuration {
 	/**
 	 * Removes the richlet and associated URL mappings.
 	 * 
-	 * @param name the richlet implementation
-	 * @return the removed richlet class or class-name with the specified name,
+	 * @param richlet the richlet implementation
+	 * @return the removed richlet class or class-name with the same class name,
 	 * or null if the richlet is not found.
 	 * @since 7.0.2
 	 */
@@ -2266,6 +2269,19 @@ public class Configuration {
 	 */
 	public Object removeRichlet(String name) {
 		return _richletContainer.removeRichlet(name);
+	}
+	
+	/** Adds a richlet mapping.
+	 *
+	 * @param richlet the richlet implementation
+	 * @param path the URL pattern. It must start with '/' and may end
+	 * with '/*'.
+	 * @exception UiException if the richlet is not defined yet.
+	 * See {@link #addRichlet}.
+	 * @since 7.0.2
+	 */
+	public void addRichletMapping(Richlet richlet, String path) {
+		_richletContainer.addRichletMapping(richlet, path);
 	}
 	
 	/** Adds a richlet mapping.

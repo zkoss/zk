@@ -159,8 +159,8 @@ final class RichletContainer {
 	/**
 	 * Removes the richlet and associated URL mappings.
 	 * 
-	 * @param name the richlet name
-	 * @return the removed richlet class or class-name with the specified name,
+	 * @param richlet the richlet implementation
+	 * @return the removed richlet class or class-name with the same class name,
 	 * or null if the richlet is not found.
 	 */
 	public Object removeRichlet(Richlet richlet) {
@@ -236,6 +236,22 @@ final class RichletContainer {
 		return ((Object[])o)[0];
 	}
 
+	/** Adds a richlet mapping.
+	 *
+	 * @param richlet the richlet implementation
+	 * @param path the URL pattern. It must start with '/' and may end
+	 * with '/*'.
+	 * @exception UiException if the richlet is not defined yet.
+	 * See {@link #addRichlet}.
+	 */
+	public void addRichletMapping(Richlet richlet, String path) {
+		if (richlet == null) {
+			throw new IllegalArgumentException("Richlet instance is required");
+		}
+		
+		addRichletMapping(richlet.getClass().getCanonicalName(), path);
+	}
+	
 	/** Adds a richlet mapping.
 	 *
 	 * @param name the name of the richlet.
