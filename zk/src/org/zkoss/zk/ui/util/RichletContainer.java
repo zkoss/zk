@@ -58,7 +58,7 @@ final class RichletContainer {
 	
 	/** Adds the definition of a richlet.
 	 *
-	 * <p>If there was a richlet associated with the same name, the
+	 * <p>If there was a richlet associated with the same name,
 	 * the old richlet will be replaced.
 	 *
 	 * @param name the richlet name, or null. If the name is null, the richlet class name
@@ -78,7 +78,7 @@ final class RichletContainer {
 	}
 	/** Adds the definition of a richlet.
 	 *
-	 * <p>If there was a richlet associated with the same name, the
+	 * <p>If there was a richlet associated with the same name, 
 	 * the old servlet will be replaced.
 	 *
 	 * @param name the richlet name, or null. If the name is null, the richlet class name
@@ -98,9 +98,23 @@ final class RichletContainer {
 		
 		return addRichlet0(richletName, richletClassName, params);
 	}
+	
 	/** Adds the richlet.
 	 *
-	 * <p>If there was a richlet associated with the same name, the
+	 * <p>If there was a richlet associated with the same class name,
+	 * the old one will be replaced.
+	 *
+	 * @param richlet the richlet implemetation.
+	 * @return the previous richlet class or class-name with the specified name,
+	 * or null if no previous richlet.
+	 */
+	public Object addRichlet(Richlet richlet) {
+		return addRichlet(null, richlet);
+	}
+	
+	/** Adds the richlet.
+	 *
+	 * <p>If there was a richlet associated with the same name, 
 	 * the old one will be replaced.
 	 *
 	 * @param name the richlet name, or null. If the name is null, the richlet class name

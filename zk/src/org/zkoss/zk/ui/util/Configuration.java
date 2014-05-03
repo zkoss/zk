@@ -2230,6 +2230,20 @@ public class Configuration {
 		return _richletContainer.addRichlet(name, richlet);
 	}
 	
+	/** Adds the richlet.
+	 *
+	 * <p>If there was a richlet associated with the same class name, the
+	 * the old one will be replaced.
+	 *
+	 * @param richlet the richlet implemetation.
+	 * @return the previous richlet class or class-name with the specified name,
+	 * or null if no previous richlet.
+	 * @since 7.0.2
+	 */
+	public Object addRichlet(Richlet richlet) {
+		return _richletContainer.addRichlet(richlet);
+	}
+	
 	/**
 	 * Removes the richlet and associated richlet mappings.
 	 * 
