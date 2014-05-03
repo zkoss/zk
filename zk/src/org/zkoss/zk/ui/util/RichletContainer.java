@@ -61,7 +61,8 @@ final class RichletContainer {
 	 * <p>If there was a richlet associated with the same name, the
 	 * the old richlet will be replaced.
 	 *
-	 * @param name the richlet name
+	 * @param name the richlet name, or null. If the name is null, the richlet class name
+	 * will be used.
 	 * @param params the initial parameters, or null if no initial parameter at all.
 	 * Once called, the caller cannot access <code>params</code> any more.
 	 * @return the previous richlet class or class-name with the specified name,
@@ -71,14 +72,17 @@ final class RichletContainer {
 		if (richletClass == null)
 			throw new IllegalArgumentException("A richlet class is required");
 
-		return addRichlet0(name, richletClass, params);
+		String richletName = name != null ? name : richletClass.getCanonicalName();
+		
+		return addRichlet0(richletName, richletClass, params);
 	}
 	/** Adds the definition of a richlet.
 	 *
 	 * <p>If there was a richlet associated with the same name, the
 	 * the old servlet will be replaced.
 	 *
-	 * @param name the richlet name
+	 * @param name the richlet name, or null. If the name is null, the richlet class name
+	 * will be used.
 	 * @param richletClassName the class name. The class will be loaded
 	 * only when the richlet is loaded.
 	 * @param params the initial parameters, or null if no initial parameter at all.
@@ -90,14 +94,17 @@ final class RichletContainer {
 		if (richletClassName == null || richletClassName.isEmpty())
 			throw new IllegalArgumentException("richletClassName is required");
 
-		return addRichlet0(name, richletClassName, params);
+		String richletName = name != null ? name : richletClassName;
+		
+		return addRichlet0(richletName, richletClassName, params);
 	}
 	/** Adds the richlet.
 	 *
 	 * <p>If there was a richlet associated with the same name, the
 	 * the old one will be replaced.
 	 *
-	 * @param name the richlet name
+	 * @param name the richlet name, or null. If the name is null, the richlet class name
+	 * will be used.
 	 * @param richlet the richlet implemetation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
@@ -106,7 +113,9 @@ final class RichletContainer {
 		if (richlet == null)
 			throw new IllegalArgumentException("richlet instance is required");
 
-		return addRichlet0(name, richlet, null);
+		String richletName = name != null ? name : richlet.getClass().getCanonicalName();
+		
+		return addRichlet0(richletName, richlet, null);
 	}
 
 	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
