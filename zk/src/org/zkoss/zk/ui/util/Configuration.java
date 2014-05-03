@@ -2221,7 +2221,7 @@ public class Configuration {
 	 * the old one will be replaced.
 	 *
 	 * @param name the richlet name
-	 * @param richlet the richlet implemetation.
+	 * @param richlet the richlet implementation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 * @since 7.0.2
@@ -2235,13 +2235,25 @@ public class Configuration {
 	 * <p>If there was a richlet associated with the same class name, the
 	 * the old one will be replaced.
 	 *
-	 * @param richlet the richlet implemetation.
+	 * @param richlet the richlet implementation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 * @since 7.0.2
 	 */
 	public Object addRichlet(Richlet richlet) {
 		return _richletContainer.addRichlet(richlet);
+	}
+	
+	/**
+	 * Removes the richlet and associated URL mappings.
+	 * 
+	 * @param name the richlet implementation
+	 * @return the removed richlet class or class-name with the specified name,
+	 * or null if the richlet is not found.
+	 * @since 7.0.2
+	 */
+	public Object removeRichlet(Richlet richlet) {
+		return _richletContainer.removeRichlet(richlet);
 	}
 	
 	/**

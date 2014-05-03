@@ -104,7 +104,7 @@ final class RichletContainer {
 	 * <p>If there was a richlet associated with the same class name,
 	 * the old one will be replaced.
 	 *
-	 * @param richlet the richlet implemetation.
+	 * @param richlet the richlet implementation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
@@ -119,7 +119,7 @@ final class RichletContainer {
 	 *
 	 * @param name the richlet name, or null. If the name is null, the richlet class name
 	 * will be used.
-	 * @param richlet the richlet implemetation.
+	 * @param richlet the richlet implementation.
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
@@ -156,6 +156,21 @@ final class RichletContainer {
 		return o;
 	}
 
+	/**
+	 * Removes the richlet and associated URL mappings.
+	 * 
+	 * @param name the richlet name
+	 * @return the removed richlet class or class-name with the specified name,
+	 * or null if the richlet is not found.
+	 */
+	public Object removeRichlet(Richlet richlet) {
+		if (richlet == null) {
+			throw new IllegalArgumentException("Richlet is required");
+		}
+		
+		return removeRichlet(richlet.getClass().getCanonicalName());
+	}
+	
 	/**
 	 * Removes the richlet and associated richlet mappings.
 	 * 
