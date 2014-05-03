@@ -476,8 +476,7 @@ public class ConfigParser {
 				log.error("Illegal richlet definition at "+el.getLocator(), ex);
 			}
 		} else { //syntax since 2.4.0
-			final String nm =
-				IDOMs.getRequiredElementValue(el, "richlet-name");
+			final String nm = el.getElementValue("richlet-name", true);
 			try {
 				config.addRichlet(nm, clsnm, params);
 			} catch (Throwable ex) {
