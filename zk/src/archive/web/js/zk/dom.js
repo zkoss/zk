@@ -599,7 +599,7 @@ zjq.prototype = {
 	/** Causes the first matched element to scroll into view.
 	 * @param DOMElement parent scrolls the first matched element into the parent's view,
 	 * if any. Otherwise, document.body is assumed. 
-	 * @param boolean if true, it means only vertical orient works.
+	 * @param boolean excludeHorizontal if true, it means only vertical orient works.
 	 * @return jqzk this object
 	 */
 	scrollIntoView: function (parent, excludeHorizontal) {
