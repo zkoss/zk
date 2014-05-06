@@ -223,7 +223,14 @@ Nov 26, 2013
   + change the addon-name of zkplus jar from 'databind' to 'zkplus'
 
     --------
+ZK 6.5.7
+* Features
+
+* Bugs
+
+  --------
 ZK 6.5.6
+May 6, 2014
 * Features
   ZK-2227: ZK Messages support Polish lang
 
