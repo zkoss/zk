@@ -572,18 +572,21 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 5.0.8
 	 */
 	fireSized: function (wgt, bfsz) {
-		if (zUtl.isImageLoading() || zk.clientinfo) {
-			var f = arguments.callee;
-			setTimeout(function () {
-				return f(wgt, bfsz);
-			}, 20);
-			return;
+		// ignore delayed rerendering case, like Bug ZK-2281
+		if (wgt.desktop) {
+			if (zUtl.isImageLoading() || zk.clientinfo) {
+				var f = arguments.callee;
+				setTimeout(function () {
+					return f(wgt, bfsz);
+				}, 20);
+				return;
+			}
+			wgt = _onSizeTarget(wgt);
+			if (!(bfsz < 0)) //don't use >= (because bfsz might be undefined)
+				zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
+			zWatch.fireDown('onFitSize', wgt, {reverse: true});
+			zWatch.fireDown('onSize', wgt);
 		}
-		wgt = _onSizeTarget(wgt);
-		if (!(bfsz < 0)) //don't use >= (because bfsz might be undefined)
-			zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
-		zWatch.fireDown('onFitSize', wgt, {reverse: true});
-		zWatch.fireDown('onSize', wgt);
 	},
 	/** Fires onBeforeSize, onShow, onFitSize, and onSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.

@@ -63,6 +63,7 @@ ZK 7.0.2
   ZK-2269: Comet Server Push send infinitely request if using Apache as proxy server
   ZK-2262: JS error showed after moving movable panel
   ZK-2271: JavaScript error when Invalidating a listhead with hflex="min" listheader
+  ZK-2281: Replacing Columns of a Grid with frozen column when switching page causes JS error
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate

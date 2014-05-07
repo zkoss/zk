@@ -528,6 +528,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.rerender(-1);
 		}
 	}
+	/* Bug ZK-2281 */
+	function _rerenderNow(wgt, skipper) {
+		var rdque = [];
+		for (var j = _rdque.length; j--;)
+			if (zUtl.isAncestor(wgt, _rdque[j])) {// if wgt's children or itself is in a rerender queue
+				if (!skipper || !skipper.skipped(wgt, _rdque[j]))
+					rdque = rdque.concat(_rdque.splice(j, 1));
+			}
+		
+		// just in case
+		if (!_rdque.length && _rdtid) {
+			clearTimeout(_rdtid);
+			_rdtid = null; 
+		}
+		
+		l_out2:
+			for (var w; w = rdque.shift();) {
+				if (!w.desktop)
+					continue;
+
+				for (var j = rdque.length; j--;)
+					if (zUtl.isAncestor(w, rdque[j]))
+						rdque.splice(j, 1); //skip rdque[j]
+					else if (zUtl.isAncestor(rdque[j], w))
+						continue l_out2; //skip wgt
+
+				w.rerender(-1);
+			}
+	}
 	function _rerenderDone(wgt, skipper /* Bug ZK-1463 */) {
 		for (var j = _rdque.length; j--;)
 			if (zUtl.isAncestor(wgt, _rdque[j])) {
@@ -2811,7 +2840,15 @@ function () {
 				if (w._binding)
 					return true;
 	},
-
+	/**
+	 * Forces the delaied rerendering children or itself to do now.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @since 7.0.2
+	 */
+	// for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
+	rerenderNow_: function (skipper) {
+		_rerenderNow(this, skipper);
+	},
 	/** Binds this widget.
 	 * It is called to assoicate (aka., attach) the widget with
 	 * the DOM tree.
