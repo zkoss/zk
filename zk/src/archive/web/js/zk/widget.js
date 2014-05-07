@@ -2456,7 +2456,6 @@ function () {
 		}
 
 		if (!skipper) {
-			window._onsizet = jq.now();
 			zUtl.fireSized(this);
 		}
 
