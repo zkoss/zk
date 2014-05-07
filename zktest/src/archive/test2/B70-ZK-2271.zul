@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2271.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 07, 2014 11:21:17 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click the button, and then it should not show any JS error.
+    <button label="Invalidate Listheader" onClick="listhead.invalidate()"/>
+    <listbox>
+       <listhead id="listhead">
+           <listheader label="Column 1" hflex="min"/>
+       </listhead>
+   </listbox>
+</zk>

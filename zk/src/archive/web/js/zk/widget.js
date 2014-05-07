@@ -1587,8 +1587,9 @@ wgt.$f().main.setTitle("foo");
 		} else
 			shallReplace = dt;
 
+		var callback = [];
 		if (shallReplace) {
-			if (node) newwgt.replaceHTML(node, dt, null, true);
+			if (node) newwgt.replaceHTML(node, dt, null, true, callback);
 			else {
 				this.unbind();
 				newwgt.bind(dt);
@@ -1603,6 +1604,13 @@ wgt.$f().main.setTitle("foo");
 
 		this.parent = this.nextSibling = this.previousSibling = null;
 		
+		// For Bug ZK-2271, we delay the fireSized calculation after p.onChilReplaced_,
+		// because the sub-nodes mapping are not getting up to date.
+		if (callback && callback.length) {
+			var f;
+			while ((f = callback.shift()) && jq.isFunction(f))
+				f();
+		}
 		if (cfid) {
 			cf = zk.Widget.$(cfid);
 			if (!cf)
@@ -2437,7 +2445,7 @@ function () {
 	 * @see _global_.jq#replaceWith
 	 * @return zk.Widget
 	 */
-	replaceHTML: function (n, desktop, skipper, _trim_) {
+	replaceHTML: function (n, desktop, skipper, _trim_, _callback_) {
 		if (!desktop) {
 			desktop = this.desktop;
 			if (!zk.Desktop._ndt) zk.stateless();
@@ -2456,7 +2464,16 @@ function () {
 		}
 
 		if (!skipper) {
-			zUtl.fireSized(this);
+			if (!jq.isArray(_callback_))
+				zUtl.fireSized(this);
+			else {
+				// for Bug ZK-2271, we delay this calculation
+				var self = this;
+				_callback_.push(function (){
+					zUtl.fireSized(self);
+				});
+			}
+				
 		}
 
 		_rsFocus(cfi);
