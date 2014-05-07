@@ -73,12 +73,15 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		if (this._selected != selected) {
 			if (this.parent)
 				this.parent.toggleItemSelection(this);
-			this._setSelectedDirectly(selected);
+			else this._setSelectedDirectly(selected);
 		}
 	},
 	_setSelectedDirectly: function (selected) {
 		var n = this.$n();
-		if (n) n.selected = selected ? 'selected' : '';
+		// Bug ZK-2285, ignore if the status is the same for IE's issue
+		if (n && n.selected != selected) {
+			n.selected = selected ? 'selected' : '';
+		}
 		this._selected = selected;
 	},
 	/** Returns whether it is selected.
