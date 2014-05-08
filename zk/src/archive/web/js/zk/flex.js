@@ -173,6 +173,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								refDim;
 							for(; c; c = c.nextSibling) {
 								//Skip absolute or fixed DOM element size
+								isText = c.nodeType == 3; // Bug ZK-2275, we need to update c.nodeType
 								if (!isText) {
 									var cpos = c.style.position;
 									if (cpos == 'absolute' || cpos == 'fixed')
