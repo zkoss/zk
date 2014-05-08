@@ -305,34 +305,7 @@ public class ConfigParser {
 			else if ("listener".equals(elnm)) {
 				parseListener(config, el);
 			} else if ("richlet".equals(elnm)) {
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "richlet-class");
-				final Map<String, String> params =
-					IDOMs.parseParams(el, "init-param", "param-name", "param-value");
-
-				String path = el.getElementValue("richlet-url", true);
-				if (path != null) {
-				//deprecated since 2.4.0, but backward compatible
-					final int cnt;
-					synchronized (this) {
-						cnt = _richletnm++;
-					}
-					final String name = "z_obs_" + Integer.toHexString(cnt);
-					try {
-						config.addRichlet(name, clsnm, params);
-						config.addRichletMapping(name, path);
-					} catch (Throwable ex) {
-						log.error("Illegal richlet definition at "+el.getLocator(), ex);
-					}
-				} else { //syntax since 2.4.0
-					final String nm =
-						IDOMs.getRequiredElementValue(el, "richlet-name");
-					try {
-						config.addRichlet(nm, clsnm, params);
-					} catch (Throwable ex) {
-						log.error("Illegal richlet definition at "+el.getLocator(), ex);
-					}
-				}
+				parseRichlet(config, el);
 			} else if ("richlet-mapping".equals(elnm)) { //syntax since 2.4.0
 				final String nm =
 					IDOMs.getRequiredElementValue(el, "richlet-name");
@@ -471,6 +444,43 @@ public class ConfigParser {
 							continue l_out;
 					}
 				log.error("Unknown element: "+elnm+", at "+el.getLocator());
+			}
+		}
+	}
+	
+	/**
+	 * Parse richlet configurations.
+	 * 
+	 * @param config the ZK configuration
+	 * @param el the "richlet" element
+	 * @since 7.0.2
+	 */
+	private void parseRichlet(Configuration config, final Element el) {
+		final String clsnm =
+			IDOMs.getRequiredElementValue(el, "richlet-class");
+		final Map<String, String> params =
+			IDOMs.parseParams(el, "init-param", "param-name", "param-value");
+
+		String path = el.getElementValue("richlet-url", true);
+		if (path != null) {
+			//deprecated since 2.4.0, but backward compatible
+			final int cnt;
+			synchronized (this) {
+				cnt = _richletnm++;
+			}
+			final String name = "z_obs_" + Integer.toHexString(cnt);
+			try {
+				config.addRichlet(name, clsnm, params);
+				config.addRichletMapping(name, path);
+			} catch (Throwable ex) {
+				log.error("Illegal richlet definition at "+el.getLocator(), ex);
+			}
+		} else { //syntax since 2.4.0
+			final String nm = el.getElementValue("richlet-name", true);
+			try {
+				config.addRichlet(nm, clsnm, params);
+			} catch (Throwable ex) {
+				log.error("Illegal richlet definition at "+el.getLocator(), ex);
 			}
 		}
 	}
