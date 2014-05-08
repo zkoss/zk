@@ -389,7 +389,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	redrawpp_: function (out) {
 		var uuid = this.uuid;
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
-		' ', this.getSclass(), '" style="display:none" tabindex="-1"><ul id="',
+		' ', this.getSclass(), '" style="display:none"><ul id="',
 		uuid, '-cave" class="', this.$s('content'), '" >');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)

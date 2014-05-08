@@ -37,7 +37,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	redrawpp_: function (out) {
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
-		'" style="display:none" tabindex="-1">');
+		'" style="display:none">');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
