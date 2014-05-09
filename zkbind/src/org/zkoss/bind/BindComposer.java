@@ -35,6 +35,8 @@ import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
 import org.zkoss.bind.tracker.impl.BindUiLifeCycle;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
 
@@ -79,7 +81,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private static final String VALUE_ANNO_ATTR = "value";
 	
-	private static final String COMPOSER_NAME_ATTR = "composerName";
 	private static final String VIEW_MODEL_ATTR = "viewModel";
 	private static final String BINDER_ATTR = "binder";
 	private static final String VALIDATION_MESSAGES_ATTR = "validationMessages";
@@ -324,10 +325,10 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 						throw new UiException(MiscUtil.formatLocationMessage("evaluated queue scope is empty, expression is "+expr,initanno));
 					}
 				}
-				binder = new AnnotateBinder(name,scope);
+				binder = newAnnotateBinder(name, scope); //ZK-2288
 			}
 		}else{
-			binder = new AnnotateBinder();
+			binder = newAnnotateBinder(null, null); //ZK-2288
 		}
 		
 		//put to attribute, so binder could be referred by the name
@@ -335,6 +336,21 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		comp.setAttribute(BINDER_ID, bname);
 		
 		return (AnnotateBinder)binder;
+	}
+	
+	//ZK-2288: A way to specify a customized default AnnotateBinder.
+	private AnnotateBinder newAnnotateBinder(String name, String scope) {
+		String clznm = Library.getProperty("org.zkoss.bind.AnnotateBinder.class");
+		if (clznm != null){
+			try {
+				return (AnnotateBinder) 
+						Classes.newInstanceByThread(clznm, new Class[] {String.class, String.class}, new String[] {name, scope});
+			} catch (Exception e) {
+				throw new UiException("Can't initialize binder",e);
+			}
+		} else {
+			return new AnnotateBinder(name, scope);
+		}
 	}
 	
 	private ValidationMessages initValidationMessages(BindEvaluatorX evalx, Component comp,Binder binder) {
