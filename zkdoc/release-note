@@ -5,6 +5,7 @@ ZK 7.0.2
   ZK-2227: ZK Messages support Polish lang
   ZK-2270: Enables registering concrete richlets instead of their class names
   ZK-2272: Remove richlets during the runtime
+  ZK-2288: A way to specify a customized default AnnotateBinder.
 
 * Bugs
   ZK-2192: Combobox button does not work when other component is animating
