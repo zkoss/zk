@@ -1,4 +1,19 @@
   --------
+ZK 6.5.4.1
+May 12, 2014
+* Features
+  ZK-2288: A way to specify a customized default AnnotateBinder
+
+* Bugs
+
+* Upgrade Notes
+  + To support ZK-2288, add the following setting in WEB-INF/zk.xml
+    <library-property>
+      <name>org.zkoss.bind.AnnotateBinder.class</name>
+      <value>com.mycompany.MyAnnotateBinder</value>
+    </library-property>
+
+  --------
 ZK 6.5.4
 Sep 24, 2013
 * Features
@@ -246,7 +261,6 @@ Mar 26, 2013
     <library-property>
       <name>org.zkoss.theme.folder.root</name>
       <value>other/themes</value>
-      <value>
     </library-property>
   + ThemeRegistry and ThemeResolver interfaces are introduced. Users could 
   implement these interfaces or extend the standard implementation to customize
