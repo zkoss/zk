@@ -68,6 +68,7 @@ ZK 7.0.2
   ZK-2283: Combobox autocomplet problem in ie11
   ZK-2279: DateBox not show properly when use attribute readonly =true
   ZK-2275: IE 9+ Client error with image button and hflex
+  ZK-2293: Bandpopup opened with alternating width
 
 * Upgrade Notes
   + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
