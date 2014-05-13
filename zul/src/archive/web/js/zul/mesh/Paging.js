@@ -49,8 +49,11 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			if (this._detailed) {
 				if (!_rerenderIfBothPaging(this)) {
 					var info = this.$n('info');
-					if (info)
+					if (info) {
 						info.innerHTML = this.infoText_();
+					} else if (this._totalSize) {
+						this.rerender(); // recreate infoTag
+					}
 				}
 			}
 		},
@@ -196,10 +199,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_infoTags: function (out) {
 		if (this._totalSize == 0)
 			return;
-			out.push('<div class="', this.$s('info'), '"><span ',
-					_rerenderIfBothPaging(this) ? 'name' : 'id', // Bug ZK-2280
-					'="', this.uuid,
-					'-info">', this.infoText_(), '</span></div>');
+		out.push('<div class="', this.$s('info'), '"><span ',
+				_rerenderIfBothPaging(this) ? 'name' : 'id', // Bug ZK-2280
+				'="', this.uuid,
+				'-info">', this.infoText_(), '</span></div>');
 	},
 	_innerTags: function () {
 		var out = [],
