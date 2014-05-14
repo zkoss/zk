@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2294.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 14, 2014 11:34:00 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Press down key to scroll down the popup then release, see the popup scroll back to top (that's a bug).
+	<zscript><![CDATA[
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++)
+		list.add("Option " + i);
+	ListModelList model = new ListModelList(list);
+	]]></zscript>
+	<combobox model="${model}" autodrop="true" onChanging="">
+	</combobox>
+</zk>

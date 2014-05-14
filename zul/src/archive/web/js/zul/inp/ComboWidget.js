@@ -80,13 +80,22 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				return;
 			}
 			var pp = this.getPopupNode_(),
-				pz = this.getPopupSize_(pp);
-			pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
-			
-			// Bug 2941343, 2936095, and 3189142
-			if (zk.ie8)
-				pp.style.width = pz[0];
-			this._fixsz(pz);
+				pz = this.getPopupSize_(pp),
+				scrollPos = {}; // Bug ZK-2294
+			try {
+				scrollPos.left = pp.scrollLeft;
+				scrollPos.Top = pp.scrollTop;
+				pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
+				
+				// Bug 2941343, 2936095, and 3189142
+				if (zk.ie8)
+					pp.style.width = pz[0];
+				this._fixsz(pz);
+			} finally {
+				// Bug ZK-2294, restore the scroll position
+				pp.scrollTop = scrollPos.Top || 0;
+				pp.scrollLeft = scrollPos.left || 0;
+			}
 		}
 	},
 	onScroll: function (wgt) {
