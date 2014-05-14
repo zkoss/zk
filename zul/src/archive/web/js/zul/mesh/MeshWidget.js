@@ -962,7 +962,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var head;
 				if (!this.frozen && (head = this.head)) {
 					// ZK-2114: fix width instead of display
-					var width = zk(this.ebody).hasVScroll() ? '15px' : '0.1px'
+					var width = zk(this.ebody).hasVScroll() ? jq.scrollbarWidth() : '0.1px'
 					head.$n('hdfaker-bar').style.width = width;
 				}
 			}
