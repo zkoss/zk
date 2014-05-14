@@ -82,6 +82,8 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		if (bar) {
 			bar.syncSize();
 			bar.scrollToElement(this.$n());
+		} else {
+			this.$supers('scrollIntoView', arguments);
 		}
 	},
 	deferRedrawHTML_: function (out) {

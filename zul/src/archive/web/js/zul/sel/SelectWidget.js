@@ -288,7 +288,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					bar.scrollToElement(item.$n());
 				// ZK-2193: scrollIntoView should exclude horizontal
 				if (this._nativebar)
-					zk(item).scrollIntoView(this.ebody, true);
+					zk(item).scrollIntoView();
 			}
 			if (zk.ff >= 4 && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
@@ -893,7 +893,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				bar.scrollToElement(lastrow.$n());
 			else {
 				// 1823278: key up until selection is out of view port, then it should scroll.
-				zk(lastrow.$n()).scrollIntoView(this.ebody, true); // Bug #1823947 and #1823278
+				zk(lastrow.$n()).scrollIntoView(); // Bug #1823947 and #1823278
 			} 
 				
 		}

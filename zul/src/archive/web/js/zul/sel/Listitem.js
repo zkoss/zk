@@ -155,6 +155,8 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		if (bar) {
 			bar.syncSize();
 			bar.scrollToElement(this.$n());
+		} else {
+			this.$supers('scrollIntoView', arguments);
 		}
 	},
 	_updHeaderCM: function (bRemove) {

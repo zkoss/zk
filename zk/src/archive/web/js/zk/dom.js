@@ -613,18 +613,20 @@ zjq.prototype = {
 		}
 		return this;
 	},
-	/** Causes the first matched element to scroll into view.
-	 * @param DOMElement parent scrolls the first matched element into the parent's view,
-	 * if any. Otherwise, document.body is assumed. 
-	 * @param boolean excludeHorizontal if true, it means only vertical orient works.
+	/** Causes the first matched element to scroll into view. 
 	 * @return jqzk this object
 	 */
-	scrollIntoView: function (parent, excludeHorizontal) {
+	scrollIntoView: function () {
 		var n = this.jq[0];
 		if (n) {
-			parent = parent || document.body.parentNode;
-			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
-				c = _scrlIntoView(p, n, c, excludeHorizontal);
+			var real = jq('#' + n.id + '-real')[0];
+			if (real)
+				n = real;
+
+			// use browser's scrollIntoView() method instead of ours.
+			setTimeout(function () {
+				n.scrollIntoView();
+			}, 20);
 		}
 		return this;
 	},

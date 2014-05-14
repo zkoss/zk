@@ -142,6 +142,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (bar) {
 			bar.syncSize();
 			bar.scrollToElement(this.$n());
+		} else {
+			this.$supers('scrollIntoView', arguments);
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
