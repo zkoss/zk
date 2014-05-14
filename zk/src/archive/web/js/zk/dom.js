@@ -81,57 +81,7 @@ zjq = function (jq) { //ZK extension
 	function _ensel() {
 		this.style.MozUserSelect = '';
 	}
-
-	function _scrlIntoView(outer, inner, info, excludeHorizontal) {
-		if (outer && inner) {
-			var ooft = zk(outer).revisedOffset(),
-				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
-				top = ioft[1] - ooft[1] +
-						(outer == (zk.webkit ? document.body : document.body.parentNode)
-								? 0 : outer.scrollTop),
-				left = ioft[0] - ooft[0] +
-						(outer == (zk.webkit ? document.body : document.body.parentNode)
-								? 0 : outer.scrollLeft),
-				ih = info ? info.h : inner.offsetHeight,
-				iw = info ? info.w : inner.offsetWidth,
-				right = left + iw,
-				bottom = top + ih,
-				updated;
-			//for fix the listbox(livedate) keydown select always at top
-			if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
-				outer.scrollTop = top;
-				updated = true;
-			} else if (bottom > outer.clientHeight + outer.scrollTop) {
-				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
-				updated = true;
-			}
-			
-			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position.
-			// ZK-2193: scrollIntoView support exclude horizontal
-			if (!excludeHorizontal)
-				if (outer.scrollLeft > left) {
-					outer.scrollLeft = left;
-					updated = true;
-				} else if (right > outer.clientWidth + outer.scrollLeft) {
-					outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
-					updated = true;
-				}
-			
-			if (updated || !info) {
-				if (!info)
-					info = {
-						oft: ioft,
-						h: inner.offsetHeight,
-						w: inner.offsetWidth,
-						el: inner
-					};
-				else info.oft = zk(info.el).revisedOffset();
-			}
-			
-			return info; 
-		}
-	}
-
+	
 	function _cmOffset(el) {
 		var t = 0, l = 0, operaBug;
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
