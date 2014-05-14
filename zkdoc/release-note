@@ -4,6 +4,7 @@ ZK 6.5.7
 
 * Bugs
   ZK-2296: After selecting an item, combobox's dropdown will scroll to right automatically
+  ZK-2294: Combobox popup scroll back to top when navigating by keyboard
 
   --------
 ZK 6.5.6
