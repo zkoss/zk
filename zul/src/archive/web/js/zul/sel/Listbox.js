@@ -207,7 +207,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				for (var it = this.getBodyWidgetIterator(); index-- >= 0;) 
 					si = it.next();
 				if (si) {
-					zk(si).scrollIntoView(this.ebody);
+					zk(si).scrollIntoView();
 					this._tmpScrollTop = this.ebody.scrollTop;
 				}
 			}
