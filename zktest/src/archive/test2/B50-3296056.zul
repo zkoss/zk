@@ -14,8 +14,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<tablelayout hflex="1">
-<tablechildren hflex="1">
+<tablelayout width="100%">
+<tablechildren width="100%">
 <panel>
 <panelchildren>
 <vlayout>
