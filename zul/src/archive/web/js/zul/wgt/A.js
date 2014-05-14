@@ -32,9 +32,37 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether it is disabled.
 		 * @param boolean disabled
 		 */
-		disabled: function () {
-			this.rerender(); //bind and unbind
-		},
+		disabled:  [
+		    // Refer from Button.js for the following changes
+		    // B60-ZK-1176
+		    // Autodisable should not re-enable when setDisabled(true) is called during onClick 
+		    function (v, opts) {
+		    	if (opts && opts.adbs)
+		    		// called from zul.wgt.ADBS.autodisable
+		    		this._adbs = true;	// Start autodisabling  
+		    	else if (!opts || opts.adbs === undefined)
+		    		// called somewhere else (including server-side)
+		    		this._adbs = false;	// Stop autodisabling
+		    	if (!v) {
+		    		if (this._adbs) {
+		    			// autodisable is still active, allow enabling
+		    			this._adbs = false;
+		    		} else if (opts && opts.adbs === false)
+		    			// ignore re-enable by autodisable mechanism
+		    			return this._disabled;
+		    	}
+		    	return v;
+		    }, 
+		    function (v) {
+		    	var self = this,
+		    		doDisable = function() { 
+			    		if (self.desktop) {
+			    			jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+			    		}
+			    	};
+		    	doDisable();
+		    }
+		],
 		/** Returns the direction.
 		 * <p>Default: "normal".
 		 * @return String
@@ -85,7 +113,49 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		tabindex: function (v) {
 			var n = this.$n();
 			if (n) n.tabIndex = v||'';
-		}
+		},
+		/** Returns a list of component IDs that shall be disabled when the user
+		 * clicks this anchor.
+		 *
+		 * <p>To represent the anchor itself, the developer can specify <code>self</code>.
+		 * For example, 
+		 * <pre><code>
+		 * anchor.setId('ok');
+		 * wgt.setAutodisable('self,cancel');
+		 * </code></pre>
+		 * is the same as
+		 * <pre><code>
+		 * anchor.setId('ok');
+		 * wgt.setAutodisable('ok,cancel');
+		 * </code></pre>
+		 * that will disable
+		 * both the ok and cancel anchors when an user clicks it.
+		 *
+		 * <p>The anchor being disabled will be enabled automatically
+		 * once the client receives a response from the server.
+		 * In other words, the server doesn't notice if a anchor is disabled
+		 * with this method.
+		 *
+		 * <p>However, if you prefer to enable them later manually, you can
+		 * prefix with '+'. For example,
+		 * <pre><code>
+		 * anchor.setId('ok');
+		 * wgt.setAutodisable('+self,+cancel');
+		 * </code></pre>
+		 *
+		 * <p>Then, you have to enable them manually such as
+		 * <pre><code>if (something_happened){
+		 *  ok.setDisabled(false);
+		 *  cancel.setDisabled(false);
+		 *</code></pre>
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets whether to disable the anchor after the user clicks it.
+		 * @param String autodisable
+		 */
+		autodisable: null
 	},
 
 	// super//
@@ -137,6 +207,8 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		if (this._disabled) 
 			evt.stop(); // Prevent browser default
 		else {
+			zul.wgt.ADBS.autodisable(this);
+			
 			this.fireX(evt);
 			if (!evt.stopped)
 				this.$super('doClick_', evt, true);
