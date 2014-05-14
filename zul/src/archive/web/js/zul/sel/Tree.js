@@ -325,6 +325,18 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			return id.endsWith('open') || id.endsWith('icon') ||
 				(evt.name == 'onRightClick' && !this.rightSelect);
 		}
+	},// Bug ZK-2295
+	clearSelection: function () {
+		this.$supers('clearSelection', arguments);
+		this._sel = null;
+	},// Bug ZK-2295
+	_addItemToSelection: function () {
+		this.$supers('_addItemToSelection', arguments);
+		this._sel = this._selItems[0]; // resync
+	},// Bug ZK-2295
+	_removeItemFromSelection: function () {
+		this.$supers('_removeItemFromSelection', arguments);
+		this._sel = this._selItems[0]; // resync
 	}
 });
 /**
