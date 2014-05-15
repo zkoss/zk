@@ -929,7 +929,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		if (items.length) {
-			this._shallFireOnRender = true;
 			this.fire('onRender', {items: items}, {implicit:true});
 		}
 	},
@@ -1464,7 +1463,28 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_deleteFakeRow: function (tbody) {
 		if (tbody)
 			jq('#' + tbody.id + '-fakeRow').remove();
-	}
+	}, // for Grid.js and Listbox.js
+	refreshBar_: function (showBar, scrollToTop) {
+		var bar = this._scrollbar;
+		if (bar) {
+			// ZK-355: Keep scroll position before sync scrollbar size
+			var currentLeft = this._currentLeft,
+				currentTop = this._currentTop;
+			bar.syncSize(showBar || this._shallShowScrollbar);
+			delete this._shallShowScrollbar; // use undefined rather false
+			if (scrollToTop)
+				bar.scrollTo(0, 0);
+			else
+				bar.scrollTo(currentLeft, currentTop);
+			//sync frozen
+			var frozen = this.frozen,
+				start;
+			if (frozen && (start = frozen._start) != 0) {
+				frozen._doScrollNow(start);
+				bar.setBarPosition(start);
+			}
+		}
+	},
 });
 /** @class zul.mesh.Scrollbar
  * @import zk.Widget
@@ -1477,7 +1497,7 @@ zul.mesh.Scrollbar = {
 	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
-		var embed = jq(wgt.$n()).data('embedscrollbar'),
+		var embed = jq(wgt.$n()).data('embedscrollbar') !== "false", // change default value to true since 7.0.2
 			frozen = wgt.frozen,
 			startPositionX = 0;
 		

@@ -81,6 +81,7 @@ ZK 7.0.2
     the API of setHflex() and setVflex() with numerical value since 7.0.2 release. Only the following values are supported: min, 0, and false.
   + Due to the better user-firendly for the scrollbar layout, we changed the org.zkoss.zul.nativebar of the library property to true by default
     for Grid, Listbox, Tree and Borderlayout component.
+  + Change the default value of data-embedscrollbar from false to true, if the org.zkoss.zul.nativebar setting to false.
 
   --------
 ZK 7.0.1

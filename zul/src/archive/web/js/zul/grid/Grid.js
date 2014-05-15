@@ -199,29 +199,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}, 200);
 	},
-	refreshBar_: function (showBar, scrollToTop) {
-		var bar = this._scrollbar;
-		if (bar) {
-			// ZK-355: Keep scroll position before sync scrollbar size
-			var currentLeft = this._currentLeft,
-				currentTop = this._currentTop;
-			
-			bar.syncSize(showBar || this._shallShowScrollbar);
-			this._shallShowScrollbar = false;
-			if (scrollToTop)
-				bar.scrollTo(0, 0);
-			else
-				bar.scrollTo(currentLeft, currentTop);
-			
-			//sync frozen
-			var frozen = this.frozen,
-				start;
-			if (frozen && (start = frozen._start) != 0) {
-				frozen._doScrollNow(start);
-				bar.setBarPosition(start);
-			}
-		}
-	},
 	destroyBar_: function () {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -229,18 +206,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			bar = this._scrollbar = null;
 		}
 	},
-	_onRender: function () {
-		this.$supers(Grid, '_onRender', arguments);
-		if (this._shallFireOnRender)
-			this._shallShowScrollbar = true;
-	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
-			var rtags = opts ? opts.rtags : null;
-			if (rtags && rtags.onDataLoading)
-				this._shallShowScrollbar = true;
 		}
 		this.$supers(Grid, 'onResponse', arguments);
 	},

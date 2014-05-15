@@ -167,27 +167,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			self._syncSelInView();
 		}, 300);
 	},
-	refreshBar_: function (showBar, scrollToTop) {
-		var bar = this._scrollbar;
-		if (bar) {
-			// ZK-355: Keep scroll position before sync scrollbar size
-			var currentLeft = this._currentLeft,
-				currentTop = this._currentTop;
-			bar.syncSize(showBar || this._shallShowScrollbar);
-			this._shallShowScrollbar = false;
-			if (scrollToTop)
-				bar.scrollTo(0, 0);
-			else
-				bar.scrollTo(currentLeft, currentTop);
-			//sync frozen
-			var frozen = this.frozen,
-				start;
-			if (frozen && (start = frozen._start) != 0) {
-				frozen._doScrollNow(start);
-				bar.setBarPosition(start);
-			}
-		}
-	},
 	destroyBar_: function () {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -235,11 +214,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._shallScrollIntoView = false;
 		}
 	},
-	_onRender: function () {
-		this.$supers(Listbox, '_onRender', arguments);
-		if (this._shallFireOnRender)
-			this._shallShowScrollbar = true;
-	},
 	_doScroll: function () {
 		// B50-ZK-56
 		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
@@ -255,9 +229,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this.stripe();
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
-			var rtags = opts ? opts.rtags : null;
-			if (rtags && rtags.onDataLoading)
-				this._shallShowScrollbar = true;
 		}
 		this.$supers(Listbox, 'onResponse', arguments);
 	},

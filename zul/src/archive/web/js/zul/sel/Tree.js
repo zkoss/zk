@@ -60,7 +60,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 				showBar = true;
 			}
 			bar.syncSize(showBar || this._shallShowScrollbar);
-			this._shallShowScrollbar = false;
+			delete this._shallShowScrollbar; // use undefined rather false
 			
 			// ZK-355: Scroll to current position
 			if (scrollPosition) {

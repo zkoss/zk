@@ -23,9 +23,9 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 			if (zk.ie < 9)
 				style.filter = 'alpha(opacity=' + 100 * opacity + ')';
 		}
-		if (embed) {
+		if (embed) { // always show if enabled
 			style = embed.style;
-			style.display = isHide ? 'block' : 'none';
+			style.display = 'block';
 			style.opacity = isHide ? 0.2 : 0;
 			if (zk.ie < 9)
 				style.filter = isHide ? 'alpha(opacity=20)' : 'alpha(opacity=0)';
@@ -162,6 +162,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			froenScrollWidth = 50 * (frozen._scrollScale || 0);
 		
 		if (needH) {
+			var old = hbar.style.display;
 			hbar.style.display = 'block'; // for calculate size
 			var embed = this.$n('hor-embed'),
 				left = this.$n('hor-left'),
@@ -212,9 +213,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			//sync indicator/scroller width ratio
 			this.hRatio = Math.abs(this.hLimit / this.hBarLimit);
-			hbar.style.display = 'none'; // for calculate size
+			hbar.style.display = old; // for calculate size
 		}
 		if (needV) {
+			var old = vbar.style.display;
 			vbar.style.display = 'block'; // for calculate size
 			var embed = this.$n('ver-embed'),
 				up = this.$n('ver-up'),
@@ -261,7 +263,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			//sync indicator/scroller width ratio
 			this.vRatio = Math.abs(this.vLimit / this.vBarLimit);
-			vbar.style.display = 'none'; // for calculate size
+			vbar.style.display = old; // for calculate size
 		}
 		
 		this.scrollTo(this._pos[0], this._pos[1]); //keep scroll position
