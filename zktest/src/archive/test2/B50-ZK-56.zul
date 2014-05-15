@@ -10,7 +10,7 @@ B50-ZK-56.zul
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
-<zk>
+<zk xmlns:ca="client/attribute">
 	<zscript><![CDATA[
 		List list = new ArrayList();
 		for (int i = 0; i < 1000; i++)
@@ -44,6 +44,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 					</listhead>
 				</listbox>
 				<listbox width="300px" height="300px" model="${model}" onCreate='model.addToSelection(model.getElementAt(300));' >
+				<custom-attributes org.zkoss.zul.nativebar="false"/>
+					<listhead>
+						<listheader label="non-ROD."/>
+					</listhead>
+					<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+				</listbox>
+		</hlayout>
+		Customized scrollbar + not embedded mode
+		<hlayout>
+				<listbox ca:data-embedscrollbar="false" width="300px" height="300px" model="${model}" onCreate='model.addToSelection(model.getElementAt(300));' >
+				<custom-attributes org.zkoss.zul.nativebar="false"/>
+					<listhead>
+						<listheader label="Rod"/>
+					</listhead>
+				</listbox>
+				<listbox ca:data-embedscrollbar="false" width="300px" height="300px" model="${model}" onCreate='model.addToSelection(model.getElementAt(300));' >
 				<custom-attributes org.zkoss.zul.nativebar="false"/>
 					<listhead>
 						<listheader label="non-ROD."/>

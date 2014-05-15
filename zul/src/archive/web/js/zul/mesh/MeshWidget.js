@@ -1497,7 +1497,7 @@ zul.mesh.Scrollbar = {
 	 * @param zk.Widget wgt a widget
 	 */
 	init: function (wgt) {
-		var embed = jq(wgt.$n()).data('embedscrollbar') !== "false", // change default value to true since 7.0.2
+		var embed = jq(wgt.$n()).data('embedscrollbar') !== false, // change default value to true since 7.0.2
 			frozen = wgt.frozen,
 			startPositionX = 0;
 		
