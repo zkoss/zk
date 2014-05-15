@@ -162,8 +162,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		setTimeout(function () {
 			if (canInitScrollbar) {
 				self.refreshBar_();
-				self._syncSelInView();
 			}
+			// we have to do this for B50-ZK-56.zul, no matter native scroll or not
+			self._syncSelInView();
 		}, 300);
 	},
 	refreshBar_: function (showBar, scrollToTop) {
@@ -220,6 +221,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					
 					if (si)
 						bar.scrollToElement(si.$n());
+				} else {
+					var si;
+					for (var it = this.getBodyWidgetIterator(); index-- >= 0;) 
+						si = it.next();
+					if (si) {
+						zk(si).scrollIntoView();
+						this._tmpScrollTop = this.ebody.scrollTop;
+					}
 				}
 			}
 			// do only once
@@ -230,6 +239,15 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, '_onRender', arguments);
 		if (this._shallFireOnRender)
 			this._shallShowScrollbar = true;
+	},
+	_doScroll: function () {
+		// B50-ZK-56
+		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
+		if (this._tmpScrollTop) {
+			this.ebody.scrollTop = this._tmpScrollTop; 
+			this._tmpScrollTop = null;
+		}
+		this.$super(zul.sel.Listbox, '_doScroll');
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
