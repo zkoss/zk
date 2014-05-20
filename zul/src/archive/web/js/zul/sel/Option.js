@@ -69,11 +69,20 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	 * @param boolean selected
 	 */
 	setSelected: function (selected) {
-		selected = selected || false;
-		if (this._selected != selected) {
-			if (this.parent)
-				this.parent.toggleItemSelection(this);
-			else this._setSelectedDirectly(selected);
+		if (this.__updating__) { // for B50-3012466.zul
+			delete this.__updating__;
+			return; //nothing to do for second loop triggered by this.parent.toggleItemSelection
+		}
+		try {
+			selected = selected || false;
+			this.__updating__ = true;
+			if (this._selected != selected) {
+				if (this.parent)
+					this.parent.toggleItemSelection(this);
+				this._setSelectedDirectly(selected); // always setting for B50-3012466.zul
+			}
+		} finally {
+			delete this.__updating__;
 		}
 	},
 	_setSelectedDirectly: function (selected) {
