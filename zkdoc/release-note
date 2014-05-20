@@ -77,8 +77,9 @@ ZK 7.0.2
   ZK-2295: Move tree item causes selection status lost
 
 * Upgrade Notes
-  + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan, we deprecate
-    the API of setHflex() and setVflex() with numerical value since 7.0.2 release. Only the following values are supported: min, 0, and false.
+  + Due to the compliexity of the size calculation (hflex and vflex) for tablechildren with colspan and rowspan,
+  we restrict the usage of hflex and vflex for the tablechildren component to "false, min, and 0" since 7.0.2
+  Only the following values are supported: min, 0, and false.
   + Due to the better user-firendly for the scrollbar layout, we changed the org.zkoss.zul.nativebar of the library property to true by default
     for Grid, Listbox, Tree and Borderlayout component.
   + Change the default value of data-embedscrollbar from false to true, if the org.zkoss.zul.nativebar setting to false.
