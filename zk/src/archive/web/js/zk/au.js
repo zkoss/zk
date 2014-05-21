@@ -1310,15 +1310,23 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @see #clearWrongValue
 	 */
 	wrongValue: function () {
-		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
-			var uuid = arguments[i], msg = arguments[i + 1],
-				wgt = Widget.$(uuid);
-			if (wgt) {
-				if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
-				else zAu.wrongValue_(wgt, msg);
-			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
-				jq.alert(msg);
-		}
+		var args = arguments,
+			func = function () {
+				for (var i = 0, len = args.length - 1; i < len; i += 2) {
+					var uuid = args[i], msg = args[i + 1],
+						wgt = Widget.$(uuid);
+					if (wgt) {
+						if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
+						else zAu.wrongValue_(wgt, msg);
+					} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
+						jq.alert(msg);
+				}
+			};
+        // for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
+		if (this.__delay__) 
+			setTimeout(func, 100);
+		else
+			func();
 	},
 	/** Submit a form.
 	 * This method looks for the widget first. If found and the widget
@@ -1341,11 +1349,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the DOM element.
 	 */
 	scrollIntoView: function (id) {
-		setTimeout(function (){
+		this.__delay__ = setTimeout(function () {
 			var w = Widget.$(id);
 			if (w) w.scrollIntoView();
 			else zk(id).scrollIntoView();
-		}, zk.ie8_ ? 0 : 50);
+			this.__delay__ = false;
+		}, 50);
 	}
 };
 /** @class zk.AuCmd1
