@@ -620,6 +620,7 @@ zAu = {
 	//remove desktop (used in mount.js and wiget.js)
 	_rmDesktop: function (dt, dummy) {
 		jq.ajax(zk.$default({
+			type: 'POST',
 			url: zk.ajaxURI(null, {desktop:dt,au:true}),
 			data: {dtid: dt.id, cmd_0: dummy ? 'dummy': 'rmDesktop', opt_0: 'i'},
 			beforeSend: function (xhr) {
