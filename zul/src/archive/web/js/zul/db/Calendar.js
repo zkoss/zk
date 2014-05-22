@@ -419,6 +419,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 		if (ofs) {
 			this._shift(ofs);
+			evt.stop(); // Bug ZK-2306: using the arrow keys in the calendar widget scrolls the browser window
 		} else if (keyCode == 32 || keyCode == 13) {
 			// pass a fake event
 			this._clickDate({
