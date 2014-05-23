@@ -81,6 +81,57 @@ zjq = function (jq) { //ZK extension
 	function _ensel() {
 		this.style.MozUserSelect = '';
 	}
+
+	function _scrlIntoView(outer, inner, info, excludeHorizontal) {
+		if (outer && inner) {
+			var ooft = zk(outer).revisedOffset(),
+				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
+				top = ioft[1] - ooft[1] +
+						(outer == (zk.webkit ? document.body : document.body.parentNode)
+								? 0 : outer.scrollTop),
+				left = ioft[0] - ooft[0] +
+						(outer == (zk.webkit ? document.body : document.body.parentNode)
+								? 0 : outer.scrollLeft),
+				ih = info ? info.h : inner.offsetHeight,
+				iw = info ? info.w : inner.offsetWidth,
+				right = left + iw,
+				bottom = top + ih,
+				updated;
+			//for fix the listbox(livedate) keydown select always at top
+			if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
+				outer.scrollTop = top;
+				updated = true;
+			} else if (bottom > outer.clientHeight + outer.scrollTop) {
+				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+				updated = true;
+			}
+			
+			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position.
+			// ZK-2193: scrollIntoView support exclude horizontal
+			if (!excludeHorizontal)
+				if (outer.scrollLeft > left) {
+					outer.scrollLeft = left;
+					updated = true;
+				} else if (right > outer.clientWidth + outer.scrollLeft) {
+					outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
+					updated = true;
+				}
+			
+			if (updated || !info) {
+				if (!info)
+					info = {
+						oft: ioft,
+						h: inner.offsetHeight,
+						w: inner.offsetWidth,
+						el: inner
+					};
+				else info.oft = zk(info.el).revisedOffset();
+			}
+			
+			return info; 
+		}
+	}
+
 	
 	function _cmOffset(el) {
 		var t = 0, l = 0, operaBug;
@@ -573,10 +624,40 @@ zjq.prototype = {
 			if (real)
 				n = real;
 
-			// use browser's scrollIntoView() method instead of ours.
-			setTimeout(function () {
-				n.scrollIntoView();
-			}, 20);
+			// only scroll when the target is not into view
+			// for test case B60-ZK-1202.zul
+			if (!this.isScrollIntoView()) {
+				// fix browser's scrollIntoView issue, when offsetParent has absolute position.
+				// for example, B65-ZK-2296-1.zul and B60-ZK-1202.zul
+				var isAbsolute,
+					p = n;
+				do {
+					if (p == document.body) break;
+					if (jq(p).css('position')=='absolute') {
+						isAbsolute = true;
+						break;
+					}
+
+				} while (p = p.offsetParent);
+				
+				// check whether the n is an instance of ItemWidget
+				// for B65-ZK-2193.zul, to have better scrollIntoView's behavior
+				if (!isAbsolute && zk.isLoaded('zul.sel')) {
+					var w = zk.Widget.$(n);
+					isAbsolute = w && w.$instanceof(zul.sel.ItemWidget);
+				}
+
+				if (isAbsolute) {
+					var parent = document.body.parentNode;
+					for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
+						c = _scrlIntoView(p, n, c, true);
+				} else {
+					// use browser's scrollIntoView() method instead of ours for F70-ZK-1924.zul
+					setTimeout(function () {
+						n.scrollIntoView();
+					}, 20);
+				}
+			}
 		}
 		return this;
 	},
@@ -625,8 +706,8 @@ zjq.prototype = {
 					inView = true;
 				for (var i = 0; i < oels.length; i++) {
 					var oel = oels[i],
-						lex = zk(oel[0].parentNode).viewportOffset()[0],
-						tey = zk(oel[1].parentNode).viewportOffset()[1];
+						lex = zk(this.jq[0] == oel[0] ? oel[0].parentNode : oel[0]).viewportOffset()[0],
+						tey = zk(this.jq[0] == oel[1] ? oel[1].parentNode : oel[1]).viewportOffset()[1];
 				
 					// scrollbar's viewport
 					inView = (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
