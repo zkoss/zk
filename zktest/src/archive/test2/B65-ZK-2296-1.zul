@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2296-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, May 23, 2014  5:49:12 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<div height="3000px">
+<window mode="modal" title="test" closable="true">
+<listbox rows="5">
+<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem label="4"/>
+<listitem id="li" label="1"/>
+</listbox>
+<button label="click me, the body's scrollbar shouldn't move!" onClick='li.getParent().setSelectedIndex(li.getIndex())'/>
+</window>
+</div>
