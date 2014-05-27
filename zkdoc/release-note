@@ -1,4 +1,5 @@
 ZK 7.0.2
+May 27, 2014
 * Features
   ZK-2207: Dropupload Component support anchor
   ZK-2226: Portallayout should support resizable portalchildren
