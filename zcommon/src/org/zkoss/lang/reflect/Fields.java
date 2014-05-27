@@ -19,6 +19,7 @@ package org.zkoss.lang.reflect;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.AccessibleObject;
+import java.util.Map;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
@@ -114,6 +115,9 @@ public class Fields {
 			return 	acs instanceof Method ?
 				((Method)acs).invoke(obj): ((Field)acs).get(obj);
 		} catch (NoSuchMethodException ex) {
+			if (obj instanceof Map) {
+				return ((Map) obj).get(name);
+			}
 			throw ex;
 		} catch (Exception ex) {
 			throw SystemException.Aide.wrap(ex, "Not found: " + name);
@@ -153,6 +157,10 @@ public class Fields {
 					autoCoerce ? Classes.coerce(fld.getType(), val): val);
 			}
 		} catch (NoSuchMethodException ex) {
+			if (obj instanceof Map) {
+				((Map) obj).put(name, val);
+				return;
+			}
 			throw ex;
 		} catch (Exception ex) {
 			throw SystemException.Aide.wrap(ex, "Not found: " + name);

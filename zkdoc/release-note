@@ -2,6 +2,7 @@ ZK 7.0.3
 * Features
 
 * Bugs
+  ZK-2292: field access using dot notation (a.b.c) is not fully consistent for maps
 
 * Upgrade Notes
 
