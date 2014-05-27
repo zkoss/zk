@@ -3,6 +3,7 @@ ZK 7.0.3
 
 * Bugs
   ZK-2292: field access using dot notation (a.b.c) is not fully consistent for maps
+  ZK-2291: ZK gets into an infinite loop when HTTP session attributes are changed inside of sessionCreated()
 
 * Upgrade Notes
 

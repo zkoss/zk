@@ -52,7 +52,7 @@ ServletContextListener {
 	public void attributeAdded(HttpSessionBindingEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
-			final Session sess = Sessions.getCurrent();
+			final Session sess = Sessions.getCurrent(false);
 			if (sess instanceof SimpleSession
 			&& evt.getSession().equals(sess.getNativeSession()))
 				((SimpleSession)sess).getScopeListeners()
@@ -62,7 +62,7 @@ ServletContextListener {
 	public void attributeRemoved(HttpSessionBindingEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
-			final Session sess = Sessions.getCurrent();
+			final Session sess = Sessions.getCurrent(false);
 			if (sess instanceof SimpleSession
 			&& evt.getSession().equals(sess.getNativeSession()))
 				((SimpleSession)sess).getScopeListeners()
@@ -72,7 +72,7 @@ ServletContextListener {
 	public void attributeReplaced(HttpSessionBindingEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
-			final Session sess = Sessions.getCurrent();
+			final Session sess = Sessions.getCurrent(false);
 			if (sess instanceof SimpleSession
 			&& evt.getSession().equals(sess.getNativeSession()))
 				((SimpleSession)sess).getScopeListeners()
