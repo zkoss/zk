@@ -214,6 +214,7 @@ public class Treechildren extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-treechildren" : _zclass;
 	}
+	@SuppressWarnings("unchecked")
 	protected void smartUpdate(String name, Object value) {
 		Component comp = getParent();
 		if (comp instanceof Treeitem) {
@@ -233,6 +234,7 @@ public class Treechildren extends XulElement {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void onPageAttached(Page newpage, Page oldpage) {
 		Map<String, Object> attributes = (Map<String, Object>) removeAttribute("org.zkoss.zul.Treechildren_smartUpdate");
 		if (attributes != null) {
