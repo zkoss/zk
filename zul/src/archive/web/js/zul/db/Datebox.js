@@ -724,6 +724,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (zk.ie9_ && force) {
 			zk(this.parent.$n('pp')).redoCSS(500); // wait for animation
 		}
+	},
+	// ZK-2308
+	doKeyDown_: function (evt) {
+		this.$supers('doKeyDown_', arguments);
+		if (evt.keyCode == 27) {
+			this.parent.escPressed_(evt);
+		}
 	}
 });
 zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {

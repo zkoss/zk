@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2308.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 28, 2014  2:26:00 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Using the datebox with keyboard only [ALT-DOWN] it can be closed with [ESC] or [ENTER].
+<separator/>
+2. After changing the date using the arrow keys, [ESC] should work as before.
+<datebox/>
+</zk>
