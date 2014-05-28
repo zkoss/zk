@@ -171,7 +171,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startX = opts.startPositionX,
 				wdh = cave.offsetWidth - startX,
-				swdh = scroller.scrollWidth - startX + froenScrollWidth,
+				swdh = hbar.offsetHeight + scroller.scrollWidth - startX + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
@@ -225,7 +225,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startY = opts.startPositionY,
 				hgh = cave.offsetHeight - startY,
-				shgh = scrollHeight - startY,
+				shgh = vbar.offsetWidth + scrollHeight - startY,
 				uhgh = up.offsetHeight
 				dhgh = down.offsetHeight,
 				vhgh = hgh - uhgh - dhgh;
@@ -301,7 +301,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			viewLeft = jq(cave).offset().left,
 			viewRight = viewLeft + cave.offsetWidth
 			scrollUp = true,
-			scrollLeft = true;
+			// if the offsetWidth are the same, we don't need to move to left.
+			scrollLeft = dom.offsetWidth == cave.offsetWidth;
 		
 		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop) ||
 			(this.needH && domRight <= viewRight && domLeft >= viewLeft))

@@ -7,6 +7,7 @@ ZK 7.0.3
   ZK-2307: Column borders become mis-aligned to listbox header's border after resizing a brower's width
   ZK-2309: Columnlayout not resize its children after changing columnchildren's visibility
   ZK-2308: ESC does not always work to close a datebox
+  ZK-2305: Horizontal scrollbar of Listbox covers the last item from being clicked
 
 * Upgrade Notes
 

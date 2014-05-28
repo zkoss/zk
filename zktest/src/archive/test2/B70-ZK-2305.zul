@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2305.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 28, 2014  3:20:55 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<style>
+.z-listcell-content{
+font-size:10px;
+height:20px
+}
+</style>
+	1. When mouse hovers to a listbox, horizontal scrollbar cover the last item to be clicked. i.e. You are able to scroll to the last one (label with E-1111-1)
+	
+	<separator/>
+	Embedded one
+	<listbox id="listbox" width="600px" rows="3">
+	<custom-attributes org.zkoss.zul.nativebar="false"/>
+		<listhead>
+			<listheader width="300px">1111</listheader>
+			<listheader width="300px">2222</listheader>
+			<listheader width="300px">3333</listheader>
+			<listheader width="300px">4444</listheader>
+		</listhead>
+
+		<listitem height="10px">
+			<listcell label="1111-1" />
+			<listcell label="2222-2" />
+			<listcell label="3333-3" />
+			<listcell label="4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="A-1111-1" />
+			<listcell label="A-2222-2" />
+			<listcell label="A-3333-3" />
+			<listcell label="A-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="B-1111-1" />
+			<listcell label="B-2222-2" />
+			<listcell label="B-3333-3" />
+			<listcell label="B-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="C-1111-1" />
+			<listcell label="C-2222-2" />
+			<listcell label="C-3333-3" />
+			<listcell label="C-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="D-1111-1" />
+			<listcell label="D-2222-2" />
+			<listcell label="D-3333-3" />
+			<listcell label="D-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="E-1111-1" />
+			<listcell label="E-2222-2" />
+			<listcell label="E-3333-3" />
+			<listcell label="E-4444-4" />
+		</listitem>
+	</listbox>
+	<separator/>
+	Not Embedded one
+	<listbox id="listbox2" width="600px" rows="3" xmlns:ca="client/attribute" ca:data-embedscrollbar="false">
+	<custom-attributes org.zkoss.zul.nativebar="false"/>
+		<listhead>
+			<listheader width="300px">1111</listheader>
+			<listheader width="300px">2222</listheader>
+			<listheader width="300px">3333</listheader>
+			<listheader width="300px">4444</listheader>
+		</listhead>
+
+		<listitem height="10px">
+			<listcell label="1111-1" />
+			<listcell label="2222-2" />
+			<listcell label="3333-3" />
+			<listcell label="4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="A-1111-1" />
+			<listcell label="A-2222-2" />
+			<listcell label="A-3333-3" />
+			<listcell label="A-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="B-1111-1" />
+			<listcell label="B-2222-2" />
+			<listcell label="B-3333-3" />
+			<listcell label="B-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="C-1111-1" />
+			<listcell label="C-2222-2" />
+			<listcell label="C-3333-3" />
+			<listcell label="C-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="D-1111-1" />
+			<listcell label="D-2222-2" />
+			<listcell label="D-3333-3" />
+			<listcell label="D-4444-4" />
+		</listitem>
+		<listitem>
+			<listcell label="E-1111-1" />
+			<listcell label="E-2222-2" />
+			<listcell label="E-3333-3" />
+			<listcell label="E-4444-4" />
+		</listitem>
+	</listbox>
+</zk>
+
