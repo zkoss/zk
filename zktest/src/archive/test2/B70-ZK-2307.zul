@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2307.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 28, 2014 11:43:30 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-listcell{ border: 1px solid black;}
+	
+	</style>
+	resize a browser window width, the column borders should not become mis-aligned to listbox header's border.
+		<custom-attributes org.zkoss.zul.nativebar="true"/>
+		<listbox id="listbox" width="100%" rows="3" >
+			<custom-attributes org.zkoss.zul.nativebar="true"/>
+			<listhead>
+				<listheader width="100px">1111</listheader>
+				<listheader width="100px">2222</listheader>
+				<listheader width="100px">3333</listheader>
+				<listheader width="300px">4444</listheader>
+				<listheader width="300px">555</listheader>
+				<listheader width="300px">666</listheader>
+			</listhead>
+
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>						
+		</listbox>
+		<listbox id="listbox2" width="100%" rows="3" >
+			<custom-attributes org.zkoss.zul.nativebar="false"/>
+			<listhead>
+				<listheader width="100px">1111</listheader>
+				<listheader width="100px">2222</listheader>
+				<listheader width="100px">3333</listheader>
+				<listheader width="300px">4444</listheader>
+				<listheader width="300px">555</listheader>
+				<listheader width="300px">666</listheader>
+			</listhead>
+
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>
+			<listitem >
+				<listcell label="1111-1" />
+				<listcell label="2222-2" />
+				<listcell label="3333-3" />
+				<listcell label="4444-4" />
+				<listcell label="555" />
+				<listcell label="6666" />
+			</listitem>						
+		</listbox>
+</zk>

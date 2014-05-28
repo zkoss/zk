@@ -955,15 +955,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (this.efoot) 
 						this.efoot.scrollLeft = this._currentLeft;
 				}
-				
-				// ZK-2114: should not show the bar if vertical scrollbar doesn't exists
-				// ZK-2131: should skip if head doesn't exist
-				var head;
-				if (!this.frozen && (head = this.head)) {
-					// ZK-2114: fix width instead of display
-					var width = zk(this.ebody).hasVScroll() ? jq.scrollbarWidth() : '0.1px'
-					head.$n('hdfaker-bar').style.width = width;
-				}
 			}
 			
 			this._shallSize = false;
@@ -1107,8 +1098,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._ebodyScrollPos = null;
 		}
 		// Set style width to table to avoid colgroup width not working 
-		// because of width attribute (width="100%") on table 
-		if (this._isAllWidths()) {
+		// because of width attribute (width="100%") on table
+		var allWidths = this._isAllWidths();
+		if (allWidths) {
 			var hdtbl = this.eheadtbl,
 				bdtbl = this.ebodytbl,
 				fttbl = this.efoottbl;
@@ -1134,7 +1126,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				vScroll = zkb.hasVScroll(),
 				hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
 				ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
-			if (vScroll) {
+			if (vScroll && !allWidths) {
 				if (hdfakerbar)
 					hdfakerbar.style.width = vScroll + 'px';
 				if (ftfakerbar)
