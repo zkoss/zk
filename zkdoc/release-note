@@ -9,6 +9,7 @@ ZK 7.0.3
   ZK-2308: ESC does not always work to close a datebox
   ZK-2305: Horizontal scrollbar of Listbox covers the last item from being clicked
   ZK-2310: When maximize the panel in portallayout, add another panel will cause js error
+  ZK-2303: Turkish Constraint Message is wrong for : NO_NEGATIVE
 
 * Upgrade Notes
 
