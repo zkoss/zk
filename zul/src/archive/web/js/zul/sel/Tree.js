@@ -216,7 +216,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			if (items[j].isSelected()) {
 				if (this._sel == null) {
 					this._sel = items[j];
-				} else if (!_multiple) {
+				} else if (!this._multiple) {
 					items[j]._selected = false;
 					continue;
 				}
