@@ -10,6 +10,7 @@ ZK 7.0.3
   ZK-2305: Horizontal scrollbar of Listbox covers the last item from being clicked
   ZK-2310: When maximize the panel in portallayout, add another panel will cause js error
   ZK-2303: Turkish Constraint Message is wrong for : NO_NEGATIVE
+  ZK-2313: Listbox's scrollIntoView should be consistent by invoking with setSelectedIndex(), setSelectedItem(), and Listitem's setSelected()
 
 * Upgrade Notes
 
