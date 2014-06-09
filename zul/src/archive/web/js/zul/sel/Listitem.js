@@ -87,7 +87,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 					msg = label;
 				else
 					msg += '</div><div class="z-drop-content"><span id="zk_ddghost-img'
-						+ (cnt++) + '" class="z-drop-disallow"></span>&nbsp;'
+						+ (cnt++) + '" class="z-drop-icon"></span>&nbsp;'
 						+ label;
 			}
 		return msg;

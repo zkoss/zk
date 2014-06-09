@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2318.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 09, 2014 11:30:57 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+Please drag 2 or more listitems to the second list, all of the dragged icons should be green color (i.e. allowable)
+    <hlayout>
+        <listbox id="left" height="250px" width="200px"
+            onDrop="move(event.dragged)" droppable="true" multiple="true" >
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK Forge" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)"> 
+                <listcell src="/img/battery.gif" label="ZK Mobile" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK GWT" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK JSF" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK JSP" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK Spring" />
+            </listitem>
+        </listbox>
+        <separator orient="vertical" spacing="8px" />
+        <listbox id="right" height="250px" width="200px" 
+            onDrop="move(event.dragged)" droppable="true" oddRowSclass="non-odd">
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/battery.gif" label="ZK Studio" />
+            </listitem>
+        </listbox>
+    </hlayout>
+    <zscript><![CDATA[
+        void move(Component dragged) {
+            if (self instanceof Listitem) {
+                self.parent.insertBefore(dragged, self);
+            } else {
+                self.appendChild(dragged);
+            }
+        }
+    ]]></zscript>
+</zk>

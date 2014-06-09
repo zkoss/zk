@@ -12,6 +12,7 @@ ZK 7.0.3
   ZK-2303: Turkish Constraint Message is wrong for : NO_NEGATIVE
   ZK-2313: Listbox's scrollIntoView should be consistent by invoking with setSelectedIndex(), setSelectedItem(), and Listitem's setSelected()
   ZK-2314: Tree component causes JS error
+  ZK-2318: Only first dragging item has correctly drag and drop style
 
 * Upgrade Notes
 
