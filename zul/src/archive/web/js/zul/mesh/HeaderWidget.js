@@ -392,6 +392,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		// bug #2799258 in IE, we have to force to recalculate the size.
 		mesh.$n()._lastsz = null;
 		
+		// for the test case of B70-ZK-2290.zul, we need to put the width back.
+		if (!zk.webkit) {
+			mesh.eheadtbl.width = '100%';
+			mesh.ebodytbl.width = '100%';
+			if (mesh.efoottbl)
+				mesh.efoottbl.width = '100%';
+		}
 		// bug #2799258
 		zUtl.fireSized(mesh, -1); //no beforeSize
 	},
