@@ -13,6 +13,7 @@ ZK 7.0.3
   ZK-2313: Listbox's scrollIntoView should be consistent by invoking with setSelectedIndex(), setSelectedItem(), and Listitem's setSelected()
   ZK-2314: Tree component causes JS error
   ZK-2318: Only first dragging item has correctly drag and drop style
+  ZK-2204: Listbox in Grid on FireFox 27.0.1 will auto select on client when mouse out listitem
 
 * Upgrade Notes
 
