@@ -1105,9 +1105,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				bdtbl = this.ebodytbl,
 				fttbl = this.efoottbl;
 			
-			// ZK-2157: should skip if the mesh has no children
-			if (hdtbl && (!(zk.isLoaded('zul.sel') && this.$instanceof(zul.sel.Tree)) && !this.$n('empty') 
-					|| (this.ebodyrows && this.ebodyrows.firstChild))) {
+			if (hdtbl) {
 				var wd = 0;
 				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
 					if (w.style.display != 'none')
@@ -1136,7 +1134,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {
-		if (this.isSizedByContent())
+		// ZK-2157: should skip if the mesh has no children
+		if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.firstChild)
 			return true;
 		if (!this.head)
 			return false;
