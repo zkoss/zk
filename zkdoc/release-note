@@ -14,6 +14,7 @@ ZK 7.0.3
   ZK-2314: Tree component causes JS error
   ZK-2318: Only first dragging item has correctly drag and drop style
   ZK-2204: Listbox in Grid on FireFox 27.0.1 will auto select on client when mouse out listitem
+  ZK-2321: ZK fails when parsing rare unicode characters that require 2 UTF-16 chars
 
 * Upgrade Notes
 
