@@ -134,8 +134,21 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			.unbind('mouseleave', this.proxy(this._mouseLeave));
 		this._unbindMouseEvent('hor');
 		this._unbindMouseEvent('ver');
-		jq(this.$n('hor')).remove();
-		jq(this.$n('ver')).remove();
+		var hbar = this.$n('hor'),
+			vbar = this.$n('ver');
+		if (hbar)
+			jq(hbar).remove();
+		
+		if (vbar)
+			jq(vbar).remove();
+		if (this.opts.embed) {
+			var hembed = this.$n('hor-embed'),
+				vembed = this.$n('ver-embed');
+			if (hembed)
+				jq(hembed).remove();
+			if (vembed)
+				jq(vembed).remove();
+		}
 		this._pos = this._barPos = this.currentPos = null;
 	},
 	hasVScroll: function () {
@@ -386,6 +399,11 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				this._unbindMouseEvent('hor');
 				this._syncPosition('hor', 0);
 				jq(hbar).remove();
+				if (this.opts.embed) {
+					var hembed = this.$n('hor-embed');
+					if (hembed)
+						jq(hembed).remove();
+				}
 			}
 		} else {
 			if (!this.$n('hor')) {
@@ -401,6 +419,11 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				this._unbindMouseEvent('ver');
 				this._syncPosition('ver', 0);
 				jq(vbar).remove();
+				if (this.opts.embed) {
+					var vembed = this.$n('ver-embed');
+					if (vembed)
+						jq(vembed).remove();
+				}
 			}
 		} else {
 			if (!vbar) {
