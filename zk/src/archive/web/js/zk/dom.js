@@ -615,9 +615,11 @@ zjq.prototype = {
 		return this;
 	},
 	/** Causes the first matched element to scroll into view. 
+	 * @param DOMElement parent scrolls the first matched element into the parent's view,
+	 * if any. Otherwise, document.body is assumed. 
 	 * @return jqzk this object
 	 */
-	scrollIntoView: function () {
+	scrollIntoView: function (parent) {
 		var n = this.jq[0];
 		if (n) {
 			var real = jq('#' + n.id + '-real')[0];
@@ -629,16 +631,18 @@ zjq.prototype = {
 			if (!this.isScrollIntoView()) {
 				// fix browser's scrollIntoView issue, when offsetParent has absolute position.
 				// for example, B65-ZK-2296-1.zul and B60-ZK-1202.zul
-				var isAbsolute,
+				var isAbsolute = parent,
 					p = n;
-				do {
-					if (p == document.body) break;
-					if (jq(p).css('position')=='absolute') {
-						isAbsolute = true;
-						break;
-					}
-
-				} while (p = p.offsetParent);
+				if (!isAbsolute) {
+					do {
+						if (p == document.body) break;
+						if (jq(p).css('position')=='absolute') {
+							isAbsolute = true;
+							break;
+						}
+	
+					} while (p = p.offsetParent);
+				}
 				
 				// check whether the n is an instance of ItemWidget
 				// for B65-ZK-2193.zul, to have better scrollIntoView's behavior
@@ -648,7 +652,7 @@ zjq.prototype = {
 				}
 
 				if (isAbsolute) {
-					var parent = document.body.parentNode;
+					var parent = parent || document.body.parentNode;
 					for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
 						c = _scrlIntoView(p, n, c, true);
 				} else {

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2328.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 16, 2014  4:55:12 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You should not see the browser scroll to the end of the browser. (if yes, that's a bug)
+	<div height="900px"></div>
+	<vlayout>
+		<listbox checkmark="true" id="listbox">
+			<listhead>
+				<listheader label="col 1" />
+				<listheader label="col 2" />
+			</listhead>
+			<listgroup label="Listgroup"/>
+			<listitem>
+				<listcell label="row 1 cell 1" />
+				<listcell label="row 1 cell 2" />
+			</listitem>
+			<listitem selected="true">
+				<listcell label="Selected row 2 cell 1" />
+				<listcell label="Selected row 2 cell 2" />
+			</listitem>
+			<listgroupfoot label="Listgroupfoot"/>
+		</listbox>
+		<button label="Multiple Selection" onClick="listbox.setMultiple(!listbox.isMultiple())" />
+	</vlayout>
+</zk>
