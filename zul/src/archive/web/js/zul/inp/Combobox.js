@@ -401,7 +401,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// B50-ZK-568: Combobox does not scroll to selected item
 		// shall do after slide down
 		if (visible && this._lastsel)
-			zk(this._lastsel).scrollIntoView();
+			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 		this.$supers('afterAnima_', arguments);
 	}
 });
