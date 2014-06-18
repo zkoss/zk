@@ -20,8 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 	// Returns if the spacing is 0.
 	function _spacing0(spacing) {
-		return spacing && spacing.startsWith('0')
-			&& (spacing.length == 1 || zUtl.isChar(spacing.charAt(1),{digit:1}));
+		return spacing && spacing.startsWith('0') && !zk.parseInt(spacing);
 	}
 	function _spacingHTML(box, child) {
 		var oo = [],
