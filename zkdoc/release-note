@@ -17,6 +17,7 @@ ZK 7.0.3
   ZK-2321: ZK fails when parsing rare unicode characters that require 2 UTF-16 chars
   ZK-2244: Defective movements in the ZK 7.0.1 Listbox.
   ZK-2328: Listbox with selected item make the whole browser scroll
+  ZK-2325: Spacing="0" and spacing="0px" produce different results for hbox/vbox on some browsers
 
 * Upgrade Notes
 
