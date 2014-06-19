@@ -273,6 +273,7 @@ ZK 6.5.7
   ZK-2294: Combobox popup scroll back to top when navigating by keyboard
   ZK-2295: Move tree item causes selection status lost
   ZK-2285: Problem with keyboard selection in listbox with select mold [IE]
+  ZK-2331: Combobox drop-down sometimes not open on top of input element if the browser space is not enough
 
   --------
 ZK 6.5.6
