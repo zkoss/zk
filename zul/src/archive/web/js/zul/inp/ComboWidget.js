@@ -185,9 +185,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		// B65-ZK-1588: bandbox popup should drop up 
 		//   when the space between the bandbox and the bottom of browser is not enough  
-		var top = jq(pp).position().top + (zk.chrome ? 1 : 0), // chrome alignement issue: -1px margin-top
+		var top = jq(pp).offset().top + (zk.chrome ? 1 : 0), // chrome alignement issue: -1px margin-top
 			realtop = zk.ie == 10 ? Math.round(top) : top,
-			after = jq(inp).position().top + zk(inp).offsetHeight(),
+			after = jq(inp).offset().top + zk(inp).offsetHeight(),
 			realafter = zk.ie == 10 ? Math.round(after) : after;
 		
 		if (realtop < realafter) {
