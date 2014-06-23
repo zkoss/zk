@@ -19,6 +19,7 @@ ZK 7.0.3
   ZK-2328: Listbox with selected item make the whole browser scroll
   ZK-2325: Spacing="0" and spacing="0px" produce different results for hbox/vbox on some browsers
   ZK-2331: Combobox drop-down sometimes not open on top of input element if the browser space is not enough
+  ZK-2152: Wrong Behaviour of Datebox when Overwriting Time
 
 * Upgrade Notes
 
