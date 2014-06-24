@@ -1,5 +1,6 @@
 ZK 7.0.3
 * Features
+  ZK-2076: Enhance Subscribe annotation to map java method by the event name and the parameter type in order
 
 * Bugs
   ZK-2292: field access using dot notation (a.b.c) is not fully consistent for maps
