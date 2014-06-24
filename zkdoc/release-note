@@ -1,6 +1,7 @@
 ZK 7.0.3
 * Features
   ZK-2076: Enhance Subscribe annotation to map java method by the event name and the parameter type in order
+  ZK-2332: Cardlayout should support tuning animation speed or disabling the animation
 
 * Bugs
   ZK-2292: field access using dot notation (a.b.c) is not fully consistent for maps
@@ -23,6 +24,7 @@ ZK 7.0.3
   ZK-2152: Wrong Behaviour of Datebox when Overwriting Time
 
 * Upgrade Notes
+  + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
 
   --------
 ZK 7.0.2
