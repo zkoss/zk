@@ -806,7 +806,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		// first number (hendle max bound)
 		if (pos == this.index[0]) {
 			var text = this.getText(val)
-						.substring((posOfs === 0)? 0: 1).trim(),
+						.substring((posOfs === 0)? 0: 2).trim(),
 				i;
 			if (!text.length) text = '0';
 			
