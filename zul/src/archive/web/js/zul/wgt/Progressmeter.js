@@ -40,9 +40,10 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 			img = this.$n('img');
 		if (img) {
 			if (zk(n).isRealVisible()) //Bug 3134159
-				jq(img).animate({
+				var $img = jq(img);
+				$img.animate({
 					width: Math.round((jq(n).innerWidth() * this._value) / 100) + 'px'
-				}, 'slow');
+				}, $img.zk.getAnimationSpeed('slow'));
 		}
 	},
 	onSize: _zkf,

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F70-ZK-2332.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, June 24, 2014  3:54:04 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	You should see each component which has the right time of animation.
+	
+	<separator/>
+	Speed=0
+	<div xmlns:ca="client/attribute">
+	
+		<cardlayout id="card" width="300px" height="200px"
+			style="border:1px solid red" selectedIndex="1"
+			ca:data-animationspeed="0">
+			<div vflex="1" hflex="1"
+				style="background-color:yellow;padding:20px">
+				flex component
+			</div>
+			<window title="Window Component" border="normal"
+				width="250px">
+				content...
+			</window>
+			<listbox>
+				<listhead sizable="true">
+					<listheader label="name" sort="auto" />
+					<listheader label="gender" sort="auto" />
+				</listhead>
+				<listitem>
+					<listcell label="Mary" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="John" />
+					<listcell label="MALE" />
+				</listitem>
+				<listfoot>
+					<listfooter>
+						<label value="This is footer1" />
+					</listfooter>
+					<listfooter>
+						<label value="This is footer2" />
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</cardlayout>
+		<hlayout>
+			<button onClick="card.previous()">previous</button>
+			<button onClick="card.next()">next</button>
+			<button
+				onClick='card.setOrient("horizontal".equals(card.getOrient()) ? "vertical" : "horizontal")'>
+				change orient
+			</button>
+		</hlayout>
+		
+		<separator />
+	
+		Normal
+		<panel id="panel1" title="Panel" width="500px" border="normal"
+			collapsible="true">
+			<panelchildren>abc</panelchildren>
+		</panel>
+
+		<separator />
+
+		Speed=0
+		<panel id="panel2" title="Panel" width="500px" border="normal"
+			collapsible="true" ca:data-animationspeed="0">
+			<panelchildren>abc</panelchildren>
+		</panel>
+
+		<separator />
+		Speed=2000
+		<panel id="panel3" title="Panel" width="500px" border="normal"
+			collapsible="true" ca:data-animationspeed="2000">
+			<panelchildren>abc</panelchildren>
+		</panel>
+
+		<separator />
+		Speed=fast
+		<panel id="panel4" title="Panel" width="500px" border="normal"
+			collapsible="true" ca:data-animationspeed="fast">
+			<panelchildren>abc</panelchildren>
+		</panel>
+
+		<separator />
+		Normal
+		<combobox>
+			<comboitem label="Simple and Rich" />
+			<comboitem label="Cool!" />
+			<comboitem label="Ajax and RIA" />
+		</combobox>
+
+		<separator />
+		Speed=0
+		<combobox ca:data-animationspeed="0">
+			<comboitem label="Simple and Rich" />
+			<comboitem label="Cool!" />
+			<comboitem label="Ajax and RIA" />
+		</combobox>
+
+		<separator />
+		Speed=2000
+		<combobox ca:data-animationspeed="2000">
+			<comboitem label="Simple and Rich" />
+			<comboitem label="Cool!" />
+			<comboitem label="Ajax and RIA" />
+		</combobox>
+		
+		<separator/>
+		Normal
+		<navbar orient="vertical" width="200px">
+			<navitem label="Home" iconSclass="z-icon-home" />
+			<nav label="Get Started" iconSclass="z-icon-th-list"
+				badgeText="3">
+				<navitem label="Step One" />
+				<navitem label="Step Two" />
+				<navitem label="Step Three" />
+			</nav>
+			<navitem label="About" iconSclass="z-icon-flag" />
+			<navitem label="Contact" iconSclass="z-icon-envelope" />
+		</navbar>
+		<separator/>
+		Speed=0
+		<navbar orient="vertical" width="200px">
+			<navitem label="Home" iconSclass="z-icon-home" />
+			<nav label="Get Started" iconSclass="z-icon-th-list"
+				badgeText="3" ca:data-animationspeed="0">
+				<navitem label="Step One" />
+				<navitem label="Step Two" />
+				<navitem label="Step Three" />
+			</nav>
+			<navitem label="About" iconSclass="z-icon-flag" />
+			<navitem label="Contact" iconSclass="z-icon-envelope" />
+		</navbar>
+		<separator/>
+		Speed=1000
+		<navbar orient="vertical" width="200px" >
+			<navitem label="Home" iconSclass="z-icon-home" />
+			<nav label="Get Started" iconSclass="z-icon-th-list"
+				badgeText="3" ca:data-animationspeed="1000">
+				<navitem label="Step One" />
+				<navitem label="Step Two" />
+				<navitem label="Step Three" />
+			</nav>
+			<navitem label="About" iconSclass="z-icon-flag" />
+			<navitem label="Contact" iconSclass="z-icon-envelope" />
+		</navbar>
+		
+		<separator/>
+		Normal
+		<progressmeter id="curr_met1" value="0" width="300px" />
+		<button label="test" width="100px" height="80px"
+			onClick='curr_met1.setValue(100);' />
+		
+		<separator/>
+		Speed=0
+		<progressmeter id="curr_met2" value="0" width="300px" ca:data-animationspeed="0"/>
+		<button label="test" width="100px" height="80px"
+			onClick='curr_met2.setValue(100);' />
+			
+		<separator/>
+		Speed=1000
+		<progressmeter id="curr_met3" value="0" width="300px" ca:data-animationspeed="1000"/>
+		<button label="test" width="100px" height="80px"
+			onClick='curr_met3.setValue(100);' />
+
+
+		<separator />
+		Only for tablet, should check those boxes that can receive right value from your selection.
+		<separator/>
+		click input to let native keyboard show, then click button to show popup.
+
+		<separator/>
+		Normal
+		<timebox cols="12" format="short" onCreate="self.value = new Date()" />
+		<separator/>
+		Speed=0
+		<timebox cols="12" format="short" onCreate="self.value = new Date()" ca:data-animationspeed="0" />
+		<separator/>
+		Speed=1000
+		<timebox cols="12" format="short" onCreate="self.value = new Date()" ca:data-animationspeed="1000" />
+		
+		<separator/>
+		Normal
+		<colorbox width="30px" height="25px" />
+		<separator/>
+		Speed=0
+		<colorbox width="30px" height="25px" ca:data-animationspeed="0" />
+		<separator/>
+		Speed=1000
+		<colorbox width="30px" height="25px" ca:data-animationspeed="1000" />
+		
+		<separator/>
+		Normal
+		<datebox cols="12" format="short" onCreate="self.value = new Date()" />
+		<separator/>
+		Speed=0
+		<datebox cols="12" format="short" onCreate="self.value = new Date()" ca:data-animationspeed="0" />
+		<separator/>
+		Speed=1000
+		<datebox cols="12" format="short" onCreate="self.value = new Date()" ca:data-animationspeed="1000" />
+		
+	</div>
+</window>

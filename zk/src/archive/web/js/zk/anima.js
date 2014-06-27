@@ -115,6 +115,35 @@ zk.copy(zk, {
 /** @partial jqzk
  */
 zk.copy(zjq.prototype, {
+	/**
+	 * Get the value of animation speed assigned through client attribute "data-animationspeed"
+	 * @param Object defaultValue [optional] default value if widget doesn't have this attribute.
+	 * <p>
+	 * Allowed values:
+	 * <dl>
+	 * <dt><code>Integer</code></dt>
+	 * <dd>It can be any integer value</dd>
+	 * <dt><code>String</code></dt>
+	 * <dd>This value can be "slow" or "fast", which is the same as jQuery Animation</dd>
+	 * </dl>
+	 * </p>
+	 * @return Object this value will be Integer or String.
+	 * @since 7.0.3
+	 */
+	getAnimationSpeed : function (defaultValue) {
+		var animationSpeed = jq(this.$().$n()).data('animationspeed'),
+			jqSpeed = $.fx.speeds;
+		
+		if(typeof animationSpeed === 'string') {
+			if(jqSpeed[animationSpeed])
+				return jqSpeed[animationSpeed];
+			else
+				animationSpeed = parseInt(animationSpeed);
+		}
+		
+		// Here are four animation functions in this class, which can't use 0 as duration so we increase animationSpeed by 1
+		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed + 1 : (defaultValue || jqSpeed._default);
+	},
 	/** Slides down (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
@@ -170,7 +199,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop, true)
 			.jq.css(css).show().animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 250,
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 250),
 			complete: opts.afterAnima
 		});
 	},
@@ -194,6 +223,7 @@ zk.copy(zjq.prototype, {
 	slideUp: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
+		
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
 			anima = {},
@@ -224,7 +254,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop)
 			.jq.css(css).animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 250,
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 250),
 			complete: opts.afterAnima
 		});
 	},
@@ -248,6 +278,7 @@ zk.copy(zjq.prototype, {
 	slideOut: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
+		
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left', 'position'],
 			anima = {},
@@ -274,7 +305,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop)
 			.jq.css(css).animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 350,
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 350),
 			complete: opts.afterAnima
 		});
 	},
@@ -298,6 +329,7 @@ zk.copy(zjq.prototype, {
 	slideIn: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;
+		
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left', 'position'],
 			anima = {},
@@ -328,7 +360,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop, true)
 			.jq.css(css).show().animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 350,
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 350),
 			complete: opts.afterAnima
 		});
 	},
