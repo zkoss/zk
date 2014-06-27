@@ -347,8 +347,11 @@ zFlex = { //static methods
 				//Bug ZK-1647: should consider header width
 				//Bug Flex-138: skip if width exists
 				if (offwdh == 0 && cwgt && zk.isLoaded('zul.mesh')
-						&& cwgt.$instanceof(zul.mesh.HeaderWidget))
-					offwdh = jq(cwgt.$n('hdfaker')).width(); //use faker width
+						&& cwgt.$instanceof(zul.mesh.HeaderWidget)) {
+					// don't use jq().width() in chrome for performance issue
+					var hdfaker = cwgt.$n('hdfaker');
+					offwdh = hdfaker ? zk.parseInt(hdfaker.style.width) || hdfaker.offsetWidth : 0; //use faker width
+				}
 				
 				//Bug ZK-1706: should consider all text node size
 				if (pretxt) {

@@ -800,7 +800,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		zWatch.fireDown('onScroll', this);
 	},
 	_fixSplit: function () {
-		jq(this.$n('split'))[this._splittable ? 'show' : 'hide']();
+		var split = this.$n('split');
+		if (split)
+			split.style.display = this._splittable ? 'block' : 'none';
 	},
 	_fixFontIcon: function () {
 		zk(this).redoCSS(-1, {'fixFontIcon': true, 'selector': '.z-borderlayout-icon'});

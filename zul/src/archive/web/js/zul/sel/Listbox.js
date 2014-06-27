@@ -23,18 +23,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
-			var $jq = jq(wgt.$n('empty')),
+			var empty = wgt.$n('empty'),
 				colspan = 0;
 			if (wgt._nrows) {
-				$jq.hide();
+				empty.style.display = 'none';
 			} else {
 				if (wgt.listhead) {
 					for (var w = wgt.listhead.firstChild; w; w = w.nextSibling)
 						if (w.isVisible())
 							colspan++;
 				}
-				$jq.attr('colspan', colspan || 1);
-				$jq.show();
+				empty.colSpan = colspan || 1;
+				empty.style.display = 'block';
 			}
 		}
 		wgt._shallFixEmpty = false;

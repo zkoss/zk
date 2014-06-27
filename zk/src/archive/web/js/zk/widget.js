@@ -4487,6 +4487,10 @@ _doFooSelect: function (evt) {
 	 */
 	ignoreDescendantFloatUp_: function (des) {
 		return false;
+	},
+	// internal use only in zkmax package
+	getDomEvtInf_: function (wgt, evtnm, fn, keyword) {
+		return _domEvtInf(wgt, evtnm, fn, keyword);
 	}
 
 }, {

@@ -16,23 +16,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	// fix for the empty message shows up or not.
 	function _fixForEmpty(wgt) {
 		if (wgt.desktop) {
-			var $jq = jq(wgt.$n('empty')),
+			var empty = wgt.$n('empty'),
 				colspan = 0;
 			if (wgt.rows && wgt.rows.nChildren) {
-				$jq.hide();
+				empty.style.display = 'none';
 			} else {
 				if (wgt.columns) {
 					for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
 						if (w.isVisible())
 							colspan++;
 				}
-				$jq.attr('colspan', colspan || 1);
-				$jq.show();
+				empty.colSpan = colspan || 1;
+				empty.style.display = 'block';
 			}
 		}
 		wgt._shallFixEmpty = false;
 	}
-
 var Grid =
 /**
  * A grid is an element that contains both rows and columns elements.

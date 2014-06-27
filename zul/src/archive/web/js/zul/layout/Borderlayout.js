@@ -97,7 +97,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			this.east = child;
 			break;
 		}
-		this.resize();
+		this._shallResize = true;
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
@@ -112,15 +112,19 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		else if (child == this.east)
 			this.east = null;
 		if (!this.childReplacing_)
-			this.resize();
+			this._shallResize = true;
 	},
 	bind_: function () {
 		this.$supers(Borderlayout, 'bind_', arguments);
-		zWatch.listen({onSize: this});
+		zWatch.listen({onSize: this, onResponse: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this});
+		zWatch.unlisten({onSize: this, onResponse: this});
 		this.$supers(Borderlayout, 'unbind_', arguments);
+	},
+	onResponse: function () {
+		if (this._shallResize)
+			this.resize();
 	},
 	beforeMinFlex_: function (o) {
 		// B50-ZK-309
@@ -153,6 +157,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	resize: function () {
 		if (this.desktop)
 			this._resize();
+		this._shallResize = false;
 	},
 	_resize: function (isOnSize) {
 		this._isOnSize = isOnSize;

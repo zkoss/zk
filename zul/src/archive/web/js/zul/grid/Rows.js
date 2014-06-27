@@ -13,10 +13,12 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	
-	function _isPE() {
-		return zk.feature.pe && zk.isLoaded('zkex.grid');
-	}
+	var _isPE = (function () {
+		var _isPE_ = zk.feature.pe;
+		return function () {
+				return _isPE_ && zk.isLoaded('zkex.grid')
+			};
+	})();
 	function _syncFrozen(wgt) {
 		var grid = wgt.getGrid(),
 			frozen;
