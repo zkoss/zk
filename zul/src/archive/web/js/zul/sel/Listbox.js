@@ -247,7 +247,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			it = this.getBodyWidgetIterator();
 		for (var j = 0, w; w = it.next(); j++) {
 			if (w.isVisible() && w.isStripeable_()) {
-				jq(w.$n())[even ? 'removeClass' : 'addClass'](scOdd);
+				jq(w)[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
 			}
 		}
@@ -389,6 +389,16 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="', 
 				this.uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
+	},
+	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
+		if(child._renderdefer) {
+			var scOdd = this.getOddRowSclass(),
+				isOdd = $(n).hasClass(scOdd); // supers will change this result, we need to cache it
+			
+			this.$supers('replaceChildHTML_', arguments);
+			if(isOdd) jq(child).addClass(scOdd);
+		} else 
+			this.$supers('replaceChildHTML_', arguments);
 	},
 	// this function used for Listbox, Listhead
 	_syncEmpty: function () {
