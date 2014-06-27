@@ -93,6 +93,21 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
+		var oldwgt = child.getOldWidget_(n),
+			$n = jq(n),
+			childHTML;
+		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
+		else if (this.shallChildROD_(child))
+			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+		
+		childHTML = child.redrawHTML_(skipper, _trim_);
+			
+		if($n.hasClass('z-grid-odd')) 
+			childHTML = childHTML.replace('z-row', 'z-row z-grid-odd');
+		$n.replaceWith(childHTML);
+		child.bind(desktop, skipper);
+	},
 	_syncStripe: function () {
 		this._shallStripe = true;
 	},
