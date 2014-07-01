@@ -247,7 +247,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			it = this.getBodyWidgetIterator();
 		for (var j = 0, w; w = it.next(); j++) {
 			if (w.isVisible() && w.isStripeable_()) {
-				jq(w.$n())[even ? 'removeClass' : 'addClass'](scOdd);
+				jq(w)[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
 			}
 		}
@@ -389,6 +389,21 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="', 
 				this.uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
+	},
+	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
+		var oldwgt = child.getOldWidget_(n),
+			$n = jq(n),
+			childHTML;
+		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
+		else if (this.shallChildROD_(child))
+			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+		
+		childHTML = child.redrawHTML_(skipper, _trim_);
+			
+		if($n.hasClass('z-listbox-odd')) 
+			childHTML = childHTML.replace('z-listitem', 'z-listitem z-listbox-odd');
+		$n.replaceWith(childHTML);
+		child.bind(desktop, skipper);
 	},
 	// this function used for Listbox, Listhead
 	_syncEmpty: function () {
