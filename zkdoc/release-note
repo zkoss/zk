@@ -24,6 +24,7 @@ ZK 7.0.3
   ZK-2152: Wrong Behaviour of Datebox when Overwriting Time
   ZK-2335: grid render performance on the client side (normal vs. renderdefer)
   ZK-2341: Nested cardlayout did not show correctly
+  ZK-2337: grid renderdefer "z-grid-odd" style missing
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.

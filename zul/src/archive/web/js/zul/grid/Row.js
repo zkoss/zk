@@ -13,9 +13,12 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _isPE() {
-		return zk.feature.pe && zk.isLoaded('zkex.grid');
-	}
+	var _isPE = (function () {
+		var _isPE_ = zk.feature.pe;
+		return function () {
+				return _isPE_ && zk.isLoaded('zkex.grid')
+			};
+	})();
 /**
  * A single row in a {@link Rows} element.
  * Each child of the {@link Row} element is placed in each successive cell
