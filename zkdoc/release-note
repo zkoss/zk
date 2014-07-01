@@ -282,6 +282,7 @@ ZK 6.5.7
   ZK-2285: Problem with keyboard selection in listbox with select mold [IE]
   ZK-2331: Combobox drop-down sometimes not open on top of input element if the browser space is not enough
   ZK-2152: Wrong Behaviour of Datebox when Overwriting Time
+  ZK-2341: Nested cardlayout did not show correctly
 
   --------
 ZK 6.5.6
