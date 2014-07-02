@@ -29,31 +29,29 @@ import org.zkoss.util.Locales;
 public class StringFns {
 	private static Logger log = LoggerFactory.getLogger(StringFns.class);
 
-	/** Concatenates two strings.
+	/** Concatenates two objects.
 	 * Note: null is considered as empty.
 	 */
-	public static String cat(String s1, String s2) {
-		if (s1 == null)
-			return s2 != null ? s2: "";
-		return s2 != null ? s1 + s2: s1;
+	public static String cat(Object o1, Object o2) {
+		return (o1 == null ? "" : String.valueOf(o1)) + (o2 == null ? "" : String.valueOf(o2));
 	}
-	/** Concatenates three strings.
+	/** Concatenates three objects.
 	 * Note: null is considered as empty.
 	 */
-	public static String cat3(String s1, String s2, String s3) {
-		return cat(cat(s1, s2), s3);
+	public static String cat3(Object o1, Object o2, Object o3) {
+		return cat(cat(o1, o2), o3);
 	}
-	/** Concatenates four strings.
+	/** Concatenates four objects.
 	 * Note: null is considered as empty.
 	 */
-	public static String cat4(String s1, String s2, String s3, String s4) {
-		return cat(cat(cat(s1, s2), s3), s4);
+	public static String cat4(Object o1, Object o2, Object o3, Object o4) {
+		return cat(cat(cat(o1, o2), o3), o4);
 	}
-	/** Concatenates four strings.
+	/** Concatenates five objects.
 	 * Note: null is considered as empty.
 	 */
-	public static String cat5(String s1, String s2, String s3, String s4, String s5) {
-		return cat(cat(cat(cat(s1, s2), s3), s4), s5);
+	public static String cat5(Object o1, Object o2, Object o3, Object o4, Object o5) {
+		return cat(cat(cat(cat(o1, o2), o3), o4), o5);
 	}
 
 	/** Converts all of the characters in this String to upper case using the rules of the current Locale.
