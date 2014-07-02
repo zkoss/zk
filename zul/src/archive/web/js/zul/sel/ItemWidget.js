@@ -152,7 +152,6 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	focus_: function (timeout) {
 		var mesh = this.getMeshWidget();
-			mesh._focusItem = this;
 		this._doFocusIn();
 		mesh._syncFocus(this);
 		mesh.focusA_(mesh.$n('a'), timeout);

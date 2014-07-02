@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2342.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jul 02, 2014  5:40:28 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	Reproducing steps: (Firefox only)
+
+1. Select a listitem
+2. Scroll down until rod kicked in
+3. Scroll up and down rapidly while rod is still loading data
+4. Click a few times at random position inside listbox while rod is still loading data
+5. Observe in network tab of browser's developer tool
+-> look for large post body and it would contain many onAnchorPos events (more than 10 times) with similar anchor positions (If true, that's a bug)
+	</label>
+    <zscript><![CDATA[
+    ListModelList model = new ListModelList(Locale.getAvailableLocales());
+    for (int i = 0; i < 10; i++)
+        model.addAll(model);
+    ]]></zscript>
+    <listbox model="${model}" height="300px">
+        <custom-attributes org.zkoss.zul.listbox.rod="true"></custom-attributes>
+    </listbox>
+</zk>
