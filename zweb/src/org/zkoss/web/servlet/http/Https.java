@@ -435,7 +435,7 @@ public class Https extends Servlets {
 				final String update_uri = (String)request.getSession().getServletContext().getAttribute("org.zkoss.zk.ui.http.update-uri"); //B65-ZK-1619
 				String flnm = "";
 				if (update_uri != null && temp.toString().contains(update_uri + "/view")) {
-					// for Bug ZK-2347, we don't specify the filename when coming with ZK Fileupload, but invoke this directly as Bug ZK-1619
+					// for Bug ZK-2350, we don't specify the filename when coming with ZK Fileupload, but invoke this directly as Bug ZK-1619
 //					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
 //					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
 				} else
@@ -575,7 +575,7 @@ public class Https extends Servlets {
 		if (agent != null) {
 			try {
 				if (agent.contains("Trident")) {
-					// as Bug ZK-2347, the space of the filename in IE will be encoded to a '+' word as described in the URLEncoder's JAVA doc
+					// as Bug ZK-2350, the space of the filename in IE will be encoded to a '+' word as described in the URLEncoder's JAVA doc
 					// and we have no smarter way to decode that precisely so leave it there when user invokes the Https.write() directly.
 					filename = URLEncoder.encode(filename, "UTF-8");
 				} else if (agent.contains("Mozilla")) {
