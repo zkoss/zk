@@ -27,6 +27,7 @@ ZK 7.0.3
   ZK-2341: Nested cardlayout did not show correctly
   ZK-2337: grid renderdefer "z-grid-odd" style missing
   ZK-2342: Multiple onAnchorPos events causing too many parameters exception
+  ZK-2350: Filedownload with file name contain empty string become to "+" sign in IE
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
