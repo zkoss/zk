@@ -28,6 +28,7 @@ ZK 7.0.3
   ZK-2337: grid renderdefer "z-grid-odd" style missing
   ZK-2342: Multiple onAnchorPos events causing too many parameters exception
   ZK-2350: Filedownload with file name contain empty string become to "+" sign in IE
+  ZK-2352: Executions.forward() will show IOException warning
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.

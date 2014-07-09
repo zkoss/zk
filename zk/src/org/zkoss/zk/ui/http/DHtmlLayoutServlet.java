@@ -183,6 +183,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				} else
 					desktop = null; //something wrong (not possible; just in case)
 			}
+			// check voided for ZK-2352: Executions.forward() will show IOException warning
+			boolean voided = false;
 			if (desktop == null) {
 				desktop = _webman.getDesktop(sess, request, response, path, true);
 				if (desktop == null) //forward or redirect
@@ -213,10 +215,12 @@ public class DHtmlLayoutServlet extends HttpServlet {
 					final Execution exec = new ExecutionImpl(
 						ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
+					voided = exec.isVoided();
 				}
 			}
 
-			if (compress) {
+			// check voided to ignore the IOExecuption that caused by Executions.forward()
+			if (compress && !voided) {
 				final String result = ((StringWriter)out).toString();
 
 				try {
