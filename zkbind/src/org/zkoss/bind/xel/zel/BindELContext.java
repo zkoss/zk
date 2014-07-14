@@ -25,6 +25,7 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyChangeDisabled;
+import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.impl.BindContextUtil;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadChildrenBindingImpl;
@@ -286,7 +287,7 @@ public class BindELContext extends XelELContext {
 	}
 	
 	public static String getModelName(Component comp) {
-		return BinderImpl.MODEL + comp.getUuid();
+		return (String) AllocUtil.inst.processScript(BinderImpl.MODEL + comp.getUuid());
 	}
 	
 	public static void addModel(Component comp, Object model) {

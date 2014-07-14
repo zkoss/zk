@@ -649,4 +649,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
+	
+	<library-property>
+	   <name>org.zkoss.bind.AnnotateBinder.class</name>
+	   <value>org.zkoss.zkmax.bind.impl.AnnotateBinderEx</value>
+	</library-property>
 </zk>

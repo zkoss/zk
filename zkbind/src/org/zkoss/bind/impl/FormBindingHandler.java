@@ -59,57 +59,27 @@ import org.zkoss.zk.ui.event.Event;
 	}
 
 	void addLoadPromptBinding(BindingKey bkey, LoadFormBinding binding) {
-		List<LoadFormBinding> bindings = _loadFormPromptBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<LoadFormBinding>();
-			_loadFormPromptBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadFormPromptBindings, bkey, binding); //ZK-2289
 	}
 	
 	void addInitBinding(BindingKey bkey, InitFormBinding binding) {
-		List<InitFormBinding> bindings = _initFormBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<InitFormBinding>();
-			_initFormBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_initFormBindings, bkey, binding); //ZK-2289
 	}
 
 	void addLoadBeforeBinding(String command, LoadFormBinding binding) {
-		List<LoadFormBinding> bindings = _loadFormBeforeBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<LoadFormBinding>();
-			_loadFormBeforeBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadFormBeforeBindings, command, binding); //ZK-2289
 	}
 
 	void addLoadAfterBinding(String command, LoadFormBinding binding) {
-		List<LoadFormBinding> bindings = _loadFormAfterBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<LoadFormBinding>();
-			_loadFormAfterBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadFormAfterBindings, command, binding); //ZK-2289
 	}
 
 	void addSaveBeforeBinding(String command, SaveFormBinding binding) {
-		List<SaveFormBinding> bindings = _saveFormBeforeBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<SaveFormBinding>();
-			_saveFormBeforeBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_saveFormBeforeBindings, command, binding); //ZK-2289
 	}
 	
 	void addSaveAfterBinding(String command, SaveFormBinding binding) {
-		List<SaveFormBinding> bindings = _saveFormAfterBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<SaveFormBinding>();
-			_saveFormAfterBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_saveFormAfterBindings, command, binding); //ZK-2289
 	}
 
 	Map<String, List<SaveFormBinding>> getSaveFormBeforeBindings() {

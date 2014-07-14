@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
@@ -53,6 +55,15 @@ public abstract class AbstractBindingHandler implements Serializable {
 		ValidationMessages vmsgs = ((BinderCtrl)binder).getValidationMessages();
 		if(vmsgs!=null){
 			vmsgs.clearMessages(component,attr);
+		}
+	}
+	
+	//ZK-2289: Futher optimize zkbind memory consumption.
+	protected <K, V> void addBinding(Map<K, List<V>> bindingsMap, K bkey, V binding) {
+		final List<V> bindings = bindingsMap.get(bkey);
+		final List<V> bindings0 = AllocUtil.inst.addList(bindings, binding);
+		if (bindings0 != bindings) { //yes, use != ; not !equals
+			bindingsMap.put(bkey, bindings0);
 		}
 	}
 }

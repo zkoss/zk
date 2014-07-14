@@ -39,8 +39,7 @@ import org.zkoss.zk.ui.Component;
 public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	private final Set<String> _doneDependsOn;
-//	private final Set<Class<? extends Converter>> _doneConverterDependsOn;
+	private Set<String> _doneDependsOn;
 	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
 	private final Class<?> _attrType;
 	
@@ -48,8 +47,6 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		String attr, String loadAttr,Class<?> attrType, String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs, 
 		String converterExpr,Map<String, Object> converterArgs) {
 		super(binder, comp, attr, "self."+loadAttr, loadExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
-		_doneDependsOn = new HashSet<String>(4);
-//		_doneConverterDependsOn = new HashSet<Class<? extends Converter>>(4);
 		_attrType = attrType == null ? Object.class : attrType;
 	}
 	
@@ -134,10 +131,10 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	public void addDependsOnTrackings(List<String> srcpath, String basepath, String[] props) {
 		if (srcpath != null) {
 			final String src = BindELContext.pathToString(srcpath);
-			if (_doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
+			if (_doneDependsOn != null && _doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
 				return;
 			}
-			_doneDependsOn.add(src); //mark method as done @DependsOn
+			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
 		}
 		for(String prop : props) {
 			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);

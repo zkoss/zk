@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
@@ -48,9 +49,17 @@ import org.zkoss.zk.ui.Component;
 public class TrackerImpl implements Tracker, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
-	private Map<Object, LinkedHashSet<TrackerNode>> _nullMap = new HashMap<Object, LinkedHashSet<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
-	private transient Map<Object, LinkedHashSet<TrackerNode>> _beanMap = new WeakIdentityMap<Object, LinkedHashSet<TrackerNode>>(); //bean -> Set of TrackerNode
-	private transient EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
+	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
+	private transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+	private transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
+	
+	public TrackerImpl() {
+		_equalBeansMap = newEqualBeansMap(); 
+	}
+
+	protected EqualBeansMap newEqualBeansMap() {
+		return new EqualBeansMap();
+	}
 	
 	public void addTracking(Component comp, String[] series, Binding binding) {
 		//Track only LoadBinding
@@ -78,21 +87,21 @@ public class TrackerImpl implements Tracker, Serializable {
 		dependsOnNode.addAssociate(srcnode); 
 	}
 	
-	private TrackerNode getOrCreateTrackerNode(Component comp, String[] series) {
+	protected TrackerNode getOrCreateTrackerNode(Component comp, String[] series) {
 		Map<Object, TrackerNode> nodes = _compMap.get(comp);
-		if (nodes == null) {
-			nodes = new HashMap<Object, TrackerNode>(4);
-			_compMap.put(comp, nodes);
-		}
 		
 		TrackerNode parentNode = null;
 		for(String script : series) {
 			TrackerNode node = null;
 			if (parentNode == null) { //head node
-				node = nodes.get(script);
+				node = nodes == null ? null : nodes.get(script);
 				if (node == null) {
 					node = newTrackerNode(script);
-					nodes.put(script, node);
+					//ZK-2289
+					Map<Object, TrackerNode> nodes0 = AllocUtil.inst.putMap(nodes, script, node);
+					if (nodes != nodes0) { //Yes, use != instead of !equals()
+						_compMap.put(comp,  nodes0);
+					}
 				}
 			} else {
 				node = parentNode.getDependent(script);
@@ -106,15 +115,15 @@ public class TrackerImpl implements Tracker, Serializable {
 		return parentNode;
 	}
 	
-	//ZSS-1989, sub-class could override this method to provide better tracker-node impl.
+	//ZK-1989, sub-class could override this method to provide better tracker-node impl.
 	protected TrackerNode newTrackerNode(Object script){
-		return new TrackerNodeImpl(script); 
+		return new TrackerNodeImpl(AllocUtil.inst.processScript(script)); //ZK-2289
 	}
 	
 	public void removeTrackings(Set<Component> comps) {
 		final Set<TrackerNode> removed = new HashSet<TrackerNode>();
 		for(Component comp:comps){
-			final Map<Object, TrackerNode> nodesMap = _compMap.remove(comp);
+			final Map<Object, TrackerNode> nodesMap = (Map<Object, TrackerNode>) _compMap.remove(comp);
 			if (nodesMap != null) {
 				final Collection<TrackerNode> nodes = nodesMap.values();
 				for (TrackerNode node : nodes) {
@@ -125,11 +134,11 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 		if(removed.size()>0){
 			removeAllFromBeanMap(removed);
-			removeNodes(_nullMap.values(), removed);
+			removeAllFromNullMap(removed);
 		}
 	}
 	public void removeTrackings(Component comp) {
-		final Map<Object, TrackerNode> nodesMap = _compMap.remove(comp);
+		final Map<Object, TrackerNode> nodesMap = (Map<Object, TrackerNode>) _compMap.remove(comp);
 		if (nodesMap != null) {
 			final Set<TrackerNode> removed = new HashSet<TrackerNode>();
 			final Collection<TrackerNode> nodes = nodesMap.values();
@@ -138,10 +147,15 @@ public class TrackerImpl implements Tracker, Serializable {
 				removed.addAll(node.getDependents());
 			}
 			removeAllFromBeanMap(removed);
-			removeNodes(_nullMap.values(), removed);
+			removeAllFromNullMap(removed);
 		}
 	}
 
+	//remove all specified nodes from the _nullMap 
+	protected void removeAllFromNullMap(Set<TrackerNode> removed) {
+		removeNodes(_nullMap.values(), removed);
+	}
+	
 	private void getLoadBindingsPerProperty(Collection<TrackerNode> nodes, String prop, LinkedHashSet<LoadBinding> bindings, LinkedHashSet<Object> kidbases, Set<TrackerNode> visited) {
 		if (".".equals(prop)) { //all base object
 			for (TrackerNode node : nodes) {
@@ -169,18 +183,28 @@ public class TrackerImpl implements Tracker, Serializable {
 		return bindings;
 	}
 	
+	protected Collection<TrackerNode> getAllTrackerNodes() {
+		Set<TrackerNode> all = null;
+		final Collection<Map<Object, TrackerNode>> nodesMaps = _compMap.values();
+		if (nodesMaps != null && !nodesMaps.isEmpty()) {
+			all = new LinkedHashSet<TrackerNode>();
+			for(Map<Object, TrackerNode> nodesMap : nodesMaps) {
+				final Collection<TrackerNode> nodes = (Collection<TrackerNode>) nodesMap.values();
+				if (nodes != null) {
+					all.addAll(nodes);
+				}
+			}
+		}
+		return all;
+	}
+	
 	private void collectLoadBindings(Object base, String prop, LinkedHashSet<LoadBinding> bindings, Set<TrackerNode> visited) {
 		final LinkedHashSet<Object> kidbases = new LinkedHashSet<Object>(); //collect kid as base bean
 		if (base != null) {
 			if ("*".equals(base)) { //loadAll, when base == "*"
-				final Collection<Map<Object, TrackerNode>> nodesMaps = _compMap.values();
-				if (nodesMaps != null) {
-					for(Map<Object, TrackerNode> nodesMap : nodesMaps) {
-						final Collection<TrackerNode> nodes = nodesMap.values();
-						if (nodes != null) {
-							getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
-						}
-					}
+				final Collection<TrackerNode> nodes = getAllTrackerNodes();
+				if (nodes != null) {
+					getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
 				}
 			} else {
 				final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
@@ -204,21 +228,23 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 	}
 	
+	protected TrackerNode getTrackerNodePerComponentScript(Object comp, Object script) {
+		//locate head TrackerNodes of this component
+		final Map<Object, TrackerNode> bindingNodes = _compMap.get(comp);
+		return bindingNodes != null ? bindingNodes.get(script) : null;
+	}
+	
 	public void tieValue(Object comp, Object base, Object script, Object propName, Object value) {
 		if (base == null) { //track from component
-			//locate head TrackerNodes of this component
-			final Map<Object, TrackerNode> bindingNodes = _compMap.get(comp);
-			if (bindingNodes != null) {
-				final TrackerNode node = bindingNodes.get(script);
-				//ZK-877: NPE in a save only binding
-				//No corresponding LoadBinding with the head script in the specified component. 
-				if (node != null) {
-					if (value != null) {
-						addBeanMap(node, value);
-					} else {
-						removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap 
-						addNullMap(node); //head TrackerNode evaluate to null
-					}
+			final TrackerNode node = getTrackerNodePerComponentScript(comp, script);
+			//ZK-877: NPE in a save only binding
+			//No corresponding LoadBinding with the head script in the specified component. 
+			if (node != null) {
+				if (value != null) {
+					addBeanMap(node, value);
+				} else {
+					removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap 
+					addNullMap(node); //head TrackerNode evaluate to null
 				}
 			}
 		} else {
@@ -258,13 +284,15 @@ public class TrackerImpl implements Tracker, Serializable {
 			
 			//add into _beanMap
 			if (!BindELContext.isImmutable(value)) {
-				LinkedHashSet<TrackerNode> nodes = _beanMap.get(value);
+				Set<TrackerNode> nodes = _beanMap.get(value);
+				//ZK-2289
+				final Set<TrackerNode> nodes0 = AllocUtil.inst.addLinkedHashSet(nodes, node);
 				if (nodes == null) {
-					nodes = new LinkedHashSet<TrackerNode>();
-					_beanMap.put(value, nodes);
 					_equalBeansMap.put(value);
 				}
-				nodes.add(node);
+				if (nodes != nodes0) { // yes, !=; not !equals
+					_beanMap.put(value, nodes0);
+				}
 				//only when value is not a primitive that we shall store it
 				node.setBean(value);
 			}
@@ -278,12 +306,12 @@ public class TrackerImpl implements Tracker, Serializable {
 	private void addNullMap(TrackerNode node) {
 		//add node into _nullMap
 		final Object propName = node.getFieldScript();
-		LinkedHashSet<TrackerNode> nodes = _nullMap.get(propName);
-		if (nodes == null) {
-			nodes = new LinkedHashSet<TrackerNode>();
-			_nullMap.put(propName, nodes);
+		final Set<TrackerNode> nodes = _nullMap.get(propName);
+		//ZK-2289
+		final Set<TrackerNode> nodes0 = AllocUtil.inst.addLinkedHashSet(nodes, node);
+		if (nodes != nodes0) { //Yes, user != instead of !equals()
+			_nullMap.put(propName, nodes0);
 		}
-		nodes.add(node);
 		
 		//remove node from the _beanMap
 		removeBeanMap(node);
@@ -394,10 +422,10 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 
 	//remove all specified nodes from the _beanMap 
-	private void removeAllFromBeanMap(Collection<TrackerNode> removed) {
-		final Collection<Entry<Object, LinkedHashSet<TrackerNode>>> nodesets = _beanMap.entrySet(); 
-		for (final Iterator<Entry<Object, LinkedHashSet<TrackerNode>>> it = nodesets.iterator(); it.hasNext();) {
-			final Entry<Object, LinkedHashSet<TrackerNode>> nodeset = it.next();
+	protected void removeAllFromBeanMap(Collection<TrackerNode> removed) {
+		final Collection<Entry<Object, Set<TrackerNode>>> nodesets = _beanMap.entrySet(); 
+		for (final Iterator<Entry<Object, Set<TrackerNode>>> it = nodesets.iterator(); it.hasNext();) {
+			final Entry<Object, Set<TrackerNode>> nodeset = it.next();
 			final Object bean = nodeset.getKey();
 			nodeset.getValue().removeAll(removed);
 			if (nodeset.getValue().isEmpty()) {
@@ -407,8 +435,8 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 	}
 	
-	private void removeNodes(Collection<LinkedHashSet<TrackerNode>> nodesets, Collection<TrackerNode> removed) {
-		for (final Iterator<LinkedHashSet<TrackerNode>> it = nodesets.iterator(); it.hasNext();) {
+	private void removeNodes(Collection<Set<TrackerNode>> nodesets, Collection<TrackerNode> removed) {
+		for (final Iterator<Set<TrackerNode>> it = nodesets.iterator(); it.hasNext();) {
 			final Set<TrackerNode> nodeset = it.next();
 			nodeset.removeAll(removed);
 			if (nodeset.isEmpty()) {
@@ -457,11 +485,11 @@ public class TrackerImpl implements Tracker, Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		
-		_beanMap = new WeakIdentityMap<Object, LinkedHashSet<TrackerNode>>(); //bean -> Set of TrackerNode
+		_beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 		_equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	}
 	
-	private static class EqualBeansMap {
+	protected static class EqualBeansMap {
 		private transient WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>(); //bean -> EqualBeans
 		private transient WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>(); //bean -> EqualBeans
 		

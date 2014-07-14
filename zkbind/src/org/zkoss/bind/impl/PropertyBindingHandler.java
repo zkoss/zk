@@ -68,73 +68,33 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	void addLoadEventBinding(Component comp, BindingKey bkey, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadEventBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadEventBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadEventBindings, bkey, binding); //ZK-2289
 	}
 	void addLoadPromptBinding(Component comp, BindingKey bkey, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadPromptBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadPromptBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadPromptBindings, bkey, binding); //ZK-2289
 	}
 	void addInitBinding(BindingKey bkey, InitPropertyBinding binding) {
-		List<InitPropertyBinding> bindings = _initBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<InitPropertyBinding>();
-			_initBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_initBindings, bkey, binding); //ZK-2289
 	}
 	
 	void addLoadBeforeBinding(String command, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadBeforeBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadBeforeBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadBeforeBindings, command, binding); //ZK-2289
 	}
 	
 	void addLoadAfterBinding(String command, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadAfterBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadAfterBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadAfterBindings, command, binding); //ZK-2289
 	}
 
 	void addSavePromptBinding(Component comp, BindingKey bkey, SavePropertyBinding binding) {
-		List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<SavePropertyBinding>();
-			_saveEventBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_saveEventBindings, bkey, binding); //ZK-2289
 	}
 	
 	void addSaveBeforeBinding(String command, SavePropertyBinding binding) {
-		List<SavePropertyBinding> bindings = _saveBeforeBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<SavePropertyBinding>();
-			_saveBeforeBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_saveBeforeBindings, command, binding); //ZK-2289
 	}
 	
 	void addSaveAfterBinding(String command, SavePropertyBinding binding) {
-		List<SavePropertyBinding> bindings = _saveAfterBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<SavePropertyBinding>();
-			_saveAfterBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_saveAfterBindings, command, binding); //ZK-2289
 	}
 	
 	//generic operation to save a property binding
