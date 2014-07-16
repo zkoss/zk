@@ -39,15 +39,12 @@ import org.zkoss.zk.ui.UiException;
 public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		LoadChildrenBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	private final Set<String> _doneDependsOn;
-//	private final Set<Class<? extends Converter>> _doneConverterDependsOn;
+	private Set<String> _doneDependsOn;
 	
 	public LoadChildrenBindingImpl(Binder binder, Component comp,
 		String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs,
 		String converterExpr,Map<String, Object> converterArgs) {
 		super(binder, comp, loadExpr, conditionType, command, bindingArgs,converterExpr,converterArgs);
-		_doneDependsOn = new HashSet<String>(4);
-//		_doneConverterDependsOn = new HashSet<Class<? extends Converter>>(4);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -143,10 +140,10 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 	public void addDependsOnTrackings(List<String> srcpath, String basepath, String[] props) {
 		if (srcpath != null) {
 			final String src = BindELContext.pathToString(srcpath);
-			if (_doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
+			if (_doneDependsOn != null && _doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
 				return;
 			}
-			_doneDependsOn.add(src); //mark method as done @DependsOn
+			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
 		}
 		for(String prop : props) {
 			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);

@@ -61,7 +61,7 @@ public class BindEvaluatorXUtil {
 	
 	// parse args , if it is a string, than parse it to an ExpressionX
 	public static Map<String, Object> parseArgs(BindEvaluatorX eval, Map<String,String[]> args) {
-		final Map<String, Object> result = new LinkedHashMap<String, Object>(args.size()); 
+		final Map<String, Object> result = AllocUtil.inst.newLinkedHashMap(args.size());  //ZK-2289
 		for(final Iterator<Entry<String, String[]>> it = args.entrySet().iterator(); it.hasNext();) {
 			final Entry<String, String[]> entry = it.next(); 
 			final String key = entry.getKey();
@@ -71,12 +71,11 @@ public class BindEvaluatorXUtil {
 		}
 		return result;
 	}
-
 	
-	private static void addArg(BindEvaluatorX eval, Map<String,Object> result, String key, String[] valueScript) {
+	private static void addArg(BindEvaluatorX eval, Map<String, Object> result, String key, String[] valueScript) {
 		Object val = null;
 		if(valueScript.length==1){
-			val =  eval.parseExpressionX(null, valueScript[0], Object.class);
+			val = eval.parseExpressionX(null, valueScript[0], Object.class);
 		}else{
 			//TODO support multiple value of a arg
 			val = valueScript;

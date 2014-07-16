@@ -63,42 +63,22 @@ import org.zkoss.zk.ui.Component;
 //	}
 	
 	void addLoadPromptBinding(Component comp, BindingKey bkey, LoadChildrenBinding binding) {
-		List<LoadChildrenBinding> bindings = _loadPromptBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<LoadChildrenBinding>();
-			_loadPromptBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadPromptBindings, bkey, binding); //ZK-2289
 	}
 	void addInitBinding(BindingKey bkey, InitChildrenBinding binding) {
-		List<InitChildrenBinding> bindings = _initBindings.get(bkey); 
-		if (bindings == null) {
-			bindings = new ArrayList<InitChildrenBinding>();
-			_initBindings.put(bkey, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_initBindings, bkey, binding); //ZK-2289
 	}
 	
 	void addLoadBeforeBinding(String command, LoadChildrenBinding binding) {
-		List<LoadChildrenBinding> bindings = _loadBeforeBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<LoadChildrenBinding>();
-			_loadBeforeBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadBeforeBindings, command, binding); //ZK-2289
 	}
 	
 	void addLoadAfterBinding(String command, LoadChildrenBinding binding) {
-		List<LoadChildrenBinding> bindings = _loadAfterBindings.get(command);
-		if (bindings == null) {
-			bindings = new ArrayList<LoadChildrenBinding>();
-			_loadAfterBindings.put(command, bindings);
-		}
-		bindings.add(binding);
+		addBinding(_loadAfterBindings, command, binding); //ZK-2289
 	}
 	
 	List<LoadChildrenBinding> getLoadPromptBindings(BindingKey bkey) {
-		return _loadPromptBindings.get(bkey);
+		return _loadPromptBindings.get(bkey); //ZK-2289
 	}
 
 	

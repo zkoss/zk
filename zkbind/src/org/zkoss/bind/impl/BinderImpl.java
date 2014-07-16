@@ -106,7 +106,6 @@ import org.zkoss.zk.ui.util.ExecutionInit;
  * @since 6.0.0
  */
 public class BinderImpl implements Binder,BinderCtrl,Serializable{
-
 	private static final long serialVersionUID = 1463169907348730644L;
 	
 	private static final Logger _log = LoggerFactory.getLogger(BinderImpl.class);
@@ -1996,19 +1995,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	private void addBinding(Component comp, String attr, Binding binding) {
+		//ZK-2289: Futher optimize zkbind memory consumption.
 		Map<String, List<Binding>> attrMap = _bindings.get(comp);
-		if (attrMap == null) {
-			//bug 657, we have to keep the attribute assignment order.
-			attrMap = new LinkedHashMap<String, List<Binding>>(); 
-			_bindings.put(comp, attrMap);
-		}
-		List<Binding> bindings = attrMap.get(attr);
-		if (bindings == null) {
-			bindings = new ArrayList<Binding>();
-			attrMap.put(attr, bindings);
-		}
-		bindings.add(binding);
-		
+		List<Binding> bindings = attrMap == null ? null : attrMap.get(attr);
+		bindings = AllocUtil.inst.addList(bindings, binding);
+		//bug 657, we have to keep the attribute assignment order.
+		attrMap = AllocUtil.inst.putLinkedHashMap(attrMap, attr, bindings);
+		_bindings.put(comp, attrMap);
+				
 		//associate component with this binder, which means, one component can only bind by one binder
 		BinderUtil.markHandling(comp,this);
 	}

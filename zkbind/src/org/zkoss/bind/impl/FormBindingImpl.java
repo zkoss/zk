@@ -34,24 +34,19 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	final protected String _formId;
 	final protected AccessInfo _accessInfo;
-	final private Map<String, ExpressionX> _fieldExprs;
+	private Map<String, ExpressionX> _fieldExprs;
 
 	protected FormBindingImpl(Binder binder, Component comp, String formId,
 			String accessExpr, ConditionType conditionType, String command,Map<String, Object> bindingArgs) {
 		super(binder, comp, bindingArgs);
 		this._formId = formId;
 		this._accessInfo = AccessInfo.create(this, accessExpr, Object.class, conditionType, command, ignoreTracker());
-		_fieldExprs = new HashMap<String, ExpressionX>();
 	}
 
 	//should this binding set the ignore tracker attribute when evaluate the expression.
 	protected boolean ignoreTracker(){
 		return false;
 	}
-	
-//	public void addPropertyBinding() { //add associated property binding in this form
-//		
-//	}
 	
 	public Form getFormBean() {
 		return ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
@@ -74,22 +69,22 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	}
 	
 	protected ExpressionX getFieldExpression(BindEvaluatorX eval, String field) {
-		ExpressionX expr  = _fieldExprs.get(field);
+		ExpressionX expr  = _fieldExprs == null ? null : _fieldExprs.get(field);
 		if (expr  == null) {
 			final String property = getPropertyString();
 			final String script = BindELContext.appendFields(property, field);
 			expr = eval.parseExpressionX(null, script, Object.class);
-			_fieldExprs.put(field, expr);
+			_fieldExprs = AllocUtil.inst.putMap(_fieldExprs, field, expr); //ZK-2289
 		}
 		return expr;
 	}
 	
 	protected ExpressionX getFormExpression(BindEvaluatorX eval, String field) {
 		final String script = BindELContext.appendFields(getFormId(), field);
-		ExpressionX expr  = _fieldExprs.get(script);
+		ExpressionX expr  = _fieldExprs == null ? null : _fieldExprs.get(script);
 		if (expr  == null) {
 			expr = eval.parseExpressionX(null, script, Object.class);
-			_fieldExprs.put(script, expr);
+			_fieldExprs = AllocUtil.inst.putMap(_fieldExprs, script, expr); //ZK-2289
 		}
 		return expr;
 	}
@@ -97,11 +92,11 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	protected ExpressionX getBaseExpression(BindEvaluatorX eval) {
 		//TODO, Dennis potential bug if a field name same as form id
 		final String property = getPropertyString();
-		ExpressionX expr = _fieldExprs.get(property);
+		ExpressionX expr = _fieldExprs == null ? null : _fieldExprs.get(property);
 		if (expr == null) {
 			final String script = property;
 			expr = eval.parseExpressionX(null, script, Object.class);
-			_fieldExprs.put(property, expr);
+			_fieldExprs = AllocUtil.inst.putMap(_fieldExprs, property, expr); //ZK-2289
 		}
 		return expr;
 	}

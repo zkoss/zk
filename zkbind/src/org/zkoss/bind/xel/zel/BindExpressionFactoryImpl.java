@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.xel.zel;
 
+import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.xel.BindXelFactory;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.impl.ExpressionFactoryImpl;
@@ -26,6 +27,6 @@ import org.zkoss.zel.impl.lang.ExpressionBuilder;
 public class BindExpressionFactoryImpl extends ExpressionFactoryImpl {
     //20110815, Henri Chen: allow override node visiting (see BindExpressionBuilder#visit)
     protected ExpressionBuilder newExpressionBuilder(String expression, ELContext context) {
-    	return new BindExpressionBuilder(expression, context);
+    	return new BindExpressionBuilder((String)AllocUtil.inst.processScript(expression), context); //ZSS-2289
     }
 }
