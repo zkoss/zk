@@ -1114,7 +1114,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (hdtbl) {
 				var wd = 0;
 				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
-					if (w.style.display != 'none')
+					if (w.style.display != 'none' && !w.id.endsWith('hdfaker-bar')) // B70-ZK-2307 and B70-ZK-2358
 						wd += zk.parseInt(w.style.width);
 				}
 				hdtbl.style.width = wd + 'px';
@@ -1124,13 +1124,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					fttbl.style.width = wd + 'px';
 			}
 		}
-		if (this._nativebar && !this.frozen) {
+		if (!this.frozen) {
 			var zkb = zk(this.ebody),
 				hScroll = zkb.hasHScroll(),
 				vScroll = zkb.hasVScroll(),
 				hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
 				ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
-			if (vScroll && !allWidths) {
+			if (vScroll) {
 				if (hdfakerbar)
 					hdfakerbar.style.width = vScroll + 'px';
 				if (ftfakerbar)
@@ -1167,7 +1167,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wd = wd ? 'width: ' + wd + ';' : '';
 			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
 		}
-		if (this._nativebar && !this.frozen && (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0))
+		if (!this.frozen && (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0))
 			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" />');
 		out.push('</colgroup>');
 	},
@@ -1480,6 +1480,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				frozen._doScrollNow(start);
 				bar.setBarPosition(start);
 			}
+			this._afterCalcSize(); // for ZK-2370, we need to check the faker-bar again
 		}
 	},
 });

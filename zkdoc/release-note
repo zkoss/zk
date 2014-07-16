@@ -31,6 +31,7 @@ ZK 7.0.3
   ZK-2350: Filedownload with file name contain empty string become to "+" sign in IE
   ZK-2352: Executions.forward() will show IOException warning
   ZK-2348: empty listheaders visibility problems when used along auxheaders
+  ZK-2358: Column borders become mis-aligned to listbox header's border when scrolling to right-most position
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.

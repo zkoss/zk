@@ -729,6 +729,10 @@ zjq.prototype = {
 	 * @since 5.0.8
 	 */
 	hasVScroll: function () {
+		var w;
+		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
+			return w._scrollbar.hasVScroll();
+		}
 		var n, v;
 		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 11 ? v: 0;
 	},
@@ -738,6 +742,10 @@ zjq.prototype = {
 	 * @since 5.0.8
 	 */
 	hasHScroll: function () {
+		var w;
+		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
+			return w._scrollbar.hasHScroll();
+		}
 		var n, v;
 		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v: 0;
 	},

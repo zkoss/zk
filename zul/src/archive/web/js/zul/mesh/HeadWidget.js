@@ -184,7 +184,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
 						barstyle = '', hdfakerbarstyle ='',
-						recoverFakerbar = mesh._nativebar && !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false,
+						recoverFakerbar = !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false,
 						index = child.getChildIndex();
 
 					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding 
@@ -280,7 +280,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			w.redraw(out);
 
 		var mesh = this.getMeshWidget();
-		if (mesh._nativebar && !mesh.frozen)
+		if (!mesh.frozen)
 			out.push('<th id="', this.uuid, '-bar" class="', this.$s('bar'), '" />');
 
 		out.push('</tr>');

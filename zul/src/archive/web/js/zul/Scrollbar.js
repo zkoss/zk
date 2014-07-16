@@ -226,6 +226,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			//sync indicator/scroller width ratio
 			this.hRatio = Math.abs(this.hLimit / this.hBarLimit);
+			
+			this.needH = indicator.offsetHeight; // use a size for hasHScroll
 			hbar.style.display = old; // for calculate size
 		}
 		if (needV) {
@@ -276,6 +278,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			//sync indicator/scroller width ratio
 			this.vRatio = Math.abs(this.vLimit / this.vBarLimit);
+
+			this.needV = indicator.offsetWidth; // use a size for hasVScroll
 			vbar.style.display = old; // for calculate size
 		}
 		
