@@ -29,6 +29,7 @@ ZK 7.0.3
   ZK-2342: Multiple onAnchorPos events causing too many parameters exception
   ZK-2350: Filedownload with file name contain empty string become to "+" sign in IE
   ZK-2352: Executions.forward() will show IOException warning
+  ZK-2348: empty listheaders visibility problems when used along auxheaders
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.

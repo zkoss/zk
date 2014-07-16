@@ -703,8 +703,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var empty = true,
 				flex = false,
 				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
-			for (var i = this.heads.length; i-- > 0;)
-				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
+			for (var i = this.heads.length; i-- > 0;) {
+				var header = this.heads[i],
+					emptyHeader = true;
+				for (var w = header.firstChild; w; w = w.nextSibling) {
 					if (hdsmin && !this.ehdfaker.childNodes[i].style.width && !w._nhflex) {
 						// B50-3357475: assume header hflex min if width/hflex unspecified
 						w._hflex = 'min';
@@ -713,9 +715,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					}
 					if (!flex && w._nhflex)
 						flex = true;
-					if (w.getLabel() || w.getImage() || w.nChildren)
+					if (w.getLabel() || w.getImage() || w.nChildren) {
+						emptyHeader = false;
 						empty = false;
+					}
 				}
+				header.$n().style.display = emptyHeader ? 'none' : ''; // Bug ZK-2348
+			}
 			var old = this.ehead.style.display,
 				tofix = force && flex && this.isRealVisible(); //Bug ZK-1647: no need to consider empty header for flex calculation
 			this.ehead.style.display = empty ? 'none' : '';
