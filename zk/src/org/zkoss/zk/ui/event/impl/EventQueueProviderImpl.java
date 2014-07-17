@@ -17,6 +17,8 @@ import java.util.HashMap;
 
 import static org.zkoss.lang.Generics.cast;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
@@ -32,6 +34,8 @@ import org.zkoss.zk.ui.event.*;
  * @since 5.0.0
  */
 public class EventQueueProviderImpl implements EventQueueProvider {
+	private static final Logger log = LoggerFactory.getLogger(EventQueueProviderImpl.class);
+	
 	/** The attribute used to store the map of event queues.
 	 */
 	protected static final String ATTR_EVENT_QUEUES = "org.zkoss.zk.ui.event.eventQueues";
@@ -55,6 +59,10 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			EventQueue<T> eq = eqs.get(name);
 			if (autoCreate && eq == null)
 				eqs.put(name, eq = new DesktopEventQueue<T>());
+
+			if (log.isDebugEnabled()) {
+				log.debug("Lookup event queue: name [{}], scope [{}], autoCreate [{}]", name, scope, autoCreate);
+			}
 			return eq;
 		} else
 			throw new UnsupportedOperationException("Unknown scope: "+scope);
@@ -82,6 +90,10 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			eq = eqs.get(name);
 			if (autoCreate && eq == null)
 				eqs.put(name, eq = new ServerPushEventQueue<T>());
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Lookup event queue: name [{}], scope [{}], autoCreate [{}]", name, ctxscope, autoCreate);
 		}
 		return eq;
 	}
@@ -116,8 +128,14 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			}
 			if (eq != null) {
 				eq.close();
+				if (log.isDebugEnabled()) {
+					log.debug("Remove the event queue: name [{}], scope [{}]", name, ctxscope);
+				}
 				return true;
 			}
+		}
+		if (log.isDebugEnabled()) {
+			log.debug("Fail to remove the event queue: name [{}], scope [{}]", name, ctxscope);
 		}
 		return false;
 	}

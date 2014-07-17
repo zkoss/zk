@@ -100,6 +100,10 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			//B65-ZK-1840 make sure the flag is true after enabling (otherwise disabling will fail) 
 			_serverPushEnabled = true; 
 		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Subscribe event queue, async is [" + async + "]");
+		}
 		_listenerInfos.add(new ListenerInfo<T>(listener, callback, async));
 	}
 	public boolean unsubscribe(EventListener<T> listener) {
@@ -107,6 +111,9 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			for (Iterator<ListenerInfo<T>> it = _listenerInfos.iterator(); it.hasNext();) {
 				final ListenerInfo<T> inf = it.next();
 				if (listener.equals(inf.listener)) {
+					if (log.isDebugEnabled()) {
+						log.debug("Unsubscribe event queue");
+					}
 					it.remove();
 					if (inf.async && --_nAsync == 0 && _serverPushEnabled)
 						//B65-ZK-1840 added enabler argument for reference counting  
@@ -114,6 +121,9 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 					return true;
 				}
 			}
+		if (log.isDebugEnabled()) {
+			log.debug("Not found in the unsubscribe event queue");
+		}
 		return false;
 	}
 	public boolean isSubscribed(EventListener<T> listener) {
