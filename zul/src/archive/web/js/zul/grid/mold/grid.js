@@ -41,7 +41,12 @@ function (out) {
 		
 		out.push('</tbody></table></div><div class="', this.$s('header-border'), '"></div>');
 	}
-	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
+	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
+	
+	if (this._autopaging)
+		out.push(' ', this.$s('autopaging'));
+	
+	out.push('"');
 
 	var hgh = this.getHeight();
 	if (hgh) 
