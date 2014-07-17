@@ -123,6 +123,11 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				mp = menu.parent,
 				mb = menu.getMenubar(),
 				ori = mb ? mb.getOrient() : '';
+
+			// ZK-2356 should sync position after calling super.onResponse()
+			if (menu.isTopmost() && ori == 'horizontal' && n) 
+				n.style.top = jq.px0(zk.parseInt(n.style.top) + 
+					zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
 			
 			while(mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
@@ -176,15 +181,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
-
-		var mb;
-		// adjust only for topmost menu in horizontal.
-		if (menu && menu.isTopmost() && (mb = menu.getMenubar()) && mb.getOrient() == 'horizontal') {
-			var n;
-			if (n = this.$n())
-				n.style.top = jq.px0(zk.parseInt(n.style.top) + 
-					zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
-		}
 		
 		this._syncPos(); //ZK-1248: re-sync position if sub-menu is overlapped on parent menu
 	},
