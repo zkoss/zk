@@ -805,7 +805,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//We have to synchronize it due to getPage allows concurrent access
 		synchronized (_pages) {
 			_pages.add(page);
-//			if (log.isDebugEnabled()) log.debug("After added, pages: "+_pages);
+			if (log.isDebugEnabled()) log.debug("After added, pages: {}", _pages);
 		}
 		afterPageAttached(page, this);
 		_wapp.getConfiguration().afterPageAttached(page, this);
@@ -817,7 +817,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				//Both UiVisualizer.getResponses and Include.setChildPage
 				//might call removePage
 
-//			if (log.isDebugEnabled()) log.debug("After removed, pages: "+_pages);
+			if (log.isDebugEnabled()) log.debug("After removed, pages: {}", _pages);
 		}
 		removeComponents(page.getRoots());
 
@@ -1473,6 +1473,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		_spush.schedule(listener, event, new Scheduler<T>() {
 			public void schedule(EventListener<T> listener, T event) {
+				if (log.isDebugEnabled()) {
+					log.debug("scheduleServerPush: [{}]", event);
+				}
+				
 				synchronized (_schedInfos) { //must be thread safe
 					if (_dummyTarget == null) {
 						_dummyTarget = new AbstractComponent();
@@ -1500,9 +1504,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		&& Executions.getCurrent().getDesktop() == this)
 			throw new IllegalStateException("No need to invoke Executions.activate() in an event listener");
 
+		if (log.isDebugEnabled()) {
+			log.debug("activateServerPush, timeout is [{}]", timeout);
+		}
 		return _spush.activate(timeout);
 	}
 	public void deactivateServerPush() {
+		if (log.isDebugEnabled()) {
+			log.debug("activateServerPush, _spush's activation is [{}]", _spush.isActive());
+		}
 		if (_spush != null)
 			if (_spush.deactivate(_spushShallStop)) {
 				_spushShallStop = false;
@@ -1609,12 +1619,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_event = event;
 		}
 		private void invoke() throws Exception {
+			if (log.isDebugEnabled()) {
+				log.debug("Handling schedule info, the event is [{}]", _event);
+			}
 			_listener.onEvent(_event);
 		}
 	}
 	private class ScheduleListener implements EventListener<Event>, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
 			final long max = System.currentTimeMillis() + getMaxSchedTime();
+			if (log.isDebugEnabled()) {
+				log.debug("Handling schedule server push, _schedInfos is empty: [{}]", _schedInfos.isEmpty());
+			}
 			while (!_schedInfos.isEmpty()) {
 				final List<ScheduleInfo<? extends Event>> schedInfos;
 				synchronized (_schedInfos) { //must be thread safe
