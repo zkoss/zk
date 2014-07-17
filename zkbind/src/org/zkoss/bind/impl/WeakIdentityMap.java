@@ -488,6 +488,22 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
                 public boolean remove(Object o) {
                     return o == null ? false : WeakIdentityMap.this.remove(o) == o;
                 }
+                //20140717, henrichen: ZK-2289
+                public boolean add(K o) {
+                	final boolean contains = containsKey(o);
+                	WeakIdentityMap.this.put(o, null);
+                	return !contains;
+                }
+                //20140717, henrichen: ZK-2289
+                public boolean addAll(Collection<? extends K> c) {
+                	boolean changed = false;
+                	for (K item : c) {
+                		final boolean ichanged = this.add(item);
+                		if (!changed && ichanged)
+                			changed = true;
+                	}
+                	return changed;
+                }
                 public void clear() {
                     WeakIdentityMap.this.clear();
                 }

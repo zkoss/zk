@@ -650,8 +650,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!-- zkmax.jar will define this automatically 
 	<library-property>
 	   <name>org.zkoss.bind.AnnotateBinder.class</name>
 	   <value>org.zkoss.zkmax.bind.impl.AnnotateBinderEx</value>
 	</library-property>
+	 -->
 </zk>
