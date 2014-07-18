@@ -45,8 +45,12 @@ function (out) {
 		out.push('</tbody></table></div><div class="', this.$s('header-border'), '"></div>');
 	}
 	//body
-	out.push('<div id="', uuid, '-body" class="', this.$s('body'), 
-			'"><table id="', uuid, '-cave"', width, 
+	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
+	
+	if (this._autopaging)
+		out.push(' ', this.$s('autopaging'));
+	
+	out.push('"><table id="', uuid, '-cave"', width, 
 			' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.treecols)
