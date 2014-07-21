@@ -1374,9 +1374,13 @@ jq(el).zk.center(); //same as 'center'
 			_txtSizDiv.style[nm] = jq.css(nm);
 		}
 
-		_txtSizDiv.innerHTML = txt || jq[0].innerHTML;
+		txt = txt || jq[0].innerHTML;
+		// ZK-2181: remove name attritube to prevent the radio has wrong status
+		_txtSizDiv.innerHTML = txt.replace(/name="[^"]*"/g, '');
 		_txtSizDiv.style.display = '';
-		return [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
+		var result = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
+		_txtSizDiv.innerHTML = ''; //reset
+		return result;
 	},
 
 	/** Returns the dimension of the specified element.
