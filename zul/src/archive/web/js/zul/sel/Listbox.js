@@ -34,7 +34,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							colspan++;
 				}
 				empty.colSpan = colspan || 1;
-				empty.style.display = 'block';
+				// ZK-2365 table cell needs the "display:table-cell" when colspan is enable.
+				empty.style.display = 'table-cell';
 			}
 		}
 		wgt._shallFixEmpty = false;
