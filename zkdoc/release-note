@@ -37,6 +37,7 @@ ZK 7.0.3
   ZK-2359: Autopaging causes flickering of list
   ZK-2366: zul.xsd did not define var attribute
   ZK-2365: "No items to display" is no longer centered in a Listbox with Firefox and Chrome.
+  ZK-2361: Missing element for <template> in zul.xsd
   
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
