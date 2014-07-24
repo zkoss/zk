@@ -585,7 +585,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 						s.top = this._lastSize.t;
 						s.width = this._lastSize.w;
 						s.height = this._lastSize.h;
-						this._lastSize = null;
+						// commented out for Bug B70-ZK-2363
+						//this._lastSize = null;
 					}
 					l = s.left;
 					t = s.top;

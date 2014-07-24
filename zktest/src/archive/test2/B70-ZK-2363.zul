@@ -1,0 +1,12 @@
+<zk>
+<window title="Test Max" border="normal" position="center" sizable="true" maximizable="true" minimizable="true" closable="true" width="488px">
+  <menubar>
+    <menu label="File" >
+      <menupopup>
+        <menu label="Test"></menu>
+      </menupopup> 
+    </menu>
+  </menubar>
+  <vbox/>
+</window>
+</zk>
