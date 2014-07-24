@@ -2545,7 +2545,57 @@
 	<!-- template -->
 	<xs:element name="template" type="templateType" />
 	<xs:complexType name="templateType">
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="anyGroup"/>
+			<xs:element ref="area"/>
+			<xs:element ref="bandpopup"/>
+			<xs:element ref="caption"/>
+			<xs:element ref="center"/>
+			<xs:element ref="columns"/>
+			<xs:element ref="column"/>
+			<xs:element ref="comboitem"/>
+			<xs:element ref="detail"/>
+			<xs:element ref="east"/>
+			<xs:element ref="fisheye"/>
+			<xs:element ref="foot"/>
+			<xs:element ref="footer"/>
+			<xs:element ref="ginfo"/>
+			<xs:element ref="gmarker"/>
+			<xs:element ref="group"/>
+			<xs:element ref="groupfoot"/>
+			<xs:element ref="listcell"/>
+			<xs:element ref="listfoot"/>
+			<xs:element ref="listfooter"/>
+			<xs:element ref="listgroup"/>
+			<xs:element ref="listgroupfoot"/>
+			<xs:element ref="listhead"/>
+			<xs:element ref="listheader"/>
+			<xs:element ref="listitem"/>
+			<xs:element ref="menu"/>
+			<xs:element ref="menuitem"/>
+			<xs:element ref="menuseparator"/>
+			<xs:element ref="nav"/>
+			<xs:element ref="navitem"/>
+			<xs:element ref="navseparator"/>
+			<xs:element ref="north"/>
+			<xs:element ref="rows"/>
+			<xs:element ref="row"/>
+			<xs:element ref="splitter"/>
+			<xs:element ref="south"/>
+			<xs:element ref="tab"/>
+			<xs:element ref="tabpanel"/>
+			<xs:element ref="tabpanels"/>
+			<xs:element ref="tabs"/>
+			<xs:element ref="treecell"/>
+			<xs:element ref="treechildren"/>
+			<xs:element ref="treecol"/>
+			<xs:element ref="treecols"/>
+			<xs:element ref="treefoot"/>
+			<xs:element ref="treefooter"/>
+			<xs:element ref="treeitem"/>
+			<xs:element ref="treerow"/>
+			<xs:element ref="west"/>
+		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="if" type="xs:string" use="optional" />
