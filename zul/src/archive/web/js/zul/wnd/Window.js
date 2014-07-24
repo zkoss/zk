@@ -585,7 +585,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 						s.top = this._lastSize.t;
 						s.width = this._lastSize.w;
 						s.height = this._lastSize.h;
-						this._lastSize = null;
+						// commented out for Bug B70-ZK-2363
+						//this._lastSize = null;
 					}
 					l = s.left;
 					t = s.top;
@@ -843,12 +844,18 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (data.width != s.width) {
 			s.width = data.width;
 			// ZK-1826: should save width
+			// ZK-2363: init this._lastSize if its null
+			if (!this._lastSize)
+				this._lastSize = {};
 			this._width = this._lastSize.w = s.width;
 		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
 			// ZK-1826: should save height
+			// ZK-2363: init this._lastSize if its null
+			if (!this._lastSize)
+				this._lastSize = {};
 			this._height = this._lastSize.h = s.height;
 		}
 
