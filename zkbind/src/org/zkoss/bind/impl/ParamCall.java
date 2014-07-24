@@ -48,7 +48,7 @@ public class ParamCall {
 
 	private static final Logger _log = LoggerFactory.getLogger(ParamCall.class);
 	
-	private Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
+	protected Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
 	private List<Type> _types;//to map class type directly, regardless the annotation
 	private boolean _mappingType;//to enable the map class type without annotation, it is for compatible to rc2, only support BindeContext and Binder
 	private ContextObjects _contextObjects;
@@ -83,10 +83,18 @@ public class ParamCall {
 		_bindContext = ctx;
 		_types.add(new Type(ctx.getClass(),_bindContext));
 	}
+	
+	public BindContext getBindContext() {
+		return _bindContext;
+	}
 	public void setBinder(Binder binder){
 		_binder = binder;
 		_types.add(new Type(binder.getClass(),_binder));
 		_root = binder.getView();
+	}
+
+	public Binder getBinder() {
+		return _binder;
 	}
 	
 	public void setBindingArgs(final Map<String, Object> bindingArgs){
@@ -170,7 +178,7 @@ public class ParamCall {
 		}
 	}
 	
-	private interface ParamResolver<T> {
+	public interface ParamResolver<T> {
 		public Object resolveParameter(T anno,Class<?> returnType);
 	}
 

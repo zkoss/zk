@@ -54,8 +54,12 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.InitChildrenBinding;
+import org.zkoss.bind.sys.InitFormBinding;
+import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.LoadChildrenBinding;
+import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.ReferenceBinding;
@@ -607,7 +611,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		final String attr = formId;
 		
-		InitFormBindingImpl binding = new InitFormBindingImpl(this, comp, attr, initExpr, bindingArgs);
+		InitFormBinding binding = newInitFormBinding(comp, attr, initExpr, bindingArgs);
 		
 		addBinding(comp, attr, binding);
 		final BindingKey bkey = getBindingKey(comp, attr);
@@ -665,7 +669,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final String attr = formId;
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(prompt){
-			final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.PROMPT,null, bindingArgs);
+			final LoadFormBinding binding = newLoadFormBinding(comp, formId, loadExpr,ConditionType.PROMPT,null, bindingArgs);
 			addBinding(comp, attr, binding);
 			final BindingKey bkey = getBindingKey(comp, attr);
 			_formBindingHandler.addLoadPromptBinding(bkey, binding);
@@ -676,7 +680,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.BEFORE_COMMAND,cmd, bindingArgs);
+					final LoadFormBinding binding = newLoadFormBinding(comp, formId, loadExpr,ConditionType.BEFORE_COMMAND,cmd, bindingArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
 						_log.debug("add before command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
@@ -690,7 +694,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.AFTER_COMMAND,cmd, bindingArgs);
+					final LoadFormBinding binding = newLoadFormBinding(comp, formId, loadExpr,ConditionType.AFTER_COMMAND,cmd, bindingArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
 						_log.debug("add after command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
@@ -715,7 +719,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(beforeCmds!=null && beforeCmds.length>0){
 			for(String cmd:beforeCmds){
-				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formId, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				final SaveFormBinding binding = newSaveFormBinding(comp, formId, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
 				addBinding(comp, formId, binding);
 				if(_log.isDebugEnabled()){
 					_log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formId,saveExpr,cmd);
@@ -729,7 +733,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		if(afterCmds!=null && afterCmds.length>0){
 			for(String cmd:afterCmds){
-				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formId, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				final SaveFormBinding binding = newSaveFormBinding(comp, formId, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
 				addBinding(comp, formId, binding);
 				if(_log.isDebugEnabled()){
 					_log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formId,saveExpr,cmd);
@@ -843,7 +847,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_log.debug("add init-binding: comp=[%s],attr=[%s],expr=[%s],converter=[%s]", comp,attr,initExpr,converterArgs);
 		}
 		
-		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, loadrep, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
+		InitPropertyBinding binding = newInitPropertyBinding(comp, attr, loadrep, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
 		
 		addBinding(comp, attr, binding); 
 		final BindingKey bkey = getBindingKey(comp, attr);
@@ -924,7 +928,86 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 		}
 	}
-	
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected LoadPropertyBinding newLoadPropertyBinding(Component comp,
+			String attr, String loadAttr, Class<?> attrType, String loadExpr,
+			ConditionType conditionType, String command,
+			Map<String, Object> bindingArgs, String converterExpr,
+			Map<String, Object> converterArgs) {
+		return new LoadPropertyBindingImpl(this, comp, attr, loadAttr, attrType, loadExpr, conditionType, command,  bindingArgs, converterExpr,converterArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected SavePropertyBinding newSavePropertyBinding(Component comp, String attr, String saveAttr, String saveExpr,
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
+			String converterExpr, Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
+		return new SavePropertyBindingImpl(this, comp, attr, saveAttr, saveExpr, conditionType, command, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected InitPropertyBinding newInitPropertyBinding(Component comp,
+			String attr, String loadAttr, Class<?> attrType, String initExpr,Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
+		return new InitPropertyBindingImpl(this, comp, attr, loadAttr, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected InitChildrenBinding newInitChildrenBinding(Component comp, String initExpr,Map<String, Object> bindingArgs,
+			String converterExpr,Map<String, Object> converterArgs) {
+		return new InitChildrenBindingImpl(this, comp, initExpr, bindingArgs, converterExpr, converterArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected LoadChildrenBinding newLoadChildrenBinding(Component comp,
+			String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs,
+			String converterExpr,Map<String, Object> converterArgs) {
+		return new LoadChildrenBindingImpl(this, comp, loadExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected CommandBinding newCommandBinding(Component comp, String evtnm, String cmdScript, Map<String, Object> args) {
+		return new CommandBindingImpl(this, comp, evtnm, cmdScript, args);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected InitFormBinding newInitFormBinding(Component comp, String formId, String initExpr, Map<String, Object> bindingArgs) {
+		return new InitFormBindingImpl(this, comp, formId, initExpr, bindingArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected LoadFormBinding newLoadFormBinding(Component comp, String formId, String loadExpr, 
+			ConditionType conditionType,String command, Map<String, Object> bindingArgs) {
+		return new LoadFormBindingImpl(this, comp, formId, loadExpr, conditionType, command, bindingArgs);
+	}
+
+	/** Make this extenable.
+	 * @since 7.0.3
+	 */
+	protected SaveFormBinding newSaveFormBinding(Component comp, String formId,
+			String saveExpr, ConditionType conditionType, String command,
+			Map<String, Object> bindingArgs, String validatorExpr,
+			Map<String, Object> validatorArgs) {
+		return new SaveFormBindingImpl(this, comp, formId, saveExpr,
+				conditionType, command, bindingArgs, validatorExpr,
+				validatorArgs);
+	}
 	private void addPropertyLoadBindings0(Component comp, String attr,
 			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
@@ -964,7 +1047,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			if(_log.isDebugEnabled()){
 				_log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converterArgs);
 			}
-			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadRep, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
+			LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadRep, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
 			addBinding(comp, attr, binding);
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
@@ -985,7 +1068,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadRep, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
+					LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadRep, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
 						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -999,7 +1082,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadRep, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
+					LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadRep, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
 						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -1051,7 +1134,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		saveRep = saveRep == null ? attr : saveRep;
 		
 		if(prompt){
-			final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveRep, saveExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+			final SavePropertyBinding binding = newSavePropertyBinding(comp, attr, saveRep, saveExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 			addBinding(comp, attr, binding);
 			if(_log.isDebugEnabled()){
 				_log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
@@ -1067,7 +1150,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveRep, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+					final SavePropertyBinding binding = newSavePropertyBinding(comp, attr, saveRep, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
 						_log.debug("add before command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
@@ -1081,7 +1164,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveRep, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+					final SavePropertyBinding binding = newSavePropertyBinding(comp, attr, saveRep, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
 						_log.debug("add after command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
@@ -1140,7 +1223,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_log.debug("add children-init-binding: comp=[%s],expr=[%s]", comp,initExpr);
 		}
 		
-		InitChildrenBindingImpl binding = new InitChildrenBindingImpl(this, comp, initExpr, bindingArgs,converterExpr,converterArgs);
+		InitChildrenBinding binding = newInitChildrenBinding(comp, initExpr, bindingArgs,converterExpr,converterArgs);
 		
 		addBinding(comp, CHILDREN_ATTR, binding); 
 		final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
@@ -1238,7 +1321,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> args) {
 		checkInit();
-		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
+		final CommandBinding binding = newCommandBinding(comp, evtnm, commandExpr, args);
 		addBinding(comp, evtnm, binding);
 		registerCommandEventListener(comp, evtnm, binding, false);
 		
@@ -1250,7 +1333,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	public void addGlobalCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> args) {
 		checkInit();
-		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
+		final CommandBinding binding = newCommandBinding(comp, evtnm, commandExpr, args);
 		addBinding(comp, evtnm, binding);
 		registerCommandEventListener(comp, evtnm, binding, true);
 		
@@ -1704,7 +1787,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
-	private ParamCall createParamCall(BindContext ctx){
+	protected ParamCall createParamCall(BindContext ctx){
 		final ParamCall call = new ParamCall();
 		call.setBinder(this);
 		call.setBindContext(ctx);

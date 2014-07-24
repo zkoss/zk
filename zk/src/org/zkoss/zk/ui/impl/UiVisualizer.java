@@ -35,8 +35,6 @@ import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -46,12 +44,12 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.AbortingReason;
-import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.*;
 
@@ -848,13 +846,13 @@ import org.zkoss.zk.au.out.*;
 			if ((nxt = last.getNextSibling()) == null
 			|| (sibs != null && !sibs.contains(nxt))) { //nextsib not available at client
 				if (parent != null //since page might not available, we try AuInsertAfter first if parent is null
-				&& !(parent instanceof Native) && !(parent instanceof StubsComponent)) { //parent valid
+				&& !(parent instanceof Native) && !(parent instanceof StubComponent)) { //parent valid
 					responses.add(new AuAppendChild(parent, contents));
 				} else {
 					final Component first = group.get(0);
 					if ((prv = first.getPreviousSibling()) != null
 					&& (sibs == null || sibs.contains(prv)) //prv is available
-					&& !(prv instanceof Native) && !(prv instanceof StubsComponent)) { //prv valid
+					&& !(prv instanceof Native) && !(prv instanceof StubComponent)) { //prv valid
 						responses.add(new AuInsertAfter(prv, contents));
 					} else {
 						if (parent != null)
@@ -862,7 +860,7 @@ import org.zkoss.zk.au.out.*;
 						responses.add(new AuAppendChild(page, contents));
 					}
 				}
-			} else if (nxt instanceof Native || nxt instanceof StubsComponent) { //native
+			} else if (nxt instanceof Native || nxt instanceof StubComponent) { //native
 				final Component first = group.get(0);
 				if ((prv = first.getPreviousSibling()) == null
 				|| (sibs != null && !sibs.contains(prv))) //prv is not available

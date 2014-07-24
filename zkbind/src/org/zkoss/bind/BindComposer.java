@@ -66,8 +66,8 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private static final Logger _log = LoggerFactory.getLogger(BindComposer.class);
 	
-	private static final String VM_ID = "$VM_ID$";
-	private static final String BINDER_ID = "$BINDER_ID$";
+	protected static final String VM_ID = "$VM_ID$";
+	protected static final String BINDER_ID = "$BINDER_ID$";
 	
 	private Object _viewModel;
 	private AnnotateBinder _binder;
@@ -76,17 +76,17 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private final Map<String, Validator> _validators;
 	private final BindEvaluatorX evalx;
 	
-	private static final String ID_ANNO = "id";
-	private static final String INIT_ANNO = "init";
+	protected static final String ID_ANNO = "id";
+	protected static final String INIT_ANNO = "init";
 	
-	private static final String VALUE_ANNO_ATTR = "value";
+	protected static final String VALUE_ANNO_ATTR = "value";
 	
-	private static final String VIEW_MODEL_ATTR = "viewModel";
-	private static final String BINDER_ATTR = "binder";
-	private static final String VALIDATION_MESSAGES_ATTR = "validationMessages";
+	protected static final String VIEW_MODEL_ATTR = "viewModel";
+	protected static final String BINDER_ATTR = "binder";
+	protected static final String VALIDATION_MESSAGES_ATTR = "validationMessages";
 	
-	private static final String QUEUE_NAME_ANNO_ATTR = "queueName";
-	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
+	protected static final String QUEUE_NAME_ANNO_ATTR = "queueName";
+	protected static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 	
 	private final static Map<Class<?>, List<Method>> _afterComposeMethodCache = 
 		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME);

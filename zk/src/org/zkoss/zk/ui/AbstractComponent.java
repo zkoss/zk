@@ -701,7 +701,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (script != null) {
-			if (initAuxInfo().wgtlsns == null) _auxinf.wgtlsns = new LinkedHashMap<String, String>();
+			if (initAuxInfo().wgtlsns == null) _auxinf.wgtlsns = new LinkedHashMap<String, String>(4);
 			old = _auxinf.wgtlsns.put(evtnm, script);
 		} else
 			old = _auxinf != null && _auxinf.wgtlsns != null ?
@@ -726,7 +726,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (script != null) {
-			if (initAuxInfo().wgtovds == null) _auxinf.wgtovds = new LinkedHashMap<String, String>();
+			if (initAuxInfo().wgtovds == null) _auxinf.wgtovds = new LinkedHashMap<String, String>(4);
 			old = _auxinf.wgtovds.put(name, script);
 		} else
 			old = _auxinf != null && _auxinf.wgtovds != null ?
@@ -752,7 +752,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final String old;
 		if (value != null) {
 			if (initAuxInfo().wgtattrs == null)
-				_auxinf.wgtattrs = new LinkedHashMap<String, String>();
+				_auxinf.wgtattrs = new LinkedHashMap<String, String>(4);
 			old = _auxinf.wgtattrs.put(name, value);
 		} else
 			old = _auxinf != null && _auxinf.wgtattrs != null ?

@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
+import org.zkoss.zk.ui.metainfo.NamespaceParser;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
@@ -104,7 +105,8 @@ public class Configuration {
 		_composers = new FastReadArray<Class<?>>(Class.class),
 		_initiators = new FastReadArray<Class<?>>(Class.class),
 		_seoRends = new FastReadArray<Class<?>>(Class.class),
-		_resolvers = new FastReadArray<Class<?>>(Class.class);
+		_resolvers = new FastReadArray<Class<?>>(Class.class),
+		_parsers = new FastReadArray<Class<?>>(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
 	private final FastReadArray<URIInterceptor>
@@ -373,6 +375,11 @@ public class Configuration {
 			}
 			added = true;
 		}
+		if (NamespaceParser.class.isAssignableFrom(klass)) {
+			_parsers.add(klass);
+			added = true;
+		}
+		
 
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
@@ -418,6 +425,7 @@ public class Configuration {
 		_initiators.remove(klass);
 		_seoRends.remove(klass);
 		_resolvers.remove(klass);
+		_parsers.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
 		_uriIntcps.removeBy(sc, true);
@@ -1010,6 +1018,28 @@ public class Configuration {
 			}
 		}
 		return inits.toArray(new Initiator[inits.size()]);
+	}
+
+	/** Returns a readonly list of the system-level NamespaceParsers.
+	 * It is empty if none is registered.
+	 * To register a system-level NamespaceParsers, use {@link #addListener}.
+	 * @since 7.0.3
+	 */
+	@SuppressWarnings("unchecked")
+	public List<NamespaceParser> getNamespaceParsers() {
+		final Class<?>[] initclses = _parsers.toArray();
+		if (initclses.length == 0)
+			return Collections.EMPTY_LIST;
+
+		final List<NamespaceParser> inits = new LinkedList<NamespaceParser>();
+		for (int j = 0; j < initclses.length; ++j) {
+			try {
+				inits.add((NamespaceParser)initclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + initclses[j]);
+			}
+		}
+		return inits;
 	}
 	/** Returns a readonly list of the system-level SEO renderer.
 	 * It is empty if none is registered.

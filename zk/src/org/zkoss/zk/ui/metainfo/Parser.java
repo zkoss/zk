@@ -23,6 +23,8 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -76,6 +78,7 @@ public class Parser {
 
 	private final WebApp _wapp;
 	private final Locator _locator;
+	private final List<NamespaceParser> _nsParsers;
 
 	/** Constructor.
 	 *
@@ -86,6 +89,16 @@ public class Parser {
 		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
+		_nsParsers = wapp.getConfiguration().getNamespaceParsers();
+		
+		// Higher is the first
+		Collections.sort(_nsParsers, new Comparator<NamespaceParser>() {
+			public int compare(NamespaceParser o1, NamespaceParser o2) {
+				int op1 = o1.getPriority();
+				int op2 = o2.getPriority();
+				return (op1 < op2) ? 1 : (op1 > op2) ? -1 : 0;
+			}
+		});
 		_locator = locator != null ? locator: wapp;
 	}
 
@@ -880,17 +893,28 @@ public class Parser {
 					if (!"xmlns".equals(attPref)
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						if (!bNativeContent
+						if (!bNativeContent && !bNative
 						&& attURI.length() == 0 //ZK 6: non-annotation namespace mandates non-annotation
 						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
 						} else {
-							addAttribute(compInfo, attrns, attnm, attval, null,
-								attr.getLocator());
-							if (attrAnnHelper != null)
-								attrAnnHelper.applyAnnotations(compInfo, attnm, true);
+							boolean handled = false;
+							for (NamespaceParser nsParser: _nsParsers) {
+								if (nsParser.isMatched(attURI)) {
+									handled = true;
+									if (nsParser.parse(attr, compInfo, pgdef)) {
+										break;
+									}
+								}
+							}
+							if (!handled) {
+								addAttribute(compInfo, attrns, attnm, attval, null,
+									attr.getLocator());
+								if (attrAnnHelper != null)
+									attrAnnHelper.applyAnnotations(compInfo, attnm, true);
+							}
 						}
 					}
 				}

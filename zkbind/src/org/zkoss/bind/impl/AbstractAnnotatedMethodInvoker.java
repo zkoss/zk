@@ -81,7 +81,9 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				BindContextUtil.newBindContext(binder, null, false, null, rootComp, null);
 			
 			try {
-				ParamCall parCall = createParamCall(ctx, binder);
+				ParamCall parCall = binder instanceof BinderImpl ? 
+						((BinderImpl)binder).createParamCall(ctx) :
+							createParamCall(ctx, binder);
 				if(bindingArgs!=null){
 					parCall.setBindingArgs(bindingArgs);
 				}

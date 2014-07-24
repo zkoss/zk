@@ -26,7 +26,7 @@ public class BindXelExpression extends ELXelExpression {
 
 	private static final long serialVersionUID = 1L;
 
-	BindXelExpression(ValueExpression expr) {
+	protected BindXelExpression(ValueExpression expr) {
 		super(expr);
 	}
 	protected ELContext newELContext(XelContext xelc) {

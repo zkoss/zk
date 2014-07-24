@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.xel.Evaluator;
 
@@ -579,6 +580,35 @@ public class Components {
 		}
 		//20090314, Henri Chen: No way to support "event" with an event proxy because org.zkoss.zk.Event is not an interface
 		return null;
+	}
+
+	/** Returns the composer object, or null
+	 * if not found.
+	 * @since 7.0.3
+	 */
+	public static Composer getComposer(Component comp) {
+		if (comp != null) {
+			Object onm = comp.getAttribute("composerName");
+			if (onm instanceof String && ((String) onm).length() > 0) {
+				return (Composer) comp.getAttribute((String) onm);
+			} else {
+				Composer result = (Composer) comp.getAttribute("_$composer$_");
+				if (result == null)
+					result = (Composer) comp.getAttribute("$composer"); // just
+																		// in
+																		// case
+				return result;
+			}
+		}
+		return null;
+	}
+	/**
+	 * Adds the smartUpdate command to the specific component.
+	 * @since 7.0.3
+	 */
+	public static void smartUpdate(Component comp, String key, Object value, boolean append) {
+		if (comp instanceof AbstractComponent)
+			((AbstractComponent)comp).smartUpdate(key, value, append);
 	}
 	/** Returns the implicit object of the specified name, or null
 	 * if not found.
