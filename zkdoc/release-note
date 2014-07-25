@@ -39,6 +39,7 @@ ZK 7.0.3
   ZK-2365: "No items to display" is no longer centered in a Listbox with Firefox and Chrome.
   ZK-2361: Missing element for <template> in zul.xsd
   ZK-2368: ZUL XSD doesn't define "status" attribute for "template" element
+  ZK-2369: borderlayout autoscroll issue iphone5
   
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
