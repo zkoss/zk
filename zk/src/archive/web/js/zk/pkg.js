@@ -22,7 +22,7 @@ zk.copy(zk, (function() {
 		_pkgdepend = {},
 		_pkgver = {},
 		_pkghosts = {}/*package host*/, _defhost = []/*default host*/,
-		_loading = zk.copy({}, _loaded); //loading (include loaded)
+		_loading = zk.copy({'zul.lang': true}, _loaded); //loading (include loaded)
 
 	//We don't use e.onload since Safari doesn't support t
 	//See also Bug 1815074
