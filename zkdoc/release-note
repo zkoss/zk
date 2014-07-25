@@ -11,6 +11,7 @@ ZK 6.5.7
   ZK-2152: Wrong Behaviour of Datebox when Overwriting Time
   ZK-2341: Nested cardlayout did not show correctly
   ZK-2350: Filedownload with file name contain empty string become to "+" sign in IE
+  ZK-2369: borderlayout autoscroll issue iphone5
 
   --------
 ZK 6.5.6
