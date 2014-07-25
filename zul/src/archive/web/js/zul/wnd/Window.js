@@ -396,11 +396,12 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_minheight: 100,
 	_minwidth: 200,
 	_shadow: true,
-	_lastSize: {},
+	_lastSize: null,
 
 	$init: function () {
 		this._fellows = {};
-
+		this._lastSize = {};
+		
 		this.$supers('$init', arguments);
 
 		this.listen({onMaximize: this, onClose: this, onMove: this, onSize: this.onSizeEvent, onZIndex: this}, -1000);
@@ -842,14 +843,16 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		_hideShadow(this);
 		if (data.width != s.width) {
 			s.width = data.width;
-			// ZK-1826: should save width
-			this._width = this._lastSize.w = s.width;
+			
+			// ZK-2363
+			this._width = s.width;
 		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
-			// ZK-1826: should save height
-			this._height = this._lastSize.h = s.height;
+			
+			// ZK-2363
+			this._height = s.height;
 		}
 
 		if (data.left != s.left || data.top != s.top) {
