@@ -912,24 +912,58 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_isInView: function(wgt) {
 		var desktop = wgt.desktop,
 			p = wgt.parent,
-			n = wgt.getInputNode(),
+			n = wgt.$n();
+			input = wgt.getInputNode(),
 			bar = null, 
-			inView = true;
+			inView = true,
+			inputNode = null;
+		
+		if (input)
+			inputNode = p;
 	
 		// ZK-2069: check whether the input is shown in parents' viewport.
 		if (!zk.ie8_) // fine tune for ie8
 			while (p && p != desktop) {
-				bar = p._scrollbar;
-				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
-					inView = bar.isScrollIntoView(n);
-					if (!inView)
-						return inView;
-				}
-				bar = null;
+				inView = this._isScrolledIntoView(wgt.parent, p);
+				if (!inView)
+					return inView;
+//				bar = p._scrollbar;
+//				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+//					inView = bar.isScrollIntoView(p);
+//					if (!inView)
+//						return inView;
+//				}
+//				bar = null;
 				p = p.parent;
 			}
 		// ZK-2069: should check native and fake scrollbar case
-		return inView && zk(n).isScrollIntoView(true);
+		return inView //&& zk(n).isScrollIntoView(true);
+	},
+	
+	_isScrolledIntoView: function(wgt, parent) {
+		
+		var parentTop = jq(parent).scrollTop() + jq(parent).offset().top,
+			parentBottom = parentTop + jq(parent).height(),
+			selfTop = jq(wgt).offset().top,
+			selfBottom = selfTop + jq(wgt).height();
+		
+		console.log(parentTop);
+		console.log(parentBottom);
+		console.log(selfTop);
+		console.log(selfBottom);
+		console.log((selfBottom <= parentBottom) && (selfTop >= parentTop));
+		console.log("----------------------");
+		
+		return ((selfBottom <= parentBottom) && (selfTop >= parentTop));
+		
+		
+//		var docViewTop = $(window).scrollTop();
+//	    var docViewBottom = docViewTop + $(window).height();
+//
+//	    var elemTop = $(elem).offset().top;
+//	    var elemBottom = elemTop + $(elem).height();
+//
+//	    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 	}
 });
 
