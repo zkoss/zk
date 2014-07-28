@@ -908,33 +908,53 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	onChangingForced: true,
 	
+	
+	hasScroll: function(el) {
+		console.log(this.getCSS(el)['overflow']);
+	},
+	
+	getCSS: function (_elem) {
+	    var computedStyle;
+	    if (typeof _elem.currentStyle != 'undefined')
+	        computedStyle = _elem.currentStyle;
+	    else
+	        computedStyle = document.defaultView.getComputedStyle(_elem, null);
+	    return computedStyle;
+	},
+	
 	// for errorbox, datebox, combowidget
 	_isInView: function(wgt) {
 		var desktop = wgt.desktop,
 			p = wgt.parent,
 			n = wgt.$n();
-			input = wgt.getInputNode(),
 			bar = null, 
 			inView = true,
-			inputNode = null;
-		
-		if (input)
-			inputNode = p;
-	
+
 		// ZK-2069: check whether the input is shown in parents' viewport.
 		if (!zk.ie8_) // fine tune for ie8
 			while (p && p != desktop) {
-				inView = this._isScrolledIntoView(wgt.parent, p);
-				if (!inView)
-					return inView;
+				console.log(zk(p).hasVScroll());
+				if (zk(p).hasVScroll() || zk(p).hasHScroll()) {
+					console.log("I have scroll");
+					//inView = zk(n).isScrollIntoView(true);
+					this._isScrolledIntoView(wgt, p);
+					console.log(inView);
+					
+					if (!inView)
+						return inView;
+				}
+				p = p.parent;
+				
 //				bar = p._scrollbar;
+//				console.log(bar);
 //				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
-//					inView = bar.isScrollIntoView(p);
+//					inView = bar.isScrollIntoView(n);
+//					console.log(n);
 //					if (!inView)
 //						return inView;
 //				}
 //				bar = null;
-				p = p.parent;
+//				p = p.parent;
 			}
 		// ZK-2069: should check native and fake scrollbar case
 		return inView //&& zk(n).isScrollIntoView(true);
@@ -947,12 +967,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			selfTop = jq(wgt).offset().top,
 			selfBottom = selfTop + jq(wgt).height();
 		
-		console.log(parentTop);
-		console.log(parentBottom);
-		console.log(selfTop);
-		console.log(selfBottom);
-		console.log((selfBottom <= parentBottom) && (selfTop >= parentTop));
-		console.log("----------------------");
+//		console.log(parentTop);
+//		console.log(parentBottom);
+//		console.log(selfTop);
+//		console.log(selfBottom);
+//		console.log((selfBottom <= parentBottom) && (selfTop >= parentTop));
+//		console.log("----------------------");
 		
 		return ((selfBottom <= parentBottom) && (selfTop >= parentTop));
 		
