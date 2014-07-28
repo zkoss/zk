@@ -42,7 +42,7 @@ ZK 7.0.3
   ZK-2363: resizing a window after maximizing it causes a JS error
   ZK-2369: borderlayout autoscroll issue iphone5
   ZK-2373: With a custom binder, there is no way to change the queue scope
-  
+  ZK-2374: touch event handling interferes with user defined jQuery version
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
 
