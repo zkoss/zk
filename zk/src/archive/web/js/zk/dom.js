@@ -676,11 +676,11 @@ zjq.prototype = {
 				te, le, oels = [];
 			do {
 				if (!te) {
-					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowY == 'auto')
+					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowY == 'auto' || jq(el).css('overflow-y') == 'auto')
 						te = el;
 				}
 				if (!le) {
-					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto')
+					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
 						le = el;
 				}
 				if (te && le) {
@@ -1435,13 +1435,13 @@ jq(el).zk.center(); //same as 'center'
 
 		} while (p = p.offsetParent);
 
-		do {
+		while (el = el.parentNode) {
 			// Opera 12.15 fix this
 			// if (!zk.opera || jq.nodeName(el, 'body')) {
 				t -= el.scrollTop  || 0;
 				l -= el.scrollLeft || 0;
 			//}
-		} while (el = el.parentNode);
+		}
 		return [l, t];
 	},
 	/** Returns the size of the text if it is placed inside the first matched element.
