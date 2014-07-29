@@ -31,8 +31,8 @@ function _createJQEvent (target, type, button, changedTouch, ofs) {
 		target = target.parentNode;
 	
 	var originalEvent = _createMouseEvent(type, button, changedTouch, ofs),
-		props = jQuery.event.props,
-		event = jQuery.Event(originalEvent);
+		props = jq.event.props,
+		event = jq.Event(originalEvent);
 
 	for ( var i = props.length, prop; i; ) {
 		prop = props[--i];
