@@ -1,0 +1,23 @@
+<zk>
+    <label multiline="true">
+    1. Open tree node 1, 3, 7, 15, 31, 63, 127, 255
+    2. Navigate to page 2 then navigate back to page 1
+    3. Close tree node 255
+    4. Should see tree node 4, 8 (bug if not seeing).
+    </label>
+    <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2375_TreeVM')">
+        <paging id="paging" pageSize="15" totalSize="@load(vm.totalsize)" />
+        <tree id="tree" model="@load(vm.model)" mold="paging" pageSize="15" rows="15">
+            <treecols>
+                <treecol label="Col" />
+            </treecols>
+            <template name="model" var="each">
+                <treeitem value="@load(each)">
+                    <treerow>
+                        <treecell label="${each}" />
+                    </treerow>
+                </treeitem>
+            </template>
+        </tree>
+    </window>
+</zk>
