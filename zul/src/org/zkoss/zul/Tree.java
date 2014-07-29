@@ -304,7 +304,6 @@ public class Tree extends MeshElement {
 		final Paginal pgi = getPaginal();
 		final int pgsz = pgi.getPageSize();
 		final int ofs = pgi.getActivePage() * pgsz;
-
 		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
 		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
 		getVisibleItemsDFS(getChildren(), map, data);
@@ -439,7 +438,7 @@ public class Tree extends MeshElement {
 	private void newInternalPaging() {
 //		assert inPagingMold(): "paging mold only";
 //		assert (_paging == null && _pgi == null);
-
+		
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
@@ -490,7 +489,7 @@ public class Tree extends MeshElement {
 							sortedIndex.add(_rodPagingIndex.removeFirst());
 						}
 						Collections.sort(sortedIndex);
-						
+
 						int i = 0;
 						int start = sortedIndex.removeFirst() * size;
 						int end = start + size;
@@ -510,7 +509,13 @@ public class Tree extends MeshElement {
 							}
 							
 							if (!ti.isOpen() && ti.getDesktop() != null) {
-								ti.getChildren().clear();
+								//bug ZK-2375: keep treerow to avoid dispaly bugs after paging
+								Iterator<Component> it = ti.getChildren().iterator();
+								while(it.hasNext()) {
+									if (((Component) it.next()).getWidgetClass().equals("zul.sel.Treechildren")) {
+										it.remove();
+									} 
+								}
 								ti.setRendered(false);
 								ti.setLoaded(false);
 							}
