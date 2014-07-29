@@ -907,55 +907,27 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @since 5.0.1
 	 */
 	onChangingForced: true,
-	
-	
-	hasScroll: function(el) {
-		console.log(this.getCSS(el)['overflow']);
-	},
-	
-	getCSS: function (_elem) {
-	    var computedStyle;
-	    if (typeof _elem.currentStyle != 'undefined')
-	        computedStyle = _elem.currentStyle;
-	    else
-	        computedStyle = document.defaultView.getComputedStyle(_elem, null);
-	    return computedStyle;
-	},
-	
+		
 	// for errorbox, datebox, combowidget
 	_isInView: function(wgt) {
 		var desktop = wgt.desktop,
 			p = wgt.parent,
-			n = wgt.$n();
+			n = wgt.$n(),
 			bar = null, 
-			inView = true,
+			inView = true;
 
 		// ZK-2069: check whether the input is shown in parents' viewport.
 		if (!zk.ie8_) // fine tune for ie8
 			while (p && p != desktop) {
-				console.log(zk(p).hasVScroll());
-				if (zk(p).hasVScroll() || zk(p).hasHScroll()) {
-					console.log("I have scroll");
-					//inView = zk(n).isScrollIntoView(true);
-					this._isScrolledIntoView(wgt, p);
-					console.log(inView);
+				if (zk(p).hasVScroll || zk(p).hasHScroll || zk(p.firstChild).hasVScroll || zk(p.firstChild).hasHScroll) {
+					inView = this._isScrolledIntoView(wgt.parent, p);
 					
 					if (!inView)
 						return inView;
 				}
 				p = p.parent;
-				
-//				bar = p._scrollbar;
-//				console.log(bar);
-//				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
-//					inView = bar.isScrollIntoView(n);
-//					console.log(n);
-//					if (!inView)
-//						return inView;
-//				}
-//				bar = null;
-//				p = p.parent;
 			}
+		
 		// ZK-2069: should check native and fake scrollbar case
 		return inView //&& zk(n).isScrollIntoView(true);
 	},
@@ -964,26 +936,22 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		
 		var parentTop = jq(parent).scrollTop() + jq(parent).offset().top,
 			parentBottom = parentTop + jq(parent).height(),
+			parentLeft = jq(parent).scrollLeft() + jq(parent).offset().left,
+			parentRight = parentLeft + jq(parent).width(),
 			selfTop = jq(wgt).offset().top,
-			selfBottom = selfTop + jq(wgt).height();
+			selfBottom = selfTop + jq(wgt).height(),
+			selfLeft = jq(wgt).offset().left,
+			selfRight = selfLeft + jq(wgt).width();
+			
 		
-//		console.log(parentTop);
-//		console.log(parentBottom);
-//		console.log(selfTop);
-//		console.log(selfBottom);
-//		console.log((selfBottom <= parentBottom) && (selfTop >= parentTop));
-//		console.log("----------------------");
+		console.log(parentTop);
+		console.log(parentBottom);
+		console.log(selfTop);
+		console.log(selfBottom);
+		console.log((selfBottom <= parentBottom) && (selfTop >= parentTop));
+		console.log("----------------------");
 		
-		return ((selfBottom <= parentBottom) && (selfTop >= parentTop));
-		
-		
-//		var docViewTop = $(window).scrollTop();
-//	    var docViewBottom = docViewTop + $(window).height();
-//
-//	    var elemTop = $(elem).offset().top;
-//	    var elemBottom = elemTop + $(elem).height();
-//
-//	    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+		return ((selfBottom <= parentBottom) && (selfTop >= parentTop) && (selfRight <= parentRight) && (selfLeft >= parentLeft));
 	}
 });
 
