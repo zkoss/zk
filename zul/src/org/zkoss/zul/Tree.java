@@ -304,7 +304,6 @@ public class Tree extends MeshElement {
 		final Paginal pgi = getPaginal();
 		final int pgsz = pgi.getPageSize();
 		final int ofs = pgi.getActivePage() * pgsz;
-
 		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
 		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
 		getVisibleItemsDFS(getChildren(), map, data);
@@ -439,7 +438,7 @@ public class Tree extends MeshElement {
 	private void newInternalPaging() {
 //		assert inPagingMold(): "paging mold only";
 //		assert (_paging == null && _pgi == null);
-
+		
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
@@ -482,15 +481,15 @@ public class Tree extends MeshElement {
 					if (mps >= 0 && !_rodPagingIndex.contains(ap)) {
 						_rodPagingIndex.add(ap);
 					}	
-					
+
 					if (mps >= 1 && mps < _rodPagingIndex.size()) {
 						LinkedList<Integer> sortedIndex = new LinkedList<Integer>();
 						mps = _rodPagingIndex.size() - mps;
 						while (mps-- > 0) {
-							sortedIndex.add(_rodPagingIndex.removeFirst());
+							sortedIndex.add(_rodPagingIndex.removeLast());
 						}
 						Collections.sort(sortedIndex);
-						
+
 						int i = 0;
 						int start = sortedIndex.removeFirst() * size;
 						int end = start + size;
