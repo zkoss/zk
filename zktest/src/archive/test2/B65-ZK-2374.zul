@@ -1,0 +1,23 @@
+<?meta name="viewport" content="width=device-width, initial-scale=1.0"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?script src="http://code.jquery.com/jquery-1.11.0.js"?>
+
+<zk xmlns:c="client" xmlns:n="native" xmlns:d="http://www.zkoss.org/2005/zk/client/attribute">
+	
+	<div>
+		When open in iPhone (or iPhone emulator in chrome's dev tool) and swipe to see the content, you should not see any js errors
+	</div>
+	
+	<n:div>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh libero, venenatis eu consectetur ac, mollis sit amet metus. Morbi non justo eros. Proin eleifend vitae ligula vitae sagittis. Praesent non vestibulum mauris. Aliquam venenatis nulla quis mauris luctus, eu convallis nunc congue. Nam et nulla leo. Vestibulum at mi ut mauris egestas laoreet.
+
+	Donec eget est convallis erat bibendum posuere at eget magna. Aliquam posuere tempor felis vitae tincidunt. Sed semper, nisi vel accumsan faucibus, nunc dui consectetur orci, tincidunt tempus enim mi ac mi. Maecenas ultricies nec neque vitae sodales. Nulla dignissim, tortor non placerat venenatis, ligula mi vehicula dolor, vitae facilisis mauris diam eget mi. Nunc tincidunt facilisis volutpat. Nullam hendrerit luctus posuere. Ut molestie diam et tristique facilisis.
+
+	Curabitur feugiat convallis erat, sit amet viverra orci. Nam ac neque augue. Cras nisl risus, tincidunt venenatis posuere in, lobortis tempor justo. Suspendisse eu lacus auctor, consequat nibh eget, eleifend leo. Phasellus eget varius orci, vitae scelerisque ligula. In posuere massa nisl, nec aliquet eros tincidunt eget. Nunc pharetra turpis ac justo vehicula, non pharetra ante adipiscing. Proin id erat non nisi consectetur blandit quis sed felis. Sed venenatis accumsan adipiscing.
+
+	Aenean iaculis risus eget arcu viverra, ut ullamcorper nulla tristique. Vestibulum commodo lectus id lorem egestas fringilla. Sed pretium felis et nibh pellentesque, non faucibus dui tempor. Donec adipiscing ipsum ut mi consectetur, posuere molestie nisl scelerisque. Aenean sit amet bibendum massa. Nullam viverra nisi augue, et lobortis lorem luctus at. Nullam sollicitudin sed eros et consectetur. Vivamus adipiscing vulputate sapien non accumsan.
+
+	Quisque aliquet libero pharetra, tincidunt sem quis, cursus neque. Ut bibendum ante non porta elementum. Integer egestas sollicitudin diam, eu vestibulum diam semper pretium. Etiam ac justo augue. Mauris id lacinia est. Etiam feugiat, felis a pharetra hendrerit, arcu justo vulputate libero, eget adipiscing purus lacus ut nisl. Morbi ac nunc in enim porttitor tincidunt ac eget nulla. Duis tincidunt sodales leo, vel consectetur mauris. In euismod velit ac risus vulputate mattis. Nullam non varius tortor. Duis libero mauris, interdum eget neque vitae, laoreet dapibus mauris. Praesent in pretium nisi, id sagittis velit. Quisque et posuere arcu, vel ornare tellus. Curabitur dolor arcu, dapibus nec volutpat id, rutrum quis felis.
+	</n:div>
+
+</zk>

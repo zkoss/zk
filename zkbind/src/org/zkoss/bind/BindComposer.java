@@ -287,13 +287,21 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			binder = AnnotationUtil.testString(initanno.getAttributeValues(VALUE_ANNO_ATTR),initanno);
 			String name = AnnotationUtil.testString(initanno.getAttributeValues(QUEUE_NAME_ANNO_ATTR),initanno);
 			String scope = AnnotationUtil.testString(initanno.getAttributeValues(QUEUE_SCOPE_ANNO_ATTR),initanno);
-			if(binder!=null){
-				if(name!=null){
-					_log.warn(MiscUtil.formatLocationMessage(QUEUE_NAME_ANNO_ATTR +" is not available if you use custom binder",initanno));
+			//if no binder, create default binder with custom queue name and scope
+			String expr;
+			if(name!=null){
+				name = BindEvaluatorXUtil.eval(evalx,comp,expr=name,String.class);
+				if(Strings.isBlank(name)){
+					throw new UiException(MiscUtil.formatLocationMessage("evaluated queue name is empty, expression is "+expr,initanno));
 				}
-				if(scope!=null){
-					_log.warn(MiscUtil.formatLocationMessage(QUEUE_SCOPE_ANNO_ATTR +" is not available if you use custom binder",initanno));
+			}
+			if(scope!=null){
+				scope = BindEvaluatorXUtil.eval(evalx,comp,expr=scope,String.class);
+				if(Strings.isBlank(scope)){
+					throw new UiException(MiscUtil.formatLocationMessage("evaluated queue scope is empty, expression is "+expr,initanno));
 				}
+			}
+			if(binder!=null) {
 				
 				binder = BindEvaluatorXUtil.eval(evalx,comp,(String)binder,Object.class);
 				try {
@@ -301,7 +309,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 						binder = comp.getPage().resolveClass((String)binder);
 					}
 					if(binder instanceof Class<?>){
-						binder = ((Class<?>)binder).newInstance();
+						binder = ((Class<?>)binder).getDeclaredConstructor(String.class, String.class).newInstance(name, scope);
 					}
 				} catch (Exception e) {
 					throw new UiException(e.getMessage(),e);
@@ -311,20 +319,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 				}
 				
 			}else {
-				//no binder, create default binder with custom queue name and scope
-				String expr;
-				if(name!=null){
-					name = BindEvaluatorXUtil.eval(evalx,comp,expr=name,String.class);
-					if(Strings.isBlank(name)){
-						throw new UiException(MiscUtil.formatLocationMessage("evaluated queue name is empty, expression is "+expr,initanno));
-					}
-				}
-				if(scope!=null){
-					scope = BindEvaluatorXUtil.eval(evalx,comp,expr=scope,String.class);
-					if(Strings.isBlank(scope)){
-						throw new UiException(MiscUtil.formatLocationMessage("evaluated queue scope is empty, expression is "+expr,initanno));
-					}
-				}
 				binder = newAnnotateBinder(name, scope); //ZK-2288
 			}
 		}else{

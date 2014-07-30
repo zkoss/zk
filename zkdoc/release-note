@@ -39,7 +39,10 @@ ZK 7.0.3
   ZK-2365: "No items to display" is no longer centered in a Listbox with Firefox and Chrome.
   ZK-2361: Missing element for <template> in zul.xsd
   ZK-2368: ZUL XSD doesn't define "status" attribute for "template" element
-  
+  ZK-2363: resizing a window after maximizing it causes a JS error
+  ZK-2369: borderlayout autoscroll issue iphone5
+  ZK-2373: With a custom binder, there is no way to change the queue scope
+  ZK-2374: touch event handling interferes with user defined jQuery version
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
 
@@ -297,6 +300,9 @@ ZK 6.5.7
   ZK-2331: Combobox drop-down sometimes not open on top of input element if the browser space is not enough
   ZK-2152: Wrong Behaviour of Datebox when Overwriting Time
   ZK-2341: Nested cardlayout did not show correctly
+  ZK-2350: Filedownload with file name contain empty string become to "+" sign in IE
+  ZK-2369: borderlayout autoscroll issue iphone5
+  ZK-2374: touch event handling interferes with user defined jQuery version
 
   --------
 ZK 6.5.6

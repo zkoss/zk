@@ -1457,6 +1457,16 @@ public class Parser {
 				if (!childInfo.getChildren().isEmpty())
 					break;
 				childInfo.setParentDirectly(null);
+				
+				// merge annotation if any
+				AnnotationMap annotationMap = childInfo.getAnnotationMap();
+				if (annotationMap != null) {
+					for (String propName : annotationMap.getAnnotatedProperties()) {
+						for (Annotation anno : annotationMap.getAnnotations(propName)) {
+							compInfo.addAnnotation(propName, anno.getName(), anno.getAttributes(), anno.getLocation());
+						}
+					}
+				}
 			} else if (o instanceof ComponentInfo) {
 				break;
 			}
