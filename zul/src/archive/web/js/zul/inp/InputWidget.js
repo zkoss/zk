@@ -911,47 +911,23 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	// for errorbox, datebox, combowidget
 	_isInView: function(wgt) {
 		var desktop = wgt.desktop,
-			p = wgt.parent,
-			n = wgt.$n(),
-			bar = null, 
+			p = wgt.parent.$n(),
+			ip = wgt.parent, 
 			inView = true;
-
+			
 		// ZK-2069: check whether the input is shown in parents' viewport.
 		if (!zk.ie8_) // fine tune for ie8
 			while (p && p != desktop) {
-				if (zk(p).hasVScroll || zk(p).hasHScroll || zk(p.firstChild).hasVScroll || zk(p.firstChild).hasHScroll) {
-					inView = this._isScrolledIntoView(wgt.parent, p);
-					
+				if (zk(p).hasVScroll() || zk(p).hasHScroll()) {
+					inView = zk(ip).isScrollIntoView(true);
 					if (!inView)
 						return inView;
 				}
-				p = p.parent;
+				p = p.parentNode;
 			}
 		
 		// ZK-2069: should check native and fake scrollbar case
-		return inView //&& zk(n).isScrollIntoView(true);
-	},
-	
-	_isScrolledIntoView: function(wgt, parent) {
-		
-		var parentTop = jq(parent).scrollTop() + jq(parent).offset().top,
-			parentBottom = parentTop + jq(parent).height(),
-			parentLeft = jq(parent).scrollLeft() + jq(parent).offset().left,
-			parentRight = parentLeft + jq(parent).width(),
-			selfTop = jq(wgt).offset().top,
-			selfBottom = selfTop + jq(wgt).height(),
-			selfLeft = jq(wgt).offset().left,
-			selfRight = selfLeft + jq(wgt).width();
-			
-		
-		console.log(parentTop);
-		console.log(parentBottom);
-		console.log(selfTop);
-		console.log(selfBottom);
-		console.log((selfBottom <= parentBottom) && (selfTop >= parentTop));
-		console.log("----------------------");
-		
-		return ((selfBottom <= parentBottom) && (selfTop >= parentTop) && (selfRight <= parentRight) && (selfLeft >= parentLeft));
+		return inView && zk(ip).isScrollIntoView(true);
 	}
 });
 
