@@ -1,0 +1,20 @@
+<window mode="modal" closable="true">
+	<grid>
+	    <rows>
+	        <row>
+	            <vbox height="1800px">
+	                <textbox width="400px" id="tb1Id" value="Please scroll down and click the Validate button"/>
+	            </vbox>
+	        </row>      
+	        <row>
+	            <textbox id="tb2Id" width="400px" constraint="no empty" />
+	        </row>
+	        <row>
+	            <separator/>
+	        </row>
+	        <row>
+	            <button label="Validate" width="150px" onClick="tb1Id.value = tb2Id.getValue()"/>
+	        </row>
+	    </rows>
+	</grid>
+</window>

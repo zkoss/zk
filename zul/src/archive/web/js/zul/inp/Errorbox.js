@@ -36,7 +36,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	show: function () {
 		jq(document.body).append(this);
 		var cstp = this.parent._cst && this.parent._cst._pos;
-		
+
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
 		// ZK-2069: show only if is in view
@@ -46,6 +46,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		}, 50); // B36-2935398: add time
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
+	
 	/** 
 	 * Destroys the errorbox
 	 */
