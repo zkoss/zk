@@ -346,7 +346,7 @@ public class Selectbox extends HtmlBasedComponent {
 			if (tm == null)
 				return Objects.toString(data);
 			else {
-				final Component[] items = tm.create(owner, null,
+				final Component[] items = tm.create(null, null,
 						new VariableResolver() {
 							public Object resolveVariable(String name) {
 								if ("each".equals(name)) {
@@ -387,7 +387,6 @@ public class Selectbox extends HtmlBasedComponent {
 					throw new UiException(
 							"The model template can only support Label component, not "
 									+ items[0]);
-				items[0].detach(); //remove the label from owner
 				return ((Label) items[0]).getValue();
 			}
 		}
