@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2379-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jul 31, 2014  5:27:13 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	</zscript>
+	<div>
+		<button label="Click Me, you should not see any error exception" onClick="parent.invalidate();" />
+	</div>
+	<div id="parent" apply="org.zkoss.bind.BindComposer">
+		<selectbox id="select" model="@load(model)" hflex="1">
+			<template name="model">
+				<label value="@load(each.displayName)"/>
+			</template>
+		</selectbox>
+	</div>
+</zk>

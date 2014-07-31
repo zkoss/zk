@@ -430,13 +430,9 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 		
-		//Bug ZK-1711: re-render data when invalidate parent component
-		if (_tmpdatas == null && _model != null && _model.getSize() > 0) {
-			onInitRenderNow();
-		}
 		if (_tmpdatas != null) {
 			render(renderer, "items", _tmpdatas);
-			_tmpdatas = null; //purge the data
+			// B65-ZK-2379 _tmpdatas = null; //purge the data
 		}
 	}
 
