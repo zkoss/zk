@@ -18,14 +18,16 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-
+import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.impl.XulElement;
@@ -617,6 +619,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 					if (_treechildren != null && _treechildren.getChildren().size() >= 5)
 						invalidate();
 				}
+				@SuppressWarnings("rawtypes")
 				TreeModel model = tree.getModel();
 				if (model instanceof TreeOpenableModel) {
 					if (open)
@@ -637,9 +640,24 @@ implements org.zkoss.zk.ui.ext.Disable {
 			// Bug #3170417 the status should update after update the visibleItemCount
 			_open = open;
 
-			// Bug #2838782
-			if (tree != null && tree.inPagingMold())
+			
+			if (tree != null && tree.inPagingMold()) {
+				//bug ZK-2375 clear the closed children and fire a paging event to make sure
+				//everything on the current active page will be rendered correctly
+				@SuppressWarnings("rawtypes")
+				TreeModel model = tree.getModel();
+				if (!open && model != null && WebApps.getFeature("ee")) {
+					int activePage = tree.getActivePage();
+					getChildren().clear();
+					setRendered(false);
+					setLoaded(false);
+					Events.postEvent(new PagingEvent("onPagingImpl", tree.getPagingChild(), activePage));
+				}
+				// Bug #2838782
 				tree.focus();
+			}
+			
+			
 			
 			Events.postEvent(evt);
 		} else

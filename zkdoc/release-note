@@ -44,6 +44,7 @@ ZK 7.0.3
   ZK-2373: With a custom binder, there is no way to change the queue scope
   ZK-2374: touch event handling interferes with user defined jQuery version
   ZK-2371: Validation message is not shown every time. It depends on the height of the browser window.
+  ZK-2375: Close treenode did not render tree correctly in paging mold
   ZK-2379: selectbox with model error when calling parent invalidate()
 
 * Upgrade Notes
