@@ -589,6 +589,13 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	getYear: function () {
 		return LeapDay.isInstance(this._date) ? this._date.getFullYear() : 
 			this._date.getFullYear() + this._offset;
+	},
+	// B70-ZK-2382: in Daylight Saving Time (DST), choose the last time at the end of this mechanism, it will display previous day.
+	// e.g. 2014/10/19 at Brasilia (UTC-03:00), it will show 2014/10/18 23:00:00
+	// so we need to increase a hour.
+	escapeDSTConflict: function(val) {
+		var newVal = new Date(val.getTime() + 3600000); //plus 60*60*1000
+		return newVal.getHours() != ((val.getHours() + 1) % 24) ? newVal : val;
 	}
 });
 })();
