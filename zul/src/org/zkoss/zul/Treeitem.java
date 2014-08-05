@@ -651,7 +651,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 					getChildren().clear();
 					setRendered(false);
 					setLoaded(false);
-					Events.postEvent(new PagingEvent("onPagingImpl", tree.getPagingChild(), activePage));
+					Events.postEvent(new PagingEvent("onPagingImpl",(Paging) tree.getPaginal(), activePage));
 				}
 				// Bug #2838782
 				tree.focus();

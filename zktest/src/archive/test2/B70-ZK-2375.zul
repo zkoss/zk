@@ -7,7 +7,7 @@
     </label>
     <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2375_TreeVM')">
         <paging id="paging" pageSize="15" totalSize="@load(vm.totalsize)" />
-        <tree id="tree" model="@load(vm.model)" mold="paging" pageSize="5" rows="5">
+        <tree id="tree" model="@load(vm.model)" mold="paging" paginal="${paging}" rows="15">
             <treecols>
                 <treecol label="Col" />
             </treecols>
