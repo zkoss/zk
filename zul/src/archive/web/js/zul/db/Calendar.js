@@ -620,10 +620,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
-			day = d != null ? d : dateobj.getDate();
-		this._value = _newDate(year, month, day, d == null);
+			day = d != null ? d : dateobj.getDate(),
+			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null)); // B70-ZK-2382
+		
+		this._value = val; 
 		if (fireOnChange)
-			this.fire('onChange', {value: this._value});
+			this.fire('onChange', {value: val});
 	},
 	// calendar-ctrl.js will override this function 
 	_clickDate: function (evt) {

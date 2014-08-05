@@ -340,7 +340,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (val) {
 			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value, this._localizedSymbols);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
-			return d;
+			return new zk.fmt.Calendar().escapeDSTConflict(d); // B70-ZK-2382
 		}
 		return null;
 	},
@@ -643,17 +643,24 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			oldDate = db.getValue(),
 			readonly = db.isReadonly();
 
-		if (oldDate)
+		if (oldDate) {
 			date = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
 				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
 
+			// B70-ZK-2382
+			date = new zk.fmt.Calendar().escapeDSTConflict(date);
+		}
+		
 		if (fmt) {
 			var tm = db._tm,
 				time = tm.getValue();
 			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+			
+			// B70-ZK-2382
+			date = new zk.fmt.Calendar().escapeDSTConflict(date);
 		}
 		
 		//Bug ZK-1712: no need to set datebox input value when shift view

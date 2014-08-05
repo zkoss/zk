@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2382.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 04, 2014  10:49:12 AM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		1. change the time zone in this client computer to (UTC-03:00) Brasilia or (UTC-02:00) without DST.
+		<separator/>
+		2. change date to 2014/10/19, if it shows 2014/10/18, this's a bug.
+	</div>
+	<separator/>
+	<datebox id="db1" format="dd/MM/yyyy" />
+	<separator/>
+	<datebox id="db2" cols="12" format="long" onCreate="self.value = new Date()" width="230px" />
+	<separator/>
+	<datebox id="db3" cols="12" format="long+medium" onCreate="self.value = new Date()" width="230px" />
+	<separator/>
+	<calendar/>
+</zk>
