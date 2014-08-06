@@ -97,9 +97,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop) {
+			var n = child.$n('chdex');
 			this._shallSize = true;
 			//Bug ZK-1732: change chdex display style according to child widget
-			child.$n('chdex').style.display = child.isVisible() ? '' : 'none';
+			if(n) n.style.display = child.isVisible() ? '' : 'none';
 		}
 	},
 	onChildRemoved_: function () {

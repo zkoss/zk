@@ -14,6 +14,7 @@ ZK 6.5.7
   ZK-2369: borderlayout autoscroll issue iphone5
   ZK-2374: touch event handling interferes with user defined jQuery version
   ZK-2379: selectbox with model error when calling parent invalidate()
+  ZK-2389: Append popup component to Hlayout throws JavaScript error
 
   --------
 ZK 6.5.6
