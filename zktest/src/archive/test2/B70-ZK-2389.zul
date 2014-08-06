@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2389.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 06, 2014  10:19:12 AM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		if you see the javascript error after clicking add button, it's a bug.
+	</div>
+	<hlayout id="layout">
+	    <button label="add" onClick="layout.appendChild(new Popup());" />
+	</hlayout>
+</zk>
