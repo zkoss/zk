@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2351.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Aug 06, 2014  4:36:28 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?import org.zkoss.util.Locales ?>
+<zk xmlns:h="native">
+    <zscript>
+    	public class TestVM {
+		    private double doubleValue;
+
+		    public double getDoubleValue() {
+		        return doubleValue;
+		    }
+
+		    public void setDoubleValue(double doubleValue) {
+		        this.doubleValue = doubleValue;
+		    }
+		}
+        String language = Locales.getCurrent().getDisplayLanguage();
+    </zscript>
+    <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('TestVM')">
+    	With IOS touch device, you can be able to type "1,1" into Turkish's spinner and it will be "1.1" for another Language (like English)
+        <h:table border="1" cellspacing="0" cellpadding="5">
+            <h:tr>
+                <h:th>Locale</h:th><h:th>Doublespinner</h:th>
+            </h:tr>
+            <h:tr>
+                <h:td>Turkish</h:td>
+                <h:td><doublespinner value="@bind(vm.doubleValue)" locale="tr_TR" /></h:td>
+            </h:tr>
+            <h:tr>
+                <h:td>${language}</h:td>
+                <h:td><doublespinner value="@bind(vm.doubleValue)" /></h:td>
+            </h:tr>
+        </h:table>
+    </window>
+</zk>

@@ -49,11 +49,19 @@ ZK 7.0.3
   ZK-2382: Can't select specific date when daylight saving time started at 12:00:00 AM
   ZK-2390: hflex fails when combining hbox and templating
   ZK-2389: Append popup component to Hlayout throws JavaScript error
+  ZK-2351: Doublespinner always blank in turkish locale on iOS devices
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
   + Due to the coupled component hierarchy issue, we deprecated the attribute stubonly of Row, Listitem, and Treeitem,
   please use Cell, Listcell, and Treecell instead.
+  + Fall back the format and locale attribute for Tablet devices to use Desktop implementation instead:
+    *. Intbox's format attribute
+    *. Doublebox's format attribute
+    *. Spinner's format attribute
+    *. Doublespinner's format attribute
+    *. Longbox's format attribute
+    *. Decimalbox's format attribute
 
   --------
 ZK 7.0.2

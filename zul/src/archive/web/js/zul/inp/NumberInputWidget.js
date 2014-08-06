@@ -87,16 +87,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 			this.$supers('doKeyPress_', arguments);
 	},
 	getType: function () {
-		return zk.mobile ? 'number' : this._type;
+		return zk.mobile && !this._format && !this._locale ? 'number' : this._type;
 	}
 });
-})();
-
-(function () { // disable format for number input element on tablet
-if (zk.mobile) {
-	var _xFormatWidget = {};
-	zk.override(zul.inp.NumberInputWidget.prototype, _xFormatWidget, {
-		setFormat: zk.$void
-	});
-}
 })();
