@@ -50,6 +50,8 @@ ZK 7.0.3
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
+  + Due to the coupled component hierarchy issue, we deprecated the attribute stubonly of Row, Listitem, and Treeitem,
+  please use Cell, Listcell, and Treecell instead.
 
   --------
 ZK 7.0.2

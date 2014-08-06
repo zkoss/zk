@@ -135,7 +135,23 @@ public class Listitem extends XulElement {
 					smartUpdate("value", _value);
 		}
 	}
+	
+	/**
+	 * Please use {@link Listcell} or {@link Listbox} instead.
+	 * @deprecated as of release 7.0.3.
+	 */
+	public void setStubonly(String stubonly) {
+		super.setStubonly(stubonly);
+	}
 
+	/**
+	 * Please use {@link Listcell} or {@link Listbox} instead.
+	 * @deprecated as of release 7.0.3.
+	 */
+	public void setStubonly(boolean stubonly) {
+		super.setStubonly(stubonly);
+	}
+	
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */

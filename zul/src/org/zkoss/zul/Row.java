@@ -230,6 +230,21 @@ public class Row extends XulElement {
 		return grid != null ? grid.getSclass(): sclass;
 	}
 	
+	/**
+	 * Please use {@link Cell} or {@link Grid} instead.
+	 * @deprecated as of release 7.0.3.
+	 */
+	public void setStubonly(String stubonly) {
+		super.setStubonly(stubonly);
+	}
+
+	/**
+	 * Please use {@link Cell} or {@link Grid} instead.
+	 * @deprecated as of release 7.0.3.
+	 */
+	public void setStubonly(boolean stubonly) {
+		super.setStubonly(stubonly);
+	}
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

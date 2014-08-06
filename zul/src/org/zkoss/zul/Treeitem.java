@@ -170,6 +170,22 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	/**
+	 * Please use {@link Treecell} or {@link Tree} instead.
+	 * @deprecated as of release 7.0.3.
+	 */
+	public void setStubonly(String stubonly) {
+		super.setStubonly(stubonly);
+	}
+
+	/**
+	 * Please use {@link Treecell} or {@link Tree} instead.
+	 * @deprecated as of release 7.0.3.
+	 */
+	public void setStubonly(boolean stubonly) {
+		super.setStubonly(stubonly);
+	}
+	
+	/**
 	 * return the index of this item
 	 * @return the index of this item
 	 * @since 5.0.9
