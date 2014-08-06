@@ -47,6 +47,7 @@ ZK 7.0.3
   ZK-2375: Close treenode did not render tree correctly in paging mold
   ZK-2379: selectbox with model error when calling parent invalidate()
   ZK-2382: Can't select specific date when daylight saving time started at 12:00:00 AM
+  ZK-2390: hflex fails when combining hbox and templating
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.

@@ -516,7 +516,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		
 		for (; xc; xc = xc.nextSibling) {
 			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? 
-					xc.firstChild.id ? xc.firstChild: xc.firstChild.firstChild : xc.firstChild : xc,
+					xc.firstChild.id ? xc.firstChild: xc.firstChild.firstChild : xc.firstChild : xc;
+
+			// B70-ZK-2390
+			for (; c; c = c.nextSibling)
+				if (c.nodeType != 3) break; //until not a text node
+				
 				zkc = zk(c),
 				fixedSize = false;
 			if (zkc.isVisible()) {
