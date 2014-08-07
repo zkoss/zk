@@ -5,6 +5,7 @@ ZK 7.0.3
   ZK-2338: cat function add support for Object signature
   ZK-2289: Futher optimize zkbind memory consumption.
   ZK-2372: A way to support a different namespace parser for attributes
+  ZK-2357: Upload button hover style missing
 
 * Bugs
   ZK-2292: field access using dot notation (a.b.c) is not fully consistent for maps

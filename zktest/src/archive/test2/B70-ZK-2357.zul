@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2357.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, AUG 06, 2014 14:22:23 AM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	    //org.zkoss.lang.Library.setProperty("org.zkoss.theme.preferred", "atlantic");
+	]]></zscript>
+	<div>
+		Hover and click on each button in this page should change the style and open a file dialog.
+	</div>
+	<hlayout>
+    	<button upload="true" label="click me."/>
+	</hlayout>
+	<div>
+		<menubar>
+			<menu label="file menu">
+				<menupopup>
+					<menuitem upload="true" label="click me."/>
+				</menupopup>
+			</menu>
+			<menuitem upload="true" label="click me."/>
+		</menubar>
+	</div>
+	<div>
+	    <toolbar>
+	    	<toolbarbutton upload="true" label="click me."/>
+	    </toolbar>
+	</div>
+</zk>
