@@ -14,7 +14,7 @@ package org.zkoss.zk.ui.metainfo;
 import org.zkoss.idom.Attribute;
 
 /**
- * A namesapce parser to handle the different namesapce for the attributes
+ * A namespace parser to handle the different namespace for the attributes
  * @author jumperchen
  * @since 7.0.3
  */

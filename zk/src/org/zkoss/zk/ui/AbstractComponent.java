@@ -1661,7 +1661,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @param script the content of the method or field to override.
 	 * Notice that it must be a valid JavaScript snippet.
 	 * If null, the previous method/field override
-	 * will be remove. And, the method/field defined in original widget will
+	 * will be removed. And, the method/field defined in original widget will
 	 * be restored.
 	 * @since 5.0.0
 	 */
