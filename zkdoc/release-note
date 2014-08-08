@@ -51,6 +51,7 @@ ZK 7.0.3
   ZK-2390: hflex fails when combining hbox and templating
   ZK-2389: Append popup component to Hlayout throws JavaScript error
   ZK-2351: Doublespinner always blank in turkish locale on iOS devices
+  ZK-2393: grid rendering on mobile device
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.

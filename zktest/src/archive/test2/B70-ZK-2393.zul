@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2393.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Aug 08, 2014  9:53:22 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<grid >
+		<auxhead>
+			<auxheader colspan="4"
+				label="You should see the grid's content in Android's Chrome browser" />
+		</auxhead>
+		<columns>
+			<column hflex="5">Language</column>
+			<column hflex="6">Contributor</column>
+			<column hflex="3">Charset</column>
+			<column hflex="4">Comment</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="Arabic (ar)" />
+				<label value="Ayman Elgharabawy" />
+				<label value="iso-8859-6" />
+				<textbox />
+			</row>
+			<row>
+				<label value="Hungarian (hu)" />
+				<label value="Andreas Klein" />
+				<label value="iso-8859-2" />
+				<textbox />
+			</row>
+			<row>
+				<label value="Italian (it)" />
+				<label value="Matteo Barbieri" />
+				<label value="iso-8859-1" />
+				<textbox />
+			</row>
+			<row>
+				<label value="Indonesian (id)" />
+				
+				<label value="James Liam Supangkat" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Japanese (ja)" />
+				
+				<label value="Poli Lee" />
+				
+				<label value=" iso-2022-jp" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Korean (ko)" />
+				
+				<label value="Deok-su Lee" />
+				
+				<label value="euc-kr" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Dutch (nl)" />
+				
+				<label value="Wido Jansen" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Portuguese (pt)" />
+				
+				<label value="Airton Carrara" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Brazilian Portugese (pt_BR)" />
+				
+				<label value="Airton Carrara" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Romanian (ro)" />
+				
+				<label value="Calin Vaida" />
+				
+				<label value="iso-8859-2" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Russian (ru)" />
+				
+				<label value="Denis Yarkovoy" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="French (fr)" />
+				
+				<label value="Jêrôme Vergereau" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Spanish (es)" />
+				
+				<label value="Daniel Octavio Ruiz Rodriguez" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="German (de)" />
+				
+				<label value="H.-Dirk Schmitt" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Czech (cs)" />
+				
+				<label value="Pavel Mica" />
+				
+				<label value="iso-8859-2" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Catalan (ca)" />
+				
+				<label value="Xavier Covas O'Ryan" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Bulgarian (bg)" />
+				
+				<label value="Boril Yonchev" />
+				
+				<label value="iso-8859-5" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Ukrainian (uk)" />
+				
+				<label value="Denis Yarkovoy" />
+				
+				<label value="iso-8859-5" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Turkish (tr)" />
+				
+				<label value="Kursat Kurt" />
+				
+				<label value="iso-8859-9" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Swedish (sv)" />
+				
+				<label value="Easit AB" />
+				
+				<label value="iso-8859-1" />
+				
+				<textbox />
+				
+			</row>
+			
+			<row>
+				
+				<label value="Slovenian (sl)" />
+				
+				<label value="Ziga" />
+				
+				<label value="iso-8859-2" />
+				
+				<textbox />
+				
+			</row>
+			
+		</rows>
+	</grid>
+</zk>
