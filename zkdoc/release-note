@@ -64,6 +64,8 @@ ZK 7.0.3
     *. Doublespinner's format attribute
     *. Longbox's format attribute
     *. Decimalbox's format attribute
+  + MeshElements (grid, listbox, and tree) to follow the setting of "org.zkoss.zul.nativebar" for touch device to use 
+    the native scrollbar by default.
 
   --------
 ZK 7.0.2
