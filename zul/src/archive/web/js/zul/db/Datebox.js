@@ -338,9 +338,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		if (val) {
-			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value, this._localizedSymbols);
+			var format = this.getFormat(),
+				d = new zk.fmt.Calendar().parseDate(val, format, !this._lenient, this._value, this._localizedSymbols);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
-			return new zk.fmt.Calendar().escapeDSTConflict(d); // B70-ZK-2382
+			// B70-ZK-2382 escape shouldn't be used in format including hour
+			if(!format.match(/[HkKh]/))
+				d = new zk.fmt.Calendar().escapeDSTConflict(d);
+			return d;
 		}
 		return null;
 	},
@@ -641,27 +645,28 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			db = this.parent,
 			fmt = db.getTimeFormat(),
 			oldDate = db.getValue(),
-			readonly = db.isReadonly();
-
-		if (oldDate) {
-			date = new Date(date.getFullYear(), date.getMonth(),
-				date.getDate(), oldDate.getHours(),
-				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
-			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
-			//since Date object will adjust month if date larger than max one
-
-			// B70-ZK-2382
-			date = new zk.fmt.Calendar().escapeDSTConflict(date);
-		}
+			readonly = db.isReadonly(),
+			cal = new zk.fmt.Calendar();
 		
 		if (fmt) {
 			var tm = db._tm,
 				time = tm.getValue();
 			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 			
-			// B70-ZK-2382
-			date = new zk.fmt.Calendar().escapeDSTConflict(date);
-		}
+			// B70-ZK-2382 escape shouldn't be used in format including hour
+			if(!fmt.match(/[HkKh]/))
+				date = cal.escapeDSTConflict(date);
+		} else if (oldDate) {
+			date = new Date(date.getFullYear(), date.getMonth(),
+				date.getDate(), oldDate.getHours(),
+				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
+			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
+			//since Date object will adjust month if date larger than max one
+			
+			// B70-ZK-2382 escape shouldn't be used in format including hour
+			if(!this.getFormat().match(/[HkKh]/))
+				date = cal.escapeDSTConflict(date);
+		}		
 		
 		//Bug ZK-1712: no need to set datebox input value when shift view
 		if (!evt.data.shiftView)

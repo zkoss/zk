@@ -594,6 +594,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	// e.g. 2014/10/19 at Brasilia (UTC-03:00), it will show 2014/10/18 23:00:00
 	// so we need to increase a hour.
 	escapeDSTConflict: function(val) {
+		if(!val) return;
 		var newVal = new Date(val.getTime() + 3600000); //plus 60*60*1000
 		return newVal.getHours() != ((val.getHours() + 1) % 24) ? newVal : val;
 	}
