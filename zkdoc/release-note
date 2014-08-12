@@ -310,7 +310,14 @@ Nov 26, 2013
   + change the addon-name of zkplus jar from 'databind' to 'zkplus'
 
     --------
+ZK 6.5.8
+* Features
+
+* Bugs
+
+  --------
 ZK 6.5.7
+August 12, 2014
 * Features
 
 * Bugs
@@ -326,6 +333,7 @@ ZK 6.5.7
   ZK-2374: touch event handling interferes with user defined jQuery version
   ZK-2379: selectbox with model error when calling parent invalidate()
   ZK-2389: Append popup component to Hlayout throws JavaScript error
+  ZK-2160: menupopup shifts position when timer event occurs
 
   --------
 ZK 6.5.6
