@@ -339,7 +339,7 @@ zFlex = { //static methods
 				continue;
 			
 			var zkc = zk(c);
-			if (zkc.isVisible()) {
+			if (zkc.isVisible(true)) {
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0,
 					cwgt = zk.Widget.$(c, {exact: 1});
