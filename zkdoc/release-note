@@ -53,6 +53,7 @@ ZK 7.0.3
   ZK-2351: Doublespinner always blank in turkish locale on iOS devices
   ZK-2393: grid rendering on mobile device
   ZK-2398: Sortable tree missing sort icon on tree column
+  ZK-2377: scrollbar will jump back after scroll to bottom-most position
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
