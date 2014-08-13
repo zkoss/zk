@@ -49,6 +49,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	
 var globallocalizedSymbols = {},
 	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
+	_innerDateFormat = 'yyyy/MM/dd ',
 	Datebox =
 /**
  * An edit box for holding a date.
@@ -328,7 +329,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
 	},
-	coerceFromString_: function (val) {
+	coerceFromString_: function (val, pattern) {
 		var unf = Datebox._unformater;
 		if (unf && jq.isFunction(unf)) {
 			var cusv = unf(val);
@@ -339,7 +340,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		if (val) {
 			var format = this.getFormat(),
-				d = new zk.fmt.Calendar().parseDate(val, format, !this._lenient, this._value, this._localizedSymbols);
+				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if(!format.match(/[HkKh]/))
@@ -348,8 +349,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		return null;
 	},
-	coerceToString_: function (val) {
-		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols) : '';
+	coerceToString_: function (val, pattern) {
+		return val ? new zk.fmt.Calendar().formatDate(val, pattern || this.getFormat(), this._localizedSymbols) : '';
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
@@ -752,16 +753,14 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	},
 	onChanging: function (evt) {
 		var db = this.parent,
-			date = this.coerceFromString_(evt.data.value), //onChanging's data is string
-			oldDate = db.getValue();
-		if (oldDate) {
-			oldDate = new Date(oldDate); //make a copy
-			oldDate.setHours(date.getHours());
-			oldDate.setMinutes(date.getMinutes());
-			oldDate.setSeconds(date.getSeconds());
-			oldDate.setMilliseconds(date.getMilliseconds());
-			date = oldDate;
-		}
+			oldDate = db.getValue(),
+			cal = new zk.fmt.Calendar(),
+			// ZK-2382 we must do the conversion with date and time in the same time
+			// otherwise the result may be affcted by DST adjustment
+			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value //onChanging's data is string
+			pattern = _innerDateFormat + db.getTimeFormat(),
+			date = db.coerceFromString_(dateTime, pattern);
+
 		db.getInputNode().value = evt.data.value
 			= db.coerceToString_(date);
 
