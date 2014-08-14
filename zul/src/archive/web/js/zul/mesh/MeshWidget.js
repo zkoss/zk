@@ -609,6 +609,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @since 5.0.7
 	 */
 	getFocusCell: function (el) {
+		var td;
+		jq([this.ebodytbl, this.eheadtbl, this.efoottbl]).each(function (i) {
+			if (this && jq.isAncestor(this, el)) {
+				var tds = jq(el).parents(i == 1 ? 'th' : 'td'); // headtable uses TH, others uses TD
+				for (var i = 0, j = tds.length; i < j; i++) {
+					td = tds[i];
+					if (jq(td).parents('table')[0] == this) {
+						return false; // break the loop;
+					}
+				}
+			}
+		});
+		return td;
 	},
 	_moveToHidingFocusCell: function (index) { //used in Row/Listcell
 		//B50-3178977 navigating the input in hiddin column.
@@ -1514,14 +1527,16 @@ zul.mesh.Scrollbar = {
 			embed: embed,
 			startPositionX: startPositionX,
 			onSyncPosition: function() {
-				var pos = this.getCurrentPosition(),
-					head = wgt.ehead,
-					foot = wgt.efoot;
-				if (pos && this.hasHScroll()) {
-					if (head)
-						head.scrollLeft = pos.x;
-					if (foot)
-						foot.scrollLeft = pos.x;
+				if (!this.frozen) {
+					var pos = this.getCurrentPosition(),
+						head = wgt.ehead,
+						foot = wgt.efoot;
+					if (pos && this.hasHScroll()) {
+						if (head)
+							head.scrollLeft = pos.x;
+						if (foot)
+							foot.scrollLeft = pos.x;
+					}
 				}
 			},
 			onScrollEnd: function() {

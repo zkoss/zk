@@ -98,19 +98,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.rows._syncStripe();
 		return this;
 	},
-	//-- super --//
-	getFocusCell: function (el) {
-		var tbody = this.rows.$n();
-		if (jq.isAncestor(tbody, el)) {
-			var tds = jq(el).parents('td'), td;
-			for (var i = 0, j = tds.length; i < j; i++) {
-				td = tds[i];
-				if (td.parentNode.parentNode == tbody) {
-					return td;
-				}
-			}
-		}
-	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);

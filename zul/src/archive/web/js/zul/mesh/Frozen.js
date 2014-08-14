@@ -150,16 +150,20 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		var p = this.parent,
 			body = p.$n('body'),
 			foot = p.$n('foot');
-		
+
 		if (p._nativebar) {
 			//B70-ZK-2130: No need to reset when beforeSize, ZK-343 with native bar works fine too.
 			zWatch.listen({onSize: this});
 			var scroll = this.$n('scrollX');
 			this.$n().style.height = this.$n('cave').style.height = scroll.style.height
 				 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
-			p.listen({onScroll: this.proxy(this._onScroll)}, -1000);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
+
+			var head = p.$n('head');
+			if (head)
+				this.domListen_(head, 'onScroll', '_doHeadScroll');
+			
 		} else {
 			zWatch.listen({onResponse: this});
 			
@@ -175,12 +179,16 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		var p = this.parent,
 			body = p.$n('body'),
-			foot = p.$n('foot');
+			foot = p.$n('foot'),
+			head = p.$n('head');
 		
 		if (p._nativebar) {
 			this.domUnlisten_(this.$n('scrollX'), 'onScroll');
 			p.unlisten({onScroll: this.proxy(this._onScroll)});
 			zWatch.unlisten({onSize: this});
+
+			if (head)
+				this.domUnlisten_(head, 'onScroll', '_doHeadScroll');
 		} else {
 			zWatch.unlisten({onResponse: this});
 			this._shallSyncScale = false;
@@ -269,6 +277,15 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				fn();
 		}
 		evt.stop();
+	},
+	_doHeadScroll: function (evt) {
+		var head = evt.domTarget,
+			num = Math.ceil(head.scrollLeft / 50);
+		// ignore scrollLeft is 0
+		if (!head.scrollLeft || this._lastScale == num)
+			return;
+		evt.data = head.scrollLeft;
+		this._onScroll(evt);
 	},
 	_doScroll: function (n) {
 		var p = this.parent, num;
