@@ -3,6 +3,7 @@ ZK 6.5.8
 * Features
 
 * Bugs
+  ZK-2401: Navigate textboxes in listheader by tab key break frozen scroll behavior
 
   --------
 ZK 6.5.7

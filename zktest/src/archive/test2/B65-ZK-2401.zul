@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2401.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Aug 14, 2014 10:47:57 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Focus on the first textbox of Listbox's header
+		2. Press "tab" key 3 times 
+		3. The scrollbar and the frozen column should not miss alignment.
+		4. Please retest with step 1 to focus on the first textbox of Listbox's content.
+	</label>
+	<window title="Listbox" border="normal">
+		<listbox width="300px">
+			<frozen columns="1" />
+			<listhead sizable="true">
+				<listheader align="center" width="40px" />
+				<listheader width="90px">
+					<textbox value="filter 1" width="70px" />
+				</listheader>
+				<listheader width="90px">
+					<textbox value="filter 2" width="70px" />
+				</listheader>
+				<listheader width="90px">
+					<textbox value="filter 3" width="70px" />
+				</listheader>
+				<listheader width="90px">
+					<textbox value="filter 4" width="70px" />
+				</listheader>
+				<listheader width="90px">
+					<textbox value="filter 5" width="70px" />
+				</listheader>
+			</listhead>
+			<listitem>
+				<listcell />
+				<listcell label="ZK Jet 0.8.0 is released" />
+				<listcell label="2008/11/17 17:41:29" />
+				<listcell>
+					<textbox value="filter 1" width="70px" /></listcell>
+				<listcell>
+					<textbox value="filter 1" width="70px" /></listcell>
+				<listcell>
+					<textbox value="filter 1" width="70px" /></listcell>
+			</listitem>
+			<listitem>
+				<listcell />
+				<listcell label="URLs for iPhone-Optimized Google Sites" />
+				<listcell label="2008/11/17 15:56:37" />
+				<listcell>
+					<textbox value="filter 1" width="70px" /></listcell>
+				<listcell>
+					<textbox value="filter 1" width="70px" /></listcell>
+				<listcell>
+					<textbox value="filter 1" width="70px" /></listcell>
+			</listitem>
+		</listbox>
+	</window>
+</zk>

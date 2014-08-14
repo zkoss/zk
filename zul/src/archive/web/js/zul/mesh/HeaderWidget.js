@@ -43,6 +43,18 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		},
 		height: _zkf
 	},
+	// Bug ZK-2401
+	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+		
+		//sync frozen
+		var box, frozen, tbody, td, tds, node;
+		if ((box = this.getMeshWidget()) && box.efrozen && 
+			(frozen = zk.Widget.$(box.efrozen.firstChild) && 
+			(node = this.$n()))) {
+			box._moveToHidingFocusCell(node.cellIndex);
+		}
+	},
 	/**
 	 * Updates the whole mesh widget.
 	 * @param String name
