@@ -55,6 +55,7 @@ ZK 7.0.3
   ZK-2398: Sortable tree missing sort icon on tree column
   ZK-2377: scrollbar will jump back after scroll to bottom-most position
   ZK-2395: Tree header and content misaligned if contains invisible columns
+  ZK-2397: Session timeout denote twice if sending two au requests
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
