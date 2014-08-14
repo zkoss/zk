@@ -1048,14 +1048,23 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (msg.startsWith('script:'))
 			return $eval(msg.substring(7));
 
+		// ZK-2397: prevent from showing reload dialog again while browser is reloading
+		if(zk._isReloadingInObsolete)
+			return;
+		
 		var v = zk.Desktop.$(dtid);
 		if (v && (v = v.requestPath))
 			msg = msg.replace(dtid, v + ' (' + dtid + ')');
 
+		zAu.disabledRequest = true;
+		
 		jq.alert(msg, {
 			icon: 'ERROR',
 			button: {
-				Reload: function () {location.reload();},
+				Reload: function () {
+					zk._isReloadingInObsolete = true;
+					location.reload();
+				},
 				Cancel: true
 			}
 		});

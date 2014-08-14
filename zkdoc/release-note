@@ -56,6 +56,7 @@ ZK 7.0.3
   ZK-2377: scrollbar will jump back after scroll to bottom-most position
   ZK-2395: Tree header and content misaligned if contains invisible columns
   ZK-2401: Navigate textboxes in listheader by tab key break frozen scroll behavior
+  ZK-2397: Session timeout denote twice if sending two au requests
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
