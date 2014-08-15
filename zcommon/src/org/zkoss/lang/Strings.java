@@ -322,11 +322,15 @@ public class Strings {
 		case '\r': return 'r';
 		case '\f': return 'f';
 		case '/':
+			String key;
 			//escape </script>
-			if (ESCAPE_JAVASCRIPT.equals(specials) //handle it specially
-			&& (k <= 0 || src.charAt(k - 1) != '<' || k + 8 > src.length()
-				|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
-				return (char)0; //don't escape
+			if (ESCAPE_JAVASCRIPT.equals(specials) // handle it specially
+					&& (k <= 0 || src.charAt(k - 1) != '<'
+							|| k + 8 > src.length() || !("script>"
+							.equalsIgnoreCase((key = src.subSequence(k + 1,
+									k + 8).toString())) || "script "
+							.equalsIgnoreCase(key)))) {
+				return (char) 0; // don't escape
 			}
 			break;
 		case '!':

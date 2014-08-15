@@ -43,7 +43,7 @@ abstract public class LabelElement extends XulElement {
 		if (label == null) label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
-			smartUpdate("label", new JavaScriptValue(JSONValue.toJSONString(_label)));
+			smartUpdate("label", _label);
 		}
 	}
 
@@ -52,7 +52,7 @@ abstract public class LabelElement extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "label", new JavaScriptValue(JSONValue.toJSONString(_label)));
+		render(renderer, "label", _label);
 		renderCrawlable(_label);
 	}
 	/** Renders the crawlable information.

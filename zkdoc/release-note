@@ -57,6 +57,7 @@ ZK 7.0.3
   ZK-2395: Tree header and content misaligned if contains invisible columns
   ZK-2401: Navigate textboxes in listheader by tab key break frozen scroll behavior
   ZK-2397: Session timeout denote twice if sending two au requests
+  ZK-2407: XSS Vulnerability in textbox.setValue()
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
@@ -320,6 +321,7 @@ ZK 6.5.8
 
 * Bugs
   ZK-2401: Navigate textboxes in listheader by tab key break frozen scroll behavior
+  ZK-2407: XSS Vulnerability in textbox.setValue()
 
   --------
 ZK 6.5.7
