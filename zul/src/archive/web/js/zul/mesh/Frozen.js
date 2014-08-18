@@ -148,6 +148,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						(index = td.cellIndex - frozen._columns) >= 0) {
 					frozen.setStart(index);
 					p.ebody.scrollLeft = 0;
+					if (p.ehead)
+						p.ehead.scrollLeft = 0;
 				}
 			};
 			
