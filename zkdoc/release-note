@@ -5,6 +5,7 @@ ZK 6.5.8
 * Bugs
   ZK-2401: Navigate textboxes in listheader by tab key break frozen scroll behavior
   ZK-2407: XSS Vulnerability in textbox.setValue()
+  ZK-2402: In IE8, clicking the "up/down" arrow of timebox does not always trigger an onChange event
 
   --------
 ZK 6.5.7
