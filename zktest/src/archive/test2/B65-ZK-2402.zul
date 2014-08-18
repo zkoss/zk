@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2402.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 18, 2014  16:29:00 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="native">
+	<zscript><![CDATA[
+		import java.util.Calendar;
+		import java.util.Date;
+		
+		public class TestVM {
+		    private Date time = Calendar.getInstance().getTime();
+		
+		    public Date getTime() {
+		        return time;
+		    }
+		
+		    public void setTime(Date time) {
+		        this.time = time;
+		    }
+		
+		}
+	]]></zscript>
+	<div>
+		1. when you see the hour portion alternates between highlighted and not highlighted at timebox, it's a bug.
+		<separator/>
+		2. after click up/down button and then click the "Display timebox value" button, you should see the value is the same as in timebox.
+	</div>
+    <h:h1>ZK ${desktop.webApp.version}</h:h1>
+    <groupbox apply="org.zkoss.bind.BindComposer" title="MVVM Data Binding"
+        viewModel="@id('vm') @init('TestVM')">
+        <timebox id="tbxOne" format="HH:mm" value="@bind(vm.time)"/>
+        <label id="lblOne" value="@load(vm.time)"/>
+        <button label="Display timebox value" onClick="lblOne.setValue(tbxOne.getValue().toString())"/>
+    </groupbox>
+    <groupbox title="onChange Listener">
+        <timebox id="tbxTwo" format="HH:mm" onChange="lblTwo.value = event.value" onCreate="self.setValue(new java.util.Date())"/>
+        <label id="lblTwo"/>
+        <button label="Display timebox value" onClick="lblTwo.setValue(tbxTwo.getValue().toString())"/>
+    </groupbox> 
+</zk>

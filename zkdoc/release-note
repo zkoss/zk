@@ -59,6 +59,7 @@ ZK 7.0.3
   ZK-2397: Session timeout denote twice if sending two au requests
   ZK-2407: XSS Vulnerability in textbox.setValue()
   ZK-2400: In IE8, clicking the "up/down" arrow of timebox triggers an onChange event every second time
+  ZK-2402: In IE8, clicking the "up/down" arrow of timebox does not always trigger an onChange event
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
