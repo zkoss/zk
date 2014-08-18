@@ -419,6 +419,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_btnDown: function(evt) { // TODO: format the value first
 		if (!this._buttonVisible || this._disabled) return;
+
+		// cache it for IE and others to keep the same position at the first time being clicked.
+		this._lastPos = this._getPos();
 		
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
@@ -437,13 +440,18 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 			
-		// cache it for IE
-		this._lastPos = this._getPos();
-			
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
-		if (zk.webkit)
+		if (zk.webkit) {
 			zk(inp).focus(); //Bug ZK-1527: chrome and safari will trigger focus if executing setSelectionRange, focus it early here
+		}
+
+		var newLastPos = this._getPos();
+		
+		// Chrome and Firefox get wrong position at initial case
+		if (this._lastPos != newLastPos)
+			zk(inp).setSelectionRange(this._lastPos);
+		
 		if (isOverUpBtn) { //up
 			this._doUp();
 			this._startAutoIncProc(true);
@@ -454,10 +462,23 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		
 		this._changed = true;
 		delete this._shortcut;
-
-		// B36-2678340: click btn-up icon first, then click btn-up btn, the value should not be null.
-		if(!zk.ie8_)
-			zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
+		
+		
+		var selrng = zk(inp).getSelectionRange();
+		if (zk.ie8_) {
+			var self = this;
+			setTimeout(function () {
+				if ((zk.currentFocus == self) && self.desktop) {
+					var newSelRng = zk(inp).getSelectionRange();
+					// IE8 change the selection range
+					if (selrng && newSelRng && selrng[0] != selrng[1] && (selrng[0] != newSelRng[0] || selrng[1] != newSelRng[1])) {
+						zk(inp).setSelectionRange(selrng[0], selrng[1]);
+					}
+				}
+			}, 150); // do it later for some timeout function happened.
+		}
+		
+		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
 		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
 			//datebox, datebox's onblur will find zk.currentFocus is null
 
