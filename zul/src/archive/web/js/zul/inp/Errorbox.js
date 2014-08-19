@@ -101,6 +101,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
 			if (zul.inp.InputWidget._isInView(this)) {// B65-ZK-1632
+				if (!this.isOpen()) // for ZK-2371, we need to show it back when inside viewport.
+					this.open();
 				this.position(this.parent, null, 'end_before', {overflow:true});
 				this._fixarrow();
 			} else {
