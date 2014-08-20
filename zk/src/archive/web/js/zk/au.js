@@ -277,8 +277,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			dt = wgt.desktop;			
 		}
 		////
-		
-		dt._aureqs.push(aureq);
+		zAu.addAuRequest(dt, aureq);
 
 		ajaxSend2(dt, timeout);
 			//Note: we don't send immediately (Bug 1593674)
@@ -605,12 +604,12 @@ zAu = {
 		var t = aureq.target;
 		if (t) {
 			var dt = t.className == 'zk.Desktop' ? t: t.desktop;
-			dt._aureqs.unshift(aureq);
+			zAu.getAuRequests(dt).unshift(aureq);
 			ajaxSend2(dt, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts) {
-				dt._aureqs.unshift(aureq);
+				zAu.getAuRequests(dt).unshift(aureq);
 				ajaxSend2(dts[dtid], timeout);
 			}
 			return;
@@ -829,7 +828,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		if (zAu.disabledRequest) {
 			return false;
 		}
-		var es = dt._aureqs;
+		var es = zAu.getAuRequests(dt);
 		if (es.length == 0)
 			return false;
 
@@ -903,6 +902,22 @@ zAu.beforeSend = function (uri, req, dt) {
 				ignorable: ignorable, tmout: 0, rtags: rtags
 			});
 		return true;
+	},
+	/** Add the AU request to the ajax queue.
+	 * @param Desktop dt
+	 * @param Event aureq the request.
+	 * @since 7.0.3
+	 */
+	addAuRequest: function (dt, aureq) {
+		dt._aureqs.push(aureq);
+	},
+	/** Returns all pending AU requests.
+	 * @param Desktop dt
+	 * @return Array an array of {@link Event}
+	 * @since 7.0.3
+	 */
+	getAuRequests: function (dt) {
+		return dt._aureqs;
 	},
 	/** A map of Ajax default setting used to send the AU requests.
 	 * @type Map

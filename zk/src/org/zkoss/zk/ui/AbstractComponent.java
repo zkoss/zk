@@ -1921,6 +1921,12 @@ w:use="foo.MyWindow"&gt;
 				if (shallHandleImportant.booleanValue())
 					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
 			}
+			if ((flags & CE_DUPLICATE_IGNORE) != 0) {
+				renderer.render("$$0" + evtnm, true);
+			}
+			if ((flags & CE_REPEAT_IGNORE) != 0) {
+				renderer.render("$$1" + evtnm, true);
+			}
 			if (Events.isListened(this, evtnm, false))
 				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
 					//$onClick and so on

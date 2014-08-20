@@ -1291,6 +1291,16 @@ wgt.$f().main.setTitle("foo");
 					ime = cls._importantEvts;
 				(ime || (cls._importantEvts = {}))[name.substring(2)] = value;
 				return this;
+			} else if (name.startsWith('$$0on')) {
+				var cls = this.$class,
+					ime = cls._duplicateIgnoreEvts;
+				(ime || (cls._duplicateIgnoreEvts = {}))[name.substring(3)] = value;
+				return this;
+			} else if (name.startsWith('$$1on')) {
+				var cls = this.$class,
+					ime = cls._repeatIgnoreEvts;
+				(ime || (cls._repeatIgnoreEvts = {}))[name.substring(3)] = value;
+				return this;
 			} else if (name.startsWith('$on')) {
 				this._asaps[name.substring(1)] = value;
 				return this;
