@@ -435,12 +435,17 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) { // TODO: format the value first
+		this._isBtnDown = true;
 		var isRounded = this.inRoundedMold();
 		if (isRounded && !this._buttonVisible) return;
 		
 		var inp;
 		if(!(inp = this.getInputNode()) || inp.disabled) return;
-		
+
+		// ZK-2404 can't keep the caret after user click on input with readonly mode
+		if(zk.ie < 8 && this.lastPos != 0)
+			zk(this.getInputNode()).setSelectionRange(this.lastPos, this.lastPos + 1);
+
 		// cache it for IE
 		this._lastPos = this._getPos();
 		
@@ -491,7 +496,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		delete this._shortcut;
 		
 		var selrng = zk(inp).getSelectionRange();
-		if (zk.ie8_) {
+		
+		if (zk.ie < 9) {
 			var self = this;
 			setTimeout(function () {
 				if ((zk.currentFocus == self) && self.desktop) {
@@ -512,6 +518,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		evt.stop();
 	},
 	_btnUp: function(evt) {
+		// btnUp could be called twice after double click the up or down button in IE with readonly mode
+		if (!this._isBtnDown) 
+			return;
+		else
+			this._isBtnDown = false;
+			
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 
 		var inp = this.getInputNode();
@@ -603,7 +615,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			fn = up ? '_doUp' : '_doDown';
 		this.timerId = setInterval(function() {
 			if ((zk.ie < 11 || zk.safari) && self._lastPos)
-				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
+				zk(self.getInputNode()).setSelectionRange(self._lastPos, (zk.ie < 8) ? self._lastPos + 1 : self._lastPos);
 			self[fn]();
 		}, 300);
 	},
@@ -660,6 +672,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this.onSize();
 			n.style.width = this.getWidth() || '';
 		}
+		
+		// ZK-2404 can't keep the caret after user click on input with readonly mode
+		if(zk < 8) this.lastPos = 0;
 	},
 	afterKeyDown_: function (evt,simulated) {
 		if (!simulated && this._inplace)
