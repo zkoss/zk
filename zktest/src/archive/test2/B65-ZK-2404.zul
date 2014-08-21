@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2404.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 18, 2014  16:29:00 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="native">
+    <div>
+    	when you click on the on of position between any digit, it must can't be change by up and down arrow. otherwise it's a bug.
+    </div>
+    <timebox readonly="true" cols="12" format="medium" onCreate="self.value = new Date()"/>
+</zk>
