@@ -753,7 +753,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	},
 	onChanging: function (evt) {
 		var db = this.parent,
-			oldDate = db.getValue(),
+			oldDate = db.getValue() || db._pop.getValue(),
 			cal = new zk.fmt.Calendar(),
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment
