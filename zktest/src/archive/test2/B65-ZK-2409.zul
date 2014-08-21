@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2409.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Aug 21, 2014  5:49:23 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<div vflex="min">
+		<n:ol>
+			<n:li>Click on combobox to focus</n:li>
+			<n:li>Enter '0', the popup should appear on top of the combobox</n:li>
+			<n:li>Enter '0' again, the popup should only have '00' left and appear selected</n:li>
+			<n:li>Press 'Enter' or 'Tab' key, the popup should disappear</n:li>
+			<n:li>Focus on combobox and delete one '0', it is bug if popup do not appear on top of the combobox</n:li>
+		</n:ol>
+	</div>
+	<zscript><![CDATA[
+	import java.text.DecimalFormat;
+	import java.text.NumberFormat;
+	import java.util.ArrayList;
+	import java.util.Comparator;
+	import java.util.List;
+	import org.zkoss.zul.ListModelList;
+	import org.zkoss.zul.ListModels;
+	public class TestVM {
+		private List items;
+		public TestVM() {
+			final NumberFormat nf = new DecimalFormat("00");
+			items = new ArrayList(5);
+			for (int i = 0; i < 5; i++) {
+				items.add(nf.format(new Integer(i)));
+			}
+		}
+		public ListModel getSubModelItem() {
+			final NumberFormat nf = new DecimalFormat("00");
+			
+			return ListModels.toListSubModel(
+					new ListModelList(items), new Comparator() {
+						public int compare(Object val, Object item) {
+							String text = String.valueOf(val);
+							String id = String.valueOf(item);
+							return id.startsWith(text) ? 0: -1;
+						}
+					}, 100);
+		}
+	}
+	]]></zscript>
+	<window border="normal" title="Combobox placed at bottom" 
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('TestVM')"
+		vflex="1">
+		<div height="95%"></div>
+		<combobox model="@load(vm.subModelItem)" autodrop="true" autocomplete="false">
+			<template name="model" var="item">
+				<comboitem label="@load(item)" />
+			</template>
+		</combobox>
+	</window>
+</zk>
