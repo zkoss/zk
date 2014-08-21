@@ -733,7 +733,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						empty = false;
 					}
 				}
-				header.$n().style.display = emptyHeader ? 'none' : ''; // Bug ZK-2348
+				
+				if(header._visible)
+					header.$n().style.display = emptyHeader ? 'none' : ''; // Bug ZK-2348
 			}
 			var old = this.ehead.style.display,
 				tofix = force && flex && this.isRealVisible(); //Bug ZK-1647: no need to consider empty header for flex calculation
