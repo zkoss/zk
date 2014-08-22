@@ -205,18 +205,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		// given init position
 		$pp.position(inp, 'after_start');	
-		this._shallSyncPopupPosition = false;
 		
 		// B65-ZK-1588: bandbox popup should drop up 
-		//   when the space between the bandbox and the bottom of browser is not enough  
-		var top = jq(pp).offset().top + (zk.chrome ? 1 : 0), // chrome alignement issue: -1px margin-top
-			realtop = zk.ie == 10 ? Math.round(top) : top,
-			after = jq(inp).offset().top + zk(inp).offsetHeight(),
-			realafter = zk.ie == 10 ? Math.round(after) : after;
-		
-		if(realtop < realafter) {
+		// when the space between the bandbox and the bottom of browser is not enough
+		if (this._checkPopupPosition()) {
 			$pp.position(inp, 'before_start');	
-			this._shallSyncPopupPosition = true;
 		}
 		pp.style.display = 'none';
 		pp.style.visibility = '';
@@ -245,6 +238,22 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:true, value: inp.value}, {rtags: {onOpen: 1}});
+	},
+	_checkPopupPosition: function () {
+		var pp = this.getPopupNode_(),
+			$pp = zk(pp),
+			inp = this.getInputNode(),
+			ppDim = $pp.dimension(true),
+			inpDim = zk(inp).dimension(true),
+			ppBottom = ppDim.top + ppDim.height,
+			inpBottom = inpDim.top + inpDim.height;
+
+		if ((ppBottom < inpBottom && ppBottom >= inpDim.top) ||
+				(ppDim.top >= inpDim.top && ppDim.top < inpBottom) ||
+				ppBottom >= jq.innerHeight() || (ppDim.top < inpDim.top && ppBottom < inpDim.top - 2)) {
+			return this._shallSyncPopupPosition = true;
+		}
+		return false;
 	},
 	/**
 	 * Extra handling for min size of popup widget. Return true if size is affected.
