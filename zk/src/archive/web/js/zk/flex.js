@@ -53,17 +53,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		pos[0] = offset[0] - pos[0];
 		pos[1] = offset[1] - pos[1];
 		
-		// 3298164: should not see red area at the bottom of listbox
-		if (zk.ie10_) {
-			pos[0] = Math.round(pos[0]);
-			pos[1] = Math.round(pos[1]);
-		}
-		
 		// revert the values
 		zk.copy(zs, coldVal);
 		zk.copy(ps, poldVal);
 			
-		return !(zk.ie < 11) ? [Math.max(0, pos[0]), Math.max(0, pos[1])] : pos; // ie may have a wrong gap
+		return [Math.max(0, pos[0]), Math.max(0, pos[1])]; // ZK-2414 and 3298164
 	}
 	
 	// check whether the two elements are the same baseline, if so, we need to
