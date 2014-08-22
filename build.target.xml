@@ -130,7 +130,7 @@ if="deploy.tomcat.required">
 			<arg value="${basedir}/codegen" />
 	</exec>
 	<exec executable="node">
-		<arg value="${maindir}/node_modules/zkless-engine/lib/CpLess.js" />
+		<arg value="${maindir}/bin/node_modules/zkless-engine/lib/CpLess.js" />
 		<arg value="${src.archive.dir}"/>
 		<arg value="${codegen.archive.dir}"/>
 		<arg path="../../zk/zul/${src.archive.dir}"/>
