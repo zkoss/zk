@@ -1,0 +1,91 @@
+{
+  "name": "clean-css",
+  "version": "2.1.8",
+  "author": {
+    "name": "Jakub Pawlowicz",
+    "email": "jakub@goalsmashers.com",
+    "url": "http://twitter.com/GoalSmashers"
+  },
+  "description": "A well-tested CSS minifier",
+  "license": "MIT",
+  "keywords": [
+    "css",
+    "minifier"
+  ],
+  "homepage": "https://github.com/GoalSmashers/clean-css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoalSmashers/clean-css.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GoalSmashers/clean-css/issues"
+  },
+  "bin": {
+    "cleancss": "./bin/cleancss"
+  },
+  "main": "index.js",
+  "files": [
+    "bin",
+    "lib",
+    "History.md",
+    "index.js",
+    "LICENSE"
+  ],
+  "scripts": {
+    "bench": "node ./test/bench.js",
+    "check": "jshint ./bin/cleancss .",
+    "prepublish": "jshint .",
+    "test": "vows"
+  },
+  "dependencies": {
+    "commander": "2.1.x"
+  },
+  "devDependencies": {
+    "jshint": "2.4.x",
+    "nock": "0.27.x",
+    "vows": "0.7.x"
+  },
+  "jshintConfig": {
+    "browser": false,
+    "camelcase": true,
+    "curly": false,
+    "eqeqeq": false,
+    "eqnull": true,
+    "immed": true,
+    "indent": 2,
+    "latedef": true,
+    "multistr": false,
+    "noarg": true,
+    "node": true,
+    "plusplus": false,
+    "quotmark": "single",
+    "strict": false,
+    "trailing": true,
+    "undef": true,
+    "unused": true
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "_id": "clean-css@2.1.8",
+  "dist": {
+    "shasum": "2b4b2fd60f32441096216ae25a21faa74580dc83",
+    "tarball": "http://registry.npmjs.org/clean-css/-/clean-css-2.1.8.tgz"
+  },
+  "_from": "clean-css@2.1.x",
+  "_npmVersion": "1.2.30",
+  "_npmUser": {
+    "name": "goalsmashers",
+    "email": "jakub@goalsmashers.com"
+  },
+  "maintainers": [
+    {
+      "name": "goalsmashers",
+      "email": "jakub@goalsmashers.com"
+    }
+  ],
+  "directories": {},
+  "_shasum": "2b4b2fd60f32441096216ae25a21faa74580dc83",
+  "_resolved": "https://registry.npmjs.org/clean-css/-/clean-css-2.1.8.tgz",
+  "readme": "ERROR: No README data found!"
+}

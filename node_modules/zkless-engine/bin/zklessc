@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+var path = require('path'),
+    fs = require('fs'),
+    args = process.argv.slice(1),
+    less = require('less'),
+    parser = new(less.Parser);
+
+ 	data = fs.readFileSync(args[1], 'utf-8');
+    parser.parse(data, function (err, tree) {
+        if (err) {
+        	throw err;
+        }
+        var css = tree.toCSS();
+		process.stdout.write(css);
+    });
