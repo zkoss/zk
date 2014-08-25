@@ -2290,8 +2290,13 @@ public class Tree extends MeshElement {
 				return null;
 			ti = (Treeitem) children.get(path[i]);
 
-			if (i < path.length - 1)
+			if (i < path.length - 1) {
+				//re-fixed for 2375: should add treeitem to openpath if using TreeOpenableModel
+				TreeModel model = this.getModel();
+				if (model instanceof TreeOpenableModel)
+					((TreeOpenableModel)model).addOpenPath(getTreeitemPath(this, ti));
 				ti.setOpen(true);
+			}
 
 			if (ti.getTreechildren() != null) {
 				children = ti.getTreechildren().getChildren();
