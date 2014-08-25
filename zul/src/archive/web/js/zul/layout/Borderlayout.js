@@ -157,9 +157,9 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	resize: function () {
 		if (this.desktop)
 			this._resize();
-		this._shallResize = false;
 	},
 	_resize: function (isOnSize) {
+		this._shallResize = false;
 		this._isOnSize = isOnSize;
 		if (!this.isRealVisible()) return;
 
