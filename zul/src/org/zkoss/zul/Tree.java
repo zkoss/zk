@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -2294,7 +2295,7 @@ public class Tree extends MeshElement {
 				//re-fixed for 2375: should add treeitem to openpath if using TreeOpenableModel
 				TreeModel model = this.getModel();
 				if (model instanceof TreeOpenableModel)
-					((TreeOpenableModel)model).addOpenPath(getTreeitemPath(this, ti));
+					((TreeOpenableModel)model).addOpenPath(Arrays.copyOf(path, i+1));
 				ti.setOpen(true);
 			}
 
