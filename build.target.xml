@@ -124,7 +124,6 @@ if="deploy.tomcat.required">
 	</java>
 </target> -->
 <target name="lessc">
-	<!-- remove codegen folder first -->
 	<exec executable="rm">
 			<arg value="-rf" />
 			<arg value="${basedir}/codegen" />
@@ -133,8 +132,8 @@ if="deploy.tomcat.required">
 		<arg value="${maindir}/bin/node_modules/zkless-engine/lib/CpLess.js" />
 		<arg value="${src.archive.dir}"/>
 		<arg value="${codegen.archive.dir}"/>
-		<arg path="../../zk/zul/${src.archive.dir}"/>
-		<arg path="../../zkcml/zkmax/${src.archive.dir}"/>
+		<arg path="${maindir}/zul/${src.archive.dir}"/>
+		<arg path="${zkcmldir}/zkmax/${src.archive.dir}"/>
 		<!-- <arg value="" /> -->
 	</exec>
 	<java classname="CompressCss" fork="true">
@@ -142,12 +141,9 @@ if="deploy.tomcat.required">
 		<arg value="${codegen.archive.dir}"/>
 		<classpath>
 			<pathelement path="${src.archive.dir}"/>
-			<pathelement path="../../zk/zul/${src.archive.dir}"/>
-			<pathelement path="../../zkcml/zkmax/${src.archive.dir}"/>
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
 		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/commons-logging.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/CssCompressor.jar"/>
 		</classpath>
 	</java>

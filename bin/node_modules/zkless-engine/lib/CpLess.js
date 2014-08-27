@@ -21,20 +21,57 @@ const genDir = 'codegen/archive/';
 		current = '',
 		imcFlag = zkmaxPath ? 2 : 1; //use for checking of copy of imports is done
 
-	//copy the imports from package to the root directory if haven't done it
-	if (!fs.existsSync(genDir)) {
-		if (zulPath && fs.existsSync(zulPath)) {
-			copyImports(zulPath, walkOn);
-		}
 
-		if (zkmaxPath && fs.existsSync(zkmaxPath)) {
-			copyImports(zkmaxPath, walkOn);
-		}
-	} else {
-		walkOn();
+	//starting point
+	walkOn();
+
+	function walkOn() {
+		var walker = walk.walk(srcDir, {followLinks: false});
+		//walk through the root directory and find every .less files and grounds them into imports and targets
+		walker.on('file', function(root, stat, next) {
+			var fn = stat.name
+			if (Str(fn).endsWith('.less')) {
+				if (Str(fn).startsWith('_')) {
+					imports.push(root + '/' + fn);
+				} else {
+					targets.push(root + '/' + fn);
+				}
+			}
+			setImmediate(next);
+		});
+
+		//encode the founded imports and save them in codegen folder
+		walker.on('end', function() {
+			if (imports.length > 0 || targets.length > 0) {
+				copyImports();
+			}
+		});
 	}
 
-	function copyImports(path, callback) {		
+	function copyImports() {
+		//copy the imports from package to the root directory if haven't done it
+		if (!fs.existsSync(genDir)) {
+			if (zulPath) {
+				if (!fs.existsSync(zulPath)) {
+					throw 'incorrect path for zul';
+				} else {
+					copyImportsFiles(zulPath);	
+				}
+			}
+
+			if (zkmaxPath) {
+				if (!fs.existsSync(zkmaxPath)) {
+					throw 'incorrect path for zkmax';
+				} else {
+					copyImportsFiles(zkmaxPath);	
+				}
+			}
+		} else {
+			encodeImports();
+		}
+	}
+
+	function copyImportsFiles(path) {		
 		if (fs.lstatSync(path).isDirectory()) {
 			var dirWalker = walk.walk(path, {followLinks: false});
 			dirWalker.on('file', function(root, stat, next) {
@@ -76,29 +113,8 @@ const genDir = 'codegen/archive/';
 
 	function importCheck() {
 		if ( --imcFlag == 0) {
-			walkOn();
-		}
-	}
-	
-	function walkOn() {
-		var walker = walk.walk(srcDir, {followLinks: false});
-		//walk through the root directory and find every .less files and grounds them into imports and targets
-		walker.on('file', function(root, stat, next) {
-			var fn = stat.name
-			if (Str(fn).endsWith('.less')) {
-				if (Str(fn).startsWith('_')) {
-					imports.push(root + '/' + fn);
-				} else {
-					targets.push(root + '/' + fn);
-				}
-			}
-			setImmediate(next);
-		});
-
-		//encode the founded imports and save them in codegen folder
-		walker.on('end', function() {
 			encodeImports();
-		});
+		}
 	}
 
 	function encodeImports() {
