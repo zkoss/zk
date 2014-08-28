@@ -473,7 +473,7 @@ function invoke_ant
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Dtomcat.home="$tomcat_home" \
 		-Dmaindir="$maindir" \
-		-Dzkcmldir="$maindir"/$ZKCML \
+		-Dzkcmldir="$maindir/$ZKCML" \
 		-Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
 		-Dless=$lesslist\
