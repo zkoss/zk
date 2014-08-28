@@ -161,11 +161,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (!this._scrollbar && canInitScrollbar)
 			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scrollbar here
 		setTimeout(function () {
-			if (canInitScrollbar) {
-				self.refreshBar_();
+			if(self.desktop) {
+				if (canInitScrollbar) {
+					self.refreshBar_();
+				}
+				// we have to do this for B50-ZK-56.zul, no matter native scroll or not
+				self._syncSelInView();
 			}
-			// we have to do this for B50-ZK-56.zul, no matter native scroll or not
-			self._syncSelInView();
 		}, 300);
 	},
 	destroyBar_: function () {
