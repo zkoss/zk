@@ -276,7 +276,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			Paging = this.$class,
 			pcount = this._pageCount,
 			acp = this._activePage,
-			postfix = ['first', 'prev', 'last', 'next'];
+			postfix = ['first', 'prev', 'last', 'next'],
+			focusInfo = zul.mesh.Paging._autoFocusInfo;
 
 		if (!this.$weave)
 			for (var i = input.length; i--;)
@@ -297,6 +298,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 					jq(btn[j]).attr('disabled', true);
 				}
 			}
+		}
+		
+		if(focusInfo && focusInfo.uuid === this.uuid) {			
+			var pos = focusInfo.lastPos;
+			zk(input[focusInfo.inpIdx]).setSelectionRange(pos[0], pos[1]);
+			zul.mesh.Paging._autoFocusInfo = null;
 		}
 	},
 	unbind_: function () {
@@ -325,14 +332,28 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	 * @param DOMElement anc the anchor of the page number
 	 * @param int pagenumber the page number
 	 */
-	go: function (anc, pgno) {
+	go: function (anc, pgno, inp) {
 		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
-		if (wgt && wgt.getActivePage() != pgno)
+		if (wgt && wgt.getActivePage() != pgno) {
+			if(inp) {
+				var uuid = wgt.uuid,
+					focusInfo = zul.mesh.Paging._autoFocusInfo = {uuid: uuid};
+				focusInfo.lastPos = zk(inp).getSelectionRange();
+				// concern about _pagingPosition equals "both"
+				jq(jq.$$(uuid, 'real')).each(function(idx){
+					if(this == inp) {
+						focusInfo.inpIdx = idx;
+						return false;
+					}
+				});
+			}
 			wgt.fire('onPaging', pgno);
+		}
 	},
 	_domKeyDown: function (evt) {
 		var inp = evt.target,
-			wgt = zk.Widget.$(inp);
+			wgt = zk.Widget.$(inp),
+			lastPos = zk(inp).getSelectionRange();
 		if (inp.disabled || inp.readOnly)
 			return;
 
@@ -351,29 +372,39 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			break;
 		case 37://left
 			break;
-		case 38: case 33: //up, PageUp
+		case 38: //up
 			wgt.$class._increase(inp, wgt, 1);
 			evt.stop();
 			break;
 		case 39://right
 			break;
-		case 40: case 34: //down, PageDown
+		case 40: //down
 			wgt.$class._increase(inp, wgt, -1);
 			evt.stop();
 			break;
+		case 33: // PageUp
+			wgt.$class._increase(inp, wgt, -1);
+			wgt.$class.go(wgt, inp.value-1, inp);
+			evt.stop();
+			break;
+		case 34: // PageDown
+			wgt.$class._increase(inp, wgt, +1);
+			wgt.$class.go(wgt, inp.value-1, inp);
+			evt.stop();
+			break;
 		case 36://home
-			wgt.$class.go(wgt,0);
+			wgt.$class.go(wgt,0, inp);
 			evt.stop();
 			break;
 		case 35://end
-			wgt.$class.go(wgt, wgt._pageCount - 1);
+			wgt.$class.go(wgt, wgt._pageCount - 1, inp);
 			evt.stop();
 			break;
 		case 9: case 8: case 46: //tab, backspace, delete 
 			break;
 		case 13: //enter
 			wgt.$class._increase(inp, wgt, 0);
-			wgt.$class.go(wgt, inp.value-1);
+			wgt.$class.go(wgt, inp.value-1, inp);
 			evt.stop();
 			break;
 		default:
