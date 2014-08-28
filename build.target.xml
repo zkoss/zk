@@ -114,7 +114,7 @@ if="deploy.tomcat.required">
 			<pathelement path="${src.archive.dir}"/>
 			<pathelement path="${maindir}/zul/${src.archive.dir}"/>
 			<pathelement path="${maindir}/zkmax/${src.archive.dir}"/>
-			<pathelement location="${dist.lib.ext.dir}/zkless-engine-maven-plugin-0.9.0-SNAPSHOT.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/zkless.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/lesscss-engine.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/js.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
@@ -124,17 +124,12 @@ if="deploy.tomcat.required">
 	</java>
 </target> -->
 <target name="lessc">
-	<exec executable="rm">
-			<arg value="-rf" />
-			<arg value="${basedir}/codegen" />
-	</exec>
 	<exec executable="node">
 		<arg value="${maindir}/bin/node_modules/zkless-engine/lib/CpLess.js" />
 		<arg value="${src.archive.dir}"/>
 		<arg value="${codegen.archive.dir}"/>
 		<arg path="${maindir}/zul/${src.archive.dir}"/>
 		<arg path="${zkcmldir}/zkmax/${src.archive.dir}"/>
-		<!-- <arg value="" /> -->
 	</exec>
 	<java classname="CompressCss" fork="true">
 		<arg value="${src.archive.dir}"/>
