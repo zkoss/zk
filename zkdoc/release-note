@@ -62,6 +62,7 @@ ZK 7.0.3
   ZK-2402: In IE8, clicking the "up/down" arrow of timebox does not always trigger an onChange event
   ZK-2409: Combobox drop-down not open on top of input if using sub model
   ZK-2414: Incorrect width calculation with hflex in IE9 / IE10
+  ZK-2413: Press page up key in the paging box of a Listbox increases page number
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
