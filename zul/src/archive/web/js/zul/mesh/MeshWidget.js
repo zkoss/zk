@@ -63,7 +63,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdcavews = [];
 			
 		if (wgt.eheadtbl && headn) {//clear and backup headers widths
-			wgt.ehead.style.width = '';
+			// ZK-2416: remove this line to prevent from defined size to be reset.
+			// wgt.ehead.style.width = '';
 			eheadtblw = wgt.eheadtbl.width;
 			wgt.eheadtbl.width = '';
 			wgt.eheadtbl.style.width = '';
@@ -84,7 +85,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (headn)
 			headn.style.width = '';
 		if (wgt.efoottbl) {//clear and backup footers widths
-			wgt.efoot.style.width = '';
+			// ZK-2416: remove this line to prevent from defined size to be reset.
+			// wgt.efoot.style.width = '';
 			efoottblw = wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
 			wgt.efoottbl.style.width = '';
