@@ -23,17 +23,17 @@ function (out) {
 	
 	out.push('<div name="', uuid, '"', this.domAttrs_(), '><ul>',
 			'<li><a name="', uuid, '-first" class="', btn, ' ', this.$s('first'),
-				'"><i class="z-paging-icon z-icon-angle-double-left"></i></a></li>',
+				'" href="javascript:;"><i class="z-paging-icon z-icon-angle-double-left"></i></a></li>',
 			'<li><a name="', uuid, '-prev" class="', btn, ' ', this.$s('previous'),
-				'"><i class="z-paging-icon z-icon-angle-left"></i></a></li>',
+				'" href="javascript:;"><i class="z-paging-icon z-icon-angle-left"></i></a></li>',
 			'<li><input name="',
 				uuid, '-real" class="', this.$s('input'), '" type="text" value="',
 				this.getActivePage() + 1, '" size="3"></input><span class="',
 				this.$s('text'), '"> / ', this.getPageCount(), '</span></li>',
 			'<li><a name="', uuid, '-next" class="', btn, ' ', this.$s('next'),
-				'"><i class="z-paging-icon z-icon-angle-right"></i></a></li>',
+				'" href="javascript:;"><i class="z-paging-icon z-icon-angle-right"></i></a></li>',
 			'<li><a name="', uuid, '-last" class="', btn, ' ', this.$s('last'),
-				'"><i class="z-paging-icon z-icon-angle-double-right"></i></a></li></ul>');
+				'" href="javascript:;"><i class="z-paging-icon z-icon-angle-double-right"></i></a></li></ul>');
 	
 	if (this.isDetailed())
 		this._infoTags(out);
