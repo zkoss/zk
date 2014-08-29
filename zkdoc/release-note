@@ -5,7 +5,6 @@ ZK 7.0.3
   ZK-2338: cat function add support for Object signature
   ZK-2289: Futher optimize zkbind memory consumption.
   ZK-2372: A way to support a different namespace parser for attributes
-  ZK-2357: Upload button hover style missing
 
 * Bugs
   ZK-2292: field access using dot notation (a.b.c) is not fully consistent for maps
@@ -63,6 +62,7 @@ ZK 7.0.3
   ZK-2409: Combobox drop-down not open on top of input if using sub model
   ZK-2414: Incorrect width calculation with hflex in IE9 / IE10
   ZK-2413: Press page up key in the paging box of a Listbox increases page number
+  ZK-2357: Upload button hover style missing
 
 * Upgrade Notes
   + Add a new client attribute "Data-AnimationSpeed", which let user change the animation speed of widget.
