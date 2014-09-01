@@ -34,7 +34,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
         </listhead>
     </listbox>
     
-    <grid emptyMessage="no items to display" vflex="true">
+    <grid emptyMessage="No items to display." vflex="true">
     	<columns>
     		<column label="C1"></column>
     		<column label="C2"></column>
@@ -45,7 +45,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
     	</columns>
     </grid>
     
-    <grid emptyMessage="no items to display" vflex="true">
+    <grid emptyMessage="No items to display." vflex="true">
     	<columns>
     		<column label="C1"></column>
     	</columns>
