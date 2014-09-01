@@ -1434,7 +1434,14 @@ jq(el).zk.center(); //same as 'center'
 			if (jq(p).css('position')=='absolute') break;
 
 		} while (p = p.offsetParent);
-
+		
+		// Bug for B70-ZK-2371.zul, chrome use document.body for scroll, but others use HTML element for scroll
+		var docEL = document.documentElement;
+		if (el.parentNode == docEL) {
+			if (el.scrollTop != docELt.scrollTop ||
+					el.scrollLeft != docEL.scrollLeft)
+				return [l, t];
+		}
 		while (el = el.parentNode) {
 			// Opera 12.15 fix this
 			// if (!zk.opera || jq.nodeName(el, 'body')) {
