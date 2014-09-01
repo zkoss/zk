@@ -87,11 +87,9 @@ zjq = function (jq) { //ZK extension
 			var ooft = zk(outer).revisedOffset(),
 				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
 				top = ioft[1] - ooft[1] +
-						(outer == (zk.webkit ? document.body : document.body.parentNode)
-								? 0 : outer.scrollTop),
+						(outer == DocRoot() ? 0 : outer.scrollTop),
 				left = ioft[0] - ooft[0] +
-						(outer == (zk.webkit ? document.body : document.body.parentNode)
-								? 0 : outer.scrollLeft),
+						(outer == DocRoot() ? 0 : outer.scrollLeft),
 				ih = info ? info.h : inner.offsetHeight,
 				iw = info ? info.w : inner.offsetWidth,
 				right = left + iw,
@@ -236,6 +234,18 @@ zjq = function (jq) { //ZK extension
 			}
 			return html5;
 		}
+	})();
+	
+	// refix ZK-2371
+	var DocRoot = (function() {
+		var docRoot,
+			// document.body may not be initiated.
+			initDocRoot = function () {
+				return docRoot = (zk.webkit || zk.opera) ? document.body : document.documentElement;
+			};
+		return function () {
+			return docRoot || initDocRoot();
+		};
 	})();
 
 zk.copy(zjq, {
@@ -652,7 +662,7 @@ zjq.prototype = {
 				}
 
 				if (isAbsolute) {
-					var parent = parent || document.body.parentNode;
+					var parent = parent || document.documentElement;
 					for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
 						c = _scrlIntoView(p, n, c, true);
 				} else {
@@ -676,11 +686,11 @@ zjq.prototype = {
 				te, le, oels = [];
 			do {
 				if (!te) {
-					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowY == 'auto' || jq(el).css('overflow-y') == 'auto')
+					if (el == DocRoot() || el.style.overflow == 'auto' || el.style.overflowY == 'auto' || jq(el).css('overflow-y') == 'auto')
 						te = el;
 				}
 				if (!le) {
-					if (el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
+					if (el == DocRoot() || el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
 						le = el;
 				}
 				if (te && le) {
@@ -1435,13 +1445,6 @@ jq(el).zk.center(); //same as 'center'
 
 		} while (p = p.offsetParent);
 		
-		// Bug for B70-ZK-2371.zul, chrome use document.body for scroll, but others use HTML element for scroll
-		var docEL = document.documentElement;
-		if (el.parentNode == docEL) {
-			if (el.scrollTop != docELt.scrollTop ||
-					el.scrollLeft != docEL.scrollLeft)
-				return [l, t];
-		}
 		while (el = el.parentNode) {
 			// Opera 12.15 fix this
 			// if (!zk.opera || jq.nodeName(el, 'body')) {
@@ -1542,9 +1545,14 @@ jq(el).zk.center(); //same as 'center'
 				style.type = 'text/css';
 				
 				style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:"" !important';
+				var scrollTop = document.documentElement.scrollTop,
+					scrollLeft = document.documentElement.scrollLeft;
 				head.appendChild(style);
 				setTimeout(function(){
 				    head.removeChild(style);
+				    // bug in B70-ZK-2371.zul
+				    document.documentElement.scrollTop = scrollTop;
+				    document.documentElement.scrollLeft = scrollLeft;
 				}, 0);
 				return this;
 			} else {
@@ -1952,16 +1960,14 @@ zk.copy(jq, {
 	 */
 	innerX: function () {
 		return window.pageXOffset
-			|| document.documentElement.scrollLeft
-			|| document.body.scrollLeft || 0;
+			|| DocRoot().scrollLeft || 0;
 	},
 	/** Returns the Y coordination of the visible part of the browser window. 
 	 * @return int
 	 */
 	innerY: function () {
 		return window.pageYOffset
-			|| document.documentElement.scrollTop
-			|| document.body.scrollTop || 0;
+			|| DocRoot().scrollTop || 0;
 	},
 	/** Returns the height of the viewport (visible part) of the browser window. 
 	 * It is the same as jq(window).width().
