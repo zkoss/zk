@@ -757,14 +757,17 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 			cal = new zk.fmt.Calendar(),
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment
-			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value //onChanging's data is string
+			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string
 			pattern = _innerDateFormat + db.getTimeFormat(),
 			date = db.coerceFromString_(dateTime, pattern);
 
-		db.getInputNode().value = evt.data.value
-			= db.coerceToString_(date);
-
-		db.fire(evt.name, evt.data); //onChanging
+		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "
+		if(date instanceof Date) {
+			db.getInputNode().value = evt.data.value
+				= db.coerceToString_(date);	
+			db.fire(evt.name, evt.data); //onChanging
+		}
+		
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			db._inplaceout = true;
