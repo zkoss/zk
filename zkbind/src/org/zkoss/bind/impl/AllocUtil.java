@@ -112,7 +112,6 @@ public class AllocUtil {
 	/**
 	 * Returns the processed script.
 	 * @param script
-	 * @return
 	 */
 	public Object processScript(Object script) {
 		return script;
