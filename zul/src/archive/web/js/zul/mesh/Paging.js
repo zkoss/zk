@@ -301,8 +301,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 		
 		if(focusInfo && focusInfo.uuid === this.uuid) {			
-			var pos = focusInfo.lastPos;
-			zk(input[focusInfo.inpIdx]).setSelectionRange(pos[0], pos[1]);
+			var pos = focusInfo.lastPos,
+				zinp = zk(input[focusInfo.inpIdx]);
+			zinp.focus();
+			zinp.setSelectionRange(pos[0], pos[1]);
 			zul.mesh.Paging._autoFocusInfo = null;
 		}
 	},
