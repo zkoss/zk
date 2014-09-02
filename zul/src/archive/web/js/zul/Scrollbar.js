@@ -327,7 +327,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			(domLeft <= viewLeft && domRight >= viewRight) ||
 			(domTop >= viewTop && domTop >= viewBottom) ||
 			(domBottom >= viewTop && domBottom <= viewBottm) ||
-			(domTop <= viewTop && domBottom >= viewBottom)){
+			(domTop <= viewTop && domBottom >= viewBottom)) {
 			return; //already in the view port
 		}
 		
