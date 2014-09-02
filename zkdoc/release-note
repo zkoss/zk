@@ -331,6 +331,7 @@ ZK 6.5.8
   ZK-2402: In IE8, clicking the "up/down" arrow of timebox does not always trigger an onChange event
   ZK-2404: In IE7, timebox cannot keep updating minutes/seconds/am/pm values by repeatedly clicking the "up/down" arrows
   ZK-2409: Combobox drop-down not open on top of input if using sub model
+  ZK-2416: Listheader not aligned with Listcells
 
   --------
 ZK 6.5.7
