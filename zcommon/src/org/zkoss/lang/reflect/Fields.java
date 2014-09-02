@@ -129,6 +129,7 @@ public class Fields {
 	 * In other words, it must be the name of a public field
 	 * or method (prefixed with set).
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static final void set(Object obj, String name, Object val,
 	boolean autoCoerce) throws NoSuchMethodException {
 		try {

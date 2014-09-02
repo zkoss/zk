@@ -94,10 +94,10 @@ if="deploy.tomcat.required">
 </target>
 
 <target name="deploy.osgi" if="deploy.lib.required">
-    <move overwrite="true" todir="${dist.osgi.dir}" >
-        <fileset dir="${dist.osgi.dir}" includes="*.bar" />
-        <mapper type="glob" from="*.bar" to="*.osgi.jar" />
-    </move>
+	<move overwrite="true" todir="${dist.osgi.dir}" >
+		<fileset dir="${dist.osgi.dir}" includes="*.bar" />
+		<mapper type="glob" from="*.bar" to="*.osgi.jar" />
+	</move>
 </target>
 
 <target name="deploy" depends="deploy.lib, deploy.osgi, deploy.tomcat">
@@ -118,7 +118,7 @@ if="deploy.tomcat.required">
 			<pathelement location="${dist.lib.ext.dir}/lesscss-engine.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/js.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/commons-logging.jar"/>
 		</classpath>
 	</java>
@@ -141,7 +141,7 @@ if="deploy.tomcat.required">
 		<classpath>
 			<pathelement path="${src.archive.dir}"/>
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/CssCompressor.jar"/>
 		</classpath>
@@ -154,11 +154,11 @@ if="deploy.tomcat.required">
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 		<arg value="true"/>
-    	<jvmarg value="-Xss1024k"/>
+		<jvmarg value="-Xss1024k"/>
 		<classpath>
-		    <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
-		    <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 		</classpath>
 	</java>
 	
@@ -169,17 +169,23 @@ if="deploy.tomcat.required">
 	<java classname="ZipJS" fork="true">
 		<arg value="${src.archive.dir}/${zipcss}"/>
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
-    	<jvmarg value="-Xss1024k"/>
+		<jvmarg value="-Xss1024k"/>
 		<classpath>
-		    <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		    <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
-		    <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
 		</classpath>
 	</java>
 </target>
 <target name="build.jar" depends="lessc, zipjs, gentime, compile" if="build.jar.required">
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
+	<condition property="includeCodegenFolder">
+		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+	</condition>
+	 <condition property="ignoreCodegenFolder" value="zul" else="zkmax">
+		<isset property="includeCodegenFolder"/>
+	</condition>
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
@@ -187,18 +193,24 @@ if="deploy.tomcat.required">
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
 		<fileset dir="${codegen.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF"/>
+		 excludes="META-INF/MANIFEST.MF, **/**.less, **/${ignoreCodegenFolder}/**"/>
 	</jar>
 </target>
 <target name="build.jar2" depends="build.jar" if="build.jar2.required">
+	<condition property="includeCodegenFolder">
+		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+	</condition>
+	 <condition property="ignoreCodegenFolder" value="zul" else="zkmax">
+		<isset property="includeCodegenFolder"/>
+	</condition>
 	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
-		<fileset dir="${codegen.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, **/*.src.js"/>
+		<fileset dir="${codegen.archive.dir}" includes="**" 
+		 excludes="META-INF/MANIFEST.MF, **/*.src.js, **/**.less, **/${ignoreCodegenFolder}/**"/>
 	</jar>
 </target>
 <target name="gentime" depends="config" if="gentime.required">
