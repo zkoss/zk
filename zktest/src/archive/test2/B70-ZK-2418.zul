@@ -9,6 +9,14 @@
 	ZK-2189
 	ZK-2194
 	ZK-2193
+	
+	<label multiline="true">
+		1. move scroll bar to rightmost position
+		2. select 1st item
+		3. press down arrow key
+		The Horizontal scroll bar should not move
+	
+	</label>
 	<listbox id="box">
 		<listhead>
 			<listheader label="Name" />
