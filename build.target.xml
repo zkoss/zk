@@ -180,12 +180,17 @@ if="deploy.tomcat.required">
 <target name="build.jar" depends="lessc, zipjs, gentime, compile" if="build.jar.required">
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
-	<condition property="includeCodegenFolder">
+
+	 <condition property="ignoreZKMaxCodegenFolder" value="NAN" else="zkmax">
 		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
 	</condition>
-	 <condition property="ignoreCodegenFolder" value="zul" else="zkmax">
-		<isset property="includeCodegenFolder"/>
+	 <condition property="ignoreZulCodegenFolder" value="zul" else="NAN">
+	 	<or>
+			<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+			<equals arg1="${jar.name}" arg2="zkex.jar" trim="true"/>
+		</or>
 	</condition>
+
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
@@ -193,15 +198,18 @@ if="deploy.tomcat.required">
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
 		<fileset dir="${codegen.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, **/**.less, **/${ignoreCodegenFolder}/**"/>
+		 excludes="META-INF/MANIFEST.MF, **/**.less, **/${ignoreZKMaxCodegenFolder}/**, **/${ignoreZulCodegenFolder}/**"/>
 	</jar>
 </target>
 <target name="build.jar2" depends="build.jar" if="build.jar2.required">
-	<condition property="includeCodegenFolder">
+	<condition property="ignoreZKMaxCodegenFolder" value="NAN" else="zkmax">
 		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
 	</condition>
-	 <condition property="ignoreCodegenFolder" value="zul" else="zkmax">
-		<isset property="includeCodegenFolder"/>
+	 <condition property="ignoreZulCodegenFolder" value="zul" else="NAN">
+	 	<or>
+			<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+			<equals arg1="${jar.name}" arg2="zkex.jar" trim="true"/>
+		</or>
 	</condition>
 	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
@@ -210,7 +218,7 @@ if="deploy.tomcat.required">
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
 		<fileset dir="${codegen.archive.dir}" includes="**" 
-		 excludes="META-INF/MANIFEST.MF, **/*.src.js, **/**.less, **/${ignoreCodegenFolder}/**"/>
+		 excludes="META-INF/MANIFEST.MF, **/*.src.js, **/**.less, **/${ignoreZKMaxCodegenFolder}/**, **/${ignoreZulCodegenFolder}/**"/>
 	</jar>
 </target>
 <target name="gentime" depends="config" if="gentime.required">
