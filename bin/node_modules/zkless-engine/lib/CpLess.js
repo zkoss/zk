@@ -3,7 +3,7 @@ const destDir = process.argv[3];
 const zulPath = process.argv[4];
 const zkmaxPath = process.argv[5];
 const theme = process.argv[6] ? process.argv[6] : '';
-const genDir = 'codegen/archive/';
+const genDir = 'tempgen/archive/';
 
 (function() {
 	var fs = require('fs'),
@@ -11,22 +11,22 @@ const genDir = 'codegen/archive/';
 		dir = require('node-dir'),
 		admzip = require('adm-zip'),
 		less = require('less'),
-		ncp = require('ncp').ncp,
 		Str = require('string'),
+		rmrf = require('rimraf'),
 		mkpath = require('./mkpath'),
 		helper = require('./SyntaxHelper'),
 		files = [],
 		imports = [],
 		targets = [],
 		current = '',
-		imcFlag = zkmaxPath ? 2 : 1; //use for checking of copy of imports is done
+		imcFlag = zkmaxPath ? 2 : 1; //use to check if copy of imports is done or not
 
 	//starting point
 	walkOn();
 
 	function walkOn() {
 		var walker = walk.walk(srcDir, {followLinks: false});
-		//walk through the root directory and find every .less files and grounds them into imports and targets
+		//walk through the root directory and find every .less files and put them into imports and targets
 		walker.on('file', function(root, stat, next) {
 			var fn = stat.name
 			if (Str(fn).endsWith('.less')) {
@@ -39,7 +39,7 @@ const genDir = 'codegen/archive/';
 			setImmediate(next);
 		});
 
-		//encode the founded imports and save them in codegen folder
+		//encode the founded imports and save them in genDir folder
 		walker.on('end', function() {
 			if (imports.length > 0 || targets.length > 0) {
 				copyImports();
@@ -48,25 +48,20 @@ const genDir = 'codegen/archive/';
 	}
 
 	function copyImports() {
-		//copy the imports from package to the root directory if haven't done it
-		if (!fs.existsSync(genDir + 'web')) {
-			if (zulPath) {
-				if (!fs.existsSync(zulPath)) {
-					throw 'incorrect path for zul';
-				} else {
-					copyImportsFiles(zulPath);	
-				}
+		if (zulPath) {
+			if (!fs.existsSync(zulPath)) {
+				throw 'incorrect path for zul';
+			} else {
+				copyImportsFiles(zulPath);	
 			}
+		}
 
-			if (zkmaxPath) {
-				if (!fs.existsSync(zkmaxPath)) {
-					throw 'incorrect path for zkmax';
-				} else {
-					copyImportsFiles(zkmaxPath);	
-				}
+		if (zkmaxPath) {
+			if (!fs.existsSync(zkmaxPath)) {
+				throw 'incorrect path for zkmax';
+			} else {
+				copyImportsFiles(zkmaxPath);	
 			}
-		} else {
-			encodeImports();
 		}
 	}
 
@@ -138,7 +133,7 @@ const genDir = 'codegen/archive/';
 	}
 
 	function lessCompile() {
-		var last = targets[targets.length -1];
+		var count = targets.length;
 		for (var i = 0; i < targets.length; i++) {
 			var cp = targets[i];
 			console.log('compiling: ' + cp);
@@ -150,8 +145,20 @@ const genDir = 'codegen/archive/';
 				}
 				mkpath.sync(newPath.substring(0, newPath.lastIndexOf('/')), 0700);
 				fs.writeFileSync(newPath, css);
-			});	
+				if (--count == 0) {
+					removeGenDir();
+				}
+			});
 		}
+
+	}
+
+	function removeGenDir() {
+		rmrf(genDir.substring(0, genDir.indexOf('archive')), function (err) {
+			if (err) {
+				throw err;
+			}
+		});
 	}
 
 	function compile(path, callback) {

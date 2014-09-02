@@ -124,10 +124,6 @@ if="deploy.tomcat.required">
 	</java>
 </target> -->
 <target name="lessc">
-	<exec executable="rm">
-			<arg value="-rf" />
-			<arg value="${basedir}/codegen/archive/web" />
-	</exec>
 	<exec executable="node">
 		<arg value="${maindir}/bin/node_modules/zkless-engine/lib/CpLess.js" />
 		<arg value="${src.archive.dir}"/>
