@@ -321,9 +321,15 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			// if the offsetWidth are the same, we don't need to move to left.
 			scrollLeft = dom.offsetWidth == cave.offsetWidth;
 		
-		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop) ||
-			(this.needH && domRight <= viewRight && domLeft >= viewLeft))
+		// Bug ZK-2418 should consider the case when dom size is greater than view size
+		if ((domRight >= viewLeft && domRight <= viewRight) ||  
+			(domLeft >= viewLeft && domLeft <= viewRight) || 
+			(domLeft <= viewLeft && domRight >= viewRight) ||
+			(domTop >= viewTop && domTop >= viewBottom) ||
+			(domBottom >= viewTop && domBottom <= viewBottm) ||
+			(domTop <= viewTop && domBottom >= viewBottom)){
 			return; //already in the view port
+		}
 		
 		if (domTop < viewTop)
 			scrollUp = false;

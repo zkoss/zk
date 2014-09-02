@@ -4,6 +4,7 @@ ZK 7.0.4
 * Features
 
 * Bugs
+  ZK-2418: Listbox's horizontal scrollbar moves to leftmost position when using up / down key to change selection
 
 * Upgrade Notes
 
