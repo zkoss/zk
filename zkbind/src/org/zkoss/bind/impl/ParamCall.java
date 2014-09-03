@@ -108,6 +108,7 @@ public class ParamCall {
 				params[i] = resolveParameter(parmAnnos[i],paramTypes[i]);
 			}
 			
+			method.setAccessible(true); // Bug ZK-2428
 			method.invoke(base, params);
 		} catch(InvocationTargetException invokEx){ 
 			//Ian YT Tsai (2012.06.20), while InvocationTargetException,
