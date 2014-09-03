@@ -30,6 +30,7 @@ import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.ValueReference;
 import org.zkoss.zel.impl.lang.ELSupport;
 import org.zkoss.zel.impl.lang.EvaluationContext;
+import org.zkoss.zel.impl.util.ClassUtil;
 import org.zkoss.zel.impl.util.MessageFactory;
 import org.zkoss.zel.impl.util.ReflectionUtil;
 
@@ -232,7 +233,7 @@ public final class AstValue extends SimpleNode {
         			if (clazzes.length!=1) { //not standard setter
         				break;
         			}
-        			if (clazzes[0].isInstance(value)) {
+        			if (ClassUtil.isInstance(value, clazzes[0])) {
     					resolver.setValue(ctx, t.base, t.property, value);
     					flag = true;
     					break;
@@ -253,19 +254,13 @@ public final class AstValue extends SimpleNode {
                     "error.resolver.unhandled", t.base, t.property));            
         }
     }
-
+    
     private boolean isAssignable(Object value, Class<?> targetClass) {
         if (targetClass == null || value == null) {
             return false;
-        } else if (targetClass.isPrimitive()) {
-            return false;
-        } else if (value != null && !targetClass.isInstance(value)) {
-            return false;
-        }
-        return true;
+        } 
+        return ClassUtil.isInstance(value, targetClass);
     }
-
-
     
     // Interface el.parser.Node uses raw types (and is auto-generated)
     public MethodInfo getMethodInfo(EvaluationContext ctx, 

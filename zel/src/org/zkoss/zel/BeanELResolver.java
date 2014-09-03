@@ -138,26 +138,27 @@ public class BeanELResolver extends ELResolver {
         //XXX refactored into write() ?
         if (!checkType(m, value)) {
         	Class<?> baseClass = base.getClass();
+    		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
+    		//XXX the same in AstValue#setValue()
+    		String propertySetterName = property.toString();
+    		if(propertySetterName != null && propertySetterName.length()>0){
+    			propertySetterName = 
+    				"set"+ 
+    				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
+    				propertySetterName.substring(1);
+    		}
+    		////
+    		
         	for (Method method : baseClass.getMethods()) {
-        		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
-        		//XXX the same in AstValue#setValue()
-        		String propertySetterName = property.toString();
-        		if(propertySetterName != null && propertySetterName.length()>0){
-        			propertySetterName = 
-        				"set"+ 
-        				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
-        				propertySetterName.substring(1);
-        		}
-        		////
-        		
         		//method name must the same as t.property (getter)
         		if (method.getName().equals(propertySetterName)) {
         			Class<?>[] clazzes = method.getParameterTypes();
         			if (clazzes.length!=1) { //not standard setter
         				break;
         			}
-        			if (clazzes[0].isInstance(value)) {
+        			if (ClassUtil.isInstance(value, clazzes[0])) {
         				m = method;
+        				break;
         			}
         		}
         	}        	

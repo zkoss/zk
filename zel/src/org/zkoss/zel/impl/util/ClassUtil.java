@@ -9,6 +9,8 @@ package org.zkoss.zel.impl.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.zkoss.zel.ELException;
 
@@ -63,4 +65,24 @@ public class ClassUtil {
 			throw new ELException("Unable to load "+className+". Make sure zcommon.jar is available.", ex);
 		}
 	}
+    
+    //ZK-2419
+    public static boolean isInstance(Object value, Class<?> clz) {
+    	if (clz.isPrimitive()) {
+    		clz = _primToClass.get(clz);
+    	}
+    	return clz.isInstance(value);
+    }
+    
+    private static Map<Class<?>, Class<?>> _primToClass = new HashMap<Class<?>, Class<?>>(8 * 4 / 3); 
+    static {
+    	_primToClass.put(boolean.class, Boolean.class);
+    	_primToClass.put(byte.class, Byte.class);
+    	_primToClass.put(char.class, Character.class);
+    	_primToClass.put(short.class, Short.class);
+    	_primToClass.put(int.class, Integer.class);
+    	_primToClass.put(long.class, Long.class);
+    	_primToClass.put(float.class, Float.class);
+    	_primToClass.put(double.class, Double.class);
+    }
 }
