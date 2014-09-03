@@ -204,7 +204,11 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		return attr;
 	},
 	doClick_: function(evt){
-		if (this._disabled) 
+		// Bug ZK-2422
+		if (zk.ie < 11 && !this.getHref()) {
+			evt.domEvent.preventDefault();
+		}
+		if (this._disabled)
 			evt.stop(); // Prevent browser default
 		else {
 			zul.wgt.ADBS.autodisable(this);
@@ -213,7 +217,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			if (!evt.stopped)
 				this.$super('doClick_', evt, true);
 		}
-			// Unlike DOM, we don't propagate to parent (so do not call $supers)
+			 // Unlike DOM, we don't propagate to parent (so do not call $supers)
 	}
 });
 
