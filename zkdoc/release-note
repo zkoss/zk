@@ -10,6 +10,7 @@ ZK 6.5.8
   ZK-2409: Combobox drop-down not open on top of input if using sub model
   ZK-2416: Listheader not aligned with Listcells
   ZK-2428: Inner anonymous inner class' initial method is not invoked
+  ZK-2420: Listbox forget scroll position when detaching parent component if rod enabled
 
   --------
 ZK 6.5.7
