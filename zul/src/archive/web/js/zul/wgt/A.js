@@ -197,14 +197,19 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			attr += ' tabIndex="' + v + '"';
 		if (v = this.getHref()) 
 			attr += ' href="' + v + '"';
-		else 
+		else
 			attr += ' href="javascript:;"';
 		if(this._disabled)
 			attr += ' disabled="disabled"';
 		return attr;
 	},
 	doClick_: function(evt){
-		if (this._disabled) 
+		// Bug ZK-2422 
+		if (zk.ie < 11 && !this.getHref()) {
+			var beforeunload = window.onbeforeunload;
+			window.onbeforeunload = null;
+		}
+		if (this._disabled)
 			evt.stop(); // Prevent browser default
 		else {
 			zul.wgt.ADBS.autodisable(this);
@@ -213,7 +218,13 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			if (!evt.stopped)
 				this.$super('doClick_', evt, true);
 		}
-			// Unlike DOM, we don't propagate to parent (so do not call $supers)
+		// Bug ZK-2422
+		if (zk.ie < 11 && beforeunload) {
+			setTimeout(function() {
+				window.onbeforeunload = beforeunload;
+			}, 10);
+		}
+			 // Unlike DOM, we don't propagate to parent (so do not call $supers)
 	}
 });
 
