@@ -5,6 +5,7 @@ ZK 7.0.4
 
 * Bugs
   ZK-2418: Listbox's horizontal scrollbar moves to leftmost position when using up / down key to change selection
+  ZK-2422: <a> component causes onbeforeUnload in IE<=10
 
 * Upgrade Notes
 

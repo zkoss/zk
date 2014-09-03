@@ -1,0 +1,20 @@
+<zk>
+	<window id="mainWin" width="100%" height="100%" >
+		<script type="text/javascript"><![CDATA[
+			zk.afterMount(function () {
+				zk.beforeUnload(function() {
+					console.log("invoke beforeUnload")
+		 		})
+			});
+		]]></script>
+
+		<vlayout>
+			Click the links/button and check the JS console, the first link causes an onBeforeUnload event in the browser window when using IE10 or below
+                        (caused/not prevented by href="javascript:;" on the &lt;a&gt; component)
+			<a label="reproduce problem" onClick='Clients.showNotification("response from server 1")'></a>
+			<a label="workaround using href = #" onClick='Clients.showNotification("response from server 2")' href="#"></a>
+			<label value="workaround using label" onClick='Clients.showNotification("response from server 3")' style="cursor: pointer; text-decoration: underline; color: blue;"/>
+			<button label="workaround using button" onClick='Clients.showNotification("response from server 4")'/>
+		</vlayout>
+	</window>
+</zk>
