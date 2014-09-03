@@ -1,0 +1,37 @@
+<zk>
+	<label multiline="true">
+	1. Scorll to bottom and select last listitem
+	2. Click "Unload tabbox" button
+	3. Click "Back" button.
+	Excepted: scroll to selected listitem
+	Actual: not scroll to selected listitem (happened to Firefox and IE, chrome works fine)
+	</label>
+	<window id="win" border="normal" title="hello" apply="org.zkoss.zktest.test2.B65_ZK_2420_Composer">
+		<button label="Unload tabbox" id="btn1" />
+		<button label="Back" id="btn2" />
+		<tabbox id="tabbox1">
+			<tabs>
+				<tab label="tab1" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<listbox id="fileList" height="200px" mold="paging" pageSize="10">
+						<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+						<listhead sizable="true">
+							<listheader label="Col 1" width="150px" />
+						</listhead>
+					</listbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		
+<!-- 		<listbox id="fileList" height="200px" onCreate="fileList.setSelectedIndex(8);"> -->
+<!-- 			<custom-attributes org.zkoss.zul.listbox.rod="true"/> -->
+<!-- 			<listhead sizable="true"> -->
+<!-- 				<listheader label="Col 1" width="150px" /> -->
+<!-- 			</listhead> -->
+<!-- 		</listbox> -->
+		
+		
+	</window>
+</zk>
