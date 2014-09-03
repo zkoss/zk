@@ -5,6 +5,7 @@ ZK 7.0.4
 
 * Bugs
   ZK-2418: Listbox's horizontal scrollbar moves to leftmost position when using up / down key to change selection
+  ZK-2419: slider only writes integer even when binding curpos with a double attribute
 
 * Upgrade Notes
 

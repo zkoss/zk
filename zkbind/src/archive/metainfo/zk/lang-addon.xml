@@ -1057,6 +1057,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
+				<attribute-name>SAVE_REPLACEMENT</attribute-name>
+				<attribute-value>curposInDouble</attribute-value>
+			</attribute>
+			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onScroll</attribute-value>
 			</attribute>
