@@ -206,7 +206,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	doClick_: function(evt){
 		// Bug ZK-2422
 		if (zk.ie < 11 && !this.getHref()) {
-			evt.domEvent.preventDefault();
+			evt.stop({dom:true});
 		}
 		if (this._disabled)
 			evt.stop(); // Prevent browser default
