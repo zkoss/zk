@@ -217,7 +217,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			if (!evt.stopped)
 				this.$super('doClick_', evt, true);
 		}
-			 // Unlike DOM, we don't propagate to parent (so do not call $supers)
+			// Unlike DOM, we don't propagate to parent (so do not call $supers)
 	}
 });
 
