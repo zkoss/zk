@@ -165,6 +165,8 @@ zul.Upload = zk.$extends(zk.Object, {
 
 		var outer = this._outer = parent ? parent.lastChild : ref.nextSibling,
 			inp = outer.firstChild.firstChild;
+		
+		this._inp = inp;
 
 		if (zk.opera) { //in opera, relative not correct (test2/B50-ZK-363.zul)
 			outer.style.position = 'absolute';
@@ -176,6 +178,12 @@ zul.Upload = zk.$extends(zk.Object, {
 		
 		jq(inp).change(_onchange);
 	},
+	/**
+	* trigger file input's click to open file dialog
+	*/
+	openFileDialog: function() {
+		jq(this._inp).click();
+	},
 	/** 
 	 * Destroys the fileupload. You cannot use this object any more. 
 	 */
@@ -184,6 +192,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			_rmSyncQue(this);
 
 		jq(this._outer).remove();
+		this._inp = null;
 		this._wgt = this._parent = null;
 		for (var v in this.uploaders) {
 			var uplder = this.uploaders[v];

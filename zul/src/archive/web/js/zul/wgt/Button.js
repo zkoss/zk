@@ -430,6 +430,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
+			else
+				this._uplder.openFileDialog();
 			var btn, fm;
 			if (this._type != "button"
 			&& (btn = this.$n('btn')) && (fm = btn.form)) {

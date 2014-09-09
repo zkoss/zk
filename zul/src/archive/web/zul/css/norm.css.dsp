@@ -460,7 +460,7 @@ span.z-upload input {
 	position: absolute;
 	cursor: pointer;
 	font-size: 45pt;
-	z-index: 1; margin: 0; padding: 0;
+	z-index: -1; margin: 0; padding: 0;
 	opacity: 0;
 	filter: alpha(opacity=0); <%-- IE --%>
 }
