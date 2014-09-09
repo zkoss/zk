@@ -1411,9 +1411,19 @@ less.Parser = function Parser(env) {
             combinator: function () {
                 var c = input.charAt(i);
 
+                if (c === '/') {
+                    save();
+                    var slashedCombinator = $re(/^\/[a-z]+\//i);
+                    if (slashedCombinator) {
+                        forget();
+                        return new(tree.Combinator)(slashedCombinator);
+                    }
+                    restore();
+                }
+
                 if (c === '>' || c === '+' || c === '~' || c === '|' || c === '^') {
                     i++;
-                    if (input.charAt(i) === '^') {
+                    if (c === '^' && input.charAt(i) === '^') {
                         c = '^^';
                         i++;
                     }
@@ -1568,6 +1578,7 @@ less.Parser = function Parser(env) {
                         value = this.detachedRuleset();
                     }
 
+                    this.comments();
                     if (!value) {
                         // prefer to try to parse first if its a variable or we are compressing
                         // but always fallback on the other one
@@ -1812,6 +1823,8 @@ less.Parser = function Parser(env) {
                         break;
                 }
 
+                this.comments();
+
                 if (hasIdentifier) {
                     value = this.entity();
                     if (!value) {
@@ -1828,6 +1841,8 @@ less.Parser = function Parser(env) {
                         value = new(tree.Anonymous)(value);
                     }
                 }
+
+                this.comments();
 
                 if (hasBlock) {
                     rules = this.blockRuleset();
@@ -2043,9 +2058,20 @@ less.Parser = function Parser(env) {
                         return name.push(a[1]);
                     }
                 }
+                function cutOutBlockComments() {
+                    //match block comments
+                    var a = /^\s*\/\*(?:[^*]|\*+[^\/*])*\*+\//.exec(c);
+                    if (a) {
+                        length += a[0].length;
+                        c = c.slice(a[0].length);
+                        return true;
+                    }
+                    return false;
+                }
 
                 match(/^(\*?)/);
                 while (match(/^((?:[\w-]+)|(?:@\{[\w-]+\}))/)); // !
+                while (cutOutBlockComments());
                 if ((name.length > 1) && match(/^\s*((?:\+_|\+)?)\s*:/)) {
                     // at last, we have the complete match now. move forward,
                     // convert name particles to tree objects and return:

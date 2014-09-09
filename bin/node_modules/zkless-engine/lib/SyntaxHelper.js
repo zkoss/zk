@@ -256,14 +256,6 @@ module.exports = {
 	    				'[': true, ';': true, '!': true, '&': true, '|': true, '^': true
 	    			};
 
-	    			// if (!ck == ' ') {    // check if ck is a white space
-	    			// 	regex = ck == '(' || ck == ',' || ck == '=' || ck == ':' || ck == '?' || ck == '{' || ck == '['
-	    			// 			|| ck == ';' || ck =='!' || ck == '&' || ck == '|' || ck == '^'
-	    			// 			|| (ck == 'n' && k > 4 && str.substring(k - 5, k + 1) == 'return')
-	    			// 			|| (ck == 'e' && k > 2 && str.substring(k - 3, k + 1) == 'case');
-	    			// 	break;
-	    			// }
-
 	    			if (!ck == ' ') {    // check if ck is a white space
 	    				regex = map[ck] || (ck == 'n' && k > 4 && str.substring(k - 5, k + 1) == 'return')
 	    						|| (ck == 'e' && k > 2 && str.substring(k - 3, k + 1) == 'case');
