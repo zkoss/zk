@@ -1,0 +1,8 @@
+<zk>
+	<window>
+		<label multiline="true">
+			Mouse hover to the fileupload button, should pop up the tooltiptext
+		</label>
+		<fileupload label="Upload" tooltiptext="Please select your file!!!" />	
+	</window>
+</zk>
