@@ -1,0 +1,16 @@
+<zk>
+	<window>
+		<label multiline="true">
+			Mouse hover to the fileupload button, should pop up the tooltiptext
+		</label>
+		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" />
+		<menubar width="200px" scrollable="true">
+			<menu label="Menu1">
+				<menupopup>
+				    <menuitem upload="true" label="Customized Attach" onUpload="" />
+				</menupopup>
+			</menu>
+		</menubar>
+		<toolbarbutton upload="true" label="Fileupload" onUpload="" />
+	</window>
+</zk>
