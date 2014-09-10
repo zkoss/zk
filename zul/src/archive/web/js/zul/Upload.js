@@ -39,9 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			upload = n._ctrl,
 			wgt = upload._wgt,
 			dt = wgt.desktop,
-//			action = zk.ajaxURI('/upload', {desktop:dt,au:true}) + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid
-//				+ (upload.maxsize !== '' ? '&maxsize=' + upload.maxsize : '')
-//				+ (upload.isNative ? '&native=true' : ''),
+
 			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid
 					+ (upload.maxsize !== '' ? '&maxsize=' + upload.maxsize : '')
 					+ (upload.isNative ? '&native=true' : ''), {desktop:dt,au:true}),
