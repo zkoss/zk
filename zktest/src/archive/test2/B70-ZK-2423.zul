@@ -1,11 +1,12 @@
 <zk>
 	<zscript>
-    <![CDATA[
-    	org.zkoss.lang.Library.setProperty("org.zkoss.web.servlet.http.URLEncoder", "org.zkoss.zktest.test2.B70_ZK_2423_URLEncoder");
-    ]]>
-    </zscript>
+		<![CDATA[
+			org.zkoss.lang.Library.setProperty("org.zkoss.web.servlet.http.URLEncoder", "org.zkoss.zktest.test2.B70_ZK_2423_URLEncoder");
+		]]>
+	</zscript>
 	<label multiline="true">
-		When adding customize parameter with fileUpload button, upload file should not cause any errors
+		When adding customize parameter with fileUpload
+		button, upload file should not cause any errors
 	</label>
 	<button onClick="">Test</button>
 	<button upload="true" onUpload="Clients.showNotification(event.getMedia().getName())">FileUploadTesting</button>
