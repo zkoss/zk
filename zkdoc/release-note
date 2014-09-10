@@ -8,8 +8,11 @@ ZK 7.0.4
   ZK-2419: slider only writes integer even when binding curpos with a double attribute
   ZK-2422: <a> component causes onbeforeUnload in IE<=10
   ZK-2423: custom UrlEncoder with fileupload
+  ZK-2440: Client-side doMouseEnter_ and doMouseLeave_ event handlers not working
 
 * Upgrade Notes
+  + Took off doMouseEnter_ and doMouseLeave_ from widget.js becasue its not in use. use domListen
+    with self defined function instead. e.g: domListen(n, 'onMouseEnter', 'selfDefinedFunction').
 
   --------
 ZK 7.0.3
