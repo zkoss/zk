@@ -471,12 +471,25 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				this.efield.value = val;
 		}
 	},
+	onShow: function () {
+		//B70-ZK-2438
+		//retrieve snap again for whom is inside detail component
+		if (!this._drag) {
+			this._makeDraggable();
+		}
+	},
 	bind_: function() {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
 		this._fixSize();
-		this._makeDraggable();
+		//fix B70-ZK-2438
+		if(this.isRealVisible())
+			this._makeDraggable();
 		
-		zWatch.listen({onSize: this});
+		zWatch.listen({
+			onSize: this,
+			//fix B70-ZK-2438
+			onShow: this
+		});
 		this.updateFormData(this._curpos);
 		this._fixPos();
 	},
@@ -486,7 +499,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
-		zWatch.unlisten({onSize: this});
+		
+		zWatch.unlisten({
+			onSize: this,
+			//fix B70-ZK-2438
+			onShow: this
+		});
 		this.$supers(zul.inp.Slider, 'unbind_', arguments);
 	}
 });

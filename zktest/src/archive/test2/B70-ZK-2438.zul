@@ -1,0 +1,21 @@
+<zk>
+<label multiline="true">
+1. expand the detail button
+2. drag the slider inside detail
+3. it should be draggable with curpos changing
+</label>
+<grid>
+	<rows>                                                                 
+		<row>
+			<detail><slider minpos="1" maxpos="4" step="1" onScroll="lblAlpha.setValue(String.valueOf(self.getCurpos()))" /></detail>
+			<cell width="70px">
+				<label value="curpos:" />
+				<label id="lblAlpha" />
+			</cell>
+			<cell>
+				<slider minpos="1" maxpos="4" step="1" id="slider" onScroll="lblAlpha.setValue(String.valueOf(self.getCurpos()))" />
+			</cell>
+		</row>
+	</rows>
+</grid>
+</zk>
