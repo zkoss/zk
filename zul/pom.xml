@@ -106,7 +106,7 @@
 			<plugin>
 				<groupId>org.zkoss.maven</groupId>
 				<artifactId>zkless-engine-maven-plugin</artifactId>
-				<version>0.9.2</version>
+				<version>0.9.3</version>
 				<executions>
 					<execution>
 						<id>compile-less</id>
