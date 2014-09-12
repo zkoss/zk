@@ -57,6 +57,12 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 			text2: [] 
 	</div>
 	<div>
+		<button id="b6" label="test6" />
+		expceted:
+			text1: [test1]
+			text2: [test6] 
+	</div>
+	<div>
 		<button id="clean" label="clean" />
 	</div>
 </window>

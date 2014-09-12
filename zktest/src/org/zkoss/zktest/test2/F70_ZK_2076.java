@@ -1,5 +1,6 @@
 package org.zkoss.zktest.test2;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -45,6 +46,11 @@ public class F70_ZK_2076 extends SelectorComposer<Window> {
     	EventQueues.lookup("test", EventQueues.DESKTOP, true).publish(new Event("b5", null, new Object[]{5, "test"}));
     }
     
+    @Listen("onClick=#b6")
+    public void b6() {
+    	EventQueues.lookup("test", EventQueues.DESKTOP, true).publish(new CustomEvent("b6", null, "test6"));
+    }
+    
     @Listen("onClick=#clean")
     public void clean() {
         t1.setValue("");
@@ -78,5 +84,14 @@ public class F70_ZK_2076 extends SelectorComposer<Window> {
     	t2.setValue("test5");
     }
     
+    @Subscribe(value = "test", eventName="b6")
+    public void b6Test(CustomEvent event) {
+    	t2.setValue(event.getData().toString());
+    }
     
+    public class CustomEvent extends Event {
+		public CustomEvent(String name, Component target, Object data) {
+			super(name, target, data);
+		}
+	}
 }
