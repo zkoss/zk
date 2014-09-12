@@ -10,6 +10,7 @@ ZK 7.0.4
   ZK-2423: custom UrlEncoder with fileupload
   ZK-2440: Client-side doMouseEnter_ and doMouseLeave_ event handlers not working
   ZK-2445: Feature ZK-2076 doesn't consider about extended event class
+  ZK-2438: Can not drag a slider, which is inside a detail with "step" attribute
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
