@@ -1,0 +1,29 @@
+<zk>
+	<label multiline="true" >
+	1. edit the textbox
+	2. click popup button
+	3. it should show the popup with normal displayed grid
+	</label> 
+    <vlayout hflex="1" vflex="1" >
+      <button label="Popup" popup="menupopup"/>
+	      <menupopup id="menupopup">
+	          <menuitem label="save" onClick=""/>
+	      </menupopup>
+      <grid width="400px" vflex="1" >
+            <columns>
+                <column width="130px" label="Name"/>
+                <column hflex="1" label="Value"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell>
+                        <label value="Company name:"/>
+                    </cell>
+                    <cell>
+                        <textbox value="" onChange="Clients.log(self.value)" hflex="1" constraint="no empty"/>
+                    </cell>
+                </row>
+            </rows>
+        </grid>
+    </vlayout>
+</zk>
