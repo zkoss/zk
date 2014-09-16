@@ -1540,6 +1540,16 @@ jq(el).zk.center(); //same as 'center'
 		}
 		return this;
 	},
+	/**
+	 * Check if element has virtual parent
+	 * @return boolean
+	 * @since 7.0.3
+	 */
+	hasVParent: function() {
+		//Fix Bug ZK-2434, consider virtual element
+		var el = this.jq[0];
+		return el && (el.z_vp || el.z_vpagt);
+	},
 
 	/** Fixes DOM elements when a widget's unbind_ is called
 	 * and it will hide the DOM element (display="none" or visibility="hidden").

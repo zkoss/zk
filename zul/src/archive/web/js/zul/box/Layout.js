@@ -276,10 +276,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			xc = this.firstChild;
 		
 		for (; xc; xc = xc.nextSibling) {
-			if (xc.isVisible()) {
+			//Bug ZK-2434: not considering the element with vparent (like popup)
+			var zkc;
+			if (xc.isVisible() && !(zkc = zk(xc)).hasVParent()) {
 				var cwgt = xc,
 					c = cwgt.$n(),
-					zkc = zk(c),
 					cp = c.parentNode,
 					zkxc = zk(cp);
 				//vertical size
