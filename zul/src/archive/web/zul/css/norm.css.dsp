@@ -455,6 +455,7 @@ span.z-upload {
 	position: relative;
 	padding: 0; margin: 0;
 	font-size: 0; width: 0; height: 0;
+	display:-moz-inline-box; display:inline-block;
 }
 span.z-upload input {
 	position: absolute;
