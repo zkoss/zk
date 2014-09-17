@@ -770,6 +770,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.eheadtbl.style.width = '';
 			this.ebodytbl.style.width = '';
 			
+			//B70-ZK-2394: store total bdcol width
+			var tblWidth = 0;
+			
 			// ZK-2098: should skip if bdcol doesn't exist
 			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
 				// ZK-2130: should save the header width
@@ -779,16 +782,37 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					w._origWd = jq.px0(wwd);
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
-					bdcol.style.width = zk(bdcol).revisedWidth(Math.round(wd)) + 'px';
+					var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd));
+					bdcol.style.width = revisedWidth + 'px';
 					hdcol.style.width = bdcol.style.width;
 					if (ftcol)
 						ftcol.style.width = bdcol.style.width;
+						
+					//B70-ZK-2394: store total bdcol width
+					tblWidth += revisedWidth;
 				}
 				bdcol = bdcol.nextSibling;
 				hdcol = hdcol.nextSibling;
 				if (ftcol)
 					ftcol = ftcol.nextSibling;
 			}
+			
+			//B70-ZK-2394: sync width from colgroup to hdtbl, bdtbl, fttbl 
+			var allWidths = this._isAllWidths();
+			if (allWidths) {
+				var hdtbl = this.eheadtbl,
+					bdtbl = this.ebodytbl,
+					fttbl = this.efoottbl;
+				
+				if (hdtbl) {
+					hdtbl.style.width = tblWidth + 'px';
+					if (bdtbl)
+						bdtbl.style.width = tblWidth + 'px';
+					if (fttbl)
+						fttbl.style.width = tblWidth + 'px';
+				}
+			}
+			
 			_adjMinWd(this);
 		}
 	},

@@ -1,0 +1,15 @@
+<zk>
+  <grid>
+    <columns>
+      <column hflex="min" label="Column1"/>
+      <column hflex="min" label="Column2"/>
+    </columns>
+    <rows>
+      <row>
+        <cell><label value="Label"/></cell>
+        <cell><label value="Label2"/></cell>
+      </row>
+      
+    </rows>
+  </grid>
+</zk>
