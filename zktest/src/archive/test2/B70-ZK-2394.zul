@@ -1,4 +1,8 @@
 <zk>
+  <label multiline="true">
+  1. specify hflex = "min" in grid column
+  2. no matter reload or resize should display normal
+  </label>
   <grid>
     <columns>
       <column hflex="min" label="Column1"/>
