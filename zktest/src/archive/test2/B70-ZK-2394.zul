@@ -1,4 +1,28 @@
 <zk>
+  <label multiline="true">
+  1. click the button
+  2. you should see zk.log shows two "Yes" to indicate the table width is the same with colgroup width
+  </label>
+  <script type="text/javascript">
+  	function getWidth() {
+  		var hdcolwidth = 0;
+  		var hdtblwidth = $('.z-grid-header>table').width();
+  		$('.z-grid-header>table>colgroup').children().each(function() {
+      		hdcolwidth = hdcolwidth + $(this).width();
+		});
+		zk.log(hdtblwidth + ' ' + hdcolwidth);
+		zk.log(hdtblwidth==hdcolwidth? 'Yes' : 'No');
+		
+		var bdcolwidth = 0;
+		var bdtblwidth = $('.z-grid-body>table').width();
+  		$('.z-grid-body>table>colgroup').children().each(function() {
+      		bdcolwidth = bdcolwidth + $(this).width();
+		});
+		zk.log(bdtblwidth + ' ' + bdcolwidth);
+		zk.log(bdtblwidth==bdcolwidth? 'Yes' : 'No');
+  	}
+  </script>
+  <button label="button" onClick='Clients.evalJavaScript("getWidth()")' />
   <grid>
     <columns>
       <column hflex="min" label="Column1"/>
@@ -9,7 +33,14 @@
         <cell><label value="Label"/></cell>
         <cell><label value="Label2"/></cell>
       </row>
-      
+      <row>
+        <cell><label value="Label"/></cell>
+        <cell><label value="Label2"/></cell>
+      </row>
+      <row>
+        <cell><label value="Label"/></cell>
+        <cell><label value="Label2"/></cell>
+      </row>
     </rows>
   </grid>
 </zk>
