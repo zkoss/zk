@@ -12,6 +12,7 @@ ZK 7.0.4
   ZK-2445: Feature ZK-2076 doesn't consider about extended event class
   ZK-2438: Can not drag a slider, which is inside a detail with "step" attribute
   ZK-2394: Flex fails on grid's column
+  ZK-2449: upload button affects button layout flow
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
