@@ -1,0 +1,10 @@
+<zk>
+	<label multiline="true">
+		Using a toolbar with hflex set to "1" inside an east component of a borderlayout will cause script error in iE 8
+	</label>
+    <borderlayout>
+        <east size="0%">
+          <toolbar hflex="1"/>
+        </east>
+    </borderlayout>
+</zk>

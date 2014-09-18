@@ -13,6 +13,7 @@ ZK 6.5.8
   ZK-2420: Listbox forget scroll position when detaching parent component if rod enabled
   ZK-2424: Firefox does not show our tooltip text on Fileupload
   ZK-2434: Binding bug with odd side effect
+  ZK-2380: IE8 causing script error with borderlayout and toolbar
 
   --------
 ZK 6.5.7

@@ -54,18 +54,18 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		if (this._orient == 'vertical') {
 			var cave = this.$n('cave');
 			if (cave)
-				n.style.height = cave.style.height = jq.px(height - zkn.padBorderHeight());
+				n.style.height = cave.style.height = jq.px0(height - zkn.padBorderHeight());
 			else
-				n.style.height = jq.px(height - zkn.padBorderHeight());
+				n.style.height = jq.px0(height - zkn.padBorderHeight());
 		}
 	},
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
 		if (this._orient == 'horizontal') {
 			var cave = this.$n('cave');
 			if (cave)
-				n.style.width = cave.style.width = jq.px(width - zkn.padBorderWidth());
+				n.style.width = cave.style.width = jq.px0(width - zkn.padBorderWidth());
 			else
-				n.style.width = jq.px(width - zkn.padBorderWidth());
+				n.style.width = jq.px0(width - zkn.padBorderWidth());
 		}
 	},
 
