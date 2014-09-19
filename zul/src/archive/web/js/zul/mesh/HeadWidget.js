@@ -159,11 +159,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				}
 				return;
 			}
-			// Fix IE, FF for the issue B30-1926480-1.zul and B30-1926480.zul
-			if (!zk.safari) {
-				mesh.rerender(1);
-				return;
-			}
 			
 			// ZK-2098: recovery the header faker if not exists
 			var head = this,
