@@ -39,11 +39,13 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		var n = this.$n(), 
 			img = this.$n('img');
 		if (img) {
-			if (zk(n).isRealVisible()) //Bug 3134159
+			//B70-ZK-2453 remember to add brackets
+			if (zk(n).isRealVisible()) { //Bug 3134159
 				var $img = jq(img);
 				$img.animate({
 					width: Math.round((jq(n).innerWidth() * this._value) / 100) + 'px'
 				}, $img.zk.getAnimationSpeed('slow'));
+			}
 		}
 	},
 	onSize: _zkf,

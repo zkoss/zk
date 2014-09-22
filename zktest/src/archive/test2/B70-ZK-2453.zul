@@ -1,0 +1,9 @@
+<zk>
+  <window border="normal" title="Progressmeter in 7.0.3 with 'visible=false' give JS error, page rendering is stopped" >
+    <label multiline="true">
+    	1. you should load this page without js error.
+    </label>
+    <progressmeter id="progressMeter" visible="false" />
+
+  </window>
+</zk>
