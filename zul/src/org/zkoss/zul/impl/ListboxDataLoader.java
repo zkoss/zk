@@ -350,8 +350,18 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 					} else if (((Listitem)item).isLoaded()) {
 						if (renderer == null)
 							renderer = (ListitemRenderer) getRealRenderer();
-						item.detach(); //always detach
-						_listbox.insertBefore(newUnloadedItem(renderer, min), next);
+
+						// ZK-2450: cache selected Index and item, added them back after detach item
+						if(_pgi != null && ((Listitem) item).isSelected()) {
+							int index = ((Listitem) item).getIndex();
+							item.detach(); // always detach
+							Listitem newItem = newUnloadedItem(renderer, min);
+							_listbox.insertBefore(newItem, next);
+							_listbox.addItemToSelection(newItem);
+						} else {
+							item.detach(); //always detach
+							_listbox.insertBefore(newUnloadedItem(renderer, min), next);
+						}
 						++addcnt;
 					}
 					++min;
