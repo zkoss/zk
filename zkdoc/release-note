@@ -14,6 +14,7 @@ ZK 7.0.4
   ZK-2394: Flex fails on grid's column
   ZK-2449: upload button affects button layout flow
   ZK-2448: JS Error when adding listheaders dynamically
+  ZK-2453: JS error on page load
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
