@@ -16,6 +16,7 @@ ZK 7.0.4
   ZK-2448: JS Error when adding listheaders dynamically
   ZK-2450: Listbox's selected index becomes -1 when navigating with page up / page down key in CE
   ZK-2453: JS error on page load
+  ZK-2458: Area component cursor style is not correct in IE
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
