@@ -225,9 +225,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			firstHdcell, fhcs;
 		if (p._nativebar && phead) {
 			firstHdcell = phead.$n().cells[0];
-			fhcs = firstHdcell.style;
-			if (!fhcs.height)
-				fhcs.height = firstHdcell.offsetHeight+'px';
+			//B70-ZK-2463: if firstHdcell is not undefined
+			if (firstHdcell) {
+				fhcs = firstHdcell.style;
+				if (!fhcs.height)
+					fhcs.height = firstHdcell.offsetHeight+'px';
+			}
 		}
 		
 		// Bug 3218078, to do the sizing after the 'setAttr' command
