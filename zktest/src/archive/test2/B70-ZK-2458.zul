@@ -1,0 +1,20 @@
+<zk>
+	<style>
+		.my-imagemap a {
+			cursor: default;
+		}
+		
+		area {
+			z-index: 10000;
+		}
+	</style>
+	<label multiline="true">
+		The cursor is always in default style in IE9/10/11 with above customization (works for Chrome, FF).
+		It seems because the "image" tag is wrapped with the "a" tag, and the "a" tag has "cursor: default" style that affects the "area" style.
+	</label>
+
+	<imagemap id="imageEdm" src="/img/item1.jpg" sclass="my-imagemap">
+		<area coords="0,0,100,100" tooltiptext="rectangle tooltips" onClick="alert(1)" shape="rectangle"></area>
+		<area coords="200,200,100" tooltiptext="circle tooltips" shape="circle"></area>
+	</imagemap>
+</zk>
