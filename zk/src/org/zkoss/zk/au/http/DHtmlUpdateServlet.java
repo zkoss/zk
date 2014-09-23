@@ -34,19 +34,19 @@ import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
+
 import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
 import org.zkoss.json.JSONValue;
 import org.zkoss.xml.XMLs;
-
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ClassWebResource;
-
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
@@ -555,9 +555,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//reason: a new page might be created (such as include)
 
 		final String sid = request.getHeader("ZK-SID");
-		if (sid != null) //Some client might not have ZK-SID
-			response.setHeader("ZK-SID", XMLs.encodeText(sid));
-
+		if (sid != null){ //Some client might not have ZK-SID
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				response.setHeader("ZK-SID","" + Integer.parseInt(XMLs.encodeText(sid)));
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
+		}
 		//parse commands
 		final Configuration config = wapp.getConfiguration();
 		final List<AuRequest> aureqs;
@@ -591,9 +597,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
 		final Execution exec = 
 			new ExecutionImpl(getServletContext(), request, response, desktop, null);
-		if (sid != null)
-			((ExecutionCtrl)exec).setRequestId(sid);
-
+		if (sid != null){
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				((ExecutionCtrl)exec).setRequestId("" + Integer.parseInt(sid));
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
+		}
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
 		out.open(request, response);
@@ -601,11 +613,23 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			wappc.getUiEngine().execUpdate(exec, aureqs, out);
 		} catch (ActivationTimeoutException ex) {
 			log.warning(ex.getMessage());
-			response.setHeader("ZK-SID", sid);
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				response.setHeader("ZK-SID", "" + Integer.parseInt(sid));
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
 			response.setIntHeader("ZK-Error", AuResponse.SC_ACTIVATION_TIMEOUT);
 		} catch (RequestOutOfSequenceException ex) {
 			log.warning(ex.getMessage());
-			response.setHeader("ZK-SID", sid);
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				response.setHeader("ZK-SID", "" + Integer.parseInt(sid));
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
 			response.setIntHeader("ZK-Error", AuResponse.SC_OUT_OF_SEQUENCE);
 		}
 		out.close(request, response);
@@ -628,8 +652,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	HttpServletResponse response, WebApp wapp, String dtid, boolean compress)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
-		if (sid != null)
-			response.setHeader("ZK-SID", sid);
+		if (sid != null) {
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				response.setHeader("ZK-SID","" + Integer.parseInt(sid));
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
+		}
 
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
