@@ -1,0 +1,42 @@
+<zk>
+	<label multiline="true">
+	1. click button 'add new Col'
+	2. you should scroll right and will see new column (without javascript error)
+	</label>
+
+	<window apply="org.zkoss.bind.BindComposer"
+		title="frozen grid and dynamic columns adding"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2463_GridViewModel')" width="1024px"
+		height="576px">
+		<vlayout vflex="1">
+			<grid model="@load(vm.rows)" vflex="1">
+				<frozen columns="1" />
+				<auxhead children="@load(vm.heads)">
+					<template name="children" var="h">
+						<auxheader label="${h.title}"
+							colspan="${h.colspan}" align="center" />
+					</template>
+				</auxhead>
+				<columns children="@load(vm.columns)">
+					<template name="children" var="c">
+						<column label="${c.title}" width="192px"
+							align="center" />
+					</template>
+				</columns>
+				<template name="model" var="r">
+					<row children="@load(r.values)">
+						<template name="children" var="v">
+							<label value="${v}" />
+						</template>
+					</row>
+				</template>
+			</grid>
+			<hbox hflex="1">
+				<cell hflex="1" align="right">
+					<button label="add new Col"
+						onClick="@command('doAdd')" />
+				</cell>
+			</hbox>
+		</vlayout>
+	</window>
+</zk>
