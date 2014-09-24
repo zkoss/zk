@@ -18,6 +18,7 @@ ZK 7.0.4
   ZK-2453: JS error on page load
   ZK-2458: Area component cursor style is not correct in IE
   ZK-2463: dynamically adding columns to frozen grids raises javascript errors
+  ZK-2464: Possible XSS Vulnerability in HTTP Header
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
@@ -365,7 +366,8 @@ ZK 6.5.8
   ZK-2434: Binding bug with odd side effect
   ZK-2449: upload button affects button layout flow
   ZK-2380: IE8 causing script error with borderlayout and toolbar
-
+  ZK-2464: Possible XSS Vulnerability in HTTP Header
+  
   --------
 ZK 6.5.7
 August 12, 2014
