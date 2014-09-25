@@ -17,6 +17,7 @@ ZK 7.0.4
   ZK-2450: Listbox's selected index becomes -1 when navigating with page up / page down key in CE
   ZK-2453: JS error on page load
   ZK-2458: Area component cursor style is not correct in IE
+  ZK-2460: When doing a drag & drop quickly on a tree, a component not found exception is thrown.
   ZK-2463: dynamically adding columns to frozen grids raises javascript errors
 
 * Upgrade Notes

@@ -1,0 +1,30 @@
+<!--
+	B70-ZK-2460.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu, Sep 24, 2014  10:30:22 AM, Created by jameschu
+	
+	Copyright (C)  Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Move children quickly and several times, there are no exceptions will be rised.
+	</label>
+	<window id="demoWindow"
+		apply="org.zkoss.zktest.test2.B70_ZK_2460_DemoComposer">
+		<style>
+			.h-inline-block { display: inline-block; _display: inline; }
+		</style>
+		<tree id="tree" width="300px" mold="paging" pageSize="4">
+			<custom-attributes org.zkoss.zul.tree.maxRodPageSize="1" />
+			<treecols>
+				<treecol label="My Contact List" />
+			</treecols>
+		</tree>
+	</window>
+</zk>
+
