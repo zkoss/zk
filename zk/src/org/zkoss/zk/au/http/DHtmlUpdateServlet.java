@@ -557,9 +557,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//reason: a new page might be created (such as include)
 
 		final String sid = request.getHeader("ZK-SID");
-		if (sid != null) //Some client might not have ZK-SID
-			response.setHeader("ZK-SID", XMLs.encodeText(sid));
-
+		if (sid != null) { //Some client might not have ZK-SID
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				Integer.parseInt(sid);
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
+			response.setHeader("ZK-SID", sid);
+		}
+		
 		//parse commands
 		final Configuration config = wapp.getConfiguration();
 		final List<AuRequest> aureqs;
@@ -630,9 +638,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	HttpServletResponse response, WebApp wapp, String dtid, boolean compress)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
-		if (sid != null)
+		if (sid != null) {
+			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
+			try {
+				Integer.parseInt(sid);
+			} catch (NumberFormatException e) {
+				responseError(request, response, "Illegal request");
+				return;
+			}
 			response.setHeader("ZK-SID", sid);
-
+		}
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
 		out.open(request, response);
