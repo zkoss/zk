@@ -54,7 +54,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			jq(dn).contents().filter(function(){
 			    return (size + index++) < total;
 			}).remove();
-			
+			this.clearCache(); //B70-ZK-2370: clearCache after remove dom content
 			jq(dn).prepend(cnt ? cnt : '&nbsp;');
 		} 
 	},
