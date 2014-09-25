@@ -2024,7 +2024,8 @@ public class Tree extends MeshElement {
 							// B65-ZK-1639.zul
 							newItem.setRendered(item.isRendered());
 						}
-					}
+					} else // B70-ZK-2460 : If template is null , item must have been rendered
+						item.setRendered(true);
 				} catch (AbstractMethodError ex) {
 					final Method m = _renderer.getClass()
 						.getMethod("render", new Class<?>[] {Treeitem.class, Object.class});
