@@ -59,8 +59,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 					n.src = img;
 				else
 					jq(n).css('background-image', 'url('+img+')');
-			}
-			else if (this.desktop) //<IMG> might not be generated (Bug 3007738)
+			} else if (this.desktop) //<IMG> might not be generated (Bug 3007738)
 				this.updateDomContent_();
 		},
 		/** Sets the image URI.
