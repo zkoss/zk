@@ -29,6 +29,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.Attributes;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -41,6 +42,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -327,7 +329,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
-				_instantMode = _src.endsWith(".zul") || _src.endsWith(".zhtml");
+				LanguageDefinition lang = LanguageDefinition.getByExtension(Servlets.getExtension(_src));
+				_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
 			} else
 				_instantMode = false;
 		} else
