@@ -21,6 +21,7 @@ ZK 7.0.4
   ZK-2463: dynamically adding columns to frozen grids raises javascript errors
   ZK-2464: Possible XSS Vulnerability in HTTP Header
   ZK-2370: Updating the label of a Panel Caption before its image doesn't update the image on the client correctly.
+  ZK-2468: Grid with frozen columns rendered incorrectly
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
