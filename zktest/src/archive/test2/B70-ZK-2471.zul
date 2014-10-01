@@ -1,0 +1,6 @@
+<zk>
+	<label>Fileupload not working in IE 10 or below</label>
+	<window id="testWin">
+		<button id="attachmentUploadBtn" label="Upload" autodisable="self" upload="true,multiple=false,native" onUpload="Clients.showNotification(event.getMedia().getName())"/>
+	</window>
+</zk>
