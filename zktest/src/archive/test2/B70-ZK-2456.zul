@@ -1,0 +1,12 @@
+<window id="mainWindow" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2456_VM')" height="100%" width="100%">
+	<div children="@load(vm.items)" xmlns:n="native" xmlns:h="xhtml">
+		<label multiline="true">
+			Press the test button should log the text above correctly. 
+		</label>
+		<template name="children">
+			<div>${each}</div>
+			<n:div><h:button onClick="@command('selected',item=each)">test</h:button></n:div>
+		</template>
+	</div>
+</window>

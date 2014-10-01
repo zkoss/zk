@@ -104,11 +104,18 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	}
 	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List
 	protected void addItemReference(Component modelOwner, final Component comp, int index, String varnm) {
-		final Binder binder = BinderUtil.getBinder(comp, true);
-		if (binder == null) return; //no binder
-		final String expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
-		//should not use binder.addReferenceBinding(comp, varnm, expression, null); here, it will mark comp bound.
-		//it is safe that we set to comp attr here since the component is created by renderer/binder. 
-		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, comp, varnm, expression)); //reference
+		// ZK-2456: if comp is native, add reference to all of its children
+		if (comp.getDefinition().isNative()) {
+			for (Component child : comp.getChildren()) {
+				addItemReference(modelOwner, child, index, varnm);
+			}
+		} else {
+			final Binder binder = BinderUtil.getBinder(comp, true);
+			if (binder == null) return; //no binder
+			final String expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
+			//should not use binder.addReferenceBinding(comp, varnm, expression, null); here, it will mark comp bound.
+			//it is safe that we set to comp attr here since the component is created by renderer/binder. 
+			comp.setAttribute(varnm, new ReferenceBindingImpl(binder, comp, varnm, expression)); //reference
+		}
 	}
 }
