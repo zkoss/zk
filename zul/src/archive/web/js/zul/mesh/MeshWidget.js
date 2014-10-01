@@ -1341,8 +1341,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// B70-ZK-2466 : JS error when adding grid columns dynamically
 		if (!hdcol || !bdcol) return;
 		
-		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
-			if (zk(hdcol).isVisible()) {
+		for (var temphdcol = hdcol, w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
+			if (zk(temphdcol).isVisible()) {
 				var wdh = w._width;
 				
 				if (w._hflex == 'min')
@@ -1350,14 +1350,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				else if (wdh && wdh.endsWith('px'))
 					wd = wds[i] = zk.parseInt(wdh);
 				else
-					wd = wds[i] = zk.parseInt(hdcol.style.width);
+					wd = wds[i] = zk.parseInt(temphdcol.style.width);
 				
 				width += wd;
 			}
-			hdcol = hdcol.nextSibling;
+			temphdcol = temphdcol.nextSibling;
 		}
 		
-		hdcol = hdfaker.firstChild,
 		var	ftcol = ftfaker ? ftfaker.firstChild : null,
 			total = this.ebody.clientWidth,
 			extSum = total - width,
