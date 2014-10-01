@@ -23,6 +23,7 @@ ZK 7.0.4
   ZK-2370: Updating the label of a Panel Caption before its image doesn't update the image on the client correctly.
   ZK-2468: Grid with frozen columns rendered incorrectly
   ZK-2473: Include with xhtml file type cannot display well
+  ZK-2456: MVVM command parameter cannot be evaluated inside a native component
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
