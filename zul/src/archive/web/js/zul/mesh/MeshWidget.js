@@ -284,6 +284,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			width = 0;
 			var w = wgt.head.firstChild,
 				bdcol = bdfaker.firstChild;
+			// B70-ZK-2466 : JS error when adding grid columns dynamically
+			if (!bdcol) return;
+			
 			for (var i = 0; w; w = w.nextSibling) {
 				if (w._hflex == 'min')
 					wd = wds[i] = _minwds[i] + zk(w.$n()).padBorderWidth();
@@ -763,6 +766,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				ftfaker = this.eftfaker,
 				ftcol;
 			
+			// B70-ZK-2466 : JS error when adding grid columns dynamically
+			if (!hdcol || !bdcol) return;
+			
 			if (ftfaker)
 				ftcol = ftfaker.firstChild;
 			
@@ -1001,8 +1007,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						this.efoot.scrollLeft = this._currentLeft;
 				}
 			}
-			
-			this._shallSize = false;
+			// B70-ZK-2466 : JS error when adding grid columns dynamically
+			this._syncSize();
 		}
 	},
 	_vflexSize: function () {
@@ -1328,8 +1334,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wds = [],
 			width = 0,
 			hdcol = hdfaker.firstChild,
+			bdcol = bdfaker.firstChild,
 			_minwds = this._minWd.wds,
 			hdlen = this.head.nChildren;
+		
+		// B70-ZK-2466 : JS error when adding grid columns dynamically
+		if (!hdcol || !bdcol) return;
 		
 		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			if (zk(hdcol).isVisible()) {
@@ -1347,9 +1357,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hdcol = hdcol.nextSibling;
 		}
 		
-		var	hdcol = hdfaker.firstChild,
-			bdcol = bdfaker.firstChild,
-			ftcol = ftfaker ? ftfaker.firstChild : null,
+		hdcol = hdfaker.firstChild;
+		var	ftcol = ftfaker ? ftfaker.firstChild : null,
 			total = this.ebody.clientWidth,
 			extSum = total - width,
 			count = total,
@@ -1446,6 +1455,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			bdcol = bdfaker.firstChild,
 			ftcol = ftfaker ? ftfaker.firstChild : null,
 			hwgt = this.head.firstChild;
+		
+		// B70-ZK-2466 : JS error when adding grid columns dynamically
+		if (!hdcol || !bdcol) return;
 		
 		for (var i = 0; hwgt; hwgt = hwgt.nextSibling, i++) {
 			// sizedByContent shall not override column width
