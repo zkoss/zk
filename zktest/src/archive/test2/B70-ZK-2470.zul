@@ -1,0 +1,106 @@
+<zk>
+	<borderlayout>
+		<west size="280px" collapsible="true" splittable="true"
+			autoscroll="true">
+			<vlayout>
+				<div height="35px"></div>
+				
+				<grid oddRowSclass="non-odd"
+					style="border:none;padding:0px;margin:0px;max-height:250px;overflow-y:auto">
+					<columns>
+						<column hflex="1" />
+					</columns>
+					<rows>
+					<group label="Additional Infos" open="false" />
+						<row>
+							<checkbox label="Comment" />
+						</row>
+						<row>
+							<checkbox label="Trigger State" />
+						</row>
+						<row>
+							<checkbox label="Processing Time" />
+						</row>
+						<row>
+							<checkbox label="Actual Units" />
+						</row>
+						<row>
+							<checkbox label="Effective Units" />
+						</row>
+						<row>
+							<checkbox label="OPM QTY Fail" />
+						</row>
+						<row>
+							<checkbox label="Wafer ID" />
+						</row>
+						<row>
+							<checkbox label="Qty Total" />
+						</row>
+						<row>
+							<checkbox label="Failure code" />
+						</row>
+						<row>
+							<checkbox label="Product Definition" />
+						</row>
+						<row>
+							<checkbox label="Recipe" />
+						</row>
+						<row>
+							<checkbox label="Lot" />
+						</row>
+						<row>
+							<checkbox label="Seriennummer" />
+						</row>
+						<row>
+							<checkbox label="TestProgram" />
+						</row>
+						<row>
+							<checkbox label="TestDevice" />
+						</row>
+						<row>
+							<checkbox label="Operator" />
+						</row>
+					</rows>
+				</grid>
+				<div height="300px"></div>
+			</vlayout>
+		</west>
+		<center border="none" autoscroll="true">
+			<zk xmlns="native">
+				<h2>Tested with ZK 7.0.3</h2>
+				<h3>First Test</h3>
+				<ul>
+					<li>Display this page in browser maximum size</li>
+					<li>
+						Open
+						<i>Additional Infos</i>
+					</li>
+					<li>Scrollbar is displayed correctly</li>
+				</ul>
+				<h3>Second Test</h3>
+				<ul>
+					<li>
+						Close
+						<i>Additional Infos</i>
+					</li>
+					<li>
+						Reduce the browser window height around to 500px
+					</li>
+					<li>
+						Open
+						<i>Additional Infos</i>
+					</li>
+					<li>
+						The scrollbar from the west component hides the
+						scroll bar from the
+						<i>Additional Infos</i>
+						group
+					</li>
+					<li>Drag the splitter a little bit</li>
+					<li>Both scroll bars are displayed correctly</li>
+				</ul>
+			</zk>
+		</center>
+	</borderlayout>
+
+</zk>
