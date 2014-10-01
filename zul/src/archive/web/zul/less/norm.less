@@ -486,6 +486,9 @@ span.z-upload input {
 	position: absolute;
 	cursor: pointer;
 	z-index: -1;
+	<c:if test="${zk.ie <= 10}">
+	z-index: 1;
+	</c:if>
 }
 .z-upload-icon {
 	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter.png');
