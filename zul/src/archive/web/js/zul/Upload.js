@@ -181,6 +181,15 @@ zul.Upload = zk.$extends(zk.Object, {
 		inp._ctrl = this;
 		
 		jq(inp).change(_onchange);
+		
+		//ZK-2471 refix
+		if (zk.ie <= 10) {
+			jq(inp).hover(function() {
+		        jq(wgt).addClass('z-upload-hover');
+		    }, function() {
+		        jq(wgt).removeClass('z-upload-hover');
+		    });
+		}
 	},
 	/**
 	 * trigger file input's click to open file dialog
