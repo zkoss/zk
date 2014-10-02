@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.event.ListDataEvent;
@@ -126,12 +128,16 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 			return;
 		}
 		int index = fromIndex;
+		//B70-ZK-2447 : IndexOutOfBound exception occurs when using ListModelList.removeRange(0, size) with all items selected
+		Set<E> removedObjs = new HashSet<E>();
 		for (final Iterator<E> it = _list.listIterator(fromIndex); it.hasNext() && index < toIndex; ++index){
 			final E obj = it.next();
-			removeFromSelection(obj);
+			removedObjs.add(obj);
 			it.remove();
 		}
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, fromIndex, index - 1);
+		for (E obj : removedObjs)
+			removeFromSelection(obj);
 	}
 
 	/**
