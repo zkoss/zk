@@ -495,6 +495,13 @@ span.z-upload input {
 	overflow: hidden;
 }
 
+.ie8, .ie9, .ie10 {
+	.z-upload-hover {
+		border-color: @hoverBorderColor;
+		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	}
+}
+
 //fileupload dialog
 .z-fileupload-add,
 .z-fileupload-remove {
