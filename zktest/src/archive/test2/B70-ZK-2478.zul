@@ -1,0 +1,12 @@
+<zk>
+	<div>
+		<menubar>
+			<menu label="file menu">
+				<menupopup>
+					<menuitem upload="true" onUpload="Clients.showNotification(event.getMedia().getName())" label="click me." />
+				</menupopup>
+			</menu>
+			<menuitem upload="true" onUpload="Clients.showNotification(event.getMedia().getName())" label="click me." />
+		</menubar>
+	</div>
+</zk>
