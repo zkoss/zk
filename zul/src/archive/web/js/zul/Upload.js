@@ -111,7 +111,10 @@ zul.Upload = zk.$extends(zk.Object, {
 		this._clsnm = cls || '';
 		
 		this._wgt = wgt;
-		this._parent = parent;
+		
+		//ZK-2478 & ZK-2449-refix
+		this._parent = (zk.isLoaded('zul.menu') && wgt.$instanceof(zul.menu.Menuitem) && parent.tagName == 'LI')
+						? parent.firstChild : parent;
 		if (wgt._tooltiptext) // ZK-751
 			this._tooltiptext = wgt._tooltiptext;
 		
