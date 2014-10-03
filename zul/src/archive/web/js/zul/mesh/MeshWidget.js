@@ -706,8 +706,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	onResponse: function () {
-		if (this._shallSize)
+		if (this._shallSize) {
 			this.syncSize();
+			// refix-ZK-2466 : Reset the _shallSize flag after resize
+			this._shallSize = false;
+		}
 	},
 	_syncSize: function () {
 		// fixed for F50-3025422.zul on ZTL
@@ -1008,7 +1011,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 			// B70-ZK-2466 : JS error when adding grid columns dynamically
-			this._syncSize();
+			// refix-ZK-2466 : Reset the _shallSize flag after resize
+			if (this.desktop && (!this.ehdfaker.firstChild || !this.ebdfaker.firstChild)) 
+				this._shallSize = true;
+			else
+				this._shallSize = false;
 		}
 	},
 	_vflexSize: function () {
