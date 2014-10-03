@@ -1175,7 +1175,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (fttbl)
 					fttbl.style.width = wd + 'px';
 			}
-		} else {
+		} else if (this.frozen) {
 			//B70-ZK-2468: should sync ebody width with ebodytbl width
 			if (this.ebody) {
 				var bdtbl = this.ebodytbl;
