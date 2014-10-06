@@ -145,8 +145,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop) {
-			if (!_fixOnChildChanged(this) && this.parent._fixHeaders())
-				this.parent.onSize();
+			if (!_fixOnChildChanged(this) && this.parent._fixHeaders()) {
+				// refix-ZK-2466 : grid dynamic add childern should 'syncSize' at the end (instead of 'add one and trigger one's onSize') 
+				this.parent._syncSize();
+			}
 			_syncFrozen(this);
 			this.parent._minWd = null;
 			var mesh = this.getMeshWidget();

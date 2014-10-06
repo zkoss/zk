@@ -284,8 +284,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			width = 0;
 			var w = wgt.head.firstChild,
 				bdcol = bdfaker.firstChild;
-			// B70-ZK-2466 : JS error when adding grid columns dynamically
-			if (!bdcol) return;
 			
 			for (var i = 0; w; w = w.nextSibling) {
 				if (w._hflex == 'min')
@@ -706,11 +704,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	onResponse: function () {
-		if (this._shallSize) {
+		if (this._shallSize)
 			this.syncSize();
-			// refix-ZK-2466 : Reset the _shallSize flag after resize
-			this._shallSize = false;
-		}
 	},
 	_syncSize: function () {
 		// fixed for F50-3025422.zul on ZTL
@@ -769,8 +764,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				ftfaker = this.eftfaker,
 				ftcol;
 			
-			// B70-ZK-2466 : JS error when adding grid columns dynamically
-			if (!hdcol || !bdcol) return;
 			
 			if (ftfaker)
 				ftcol = ftfaker.firstChild;
@@ -1010,12 +1003,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						this.efoot.scrollLeft = this._currentLeft;
 				}
 			}
-			// B70-ZK-2466 : JS error when adding grid columns dynamically
-			// refix-ZK-2466 : Reset the _shallSize flag after resize
-			if (this.desktop && (!this.ehdfaker.firstChild || !this.ebdfaker.firstChild)) 
-				this._shallSize = true;
-			else
-				this._shallSize = false;
+			this._shallSize = false;
 		}
 	},
 	_vflexSize: function () {
@@ -1345,9 +1333,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			_minwds = this._minWd.wds,
 			hdlen = this.head.nChildren;
 		
-		// B70-ZK-2466 : JS error when adding grid columns dynamically
-		if (!hdcol || !bdcol) return;
-		
 		for (var temphdcol = hdcol, w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			if (zk(temphdcol).isVisible()) {
 				var wdh = w._width;
@@ -1462,8 +1447,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ftcol = ftfaker ? ftfaker.firstChild : null,
 			hwgt = this.head.firstChild;
 		
-		// B70-ZK-2466 : JS error when adding grid columns dynamically
-		if (!hdcol || !bdcol) return;
 		
 		for (var i = 0; hwgt; hwgt = hwgt.nextSibling, i++) {
 			// sizedByContent shall not override column width
