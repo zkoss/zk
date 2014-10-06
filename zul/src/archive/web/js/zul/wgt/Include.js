@@ -16,6 +16,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * An include widget
  */
 zul.wgt.Include = zk.$extends(zul.Widget, {
+	//F70-ZK-2455: a way to change enclosing tag
+	_enclosingTag: 'div',
 	$init: function () {
 		this._fellows = {};
 		this.$supers('$init', arguments);
@@ -33,6 +35,22 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		 * @param boolean comment
 		 */
 		comment: null
+	},
+	/**
+	 * Returns the enclosing tag
+	 * @return String
+	 * @since 7.0.4 
+	 */
+	getEnclosingTag: function() {
+		return this._enclosingTag;
+	},
+	/**
+	 * Sets the enclosing tag
+	 * @param String enclosing tag
+	 * @since 7.0.4 
+	 */
+	setEnclosingTag: function(tag) {
+		this._enclosingTag = tag;
 	},
 
 	//super//
