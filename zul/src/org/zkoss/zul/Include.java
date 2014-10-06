@@ -200,6 +200,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private boolean _comment;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
 	private byte _progressStatus;
+	//F70-ZK-2455 change enclosing tag
+	private String _tag = "div";
 
 	public Include() {
 		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
@@ -319,6 +321,25 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			fixMode();
 			if (!_instantMode) invalidate();
 			else super.invalidate();
+		}
+	}
+	/** Returns the name of the enclosing tag.
+	 * <p>Default: div 
+	 * @since 7.0.4
+	 */
+	public String getEnclosingTag() {
+		return _tag;
+	}
+	/**Sets the the name of the enclosing tag
+	 * <p>Default: div
+	 * @since 7.0.4
+	 */
+	public void setEnclosingTag(String tag) {
+		if (tag == null || tag.length() == 0)
+			throw new IllegalArgumentException();
+		if (!_tag.equals(tag)) {
+			_tag = tag;
+			smartUpdate("enclosingTag", _tag);
 		}
 	}
 	private void fixMode() {
@@ -539,6 +560,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 
 		setChildPage(null);
 		render(renderer, "comment", _comment);
+		render(renderer, "enclosingTag", _tag);
 
 		if (_instantMode &&_afterComposed)
 			return; //instant mode (done by redrawChildren())
