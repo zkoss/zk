@@ -3,6 +3,7 @@
 ZK 7.0.4
 * Features
   ZK-2455: A way to change the html tag of the include component
+  ZK-2483: ZK template support Map, List, Set, and other Collection type
 
 * Bugs
   ZK-2418: Listbox's horizontal scrollbar moves to leftmost position when using up / down key to change selection

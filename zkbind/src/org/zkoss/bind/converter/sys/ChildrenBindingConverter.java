@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
@@ -37,6 +38,8 @@ public class ChildrenBindingConverter implements Converter, Serializable{
 		Collection<Object> data;
 		if (val instanceof Collection) {
 			data = new ArrayList<Object>((Collection)val);
+		} else if (val instanceof Map) { // ZK-2483: support Map in template children binding.
+			data = new ArrayList<Object>((Collection) ((Map) val).entrySet());
 		} else if (val instanceof Object[]) {
 			data = Arrays.asList((Object[])val);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
