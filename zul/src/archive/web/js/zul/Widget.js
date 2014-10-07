@@ -584,6 +584,15 @@ zul.Widget = zk.$extends(zk.Widget, {
 			zk.Widget.$(id.substring(5, id.length - 1)):
 			this.$f(id, true): null;
 	},
+	//B70-ZK-2435: catch key down event right now rather than propagate it
+	doKeyDown_ : function(evt) {
+		if (this.getCtrlKeys() || this.isListen("onOK") || this.isListen("onCancel")) {
+			this.afterKeyDown_(evt);
+			evt.stop();// stop to notify parent
+		} else {
+			this.$supers('doKeyDown_', arguments);
+		}
+	},
 	/**
 	 * Called after {@link zk.Widget#doKeyDown_} is called and the event
 	 * propagation is not stopped.
