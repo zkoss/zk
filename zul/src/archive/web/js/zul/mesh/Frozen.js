@@ -165,12 +165,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				this.domListen_(head, 'onScroll', '_doHeadScroll');
 			
 		} else {
-			zWatch.listen({onResponse: this});
-			
 			// Bug ZK-2264
 			this._shallSyncScale = true;
 		}
-		
+		// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
+		zWatch.listen({onResponse: this});
 		if (body)
 			jq(body).addClass('z-word-nowrap');
 		if (foot)
@@ -190,10 +189,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			if (head)
 				this.domUnlisten_(head, 'onScroll', '_doHeadScroll');
 		} else {
-			zWatch.unlisten({onResponse: this});
 			this._shallSyncScale = false;
 		}
-		
+		// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
+		zWatch.unlisten({onResponse: this});
 		if (body)
 			jq(body).removeClass('z-word-nowrap');
 		if (foot)
@@ -203,7 +202,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	// Bug ZK-2264, we should resync the variable of _scrollScale, which do the same as HeadWidget.js
 	onResponse: function () {
 		if (this.parent._nativebar) {
-			zWatch.unlisten({onResponse: this});
+			// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
+			this._syncFrozenNow();
 		} else if (this._shallSyncScale) {
 			var hdfaker = this.parent.ehdfaker;
 			if (hdfaker) {
