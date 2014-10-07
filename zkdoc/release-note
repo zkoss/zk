@@ -16,6 +16,7 @@ ZK 6.5.8
   ZK-2449: upload button affects button layout flow
   ZK-2380: IE8 causing script error with borderlayout and toolbar
   ZK-2464: Possible XSS Vulnerability in HTTP Header
+  ZK-2435: Bandbox does not allow to distinguish onOK from onCancel
   
   --------
 ZK 6.5.7

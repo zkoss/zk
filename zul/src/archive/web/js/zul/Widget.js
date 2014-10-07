@@ -574,6 +574,16 @@ zul.Widget = zk.$extends(zk.Widget, {
 			zk.Widget.$(id.substring(5, id.length - 1)):
 			this.$f(id, true): null;
 	},
+	//B65-ZK-2435: catch key down event right now rather than propagate it
+	doKeyDown_ : function(evt) {
+		var keyCode = evt.keyCode;
+		if (this.getCtrlKeys() || (keyCode && (keyCode == 13 || keyCode == 27))) {//Enter is 13, ESC is 27
+			this.afterKeyDown_(evt);
+			evt.stop();// stop to notify parent
+		} else {
+			this.$supers('doKeyDown_', arguments);
+		}
+	},
 	/**
 	 * Called after {@link zk.Widget#doKeyDown_} is called and the event
 	 * propagation is not stopped.
