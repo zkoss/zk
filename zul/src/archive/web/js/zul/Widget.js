@@ -586,7 +586,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	//B70-ZK-2435: catch key down event right now rather than propagate it
 	doKeyDown_ : function(evt) {
-		if (this.getCtrlKeys() || this.isListen("onOK") || this.isListen("onCancel")) {
+		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			this.afterKeyDown_(evt);
 			evt.stop();// stop to notify parent
 		} else {
