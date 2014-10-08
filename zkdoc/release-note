@@ -31,6 +31,7 @@ ZK 7.0.4
   ZK-2447: IndexOutOfBound exception occurs when using ListModelList.removeRange(0, size) with all items selected
   ZK-2478: Menuitem Fileupload not working in IE 10 and below
   ZK-2435: Bandbox does not allow to distinguish onOK from onCancel
+  ZK-2481: Navbar not visible if it is aligned right
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
