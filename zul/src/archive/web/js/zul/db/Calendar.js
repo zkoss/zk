@@ -901,8 +901,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			maxyear = this._maxyear;
 
 		if (this._view == 'day') {
+			//B70-ZK-2477, if zul declares the locale, don't use system's locale
+			var DOW_1ST = zk.DOW_1ST;
+			if (this._localizedSymbols && this._localizedSymbols.DOW_1ST != undefined) {
+				DOW_1ST = this._localizedSymbols.DOW_1ST
+			}
 			var d = seldate.getDate(),
-				DOW_1ST = (this._localizedSymbols && this._localizedSymbols.DOW_1ST )|| zk.DOW_1ST, //ZK-1061
 				v = new Date(y, m, 1).getDay()- DOW_1ST,
 				last = new Date(y, m + 1, 0).getDate(), //last date of this month
 				prev = new Date(y, m, 0).getDate(), //last date of previous month
