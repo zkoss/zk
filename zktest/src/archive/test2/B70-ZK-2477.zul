@@ -1,0 +1,12 @@
+<zk>
+	<label multiline="true">
+		1. change your system locale to Romania
+		2. you should see zk.log shows two different locale
+		3. you should see calendar popup with right days of week
+	</label>
+	<zscript>
+	Clients.log( org.zkoss.util.Locales.getCurrent().toString());
+	</zscript>
+	Datebox locale en: <datebox id="dben" cols="30" format="full" locale="en" 
+		onCreate="self.value = new Date(); Clients.log(self.getLocale().toString())"/>
+</zk>
