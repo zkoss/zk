@@ -21,21 +21,21 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		Hover and click on each button in this page should change the style and open a file dialog.
 	</div>
 	<hlayout>
-    	<button upload="true" label="click me."/>
+    	<button upload="true" label="click me." onUpload="Clients.showNotification(event.getMedia().getName())"/>
 	</hlayout>
 	<div>
 		<menubar>
 			<menu label="file menu">
 				<menupopup>
-					<menuitem upload="true" label="click me."/>
+					<menuitem upload="true" label="click me." onUpload="Clients.showNotification(event.getMedia().getName())"/>
 				</menupopup>
 			</menu>
-			<menuitem upload="true" label="click me."/>
+			<menuitem upload="true" label="click me." onUpload="Clients.showNotification(event.getMedia().getName())"/>
 		</menubar>
 	</div>
 	<div>
 	    <toolbar>
-	    	<toolbarbutton upload="true" label="click me."/>
+	    	<toolbarbutton upload="true" label="click me." onUpload="Clients.showNotification(event.getMedia().getName())"/>
 	    </toolbar>
 	</div>
 </zk>
