@@ -1,3 +1,8 @@
+  --------
+ZK 7.0.3.1
+October 15, 2014
+  Fixed file upload issues in IE 10 or below for 7.0.3
+  
 
   --------
 ZK 7.0.3
