@@ -34,6 +34,7 @@ ZK 7.0.4
   ZK-2481: Navbar not visible if it is aligned right
   ZK-2477: Datebox shows the wrong day of week for locale "en" (Internet Explorer 9)
   ZK-2491: css background style doesn't display in print preview
+  ZK-2488: Caption component with label renders incorrectly
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen

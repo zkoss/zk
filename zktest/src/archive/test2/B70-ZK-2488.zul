@@ -1,0 +1,38 @@
+<zk>
+	<label multiline="true">
+		1. you should see the circle icon display at label's left
+	</label>
+	<groupbox closable="true" title="Groupbox">
+		<caption iconSclass="z-icon-circle">
+			<label value="Test-Label" />
+		</caption>
+		caption in groupbox
+	</groupbox>
+	<separator />
+	<tabbox>
+		<tabs>
+			<tab>
+				<caption iconSclass="z-icon-circle">
+					<label value="Test-Label" />
+				</caption>
+			</tab>
+		</tabs>
+		<tabpanels>
+			<tabpanel>caption in tabbox/tab</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<separator />
+	<panel closable="true" minimizable="true"  title="Panel">
+		<caption iconSclass="z-icon-circle">
+			<label value="Test-Label" />
+		</caption>
+		<panelchildren>caption in panel</panelchildren>
+	</panel>
+	<separator />
+	<window closable="true" minimizable="true"  title="Window">
+		<caption iconSclass="z-icon-circle">
+			<label value="Test-Label" />
+		</caption>
+		caption in window
+	</window>
+</zk>
