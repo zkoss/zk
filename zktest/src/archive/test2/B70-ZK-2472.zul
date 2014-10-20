@@ -1,0 +1,11 @@
+<zk>
+	<window vflex="1">
+		<div vflex="1">
+			<label multiline="true">
+				Click the download button and download the file,
+				you should not see any scroll bar after download
+			</label>
+			<button label="download" onClick='Filedownload.save("/test2/B1896797.pdf", "application/pdf");'></button>
+		</div>
+	</window>
+</zk>
