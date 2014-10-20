@@ -1,0 +1,26 @@
+<zk>
+	<label multiline="true">
+		1. Select text by dragging mouse
+		2. The listcell/treecell should not be selected
+	</label>
+	<listbox>
+		<custom-attributes org.zkoss.zul.listbox.selectOnHighlight.disabled="true"/>
+		<listhead><listheader>Listbox</listheader></listhead>
+	    <listitem><listcell><textbox/></listcell></listitem>
+	    <listitem><listcell><a href="http://www.zkoss.org">www.zkoss.org</a></listcell></listitem>
+	    <listitem><listcell><label>text_without_space</label></listcell></listitem>
+	    <listitem><listcell><label>long text with space</label></listcell></listitem>
+	</listbox>
+	
+	<tree style="margin-top: 20px">
+		<custom-attributes org.zkoss.zul.tree.selectOnHighlight.disabled="true"/>
+		<treecols>
+			<treecol label="tree" />
+		</treecols>
+		<treechildren>
+			<treeitem><treerow><treecell><a href="http://www.zkoss.org">www.zkoss.org</a></treecell></treerow></treeitem>
+			<treeitem><treerow><treecell><label>text_without_space</label></treecell></treerow></treeitem>
+			<treeitem><treerow><treecell><label>long text with space</label></treecell></treerow></treeitem>
+		</treechildren>
+	</tree>
+</zk>

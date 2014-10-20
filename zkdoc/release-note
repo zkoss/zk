@@ -4,6 +4,7 @@ ZK 7.0.4
 * Features
   ZK-2455: A way to change the html tag of the include component
   ZK-2483: ZK template support Map, List, Set, and other Collection type
+  ZK-2433: Highlight text in a listitem without using nonselectableTag
 
 * Bugs
   ZK-2418: Listbox's horizontal scrollbar moves to leftmost position when using up / down key to change selection
@@ -38,6 +39,8 @@ ZK 7.0.4
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
     with self-defined function instead. e.g: domListen(n, 'onMouseEnter', 'selfDefinedFunction').
+  + Added custom attribute org.zkoss.zul.listbox.selectOnHighlight.disabled and org.zkoss.zul.tree.selectOnHighlight.disabled. 
+    When sets true on Listbox/Tree, select functionality will be disabled when highlighting text content with mouse dragging.
 
   --------
 ZK 7.0.3

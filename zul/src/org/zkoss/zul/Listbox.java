@@ -258,6 +258,10 @@ import org.zkoss.zul.impl.XulElement;
  * It is used only if live data ({@link #setModel(ListModel)} and not paging
  * ({@link #getPagingChild}).</dd>
  * 
+ * <dt>org.zkoss.zul.listbox.selectOnHighlight.disabled</dt>.(since 7.0.4)
+ * <dd>Sets whether to disable select functionality when highlighting text 
+ * content with mouse dragging or not.</dd>
+ * 
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
@@ -3263,6 +3267,8 @@ public class Listbox extends MeshElement {
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())
 				renderer.render("groupSelect", true);
+			if (isSelectOnHighlightDisabled()) // F70-ZK-2433
+				renderer.render("selectOnHighlightDisabled", true);
 		}
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
@@ -3289,6 +3295,10 @@ public class Listbox extends MeshElement {
 			val = Library.getProperty(attr);
 		return val instanceof Boolean ? ((Boolean)val).booleanValue():
 			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+
+	protected boolean isSelectOnHighlightDisabled() {
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.selectOnHighlight.disabled", false, true);
 	}
 	
 	/** 

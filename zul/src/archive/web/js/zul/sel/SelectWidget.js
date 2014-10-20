@@ -224,7 +224,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		 */
 		name: function () {
 			if (this.destkop) this.updateFormData();
-		}
+		},
+		
+		selectOnHighlightDisabled: _zkf
 	},
 	setChgSel: function (val) { //called from the server
 		var sels = {};
@@ -635,6 +637,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	//@param bSel whether it is called by _doItemSelect
 	_shallIgnore: function(evt, bSel) { // move this function in the widget for override
+		// F70-ZK-2433
+		if (this.checkOnHighlightDisabled_())
+			return true;
+		
 		if (!evt.domTarget || !evt.target.canActivate())
 			return true;
 
@@ -669,6 +675,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		return _focusable(evt);
 	},
+	// F70-ZK-2433 to be overridden
+	checkOnHighlightDisabled_: zk.$void,
 	_doItemSelect: function (row, evt) { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
 		//(like Windows does)

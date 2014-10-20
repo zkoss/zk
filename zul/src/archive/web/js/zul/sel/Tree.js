@@ -337,6 +337,18 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	_removeItemFromSelection: function () {
 		this.$supers('_removeItemFromSelection', arguments);
 		this._sel = this._selItems[0]; // resync
+	},// @Override F70-ZK-2433
+	checkOnHighlightDisabled_: function() {
+		if (this._selectOnHighlightDisabled) {
+			var selection = window.getSelection || document.selection;
+			if (selection) {
+				if (zk.ie && zk.ie < 9) {
+					return selection.type == 'Text' && selection.createRange().htmlText.length > 0;
+				} else {
+					return selection().toString().length > 0;
+				}
+			}
+		}
 	}
 });
 /**

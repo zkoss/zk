@@ -158,6 +158,10 @@ import org.zkoss.zul.impl.XulElement;
  * }
  * </code></pre>
  * 
+ * <dt>org.zkoss.zul.tree.selectOnHighlight.disabled</dt>.(since 7.0.4)
+ * <dd>Sets whether to disable select functionality when highlighting text 
+ * content with mouse dragging or not.</dd>
+ * 
  * </br/>
  * [Since 7.0.0] (EE version only)
  * 
@@ -2342,6 +2346,8 @@ public class Tree extends MeshElement {
 			renderer.render("_cdo", true);
 		if (!isRightSelect())
 			renderer.render("rightSelect", false);
+		if (isSelectOnHighlightDisabled()) // F70-ZK-2433
+			renderer.render("selectOnHighlightDisabled", true);
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
 		
@@ -2397,6 +2403,11 @@ public class Tree extends MeshElement {
 				"true".equals(Library.getProperty("org.zkoss.zul.tree.checkmarkDeselectOthers")));
 		return _ckDeselectOther.booleanValue();
 	}
+
+	protected boolean isSelectOnHighlightDisabled() {
+		return Utils.testAttribute(this, "org.zkoss.zul.tree.selectOnHighlight.disabled", false, true);
+	}
+	
 	private static Boolean _ckDeselectOther;
 
 	private <T> Set<T> collectUnselectedObjects(Set<T> previousSelection, Set<T> currentSelection) {
