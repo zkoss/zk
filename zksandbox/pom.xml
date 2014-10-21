@@ -8,7 +8,7 @@
 		<commons-lang.version>2.4</commons-lang.version>
 		<bsh.version>2.0b4</bsh.version>
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>
-		<commons-io.version>2.1</commons-io.version>
+		<commons-io.version>2.4</commons-io.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<servlet.version>2.4</servlet.version>
 		<poi.version>3.7</poi.version>
@@ -22,7 +22,7 @@
 		<timeplotz.version>1.1_50</timeplotz.version>
 		<zuljsp.version>1.4.1</zuljsp.version>
 	</properties>
-	<version>7.0.5-SNAPSHOT</version>
+	<version>8.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<licenses>
 		<license>

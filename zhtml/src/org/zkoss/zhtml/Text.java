@@ -22,15 +22,15 @@ import java.io.IOException;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
-
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-
 import org.zkoss.zhtml.impl.PageRenderer;
 import org.zkoss.zhtml.impl.TagRenderContext;
 
@@ -62,7 +62,7 @@ public class Text extends AbstractComponent implements RawId {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			if (isIdRequired())
+			if (!invalidateParent())
 				smartUpdate("value", _value);
 			else
 				invalidate();
@@ -71,13 +71,13 @@ public class Text extends AbstractComponent implements RawId {
 
 	/** Whether to generate the value directly without ID. */
 	private boolean isIdRequired() {
-		final Component p = getParent();
+		final Page p = getPage();
 		return p == null || !isVisible()
 			|| getId().length() > 0 || !isRawLabel(p);
 	}
-	private static boolean isRawLabel(Component comp) {
+	private static boolean isRawLabel(Page page) {
 		final LanguageDefinition langdef =
-			comp.getDefinition().getLanguageDefinition();
+				page.getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 
@@ -105,18 +105,23 @@ public class Text extends AbstractComponent implements RawId {
 	public String getWidgetClass() {
 		return "zhtml.Text";
 	}
+	
+	private boolean invalidateParent() {
+		return !(getParent() instanceof Includer) && !isIdRequired();
+	}
 	public void setParent(Component parent) {
 		final Component old = getParent();
-		if (old != null && old != parent && !isIdRequired())
+		if (old != null && old != parent && invalidateParent())
 			old.invalidate();
 
 		super.setParent(parent);
 
-		if (parent != null && old != parent && !isIdRequired())
+		// avoid Includer to invalidate itself in an infinite loop
+		if (parent != null && old != parent && invalidateParent())
 			parent.invalidate();
 	}
 	public void invalidate() {
-		if (isIdRequired()) super.invalidate();
+		if (!invalidateParent()) super.invalidate();
 		else getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {

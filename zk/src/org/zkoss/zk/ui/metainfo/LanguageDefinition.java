@@ -168,6 +168,8 @@ public class LanguageDefinition {
 	private final Set<String> _cssURIs = new LinkedHashSet<String>();
 	/** Whether it is a native language. */
 	private final boolean _native;
+	/** A TreeBuilder class */
+	private final String _treeBuilderClass; // since 8.0.0
 
 	/** Returns whether the specified language exists.
 	 */
@@ -177,6 +179,14 @@ public class LanguageDefinition {
 		synchronized (_ldefByName) {
 			return _ldefByName.containsKey(name);
 		}
+	}
+	
+	/**
+	 * Returns the tree builder class for this language
+	 * @since 8.0.0
+	 */
+	public String getTreeBuilderClass() {
+		return _treeBuilderClass;
 	}
 
 	/** Returns the language definition of the specified name or namespace.
@@ -334,11 +344,12 @@ public class LanguageDefinition {
 	 * If native, the namespaces found in a ZUML page is no longer
 	 * used to specified a language. Rather, it is output to the client
 	 * directly.
+	 * @param treeBuilderClass a tree builder class for this language (since 8.0.0)
 	 * @since 5.0.0
 	 */
 	public LanguageDefinition(String deviceType, String name, String namespace,
 	List<String> extensions, PageRenderer pageRenderer,
-	boolean ignoreCase, boolean bNative, Locator locator) {
+	boolean ignoreCase, boolean bNative, Locator locator, String treeBuilderClass) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
 		if (!Devices.exists(deviceType))
@@ -357,6 +368,7 @@ public class LanguageDefinition {
 		_native = bNative;
 		_pgrend = pageRenderer;
 		_compdefs = new ComponentDefinitionMap(ignoreCase);
+		_treeBuilderClass = treeBuilderClass;
 
 		boolean replWarned = false;
 		synchronized (_ldefByName) {
@@ -840,6 +852,12 @@ public class LanguageDefinition {
 	 */
 	public boolean isRawLabel() {
 		return _labeltmpl != null && _labeltmpl.raw;
+	}
+	/** Returns the label attribute of the label template in the language setting.
+	 * @since 8.0.0
+	 */
+	public String getLabelAttribute() {
+		return _labeltmpl != null ? _labeltmpl._name : null;
 	}
 
 	/** Adds the definition for the dynamic tag.

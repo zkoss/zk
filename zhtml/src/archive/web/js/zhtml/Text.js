@@ -45,11 +45,20 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 		 */
 		value: _zkf
 	},
-
+	// ZK 7.5 enable to preserve the line break and comment into XHTML format
+	// so we need to skip them here.
+	_checkContentRequired: function (val) {
+		if (val) {
+			val = val.trim();
+			if (val && !(val.startsWith('<\!--') && val.endsWith('-->')))
+				return true;
+		}
+		return false;
+	},
 	redraw: function (out) {
-		var attrs = this.domAttrs_({id:1}),
-			span = attrs || this.idRequired,
-			val = this._value;
+		var attrs = this.domAttrs_({id:1, zclass:1}),
+			val = this._value,
+			span = attrs || (this.idRequired && this._checkContentRequired(val));
 			// Bug 3245960: enclosed text was wrapped with <span>
 		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
 		out.push(this._encode ? zUtl.encodeXML(val): val);

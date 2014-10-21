@@ -22,9 +22,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zhtml.Version</version-class>
-		<version-uid>7.0.5</version-uid>
+		<version-uid>8.0.0</version-uid>
 	</version>
 
+	<treebuilder-class>org.zkoss.zhtml.impl.HtmlTreeBuilder</treebuilder-class>
 	<renderer-class>org.zkoss.zhtml.impl.PageRenderer</renderer-class>
 	<case-insensitive/>
 

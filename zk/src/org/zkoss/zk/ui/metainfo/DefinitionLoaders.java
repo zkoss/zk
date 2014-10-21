@@ -259,7 +259,12 @@ public class DefinitionLoaders {
 			final String ns =
 				IDOMs.getRequiredElementValue(root, "namespace");
 			final String deviceType =
-				IDOMs.getRequiredElementValue(root, "device-type");
+					IDOMs.getRequiredElementValue(root, "device-type");
+			String treeBuilderClass = root.getElementValue("treebuilder-class", true);
+			
+			if (treeBuilderClass == null) // XulTreeBuilder as default
+				treeBuilderClass = XmlTreeBuilder.class.getName();
+				
 
 			//if (log.isDebugEnabled()) log.debug("Load language: "+lang+", "+ns);
 
@@ -276,7 +281,7 @@ public class DefinitionLoaders {
 
 			langdef = new LanguageDefinition(
 				deviceType, lang, ns, exts, pageRenderer,
-				"true".equals(ignoreCase), "true".equals(bNative), locator);
+				"true".equals(ignoreCase), "true".equals(bNative), locator, treeBuilderClass);
 			device = Devices.getDevice(deviceType);
 		}
 

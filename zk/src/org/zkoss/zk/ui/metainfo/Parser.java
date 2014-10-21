@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.CData;
+import org.zkoss.idom.Comment;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.Item;
@@ -110,9 +111,8 @@ public class Parser {
 	 */
 	public PageDefinition parse(File file, String path) throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+file);
-		final PageDefinition pgdef =
-			parse(new SAXBuilder(true, false, true).build(file),
-				Servlets.getExtension(file.getName()));
+		String extension = Servlets.getExtension(file.getName());
+		final PageDefinition pgdef = parse(TreeBuilderFactory.makeBuilder(extension).parse(file), extension);
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
@@ -124,9 +124,8 @@ public class Parser {
 	 */
 	public PageDefinition parse(URL url, String path) throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+url);
-		final PageDefinition pgdef =
-			parse(new SAXBuilder(true, false, true).build(url),
-				Servlets.getExtension(url.toExternalForm()));
+		String extension = Servlets.getExtension(url.toExternalForm());
+		final PageDefinition pgdef = parse(TreeBuilderFactory.makeBuilder(extension).parse(url), extension);
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
@@ -141,7 +140,7 @@ public class Parser {
 	public PageDefinition parse(Reader reader, String extension)
 	throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+reader);
-		return parse(new SAXBuilder(true, false, true).build(reader), extension);
+		return parse(TreeBuilderFactory.makeBuilder(extension).parse(reader), extension);
 	}
 	/** Parse the raw content directly from a DOM tree.
 	 *
@@ -643,16 +642,40 @@ public class Parser {
 					textAsBuffer = new StringBuffer();
 				break; //found
 			}
-
+		final boolean isXHTML = "xhtml".equals(parentlang.getName());
+		boolean breakLine = false;
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
+				breakLine = false;
 				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent);
 			} else if (o instanceof ProcessingInstruction) {
+				breakLine = false;
 				parse(pgdef, (ProcessingInstruction)o);
+			} else if (o instanceof Comment) {
+				breakLine = false;
+				// keep the comment, like <!--[if lte IE 9]>
+				if (parentlang.isNative() || isXHTML) {
+					String label = "<!--" + ((Item)o).getText() + "-->";
+					final ComponentInfo labelInfo =
+							parentlang.newLabelInfo(parent, label);
+					labelInfo.addProperty("encode", "false", null);
+				}
 			} else if ((o instanceof Text) || (o instanceof CData)) {
 				String label = ((Item)o).getText(),
-					trimLabel = label.trim();
+					trimLabel = !isXHTML ?
+							label.trim() : label; // do not trim with xhtml
+				if (breakLine && (o instanceof Text) && label.trim().isEmpty()) {
+					// we need to merge the breakLine into the previous one to save memory
+					List<NodeInfo> children = parent.getChildren();
+					final String labelAttr = parentlang.getLabelAttribute();
+					for (Property prop : ((ComponentInfo)children.get(children.size() - 1)).getProperties()) {
+						if (prop.getName().equals(labelAttr)) {
+							prop.setRawValue(prop.getRawValue() + trimLabel);
+						}
+					}
+					continue;
+				}
 				if (label.length() == 0)
 					continue;
 
@@ -667,6 +690,9 @@ public class Parser {
 				&& pi != null && !pi.isBlankPreserved() && !isNativeText(pi))
 					continue;
 
+				if (!isXHTML && (o instanceof Text) && label.trim().isEmpty())
+					breakLine = true;
+				
 				//consider as a label
 				if (isNativeText(pi)) {
 					new TextInfo(parent, label);
@@ -691,6 +717,8 @@ public class Parser {
 							labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
 					}
 				}
+			} else {
+				breakLine = false;
 			}
 		}
 
@@ -909,8 +937,9 @@ public class Parser {
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						if (!bNativeContent && !bNative
-						&& attURI.length() == 0 //ZK 6: non-annotation namespace mandates non-annotation
-						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
+								//ZK 6: non-annotation namespace mandates non-annotation
+								&& (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
+								&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
