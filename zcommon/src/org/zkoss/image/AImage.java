@@ -69,6 +69,8 @@ public class AImage implements Image, java.io.Serializable {
 	/** the hash code. */
 //	private transient int _hashCode = 0;
 
+	/** Constructs an image with a byte array.
+	 */
 	public AImage(String name, byte[] data) throws IOException {
 		init(name, data);
 	}
