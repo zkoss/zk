@@ -36,6 +36,7 @@ ZK 7.0.4
   ZK-2491: css background style doesn't display in print preview
   ZK-2488: Caption component with label renders incorrectly
   ZK-2472: zk_download iframe creates scrollbar
+  ZK-2489: iscroll not working for tablet
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen

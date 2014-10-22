@@ -242,8 +242,14 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	}
 
 	/*package*/ boolean isNativeScrollbar() {
-		boolean isIE8 = Servlets.isBrowser((ServletRequest) Executions.getCurrent().getNativeRequest(), "ie8-");
-		return isIE8 ? true : Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
+		ServletRequest request = (ServletRequest) Executions.getCurrent().getNativeRequest();
+		// B70-ZK-2489: Set org.zkoss.zul.nativebar's default to false when using a mobile device
+		if (Servlets.isBrowser(request, "ie8-")) {
+			return true;
+		} else {
+			boolean isMobile = Servlets.getBrowser(request, "mobile") != null;
+			return Utils.testAttribute(this, "org.zkoss.zul.nativebar", !isMobile, true);
+		}
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
