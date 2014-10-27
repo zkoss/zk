@@ -38,7 +38,7 @@ public class ClassUtil {
 	Object newInstance(Class<?> cls, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, IllegalAccessException {
-		return newInstance(cls, args);
+		return _classReflect.newInstance(cls, args);
 	}
 
 	/**

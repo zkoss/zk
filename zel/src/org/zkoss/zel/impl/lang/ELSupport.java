@@ -20,6 +20,7 @@ package org.zkoss.zel.impl.lang;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.AccessController;
@@ -34,6 +35,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.util.ClassUtil;
 import org.zkoss.zel.impl.util.MessageFactory;
@@ -49,6 +52,8 @@ public class ELSupport {
 	//20120418, henrichen: moved from org.zkoss.zel.impl.parser.AstValue (ZK-1062)
     private static final boolean IS_SECURITY_ENABLED =
         (System.getSecurityManager() != null);
+    
+    private static final Logger log = LoggerFactory.getLogger(ELSupport.class);
 
     //20120418, henrichen: ZK-1062
     /**EL 2.2 by spec. should coerce "null" value to 0 number, 0 character, "" String, false boolean.
@@ -547,7 +552,14 @@ public class ELSupport {
 			//try the construct first
 			try {
 				return ClassUtil.newInstance(type, new Object[]{obj});
-			} catch (Throwable e) {/*eat*/}			
+			} catch (Throwable e) {
+				//B70-ZK-2493 only throw those undefined exceptions
+				if (!(e instanceof NoSuchMethodException) && !(e instanceof InstantiationException) && 
+					!(e instanceof InvocationTargetException) && !(e instanceof IllegalAccessException)) {
+					log.warn("ClassUtil.newInstance has unexpected error: ", e);
+					throw new ELException("ClassUtil.newInstance has unexpected error: ", e);
+				}
+			}
 			
 			//try the common java.lang collections
 			if(Set.class.isAssignableFrom(type)){
