@@ -120,6 +120,10 @@ def alert(m):
 	<native-template>
 		<native-class>org.zkoss.zk.ui.HtmlNativeComponent</native-class>
 	</native-template>
+	<!-- since 8.0.0 shadow element -->
+	<shadow-template>
+		<shadow-class>org.zkoss.zk.ui.HtmlShadowElement</shadow-class>
+	</shadow-template>
 
 	<!-- Specifies a component
 	<component>

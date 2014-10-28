@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Composer;
 
@@ -109,17 +110,6 @@ public class Utils {
 		final Map<Component,ComponentInfo> map = getComponentInfos(false);
 		return map != null ? map.get(comp): null;
 	}
-	/** Sets the component info for the given component.
-	 * <p>It is used only internally.
-	 */
-	public static void setComponentInfo(Component comp, ComponentInfo info) {
-		final Map<Component,ComponentInfo> map = getComponentInfos(info != null);
-		if (map != null)
-			if (info != null)
-				map.put(comp, info);
-			else
-				map.remove(comp);
-	}
 	private static Map<Component,ComponentInfo> getComponentInfos(boolean autoCreate){
 		Execution exec = Executions.getCurrent();
 		if (exec == null )
@@ -131,6 +121,41 @@ public class Utils {
 			exec.setAttribute(COMPONENT_INFO, result);
 		}
 		return result;
+	}
+	/** Sets the component info for the given component.
+	 * <p>It is used only internally.
+	 */
+	public static void setComponentInfo(Component comp, ComponentInfo info) {
+		final Map<Component,ComponentInfo> map = getComponentInfos(info != null);
+		if (map != null)
+			if (info != null)
+				map.put(comp, info);
+			else
+				map.remove(comp);
+	}
+	private static Map<Component,ShadowInfo> getShadowInfos(boolean autoCreate){
+		Execution exec = Executions.getCurrent();
+		if (exec == null )
+			return null;
+
+		Map<Component, ShadowInfo> result = cast((Map) exec.getAttribute(COMPONENT_INFO));
+		if (result == null && autoCreate){
+			result = new HashMap<Component, ShadowInfo>();
+			exec.setAttribute(COMPONENT_INFO, result);
+		}
+		return result;
+	}
+	/** Sets the component info for the given component.
+	 * <p>It is used only internally.
+	 * @since 8.0.0
+	 */
+	public static void setShadowInfo(Component comp, ShadowInfo info) {
+		final Map<Component, ShadowInfo> map = getShadowInfos(info != null);
+		if (map != null)
+			if (info != null)
+				map.put(comp, info);
+			else
+				map.remove(comp);
 	}
 	private static final String COMPONENT_INFO = "org.zkoss.zk.ui.metainfo.compinfo";
 }

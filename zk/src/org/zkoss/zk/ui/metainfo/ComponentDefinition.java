@@ -150,6 +150,13 @@ public interface ComponentDefinition extends Cloneable {
 	 * @see LanguageDefinition#getNativeDefinition
 	 */
 	public boolean isNative();
+
+	/** Returns whether this is a shadow element.
+	 *
+	 * @since 8.0.0
+	 * @see LanguageDefinition#getShadowDefinition
+	 */
+	public boolean isShadowElement();
 	/** Returns the class (Class) or the class name (String) that
 	 * implements the component.
 	 *

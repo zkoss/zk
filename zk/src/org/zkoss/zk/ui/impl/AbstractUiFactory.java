@@ -29,6 +29,8 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.ShadowElement;
+import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.BeforeCompose;
@@ -36,8 +38,11 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.NodeInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
+import org.zkoss.zk.ui.metainfo.TemplateInfo;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -90,6 +95,27 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
 		return new PageImpl(richlet, path);
+	}
+	// since 8.0.0
+	public Component newComponent(Page page, Component parent,
+	ShadowInfo compInfo, Component insertBefore) {
+		final Component comp = compInfo.newInstance(page, parent);
+		Utils.setShadowInfo(comp, compInfo);
+		
+		if (parent instanceof ShadowElement) {
+			parent.insertBefore(comp, insertBefore);
+		} else if (parent != null) {
+			((ShadowElementCtrl) comp).setShadowHost(parent);
+		} else { // rare case, but may happen when developer uses this method.
+			
+		}
+
+		if (comp instanceof BeforeCompose)
+			((BeforeCompose)comp).beforeCompose();
+		compInfo.applyProperties(comp); //include comp's definition
+		
+		Utils.setShadowInfo(comp, null);
+		return comp;
 	}
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo, Component insertBefore) {

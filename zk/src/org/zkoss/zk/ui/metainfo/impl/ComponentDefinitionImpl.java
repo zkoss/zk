@@ -128,6 +128,20 @@ implements ComponentDefinition, java.io.Serializable {
 		_evalr = _langdef != null ? _langdef.getEvaluatorRef():
 			_pgdef != null ? _pgdef.getEvaluatorRef(): null;
 	}
+	/** Constructs a shadow component definition.
+	 * It is the component definition used to implement the shadow element.
+	 *
+	 * @param langdef the language definition. It is null if it is defined
+	 * as part of a page definition
+	 * @param pgdef the page definition. It is null if it is defined
+	 * as part of a language definition.
+	 * @since 8.0.0
+	 */
+	public static final ComponentDefinition newShadowDefinition(
+	LanguageDefinition langdef, PageDefinition pgdef, String name,
+	Class<? extends Component> cls) {
+		return new ShadowDefinition(langdef, pgdef, name, cls);
+	}
 	/** Constructs a macro component definition.
 	 * It is the component definition used to implement the macros.
 	 *
@@ -304,8 +318,12 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 	public Component newInstance(Class<? extends Component> cls) {
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
-		final boolean bSet = !(curInfo instanceof ComponentInfo)
-			|| ((ComponentInfo)curInfo).getComponentDefinition() != this;
+		boolean bSet = true;
+		if (curInfo instanceof ComponentInfo) {
+			bSet = ((ComponentInfo)curInfo).getComponentDefinition() != this;
+		} else if (curInfo instanceof ShadowInfo) {
+			bSet = ((ShadowInfo)curInfo).getComponentDefinition() != this;
+		}
 		if (bSet) ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
@@ -482,6 +500,10 @@ implements ComponentDefinition, java.io.Serializable {
 		cd._name = name;
 		cd._langdef = langdef;
 		return cd;
+	}
+	
+	public boolean isShadowElement() {
+		return false;
 	}
 
 	//Serializable//

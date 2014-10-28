@@ -40,6 +40,7 @@ import org.zkoss.zk.device.DeviceNotFoundException;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
@@ -153,6 +154,10 @@ public class LanguageDefinition {
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
 	private Class<? extends Component> _macrocls;
+	/** The shadow template. since 8.0.0 */
+	private Class<? extends Component> _shadowcls;
+	/** The shadow element map. since 8.0.0 */
+	private final ComponentDefinitionMap _shadowdefs;
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
 	/** The evaluator. */
@@ -368,6 +373,7 @@ public class LanguageDefinition {
 		_native = bNative;
 		_pgrend = pageRenderer;
 		_compdefs = new ComponentDefinitionMap(ignoreCase);
+		_shadowdefs = new ComponentDefinitionMap(ignoreCase);
 		_treeBuilderClass = treeBuilderClass;
 
 		boolean replWarned = false;
@@ -450,6 +456,17 @@ public class LanguageDefinition {
 	public List<String> getExtensions() {
 		return _exts;
 	}
+	/** Returns a readonly collection of all shadow element definitions in this language.
+	 * @since 8.0.0
+	 */
+	public Collection<ComponentDefinition> getShadowDefinitions() {
+		return _shadowdefs.getDefinitions();
+	}
+	/** Returns the map of shadow elements defined in this language (never null).
+	 */
+	public ComponentDefinitionMap getShadowDefinitionMap() {
+		return _shadowdefs;
+	}
 	/** Returns a readonly collection of all component definitions in this language.
 	 * @since 3.6.3
 	 */
@@ -460,6 +477,63 @@ public class LanguageDefinition {
 	 */
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
+	}
+	/** Returns {@link ComponentDefinition} of the specified name.
+	 *
+	 * <p>Note: anonymous shadow element definition won't be returned by
+	 * this method.
+	 *
+	 * @param name the name of the shadow element definition.
+	 * @exception DefinitionNotFoundException is thrown if the definition
+	 * is not found
+	 */
+	public ComponentDefinition getShadowDefinition(String name) {
+		final ComponentDefinition compdef =
+			_shadowdefs.get(name);
+		if (compdef == null)
+			throw new DefinitionNotFoundException("Shadow element definition not found: "+name);
+		return compdef;
+	}
+	/** Returns {@link ComponentDefinition} of the specified name, or null
+	 * if not found.
+	 * It is the same as {@link #getShadowDefinition}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param name the name of the shadow element definition.
+	 * @since 8.0.0
+	 */
+	public ComponentDefinition getShadowDefinitionIfAny(String name) {
+		return _shadowdefs.get(name);
+	}
+	/** Returns {@link ComponentDefinition} of the specified class.
+	 *
+	 * <p>Note: anonymous shadow element definition won't be returned by
+	 * this method.
+	 *
+	 * @param klass the class that implements the shadow element.
+	 * @exception DefinitionNotFoundException is thrown if the definition
+	 * is not found
+	 * @since 8.0.0
+	 */
+	public ComponentDefinition getShadowDefinition(Class klass) {
+		final ComponentDefinition compdef =
+			_shadowdefs.get(klass);
+		if (compdef == null)
+			throw new DefinitionNotFoundException("Shadow element definition not found: "+klass);
+		return compdef;
+	}
+	/** Returns whether the specified shadow element is defined.
+	 * @since 8.0.0
+	 */
+	public boolean hasShadowDefinition(String name) {
+		return _shadowdefs.contains(name);
+	}
+	/** Adds a shadow element definition.
+	 */
+	public void addShadowDefinition(ComponentDefinition compdef) {
+		if (compdef == null)
+			throw new IllegalArgumentException();
+		_shadowdefs.add(compdef);
 	}
 	/** Returns {@link ComponentDefinition} of the specified name.
 	 *
@@ -799,6 +873,34 @@ public class LanguageDefinition {
 			ComponentDefinitionImpl.newMacroDefinition(
 				pgdef != null ? null: this, pgdef,
 				name, _macrocls, macroURI, inline);
+		return compdef;
+	}
+
+	/** Sets the shadow template.
+	 * @since 8.0.0
+	 */
+	public void setShadowTemplate(Class<? extends Component> klass) {
+		if (klass == null || !Component.class.isAssignableFrom(klass)
+		|| !ShadowElement.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal shadow class: "+klass);
+		_shadowcls = klass;
+	}
+	/** Instantiates and returns the component definition for the specified condition.
+	 *
+	 * @param pgdef the page definition the shadow definition belongs to.
+	 * If null, it belongs to this language definition.
+	 * @exception UnsupportedOperationException if this language doesn't
+	 * support the shadows
+	 * @since 8.0.0
+	 */
+	public ComponentDefinition getShadowDefinition(
+	String name, PageDefinition pgdef) {
+		if (_shadowcls == null)
+			throw new UiException("Shadow not supported by "+this);
+
+		final ComponentDefinition compdef =
+			ComponentDefinitionImpl.newShadowDefinition(
+				pgdef != null ? null: this, pgdef, name, _shadowcls);
 		return compdef;
 	}
 

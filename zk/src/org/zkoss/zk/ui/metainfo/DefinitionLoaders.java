@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
-
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.idom.Document;
@@ -45,8 +44,8 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
-
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.ui.ext.Macro;
@@ -290,6 +289,7 @@ public class DefinitionLoaders {
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
 		parseNativeTemplate(langdef, root);
+		parseShadowTemplate(langdef, root);
 		
 		for (Element el : root.getElements("message-loader-class")) {
 			final String clsname = el.getText().trim();
@@ -472,7 +472,11 @@ public class DefinitionLoaders {
 				else if (clsnm != null)
 					compdef.setImplementationClass(clsnm);
 
-				langdef.addComponentDefinition(compdef);
+				if (compdef.isShadowElement()) {
+					langdef.addShadowDefinition(compdef);
+				} else {
+					langdef.addComponentDefinition(compdef);
+				}
 					//Note: setImplementationClass before addComponentDefinition
 			} else {
 				if (log.isTraceEnabled()) log.trace("Add component definition: name="+name);
@@ -483,7 +487,12 @@ public class DefinitionLoaders {
 					new ComponentDefinitionImpl(langdef, null, name, cls):
 					new ComponentDefinitionImpl(langdef, null, name, clsnm);
 				compdef.setDeclarationURL(url);
-				langdef.addComponentDefinition(compdef);
+				String s = el.getElementValue("shadow-element", true);
+				if (s != null && !"false".equals(s)) {
+					langdef.addShadowDefinition(compdef);
+				} else {
+					langdef.addComponentDefinition(compdef);	
+				}
 			}
 
 			parseTextAs(compdef, el.getElement("text-as"));
@@ -671,6 +680,18 @@ public class DefinitionLoaders {
 				locateClass(IDOMs.getRequiredElementValue(el, "native-class"),
 					Component.class, Native.class);
 			langdef.setNativeTemplate(cls);
+		}
+	}
+	/* since 8.0.0 */
+	private static
+	void parseShadowTemplate(LanguageDefinition langdef, Element el)
+	throws Exception {
+		el = el.getElement("shadow-template");
+		if (el != null) {
+			final Class<? extends Component> cls =
+				locateClass(IDOMs.getRequiredElementValue(el, "shadow-class"),
+					Component.class, ShadowElement.class);
+			langdef.setShadowTemplate(cls);
 		}
 	}
 	private static

@@ -72,6 +72,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.Attributes;
@@ -143,6 +144,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			ComponentsCtrl.setCurrentInfo((ComponentInfo)null); //to avoid mis-use
 			if (curInfo instanceof ComponentInfo) {
 				final ComponentInfo compInfo = (ComponentInfo)curInfo;
+				_def = compInfo.getComponentDefinition();
+				addSharedAnnotationMap(_def.getAnnotationMap());
+				addSharedAnnotationMap(compInfo.getAnnotationMap());
+			} else if (curInfo instanceof ShadowInfo) {
+				final ShadowInfo compInfo = (ShadowInfo)curInfo;
 				_def = compInfo.getComponentDefinition();
 				addSharedAnnotationMap(_def.getAnnotationMap());
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
@@ -919,6 +925,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _parent.getAttributeOrFellow(name, true);
 			if (_page != null)
 				return _page.getAttributeOrFellow(name, true);
+			if (this instanceof ShadowElement) {
+				Component shadowHost = ((ShadowElement) this).getShadowHost();
+				if (shadowHost != null)
+					return shadowHost.getAttributeOrFellow(name, true);
+			}
 			if (!(this instanceof IdSpace))
 				return getVirtualIdSpace().getFellowIfAny(name);
 		}
@@ -967,6 +978,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		checkParentChild(parent, this); //create _chdinf
 		beforeParentChanged(parent);
+		triggerBeforeHostParentChanged(parent);
 
 		final boolean idSpaceChanged =
 			(parent != null ? spaceController(parent): null)
@@ -1089,6 +1101,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return false; //nothing changed (Listbox and other assumes this)
 
 		beforeChildAdded(newChild, refChild);
+		triggerBeforeHostChildAdded(newChild, refChild);
 
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		final boolean moved = nc._parent == this; //moved in the same parent
@@ -1144,6 +1157,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!moved) { //new added
 			++_chdinf.nChild;
 			onChildAdded(nc);
+			triggerAfterHostChildAdded(nc);
 		}
 		return true;
 	}
@@ -1294,7 +1308,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return false; //nothing to do
 
 		beforeChildRemoved(child);
-
+		triggerBeforeHostChildRemoved(child);
+		
 		setNext(oc._prev, oc._next);
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;
@@ -1318,6 +1333,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		++_chdinf.modCntChd;
 		--_chdinf.nChild;
 		onChildRemoved(child);
+		triggerAfterHostChildRemoved(child);
 		return true;
 	}
 
@@ -3262,6 +3278,8 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.4
 	 */
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		/** shadow roots since 8.0.0 */
+		private List<ShadowElement> seRoots;
 		/** The mold. */
 		private String mold;
 
@@ -3547,5 +3565,58 @@ w:use="foo.MyWindow"&gt;
 			_listener = ln;
 			_zscript = zs;
 		}
+	}
+	private void triggerBeforeHostParentChanged(Component parent) {
+		for (ShadowElement se : getShadowRoots()) {
+			if (se instanceof ShadowElementCtrl) {
+				((ShadowElementCtrl)se).beforeHostParentChanged(parent);
+			}
+		}
+	}
+	private void triggerBeforeHostChildRemoved(Component child) {
+		for (ShadowElement se : getShadowRoots()) {
+			if (se instanceof ShadowElementCtrl) {
+				((ShadowElementCtrl)se).beforeHostChildRemoved(child);
+			}
+		}
+	}
+	private void triggerAfterHostChildRemoved(Component child) {
+		for (ShadowElement se : getShadowRoots()) {
+			if (se instanceof ShadowElementCtrl) {
+				((ShadowElementCtrl)se).afterHostChildRemoved(child);
+			}
+		}
+	}
+	private void triggerBeforeHostChildAdded(Component child, Component insertBefore) {
+		for (ShadowElement se : getShadowRoots()) {
+			if (se instanceof ShadowElementCtrl) {
+				((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore);
+			}
+		}
+		
+	}
+	private void triggerAfterHostChildAdded(Component child) {
+		for (ShadowElement se : getShadowRoots()) {
+			if (se instanceof ShadowElementCtrl) {
+				((ShadowElementCtrl)se).afterHostChildAdded(child);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ShadowElement> getShadowRoots() {
+		return _auxinf != null && _auxinf.seRoots != null ?
+			_auxinf.seRoots: Collections.EMPTY_LIST;
+	}
+	public boolean removeShadowRoot(ShadowElement shadow) {
+		if (_auxinf != null && _auxinf.seRoots != null)
+			return _auxinf.seRoots.remove(shadow);
+		return false;
+	}
+	public boolean addShadowRoot(ShadowElement shadow) {
+		AuxInfo auxinf = initAuxInfo();
+		if (auxinf.seRoots == null)
+			auxinf.seRoots = new LinkedList<ShadowElement>();
+		return auxinf.seRoots.add(shadow);
 	}
 }

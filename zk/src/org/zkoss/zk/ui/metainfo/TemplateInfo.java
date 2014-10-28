@@ -40,7 +40,7 @@ public class TemplateInfo extends BranchInfo {
 	Map<String, String> params, ConditionImpl cond) {
 		super(parent, cond);
 
-		if (name == null || name.length() == 0)
+		if (name == null) // support "" an empty string for ZK 8.0.0 shadow element
 			throw new IllegalArgumentException("null");
 		_name = name;
 		_src = src != null ? new ExValue(src, String.class): null;

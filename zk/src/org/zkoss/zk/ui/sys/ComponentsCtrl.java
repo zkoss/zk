@@ -35,7 +35,6 @@ import org.zkoss.util.FastReadCache;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 import org.zkoss.json.JavaScriptValue;
-
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
@@ -47,6 +46,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.xel.ExValue;
@@ -172,6 +172,15 @@ public class ComponentsCtrl {
 	 * @since 3.0.0
 	 */
 	public static void setCurrentInfo(ComponentInfo compInfo) {
+		_compdef.set(compInfo);
+	}
+	/** Sets the current shadow definition, which is used only by
+	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
+	 * {@link org.zkoss.zk.ui.AbstractComponent}.
+	 * <p>Used only internally.
+	 * @since 8.0.0
+	 */
+	public static void setCurrentInfo(ShadowInfo compInfo) {
 		_compdef.set(compInfo);
 	}
 
@@ -521,6 +530,10 @@ public class ComponentsCtrl {
 		
 		public Object clone() {
 			throw new UnsupportedOperationException();
+		}
+
+		public boolean isShadowElement() {
+			return false;
 		}
 	};
 }

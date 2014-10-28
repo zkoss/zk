@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.Annotation;
@@ -458,4 +459,27 @@ public interface ComponentCtrl {
 	 * @since 6.0.0
 	 */
 	public EventListenerMap getEventListenerMap();
+	
+	/**
+	 * Returns a set of shadow elements, if any.
+	 * @since 8.0.0
+	 */
+	public List<ShadowElement> getShadowRoots();
+	
+	/**
+	 * Removes the given shadow root from this host.
+	 * @param shadow a shadow element
+	 * @return true if child is added successfully
+	 * @since 8.0.0
+	 */
+	public boolean removeShadowRoot(ShadowElement shadow);
+	
+	/**
+	 * Removes the given shadow root from this host.
+	 * @param shadow a shadow element
+	 * @return true if child is removed successfully; false if it doesn't
+	 * have the specified child
+	 * @since 8.0.0
+	 */
+	public boolean addShadowRoot(ShadowElement shadow);
 }

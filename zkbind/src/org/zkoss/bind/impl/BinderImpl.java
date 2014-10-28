@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -71,8 +70,8 @@ import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
-import org.zkoss.bind.sys.debugger.impl.info.AddCommandBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.info.AddBindingInfo;
+import org.zkoss.bind.sys.debugger.impl.info.AddCommandBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.info.CommandInfo;
 import org.zkoss.bind.sys.debugger.impl.info.EventInfo;
 import org.zkoss.bind.sys.debugger.impl.info.NotifyChangeInfo;
@@ -89,6 +88,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -2170,11 +2170,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private void loadComponent0(Component comp,boolean loadinit) {
 		loadComponentProperties0(comp,loadinit);
-		
+
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
 		if (compBindings == null || !compBindings.keySet().contains(CHILDREN_ATTR)) {
 			for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
 				loadComponent0(kid,loadinit); //recursive
+			}
+		}
+		if (comp instanceof ComponentCtrl) {
+			for (ShadowElement se : ((ComponentCtrl) comp).getShadowRoots()) {
+				loadComponent0((Component)se,loadinit); //recursive
 			}
 		}
 	}

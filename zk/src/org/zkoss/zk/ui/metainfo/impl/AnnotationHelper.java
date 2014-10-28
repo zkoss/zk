@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
@@ -388,6 +389,23 @@ public class AnnotationHelper {
 	 * @since 6.0.1
 	 */
 	public void applyAnnotations(ComponentInfo compInfo, String propName,
+	boolean clear) {
+		for (AnnotInfo info: _annots) {
+			compInfo.addAnnotation(propName, info.name, info.attrs, info.loc);
+		}
+		if (clear)
+			_annots.clear();
+	}
+	/** Applies the annotations defined in this helper to the specified
+	 * instance definition.
+	 *
+	 * @param compInfo the instance definition to update
+	 * @param propName the property name
+	 * @param clear whether to clear all definitions before returning
+	 * @see #clear
+	 * @since 8.0.0
+	 */
+	public void applyAnnotations(ShadowInfo compInfo, String propName,
 	boolean clear) {
 		for (AnnotInfo info: _annots) {
 			compInfo.addAnnotation(propName, info.name, info.attrs, info.loc);

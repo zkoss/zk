@@ -31,6 +31,7 @@ import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
@@ -89,6 +90,13 @@ public class AnnotateBinderHelper {
 		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
 			processAllComponentsBindings(kid); //recursive to each child
+		}
+
+		// support shadow element
+		if (comp instanceof ComponentCtrl) {
+			for (ShadowElement se : ((ComponentCtrl) comp).getShadowRoots()) {
+				processAllComponentsBindings((Component)se);
+			}
 		}
 	}
 	
