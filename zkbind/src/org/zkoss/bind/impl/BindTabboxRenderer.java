@@ -53,7 +53,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				
@@ -117,7 +117,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

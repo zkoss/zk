@@ -562,7 +562,7 @@ public class Radiogroup extends XulElement {
 										return null;
 									}
 									public Object getEach() {
-										return data;
+										return getCurrent();
 									}
 									public int getIndex() {
 										return index;
@@ -572,6 +572,26 @@ public class Radiogroup extends XulElement {
 									}
 									public Integer getEnd() {
 										return cb.getModel().getSize();
+									}
+
+									public Object getCurrent() {
+										return data;
+									}
+
+									public boolean isFirst() {
+										return getCount() == 1;
+									}
+
+									public boolean isLast() {
+										return getIndex() + 1 == getEnd();
+									}
+
+									public Integer getStep() {
+										return null;
+									}
+
+									public int getCount() {
+										return getIndex() + 1;
 									}
 								};
 							} else {

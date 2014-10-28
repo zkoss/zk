@@ -2,11 +2,12 @@
 ZK 8.0.0
 * Features
   ZK-2476: Support to plug a different parser for parsing a page
+  ZK-2508: Enhance ForEachStatus to be consistent with JSTL's varStatus properties
   
 * Bugs
 
 * Upgrade Notes
-
+  + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
   --------
 ZK 7.0.4
 December 9, 2014

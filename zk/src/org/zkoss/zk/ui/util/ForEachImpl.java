@@ -23,7 +23,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.zkoss.util.CollectionsX;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Scope;
@@ -46,7 +45,7 @@ public class ForEachImpl implements ForEach {
 	private final Page _page;
 	private final Component _comp;
 	private final ExValue[] _expr;
-	private final ExValue _begin, _end;
+	private final ExValue _begin, _end, _step;
 	private Status _status;
 	private Iterator _it;
 	private Object _oldEach;
@@ -68,9 +67,7 @@ public class ForEachImpl implements ForEach {
 	public static
 	ForEach getInstance(EvaluatorRef evalr, Component comp,
 	ExValue[] expr, ExValue begin, ExValue end) {
-		if (expr == null || expr.length == 0)
-			return null;
-		return new ForEachImpl(evalr, comp, expr, begin, end);
+		return getInstance(evalr, comp, expr, begin, end, null);
 	}
 	/** Returns an instance that represents the iterator for the
 	 * specified collection, or null if expr is null or empty.
@@ -88,11 +85,89 @@ public class ForEachImpl implements ForEach {
 	public static
 	ForEach getInstance(EvaluatorRef evalr, Page page,
 	ExValue[] expr, ExValue begin, ExValue end) {
-		if (expr == null || expr.length == 0)
-			return null;
-		return new ForEachImpl(evalr, page, expr, begin, end);
+		return getInstance(evalr, page, expr, begin, end, null);
 	}
 
+	/** Returns an instance that represents the iterator for the
+	 * specified collection.
+	 *
+	 * @param expr an array of expressions. There are two formats.
+	 * <ol>
+	 * <li>length == 1: it iterates thru the content of expr[0].
+	 * For example, if expr[0] is an array, all items in this array will
+	 * be iterated.</li>
+	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length == 0 or expr is null, null is returned</li>
+	 * </ol>
+	 * @since 8.0.0
+	 */
+	public static
+	ForEach getInstance(EvaluatorRef evalr, Component comp,
+	ExValue[] expr, ExValue begin, ExValue end, ExValue step) {
+		if (expr == null || expr.length == 0)
+			return null;
+		return new ForEachImpl(evalr, comp, expr, begin, end, step);
+	}
+	/** Returns an instance that represents the iterator for the
+	 * specified collection, or null if expr is null or empty.
+	 *
+	 * @param expr an array of expressions. There are two formats.
+	 * <ol>
+	 * <li>length == 1: it iterates thru the content of expr[0].
+	 * For example, if expr[0] is an array, all items in this array will
+	 * be iterated.</li>
+	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length == 0 or expr is null, null is returned</li>
+	 * </ol>
+	 * @since 8.0.0
+	 */
+	public static
+	ForEach getInstance(EvaluatorRef evalr, Page page,
+	ExValue[] expr, ExValue begin, ExValue end, ExValue step) {
+		if (expr == null || expr.length == 0)
+			return null;
+		return new ForEachImpl(evalr, page, expr, begin, end, step);
+	}
+	
+	/** Constructor.
+	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue, ExValue)}
+	 * instead of this constructor.
+	 * @exception IllegalArgumentException if comp or evalr is null
+	 * @since 8.0.0
+	 */
+	public ForEachImpl(EvaluatorRef evalr, Component comp,
+	ExValue[] expr, ExValue begin, ExValue end, ExValue step) {
+		if (comp == null || evalr == null)
+			throw new IllegalArgumentException("null");
+
+		_evalr = evalr;
+		_page = null;
+		_comp = comp;
+		_expr = expr;
+		_begin = begin;
+		_end = end;
+		_step = step;
+	}
+	/** Constructor.
+	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue, ExValue)}
+	 * instead of this constructor.
+	 * @exception IllegalArgumentException if page or evalr is null
+	 * @since 8.0.0
+	 */
+	public ForEachImpl(EvaluatorRef evalr, Page page, ExValue[] expr, ExValue begin,
+			ExValue end, ExValue step) {
+		if (page == null || evalr == null)
+			throw new IllegalArgumentException();
+
+		_evalr = evalr;
+		_page = page;
+		_comp = null;
+		_expr = expr;
+		_begin = begin;
+		_end = end;
+		_step = step;
+	}
+	
 	/** Constructor.
 	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)}
 	 * instead of this constructor.
@@ -110,6 +185,7 @@ public class ForEachImpl implements ForEach {
 		_expr = expr;
 		_begin = begin;
 		_end = end;
+		_step = null;
 	}
 	/** Constructor.
 	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)}
@@ -117,7 +193,8 @@ public class ForEachImpl implements ForEach {
 	 * @exception IllegalArgumentException if page or evalr is null
 	 * @since 3.0.6
 	 */
-	public ForEachImpl(EvaluatorRef evalr, Page page, ExValue[] expr, ExValue begin, ExValue end) {
+	public ForEachImpl(EvaluatorRef evalr, Page page, ExValue[] expr, ExValue begin,
+			ExValue end) {
 		if (page == null || evalr == null)
 			throw new IllegalArgumentException();
 
@@ -127,6 +204,7 @@ public class ForEachImpl implements ForEach {
 		_expr = expr;
 		_begin = begin;
 		_end = end;
+		_step = null;
 	}
 
 	/** Returns an instance that represents the iterator for the
@@ -172,6 +250,7 @@ public class ForEachImpl implements ForEach {
 		_expr = expr != null ? new ExValue[] {new ExValue(expr, Object.class)}: null;
 		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
 		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
+		_step = null;
 	}
 	/** Constructor.
 	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, String, String, String)}
@@ -190,6 +269,7 @@ public class ForEachImpl implements ForEach {
 		_expr = expr != null ? new ExValue[] {new ExValue(expr, Object.class)}: null;
 		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
 		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
+		_step = null;
 	}
 	private Object eval(ExValue value) {
 		return value == null ? null:
@@ -230,15 +310,24 @@ public class ForEachImpl implements ForEach {
 			if (vbeg < 0) ibeg = new Integer(vbeg = 0);
 			_status.setBegin(ibeg);
 			_status.setEnd((Integer)eval(_end));
+			_status.setStep((Integer)eval(_step));
 
 			prepare(o, vbeg); //prepare iterator
 		}
 
+		if (_status.count > 0 && _status.getStep() != null) {
+			 _status.index += _status.getStep().intValue() - 1;
+		}
 		if ((_status.end == null || _status.index < _status.end.intValue())
 		&& _it.hasNext()) {
 			++_status.index;
 			_status.each = _it.next();
+			_status.count++;
 			getScope().setAttribute("each", _status.each);
+			
+			if (_status.getStep() != null)
+				discard(_status.getStep().intValue() - 1);
+			calibrateLast();
 			return true;
 		}
 
@@ -247,6 +336,24 @@ public class ForEachImpl implements ForEach {
 		restoreStatus();
 		return false;
 	}
+
+	private void discard(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException("'step' cannot less than 1");
+		}
+		while (n-- > 0) {
+			if (_it.hasNext()) {
+				_it.next();
+			} else {
+				break;
+			}
+		}
+	}
+	private void calibrateLast() {
+		_status.last = !_it.hasNext() && (_status.end == null || _status.index +  _status.begin + 
+				(_status.getStep() == null ? 1 : _status.getStep().intValue()) == _status.end.intValue());
+	}
+	
 	private void setupStatus() {
 		final Scope scope = getScope();
 		_oldEach = scope.getAttribute("each", true);
@@ -426,7 +533,9 @@ public class ForEachImpl implements ForEach {
 		private final Object previous;
 		private Object each;
 		private int index;
-		private Integer begin, end;
+		private int count = 0;
+		private boolean last = false;
+		private Integer begin, end, step;
 
 		private Status(Object previous) {
 			this.previous = previous;
@@ -439,13 +548,16 @@ public class ForEachImpl implements ForEach {
 		private void setEnd(Integer end) {
 			this.end = end;
 		}
+		private void setStep(Integer step) {
+			this.step = step;
+		}
 
 		public ForEachStatus getPrevious() {
 			return this.previous instanceof ForEachStatus ?
 				(ForEachStatus)this.previous: null;
 		}
 		public Object getEach() {
-			return this.each;
+			return getCurrent();
 		}
 		public int getIndex() {
 			return this.index;
@@ -459,6 +571,21 @@ public class ForEachImpl implements ForEach {
 
 		public String toString() {
 			return "[index=" + index + ']';
+		}
+		public Object getCurrent() {
+			return this.each;
+		}
+		public boolean isFirst() {
+			return getCount() == 1;
+		}
+		public boolean isLast() {
+			return last;
+		}
+		public Integer getStep() {
+			return step;
+		}
+		public int getCount() {
+			return count;
 		}
 	}
 }

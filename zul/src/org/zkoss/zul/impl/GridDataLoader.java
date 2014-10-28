@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
@@ -270,7 +269,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 									}
 									
 									public Object getEach() {
-										return data;
+										return getCurrent();
 									}
 									
 									public int getIndex() {
@@ -283,6 +282,26 @@ public class GridDataLoader implements DataLoader, Cropper {
 									
 									public Integer getEnd() {
 										return grid.getModel().getSize();
+									}
+
+									public Object getCurrent() {
+										return data;
+									}
+
+									public boolean isFirst() {
+										return getCount() == 1;
+									}
+
+									public boolean isLast() {
+										return getIndex() + 1 == getEnd();
+									}
+
+									public Integer getStep() {
+										return null;
+									}
+
+									public int getCount() {
+										return getIndex() + 1;
 									}
 								};
 							} else if ("groupingInfo".equals(name)) {

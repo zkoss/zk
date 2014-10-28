@@ -882,7 +882,7 @@ public class Parser {
 			}
 
 			String ifc = null, unless = null,
-				forEach = null, forEachBegin = null, forEachEnd = null;
+				forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
 			AnnotationHelper attrAnnHelper = null;
 			for (Iterator it = el.getAttributeItems().iterator();
 			it.hasNext();) {
@@ -917,6 +917,8 @@ public class Parser {
 					unless = attval;
 				} else if ("forEach".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEach = attval;
+				} else if ("forEachStep".equals(attnm) && isZkAttr(langdef, attrns)) {
+					forEachStep = attval;
 				} else if ("forEachBegin".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEachBegin = attval;
 				} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
@@ -965,7 +967,7 @@ public class Parser {
 			}
 
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
-			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
+			compInfo.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
 			annHelper.applyAnnotations(compInfo, null, true);
 			
 
@@ -1299,7 +1301,7 @@ public class Parser {
 
 		final ZkInfo zi = new ZkInfo(parent, null);
 		String ifc = null, unless = null,
-			forEach = null, forEachBegin = null, forEachEnd = null;
+			forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
@@ -1313,6 +1315,8 @@ public class Parser {
 				unless = attval;
 			} else if ("forEach".equals(attnm)) {
 				forEach = attval;
+			} else if ("forEachStep".equals(attnm)) {
+				forEachStep = attval;
 			} else if ("forEachBegin".equals(attnm)) {
 				forEachBegin = attval;
 			} else if ("forEachEnd".equals(attnm)) {
@@ -1335,7 +1339,7 @@ public class Parser {
 			}
 		}
 		zi.setCondition(ConditionImpl.getInstance(ifc, unless));
-		zi.setForEach(forEach, forEachBegin, forEachEnd);
+		zi.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
 		return zi;
 	}
 

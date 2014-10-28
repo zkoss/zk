@@ -85,15 +85,15 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 					return index;
 				}
 				
-				public Object getEach(){
-					return data;
-				}
-				
 				public Integer getEnd(){
 					if(size<0){
 						throw new UiException("end attribute is not supported");// the tree case
 					}
 					return size;
+				}
+
+				public Object getCurrent() {
+					return data;
 				}
 			});
 			resolver.addTemplateTracking(eachComp,data,index,size);

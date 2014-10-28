@@ -55,12 +55,16 @@ import org.zkoss.zk.ui.util.ForEachImpl;
 	 * or null if this info shall be interpreted only once.
 	 */
 	public ForEach resolveForEach(Page page, Component comp) {
-		return _forEach == null ? null:
-			comp != null ?
-				ForEachImpl.getInstance(
-					_evalr, comp, _forEach, _forEachInfo[0], _forEachInfo[1]):
-				ForEachImpl.getInstance(
-					_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]);
+		return _forEach == null ? null
+				: _forEachInfo.length == 2 ?
+					(comp != null ? ForEachImpl.getInstance(_evalr, comp,
+										_forEach, _forEachInfo[0], _forEachInfo[1]) : 
+									ForEachImpl.getInstance(_evalr, page, _forEach,
+										_forEachInfo[0], _forEachInfo[1])) :
+					(comp != null ? ForEachImpl.getInstance(_evalr, comp, _forEach,
+										_forEachInfo[0], _forEachInfo[1], _forEachInfo[2]) :
+									ForEachImpl.getInstance(_evalr, page, _forEach,
+											_forEachInfo[0], _forEachInfo[1], _forEachInfo[2]));
 	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
@@ -76,6 +80,24 @@ import org.zkoss.zk.ui.util.ForEachImpl;
 					new ExValue(begin, Integer.class): null,
 				end != null && end.length() > 0 ?
 					new ExValue(end, Integer.class): null};
+	}
+	/** Sets the forEach attribute, which is usually an expression.
+	 * @param expr the expression to return a collection of objects, or
+	 * null/empty to denote no iteration.
+	 * @since 8.0.0
+	 */
+	public void setForEach(String expr, String begin, String end, String step) {
+		_forEach = Utils.parseList(expr, Object.class, false);
+			//forEach="" means to iterate a single-element array and the value
+			//is empty
+		_forEachInfo = _forEach == null ? null:
+			new ExValue[] {
+				begin != null && begin.length() > 0 ?
+					new ExValue(begin, Integer.class): null,
+				end != null && end.length() > 0 ?
+					new ExValue(end, Integer.class): null,
+				step != null && step.length() > 0 ?
+					new ExValue(step, Integer.class): null};
 	}
 	/** Returns whether the forEach condition is defined.
 	 */
