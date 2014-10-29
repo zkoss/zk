@@ -762,6 +762,7 @@ public class Parser {
 		final String pref = ns != null ? ns.getPrefix(): "";
 		final String uri = ns != null ? ns.getURI(): "";
 		LanguageDefinition langdef = pgdef.getLanguageDefinition();
+		final String langName = langdef.getName();
 
 		if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri)
 		|| "annotation".equals(uri))
@@ -862,8 +863,19 @@ public class Parser {
 				final String attURI = attrns != null ? attrns.getURI(): "";
 				final String attnm = attr.getLocalName();
 				final String attval = attr.getValue();
-
-				if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
+				final String attPref = attrns != null ? attrns.getPrefix(): "";
+				
+				
+				// ZK-2494: use getName instead of getLocalName when namespace is native or xml and attribute uri 
+				// is not one of known namespaces in zk. Exclude xmlns to avoid redefine.
+				if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName) || "xml".equals(langName)) {
+					if (!isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
+							&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
+						compInfo.addProperty(attr.getName(), attval, null);
+					} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
+						compInfo.addProperty(attnm, attval, null);
+					}
+				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setForward(attval);
@@ -888,8 +900,7 @@ public class Parser {
 					applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), true, location(attr));
 				} else if (!"use".equals(attnm)
 				|| !isZkAttr(langdef, attrns, bNativeContent)) {
-					final String attPref = attrns != null ? attrns.getPrefix(): "",
-						attvaltrim;
+					final String attvaltrim;
 					if (!"xmlns".equals(attPref)
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
@@ -1431,13 +1442,9 @@ public class Parser {
 			final String uri = ns.getURI();
 			boolean bNatPrefix =
 				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+			// ZK-2494: Should also consider adding declaredNamespace inside a native component
 			if (bNatPrefix
-			|| (langdef.isNative()
-				&& !LanguageDefinition.ZK_NAMESPACE.equals(uri)
-				&& !"zk".equals(uri)
-				&& !LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
-				&& !"native".equals(uri)
-				&& !langdef.getNamespace().equals(uri)))
+			|| (!isZKNamespace(uri) && !langdef.getNamespace().equals(uri)))
 				nativeInfo.addDeclaredNamespace(
 					new Namespace(ns.getPrefix(),
 						bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
@@ -1522,5 +1529,70 @@ public class Parser {
 				}
 			}
 		}
+	}
+	
+	/** Returns the language definition of the specified name or namespace.
+	 *  Return null if Definition not found
+	 */
+	private static LanguageDefinition langdefLookup(String name) {
+		if (name == null || name.length() == 0) {
+			return null;
+		}
+		
+		try {
+			return LanguageDefinition.lookup(name);
+		} catch (DefinitionNotFoundException e) {
+			return null;
+		}
+	}
+	
+	/** Returns whether the given uri is a known namespace in ZK or not
+	 */
+	private static boolean isZKNamespace(String uri) {
+		if (LanguageDefinition.ZK_NAMESPACE.equals(uri)
+				|| "zk".equals(uri)
+				|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
+				|| "native".equals(uri)
+				|| "annotation".equals(uri)
+				|| LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri)
+				|| "client".equals(uri)
+				|| LanguageDefinition.CLIENT_NAMESPACE.equals(uri)
+				|| "client/attribute".equals(uri)
+				|| LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri)
+				|| "xhtml".equals(uri)
+				|| "http://www.w3.org/1999/xhtml/".equals(uri)
+				|| "zul".equals(uri)
+				|| "http://www.zkoss.org/2005/zul/".equals(uri)
+				|| "xml".equals(uri)
+				|| "http://www.zkoss.org/2007/xml".equals(uri)
+				|| langdefLookup(uri) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/** Returns whether the given uri is in native namespace or not
+	 */
+	private static boolean isNativeNamespace(String uri) {
+		return "native".equals(uri) || LanguageDefinition.NATIVE_NAMESPACE.equals(uri);
+	}
+	
+	/** Returns whether the given uri is in xml namespace or not
+	 */
+	private static boolean isXmlNamespace(String uri) {
+		return "xml".equals(uri) || "http://www.zkoss.org/2007/xml".equals(uri);
+	}
+	
+	/** Returns whether the given uri is in client namespace or not
+	 */
+	private static boolean isClientNamespace(String uri) {
+		return "client".equals(uri) || LanguageDefinition.CLIENT_NAMESPACE.equals(uri);
+	}
+	
+	/** Returns whether the given uri is in client attribute namespace or not
+	 */
+	private static boolean isClientAttrNamespace(String uri) {
+		return "client/attribute".equals(uri) || LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri);
 	}
 }
