@@ -743,7 +743,8 @@ foo.Widget = zk.$extends(zk.Widget, {
 
 		zk.copy(jclass, staticMembers);
 
-		thispt._$super = superpt;
+		//B65-ZK-2487: ios8 safari weird bug, can't assign superpt to thispt._$super. here is workaround
+		thispt['_$super'] = superpt;
 		thispt._$subs = [];
 		superpt._$subs.push(thispt);
 			//maintain a list of subclasses (used zk.override)
