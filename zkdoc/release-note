@@ -40,6 +40,7 @@ ZK 7.0.4
   ZK-2489: iscroll not working for tablet
   ZK-2493: ClassUtil.newInstance() may cause stack overflow exception
   ZK-2494: SVG image looks different over ZK zul page on firefox and opera
+  ZK-2506: href with mailto: causes session timeout
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
