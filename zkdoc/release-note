@@ -39,6 +39,7 @@ ZK 7.0.4
   ZK-2472: zk_download iframe creates scrollbar
   ZK-2489: iscroll not working for tablet
   ZK-2493: ClassUtil.newInstance() may cause stack overflow exception
+  ZK-2509: grid column width not render correct when using frozen component
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
