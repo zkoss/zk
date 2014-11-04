@@ -126,19 +126,44 @@
 			<version>2.4</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Test Dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-easymock</artifactId>
+			<version>1.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.5.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
-		<testOutputDirectory>${project.build.directory}/test-classes
-		</testOutputDirectory>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>${project.basedir}/src/archive</directory>
 			</resource>
 		</resources>
+		<testSourceDirectory>${project.basedir}/test/</testSourceDirectory>
+		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 		<plugins>
 			<!--<plugin>
 				<groupId>org.zkoss.maven</groupId>
