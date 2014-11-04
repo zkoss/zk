@@ -1,8 +1,24 @@
   --------
+ZK 7.0.3.2
+November 5, 2014
+* Features
+
+* Bugs
+  ZK-2487: ZK on iOS 8.0.2 Safari not working ?
+
+* Upgrade Notes
+
+  --------
 ZK 7.0.3.1
 October 15, 2014
-  Fixed file upload issues in IE 10 or below for 7.0.3
-  
+* Features
+
+* Bugs
+  ZK-2449: upload button affects button layout flow
+  ZK-2471: file upload in IE10
+  ZK-2478: Menuitem Fileupload not working in IE 10 and below
+
+* Upgrade Notes
 
   --------
 ZK 7.0.3
