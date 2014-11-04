@@ -872,10 +872,14 @@ public class Parser {
 					if (!isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 							&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						compInfo.addProperty(attr.getName(), attval, null);
+						continue;
 					} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
 						compInfo.addProperty(attnm, attval, null);
+						continue;
 					}
-				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
+				}
+				
+				if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setForward(attval);
