@@ -83,4 +83,4 @@ function handler(event) {
     return ($.event.dispatch || $.event.handle).apply(this, args);
 }
 
-})(jQuery);
+})(jq); // ZK-2507: use jq to avoid jQuery conflicts
