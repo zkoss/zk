@@ -692,4 +692,4 @@
 
   // Export some functions for testable-ness.
   $.transit.getTransitionValue = getTransition;
-})(jQuery);
+})(jq); // ZK-2507: use jq to avoid jQuery conflicts

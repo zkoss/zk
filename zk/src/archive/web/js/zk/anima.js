@@ -132,7 +132,7 @@ zk.copy(zjq.prototype, {
 	 */
 	getAnimationSpeed : function (defaultValue) {
 		var animationSpeed = jq(this.$().$n()).data('animationspeed'),
-			jqSpeed = $.fx.speeds;
+			jqSpeed = jq.fx.speeds;
 		
 		if(typeof animationSpeed === 'string') {
 			if(jqSpeed[animationSpeed])
