@@ -787,6 +787,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
 					var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd));
+					//B70-ZK-2509: w.$n().offsetWidth is small when there are many columns at beginning, so save revised width if any
+					w._origWd = revisedWidth + 'px';
 					bdcol.style.width = revisedWidth + 'px';
 					hdcol.style.width = bdcol.style.width;
 					if (ftcol)

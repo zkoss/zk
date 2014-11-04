@@ -40,6 +40,7 @@ ZK 7.0.4
   ZK-2489: iscroll not working for tablet
   ZK-2493: ClassUtil.newInstance() may cause stack overflow exception
   ZK-2494: SVG image looks different over ZK zul page on firefox and opera
+  ZK-2509: grid column width not render correct when using frozen component
   ZK-2507: Some portlets deployed to Liferay 5.2.3 cause JavaScript errors
   ZK-2487: ZK on iOS 8.0.2 Safari not working ?
   ZK-2506: href with mailto: causes session timeout
