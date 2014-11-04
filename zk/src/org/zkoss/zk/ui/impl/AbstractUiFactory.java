@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.metainfo.TemplateInfo;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.util.Composer;
 
@@ -101,12 +102,15 @@ abstract public class AbstractUiFactory implements UiFactory {
 	ShadowInfo compInfo, Component insertBefore) {
 		final Component comp = compInfo.newInstance(page, parent);
 		Utils.setShadowInfo(comp, compInfo);
+		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		
-		if (parent instanceof ShadowElement) {
+		if (currentInfo instanceof ShadowElement) {
+			((Component) currentInfo).insertBefore(comp, insertBefore);
+		} else if (parent instanceof ShadowElement) {
 			parent.insertBefore(comp, insertBefore);
 		} else if (parent != null) {
-			((ShadowElementCtrl) comp).setShadowHost(parent);
-		} else { // rare case, but may happen when developer uses this method.
+			((ShadowElementCtrl) comp).setShadowHost(parent, insertBefore);
+		} else { // TODO, for Page case
 			
 		}
 

@@ -697,7 +697,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/*package*/ final int nChild() { //called by HtmlNativeComponent
 		return _chdinf != null ? _chdinf.nChild: 0;
 	}
-	private int modCntChd() {
+	/*package*/ int modCntChd() { // called by HtmlShadowElement
 		return _chdinf != null ? _chdinf.modCntChd: 0;
 	}
 
@@ -3567,38 +3567,56 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 	private void triggerBeforeHostParentChanged(Component parent) {
-		for (ShadowElement se : getShadowRoots()) {
-			if (se instanceof ShadowElementCtrl) {
-				((ShadowElementCtrl)se).beforeHostParentChanged(parent);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			for (ShadowElement se : getShadowRoots()) {
+				if (se instanceof ShadowElementCtrl) {
+					((ShadowElementCtrl)se).beforeHostParentChanged(parent);
+				}
 			}
 		}
 	}
 	private void triggerBeforeHostChildRemoved(Component child) {
-		for (ShadowElement se : getShadowRoots()) {
-			if (se instanceof ShadowElementCtrl) {
-				((ShadowElementCtrl)se).beforeHostChildRemoved(child);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			final int indexOf = getChildren().indexOf(child);
+			for (ShadowElement se : getShadowRoots()) {
+				if (se instanceof ShadowElementCtrl) {
+					((ShadowElementCtrl)se).beforeHostChildRemoved(child, indexOf);
+				}
 			}
 		}
 	}
 	private void triggerAfterHostChildRemoved(Component child) {
-		for (ShadowElement se : getShadowRoots()) {
-			if (se instanceof ShadowElementCtrl) {
-				((ShadowElementCtrl)se).afterHostChildRemoved(child);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			final int indexOf = getChildren().indexOf(child);
+			for (ShadowElement se : getShadowRoots()) {
+				if (se instanceof ShadowElementCtrl) {
+					((ShadowElementCtrl)se).afterHostChildRemoved(child, indexOf);
+				}
 			}
 		}
 	}
 	private void triggerBeforeHostChildAdded(Component child, Component insertBefore) {
-		for (ShadowElement se : getShadowRoots()) {
-			if (se instanceof ShadowElementCtrl) {
-				((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
+			for (ShadowElement se : getShadowRoots()) {
+				if (se instanceof ShadowElementCtrl) {
+					((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore, indexOfInsertBefore);
+				}
 			}
 		}
-		
 	}
 	private void triggerAfterHostChildAdded(Component child) {
-		for (ShadowElement se : getShadowRoots()) {
-			if (se instanceof ShadowElementCtrl) {
-				((ShadowElementCtrl)se).afterHostChildAdded(child);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			final int indexOf = getChildren().indexOf(child);
+			for (ShadowElement se : getShadowRoots()) {
+				if (se instanceof ShadowElementCtrl) {
+					((ShadowElementCtrl)se).afterHostChildAdded(child, indexOf);
+				}
 			}
 		}
 	}
@@ -3617,6 +3635,8 @@ w:use="foo.MyWindow"&gt;
 		AuxInfo auxinf = initAuxInfo();
 		if (auxinf.seRoots == null)
 			auxinf.seRoots = new LinkedList<ShadowElement>();
-		return auxinf.seRoots.add(shadow);
+		if (!auxinf.seRoots.contains(shadow))
+			return auxinf.seRoots.add(shadow);
+		return false;
 	}
 }

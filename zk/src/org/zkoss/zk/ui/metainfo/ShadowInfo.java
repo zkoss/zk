@@ -202,7 +202,7 @@ public class ShadowInfo extends BranchInfo {
 
 	//Object//
 	public String toString() {
-		final StringBuffer sb = new StringBuffer(40).append("[shadow element:");
+		final StringBuffer sb = new StringBuffer(40).append("[shadow element(").append(_tag).append(")");
 		if (_props != null)
 			for (Property name: _props)
 				sb.append(' ').append(name.getName());
