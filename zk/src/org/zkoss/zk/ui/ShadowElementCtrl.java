@@ -55,9 +55,8 @@ public interface ShadowElementCtrl {
 	
 	/** Called when a child is removed to the host.
 	 * @param child the child has been added (never null).
-	 * @param indexOfChild the index of the removed child.
 	 */
-	public void afterHostChildRemoved(Component child, int indexOfChild);
+	public void afterHostChildRemoved(Component child);
 	
 	/**
 	 * Returns whether the shadow element contains a dynamic value, it means the

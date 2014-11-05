@@ -464,7 +464,7 @@ public interface ComponentCtrl {
 	 * Returns a set of shadow elements, if any.
 	 * @since 8.0.0
 	 */
-	public List<ShadowElement> getShadowRoots();
+	public <T extends ShadowElement> List<T> getShadowRoots();
 	
 	/**
 	 * Removes the given shadow root from this host.

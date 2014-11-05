@@ -87,6 +87,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -3566,60 +3567,99 @@ w:use="foo.MyWindow"&gt;
 			_zscript = zs;
 		}
 	}
+
+	// Shadow Element Implementation Start
+	private Map<Component, Integer> intIndexMap() {
+		Map<Component, Integer> distributedIndexInfo = (Map<Component, Integer>)ShadowElementsCtrl.getDistributedIndexInfo();
+		if (distributedIndexInfo == null) {
+			distributedIndexInfo = new HashMap<Component, Integer>(getChildren().size());
+			ShadowElementsCtrl.setDistributedIndexInfo(distributedIndexInfo);
+		}
+		return distributedIndexInfo;
+	}
+	private void destroyIndexMap() {
+		ShadowElementsCtrl.setDistributedIndexInfo(null);
+	}
+	
 	private void triggerBeforeHostParentChanged(Component parent) {
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
-			for (ShadowElement se : getShadowRoots()) {
-				if (se instanceof ShadowElementCtrl) {
-					((ShadowElementCtrl)se).beforeHostParentChanged(parent);
+			try {
+				intIndexMap();
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).beforeHostParentChanged(parent);
+					}
 				}
+			} finally {
+				destroyIndexMap();
 			}
 		}
 	}
 	private void triggerBeforeHostChildRemoved(Component child) {
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
-			final int indexOf = getChildren().indexOf(child);
-			for (ShadowElement se : getShadowRoots()) {
-				if (se instanceof ShadowElementCtrl) {
-					((ShadowElementCtrl)se).beforeHostChildRemoved(child, indexOf);
+			try {
+				intIndexMap();
+				final int indexOf = getChildren().indexOf(child);
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).beforeHostChildRemoved(child, indexOf);
+					}
 				}
+			} finally {
+				destroyIndexMap();
 			}
 		}
 	}
 	private void triggerAfterHostChildRemoved(Component child) {
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
-			final int indexOf = getChildren().indexOf(child);
-			for (ShadowElement se : getShadowRoots()) {
-				if (se instanceof ShadowElementCtrl) {
-					((ShadowElementCtrl)se).afterHostChildRemoved(child, indexOf);
+			try {
+				intIndexMap();
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).afterHostChildRemoved(child);
+					}
 				}
+			} finally {
+				destroyIndexMap();
 			}
 		}
 	}
 	private void triggerBeforeHostChildAdded(Component child, Component insertBefore) {
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
-			final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
-			for (ShadowElement se : getShadowRoots()) {
-				if (se instanceof ShadowElementCtrl) {
-					((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore, indexOfInsertBefore);
+			try {
+				intIndexMap();
+				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore, indexOfInsertBefore);
+					}
 				}
+			} finally {
+				destroyIndexMap();
 			}
 		}
 	}
 	private void triggerAfterHostChildAdded(Component child) {
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
-			final int indexOf = getChildren().indexOf(child);
-			for (ShadowElement se : getShadowRoots()) {
-				if (se instanceof ShadowElementCtrl) {
-					((ShadowElementCtrl)se).afterHostChildAdded(child, indexOf);
+			try {
+				intIndexMap();
+				final int indexOf = getChildren().indexOf(child);
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).afterHostChildAdded(child, indexOf);
+					}
 				}
+			} finally {
+				destroyIndexMap();
 			}
 		}
 	}
+	// Shadow Element Implementation End
 
 	@SuppressWarnings("unchecked")
 	public List<ShadowElement> getShadowRoots() {
