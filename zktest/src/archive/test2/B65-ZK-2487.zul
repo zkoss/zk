@@ -1,0 +1,33 @@
+<zk>
+	<label multiline="true">
+		1. you should not see endless loading animation in ios8 safari
+	</label>
+	<menu xmlns:w="client" w:onBind="this.$supers('domContent_', arguments)" />
+	<listbox>
+		<listitem>
+			<listcell></listcell>
+		</listitem>
+	</listbox>
+	<grid>
+		<columns>
+			<column />
+		</columns>
+	</grid>
+	<tabbox>
+		<tabs>
+			<tab />
+		</tabs>
+	</tabbox>
+	<tree>
+		<treecols>
+			<treecol />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell />
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
