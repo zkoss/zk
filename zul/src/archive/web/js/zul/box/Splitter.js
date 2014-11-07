@@ -343,25 +343,42 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			diff = run.z_point[0];
 			fd = 'width';
 		}
+		//B70-ZK-2514: make runNext always the same block with the dragging direction, ex. drag to up, up is runNext
+		var runNext = run.next, runPrev = run.prev;
+		if (diff < 0) {
+			runNext = run.prev;
+			runPrev = run.next;
+			diff = -diff;
+			bfcolps = !bfcolps;
+		}
+		
 		if (!diff) return; //nothing to do
 
 		if (w = run.nextwgt) zWatch.fireDown('beforeSize', w);
 		if (w = run.prevwgt) zWatch.fireDown('beforeSize', w);
 		
-		var ns = 0;
-		if (w = run.next) {
-			var s = zk.parseInt(w.style[fd]);
+		//B70-ZK-2514: assign fd to each block separately and count on clientFd in the end
+		if (runNext && runPrev) {
+			var s = zk.parseInt(runNext.style[fd]),
+				s2 = zk.parseInt(runPrev.style[fd]),
+				totalFd = s + s2;
+			
 			s -= diff;
 			if (s < 0) s = 0;
-			w.style[fd] = s + 'px';
-			if (!bfcolps) w.style.overflow = 'hidden';
-		}
-		if (w = run.prev) {
-			var s = zk.parseInt(w.style[fd]);
-			s += diff;
-			if (s < 0) s = 0;
-			w.style[fd] = s + 'px';
-			if (bfcolps) w.style.overflow = 'hidden';
+			var minusS = totalFd - s;
+			runNext.style[fd] = s + 'px';
+			runPrev.style[fd] = minusS + 'px';
+			var nextClientFd = runNext['client' + fd.charAt(0).toUpperCase() + fd.slice(1)];
+			var prevClientFd = totalFd - nextClientFd;
+			if (nextClientFd != s)
+				runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
+			if (prevClientFd != minusS)
+				runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
+			
+			if (!bfcolps) 
+				runNext.style.overflow = 'hidden';
+			else
+				runPrev.style.overflow = 'hidden';
 		}
 
 		if (w = run.nextwgt)
