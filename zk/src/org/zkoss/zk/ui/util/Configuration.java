@@ -175,6 +175,10 @@ public class Configuration {
 	private boolean _customThemeProvider = false;
 	private boolean _customThemeRegistry = false;
 	private boolean _customThemeResolver = false;
+	
+	//F70-ZK-2495: init crash script and timeout
+	private String _initCrashScript;
+	private int _initCrashTimeout = -1;
 
 	/** Constructor.
 	 */
@@ -2943,5 +2947,40 @@ public class Configuration {
 	 */
 	public void setCustomThemeResolver(boolean customThemeResolver) {
 		_customThemeResolver = customThemeResolver;
+	}
+
+	/**
+	 * Sets user customized init crash script
+	 * <p>User can customize init crash page layout by defining a javascript function which is assigned to <code>window.zkShowCrashMessage</code>
+	 * @param script
+	 * @since 7.0.4
+	 */
+	public void setInitCrashScript(String script) {
+		_initCrashScript = script;
+	}
+	/**
+	 * Sets user customized init crash timeout
+	 * <p>User can customize init crash timeout by simply giving a number(sec).
+	 * @param timeout
+	 * @since 7.0.4
+	 */
+	public void setInitCrashTimeout(int timeout) {
+		_initCrashTimeout = timeout;
+	}
+	/**
+	 * Returns init crash script, if null, use default, see crashmsg.js
+	 * @return String 
+	 * @since 7.0.4
+	 */
+	public String getInitCrashScript() {
+		return _initCrashScript;
+	}
+	/**
+	 * Returns init crash timeout, if 0, use default, which is 60 sec
+	 * @return int
+	 * @since 7.0.4
+	 */
+	public int getInitCrashTimeout() {
+		return _initCrashTimeout;
 	}
 }

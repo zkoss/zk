@@ -705,6 +705,14 @@ public class ConfigParser {
 
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));
+		
+		//F70-ZK-2495: add new config to customize crash script
+		s = conf.getElementValue("init-crash-script", true);
+		if (s != null) config.setInitCrashScript(s);
+		
+		//F70-ZK-2495: add new config to customize timeout
+		v = parseInteger(conf, "init-crash-timeout", NON_NEGATIVE);
+		if (v != null) config.setInitCrashTimeout(v.intValue());
 
 		//client (JS) packages
 		for (Iterator it = conf.getElements("package").iterator();
