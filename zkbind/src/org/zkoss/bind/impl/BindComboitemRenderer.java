@@ -39,7 +39,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 		final Combobox cb = (Combobox)item.getParent();
 		final ListModel<?> model = cb.getModel();
 		final int size = model.getSize();
-		final Template tm = resoloveTemplate(cb,item,data,index,size,"model");
+		final Template tm = resolveTemplate(cb,item,data,index,size,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);

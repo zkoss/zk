@@ -41,7 +41,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 		final Tabs tabs = tabbox.getTabs();
 		final int size = tabbox.getModel().getSize();
 		final String tmn = "model";
-		final Template tm = resoloveTemplate(tabbox,item,data,index,size,tmn,"tab");
+		final Template tm = resolveTemplate(tabbox,item,data,index,size,tmn,"tab");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
@@ -106,7 +106,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 		final Tabpanels tabpanels = tabbox.getTabpanels();
 		final int size = tabbox.getModel().getSize();
 		final String tmn = "model";
-		final Template tm = resoloveTemplate(tabbox,item,data,index,size,tmn,"tabpanel");
+		final Template tm = resolveTemplate(tabbox,item,data,index,size,tmn,"tabpanel");
 		if (tm == null) {
 			item.appendChild(new Label(Objects.toString(data)));
 		} else {
