@@ -45,7 +45,10 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		var cnt = this.domContent_(),
 			dn = this.$n('cave'),
 			size = this.nChildren,
-			total = jq(dn).contents().length,
+			// B70-ZK-2519: Do not count the empty text nodes created by prolog
+			total = jq(dn).contents().filter(function () {
+				return !(this.nodeType == 3 && !this.nodeValue.trim().length);
+			}).length,
 			index = 0;
 		
 		 // B50-ZK-313: only replace dom content
