@@ -790,7 +790,9 @@ public class UiEngineImpl implements UiEngine {
 			} else if (meta instanceof ShadowInfo) {
 				final ShadowInfo shadow = (ShadowInfo) meta;
 				if (isEffective(shadow, page, parent)) {
-					execCreateChild(ci, parent, shadow,  insertBefore);
+					final Component[] children = execCreateChild(ci, parent, shadow,  insertBefore);
+					for (int j = 0; j < children.length; ++j)
+						created.add(children[j]);
 				}
 			} else {
 				execNonComponent(ci, parent, meta);

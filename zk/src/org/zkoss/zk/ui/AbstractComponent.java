@@ -3569,15 +3569,18 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	// Shadow Element Implementation Start
-	private Map<Component, Integer> intIndexMap() {
-		Map<Component, Integer> distributedIndexInfo = (Map<Component, Integer>)ShadowElementsCtrl.getDistributedIndexInfo();
+	/**package*/ Map<Component, Integer> initIndexCacheMap() {
+		Map<Component, Integer> distributedIndexInfo = getIndexCacheMap();
 		if (distributedIndexInfo == null) {
 			distributedIndexInfo = new HashMap<Component, Integer>(getChildren().size());
 			ShadowElementsCtrl.setDistributedIndexInfo(distributedIndexInfo);
 		}
 		return distributedIndexInfo;
 	}
-	private void destroyIndexMap() {
+	/**package*/ Map<Component, Integer> getIndexCacheMap() {
+		return (Map<Component, Integer>) ShadowElementsCtrl.getDistributedIndexInfo();
+	}
+	/**package*/ void destroyIndexCacheMap() {
 		ShadowElementsCtrl.setDistributedIndexInfo(null);
 	}
 	
@@ -3585,14 +3588,14 @@ w:use="foo.MyWindow"&gt;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
 			try {
-				intIndexMap();
+				initIndexCacheMap();
 				for (ShadowElement se : getShadowRoots()) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).beforeHostParentChanged(parent);
 					}
 				}
 			} finally {
-				destroyIndexMap();
+				destroyIndexCacheMap();
 			}
 		}
 	}
@@ -3600,7 +3603,7 @@ w:use="foo.MyWindow"&gt;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
 			try {
-				intIndexMap();
+				initIndexCacheMap();
 				final int indexOf = getChildren().indexOf(child);
 				for (ShadowElement se : getShadowRoots()) {
 					if (se instanceof ShadowElementCtrl) {
@@ -3608,7 +3611,7 @@ w:use="foo.MyWindow"&gt;
 					}
 				}
 			} finally {
-				destroyIndexMap();
+				destroyIndexCacheMap();
 			}
 		}
 	}
@@ -3616,14 +3619,14 @@ w:use="foo.MyWindow"&gt;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
 			try {
-				intIndexMap();
+				initIndexCacheMap();
 				for (ShadowElement se : getShadowRoots()) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).afterHostChildRemoved(child);
 					}
 				}
 			} finally {
-				destroyIndexMap();
+				destroyIndexCacheMap();
 			}
 		}
 	}
@@ -3631,7 +3634,7 @@ w:use="foo.MyWindow"&gt;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
 			try {
-				intIndexMap();
+				initIndexCacheMap();
 				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
 				for (ShadowElement se : getShadowRoots()) {
 					if (se instanceof ShadowElementCtrl) {
@@ -3639,7 +3642,7 @@ w:use="foo.MyWindow"&gt;
 					}
 				}
 			} finally {
-				destroyIndexMap();
+				destroyIndexCacheMap();
 			}
 		}
 	}
@@ -3647,7 +3650,7 @@ w:use="foo.MyWindow"&gt;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
 			try {
-				intIndexMap();
+				initIndexCacheMap();
 				final int indexOf = getChildren().indexOf(child);
 				for (ShadowElement se : getShadowRoots()) {
 					if (se instanceof ShadowElementCtrl) {
@@ -3655,14 +3658,14 @@ w:use="foo.MyWindow"&gt;
 					}
 				}
 			} finally {
-				destroyIndexMap();
+				destroyIndexCacheMap();
 			}
 		}
 	}
 	// Shadow Element Implementation End
 
 	@SuppressWarnings("unchecked")
-	public List<ShadowElement> getShadowRoots() {
+	public <T extends ShadowElement> List<T> getShadowRoots() {
 		return _auxinf != null && _auxinf.seRoots != null ?
 			_auxinf.seRoots: Collections.EMPTY_LIST;
 	}

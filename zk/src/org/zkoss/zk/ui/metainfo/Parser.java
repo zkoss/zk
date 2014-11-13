@@ -706,7 +706,11 @@ public class Parser {
 							else if (!(parent instanceof TemplateInfo))
 								throw new UnsupportedOperationException(
 									message("Not allowed in text-as", ((Item)o).getParent()));
-					} else if (!(parent instanceof ShadowInfo) && !(parent instanceof TemplateInfo)) { // shadow element and template don't support LabelInfo
+					} else { // shadow element and template shouldn't support empty LabelInfo
+						if ((parent instanceof ShadowInfo || parent instanceof TemplateInfo)) {
+							if (trimLabel.isEmpty())
+								continue; //ignore
+						}
 						if (isTrimLabel() && !parentlang.isRawLabel()) {
 							if (trimLabel.length() == 0)
 								continue; //ignore
@@ -1323,6 +1327,10 @@ public class Parser {
 		
 		Node root = el.getFirstChild();
 		while (root != null && !(root instanceof Element)) {
+			if (root instanceof Text) {
+				if (!((Text)root).getText().trim().isEmpty())
+					break;
+			}
 			root = root.getNextSibling();
 		}
 		if (root != null) {

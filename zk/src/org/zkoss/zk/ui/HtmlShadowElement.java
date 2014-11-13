@@ -12,6 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.AbstractList;
+import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,17 +55,19 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	private transient Component _lastInsertion;
 	private transient Component _nextInsertion;
 	private transient Component _previousInsertion;
-	private transient Map<String, Object> _props;
-	private transient boolean _afterComposed = false;
-
+	protected transient Map<String, Object> _props;
+	protected transient boolean _afterComposed = false;
 	
 	protected Component _host;
+	
 	public HtmlShadowElement() {
 		init();
 	}
+	
 	private void init() {
 		_props = new LinkedHashMap<String, Object>();
 	}
+	
 	/**
 	 * Returns the next component before this shadow, if any. (it will invoke recursively from its parent.)
 	 */
@@ -219,11 +223,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		super.beforeChildAdded(child, refChild);
 	}
 	
-	@Override
-	public boolean insertBefore(Component newChild, Component refChild) {
-		// TODO Auto-generated method stub
-		return super.insertBefore(newChild, refChild);
-	}
 	public void onChildAdded(org.zkoss.zk.ui.Component child) {
 		super.onChildAdded(child);
 		HtmlShadowElement childSE = asShadow(child);
@@ -249,7 +248,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				"Unsupported for shadow element's invalidation, please use getShadowHost().invalidate() instead.");
 	}
 	
-	private Map<Component, Integer> fillIndexMap(Component first, Component last) {
+	private Map<Component, Integer> fillUpIndexMap(Component first, Component last) {
 		if (first == null) // last will be null too 
 			return getIndexMap();
 		Component parent = first.getParent();
@@ -281,12 +280,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	@SuppressWarnings("unused")
 	private int[] getInsertionIndex(Component firstChild, Component lastChild, Map<Component, Integer> indexMap) {
 		if (indexMap == null) {
-			indexMap = fillIndexMap(firstChild, lastChild);
+			indexMap = fillUpIndexMap(firstChild, lastChild);
 			return new int[] {indexMap.get(firstChild), indexMap.get(lastChild)};
 		} else {
 			Integer start = indexMap.get(firstChild), end = indexMap.get(lastChild);
 			if (start == null || end == null) // refill
-				indexMap = fillIndexMap(firstChild, lastChild);
+				indexMap = fillUpIndexMap(firstChild, lastChild);
 			start = indexMap.get(firstChild);
 			end = indexMap.get(lastChild);
 			return new int[] {start, end};
@@ -301,7 +300,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				_lastInsertion = lastChild;
 				isEdge = true;
 			} else {
-				Map<Component, Integer> indexMap = fillIndexMap(firstChild, lastChild);
+				Map<Component, Integer> indexMap = fillUpIndexMap(firstChild, lastChild);
 				int[] childIndex = getInsertionIndex(firstChild, lastChild, indexMap);
 				int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, indexMap);
 				
@@ -363,6 +362,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	public Object getDynamicProperty(String name) {
 		return _props.get(name);
 	}
+	public  Map<String,Object> getDynamicProperties() {
+		return _props;
+	}
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
 		_props.put(name, value);
@@ -392,8 +394,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	 * (rather than {@link #afterCompose}).
 	 */
 	public void afterCompose() {
-		_afterComposed = true;
-		if (isEffective() && _firstInsertion == null) { // don't do it twice, if it has a child.
+		if (!_afterComposed && isEffective() && _firstInsertion == null) { // don't do it twice, if it has a child.
+			_afterComposed = true;
 			Component host = getShadowHostIfAny();
 			if (host != null) {
 				Object shadowInfo = ShadowElementsCtrl.getCurrentInfo();
@@ -446,19 +448,20 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	 * The second invocation is ignored. If you want to recreate child
 	 * components, use {@link #recreate()} instead.
 	 * @param host the shadow host component, never null.
-	 * @return a set of components that contain Component and ShadowElement created in order.
 	 */
-	protected abstract Component[] compose(Component host);
+	protected abstract void compose(Component host);
 
 	public void beforeHostChildRemoved(Component child, int indexOfChild) {
-		log.warn("beforeHostChildRemoved " + child + ", in this shadow "  + 
+		if (log.isDebugEnabled()) {
+			log.debug("beforeHostChildRemoved " + child + ", in this shadow "  + 
 				ShadowElementsCtrl.getCurrentInfo());
+		}
 
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (currentInfo instanceof HtmlShadowElement) { // removed as my child in our control code
 			if (currentInfo == this) {
 				// do it at beginning. 
-				adjustInsertionForRemoved(this, child);
+				adjustInsertionForRemove(this, child);
 				
 				boolean isEdge = false;
 				Component oldFirst = _firstInsertion;
@@ -491,8 +494,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			int selfFirstIndex = children.indexOf(_firstInsertion);
 			if (indexOfChild < selfFirstIndex) return; // out of our range;
 			
-			Map<Component, Integer> indexMap = fillIndexMap(_firstInsertion, _lastInsertion);
-			int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, fillIndexMap(_firstInsertion, _lastInsertion));
+			Map<Component, Integer> indexMap = fillUpIndexMap(_firstInsertion, _lastInsertion);
+			int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, fillUpIndexMap(_firstInsertion, _lastInsertion));
 			if (selfIndex[1] < indexOfChild) return; // out of our range;
 
 			HtmlShadowElement node = queryIntersectedShadowIfAny(indexOfChild, indexMap);
@@ -515,12 +518,64 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			return asShadow(binarySearchSubTree);
 		return null; // not found;
 	}
+	
+	private class BinarySearchIterator {
+		private HtmlShadowElement _subTree;
+		private int _low, _high, _mid, _midChild, _queryIndex;
+		public BinarySearchIterator(HtmlShadowElement subTree, int nChild, int queryIndex) {
+			_subTree = subTree;
+			_low = 0;
+			_high = nChild - 1;
+			_midChild = getMiddleIndex(_low, _high);
+			_mid = _midChild;
+			_queryIndex = queryIndex;
+		}
 
-	// return -1, not found;
-	private int checkMiddleIndex(int low, int high) {
-		if (low > high)
-			return -1;
-		return (low + high) >>> 1;
+		// return -1, not found;
+		private int getMiddleIndex(int low, int high) {
+			if (low > high)
+				return -1;
+			return (low + high) >>> 1;
+		}
+
+		public boolean hasNext() {
+			return _low <= _high && _mid >= 0;
+		}
+
+		public HtmlShadowElement next() {
+			return asShadow(_subTree.getChildren().get(_mid));
+		}
+		
+		private void checkIndex() {
+			int newMid = getMiddleIndex(_low, _high);
+			if (_mid == newMid)
+				_mid = -1; // nothing do to.
+			else
+				_midChild = _mid = newMid;
+		}
+		public void adjustCursor(Integer result) {
+			final int queryResult = result.intValue();
+			if (queryResult < 0) {// not found, find next
+				if (_mid <= _low) {
+					_low = _midChild + 1; // not found and do it from right again.
+					checkIndex();
+				} else {
+					_mid--;
+				}
+			} else if (queryResult > -1) { // find but not match
+				if (_low == _mid && _mid == _high) {
+					_mid = -1; // not found to avoid dead loop
+				} else {
+					if (queryResult < _queryIndex) {
+						_low = _mid + 1; // find from right
+					} else {
+						_high = _mid - 1; // find from left
+					}
+					checkIndex();
+				}
+			}
+		}
+		
 	}
 	private Object binarySearchSubTree(HtmlShadowElement subTree, int queryIndex, Map<Component, Integer> indexMap) {
 		int startIndex, endIndex;
@@ -537,41 +592,13 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		if (nChild == 0)
 			return subTree; // subTree is the intersection node.
 		
-		int low = 0;
-		int high = nChild - 1;
-		int midChild = checkMiddleIndex(low, high);
-		int mid = midChild;
+		
 //		int midIndex = (endIndex - startIndex) >>> 1;
-		while (low <= high && mid >= 0) {
-			System.out.println(subTree + ">>>" + mid);
-			HtmlShadowElement target = asShadow(subTree.getChildren().get(mid));
-			Object result = binarySearchSubTree(target, queryIndex, indexMap);
+		BinarySearchIterator bsit = new BinarySearchIterator(subTree, nChild, queryIndex);
+		while (bsit.hasNext()) {
+			Object result = binarySearchSubTree(bsit.next(), queryIndex, indexMap);
 			if (result instanceof Integer) {
-				int queryResult = ((Integer) result).intValue();
-				if (queryResult < 0) {// not found, find next
-					int oldMid = mid;
-					mid--;
-					if (oldMid <= low) {
-						low = midChild + 1; // not found and do it from right again.
-						mid = checkMiddleIndex(low, high);
-						midChild = mid;
-						if (mid == oldMid)
-							break; // nothing do to.
-					}
-				} else if (queryResult > -1) { // find but not match
-					if (low == mid && mid == high) {
-						break; // not found to avoid dead loop
-					}
-					if (queryResult < queryIndex) {
-						low = mid + 1; // find from right
-					} else {
-						high = mid - 1; // find from left
-					}
-					int newMid = checkMiddleIndex(low, high);
-					if (newMid == mid)
-						break; // nothing do to.
-					midChild = mid = newMid; 
-				}
+				bsit.adjustCursor((Integer)result);
 			} else {
 				return result; // node is found.
 			}
@@ -579,14 +606,20 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		
 		return subTree; // subTree is the intersection node.
 	}
+	
 	public void beforeHostParentChanged(Component parent) {
-		log.warn("beforeHostParentChanged " + parent + ", in this shadow "  + 
+		if (log.isDebugEnabled()) {
+			log.debug("beforeHostParentChanged " + parent + ", in this shadow "  + 
 				ShadowElementsCtrl.getCurrentInfo());
+		}
 	}
 
 	public void beforeHostChildAdded(Component child, Component insertBefore, int indexOfInsertBefore) {
-		log.warn("beforeHostChildAdded " + child + ", " + insertBefore + ", in this shadow "  + 
-				ShadowElementsCtrl.getCurrentInfo());
+		if (log.isDebugEnabled()) {
+			log.warn("beforeHostChildAdded " + child + ", " + insertBefore + ", in this shadow "  + 
+					ShadowElementsCtrl.getCurrentInfo());
+		}
+		
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (indexOfInsertBefore < 0) {
 			if (currentInfo instanceof HtmlShadowElement) { // in our control
@@ -599,19 +632,25 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					_nextInsertion = child;
 			}
 		} else { // special case
-			Map<Component, Integer> indexMap = fillIndexMap(_firstInsertion, _lastInsertion);
+			Map<Component, Integer> indexMap = fillUpIndexMap(_firstInsertion, _lastInsertion);
 			HtmlShadowElement node = queryIntersectedShadowIfAny(indexOfInsertBefore, indexMap);
 			if (currentInfo instanceof HtmlShadowElement) { // in our control
 				if (isAncestor(asShadow(currentInfo), node)) {
 					adjustInsertionForInsertBefore(node, child, insertBefore);
 				}
 			} else if (node != null) {
-				adjustInsertionForInsertBefore(node, child, insertBefore);
+				// check if the insertion is before the shadow root range,
+				// if true, do nothing.
+				if (this.getParent() != null || insertBefore != _firstInsertion) {
+					adjustInsertionForInsertBefore(node, child, insertBefore);
+				} else { // in front of the shadow root.
+					_previousInsertion = child; 
+				}
 			}
 		}
 	}
 	@SuppressWarnings("unchecked")
-	private <T extends HtmlShadowElement> T asShadow(Object o) {
+	private static <T extends HtmlShadowElement> T asShadow(Object o) {
 		return (T) o; 
 	}
 	private boolean isAncestor(HtmlShadowElement parent, HtmlShadowElement child) {
@@ -619,7 +658,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		if (parent == child) return true;
 		return isAncestor(parent, asShadow(child.getParent()));
 	}
-	private boolean adjustInsertionForRemoved(HtmlShadowElement se, Component removed) {
+	private boolean adjustInsertionForRemove(HtmlShadowElement se, Component removed) {
 		Component old = null;
 		Direction direction = inRange(se, removed);
 		switch (direction) {
@@ -681,7 +720,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			List<HtmlShadowElement> children = se.getChildren();
 			if (!children.isEmpty()) {
 				for (Iterator<HtmlShadowElement> sit = children.iterator(); sit.hasNext();) {
-					if (adjustInsertionForRemoved(sit.next(), removed))
+					if (adjustInsertionForRemove(sit.next(), removed))
 						return true;
 				}
 			}
@@ -732,64 +771,118 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			return false;
 		}
 	}
+	/**
+	 * A help class for an insertion direction.
+	 * @author jumperchen
+	 */
 	public enum Direction {
+		/**
+		 * It indicates the direction of the target is inserted before the previous insertion
+		 */
 		BEFORE_PREVIOUS,
+		/**
+		 * It indicates the direction of the target is the same as the previous insertion
+		 */
 		PREVIOUS,
+		/**
+		 * It indicates the direction of the target is the same as the first insertion
+		 */
 		FIRST,
+		/**
+		 * It indicates the direction of the target is inserted in its descendant insertion range
+		 */
 		IN_RANGE,
+		/**
+		 * It indicates the direction of the target is the same as the last insertion
+		 */
 		LAST,
+		/**
+		 * It indicates the direction of the target is the same as the next insertion
+		 */
 		NEXT,
+		/**
+		 * It indicates the direction of the target is inserted after the next insertion
+		 */
 		AFTER_NEXT,
+		/**
+		 * It cannot indicate the direction of the target where it should be inserted.
+		 */
 		UNKNOWN
 	}
-	private static int getIndex(Component child) {
-		if (child == null)
+	private static int getIndex(HtmlShadowElement owner, Component insertion) {
+		if (insertion == null)
 			return -1;
-		if (child.getParent() == null)
-			throw new IllegalStateException("The child cannot be orphan" + child);
-		if (child instanceof ShadowElement)
+		if (insertion.getParent() == null) {
+			if (owner == null) {
+				throw new IllegalStateException("The insertion cannot be orphan" + insertion);
+			} else {
+				throw new IllegalStateException("The insertion [" + insertion +
+						"] of the shadow [" + owner + "] cannot be orphan");
+			}
+		}
+		if (insertion instanceof ShadowElement)
 			return -1; // cannot compare component with shadow
-		return child.getParent().getChildren().indexOf(child);
+		return insertion.getParent().getChildren().indexOf(insertion);
 	}
-	// -2 before
-	// -1 previous insertion
+	
+	/**
+	 * Returns the direction of the target component according to the given shadow element.
+	 * @param se the shadow element
+	 * @param target the target to check.
+	 */
 	public static Direction inRange(HtmlShadowElement se, Component target) {
-		int targetIndex = getIndex(target);
-		int prev = getIndex(se.getPreviousInsertion());
-		int first = getIndex(se.getFirstInsertion());
-		int last = getIndex(se.getLastInsertion());
-		int next = getIndex(se.getNextInsertion());
-		if (targetIndex == prev) {
-			return Direction.PREVIOUS;
-		} else if (targetIndex == first) {
-			return Direction.FIRST;
-		} else if (targetIndex == last) {
-			return Direction.LAST;
-		} else if (targetIndex == next) {
-			return Direction.NEXT;
-		} else if (targetIndex > first && targetIndex < last) {
-			return Direction.IN_RANGE;
-		} else if (prev > -1 && targetIndex < prev) {
-			return Direction.BEFORE_PREVIOUS;
-		} else if (next > -1 && targetIndex > next) {
-			return Direction.AFTER_NEXT;
-		} else {
-			return Direction.UNKNOWN;
+		Map<Component, Integer> oldCacheMap = se.getIndexCacheMap();
+		final boolean destroyCacheMap = oldCacheMap == null;
+		try {
+			// cache the index.
+			if (destroyCacheMap)
+				oldCacheMap = se.initIndexCacheMap();
+			
+			int targetIndex = getIndex(null, target);
+			int prev = getIndex(se, se.getPreviousInsertion());
+			int first = getIndex(se, se.getFirstInsertion());
+			int last = getIndex(se, se.getLastInsertion());
+			int next = getIndex(se, se.getNextInsertion());
+			if (targetIndex == prev) {
+				return Direction.PREVIOUS;
+			} else if (targetIndex == first) {
+				return Direction.FIRST;
+			} else if (targetIndex == last) {
+				return Direction.LAST;
+			} else if (targetIndex == next) {
+				return Direction.NEXT;
+			} else if (targetIndex > first && targetIndex < last) {
+				return Direction.IN_RANGE;
+			} else if (prev > -1) {
+				return targetIndex - prev > 0 ? Direction.AFTER_NEXT : Direction.BEFORE_PREVIOUS;
+			} else if (first > -1) {
+				return targetIndex - first > 0 ? Direction.AFTER_NEXT : Direction.BEFORE_PREVIOUS;	
+			} else if (next > -1) {
+				return targetIndex - next > 0 ? Direction.AFTER_NEXT : Direction.BEFORE_PREVIOUS;
+			} else if (last > -1) {
+				return targetIndex - last > 0 ? Direction.AFTER_NEXT : Direction.BEFORE_PREVIOUS;	
+			} else {
+				return Direction.UNKNOWN;
+			}
+		} finally {
+			if (destroyCacheMap)
+				se.destroyIndexCacheMap();
 		}
 	}
 	public void afterHostChildAdded(Component child, int indexOfChild) {
-		log.warn("afterHostChildAdded " + child + ", in this shadow "  + 
-				ShadowElementsCtrl.getCurrentInfo());
+		if (log.isDebugEnabled()) {
+			log.debug("afterHostChildAdded " + child + ", in this shadow "  + 
+					ShadowElementsCtrl.getCurrentInfo());
+		}
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (currentInfo instanceof HtmlShadowElement) { // added as my child in our control code
-			Map<Component, Integer> indexMap = null;
 			if (currentInfo == this) {
 				boolean isEdge = false;
 				if (_firstInsertion == null) { // initial range
 					_firstInsertion = _lastInsertion = child;
 					isEdge = true;
 				} else {
-					int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, fillIndexMap(_firstInsertion, _lastInsertion));
+					int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, fillUpIndexMap(_firstInsertion, _lastInsertion));
 					if (indexOfChild < selfIndex[0]) {
 						_firstInsertion = child;
 						isEdge = true;
@@ -815,7 +908,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			int selfFirstIndex = children.indexOf(_firstInsertion);
 			if (insertIndex < selfFirstIndex) return; // out of our range;
 			
-			Map<Component, Integer> indexMap = fillIndexMap(_firstInsertion, _lastInsertion);
+			Map<Component, Integer> indexMap = fillUpIndexMap(_firstInsertion, _lastInsertion);
 			int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, indexMap);
 			if (selfIndex[1] < insertIndex) return; // out of our range;
 
@@ -832,8 +925,10 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	}
 	
 	public void afterHostChildRemoved(Component child) {
-		log.warn("afterHostChildRemoved " + child + ", in this shadow "  + 
+		if (log.isDebugEnabled()) {
+			log.debug("afterHostChildRemoved " + child + ", in this shadow "  + 
 				ShadowElementsCtrl.getCurrentInfo());
+		}
 	}
 
 	/** Detaches all child components and then recreate them by use of
@@ -854,8 +949,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			}
 			afterCompose();
 		}
-		// 1. remove all distributed children
-		// 2. so the same as afterCompose
 	}
 	
 	/**
@@ -898,7 +991,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	public <T extends Component> List<T> getDistributedChildren() {
 		final Component shadowHostIfAny = getShadowHostIfAny();
 		
-		return new AbstractList<T>() {
+		return new AbstractSequentialList<T>() {
 			@SuppressWarnings("unchecked")
 			public ListIterator<T> listIterator(int index) {
 				return (ListIterator<T>)new ChildIter((AbstractComponent)shadowHostIfAny, index);
@@ -1000,7 +1093,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				//if o has the same parent (since we have to move)
 		}
 	}
-
 	
 	// refer to AnnotateBinderHelper.BIND_ANNO
 	final static private String BIND_ANNO = "bind";
@@ -1034,14 +1126,14 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	 * Returns how many properties that support a dynamic value. This method is
 	 * used by {@link #isDynamicValue()} to check automatically.
 	 */
-	public abstract List<String> getDynamicProperties();
+	protected abstract Set<String> getDynamicKeys();
 
 	private Boolean _dynamicValue;
 
 	public boolean isDynamicValue() {
 		return true;
 //		if (_dynamicValue == null) {
-//			List<String> props = getDynamicProperties();
+//			List<String> props = getDynamicKeys();
 //			if (props != null) {
 //				for (String prop : props) {
 //					if (isDynamicValue(prop)) {
