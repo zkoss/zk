@@ -656,4 +656,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	   <value>org.zkoss.zkmax.bind.impl.AnnotateBinderEx</value>
 	</library-property>
 	 -->
+	 
+	 <client-config>
+		<init-crash-script><![CDATA[
+		    window.zkShowCrashMessage = function () {
+		    	var h2 = '<h2 style="background: rgb(1,133,174); text-align: center; ' 
+		    			+ 'color: white; width: 700px; margin: 0 auto;">';
+			    var msg = 'Ooooops!! zkErrorCode: ' + window.zkErrorCode;
+			    h2 = h2 + msg + '</h2>';
+			    document.body.style.background = 'rgb(1,133,174)';
+			    document.body.innerHTML = h2;
+		    }
+		  ]]></init-crash-script>
+		<init-crash-timeout>5</init-crash-timeout>
+	</client-config>
 </zk>

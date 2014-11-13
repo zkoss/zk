@@ -108,6 +108,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	private static void outHeaders(Execution exec, Page page, Writer out)
 	throws IOException {
 		out.write(HtmlPageRenders.outHeaders(exec, page, true));
+		//F70-ZK-2495: place init-crash-script before zk.wpd
+		out.write(HtmlPageRenders.outInitCrashScript(exec, null));
 		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
 		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		out.write(HtmlPageRenders.outHeaders(exec, page, false));

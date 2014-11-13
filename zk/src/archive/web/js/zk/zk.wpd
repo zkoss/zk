@@ -23,6 +23,7 @@ window.$eval=function(s){return eval(s);};
 		<!-- 1. jq.globalEval() seems have memory leak problem, so use eval()
 			 2. we cannot use eval() directly since compressor won't shorten names
 		-->
+	<script src="crashmsg.js" />
 	<script src="ext/jquery.js"/>
 	<script src="zk.js" jsdoc="true"/>
 	<function class="org.zkoss.zul.impl.Utils"

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window>
+	<label multiline="true">
+		1. quickly press the button
+		2. server no response error, error code = 5
+	</label>
+	<button label="show error 5" onClick='Thread.sleep(5000);'>
+	</button>
+</window>
