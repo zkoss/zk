@@ -39,7 +39,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 		final Listbox listbox = (Listbox)item.getParent();
 		final int size = listbox.getModel().getSize();
 		final String tmn = item instanceof Listgroup?"model:group":item instanceof Listgroupfoot?"model:groupfoot":"model";
-		final Template tm = resoloveTemplate(listbox,item,data,index,size,tmn);
+		final Template tm = resolveTemplate(listbox,item,data,index,size,tmn);
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);

@@ -34,7 +34,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 	public void render(final Treeitem item, final Object data, final int index) throws Exception {
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
-		final Template tm = resoloveTemplate(tree,parent,data,index,-1,"model");
+		final Template tm = resolveTemplate(tree,parent,data,index,-1,"model");
 		if (tm == null) {
 			Treecell tc = new Treecell(Objects.toString(data));
 			Treerow tr = null;

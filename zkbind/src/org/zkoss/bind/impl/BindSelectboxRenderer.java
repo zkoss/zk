@@ -36,7 +36,7 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 	
 	public String render(final Component owner, final Object data, final int index) throws Exception {
 		final int size = ((Selectbox)owner).getModel().getSize();
-		final Template tm = resoloveTemplate(owner,owner,data,index,size,"model");
+		final Template tm = resolveTemplate(owner,owner,data,index,size,"model");
 		if (tm == null) {
 			return Objects.toString(data);
 		} else {

@@ -38,7 +38,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 		final Grid grid = (Grid)rows.getParent();
 		final int size = grid.getModel().getSize();
 		final String tmn = row instanceof Group?"model:group":row instanceof Groupfoot?"model:groupfoot":"model";
-		final Template tm = resoloveTemplate(grid,row,data,index,size,tmn);
+		final Template tm = resolveTemplate(grid,row,data,index,size,tmn);
 		if (tm == null) {
 			final Label label = newRenderLabel(Objects.toString(data));
 			label.applyProperties();

@@ -36,7 +36,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 	throws Exception {
 		final Radiogroup radiogroup = item.getRadiogroup();
 		final int size = radiogroup.getModel().getSize();
-		final Template tm = resoloveTemplate(radiogroup,item,data,index,size,"model");
+		final Template tm = resolveTemplate(radiogroup,item,data,index,size,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);

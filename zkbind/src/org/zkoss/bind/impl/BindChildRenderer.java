@@ -32,7 +32,7 @@ public class BindChildRenderer extends AbstractRenderer{
 	}
 	
 	public void render(final Component owner, final Object data, final int index, final int size){
-		final Template tm = resoloveTemplate(owner,owner,data,index,size,"children");
+		final Template tm = resolveTemplate(owner,owner,data,index,size,"children");
 		if (tm == null) {
 			Label l = new Label(data==null?"":data.toString());
 			l.setParent(owner);
