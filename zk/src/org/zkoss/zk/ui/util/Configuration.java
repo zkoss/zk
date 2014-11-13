@@ -2976,7 +2976,7 @@ public class Configuration {
 		return _initCrashScript;
 	}
 	/**
-	 * Returns init crash timeout, if 0, use default, which is 60 sec
+	 * Returns init crash timeout, if -1, use default, which is 60 sec
 	 * @return int
 	 * @since 7.0.4
 	 */
