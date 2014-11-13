@@ -45,6 +45,7 @@ ZK 7.0.4
   ZK-2487: ZK on iOS 8.0.2 Safari not working ?
   ZK-2506: href with mailto: causes session timeout
   ZK-2514: Splitter doesn't move to the position being dragged to
+  ZK-2519: Changing the caption label removes other DOM elements in the caption
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
