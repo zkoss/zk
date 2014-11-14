@@ -41,8 +41,6 @@ setTimeout(function () {
 				zkErrorCode = 5;
 		}
 		
-		window.zkErrorCode = zkErrorCode; //user can get zkErrorCode to customize message 
-		
 		if (!window.zkShowCrashMessage) {
 			window.zkShowCrashMessage = function () {
 				var style = '<style> a:visited {color: white;} </style>';
@@ -78,6 +76,6 @@ setTimeout(function () {
 				body.innerHTML = div;
 			}
 		}
-		window.zkShowCrashMessage();
+		window.zkShowCrashMessage(zkErrorCode);
 	}
 }, window.zkInitCrashTimeout >= 0 ? window.zkInitCrashTimeout * 1000 : 60000);

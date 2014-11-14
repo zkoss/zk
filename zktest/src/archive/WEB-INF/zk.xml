@@ -659,10 +659,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	 
 	 <client-config>
 		<init-crash-script><![CDATA[
-		    window.zkShowCrashMessage = function () {
+		    window.zkShowCrashMessage = function (code) {
 		    	var h2 = '<h2 style="background: rgb(1,133,174); text-align: center; ' 
 		    			+ 'color: white; width: 700px; margin: 0 auto;">';
-			    var msg = 'Ooooops!! zkErrorCode: ' + window.zkErrorCode;
+			    var msg = 'Ooooops!! ErrorCode: ' + code;
 			    h2 = h2 + msg + '</h2>';
 			    document.body.style.background = 'rgb(1,133,174)';
 			    document.body.innerHTML = h2;
@@ -670,4 +670,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		  ]]></init-crash-script>
 		<init-crash-timeout>5</init-crash-timeout>
 	</client-config>
+	
+	<library-property>
+      <name>org.zkoss.zk.WPD.cache</name>
+      <value>false</value>
+  </library-property>
 </zk>
