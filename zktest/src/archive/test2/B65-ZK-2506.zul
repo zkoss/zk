@@ -1,0 +1,51 @@
+<zk>
+	<window border="normal" title="ZK-2506" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_2506_VM')">
+		<label multiline="true">
+			Click each Links and buttons, blank href should
+			not cause any js error
+			mailto hrefs should open a blank page and
+			process the default mail client.
+			regular hrefs should redirect the
+			current page
+		</label>
+		<vlayout>
+
+			<a href="Mailto:foo@gmail.com">
+				<label value="foo@gmail.com" />
+			</a>
+			<a>
+				<label value="This is a Blank URL" />
+			</a>
+			<button href="Mailto:foo@gmail.com" label="foo@gmail.com"></button>
+			<menubar>
+				<menu label="file menu">
+					<menupopup>
+						<menuitem href="Mailto:foo@gmail.com" label="mailToFoo" />
+					</menupopup>
+				</menu>
+				<menuitem href="Mailto:foo@gmail.com" label="mailToFoo" />
+			</menubar>
+			<toolbar>
+				<toolbarbutton href="Mailto:foo@gmail.com" label="mailToFoo" />
+			</toolbar>
+			<button label="Check state" onClick="@command('checkState')" />
+			<label value="@load(vm.name)" />
+			<a href="http://www.google.com">
+				<label value="GOOGLE" />
+			</a>
+			<button href="http://www.google.com" label="GOOGLE"></button>
+			<menubar>
+				<menu label="file menu">
+					<menupopup>
+						<menuitem href="http://www.google.com" label="GOOGLE" />
+					</menupopup>
+				</menu>
+				<menuitem href="http://www.google.com" label="GOOGLE" />
+			</menubar>
+			<toolbar>
+				<toolbarbutton href="http://www.google.com" label="GOOGLE" />
+			</toolbar>
+		</vlayout>
+	</window>
+</zk>

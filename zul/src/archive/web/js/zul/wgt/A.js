@@ -135,6 +135,12 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		return attr;
 	},
 	doClick_: function(evt){
+		var href = this.getHref();
+		// ZK-2506: open a blank page to process "mailto" url
+		if (href && href.toLowerCase().startsWith('mailto:')) {
+			zUtl.go(href, {target: '_blank'});
+			evt.stop({dom: true});
+		}
 		if (this._disabled) 
 			evt.stop(); //prevent browser default
 		else {

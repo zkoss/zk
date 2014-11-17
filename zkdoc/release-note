@@ -17,6 +17,7 @@ ZK 6.5.8
   ZK-2380: IE8 causing script error with borderlayout and toolbar
   ZK-2464: Possible XSS Vulnerability in HTTP Header
   ZK-2487: ZK on iOS 8.0.2 Safari not working ?
+  ZK-2506: href with mailto: causes session timeout
   
   --------
 ZK 6.5.7
