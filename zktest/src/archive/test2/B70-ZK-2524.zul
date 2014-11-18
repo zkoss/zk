@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2524.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Nov 18, 2014  4:42:40 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<div apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2524ViewModel')">
+    <label style="font-size:20px;font-weight:bold">You should only see two 'getName()' at log console.</label>
+    <vlayout children="@load(vm.model)">
+        <template name="children">
+            <label value="@init(each.name)"/>
+            <label value="@load(each.name)"/>
+        </template>
+    </vlayout>
+</div>

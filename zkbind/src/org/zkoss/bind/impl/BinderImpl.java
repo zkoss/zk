@@ -2171,8 +2171,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void loadComponent0(Component comp,boolean loadinit) {
 		loadComponentProperties0(comp,loadinit);
 		
-		for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
-			loadComponent0(kid,loadinit); //recursive
+		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
+		if (compBindings == null || !compBindings.keySet().contains(CHILDREN_ATTR)) {
+			for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
+				loadComponent0(kid,loadinit); //recursive
+			}
 		}
 	}
 	
