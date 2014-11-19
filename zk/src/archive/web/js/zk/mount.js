@@ -829,7 +829,14 @@ jq(function() {
 	};
 
 	var _oldBfUnload = window.onbeforeunload;
-	window.onbeforeunload = function () {
+	window.onbeforeunload = function (evt) {
+		// ZK-2506
+		if (evt && zk._preventBeforeUnloadDefault) {
+			evt.preventDefault();
+			delete zk._preventBeforeUnloadDefault;
+			return;
+		}
+
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose)
 				return zk.confirmClose;
