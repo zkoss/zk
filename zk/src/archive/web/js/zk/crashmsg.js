@@ -18,7 +18,7 @@
 
 Copyright (C)  Potix Corporation. All Rights Reserved.
 */
-setTimeout(function () {
+window.zkInitCrashTimer = setTimeout(function () {
 	var zkErrorCode,
 		z_runonce = document.querySelectorAll('.z-runonce')[0], 
 		zk_proc = document.getElementById('zk_proc'),
