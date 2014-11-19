@@ -307,8 +307,17 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (!evt.stopped) {
 				var href = this._href,
 					isMailTo = href ? href.toLowerCase().startsWith('mailto:') : false;
-				if (href) // ZK-2506: always open a mailto url with _blank
-					zUtl.go(href, {target: isMailTo ? '_blank' : this._target || (evt.data.ctrlKey ? '_blank' : '')});
+				
+				if (href) {
+					// ZK-2506: use iframe to open a 'mailto' href
+					if (isMailTo) {
+						var ifrm = jq.newFrame('mailtoFrame', href, null);
+						jq(ifrm).remove();
+					}
+					else
+						zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
+				}
+				
 				this.$super('doClick_', evt, true);
 			}
 		}
