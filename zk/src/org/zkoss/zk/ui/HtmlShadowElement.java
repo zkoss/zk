@@ -55,18 +55,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	private transient Component _lastInsertion;
 	private transient Component _nextInsertion;
 	private transient Component _previousInsertion;
-	protected transient Map<String, Object> _props;
 	protected transient boolean _afterComposed = false;
 	
 	protected Component _host;
-	
-	public HtmlShadowElement() {
-		init();
-	}
-	
-	private void init() {
-		_props = new LinkedHashMap<String, Object>();
-	}
 	
 	/**
 	 * Returns the next component before this shadow, if any. (it will invoke recursively from its parent.)
@@ -149,26 +140,23 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			Component prev = (Component)lastShadowElement;
 			HtmlShadowElement prevOwner = asShadow(lastShadowElement);
 			Component lastChild = host.getLastChild();
-			 while (prev != null) {
-				if (prev instanceof HtmlShadowElement) {
-					prevOwner  = asShadow(prev);
-					prev = prevOwner.getPreviousInsertion();
-				} else {
+			 
+			if (prevOwner == null) {
+				prev = lastChild;
+			} else {
+				switch (HtmlShadowElement.inRange(prevOwner, lastChild)) {
+				case NEXT:
+				case AFTER_NEXT:
+				case UNKNOWN:
+					prev = lastChild;
 					break;
+				default:
+					// prev is the lastShadowElement 
 				}
 			}
-			
-			if (prev == null) { // only shadow elements in front of it
-				if (lastChild == null) // no any Component available 
-					_previousInsertion = (Component) lastShadowElement;
-				else
-					_previousInsertion = lastChild;
-			} else {
-				if (prev == lastChild) { // the lastShadowElement is the last one
-					_previousInsertion = (Component) lastShadowElement;
-				} else {
-					_previousInsertion = lastChild;
-				}
+			_previousInsertion = prev;
+			if (prev == lastShadowElement && prev != null) {
+				prevOwner._nextInsertion = this;
 			}
 		}
 			
@@ -345,29 +333,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	//Cloneable//
 	public Object clone() {
 		final HtmlShadowElement clone = (HtmlShadowElement)super.clone();
-		clone.init();
-		clone._props.putAll(_props);
 		
 		clone._previousInsertion = _previousInsertion;
 		clone._firstInsertion = _firstInsertion;
 		clone._lastInsertion = _lastInsertion;
 		clone._nextInsertion = _nextInsertion;
 		return clone;
-	}
-
-	//-- DynamicPropertied --//
-	public boolean hasDynamicProperty(String name) {
-		return _props.containsKey(name);
-	}
-	public Object getDynamicProperty(String name) {
-		return _props.get(name);
-	}
-	public  Map<String,Object> getDynamicProperties() {
-		return _props;
-	}
-	public void setDynamicProperty(String name, Object value)
-	throws WrongValueException {
-		_props.put(name, value);
 	}
 
 	public Component getShadowHost() {
@@ -394,26 +365,37 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	 * (rather than {@link #afterCompose}).
 	 */
 	public void afterCompose() {
-		if (!_afterComposed && isEffective() && _firstInsertion == null) { // don't do it twice, if it has a child.
+		if (!_afterComposed) { // don't do it twice, if it has a child.
 			_afterComposed = true;
-			Component host = getShadowHostIfAny();
-			if (host != null) {
-				Object shadowInfo = ShadowElementsCtrl.getCurrentInfo();
-				try {
-					ShadowElementsCtrl.setCurrentInfo(this);
-					compose(host);
-				} finally {
-					ShadowElementsCtrl.setCurrentInfo(shadowInfo);
+			if (isEffective() && _firstInsertion == null) {
+				Component host = getShadowHostIfAny();
+				if (host != null) {
+					Object shadowInfo = ShadowElementsCtrl.getCurrentInfo();
+					try {
+						ShadowElementsCtrl.setCurrentInfo(this);
+						compose(host);
+					} finally {
+						ShadowElementsCtrl.setCurrentInfo(shadowInfo);
+					}
 				}
 			}
 		}
 	}
 	
+	// TODO: not implemented yet
 	public boolean mergeChild(Component child) {
-		if (child.getParent() != this) {
+		if (child instanceof HtmlShadowElement) {
+			if (child.getParent() != this) {
+				return true;
+			}
+			return false; // same parent, nothing to do
+		} else if (child != null) { // shadow host
+			_parent = null;
+			((ComponentCtrl) child).addShadowRoot(this);
+			_host = child;
 			return true;
 		}
-		return false; // same parent, nothing to do
+		return false;
 	}
 	
 	public List<ShadowElement> rebuildShadowTree() {
@@ -650,7 +632,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		}
 	}
 	@SuppressWarnings("unchecked")
-	private static <T extends HtmlShadowElement> T asShadow(Object o) {
+	protected static <T extends HtmlShadowElement> T asShadow(Object o) {
 		return (T) o; 
 	}
 	private boolean isAncestor(HtmlShadowElement parent, HtmlShadowElement child) {
@@ -816,8 +798,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			if (owner == null) {
 				throw new IllegalStateException("The insertion cannot be orphan" + insertion);
 			} else {
-				throw new IllegalStateException("The insertion [" + insertion +
-						"] of the shadow [" + owner + "] cannot be orphan");
+				if (insertion instanceof HtmlShadowElement && ((HtmlShadowElement) insertion).getShadowHost() != null) {
+					return -1;
+				} else {
+					throw new IllegalStateException("The insertion [" + insertion +
+							"] of the shadow [" + owner + "] cannot be orphan");
+				}
 			}
 		}
 		if (insertion instanceof ShadowElement)
@@ -947,6 +933,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					next = tmp;
 				}
 			}
+			_afterComposed = false; // reset
 			afterCompose();
 		}
 	}
@@ -1095,13 +1082,13 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	}
 	
 	// refer to AnnotateBinderHelper.BIND_ANNO
-	final static private String BIND_ANNO = "bind";
+	final static protected String BIND_ANNO = "bind";
 	// refer to AnnotateBinderHelper.BIND_ANNO
-	final static private String LOAD_ANNO = "load";
+	final static protected String LOAD_ANNO = "load";
 	// refer to AnnotateBinderHelper.SAVE_ANNO
-	final static private String SAVE_ANNO = "save";
+	final static protected String SAVE_ANNO = "save";
 	// refer to AnnotateBinderHelper.REFERENCE_ANNO
-	final static private String REFERENCE_ANNO = "ref";
+	final static protected String REFERENCE_ANNO = "ref";
 
 	/**
 	 * Returns whether the property name contains with a dynamic value.
@@ -1121,19 +1108,14 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		}
 		return false;
 	}
-
-	/**
-	 * Returns how many properties that support a dynamic value. This method is
-	 * used by {@link #isDynamicValue()} to check automatically.
-	 */
-	protected abstract Set<String> getDynamicKeys();
-
+	
 	private Boolean _dynamicValue;
 
 	public boolean isDynamicValue() {
 		return true;
 //		if (_dynamicValue == null) {
-//			List<String> props = getDynamicKeys();
+//			final ComponentCtrl ctrl = this;
+//			List<String> props = ctrl.getAnnotatedProperties();
 //			if (props != null) {
 //				for (String prop : props) {
 //					if (isDynamicValue(prop)) {
@@ -1157,6 +1139,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			else
 				return '<' + clsnm + '>';
 		}
-		return "<" + clsnm + " (" + _host + ")>";
+		ComponentCtrl host = (ComponentCtrl)_host;
+		return "<" + clsnm + "@" + host.getShadowRoots().indexOf(this) +" (" + _host + ")>";
 	}
 }

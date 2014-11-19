@@ -14,7 +14,6 @@ package org.zkoss.zk.ui;
 import java.util.List;
 
 import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 /**
  * A shadow element can allow to have a set of shadow elements to work with a
@@ -24,7 +23,7 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
  * @author jumperchen
  * @since 8.0.0
  */
-public interface ShadowElement extends AfterCompose, DynamicPropertied {
+public interface ShadowElement extends AfterCompose {
 
 	/**
 	 * Returns the owner component that hosts this shadow element.

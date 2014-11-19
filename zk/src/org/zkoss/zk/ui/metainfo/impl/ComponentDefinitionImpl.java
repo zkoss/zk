@@ -135,12 +135,13 @@ implements ComponentDefinition, java.io.Serializable {
 	 * as part of a page definition
 	 * @param pgdef the page definition. It is null if it is defined
 	 * as part of a language definition.
+	 * @param templateURI the URI of the ZUML page to representing this shadow, like macroURI.
 	 * @since 8.0.0
 	 */
 	public static final ComponentDefinition newShadowDefinition(
 	LanguageDefinition langdef, PageDefinition pgdef, String name,
-	Class<? extends Component> cls) {
-		return new ShadowDefinition(langdef, pgdef, name, cls);
+	Class<? extends Component> cls, String templateURi) {
+		return new ShadowDefinitionImpl(langdef, pgdef, name, cls, templateURi);
 	}
 	/** Constructs a macro component definition.
 	 * It is the component definition used to implement the macros.

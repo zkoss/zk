@@ -483,14 +483,18 @@ public class DefinitionLoaders {
 
 				if (cls == null && clsnm == null)
 					throw new UiException(message("component-class is required", el));
-				compdef = cls != null ?
-					new ComponentDefinitionImpl(langdef, null, name, cls):
-					new ComponentDefinitionImpl(langdef, null, name, clsnm);
-				compdef.setDeclarationURL(url);
 				String s = el.getElementValue("shadow-element", true);
 				if (s != null && !"false".equals(s)) {
+					compdef = cls != null ?
+						new ShadowDefinitionImpl(langdef, null, name, cls):
+						new ShadowDefinitionImpl(langdef, null, name, clsnm);
+					compdef.setDeclarationURL(url);
 					langdef.addShadowDefinition(compdef);
 				} else {
+					compdef = cls != null ?
+							new ComponentDefinitionImpl(langdef, null, name, cls):
+							new ComponentDefinitionImpl(langdef, null, name, clsnm);
+						compdef.setDeclarationURL(url);
 					langdef.addComponentDefinition(compdef);	
 				}
 			}

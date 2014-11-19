@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.impl.ZScriptInitiator;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
+import org.zkoss.zk.ui.metainfo.impl.ShadowDefinitionImpl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -433,7 +434,22 @@ public class Parser {
 		final LanguageDefinition langdef = lang != null ?
 			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
-		if (macroURI != null) {
+		String templateURI = params.remove("templateURI");
+		if (templateURI != null) { // assume it is shadow like (<apply>)
+			final String template = params.remove("template");
+			noEL("inline", template, pi);
+			noEL("templateURI", templateURI, pi);
+				//no EL because pagedef must be loaded to resolve
+				//the implementing class before creating an instance of shadow
+
+			compdef = langdef.getShadowDefinition(
+				name, pgdef, toAbsoluteURI(templateURI, false));
+			if (!isEmpty(clsnm)) {
+				noEL("class", clsnm, pi);
+				compdef.setImplementationClass(clsnm);
+					//Resolve later since might defined in zscript
+			}
+		} else if (macroURI != null) {
 			//if (log.finerable()) log.finer("macro component definition: "+name);
 
 			final String inline = params.remove("inline");
@@ -823,8 +839,8 @@ public class Parser {
 		} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseItems(pgdef, parseZk(parent, el, annHelper),
 					el.getChildren(), annHelper, bNativeContent);
-		} else if (isShadowElement(langdef, nm, pref, uri, bNativeContent)) {
-			parseItems(pgdef, parseShadowElement(parent, el, annHelper),
+		} else if (isShadowElement(langdef, pgdef, nm, pref, uri, bNativeContent)) {
+			parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper),
 				el.getChildren(), annHelper, bNativeContent);
 		} else {
 			//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
@@ -1271,13 +1287,15 @@ public class Parser {
 		}
 		annHelper.add(el.getLocalName(), attrs, location(el));
 	}
-	private static NodeInfo parseShadowElement(NodeInfo parent, Element el,
+	private static NodeInfo parseShadowElement(PageDefinition pgdef, NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		String ifc = null, unless = null,
 			name = el.getLocalName();
 		AnnotationHelper attrAnnHelper = null;
 		final LanguageDefinition lookup = LanguageDefinition.lookup("xul/html");
-		final ShadowInfo compInfo = new ShadowInfo(parent, lookup.getShadowDefinition(name),
+		ComponentDefinition shadowDefinition = lookup.hasShadowDefinition(name) ? lookup.getShadowDefinition(name)
+						: pgdef.getComponentDefinitionMap().get(name);
+		final ShadowInfo compInfo = new ShadowInfo(parent, shadowDefinition,
 			name, ConditionImpl.getInstance(ifc, unless));
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
@@ -1449,11 +1467,14 @@ public class Parser {
 	 * @param bNativeContent whether to ignore if URI not specified explicitly
 	 */
 	private static final boolean isShadowElement(LanguageDefinition langdef,
-	String nm, String pref, String uri, boolean bNativeContent) {
+			PageDefinition pgdef, String nm, String pref, String uri, boolean bNativeContent) {
 		// feature in 8.0.0, no need to check namespace, if any.
 		if ("true".equalsIgnoreCase(Library.getProperty("org.zkoss.zk.namespace.tolerant", "false")))
 			return langdef.hasShadowDefinition(nm) || (!"xul/html".equals(langdef.getName()) && 
 					LanguageDefinition.lookup("xul/html").hasShadowDefinition(nm));
+		ComponentDefinition componentDefinition = pgdef.getComponentDefinitionMap().get(nm);
+		if (componentDefinition instanceof ShadowDefinitionImpl)
+			return true;
 		if (isDefaultNS(langdef, pref, uri))
 			return !bNativeContent && langdef.hasShadowDefinition(nm);
 		return false;

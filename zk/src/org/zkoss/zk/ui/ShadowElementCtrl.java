@@ -71,5 +71,5 @@ public interface ShadowElementCtrl {
 	 * it should be alive, otherwise, it will be detached.
 	 * @return a set of shadow tree that contain a dynamic value, or empty list.
 	 */
-	public List<ShadowElement> rebuildShadowTree();
+	public <T extends ShadowElement> List<T> rebuildShadowTree();
 }

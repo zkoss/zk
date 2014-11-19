@@ -119,7 +119,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private String _uuid;
 	private transient ComponentDefinition _def;
 
-	private transient AbstractComponent _parent;
+	/*package*/ transient AbstractComponent _parent; //called by HtmlShadowElement
 	/** The next sibling. */
 	/*package*/ transient AbstractComponent _next;
 	/** The previous sibling. */
@@ -946,6 +946,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _parent.hasAttributeOrFellow(name, true);
 			if (_page != null)
 				return _page.hasAttributeOrFellow(name, true);
+			if (this instanceof ShadowElement) {
+				Component shadowHost = ((ShadowElement) this).getShadowHost();
+				if (shadowHost != null)
+					return shadowHost.hasAttributeOrFellow(name, true);
+			}
 			if (!(this instanceof IdSpace))
 				return getVirtualIdSpace().hasFellow(name);
 		}

@@ -744,6 +744,37 @@ public interface Execution extends Scope {
 	 */
 	public Component createComponents(String uri, Component parent,
 	Component insertBefore, VariableResolver resolver);
+	/** Creates components from a page file specified by an URI
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>It loads the page definition from the specified URI (by
+	 * use {@link #getPageDefinition} ), and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
+	 * @since 8.0.0
+	 */
+	public Component createComponents(String uri, Component parent,
+	Component insertBefore, VariableResolver resolver,  Map<?, ?> arg);
 	/** Creates components from the raw content specified by a string
 	 * with a custom variable resolver and inserts before a particular component.
 	 * The created components become the child of the specified parent,

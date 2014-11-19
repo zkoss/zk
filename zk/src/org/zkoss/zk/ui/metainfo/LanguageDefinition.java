@@ -894,13 +894,13 @@ public class LanguageDefinition {
 	 * @since 8.0.0
 	 */
 	public ComponentDefinition getShadowDefinition(
-	String name, PageDefinition pgdef) {
+	String name, PageDefinition pgdef, String templateURI) {
 		if (_shadowcls == null)
 			throw new UiException("Shadow not supported by "+this);
 
 		final ComponentDefinition compdef =
 			ComponentDefinitionImpl.newShadowDefinition(
-				pgdef != null ? null: this, pgdef, name, _shadowcls);
+				pgdef != null ? null: this, pgdef, name, _shadowcls, templateURI);
 		return compdef;
 	}
 
