@@ -1120,7 +1120,7 @@ zk.endProcessing();
 		//F70-ZK-2495: delete init crash timer once endProcessing is called
 		if (window.zkInitCrashTimer) { 
 			clearTimeout(window.zkInitCrashTimer);
-			delete window.zkInitCrashTimer;
+			window.zkInitCrashTimer = false;
 		}
 		zk.processing = false;
 		zUtl.destroyProgressbox('zk_proc');
