@@ -203,12 +203,13 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			attr += ' disabled="disabled"';
 		return attr;
 	},
-	doClick_: function(evt){
+	doClick_: function(evt) {
 		var href = this.getHref();
-		// ZK-2506: open a blank page to process "mailto" url
+		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
-			zUtl.go(href, {target: '_blank'});
-			evt.stop({dom: true});
+			var ifrm = jq.newFrame('mailtoFrame', href, null);
+			jq(ifrm).remove();
+			evt.stop();
 		}
 		// Bug ZK-2422
 		if (zk.ie < 11 && !href) {
