@@ -353,9 +353,22 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 		
 		if (!diff) return; //nothing to do
-
-		if (w = run.nextwgt) zWatch.fireDown('beforeSize', w);
-		if (w = run.prevwgt) zWatch.fireDown('beforeSize', w);
+		
+		//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
+		if (w = run.nextwgt) {
+			if (w.getHflex())
+				w.setHflex('false');
+			if (w.getVflex()) 
+				w.setVflex('false');
+			zWatch.fireDown('beforeSize', w);
+		}
+		if (w = run.prevwgt) {
+			if (w.getHflex())
+				w.setHflex('false');
+			if (w.getVflex()) 
+				w.setVflex('false');
+			zWatch.fireDown('beforeSize', w);
+		}
 		
 		//B70-ZK-2514: assign fd to each block separately and count on clientFd in the end
 		if (runNext && runPrev) {
