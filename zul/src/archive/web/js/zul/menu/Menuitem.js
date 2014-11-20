@@ -292,8 +292,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 				this.fireX(evt);
 			}  else if (anc.href.toLowerCase().startsWith('mailto:')) { // ZK-2506
-				zUtl.go(anc.href, {target: '_blank'});
-				evt.stop({dom: true});
+				var ifrm = jq.newFrame('mailtoFrame', anc.href, null);
+				jq(ifrm).remove();
+				evt.stop();
 			} else {
 				if (zk.ie < 11 && topmost && this.$n().id != anc.id)
 					zUtl.go(anc.href, {target: anc.target});
