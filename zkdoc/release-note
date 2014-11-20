@@ -6,6 +6,7 @@ ZK 7.0.4
   ZK-2483: ZK template support Map, List, Set, and other Collection type
   ZK-2433: Highlight text in a listitem without using nonselectableTag
   ZK-2495: When ZK init page, the loading animation runs in a endless loop
+  ZK-112: Splitter should override neighbor sizes when dragged by user
 
 * Bugs
   ZK-2418: Listbox's horizontal scrollbar moves to leftmost position when using up / down key to change selection
