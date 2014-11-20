@@ -1,0 +1,11 @@
+<zk>
+	<label multiline="true">
+		1. try to type to each textbox
+		2. if you can't type any letter, it is bug
+	</label>
+	textbox with onOK/onCancel listener
+	<separator />
+	<textbox onOK='alert("OK")'/>
+	<textbox onCancel='alert("Cancel")'/>
+	<textbox ctrlKeys="^k" onCtrlKey='alert("ctrl key")'/>
+</zk>
