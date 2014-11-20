@@ -3676,7 +3676,10 @@ w:use="foo.MyWindow"&gt;
 	}
 	public boolean removeShadowRoot(ShadowElement shadow) {
 		if (_auxinf != null && _auxinf.seRoots != null)
-			return _auxinf.seRoots.remove(shadow);
+			if (_auxinf.seRoots.remove(shadow)) {
+				shadow.detach();
+				return true;
+			}
 		return false;
 	}
 	public boolean addShadowRoot(ShadowElement shadow) {

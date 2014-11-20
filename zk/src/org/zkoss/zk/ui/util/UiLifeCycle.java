@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.util;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.ShadowElement;
 
 /**
  * Used to intercept the life cycle of UI, such as {@link Component}
@@ -28,12 +29,36 @@ import org.zkoss.zk.ui.Desktop;
  * @since 3.0.6
  */
 public interface UiLifeCycle {
+	/** Called after a shadow is attached to a host.
+	 *
+	 * <p>If a tree of shadows are attached to a host, this method
+	 * called only against the root one. For example, if shadow A
+	 * has a child B and A is attached to host P, then
+	 * afterShadowAttached(A, P) is called.
+	 *
+	 * <p>Note: exception thrown by this method is ignored (but logged).
+	 * @since 8.0.0
+	 */
+	public void afterShadowAttached(ShadowElement shadow, Component host);
+	/** Called after a shadow is detached from a host.
+	 *
+	 * <p>If a tree of shadows are detached to a host, this method
+	 * called only against the root one. For example, if shadow A
+	 * has a child B and A is detached from host P, then
+	 * afterShadowDetached(A, P) is called.
+	 *
+	 * <p>Note: exception thrown by this method is ignored (but logged).
+	 *
+	 * @param prevpage the previous host that shadow belongs to.
+	 * @since 8.0.0
+	 */
+	public void afterShadowDetached(ShadowElement shadow, Component prevhost);
 	/** Called after a component is attached to a page.
 	 *
 	 * <p>If a tree of components are attached to a page, this method
 	 * called only against the root one. For example, if component A
 	 * has a child B and A is attached to page P, then
-	 * aferComponentAttached(A, P) is called.
+	 * afterComponentAttached(A, P) is called.
 	 *
 	 * <p>Note: exception thrown by this method is ignored (but logged).
 	 */
@@ -43,7 +68,7 @@ public interface UiLifeCycle {
 	 * <p>If a tree of components are detached to a page, this method
 	 * called only against the root one. For example, if component A
 	 * has a child B and A is detached from page P, then
-	 * aferComponentDetached(A, P) is called.
+	 * afterComponentDetached(A, P) is called.
 	 *
 	 * <p>Note: exception thrown by this method is ignored (but logged).
 	 *

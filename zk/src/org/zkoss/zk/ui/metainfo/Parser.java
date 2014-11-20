@@ -1354,6 +1354,12 @@ public class Parser {
 		if (root != null) {
 			String rn = root.getLocalName();
 			if (!"template".equals(rn)) { // automatically create a template tag for it.
+				Node item = root;
+				while (item != null) {
+					if ("template".equals(item.getLocalName()))
+						throw new UiException(message(rn+" does not support between templates", (Item)root));
+					item = item.getNextSibling();
+				}
 				return new TemplateInfo(compInfo, "", null, null, null);
 			}
 		}

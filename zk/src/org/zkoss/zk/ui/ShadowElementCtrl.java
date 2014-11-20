@@ -11,6 +11,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 /**
@@ -69,7 +70,8 @@ public interface ShadowElementCtrl {
 	 * 
 	 * Rebuilds the shadow tree if the shadow element contains a dynamic value,
 	 * it should be alive, otherwise, it will be detached.
-	 * @return a set of shadow tree that contain a dynamic value, or empty list.
+	 * @throws ConcurrentModificationException if caller use the same collection,
+	 * it may throw this exception when merging sub-tree.
 	 */
-	public <T extends ShadowElement> List<T> rebuildShadowTree();
+	public void rebuildShadowTree();
 }
