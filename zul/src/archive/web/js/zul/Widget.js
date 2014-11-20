@@ -588,7 +588,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 	doKeyDown_ : function(evt) {
 		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			this.afterKeyDown_(evt);
-			evt.stop();// stop to notify parent
 		} else {
 			this.$supers('doKeyDown_', arguments);
 		}
