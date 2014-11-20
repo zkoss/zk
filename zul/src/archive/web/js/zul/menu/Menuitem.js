@@ -300,7 +300,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 				this.fireX(evt);
 			} else if (anc.href.toLowerCase().startsWith('mailto:')) { // ZK-2506
-				var ifrm = jq.newFrame('mailtoFrame', href, null);
+				var ifrm = jq.newFrame('mailtoFrame', anc.href, null);
 				jq(ifrm).remove();
 				evt.stop();
 			} else {
