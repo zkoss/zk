@@ -1,0 +1,11 @@
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. try to type to each textbox
+		2. you should see zk.log
+	</label>
+	textbox with onOK/onCancel listener
+	<separator />
+	<textbox onOK='alert("OK")' w:onKeyDown="zk.log('onOK');" />
+	<textbox onCancel='alert("Cancel")' w:onKeyDown="zk.log('onCancel');"/>
+	<textbox ctrlKeys="^k" onCtrlKey='alert("ctrl key")' w:onKeyDown="zk.log('onCtrlKey');"/>
+</zk>

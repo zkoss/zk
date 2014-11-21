@@ -50,6 +50,7 @@ ZK 7.0.4
   ZK-2519: Changing the caption label removes other DOM elements in the caption
   ZK-2524: Property value is loaded twice when property binding and children binding are used together
   ZK-2529: onOK/onCancel/ctrlKeys prevent widget input
+  ZK-2532: onOK/onCancel/ctrlKeys prevent client side event listening (w:onKeyDown)
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen
