@@ -1186,6 +1186,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					hdfakerbar.style.width = vScroll + 'px';
 				if (ftfakerbar)
 					ftfakerbar.style.width = vScroll + 'px';
+			} else {
+				//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
+				if (hdfakerbar)
+					hdfakerbar.style.width = 0.1 + 'px';
+				if (ftfakerbar)
+					ftfakerbar.style.width = 0.1 + 'px';
 			}
 		}
 	},
