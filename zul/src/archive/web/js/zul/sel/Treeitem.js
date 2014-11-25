@@ -358,7 +358,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		} else if (child == this.treechildren) {
 			this.treechildren = null;
 			if (!this.childReplacing_) //NOT called by onChildReplaced_
-				this._syncIcon(); // remove the icon
+				this._syncIcon(true); // remove the icon
 		}
 	},
 	onChildAdded_: function(child) {
@@ -467,14 +467,14 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this._removeChildHTML(n);
 		this.$supers('replaceHTML', arguments);
 	},
-	_syncIcon: function () {
+	_syncIcon: function (isRemoved) {
 		if (this.desktop && this.treerow) {
 			var i = this.treerow;
 			if (i = i.firstChild)
-				i._syncIcon();
+				i._syncIcon(isRemoved);
 			if (i = this.treechildren)
 				for (i = i.firstChild; i; i = i.nextSibling)
-					i._syncIcon();
+					i._syncIcon(isRemoved);
 		}
 	}
 },{
