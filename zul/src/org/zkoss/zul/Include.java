@@ -350,7 +350,13 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
-				LanguageDefinition lang = LanguageDefinition.getByExtension(Servlets.getExtension(_src));
+				// refix-ZK-2473: take off the parameters in _src
+				String ext = Servlets.getExtension(_src);
+				int i = ext.indexOf("?");
+				if (i > 0) {
+					ext = ext.substring(0, i);
+				}
+				LanguageDefinition lang = LanguageDefinition.getByExtension(ext);
 				_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
 			} else
 				_instantMode = false;
