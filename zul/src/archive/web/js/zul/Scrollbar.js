@@ -322,12 +322,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			scrollLeft = dom.offsetWidth == cave.offsetWidth;
 		
 		// Bug ZK-2418 should consider the case when dom size is greater than view size
-		if ((domRight >= viewLeft && domRight <= viewRight) ||  
+		if (((domRight >= viewLeft && domRight <= viewRight) ||  
 			(domLeft >= viewLeft && domLeft <= viewRight) || 
-			(domLeft <= viewLeft && domRight >= viewRight) ||
-			(domTop >= viewTop && domTop >= viewBottom) ||
-			(domBottom >= viewTop && domBottom <= viewBottm) ||
-			(domTop <= viewTop && domBottom >= viewBottom)) {
+			(domLeft <= viewLeft && domRight >= viewRight)) &&
+			((domTop >= viewTop && domTop <= viewBottom) ||
+			(domBottom >= viewTop && domBottom <= viewBottom) ||
+			(domTop <= viewTop && domBottom >= viewBottom))) {
 			return; //already in the view port
 		}
 		
