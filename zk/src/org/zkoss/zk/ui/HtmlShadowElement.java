@@ -37,6 +37,10 @@ import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
@@ -57,7 +61,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	private transient Component _previousInsertion;
 	protected transient boolean _afterComposed = false;
 	
-	protected Component _host;
+	private Component _host;
+	
+	protected static String ON_REBUILD_SHADOW_TREE_LATER = 	"onRebuildShadowTreeLater";
 	
 	/**
 	 * Returns the next component before this shadow, if any. (it will invoke recursively from its parent.)
@@ -65,11 +71,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	public Component getNextInsertionComponentIfAny() {
 		if (_nextInsertion == null) {
 			Component result = _lastInsertion == null ? null : _lastInsertion.getNextSibling();
-			if (result == null && getParent() != null) // ask for its parent
+			if (result == null && getParent() != null) {// ask for its parent
 				return asShadow(getParent()).getNextInsertionComponentIfAny();
+			}
 			return result;
 		} else if (_nextInsertion instanceof HtmlShadowElement) {
-			return asShadow(_nextInsertion).getNextInsertionComponentIfAny();
+			HtmlShadowElement nextInsertion = asShadow(_nextInsertion);
+			if (getParent() == null) {
+				// ask for the firstInsertion first.
+				if (nextInsertion._firstInsertion != null)
+					return nextInsertion._firstInsertion;
+			}
+			return nextInsertion.getNextInsertionComponentIfAny();
 		}
 		return _nextInsertion;
 	}
@@ -83,9 +96,45 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				return asShadow(getParent()).getPreviousInsertionComponentIfAny();
 			return result;
 		} else if (_previousInsertion instanceof HtmlShadowElement) {
-			return asShadow(_previousInsertion).getPreviousInsertionComponentIfAny();
+			HtmlShadowElement previousInsertion = asShadow(_previousInsertion);
+			if (getParent() == null) {
+				// ask for the lastInsertion first.
+				if (previousInsertion._lastInsertion != null)
+					return previousInsertion._lastInsertion;
+			}
+			return previousInsertion.getPreviousInsertionComponentIfAny();
 		}
 		return _previousInsertion;
+	}
+	protected void onHostAttached(Component host) {
+		Iterable<EventListener<? extends Event>> eventListeners = host.getEventListeners(ON_REBUILD_SHADOW_TREE_LATER);
+		if (!eventListeners.iterator().hasNext()) {
+			host.addEventListener(ON_REBUILD_SHADOW_TREE_LATER, new SerializableEventListener<Event>() {
+
+				public void onEvent(Event event) throws Exception {
+					Component target = event.getTarget();
+					if (target instanceof ComponentCtrl) {
+						for (ShadowElement se : new ArrayList<ShadowElement>(((ComponentCtrl)target).getShadowRoots())) {
+							if (se instanceof ShadowElementCtrl) {
+								((ShadowElementCtrl) se).rebuildShadowTree();
+							}
+						}
+					}
+				}
+				
+			});
+		}
+	}
+	protected void onHostDetached(Component host) {
+		if (host instanceof ComponentCtrl) {
+			ComponentCtrl hostCtrl = (ComponentCtrl) host;
+			if (((ComponentCtrl) host).getShadowRoots().isEmpty()) {
+				Iterable<EventListener<? extends Event>> eventListeners = host.getEventListeners(ON_REBUILD_SHADOW_TREE_LATER);
+				for (EventListener<? extends Event> listener : eventListeners) {
+					host.removeEventListener(ON_REBUILD_SHADOW_TREE_LATER, listener);
+				}
+			}
+		}
 	}
 
 	/**
@@ -127,6 +176,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			throw new UiException("The shadow element cannot change its host, if existed. [" + this + "]");
 		}
 		_host = host;
+		onHostAttached(host);
 		                               
 		if (insertBefore != null) { // TODO
 			throw new IllegalAccessError("Not implemented yet");
@@ -172,6 +222,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			ComponentCtrl host = (ComponentCtrl) _host;
 			_host = null; // clear first to avoid endloop
 			((ComponentCtrl) host).removeShadowRoot(this);
+			onHostDetached((Component)host);
 		}
 		setParent(null);
 		if (prevhost != null) {
@@ -187,7 +238,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		
 		if (parent == null && _host == null) {
 			// detach
-			setPrevInsertion(_nextInsertion, _previousInsertion); // resync
+			Component next = _nextInsertion == null ? _lastInsertion : _nextInsertion;
+			setPrevInsertion(next, _previousInsertion); // resync
 			_previousInsertion = null;
 			_firstInsertion = null;
 			_lastInsertion = null;
@@ -249,6 +301,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				previousInsertion = seRefChild.getPreviousInsertion();
 				setPrevInsertion(seRefChild, seChild);
 				setPrevInsertion(seChild, previousInsertion);
+			}
+		} else if (_lastInsertion != null) {
+			if (refChild != null) {
+				throw new IllegalStateException("Some logic wrong here.");
+			} else {
+				if (_lastInsertion instanceof HtmlShadowElement) {
+					setPrevInsertion(seChild, _lastInsertion);
+					if (seChild._nextInsertion == ((HtmlShadowElement)_lastInsertion)._nextInsertion)// avoid circle reference
+						seChild._nextInsertion = null;
+				} else {
+					seChild._previousInsertion = _lastInsertion;
+				}
 			}
 		}
 		
@@ -418,19 +482,33 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			_afterComposed = true;
 			if (isEffective() && _firstInsertion == null) {
 				Component host = getShadowHostIfAny();
-				if (host != null) {
-					Object shadowInfo = ShadowElementsCtrl.getCurrentInfo();
-					try {
-						ShadowElementsCtrl.setCurrentInfo(this);
-						compose(host);
-					} finally {
-						ShadowElementsCtrl.setCurrentInfo(shadowInfo);
+				if (host == null)
+					throw new UiException("Host cannot be null [" + this + "]");
+				Object shadowInfo = ShadowElementsCtrl.getCurrentInfo();
+				try {
+					ShadowElementsCtrl.setCurrentInfo(this);
+					compose(host);
+				} finally {
+					ShadowElementsCtrl.setCurrentInfo(shadowInfo);
+				}
+				Execution exec = Executions.getCurrent();
+				if (exec != null) {
+					String key = "org.zkoss.zk.ui.HttmlShadowelement" + host.getUuid();
+					if (!exec.hasAttribute(key)) {
+						exec.setAttribute(key, Boolean.TRUE);
+						
+						// put it to the end of all events
+						Events.postEvent(-250000, new Event(ON_REBUILD_SHADOW_TREE_LATER, host));
 					}
 				}
+				
 			}
 		}
 	}
 	private static void setPrevInsertion(Component target, Component prevInsertion) {
+		if (target == prevInsertion)
+			return; // do nothing
+		
 		if (target instanceof HtmlShadowElement) {
 			asShadow(target)._previousInsertion = prevInsertion; 
 		}
@@ -599,7 +677,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					asShadow(getParent()).shrinkRange(oldFirst, oldLast);
 				}
 				return; // finish
-			} else {
+			} else if (isAncestor(this, asShadow(currentInfo))) {// do only my descendent
 				asShadow(currentInfo).beforeHostChildRemoved(child, indexOfChild);
 				return; // finish
 			}
@@ -739,10 +817,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (indexOfInsertBefore < 0) {
 			if (currentInfo instanceof HtmlShadowElement) { // in our control
-				HtmlShadowElement current = asShadow(currentInfo);
-				Component lastChild = current.getLastChild();
-				if (lastChild != null)
-					asShadow(lastChild)._nextInsertion = child;
+				if (isAncestor(this, asShadow(currentInfo))) {// do only my descendent
+					HtmlShadowElement current = asShadow(currentInfo);
+					Component lastChild = current.getLastChild();
+					if (lastChild != null)
+						asShadow(lastChild)._nextInsertion = child;
+				}
 			} else { // out of our control
 				if (_nextInsertion == null)
 					_nextInsertion = child;
@@ -1016,7 +1096,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				if (_firstInsertion == null) { // initial range
 					_firstInsertion = _lastInsertion = child;
 					isEdge = true;
-				} else {
+				} else if (_firstInsertion != child && _lastInsertion != child) {
 					int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, fillUpIndexMap(_firstInsertion, _lastInsertion));
 					if (indexOfChild < selfIndex[0]) {
 						_firstInsertion = child;
@@ -1031,7 +1111,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					asShadow(getParent()).stretchRange(_firstInsertion, _lastInsertion);
 				}
 				return; // finish
-			} else {
+			} else if (isAncestor(this, asShadow(currentInfo))) {// do only my descendent
 				asShadow(currentInfo).afterHostChildAdded(child, indexOfChild);
 				return; // finish
 			}
