@@ -1363,7 +1363,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			total = this.ebody.clientWidth,
 			extSum = total - width,
 			count = total,
-			visj = -1;
+			visj = -1,
+			tblWidth = 0; //refix B70-ZK-2394: should sync colgroup width with table width
 		
 		if (this._nspan < 0) { //span to all columns
 			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
@@ -1381,6 +1382,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					
 					hdcol.style.width = stylew;
 					bdcol.style.width = stylew;
+					tblWidth += wd; //refix B70-ZK-2394: store each col's width
 					bdcol = bdcol.nextSibling;
 					
 					if (ftcol) {
@@ -1391,11 +1393,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			//compensate calc error
 			if (extSum > 0 && count != 0 && visj >= 0) {
+				tblWidth -= wd; //refix B70-ZK-2394: subtract the last wd (visj is the last)
 				wd = wds[visj] + count;
 				var stylew = jq.px0(wd);
 				
 				bdfaker.childNodes[visj].style.width = stylew;
 				hdfaker.childNodes[visj].style.width = stylew;
+				tblWidth += wd; //refix B70-ZK-2394: and add new wd
 				
 				if (ftfaker)
 					ftfaker.childNodes[visj].style.width = stylew;
@@ -1413,6 +1417,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					var stylew = jq.px0(wd);
 					hdcol.style.width = stylew;
 					bdcol.style.width = stylew;
+					tblWidth += wd; //refix B70-ZK-2394: store each col's width
 					bdcol = bdcol.nextSibling;
 					if (ftcol) {
 						ftcol.style.width = stylew;
@@ -1421,6 +1426,23 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 		}
+		
+		//refix B70-ZK-2394: sync colgroup width with (head, body, foot)table width
+		var allWidths = this._isAllWidths();
+		if (allWidths) {
+			var hdtbl = this.eheadtbl,
+				bdtbl = this.ebodytbl,
+				fttbl = this.efoottbl;
+			
+			if (hdtbl) {
+				hdtbl.style.width = tblWidth + 'px';
+				if (bdtbl)
+					bdtbl.style.width = tblWidth + 'px';
+				if (fttbl)
+					fttbl.style.width = tblWidth + 'px';
+			}
+		}
+		
 		//bug 3188738: Opera only. Grid/Listbox/Tree span="x" not working
 		if (zk.opera)
 			zk(this.$n()).redoCSS();
