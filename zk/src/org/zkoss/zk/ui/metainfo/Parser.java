@@ -869,7 +869,7 @@ public class Parser {
 				// ZK-2494: use getName instead of getLocalName when namespace is native or xml and attribute uri 
 				// is not one of known namespaces in zk. Exclude xmlns to avoid redefine.
 				if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName) || "xml".equals(langName)) {
-					if (!isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
+					if (!isZkAttr(langdef, attrns) && !isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 							&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						compInfo.addProperty(attr.getName(), attval, null);
 						continue;
@@ -1395,9 +1395,12 @@ public class Parser {
 
 				final String pref = attrns.getPrefix();
 				LanguageDefinition langdef = compInfo.getLanguageDefinition();
+				ComponentDefinition compdef = compInfo.getComponentDefinition();
+				
 				if (langdef == null)
 					bZkAttr = true;
-				else if (isDefaultNS(langdef, pref, uri))
+				// refix ZK-2495: skip native components
+				else if (isDefaultNS(langdef, pref, uri) && !compdef.isNative())
 					bZkAttr = !langdef.isDynamicReservedAttributes("[event]");
 				else
 					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri)
