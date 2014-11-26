@@ -238,8 +238,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		
 		if (parent == null && _host == null) {
 			// detach
-			Component next = _nextInsertion == null ? _lastInsertion : _nextInsertion;
-			setPrevInsertion(next, _previousInsertion); // resync
+			setPrevInsertion(_nextInsertion, _previousInsertion); // resync
 			_previousInsertion = null;
 			_firstInsertion = null;
 			_lastInsertion = null;
@@ -580,7 +579,22 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			return ;// nothing to do.	
 		//mergeSubTree0(children);
 		for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
+			Component previous = child._previousInsertion;
+			Component next = child._nextInsertion;
 			_parent.insertBefore(child, this);
+
+			// resync the insertion of the child, if it has some comopnent sibling.
+			if (previous != null && !(previous instanceof HtmlShadowElement)) {
+				Component newPrevious = child._previousInsertion;
+				setPrevInsertion(previous, newPrevious);
+				setPrevInsertion(child, previous);
+			}
+			if (next != null && !(next instanceof HtmlShadowElement)) {
+				Component newNext = child._nextInsertion;
+				setPrevInsertion(newNext, next);
+				setPrevInsertion(next, child);
+			}
+			
 		}
 	}
 
