@@ -333,6 +333,7 @@ public class Listbox extends MeshElement {
 	private transient boolean _rod;
 	/** whether to ignore ListDataEvent.SELECTION_CHANGED */
 	private transient boolean _ignoreDataSelectionEvent;
+	/** the message to display when there are no items */
 	private String _emptyMessage;
 	
 	static {
@@ -2855,10 +2856,20 @@ public class Listbox extends MeshElement {
 		}
 	}
 	
+	/**
+	 * Returns the message to display when there are no items
+	 * @return String
+	 * @since 5.0.7
+	 */
 	public String getEmptyMessage() {
 		return _emptyMessage;
 	}
 	
+	/**
+	 * Sets the message to display when there are no items
+	 * @param String emptyMessage
+	 * @since 5.0.7
+	 */
 	public void setEmptyMessage(String emptyMessage) {
 		if(!Objects.equals(emptyMessage, _emptyMessage)){
 			this._emptyMessage = emptyMessage;

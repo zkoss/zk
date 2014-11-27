@@ -69,7 +69,17 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 */
 	groupSelect: false,
 	_scrollbar: null,
-	$define:{
+	$define: {
+		/**
+		 * Returns the message to display when there are no items
+		 * @return String
+		 * @since 5.0.7
+		 */
+		/**
+		 * Sets the message to display when there are no items
+		 * @param String msg
+		 * @since 5.0.7
+		 */
 		emptyMessage: function(msg) {
 			if(this.desktop)
 				jq(this.$n('empty')).html(msg);
