@@ -1,0 +1,78 @@
+<zk xmlns:w="client">
+	<style>
+		:focus {
+		outline: 5px solid red !important;
+		}
+	</style>
+	<label multiline="true">
+		Press the tab button 4 times,
+		You should see the focus changes in the order given bellow:
+		1. checkbox -> 2. tree -> 3. button -> 4. listbox
+	</label>
+	<separator/>
+	<vlayout>
+		<button label="button" tabindex="3" />
+		<separator/>
+		<checkbox label="checkbox" tabindex="1" />
+		<separator/>
+		<listbox mold="paging" pageSize="3" tabindex="4">
+			<listitem label="Car" />
+			<listitem label="Taxi" />
+			<listitem label="Bus" selected="true" />
+			<listitem label="Train" />
+			<listitem label="Car" />
+			<listitem label="Taxi" />
+			<listitem label="Car" />
+			<listitem label="Taxi" />
+			<listitem label="Car" />
+			<listitem label="Taxi" />
+		</listbox>
+		<separator/>
+		<tree mold="paging" pageSize="3" tabindex="2">
+			<treecols>
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.1" />
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.2" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.2" />
+								<treecell label="Item 2.2 is something who cares" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Item 3" />
+			</treechildren>
+		</tree>
+	</vlayout>
+</zk>

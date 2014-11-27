@@ -661,7 +661,7 @@ public class Listbox extends MeshElement {
 	/**
 	 * Returns the tab order of this component.
 	 * <p>
-	 * Currently, only the "select" mold supports this property.
+	 * All three molds support this property since 7.0.4.
 	 * <p>
 	 * Default: 0 (means the same as browser's default).
 	 */
@@ -672,7 +672,7 @@ public class Listbox extends MeshElement {
 	/**
 	 * Sets the tab order of this component.
 	 * <p>
-	 * Currently, only the "select" mold supports this property.
+	 * All three molds support this property since 7.0.4.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
@@ -3214,12 +3214,14 @@ public class Listbox extends MeshElement {
 		render(renderer, "name", _name);
 		
 		render(renderer, "emptyMessage", _emptyMessage);
+		
+		// Feature ZK-2531: Support tab ordering in default and paging mold
+		if (_tabindex != 0)
+			renderer.render("tabindex", _tabindex);
 
 		if (inSelectMold()) {
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());
-			if (_tabindex != 0)
-				renderer.render("tabindex", _tabindex);
 			if (_maxlength > 0)
 				renderer.render("maxlength", _maxlength);
 		} else {
