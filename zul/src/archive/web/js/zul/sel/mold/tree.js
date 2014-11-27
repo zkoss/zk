@@ -62,9 +62,11 @@ function (out) {
 		out.push('<tbody id="', this.uuid, '-rows"/>');
 	
 	out.push('</table><', tag, ' style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" id="', uuid, 
-			'-a"  onclick="return false;" href="javascript:;" class="z-focus-a"></',
-			tag, '>');
-	out.push("</div>");
+			 '-a"  onclick="return false;" href="javascript:;" class="z-focus-a"');
+	var tabindex = this._tabindex; // Feature ZK-2531
+	if (tabindex)
+		out.push(' tabindex="' + tabindex + '"');
+	out.push('></', tag, '>', "</div>");
 	
 	if (this._nativebar && this.frozen) {
 		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');

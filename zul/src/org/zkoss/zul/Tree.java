@@ -227,6 +227,7 @@ public class Tree extends MeshElement {
 	private static final int INIT_LIMIT = -1; // since 7.0.0
 	private int _preloadsz = 50; // since 7.0.0
 	private transient LinkedList<Integer> _rodPagingIndex;  // since 7.0.0
+	private int _tabindex; // Feature ZK-2531, since 7.0.4
 	
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -829,6 +830,28 @@ public class Tree extends MeshElement {
 		if ("single".equals(seltype)) setMultiple(false);
 		else if ("multiple".equals(seltype)) setMultiple(true);
 		else throw new WrongValueException("Unknown seltype: "+seltype);
+	}
+	/**
+	 * Returns the tab order of this component.
+	 * <p>
+	 * @since 7.0.4
+	 * <p>
+	 * Default: 0 (means the same as browser's default).
+	 */
+	public int getTabindex() {
+		return _tabindex;
+	}
+
+	/**
+	 * Sets the tab order of this component.
+	 * <p>
+	 * @since 7.0.4
+	 */
+	public void setTabindex(int tabindex) throws WrongValueException {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			smartUpdate("tabindex", tabindex);
+		}
 	}
 	/** Returns whether multiple selections are allowed.
 	 * <p>Default: false.
@@ -2350,6 +2373,8 @@ public class Tree extends MeshElement {
 			renderer.render("selectOnHighlightDisabled", true);
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
+		if (_tabindex != 0) // Feature ZK-2531
+			renderer.render("tabindex", _tabindex);
 		
 		if (_currentTop != 0)
 			renderer.render("_currentTop", _currentTop);

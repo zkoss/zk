@@ -74,9 +74,12 @@ function (out) {
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
 	
-	out.push('<', tag, ' id="', uuid, 
-			'-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" onclick="return false;" href="javascript:;" class="z-focus-a"></',
-			tag, '>', "</div>");
+	out.push('<', tag, ' id="', uuid, '-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft), 
+			 '" onclick="return false;" href="javascript:;" class="z-focus-a"');
+	var tabindex = this._tabindex; // Feature ZK-2531
+	if (tabindex)
+		out.push(' tabindex="' + tabindex + '"');
+	out.push('></', tag, '>', "</div>");
 	
 	if (this._nativebar && this.frozen) {
 		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
