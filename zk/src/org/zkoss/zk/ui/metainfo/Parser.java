@@ -436,8 +436,6 @@ public class Parser {
 		ComponentDefinition compdef;
 		String templateURI = params.remove("templateURI");
 		if (templateURI != null) { // assume it is shadow like (<apply>)
-			final String template = params.remove("template");
-			noEL("inline", template, pi);
 			noEL("templateURI", templateURI, pi);
 				//no EL because pagedef must be loaded to resolve
 				//the implementing class before creating an instance of shadow
@@ -794,6 +792,8 @@ public class Parser {
 					return langdef;
 			} else if (node instanceof PageDefinition) {
 				return ((PageDefinition)node).getLanguageDefinition();
+			} else if (node instanceof ShadowInfo) {
+				return ((ShadowInfo)node).getLanguageDefinition();
 			}
 		}
 		return null;

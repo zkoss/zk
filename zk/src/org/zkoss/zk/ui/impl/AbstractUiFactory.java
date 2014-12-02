@@ -104,7 +104,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 		Utils.setShadowInfo(comp, compInfo);
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		
-		if (currentInfo instanceof ShadowElement) {
+		if (currentInfo instanceof ShadowElement && ((ShadowElementCtrl) currentInfo).getShadowHostIfAny() == parent) {
 			((Component) currentInfo).insertBefore(comp, insertBefore);
 		} else if (parent instanceof ShadowElement) {
 			parent.insertBefore(comp, insertBefore);

@@ -115,8 +115,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					Component target = event.getTarget();
 					if (target instanceof ComponentCtrl) {
 						for (ShadowElement se : new ArrayList<ShadowElement>(((ComponentCtrl)target).getShadowRoots())) {
-							if (se instanceof ShadowElementCtrl) {
-								((ShadowElementCtrl) se).rebuildShadowTree();
+							if (se instanceof HtmlShadowElement) {
+								((HtmlShadowElement) se).rebuildShadowTree();
 							}
 						}
 					}
@@ -127,7 +127,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	}
 	protected void onHostDetached(Component host) {
 		if (host instanceof ComponentCtrl) {
-			ComponentCtrl hostCtrl = (ComponentCtrl) host;
 			if (((ComponentCtrl) host).getShadowRoots().isEmpty()) {
 				Iterable<EventListener<? extends Event>> eventListeners = host.getEventListeners(ON_REBUILD_SHADOW_TREE_LATER);
 				for (EventListener<? extends Event> listener : eventListeners) {
@@ -504,7 +503,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			}
 		}
 	}
-	private static void setPrevInsertion(Component target, Component prevInsertion) {
+	protected static void setPrevInsertion(Component target, Component prevInsertion) {
 		if (target == prevInsertion)
 			return; // do nothing
 		
@@ -514,58 +513,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			
 		if (prevInsertion instanceof HtmlShadowElement) {
 			asShadow(prevInsertion)._nextInsertion = target;
-		}
-	}
-	private void mergeSubTree0(List<HtmlShadowElement> children) {
-		// do the insertion merge from the child.
-		Component prevInsertion = _previousInsertion;
-		
-		List<HtmlShadowElement> dChildren = getDistributedChildren();
-		ListIterator<HtmlShadowElement> sit = children.listIterator();
-		if (dChildren.isEmpty()) {
-			for (;sit.hasNext();) {
-				HtmlShadowElement seNext = sit.next();
-				setPrevInsertion(seNext, prevInsertion);
-				prevInsertion = seNext;
-			}
-		} else {
-			HtmlShadowElement seNext = sit.next();
-			for (ListIterator<HtmlShadowElement> cit = dChildren.listIterator(); cit.hasNext();) {
-				AbstractComponent next = cit.next();
-				if (seNext != null) {
-					switch(inRange(seNext, next)) {
-					case AFTER_NEXT:
-					case UNKNOWN:
-						cit.previous(); // go back
-						setPrevInsertion(seNext, prevInsertion);
-						prevInsertion = seNext;
-						if (sit.hasNext())
-							seNext = sit.next();
-						else
-							seNext = null;
-						break;
-					case FIRST:
-					case IN_RANGE:
-					case LAST:
-						setPrevInsertion(seNext, prevInsertion);
-						while (cit.hasNext()) {
-							if (cit.next() == seNext.getLastChild()) {
-								break; // move the cursor to the end of the seNext shadow
-							}
-						}
-						prevInsertion = seNext;
-						if (sit.hasNext())
-							seNext = sit.next();
-						else
-							seNext = null;
-						break;
-					default:
-						prevInsertion = next;
-					}
-				} else {
-					break;
-				}
-			}
 		}
 	}
 
@@ -621,29 +568,38 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		}
 		return false;
 	}
-	
-	public void rebuildShadowTree() {
+
+	private void rebuildShadowTree() {
 		Map<Component, Integer> oldCacheMap = getIndexCacheMap();
 		final boolean destroyCacheMap = oldCacheMap == null;
 		try {
 			if (destroyCacheMap) // the first caller
 				oldCacheMap = initIndexCacheMap();
 
-			List<HtmlShadowElement> children = getChildren();
-			for (HtmlShadowElement se : new ArrayList<HtmlShadowElement>(children)) {
-				se.rebuildShadowTree();
-			}
-			if (!isDynamicValue()) {
-				// do nothing
-				mergeSubTree();
-				detach();
-			}
+			rebuildSubShadowTree();
 		} finally {
 			if (destroyCacheMap) // the first caller
 				destroyIndexCacheMap();
 		}
 	}
 
+	/**
+	 * Rebuilds the shadow tree if the shadow element contains a dynamic value,
+	 * it should be alive, otherwise, it will be detached.
+	 * @throws ConcurrentModificationException if caller use the same collection,
+	 * it may throw this exception when merging sub-tree.
+	 */
+	protected void rebuildSubShadowTree() {
+		List<HtmlShadowElement> children = getChildren();
+		for (HtmlShadowElement se : new ArrayList<HtmlShadowElement>(children)) {
+			se.rebuildSubShadowTree();
+		}
+		if (!isDynamicValue()) {
+			// do nothing
+			mergeSubTree();
+			detach();
+		}
+	}
 	/**
 	 * Returns whether the shadow element is effective
 	 */
@@ -831,11 +787,14 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (indexOfInsertBefore < 0) {
 			if (currentInfo instanceof HtmlShadowElement) { // in our control
-				if (isAncestor(this, asShadow(currentInfo))) {// do only my descendent
-					HtmlShadowElement current = asShadow(currentInfo);
-					Component lastChild = current.getLastChild();
+				HtmlShadowElement asShadow = asShadow(currentInfo);
+				if (isAncestor(this, asShadow)) {// do only my descendent
+					Component lastChild = asShadow.getLastChild();
 					if (lastChild != null)
 						asShadow(lastChild)._nextInsertion = child;
+				} else if (asShadow.getShadowHostIfAny() != getShadowHostIfAny()) { // not my ancestor, it may create by template and another host
+					if (_nextInsertion == null)
+						_nextInsertion = child;
 				}
 			} else { // out of our control
 				if (_nextInsertion == null)
@@ -1181,11 +1140,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		}
 	}
 	
-	/**
-	 * Return the shadow host from it or its ancestor, if any. 
-	 * @return null or a host component
-	 */
-	protected Component getShadowHostIfAny() {
+	public Component getShadowHostIfAny() {
 		Component parent = this;
 		 while (parent.getParent() != null) {
 			 parent = parent.getParent();

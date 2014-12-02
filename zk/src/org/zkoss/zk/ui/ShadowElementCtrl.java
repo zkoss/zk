@@ -66,12 +66,8 @@ public interface ShadowElementCtrl {
 	public boolean isDynamicValue();
 
 	/**
-	 * <p>Tool or framework developer use only.
-	 * 
-	 * Rebuilds the shadow tree if the shadow element contains a dynamic value,
-	 * it should be alive, otherwise, it will be detached.
-	 * @throws ConcurrentModificationException if caller use the same collection,
-	 * it may throw this exception when merging sub-tree.
+	 * Return the shadow host from it or its ancestor, if any. 
+	 * @return null or a host component
 	 */
-	public void rebuildShadowTree();
+	public Component getShadowHostIfAny();
 }
