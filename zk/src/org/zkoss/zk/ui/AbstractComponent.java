@@ -125,7 +125,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** The previous sibling. */
 	/*package*/ transient AbstractComponent _prev;
 	/** ChildInfo: use a class (rather than multiple member) to save footprint */
-	private transient ChildInfo _chdinf;
+	/*package*/ transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
 
@@ -3431,13 +3431,13 @@ w:use="foo.MyWindow"&gt;
 			_chdinf = new ChildInfo();
 		return _chdinf;
 	}
-	private static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
+	/*package*/ static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
 		/** The first child. */
-		private AbstractComponent first;
+		/*package*/ AbstractComponent first;
 		/** The last child. */
-		private AbstractComponent last;
+		/*package*/ AbstractComponent last;
 		/** # of children. */
-		private int nChild;
+		/*package*/ int nChild;
 		/** Set of components that are being added or removed.
 		 * _aring[0]: add, _aring[1]: remove
 		 * It is used to prevent dead-loop between {@link #removeChild}
@@ -3446,7 +3446,7 @@ w:use="foo.MyWindow"&gt;
 		private Set<Component>[] _aring; //use an array to save memory
 		/** The modification count used to avoid co-modification of _next, _prev..
 		 */
-		private int modCntChd;
+		/*package*/ int modCntChd;
 		/** The virtual ID space used when this component is a root component,
 		 * but not attached to a page, nor implement IdSpace.
 		 */
@@ -3688,6 +3688,19 @@ w:use="foo.MyWindow"&gt;
 			auxinf.seRoots = new LinkedList<ShadowElement>();
 		if (!auxinf.seRoots.contains(shadow))
 			return auxinf.seRoots.add(shadow);
+		return false;
+	}
+	public boolean addShadowRootBefore(ShadowElement shadow,
+			ShadowElement insertBefore) {
+		if (insertBefore == null)
+			return addShadowRoot(shadow);
+		if (insertBefore.getShadowHost() != this)
+			throw new UiException("Wrong shadow host [" + insertBefore + "]");
+		AuxInfo auxinf = initAuxInfo();
+		if (!auxinf.seRoots.contains(shadow)) {
+			auxinf.seRoots.add(auxinf.seRoots.indexOf(insertBefore), shadow);
+			return true;
+		}
 		return false;
 	}
 }

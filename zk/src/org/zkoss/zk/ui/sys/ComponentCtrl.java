@@ -467,7 +467,7 @@ public interface ComponentCtrl {
 	public <T extends ShadowElement> List<T> getShadowRoots();
 	
 	/**
-	 * Removes the given shadow root from this host.
+	 * Removes the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
 	 * @return true if child is added successfully
 	 * @since 8.0.0
@@ -475,11 +475,21 @@ public interface ComponentCtrl {
 	public boolean removeShadowRoot(ShadowElement shadow);
 	
 	/**
-	 * Removes the given shadow root from this host.
+	 * Adds the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
 	 * @return true if child is removed successfully; false if it doesn't
 	 * have the specified child
 	 * @since 8.0.0
 	 */
 	public boolean addShadowRoot(ShadowElement shadow);
+	
+	/**
+	 * Adds the given shadow root from this host. (Shadow developer use only)
+	 * @param shadow a shadow element
+	 * @param insertBefore the shadow before which you want the new child
+	 * @return true if child is removed successfully; false if it doesn't
+	 * have the specified child
+	 * @since 8.0.0
+	 */
+	public boolean addShadowRootBefore(ShadowElement shadow, ShadowElement insertBefore);
 }

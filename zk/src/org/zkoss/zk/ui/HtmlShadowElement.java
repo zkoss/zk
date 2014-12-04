@@ -223,7 +223,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			((ComponentCtrl) host).removeShadowRoot(this);
 			onHostDetached((Component)host);
 		}
-		setParent(null);
+		setParent0(null);
 		if (prevhost != null) {
 			prevhost.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, prevhost);
 		}
@@ -231,6 +231,23 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	
 	
 	public void setParent(Component parent) {
+		Component host = getShadowHostIfAny();
+		
+		setParent0(parent);
+		
+		if (host == null)
+			host = getShadowHostIfAny();
+		
+		if (host != null) {
+			if (parent != null) {
+				host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(this, host);
+			} else {
+				host.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, host);
+			}
+		}
+	}
+	
+	private void setParent0(Component parent) {
 		if (_host != null && parent != null) {
 			throw new UiException("As a shadow root cannot be a child of a shadow element.");
 		}
@@ -244,12 +261,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			_nextInsertion = null;
 		}
 		super.setParent(parent);
-		 
-		if (parent != null) {
-			Component host = getShadowHostIfAny();
-			if (host != null)
-				host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(this, host);
-		}
 	}
 	
 	public void beforeParentChanged(Component parent) {
@@ -523,25 +534,47 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	public void mergeSubTree() {
 		List<HtmlShadowElement> children = getChildren();
 		if (children == null || children.isEmpty())
-			return ;// nothing to do.	
-		//mergeSubTree0(children);
-		for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
-			Component previous = child._previousInsertion;
-			Component next = child._nextInsertion;
-			_parent.insertBefore(child, this);
-
-			// resync the insertion of the child, if it has some comopnent sibling.
-			if (previous != null && !(previous instanceof HtmlShadowElement)) {
-				Component newPrevious = child._previousInsertion;
-				setPrevInsertion(previous, newPrevious);
-				setPrevInsertion(child, previous);
+			return ;// nothing to do.
+		if (_parent != null) {
+			for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
+				Component previous = child._previousInsertion;
+				Component next = child._nextInsertion;
+				_parent.insertBefore(child, this);
+	
+				// resync the insertion of the child, if it has some comopnent sibling.
+				if (previous != null && !(previous instanceof HtmlShadowElement)) {
+					Component newPrevious = child._previousInsertion;
+					setPrevInsertion(previous, newPrevious);
+					setPrevInsertion(child, previous);
+				}
+				if (next != null && !(next instanceof HtmlShadowElement)) {
+					Component newNext = child._nextInsertion;
+					setPrevInsertion(newNext, next);
+					setPrevInsertion(next, child);
+				}
+				
 			}
-			if (next != null && !(next instanceof HtmlShadowElement)) {
+		} else { // merge to host
+			for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
+				Component previous = _previousInsertion;
+				
+				child.mergeToHost(_host);
+				
+				if (previous != null) {
+					Component newPrevious = child._previousInsertion;
+					if (newPrevious == null) {
+						setPrevInsertion(child, previous);
+					} else {
+						setPrevInsertion(newPrevious, previous);
+					}
+				}
 				Component newNext = child._nextInsertion;
-				setPrevInsertion(newNext, next);
-				setPrevInsertion(next, child);
+				if (newNext == null) {
+					setPrevInsertion(this, child);
+				} else {
+					setPrevInsertion(this, newNext);
+				}
 			}
-			
 		}
 	}
 
@@ -561,9 +594,19 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		HtmlShadowElement oldParent = (HtmlShadowElement)_parent;
 		
 		if (host != _host) {
+			HtmlShadowElement parent = (HtmlShadowElement) _parent;
 			_parent = null;
-			((ComponentCtrl) host).addShadowRoot(this);
+			((ComponentCtrl) host).addShadowRootBefore(this, (ShadowElement) parent);
 			_host = host;
+
+			// remove children reference
+			++ parent._chdinf.modCntChd;
+			-- parent._chdinf.nChild;
+			if (this._prev == null)
+				parent._chdinf.first = this._next;
+			if (this._next == null)
+				parent._chdinf.last = this._prev;
+			
 			return true;
 		}
 		return false;
