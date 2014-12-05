@@ -1031,7 +1031,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
-			if (!w.isDisabled() && w.isCheckable()) // ZK-2534: skip non-checkable items
+			if (!w.isDisabled())
 				this._changeSelect(w, true);
 		if (notify && evt !== true)
 			this.fireOnSelect(this.getSelectedItem(), evt);
@@ -1206,8 +1206,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			return false;
 		var isGroupSelect = this.groupSelect;
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
-			if (!w.isCheckable()) // ZK-2534: skip non-checkable items
-		    	continue;
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;
