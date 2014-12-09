@@ -2,6 +2,7 @@
   --------
 ZK 7.0.4
 * Features
+  December 9, 2014
   ZK-2455: A way to change the html tag of the include component
   ZK-2483: ZK template support Map, List, Set, and other Collection type
   ZK-2433: Highlight text in a listitem without using nonselectableTag
