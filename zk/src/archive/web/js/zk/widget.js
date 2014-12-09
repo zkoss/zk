@@ -2855,8 +2855,7 @@ function () {
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
 	 * @since 7.0.2
 	 */
-	// for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
-	rerenderNow_: function (skipper) {
+	rerenderNow_: function (skipper) { // for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
 		_rerenderNow(this, skipper);
 	},
 	/** Binds this widget.

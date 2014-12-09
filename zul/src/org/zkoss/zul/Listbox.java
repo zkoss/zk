@@ -2867,7 +2867,7 @@ public class Listbox extends MeshElement {
 	
 	/**
 	 * Sets the message to display when there are no items
-	 * @param String emptyMessage
+	 * @param emptyMessage
 	 * @since 5.0.7
 	 */
 	public void setEmptyMessage(String emptyMessage) {

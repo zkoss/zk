@@ -204,7 +204,7 @@ public final class MethodExpressionImpl extends MethodExpression implements
     }
 
     /**
-     * @return
+     * @return Node
      * @throws ELException
      */
     private Node getNode() throws ELException {

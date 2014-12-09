@@ -728,7 +728,7 @@ public class Grid extends MeshElement {
 	
 	/**
 	 * Sort the rows based on {@link Column#getSortDirection}.
-	 * @return
+	 * @return whether the method susseed or not
 	 */
 	private static boolean doSort(Grid grid) {
 		Columns cols = grid.getColumns();
@@ -1449,7 +1449,7 @@ public class Grid extends MeshElement {
 	
 	/**
 	 * Sets the message to display when there are no items
-	 * @param String emptyMessage
+	 * @param emptyMessage
 	 * @since 5.0.7
 	 */
 	public void setEmptyMessage(String emptyMessage) {
