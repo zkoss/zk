@@ -955,15 +955,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			ComponentCtrl ctrl = this;
 			List<HtmlShadowElement> shadowRoots = ctrl.getShadowRoots();
 			if (!shadowRoots.isEmpty()) {
+				Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 				try {
-					initIndexCacheMap();
+					if (indexCacheMap == null) 
+						initIndexCacheMap();
+					
 					for (HtmlShadowElement shadow : shadowRoots) {
 						val = shadow.resolveVariable(baseChild, name, recurse);
 						if (val != null)
 							return val;
 					}
 				} finally {
-					destroyIndexCacheMap();
+					ShadowElementsCtrl.setDistributedIndexInfo(indexCacheMap);
 				}
 			}
 		}

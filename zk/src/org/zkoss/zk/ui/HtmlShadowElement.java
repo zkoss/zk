@@ -639,7 +639,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		final boolean destroyCacheMap = oldCacheMap == null;
 		try {
 			if (destroyCacheMap) // the first caller
-				oldCacheMap = initIndexCacheMap();
+				initIndexCacheMap();
 
 			rebuildSubShadowTree();
 		} finally {
