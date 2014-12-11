@@ -70,4 +70,17 @@ public interface ShadowElementCtrl {
 	 * @return null or a host component
 	 */
 	public Component getShadowHostIfAny();
+
+	/** Returns the variable associated with this base component or null if not found.
+	 *
+	 * <p>Notice that it doesn't check any variable defined in
+	 * {@link org.zkoss.xel.VariableResolver}
+	 * (of {@link Page#addVariableResolver}).
+	 *
+	 * @param child the child component of the shadow host
+	 * @param recurse whether to look up the parent shadow for the
+	 * existence of the variable.<br/>
+	 * If recurse is true, it will look up all parents until found.
+	 */
+	public Object resolveVariable(Component child, String name, boolean recurse);
 }

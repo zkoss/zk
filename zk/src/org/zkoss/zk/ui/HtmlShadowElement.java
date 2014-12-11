@@ -65,6 +65,28 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	
 	protected static String ON_REBUILD_SHADOW_TREE_LATER = 	"onRebuildShadowTreeLater";
 	
+	public Object resolveVariable(Component child, String name, boolean recurse) {
+		if (_firstInsertion == null) // out of our range;
+			return null;
+		
+		if (child == null || child.getParent() == null) {
+			return getAttributeOrFellow(name, recurse);
+		}
+		
+		List<Component> children = child.getParent().getChildren();
+		int insertIndex = children.indexOf(child);
+		int selfFirstIndex = children.indexOf(_firstInsertion);
+		if (insertIndex < selfFirstIndex) return null; // out of our range;
+		
+		Map<Component, Integer> indexMap = fillUpIndexMap(_firstInsertion, _lastInsertion);
+		int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, indexMap);
+		if (selfIndex[1] < insertIndex) return null; // out of our range;
+
+		HtmlShadowElement node = queryIntersectedShadowIfAny(insertIndex, indexMap);
+		if (node != null)
+			return node.getShadowVariable(name, recurse);
+		return null;
+	}
 	/**
 	 * Returns the next component before this shadow, if any. (it will invoke recursively from its parent.)
 	 */
@@ -851,7 +873,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					adjustInsertionForInsertBefore(node, child, insertBefore);
 				} else if (!((HtmlShadowElement) currentInfo).getChildren().isEmpty()) { // adjust from currentInfo's first.
 					HtmlShadowElement currentShadow = asShadow(currentInfo);
-					asShadow(currentShadow.getFirstChild())._nextInsertion = child;
+					asShadow(currentShadow.getLastChild())._nextInsertion = child;
 				}
 			} else if (node != null) {
 				// check if the insertion is before the shadow root range,

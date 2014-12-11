@@ -936,6 +936,56 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return null;
 	}
+
+	private boolean _variableSeeking = false;
+	public Object getShadowVariable(String name, boolean recurse) {
+		try {
+			_variableSeeking = true;
+			return getShadowVariable0(this, name, true);
+		} finally {
+			_variableSeeking = false;
+		}
+	}
+	protected Object getShadowVariable0(AbstractComponent baseChild, String name, boolean recurse) {
+		Object val = getAttribute(name);
+		if (val != null || hasAttribute(name))
+			return val;
+		
+		if (!(this instanceof ShadowElement)) {
+			ComponentCtrl ctrl = this;
+			List<HtmlShadowElement> shadowRoots = ctrl.getShadowRoots();
+			if (!shadowRoots.isEmpty()) {
+				try {
+					initIndexCacheMap();
+					for (HtmlShadowElement shadow : shadowRoots) {
+						val = shadow.resolveVariable(baseChild, name, recurse);
+						if (val != null)
+							return val;
+					}
+				} finally {
+					destroyIndexCacheMap();
+				}
+			}
+		}
+		if (recurse) {
+			if (_parent != null)
+				return _parent.getShadowVariable0(this, name, recurse);
+			
+			if (this instanceof ShadowElement) {
+				AbstractComponent shadowHost = (AbstractComponent)((ShadowElement) this).getShadowHost();
+				if (shadowHost != null) {
+					if (shadowHost._variableSeeking) {
+						if (shadowHost.getParent() != null) {
+							return ((AbstractComponent)shadowHost.getParent()).getShadowVariable(name, recurse);
+						}
+						return null; // avoid deadloop
+					}
+					return shadowHost.getShadowVariable(name, recurse);
+				}
+			}
+		}
+		return null;
+	}
 	public boolean hasAttributeOrFellow(String name, boolean recurse) {
 		if (hasAttribute(name)
 		|| (this instanceof IdSpace && hasFellow(name)))
