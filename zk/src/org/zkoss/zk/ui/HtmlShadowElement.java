@@ -276,7 +276,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		
 		if (parent == null && _host == null) {
 			// detach
-			setPrevInsertion(_nextInsertion, _previousInsertion); // resync
+			if (_firstInsertion != null) {
+				setPrevInsertion(_firstInsertion, _previousInsertion); // resync
+				setPrevInsertion(_nextInsertion, _lastInsertion); // resync
+			} else {
+				setPrevInsertion(_nextInsertion, _previousInsertion); // resync
+			}
 			_previousInsertion = null;
 			_firstInsertion = null;
 			_lastInsertion = null;
@@ -553,7 +558,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	 * Merge the all sub-tree into the parent's insertions, unlike
 	 * {@link #appendChild(Component)}
 	 */
-	public void mergeSubTree() {
+	protected void mergeSubTree() {
 		List<HtmlShadowElement> children = getChildren();
 		if (children == null || children.isEmpty())
 			return ;// nothing to do.
@@ -660,7 +665,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			se.rebuildSubShadowTree();
 		}
 		if (!isDynamicValue()) {
-			// do nothing
 			mergeSubTree();
 			detach();
 		}
@@ -1341,6 +1345,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	final static protected String SAVE_ANNO = "save";
 	// refer to AnnotateBinderHelper.REFERENCE_ANNO
 	final static protected String REFERENCE_ANNO = "ref";
+	// refer to BinderImpl.BINDER
+	final static protected String BINDER = "$BINDER$";
 
 	/**
 	 * Returns whether the property name contains with a dynamic value.

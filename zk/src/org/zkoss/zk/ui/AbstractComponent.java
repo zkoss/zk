@@ -957,8 +957,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (!shadowRoots.isEmpty()) {
 				Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 				try {
-					if (indexCacheMap == null) 
-						initIndexCacheMap();
+					if (indexCacheMap != null) {
+						destroyIndexCacheMap(); // reset
+					}
+					initIndexCacheMap();
 					
 					for (HtmlShadowElement shadow : shadowRoots) {
 						val = shadow.resolveVariable(baseChild, name, recurse);
