@@ -1,17 +1,15 @@
 <zk>
-	<window>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01032BindContextEvent')" title="a title">
 		<label multiline="true">
 		1.change the value of text, you will see 'evt1:onChange,evt2:onChange, cmd:cmd'
 		2.click on the button, you will see 'evt1:onClick,evt2:onClick, cmd:cmd'
 		
 		</label>
-		<window apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01032BindContextEvent')" title="a title">
-			<vbox>
-			<label id="msg" value="@load(vm.message)" />
-			<textbox id="tb" onChange="@command('cmd',e=event)"/>
-			<button id="btn" label="click me" onClick="@command('cmd',e=event)"/>
-			</vbox>
-		</window>
+		<vbox>
+		<label id="msg" value="@load(vm.message)" />
+		<textbox id="tb" onChange="@command('cmd',e=event)"/>
+		<button id="btn" label="click me" onClick="@command('cmd',e=event)"/>
+		</vbox>
 	</window>
 </zk>

@@ -28,6 +28,6 @@ public class B01640CommandSend2WrongViewModel {
 
 	@Command("showChild")
 	public void cmd() {
-		Executions.createComponents("/bind/issue/B01640CommandSend2WrongViewModelChild.zul", workContent, null);
+		Executions.createComponents("./B01640CommandSend2WrongViewModelChild.zul", workContent, null);
 	}
 }

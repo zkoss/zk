@@ -1,5 +1,5 @@
 <window>
-	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
+	<window id="win1" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
 	@init('org.zkoss.zktest.bind.issue.F01033InitClass$Case1$D',val1='Dennis',val2='Chen')">
 		
 		<vbox> 
@@ -7,7 +7,7 @@
 			<hbox>l12[<label id="l12" value="@load(vm.value2)"/>]=Chen</hbox>
 		</vbox>
 	</window>
-	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
+	<window id="win2" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
 	@init('org.zkoss.zktest.bind.issue.F01033InitClass$Case2$D',val1='Ian',val2='Tasi')">
 		
 		<vbox> 

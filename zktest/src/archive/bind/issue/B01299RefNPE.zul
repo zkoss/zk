@@ -2,7 +2,7 @@
 	<hlayout>
 		<vlayout>
 			--prompt binding--
-			<window apply="org.zkoss.bind.BindComposer" title="CaseA-1"
+			<window id="win1" apply="org.zkoss.bind.BindComposer" title="CaseA-1"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then tab out, the label should be
 				updated
@@ -11,7 +11,7 @@
 					<label id="lba1" value="@load(text)" />
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseA-2"
+			<window id="win2" apply="org.zkoss.bind.BindComposer" title="CaseA-2"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then tab out, the label should be
 				updated
@@ -21,7 +21,7 @@
 					<label id="lba2" value="@load(text)" />
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseA-3"
+			<window id="win3" apply="org.zkoss.bind.BindComposer" title="CaseA-3"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then tab out, the label should be
 				updated
@@ -45,7 +45,7 @@
 		</vlayout>
 		<vlayout>
 			--condition binding--
-			<window apply="org.zkoss.bind.BindComposer" title="CaseB-1"
+			<window id="win4" apply="org.zkoss.bind.BindComposer" title="CaseB-1"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then click update, the label should
 				be updated
@@ -55,7 +55,7 @@
 					<button label="update" onClick="@command('submit')" id="btnb1" />
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseB-2"
+			<window id="win5" apply="org.zkoss.bind.BindComposer" title="CaseB-2"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then click update, the label should
 				be updated
@@ -65,7 +65,7 @@
 					<button label="update" onClick="@command('submit')" id="btnb2"/>
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseB-3"
+			<window id="win6" apply="org.zkoss.bind.BindComposer" title="CaseB-3"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then click update, the label should
 				be updated
@@ -75,7 +75,7 @@
 					<button label="update" onClick="@command('submit')" id="btnb3"/>
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseB-4"
+			<window id="win7" apply="org.zkoss.bind.BindComposer" title="CaseB-4"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then click update, the label should
 				be updated
@@ -98,7 +98,7 @@
 					</vlayout>
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseB-5"
+			<window id="win8" apply="org.zkoss.bind.BindComposer" title="CaseB-5"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then click update, the label should
 				be updated
@@ -109,7 +109,7 @@
 					<button label="update" onClick="@command('submit')" id="btnb5"/>
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseB-6"
+			<window id="win9" apply="org.zkoss.bind.BindComposer" title="CaseB-6"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then click update, the label should
 				be updated
@@ -135,7 +135,7 @@
 		</vlayout>
 		Exceptions
 		<vlayout>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseC-1"
+			<window id="win10" apply="org.zkoss.bind.BindComposer" title="CaseC-1"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then tab out, you will see exception
 				<vlayout text="@ref(vm)">
@@ -143,7 +143,7 @@
 						value="@save(text) @validator(vm.textValidator)" />
 				</vlayout>
 			</window>
-			<window apply="org.zkoss.bind.BindComposer" title="CaseC-2"
+			<window id="win11" apply="org.zkoss.bind.BindComposer" title="CaseC-2"
 				viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01299RefNPE')">
 				type on the textbox, then tab out, you will see exception
 				<vlayout text="@ref(vm)">

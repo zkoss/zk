@@ -2,7 +2,7 @@
 <label multiline="true">
 1.you should see all static values are ABC
 </label>
-	<window 
+	<window id="win1" 
 		title = "Outter Window"
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01472BindIncludeArg')" >
 		<vlayout>
@@ -15,7 +15,7 @@
 		</vlayout>
 		<button id="btn1" label="reload" onClick="@command('reload')" />
 		<div>
-			<include sValue="@load(vm.staticValue)" src="@load(vm.zul)" mode="instant" />
+			<include id="inc1" sValue="@load(vm.staticValue)" src="@load(vm.zul)" mode="instant" />
 		</div>
 	</window>
 </zk>

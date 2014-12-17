@@ -1,4 +1,5 @@
 <zk>
+<div>
 	<window id="w1" apply="org.zkoss.bind.BindComposer" title="Children Binding Init"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01615ChildrenBindingInForm')">
 		<groupbox form="@id('prn') @load(vm.myData1)">
@@ -41,4 +42,5 @@
 			</div>
 		</groupbox>
 	</window>
+</div>
 </zk>

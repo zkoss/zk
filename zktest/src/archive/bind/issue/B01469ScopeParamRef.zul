@@ -2,7 +2,7 @@
 <label multiline="true">
 1.you should see all static values are ABC
 </label>
-	<window 
+	<window id="win1"
 		title = "Outter Window"
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01469ScopeParamRef')" >
 		<vlayout>
@@ -11,7 +11,7 @@
 			</hlayout>
 		</vlayout>
 		<div>
-			<include src="@load('/bind/issue/B01469ScopeParamRefInner.zul')" sValue="@ref(vm.staticValue)" />
+			<include id="inc1" src="@load('./B01469ScopeParamRefInner.zul')" sValue="@ref(vm.staticValue)" />
 		</div>
 	</window>
 </zk>

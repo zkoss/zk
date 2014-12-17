@@ -1,17 +1,18 @@
 <?page title="Auto Generated index.zul"?>
 <zk xmlns:n="native">
-<n:ol>
-	<n:li>click add Person</n:li>
-	<n:li>click X to delete person</n:li>
-	<n:li>click add URL</n:li>
-	<n:li>click X to delete URL</n:li>
-	<n:li>there shouldn't pop up an alert of NPE</n:li>
-</n:ol>
 
 <window id="mainWindow" title="" border="normal" height="400px"
 	contentStyle="overflow:auto" apply="org.zkoss.bind.BindComposer"
 	validationMessages="@id('vmsgs')"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01185CollectionBindingNPE')">
+
+	<label multiline="true">
+		1. click add Person
+		2. click X to delete person
+		3. click add URL
+		4. click X to delete URL
+		5. there shouldn't pop up an alert of NPE
+	</label>
 
 	<groupbox hflex="1">
 		<caption label="Person Profile" />

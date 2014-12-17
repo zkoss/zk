@@ -1,14 +1,12 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<window>
-
-	<zscript>
-	Object selected = "1";
-	//for test
-</zscript>
 	<window id="win" title="new page title" border="normal"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01085NPEReferenceBinding')"
 		vmsel="@ref(vm.selected)" simple="@ref(selected)">
+		<zscript>
+		Object selected = "1";
+		//for test
+		</zscript>
 		<label multiline="true">
 			1.selection of listbox1,2,3 are synchronized 2.select on
 			listbox4,5 will get exception
@@ -82,4 +80,3 @@
 		<label id="lb1" value="@load(vmsel)" />
 		<label id="lb2" value="@load(selected)" />
 	</window>
-</window>

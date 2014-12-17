@@ -17,7 +17,7 @@ public class B01472BindIncludeArg {
 	}
 	
 	public String getZul(){
-		return "/bind/issue/B01472BindIncludeArgInner.zul?t="+t++;
+		return "./B01472BindIncludeArgInner.zul?t="+t++;
 	}
 	
 	@Command

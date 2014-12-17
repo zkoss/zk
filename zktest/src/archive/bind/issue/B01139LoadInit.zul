@@ -12,13 +12,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
 
 <zk xmlns:n="native">
-<n:h5>Testing step:</n:h5>
-	<n:ol>
-		<n:li> make the checkbox in caption become unchecked </n:li>
-		<n:li> change the value of "name" textbox</n:li>
-		<n:li> click "change name" button</n:li>
-		<n:li> the value of name should not changed</n:li>
-	</n:ol>
+
 	
 <window id="myWin" title="binder loadComponent loadinit false" border="normal" 
 	apply="org.zkoss.bind.BindComposer"
@@ -27,6 +21,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<checkbox id="liChk" label="load Init" checked="true" />
 		
 	</caption>
+	<n:h5>Testing step:</n:h5>
+	<n:ol>
+		<n:li> make the checkbox in caption become unchecked </n:li>
+		<n:li> change the value of "name" textbox</n:li>
+		<n:li> click "change name" button</n:li>
+		<n:li> the value of name should not changed</n:li>
+	</n:ol>
 	
 		
 	<grid>

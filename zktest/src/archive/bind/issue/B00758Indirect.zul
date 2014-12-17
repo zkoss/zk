@@ -1,5 +1,5 @@
 <zk>
-<window>
+
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00758Indirect')">
 	<label multiline="true">
@@ -27,5 +27,5 @@
 		onClick="@command('chang1stPerson')" />
 	<button label="Dump" onClick="binder.getTracker().dump()" />
 </window>
-</window>
+
 </zk>

@@ -1,20 +1,18 @@
 <zk>
-	<window>
-	<label multiline="true">
-	1.type 9 in combobox. you should see a drop down which contains value the start with 9
-	2.select 99, you should see the label become 99
-	</label>
-		<window apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00992SubModel')" title="a title">
-			<hbox>
-			<combobox id="combobox" model="@load(vm.model)" autodrop="true" selectedItem="@bind(vm.selected)" >
-				<template name="model">
-					<comboitem label="@load(each.name)"/>
-				</template>
-			</combobox>
-			<label id="lab" value="@load(vm.selected.name)"/>
-			</hbox>
-			<button label="dump" onClick="binder.tracker.dump()"/>
-		</window>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00992SubModel')" title="a title">
+		<label multiline="true">
+		1.type 9 in combobox. you should see a drop down which contains value the start with 9
+		2.select 99, you should see the label become 99
+		</label>
+		<hbox>
+		<combobox id="combobox" model="@load(vm.model)" autodrop="true" selectedItem="@bind(vm.selected)" >
+			<template name="model">
+				<comboitem label="@load(each.name)"/>
+			</template>
+		</combobox>
+		<label id="lab" value="@load(vm.selected.name)"/>
+		</hbox>
+		<button label="dump" onClick="binder.tracker.dump()"/>
 	</window>
 </zk>

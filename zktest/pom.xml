@@ -289,11 +289,11 @@
 		    <artifactId>slf4j-api</artifactId>
 		    <version>1.6.1</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-log4j12</artifactId>
 		    <version>1.6.1</version>
-		</dependency>
+		</dependency> -->
 		
 		
 		            
@@ -343,6 +343,19 @@
 			<version>6.1.26</version>
 		</dependency>
 		-->
+		
+		<!-- For Zats -->
+		<dependency>
+			<groupId>org.zkoss.zats</groupId>
+			<artifactId>zats-mimic-ext7</artifactId>
+			<version>1.2.1.FL.20141111</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+		</dependency>
 		       
 	</dependencies>
 	<build>

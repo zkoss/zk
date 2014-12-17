@@ -1,5 +1,5 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
+	<window id="win2" apply="org.zkoss.bind.BindComposer"
 			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00993IncludeReload2')">
 		<zscript>
 		java.util.Date date = new java.util.Date();

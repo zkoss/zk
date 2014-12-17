@@ -33,8 +33,8 @@ public class B01887DetachAttach {
 		entityVM = new VM();
 		listVM = new VM();
 		
-		entityVM.setInc("/bind/issue/B01887DetachAttachInner1.zul");
-		listVM.setInc("/bind/issue/B01887DetachAttachInner2.zul");
+		entityVM.setInc("./B01887DetachAttachInner1.zul");
+		listVM.setInc("./B01887DetachAttachInner2.zul");
 	}
 	
 	@AfterCompose

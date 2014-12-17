@@ -1,5 +1,5 @@
 <zk>
-	<window 
+	<window id="win2" 
 		title = "Inner Window 1">
 		<vlayout>
 			<hlayout>
@@ -10,7 +10,7 @@
 			</hlayout>
 		</vlayout>
 	</window>
-	<window 
+	<window id="win3"
 		title = "Inner Window 2"
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vmi') @init('org.zkoss.zktest.bind.issue.B01468RefIncludeInner')" >
 		<button label="dump inner" onClick="binder.tracker.dump()"/>

@@ -1,5 +1,5 @@
 <zk>
-	<window 
+	<window id="win2" 
 		title = "Inner Window"
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vmi') @init('org.zkoss.zktest.bind.issue.B01469ScopeParamRefInner')" >
 		<vlayout>

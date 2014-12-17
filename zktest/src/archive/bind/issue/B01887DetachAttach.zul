@@ -9,13 +9,13 @@
 			<div id="dyn1">
 				DYN1
 				<label value="@init(entityVM)" />
-				<include src="@init(entityVM.inc)" />
+				<include id="inc1" src="@init(entityVM.inc)" />
 			</div>
 			
 			<div id="dyn2">
 				DYN2
 				<label value="@init(listVM)" />
-				<include src="@init(listVM.inc)" />
+				<include id="inc2" src="@init(listVM.inc)" />
 			</div>
 		</div>
 		

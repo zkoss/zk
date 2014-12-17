@@ -1,5 +1,5 @@
 <zk>
-	<window title="Inner" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01699IncludeMultipleTimesInner')">
+	<window id="win2" title="Inner" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01699IncludeMultipleTimesInner')">
 
 		<div id="d1">
 			<div id="d11">

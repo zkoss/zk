@@ -3,7 +3,7 @@
 		1.change the dynamic value to XYZ and tab out.
 		2.all Dynamic Value should change to XYZ (however, dValue in inner window2 is not if the bug isn't fixed)
 	</label>
-	<window 
+	<window id="win1"
 		title = "Outter Window"
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01468RefInclude')" >
 		<button label="dump outer" onClick="binder.tracker.dump()"/>
@@ -18,7 +18,7 @@
 				dValue : <label id="lb2"  value="@load(dValue)"/> 
 			</hlayout>
 		
-			<include src="/bind/issue/B01468RefIncludeInner.zul" />
+			<include id="include" src="./B01468RefIncludeInner.zul" />
 		</div>
 	</window>
 </zk>

@@ -1,9 +1,9 @@
 <zk>
+	<window id="win1" title="new page title" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01699IncludeMultipleTimes')">
 	<label multiline="true">
 	1.you should see Foo_1 and Bar_1 in inner window
 	2.click switch, you should see FOO1 and BAR_1 in Inner2 window
 	</label>
-	<window title="new page title" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01699IncludeMultipleTimes')">
 		<button id="btn" onClick="@command('page2')" label="switch"/>
 		<div>
 			<div>
