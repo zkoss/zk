@@ -48,10 +48,10 @@ import org.zkoss.zk.ui.Component;
  */
 public class TrackerImpl implements Tracker, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
-	private LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
-	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
-	private transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
-	private transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
+	protected LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
+	protected Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
+	protected transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+	protected transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
 	
 	public TrackerImpl() {
 		_equalBeansMap = newEqualBeansMap(); 
@@ -276,7 +276,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	//add node into the _beanMap
-	private void addBeanMap(TrackerNode node, Object value) {
+	protected void addBeanMap(TrackerNode node, Object value) {
 		//add node into _beanMap
 		if (!value.equals(node.getBean())) {
 			//try to remove from the _beanMap
@@ -340,7 +340,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	//remove node from the _beanMap
-	private void removeBeanMap(TrackerNode node) {
+	protected void removeBeanMap(TrackerNode node) {
 		final Object value = node.getBean();
 		if (value != null) {
 			node.setBean(null);

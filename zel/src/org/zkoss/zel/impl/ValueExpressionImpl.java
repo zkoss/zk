@@ -87,7 +87,7 @@ import org.zkoss.zel.impl.util.ReflectionUtil;
  * @author Jacob Hookom [jacob@hookom.net]
  * @version $Id: ValueExpressionImpl.java 1026769 2010-10-24 11:55:10Z markt $
  */
-public final class ValueExpressionImpl extends ValueExpression implements
+public class ValueExpressionImpl extends ValueExpression implements
         Externalizable {
 
     private Class<?> expectedType;

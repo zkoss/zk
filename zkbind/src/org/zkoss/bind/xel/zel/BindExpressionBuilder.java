@@ -49,7 +49,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 	
 	private static final Logger _log = LoggerFactory.getLogger(BindExpressionBuilder.class);
 	private static final String _isVisitedKey = BindExpressionBuilder.class+"_isVisted";
-	private final BindELContext _ctx;
+	protected final BindELContext _ctx;
     public BindExpressionBuilder(String expression, ELContext ctx) throws ELException {
 		super(expression, ctx);
 		_ctx = (BindELContext) ctx;
@@ -73,7 +73,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 	
 	//to tracing load property dependency or form field(both save and load)
 	//path example, [vm,.p1,.firstName] or [fx.firstName]
-	private void addTracking(List<String> series) {
+	protected void addTracking(List<String> series) {
 		final Binding binding = _ctx.getBinding();
 		final boolean dotracker = !_ctx.ignoreTracker();
 		
@@ -156,7 +156,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 		}
 	}
 
-	private void visitNode(Node node) {
+	protected void visitNode(Node node) {
 		if(_ctx.getBinding()==null) return; //no need to build tracker, we are not in binding expression
 		
 		final List<String> path = new ArrayList<String>();

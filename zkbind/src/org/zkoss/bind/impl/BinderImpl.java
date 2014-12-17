@@ -533,7 +533,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	public BindEvaluatorX getEvaluatorX() {
 		if (_eval == null) {
-			_eval = new BindEvaluatorXImpl(null, org.zkoss.bind.xel.BindXelFactory.class);
+			_eval = BindEvaluatorXUtil.createEvaluator(null);
 		}
 		return _eval;
 	}

@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public class BindELResolver extends XelELResolver {
-	private final CompositeELResolver _resolver;
+	private CompositeELResolver _resolver;
 	
 	public BindELResolver(XelContext ctx) {
 		super(ctx);
@@ -60,8 +60,16 @@ public class BindELResolver extends XelELResolver {
 		
 		_resolver.add(super.getELResolver());
 	}
+	public BindELResolver(XelContext ctx, boolean lazy) {
+		super(ctx);
+	}
+	
 	protected ELResolver getELResolver() {
 		return _resolver;
+	}
+	
+	protected ELResolver getSuperELResolver() {
+		return super.getELResolver();
 	}
 	//ELResolver//
 	public Object getValue(ELContext ctx, Object base, Object property)
@@ -132,7 +140,7 @@ public class BindELResolver extends XelELResolver {
 	}
 
 	//update dependency and notify changed
-	private void tieValue(ELContext elCtx, Object base, Object property, Object value, boolean allownotify) {
+	protected void tieValue(ELContext elCtx, Object base, Object property, Object value, boolean allownotify) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
