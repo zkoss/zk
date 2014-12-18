@@ -4,10 +4,10 @@
 	it is not a zkbind bug, but a issue of doublebox with format lost the precision.
 	<vbox form="@id('fx') @load(vm) @save(vm,after='cmd1')">
 		<hbox>
-			<label value="@load(fxStatus.dirty?'Dirty':'Non-dirty')"/>
+			<label id="lb1" value="@load(fxStatus.dirty?'Dirty':'Non-dirty')"/>
 		</hbox>
-		<intbox value="@bind(fx.age)" />
-		<doublebox value="@bind(fx.price)" format="#0.##" />
+		<intbox id="intbox" value="@bind(fx.age)" />
+		<doublebox id="doublebox" value="@bind(fx.price)" format="#0.##" />
 	</vbox>
 
 	<button label="Dump" onClick="binder.getTracker().dump()" />

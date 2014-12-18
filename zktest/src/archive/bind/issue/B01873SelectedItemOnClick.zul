@@ -10,10 +10,10 @@
 		1. click on a un-selected item's inner div.
 		2. the label should be updated to item/sub-item 's name
 	</label>
-	<window apply="org.zkoss.bind.BindComposer"
+	<window id="win" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01873SelectedItemOnClick')">
 
-		<listbox mold="paging" pageSize="10" pagingPosition="both"
+		<listbox id="listbox" mold="paging" pageSize="10" pagingPosition="both"
 			model="@load(vm.items)" selectedItem="@bind(vm.selectedItem)">
 			<template name="model" var="item">
 				<listitem>
@@ -29,8 +29,8 @@
 			</template>
 		</listbox>
 		<hlayout>
-			<label value="@bind(vm.selectedItem.name)" />/
-			<label value="@bind(vm.clickedSubItem.name)" />
+			<label id="lb1" value="@bind(vm.selectedItem.name)" />/
+			<label id="lb2" value="@bind(vm.clickedSubItem.name)" />
 		</hlayout>
 	</window>
 </zk>

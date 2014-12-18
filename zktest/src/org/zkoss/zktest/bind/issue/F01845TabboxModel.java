@@ -19,15 +19,15 @@ public class F01845TabboxModel {
 	@Init
 	public void init() {
 		tabInfos = new ListModelList<TabInfo>();
-		tabInfos.add(selected = new TabInfo("Detail " + counter++, "/bind/issue/F01845TabboxModelDetail.zul"));
-		tabInfos.add(new TabInfo("Detail " + counter++, "/bind/issue/F01845TabboxModelDetail.zul"));
+		tabInfos.add(selected = new TabInfo("Detail " + counter++, "./F01845TabboxModelDetail.zul"));
+		tabInfos.add(new TabInfo("Detail " + counter++, "./F01845TabboxModelDetail.zul"));
 		
 	}
 
 	@Command("addTab")
 //	@NotifyChange("tabInfos") //don't need to notify, because you are using efficient ListModelList
 	public void onAddTab() {
-		tabInfos.add(new TabInfo("Detail " + counter++, "/bind/issue/F01845TabboxModelDetail.zul"));
+		tabInfos.add(new TabInfo("Detail " + counter++, "./F01845TabboxModelDetail.zul"));
 	}
 
 	@Command("removeTab")

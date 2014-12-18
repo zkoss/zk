@@ -16,7 +16,7 @@
             </tabpanel>
             <!-- Tab 4 -->
             <tabpanel fulfill="tab4.onSelect" onFulfill="@command('populateList4')">
-                <listbox model="@bind(vm.list4)" vflex="true" mold="paging"
+                <listbox id="listbox" model="@bind(vm.list4)" vflex="true" mold="paging"
                     autopaging="true">
                     <listhead>
                         <listheader sort="auto">

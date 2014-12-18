@@ -3,24 +3,28 @@ package org.zkoss.zktest.zats;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
+import org.zkoss.zats.mimic.ZatsEnvironment;
 
 public abstract class ZATSTestCase {
+	protected static ZatsEnvironment env;
 	
 	@BeforeClass
 	public static void init() {
-		Zats.init("./src/archive/bind/issue");
+		env = new DefaultZatsEnvironment("./src/archive/WEB-INF", "/zktest");
+		env.init("./src/archive/bind/issue");
 	}
 	
 	@AfterClass
 	public static void end() {
-		Zats.end();
+		env.destroy();
 	}
 	
 	@After
 	public void after() {
-		Zats.cleanup();
+		env.cleanup();
 	}
 	
 	public DesktopAgent connect() {
@@ -29,9 +33,9 @@ public abstract class ZATSTestCase {
 	
 	public DesktopAgent connect(String location){
 		if (location == null || location.length() <= 0)
-			return Zats.newClient().connect(getFileLocation());
+			return env.newClient().connect(getFileLocation());
 		else
-			return Zats.newClient().connect(location);
+			return env.newClient().connect(location);
 	}
 
 	private String getFileLocation() {

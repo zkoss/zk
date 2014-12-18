@@ -4,31 +4,31 @@
 		<div form="@id('fx')@load(vm.product) @save(vm.product,before='save')">
 			<vlayout item="@ref(fx.item)" name2="@ref(fx.item.name2)">
 				<div>
-					fx.item.name: <textbox value="@bind(fx.item.name)"/>
+					fx.item.name: <textbox id="tb1" value="@bind(fx.item.name)"/>
 				</div>
 				<div>
-					item.name1: <textbox value="@bind(item.name1)"/>(value are save to item directly)
+					item.name1: <textbox id="tb2" value="@bind(item.name1)"/>(value are save to item directly)
 				</div>
 				<div>
-					name2: <textbox value="@bind(name2)"/>(value is not update after save)
+					name2: <textbox id="tb3" value="@bind(name2)"/>(value is not update after save)
 				</div>
 			</vlayout>
 		</div>
 		<vlayout>
 			<div>
 				vm.product.item.name
-				<label value="@bind(vm.product.item.name)" />
+				<label id="lb1" value="@bind(vm.product.item.name)" />
 			</div>
 			<div>
 				vm.product.item.name1
-				<label value="@bind(vm.product.item.name1)" />
+				<label id="lb2" value="@bind(vm.product.item.name1)" />
 			</div>
 			<div>
 				vm.product.item.name2
-				<label value="@bind(vm.product.item.name2)" />
+				<label id="lb3" value="@bind(vm.product.item.name2)" />
 			</div>
 		</vlayout>
-		<button label="save" onClick="@command('save')"/>
+		<button id="save" label="save" onClick="@command('save')"/>
 		<button label="dump" onClick="binder.getTracker().dump()"/>
 	</window>
 </zk>

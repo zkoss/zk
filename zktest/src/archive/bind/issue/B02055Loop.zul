@@ -31,7 +31,7 @@ Test xhtml component inside grid with annotation databinding (this bug generate 
 
 <groupbox>
 	<caption label="grid"/>
-	<grid model="@{links}">
+	<grid id="grid" model="@{links}">
 	<rows>
 	<row each="@{link1}">
 		<h:a href="@{link1.link}"><label value="@{link1.link}"/></h:a>
@@ -42,7 +42,7 @@ Test xhtml component inside grid with annotation databinding (this bug generate 
 
 <groupbox>
 	<caption label="listbox"/>
-	<listbox model="@{links}">
+	<listbox id="listbox" model="@{links}">
 	<listitem each="@{link2}">
 		<listcell><h:a href="@{link2.link}"><label value="@{link2.link}"/></h:a></listcell>
 	</listitem>

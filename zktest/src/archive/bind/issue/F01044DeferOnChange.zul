@@ -22,7 +22,7 @@
 	<hlayout>
 		Value3:<label id="lb5" value="@bind(vm.value3)"/>/Value4:<label id="lb6" value="@bind(vm.value4)"/>
 	</hlayout>
-	<button label="Save2" onClick="@command('save2')" />
+	<button id="save2" label="Save2" onClick="@command('save2')" />
 	
 	
 </window>

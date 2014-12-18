@@ -12,19 +12,19 @@
 		model.add("C");
 		</zscript>
 		Listbox1, mode,item by EL
-		<listbox model="${model}">
+		<listbox id="listbox1" model="${model}">
 			<template name="model">
 				<listitem label="${each}" />	
 			</template>
 		</listbox>
 		Listbox2, model by EL, item by Binder
-		<listbox model="${model}" visible="@load(true)"> <!-- visible to enable binder renderer -->
+		<listbox id="listbox2" model="${model}" visible="@load(true)"> <!-- visible to enable binder renderer -->
 			<template name="model">
 				<listitem label="@load(each)" />	
 			</template>
 		</listbox>
 		Listbox3, mode &amp; item by Binder
-		<listbox model="@load(model)" > 
+		<listbox id="listbox3" model="@load(model)" > 
 			<template name="model">
 				<listitem label="@load(each)" />	
 			</template>

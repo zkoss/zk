@@ -1,8 +1,8 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01938GridListboxActivePage')">
-		<intbox value="@bind(vm.pageIndex)"/>
-		<grid model="@bind(vm.data)" mold="paging" pageSize="3"
+		<intbox id="intbox" value="@bind(vm.pageIndex)"/>
+		<grid id="grid" model="@bind(vm.data)" mold="paging" pageSize="3"
 			activePage="@bind(vm.pageIndex)">
 			<columns>
 				<column label="col"/>
@@ -11,7 +11,7 @@
 				<row forEach="${data}">Item</row>
 			</rows>
 		</grid>
-		<listbox  model="@bind(vm.data)" mold="paging" pageSize="3" 
+		<listbox id="listbox" model="@bind(vm.data)" mold="paging" pageSize="3" 
 			activePage="@bind(vm.pageIndex)">
 			<listhead>
 				<listheader label="col"/>

@@ -8,8 +8,8 @@
 	
 	
 	
-		<label value="@load(vm.price) @converter('formattedNumber', format='###,##0.00')"/>
-		<label value="@load(vm.creationDate) @converter('formattedDate', format='yyyy/MM/dd')"/>
+		<label id="lb1" value="@load(vm.price) @converter('formattedNumber', format='###,##0.00')"/>
+		<label id="lb2" value="@load(vm.creationDate) @converter('formattedDate', format='yyyy/MM/dd')"/>
 	</window>
 
 
