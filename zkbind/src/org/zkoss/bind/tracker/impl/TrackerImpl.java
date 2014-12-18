@@ -168,9 +168,10 @@ public class TrackerImpl implements Tracker, Serializable {
 			}
 		} else {
 			for (TrackerNode node : nodes) {
-				final TrackerNode kid = node.getDependent(prop);
-				if (kid != null) {
-					getLoadBindings0(kid, bindings, kidbases, visited);
+				for (TrackerNode kid : node.getDependents(prop)) {
+					if (kid != null) {
+						getLoadBindings0(kid, bindings, kidbases, visited);
+					}
 				}
 			}
 		}
@@ -252,13 +253,14 @@ public class TrackerImpl implements Tracker, Serializable {
 			if (baseNodes != null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 				final Set<TrackerNode> propNodes = new LinkedHashSet<TrackerNode>(); //normal nodes; i.e. a base + property node. e.g. vm.selectedPerson
 				for (TrackerNode baseNode : baseNodes) {
-					final TrackerNode node = baseNode.getDependent(script);
-					if (node == null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
-						continue;
-					}
-					propNodes.add(node);
-					if (BindELContext.isBracket((String)script)) {
-						baseNode.tieProperty(propName, script);
+					for (TrackerNode node : baseNode.getDependents(script)) {
+						if (node == null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
+							continue;
+						}
+						propNodes.add(node);
+						if (BindELContext.isBracket((String)script)) {
+							baseNode.tieProperty(propName, script);
+						}
 					}
 				}
 
@@ -413,9 +415,10 @@ public class TrackerImpl implements Tracker, Serializable {
 	private Set<TrackerNode> getDependents(Set<TrackerNode> parentnodes, String prop) {
 		final Set<TrackerNode> kidnodes = new HashSet<TrackerNode>();
 		for (TrackerNode node : parentnodes) {
-			final TrackerNode kid = node.getDependent(prop);
-			if (kid != null) {
-				kidnodes.add(kid);
+			for (TrackerNode kid : node.getDependents(prop)) {
+				if (kid != null) {
+					kidnodes.add(kid);
+				}
 			}
 		}
 		return kidnodes;

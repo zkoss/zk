@@ -17,6 +17,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +61,22 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 			}
 		}
 		return kid;
+	}
+
+	public Set<TrackerNode> getDependents(Object property) {
+		LinkedHashSet<TrackerNode> set = new LinkedHashSet<TrackerNode>(5);
+		TrackerNode kid = getDependent0(property);
+		if (kid != null) {
+			set.add(kid);
+		}
+
+		final Object script = _brackets.get(property);
+		if (script != null) {
+			kid = getDependent0(script);
+		}
+		if (kid != null)
+			set.add(kid);
+		return set;
 	}
 	
 	private TrackerNode getDependent0(Object script) {

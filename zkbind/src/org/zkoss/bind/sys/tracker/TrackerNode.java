@@ -50,6 +50,14 @@ public interface TrackerNode {
 	public TrackerNode getDependent(Object script);
 	
 	/**
+	 * Returns all associated TrackerNodes of the associated field script of this tracker node.
+	 * @param script field script to get the dependent 
+	 * @return all linked TrackerNodes
+	 * @since 8.0.0
+	 */
+	public Set<TrackerNode> getDependents(Object script);
+	
+	/**
 	 * Add a dependent node of the field script.
 	 * @param script the field script to link this track node to its dependent nodes.
 	 * @param dependent the TrackerNode to be added
