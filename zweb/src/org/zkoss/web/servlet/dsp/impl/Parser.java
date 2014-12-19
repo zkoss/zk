@@ -526,7 +526,7 @@ public class Parser {
 		throws Exception {
 			final Element root = new SAXBuilder(true, false, true)
 				.build(url).getRootElement();
-			_mapper.load(prefix, root);
+			_mapper.load(prefix, url);
 
 			final Map<String, Class<?>> acts = new HashMap<String, Class<?>>();
 			for (Iterator it = root.getElements("tag").iterator();
