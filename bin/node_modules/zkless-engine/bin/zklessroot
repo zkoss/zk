@@ -1,5 +1,0 @@
-#!/usr/bin/env node
-
-var path = require('path');
-var appDir = path.dirname(require.main.filename);
-console.log(appDir.substring(0, appDir.length - 3));

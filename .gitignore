@@ -12,6 +12,7 @@ zml
 dist/lib/z*.jar
 dist/lib/z*.war
 dist/lib/osgi
+bin/node_modules
 *.classpath
 */.settings/*.prefs
 */.settings/*.component
