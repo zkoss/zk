@@ -23,10 +23,10 @@
 			</listitem>
 		</template>
 	</listbox>
-	<label value="@load(vm.selected.name)"/>
+	<label id="lb" value="@load(vm.selected.name)"/>
 	<hbox>
-		<button label="reload" onClick="@command('reload')" />
-		<button label="invalidate" onClick="outerbox.invalidate()" />
+		<button id="reload" label="reload" onClick="@command('reload')" />
+		<button id="invalidate" label="invalidate" onClick="outerbox.invalidate()" />
 		<button label="Dump" onClick="binder.getTracker().dump()" />
 	</hbox>	
 </window>

@@ -31,13 +31,15 @@ public class B00762Combobox1Test extends ZATSTestCase {
 		ComponentAgent reload = desktop.query("#reload");
 		ComponentAgent showselect = desktop.query("#showselect");
 		
-		outerbox.queryAll("comboitem").get(0).as(SelectAgent.class).select();
-		//assertEquals("A", selected.as(Label.class).getValue()); //can't sync label with selected item
+		//outerbox.queryAll("comboitem").get(0).as(SelectAgent.class).select();
+		outerbox.type("A");
+		assertEquals("A", selected.as(Label.class).getValue()); //can't sync label with selected item
 		showselect.click();
 		assertEquals("0", min.as(Label.class).getValue());
 		
-		outerbox.queryAll("comboitem").get(2).as(SelectAgent.class).select();
-		//assertEquals("C", selected.as(Label.class).getValue()); //can't sync label with selected item
+		//outerbox.queryAll("comboitem").get(2).as(SelectAgent.class).select();
+		outerbox.type("C");
+		assertEquals("C", selected.as(Label.class).getValue()); //can't sync label with selected item
 		showselect.click();
 		assertEquals("2", min.as(Label.class).getValue());
 		
