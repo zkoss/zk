@@ -68,7 +68,7 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return this._accessInfo.getCommandName();
 	}
 	
-	protected ExpressionX getFieldExpression(BindEvaluatorX eval, String field) {
+	public ExpressionX getFieldExpression(BindEvaluatorX eval, String field) {
 		ExpressionX expr  = _fieldExprs == null ? null : _fieldExprs.get(field);
 		if (expr  == null) {
 			final String property = getPropertyString();
@@ -79,7 +79,7 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return expr;
 	}
 	
-	protected ExpressionX getFormExpression(BindEvaluatorX eval, String field) {
+	public ExpressionX getFormExpression(BindEvaluatorX eval, String field) {
 		final String script = BindELContext.appendFields(getFormId(), field);
 		ExpressionX expr  = _fieldExprs == null ? null : _fieldExprs.get(script);
 		if (expr  == null) {
@@ -89,7 +89,7 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return expr;
 	}
 	
-	protected ExpressionX getBaseExpression(BindEvaluatorX eval) {
+	public ExpressionX getBaseExpression(BindEvaluatorX eval) {
 		//TODO, Dennis potential bug if a field name same as form id
 		final String property = getPropertyString();
 		ExpressionX expr = _fieldExprs == null ? null : _fieldExprs.get(property);

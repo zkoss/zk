@@ -45,10 +45,13 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public class BindELResolver extends XelELResolver {
-	private CompositeELResolver _resolver;
+	protected CompositeELResolver _resolver;
 	
 	public BindELResolver(XelContext ctx) {
 		super(ctx);
+		init();
+	}
+	protected void init() {
 		_resolver = new CompositeELResolver();
 		_resolver.add(new PathELResolver()); //must be the first
 		_resolver.add(new FormELResolver());
@@ -60,17 +63,11 @@ public class BindELResolver extends XelELResolver {
 		
 		_resolver.add(super.getELResolver());
 	}
-	public BindELResolver(XelContext ctx, boolean lazy) {
-		super(ctx);
-	}
 	
 	protected ELResolver getELResolver() {
 		return _resolver;
 	}
 	
-	protected ELResolver getSuperELResolver() {
-		return super.getELResolver();
-	}
 	//ELResolver//
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {

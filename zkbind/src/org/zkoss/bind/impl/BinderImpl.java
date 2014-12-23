@@ -317,6 +317,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		init(comp,viewModel,null);
 	}
 	
+	public Map<String, List<Binding>> getBindings(Component comp) {
+		return _bindings.get(comp);
+	}
 	/**
 	 * 
 	 * 

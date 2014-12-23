@@ -195,6 +195,23 @@ public class BindELContext extends XelELContext {
 		validates.addAll(props);
 	}
 
+	public static String toNodeString(Node next, StringBuilder path) {
+		if (next instanceof AstBracketSuffix) {
+			final String bracketString = toNodeString(next.jjtGetChild(0), new StringBuilder()); //recursive
+			path.append("[").append(bracketString).append("]");
+		} else if (next instanceof AstValue) {
+    		for(int j = 0, len = next.jjtGetNumChildren(); j < len; ++j) {
+    			final Node kid = next.jjtGetChild(j);
+    			toNodeString(kid, path); //recursive
+    		}
+		} else if (next instanceof AstDotSuffix) {
+			path.append(".").append(next.getImage());
+		} else {
+			path.append(next.getImage());
+		}
+		return path.toString();
+	}
+
 	public static String toNodeString(Node next, StringBuffer path) {
 		if (next instanceof AstBracketSuffix) {
 			final String bracketString = toNodeString(next.jjtGetChild(0), new StringBuffer()); //recursive
