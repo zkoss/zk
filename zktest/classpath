@@ -15,3 +15,7 @@
 ../dist/lib/ext/commons-lang.jar
 ../dist/lib/ext/commons-beanutils.jar
 ../dist/lib/ext/slf4j-api.jar
+../dist/lib/ext/junit.jar
+../dist/lib/ext/zats-mimic-ext7.jar
+../dist/lib/ext/zats-common.jar
+../dist/lib/ext/zats-mimic.jar
