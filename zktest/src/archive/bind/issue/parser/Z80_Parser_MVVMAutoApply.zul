@@ -1,0 +1,14 @@
+<?page contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="root">
+		<window id="w1" viewModel="@id('vm1') @init('org.zkoss.zktest.bind.issue.parser.Z80_Parser_MVVMAutoApplyVM')" >
+			<label value="@load(vm1.label1)" />
+			<window id="w2" viewModel="@id('vm2') @init('org.zkoss.zktest.bind.issue.parser.Z80_Parser_MVVMAutoApplyVM')" >
+				<label value="@load(vm2.label2)" />
+			</window>
+		</window>
+		<window id="w3" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm3') @init('org.zkoss.zktest.bind.issue.parser.Z80_Parser_MVVMAutoApplyVM')" >
+			<label value="@load(vm3.label3)" />
+		</window>
+	</window>
+</zk>
