@@ -908,6 +908,8 @@ public class Parser {
 			String ifc = null, unless = null,
 				forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
 			AnnotationHelper attrAnnHelper = null;
+			//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+			boolean isMVVM = false;
 			for (Iterator it = el.getAttributeItems().iterator();
 			it.hasNext();) {
 				final Attribute attr = (Attribute)it.next();
@@ -969,6 +971,8 @@ public class Parser {
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
+							//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+							if ("viewModel".equals(attnm)) isMVVM = true;
 						} else {
 							boolean handled = false;
 							for (NamespaceParser nsParser: _nsParsers) {
@@ -990,6 +994,18 @@ public class Parser {
 				}
 			}
 
+			//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+			if (isMVVM) {
+				String apply = compInfo.getApply();
+				if (apply != null && apply.indexOf("org.zkoss.bind.BindComposer") != -1) {
+					//Warnning
+					log.warn(message("If the attribute of viewModel being used, then the apply of \"org.zkoss.bind.BindComposer\" has no longer to support", el));
+				} else {
+					if (apply == null) apply = "";
+					else apply += ",";
+					compInfo.setApply(apply + "org.zkoss.bind.BindComposer");
+				}
+			}
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
 			annHelper.applyAnnotations(compInfo, null, true);
