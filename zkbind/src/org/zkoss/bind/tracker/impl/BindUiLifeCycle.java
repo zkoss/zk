@@ -33,14 +33,17 @@ import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.UiLifeCycle;
 
 /**
  * Track Binding CRUD and dependent tracking management. 
  * @author henrichen
+ * @author jumperchen
  * @since 6.0.0
  */
 public class BindUiLifeCycle implements UiLifeCycle {
@@ -72,7 +75,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			Events.postEvent(new Event(ON_ZKBIND_LATER, comp));
 			return;
 		}
-		if (comp.getDesktop() != null) {
+		if (comp.getDesktop() != null || comp instanceof ShadowElement) {
 			//check if this component already binded
 			Binder selfBinder = BinderUtil.getBinder(comp);
 			if (selfBinder == null) {
@@ -90,30 +93,31 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);
 							//ZK-611 have wrong binding on a removed treecell in a template
 							//if it was detached, ignore it
-							if(comp.getPage()==null){
+							if (comp.getPage() == null && !(comp instanceof ShadowElement)) {
 								return;
 							}
 							
 							final Binder innerBinder = BinderUtil.getBinder(comp);
-							if(innerBinder!=null){//it was already handled by innerBinder, ignore it								
+							if (innerBinder != null) {//it was already handled by innerBinder, ignore it								
 								return;
 							}
 							
 							//ZK-1640 command send 2 wrong ViewModel
 							//check if there any parent binder again, don't use out-side parentBinder, it is not correct
 							Binder binder = BinderUtil.getBinder(comp,true);
-							if(binder == null){
+							if (binder == null) {
 								return;
 							}
 							
 							//ZK-1699 Performance issue ZK-Bind getters are called multiple times
 							//check if it is handling, if yes then skip to evaluate it.
-							if(getExtension().isLifeCycleHandling(comp)){
+							if (getExtension().isLifeCycleHandling(comp)) {
 								return;
 							}
 							
-							if(binder instanceof AnnotateBinder){
-								new AnnotateBinderHelper(binder).initComponentBindings(comp);
+							if (binder instanceof AnnotateBinder) {
+								new AnnotateBinderHelper(binder)
+										.initComponentBindings(comp);
 							}
 							
 							//ZK-1699, mark the comp and it's children are handling.
@@ -171,6 +175,15 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			removeBindings(comp); 
 		}
 	}
+	public void afterShadowAttached(ShadowElement shadow, Component host) {
+		if (shadow instanceof Component) // just in case
+			handleComponentAttached((Component)shadow);
+	}
+
+	public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
+		if (shadow instanceof Component) // just in case
+			handleComponentDetached((Component)shadow);
+	}
 	
 	private void removeBindings(Component comp) {
 		//ZK-2224 batch remove component and it kids to enhance performance.
@@ -187,6 +200,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			final Component kid = it.next();
 			if (kid != null) {
 				removeBindingsRecursively(kid,batchRemove); //recursive
+			}
+		}
+		if (comp instanceof ComponentCtrl) {
+			for (ShadowElement se : ((ComponentCtrl) comp).getShadowRoots()) {
+				removeBindingsRecursively((Component)se, batchRemove); //recursive
 			}
 		}
 	}

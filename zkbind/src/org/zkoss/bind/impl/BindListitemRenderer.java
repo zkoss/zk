@@ -51,7 +51,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

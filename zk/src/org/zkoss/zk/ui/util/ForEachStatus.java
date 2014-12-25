@@ -22,6 +22,9 @@ package org.zkoss.zk.ui.util;
  *
  * <p>The main use is to get the object in the outer iteration:
  * <code>forEachStatus.previous.each</code>
+ * 
+ * <p> Since 8.0.0, we enhance this class to be consistent with JSTL's varStatus
+ * properties. 
  *
  * @author tomyeh
  */
@@ -30,8 +33,14 @@ public interface ForEachStatus {
 	 */
 	public ForEachStatus getPrevious();
 	/** Returns the object of this iteration.
+	 * @deprecated As of release 8.0.0, use {@link #getCurrent()} instead.
 	 */
 	public Object getEach();
+	/**
+	 * Returns the object of this iteration.
+	 * @since 8.0.0
+	 */
+	public Object getCurrent();
 	/** Returns the index of the current round of the iteration.
 	 * If iteration is being performed over a subset of an underlying array,
 	 * collection, or other type, the index returned is absolute with respect
@@ -49,4 +58,28 @@ public interface ForEachStatus {
 	 * or null if not specified (and the last element is assumed).
 	 */
 	public Integer getEnd();
+
+	/**Returns whether the current round is the first pass through the iteration
+	 * @since 8.0.0
+	 */
+	public boolean isFirst();
+	/**Returns whether the current round is the last pass through the iteration
+	 * @since 8.0.0
+	 */
+	public boolean isLast();
+	/** Returns the value of the 'step' attribute for the associated tag,
+	 * or null if no 'step' attribute was specified.
+	 * @since 8.0.0
+	 */
+	public Integer getStep();
+	/**
+	 * Retrieves the "count" of the current round of the iteration. The count is
+	 * a relative, 1-based sequence number identifying the current "round" of
+	 * iteration (in context with all rounds the current iteration will
+	 * perform). As an example, an iteration with begin = 5, end = 15, and step
+	 * = 5 produces the counts 1, 2, and 3 in that order.
+	 * 
+	 * @since 8.0.0
+	 */
+	public int getCount();
 }

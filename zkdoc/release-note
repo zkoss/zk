@@ -1,11 +1,13 @@
   --------
-ZK 7.0.5
+ZK 8.0.0
 * Features
-
+  ZK-2476: Support to plug a different parser for parsing a page
+  ZK-2508: Enhance ForEachStatus to be consistent with JSTL's varStatus properties
+  
 * Bugs
 
 * Upgrade Notes
-
+  + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
   --------
 ZK 7.0.4
 December 9, 2014
@@ -62,6 +64,7 @@ December 9, 2014
   ZK-2519: Changing the caption label removes other DOM elements in the caption
   ZK-2524: Property value is loaded twice when property binding and children binding are used together
   ZK-2529: onOK/onCancel/ctrlKeys prevent widget input
+  ZK-2543: Listbox allows selection with checkable="false"
 
 * Upgrade Notes
   + Took off doMouseEnter_ and doMouseLeave_ from widget.js because there are not in use. Use domListen

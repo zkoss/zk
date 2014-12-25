@@ -51,7 +51,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

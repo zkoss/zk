@@ -56,7 +56,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

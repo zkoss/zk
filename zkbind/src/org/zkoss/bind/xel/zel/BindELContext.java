@@ -81,6 +81,14 @@ public class BindELContext extends XelELContext {
 		return getXelContext().setAttribute(name, value);
 	}
 	
+	/**
+	 * Removes the attribute, if any.
+	 * @since 8.0.0
+	 */
+	public Object removeAttribute(String name) {
+		return getXelContext().removeAttribute(name);
+	}
+	
 	private static final String TMPBASE = "$TMPBASE$";
 	public static Property prepareProperty(Object base, String prop, Object value, BindContext ctx) {
 		if (ctx != null && prop.indexOf('[') >= 0) { //handle properties that containing [] indirect reference
@@ -187,7 +195,24 @@ public class BindELContext extends XelELContext {
 		validates.addAll(props);
 	}
 
-	/*package*/ static String toNodeString(Node next, StringBuffer path) {
+	public static String toNodeString(Node next, StringBuilder path) {
+		if (next instanceof AstBracketSuffix) {
+			final String bracketString = toNodeString(next.jjtGetChild(0), new StringBuilder()); //recursive
+			path.append("[").append(bracketString).append("]");
+		} else if (next instanceof AstValue) {
+    		for(int j = 0, len = next.jjtGetNumChildren(); j < len; ++j) {
+    			final Node kid = next.jjtGetChild(j);
+    			toNodeString(kid, path); //recursive
+    		}
+		} else if (next instanceof AstDotSuffix) {
+			path.append(".").append(next.getImage());
+		} else {
+			path.append(next.getImage());
+		}
+		return path.toString();
+	}
+
+	public static String toNodeString(Node next, StringBuffer path) {
 		if (next instanceof AstBracketSuffix) {
 			final String bracketString = toNodeString(next.jjtGetChild(0), new StringBuffer()); //recursive
 			path.append("[").append(bracketString).append("]");

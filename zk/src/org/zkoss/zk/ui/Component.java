@@ -506,6 +506,23 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public Object getAttributeOrFellow(String name, boolean recurse);
+
+
+	/** Returns the shadow variable associated with this component or its parent
+	 * component; or null if not found.
+	 *
+	 * <p>Notice that it doesn't check any variable defined in
+	 * {@link org.zkoss.xel.VariableResolver}
+	 * (of {@link Page#addVariableResolver}).
+	 *
+	 * @param recurse whether to look up the parent component for the
+	 * existence of the shadow variable.<br/>
+	 * If recurse is true, it will look up all parents until found.
+	 * If any of them is a shadow host.
+	 * @since 8.0.0
+	 */
+	public Object getShadowVariable(String name, boolean recurse);
+	
 	/** Returns if a custom attribute is associated with this component,
 	 * or the fellow of this component.
 	 *

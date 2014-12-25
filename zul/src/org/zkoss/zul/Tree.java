@@ -1977,7 +1977,7 @@ public class Tree extends MeshElement {
 									}
 									
 									public Object getEach() {
-										return node;
+										return getCurrent();
 									}
 									
 									public int getIndex() {
@@ -1990,6 +1990,26 @@ public class Tree extends MeshElement {
 									
 									public Integer getEnd() {
 										throw new UnsupportedOperationException("end not available");
+									}
+
+									public Object getCurrent() {
+										return node;
+									}
+
+									public boolean isFirst() {
+										return getCount() == 1;
+									}
+
+									public boolean isLast() {
+										return getIndex() + 1 == getEnd();
+									}
+
+									public Integer getStep() {
+										return null;
+									}
+
+									public int getCount() {
+										return getIndex() + 1;
 									}
 								};
 							} else {

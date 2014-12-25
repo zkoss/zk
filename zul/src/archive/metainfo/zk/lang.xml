@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zul.Version</version-class>
-		<version-uid>7.0.5</version-uid>
+		<version-uid>8.0.0</version-uid>
 	</version>
 
 	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
@@ -120,6 +120,10 @@ def alert(m):
 	<native-template>
 		<native-class>org.zkoss.zk.ui.HtmlNativeComponent</native-class>
 	</native-template>
+	<!-- since 8.0.0 shadow element -->
+	<shadow-template>
+		<shadow-class>org.zkoss.zk.ui.HtmlShadowElement</shadow-class>
+	</shadow-template>
 
 	<!-- Specifies a component
 	<component>

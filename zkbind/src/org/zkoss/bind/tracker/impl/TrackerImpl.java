@@ -48,10 +48,10 @@ import org.zkoss.zk.ui.Component;
  */
 public class TrackerImpl implements Tracker, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
-	private LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
-	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
-	private transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
-	private transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
+	protected LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
+	protected Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
+	protected transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+	protected transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
 	
 	public TrackerImpl() {
 		_equalBeansMap = newEqualBeansMap(); 
@@ -168,9 +168,10 @@ public class TrackerImpl implements Tracker, Serializable {
 			}
 		} else {
 			for (TrackerNode node : nodes) {
-				final TrackerNode kid = node.getDependent(prop);
-				if (kid != null) {
-					getLoadBindings0(kid, bindings, kidbases, visited);
+				for (TrackerNode kid : node.getDependents(prop)) {
+					if (kid != null) {
+						getLoadBindings0(kid, bindings, kidbases, visited);
+					}
 				}
 			}
 		}
@@ -252,13 +253,14 @@ public class TrackerImpl implements Tracker, Serializable {
 			if (baseNodes != null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 				final Set<TrackerNode> propNodes = new LinkedHashSet<TrackerNode>(); //normal nodes; i.e. a base + property node. e.g. vm.selectedPerson
 				for (TrackerNode baseNode : baseNodes) {
-					final TrackerNode node = baseNode.getDependent(script);
-					if (node == null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
-						continue;
-					}
-					propNodes.add(node);
-					if (BindELContext.isBracket((String)script)) {
-						baseNode.tieProperty(propName, script);
+					for (TrackerNode node : baseNode.getDependents(script)) {
+						if (node == null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
+							continue;
+						}
+						propNodes.add(node);
+						if (BindELContext.isBracket((String)script)) {
+							baseNode.tieProperty(propName, script);
+						}
 					}
 				}
 
@@ -276,7 +278,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	//add node into the _beanMap
-	private void addBeanMap(TrackerNode node, Object value) {
+	protected void addBeanMap(TrackerNode node, Object value) {
 		//add node into _beanMap
 		if (!value.equals(node.getBean())) {
 			//try to remove from the _beanMap
@@ -340,7 +342,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	//remove node from the _beanMap
-	private void removeBeanMap(TrackerNode node) {
+	protected void removeBeanMap(TrackerNode node) {
 		final Object value = node.getBean();
 		if (value != null) {
 			node.setBean(null);
@@ -413,9 +415,10 @@ public class TrackerImpl implements Tracker, Serializable {
 	private Set<TrackerNode> getDependents(Set<TrackerNode> parentnodes, String prop) {
 		final Set<TrackerNode> kidnodes = new HashSet<TrackerNode>();
 		for (TrackerNode node : parentnodes) {
-			final TrackerNode kid = node.getDependent(prop);
-			if (kid != null) {
-				kidnodes.add(kid);
+			for (TrackerNode kid : node.getDependents(prop)) {
+				if (kid != null) {
+					kidnodes.add(kid);
+				}
 			}
 		}
 		return kidnodes;

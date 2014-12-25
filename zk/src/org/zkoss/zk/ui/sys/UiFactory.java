@@ -20,7 +20,6 @@ import java.io.Reader;
 import java.io.IOException;
 
 import org.zkoss.idom.Document;
-
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -32,6 +31,7 @@ import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 
 /**
  * Used to create {@link Session}, {@link Desktop}, {@link Page},
@@ -132,6 +132,20 @@ public interface UiFactory {
 	 */
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo, Component insertBefore);
+
+	/** Creates and initializes a shadow based on the specified
+	 * {@link ShadowInfo}.
+	 *
+	 * <p>After called, the new shadow element is added to the host component, if any.
+	 * In addition, the properties are all applied to the new shadow element.
+	 *
+	 * @param page the page that the host component belongs to (never null).
+	 * @param parent the parent shadow, or null if the new shadow is root.
+	 * @param compInfo the shadow information
+	 * @since 8.0.0
+	 */
+	public Component newComponent(Page page, Component parent,
+	ShadowInfo compInfo, Component insertBefore);
 
 	/** Creates and initializes a component based on the specified
 	 * {@link ComponentDefinition}.

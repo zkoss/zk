@@ -48,7 +48,7 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2508.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Oct 28, 2014  6:31:49 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<n:h4>1. Test case: forEach="one, two, three, four"</n:h4>
+	<zscript>
+	items = Arrays.asList(new Object[] { "one", "two", "three", "four" });
+</zscript>
+	<div style="border:1px solid blue">
+		<div forEach="${items}">
+			${each} Index: ${forEachStatus.index} Count:
+			${forEachStatus.count} First: ${forEachStatus.first} Last:
+			${forEachStatus.last}
+		</div>
+	</div>
+	Result:
+	<div style="border:1px solid red;color:blue">
+		<div>one Index: 0 Count: 1 First: true Last: false</div>
+		<div>two Index: 1 Count: 2 First: false Last: false</div>
+		<div>three Index: 2 Count: 3 First: false Last: false</div>
+		<div>four Index: 3 Count: 4 First: false Last: true</div>
+	</div>
+	<n:h4>2. Test case: forEach="one, two, three, four" forEachStep="3"</n:h4>
+	<div style="border:1px solid blue">
+		<div forEach="${items}" forEachStep="3">
+			${each} Index: ${forEachStatus.index} Count:
+			${forEachStatus.count} First: ${forEachStatus.first} Last:
+			${forEachStatus.last}
+		</div>
+	</div>
+	Result:
+	<div style="border:1px solid red;color:blue">
+		<div>one Index: 0 Count: 1 First: true Last: false</div>
+		<div>four Index: 3 Count: 2 First: false Last: true</div>
+	</div>
+	<n:h4>3. Test case: forEach="one, two, three, four" forEachBegin="1" forEachStep="3"
+	</n:h4>
+	<div style="border:1px solid blue">
+		<div forEach="${items}" forEachBegin="1" forEachStep="3">
+			${each} Index: ${forEachStatus.index} Count:
+			${forEachStatus.count} First: ${forEachStatus.first} Last:
+			${forEachStatus.last}
+		</div>
+	</div>
+	Result:
+	<div style="border:1px solid red;color:blue">
+		<div>two Index: 1 Count: 1 First: true Last: true</div>
+	</div>
+</zk>

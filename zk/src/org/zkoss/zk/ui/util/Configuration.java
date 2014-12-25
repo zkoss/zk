@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.RichletConfig;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
@@ -1117,6 +1118,34 @@ public class Configuration {
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].afterComponentDetached(comp, prevpage);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
+			}
+		}
+	}
+	/** Invokes {@link UiLifeCycle#afterShadowAttached(ShadowElement, Component)}
+	 * when a shadow is attached to a host.
+	 * @since 8.0.0
+	 */
+	public void afterShadowAttached(ShadowElement shadow, Component host) {
+		final UiLifeCycle[] ary = _uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterShadowAttached(shadow, host);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
+			}
+		}
+	}
+	/** Invokes {@link UiLifeCycle#afterShadowDetached(ShadowElement, Component)}
+	 * when a shadow is detached from a host.
+	 * @since 8.0.0
+	 */
+	public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
+		final UiLifeCycle[] ary = _uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterShadowDetached(shadow, prevhost);
 			} catch (Throwable ex) {
 				log.error("Failed to invoke "+ary[j], ex);
 			}

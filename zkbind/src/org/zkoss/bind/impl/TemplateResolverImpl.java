@@ -96,7 +96,7 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return eachData;
 				}
 				

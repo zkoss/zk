@@ -74,11 +74,11 @@ public class ExpressionBuilder implements NodeVisitor {
     private static final ConcurrentCache<String, Node> cache =
         new ConcurrentCache<String, Node>(CACHE_SIZE);
 
-    private FunctionMapper fnMapper;
+    protected FunctionMapper fnMapper;
 
-    private VariableMapper varMapper;
+    protected VariableMapper varMapper;
 
-    private String expression;
+    protected String expression;
 
     /**
      *
@@ -167,7 +167,7 @@ public class ExpressionBuilder implements NodeVisitor {
         }
     }
 
-    private Node build() throws ELException {
+    protected Node build() throws ELException {
         Node n = createNodeInternal(this.expression);
         this.prepare(n);
         if (n instanceof AstDeferredExpression

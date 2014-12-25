@@ -1,0 +1,17 @@
+<html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns="http://www.zkoss.org/2005/zk/native">
+<html>
+<head>
+	<title></title>
+	<!--[if lte IE 9]>
+		<link rel="stylesheet" href="../assets/css/test.min.css" />
+	<![endif]-->
+</head>
+<body>
+<u:label><![CDATA[You should not see any exception and then see the browser source, you should be able to see  
+"<!--[if lte IE 9]>" into the head tag.
+]]></u:label>
+<u:window xmlns:u="zul" title="test" height="100%" width="100%">
+	&copy Test
+</u:window>
+</body>
+</html>

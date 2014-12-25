@@ -72,6 +72,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.Attributes;
@@ -86,6 +87,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -117,13 +119,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private String _uuid;
 	private transient ComponentDefinition _def;
 
-	private transient AbstractComponent _parent;
+	/*package*/ transient AbstractComponent _parent; //called by HtmlShadowElement
 	/** The next sibling. */
 	/*package*/ transient AbstractComponent _next;
 	/** The previous sibling. */
 	/*package*/ transient AbstractComponent _prev;
 	/** ChildInfo: use a class (rather than multiple member) to save footprint */
-	private transient ChildInfo _chdinf;
+	/*package*/ transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
 
@@ -143,6 +145,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			ComponentsCtrl.setCurrentInfo((ComponentInfo)null); //to avoid mis-use
 			if (curInfo instanceof ComponentInfo) {
 				final ComponentInfo compInfo = (ComponentInfo)curInfo;
+				_def = compInfo.getComponentDefinition();
+				addSharedAnnotationMap(_def.getAnnotationMap());
+				addSharedAnnotationMap(compInfo.getAnnotationMap());
+			} else if (curInfo instanceof ShadowInfo) {
+				final ShadowInfo compInfo = (ShadowInfo)curInfo;
 				_def = compInfo.getComponentDefinition();
 				addSharedAnnotationMap(_def.getAnnotationMap());
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
@@ -691,7 +698,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/*package*/ final int nChild() { //called by HtmlNativeComponent
 		return _chdinf != null ? _chdinf.nChild: 0;
 	}
-	private int modCntChd() {
+	/*package*/ int modCntChd() { // called by HtmlShadowElement
 		return _chdinf != null ? _chdinf.modCntChd: 0;
 	}
 
@@ -919,8 +926,68 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _parent.getAttributeOrFellow(name, true);
 			if (_page != null)
 				return _page.getAttributeOrFellow(name, true);
+			if (this instanceof ShadowElement) {
+				Component shadowHost = ((ShadowElement) this).getShadowHost();
+				if (shadowHost != null)
+					return shadowHost.getAttributeOrFellow(name, true);
+			}
 			if (!(this instanceof IdSpace))
 				return getVirtualIdSpace().getFellowIfAny(name);
+		}
+		return null;
+	}
+
+	private boolean _variableSeeking = false;
+	public Object getShadowVariable(String name, boolean recurse) {
+		try {
+			_variableSeeking = true;
+			return getShadowVariable0(this, name, true);
+		} finally {
+			_variableSeeking = false;
+		}
+	}
+	protected Object getShadowVariable0(AbstractComponent baseChild, String name, boolean recurse) {
+		Object val = getAttribute(name);
+		if (val != null || hasAttribute(name))
+			return val;
+		
+		if (!(this instanceof ShadowElement)) {
+			ComponentCtrl ctrl = this;
+			List<HtmlShadowElement> shadowRoots = ctrl.getShadowRoots();
+			if (!shadowRoots.isEmpty()) {
+				Map<Component, Integer> indexCacheMap = getIndexCacheMap();
+				try {
+					if (indexCacheMap != null) {
+						destroyIndexCacheMap(); // reset
+					}
+					initIndexCacheMap();
+					
+					for (HtmlShadowElement shadow : shadowRoots) {
+						val = shadow.resolveVariable(baseChild, name, recurse);
+						if (val != null)
+							return val;
+					}
+				} finally {
+					ShadowElementsCtrl.setDistributedIndexInfo(indexCacheMap);
+				}
+			}
+		}
+		if (recurse) {
+			if (_parent != null)
+				return _parent.getShadowVariable0(this, name, recurse);
+			
+			if (this instanceof ShadowElement) {
+				AbstractComponent shadowHost = (AbstractComponent)((ShadowElement) this).getShadowHost();
+				if (shadowHost != null) {
+					if (shadowHost._variableSeeking) {
+						if (shadowHost.getParent() != null) {
+							return ((AbstractComponent)shadowHost.getParent()).getShadowVariable(name, recurse);
+						}
+						return null; // avoid deadloop
+					}
+					return shadowHost.getShadowVariable(name, recurse);
+				}
+			}
 		}
 		return null;
 	}
@@ -934,6 +1001,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _parent.hasAttributeOrFellow(name, true);
 			if (_page != null)
 				return _page.hasAttributeOrFellow(name, true);
+			if (this instanceof ShadowElement) {
+				Component shadowHost = ((ShadowElement) this).getShadowHost();
+				if (shadowHost != null)
+					return shadowHost.hasAttributeOrFellow(name, true);
+			}
 			if (!(this instanceof IdSpace))
 				return getVirtualIdSpace().hasFellow(name);
 		}
@@ -967,6 +1039,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		checkParentChild(parent, this); //create _chdinf
 		beforeParentChanged(parent);
+		triggerBeforeHostParentChanged(parent);
 
 		final boolean idSpaceChanged =
 			(parent != null ? spaceController(parent): null)
@@ -1089,6 +1162,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return false; //nothing changed (Listbox and other assumes this)
 
 		beforeChildAdded(newChild, refChild);
+		triggerBeforeHostChildAdded(newChild, refChild);
 
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		final boolean moved = nc._parent == this; //moved in the same parent
@@ -1144,6 +1218,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!moved) { //new added
 			++_chdinf.nChild;
 			onChildAdded(nc);
+			triggerAfterHostChildAdded(nc);
 		}
 		return true;
 	}
@@ -1294,7 +1369,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return false; //nothing to do
 
 		beforeChildRemoved(child);
-
+		triggerBeforeHostChildRemoved(child);
+		
 		setNext(oc._prev, oc._next);
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;
@@ -1318,6 +1394,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		++_chdinf.modCntChd;
 		--_chdinf.nChild;
 		onChildRemoved(child);
+		triggerAfterHostChildRemoved(child);
 		return true;
 	}
 
@@ -3262,6 +3339,8 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.4
 	 */
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		/** shadow roots since 8.0.0 */
+		private List<ShadowElement> seRoots;
 		/** The mold. */
 		private String mold;
 
@@ -3407,13 +3486,13 @@ w:use="foo.MyWindow"&gt;
 			_chdinf = new ChildInfo();
 		return _chdinf;
 	}
-	private static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
+	/*package*/ static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
 		/** The first child. */
-		private AbstractComponent first;
+		/*package*/ AbstractComponent first;
 		/** The last child. */
-		private AbstractComponent last;
+		/*package*/ AbstractComponent last;
 		/** # of children. */
-		private int nChild;
+		/*package*/ int nChild;
 		/** Set of components that are being added or removed.
 		 * _aring[0]: add, _aring[1]: remove
 		 * It is used to prevent dead-loop between {@link #removeChild}
@@ -3422,7 +3501,7 @@ w:use="foo.MyWindow"&gt;
 		private Set<Component>[] _aring; //use an array to save memory
 		/** The modification count used to avoid co-modification of _next, _prev..
 		 */
-		private int modCntChd;
+		/*package*/ int modCntChd;
 		/** The virtual ID space used when this component is a root component,
 		 * but not attached to a page, nor implement IdSpace.
 		 */
@@ -3547,5 +3626,136 @@ w:use="foo.MyWindow"&gt;
 			_listener = ln;
 			_zscript = zs;
 		}
+	}
+
+	// Shadow Element Implementation Start
+	/**package*/ Map<Component, Integer> initIndexCacheMap() {
+		Map<Component, Integer> distributedIndexInfo = getIndexCacheMap();
+		if (distributedIndexInfo == null) {
+			distributedIndexInfo = new HashMap<Component, Integer>(getChildren().size());
+			ShadowElementsCtrl.setDistributedIndexInfo(distributedIndexInfo);
+		}
+		return distributedIndexInfo;
+	}
+	/**package*/ Map<Component, Integer> getIndexCacheMap() {
+		return (Map<Component, Integer>) ShadowElementsCtrl.getDistributedIndexInfo();
+	}
+	/**package*/ void destroyIndexCacheMap() {
+		ShadowElementsCtrl.setDistributedIndexInfo(null);
+	}
+	
+	private void triggerBeforeHostParentChanged(Component parent) {
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			try {
+				initIndexCacheMap();
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).beforeHostParentChanged(parent);
+					}
+				}
+			} finally {
+				destroyIndexCacheMap();
+			}
+		}
+	}
+	private void triggerBeforeHostChildRemoved(Component child) {
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			try {
+				initIndexCacheMap();
+				final int indexOf = getChildren().indexOf(child);
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).beforeHostChildRemoved(child, indexOf);
+					}
+				}
+			} finally {
+				destroyIndexCacheMap();
+			}
+		}
+	}
+	private void triggerAfterHostChildRemoved(Component child) {
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			try {
+				initIndexCacheMap();
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).afterHostChildRemoved(child);
+					}
+				}
+			} finally {
+				destroyIndexCacheMap();
+			}
+		}
+	}
+	private void triggerBeforeHostChildAdded(Component child, Component insertBefore) {
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			try {
+				initIndexCacheMap();
+				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore, indexOfInsertBefore);
+					}
+				}
+			} finally {
+				destroyIndexCacheMap();
+			}
+		}
+	}
+	private void triggerAfterHostChildAdded(Component child) {
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			try {
+				initIndexCacheMap();
+				final int indexOf = getChildren().indexOf(child);
+				for (ShadowElement se : getShadowRoots()) {
+					if (se instanceof ShadowElementCtrl) {
+						((ShadowElementCtrl)se).afterHostChildAdded(child, indexOf);
+					}
+				}
+			} finally {
+				destroyIndexCacheMap();
+			}
+		}
+	}
+	// Shadow Element Implementation End
+
+	@SuppressWarnings("unchecked")
+	public <T extends ShadowElement> List<T> getShadowRoots() {
+		return _auxinf != null && _auxinf.seRoots != null ?
+			_auxinf.seRoots: Collections.EMPTY_LIST;
+	}
+	public boolean removeShadowRoot(ShadowElement shadow) {
+		if (_auxinf != null && _auxinf.seRoots != null)
+			if (_auxinf.seRoots.remove(shadow)) {
+				shadow.detach();
+				return true;
+			}
+		return false;
+	}
+	public boolean addShadowRoot(ShadowElement shadow) {
+		AuxInfo auxinf = initAuxInfo();
+		if (auxinf.seRoots == null)
+			auxinf.seRoots = new LinkedList<ShadowElement>();
+		if (!auxinf.seRoots.contains(shadow))
+			return auxinf.seRoots.add(shadow);
+		return false;
+	}
+	public boolean addShadowRootBefore(ShadowElement shadow,
+			ShadowElement insertBefore) {
+		if (insertBefore == null)
+			return addShadowRoot(shadow);
+		if (insertBefore.getShadowHost() != this)
+			throw new UiException("Wrong shadow host [" + insertBefore + "]");
+		AuxInfo auxinf = initAuxInfo();
+		if (!auxinf.seRoots.contains(shadow)) {
+			auxinf.seRoots.add(auxinf.seRoots.indexOf(insertBefore), shadow);
+			return true;
+		}
+		return false;
 	}
 }

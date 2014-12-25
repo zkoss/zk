@@ -236,9 +236,9 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 				}
 
 				boolean disableUnavailable = false;
-				if (jhead < 0 && ((jhead = heade) < 0) //use </head> if no <zkhead>
-				&& ((jhead = head) < 0) //use <head> if no </head> (though unlikely)
-				&& ((jhead = junav) < 0) //use <body> if no <head>
+				if (jhead < 0 && ((jhead = head) < 0) //use <head> if no <zkhead>
+				&& ((jhead = heade) < 0) //use </head> if no <head> (though unlikely)
+				&& ((jhead = junav) < 0) //use <body> if no </head>
 				&& ((jhead = html) < 0)) { //use <html> if no <body>
 					if (_tag != null) {
 						final String tn = _tag.toLowerCase(java.util.Locale.ENGLISH);

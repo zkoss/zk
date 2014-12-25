@@ -1095,6 +1095,11 @@ public class Components {
 		public void log(String msg, Throwable ex) {
 			exec().log(msg, ex);
 		}
+
+		public Component createComponents(String uri, Component parent,
+				Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
+			return exec().createComponents(uri, parent, insertBefore, resolver, arg);
+		}
 	}
 	
 	//Proxy to read current requestScope

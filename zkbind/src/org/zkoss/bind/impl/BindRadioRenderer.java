@@ -48,7 +48,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

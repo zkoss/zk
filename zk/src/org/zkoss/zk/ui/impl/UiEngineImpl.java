@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
@@ -83,6 +84,7 @@ import org.zkoss.zk.ui.metainfo.NativeInfo;
 import org.zkoss.zk.ui.metainfo.NodeInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.Property;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.metainfo.TemplateInfo;
 import org.zkoss.zk.ui.metainfo.TextInfo;
 import org.zkoss.zk.ui.metainfo.VariablesInfo;
@@ -785,6 +787,13 @@ public class UiEngineImpl implements UiEngine {
 					} else {
 						throw new UnsupportedOperationException("parent or page required for native label: "+s);
 					}
+			} else if (meta instanceof ShadowInfo) {
+				final ShadowInfo shadow = (ShadowInfo) meta;
+				if (isEffective(shadow, page, parent)) {
+					final Component[] children = execCreateChild(ci, parent, shadow,  insertBefore);
+					for (int j = 0; j < children.length; ++j)
+						created.add(children[j]);
+				}
 			} else {
 				execNonComponent(ci, parent, meta);
 			}
@@ -797,6 +806,33 @@ public class UiEngineImpl implements UiEngine {
 		return childInfo.withSwitch() ?
 			execSwitch(ci, childInfo, parent, insertBefore):
 			execCreate0(ci, childInfo, parent, insertBefore);
+	}
+	private static Component[] execCreateChild(
+	CreateInfo ci, Component parent, ShadowInfo childInfo, Component insertBefore) {
+		Component child = null;
+		final boolean bRoot = parent == null;
+		try {
+			// None composer support for shadow element
+			
+			child = ci.uf.newComponent(ci.page, parent, childInfo, insertBefore);
+			
+			childInfo.apply(child); // apply the property from ShadowInfo
+			
+			execCreate(ci, childInfo, child, null); //recursive (and appendChild)
+
+			if (child instanceof AfterCompose)
+				((AfterCompose)child).afterCompose();
+
+		} catch (Throwable ex) {
+			boolean ignore = false;
+			if (!ignore) {
+				ignore = ci.doCatch(ex, bRoot);
+				if (!ignore)
+					throw UiException.Aide.wrap(ex);
+			}
+		}
+		
+		return child != null ? new Component[] {child}: new Component[0];
 	}
 	private static Component[] execCreateChild(
 	CreateInfo ci, Component parent, ComponentInfo childInfo,
@@ -989,7 +1025,15 @@ public class UiEngineImpl implements UiEngine {
 	private static final void execNonComponent(
 	CreateInfo ci, Component comp, Object meta) {
 		final Page page = ci.page;
-		if (meta instanceof ZScriptInfo) {
+		if (meta instanceof AttributesInfo) {
+			final AttributesInfo attrs = (AttributesInfo)meta;
+			if (comp != null) attrs.apply(comp); //it handles isEffective
+			else attrs.apply(page);
+		} else if (meta instanceof TemplateInfo) {
+			final TemplateInfo tempInfo = (TemplateInfo)meta;
+			if (isEffective(tempInfo, page, comp))
+				comp.setTemplate(tempInfo.getName(), new TemplateImpl(tempInfo, comp));
+		} else if (meta instanceof ZScriptInfo) {
 			//Spec fix since 6.0.0: if/unless shall be evaluated first
 			final ZScriptInfo zsInfo = (ZScriptInfo)meta;
 			if (isEffective(zsInfo, page, comp)) {
@@ -1007,14 +1051,6 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			}
-		} else if (meta instanceof AttributesInfo) {
-			final AttributesInfo attrs = (AttributesInfo)meta;
-			if (comp != null) attrs.apply(comp); //it handles isEffective
-			else attrs.apply(page);
-		} else if (meta instanceof TemplateInfo) {
-			final TemplateInfo tempInfo = (TemplateInfo)meta;
-			if (isEffective(tempInfo, page, comp))
-				comp.setTemplate(tempInfo.getName(), new TemplateImpl(tempInfo, comp));
 		} else if (meta instanceof VariablesInfo) {
 			final VariablesInfo vars = (VariablesInfo)meta;
 			if (comp != null) vars.apply(comp); //it handles isEffective

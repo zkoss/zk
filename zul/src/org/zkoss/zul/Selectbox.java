@@ -358,7 +358,7 @@ public class Selectbox extends HtmlBasedComponent {
 										}
 										
 										public Object getEach() {
-											return data;
+											return getCurrent();
 										}
 										
 										public int getIndex() {
@@ -371,6 +371,26 @@ public class Selectbox extends HtmlBasedComponent {
 										
 										public Integer getEnd() {
 											return ((Selectbox)owner).getModel().getSize();
+										}
+
+										public Object getCurrent() {
+											return data;
+										}
+
+										public boolean isFirst() {
+											return getCount() == 1;
+										}
+
+										public boolean isLast() {
+											return getIndex() + 1 == getEnd();
+										}
+
+										public Integer getStep() {
+											return null;
+										}
+
+										public int getCount() {
+											return getIndex() + 1;
 										}
 									};
 								} else {

@@ -19,9 +19,12 @@ import java.util.Map.Entry;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.xel.zel.ImplicitObjectELResolver;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * an internal utility to help doing evaluation.
@@ -84,6 +87,16 @@ public class BindEvaluatorXUtil {
 	}
 	
 	public static BindEvaluatorX createEvaluator(FunctionMapper fnampper){
+		String clznm = Library.getProperty("org.zkoss.bind.BindEvaluatorX.class");
+		if (clznm != null) {
+			Class<BindEvaluatorX> clz;
+			try {
+				clz = (Class<BindEvaluatorX>) Classes.forNameByThread(clznm);
+				return clz.getConstructor(FunctionMapper.class).newInstance(fnampper);
+			} catch (Exception e) {
+				throw new UiException("Can't initialize BindEvaluatorX", e);
+			}
+		}
 		return new BindEvaluatorXImpl(fnampper, org.zkoss.bind.xel.BindXelFactory.class);
 	}
 	

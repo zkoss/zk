@@ -31,7 +31,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
-
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Page;
@@ -406,7 +405,7 @@ public class Combobox extends Textbox {
 									}
 									
 									public Object getEach() {
-										return data;
+										return getCurrent();
 									}
 									
 									public int getIndex() {
@@ -419,6 +418,26 @@ public class Combobox extends Textbox {
 									
 									public Integer getEnd() {
 										return cb.getModel().getSize();
+									}
+
+									public Object getCurrent() {
+										return data;
+									}
+
+									public boolean isFirst() {
+										return getCount() == 1;
+									}
+
+									public boolean isLast() {
+										return getIndex() + 1 == getEnd();
+									}
+
+									public Integer getStep() {
+										return null;
+									}
+
+									public int getCount() {
+										return getIndex() + 1;
 									}
 								};
 							} else {

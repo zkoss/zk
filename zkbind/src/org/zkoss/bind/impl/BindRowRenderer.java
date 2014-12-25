@@ -52,7 +52,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 					return index;
 				}
 				
-				public Object getEach(){
+				public Object getCurrent(){
 					return data;
 				}
 				

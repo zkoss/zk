@@ -34,8 +34,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.CData;
+import org.zkoss.idom.Comment;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.Item;
@@ -64,6 +66,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.impl.ZScriptInitiator;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
+import org.zkoss.zk.ui.metainfo.impl.ShadowDefinitionImpl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -110,9 +113,8 @@ public class Parser {
 	 */
 	public PageDefinition parse(File file, String path) throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+file);
-		final PageDefinition pgdef =
-			parse(new SAXBuilder(true, false, true).build(file),
-				Servlets.getExtension(file.getName()));
+		String extension = Servlets.getExtension(file.getName());
+		final PageDefinition pgdef = parse(TreeBuilderFactory.makeBuilder(extension).parse(file), extension);
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
@@ -124,9 +126,8 @@ public class Parser {
 	 */
 	public PageDefinition parse(URL url, String path) throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+url);
-		final PageDefinition pgdef =
-			parse(new SAXBuilder(true, false, true).build(url),
-				Servlets.getExtension(url.toExternalForm()));
+		String extension = Servlets.getExtension(url.toExternalForm());
+		final PageDefinition pgdef = parse(TreeBuilderFactory.makeBuilder(extension).parse(url), extension);
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
@@ -141,7 +142,7 @@ public class Parser {
 	public PageDefinition parse(Reader reader, String extension)
 	throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+reader);
-		return parse(new SAXBuilder(true, false, true).build(reader), extension);
+		return parse(TreeBuilderFactory.makeBuilder(extension).parse(reader), extension);
 	}
 	/** Parse the raw content directly from a DOM tree.
 	 *
@@ -433,7 +434,20 @@ public class Parser {
 		final LanguageDefinition langdef = lang != null ?
 			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
-		if (macroURI != null) {
+		String templateURI = params.remove("templateURI");
+		if (templateURI != null) { // assume it is shadow like (<apply>)
+			noEL("templateURI", templateURI, pi);
+				//no EL because pagedef must be loaded to resolve
+				//the implementing class before creating an instance of shadow
+
+			compdef = langdef.getShadowDefinition(
+				name, pgdef, toAbsoluteURI(templateURI, false));
+			if (!isEmpty(clsnm)) {
+				noEL("class", clsnm, pi);
+				compdef.setImplementationClass(clsnm);
+					//Resolve later since might defined in zscript
+			}
+		} else if (macroURI != null) {
 			//if (log.finerable()) log.finer("macro component definition: "+name);
 
 			final String inline = params.remove("inline");
@@ -643,16 +657,40 @@ public class Parser {
 					textAsBuffer = new StringBuffer();
 				break; //found
 			}
-
+		final boolean isXHTML = "xhtml".equals(parentlang.getName());
+		boolean breakLine = false;
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
+				breakLine = false;
 				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent);
 			} else if (o instanceof ProcessingInstruction) {
+				breakLine = false;
 				parse(pgdef, (ProcessingInstruction)o);
+			} else if (o instanceof Comment) {
+				breakLine = false;
+				// keep the comment, like <!--[if lte IE 9]>
+				if (parentlang.isNative() || isXHTML) {
+					String label = "<!--" + ((Item)o).getText() + "-->";
+					final ComponentInfo labelInfo =
+							parentlang.newLabelInfo(parent, label);
+					labelInfo.addProperty("encode", "false", null);
+				}
 			} else if ((o instanceof Text) || (o instanceof CData)) {
 				String label = ((Item)o).getText(),
-					trimLabel = label.trim();
+					trimLabel = !isXHTML ?
+							label.trim() : label; // do not trim with xhtml
+				if (breakLine && (o instanceof Text) && label.trim().isEmpty()) {
+					// we need to merge the breakLine into the previous one to save memory
+					List<NodeInfo> children = parent.getChildren();
+					final String labelAttr = parentlang.getLabelAttribute();
+					for (Property prop : ((ComponentInfo)children.get(children.size() - 1)).getProperties()) {
+						if (prop.getName().equals(labelAttr)) {
+							prop.setRawValue(prop.getRawValue() + trimLabel);
+						}
+					}
+					continue;
+				}
 				if (label.length() == 0)
 					continue;
 
@@ -667,6 +705,9 @@ public class Parser {
 				&& pi != null && !pi.isBlankPreserved() && !isNativeText(pi))
 					continue;
 
+				if (!isXHTML && (o instanceof Text) && label.trim().isEmpty())
+					breakLine = true;
+				
 				//consider as a label
 				if (isNativeText(pi)) {
 					new TextInfo(parent, label);
@@ -679,7 +720,11 @@ public class Parser {
 							else if (!(parent instanceof TemplateInfo))
 								throw new UnsupportedOperationException(
 									message("Not allowed in text-as", ((Item)o).getParent()));
-					} else {
+					} else { // shadow element and template shouldn't support empty LabelInfo
+						if ((parent instanceof ShadowInfo || parent instanceof TemplateInfo)) {
+							if (trimLabel.isEmpty())
+								continue; //ignore
+						}
 						if (isTrimLabel() && !parentlang.isRawLabel()) {
 							if (trimLabel.length() == 0)
 								continue; //ignore
@@ -691,6 +736,8 @@ public class Parser {
 							labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
 					}
 				}
+			} else {
+				breakLine = false;
 			}
 		}
 
@@ -745,6 +792,8 @@ public class Parser {
 					return langdef;
 			} else if (node instanceof PageDefinition) {
 				return ((PageDefinition)node).getLanguageDefinition();
+			} else if (node instanceof ShadowInfo) {
+				return ((ShadowInfo)node).getLanguageDefinition();
 			}
 		}
 		return null;
@@ -789,6 +838,9 @@ public class Parser {
 				el.getChildren(), annHelper, bNativeContent);
 		} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseItems(pgdef, parseZk(parent, el, annHelper),
+					el.getChildren(), annHelper, bNativeContent);
+		} else if (isShadowElement(langdef, pgdef, nm, pref, uri, bNativeContent)) {
+			parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper),
 				el.getChildren(), annHelper, bNativeContent);
 		} else {
 			//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
@@ -854,8 +906,10 @@ public class Parser {
 			}
 
 			String ifc = null, unless = null,
-				forEach = null, forEachBegin = null, forEachEnd = null;
+				forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
 			AnnotationHelper attrAnnHelper = null;
+			//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+			boolean isMVVM = false;
 			for (Iterator it = el.getAttributeItems().iterator();
 			it.hasNext();) {
 				final Attribute attr = (Attribute)it.next();
@@ -889,6 +943,8 @@ public class Parser {
 					unless = attval;
 				} else if ("forEach".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEach = attval;
+				} else if ("forEachStep".equals(attnm) && isZkAttr(langdef, attrns)) {
+					forEachStep = attval;
 				} else if ("forEachBegin".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEachBegin = attval;
 				} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
@@ -909,11 +965,14 @@ public class Parser {
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						if (!bNativeContent && !bNative
-						&& attURI.length() == 0 //ZK 6: non-annotation namespace mandates non-annotation
-						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
+								//ZK 6: non-annotation namespace mandates non-annotation
+								&& (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
+								&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
+							//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+							if ("viewModel".equals(attnm)) isMVVM = true;
 						} else {
 							boolean handled = false;
 							for (NamespaceParser nsParser: _nsParsers) {
@@ -935,8 +994,17 @@ public class Parser {
 				}
 			}
 
+			//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+			if (isMVVM) {
+				String apply = compInfo.getApply();
+				if (apply != null && apply.indexOf("BindComposer") != -1) {
+					//Warnning
+					log.warn(message("If the attribute of viewModel being used, then the apply has no longer to support", el));
+				}
+				compInfo.setApply("org.zkoss.bind.BindComposer");
+			}
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
-			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
+			compInfo.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
 			annHelper.applyAnnotations(compInfo, null, true);
 			
 
@@ -1026,6 +1094,14 @@ public class Parser {
 	/** @param val the value (it was trimmed before called). */
 	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
 	ComponentInfo compInfo, String nm, String val, boolean selfAllowed,
+	org.zkoss.util.resource.Location loc) {
+		attrAnnHelper.addByCompoundValue(val.trim(), loc);
+		attrAnnHelper.applyAnnotations(compInfo,
+			selfAllowed && "self".equals(nm) ? null: nm, true);
+	}
+	/** @param val the value (it was trimmed before called). */
+	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
+	ShadowInfo compInfo, String nm, String val, boolean selfAllowed,
 	org.zkoss.util.resource.Location loc) {
 		attrAnnHelper.addByCompoundValue(val.trim(), loc);
 		attrAnnHelper.applyAnnotations(compInfo,
@@ -1224,6 +1300,84 @@ public class Parser {
 		}
 		annHelper.add(el.getLocalName(), attrs, location(el));
 	}
+	private static NodeInfo parseShadowElement(PageDefinition pgdef, NodeInfo parent, Element el,
+	AnnotationHelper annHelper) throws Exception {
+		String ifc = null, unless = null,
+			name = el.getLocalName();
+		AnnotationHelper attrAnnHelper = null;
+		final LanguageDefinition lookup = LanguageDefinition.lookup("xul/html");
+		ComponentDefinition shadowDefinition = lookup.hasShadowDefinition(name) ? lookup.getShadowDefinition(name)
+						: pgdef.getComponentDefinitionMap().get(name);
+		final ShadowInfo compInfo = new ShadowInfo(parent, shadowDefinition,
+			name, ConditionImpl.getInstance(ifc, unless));
+		for (Iterator it = el.getAttributeItems().iterator();
+		it.hasNext();) {
+			final Attribute attr = (Attribute)it.next();
+			final Namespace attrns = attr.getNamespace();
+			final String attURI = attrns != null ? attrns.getURI(): "";
+			final String attnm = attr.getLocalName();
+			final String attval = attr.getValue();
+			if ("if".equals(attnm)) {
+				ifc = attval;
+			} else if ("unless".equals(attnm)) {
+				unless = attval;
+			} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI)
+					|| "annotation".equals(attURI)) {
+				//ZK 6: annotation namespace mandates annotation
+				if (attrAnnHelper == null)
+					attrAnnHelper = new AnnotationHelper();
+				applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), false, location(attr));
+			} else {
+				final String attPref = attrns != null ? attrns.getPrefix()
+						: null;
+				String attvaltrim;
+				if (!"xmlns".equals(attPref)
+						&& !("xmlns".equals(attnm) && "".equals(attPref))
+						&& !"http://www.w3.org/2001/XMLSchema-instance"
+								.equals(attURI)) {
+					if ((attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE
+							.endsWith(attURI))
+							&& AnnotationHelper
+									.isAnnotation(attvaltrim = attval.trim())) { // annotation
+						if (attrAnnHelper == null)
+							attrAnnHelper = new AnnotationHelper();
+						applyAttrAnnot(attrAnnHelper, compInfo, attnm,
+								attvaltrim, true, location(attr));
+					} else {
+						compInfo.addProperty(attnm, attval, null);
+						if (attrAnnHelper != null)
+							attrAnnHelper.applyAnnotations(compInfo, attnm,
+									true);
+					}
+				}
+			}
+		}
+		
+		compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
+		annHelper.applyAnnotations(compInfo, null, true);
+		
+		Node root = el.getFirstChild();
+		while (root != null && !(root instanceof Element)) {
+			if (root instanceof Text) {
+				if (!((Text)root).getText().trim().isEmpty())
+					break;
+			}
+			root = root.getNextSibling();
+		}
+		if (root != null) {
+			String rn = root.getLocalName();
+			if (!"template".equals(rn)) { // automatically create a template tag for it.
+				Node item = root;
+				while (item != null) {
+					if ("template".equals(item.getLocalName()))
+						throw new UiException(message(rn+" does not support between templates", (Item)root));
+					item = item.getNextSibling();
+				}
+				return new TemplateInfo(compInfo, "", null, null, null);
+			}
+		}
+		return compInfo;
+	}
 	private static TemplateInfo parseTemplate(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		if (annHelper.clear())
@@ -1258,8 +1412,12 @@ public class Parser {
 					params.put(attnm, attval);
 			}
 		}
-		if (name == null)
-			throw new UiException(message("The name attribute required", el));
+		if (name == null) {
+			//throw new UiException(message("The name attribute required", el));
+			name = "";
+			// support "" an empty string for ZK 8.0.0 shadow element
+			
+		}
 		return new TemplateInfo(parent,
 			name, src, params, ConditionImpl.getInstance(ifc, unless));
 	}
@@ -1270,7 +1428,7 @@ public class Parser {
 
 		final ZkInfo zi = new ZkInfo(parent, null);
 		String ifc = null, unless = null,
-			forEach = null, forEachBegin = null, forEachEnd = null;
+			forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
@@ -1284,6 +1442,8 @@ public class Parser {
 				unless = attval;
 			} else if ("forEach".equals(attnm)) {
 				forEach = attval;
+			} else if ("forEachStep".equals(attnm)) {
+				forEachStep = attval;
 			} else if ("forEachBegin".equals(attnm)) {
 				forEachBegin = attval;
 			} else if ("forEachEnd".equals(attnm)) {
@@ -1306,7 +1466,7 @@ public class Parser {
 			}
 		}
 		zi.setCondition(ConditionImpl.getInstance(ifc, unless));
-		zi.setForEach(forEach, forEachBegin, forEachEnd);
+		zi.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
 		return zi;
 	}
 
@@ -1320,6 +1480,24 @@ public class Parser {
 		return (!langdef.isNative() && "".equals(pref) && "".equals(uri))
 			|| langdef.getNamespace().equals(uri);
 	}
+	/** Returns whether it is a Shadow element.
+	 * @param pref namespace's prefix
+	 * @param uri namespace's URI
+	 * @param bNativeContent whether to ignore if URI not specified explicitly
+	 */
+	private static final boolean isShadowElement(LanguageDefinition langdef,
+			PageDefinition pgdef, String nm, String pref, String uri, boolean bNativeContent) {
+		// feature in 8.0.0, no need to check namespace, if any.
+		if ("true".equalsIgnoreCase(Library.getProperty("org.zkoss.zk.namespace.tolerant", "false")))
+			return langdef.hasShadowDefinition(nm) || (!"xul/html".equals(langdef.getName()) && 
+					LanguageDefinition.lookup("xul/html").hasShadowDefinition(nm));
+		ComponentDefinition componentDefinition = pgdef.getComponentDefinitionMap().get(nm);
+		if (componentDefinition instanceof ShadowDefinitionImpl)
+			return true;
+		if (isDefaultNS(langdef, pref, uri))
+			return !bNativeContent && langdef.hasShadowDefinition(nm);
+		return false;
+	}
 	/** Returns whether it is a ZK element.
 	 * @param pref namespace's prefix
 	 * @param uri namespace's URI
@@ -1327,6 +1505,9 @@ public class Parser {
 	 */
 	private static final boolean isZkElement(LanguageDefinition langdef,
 	String nm, String pref, String uri, boolean bNativeContent) {
+		// feature in 8.0.0, no need to check namespace, if any.
+		if ("true".equalsIgnoreCase(Library.getProperty("org.zkoss.zk.namespace.tolerant", "false")))
+			return true;
 		if (isDefaultNS(langdef, pref, uri))
 			return !bNativeContent && !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri);
