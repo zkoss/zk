@@ -50,7 +50,7 @@ public class B01005BeanValidatorPath {
 		return "value2";
 	}
 
-	public class Bean {
+	public static class Bean {
 		@NotEmpty
 		@NotNull
 		@Length(min=3,message = "min length is 3")

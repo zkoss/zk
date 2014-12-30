@@ -20,10 +20,11 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormExt;
+import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType; 
@@ -105,18 +106,14 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 		
 		//update form field into backing bean
-		if(form instanceof FormExt){
-			for (String field : ((FormExt)form).getSaveFieldNames()) {
-				final ExpressionX expr = getFieldExpression(eval, field);
-				if (expr != null) {
-					//ZK-911. Load from Form bean via expression(so will use form's AccessFieldName)
-					final ExpressionX formExpr = getFormExpression(eval, field);
-					final Object value = eval.getValue(null, comp, formExpr);//form.getField(field);
-					eval.setValue(ctx, comp, expr, value);
-				}
-			}
+		if(form instanceof FormProxyObject){
+			if (((FormProxyObject)form).isDirtyForm())
+				((FormProxyObject)form).submitToOrigin(ctx);
 		}
-		//TODO should we clear form dirty and notify formStatus?
+
+		if (form instanceof FormCtrl) {
+			binder.notifyChange(((FormCtrl)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
+		}
 	}
 	
 	private String getConditionString(BindContext ctx){
@@ -159,8 +156,8 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Form form = getFormBean();
 	
 		//remember base and form field
-		if(form instanceof FormExt){
-			for (String field : ((FormExt)form).getSaveFieldNames()) {
+		if(form instanceof FormCtrl){
+			for (String field : ((FormCtrl)form).getSaveFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final ValueReference valref = eval.getValueReference(ctx, comp, expr);

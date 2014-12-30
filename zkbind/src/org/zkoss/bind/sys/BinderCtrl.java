@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.event.EventQueues;
  *  <br/>
  * Application developers rarely need to access methods in this interface.
  * @author dennis
+ * @author jumperchen
  * @since 6.0.0
  */
 public interface BinderCtrl {	
@@ -47,6 +48,36 @@ public interface BinderCtrl {
 	 * PhaseListener key
 	 */
 	public static final String PHASE_LISTENER_CLASS_KEY = "org.zkoss.bind.PhaseListener.class";
+	
+	//control keys
+	public static final String BINDING = "$BINDING$"; //a binding
+	public static final String BINDER = "$BINDER$"; //the binder
+	public static final String BINDCTX = "$BINDCTX$"; //bind context
+	public static final String VAR = "$VAR$"; //variable name in a collection
+	public static final String VM = "$VM$"; //the associated view model
+	public static final String NOTIFYS = "$NOTIFYS$"; //changed properties to be notified
+	public static final String VALIDATES = "$VALIDATES$"; //properties to be validated
+	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
+	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
+	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
+
+	public static final String LOAD_FORM_EXPRESSION = "$LOAD_FORM_EXPR$";//The attribute name of a loaded bean class, internal use only
+	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$";//The attribute name of a loaded bean class, internal use only
+	
+	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
+
+	public static final String IGNORE_REF_VALUE = "$IGNORE_REF_VALUE$"; //ignore getting nested value form ref-binding when doing el evaluation.
+	public static final String INVALIDATE_REF_VALUE = "$INVALIDATE_REF_VALUE$"; //invalidate getting nested value form ref-binding when doing el evaluation.
+
+	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
+	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
+	public static final String ON_BIND_CLEAN = "onBindClean"; //do component binding clean up
+	public static final String MODEL = "$MODEL$"; //collection model for index tracking
+
+	//private control key
+	public static final String FORM_ID = "$FORM_ID$";
+	public static final String CHILDREN_ATTR = "$CHILDREN$";
+	public static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
 	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components

@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys;
 
 import org.zkoss.bind.Form;
+import org.zkoss.xel.ExpressionX;
 
 /**
  * A binding tells how to deal with Load and Save between a form and a bean.
@@ -47,5 +48,17 @@ public interface FormBinding extends Binding {
 	 * Returns the condition type of this binding
 	 */
 	public ConditionType getConditionType();
+	
+	/**
+	 * Returns the field expression from the given field.
+	 * @since 8.0.0
+	 */
+	public ExpressionX getFieldExpression(BindEvaluatorX eval, String field);
+
+	/**
+	 * Returns the form expression from the given field.
+	 * @since 8.0.0
+	 */
+	public ExpressionX getFormExpression(BindEvaluatorX eval, String field);
 
 }

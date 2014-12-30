@@ -35,6 +35,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import javassist.util.proxy.ProxyFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zel.ELException;
@@ -441,13 +443,19 @@ public class ELSupport {
 
     //ZK-1062: null intbox give a 0 value to Long bean property (expect null)
     protected static final Object coerceToTypeForSetValue(final Object obj,
-            final Class<?> type) throws ELException {
+            Class<?> type) throws ELException {
         if (type == null || Object.class.equals(type) ||
                 (obj != null && type.isAssignableFrom(obj.getClass()))) {
             return obj;
         }
         if (String.class.equals(type)) {
             return obj == null && COERCE_NULL_TO_NULL ? null : coerceToString(obj);
+        }
+        // since 8.0.0 support proxy form binding
+        if (ProxyFactory.isProxyClass(type)) {
+        	type = type.getSuperclass();
+        	if (obj != null && type.isAssignableFrom(obj.getClass()))
+        		return obj;
         }
         if (ELArithmetic.isNumberType(type)) {
             return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToNumber(obj, type);
@@ -492,13 +500,19 @@ public class ELSupport {
     }
 
     public static final Object coerceToType(final Object obj,
-            final Class<?> type) throws ELException {
+            Class<?> type) throws ELException {
         if (type == null || Object.class.equals(type) ||
                 (obj != null && type.isAssignableFrom(obj.getClass()))) {
             return obj;
         }
         if (String.class.equals(type)) {
             return coerceToString(obj);
+        }
+        // since 8.0.0 support proxy form binding
+        if (ProxyFactory.isProxyClass(type)) {
+        	type = type.getSuperclass();
+        	if (obj != null && type.isAssignableFrom(obj.getClass()))
+        		return obj;
         }
         if (ELArithmetic.isNumberType(type)) {
             return coerceToNumber(obj, type);
@@ -548,6 +562,12 @@ public class ELSupport {
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	private static Object coerceToCollection(Object obj, Class<?> type) {
 		if(obj==null) return null;
+		// since 8.0.0 support proxy form binding
+        if (ProxyFactory.isProxyClass(type)) {
+        	type = type.getSuperclass();
+        	if (obj != null && type.isAssignableFrom(obj.getClass()))
+        		return obj;
+        }
 		if(obj instanceof Collection){
 			//try the construct first
 			try {
@@ -660,6 +680,10 @@ public class ELSupport {
             @SuppressWarnings("rawtypes") Class type) throws ELException {
         if (obj == null || "".equals(obj)) {
             return null;
+        }
+        // since 8.0.0 support proxy form binding
+        if (ProxyFactory.isProxyClass(type)) {
+        	type = type.getSuperclass();
         }
         
         if (type.isAssignableFrom(obj.getClass())) {

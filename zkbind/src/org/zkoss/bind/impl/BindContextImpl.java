@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ import org.zkoss.zk.ui.event.Event;
  * @author henrichen
  * @since 6.0.0
  */
-public class BindContextImpl implements BindContext {
+public class BindContextImpl implements BindContext, Serializable {
+	private static final long serialVersionUID = 20141230165521L;
 	private final Binder _binder;
 	private final Binding _binding;
 	private final boolean _save;

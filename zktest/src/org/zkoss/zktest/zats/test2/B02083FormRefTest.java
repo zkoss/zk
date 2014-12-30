@@ -41,7 +41,7 @@ public class B02083FormRefTest extends ZATSTestCase {
 		assertEquals("fu1", tb2.as(Textbox.class).getValue());
 		assertEquals("AAA2", tb3.as(Textbox.class).getValue());
 		assertEquals("AAA", lb1.as(Label.class).getValue());
-		assertEquals("fu1", lb2.as(Label.class).getValue());
+		assertEquals("AAA1", lb2.as(Label.class).getValue());
 		assertEquals("AAA2", lb3.as(Label.class).getValue());
 		
 		tb3.type("fu2");
@@ -49,7 +49,7 @@ public class B02083FormRefTest extends ZATSTestCase {
 		assertEquals("fu1", tb2.as(Textbox.class).getValue());
 		assertEquals("fu2", tb3.as(Textbox.class).getValue());
 		assertEquals("AAA", lb1.as(Label.class).getValue());
-		assertEquals("fu1", lb2.as(Label.class).getValue());
+		assertEquals("AAA1", lb2.as(Label.class).getValue());
 		assertEquals("AAA2", lb3.as(Label.class).getValue());
 		
 		save.click();
@@ -58,7 +58,7 @@ public class B02083FormRefTest extends ZATSTestCase {
 		assertEquals("fu2", tb3.as(Textbox.class).getValue());
 		assertEquals("fu", lb1.as(Label.class).getValue());
 		assertEquals("fu1", lb2.as(Label.class).getValue());
-		assertEquals("AAA2", lb3.as(Label.class).getValue());
+		assertEquals("fu2", lb3.as(Label.class).getValue());
 
 	}
 }

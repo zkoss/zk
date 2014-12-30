@@ -25,6 +25,7 @@ public class B02083FormRef {
 		private String name1;
 		private String name2;
 
+		public Item() {}
 		public Item(String name) {
 			this.name = name;
 			this.name1 = name+"1";

@@ -19,3 +19,4 @@
 ../dist/lib/ext/zats-mimic-ext7.jar
 ../dist/lib/ext/zats-common.jar
 ../dist/lib/ext/zats-mimic.jar
+../dist/lib/ext/javassist.jar

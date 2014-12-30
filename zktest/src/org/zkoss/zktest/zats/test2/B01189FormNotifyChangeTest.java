@@ -32,57 +32,57 @@ public class B01189FormNotifyChangeTest extends ZATSTestCase {
 		
 		tb1.type("A");
 		assertEquals("A", tb2.as(Textbox.class).getValue());
-		assertEquals("", tb3.as(Textbox.class).getValue());
+		assertEquals("A", tb3.as(Textbox.class).getValue());
 		assertEquals("A", tb4.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("A", lb1.as(Label.class).getValue());
 		
 		tb2.type("B");
 		assertEquals("B", tb1.as(Textbox.class).getValue());
-		assertEquals("", tb3.as(Textbox.class).getValue());
+		assertEquals("B", tb3.as(Textbox.class).getValue());
 		assertEquals("B", tb4.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("B", lb1.as(Label.class).getValue());
 		
 		tb3.type("C");
-		assertEquals("B", tb1.as(Textbox.class).getValue());
-		assertEquals("B", tb2.as(Textbox.class).getValue());
+		assertEquals("C", tb1.as(Textbox.class).getValue());
+		assertEquals("C", tb2.as(Textbox.class).getValue());
 		assertEquals("C", tb4.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("C", lb1.as(Label.class).getValue());
 		
 		tb4.type("D");
-		assertEquals("B", tb1.as(Textbox.class).getValue());
-		assertEquals("B", tb2.as(Textbox.class).getValue());
-		assertEquals("C", tb3.as(Textbox.class).getValue());
+		assertEquals("D", tb1.as(Textbox.class).getValue());
+		assertEquals("D", tb2.as(Textbox.class).getValue());
+		assertEquals("D", tb3.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("D", lb1.as(Label.class).getValue());
 		
 		tb1.type("E");
 		assertEquals("E", tb2.as(Textbox.class).getValue());
-		assertEquals("C", tb3.as(Textbox.class).getValue());
+		assertEquals("E", tb3.as(Textbox.class).getValue());
 		assertEquals("E", tb4.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("E", lb1.as(Label.class).getValue());
 		
 		tb2.type("F");
 		assertEquals("F", tb1.as(Textbox.class).getValue());
-		assertEquals("C", tb3.as(Textbox.class).getValue());
+		assertEquals("F", tb3.as(Textbox.class).getValue());
 		assertEquals("F", tb4.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("F", lb1.as(Label.class).getValue());
 		
 		tb3.type("G");
-		assertEquals("F", tb1.as(Textbox.class).getValue());
-		assertEquals("F", tb2.as(Textbox.class).getValue());
+		assertEquals("G", tb1.as(Textbox.class).getValue());
+		assertEquals("G", tb2.as(Textbox.class).getValue());
 		assertEquals("G", tb4.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("G", lb1.as(Label.class).getValue());
 		
 		tb4.type("H");
-		assertEquals("F", tb1.as(Textbox.class).getValue());
-		assertEquals("F", tb2.as(Textbox.class).getValue());
-		assertEquals("G", tb3.as(Textbox.class).getValue());
+		assertEquals("H", tb1.as(Textbox.class).getValue());
+		assertEquals("H", tb2.as(Textbox.class).getValue());
+		assertEquals("H", tb3.as(Textbox.class).getValue());
 		save1.click();
 		assertEquals("H", lb1.as(Label.class).getValue());
 

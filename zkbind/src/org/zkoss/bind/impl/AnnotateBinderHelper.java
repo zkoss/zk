@@ -44,17 +44,17 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 public class AnnotateBinderHelper {
 	final private Binder _binder;
 	
-	final static private String INIT_ANNO = "init";
-	final static private String BIND_ANNO = "bind";
-	final static private String LOAD_ANNO = "load";
-	final static private String SAVE_ANNO = "save";
-	final static private String REFERENCE_ANNO = "ref";
-	final static private String ID_ANNO = "id";
-	final static private String VALIDATOR_ANNO = "validator";
-	final static private String CONVERTER_ANNO = "converter";
-	final static private String TEMPLATE_ANNO = "template";
-	final static private String COMMAND_ANNO = "command";
-	final static private String GLOBAL_COMMAND_ANNO = "global-command";
+	final static public String INIT_ANNO = "init";
+	final static public String BIND_ANNO = "bind";
+	final static public String LOAD_ANNO = "load";
+	final static public String SAVE_ANNO = "save";
+	final static public String REFERENCE_ANNO = "ref";
+	final static public String ID_ANNO = "id";
+	final static public String VALIDATOR_ANNO = "validator";
+	final static public String CONVERTER_ANNO = "converter";
+	final static public String TEMPLATE_ANNO = "template";
+	final static public String COMMAND_ANNO = "command";
+	final static public String GLOBAL_COMMAND_ANNO = "global-command";
 	
 	final static public String FORM_ATTR = "form";
 	final static public String VIEW_MODEL_ATTR = "viewModel";

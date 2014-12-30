@@ -18,7 +18,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormExt;
+import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
@@ -80,10 +80,13 @@ public class BindELResolver extends XelELResolver {
 		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding)value : null;
 		if (rbinding != null) {
 			//ZK-1299 Use @ref and save after will cause null point exception
-			if(Boolean.TRUE.equals(ignoreRefVal)){
+			if (Boolean.TRUE.equals(ignoreRefVal)) {
 				return rbinding;
 			}
 			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
+			final Object invalidateRef = bctx.getAttribute(BinderCtrl.INVALIDATE_REF_VALUE);
+			if ("true".equalsIgnoreCase(String.valueOf(invalidateRef)))
+				rbinding.invalidateCache();
 		} 
 		//If value evaluated to a ReferenceBinding, always tie the ReferenceBinding itself as the 
 		//evaluated bean, @see TrackerImpl#getLoadBindings0() and TrackerImpl#getAllTrackerNodesByBeanNodes()
@@ -153,11 +156,7 @@ public class BindELResolver extends XelELResolver {
         	//ZK-1189, form shouldn't count on property directly
         	String formFieldName = null;
 			if (isForm) {
-				if (nums > 0) { //still in resolving the form field
-					return;
-				} else { //done resolving the form field
 					script = path.getTrackFieldName();//script is the expression, ex, bean[a.b.c]
-				}
 				formFieldName = path.getAccessFieldName();//filedname is the evaluated value, ex, bean.k (a.b.c is k in script case)
 			} else {
 				script = path.getTrackProperty();
@@ -189,8 +188,8 @@ public class BindELResolver extends XelELResolver {
 								if(!script.equals(formFieldName)){
 									BindELContext.addNotifys(base, (String) formFieldName, value, bctx);
 								}
-								if (base instanceof FormExt)
-									BindELContext.addNotifys(((FormExt)base).getStatus(), ".", null, bctx);
+								if (base instanceof FormCtrl)
+									BindELContext.addNotifys(((FormCtrl)base).getStatus(), ".", null, bctx);
 							} else {
 								final Method m = (Method) ctx.getContext(Method.class);
 								//collect Property for @NotifyChange, kept in BindContext

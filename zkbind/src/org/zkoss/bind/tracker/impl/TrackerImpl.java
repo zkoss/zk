@@ -280,7 +280,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	//add node into the _beanMap
 	protected void addBeanMap(TrackerNode node, Object value) {
 		//add node into _beanMap
-		if (!value.equals(node.getBean())) {
+		if (!testEqualsBean(node.getBean(), value)) {
 			//try to remove from the _beanMap
 			removeBeanMap(node);
 			
@@ -491,7 +491,14 @@ public class TrackerImpl implements Tracker, Serializable {
 		_beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 		_equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	}
-	
+	protected static boolean testEqualsBean(Object nodeBean, Object bean) {
+		if (nodeBean == bean)
+			return true;
+		if (nodeBean instanceof WeakReference) {
+			nodeBean = ((WeakReference) nodeBean).get();
+		}
+		return bean.equals(nodeBean);
+	}
 	protected static class EqualBeansMap {
 		private transient WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>(); //bean -> EqualBeans
 		private transient WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>(); //bean -> EqualBeans

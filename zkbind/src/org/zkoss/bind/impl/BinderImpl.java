@@ -34,7 +34,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormExt;
+import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.GlobalCommandEvent;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
@@ -115,39 +115,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private static final Logger _log = LoggerFactory.getLogger(BinderImpl.class);
 	
 	private static final Map<String, Object> RENDERERS = new HashMap<String, Object>();
-	
-	//control keys
-	public static final String BINDING = "$BINDING$"; //a binding
-	public static final String BINDER = "$BINDER$"; //the binder
-	public static final String BINDCTX = "$BINDCTX$"; //bind context
-	public static final String VAR = "$VAR$"; //variable name in a collection
-	public static final String VM = "$VM$"; //the associated view model
-	public static final String NOTIFYS = "$NOTIFYS$"; //changed properties to be notified
-	public static final String VALIDATES = "$VALIDATES$"; //properties to be validated
-	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
-	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
-	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
-	
-	public static final String LOAD_FORM_EXPRESSION = "$LOAD_FORM_EXPR$";//The attribute name of a loaded bean class, internal use only
-	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$";//The attribute name of a loaded bean class, internal use only
-	
-	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
-	
-	public static final String IGNORE_REF_VALUE = "$IGNORE_REF_VALUE$"; //ignore getting nested value form ref-binding when doing el evaluation.
-
-	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
-	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
-	public static final String ON_BIND_CLEAN = "onBindClean"; //do component binding clean up
-	public static final String MODEL = "$MODEL$"; //collection model for index tracking
-	
+		
 	//events for dummy target
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
-	
-	//private control key
-	private static final String FORM_ID = "$FORM_ID$";
-	private static final String CHILDREN_ATTR = "$CHILDREN$";
-	private static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
 	
 	//Command lifecycle result
 	private static final int COMMAND_SUCCESS = 0;
@@ -554,17 +525,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
 		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
 		
-		if(form instanceof FormExt){
-			final FormExt fex = (FormExt)form;
+		if(form instanceof FormCtrl){
+			final FormCtrl fex = (FormCtrl)form;
 			comp.setAttribute(id+"Status", fex.getStatus());//by convention fxStatus
 			
-			if(oldForm instanceof FormExt){//copy the filed information, this is for a form-init that assign a user form
-				for(String fn:((FormExt)oldForm).getLoadFieldNames()){
-					fex.addLoadFieldName(fn);
-				}
-				for(String fn:((FormExt)oldForm).getSaveFieldNames()){
-					fex.addSaveFieldName(fn);
-				}
+			if(oldForm instanceof FormCtrl){//copy the filed information, this is for a form-init that assign a user form
+				((FormCtrl) oldForm).replaceForm((FormCtrl)form);
 			}
 		}
 	}
@@ -598,9 +564,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		
 		
-		Form form = getForm(comp,id);
-		if(form==null){
-			storeForm(comp,id,new SimpleForm());
+		Form form = getForm(comp, id);
+		if (form == null) {
+			storeForm(comp, id, new SimpleForm(this));
 		}
 		
 		addFormInitBinding0(comp,id,initExpr,initArgs);
@@ -640,7 +606,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		Form form = getForm(comp,id);
 		if(form==null){
-			storeForm(comp,id,new SimpleForm());
+			storeForm(comp,id, new SimpleForm(this));
 		}
 		
 		addFormLoadBindings0(comp,id,loadExpr,beforeCmds,afterCmds,bindingArgs);
@@ -661,7 +627,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		Form form = getForm(comp,id);
 		if(form==null){
-			storeForm(comp,id,new SimpleForm());
+			storeForm(comp,id,new SimpleForm(this));
 		}
 
 		addFormSaveBindings0(comp, id, saveExpr, beforeCmds, afterCmds, bindingArgs, validatorExpr, validatorArgs);
@@ -2175,7 +2141,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		loadComponentProperties0(comp,loadinit);
 
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
-		if (compBindings == null || !compBindings.keySet().contains(CHILDREN_ATTR)) {
+		if (_activating || compBindings == null || !compBindings.keySet().contains(CHILDREN_ATTR)) {
 			for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
 				loadComponent0(kid,loadinit); //recursive
 			}

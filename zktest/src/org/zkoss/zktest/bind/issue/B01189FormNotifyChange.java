@@ -34,7 +34,7 @@ public class B01189FormNotifyChange {
 		return bean3;
 	}
 	
-	public class Bean{
+	public static class Bean{
 		String prop;
 
 		public String getProp() {

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B02078.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Dec 29, 2014  4:07:42 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+<window	width="500px" 
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B02078')">
+
+
+	<style>
+		.icon-red {
+			color: red;
+		}	
+		.icon-green {
+			color: green;
+		}	
+	</style>
+
+	in "DB" <button label="reload from DB" onClick="@command('reload')" />
+	<grid id="view">
+		<rows>
+			<row>
+				Name:
+				<label value="@load(vm.currentItem.name)" />
+			</row>
+			<row>
+				MainTag:
+				<label value="@load(vm.currentItem.mainTag.value)" />
+			</row>
+			<row>
+				Tags:
+				<label value="@load(vm.currentItem.tags)" />
+			</row>
+		</rows>
+	</grid>
+
+	editable
+	<grid id="form" form="@id('fx') @load(vm.currentItem) @save(vm.currentItem, before='save')">
+		<rows>
+			<row>
+				Name:
+				<textbox value="@bind(fx.name)" />
+			</row>
+			<row>
+				MainTag:
+				<textbox value="@bind(fx.mainTag.value)" />
+			</row>
+			<row>
+				Tags:
+				<cell>
+					<listbox model="@load(fx.tags)" value="@save(fx.tags, before='save')" >
+						<template name="model">
+							<listitem>
+								<listcell>
+									<hlayout>
+										<textbox value="@bind(each.value)" />
+										<a iconSclass="z-icon-minus-circle icon-red" onClick="@command('removeTag', form=fx, tag=each)"/>
+									</hlayout>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<hlayout>
+						new tag <textbox id="newTagValue" onOK="@command('addTag', form=fx, tagValue=self.value)"/>
+						<a iconSclass="z-icon-plus-circle icon-green" forward="onClick=newTagValue.onOK"/>
+					</hlayout>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	
+	<button label="save to DB" onClick="@command('save')" />
+	<button label="cancel" onClick="@command('cancel')" />
+</window>
+
+
+</zk>

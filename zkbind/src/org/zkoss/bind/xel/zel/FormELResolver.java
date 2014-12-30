@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.bind.Form;
+import org.zkoss.bind.impl.FormProxy;
 import org.zkoss.bind.impl.Path;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
@@ -38,17 +39,8 @@ public class FormELResolver extends ELResolver {
             throw new NullPointerException();
         }
         if (base instanceof Form) {
-        	//don't care the property, at there, get the path (the key of field in form), the path was built by PathResolver) 
-        	final int nums = ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
-        	final Path path = getPathList(ctx); //get path, see #PathResolver
-        	
-            ctx.setPropertyResolved(true);
-            if (nums == 0) { //last property
-            	final String fieldName = path.getAccessFieldName();
-            	return ((Form) base).getField(fieldName);
-            } else {
-            	return base; //allow FORM resolving to continue!
-            }
+        	ctx.setPropertyResolved(true);
+            	return ((Form) base).getField(property.toString());
         }
         return null;
     }

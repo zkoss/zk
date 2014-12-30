@@ -52,7 +52,7 @@ public class B01017NestedFormPath {
 		return "value3";
 	}
 
-	public class Bean {
+	public static class Bean {
 		String value1;
 		String value2;
 		String value3;

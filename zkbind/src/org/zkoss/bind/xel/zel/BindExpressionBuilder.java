@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
@@ -31,7 +32,6 @@ import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
-
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.ExpressionBuilder;
@@ -108,50 +108,26 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 						if(_log.isDebugEnabled()){
 							_log.debug("add save-field '%s' to form '%s'", fieldName,formBean);
 						}
-						if(formBean instanceof FormExt ){
-							((FormExt)formBean).addSaveFieldName(fieldName);
+						if(formBean instanceof FormCtrl ){
+							((FormCtrl)formBean).addSaveFieldName(fieldName);
 						}
 						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding)binding, fieldName);
-					} else if (binding instanceof LoadPropertyBinding 
-							|| binding instanceof LoadChildrenBinding || binding instanceof ReferenceBinding) {
-						if(_log.isDebugEnabled()){
-							_log.debug("add load-field '%s' to form '%s'", fieldName,formBean);
-						}
-						if(formBean instanceof FormExt){
-							((FormExt)formBean).addLoadFieldName(fieldName);
-						}
 					}
-					//initialize Tracker per the series (in special Form way)
-					if(dotracker){
-						if (srcprops == null) {
-							tracker.addTracking(comp, new String[] {prop, fieldName}, binding);
-						} else {
-							tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, new String[] {prop, fieldName});
-						}
-					}
+				}
+			}
+
+			//initialize Tracker per the series
+			String[] props = properties(series);
+			if(dotracker){
+				if (srcprops == null) {
+					tracker.addTracking(comp, props, binding);
 				} else {
-					if(dotracker){
-						if (srcprops == null) {
-							tracker.addTracking(comp, new String[] {prop}, binding);
-						} else {
-							tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, new String[] {prop});
-						}
-					}
+					tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, props);
 				}
-			} else {
-				//initialize Tracker per the series
-				String[] props = properties(series);
-				if(dotracker){
-					if (srcprops == null) {
-						tracker.addTracking(comp, props, binding);
-					} else {
-						tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, props);
-					}
-				}
-				
-				if (binding instanceof LoadFormBindingImpl) {
-					((LoadFormBindingImpl)binding).setSeriesLength(props.length);
-				}
+			}
+			
+			if (binding instanceof LoadFormBindingImpl) {
+				((LoadFormBindingImpl)binding).setSeriesLength(props.length);
 			}
 		}
 	}
