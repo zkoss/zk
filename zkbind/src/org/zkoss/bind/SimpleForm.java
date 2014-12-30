@@ -17,16 +17,12 @@ import org.zkoss.bind.impl.FormProxy;
  * @author dennis
  * @since 6.0.0
  */
-public class SimpleForm extends FormProxy {
+public class SimpleForm<T> extends FormProxy<T> {
 	public SimpleForm() {
 		super(null);
 	}
 	public SimpleForm(Binder binder) {
 		super(binder);
-	}
-	public SimpleForm(String initExpr, Binder binder) {
-		super(binder);
-		// TODO Auto-generated constructor stub
 	}
 
 	private static final long serialVersionUID = 1463169907348730644L;

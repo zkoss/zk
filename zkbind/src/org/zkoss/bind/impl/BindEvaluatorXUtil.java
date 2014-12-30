@@ -86,6 +86,7 @@ public class BindEvaluatorXUtil {
 		result.put(key, val);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static BindEvaluatorX createEvaluator(FunctionMapper fnampper){
 		String clznm = Library.getProperty("org.zkoss.bind.BindEvaluatorX.class");
 		if (clznm != null) {

@@ -65,6 +65,7 @@ public class FormProxy<T> implements Form, FormCtrl, FormProxyObject,
 		_binder = binder;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setOwner(Object owner, FormBinding binding) {
 		_owner = (T) owner;
 		_binding = binding;
@@ -201,6 +202,7 @@ public class FormProxy<T> implements Form, FormCtrl, FormProxyObject,
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void replaceForm(FormCtrl newForm) {
 		if (newForm != null) {
 			for (String fn : getSaveFieldNames()) {

@@ -22,14 +22,13 @@ import java.util.Set;
  */
 public class SetProxy<E> extends AbstractCollectionProxy<E> implements Set<E> {
 	private static final long serialVersionUID = 20141229141520L;
-	private Set<E> _cache;
 
 	public SetProxy(Collection<E> origin) {
 		super(origin);
 		resetFromOrigin();
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
 	protected Collection<E> initCache() {
 		return new LinkedHashSet<E>(((Collection<E>)getOriginObject()).size());
 	}
