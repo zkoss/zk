@@ -13,6 +13,14 @@ ZK 8.0.0
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
   + Deprecated the class of org.zkoss.bind.impl.FormImpl and org.zkoss.bind.impl.FormExt, use org.zkoss.bind.impl.FormProxy and org.zkoss.bind.impl.FormCtrl instead.
   --------
+ZK 7.0.5
+* Features
+
+* Bugs
+  ZK-2564: vm.items not sync after window serialization and deserialization
+
+* Upgrade Notes
+  --------
 ZK 7.0.4
 December 9, 2014
 * Features
