@@ -1,10 +1,11 @@
-package org.zkoss.zktest.zats.test2;
+package org.zkoss.zktest.zats.bind.issue;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
