@@ -13,7 +13,7 @@ public class F00771_2Test extends ZATSTestCase {
 	
 	@Test
 	public void test() {
-		DesktopAgent desktop = connect("/F00771.zul");
+		DesktopAgent desktop = connect("/bind/issue/F00771.zul");
 		
 		ComponentAgent val1 = desktop.query("#val1");
 		ComponentAgent val2 = desktop.query("#val2");

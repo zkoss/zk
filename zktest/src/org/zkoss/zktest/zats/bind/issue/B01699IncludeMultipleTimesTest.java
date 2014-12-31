@@ -26,7 +26,7 @@ public class B01699IncludeMultipleTimesTest extends ZATSTestCase{
 		ComponentAgent include = desktop.query("include");
 		ComponentAgent btn = desktop.query("#btn");
 		String includeSrc = include.as(Include.class).getSrc().substring(1);
-		DesktopAgent desktop2 = connect(includeSrc);
+		DesktopAgent desktop2 = connect("/bind/issue" + includeSrc);
 		ComponentAgent lab1 = desktop2.query("#lb1");
 		ComponentAgent lab2 = desktop2.query("#lb2");
 		
@@ -35,7 +35,7 @@ public class B01699IncludeMultipleTimesTest extends ZATSTestCase{
 		
 		btn.click();
 		includeSrc = include.as(Include.class).getSrc().substring(1);
-		desktop2 = connect(includeSrc);
+		desktop2 = connect("/bind/issue" + includeSrc);
 		lab1 = desktop2.query("#lb1");
 		lab2 = desktop2.query("#lb2");
 
