@@ -62,7 +62,7 @@ public class B00869SerializationTest extends ZATSTestCase {
 		tb1.type("CY");
 		save.click();
 		assertEquals("CY", selected.as(Label.class).getValue());
-		assertEquals("CY", children.queryAll("label").get(1).as(Label.class).getValue());
+		assertEquals("CY", children.queryAll("label").get(2).as(Label.class).getValue());
 		assertEquals("CY", items.get(2).queryAll("listcell").get(1).as(Listcell.class).getLabel());
 	}
 }
