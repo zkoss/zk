@@ -94,6 +94,7 @@ import java.util.LinkedList;
 	}
 	public void remove() {
 		_it.remove();
+		_nextAvail = false;
 	}
 
 	private static final Converter _identityConverter = new Converter() {
