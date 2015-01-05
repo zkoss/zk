@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Phase;
 import org.zkoss.bind.impl.BinderUtil.UtilContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -206,38 +208,70 @@ public class AnnotateBinderHelper {
 		}
 	}
 	
+	private BindContext doPreInitPhase(Component comp, String propName) {
+		if (_binder instanceof BinderImpl) {
+			BindContext ctx = BindContextUtil.newBindContext(_binder, null, false, propName, comp, null);
+			((BinderImpl) _binder).doPrePhase(Phase.INITIAL_BINDING, ctx);
+			return ctx;
+		}
+		return null;
+	}
+	
 	private void processPropertyBindings(Component comp, String propName) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		
 		//validator and converter information
 		ExpressionAnnoInfo validatorInfo = parseValidator(comp,propName);
 		ExpressionAnnoInfo converterInfo = parseConverter(comp,propName);
-
-		//scan init
-		Collection<Annotation> initannos = compCtrl.getAnnotations(propName, INIT_ANNO);
-		if(initannos.size()>1){
-			throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+propName+" of "+comp,initannos.iterator().next()));
-		}else if(initannos.size()==1){
-			processPropertyInit(comp,propName,initannos.iterator().next(),converterInfo);
-		}
 		
-		Collection<Annotation> annos = compCtrl.getAnnotations(propName); //init in the annotation with the sequence
-		
-		for(Annotation anno:annos){
-			if(anno.getName().equals(BIND_ANNO)){
-				processPropertyPromptBindings(comp,propName,anno,converterInfo,validatorInfo);
-			}else if(anno.getName().equals(LOAD_ANNO)){
-				processPropertyLoadBindings(comp,propName,anno,converterInfo);
-			}else if(anno.getName().equals(SAVE_ANNO)){
-				processPropertySaveBindings(comp,propName,anno,converterInfo,validatorInfo);
-			}else if(anno.getName().equals(REFERENCE_ANNO)){
-				processReferenceBinding(comp,propName,anno);
+		BindContext ctx = null;
+		try {
+			
+			//scan init
+			Collection<Annotation> initannos = compCtrl.getAnnotations(propName, INIT_ANNO);
+			if(initannos.size()>1){
+				throw new IllegalSyntaxException(MiscUtil.formatLocationMessage("Allow only one @init for "+propName+" of "+comp,initannos.iterator().next()));
+			}else if(initannos.size()==1){
+				processPropertyInit(comp,propName,initannos.iterator().next(),converterInfo);
 			}
-		}
-
-		ExpressionAnnoInfo templateInfo = parseTemplate(comp,propName);
-		if(templateInfo!=null){
-			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
+			
+			Collection<Annotation> annos = compCtrl.getAnnotations(propName); //init in the annotation with the sequence
+			
+			for (Annotation anno : annos) {
+				if (anno.getName().equals(BIND_ANNO)) {
+					if (ctx == null) {
+						ctx = doPreInitPhase(comp, propName);
+					}
+					processPropertyPromptBindings(comp, propName, anno,
+							converterInfo, validatorInfo);
+				} else if (anno.getName().equals(LOAD_ANNO)) {
+					if (ctx == null) {
+						ctx = doPreInitPhase(comp, propName);
+					}
+					processPropertyLoadBindings(comp, propName, anno,
+							converterInfo);
+				} else if (anno.getName().equals(SAVE_ANNO)) {
+					if (ctx == null) {
+						ctx = doPreInitPhase(comp, propName);
+					}
+					processPropertySaveBindings(comp, propName, anno,
+							converterInfo, validatorInfo);
+				} else if (anno.getName().equals(REFERENCE_ANNO)) {
+					if (ctx == null) {
+						ctx = doPreInitPhase(comp, propName);
+					}
+					processReferenceBinding(comp, propName, anno);
+				}
+			}
+	
+			ExpressionAnnoInfo templateInfo = parseTemplate(comp,propName);
+			if(templateInfo!=null){
+				_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
+			}
+		} finally {
+			if (_binder instanceof BinderImpl && ctx != null) {
+				((BinderImpl) _binder).doPostPhase(Phase.INITIAL_BINDING, ctx);
+			}
 		}
 	}
 	

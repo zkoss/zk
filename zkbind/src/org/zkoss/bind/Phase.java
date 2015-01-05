@@ -76,5 +76,10 @@ public enum Phase {
 	/**
 	 * load binding phase.
 	 */
-	LOAD_BINDING
+	LOAD_BINDING,
+	/**
+	 * initial binding phase
+	 * @since 8.0.0
+	 */
+	INITIAL_BINDING
 }
