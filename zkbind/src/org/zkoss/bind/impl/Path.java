@@ -86,7 +86,7 @@ public class Path {
 		for(PathNode prop : path.subList(0, path.size()-1)) { //remove the last one
 			sb.append(prop.origin);
 		}
-    	return sb.charAt(0) == '.' ? sb.substring(1) : sb.toString();
+    	return sb.length() > 0 && sb.charAt(0) == '.' ? sb.substring(1) : sb.toString();
 	}
     
 	public String toString() {

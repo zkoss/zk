@@ -69,11 +69,6 @@ public class FormProxy<T> implements Form, FormCtrl, FormProxyObject,
 	public void setOwner(Object owner, FormBinding binding) {
 		_owner = (T) owner;
 		_binding = binding;
-		resetCache();
-	}
-
-	private void resetCache() {
-		_fields.clear();
 	}
 
 	public T getOwner() {

@@ -58,7 +58,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	}
 
 	public Set<java.util.Map.Entry<K, V>> entrySet() {
-		return ProxyHelper.createProxyIfAny(_cache.entrySet());
+		return _cache.entrySet();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -71,13 +71,14 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			comp.setAttribute(BinderCtrl.LOAD_FORM_EXPRESSION, getPropertyString());
 			
 			if (!(bean instanceof Form))
-				((FormProxy)getFormBean()).setOwner(bean, this);	
+				fex.setOwner(bean, this);	
 			
-			fex.resetDirty(); //initial loading, mark form as clean
-
 			if (activating)
 				return;// don't notify change if activating
 
+			// don't do resetDirty when in activating. Test case is in bind/form/FormWith*
+			fex.resetDirty(); //initial loading, mark form as clean
+						
 			binder.notifyChange(form, "."); // notify change of fx and fx.*
 			if (form instanceof FormCtrl) {
 				// notify change of fxStatus and fxStatus.*

@@ -60,8 +60,9 @@ public interface Tracker {
 	 * @param script the field script
 	 * @param propName the resolved property name from the field script
 	 * @param value the value of the property
+	 * @param basePath the basePath script prior to the <tt>script</tt> field script (Since 8.0)
 	 */
-	public void tieValue(Object comp, Object base, Object script, Object propName, Object value);
+	public void tieValue(Object comp, Object base, Object script, Object propName, Object value, Object basePath);
 	
 	/**
 	 * Returns all bindings that associated with the specified property.

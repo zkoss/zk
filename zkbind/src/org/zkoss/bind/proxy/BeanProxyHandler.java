@@ -11,15 +11,13 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.bind.proxy;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.impl.AllocUtil;
-import org.zkoss.bind.impl.BindContextUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.UiException;
 
@@ -32,7 +30,7 @@ import javassist.util.proxy.MethodHandler;
  * @author jumperchen
  * @since 8.0.0
  */
-public class BeanProxyHandler<T> implements MethodHandler {
+public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 	protected static MethodFilter BEAN_METHOD_FILTER = new MethodFilter() {
 		public boolean isHandled(Method m) {
 			if (m.getName().startsWith("set")

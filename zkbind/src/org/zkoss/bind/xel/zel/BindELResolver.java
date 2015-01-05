@@ -164,7 +164,7 @@ public class BindELResolver extends XelELResolver {
 			final Binder binder = binding.getBinder();
 			final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
 			final Component ctxcomp = bctx != null ? bctx.getComponent() : binding.getComponent();
-			((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
+			((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value, path.getTrackBasePath());
 			
 			if (base != null) {
 				if (binding instanceof SaveBinding) {

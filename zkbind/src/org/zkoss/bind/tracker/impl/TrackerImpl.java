@@ -235,14 +235,14 @@ public class TrackerImpl implements Tracker, Serializable {
 		return bindingNodes != null ? bindingNodes.get(script) : null;
 	}
 	
-	public void tieValue(Object comp, Object base, Object script, Object propName, Object value) {
+	public void tieValue(Object comp, Object base, Object script, Object propName, Object value, Object basePath) {
 		if (base == null) { //track from component
 			final TrackerNode node = getTrackerNodePerComponentScript(comp, script);
 			//ZK-877: NPE in a save only binding
 			//No corresponding LoadBinding with the head script in the specified component. 
 			if (node != null) {
 				if (value != null) {
-					addBeanMap(node, value);
+					addBeanMap(node, value, basePath);
 				} else {
 					removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap 
 					addNullMap(node); //head TrackerNode evaluate to null
@@ -266,7 +266,7 @@ public class TrackerImpl implements Tracker, Serializable {
 
 				if (value != null) {
 					for (TrackerNode node : propNodes) { //normal nodes
-						addBeanMap(node, value);
+						addBeanMap(node, value, basePath);
 					}
 				} else { //value == null
 					for (TrackerNode node : propNodes) { //normal nodes
@@ -278,7 +278,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	//add node into the _beanMap
-	protected void addBeanMap(TrackerNode node, Object value) {
+	protected void addBeanMap(TrackerNode node, Object value, Object basePath) {
 		//add node into _beanMap
 		if (!testEqualsBean(node.getBean(), value)) {
 			//try to remove from the _beanMap
