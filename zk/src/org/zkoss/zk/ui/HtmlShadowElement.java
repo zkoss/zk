@@ -845,6 +845,11 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			log.debug("beforeHostParentChanged " + parent + ", in this shadow "  + 
 				ShadowElementsCtrl.getCurrentInfo());
 		}
+		if (parent == null) {
+			((ComponentCtrl) _host).removeShadowRoot(this);
+		} else if (_host.getParent() == null) {
+			onHostAttached(_host);
+		}
 	}
 
 	public void beforeHostChildAdded(Component child, Component insertBefore, int indexOfInsertBefore) {

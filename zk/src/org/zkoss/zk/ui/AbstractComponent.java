@@ -3649,7 +3649,7 @@ w:use="foo.MyWindow"&gt;
 		if (!shadowRoots.isEmpty()) {
 			try {
 				initIndexCacheMap();
-				for (ShadowElement se : getShadowRoots()) {
+				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).beforeHostParentChanged(parent);
 					}
@@ -3665,7 +3665,7 @@ w:use="foo.MyWindow"&gt;
 			try {
 				initIndexCacheMap();
 				final int indexOf = getChildren().indexOf(child);
-				for (ShadowElement se : getShadowRoots()) {
+				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).beforeHostChildRemoved(child, indexOf);
 					}
@@ -3680,7 +3680,7 @@ w:use="foo.MyWindow"&gt;
 		if (!shadowRoots.isEmpty()) {
 			try {
 				initIndexCacheMap();
-				for (ShadowElement se : getShadowRoots()) {
+				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).afterHostChildRemoved(child);
 					}
@@ -3696,7 +3696,7 @@ w:use="foo.MyWindow"&gt;
 			try {
 				initIndexCacheMap();
 				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
-				for (ShadowElement se : getShadowRoots()) {
+				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore, indexOfInsertBefore);
 					}
@@ -3712,7 +3712,7 @@ w:use="foo.MyWindow"&gt;
 			try {
 				initIndexCacheMap();
 				final int indexOf = getChildren().indexOf(child);
-				for (ShadowElement se : getShadowRoots()) {
+				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl)se).afterHostChildAdded(child, indexOf);
 					}
