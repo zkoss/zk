@@ -66,8 +66,10 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 	public Object invoke(Object self, Method method, Method proceed,
 			Object[] args) throws Exception {
 		try {
-			if (method.getName().equals("hashCode"))
-				return hashCode();
+			if (method.getName().equals("hashCode")) {
+				int a = (Integer) method.invoke(_origin, args);
+				return 37 * 31 + a; 
+			}
 			if (method.getDeclaringClass().isAssignableFrom(
 					FormProxyObject.class)) {
 				if ("submitToOrigin".equals(method.getName())) {

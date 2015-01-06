@@ -101,18 +101,29 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	}
 	
 	public boolean add(E e) {
-		_dirty = true;
-		return _cache.add(e);
+		if (_cache.add(ProxyHelper.createProxyIfAny(e))) {
+			_dirty = true;
+			return true;
+		}
+		return false;
 	}
 
 	public boolean remove(Object o) {
-		_dirty = true;
-		return _cache.remove(o);
+		if (_cache.remove(ProxyHelper.createProxyIfAny(o))) {
+			_dirty = true;
+			return true;
+		}
+		return false;
 	}
 
 	public boolean addAll(Collection<? extends E> c) {
-		_dirty = true;
-		return _cache.addAll(c);
+		boolean modified = false;
+		Iterator<? extends E> e = c.iterator();
+		while (e.hasNext()) {
+		    if (add(e.next()))
+			modified = true;
+		}
+		return modified;
 	}
 
 

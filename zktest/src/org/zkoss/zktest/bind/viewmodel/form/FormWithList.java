@@ -32,6 +32,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zktest.bind.viewmodel.form.FormWithMap.Tag;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
@@ -214,6 +215,7 @@ public class FormWithList implements Serializable{
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
+			final String value = getValue();
 			result = prime * result + ((value == null) ? 0 : value.hashCode());
 			return result;
 		}
@@ -227,10 +229,12 @@ public class FormWithList implements Serializable{
 			if (getClass() != obj.getClass())
 				return false;
 			Tag other = (Tag) obj;
-			if (value == null) {
-				if (other.value != null)
+			String value1 = getValue();
+			String value2 = other.getValue();
+			if (value1 == null) {
+				if (value2 != null)
 					return false;
-			} else if (!value.equals(other.value))
+			} else if (!value1.equals(value2))
 				return false;
 			return true;
 		}

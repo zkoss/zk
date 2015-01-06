@@ -188,4 +188,16 @@ public interface BinderCtrl {
 	 * @since 6.5.2 
 	 */
 	public BindingAnnotationInfoChecker getBindingAnnotationInfoChecker();
+	
+	/**
+	 * Returns the queue name of this binder
+	 * @since 8.0.0
+	 */
+	public String getQueueName();
+
+	/**
+	 * Returns the queue scope of this binder
+	 * @since 8.0.0
+	 */
+	public String getQueueScope();
 }

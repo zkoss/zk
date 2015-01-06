@@ -113,35 +113,36 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	}
 
 	public boolean containsKey(Object key) {
-		return _cache.containsKey(key);
+		return _cache.containsKey(ProxyHelper.createProxyIfAny(key));
 	}
 
 	public boolean containsValue(Object value) {
 		Iterator<V> it = _cache.values().iterator();
+		Object proxyValue = ProxyHelper.createProxyIfAny(value);
 		while (it.hasNext()) {
-			if (AbstractCollectionProxy.testEquals(it.next(), value))
+			if (AbstractCollectionProxy.testEquals(it.next(), proxyValue))
 				return true;
 		}
 		return false;
 	}
 
 	public V get(Object key) {
-		return _cache.get(key);
+		return _cache.get(ProxyHelper.createProxyIfAny(key));
 	}
 
 	public V put(K key, V value) {
 		_dirty = true;
-		return _cache.put(key, value);
+		return _cache.put(ProxyHelper.createProxyIfAny(key), ProxyHelper.createProxyIfAny(value));
 	}
 
 	public V remove(Object key) {
 		_dirty = true;
-		return _cache.remove(key);
+		return _cache.remove(ProxyHelper.createProxyIfAny(key));
 	}
 
 	public void putAll(Map<? extends K, ? extends V> m) {
-		_dirty = true;
-		_cache.putAll(m);
+		for (Map.Entry<? extends K, ? extends V> e : m.entrySet())
+            put(e.getKey(), e.getValue());
 	}
 
 	public void clear() {

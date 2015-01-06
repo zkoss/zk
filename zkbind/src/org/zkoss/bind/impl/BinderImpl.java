@@ -2432,4 +2432,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		DebuggerFactory factory = DebuggerFactory.getInstance();
 		return factory==null?null:factory.getAnnotationInfoChecker();
 	}
+
+	public String getQueueName() {
+		return _quename;
+	}
+
+	public String getQueueScope() {
+		return _quescope;
+	}
 }
