@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,7 @@ import org.zkoss.bind.annotation.DefaultCommand;
 import org.zkoss.bind.annotation.DefaultGlobalCommand;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.SmartNotifyChange;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
@@ -80,6 +82,7 @@ import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
@@ -1620,11 +1623,32 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				if(commandArgs != null){
 					parCall.setBindingArgs(commandArgs);
 				}
-				
-				parCall.call(viewModel, method);
-				
-				notifys.addAll(BindELContext.getNotifys(method, viewModel,
-						(String) null, (Object) null, ctx)); // collect notifyChange
+				final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
+				if (sannt != null) {
+					Set<Property> properties = new LinkedHashSet<Property>(5);
+					properties.addAll(BindELContext.getNotifys(method, viewModel,
+							(String) null, (Object) null, ctx)); // collect notifyChange
+					
+					parCall.call(viewModel, method);
+					
+					for (Iterator<Property> it = properties.iterator(); it.hasNext();) {
+						Property prop = it.next();
+						Object result = null;
+						try {
+							result = Fields.get(prop.getBase(), prop.getProperty());
+							if (Objects.equals(result, prop.getValue()))
+								it.remove();
+								
+						} catch (NoSuchMethodException e) {
+						}
+					}
+					notifys.addAll(properties);
+				} else {
+					parCall.call(viewModel, method);
+					
+					notifys.addAll(BindELContext.getNotifys(method, viewModel,
+							(String) null, (Object) null, ctx)); // collect notifyChange
+				}
 			}else{
 				//do nothing
 				if(_log.isDebugEnabled()){
@@ -1795,11 +1819,32 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				if(commandArgs != null){
 					parCall.setBindingArgs(commandArgs);
 				}
-				
-				parCall.call(viewModel, method);
-				
-				notifys.addAll(BindELContext.getNotifys(method, viewModel,
-						(String) null, (Object) null, ctx)); // collect notifyChange
+				final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
+				if (sannt != null) {
+					Set<Property> properties = new LinkedHashSet<Property>(5);
+					properties.addAll(BindELContext.getNotifys(method, viewModel,
+							(String) null, (Object) null, ctx)); // collect notifyChange
+					
+					parCall.call(viewModel, method);
+					
+					for (Iterator<Property> it = properties.iterator(); it.hasNext();) {
+						Property prop = it.next();
+						Object result = null;
+						try {
+							result = Fields.get(prop.getBase(), prop.getProperty());
+							if (Objects.equals(result, prop.getValue()))
+								it.remove();
+								
+						} catch (NoSuchMethodException e) {
+						}
+					}
+					notifys.addAll(properties);
+				} else {
+					parCall.call(viewModel, method);
+					
+					notifys.addAll(BindELContext.getNotifys(method, viewModel,
+							(String) null, (Object) null, ctx)); // collect notifyChange
+				}				
 			}else{
 				throw new UiException(MiscUtil.formatLocationMessage("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel,comp));
 			}

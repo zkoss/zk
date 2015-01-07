@@ -25,6 +25,7 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyChangeDisabled;
+import org.zkoss.bind.annotation.SmartNotifyChange;
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.impl.BindContextUtil;
 import org.zkoss.bind.impl.BinderImpl;
@@ -35,6 +36,7 @@ import org.zkoss.bind.impl.PropertyImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.lang.Primitives;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.XelContext;
@@ -126,8 +128,14 @@ public class BindELContext extends XelELContext {
 		final NotifyChange annt = m.getAnnotation(NotifyChange.class);
 		//ZK-687 @NotifyChange should be doing automatically. 
 		final NotifyChangeDisabled anntdis = m.getAnnotation(NotifyChangeDisabled.class);
+
+		final SmartNotifyChange sannt = m.getAnnotation(SmartNotifyChange.class);
+		
 		if (annt != null && anntdis != null) {
 			throw new UiException("don't use "+NotifyChange.class+" with "+NotifyChangeDisabled.class+", choose only one");
+		}
+		if (sannt != null && anntdis != null) {
+			throw new UiException("don't use "+SmartNotifyChange.class+" with "+NotifyChangeDisabled.class+", choose only one");
 		}
 		
 		if (annt != null) {
@@ -144,6 +152,29 @@ public class BindELContext extends XelELContext {
 		}else if(anntdis == null && prop != null){
 			notifys.add(new PropertyImpl(base, prop, value));
 		}
+		
+		if (sannt != null) {
+			//if has annotation, use annotated value or prop (if no value in annotation)
+			String[] notifies = sannt.value();
+			if (notifies.length > 0) {
+				for(String notify : notifies) {
+					Property propx = null;
+					try {
+						if (!("*".equals(notify) || ".".equals(notify)))
+							propx = prepareProperty(base, notify, Fields.get(base, notify), ctx);
+						else
+							propx = prepareProperty(base, notify, value, ctx);
+					} catch (NoSuchMethodException e) {
+						propx = prepareProperty(base, notify, value, ctx); // eat the exception
+					}
+					if (propx != null)
+						notifys.add(propx);
+				}
+			} else if (prop != null) { //property is null in doExecute case
+				notifys.add(new PropertyImpl(base, prop, value));
+			}
+		}
+		
 		return notifys;
 	}
 	
