@@ -973,9 +973,8 @@ public class Parser {
 							boolean handled = false;
 							for (NamespaceParser nsParser: _nsParsers) {
 								if (nsParser.isMatched(attURI)) {
-									handled = true;
 									if (nsParser.parse(attr, compInfo, pgdef)) {
-										break;
+										handled = true;
 									}
 								}
 							}
