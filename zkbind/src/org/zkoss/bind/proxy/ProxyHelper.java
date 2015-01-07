@@ -60,7 +60,7 @@ public class ProxyHelper {
 			try {
 				p1 = proxyClass.newInstance();
 			} catch (Exception e) {
-				throw new UiException("Cannot create a proxy object:[" + origin + "]", e);
+				throw new UiException("Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.", e);
 			}
 
 			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));

@@ -12,12 +12,9 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
