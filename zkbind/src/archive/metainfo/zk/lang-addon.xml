@@ -33,7 +33,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
-
+	
+	<javascript package="zkbind"/>
 	<version>
 		<version-class>org.zkoss.bind.Version</version-class>
 		<version-uid>8.0.0</version-uid>

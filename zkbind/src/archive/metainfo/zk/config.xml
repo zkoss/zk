@@ -23,22 +23,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.bind.tracker.impl.BindUiLifeCycle</listener-class>
 	</listener>
-<!-- 
-	<library-property>
-		<name>org.zkoss.zk.ui.event.EventQueueProvider.class</name>
-		<value>org.zkoss.zkmax.ui.event.impl.EventQueueProviderImpl</value>
-	</library-property>
-	<library-property>
-		<name>org.zkoss.zul.grid.DataLoader.class</name>
-		<value>org.zkoss.zkmax.zul.impl.LiveGridDataLoader</value>
-	</library-property>
-	<library-property>
-		<name>org.zkoss.zul.listbox.DataLoader.class</name>
-		<value>org.zkoss.zkmax.zul.impl.LiveListboxDataLoader</value>
-	</library-property>
-	<library-property>
-		<name>org.zkoss.zk.ui.impl.UiEngineImpl.extension</name>
-		<value>org.zkoss.zkmax.ui.impl.UiEngineExtension</value>
-	</library-property>
- -->
+	
+	<listener>
+		<listener-class>org.zkoss.bind.impl.BinderPropertiesRenderer</listener-class>
+	</listener>	
+	
+	<listener>
+		<listener-class>org.zkoss.bind.impl.ClientBinderCommandParser</listener-class>
+	</listener>
 </config>

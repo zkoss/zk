@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F02584.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jan 08, 2015  2:27:01 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:w="client">
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F02584')">
+		Please click each of the following button, and then you should be the message below as the same as the button's label.
+		<separator/>
+		<label id="msg" value='@load(vm.msg)'/>
+		<button label="Native namespace" n:onClick='@command("doClick", {label: zk.Widget.$(this).getLabel()})'/>
+		<button label="Client namespace" w:onClick='@command("doClick", {label: zk.Widget.$(this).getLabel()})'/>
+		<n:button onClick='@command("doClick", {label: this.innerHTML})'>Native Component</n:button>
+	</div>
+</zk>

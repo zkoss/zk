@@ -5,6 +5,7 @@ ZK 8.0.0
   ZK-2508: Enhance ForEachStatus to be consistent with JSTL's varStatus properties
   ZK-2578: Add one more phase when initial bindings
   ZK-2581: Add a @SmartNotifyChange annotation that triggering the notification once the value of the property is changed
+  ZK-2584: Support @command and @global-command for client side to use
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

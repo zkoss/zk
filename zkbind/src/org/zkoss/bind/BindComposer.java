@@ -27,6 +27,7 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.impl.AbstractAnnotatedMethodInvoker;
 import org.zkoss.bind.impl.AnnotationUtil;
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
+import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -39,7 +40,8 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
-
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -60,7 +62,8 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * @since 6.0.0
  */
 @SuppressWarnings("rawtypes")
-public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
+public class BindComposer<T extends Component> implements Composer<T>,
+		ComposerExt<T>, Serializable, AuService {
 	
 	private static final long serialVersionUID = 1463169907348730644L;
 	
@@ -180,6 +183,8 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		if(keeper.isRootBinder(_binder)){
 			keeper.loadComponentForAllBinders();
 		}
+
+		comp.setAuService(this);
 	}
 	
 	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx,Component comp) {
@@ -507,6 +512,24 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private BindingAnnotationInfoChecker getBindingAnnotationInfoChecker(){
 		DebuggerFactory factory = DebuggerFactory.getInstance();
 		return factory==null?null:factory.getAnnotationInfoChecker();
+	}
+
+	public boolean service(AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if ("onBindCommand".equals(cmd)) {
+			Map<String, Object> data = request.getData();
+			String vcmd = data.get("cmd").toString();
+
+			_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));
+			return true;
+		} else if ("onBindGlobalCommand".equals(cmd)) {
+			Map<String, Object> data = request.getData();
+			String vcmd = data.get("cmd").toString();
+
+			BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd, (Map<String, Object>) data.get("args"));
+			return true;
+		}
+		return false;
 	}
 	
 }//end of class...
