@@ -29,6 +29,7 @@ public class Strings {
 	 * JavaScript. It assumes the string will be enclosed with a single quote.
 	 */
 	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/!";
+	public static final String EMPTY = "";
 	/**
 	 * Returns true if the string is null or empty.
 	 */
@@ -639,6 +640,51 @@ public class Strings {
 		}
 		return from;
 	}
+
+	/**
+	 * Joins the elements of the array into a single String separated by a comma.
+	 * @param array
+	 * @since 8.0.0
+	 */
+	public static final <T> String join(T[] array) {
+		return join(array, ',');
+	}
+	/**
+	 * Joins the elements of the array into a single String separated by the given separator.
+	 * @param array
+	 * @param separator
+	 * @since 8.0.0
+	 */
+	public static final <T> String join(T[] array, char separator) {
+		if (array == null) return null;
+		return join(array, separator, 0, array.length);
+	}
+	/**
+	 * Joins the elements of the array into a single String separated by the given separator
+	 * from the startIndex to the endIndex.
+	 * @param array
+	 * @param separator
+	 * @param startIndex
+	 * @param endIndex
+	 * @since 8.0.0
+	 */
+	public static final <T> String join(T[] array, char separator,
+			int startIndex, int endIndex) {
+		if (array == null)
+			return null;
+		final int items = endIndex - startIndex;
+		if (items <= 0)
+			return EMPTY;
+		final StringBuilder buf = new StringBuilder(items * 16);
+		for (int i = startIndex; i < endIndex; i++) {
+			if (i > startIndex) {
+				buf.append(separator);
+			}
+			buf.append(array[i]);
+		}
+		return buf.toString();
+	}
+
 	/** Returns the ending parenthesis (such as }),
 	 * or (char)0 if cc is not the beginning parenthesis (such as {).
 	 */
