@@ -1,0 +1,38 @@
+<?page contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="root" apply="org.zkoss.zktest.bind.issue.parser.F80_Parser_StoreSubAnnotCntComposer">
+		<window id="w1" viewModel="@id('vm1') @init('org.zkoss.zktest.bind.issue.parser.F80_Parser_StoreSubAnnotCntVM')" >
+			<label id="l1" value="@load(vm1.label1)" />
+			<window id="w2" viewModel="@id('vm2') @init('org.zkoss.zktest.bind.issue.parser.F80_Parser_StoreSubAnnotCntVM')" >
+				<label id="l2" value="@load(vm2.label2)" />
+				<button id="test1" label="@load(vm2.label1)" onClick="@command('func1')"/>
+			</window>
+		</window>
+		<window id="w3" viewModel="@id('vm3') @init('org.zkoss.zktest.bind.issue.parser.F80_Parser_StoreSubAnnotCntVM')" >
+			<label id="l3" value="@load(vm3.label3)" />
+			<label id="l4"></label>
+			<button id="test2" label="@load(vm3.label2)" onClick="@command('func2')"/>
+			<button id="test3" label="@load(vm3.label3)" onClick="@command('func3')"/>
+		</window>
+		<window id="children_binding" viewModel="@id('vmc') @init('org.zkoss.zktest.bind.issue.parser.F80_Parser_StoreSubAnnotCntVM')"  >
+			<vlayout id="dependency" children="@load(vmc.nodes) @template(each.name eq 'Item A'?'c1':'c2')">
+				<template name="c1" var="node">
+					<label value="@bind(node.name)" sclass="c1" style="padding-left:10px;border:2px solid blue;"/>
+					<label id="nobinding"/>
+				</template>
+				<template name="c2" var="node">
+					<label value="@bind(node.name)" sclass="c2" style="padding-left:10px;border:2px solid red;"/>
+				</template>
+			</vlayout>
+		</window>
+		<button id="add" label="add"/>
+		<button id="add_bind" label="add_bind"/>
+		<button id="remove_binding_one" label="remove_binding_one"/>
+		<button id="remove_binding_all" label="remove_binding_all"/>
+		<button id="add_bindfirst" label="add_bindfirst"/>
+		<button id="add_bindlast" label="add_bindlast"/>
+		<button id="move_append" label="move"/>
+		<button id="move_setParent" label="move"/>
+		<button id="remove" label="remove"/>
+	</window>
+</zk>

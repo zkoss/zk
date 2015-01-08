@@ -1219,6 +1219,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			++_chdinf.nChild;
 			onChildAdded(nc);
 			triggerAfterHostChildAdded(nc);
+			//F80 - store subtree's binder annotation count
+			updateBindingAnntationCount(initAuxInfo().subAnnotCnt + nc.initAuxInfo().subAnnotCnt);
 		}
 		return true;
 	}
@@ -1394,6 +1396,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		++_chdinf.modCntChd;
 		--_chdinf.nChild;
 		onChildRemoved(child);
+		//F80 - store subtree's binder annotation count
+		updateBindingAnntationCount(initAuxInfo().subAnnotCnt - oc.initAuxInfo().subAnnotCnt);
 		triggerAfterHostChildRemoved(child);
 		return true;
 	}
@@ -3388,6 +3392,10 @@ w:use="foo.MyWindow"&gt;
 		private transient boolean evthdsShared;
 		/** Whether this component is visible. */
 		private boolean visible = true;
+		//F80 - store subtree's binder annotation count
+		private boolean hasBindingAnnot = false;
+		private int subAnnotCnt = 0;
+		
 
 		public Object clone() {
 			final AuxInfo clone;
@@ -3757,5 +3765,30 @@ w:use="foo.MyWindow"&gt;
 			return true;
 		}
 		return false;
+	}
+	
+	//F80 - store subtree's binder annotation count
+	public boolean hasBindingAnnotation() {
+		return _auxinf != null && _auxinf.hasBindingAnnot;
+	}
+	
+	public int getSubBinderAnnotionCount() {
+		return _auxinf == null ? 0 : _auxinf.subAnnotCnt;
+	}
+	
+	private void updateBindingAnntationCount(int count) {
+		int diff = count - initAuxInfo().subAnnotCnt; 
+		for (AbstractComponent node = this; node != null; node = (AbstractComponent) node.getParent())
+			node.initAuxInfo().subAnnotCnt += diff;
+	}
+	
+	public void setHasBindingAnnotation(boolean hasBindingAnnot) {
+		AuxInfo auxinf = initAuxInfo();
+		boolean old = auxinf.hasBindingAnnot;
+		if (old != hasBindingAnnot) {
+			int count = hasBindingAnnot ? 1 : -1;
+			auxinf.hasBindingAnnot = hasBindingAnnot;
+			updateBindingAnntationCount(auxinf.subAnnotCnt + count);
+		}
 	}
 }
