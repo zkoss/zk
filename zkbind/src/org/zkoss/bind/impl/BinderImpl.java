@@ -322,6 +322,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}}.invokeMethod(this, initArgs);
 		
 		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
+		//F80 - store subtree's binder annotation count
+		if (comp instanceof ComponentCtrl)
+			((ComponentCtrl)comp).setHasBindingAnnotation(true);
 	}
 	
 	
@@ -2022,7 +2025,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				removed.addAll(entry.getValue());
 			}
 			if (!removed.isEmpty()) {
-				removeBindings(removed);
+				removeBindings(removed, comp);
 			}
 		}
 		
@@ -2063,7 +2066,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_refBindingHandler.removeReferenceBinding(comp,key);
 		}
 		
-		removeBindings(removed);
+		//F80 - store subtree's binder annotation count
+		removeBindings(removed, comp);
 	}
 	
 	
@@ -2085,7 +2089,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 
 
-	private void removeBindings(Collection<Binding> removed) {
+	private void removeBindings(Collection<Binding> removed, Component comp) {
+		//F80 - store subtree's binder annotation count
+		if (!_bindings.containsKey(comp) && comp instanceof ComponentCtrl)
+			((ComponentCtrl)comp).setHasBindingAnnotation(false);
 		_formBindingHandler.removeBindings(removed);
 		_propertyBindingHandler.removeBindings(removed);
 		_childrenBindingHandler.removeBindings(removed);
@@ -2100,6 +2107,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		attrMap = AllocUtil.inst.putLinkedHashMap(attrMap, attr, bindings);
 		_bindings.put(comp, attrMap);
 				
+		//F80 - store subtree's binder annotation count
+		if (comp instanceof ComponentCtrl)
+			((ComponentCtrl)comp).setHasBindingAnnotation(true);
 		//associate component with this binder, which means, one component can only bind by one binder
 		BinderUtil.markHandling(comp,this);
 	}

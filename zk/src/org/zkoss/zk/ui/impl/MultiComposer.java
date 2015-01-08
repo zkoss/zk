@@ -16,6 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
@@ -109,7 +111,11 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 	 * @param cs the array of composer instances.
 	 */
 	protected MultiComposer(Composer<T>[] cs) throws Exception {
-		_cs = cs;
+		//ZK8 - prevent duplicate composer classes
+		Map<String, Composer<T>> csMap = new HashMap<String, Composer<T>>();
+		for (int j = 0; j < cs.length; ++j)
+			csMap.put(cs[j].getClass().toString(), cs[j]);
+		_cs = csMap.values().toArray(new Composer[csMap.values().size()]);
 	}
 	public void doAfterCompose(T comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
