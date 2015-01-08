@@ -39,64 +39,49 @@ public class F02581Test extends ZATSTestCase {
 		String val1;
 		String val2;
 		
-		val1 = l1.as(Label.class).getValue();
-		val2 = l2.as(Label.class).getValue();
-		reload.click();
-		l1 = desktop.query("#inc1 #win2 #l1");
-		l2 = desktop.query("#inc1 #win2 #l2");
-		assertTrue(val1.equals(l1.as(Label.class).getValue()));
-		assertTrue(val2.equals(l2.as(Label.class).getValue()));
+		for (int i = 0; i < 4; i++) {
+			val1 = l1.as(Label.class).getValue();
+			val2 = l2.as(Label.class).getValue();
+			reload.click();
+			l1 = desktop.query("#inc1 #win2 #l1");
+			l2 = desktop.query("#inc1 #win2 #l2");
+			assertTrue(val1.equals(l1.as(Label.class).getValue()));
+			assertTrue(val2.equals(l2.as(Label.class).getValue()));
+	
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+	
 
-		try {
-			Thread.sleep(100);
-		} catch (Exception e) {
-			
-		}
-		val1 = l1.as(Label.class).getValue();
-		val2 = l2.as(Label.class).getValue();
-		reload.click();
-		l1 = desktop.query("#inc1 #win2 #l1");
-		l2 = desktop.query("#inc1 #win2 #l2");
-		assertTrue(val1.equals(l1.as(Label.class).getValue()));
-		assertTrue(val2.equals(l2.as(Label.class).getValue()));
-
-		try {
-			Thread.sleep(100);
-		} catch (Exception e) {
-			
-		}
-		val1 = l1.as(Label.class).getValue();
-		val2 = l2.as(Label.class).getValue();
-		reload.click();
-		l1 = desktop.query("#inc1 #win2 #l1");
-		l2 = desktop.query("#inc1 #win2 #l2");
-		assertTrue(val1.equals(l1.as(Label.class).getValue()));
-		assertTrue(val2.equals(l2.as(Label.class).getValue()));
+	@Test
+	public void testChange() {
+		DesktopAgent desktop = connect();
 		
-		try {
-			Thread.sleep(100);
-		} catch (Exception e) {
-			
-		}
-		val1 = l1.as(Label.class).getValue();
-		val2 = l2.as(Label.class).getValue();
-		reload.click();
-		l1 = desktop.query("#inc1 #win2 #l1");
-		l2 = desktop.query("#inc1 #win2 #l2");
-		assertTrue(val1.equals(l1.as(Label.class).getValue()));
-		assertTrue(val2.equals(l2.as(Label.class).getValue()));
+		ComponentAgent l1 = desktop.query("#inc1 #win2 #l1");
+		ComponentAgent l2 = desktop.query("#inc1 #win2 #l2");
+		ComponentAgent reload = desktop.query("#reload2");
 		
-		try {
-			Thread.sleep(100);
-		} catch (Exception e) {
-			
+		String val1;
+		String val2;
+		
+		for (int i = 0; i < 4; i++) {
+			val1 = l1.as(Label.class).getValue();
+			val2 = l2.as(Label.class).getValue();
+			reload.click();
+			l1 = desktop.query("#inc1 #win2 #l1");
+			l2 = desktop.query("#inc1 #win2 #l2");
+			assertFalse(val1.equals(l1.as(Label.class).getValue()));
+			assertFalse(val2.equals(l2.as(Label.class).getValue()));
+	
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+				
+			}
 		}
-		val1 = l1.as(Label.class).getValue();
-		val2 = l2.as(Label.class).getValue();
-		reload.click();
-		l1 = desktop.query("#inc1 #win2 #l1");
-		l2 = desktop.query("#inc1 #win2 #l2");
-		assertTrue(val1.equals(l1.as(Label.class).getValue()));
-		assertTrue(val2.equals(l2.as(Label.class).getValue()));
 	}
 }

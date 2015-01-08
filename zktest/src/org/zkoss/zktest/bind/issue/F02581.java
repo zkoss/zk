@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Component;
  * @author jumperchen
  */
 public class F02581 {
-	String url = "./B00993IncludeReload2.zul";
+	String url = "./F02581IncludeReload.zul";
 	public String getUrl(){
 		return url;
 	}
@@ -34,6 +34,12 @@ public class F02581 {
 	@SmartNotifyChange("url")
 	public void reload(){
 		
+	}
+	
+	@org.zkoss.bind.annotation.Command
+	@SmartNotifyChange("url")
+	public void reload2(){
+		url = "./F02581IncludeReload.zul?" + new java.util.Date().getTime();
 	}
 	
 	public Date getNow(){
