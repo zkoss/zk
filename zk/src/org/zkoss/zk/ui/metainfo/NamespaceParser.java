@@ -28,7 +28,7 @@ public interface NamespaceParser {
 	/**
 	 * Parses the the content with the current namespace parser.
 	 * 
-	 * @return true to terminal the original parser processing
+	 * @return true to terminal the next namespace parser processing
 	 */
 	public boolean parse(Attribute attr, ComponentInfo compInfo,
 			PageDefinition pgdef) throws Exception;

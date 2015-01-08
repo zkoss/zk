@@ -979,6 +979,7 @@ public class Parser {
 								if (nsParser.isMatched(attURI)) {
 									if (nsParser.parse(attr, compInfo, pgdef)) {
 										handled = true;
+										break;
 									}
 								}
 							}
