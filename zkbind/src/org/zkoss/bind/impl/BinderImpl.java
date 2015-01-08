@@ -324,7 +324,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
 		//F80 - store subtree's binder annotation count
 		if (comp instanceof ComponentCtrl)
-			((ComponentCtrl)comp).setHasBindingAnnotation(true);
+			((ComponentCtrl)comp).enableBindingAnnotation();
 	}
 	
 	
@@ -2092,7 +2092,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void removeBindings(Collection<Binding> removed, Component comp) {
 		//F80 - store subtree's binder annotation count
 		if (!_bindings.containsKey(comp) && comp instanceof ComponentCtrl)
-			((ComponentCtrl)comp).setHasBindingAnnotation(false);
+			((ComponentCtrl)comp).disableBindingAnnotation();
 		_formBindingHandler.removeBindings(removed);
 		_propertyBindingHandler.removeBindings(removed);
 		_childrenBindingHandler.removeBindings(removed);
@@ -2109,7 +2109,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				
 		//F80 - store subtree's binder annotation count
 		if (comp instanceof ComponentCtrl)
-			((ComponentCtrl)comp).setHasBindingAnnotation(true);
+			((ComponentCtrl)comp).enableBindingAnnotation();
 		//associate component with this binder, which means, one component can only bind by one binder
 		BinderUtil.markHandling(comp,this);
 	}

@@ -492,12 +492,24 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public boolean addShadowRootBefore(ShadowElement shadow, ShadowElement insertBefore);
-	
+
 	/**
-	 * Set if the component has binding annotation or not. (Internal or component developer use only.)
-	 * @param true if the component has binding annotation
+	 * Set to enable the component with binding annotation. (Internal or component developer use only.)
 	 * @since 8.0.0
 	 */
-	public void setHasBindingAnnotation(boolean hasBindingAnnot);
+	public void enableBindingAnnotation();
+	
+	/**
+	 * Set to disable the component with binding annotation. (Internal or component developer use only.)
+	 * @since 8.0.0
+	 */
+	public void disableBindingAnnotation();
+	
+	/**
+	 * Returns whether the component has binding annotation or not. (Internal or component developer use only.)
+	 * @return true if the component has binding annotation
+	 * @since 8.0.0
+	 */
+	public boolean hasBindingAnnotation();
 	
 }

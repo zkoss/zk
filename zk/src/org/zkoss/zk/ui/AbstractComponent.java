@@ -3782,7 +3782,14 @@ w:use="foo.MyWindow"&gt;
 			node.initAuxInfo().subAnnotCnt += diff;
 	}
 	
-	public void setHasBindingAnnotation(boolean hasBindingAnnot) {
+	public void enableBindingAnnotation() {
+		setBindingAnnotation0(true);
+	}
+	
+	public void disableBindingAnnotation() {
+		setBindingAnnotation0(false);
+	}
+	private void setBindingAnnotation0(boolean hasBindingAnnot) {
 		AuxInfo auxinf = initAuxInfo();
 		boolean old = auxinf.hasBindingAnnot;
 		if (old != hasBindingAnnot) {
