@@ -46,7 +46,7 @@
 			<row>
 				Tags:
 				<cell>
-					<listbox model="@load(fx.tags)" value="@save(fx.tags, before='save')" >
+					<listbox model="@load(fx.tags)">
 						<template name="model">
 							<listitem>
 								<listcell>
