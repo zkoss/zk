@@ -33,6 +33,7 @@ public class B01088FormUpdate {
 	public static class Person{
 		String firstName;
 		String lastName;
+		public Person() {}
 		public Person(String firstName,String lastName){
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -52,16 +53,16 @@ public class B01088FormUpdate {
 		
 	}
 	
-	public Converter<Object, Form, Component> getConverter1(){
-		return new Converter<Object, Form, Component>() {
+	public Converter<Object, Person, Component> getConverter1(){
+		return new Converter<Object, Person, Component>() {
 
 			
-			public Object coerceToUi(Form val, Component component, BindContext ctx) {
-				return val.getField("firstName")+" "+((Form)val).getField("lastName");
+			public Object coerceToUi(Person val, Component component, BindContext ctx) {
+				return val.getFirstName()+" "+ val.getLastName();
 			}
 
 			
-			public Form coerceToBean(Object val, Component component, BindContext ctx) {
+			public Person coerceToBean(Object val, Component component, BindContext ctx) {
 				return null;
 			}
 		};

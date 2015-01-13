@@ -19,6 +19,7 @@ import java.util.Set;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 
+import org.zkoss.bind.Form;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.UiException;
 
@@ -67,5 +68,22 @@ public class ProxyHelper {
 			return (T) p1;
 		}
 	}
-	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T extends Object> T createFormProxy(T origin, Class<?> type) {
+
+		ProxyFactory factory = new ProxyFactory();
+		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
+		factory.setSuperclass(type);
+		factory.setInterfaces(new Class[]{FormProxyObject.class, Form.class});
+		Class<?> proxyClass = factory.createClass();
+		Object p1 = null;
+		try {
+			p1 = proxyClass.newInstance();
+		} catch (Exception e) {
+			throw new UiException("Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.", e);
+		}
+
+		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));
+		return (T) p1;
+	}
 }

@@ -35,13 +35,11 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.GlobalCommandEvent;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.PropertyChangeEvent;
-import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DefaultCommand;
@@ -219,6 +217,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private boolean _activating = false;
 	//to help deferred activation when first execution
 	private transient DeferredActivator _deferredActivator;
+	
+	private transient Map<Object, Set<String>> _saveFormFields;
 	
 	private final ImplicitObjectContributor _implicitContributor;
 	
@@ -401,14 +401,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	public void setViewModel(Object vm) {
 		checkInit();
-		_rootComp.setAttribute(BinderImpl.VM, vm);
+		_rootComp.setAttribute(BinderCtrl.VM, vm);
 		_hasGetConverterMethod = true;//reset to true
 		_hasGetValidatorMethod = true;//reset to true
 	}
 	
 	public Object getViewModel() {
 		checkInit();
-		return _rootComp.getAttribute(BinderImpl.VM);
+		return _rootComp.getAttribute(BinderCtrl.VM);
 	}
 	
 	//Note: assume system converter is state-less
@@ -531,13 +531,19 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
 		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
 		
-		if(form instanceof FormCtrl){
-			final FormCtrl fex = (FormCtrl)form;
-			comp.setAttribute(id+"Status", fex.getStatus());//by convention fxStatus
-			
-			if(oldForm instanceof FormCtrl){//copy the filed information, this is for a form-init that assign a user form
-				((FormCtrl) oldForm).replaceForm((FormCtrl)form);
+		if(form instanceof Form){
+			final Form fex = form;
+			comp.setAttribute(id+"Status", fex.getFormStatus());//by convention fxStatus		
+		}
+		Map<Object, Set<String>> initSaveFormMap = initSaveFormMap();
+		Set<String> remove = initSaveFormMap.remove(oldForm);
+		if (remove != null) {
+			Set<String> set = initSaveFormMap.get(form);
+			if (set == null) {
+				set = new HashSet<String>(16);
+				initSaveFormMap.put(form, set);
 			}
+			set.addAll(remove);
 		}
 	}
 	
@@ -554,7 +560,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		String id = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
 		if(id!=null){
 			comp.removeAttribute(FORM_ID);
-			comp.removeAttribute(id);
+			Object form = comp.removeAttribute(id);
+			if (form != null)
+				initSaveFormMap().remove(form);
 			comp.removeAttribute(id+"Status");
 		}
 	}
@@ -567,12 +575,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		if(initExpr==null){
 			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("initExpr is null for component "+comp+", form "+id,comp));
-		}
-		
-		
-		Form form = getForm(comp, id);
-		if (form == null) {
-			storeForm(comp, id, new SimpleForm(this));
 		}
 		
 		addFormInitBinding0(comp,id,initExpr,initArgs);
@@ -610,11 +612,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("loadExpr is null for component "+comp+", form "+id,comp));
 		}
 		
-		Form form = getForm(comp,id);
-		if(form==null){
-			storeForm(comp,id, new SimpleForm(this));
-		}
-		
 		addFormLoadBindings0(comp,id,loadExpr,beforeCmds,afterCmds,bindingArgs);
 	}
 
@@ -629,11 +626,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		if(saveExpr==null){
 			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("saveExpr is null for component "+comp+", form "+id,comp));
-		}
-		
-		Form form = getForm(comp,id);
-		if(form==null){
-			storeForm(comp,id,new SimpleForm(this));
 		}
 
 		addFormSaveBindings0(comp, id, saveExpr, beforeCmds, afterCmds, bindingArgs, validatorExpr, validatorArgs);
@@ -855,7 +847,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	private void initRendererIfAny(Component comp,String attr) {
-		final Object installed = comp.getAttribute(BinderImpl.RENDERER_INSTALLED);
+		final Object installed = comp.getAttribute(BinderCtrl.RENDERER_INSTALLED);
 		if (installed != null) { //renderer was set already init
 			return;
 		}
@@ -898,7 +890,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						}
 					}
 					
-					comp.setAttribute(BinderImpl.RENDERER_INSTALLED,"");//mark installed
+					comp.setAttribute(BinderCtrl.RENDERER_INSTALLED,"");//mark installed
 				}
 			}
 		}
@@ -999,7 +991,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = (String) AnnotationUtil.testString(attrs.get(Binder.ACCESS),ann); //_accessInfo right, "both|save|load", default to load
+			final String rw = AnnotationUtil.testString(attrs.get(Binder.ACCESS),ann); //_accessInfo right, "both|save|load", default to load
 			if (rw != null && !"both".equals(rw) && !"load".equals(rw)) { //save only, skip
 				return;
 			}
@@ -2494,5 +2486,43 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	public String getQueueScope() {
 		return _quescope;
+	}
+
+	private Map<Object, Set<String>> initSaveFormMap() {
+		if (_saveFormFields == null) {
+			_saveFormFields = new HashMap<Object, Set<String>>(4);
+		}
+		return _saveFormFields;
+	}
+	public void addSaveFormFieldName(Form form, String fieldName) {
+		Set<String> fields = initSaveFormMap().get(form);
+		if (fields == null) {
+			fields = new HashSet<String>(16);
+			_saveFormFields.put(form, fields);
+		}
+		fields.add(fieldName);
+	}
+	public void addSaveFormFieldName(Form form, Set<String> fieldNames) {
+		Set<String> fields = initSaveFormMap().get(form);
+		if (fields == null) {
+			fields = new HashSet<String>(16);
+			_saveFormFields.put(form, fields);
+		}
+		fields.addAll(fieldNames);
+		
+	}
+	@SuppressWarnings("unchecked")
+	public Set<String> removeSaveFormFieldNames(Form self) {
+		Set<String> result = initSaveFormMap().remove(self);
+		if (result == null)
+			return Collections.EMPTY_SET;
+		return result;
+	}
+	@SuppressWarnings("unchecked")
+	public Set<String> getSaveFormFieldNames(Form form) {
+		Set<String> result = initSaveFormMap().get(form);
+		if (result == null)
+			return Collections.EMPTY_SET;
+		return result;
 	}
 }

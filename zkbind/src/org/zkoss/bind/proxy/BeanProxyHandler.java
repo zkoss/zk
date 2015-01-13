@@ -12,6 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,8 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.zk.ui.UiException;
 
 import javassist.util.proxy.MethodFilter;
@@ -35,6 +38,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 		public boolean isHandled(Method m) {
 			if (m.getName().startsWith("set")
 					|| m.getName().startsWith("get")
+					|| m.getName().startsWith("is")
 					|| m.getName().equals("hashCode"))
 				return true;
 			try {
@@ -46,10 +50,10 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 		}
 
 	};
-	private T _origin;
+	protected T _origin;
 
-	private Map<String, Object> _cache;
-	private Set<String> _dirtyFieldNames; // field name that is dirty
+	protected Map<String, Object> _cache;
+	protected Set<String> _dirtyFieldNames; // field name that is dirty
 
 	public BeanProxyHandler(T origin) {
 		_origin = origin;
@@ -67,28 +71,27 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 			Object[] args) throws Exception {
 		try {
 			if (method.getName().equals("hashCode")) {
-				int a = (Integer) method.invoke(_origin, args);
+				int a = (_origin != null) ? (Integer) method.invoke(_origin, args) : 0;
 				return 37 * 31 + a; 
 			}
 			if (method.getDeclaringClass().isAssignableFrom(
 					FormProxyObject.class)) {
 				if ("submitToOrigin".equals(method.getName())) {
-					if (_dirtyFieldNames != null) {
-						for (String field : _dirtyFieldNames) {
-							final Object value = _cache.get(field);
+					if (_dirtyFieldNames != null && _origin != null) {
+						for (Map.Entry<String, Object> me : _cache.entrySet()) {
+							final Object value = me.getValue();
 							if (value instanceof FormProxyObject) {
 								((FormProxyObject) value)
 										.submitToOrigin((BindContext) args[0]);
-							} else {
-								final String mname = toSetter(field);
+							} else if (_dirtyFieldNames.contains(me.getKey())) {
+								final String mname = toSetter(me.getKey());
 								try {
-									final Method m = _origin.getClass()
-											.getMethod(
-													mname,
-													new Class[] { value
-															.getClass() });
-									m.invoke(_origin, value);
-									BindELContext.addNotifys(m, _origin, field,
+									final AccessibleObject ao = Classes.getAccessibleObject(
+											_origin.getClass(), mname,
+											new Class[] { value.getClass() },Classes.B_SET|Classes.B_PUBLIC_ONLY);
+									final Method m = (Method)ao;
+									m.invoke(_origin, Classes.coerce(m.getParameterTypes()[0], value));
+									BindELContext.addNotifys(m, _origin, me.getKey(),
 											value, (BindContext) args[0]);
 								} catch (NoSuchMethodException e) {
 									throw new UiException(e);
@@ -104,28 +107,26 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						_dirtyFieldNames.clear();
 					if (_cache != null)
 						_cache.clear();
-				} else if ("isDirtyForm".equals(method.getName())) {
-					if (_dirtyFieldNames == null || _dirtyFieldNames.isEmpty()) {
-						return false;
-					} else {
+				} else if ("isFormDirty".equals(method.getName())) {
 						boolean dirty = false;
 						
-						// If the dirty field is a form proxy object it may not be dirty.
-						// But once it contains a non-form proxy object, it must be dirty.
-						for (String field : _dirtyFieldNames) {
-							final Object value = _cache.get(field);
-							if (value instanceof FormProxyObject) {
-								if (((FormProxyObject) value).isDirtyForm()) {
+						if (_dirtyFieldNames != null && _cache != null) {
+							// If the dirty field is a form proxy object it may not be dirty.
+							// But once it contains a non-form proxy object, it must be dirty.
+							for (Map.Entry<String, Object> me : _cache.entrySet()) {
+								final Object value = me.getValue();
+								if (value instanceof FormProxyObject) {
+									if (((FormProxyObject) value).isFormDirty()) {
+										dirty = true;
+										break;
+									}
+								} else if (_dirtyFieldNames.contains(me.getKey())) {
 									dirty = true;
 									break;
 								}
-							} else {
-								dirty = true;
-								break;
 							}
 						}
 						return dirty;
-					}
 				} else {
 					throw new IllegalAccessError("Not implemented yet for FormProxyObject interface: [" + method.getName() + "]");
 				}
@@ -134,6 +135,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 					final String attr = toAttrName(method);
 					Object value = null;
 					if (_cache == null) {
+						if (_origin == null)
+							return null;
 						Object invoke = method.invoke(_origin, args);
 						if (invoke != null) {
 							value = ProxyHelper.createProxyIfAny(invoke);
@@ -145,6 +148,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 					} else {
 						value = _cache.get(attr);
 						if (!_cache.containsKey(attr)) {
+							if (_origin == null)
+								return null;
 							Object invoke = method.invoke(_origin, args);
 							if (invoke != null) {
 								value = ProxyHelper.createProxyIfAny(invoke);
@@ -153,6 +158,22 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 									addDirtyField(attr); // it may be changed.
 								}
 							}
+						}
+					}
+					return value;
+				} else if (method.getName().startsWith("is")) {
+					final String attr = toAttrName(method, 2);
+					Object value = null;
+					if (_cache == null) {
+						if (_origin == null)
+							return false;
+						value = method.invoke(_origin, args);
+					} else {
+						value = _cache.get(attr);
+						if (!_cache.containsKey(attr)) {
+							if (_origin == null)
+								return false;
+							value = method.invoke(_origin, args);
 						}
 					}
 					return value;
@@ -168,22 +189,28 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 		return null;
 	}
 
-	private static String toSetter(String attr) {
+	protected static String toSetter(String attr) {
 		return capitalize("set", attr);
 	}
 
-	private static String toGetter(String attr) {
+	protected static String toGetter(String attr) {
 		return capitalize("get", attr);
 	}
 
-	private static String capitalize(String prefix, String attr) {
+	protected static String capitalize(String prefix, String attr) {
 		return new StringBuilder(prefix)
 				.append(Character.toUpperCase(attr.charAt(0)))
 				.append(attr.substring(1)).toString();
 	}
 
-	private static String toAttrName(Method method) {
+	protected static String toAttrName(Method method, int prefix) {
 		final String name = method.getName();
-		return name.toLowerCase().substring(3, name.length());
+		final String attrName = name.substring(prefix, name.length());
+		return new StringBuilder(attrName.length()).append(Character.toLowerCase(attrName.charAt(0)))
+		.append(attrName.substring(1)).toString();
+	}
+
+	protected static String toAttrName(Method method) {
+		return toAttrName(method, 3);
 	}
 }

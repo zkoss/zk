@@ -29,6 +29,7 @@ public class B01615ChildrenBindingInForm {
 	static public class MyData {
 		private List list;
 		
+		public MyData() {}
 		public MyData(List list) {
 			super();
 			this.list = list;

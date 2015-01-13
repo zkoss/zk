@@ -22,6 +22,7 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.sys.FormBinding;
 
 /**
  * A proxy object to implement <tt>Map</tt>
@@ -83,13 +84,13 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 		_dirty = false;
 	}
 
-	public boolean isDirtyForm() {
+	public boolean isFormDirty() {
 		if (_dirty) {
 			return true;
 		} else {
 			for (Map.Entry<K, V> me : _cache.entrySet()) {
 				if (me.getValue() instanceof FormProxyObject) {
-					if (((FormProxyObject) me.getValue()).isDirtyForm())
+					if (((FormProxyObject) me.getValue()).isFormDirty())
 						return true;
 				}
 			}
@@ -153,5 +154,9 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 
 	public Collection<V> values() {
 		return _cache.values();
+	}
+	
+	public void setFormOwner(Object owner, FormBinding binding) {
+		throw new IllegalAccessError("Not supported");
 	}
 }

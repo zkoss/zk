@@ -12,6 +12,7 @@ public class B00847FormInit {
 
 	public static class Attr {
 		private String color;
+		public Attr() {}
 		public Attr(String color) {
 			this.color = color;
 		}

@@ -50,7 +50,7 @@ public class B00848ValidationMessagesEmpty {
 	public Validator getValidator3(){
 		return new AbstractValidator() {
 			public void validate(ValidationContext ctx) {
-				String val1 = (String)((Form)ctx.getProperty().getValue()).getField("value1");
+				String val1 = (String)((B00848ValidationMessagesEmpty)ctx.getProperty().getValue()).getValue1();
 				
 				if(!"AbC".equals(val1)){
 					addInvalidMessages(ctx, new String[]{"value must equals 'AbC', but is "+val1,"extra validation info "+val1});

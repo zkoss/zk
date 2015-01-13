@@ -13,7 +13,7 @@ import org.zkoss.zk.ui.Component;
 
 public class F1 {
 
-	public class User{
+	public static class User{
 		private String account;
 		private String password;
 		private String password2;

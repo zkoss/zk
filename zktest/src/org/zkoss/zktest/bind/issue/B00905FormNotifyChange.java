@@ -22,8 +22,9 @@ public class B00905FormNotifyChange {
 		System.out.println("Save " + person.getName());
 	}
 	
-	public class Person {
+	public static class Person {
 		private String name;
+		public Person() {}
 		public Person(String name) {
 			this.name = name;
 		}

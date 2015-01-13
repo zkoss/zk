@@ -61,6 +61,7 @@ public class B02083FormRef {
 	public static class Product {
 		private Item item;
 
+		public Product() {}
 		public Product(Item item) {
 			this.item = item;
 		}

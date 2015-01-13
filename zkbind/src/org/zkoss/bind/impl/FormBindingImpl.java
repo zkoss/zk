@@ -12,11 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.proxy.FormProxyObject;
+import org.zkoss.bind.proxy.ProxyHelper;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
@@ -50,6 +51,17 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	
 	public Form getFormBean() {
 		return ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
+	}
+	
+	public <T> Form initFormBean(Object bean, Class<Object> class1) {
+		Form form = ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
+		if (form == null) {
+			form = (Form) ProxyHelper.createFormProxy(bean, class1);
+			((BinderCtrl)getBinder()).storeForm(getComponent(), _formId, form);
+		}
+		if (!(bean instanceof Form) && form instanceof FormProxyObject)
+			((FormProxyObject)form).setFormOwner(bean, this);
+		return form;
 	}
 
 	public String getFormId() {

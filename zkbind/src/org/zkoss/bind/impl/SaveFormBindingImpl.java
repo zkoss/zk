@@ -20,7 +20,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormCtrl;
+import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
@@ -56,6 +56,10 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		_validator = validatorExpr==null?null:parseValidator(eval,validatorExpr);
 		_validatorArgs = validatorArgs;
+		
+		// force to init Form for validation
+		getFormBean(BindContextUtil.newBindContext(binder, this, false, null, getComponent(), null));
+		
 	}
 	
 	public Map<String, Object> getValidatorArgs() {
@@ -92,11 +96,23 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 	}
 	
+	public Form getFormBean(BindContext ctx) {
+		Form form = getFormBean();
+		if (form == null) {
+			final Binder binder = getBinder();
+			final BindEvaluatorX eval = binder.getEvaluatorX();
+			final Component comp = getComponent();
+
+			final Object bean = eval.getValue(ctx, comp,
+					_accessInfo.getProperty());;
+			form = initFormBean(bean,  (Class<Object>)(bean == null ? eval.getType(ctx, comp, _accessInfo.getProperty()) : bean.getClass()));
+		}
+		return form;
+	}
 	public void save(BindContext ctx) {
 		final Binder binder = getBinder();
-		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();//ctx.getComponent();
-		final Form form = getFormBean();
+		final Form form = getFormBean(ctx);
 
 		
 		BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
@@ -106,14 +122,11 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 		
 		//update form field into backing bean
-		if(form instanceof FormProxyObject){
-			if (((FormProxyObject)form).isDirtyForm())
-				((FormProxyObject)form).submitToOrigin(ctx);
-		}
+		FormStatus formStatus = form.getFormStatus();
+		if (formStatus.isDirty())
+			formStatus.submit(ctx);
 
-		if (form instanceof FormCtrl) {
-			binder.notifyChange(((FormCtrl)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
-		}
+		binder.notifyChange(formStatus, ".");//notify change of fxStatus and fxStatus.*
 	}
 	
 	private String getConditionString(BindContext ctx){
@@ -135,7 +148,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();//ctx.getComponent();
-		final Form form = getFormBean();
+		final Form form = getFormBean(ctx);
 			
 		final ExpressionX expr = getBaseExpression(eval);
 		if (expr != null) {
@@ -153,11 +166,11 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();//ctx.getComponent();
-		final Form form = getFormBean();
+		final Form form = getFormBean(ctx);
 	
 		//remember base and form field
-		if(form instanceof FormCtrl){
-			for (String field : ((FormCtrl)form).getSaveFieldNames()) {
+		if(form instanceof Form){
+			for (String field : ((BinderCtrl)binder).getSaveFormFieldNames(form)) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final ValueReference valref = eval.getValueReference(ctx, comp, expr);

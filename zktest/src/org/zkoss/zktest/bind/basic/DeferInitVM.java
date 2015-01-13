@@ -3,7 +3,7 @@ package org.zkoss.zktest.bind.basic;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.DefaultBinder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.SimpleForm;
+import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -132,10 +132,13 @@ public class DeferInitVM implements Composer<Window>{
 			this.value1 = value1;
 			this.value2 = value2;
 			this.person = new Person(value3);
-			form = new SimpleForm(){
-				public void setField(String field, Object value) {
-					super.setField(field, value+":byForm");
+			form = new Form() {
+
+				public FormStatus getFormStatus() {
+					// TODO Auto-generated method stub
+					return null;
 				}
+				
 			};
 		}
 

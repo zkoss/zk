@@ -13,7 +13,7 @@ import org.zkoss.bind.annotation.BindingParam;
 public class F2{
 
 	
-	public class Order{
+	public static class Order{
 		private Integer quantityA = 1;
 		private Integer quantityB = 1;
 		private Integer subtotalA = 10;

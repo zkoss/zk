@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -104,9 +103,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 						if(_log.isDebugEnabled()){
 							_log.debug("add save-field '%s' to form '%s'", fieldName,formBean);
 						}
-						if(formBean instanceof FormCtrl ){
-							((FormCtrl)formBean).addSaveFieldName(fieldName);
-						}
+						((BinderCtrl)binder).addSaveFormFieldName(formBean, fieldName);
 						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding)binding, fieldName);
 					}
 				}

@@ -18,7 +18,6 @@ import java.util.List;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -64,17 +63,17 @@ public class B02078 {
 	}
 
 	@Command("addTag")
-	public void onAddTag(@BindingParam("form") SimpleForm form,
+	public void onAddTag(@BindingParam("form") Item form,
 			@BindingParam("tagValue") String tagValue) {
-		List<Tag> tags = (List<Tag>) form.getField("tags");
+		List<Tag> tags = form.getTags();
 		tags.add(new Tag(tagValue));
 		BindUtils.postNotifyChange(null, null, form, "tags");
 	}
 
 	@Command("removeTag")
-	public void onRemoveTag(@BindingParam("form") SimpleForm form,
+	public void onRemoveTag(@BindingParam("form") Item form,
 			@BindingParam("tag") Tag tag) {
-		List<Tag> tags = (List<Tag>) form.getField("tags");
+		List<Tag> tags = form.getTags();
 		tags.remove(tag);
 		BindUtils.postNotifyChange(null, null, form, "tags");
 	}

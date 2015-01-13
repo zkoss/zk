@@ -19,9 +19,9 @@ import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.proxy.ProxyHelper;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -31,12 +31,11 @@ import org.zkoss.zk.ui.Component;
 public class F0002 extends BindComposer {
 	private String value1;
 	private String value2;
-	private Form form1;
+	private F0002 form1;
 
 	public F0002() {	
 		value1 = "A";
 		value2 = "B";
-		form1 = new SimpleForm();
 	}
 
 	public String getValue1() {
@@ -60,7 +59,9 @@ public class F0002 extends BindComposer {
 	
 	
 	
-	public Form getForm1() {
+	public F0002 getForm1() {
+		if (form1 == null)
+			form1 = ProxyHelper.createFormProxy(this, this.getClass());
 		return form1;
 	}
 
@@ -75,6 +76,6 @@ public class F0002 extends BindComposer {
 	}
 	
 	public String getFormValue2(){
-		return (String)form1.getField("value2");
+		return form1.getValue2();
 	}
 }

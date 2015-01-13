@@ -46,9 +46,8 @@ public class B01347CheckboxCrash {
 		return result;
 	}
 	
-	public class Product {
+	public static class Product {
 		
-
 
 		private String name;
 		private boolean flag;

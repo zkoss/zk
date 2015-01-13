@@ -12,15 +12,14 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.lang.Objects;
 
 /**
@@ -147,14 +146,14 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 		return modified;
 	}
 
-	public boolean isDirtyForm() {
+	public boolean isFormDirty() {
 		if (_dirty)
 			return true;
 		Iterator<?> e = iterator();
 		while (e.hasNext()) {
 			Object o = e.next();
 			if (o instanceof FormProxyObject) {
-				if (((FormProxyObject) o).isDirtyForm())
+				if (((FormProxyObject) o).isFormDirty())
 					return true;
 			}
 		}
@@ -217,5 +216,9 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 				return true;
 		}
 		return false;
+	}
+	
+	public void setFormOwner(Object owner, FormBinding binding) {
+		throw new IllegalAccessError("Not supported");
 	}
 }

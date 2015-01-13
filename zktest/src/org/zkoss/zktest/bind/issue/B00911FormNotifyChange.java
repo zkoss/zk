@@ -24,15 +24,16 @@ public class B00911FormNotifyChange {
 	}
 	
 	@Command
-	public void notify1(@BindingParam("fx") Form form) {
-		form.setField("name", "Alex");
-		form.setField("type", "B");
+	public void notify1(@BindingParam("fx") Person form) {
+		form.setName("Alex");
+		form.setType("B");
 		BindUtils.postNotifyChange(null, null, form, "name");//notify name only
 	}
 	
-	public class Person {
+	public static class Person {
 		private String name;
 		private String type;
+		public Person() {}
 		public Person(String name,String type) {
 			this.name = name;
 			this.type = type;

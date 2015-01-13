@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindUtils;
-import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -73,17 +72,17 @@ public class FormWithMap implements Serializable{
 	}
 
 	@Command("addTag")
-	public void onAddTag(@BindingParam("form") SimpleForm form,
+	public void onAddTag(@BindingParam("form") Item form,
 			@BindingParam("tagValue") String tagValue) {
-		Map<String, Tag> tags = (Map<String, Tag>) form.getField("tags");
+		Map<String, Tag> tags = form.getTags();
 		tags.put(tagValue, new Tag(tagValue));
 		BindUtils.postNotifyChange(null, null, form, "tags");
 	}
 
 	@Command("removeTag")
-	public void onRemoveTag(@BindingParam("form") SimpleForm form,
+	public void onRemoveTag(@BindingParam("form") Item form,
 			@BindingParam("tag") Tag tag) {
-		Map<String, Tag> tags = (Map<String, Tag>) form.getField("tags");
+		Map<String, Tag> tags = form.getTags();
 		tags.remove(tag.getValue());
 		BindUtils.postNotifyChange(null, null, form, "tags");
 	}

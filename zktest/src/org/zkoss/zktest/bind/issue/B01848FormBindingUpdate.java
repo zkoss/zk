@@ -48,6 +48,8 @@ public class B01848FormBindingUpdate {
 
 	public static class Product {
 		private Item item;
+		
+		public Product() {}
 
 		public Product(Item item) {
 			this.item = item;

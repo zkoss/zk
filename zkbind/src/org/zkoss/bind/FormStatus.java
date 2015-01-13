@@ -24,4 +24,22 @@ public interface FormStatus {
 	 * @see Form#isDirty()
 	 */
 	public boolean isDirty();
+
+	/**
+	 * Resets the modified data.  
+	 * @since 8.0.0
+	 */
+	public void reset();
+
+	/**
+	 * Submits the modified date to the origin object.
+	 * @since 8.0.0
+	 */
+	public void submit(BindContext ctx);
+	
+	/**
+	 * Returns the origin object of the form object
+	 * @since 8.0.0
+	 */
+	public Object getOrigin();
 }

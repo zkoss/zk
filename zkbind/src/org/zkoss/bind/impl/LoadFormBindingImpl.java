@@ -19,7 +19,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormCtrl;
+import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
@@ -62,34 +62,31 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			throw new UiException(MiscUtil.formatLocationMessage("doesn't support to load a nested form , formId "+getFormId(),comp));
 		}
 		
-		final Form form = getFormBean();
+		final Form form = initFormBean(bean, (Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())));
 		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
-		if (form instanceof FormCtrl) {
-			FormCtrl fex = (FormCtrl)form;
+
 			//ZK-1005 ZK 6.0.1 validation fails on nested bean
 			//sets the last loaded bean express of the form
 			comp.setAttribute(BinderCtrl.LOAD_FORM_EXPRESSION, getPropertyString());
-			
-			if (!(bean instanceof Form))
-				fex.setOwner(bean, this);	
 			
 			if (activating)
 				return;// don't notify change if activating
 
 			// don't do resetDirty when in activating. Test case is in bind/form/FormWith*
-			fex.resetDirty(); //initial loading, mark form as clean
+			FormStatus formStatus = form.getFormStatus();
+			formStatus.reset(); //initial loading, mark form as clean
 						
 			binder.notifyChange(form, "."); // notify change of fx and fx.*
-			if (form instanceof FormCtrl) {
+
 				// notify change of fxStatus and fxStatus.*
-				binder.notifyChange(((FormCtrl) form).getStatus(), ".");
-			}
+			binder.notifyChange(formStatus, ".");
+
 			if (collector != null) {
 				collector.addInfo(new LoadInfo(LoadInfo.FORM_LOAD, comp,
 						getConditionString(ctx), getPropertyString(),
 						getFormId(), bean, getArgs(), null));
 			}
-		}
+
 	}
 	
 	private String getConditionString(BindContext ctx){

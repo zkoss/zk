@@ -18,7 +18,6 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
@@ -54,7 +53,6 @@ public class BindELResolver extends XelELResolver {
 	protected void init() {
 		_resolver = new CompositeELResolver();
 		_resolver.add(new PathELResolver()); //must be the first
-		_resolver.add(new FormELResolver());
 		_resolver.add(new ListModelELResolver());
 		_resolver.add(new TreeModelELResolver());
 		_resolver.add(new ValidationMessagesELResolver());
@@ -188,8 +186,8 @@ public class BindELResolver extends XelELResolver {
 								if(!script.equals(formFieldName)){
 									BindELContext.addNotifys(base, (String) formFieldName, value, bctx);
 								}
-								if (base instanceof FormCtrl)
-									BindELContext.addNotifys(((FormCtrl)base).getStatus(), ".", null, bctx);
+								if (base instanceof Form)
+									BindELContext.addNotifys(((Form)base).getFormStatus(), ".", null, bctx);
 							} else {
 								final Method m = (Method) ctx.getContext(Method.class);
 								//collect Property for @NotifyChange, kept in BindContext

@@ -106,8 +106,8 @@ public class AllFunctionVM {
 
 			
 			public void validate(ValidationContext ctx) {
-				Form fx = (Form) ctx.getProperty().getValue();
-				if (!"B".equals(fx.getField("name"))) {
+				Element fx = (Element) ctx.getProperty().getValue();
+				if (!"B".equals(fx.getName())) {
 					ctx.setInvalid();
 					Clients.showNotification("value must be 'B'");
 				}

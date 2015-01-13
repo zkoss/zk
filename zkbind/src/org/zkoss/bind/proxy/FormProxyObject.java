@@ -12,6 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.sys.FormBinding;
 
 /**
  * The interface implemented by proxy classes.
@@ -39,5 +40,11 @@ public interface FormProxyObject {
 	 * Returns whether the form proxy object is dirty or not, including all
 	 * of its attributes.
 	 */
-	public boolean isDirtyForm();
+	public boolean isFormDirty();
+	
+	/**
+	 * Sets the owner of this form with its binding.
+	 * @param owner the object associated with this form.
+	 */
+	public void setFormOwner(Object owner, FormBinding binding);
 }

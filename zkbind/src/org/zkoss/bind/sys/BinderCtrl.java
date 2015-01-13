@@ -200,4 +200,32 @@ public interface BinderCtrl {
 	 * @since 8.0.0
 	 */
 	public String getQueueScope();
+	
+	/**
+	 * Adds a field name for saving with the given Form.
+	 * @param fieldName field name to be saved into.
+	 * @since 8.0.0
+	 */
+	public void addSaveFormFieldName(Form form, String fieldName);
+	
+	/**
+	 * Adds all field names for saving with the given Form.
+	 * @param fieldName field name to be saved into.
+	 * @since 8.0.0
+	 */
+	public void addSaveFormFieldName(Form form, Set<String> fieldNames);
+
+	/**
+	 * Returns all field names for saving with the given Form.
+	 * @param fieldName field name to be saved into.
+	 * @since 8.0.0
+	 */
+	public Set<String> getSaveFormFieldNames(Form self);
+
+	/**
+	 * Remove all field names for saving with the given Form.
+	 * @param fieldName field name to be saved into.
+	 * @since 8.0.0
+	 */
+	public Set<String> removeSaveFormFieldNames(Form self);
 }

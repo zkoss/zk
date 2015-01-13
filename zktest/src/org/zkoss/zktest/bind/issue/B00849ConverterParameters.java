@@ -31,7 +31,7 @@ public class B00849ConverterParameters {
 		Selectors.wireComponents(component, this, false);
 	}
 	
-	public class Order {
+	public static class Order {
 		private String name = "default name";
 
 		public String getName() {

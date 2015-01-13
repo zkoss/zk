@@ -12,16 +12,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormCtrl;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
@@ -29,8 +24,6 @@ import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
-import org.zkoss.bind.xel.zel.BindELContext;
-import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -57,7 +50,7 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		if (!(value instanceof Form)) {
-			((FormProxy)getFormBean()).setOwner(value, this);
+			initFormBean(value, (Class<Object>) (value != null ? value.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())));
 			
 			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){
