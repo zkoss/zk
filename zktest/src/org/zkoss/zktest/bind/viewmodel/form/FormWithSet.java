@@ -16,8 +16,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.zkoss.bind.BindUtils;
@@ -28,6 +30,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zktest.bind.viewmodel.form.FormWithList.Item;
 import org.zkoss.zktest.bind.viewmodel.form.FormWithMap.Tag;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
@@ -46,10 +49,16 @@ public class FormWithSet implements Serializable{
 			}};
 
 	private Item currentItem;
+	
+	private Set<Tag> bunchTags;
 
 	@Init
 	public void init() {
 		loadCurrentItem();
+		bunchTags = new LinkedHashSet<Tag>(3);
+		bunchTags.add(new Tag("addAll1"));
+		bunchTags.add(new Tag("addAll2"));
+		bunchTags.add(new Tag("addAll3"));
 	}
 
 	@Command("save")
@@ -83,6 +92,20 @@ public class FormWithSet implements Serializable{
 			@BindingParam("tag") Tag tag) {
 		Set<Tag> tags = (Set<Tag>) form.getTags();
 		tags.remove(tag);
+		BindUtils.postNotifyChange(null, null, form, "tags");
+	}
+	
+	@Command("addAll")
+	public void onAddAll(@BindingParam("form") Item form) {
+		Set<Tag> tags = form.getTags();
+		tags.addAll(bunchTags);
+		BindUtils.postNotifyChange(null, null, form, "tags");
+	}
+	
+	@Command("retainAll")
+	public void onRetainAll(@BindingParam("form") Item form) {
+		Set<Tag> tags = form.getTags();
+		tags.retainAll(bunchTags);
 		BindUtils.postNotifyChange(null, null, form, "tags");
 	}
 

@@ -30,36 +30,110 @@ public class FormWithSetTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		ComponentAgent window = desktop.query("#win");
 		ComponentAgent viewGrid = window.query("#view");
-		checkContent(viewGrid, "screw", "tool", "[metal, construction, small]");
-		ComponentAgent listbox = window.query("listbox");
-		listbox.getFirstChild().query("textbox").type("Name");
-		listbox.getChild(1).query("textbox").type("MainTag");
-		listbox.getLastChild().query("textbox").type("Tags");
-		ComponentAgent newTagValue = listbox.query("#newTagValue");
-		newTagValue.type("NewItem");
 		ComponentAgent formGrid = window.query("#form");
+		ComponentAgent listbox = window.query("listbox");
+		ComponentAgent newTagValue = listbox.query("#newTagValue");
+		ComponentAgent addNewTagBtn = newTagValue.getNextSibling();
 		ComponentAgent editRow = formGrid.getFirstChild().getFirstChild();
+		//buttons
+		ComponentAgent addAll = window.query("#addAll");
+		ComponentAgent retainAll = window.query("#retainAll");
+		ComponentAgent serialize = window.query("#serialize");
+		ComponentAgent save = window.query("#save");
+		ComponentAgent cancel = window.query("#cancel");
+		
+		//init state
+		checkContent(viewGrid, "screw", "tool", "[metal, construction, small]");
+		
+		//click cancel to discard all changes
 		editRow.getLastChild().type("Name");
 		editRow = editRow.getNextSibling();
 		editRow.getLastChild().type("MainTag");
-		newTagValue.getNextSibling().click();
-		window.getLastChild().click();
-		checkContent(viewGrid, "screw", "tool", "[metal, construction, small]");
 		listbox.getFirstChild().query("textbox").type("Name");
 		listbox.getChild(1).query("textbox").type("MainTag");
-		listbox.getLastChild().query("textbox").type("Tags");
+		listbox.getLastChild().query("textbox").getNextSibling().click();
 		newTagValue.type("NewItem");
-		newTagValue.getNextSibling().click();
+		addNewTagBtn.click();
+		cancel.click();
+		checkContent(viewGrid, "screw", "tool", "[metal, construction, small]");
+		
+		//add tag and save
 		editRow = formGrid.getFirstChild().getFirstChild();
 		editRow.getLastChild().type("Name");
 		editRow = editRow.getNextSibling();
 		editRow.getLastChild().type("MainTag");
-		ComponentAgent saveButton = window.getLastChild().getPreviousSibling();
-		saveButton.getPreviousSibling().click(); // do serialization
+		listbox.getFirstChild().query("textbox").type("Name");
+		listbox.getChild(1).query("textbox").type("MainTag");
+		listbox.getLastChild().query("textbox").type("Tags");
+		newTagValue.type("NewItem");
+		addNewTagBtn.click();
+		save.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, NewItem]");
 		
-		// need to use the new component reference
-		desktop.query("#win").getLastChild().getPreviousSibling().click();
-		checkContent(desktop.query("#win #view"), "Name", "MainTag", "[Name, MainTag, Tags, NewItem]");
+		//remove tags and cancel
+		listbox.getLastChild().query("textbox").getNextSibling().click();;
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, NewItem]");
+		cancel.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, NewItem]");
+		
+		//remove tags and save
+		listbox.getLastChild().query("textbox").getNextSibling().click();;
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, NewItem]");
+		save.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags]");
+		
+		//add multiple tags and save
+		newTagValue.type("big");
+		addNewTagBtn.click();
+		newTagValue.type("middle");
+		addNewTagBtn.click();
+		newTagValue.type("big");
+		addNewTagBtn.click();
+		save.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, big, middle]");
+		
+		//remove tags to ensure the order
+		listbox.getChild(3).query("textbox").getNextSibling().click();
+		save.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, middle]");
+		
+		//click addAll
+		addAll.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, middle]");
+		save.click();
+		checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, middle, addAll1, addAll2, addAll3]");
+		
+		//click retainAll
+		retainAll.click();
+		assertEquals(3, listbox.getChildren().size());
+		save.click();
+		checkContent(viewGrid, "Name", "MainTag", "[addAll1, addAll2, addAll3]");
+		
+		// do serialize and deserialize, need to use the new component reference
+		serialize.click(); // do serialization
+		window = desktop.query("#win");
+		viewGrid = window.query("#view");
+		formGrid = window.query("#form");
+		listbox = window.query("listbox");
+		newTagValue = listbox.query("#newTagValue");
+		addNewTagBtn = newTagValue.getNextSibling();
+		editRow = formGrid.getFirstChild().getFirstChild();
+		save = window.query("#save");
+		checkContent(viewGrid, "Name", "MainTag", "[addAll1, addAll2, addAll3]");
+		//checkContent(viewGrid, "Name", "MainTag", "[Name, MainTag, Tags, middle, addAll1, addAll2, addAll3]");
+		
+		editRow = formGrid.getFirstChild().getFirstChild();
+		editRow.getLastChild().type("chunfu");
+		editRow = editRow.getNextSibling();
+		editRow.getLastChild().type("potix");
+		listbox.getFirstChild().query("textbox").type("first");
+		listbox.getChild(1).query("textbox").type("second");
+		listbox.getLastChild().query("textbox").type("third");
+		newTagValue.type("NewItem");
+		addNewTagBtn.click();
+		save.click();
+		checkContent(viewGrid, "chunfu", "potix", "[first, second, third, NewItem]");
+		//checkContent(viewGrid, "chunfu", "potix", "[first, second, Tags, middle, addAll1, addAll2, third, NewItem]");
 	}
 	
 	private void checkContent(ComponentAgent viewGrid, String val0, String val1, String val2) {

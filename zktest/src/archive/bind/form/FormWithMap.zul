@@ -64,13 +64,19 @@
 					</hlayout>
 				</cell>
 			</row>
+			<row>
+				<cell>
+					<button id="addAll" onClick="@command('addAll', form=fx)">addAll</button>
+					<button id="removeAll" onClick="@command('removeAll', form=fx)">removeAll</button>
+				</cell>
+			</row>
 		</rows>
 	</grid>
 	
 	<hlayout>message:<label id="msg"/></hlayout>
 	<button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win, msg)' />
-	<button label="save to DB" onClick="@command('save')" />
-	<button label="cancel" onClick="@command('cancel')" />
+	<button id="save" label="save to DB" onClick="@command('save')" />
+	<button id="cancel" label="cancel" onClick="@command('cancel')" />
 </window>
 </div>
 </zk>

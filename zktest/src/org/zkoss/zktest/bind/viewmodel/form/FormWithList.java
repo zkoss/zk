@@ -46,10 +46,16 @@ public class FormWithList implements Serializable{
 			"metal", "construction", "small"));
 
 	private Item currentItem;
+	
+	private List<Tag> bunchTags;
 
 	@Init
 	public void init() {
 		loadCurrentItem();
+		bunchTags = new ArrayList<Tag>(3);
+		bunchTags.add(new Tag("addAll1"));
+		bunchTags.add(new Tag("addAll2"));
+		bunchTags.add(new Tag("addAll3"));
 	}
 
 	@Command("save")
@@ -83,6 +89,20 @@ public class FormWithList implements Serializable{
 			@BindingParam("tag") Tag tag) {
 		List<Tag> tags = form.getTags();
 		tags.remove(tag);
+		BindUtils.postNotifyChange(null, null, form, "tags");
+	}
+	
+	@Command("addAll")
+	public void onAddAll(@BindingParam("form") Item form) {
+		List<Tag> tags = form.getTags();
+		tags.addAll(bunchTags);
+		BindUtils.postNotifyChange(null, null, form, "tags");
+	}
+	
+	@Command("retainAll")
+	public void onRetainAll(@BindingParam("form") Item form) {
+		List<Tag> tags = form.getTags();
+		tags.retainAll(bunchTags);
 		BindUtils.postNotifyChange(null, null, form, "tags");
 	}
 
@@ -147,7 +167,8 @@ public class FormWithList implements Serializable{
 		parent.insertBefore(newwin, ref);
 		//for load component back.
 		((ComponentCtrl)newwin).sessionDidActivate(newwin.getPage());//simulate
-		msg.setValue("done deserialize: "+_bytes.length);	
+		
+		((Label)newwin.getFellow("msg")).setValue("done deserialize: "+_bytes.length);	
 	}
 
 	public static class Item  implements Serializable {
