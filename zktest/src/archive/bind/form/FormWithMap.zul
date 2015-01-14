@@ -59,7 +59,7 @@
 						</template>
 					</listbox>
 					<hlayout>
-						new tag <textbox id="newTagValue" value="@load(fx.newTagValue)" onOK="@command('addTag', form=fx, tagValue=self.value)"/>
+						new tag <textbox id="newTagValue" value="@load(fx.resetEmptyStringValue, after='*')" onOK="@command('addTag', form=fx, tagValue=self.value)"/>
 						<a iconSclass="z-icon-plus-circle icon-green" forward="onClick=newTagValue.onOK"/>
 					</hlayout>
 				</cell>

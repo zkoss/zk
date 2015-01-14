@@ -74,7 +74,7 @@ public class ProxyHelper {
 		ProxyFactory factory = new ProxyFactory();
 		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
 		factory.setSuperclass(type);
-		factory.setInterfaces(new Class[]{FormProxyObject.class, Form.class});
+		factory.setInterfaces(new Class[]{FormProxyObject.class, Form.class, FormFieldCleaner.class});
 		Class<?> proxyClass = factory.createClass();
 		Object p1 = null;
 		try {

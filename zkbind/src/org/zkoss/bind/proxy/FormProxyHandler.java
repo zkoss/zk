@@ -13,6 +13,8 @@ package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
@@ -20,6 +22,7 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.UiException;
 
 import javassist.util.proxy.MethodFilter;
@@ -49,7 +52,19 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 		}
 
 	};
-
+	private static final Map<String, Object> _defaultValues = new HashMap<String, Object>(10);
+	static {
+		_defaultValues.put("getResetEmptyStringValue", Strings.EMPTY);
+		_defaultValues.put("getResetNullValue", null);
+		_defaultValues.put("getResetByteValue", (byte)0);
+		_defaultValues.put("getResetShortValue", (short)0);
+		_defaultValues.put("getResetIntValue", (int)0);
+		_defaultValues.put("getResetLongValue", 0L);
+		_defaultValues.put("getResetFloatValue", 0.0f);
+		_defaultValues.put("getResetDoubleValue", 0.0d);
+		_defaultValues.put("getResetBooleanValue", false);
+		_defaultValues.put("getResetCharValue", '\u0000');
+	}
 	private FormBinding _binding;
 	
 	FormStatusImpl _status;
@@ -87,13 +102,14 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 			final String mname = method.getName();
 			Class<?> declaringClass = method.getDeclaringClass();
 			
-			if (declaringClass.equals(Form.class) ||
-					declaringClass.equals(FormProxyObject.class)) {
+			if (declaringClass.equals(FormFieldCleaner.class)) {
+				return _defaultValues.get(mname);
+			} else {
 				if ("setFormOwner".equals(mname)) {
 					if (_binding != null) {
 						BinderCtrl binder = (BinderCtrl) _binding.getBinder();
 						Set<String> saveFormFieldNames = binder.removeSaveFormFieldNames((Form)self);
-
+	
 						_origin = (T) args[0];
 						_binding = (FormBinding) args[1];
 						
@@ -108,9 +124,9 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 					_status.setOwner((FormProxyObject)self);
 					return _status;
 				}
+				
+				return super.invoke(self, method, proceed, args);
 			}
-			return super.invoke(self, method, proceed, args);
-			
 		} catch (Exception e) {
 			throw new UiException(e);
 		}
