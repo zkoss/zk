@@ -52,7 +52,7 @@
 								<listcell>
 									<hlayout>
 										<textbox value="@bind(each.value.value)" />
-										<a iconSclass="z-icon-minus-circle icon-red" onClick="@command('removeTag', form=fx, tag=each)"/>
+										<a iconSclass="z-icon-minus-circle icon-red" onClick="@command('removeTag', form=fx, tag=each.value)"/>
 									</hlayout>
 								</listcell>
 							</listitem>

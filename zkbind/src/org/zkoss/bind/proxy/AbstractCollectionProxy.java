@@ -122,6 +122,8 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 		    if (add(e.next()))
 			modified = true;
 		}
+		if (modified)
+			_dirty = true;
 		return modified;
 	}
 
@@ -137,12 +139,15 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	public boolean removeAll(Collection<?> c) {
 		boolean modified = false;
 		Iterator<?> e = iterator();
+		c = ProxyHelper.createProxyIfAny(c); // use a proxy object to compare
 		while (e.hasNext()) {
 			if (c.contains(e.next())) {
 				e.remove();
 				modified = true;
 			}
 		}
+		if (modified)
+			_dirty = true;
 		return modified;
 	}
 
@@ -163,12 +168,15 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	public boolean retainAll(Collection<?> c) {
 		boolean modified = false;
 		Iterator<E> e = iterator();
+		c = ProxyHelper.createProxyIfAny(c); // use a proxy object to compare
 		while (e.hasNext()) {
 			if (!c.contains(e.next())) {
 				e.remove();
 				modified = true;
 			}
 		}
+		if (modified)
+			_dirty = true;
 		return modified;
 	}
 	
