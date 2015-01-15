@@ -20,14 +20,12 @@ package org.zkoss.zel.impl.parser;
 
 import java.math.BigInteger;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstInteger.java 1003861 2010-10-02 18:53:30Z markt $
  */
 public final class AstInteger extends SimpleNode {
     public AstInteger(int id) {

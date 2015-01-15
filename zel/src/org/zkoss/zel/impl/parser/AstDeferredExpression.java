@@ -18,34 +18,36 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstDeferredExpression.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstDeferredExpression extends SimpleNode {
     public AstDeferredExpression(int id) {
         super(id);
     }
+
     
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         return this.children[0].getType(ctx);
     }
+
     
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         return this.children[0].getValue(ctx);
     }
+
     
     public boolean isReadOnly(EvaluationContext ctx)
             throws ELException {
         return this.children[0].isReadOnly(ctx);
     }
+
     
     public void setValue(EvaluationContext ctx, Object value)
             throws ELException {

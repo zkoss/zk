@@ -20,14 +20,12 @@ package org.zkoss.zel.impl.parser;
 
 import java.math.BigDecimal;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstFloatingPoint.java 1003861 2010-10-02 18:53:30Z markt $
  */
 public final class AstFloatingPoint extends SimpleNode {
     public AstFloatingPoint(int id) {
@@ -46,11 +44,13 @@ public final class AstFloatingPoint extends SimpleNode {
         }
         return this.number;
     }
+
     
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         return this.getFloatingPoint();
     }
+
     
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {

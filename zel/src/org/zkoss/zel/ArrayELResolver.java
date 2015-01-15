@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,6 @@ package org.zkoss.zel;
 
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class ArrayELResolver extends ELResolver {
@@ -33,15 +32,35 @@ public class ArrayELResolver extends ELResolver {
     public ArrayELResolver(boolean readOnly) {
         this.readOnly = readOnly;
     }
+
     
-    public Object getValue(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public Class<?> getType(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base != null && base.getClass().isArray()) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
+            try {
+                int idx = coerce(property);
+                checkBounds(base, idx);
+            } catch (IllegalArgumentException e) {
+                // ignore
+            }
+            return base.getClass().getComponentType();
+        }
+
+        return null;
+    }
+
+    
+    public Object getValue(ELContext context, Object base, Object property) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        if (base != null && base.getClass().isArray()) {
+            context.setPropertyResolved(base, property);
             int idx = coerce(property);
             if (idx < 0 || idx >= Array.getLength(base)) {
                 return null;
@@ -51,86 +70,58 @@ public class ArrayELResolver extends ELResolver {
 
         return null;
     }
-    
-    public Class<?> getType(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
-        if (base != null && base.getClass().isArray()) {
-            context.setPropertyResolved(true);
-            int idx = coerce(property);
-            checkBounds(base, idx);
-            return base.getClass().getComponentType();
-        }
-
-        return null;
-    }
     
     public void setValue(ELContext context, Object base, Object property,
-            Object value) throws NullPointerException,
-            PropertyNotFoundException, PropertyNotWritableException,
-            ELException {
+            Object value) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base != null && base.getClass().isArray()) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
 
             if (this.readOnly) {
-                throw new PropertyNotWritableException(message(context,
-                        "resolverNotWriteable", new Object[] { base.getClass()
-                                .getName() }));
+                throw new PropertyNotWritableException(Util.message(context,
+                        "resolverNotWriteable", base.getClass().getName()));
             }
 
             int idx = coerce(property);
             checkBounds(base, idx);
-            if (value != null &&
-                    !base.getClass().getComponentType().isAssignableFrom(
-                            value.getClass())) {
-                throw new ClassCastException(message(context,
-                        "objectNotAssignable",
-                        new Object[] {value.getClass().getName(),
-                        base.getClass().getComponentType().getName()}));
+            if (value != null && !Util.isAssignableFrom(value.getClass(),
+                    base.getClass().getComponentType())) {
+                throw new ClassCastException(Util.message(context,
+                        "objectNotAssignable", value.getClass().getName(),
+                        base.getClass().getComponentType().getName()));
             }
             Array.set(base, idx, value);
         }
     }
+
     
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base != null && base.getClass().isArray()) {
-            context.setPropertyResolved(true);
-            int idx = coerce(property);
-            checkBounds(base, idx);
+            context.setPropertyResolved(base, property);
+            try {
+                int idx = coerce(property);
+                checkBounds(base, idx);
+            } catch (IllegalArgumentException e) {
+                // ignore
+            }
         }
 
         return this.readOnly;
     }
+
     
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        if (base != null && base.getClass().isArray()) {
-            FeatureDescriptor[] descs = new FeatureDescriptor[Array.getLength(base)];
-            for (int i = 0; i < descs.length; i++) {
-                descs[i] = new FeatureDescriptor();
-                descs[i].setDisplayName("["+i+"]");
-                descs[i].setExpert(false);
-                descs[i].setHidden(false);
-                descs[i].setName(""+i);
-                descs[i].setPreferred(true);
-                descs[i].setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.FALSE);
-                descs[i].setValue(TYPE, Integer.class);
-            }
-            return Arrays.asList(descs).iterator();
-        }
         return null;
     }
+
     
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null && base.getClass().isArray()) {

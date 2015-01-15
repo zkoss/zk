@@ -18,30 +18,30 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstChoice.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstChoice extends SimpleNode {
     public AstChoice(int id) {
         super(id);
     }
+
     
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         Object val = this.getValue(ctx);
         return (val != null) ? val.getClass() : null;
     }
+
     
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         Object obj0 = this.children[0].getValue(ctx);
-        Boolean b0 = coerceToBoolean(obj0);
+        Boolean b0 = coerceToBoolean(obj0, true);
         return this.children[((b0.booleanValue() ? 1 : 2))].getValue(ctx);
     }
 }

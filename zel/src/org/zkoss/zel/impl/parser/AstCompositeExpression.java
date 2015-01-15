@@ -18,7 +18,6 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.ELSupport;
 import org.zkoss.zel.impl.lang.EvaluationContext;
@@ -26,18 +25,19 @@ import org.zkoss.zel.impl.lang.EvaluationContext;
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstCompositeExpression.java 1024224 2010-10-19 13:03:01Z markt $
  */
 public final class AstCompositeExpression extends SimpleNode {
 
     public AstCompositeExpression(int id) {
         super(id);
     }
+
     
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         return String.class;
     }
+
     
     public Object getValue(EvaluationContext ctx)
             throws ELException {

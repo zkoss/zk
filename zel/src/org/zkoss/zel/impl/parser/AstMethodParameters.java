@@ -22,27 +22,32 @@ import java.util.ArrayList;
 
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
-/**
- * $Id: AstMethodParameters.java 899450 2010-01-14 22:41:41Z markt $
- */
 public final class AstMethodParameters extends SimpleNode {
     public AstMethodParameters(int id) {
         super(id);
     }
 
     public Object[] getParameters(EvaluationContext ctx) {
-        ArrayList<Object> params = new ArrayList<Object>();
+        ArrayList<Object> params = new ArrayList<>();
         for (int i = 0; i < this.jjtGetNumChildren(); i++) {
             params.add(this.jjtGetChild(i).getValue(ctx));
         }
         return params.toArray(new Object[params.size()]);
     }
+
     
-    public Class<?>[] getParameterTypes(EvaluationContext ctx) {
-        ArrayList<Class<?>> paramTypes = new ArrayList<Class<?>>();
-        for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-            paramTypes.add(this.jjtGetChild(i).getType(ctx));
+    public String toString() {
+        // Purely for debug purposes. May not be complete or correct. Certainly
+        // is not efficient. Be sure not to call this from 'real' code.
+        StringBuilder result = new StringBuilder();
+        result.append('(');
+        if (children != null) {
+            for (Node n : children) {
+                result.append(n.toString());
+                result.append(',');
+            }
         }
-        return paramTypes.toArray(new Class<?>[paramTypes.size()]);
+        result.append(')');
+        return result.toString();
     }
 }

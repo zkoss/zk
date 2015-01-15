@@ -21,16 +21,18 @@ package org.zkoss.zel.impl.parser;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-
+import org.zkoss.zel.ELClass;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.FunctionMapper;
+import org.zkoss.zel.LambdaExpression;
+import org.zkoss.zel.ValueExpression;
+import org.zkoss.zel.VariableMapper;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zel.impl.util.MessageFactory;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstFunction.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstFunction extends SimpleNode {
 
@@ -57,12 +59,13 @@ public final class AstFunction extends SimpleNode {
     public String getPrefix() {
         return prefix;
     }
+
     
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
-        
+
         FunctionMapper fnMapper = ctx.getFunctionMapper();
-        
+
         // quickly validate again for this request
         if (fnMapper == null) {
             throw new ELException(MessageFactory.get("error.fnMapper.null"));
@@ -75,32 +78,110 @@ public final class AstFunction extends SimpleNode {
         return m.getReturnType();
     }
 
-   
+    
     public Object getValue(EvaluationContext ctx)
             throws ELException {
-        
+
         FunctionMapper fnMapper = ctx.getFunctionMapper();
-        
+
         // quickly validate again for this request
         if (fnMapper == null) {
             throw new ELException(MessageFactory.get("error.fnMapper.null"));
         }
         Method m = fnMapper.resolveFunction(this.prefix, this.localName);
+
+        if (m == null && this.prefix.length() == 0) {
+            // TODO: Do we need to think about precedence of the various ways
+            //       a lambda expression may be obtained from something that
+            //       the parser thinks is a function?
+            Object obj = null;
+            if (ctx.isLambdaArgument(this.localName)) {
+                obj = ctx.getLambdaArgument(this.localName);
+            }
+            if (obj == null) {
+                VariableMapper varMapper = ctx.getVariableMapper();
+                if (varMapper != null) {
+                    obj = varMapper.resolveVariable(this.localName);
+                    if (obj instanceof ValueExpression) {
+                        // See if this returns a LambdaEXpression
+                        obj = ((ValueExpression) obj).getValue(ctx);
+                    }
+                }
+            }
+            if (obj == null) {
+                obj = ctx.getELResolver().getValue(ctx, null, this.localName);
+            }
+            if (obj instanceof LambdaExpression) {
+                // Build arguments
+                int i = 0;
+                while (obj instanceof LambdaExpression &&
+                        i < jjtGetNumChildren()) {
+                    Node args = jjtGetChild(i);
+                    obj = ((LambdaExpression) obj).invoke(
+                            ((AstMethodParameters) args).getParameters(ctx));
+                    i++;
+                }
+                if (i < jjtGetNumChildren()) {
+                    // Haven't consumed all the sets of parameters therefore
+                    // there were too many sets of parameters
+                    throw new ELException(MessageFactory.get(
+                            "error.lambda.tooManyMethodParameterSets"));
+                }
+                return obj;
+            }
+
+            // Call to a constructor or a static method
+            obj = ctx.getImportHandler().resolveClass(this.localName);
+            if (obj != null) {
+                return ctx.getELResolver().invoke(ctx, new ELClass((Class<?>) obj), "<init>", null,
+                        ((AstMethodParameters) this.children[0]).getParameters(ctx));
+            }
+            obj = ctx.getImportHandler().resolveStatic(this.localName);
+            if (obj != null) {
+                return ctx.getELResolver().invoke(ctx, new ELClass((Class<?>) obj), this.localName,
+                        null, ((AstMethodParameters) this.children[0]).getParameters(ctx));
+            }
+        }
+
         if (m == null) {
             throw new ELException(MessageFactory.get("error.fnMapper.method",
                     this.getOutputName()));
         }
 
+        // Not a lambda expression so must be a function. Check there is just a
+        // single set of method parameters
+        if (this.jjtGetNumChildren() != 1) {
+            throw new ELException(MessageFactory.get(
+                    "error.funciton.tooManyMethodParameterSets",
+                    getOutputName()));
+        }
+
+        Node parameters = jjtGetChild(0);
         Class<?>[] paramTypes = m.getParameterTypes();
         Object[] params = null;
         Object result = null;
-        int numParams = this.jjtGetNumChildren();
-        if (numParams > 0) {
-            params = new Object[numParams];
+        int inputParameterCount = parameters.jjtGetNumChildren();
+        int methodParameterCount = paramTypes.length;
+        if (inputParameterCount > 0) {
+            params = new Object[methodParameterCount];
             try {
-                for (int i = 0; i < numParams; i++) {
-                    params[i] = this.children[i].getValue(ctx);
-                    params[i] = coerceToType(params[i], paramTypes[i]);
+                for (int i = 0; i < methodParameterCount; i++) {
+                    if (m.isVarArgs() && i == methodParameterCount - 1) {
+                        if (inputParameterCount < methodParameterCount) {
+                            params[i] = null;
+                        } else {
+                            Object[] varargs =
+                                    new Object[inputParameterCount - methodParameterCount + 1];
+                            Class<?> target = paramTypes[i].getComponentType();
+                            for (int j = i; j < inputParameterCount; j++) {
+                                varargs[j-i] = parameters.jjtGetChild(j).getValue(ctx);
+                                varargs[j-i] = coerceToType(varargs[j-i], target);
+                            }
+                        }
+                    } else {
+                        params[i] = parameters.jjtGetChild(i).getValue(ctx);
+                        params[i] = coerceToType(params[i], paramTypes[i]);
+                    }
                 }
             } catch (ELException ele) {
                 throw new ELException(MessageFactory.get("error.function", this
@@ -113,8 +194,15 @@ public final class AstFunction extends SimpleNode {
             throw new ELException(MessageFactory.get("error.function", this
                     .getOutputName()), iae);
         } catch (InvocationTargetException ite) {
+            Throwable cause = ite.getCause();
+            if (cause instanceof ThreadDeath) {
+                throw (ThreadDeath) cause;
+            }
+            if (cause instanceof VirtualMachineError) {
+                throw (VirtualMachineError) cause;
+            }
             throw new ELException(MessageFactory.get("error.function", this
-                    .getOutputName()), ite.getCause());
+                    .getOutputName()), cause);
         }
         return result;
     }
@@ -126,7 +214,8 @@ public final class AstFunction extends SimpleNode {
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
-    
+
+
     
     public String toString()
     {

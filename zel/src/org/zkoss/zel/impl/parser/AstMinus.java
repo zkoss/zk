@@ -18,7 +18,6 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.ELArithmetic;
 import org.zkoss.zel.impl.lang.EvaluationContext;
@@ -26,7 +25,6 @@ import org.zkoss.zel.impl.lang.EvaluationContext;
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstMinus.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstMinus extends ArithmeticNode {
     public AstMinus(int id) {

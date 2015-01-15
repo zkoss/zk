@@ -26,15 +26,16 @@ import org.zkoss.zel.impl.util.MessageFactory;
 /**
  * A helper class of Arithmetic defined by the EL Specification
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: ELArithmetic.java 1099789 2011-05-05 13:39:09Z markt $
  */
 public abstract class ELArithmetic {
 
     public static final class BigDecimalDelegate extends ELArithmetic {
-       
+
+        
         protected Number add(Number num0, Number num1) {
             return ((BigDecimal) num0).add((BigDecimal) num1);
         }
+
         
         protected Number coerce(Number num) {
             if (num instanceof BigDecimal)
@@ -43,27 +44,33 @@ public abstract class ELArithmetic {
                 return new BigDecimal((BigInteger) num);
             return new BigDecimal(num.doubleValue());
         }
+
         
         protected Number coerce(String str) {
             return new BigDecimal(str);
         }
+
         
         protected Number divide(Number num0, Number num1) {
             return ((BigDecimal) num0).divide((BigDecimal) num1,
                     BigDecimal.ROUND_HALF_UP);
         }
+
         
         protected Number subtract(Number num0, Number num1) {
             return ((BigDecimal) num0).subtract((BigDecimal) num1);
         }
+
         
         protected Number mod(Number num0, Number num1) {
             return new Double(num0.doubleValue() % num1.doubleValue());
         }
+
         
         protected Number multiply(Number num0, Number num1) {
             return ((BigDecimal) num0).multiply((BigDecimal) num1);
         }
+
         
         public boolean matches(Object obj0, Object obj1) {
             return (obj0 instanceof BigDecimal || obj1 instanceof BigDecimal);
@@ -71,36 +78,44 @@ public abstract class ELArithmetic {
     }
 
     public static final class BigIntegerDelegate extends ELArithmetic {
+
         
         protected Number add(Number num0, Number num1) {
             return ((BigInteger) num0).add((BigInteger) num1);
         }
+
         
         protected Number coerce(Number num) {
             if (num instanceof BigInteger)
                 return num;
             return new BigInteger(num.toString());
         }
+
         
         protected Number coerce(String str) {
             return new BigInteger(str);
         }
+
         
         protected Number divide(Number num0, Number num1) {
             return (new BigDecimal((BigInteger) num0)).divide(new BigDecimal((BigInteger) num1), BigDecimal.ROUND_HALF_UP);
         }
+
         
         protected Number multiply(Number num0, Number num1) {
             return ((BigInteger) num0).multiply((BigInteger) num1);
         }
+
         
         protected Number mod(Number num0, Number num1) {
             return ((BigInteger) num0).mod((BigInteger) num1);
         }
+
         
         protected Number subtract(Number num0, Number num1) {
             return ((BigInteger) num0).subtract((BigInteger) num1);
         }
+
         
         public boolean matches(Object obj0, Object obj1) {
             return (obj0 instanceof BigInteger || obj1 instanceof BigInteger);
@@ -108,6 +123,7 @@ public abstract class ELArithmetic {
     }
 
     public static final class DoubleDelegate extends ELArithmetic {
+
         
         protected Number add(Number num0, Number num1) {
             // could only be one of these
@@ -118,6 +134,7 @@ public abstract class ELArithmetic {
             }
             return new Double(num0.doubleValue() + num1.doubleValue());
         }
+
         
         protected Number coerce(Number num) {
             if (num instanceof Double)
@@ -126,18 +143,22 @@ public abstract class ELArithmetic {
                 return new BigDecimal((BigInteger) num);
             return new Double(num.doubleValue());
         }
+
         
         protected Number coerce(String str) {
             return new Double(str);
         }
+
         
         protected Number divide(Number num0, Number num1) {
             return new Double(num0.doubleValue() / num1.doubleValue());
         }
+
         
         protected Number mod(Number num0, Number num1) {
             return new Double(num0.doubleValue() % num1.doubleValue());
         }
+
         
         protected Number subtract(Number num0, Number num1) {
             // could only be one of these
@@ -148,6 +169,7 @@ public abstract class ELArithmetic {
             }
             return new Double(num0.doubleValue() - num1.doubleValue());
         }
+
         
         protected Number multiply(Number num0, Number num1) {
             // could only be one of these
@@ -158,6 +180,7 @@ public abstract class ELArithmetic {
             }
             return new Double(num0.doubleValue() * num1.doubleValue());
         }
+
         
         public boolean matches(Object obj0, Object obj1) {
             return (obj0 instanceof Double
@@ -171,36 +194,44 @@ public abstract class ELArithmetic {
     }
 
     public static final class LongDelegate extends ELArithmetic {
+
         
         protected Number add(Number num0, Number num1) {
             return Long.valueOf(num0.longValue() + num1.longValue());
         }
+
         
         protected Number coerce(Number num) {
             if (num instanceof Long)
                 return num;
             return Long.valueOf(num.longValue());
         }
+
         
         protected Number coerce(String str) {
             return Long.valueOf(str);
         }
+
         
         protected Number divide(Number num0, Number num1) {
             return Long.valueOf(num0.longValue() / num1.longValue());
         }
+
         
         protected Number mod(Number num0, Number num1) {
             return Long.valueOf(num0.longValue() % num1.longValue());
         }
+
         
         protected Number subtract(Number num0, Number num1) {
             return Long.valueOf(num0.longValue() - num1.longValue());
         }
+
         
         protected Number multiply(Number num0, Number num1) {
             return Long.valueOf(num0.longValue() * num1.longValue());
         }
+
         
         public boolean matches(Object obj0, Object obj1) {
             return (obj0 instanceof Long || obj1 instanceof Long);
@@ -218,22 +249,10 @@ public abstract class ELArithmetic {
     private static final Long ZERO = Long.valueOf(0);
 
     public static final Number add(final Object obj0, final Object obj1) {
-        if (obj0 == null && obj1 == null) {
+        final ELArithmetic delegate = findDelegate(obj0, obj1);
+        if (delegate == null) {
             return Long.valueOf(0);
         }
-
-        final ELArithmetic delegate;
-        if (BIGDECIMAL.matches(obj0, obj1))
-            delegate = BIGDECIMAL;
-        else if (DOUBLE.matches(obj0, obj1)) {
-            if (BIGINTEGER.matches(obj0, obj1))
-                delegate = BIGDECIMAL;
-            else
-                delegate = DOUBLE;
-        } else if (BIGINTEGER.matches(obj0, obj1))
-            delegate = BIGINTEGER;
-        else
-            delegate = LONG;
 
         Number num0 = delegate.coerce(obj0);
         Number num1 = delegate.coerce(obj1);
@@ -263,22 +282,10 @@ public abstract class ELArithmetic {
     }
 
     public static final Number subtract(final Object obj0, final Object obj1) {
-        if (obj0 == null && obj1 == null) {
+        final ELArithmetic delegate = findDelegate(obj0, obj1);
+        if (delegate == null) {
             return Long.valueOf(0);
         }
-
-        final ELArithmetic delegate;
-        if (BIGDECIMAL.matches(obj0, obj1))
-            delegate = BIGDECIMAL;
-        else if (DOUBLE.matches(obj0, obj1)) {
-            if (BIGINTEGER.matches(obj0, obj1))
-                delegate = BIGDECIMAL;
-            else
-                delegate = DOUBLE;
-        } else if (BIGINTEGER.matches(obj0, obj1))
-            delegate = BIGINTEGER;
-        else
-            delegate = LONG;
 
         Number num0 = delegate.coerce(obj0);
         Number num1 = delegate.coerce(obj1);
@@ -306,27 +313,35 @@ public abstract class ELArithmetic {
     }
 
     public static final Number multiply(final Object obj0, final Object obj1) {
-        if (obj0 == null && obj1 == null) {
+        final ELArithmetic delegate = findDelegate(obj0, obj1);
+        if (delegate == null) {
             return Long.valueOf(0);
         }
-
-        final ELArithmetic delegate;
-        if (BIGDECIMAL.matches(obj0, obj1))
-            delegate = BIGDECIMAL;
-        else if (DOUBLE.matches(obj0, obj1)) {
-            if (BIGINTEGER.matches(obj0, obj1))
-                delegate = BIGDECIMAL;
-            else
-                delegate = DOUBLE;
-        } else if (BIGINTEGER.matches(obj0, obj1))
-            delegate = BIGINTEGER;
-        else
-            delegate = LONG;
 
         Number num0 = delegate.coerce(obj0);
         Number num1 = delegate.coerce(obj1);
 
         return delegate.multiply(num0, num1);
+    }
+
+    private static ELArithmetic findDelegate(final Object obj0, final Object obj1) {
+        if (obj0 == null && obj1 == null) {
+            return null;
+        }
+
+        if (BIGDECIMAL.matches(obj0, obj1)) {
+            return BIGDECIMAL;
+        } else if (DOUBLE.matches(obj0, obj1)) {
+            if (BIGINTEGER.matches(obj0, obj1)) {
+                return BIGDECIMAL;
+            } else {
+                return DOUBLE;
+            }
+        } else if (BIGINTEGER.matches(obj0, obj1)) {
+            return BIGINTEGER;
+        } else {
+            return LONG;
+        }
     }
 
     public static final boolean isNumber(final Object obj) {

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ package org.zkoss.zel.impl.lang;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -27,10 +28,12 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -46,9 +49,8 @@ import org.zkoss.zel.impl.util.MessageFactory;
 
 /**
  * A helper class that implements the EL Specification
- * 
+ *
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: ELSupport.java 1050680 2010-12-18 17:26:52Z markt $
  */
 public class ELSupport {
 	//20120418, henrichen: moved from org.zkoss.zel.impl.parser.AstValue (ZK-1062)
@@ -89,31 +91,55 @@ public class ELSupport {
         }
     }
     //^^
+
     private static final Long ZERO = Long.valueOf(0L);
+
+    protected static final boolean COERCE_TO_ZERO;
+
+    static {
+        if (IS_SECURITY_ENABLED) {
+            COERCE_TO_ZERO = AccessController.doPrivileged(
+                    new PrivilegedAction<Boolean>(){
+                        
+                        public Boolean run() {
+                            return Boolean.valueOf(System.getProperty(
+                                    "org.apache.el.parser.COERCE_TO_ZERO",
+                                    "false"));
+                        }
+
+                    }
+            ).booleanValue();
+        } else {
+            COERCE_TO_ZERO = Boolean.valueOf(System.getProperty(
+                    "org.apache.el.parser.COERCE_TO_ZERO",
+                    "false")).booleanValue();
+        }
+    }
+
 
     /**
      * Compare two objects, after coercing to the same type if appropriate.
-     * 
-     * If the objects are identical, or they are equal according to 
+     *
+     * If the objects are identical, or they are equal according to
      * {@link #equals(Object, Object)} then return 0.
-     * 
+     *
      * If either object is a BigDecimal, then coerce both to BigDecimal first.
      * Similarly for Double(Float), BigInteger, and Long(Integer, Char, Short, Byte).
-     *  
+     *
      * Otherwise, check that the first object is an instance of Comparable, and compare
      * against the second object. If that is null, return 1, otherwise
      * return the result of comparing against the second object.
-     * 
+     *
      * Similarly, if the second object is Comparable, if the first is null, return -1,
      * else return the result of comparing against the first object.
-     * 
+     *
      * A null object is considered as:
      * <ul>
      * <li>ZERO when compared with Numbers</li>
      * <li>the empty string for String compares</li>
      * <li>Otherwise null is considered to be lower than anything else.</li>
      * </ul>
-     * 
+     *
      * @param obj0 first object
      * @param obj1 second object
      * @return -1, 0, or 1 if this object is less than, equal to, or greater than val.
@@ -163,17 +189,17 @@ public class ELSupport {
 
     /**
      * Compare two objects for equality, after coercing to the same type if appropriate.
-     * 
+     *
      * If the objects are identical (including both null) return true.
      * If either object is null, return false.
      * If either object is Boolean, coerce both to Boolean and check equality.
      * Similarly for Enum, String, BigDecimal, Double(Float), Long(Integer, Short, Byte, Character)
      * Otherwise default to using Object.equals().
-     * 
+     *
      * @param obj0 the first object
      * @param obj1 the second object
      * @return true if the objects are equal
-     * @throws ELException
+     * @throws ELException if one of the coercion fails
      */
     public static final boolean equals(final Object obj0, final Object obj1)
             throws ELException {
@@ -181,8 +207,24 @@ public class ELSupport {
             return true;
         } else if (obj0 == null || obj1 == null) {
             return false;
+        } else if (isBigDecimalOp(obj0, obj1)) {
+            BigDecimal bd0 = (BigDecimal) coerceToNumber(obj0, BigDecimal.class);
+            BigDecimal bd1 = (BigDecimal) coerceToNumber(obj1, BigDecimal.class);
+            return bd0.equals(bd1);
+        } else if (isDoubleOp(obj0, obj1)) {
+            Double d0 = (Double) coerceToNumber(obj0, Double.class);
+            Double d1 = (Double) coerceToNumber(obj1, Double.class);
+            return d0.equals(d1);
+        } else if (isBigIntegerOp(obj0, obj1)) {
+            BigInteger bi0 = (BigInteger) coerceToNumber(obj0, BigInteger.class);
+            BigInteger bi1 = (BigInteger) coerceToNumber(obj1, BigInteger.class);
+            return bi0.equals(bi1);
+        } else         if (isLongOp(obj0, obj1)) {
+            Long l0 = (Long) coerceToNumber(obj0, Long.class);
+            Long l1 = (Long) coerceToNumber(obj1, Long.class);
+            return l0.equals(l1);
         } else if (obj0 instanceof Boolean || obj1 instanceof Boolean) {
-            return coerceToBoolean(obj0).equals(coerceToBoolean(obj1));
+            return coerceToBoolean(obj0, false).equals(coerceToBoolean(obj1, false));
         } else if (obj0.getClass().isEnum()) {
             return obj0.equals(coerceToEnum(obj1, obj0.getClass()));
         } else if (obj1.getClass().isEnum()) {
@@ -190,26 +232,6 @@ public class ELSupport {
         } else if (obj0 instanceof String || obj1 instanceof String) {
             int lexCompare = coerceToString(obj0).compareTo(coerceToString(obj1));
             return (lexCompare == 0) ? true : false;
-        }
-        if (isBigDecimalOp(obj0, obj1)) {
-            BigDecimal bd0 = (BigDecimal) coerceToNumber(obj0, BigDecimal.class);
-            BigDecimal bd1 = (BigDecimal) coerceToNumber(obj1, BigDecimal.class);
-            return bd0.equals(bd1);
-        }
-        if (isDoubleOp(obj0, obj1)) {
-            Double d0 = (Double) coerceToNumber(obj0, Double.class);
-            Double d1 = (Double) coerceToNumber(obj1, Double.class);
-            return d0.equals(d1);
-        }
-        if (isBigIntegerOp(obj0, obj1)) {
-            BigInteger bi0 = (BigInteger) coerceToNumber(obj0, BigInteger.class);
-            BigInteger bi1 = (BigInteger) coerceToNumber(obj1, BigInteger.class);
-            return bi0.equals(bi1);
-        }
-        if (isLongOp(obj0, obj1)) {
-            Long l0 = (Long) coerceToNumber(obj0, Long.class);
-            Long l1 = (Long) coerceToNumber(obj1, Long.class);
-            return l0.equals(l1);
         } else {
             return obj0.equals(obj1);
         }
@@ -227,7 +249,7 @@ public class ELSupport {
         if (type.isAssignableFrom(obj.getClass())) {
             return (Enum<?>) obj;
         }
-        
+
         if (!(obj instanceof String)) {
             throw new ELException(MessageFactory.get("error.convert",
                     obj, obj.getClass(), type));
@@ -238,7 +260,7 @@ public class ELSupport {
              result = Enum.valueOf(type, (String) obj);
         } catch (IllegalArgumentException iae) {
             throw new ELException(MessageFactory.get("error.convert",
-                    obj, obj.getClass(), type), iae);
+                    obj, obj.getClass(), type));
         }
         return result;
     }
@@ -247,11 +269,20 @@ public class ELSupport {
      * Convert an object to Boolean.
      * Null and empty string are false.
      * @param obj the object to convert
+     * @param primitive is the target a primitive in which case coercion to null
+     *                  is not permitted
      * @return the Boolean value of the object
      * @throws ELException if object is not Boolean or String
      */
-    public static final Boolean coerceToBoolean(final Object obj)
-            throws ELException {
+    public static final Boolean coerceToBoolean(final Object obj,
+            boolean primitive) throws ELException {
+
+        if (!COERCE_TO_ZERO && !primitive) {
+            if (obj == null) {
+                return null;
+            }
+        }
+
         if (obj == null || "".equals(obj)) {
             return Boolean.FALSE;
         }
@@ -266,7 +297,7 @@ public class ELSupport {
                 obj, obj.getClass(), Boolean.class));
     }
 
-    public static final Character coerceToCharacter(final Object obj)
+    private static final Character coerceToCharacter(final Object obj)
             throws ELException {
         if (obj == null || "".equals(obj)) {
             return Character.valueOf((char) 0);
@@ -334,6 +365,13 @@ public class ELSupport {
 
     public static final Number coerceToNumber(final Object obj,
             final Class<?> type) throws ELException {
+
+        if (!COERCE_TO_ZERO) {
+            if (obj == null && !type.isPrimitive()) {
+                return null;
+            }
+        }
+
         if (obj == null || "".equals(obj)) {
             return coerceToNumber(ZERO, type);
         }
@@ -360,7 +398,7 @@ public class ELSupport {
                 return Long.valueOf(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (Integer.TYPE == type || Integer.class.equals(type)) {
@@ -368,7 +406,7 @@ public class ELSupport {
                 return Integer.valueOf(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (Double.TYPE == type || Double.class.equals(type)) {
@@ -376,7 +414,7 @@ public class ELSupport {
                 return Double.valueOf(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (BigInteger.class.equals(type)) {
@@ -384,7 +422,7 @@ public class ELSupport {
                 return new BigInteger(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (BigDecimal.class.equals(type)) {
@@ -392,7 +430,7 @@ public class ELSupport {
                 return new BigDecimal(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (Byte.TYPE == type || Byte.class.equals(type)) {
@@ -400,7 +438,7 @@ public class ELSupport {
                 return Byte.valueOf(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (Short.TYPE == type || Short.class.equals(type)) {
@@ -408,7 +446,7 @@ public class ELSupport {
                 return Short.valueOf(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
         if (Float.TYPE == type || Float.class.equals(type)) {
@@ -416,17 +454,17 @@ public class ELSupport {
                 return Float.valueOf(val);
             } catch (NumberFormatException nfe) {
                 throw new ELException(MessageFactory.get("error.convert",
-                        val, String.class, type), nfe);
+                        val, String.class, type));
             }
         }
 
         throw new ELException(MessageFactory.get("error.convert",
-                val, String.class, type), new NumberFormatException());
+                val, String.class, type));
     }
 
     /**
-     * Coerce an object to a string
-     * @param obj
+     * Coerce an object to a string.
+     * @param obj the object to convert
      * @return the String value of the object
      */
     public static final String coerceToString(final Object obj) {
@@ -440,8 +478,8 @@ public class ELSupport {
             return obj.toString();
         }
     }
-
-    //ZK-1062: null intbox give a 0 value to Long bean property (expect null)
+    
+  //ZK-1062: null intbox give a 0 value to Long bean property (expect null)
     protected static final Object coerceToTypeForSetValue(final Object obj,
             Class<?> type) throws ELException {
         if (type == null || Object.class.equals(type) ||
@@ -464,7 +502,7 @@ public class ELSupport {
             return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToCharacter(obj);
         }
         if (Boolean.class.equals(type) || Boolean.TYPE == type) {
-            return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToBoolean(obj);
+            return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToBoolean(obj, true);
         }
         if (type.isEnum()) {
             return coerceToEnum(obj, type);
@@ -501,10 +539,19 @@ public class ELSupport {
 
     public static final Object coerceToType(final Object obj,
             Class<?> type) throws ELException {
+
         if (type == null || Object.class.equals(type) ||
                 (obj != null && type.isAssignableFrom(obj.getClass()))) {
             return obj;
         }
+
+        if (!COERCE_TO_ZERO) {
+            if (obj == null && !type.isPrimitive() &&
+                    !String.class.isAssignableFrom(type)) {
+                return null;
+            }
+        }
+
         if (String.class.equals(type)) {
             return coerceToString(obj);
         }
@@ -521,7 +568,7 @@ public class ELSupport {
             return coerceToCharacter(obj);
         }
         if (Boolean.class.equals(type) || Boolean.TYPE == type) {
-            return coerceToBoolean(obj);
+            return coerceToBoolean(obj, Boolean.TYPE == type);
         }
         if (type.isEnum()) {
             return coerceToEnum(obj, type);
@@ -535,26 +582,70 @@ public class ELSupport {
         if (isCollectionType(type)) {
         	return coerceToCollection(obj, type);
         }
-        
 
         // new to spec
         if (obj == null)
             return null;
         if (obj instanceof String) {
-            if ("".equals(obj))
-                return null;
             PropertyEditor editor = PropertyEditorManager.findEditor(type);
-            if (editor != null) {
-                editor.setAsText((String) obj);
-                return editor.getValue();
+            if (editor == null) {
+                if ("".equals(obj)) {
+                    return null;
+                }
+                throw new ELException(MessageFactory.get("error.convert", obj,
+                        obj.getClass(), type));
+            } else {
+                try {
+                    editor.setAsText((String) obj);
+                    return editor.getValue();
+                } catch (RuntimeException e) {
+                    if ("".equals(obj)) {
+                        return null;
+                    }
+                    throw new ELException(MessageFactory.get("error.convert",
+                            obj, obj.getClass(), type), e);
+                }
             }
         }
-        
+
+        // Handle special case because the syntax for the empty set is the same
+        // for an empty map. The parser will always parse {} as an empty set.
+        if (obj instanceof Set && type == Map.class &&
+                ((Set<?>) obj).isEmpty()) {
+            return Collections.EMPTY_MAP;
+        }
+
+        // Handle arrays
+        if (type.isArray() && obj.getClass().isArray()) {
+            return coerceToArray(obj, type);
+        }
+
         throw new ELException(MessageFactory.get("error.convert",
                 obj, obj.getClass(), type));
     }
 
-	private static boolean isCollectionType(Class<?> type) {
+    private static Object coerceToArray(final Object obj,
+            final Class<?> type) {
+        // Note: Nested arrays will result in nested calls to this method.
+
+        // Note: Calling method has checked the obj is an array.
+
+        int size = Array.getLength(obj);
+        // Cast the input object to an array (calling method has checked it is
+        // an array)
+        // Get the target type for the array elements
+        Class<?> componentType = type.getComponentType();
+        // Create a new array of the correct type
+        Object result = Array.newInstance(componentType, size);
+        // Coerce each element in turn.
+        for (int i = 0; i < size; i++) {
+            Array.set(result, i, coerceToType(Array.get(obj, i), componentType));
+        }
+
+        return result;
+    }
+    
+    private static boolean isCollectionType(Class<?> type) {
 		//support set and list only
 		return Collection.class.isAssignableFrom(type);
 	}
@@ -608,8 +699,7 @@ public class ELSupport {
                 obj, obj.getClass(), type));
 	}
 
-
-	public static final boolean isBigDecimalOp(final Object obj0,
+    public static final boolean isBigDecimalOp(final Object obj0,
             final Object obj1) {
         return (obj0 instanceof BigDecimal || obj1 instanceof BigDecimal);
     }
@@ -657,12 +747,12 @@ public class ELSupport {
     }
 
     /**
-     * 
+     *
      */
     public ELSupport() {
         super();
     }
-
+    
     //20120314, henrichen: ZK-919
     public static final boolean isDateTimeType(final Class<?> type) {
         return java.util.Date.class.isAssignableFrom(type);
@@ -712,4 +802,5 @@ public class ELSupport {
 		final Constructor ctr = type.getConstructor(new Class[] {long.class});
     	return (java.util.Date) ctr.newInstance(time);
 	}
+
 }

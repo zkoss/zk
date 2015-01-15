@@ -18,13 +18,14 @@
 
 package org.zkoss.zel.impl.parser;
 
-
+import org.zkoss.zel.ELClass;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.MethodExpression;
 import org.zkoss.zel.MethodInfo;
 import org.zkoss.zel.MethodNotFoundException;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.ValueExpression;
+import org.zkoss.zel.ValueReference;
 import org.zkoss.zel.VariableMapper;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zel.impl.util.MessageFactory;
@@ -33,7 +34,6 @@ import org.zkoss.zel.impl.util.Validation;
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstIdentifier.java 1061787 2011-01-21 12:39:15Z markt $
  */
 public final class AstIdentifier extends SimpleNode {
     public AstIdentifier(int id) {
@@ -62,6 +62,12 @@ public final class AstIdentifier extends SimpleNode {
 
     
     public Object getValue(EvaluationContext ctx) throws ELException {
+        // Lambda parameters
+        if (ctx.isLambdaArgument(this.image)) {
+            return ctx.getLambdaArgument(this.image);
+        }
+
+        // Variable mapper
         VariableMapper varMapper = ctx.getVariableMapper();
         if (varMapper != null) {
             ValueExpression expr = varMapper.resolveVariable(this.image);
@@ -69,15 +75,33 @@ public final class AstIdentifier extends SimpleNode {
                 return expr.getValue(ctx.getELContext());
             }
         }
+
+        // EL Resolvers
         ctx.setPropertyResolved(false);
         ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
         ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
         Object result = ctx.getELResolver().getValue(ctx, null, this.image);
-        if (!ctx.isPropertyResolved()) {
-            throw new PropertyNotFoundException(MessageFactory.get(
-                    "error.resolver.unhandled.null", this.image));
+        if (ctx.isPropertyResolved()) {
+            return result;
         }
-        return result;
+
+        // Import
+        result = ctx.getImportHandler().resolveClass(this.image);
+        if (result != null) {
+            return new ELClass((Class<?>) result);
+        }
+        result = ctx.getImportHandler().resolveStatic(this.image);
+        if (result != null) {
+            try {
+                return ((Class<?>) result).getField(this.image).get(null);
+            } catch (IllegalArgumentException | IllegalAccessException
+                    | NoSuchFieldException | SecurityException e) {
+                throw new ELException(e);
+            }
+        }
+
+        throw new PropertyNotFoundException(MessageFactory.get(
+                "error.resolver.unhandled.null", this.image));
     }
 
     
@@ -124,7 +148,7 @@ public final class AstIdentifier extends SimpleNode {
             Object[] paramValues) throws ELException {
         return this.getMethodExpression(ctx).invoke(ctx.getELContext(), paramValues);
     }
-    
+
 
     
     public MethodInfo getMethodInfo(EvaluationContext ctx,
@@ -140,6 +164,25 @@ public final class AstIdentifier extends SimpleNode {
         }
         this.image = image;
     }
+
+
+    
+    public ValueReference getValueReference(EvaluationContext ctx) {
+        VariableMapper varMapper = ctx.getVariableMapper();
+
+        if (varMapper == null) {
+            return null;
+        }
+
+        ValueExpression expr = varMapper.resolveVariable(this.image);
+
+        if (expr == null) {
+            return null;
+        }
+
+        return expr.getValueReference(ctx);
+    }
+
 
     private final MethodExpression getMethodExpression(EvaluationContext ctx)
             throws ELException {
