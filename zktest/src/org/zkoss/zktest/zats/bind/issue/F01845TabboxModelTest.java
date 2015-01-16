@@ -9,9 +9,6 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Tab;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
 
 
 public class F01845TabboxModelTest extends ZATSTestCase {

@@ -348,7 +348,7 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext7</artifactId>
-			<version>1.2.1.FL.20141111</version>
+			<version>1.2.1.FL.20150114</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

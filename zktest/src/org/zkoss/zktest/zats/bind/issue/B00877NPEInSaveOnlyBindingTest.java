@@ -19,12 +19,12 @@ public class B00877NPEInSaveOnlyBindingTest extends ZATSTestCase {
 		ComponentAgent tb = desktop.query("#tb");
 		
 		tb.type("abc");
-		System.out.println("******" + tb.as(Textbox.class).getErrorMessage());
-		System.out.println("******" + tb.as(Textbox.class).getValue());
+		//System.out.println("******" + tb.as(Textbox.class).getErrorMessage());
+		//System.out.println("******" + tb.as(Textbox.class).getValue());
 		
 		tb.type("Lin");
-		System.out.println("******" + tb.as(Textbox.class).getErrorMessage());
-		System.out.println("******" + tb.as(Textbox.class).getValue());
+		//System.out.println("******" + tb.as(Textbox.class).getErrorMessage());
+		//System.out.println("******" + tb.as(Textbox.class).getValue());
 		
 /*		var msg = jq("$msg")
 			      var tb = jq("$tb")
