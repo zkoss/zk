@@ -66,7 +66,7 @@ class Util {
             }
         }
         ResourceBundle bundle = ResourceBundle.getBundle(
-                "javax.el.LocalStrings", locale);
+                "org.zkoss.zel.LocalStrings", locale);
         try {
             String template = bundle.getString(name);
             if (props != null) {

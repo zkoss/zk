@@ -92,6 +92,14 @@ public class StandardELContext extends ELContext {
             return wrappedContext.getContext(key);
         }
     }
+    
+    public Object getWrappedContext() {
+    	if (wrappedContext == null) {
+            return null;
+        } else {
+            return wrappedContext;
+        }
+    }
 
     
     public ELResolver getELResolver() {

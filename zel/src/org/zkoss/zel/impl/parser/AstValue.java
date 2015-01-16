@@ -168,6 +168,7 @@ public final class AstValue extends SimpleNode {
                 }
                 // This is a method
                 Object[] paramValues = mps.getParameters(ctx);
+                /*base = resolver.invoke(ctx, base, suffix, null, paramValues);*/
                 base = resolver.invoke(ctx, base, suffix,
                         getTypesFromValues(paramValues), paramValues);
                 i+=2;

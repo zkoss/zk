@@ -16,6 +16,7 @@ import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.ELXelExpression;
 import org.zkoss.zel.ELContext;
+import org.zkoss.zel.StandardELContext;
 import org.zkoss.zel.ValueExpression;
 
 /**
@@ -30,6 +31,7 @@ public class BindXelExpression extends ELXelExpression {
 		super(expr);
 	}
 	protected ELContext newELContext(XelContext xelc) {
-		return new BindELContext(xelc);
+		//return new BindELContext(xelc);
+		return new StandardELContext(new BindELContext(xelc));
 	}
 }

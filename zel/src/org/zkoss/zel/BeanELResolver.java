@@ -211,7 +211,29 @@ public class BeanELResolver extends ELResolver {
 			try {
 				matchingMethod = Util.getMethod(clazz, clazz.getMethod(methodName, paramTypes));
 			} catch (NoSuchMethodException e) {
-				throw new MethodNotFoundException(e);
+				//throw new MethodNotFoundException(e);
+				int paramCount = 0;
+				if (params != null) {
+					paramCount = params.length;
+				}
+				Method[] methods = clazz.getMethods();
+				for (Method m : methods) {
+					if (methodName.equals(m.getName())) {
+						if (m.getParameterTypes().length == paramCount) {
+							// Same number of parameters - use the first match
+							matchingMethod = Util.getMethod(clazz, m);
+							break;
+						}
+						if (m.isVarArgs()
+								&& paramCount > m.getParameterTypes().length - 2) {
+							matchingMethod = Util.getMethod(clazz, m);
+						}
+					}
+				}
+				if (matchingMethod == null) {
+					throw new MethodNotFoundException("Unable to find method ["
+							+ methodName + "] with [" + paramCount + "] parameters");
+				}
 			}
 		} else {
 			int paramCount = 0;

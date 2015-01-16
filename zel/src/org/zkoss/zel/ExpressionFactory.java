@@ -384,7 +384,7 @@ public abstract class ExpressionFactory {
         }
         if (className == null) {
             // Fourth - default
-            className = "org.apache.el.ExpressionFactoryImpl";
+            className = "org.zkoss.zel.impl.ExpressionFactoryImpl";
         }
         return className;
     }
