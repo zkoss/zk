@@ -10,9 +10,9 @@
 			}
 		}
 	]]></zscript>
-	<window apply="org.zkoss.bind.BindComposer"
+	<window id="win" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('MyVM2')">
-		<label value="@bind(vm.value)"/>
+		<label id="lb" value="@bind(vm.value)"/>
 		<textbox value="@bind(vm.value)"/>
 	</window>
 </zk>
