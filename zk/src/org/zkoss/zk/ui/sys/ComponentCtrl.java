@@ -506,10 +506,23 @@ public interface ComponentCtrl {
 	public void disableBindingAnnotation();
 	
 	/**
-	 * Returns whether the component has binding annotation or not. (Internal or component developer use only.)
-	 * @return true if the component has binding annotation
+	 * Returns whether the component itself has binding annotation or not. (Internal or component developer use only.)
+	 * @return true if the component itself has binding annotation
 	 * @since 8.0.0
 	 */
 	public boolean hasBindingAnnotation();
 	
+	/**
+	 * Returns whether the component and its children have binding annotation or not. (Internal or component developer use only.)
+	 * @return true if the component and its children have binding annotation
+	 * @since 8.0.0
+	 */
+	public boolean hasSubBindingAnnotation();
+
+	/**
+	 * Returns the count of the component's subtree binding annotation. (Internal or component developer use only.)
+	 * @return 0 if the component and its children have no binding annotation , more than 0 if they have binding annotation
+	 * @since 8.0.0
+	 */
+	public int getSubBinderAnnotionCount();
 }
