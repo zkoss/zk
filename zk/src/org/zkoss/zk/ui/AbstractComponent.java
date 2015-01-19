@@ -3772,6 +3772,10 @@ w:use="foo.MyWindow"&gt;
 		return _auxinf != null && _auxinf.hasBindingAnnot;
 	}
 	
+	public boolean hasSubBindingAnnotation() {
+		return _auxinf != null && _auxinf.subAnnotCnt > 0;
+	}
+	
 	public int getSubBinderAnnotionCount() {
 		return _auxinf == null ? 0 : _auxinf.subAnnotCnt;
 	}
