@@ -42,6 +42,13 @@ fi
 maindir="$(pwd)"
 tmp1="checktmp1"
 tmp2="checktmp2"
+
+if [ $(basename "$folder1") = "maven" ] && [ $(basename "$folder2") = "maven" ] ; then
+	isMaven="true"
+else
+	isMaven="false"
+fi
+
 function checkFileSize {
 	echo $(pwd)/$1
 	if [ -d $1 ] ; then
@@ -50,15 +57,55 @@ function checkFileSize {
 	du -abh * >> $maindir/$2.log
 }
 
+function checkFileSizeMaven {
+	if [ -d $maindir/tmp ] ; then
+		rm -rf $maindir/tmp
+	fi
+	mkdir $maindir/tmp
+	cp -r $1 $maindir/tmp
+	cd $maindir/tmp
+	unzipJar
+	cd $maindir/tmp
+	du -abh * >> $maindir/$2.log
+	rm -rf $maindir/tmp
+}
+
+function unzipJar {
+	for f in `ls | sort`; do
+		if [ -f "$f" ] ; then
+			if [ "$(echo "$f" | awk '/jar$/{print "yes"}')" = "yes" ] ; then
+				tmpDir=$(pwd)/$(basename "$f" .jar)
+				mkdir $tmpDir
+				unzip $f -d $tmpDir
+				rm -rf $f
+			else
+				cp $f $maindir/tmp
+			fi
+		elif [ -d "$f" ] ; then
+			cd $f
+			unzipJar
+			cd -
+		fi
+	done
+}
+
 if [ -f "$maindir/$tmp1.log" ] ; then
 	rm $maindir/$tmp1.log
 fi
 if [ -f "$maindir/$tmp2.log" ] ; then
 	rm $maindir/$tmp2.log
 fi
+if [ -d "$maindir/tmp" ] ; then
+	rm -rf $maindir/tmp
+fi
 
-checkFileSize "$folder1" "$tmp1"
-checkFileSize "$folder2" "$tmp2"
+if [ "$isMaven" = "true" ] ; then
+	checkFileSizeMaven "$folder1" "$tmp1"
+	checkFileSizeMaven "$folder2" "$tmp2"
+else
+	checkFileSize "$folder1" "$tmp1"
+	checkFileSize "$folder2" "$tmp2"
+fi
 
 cd $maindir
 
