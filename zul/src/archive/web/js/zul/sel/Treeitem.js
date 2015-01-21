@@ -389,10 +389,22 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_renderChildHTML: function (childHTML) {
-		var w, tarWgt;
+		var w, tarWgt, tree = this.getTree();
 		//Bug ZK-1726: search correct siblings
 		if (w = this.previousSibling) {
-			tarWgt = _searchPrevRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+			// ZK-2538: only check rendered item in paging mold
+			if (tree && tree.getMold() == 'paging') {
+				var count = tree.getPageSize();
+				for (;w && count-- > 0; w = w.previousSibling) {
+					if (w.treerow) {
+						tarWgt = w;
+						break;
+					}
+				}
+			} else {
+				tarWgt = _searchPrevRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+			}
+			
 			if (tarWgt) {
 				var dom = tarWgt.$n();
 				if (tarWgt.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
@@ -410,7 +422,19 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 		}
 		if (w = this.nextSibling) {
-			tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+			// ZK-2538: only check rendered item in paging mold
+			if (tree && tree.getMold() == 'paging') {				
+				var count = tree.getPageSize();
+				for (;w && count-- > 0; w = w.nextSibling) {
+					if (w.treerow) {
+						tarWgt = w;
+						break;
+					}
+				}
+			} else {
+				tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+			}
+			
 			if (tarWgt) {
 				var dom = tarWgt.$n();
 				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
