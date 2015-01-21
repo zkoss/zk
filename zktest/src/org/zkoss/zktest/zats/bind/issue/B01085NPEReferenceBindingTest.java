@@ -1,6 +1,6 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -54,22 +54,20 @@ public class B01085NPEReferenceBindingTest extends ZATSTestCase {
 		assertEquals(2, listbox2.as(Listbox.class).getSelectedIndex());
 		assertEquals("2", lb1.as(Label.class).getValue());
 		
-		listbox4.queryAll("listitem").get(0).as(SelectAgent.class).select();
-		assertEquals(1, listbox5.as(Listbox.class).getSelectedIndex());
-		assertEquals(1, listbox6.as(Listbox.class).getSelectedIndex());
-		assertEquals("1", lb2.as(Label.class).getValue());
-		//how to detect error window component~~~~~~~
-		
-		listbox5.queryAll("listitem").get(0).as(SelectAgent.class).select();
-		assertEquals(0, listbox4.as(Listbox.class).getSelectedIndex());
-		assertEquals(1, listbox6.as(Listbox.class).getSelectedIndex());
-		assertEquals("1", lb2.as(Label.class).getValue());
-		//how to detect error window component~~~~~~~
-		
-		listbox6.queryAll("listitem").get(0).as(SelectAgent.class).select();
-		assertEquals(0, listbox4.as(Listbox.class).getSelectedIndex());
-		assertEquals(0, listbox5.as(Listbox.class).getSelectedIndex());
-		assertEquals("1", lb2.as(Label.class).getValue());
-		//how to detect error window component~~~~~~~
+		try {
+			listbox4.queryAll("listitem").get(0).as(SelectAgent.class).select();
+		} catch (Exception e) {
+			assertTrue(e.getCause().toString().contains("UiException: selected"));
+		}
+		try {
+			listbox5.queryAll("listitem").get(0).as(SelectAgent.class).select();
+		} catch (Exception e) {
+			assertTrue(e.getCause().toString().contains("UiException: selected"));
+		}
+		try {
+			listbox6.queryAll("listitem").get(0).as(SelectAgent.class).select();
+		} catch (Exception e) {
+			assertTrue(e.getCause().toString().contains("UiException: selected"));
+		}
 	}
 }

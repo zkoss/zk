@@ -32,10 +32,36 @@ Note: the server push is enabled and timer disabled at the beginning.
 	Key something to see different output (don't turn on timer in this test):
 	<textbox id="tb"/>
 	</vbox>
-	<timer id="timer" running="false" repeats="true" delay="1000"
+	<timer id="timer" running="true" repeats="true" delay="1000"
 		onTimer='org.zkoss.zktest.test2.ServerPush2.updateInfo(info, tb, "timer")'/>
 	<div id="info" style="border:1px solid blue"/>
 	<zscript>
 	org.zkoss.zktest.test2.ServerPush2.start(info, tb);
 	</zscript>
+	<zk>
+	<style dynamic="true">
+		.comet-news {
+			color: #0A94F3;
+		}
+	</style>
+	<window> Please press the "Start" button to see the demo "Comet Server Push".
+		<button label="Start" onClick="org.zkoss.zktest.test2.CometServerPush.start(info, listbox)"/>
+		<button label="Stop" onClick="org.zkoss.zktest.test2.CometServerPush.stop()"/>
+		<separator/>
+		<hbox>
+		Change Maximum Diameter:
+		<listbox id="listbox" rows="1" mold="select" onSelect="">
+			<listitem label="20" selected="true"/>
+			<listitem label="40"/>
+			<listitem label="60"/>
+		</listbox>
+		</hbox>
+			
+		<image id="info" width="150px" height="150px"/>
+		
+	<zscript>
+	org.zkoss.zktest.test2.CometServerPush.start(info, listbox, true);
+	</zscript>
+	</window>
+</zk>
 </window>
