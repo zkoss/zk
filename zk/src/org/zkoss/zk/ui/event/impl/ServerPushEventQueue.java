@@ -50,8 +50,13 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 			throw new IllegalArgumentException();
 
 		synchronized (_dtInfos) {
-			for (DesktopInfo di: _dtInfos.values())
-				di.publish(event);
+			for (DesktopInfo di : _dtInfos.values()) {
+				try {
+					di.publish(event);
+				} catch (Exception ex) {
+					log.warn("", ex);
+				}
+			}
 		}
 	}
 	public void subscribe(EventListener<T> listener) {
