@@ -579,7 +579,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					setPrevInsertion(newNext, next);
 					setPrevInsertion(next, child);
 				}
-				
+
+				if (_firstInsertion == child._firstInsertion)
+					_firstInsertion = null; // reset
+
+				if (_lastInsertion == child._lastInsertion)
+					_lastInsertion = null; // reset
 			}
 		} else { // merge to host
 			for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
@@ -601,6 +606,11 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				} else {
 					setPrevInsertion(this, newNext);
 				}
+				if (_firstInsertion == child._firstInsertion)
+					_firstInsertion = null; // reset
+
+				if (_lastInsertion == child._lastInsertion)
+					_lastInsertion = null; // reset
 			}
 		}
 	}
