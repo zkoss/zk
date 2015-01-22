@@ -25,8 +25,12 @@ import org.zkoss.bind.sys.InitChildrenBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataListener;
 
 /**
  * Implementation of {@link InitChildrenBinding}.
@@ -59,9 +63,9 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		
 		//use _converter to convert type if any
 		final Converter conv = getConverter();
+		Object old = value;
 		if (conv != null) {
-			Object old;
-			value = conv.coerceToUi(old = value, comp, ctx);
+			value = conv.coerceToUi(value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
 					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT,comp,null,
@@ -82,9 +86,16 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			}
 			BindChildRenderer renderer = new BindChildRenderer();
 			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
+			//ZK-2545 - Children binding support list model
+			boolean isUsingListModel = value != null && value instanceof ListModel;
+			if (isUsingListModel) {
+				((ListModel<?>) value).addListDataListener(new ChildrenBindingListDataListener(comp, ctx, conv));
+				if (comp.hasAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS))
+					comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+			}
 			int size = data.size();
-			for(int i=0;i<size;i++){
-				renderer.render(comp, data.get(i),i,size);
+			for(int i = 0; i < size; i++) {
+				renderer.render(comp, data.get(i), i, size, isUsingListModel);
 			}
 		}
 		

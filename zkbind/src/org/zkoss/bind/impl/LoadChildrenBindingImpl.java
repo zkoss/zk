@@ -12,8 +12,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.lang.reflect.Method;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +32,9 @@ import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataListener;
 
 /**
  * Implementation of {@link LoadChildrenBinding}.
@@ -55,10 +60,11 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
-		final boolean activating = ((BinderCtrl)getBinder()).isActivating();	
+		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 		
 		//use _converter to convert type if any
 		final Converter conv = getConverter();
+		Object old = value;
 		if (conv != null) {
 //			//if a converter depends on some property, we should also add tracker
 //			//TODO, Dennis, ISSUES, currently, a base path of a converter, is its binding path.
@@ -67,8 +73,7 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 //			addConverterDependsOnTrackings(conv, ctx);
 			
 			if(activating) return;//don't load to component if activating
-			Object old;
-			value = conv.coerceToUi(old = value, comp, ctx);
+			value = conv.coerceToUi(value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
 				if(collector!=null){
 					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_LOAD,comp,getConditionString(ctx),
@@ -90,9 +95,16 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			}
 			BindChildRenderer renderer = new BindChildRenderer();
 			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
+			//ZK-2545 - Children binding support list model
+			boolean isUsingListModel = old instanceof ListModel;
+			if (isUsingListModel) {
+				((ListModel<?>) old).addListDataListener(new ChildrenBindingListDataListener(comp, ctx, conv));
+				if (comp.hasAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS))
+					comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+			}
 			int size = data.size();
-			for(int i=0;i<size;i++){
-				renderer.render(comp, data.get(i),i,size);
+			for(int i = 0; i < size; i++) {
+				renderer.render(comp, data.get(i), i, size, isUsingListModel);
 			}
 		}
 		
@@ -149,4 +161,5 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);
 		}
 	}
+	
 }

@@ -1,0 +1,154 @@
+<?page contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div>
+		<window id="w" title="ZK MVVM Children Binding" border="normal" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F02545ChildrenBindingSupportListModelVM')">
+			<hlayout id="list">
+				<div hflex="1">
+					<label value="Origin model (@init)" />
+					<listbox id="omi" model="@init(vm.model_l)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.id)"/>
+            					<listcell label="@load(each.name)"/>
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+				<div hflex="1">
+					<label value="Children model (@init)" />
+					<vlayout id="cbmi" children="@init(vm.model_l)">
+						<template name="children">
+							<hlayout>
+								<label value="@load(each.id)"/>
+								<label value=" - "/>
+								<label value="@load(each.name)"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div>
+				<div hflex="1">
+					<label value="Origin model (@load)" />
+					<listbox id="oml" model="@load(vm.model_l)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.id)"/>
+            					<listcell label="@load(each.name)"/>
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+				<div hflex="1">
+					<label value="Children model (@load)" />
+					<vlayout id="cbml" children="@load(vm.model_l)">
+						<template name="children" var="nodem1">
+							<hlayout>
+								<label value="@load(nodem1.id)"/>
+								<label value=" - "/>
+								<label value="@load(nodem1.name)"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div>
+			</hlayout>
+			<hlayout id="array">
+				<div hflex="1">
+					<label value="Origin model - ListModelArray 1D" />
+					<listbox id="oml_a1d" model="@load(vm.model_a1D)">
+						<template name="model">
+							<listitem label="@load(each)" />
+						</template>
+					</listbox>
+				</div>
+				<div hflex="1">
+					<label value="Children model - ListModelArray 1D" />
+					<vlayout id="cbml_a1d" children="@load(vm.model_a1D)">
+						<template name="children">
+							<label value="@load(each)" />
+						</template>
+					</vlayout>
+				</div>
+				<div hflex="1">
+					<label value="Origin model - ListModelArray 2D" />
+					<listbox id="oml_a2d" model="@load(vm.model_a2D)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each[0])"/>
+            					<listcell label="@load(each[1])"/>
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+				<div hflex="1">
+					<label value="Children model - ListModelArray 2D" />
+					<vlayout id="cbml_a2d" children="@load(vm.model_a2D)">
+						<template name="children">
+							<hlayout>
+								<label value="@load(each[0])"/>
+								<label value=" - "/>
+								<label value="@load(each[1])"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div>
+			</hlayout>
+			<hlayout id="map_set">
+				<div hflex="1">
+					<label value="Origin model - ListModelMap" />
+					<listbox id="oml_m" model="@load(vm.model_m)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.key)"/>
+            					<listcell label="@load(each.value.name)"/>
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+				<div hflex="1">
+					<label value="Children model - ListModelMap" />
+					<vlayout id="cbml_m" children="@load(vm.model_m)">
+						<template name="children">
+							<hlayout>
+								<label value="@load(each.key)"/>
+								<label value=" - "/>
+								<label value="@load(each.value.name)"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div>
+				<div hflex="1">
+					<label value="Origin model - ListModelSet" />
+					<listbox id="oml_s" model="@load(vm.model_s)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.id)"/>
+            					<listcell label="@load(each.name)"/>
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+				<div hflex="1">
+					<label value="Children model - ListModelSet" />
+					<vlayout id="cbml_s" children="@load(vm.model_s)">
+						<template name="children">
+							<hlayout>
+								<label value="@load(each.id)"/>
+								<label value=" - "/>
+								<label value="@load(each.name)"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div>
+			</hlayout>
+			<button id="change_model" label="change_model(all)" onClick="@command('change_model')" />
+			<button id="add" label="add(List, Map, Set)" onClick="@command('add')" />
+			<button id="update" label="update(List, Map, Array)" onClick="@command('update')" />
+			<button id="remove" label="remove(List, Map, Set)" onClick="@command('remove')" />
+		</window>
+		<vlayout id="ctrl">
+			<div>
+				<button id="serialization" label="serialize/deserialize" onClick='w.getAttribute("vm").doSerialize(w, msg)' />message:<label id="msg"/>
+			</div>
+	<!-- 		<button id="clone" label="clone" onClick='w.getAttribute("vm").clone(w)' /> -->
+		</vlayout>
+	</div>
+</zk>

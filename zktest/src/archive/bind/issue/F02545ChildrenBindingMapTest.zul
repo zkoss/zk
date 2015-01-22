@@ -1,0 +1,49 @@
+<?page contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div>
+		<window id="w" title="ZK MVVM Children Binding" border="normal" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F02545ChildrenBindingMapTestVM')">
+			<hlayout>
+				<!-- <div hflex="1">
+					<label value="Origin model - ListModelMap" />
+					<listbox id="oml_m" model="@load(vm.nodes1)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.key)"/>
+            					<listcell label="@load(each.value)"/>
+							</listitem>
+						</template>
+					</listbox>
+				</div> -->
+				<div hflex="1">
+					<label value="Children Binding - Map(String, String)" />
+					<vlayout id="cbm1" children="@load(vm.nodes1)">
+						<template name="children">
+							<hlayout>
+								<label value="@load(each.key)"/>
+								<label value=" - "/>
+								<label value="@load(each.value)"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div>
+				<!-- <div hflex="1">
+					<label value="Children Binding - Map(String, Node)" />
+					<vlayout id="cbm2" children="@load(vm.nodes2)">
+						<template name="children">
+							<hlayout>
+								<label value="@load(each.key)"/>
+								<label value=" - "/>
+								<label value="@load(each.value.name)"/>
+							</hlayout>
+						</template>
+					</vlayout>
+				</div> -->
+			</hlayout>
+		</window>
+		<vlayout id="ctrl">
+			<div>
+				<button id="serialization" label="serialize/deserialize" onClick='w.getAttribute("vm").doSerialize(w, msg)' />message:<label id="msg"/>
+			</div>
+		</vlayout>
+	</div>
+</zk>

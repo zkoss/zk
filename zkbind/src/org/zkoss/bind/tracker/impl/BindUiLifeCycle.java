@@ -27,6 +27,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.BinderUtil;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
@@ -155,6 +156,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		});
 		//ZK-2022, make it is in queue of remove.
 		comp.setAttribute(REMOVE_MARK, Boolean.TRUE);
+		//ZK-2545 - Children binding support list model
+		comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 		// post ON_BIND_INIT event
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
 	}

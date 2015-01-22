@@ -1,4 +1,4 @@
-package org.zkoss.zktest.bind.issue.parser;
+package org.zkoss.zktest.bind.parser;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.DefaultBinder;
