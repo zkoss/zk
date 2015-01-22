@@ -220,13 +220,8 @@ public class AnnotationHelper {
 					if (nm != null)
 						throw wrongAnnotationException(rval, "',' missed between two equal sign (=)", loc);
 					nm = sb.toString().trim(); //name found
-					if (nm.charAt(nm.length() - 1) == '+'/* || nm.indexOf("before") < 0 || nm.indexOf("after") < 0*/) {
-						//it's el3 case, keep moving!!!
-						nm = null;
-					} else {
-						sb.setLength(0); //cleanup
-						continue; //parse value
-					}
+					sb.setLength(0); //cleanup
+					continue; //parse value
 				} else if (cc == '(') {
 					++nparen;
 				} else if (cc == ')') {
