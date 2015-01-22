@@ -19,6 +19,7 @@ import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 import org.zkoss.zel.ELContext;
+import org.zkoss.zel.StandardELContext;
 import org.zkoss.zel.ValueExpression;
 
 /**
@@ -64,7 +65,7 @@ public class ELXelExpression implements ExpressionX, java.io.Serializable {
 	}
 	
 	protected ELContext newELContext(XelContext xelc) {
-		return new XelELContext(xelc);
+		return new StandardELContext(new XelELContext(xelc));
 	}
 	
 	public static class ValueReferenceImpl implements ValueReference, java.io.Serializable {

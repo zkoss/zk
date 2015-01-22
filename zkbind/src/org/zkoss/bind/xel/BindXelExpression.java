@@ -16,6 +16,7 @@ import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.ELXelExpression;
 import org.zkoss.zel.ELContext;
+import org.zkoss.zel.StandardELContext;
 import org.zkoss.zel.ValueExpression;
 
 /**

@@ -7,9 +7,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,6 @@
  */
 
 package org.zkoss.zel.impl.parser;
-
 
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.MethodInfo;
@@ -32,8 +31,8 @@ import org.zkoss.zel.impl.lang.EvaluationContext;
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * $Id: Node.java 898969 2010-01-13 22:10:49Z markt $
  */
+@SuppressWarnings("all") // Ignore warnings in generated code
 public interface Node {
 
   /** This method is called after the node has been made the current
@@ -59,9 +58,9 @@ public interface Node {
 
   /** Return the number of children the node has. */
   public int jjtGetNumChildren();
-  
+
   public String getImage();
-  
+
   public Object getValue(EvaluationContext ctx) throws ELException;
   public void setValue(EvaluationContext ctx, Object value) throws ELException;
   public Class<?> getType(EvaluationContext ctx) throws ELException;
@@ -71,12 +70,12 @@ public interface Node {
           throws ELException;
   public Object invoke(EvaluationContext ctx, Class<?>[] paramTypes,
           Object[] paramValues) throws ELException;
-  
+
   /**
    * @since EL 2.2
    */
   public ValueReference getValueReference(EvaluationContext ctx);
-  
+
   /**
    * @since EL 2.2
    */

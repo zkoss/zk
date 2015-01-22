@@ -21,24 +21,24 @@ package org.zkoss.zel.impl.parser;
 import java.util.Collection;
 import java.util.Map;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstEmpty.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstEmpty extends SimpleNode {
     public AstEmpty(int id) {
         super(id);
     }
+
     
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         return Boolean.class;
     }
+
     
     public Object getValue(EvaluationContext ctx)
             throws ELException {

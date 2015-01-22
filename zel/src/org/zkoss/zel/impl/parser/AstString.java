@@ -18,14 +18,12 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstString.java 1003861 2010-10-02 18:53:30Z markt $
  */
 public final class AstString extends SimpleNode {
     public AstString(int id) {

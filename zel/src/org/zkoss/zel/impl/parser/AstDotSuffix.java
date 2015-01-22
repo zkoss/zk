@@ -18,7 +18,6 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zel.impl.util.MessageFactory;
@@ -27,17 +26,18 @@ import org.zkoss.zel.impl.util.Validation;
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstDotSuffix.java 1061787 2011-01-21 12:39:15Z markt $
  */
 public final class AstDotSuffix extends SimpleNode {
     public AstDotSuffix(int id) {
         super(id);
     }
+
     
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         return this.image;
     }
+
     
     public void setImage(String image) {
         if (!Validation.isIdentifier(image)) {

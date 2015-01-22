@@ -6,6 +6,7 @@ package org.zkoss.zel.impl.parser;
  * Describes the input token stream.
  */
 
+@SuppressWarnings("all") // Ignore warnings in generated code
 public class Token implements java.io.Serializable {
 
   /**
