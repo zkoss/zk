@@ -20,7 +20,9 @@ import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
+import org.zkoss.util.Maps;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.ListModelArray;
 
 /**
  * To converter items to List
@@ -39,7 +41,9 @@ public class ChildrenBindingConverter implements Converter, Serializable{
 		if (val instanceof Collection) {
 			data = new ArrayList<Object>((Collection)val);
 		} else if (val instanceof Map) { // ZK-2483: support Map in template children binding.
-			data = new ArrayList<Object>((Collection) ((Map) val).entrySet());
+			data = new ArrayList<Object>(Maps.transferToSerializableEntrySet(((Map<?, ?>) val).entrySet()));
+		} else if (val instanceof ListModelArray<?>) { // ZK-2545: support ListModelArray in template children binding.
+			data =  Arrays.asList(((ListModelArray<?>) val).getInnerArray());
 		} else if (val instanceof Object[]) {
 			data = Arrays.asList((Object[])val);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {

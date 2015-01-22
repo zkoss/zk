@@ -1,4 +1,4 @@
-package org.zkoss.zktest.zats.bind.issue.parser;
+package org.zkoss.zktest.zats.bind.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

@@ -79,6 +79,9 @@ public interface BinderCtrl {
 	public static final String CHILDREN_ATTR = "$CHILDREN$";
 	public static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
 	
+	//ZK-2545 - Children binding support list model
+	public static final String CHILDREN_BINDING_RENDERED_COMPONENTS = "$CHILDREN_BINDING_RENDERED_COMPONENTS$";
+	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
 	 * @param associatedComp associated component inside a form binding

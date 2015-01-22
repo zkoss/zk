@@ -1,4 +1,4 @@
-package org.zkoss.zktest.bind.issue.parser;
+package org.zkoss.zktest.bind.parser;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;

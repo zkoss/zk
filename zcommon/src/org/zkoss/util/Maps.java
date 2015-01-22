@@ -21,12 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
+import java.util.LinkedHashSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -739,5 +741,66 @@ public class Maps {
 			sb.append(cc == '\n' ? 'n': cc == '\t' ? 't': cc);
 			j = k + 1;
 		}
+	}
+	/**
+	 * Tranfer Set<<Map.Entry<K, V>> to be serializable
+	 * @since 8.0.0
+	 */
+	public static <K, V> Set<SerializableEntry<K, V>> transferToSerializableEntrySet(Set<Map.Entry<K, V>> entry) {
+		Set<SerializableEntry<K, V>> newSet = new LinkedHashSet<SerializableEntry<K, V>>(entry.size());
+		for(Map.Entry<K, V> me: entry) {
+			newSet.add(new SerializableEntry<K, V>(me));
+		}
+		return newSet;
+	}
+	
+	/**
+	 * A serializable implement of Map.Entry
+	 * @since 8.0.0
+	 */
+	public static class SerializableEntry<K,V> implements Map.Entry<K,V>, java.io.Serializable {
+	    private static final long serialVersionUID = 20150121161520L;
+	    private final K key;
+	    private V val;
+	
+	    public SerializableEntry(K key, V val) {
+	        this.key = key;
+	        this.val = val;
+	    }
+	
+	    public SerializableEntry(Map.Entry<K, V> entry) {
+	        this.key = entry.getKey();
+	        this.val = entry.getValue();
+	    }
+
+	    public K getKey() {
+	        return key;
+	    }
+	
+	    public V getValue() {
+	        return val;
+	    }
+	
+	    public V setValue(V value) {
+	        V old = this.val;
+	        this.val = value;
+	        return old;
+	    }
+	
+		public boolean equals(Map.Entry<K, V> obj) {
+	        return eq(key, obj.getKey()) && eq(val, obj.getValue());
+	    }
+	
+	    public int hashCode() {
+	        return (key == null ? 0 : key.hashCode()) ^ (val == null ? 0 : val.hashCode());
+	    }
+	   
+	    public String toString() {
+	        return key + "=" + val;
+	    }
+	    
+	    private static boolean eq(Object o1, Object o2) {
+	        return o1 == null ? o2 == null : o1.equals(o2);
+	    }
 	}
 }
