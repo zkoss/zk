@@ -14,10 +14,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.zel;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
+import org.zkoss.xel.XelContext;
 import org.zkoss.zel.ArrayELResolver;
 import org.zkoss.zel.BeanELResolver;
+import org.zkoss.zel.BeanNameELResolver;
+import org.zkoss.zel.BeanNameResolver;
 import org.zkoss.zel.CompositeELResolver;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
@@ -28,11 +35,7 @@ import org.zkoss.zel.MethodNotFoundException;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.ResourceBundleELResolver;
-
-import org.zkoss.lang.Objects;
-import org.zkoss.xel.XelContext;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.VariableResolverX;
+import org.zkoss.zel.StaticFieldELResolver;
 
 /**
  * An XEL implementation of ZEL ELResolver.
@@ -41,8 +44,15 @@ import org.zkoss.xel.VariableResolverX;
  */
 public class XelELResolver extends ELResolver {
 	private static final CompositeELResolver DEFAULT;
+	private final static Map<String, Object> localBeans = new HashMap<String, Object>();
+	
 	static {
 		DEFAULT = new CompositeELResolver();
+		//add resolver in order to support EL 3.0
+		DEFAULT.add(new BeanNameELResolver(
+                new StandardBeanNameResolver(localBeans))); // for semicolon expression
+		DEFAULT.add(new CompositeELResolver());
+		DEFAULT.add(new StaticFieldELResolver()); //for calling static method
 		DEFAULT.add(new MapELResolver());
 		DEFAULT.add(new ResourceBundleELResolver());
 		DEFAULT.add(new ListELResolver());
@@ -78,11 +88,13 @@ public class XelELResolver extends ELResolver {
 			if (resolver instanceof VariableResolverX) {
 				final Object o = ((VariableResolverX)resolver)
 					.resolveVariable(_ctx, base, property);
-				ctx.setPropertyResolved(true);
+				//in order to call static method, we can't set property as resolved 
+				if (o != null) ctx.setPropertyResolved(true);
 				return o;
 			} else if (base == null && property != null) {
 				final Object o = resolver.resolveVariable(property.toString());
-				ctx.setPropertyResolved(true);
+				//in order to call static method, we can't set property as resolved
+				if (o != null) ctx.setPropertyResolved(true);
 				return o;
 			}
 		}
@@ -108,7 +120,8 @@ public class XelELResolver extends ELResolver {
 		}
 
 		if (base == null) {
-			throw new PropertyNotWritableException(Objects.toString(property));
+			//some situation occurs here, 
+			//we should pass them to the following resolver rather than throw exception
 		}
 
 		getELResolver().setValue(ctx, base, property, value);
@@ -147,4 +160,44 @@ public class XelELResolver extends ELResolver {
 		}
 		return getELResolver().invoke(ctx, base, method, paramTypes, params);
 	}
+
+	/**
+	 * It's a class copied from StandardELContext
+	 * @author Chunfu
+	 *
+	 */
+	protected static class StandardBeanNameResolver extends BeanNameResolver {
+
+        private final Map<String,Object> beans;
+
+        public StandardBeanNameResolver(Map<String,Object> beans) {
+            this.beans = beans;
+        }
+
+        
+        public boolean isNameResolved(String beanName) {
+            return beans.containsKey(beanName);
+        }
+
+        
+        public Object getBean(String beanName) {
+            return beans.get(beanName);
+        }
+
+        
+        public void setBeanValue(String beanName, Object value)
+                throws PropertyNotWritableException {
+            beans.put(beanName, value);
+        }
+
+        
+        public boolean isReadOnly(String beanName) {
+            return false;
+        }
+
+        
+        public boolean canCreateBean(String beanName) {
+            return true;
+        }
+    }
 }

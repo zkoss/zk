@@ -93,14 +93,6 @@ public class StandardELContext extends ELContext {
         }
     }
     
-    public Object getWrappedContext() {
-    	if (wrappedContext == null) {
-            return null;
-        } else {
-            return wrappedContext;
-        }
-    }
-
     
     public ELResolver getELResolver() {
         return standardResolver;

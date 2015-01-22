@@ -65,7 +65,6 @@ public class ELXelExpression implements ExpressionX, java.io.Serializable {
 	}
 	
 	protected ELContext newELContext(XelContext xelc) {
-		/*return new XelELContext(xelc);*/
 		return new StandardELContext(new XelELContext(xelc));
 	}
 	

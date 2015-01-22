@@ -100,8 +100,9 @@ public final class AstIdentifier extends SimpleNode {
             }
         }
 
-        throw new PropertyNotFoundException(MessageFactory.get(
-                "error.resolver.unhandled.null", this.image));
+        //in order to support static method, we can't set property resolved 
+        //inside XelELResolver.resolve(), and shouldn't throw exception here
+        return null;
     }
 
     

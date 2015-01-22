@@ -31,7 +31,6 @@ public class BindXelExpression extends ELXelExpression {
 		super(expr);
 	}
 	protected ELContext newELContext(XelContext xelc) {
-		//return new BindELContext(xelc);
-		return new StandardELContext(new BindELContext(xelc));
+		return new BindELContext(xelc);
 	}
 }
