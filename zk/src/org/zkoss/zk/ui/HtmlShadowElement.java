@@ -99,11 +99,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			return result;
 		} else if (_nextInsertion instanceof HtmlShadowElement) {
 			HtmlShadowElement nextInsertion = asShadow(_nextInsertion);
-			if (getParent() == null) {
-				// ask for the firstInsertion first.
-				if (nextInsertion._firstInsertion != null)
-					return nextInsertion._firstInsertion;
-			}
+			// ask for the firstInsertion first.
+			if (nextInsertion._firstInsertion != null)
+				return nextInsertion._firstInsertion;
 			return nextInsertion.getNextInsertionComponentIfAny();
 		}
 		return _nextInsertion;
@@ -119,11 +117,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			return result;
 		} else if (_previousInsertion instanceof HtmlShadowElement) {
 			HtmlShadowElement previousInsertion = asShadow(_previousInsertion);
-			if (getParent() == null) {
-				// ask for the lastInsertion first.
-				if (previousInsertion._lastInsertion != null)
-					return previousInsertion._lastInsertion;
-			}
+			// ask for the lastInsertion first.
+			if (previousInsertion._lastInsertion != null)
+				return previousInsertion._lastInsertion;
 			return previousInsertion.getPreviousInsertionComponentIfAny();
 		}
 		return _previousInsertion;

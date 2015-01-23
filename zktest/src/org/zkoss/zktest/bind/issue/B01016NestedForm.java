@@ -40,7 +40,7 @@ public class B01016NestedForm {
 		System.out.println("update "+getValue1()+","+getBean().getValue2());
 	}
 
-	public class Bean {
+	public static class Bean {
 		String value2;
 
 		public String getValue2() {

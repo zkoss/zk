@@ -71,8 +71,13 @@ public class ProxyHelper {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T extends Object> T createFormProxy(T origin, Class<?> type) {
 
+		if (origin instanceof Form)
+			return origin;
 		ProxyFactory factory = new ProxyFactory();
 		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
+		if (origin instanceof FormProxyObject)
+			type = ((FormProxyObject) origin).getOriginObject().getClass();
+		
 		factory.setSuperclass(type);
 		factory.setInterfaces(new Class[]{FormProxyObject.class, Form.class, FormFieldCleaner.class});
 		Class<?> proxyClass = factory.createClass();
