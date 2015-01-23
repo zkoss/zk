@@ -30,13 +30,15 @@ public class ElStringConcate {
 	public static void main(String[] args) {
 		ELProcessor elProc = new ELProcessor();
 		
+		System.out.println(elProc.eval("xxx.xxx"));
+		System.out.println(elProc.eval("var = 'hi'; var.xxx"));
 		elProc.defineBean("foo", new BigDecimal("123"));
 		elProc.defineBean("bar", "blahblah");
-		System.out.println(elProc.eval("Math.sqrt(16)"));
+		//System.out.println(elProc.eval("Math.sqrt(16)"));
 		//System.out.println(elProc.eval("incr = x -> x+1; incr(10)"));
 		
 		String expression = "bar += 'hi' += foo";
 		String ret1 = (String) elProc.getValue(expression, String.class);
-		System.out.println(ret1);
+		//System.out.println(ret1);
 	}
 }

@@ -42,7 +42,7 @@ public class BeanELResolver extends ELResolver {
 
     private static final int CACHE_SIZE;
     private static final String CACHE_SIZE_PROP =
-        "org.apache.el.BeanELResolver.CACHE_SIZE";
+        "org.zkoss.zel.BeanELResolver.CACHE_SIZE";
 
     static {
         if (System.getSecurityManager() == null) {
