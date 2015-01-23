@@ -1,0 +1,47 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.el.F80_ZK_2596')">
+		@load(xxx.xxx): there should be no exception
+		<label id="lb1" value="@load(v.xxx)"></label>
+		<separator></separator>
+		@load((Math.sqrt(16))):
+		<label id="lb2" value="@load((Math.sqrt(16)))"></label>
+		<separator></separator>
+		@load(([1, 2, 3, 4].get(3))):
+		<label id="lb3" value="@load(([1, 2, 3, 4].get(3)))"></label>
+		<separator></separator>
+		vm.value:
+		<label id="lb4" value="@load(value=vm.value)"></label>
+		<separator></separator>
+		@load((incr = x -> x+1; vm.value += incr(5)): 
+		<label id="lb5" value="@load((incr = x -> x + 1; vm.value += incr(5)))"></label>
+		<separator></separator>
+		@load((vm.value += 'hi'): 
+		<label id="lb6" value="@load((vm.value += 'hi'))"></label>
+		<separator></separator>
+		@command('click', key=(vm.value+=(x -> x + 1)(5))))
+		<button id="btn1" onClick="@command('click', key=(vm.value+=(x -> x + 1)(5))))">click</button>
+		<label id="lb13" value="@load(vm.value)"></label>
+		<separator></separator>
+		@command('click', key=(incr = x -> x + 1; vm.value += incr(10)))
+		<button id="btn2" onClick="@command('click', key=(incr = x -> x + 1; vm.value += incr(10)))">click</button>
+		<label id="lb14" value="@load(vm.value)"></label>
+		<separator></separator>
+		xx = vm.value; xx + vm.value: 
+		<label id="lb7" value="${xx = vm.value; xx += vm.value}"></label>
+		<separator></separator>
+		'one ' += vm.value += ' two': 
+		<label id="lb8" value="${'one ' += vm.value += ' two'}"></label>
+		<separator></separator>
+		(x -> x+1)(10): 
+		<label id="lb9" value="${(x -> x+1)(10)}"></label>
+		<separator></separator>
+		incr = x -> x+1; incr(10):
+		<label id="lb10" value="${incr = x -> x+1; incr(10)}"></label>
+		<separator></separator>
+		[1, 2, 3, 4].get(3): 
+		<label id="lb11" value="${[1, 2, 3, 4].get(3)}"></label>
+		<separator></separator>
+		fact(5): 
+		<label id="lb12" value="${fact = n-> n == 0 ? 1 : n * fact(n-1); fact(5)}"></label>
+	</window>
+</zk>

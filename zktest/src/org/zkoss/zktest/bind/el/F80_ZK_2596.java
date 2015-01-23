@@ -7,12 +7,12 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zel.ELProcessor;
 
-public class ElStringConcate {
+public class F80_ZK_2596 {
 	
 	private String value;
 	
-	public ElStringConcate() {
-		value = "string concate";
+	public F80_ZK_2596() {
+		value = "value";
 	}
 	
 	public String getValue() {
@@ -22,9 +22,9 @@ public class ElStringConcate {
 		this.value = value;
 	}
 	
-	@Command
+	@Command @NotifyChange("value")
 	public void click(@BindingParam("key")String key) {
-		System.out.println("yes we can!! " + key);
+		value = key;
 	}
 
 	public static void main(String[] args) {
