@@ -50,7 +50,7 @@ public class ExpressionBuilder implements NodeVisitor {
 
     private static final int CACHE_SIZE;
     private static final String CACHE_SIZE_PROP =
-        "org.apache.el.ExpressionBuilder.CACHE_SIZE";
+        "org.zkoss.zel.ExpressionBuilder.CACHE_SIZE";
 
     static {
         if (System.getSecurityManager() == null) {
