@@ -177,15 +177,19 @@ public class ValueExpressionImpl extends ValueExpression implements
     
     public Object getValue(ELContext context) throws PropertyNotFoundException,
             ELException {
-        EvaluationContext ctx = new EvaluationContext(context, this.fnMapper,
-                this.varMapper);
-        context.notifyBeforeEvaluation(getExpressionString());
-        Object value = this.getNode().getValue(ctx);
-        if (this.expectedType != null) {
-            value = context.convertToType(value, this.expectedType);
-        }
-        context.notifyAfterEvaluation(getExpressionString());
-        return value;
+    	try {
+	        EvaluationContext ctx = new EvaluationContext(context, this.fnMapper,
+	                this.varMapper);
+	        context.notifyBeforeEvaluation(getExpressionString());
+	        Object value = this.getNode().getValue(ctx);
+	        if (this.expectedType != null) {
+	            value = context.convertToType(value, this.expectedType);
+	        }
+	        context.notifyAfterEvaluation(getExpressionString());
+	        return value;
+    	} catch (PropertyNotFoundException e) {
+    		throw new PropertyNotFoundException(expr + ", " + e.getMessage(), e);
+    	}
     }
 
     /*

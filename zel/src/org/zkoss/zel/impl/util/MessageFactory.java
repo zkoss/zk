@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public final class MessageFactory {
 
     protected static final ResourceBundle bundle =
-            ResourceBundle.getBundle("org.apache.el.Messages");
+            ResourceBundle.getBundle("org.zkoss.zel.impl.Messages");
 
     public MessageFactory() {
         super();

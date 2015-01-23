@@ -100,6 +100,12 @@ public final class AstIdentifier extends SimpleNode {
             }
         }
 
+        //user can set property as resolved to hide null type exception, default is true
+        String hideException = System.getProperty("org.zkoss.zel.hideNullTypeException");
+        if (hideException == null || "true".equals(hideException.toLowerCase())) {
+        	ctx.setPropertyResolved(true);
+        }
+        
         //in order to support static method, we can't set property resolved 
         //inside XelELResolver.resolve(), and shouldn't throw exception here
         return null;

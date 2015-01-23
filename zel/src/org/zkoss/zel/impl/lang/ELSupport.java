@@ -103,7 +103,7 @@ public class ELSupport {
                         
                         public Boolean run() {
                             return Boolean.valueOf(System.getProperty(
-                                    "org.apache.el.parser.COERCE_TO_ZERO",
+                                    "org.zkoss.zel.impl.parser.COERCE_TO_ZERO",
                                     "false"));
                         }
 
@@ -111,7 +111,7 @@ public class ELSupport {
             ).booleanValue();
         } else {
             COERCE_TO_ZERO = Boolean.valueOf(System.getProperty(
-                    "org.apache.el.parser.COERCE_TO_ZERO",
+                    "org.zkoss.zel.impl.parser.COERCE_TO_ZERO",
                     "false")).booleanValue();
         }
     }

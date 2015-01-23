@@ -96,7 +96,7 @@ public abstract class ExpressionFactory {
      * <li>$JRE_HOME/lib/el.properties - key javax.el.ExpressionFactory</li>
      * <li>javax.el.ExpressionFactory</li>
      * <li>Platform default implementation -
-     *     org.apache.el.ExpressionFactoryImpl</li>
+     *     org.zkoss.zel.impl.ExpressionFactoryImpl</li>
      * </ol>
      * @return the new ExpressionFactory
      */

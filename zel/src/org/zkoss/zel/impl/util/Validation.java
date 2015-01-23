@@ -45,14 +45,14 @@ public class Validation {
                         
                         public Boolean run() {
                             return Boolean.valueOf(System.getProperty(
-                                    "org.apache.el.parser.SKIP_IDENTIFIER_CHECK",
+                                    "org.zkoss.zel.impl.parser.SKIP_IDENTIFIER_CHECK",
                             "false"));
                         }
                     }
             ).booleanValue();
         } else {
             SKIP_IDENTIFIER_CHECK = Boolean.valueOf(System.getProperty(
-                    "org.apache.el.parser.SKIP_IDENTIFIER_CHECK",
+                    "org.zkoss.zel.impl.parser.SKIP_IDENTIFIER_CHECK",
             "false")).booleanValue();
         }
     }
@@ -65,7 +65,7 @@ public class Validation {
     /**
      * Test whether a string is a Java identifier. Note that the behaviour of
      * this method depend on the system property
-     * {@code org.apache.el.parser.SKIP_IDENTIFIER_CHECK}
+     * {@code org.zkoss.zel.impl.parser.SKIP_IDENTIFIER_CHECK}
      *
      * @param key The string to test
      *

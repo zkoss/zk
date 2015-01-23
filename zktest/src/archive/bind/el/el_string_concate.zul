@@ -1,6 +1,9 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.el.ElStringConcate')">
-	
+		@load(xxx.xxx): there should be no exception
+		<label value="@load(v.xxx)"></label>
+		<!-- <label value="@load(vm.xxx)"></label> -->
+		<separator></separator>
 		@load((Math.sqrt(16))):
 		<label value="@load((Math.sqrt(16)))"></label>
 		<separator></separator>
