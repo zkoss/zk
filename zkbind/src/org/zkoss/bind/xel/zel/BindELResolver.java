@@ -35,6 +35,7 @@ import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
+import org.zkoss.zel.StandardELContext;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zk.ui.Component;
 
@@ -72,6 +73,7 @@ public class BindELResolver extends XelELResolver {
 		Object value = super.getValue(ctx, base, property);
 		
 		final BindELContext bctx = (BindELContext)((EvaluationContext)ctx).getELContext();
+		
 		Object ignoreRefVal = bctx.getAttribute(BinderImpl.IGNORE_REF_VALUE);
 		
 		//ZK-950: The expression reference doesn't update while change the instant of the reference
@@ -81,7 +83,8 @@ public class BindELResolver extends XelELResolver {
 			if (Boolean.TRUE.equals(ignoreRefVal)) {
 				return rbinding;
 			}
-			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
+//			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
+			value = rbinding.getValue(bctx);
 			final Object invalidateRef = bctx.getAttribute(BinderCtrl.INVALIDATE_REF_VALUE);
 			if ("true".equalsIgnoreCase(String.valueOf(invalidateRef)))
 				rbinding.invalidateCache();
@@ -118,6 +121,7 @@ public class BindELResolver extends XelELResolver {
 	//save value into equal beans
 	private void saveEqualBeans(ELContext elCtx, Object base, String prop, Object value) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
+		
 		final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
 
 		if (bctx.getAttribute(BinderImpl.SAVE_BASE) != null) { //recursive back, return
@@ -140,6 +144,7 @@ public class BindELResolver extends XelELResolver {
 	//update dependency and notify changed
 	protected void tieValue(ELContext elCtx, Object base, Object property, Object value, boolean allownotify) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
+		
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
 		//only there is a binding that needs tie tracking to value

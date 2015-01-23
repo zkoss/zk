@@ -20,7 +20,6 @@ package org.zkoss.zel.impl.parser;
 
 import java.util.Arrays;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.MethodInfo;
 import org.zkoss.zel.PropertyNotWritableException;
@@ -32,14 +31,13 @@ import org.zkoss.zel.impl.util.MessageFactory;
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: SimpleNode.java 1060907 2011-01-19 19:08:36Z markt $
  */
 public abstract class SimpleNode extends ELSupport implements Node {
     protected Node parent;
 
     protected Node[] children;
 
-    protected int id;
+    protected final int id;
 
     protected String image;
 
@@ -47,22 +45,27 @@ public abstract class SimpleNode extends ELSupport implements Node {
         id = i;
     }
 
+    
     public void jjtOpen() {
         // NOOP by default
     }
 
+    
     public void jjtClose() {
         // NOOP by default
     }
 
+    
     public void jjtSetParent(Node n) {
         parent = n;
     }
 
+    
     public Node jjtGetParent() {
         return parent;
     }
 
+    
     public void jjtAddChild(Node n, int i) {
         if (children == null) {
             children = new Node[i + 1];
@@ -74,10 +77,12 @@ public abstract class SimpleNode extends ELSupport implements Node {
         children[i] = n;
     }
 
+    
     public Node jjtGetChild(int i) {
         return children[i];
     }
 
+    
     public int jjtGetNumChildren() {
         return (children == null) ? 0 : children.length;
     }
@@ -98,10 +103,7 @@ public abstract class SimpleNode extends ELSupport implements Node {
         return ELParserTreeConstants.jjtNodeName[id];
     }
 
-    public String toString(String prefix) {
-        return prefix + toString();
-    }
-
+    
     public String getImage() {
         return image;
     }
@@ -110,26 +112,31 @@ public abstract class SimpleNode extends ELSupport implements Node {
         this.image = image;
     }
 
+    
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         throw new UnsupportedOperationException();
     }
 
+    
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         throw new UnsupportedOperationException();
     }
 
+    
     public boolean isReadOnly(EvaluationContext ctx)
             throws ELException {
         return true;
     }
 
+    
     public void setValue(EvaluationContext ctx, Object value)
             throws ELException {
         throw new PropertyNotWritableException(MessageFactory.get("error.syntax.set"));
     }
 
+    
     public void accept(NodeVisitor visitor) throws Exception {
         visitor.visit(this);
         if (this.children != null && this.children.length > 0) {
@@ -139,17 +146,19 @@ public abstract class SimpleNode extends ELSupport implements Node {
         }
     }
 
+    
     public Object invoke(EvaluationContext ctx, Class<?>[] paramTypes,
             Object[] paramValues) throws ELException {
         throw new UnsupportedOperationException();
     }
 
+    
     public MethodInfo getMethodInfo(EvaluationContext ctx,
             Class<?>[] paramTypes) throws ELException {
         throw new UnsupportedOperationException();
     }
-    
-    
+
+
     
     public int hashCode() {
         final int prime = 31;
@@ -188,18 +197,20 @@ public abstract class SimpleNode extends ELSupport implements Node {
     /**
      * @since EL 2.2
      */
+    
     public ValueReference getValueReference(EvaluationContext ctx) {
         return null;
     }
-    
+
     /**
      * @since EL 2.2
      */
+    
     public boolean isParametersProvided() {
         return false;
     }
     
-    //20120331, henrichen@zkoss.org
+  //20120331, henrichen@zkoss.org
     /**
      * Returns total siblings (including self) of this node; so at least return one.
      * @since ZEL 2.2.2

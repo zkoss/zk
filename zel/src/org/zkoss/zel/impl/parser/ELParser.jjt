@@ -38,11 +38,10 @@ options
 PARSER_BEGIN( ELParser )
 package org.zkoss.zel.impl.parser;
 import java.io.StringReader;
-import org.zkoss.zel.ELException;
-public class ELParser
-{
-    public static Node parse(String ref) throws ELException
-    {
+import javax.el.ELException;
+public class ELParser {
+
+    public static Node parse(String ref) throws ELException {
         try {
             return (new ELParser(new StringReader(ref))).CompositeExpression();
         } catch (ParseException pe) {
@@ -59,7 +58,9 @@ PARSER_END( ELParser )
  */
 AstCompositeExpression CompositeExpression() #CompositeExpression : {}
 {
-    (DeferredExpression() | DynamicExpression() | LiteralExpression())* <EOF> { return jjtThis; }
+    (DeferredExpression() |
+     DynamicExpression() |
+     LiteralExpression())* <EOF> { return jjtThis; }
 }
 
 /*
@@ -73,29 +74,76 @@ void LiteralExpression() #LiteralExpression : { Token t = null; }
 
 /*
  * DeferredExpression
- * #{..} Expressions
+ * #{...} Expressions
  */
 void DeferredExpression() #DeferredExpression : {}
 {
-    <START_DEFERRED_EXPRESSION> Expression() <END_EXPRESSION>
+    <START_DEFERRED_EXPRESSION> Expression() <RBRACE>
 }
 
 /*
  * DynamicExpression
- * ${..} Expressions
+ * ${...} Expressions
  */
 void DynamicExpression() #DynamicExpression : {}
 {
-    <START_DYNAMIC_EXPRESSION> Expression() <END_EXPRESSION>
+    <START_DYNAMIC_EXPRESSION> Expression() <RBRACE>
 }
 
 /*
  * Expression
- * EL Expression Language Root, goes to Choice
+ * EL Expression Language Root
  */
 void Expression() : {}
 {
-    Choice()
+    Semicolon()
+}
+
+/*
+ * Semicolon
+ */
+void Semicolon() : {}
+{
+    Assignment() ( <SEMICOLON> Assignment() #Semicolon(2) )*
+}
+
+/*
+ * Assignment
+ */
+void Assignment() : {}
+{
+    LOOKAHEAD(4) LambdaExpression() |
+    Choice() ( LOOKAHEAD(2) <ASSIGN> Assignment() #Assign(2) )*
+}
+
+/*
+ * Lambda expression
+ */
+void LambdaExpression() #LambdaExpression : {}
+{
+    LambdaParameters() <ARROW> ( LOOKAHEAD(3) LambdaExpression() | Choice() )
+}
+
+/*
+ * Lambda parameters
+ */
+void LambdaParameters() #LambdaParameters : {}
+{
+    Identifier() | <LPAREN> ( Identifier() ( <COMMA> Identifier() )* )? <RPAREN>
+}
+
+/*
+ * Possible invocation of lambda expression. Invocations must be bracketed but
+ * being bracketed does not mean it is an invocation.
+ */
+void LambdaExpressionOrInvocation() #LambdaExpression : {}
+{
+    <LPAREN>
+        LambdaParameters()
+        <ARROW>
+        ( LOOKAHEAD(3) LambdaExpression() | Choice() )
+    <RPAREN>
+    ( MethodParameters() )*
 }
 
 /*
@@ -141,21 +189,34 @@ void Equality() : {}
 
 /*
  * Compare
- * For a bunch of them, then Math
+ * For a bunch of them, then +=
  */
 void Compare() : {}
 {
-    Math()
+    Concatenation()
     (
-        ((<LT0>|<LT1>) Math() #LessThan(2))
+        ((<LT0>|<LT1>) Concatenation() #LessThan(2))
     |
-        ((<GT0>|<GT1>) Math() #GreaterThan(2))
+        ((<GT0>|<GT1>) Concatenation() #GreaterThan(2))
     |
-        ((<LE0>|<LE1>) Math() #LessThanEqual(2))
+        ((<LE0>|<LE1>) Concatenation() #LessThanEqual(2))
     |
-        ((<GE0>|<GE1>) Math() #GreaterThanEqual(2))
+        ((<GE0>|<GE1>) Concatenation() #GreaterThanEqual(2))
     )*
 }
+
+/*
+ * Concatenation
+ * For +=, then Math
+ *
+ */
+ void Concatenation() : {}
+ {
+     Math()
+     (
+         <CONCAT> Math() #Concatenation(2)
+     )*
+ }
 
 /*
  * Math
@@ -262,9 +323,49 @@ void MethodParameters() #MethodParameters : {}
  */
 void NonLiteral() : {}
 {
-    <LPAREN> Expression() <RPAREN>
+    LOOKAHEAD(5) LambdaExpressionOrInvocation()
+    | <LPAREN> Expression() <RPAREN>
     | LOOKAHEAD((<IDENTIFIER> <COLON>)? <IDENTIFIER> <LPAREN>) Function()
     | Identifier()
+    | LOOKAHEAD(3)SetData()
+    | ListData()
+    | MapData()
+}
+
+/*
+ * Note that both an empty Set and an empty Map are represented by {}. The
+ * parser will always parse {} as an empty Set and special handling is required
+ * to convert it to an empty Map when appropriate.
+ */
+void SetData() #SetData: {}
+{
+    <START_SET_OR_MAP>
+        ( Expression() ( <COMMA> Expression() )* )?
+    <RBRACE>
+}
+
+void ListData() #ListData: {}
+{
+    <LBRACK>
+        ( Expression() ( <COMMA> Expression() )* )?
+    <RBRACK>
+}
+
+/*
+ * Note that both an empty Set and an empty Map are represented by {}. The
+ * parser will always parse {} as an empty Set and special handling is required
+ * to convert it to an empty Map when appropriate.
+ */
+void MapData() #MapData: {}
+{
+    <START_SET_OR_MAP>
+        ( MapEntry() ( <COMMA> MapEntry() )* )?
+    <RBRACE>
+}
+
+void MapEntry() #MapEntry: {}
+{
+    Expression() <COLON> Expression()
 }
 
 /*
@@ -286,16 +387,16 @@ void Function() #Function :
     Token t1 = null;
 }
 {
-    (LOOKAHEAD(2) t0=<IDENTIFIER> <COLON>)? t1=<IDENTIFIER>
+    t0=<IDENTIFIER>  ( <COLON> t1=<IDENTIFIER> )?
     {
-        if (t0 != null) {
+        if (t1 != null) {
             jjtThis.setPrefix(t0.image);
             jjtThis.setLocalName(t1.image);
         } else {
-            jjtThis.setLocalName(t1.image);
+            jjtThis.setLocalName(t0.image);
         }
     }
-    <LPAREN> (Expression() (<COMMA> Expression())*)? <RPAREN>
+    ( MethodParameters() )+
 }
 
 /*
@@ -322,7 +423,7 @@ void Boolean() : {}
 }
 
 /*
- * FloatinPoint
+ * FloatingPoint
  * For Decimal and Floating Point Literals
  */
 void FloatingPoint() #FloatingPoint : { Token t = null; }
@@ -358,7 +459,11 @@ void Null() #Null : {}
 }
 
 
-/* ==================================================================================== */
+/* ========================================================================== */
+TOKEN_MGR_DECLS:
+{
+java.util.Deque<Integer> deque = new java.util.ArrayDeque<Integer>();
+}
 <DEFAULT> TOKEN :
 {
   /*
@@ -375,36 +480,38 @@ void Null() #Null : {}
     | "#"
   >
 |
-  < START_DYNAMIC_EXPRESSION: "${" > : IN_EXPRESSION
+  < START_DYNAMIC_EXPRESSION: "${" > {deque.push(DEFAULT);}: IN_EXPRESSION
 |
-  < START_DEFERRED_EXPRESSION: "#{" > : IN_EXPRESSION
+  < START_DEFERRED_EXPRESSION: "#{" > {deque.push(DEFAULT);}: IN_EXPRESSION
 }
 
-<IN_EXPRESSION> SKIP : { " " | "\t" | "\n" | "\r" }
+<IN_EXPRESSION, IN_SET_OR_MAP> SKIP : { " " | "\t" | "\n" | "\r" }
 
-<IN_EXPRESSION> TOKEN :
+<IN_EXPRESSION, IN_SET_OR_MAP> TOKEN :
 {
-    < INTEGER_LITERAL: ["0"-"9"] (["0"-"9"])* >
+     < START_SET_OR_MAP : "{" > {deque.push(curLexState);}: IN_SET_OR_MAP
+|    < RBRACE: "}" > {SwitchTo(deque.pop());}
+|    < INTEGER_LITERAL: ["0"-"9"] (["0"-"9"])* >
 |    < FLOATING_POINT_LITERAL: (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)?
         | "." (["0"-"9"])+ (<EXPONENT>)?
         | (["0"-"9"])+ <EXPONENT>
-    >
+     >
 |    < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
 |    < STRING_LITERAL: ("\"" ((~["\"","\\"])
         | ("\\" ( ["\\","\"","\'"] )))* "\"")
         | ("\'" ((~["\'","\\"])
         | ("\\" ( ["\\","\"","\'"] )))* "\'")
-    >
+     >
 |    < TRUE : "true" >
 |    < FALSE : "false" >
 |    < NULL : "null" >
-|    < END_EXPRESSION : "}" > : DEFAULT
 |    < DOT : "." >
 |    < LPAREN : "(" >
 |    < RPAREN : ")" >
 |    < LBRACK : "[" >
 |    < RBRACK : "]" >
 |    < COLON : ":" >
+|    < SEMICOLON : ";" >
 |    < COMMA : "," >
 |    < GT0 : ">" >
 |    < GT1 : "gt" >
@@ -434,6 +541,9 @@ void Null() #Null : {}
 |    < DIV1 : "div" >
 |    < MOD0 : "%" >
 |    < MOD1 : "mod" >
+|    < CONCAT : "+=" >
+|    < ASSIGN : "=" >
+|    < ARROW : "->" >
 |    < IDENTIFIER : (<LETTER>|<IMPL_OBJ_START>) (<LETTER>|<DIGIT>)* >
 |    < FUNCTIONSUFFIX : (<IDENTIFIER>) >
 |    < #IMPL_OBJ_START: "#" >

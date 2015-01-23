@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class BeanELResolver extends ELResolver {
 
     private static final int CACHE_SIZE;
     private static final String CACHE_SIZE_PROP =
-        "org.zkoss.zel.BeanELResolver.CACHE_SIZE";
+        "org.apache.el.BeanELResolver.CACHE_SIZE";
 
     static {
         if (System.getSecurityManager() == null) {
@@ -53,6 +52,7 @@ public class BeanELResolver extends ELResolver {
             CACHE_SIZE = AccessController.doPrivileged(
                     new PrivilegedAction<Integer>() {
 
+                    
                     public Integer run() {
                         return Integer.valueOf(
                                 System.getProperty(CACHE_SIZE_PROP, "1000"));
@@ -64,7 +64,7 @@ public class BeanELResolver extends ELResolver {
     private final boolean readOnly;
 
     private final ConcurrentCache<String, BeanProperties> cache =
-        new ConcurrentCache<String, BeanProperties>(CACHE_SIZE);
+        new ConcurrentCache<>(CACHE_SIZE);
 
     public BeanELResolver() {
         this.readOnly = false;
@@ -73,9 +73,9 @@ public class BeanELResolver extends ELResolver {
     public BeanELResolver(boolean readOnly) {
         this.readOnly = readOnly;
     }
+
     
-    public Object getValue(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public Class<?> getType(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
@@ -83,40 +83,38 @@ public class BeanELResolver extends ELResolver {
             return null;
         }
 
-        context.setPropertyResolved(true);
+        context.setPropertyResolved(base, property);
+        return this.property(context, base, property).getPropertyType();
+    }
+
+    
+    public Object getValue(ELContext context, Object base, Object property) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (base == null || property == null) {
+            return null;
+        }
+
+        context.setPropertyResolved(base, property);
         Method m = this.property(context, base, property).read(context);
         try {
-            final Object result = m.invoke(base, (Object[]) null);
-            context.putContext(Method.class, m); //20110826, henrichen: expose getXxx method
-            return result;
-        } catch (IllegalAccessException e) {
-            throw new ELException(e);
+        	final Object result = m.invoke(base, (Object[]) null);
+        	context.putContext(Method.class, m);
+        	return result;
         } catch (InvocationTargetException e) {
-            throw new ELException(message(context, "propertyReadError",
-                    new Object[] { base.getClass().getName(),
-                            property.toString() }), e.getCause());
+            Throwable cause = e.getCause();
+            Util.handleThrowable(cause);
+            throw new ELException(Util.message(context, "propertyReadError",
+                    base.getClass().getName(), property.toString()), cause);
         } catch (Exception e) {
             throw new ELException(e);
         }
     }
-    
-    public Class<?> getType(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        if (base == null || property == null) {
-            return null;
-        }
 
-        context.setPropertyResolved(true);
-        return this.property(context, base, property).getPropertyType();
-    }
     
     public void setValue(ELContext context, Object base, Object property,
-            Object value) throws NullPointerException,
-            PropertyNotFoundException, PropertyNotWritableException,
-            ELException {
+            Object value) {
         if (context == null) {
             throw new NullPointerException();
         }
@@ -124,17 +122,16 @@ public class BeanELResolver extends ELResolver {
             return;
         }
 
-        context.setPropertyResolved(true);
+        context.setPropertyResolved(base, property);
 
         if (this.readOnly) {
-            throw new PropertyNotWritableException(message(context,
-                    "resolverNotWriteable", new Object[] { base.getClass()
-                            .getName() }));
+            throw new PropertyNotWritableException(Util.message(context,
+                    "resolverNotWriteable", base.getClass().getName()));
         }
 
         Method m = this.property(context, base, property).write(context);
-
-        //for ZK-1178: check type of mehtod's parameter is the same as type of value
+        
+      //for ZK-1178: check type of mehtod's parameter is the same as type of value
         //XXX refactored into write() ?
         if (!checkType(m, value)) {
         	Class<?> baseClass = base.getClass();
@@ -167,17 +164,16 @@ public class BeanELResolver extends ELResolver {
         
         try {
             m.invoke(base, value);
-            context.putContext(Method.class, m); //20110826, henrichen: expose property setXxx method
-        } catch (IllegalAccessException e) {
-            throw new ELException(e);
+            context.putContext(Method.class, m);
         } catch (InvocationTargetException e) {
-            throw new ELException(message(context, "propertyWriteError",
-                    new Object[] { base.getClass().getName(),
-                            property.toString() }), e.getCause());
+            Throwable cause = e.getCause();
+            Util.handleThrowable(cause);
+            throw new ELException(Util.message(context, "propertyWriteError",
+                    base.getClass().getName(), property.toString()), cause);
         } catch (IllegalArgumentException e) {
-        	 throw new ELException(message(context, "propertyWriteError",
-                     new Object[] { base.getClass().getName(),
-                             property.toString() }), e);
+        	throw new ELException(Util.message(context, "propertyWriteError",
+                    new Object[] { base.getClass().getName(),
+                            property.toString() }), e);
         } catch (Exception e) {
             throw new ELException(e);
         }
@@ -190,335 +186,54 @@ public class BeanELResolver extends ELResolver {
 		}
 		return clazzes[0].isInstance(value);
     }
-    
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        if (base == null || property == null) {
-            return false;
-        }
 
-        context.setPropertyResolved(true);
-        return this.readOnly
-                || this.property(context, base, property).isReadOnly();
-    }
-    
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        if (base == null) {
-            return null;
-        }
-
-        try {
-            BeanInfo info = Introspector.getBeanInfo(base.getClass());
-            PropertyDescriptor[] pds = info.getPropertyDescriptors();
-            for (int i = 0; i < pds.length; i++) {
-                //20110927, henrichen: Instrospector see getAbc(int) as IndexedPropertyDescriptor
-            	final PropertyDescriptor pd = pds[i]; 
-                pd.setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.TRUE);
-                if (pd instanceof IndexedPropertyDescriptor) {
-                	pd.setValue(TYPE, ((IndexedPropertyDescriptor) pd).getIndexedPropertyType());
-                } else {
-                	pd.setValue(TYPE, pd.getPropertyType());
-                }
-            }
-            return Arrays.asList((FeatureDescriptor[]) pds).iterator();
-        } catch (IntrospectionException e) {
-            //
-        }
-
-        return null;
-    }
-    
-    public Class<?> getCommonPropertyType(ELContext context, Object base) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        if (base != null) {
-            return Object.class;
-        }
-
-        return null;
-    }
-
-    protected static final class BeanProperties {
-        private final Map<String, BeanProperty> properties;
-
-        private final Class<?> type;
-
-        public BeanProperties(Class<?> type) throws ELException {
-            this.type = type;
-            this.properties = new HashMap<String, BeanProperty>();
-            try {
-                BeanInfo info = Introspector.getBeanInfo(this.type);
-                PropertyDescriptor[] pds = info.getPropertyDescriptors();
-                //20110927, henrichen: Introspector sees getAbc(int) as IndexedPropertyDescriptor
-                //which might override getAbc() PropertyDescriptor; have to recover the case
-                for (int i = 0; i < pds.length; i++) {
-                	final PropertyDescriptor pd = recoverIndexedPropertyDescriptor(this.type, pds[i]);
-                    this.properties.put(pd.getName(), new BeanProperty(type, pd));
-                }
-            } catch (IntrospectionException ie) {
-                throw new ELException(ie);
-            }
-        }
-
-        //20110927, henrichen: Introspector see getAbc(int) as IndexedPropertyDescriptor
-        //which could merge away getAbc() PropertyDescriptor; have to recover this case
-        //e.g. Map AbstractComponent#getAttributes() and Map AbstractComponent#getAttributes(int scope)
-        private PropertyDescriptor recoverIndexedPropertyDescriptor(Class baseClz, PropertyDescriptor pd) {
-        	if (pd instanceof IndexedPropertyDescriptor) {
-        		final IndexedPropertyDescriptor ipd = (IndexedPropertyDescriptor) pd;
-        		if (ipd.getIndexedReadMethod() != null) {
-	            	try {
-	            		//try to get getter parameter type 
-	            		final String name = ipd.getName();
-	            		final Method rm = ipd.getIndexedReadMethod();
-	            		final String readMethodName = rm != null ? rm.getName() : null;
-	            		final Method wm = ipd.getIndexedWriteMethod();
-	            		final String writeMethodName = wm != null ? wm.getName() : null;
-						pd = new PropertyDescriptor(name, baseClz, readMethodName, writeMethodName);
-					} catch (IntrospectionException e) {
-						//ignore
-	            	} catch (SecurityException e) {
-						//ignore
-					}
-        		}
-        	}
-        	return pd;
-        }
-        private BeanProperty get(ELContext ctx, String name) {
-            BeanProperty property = this.properties.get(name);
-            if (property == null) {
-                throw new PropertyNotFoundException(message(ctx,
-                        "propertyNotFound",
-                        new Object[] { type.getName(), name }));
-            }
-            return property;
-        }
-
-        public BeanProperty getBeanProperty(String name) {
-            return get(null, name);
-        }
-        
-        private Class<?> getType() {
-            return type;
-        }
-    }
-
-    protected static final class BeanProperty {
-        private final Class<?> type;
-
-        private final Class<?> owner;
-
-        private final PropertyDescriptor descriptor;
-
-        private Method read;
-
-        private Method write;
-
-        public BeanProperty(Class<?> owner, PropertyDescriptor descriptor) {
-            this.owner = owner;
-            this.descriptor = descriptor;
-            
-            //20110927, henrichen: Introspector see getAbc(int) as IndexedPropertyDescriptor
-            this.type = descriptor instanceof IndexedPropertyDescriptor ?  
-            		((IndexedPropertyDescriptor)descriptor).getIndexedPropertyType() :
-            		descriptor.getPropertyType();
-        }
-
-        // Can't use Class<?> because API needs to match specification
-        @SuppressWarnings("rawtypes")
-        public Class getPropertyType() {
-            return this.type;
-        }
-
-        public boolean isReadOnly() {
-            return this.write == null
-                && (null == (this.write = getMethod(this.owner, descriptor.getWriteMethod())));
-        }
-
-        public Method getWriteMethod() {
-            return write(null);
-        }
-
-        public Method getReadMethod() {
-            return this.read(null);
-        }
-
-        private Method write(ELContext ctx) {
-            if (this.write == null) {
-                this.write = getMethod(this.owner, descriptor.getWriteMethod());
-                
-                //20110921, henrichen: Introspector is too strict for Setter(must return void), here we loosen it
-                if (this.write == null) {
-                	final String name = this.descriptor.getName();
-            		final String mname = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-            		//try to get setter parameter type 
-            		final Class parameterTypes = this.descriptor instanceof IndexedPropertyDescriptor ?
-            				((IndexedPropertyDescriptor)this.descriptor).getIndexedPropertyType() :
-            				this.descriptor.getPropertyType();
-            				
-                	try {
-                		final Method m = this.owner.getMethod(mname, new Class[] {parameterTypes});
-                		this.write = getMethod(this.owner, m);
-                	} catch (SecurityException e) {
-						//ignore
-					} catch (NoSuchMethodException e) {
-						//ignore
-					}
-                	
-                	//20120423, dennis: Introspector is too strict for Setter(must has same class argument as getter), 
-                    //here we chosen a possible method by the getter type
-                    if (this.write == null) {
-                    	try {
-                    		final Method m = ClassUtil.getCloseMethod(this.owner, mname, new Class[]{parameterTypes});
-                    		this.write = getMethod(this.owner, m);
-                    	} catch (SecurityException e) {
-    						//ignore
-    					} catch (NoSuchMethodException e) {
-    						//ignore
-						}
-                    }
-                }
-                
-                if (this.write == null) {
-                    throw new PropertyNotFoundException(message(ctx,
-                            "propertyNotWritable", new Object[] {
-                    		owner.getName(), descriptor.getName() }));
-                }
-            }
-            return this.write;
-        }
-
-        private Method read(ELContext ctx) {
-            if (this.read == null) {
-                this.read = getMethod(this.owner, descriptor.getReadMethod());
-                if (this.read == null) {
-                    throw new PropertyNotFoundException(message(ctx,
-                            "propertyNotReadable", new Object[] {
-                    		owner.getName(), descriptor.getName() }));
-                }
-            }
-            return this.read;
-        }
-    }
-
-    private final BeanProperty property(ELContext ctx, Object base,
-            Object property) {
-        Class<?> type = base.getClass();
-        String prop = property.toString();
-
-        BeanProperties props = this.cache.get(type.getName());
-        if (props == null || type != props.getType()) {
-            props = new BeanProperties(type);
-            this.cache.put(type.getName(), props);
-        }
-
-        return props.get(ctx, prop);
-    }
-
-    private static final Method getMethod(Class<?> type, Method m) {
-        if (m == null || Modifier.isPublic(type.getModifiers())) {
-            return m;
-        }
-        Class<?>[] inf = type.getInterfaces();
-        Method mp = null;
-        for (int i = 0; i < inf.length; i++) {
-            try {
-                mp = inf[i].getMethod(m.getName(), m.getParameterTypes());
-                mp = getMethod(mp.getDeclaringClass(), mp);
-                if (mp != null) {
-                    return mp;
-                }
-            } catch (NoSuchMethodException e) {
-                // Ignore
-            	e.printStackTrace();
-            }
-        }
-        Class<?> sup = type.getSuperclass();
-        if (sup != null) {
-            try {
-                mp = sup.getMethod(m.getName(), m.getParameterTypes());
-                mp = getMethod(mp.getDeclaringClass(), mp);
-                if (mp != null) {
-                    return mp;
-                }
-            } catch (NoSuchMethodException e) {
-                // Ignore
-            	e.printStackTrace();
-            }
-        }
-        return null;
-    }
-    
-    private static final class ConcurrentCache<K,V> {
-
-        private final int size;
-        private final Map<K,V> eden;
-        private final Map<K,V> longterm;
-        
-        public ConcurrentCache(int size) {
-            this.size = size;
-            this.eden = new ConcurrentHashMap<K,V>(size);
-            this.longterm = new WeakHashMap<K,V>(size);
-        }
-        
-        public V get(K key) {
-            V value = this.eden.get(key);
-            if (value == null) {
-                synchronized (longterm) {
-                    value = this.longterm.get(key);
-                }
-                if (value != null) {
-                    this.eden.put(key, value);
-                }
-            }
-            return value;
-        }
-        
-        public void put(K key, V value) {
-            if (this.eden.size() >= this.size) {
-                synchronized (longterm) {
-                    this.longterm.putAll(this.eden);
-                }
-                this.eden.clear();
-            }
-            this.eden.put(key, value);
-        }
-
-    }
-    
     /**
      * @since EL 2.2
      */
+    
     public Object invoke(ELContext context, Object base, Object method,
             Class<?>[] paramTypes, Object[] params) {
-		if (context == null) {
-			throw new NullPointerException();
-		}
-		if (base == null || method == null) {
-			return null;
-		}
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (base == null || method == null) {
+            return null;
+        }
 
-		ExpressionFactory factory = ExpressionFactory.newInstance();
-
-		String methodName = (String) factory.coerceToType(method, String.class);
+        ExpressionFactory factory = ExpressionFactory.newInstance();
+        
+        String methodName = (String) factory.coerceToType(method, String.class);
 
 		// Find the matching method
 		Method matchingMethod = null;
 		Class<?> clazz = base.getClass();
 		if (paramTypes != null) {
 			try {
-				matchingMethod = getMethod(clazz, clazz.getMethod(methodName, paramTypes));
+				matchingMethod = Util.getMethod(clazz, clazz.getMethod(methodName, paramTypes));
 			} catch (NoSuchMethodException e) {
-				throw new MethodNotFoundException(e);
+				//throw new MethodNotFoundException(e);
+				int paramCount = 0;
+				if (params != null) {
+					paramCount = params.length;
+				}
+				Method[] methods = clazz.getMethods();
+				for (Method m : methods) {
+					if (methodName.equals(m.getName())) {
+						if (m.getParameterTypes().length == paramCount) {
+							// Same number of parameters - use the first match
+							matchingMethod = Util.getMethod(clazz, m);
+							break;
+						}
+						if (m.isVarArgs()
+								&& paramCount > m.getParameterTypes().length - 2) {
+							matchingMethod = Util.getMethod(clazz, m);
+						}
+					}
+				}
+				if (matchingMethod == null) {
+					//maybe other resolver can resolve, we shouldn't throw exception here
+					return null;
+				}
 			}
 		} else {
 			int paramCount = 0;
@@ -530,12 +245,12 @@ public class BeanELResolver extends ELResolver {
 				if (methodName.equals(m.getName())) {
 					if (m.getParameterTypes().length == paramCount) {
 						// Same number of parameters - use the first match
-						matchingMethod = getMethod(clazz, m);
+						matchingMethod = Util.getMethod(clazz, m);
 						break;
 					}
 					if (m.isVarArgs()
 							&& paramCount > m.getParameterTypes().length - 2) {
-						matchingMethod = getMethod(clazz, m);
+						matchingMethod = Util.getMethod(clazz, m);
 					}
 				}
 			}
@@ -609,7 +324,268 @@ public class BeanELResolver extends ELResolver {
 		}
         
         context.setPropertyResolved(true);
-        return result;
+        return result;  
     }
 
+    
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (base == null || property == null) {
+            return false;
+        }
+
+        context.setPropertyResolved(base, property);
+        return this.readOnly || this.property(context, base, property).isReadOnly();
+    }
+
+    
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+        if (base == null) {
+            return null;
+        }
+
+        try {
+            BeanInfo info = Introspector.getBeanInfo(base.getClass());
+            PropertyDescriptor[] pds = info.getPropertyDescriptors();
+            for (int i = 0; i < pds.length; i++) {
+            	//20110927, henrichen: Instrospector see getAbc(int) as IndexedPropertyDescriptor
+            	final PropertyDescriptor pd = pds[i]; 
+                pd.setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.TRUE);
+                if (pd instanceof IndexedPropertyDescriptor) {
+                	pd.setValue(TYPE, ((IndexedPropertyDescriptor) pd).getIndexedPropertyType());
+                } else {
+                	pd.setValue(TYPE, pd.getPropertyType());
+                }
+            }
+            return Arrays.asList((FeatureDescriptor[]) pds).iterator();
+        } catch (IntrospectionException e) {
+            //
+        }
+
+        return null;
+    }
+
+    
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
+        if (base != null) {
+            return Object.class;
+        }
+
+        return null;
+    }
+
+    static final class BeanProperties {
+        private final Map<String, BeanProperty> properties;
+
+        private final Class<?> type;
+
+        public BeanProperties(Class<?> type) throws ELException {
+            this.type = type;
+            this.properties = new HashMap<>();
+            try {
+                BeanInfo info = Introspector.getBeanInfo(this.type);
+                PropertyDescriptor[] pds = info.getPropertyDescriptors();
+                //20110927, henrichen: Introspector sees getAbc(int) as IndexedPropertyDescriptor
+                //which might override getAbc() PropertyDescriptor; have to recover the case
+                for (int i = 0; i < pds.length; i++) {
+                	final PropertyDescriptor pd = recoverIndexedPropertyDescriptor(this.type, pds[i]);
+                    this.properties.put(pd.getName(), new BeanProperty(type, pd));
+                }
+            } catch (IntrospectionException ie) {
+                throw new ELException(ie);
+            }
+        }
+        
+        //20110927, henrichen: Introspector see getAbc(int) as IndexedPropertyDescriptor
+        //which could merge away getAbc() PropertyDescriptor; have to recover this case
+        //e.g. Map AbstractComponent#getAttributes() and Map AbstractComponent#getAttributes(int scope)
+        private PropertyDescriptor recoverIndexedPropertyDescriptor(Class baseClz, PropertyDescriptor pd) {
+        	if (pd instanceof IndexedPropertyDescriptor) {
+        		final IndexedPropertyDescriptor ipd = (IndexedPropertyDescriptor) pd;
+        		if (ipd.getIndexedReadMethod() != null) {
+	            	try {
+	            		//try to get getter parameter type 
+	            		final String name = ipd.getName();
+	            		final Method rm = ipd.getIndexedReadMethod();
+	            		final String readMethodName = rm != null ? rm.getName() : null;
+	            		final Method wm = ipd.getIndexedWriteMethod();
+	            		final String writeMethodName = wm != null ? wm.getName() : null;
+						pd = new PropertyDescriptor(name, baseClz, readMethodName, writeMethodName);
+					} catch (IntrospectionException e) {
+						//ignore
+	            	} catch (SecurityException e) {
+						//ignore
+					}
+        		}
+        	}
+        	return pd;
+        }
+
+        private BeanProperty get(ELContext ctx, String name) {
+            BeanProperty property = this.properties.get(name);
+            if (property == null) {
+                throw new PropertyNotFoundException(Util.message(ctx,
+                        "propertyNotFound", type.getName(), name));
+            }
+            return property;
+        }
+
+        public BeanProperty getBeanProperty(String name) {
+            return get(null, name);
+        }
+
+        private Class<?> getType() {
+            return type;
+        }
+    }
+
+    static final class BeanProperty {
+        private final Class<?> type;
+
+        private final Class<?> owner;
+
+        private final PropertyDescriptor descriptor;
+
+        private Method read;
+
+        private Method write;
+
+        public BeanProperty(Class<?> owner, PropertyDescriptor descriptor) {
+            this.owner = owner;
+            this.descriptor = descriptor;
+            //20110927, henrichen: Introspector see getAbc(int) as IndexedPropertyDescriptor
+            this.type = descriptor instanceof IndexedPropertyDescriptor ?  
+            		((IndexedPropertyDescriptor)descriptor).getIndexedPropertyType() :
+            		descriptor.getPropertyType();
+        }
+
+        // Can't use Class<?> because API needs to match specification
+        @SuppressWarnings("rawtypes")
+        public Class getPropertyType() {
+            return this.type;
+        }
+
+        public boolean isReadOnly() {
+            return this.write == null &&
+                    (null == (this.write = Util.getMethod(this.owner, descriptor.getWriteMethod())));
+        }
+
+        public Method getWriteMethod() {
+            return write(null);
+        }
+
+        public Method getReadMethod() {
+            return this.read(null);
+        }
+
+        private Method write(ELContext ctx) {
+            if (this.write == null) {
+                this.write = Util.getMethod(this.owner, descriptor.getWriteMethod());
+                
+                //20110921, henrichen: Introspector is too strict for Setter(must return void), here we loosen it
+                if (this.write == null) {
+                	final String name = this.descriptor.getName();
+            		final String mname = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+            		//try to get setter parameter type 
+            		final Class parameterTypes = this.descriptor instanceof IndexedPropertyDescriptor ?
+            				((IndexedPropertyDescriptor)this.descriptor).getIndexedPropertyType() :
+            				this.descriptor.getPropertyType();
+            				
+                	try {
+                		final Method m = this.owner.getMethod(mname, new Class[] {parameterTypes});
+                		this.write = Util.getMethod(this.owner, m);
+                	} catch (SecurityException e) {
+						//ignore
+					} catch (NoSuchMethodException e) {
+						//ignore
+					}
+                	
+                	//20120423, dennis: Introspector is too strict for Setter(must has same class argument as getter), 
+                    //here we chosen a possible method by the getter type
+                    if (this.write == null) {
+                    	try {
+                    		final Method m = ClassUtil.getCloseMethod(this.owner, mname, new Class[]{parameterTypes});
+                    		this.write = Util.getMethod(this.owner, m);
+                    	} catch (SecurityException e) {
+    						//ignore
+    					} catch (NoSuchMethodException e) {
+    						//ignore
+						}
+                    }
+                }
+                
+                if (this.write == null) {
+                    throw new PropertyNotWritableException(Util.message(ctx,
+                            "propertyNotWritable", new Object[] {
+                                    owner.getName(), descriptor.getName() }));
+                }
+            }
+            return this.write;
+        }
+
+        private Method read(ELContext ctx) {
+            if (this.read == null) {
+                this.read = Util.getMethod(this.owner, descriptor.getReadMethod());
+                if (this.read == null) {
+                    throw new PropertyNotFoundException(Util.message(ctx,
+                            "propertyNotReadable", new Object[] {
+                                    owner.getName(), descriptor.getName() }));
+                }
+            }
+            return this.read;
+        }
+    }
+
+    private final BeanProperty property(ELContext ctx, Object base,
+            Object property) {
+        Class<?> type = base.getClass();
+        String prop = property.toString();
+
+        BeanProperties props = this.cache.get(type.getName());
+        if (props == null || type != props.getType()) {
+            props = new BeanProperties(type);
+            this.cache.put(type.getName(), props);
+        }
+
+        return props.get(ctx, prop);
+    }
+
+    private static final class ConcurrentCache<K,V> {
+
+        private final int size;
+        private final Map<K,V> eden;
+        private final Map<K,V> longterm;
+
+        public ConcurrentCache(int size) {
+            this.size = size;
+            this.eden = new ConcurrentHashMap<>(size);
+            this.longterm = new WeakHashMap<>(size);
+        }
+
+        public V get(K key) {
+            V value = this.eden.get(key);
+            if (value == null) {
+                synchronized (longterm) {
+                    value = this.longterm.get(key);
+                }
+                if (value != null) {
+                    this.eden.put(key, value);
+                }
+            }
+            return value;
+        }
+
+        public void put(K key, V value) {
+            if (this.eden.size() >= this.size) {
+                synchronized (longterm) {
+                    this.longterm.putAll(this.eden);
+                }
+                this.eden.clear();
+            }
+            this.eden.put(key, value);
+        }
+
+    }
 }

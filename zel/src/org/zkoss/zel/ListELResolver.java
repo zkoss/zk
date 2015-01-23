@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,6 @@ package org.zkoss.zel;
 
 import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ListELResolver extends ELResolver {
     private final boolean readOnly;
 
     private static final Class<?> UNMODIFIABLE =
-        Collections.unmodifiableList(new ArrayList<Object>()).getClass();
+        Collections.unmodifiableList(new ArrayList<>()).getClass();
 
     public ListELResolver() {
         this.readOnly = false;
@@ -38,34 +37,15 @@ public class ListELResolver extends ELResolver {
     public ListELResolver(boolean readOnly) {
         this.readOnly = readOnly;
     }
+
     
-    public Object getValue(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public Class<?> getType(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof List<?>) {
-            context.setPropertyResolved(true);
-            List<?> list = (List<?>) base;
-            int idx = coerce(property);
-            if (idx < 0 || idx >= list.size()) {
-                return null;
-            }
-            return list.get(idx);
-        }
-
-        return null;
-    }
-    
-    public Class<?> getType(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        if (base instanceof List<?>) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
             List<?> list = (List<?>) base;
             int idx = coerce(property);
             if (idx < 0 || idx >= list.size()) {
@@ -77,24 +57,41 @@ public class ListELResolver extends ELResolver {
 
         return null;
     }
+
     
-    public void setValue(ELContext context, Object base, Object property,
-            Object value) throws NullPointerException,
-            PropertyNotFoundException, PropertyNotWritableException,
-            ELException {
+    public Object getValue(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof List<?>) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
+            List<?> list = (List<?>) base;
+            int idx = coerce(property);
+            if (idx < 0 || idx >= list.size()) {
+                return null;
+            }
+            return list.get(idx);
+        }
+
+        return null;
+    }
+
+    
+    public void setValue(ELContext context, Object base, Object property,
+            Object value) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        if (base instanceof List<?>) {
+            context.setPropertyResolved(base, property);
             @SuppressWarnings("unchecked") // Must be OK to cast to Object
             List<Object> list = (List<Object>) base;
 
             if (this.readOnly) {
-                throw new PropertyNotWritableException(message(context,
-                        "resolverNotWriteable", new Object[] { base.getClass()
-                                .getName() }));
+                throw new PropertyNotWritableException(Util.message(context,
+                        "resolverNotWriteable", base.getClass().getName()));
             }
 
             int idx = coerce(property);
@@ -107,44 +104,37 @@ public class ListELResolver extends ELResolver {
             }
         }
     }
+
     
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof List<?>) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
             List<?> list = (List<?>) base;
-            int idx = coerce(property);
-            if (idx < 0 || idx >= list.size()) {
-                throw new PropertyNotFoundException(
-                        new ArrayIndexOutOfBoundsException(idx).getMessage());
+            try {
+                int idx = coerce(property);
+                if (idx < 0 || idx >= list.size()) {
+                    throw new PropertyNotFoundException(
+                            new ArrayIndexOutOfBoundsException(idx)
+                                    .getMessage());
+                }
+            } catch (IllegalArgumentException e) {
+                // ignore
             }
             return this.readOnly || UNMODIFIABLE.equals(list.getClass());
         }
 
         return this.readOnly;
     }
+
     
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        if (base instanceof List<?>) {
-            FeatureDescriptor[] descs = new FeatureDescriptor[((List<?>) base).size()];
-            for (int i = 0; i < descs.length; i++) {
-                descs[i] = new FeatureDescriptor();
-                descs[i].setDisplayName("["+i+"]");
-                descs[i].setExpert(false);
-                descs[i].setHidden(false);
-                descs[i].setName(""+i);
-                descs[i].setPreferred(true);
-                descs[i].setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.FALSE);
-                descs[i].setValue(TYPE, Integer.class);
-            }
-            return Arrays.asList(descs).iterator();
-        }
         return null;
     }
+
     
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof List<?>) { // implies base != null

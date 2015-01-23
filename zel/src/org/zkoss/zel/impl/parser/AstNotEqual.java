@@ -18,14 +18,12 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstNotEqual.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstNotEqual extends BooleanNode {
     public AstNotEqual(int id) {

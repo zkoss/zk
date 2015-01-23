@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,20 +30,21 @@ public class ResourceBundleELResolver extends ELResolver {
     public ResourceBundleELResolver() {
         super();
     }
+
     
-    public Object getValue(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public Object getValue(ELContext context, Object base, Object property) {
+
         if (context == null) {
             throw new NullPointerException();
         }
-        
+
         if (base instanceof ResourceBundle) {
+            context.setPropertyResolved(base, property);
+
             if (property != null) {
                 try {
-                    Object result = ((ResourceBundle) base).getObject(property
+                    return ((ResourceBundle) base).getObject(property
                             .toString());
-                    context.setPropertyResolved(true);
-                    return result;
                 } catch (MissingResourceException mre) {
                     return "???" + property.toString() + "???";
                 }
@@ -52,58 +53,52 @@ public class ResourceBundleELResolver extends ELResolver {
 
         return null;
     }
+
     
-    public Class<?> getType(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public Class<?> getType(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
-        
+
         if (base instanceof ResourceBundle) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
         }
-        
+
         return null;
     }
+
     
     public void setValue(ELContext context, Object base, Object property,
-            Object value) throws NullPointerException,
-            PropertyNotFoundException, PropertyNotWritableException,
-            ELException {
+            Object value) {
         if (context == null) {
             throw new NullPointerException();
         }
-        
+
         if (base instanceof ResourceBundle) {
-            context.setPropertyResolved(true);
-            throw new PropertyNotWritableException(message(context,
-                    "resolverNotWriteable", new Object[] { base.getClass()
-                            .getName() }));
+            context.setPropertyResolved(base, property);
+            throw new PropertyNotWritableException(Util.message(context,
+                    "resolverNotWriteable", base.getClass().getName()));
         }
-    }
-    
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        
-        if (base instanceof ResourceBundle) {
-            context.setPropertyResolved(true);
-        }
-        
-        return true;
     }
 
-    //Dennis, 201206221, the override method cannot pass the build without warn because of the override generic type
-    //and I don't know the reason they explained below, so I fix it , added the generic type.
-    // Can't use Iterator<FeatureDescriptor> because API needs to match
-    // specification
-    //@SuppressWarnings({ "unchecked", "rawtypes" }) 
-    public Iterator<java.beans.FeatureDescriptor> getFeatureDescriptors(
+    
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        if (base instanceof ResourceBundle) {
+            context.setPropertyResolved(base, property);
+            return true;
+        }
+
+        return false;
+    }
+
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(
             ELContext context, Object base) {
         if (base instanceof ResourceBundle) {
-            List<FeatureDescriptor> feats = new ArrayList<FeatureDescriptor>();
+            List<FeatureDescriptor> feats = new ArrayList<>();
             Enumeration<String> e = ((ResourceBundle) base).getKeys();
             FeatureDescriptor feat;
             String key;
@@ -111,6 +106,7 @@ public class ResourceBundleELResolver extends ELResolver {
                 key = e.nextElement();
                 feat = new FeatureDescriptor();
                 feat.setDisplayName(key);
+                feat.setShortDescription("");
                 feat.setExpert(false);
                 feat.setHidden(false);
                 feat.setName(key);
@@ -123,6 +119,7 @@ public class ResourceBundleELResolver extends ELResolver {
         }
         return null;
     }
+
     
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof ResourceBundle) {

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,8 @@ import java.util.Map;
 
 public class MapELResolver extends ELResolver {
 
-    private static final Class<?> UNMODIFIABLE = Collections.unmodifiableMap(
-            new HashMap<Object, Object>()).getClass();
+    private static final Class<?> UNMODIFIABLE =
+            Collections.unmodifiableMap(new HashMap<>()).getClass();
 
     private final boolean readOnly;
 
@@ -39,50 +39,48 @@ public class MapELResolver extends ELResolver {
     public MapELResolver(boolean readOnly) {
         this.readOnly = readOnly;
     }
+
     
-    public Object getValue(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public Class<?> getType(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof Map<?,?>) {
-            context.setPropertyResolved(true);
-            return ((Map<?,?>) base).get(property);
-        }
-        
-        return null;
-    }
-    
-    public Class<?> getType(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        if (base instanceof Map<?,?>) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
             return Object.class;
         }
-        
+
         return null;
     }
+
+    
+    public Object getValue(ELContext context, Object base, Object property) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        if (base instanceof Map<?,?>) {
+            context.setPropertyResolved(base, property);
+            return ((Map<?,?>) base).get(property);
+        }
+
+        return null;
+    }
+
     
     public void setValue(ELContext context, Object base, Object property,
-            Object value) throws NullPointerException,
-            PropertyNotFoundException, PropertyNotWritableException,
-            ELException {
+            Object value) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof Map<?, ?>) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
 
             if (this.readOnly) {
-                throw new PropertyNotWritableException(message(context,
-                        "resolverNotWriteable", new Object[] { base.getClass()
-                                .getName() }));
+                throw new PropertyNotWritableException(Util.message(context,
+                        "resolverNotWriteable", base.getClass().getName()));
             }
 
             try {
@@ -94,36 +92,38 @@ public class MapELResolver extends ELResolver {
             }
         }
     }
+
     
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
         if (context == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof Map<?, ?>) {
-            context.setPropertyResolved(true);
+            context.setPropertyResolved(base, property);
             return this.readOnly || UNMODIFIABLE.equals(base.getClass());
         }
-        
+
         return this.readOnly;
     }
+
     
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base instanceof Map<?, ?>) {
             Iterator<?> itr = ((Map<?, ?>) base).keySet().iterator();
-            List<FeatureDescriptor> feats = new ArrayList<FeatureDescriptor>();
+            List<FeatureDescriptor> feats = new ArrayList<>();
             Object key;
             FeatureDescriptor desc;
             while (itr.hasNext()) {
                 key = itr.next();
                 desc = new FeatureDescriptor();
                 desc.setDisplayName(key.toString());
+                desc.setShortDescription("");
                 desc.setExpert(false);
                 desc.setHidden(false);
                 desc.setName(key.toString());
                 desc.setPreferred(true);
-                desc.setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.FALSE);
+                desc.setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.TRUE);
                 desc.setValue(TYPE, key.getClass());
                 feats.add(desc);
             }
@@ -131,6 +131,7 @@ public class MapELResolver extends ELResolver {
         }
         return null;
     }
+
     
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base instanceof Map<?, ?>) {

@@ -18,14 +18,12 @@
 
 package org.zkoss.zel.impl.parser;
 
-
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
 /**
  * @author Jacob Hookom [jacob@hookom.net]
- * @version $Id: AstOr.java 939311 2010-04-29 14:01:02Z kkolinko $
  */
 public final class AstOr extends BooleanNode {
     public AstOr(int id) {
@@ -36,12 +34,12 @@ public final class AstOr extends BooleanNode {
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         Object obj = this.children[0].getValue(ctx);
-        Boolean b = coerceToBoolean(obj);
+        Boolean b = coerceToBoolean(obj, true);
         if (b.booleanValue()) {
             return b;
         }
         obj = this.children[1].getValue(ctx);
-        b = coerceToBoolean(obj);
+        b = coerceToBoolean(obj, true);
         return b;
     }
 }
