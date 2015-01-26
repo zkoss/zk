@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2539.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan 21, 2015  6:18:52 PM, Created by hanhsu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Open the zul page
+		2. Navigate to the last page
+		3. Select the first row
+		4. Click the "Get selected count" button
+		There should not be any server side error
+	</label>
+    <button label="Get selected count">
+    <attribute name="onClick"><![CDATA[
+    mytree.getSelectedCount();
+    ]]></attribute>
+    </button>
+    <zscript><![CDATA[    
+    List items = Collections.nCopies(50000, "test");
+    ]]></zscript>
+    <tree id="mytree" mold="paging" pageSize="5">
+        <treecols>
+            <treecol label="Column 1" />
+        </treecols>
+        <treechildren>
+            <treeitem forEach="${items}">
+                <treerow>
+                    <treecell label="${forEachStatus.index}"/>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>

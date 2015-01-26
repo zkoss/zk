@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -916,32 +917,42 @@ public class Tree extends MeshElement {
 	}
 	/**
 	 * Returns the count the specified item in which it should be shown on the
-	 * paging mold recursively in breadth-first order.
-	 * @return If 0, the item is top. If -1, the item is invisible.
+	 * paging mold recursively in breadth-first order. 
 	 * @since 3.0.7
 	 */
 	private int getVisibleIndexOfItem0(Treeitem item, boolean inclusive) {
-		if (item == null) return 0;
+		// ZK-2539: use vector instead of recursive calls to avoid stack overflow 
+		// when number of tree items is huge.
+		Vector<Treeitem> items = new Vector<Treeitem>();
 		int count = 0;
-		if (item.isRealVisible()) {
-			count++;
-			if (inclusive && item.isOpen() && item.getTreechildren() != null)
-				count += item.getTreechildren().getVisibleItemCount();
-		}
-		int c = getVisibleIndexOfItem0((Treeitem) item.getPreviousSibling(), true);
-		if (c == -1) return -1;
-		else if (c != 0) {
-			count += c;
-		} else {
-			Component cmp = item.getParent().getParent();
-			if (cmp instanceof Treeitem) {
-				Treeitem parent = (Treeitem)cmp;
-				if (parent.isRealVisible()) {
-					parent.setOpen(true);
-					int cnt = getVisibleIndexOfItem0(parent, false);
-					if (cnt == -1) return -1;
-					count += cnt;
-				} else return -1; // invisible item
+		items.add(item);
+		while (!items.isEmpty()) {
+			item = items.remove(0);
+			if (item == null) {
+				continue;
+			} else if (item.isRealVisible()) {
+				count++;
+				Treechildren chdrn = item.getTreechildren();
+				if (inclusive && item.isOpen() && chdrn != null) {
+					count += chdrn.getVisibleItemCount();
+				}
+			}
+			Component prev = item.getPreviousSibling();
+			if (prev != null && prev instanceof Treeitem) {
+				items.add(0, (Treeitem) prev);
+				inclusive = true;
+			} else { // go up a level when there's no more prev sibling
+				Component cmp = item.getParent().getParent();
+				if (cmp instanceof Treeitem) {
+					Treeitem parent = (Treeitem) cmp;
+					if (parent.isRealVisible()) {
+						parent.setOpen(true);
+						items.add(0, parent);
+						inclusive = false;
+					} else {
+						count --;
+					}
+				}
 			}
 		}
 		return count;
