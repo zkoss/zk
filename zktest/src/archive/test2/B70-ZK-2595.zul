@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2595.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jan 23, 2015 10:08:55 AM, Created by hanhsu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+	.blue {
+		border: solid 1px blue;
+	}
+	.red {
+		border: solid 1px red;
+	}
+	.green {
+		border: solid 1px green;
+	}
+	.black {
+		border: solid 1px black;
+	}
+	</style>
+	Please click the button "add newChild" and the size fo black area inside blue area should be up to date
+	<hlayout id="container1" width="1800px">
+		<div hflex="1">
+			<div hflex="1" class="blue">
+				<div class="black" hflex="1">
+				blue
+				</div>
+			</div>
+		</div>
+		<div class="red" hflex="1">
+		red
+		</div>
+		<div class="green" hflex="1">
+		green
+		</div>
+	</hlayout>
+	<separator />
+	<hbox id="container2" width="1800px">
+		<div hflex="1">
+			<div hflex="1" class="blue">
+				<div class="black" hflex="1">
+				blue
+				</div>
+			</div>
+		</div>
+		<div class="red" hflex="1">
+		red
+		</div>
+		<div class="green" hflex="1">
+		green
+		</div>
+	</hbox>
+	<separator />
+	<vlayout id="container3" height="300px">
+		<div vflex="1">
+			<div vflex="1" class="blue">
+				<div class="black" vflex="1">
+				blue
+				</div>
+			</div>
+		</div>
+		<div class="red" vflex="1">
+		red
+		</div>
+		<div class="green" vflex="1">
+		green
+		</div>
+	</vlayout>
+	<separator />
+	<vbox id="container4" height="300px">
+		<div vflex="1">
+			<div vflex="1" class="blue">
+				<div class="black" vflex="1">
+				blue
+				</div>
+			</div>
+		</div>
+		<div class="red" vflex="1">
+		red
+		</div>
+		<div class="green" vflex="1">
+		green
+		</div>
+	</vbox>
+	<separator />
+	<button label="add newChild">
+		<attribute name="onClick">
+		container1.appendChild(container1.getLastChild().clone());
+		container2.appendChild(container2.getLastChild().clone());
+		container3.appendChild(container3.getLastChild().clone());
+		container4.appendChild(container4.getLastChild().clone());
+		</attribute>
+	</button>
+</zk>
