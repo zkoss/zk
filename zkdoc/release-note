@@ -6,6 +6,7 @@ ZK 7.0.5
   ZK-2564: vm.items not sync after window serialization and deserialization
   ZK-2538: Updating a treeitem in a large tree with paging causes client-side stack overflow
   ZK-2539: Getting selected count from a large tree with paging causes server-side stack overflow
+  ZK-2553: grid with frozen JS error
 
 * Upgrade Notes
 
