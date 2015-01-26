@@ -1,5 +1,5 @@
 8.0.0
-#source=1.5
-#target=1.5
+source=1.7
+target=1.7
 unchecked=off
 deprecation=off
