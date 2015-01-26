@@ -33,7 +33,15 @@ public abstract class ZATSTestCase {
 	
 	public DesktopAgent connect(String location){
 		if (location == null || location.length() <= 0)
-			return env.newClient().connect(getFileLocation());
+			try {
+				return env.newClient().connect(getFileLocation());
+			} catch (Exception e) {
+				try {
+					return env.newClient().connect(getFileLocation().replace("_", "-"));
+				} catch (Exception e2) {
+					return env.newClient().connect(getFileLocation().replace("-", "_"));
+				}
+			}
 		else
 			return env.newClient().connect(location);
 	}
