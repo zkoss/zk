@@ -420,11 +420,13 @@ function invoke_ant
 	if [ "$srcver" = "" ] ; then
 		srcver=1.5
 	fi
+	srcver=${srcver:0:3} #fix linux compiling issue
 	tgtver=$(grep '^target=' version)
 	tgtver=${tgtver#target=}
 	if [ "$tgtver" = "" ] ; then
 		tgtver=1.5
 	fi
+	tgtver=${tgtver:0:3} #fix linux compiling issue
 	deprecation=$(grep '^deprecation=' version)
 	deprecation=${deprecation#deprecation=}
 	if [ "$deprecation" = "" ] ; then
