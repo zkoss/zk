@@ -18,6 +18,7 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Radio;
@@ -68,7 +69,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			radiogroup.setAttribute(varnm, data);
 			radiogroup.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = tm.create(radiogroup, item, null, null);
+			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(radiogroup, item, null, null));
 			
 			radiogroup.setAttribute(varnm, oldVar);
 			radiogroup.setAttribute(itervarnm, oldIter);

@@ -16,6 +16,7 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Grid;
@@ -72,7 +73,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			grid.setAttribute(varnm, data);
 			grid.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = tm.create(rows, row, null, null);
+			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(rows, row, null, null));
 			
 			grid.setAttribute(varnm, oldVar);
 			grid.setAttribute(itervarnm, oldIter);

@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
@@ -345,7 +346,7 @@ public class Selectbox extends HtmlBasedComponent {
 			if (tm == null)
 				return Objects.toString(data);
 			else {
-				final Component[] items = tm.create(owner, null,
+				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(owner, null,
 						new VariableResolver() {
 							public Object resolveVariable(String name) {
 								if ("each".equals(name)) {
@@ -397,7 +398,7 @@ public class Selectbox extends HtmlBasedComponent {
 									return null;
 								}
 							}
-						}, null);
+						}, null));
 				if (items.length != 1)
 					throw new UiException(
 							"The model template must have exactly one item, not "

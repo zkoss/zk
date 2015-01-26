@@ -24,6 +24,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -234,7 +235,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				item.setValue(data);
 			} else {
 				final GroupingInfo groupingInfo = info;
-				final Component[] items = tm.create(listbox, item,
+				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(listbox, item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {
@@ -288,7 +289,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 								return null;
 							}
 						}
-					}, null);
+					}, null));
 				if (items.length != 1)
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 

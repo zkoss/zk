@@ -18,6 +18,7 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Listbox;
@@ -71,7 +72,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			listbox.setAttribute(varnm, data);
 			listbox.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = tm.create(listbox, item, null, null);
+			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(listbox, item, null, null));
 			
 			listbox.setAttribute(varnm, oldVar);
 			listbox.setAttribute(itervarnm, oldIter);

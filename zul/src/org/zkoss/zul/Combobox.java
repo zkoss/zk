@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
@@ -392,7 +393,7 @@ public class Combobox extends Textbox {
 				item.setLabel(Objects.toString(data));
 				item.setValue(data);
 			} else {
-				final Component[] items = tm.create(item.getParent(), item,
+				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(item.getParent(), item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {
@@ -444,7 +445,7 @@ public class Combobox extends Textbox {
 								return null;
 							}
 						}
-					}, null);
+					}, null));
 				if (items.length != 1)
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 

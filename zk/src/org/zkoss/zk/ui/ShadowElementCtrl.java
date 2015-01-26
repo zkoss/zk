@@ -83,4 +83,25 @@ public interface ShadowElementCtrl {
 	 * If recurse is true, it will look up all parents until found.
 	 */
 	public Object resolveVariable(Component child, String name, boolean recurse);
+	
+	/**
+	 * Returns the next insertion point, it may be a component, a shadow element, or null.
+	 */
+	public Component getNextInsertion();
+
+	/**
+	 * Returns the previous insertion point, it may be a component, a shadow element, or null.
+	 */
+	public Component getPreviousInsertion();
+
+	/**
+	 * Returns the first component of its insertion range.
+	 */
+	public Component getFirstInsertion();
+
+	/**
+	 * Returns the last component of its insertion range.
+	 */
+	public Component getLastInsertion();
+
 }

@@ -8,7 +8,7 @@
 			<template name="children" var="column">
 				 <label value="@load(vm.getProfileSkillsX(column,profile))"/> 
 				 <label value="@load(vm.getProfileSkills(profile,column))"/>
-				 <label value="@load(profile[column]))"/>  
+				 <label value="@load(profile[column])"/>  
 			</template>
 		</row>
 	</template>

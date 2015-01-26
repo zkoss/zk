@@ -19,6 +19,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
@@ -73,7 +74,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			tabs.setAttribute(varnm, data);
 			tabs.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = tm.create(tabs, item, null, null);
+			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(tabs, item, null, null));
 			
 			tabs.setAttribute(varnm, oldVar);
 			tabs.setAttribute(itervarnm, oldIter);

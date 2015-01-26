@@ -12,12 +12,16 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlShadowElement;
+import org.zkoss.zk.ui.ShadowElement;
+import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Template;
 
@@ -68,6 +72,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		}
 		return template;
 	}
+	
     //ZK-739: Allow dynamic template for collection binding.
 	protected void addTemplateTracking(Component templateComp, final Component eachComp,final Object data, final int index, final int size) {
 		final Binder binder = BinderUtil.getBinder(eachComp, true);

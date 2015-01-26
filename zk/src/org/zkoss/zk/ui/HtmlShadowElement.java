@@ -194,10 +194,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		}
 		_host = host;
 		onHostAttached(host);
-		                               
-		if (insertBefore != null) { // TODO
-			throw new IllegalAccessError("Not implemented yet");
-		}
+		
 		_nextInsertion = insertBefore;
 		if (insertBefore != null) {
 			_previousInsertion = insertBefore.getPreviousSibling();

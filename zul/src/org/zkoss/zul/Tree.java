@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
@@ -1964,7 +1965,7 @@ public class Tree extends MeshElement {
 				}
 				tc.setParent(tr);
 			} else {
-				final Component[] items = tm.create(ti.getParent(), ti,
+				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(ti.getParent(), ti,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {
@@ -2016,7 +2017,7 @@ public class Tree extends MeshElement {
 								return null;
 							}
 						}
-					}, null);
+					}, null));
 				if (items.length != 1)
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 

@@ -19,6 +19,7 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
@@ -61,7 +62,7 @@ public class BindChildRenderer extends AbstractRenderer{
 		owner.setAttribute(varnm, data);
 		owner.setAttribute(itervarnm, iterStatus);
 		
-		final Component[] items = tm.create(owner, null, null, null);
+		final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(owner, null, null, null));
 		
 		owner.setAttribute(varnm, oldVar);
 		owner.setAttribute(itervarnm, oldIter);

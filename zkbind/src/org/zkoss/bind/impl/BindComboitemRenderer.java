@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
@@ -71,7 +72,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			cb.setAttribute(varnm, data);
 			cb.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = tm.create(cb, item, null, null);
+			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(cb, item, null, null));
 			
 			cb.setAttribute(varnm, oldVar);
 			cb.setAttribute(itervarnm, oldIter);

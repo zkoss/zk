@@ -16,6 +16,7 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Tree;
@@ -77,7 +78,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			parent.setAttribute(varnm, data);
 			parent.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = tm.create(parent, item, null, null);
+			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(parent, item, null, null));
 			
 			parent.setAttribute(varnm, oldVar);
 			parent.setAttribute(itervarnm, oldIter);

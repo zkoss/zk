@@ -24,6 +24,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -256,7 +257,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				row.setValue(data);
 			} else {
 				final GroupingInfo groupingInfo = info;
-				final Component[] items = tm.create(rows, row,
+				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(rows, row,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {
@@ -310,7 +311,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 								return null;
 							}
 						}
-					}, null);
+					}, null));
 				if (items.length != 1)
 					throw new UiException("The model template must have exactly one row, not "+items.length);
 
