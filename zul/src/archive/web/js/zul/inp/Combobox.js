@@ -269,8 +269,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (sel)
 			zk(sel).scrollIntoView(this.$n('pp'));
-
-		this._select(sel, {sendOnSelect:true});
+		
+		//B70-ZK-2548: fire onChange event to notify server the current value 
+		this._select(sel, {sendOnSelect: true, sendOnChange: true});
 		evt.stop();
 	},
 	_next: (function() {
