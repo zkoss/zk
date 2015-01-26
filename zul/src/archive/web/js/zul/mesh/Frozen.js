@@ -74,6 +74,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				columns = wgt._columns,
 				leftWidth = 0;
 			
+			//B70-ZK-2553: one may specify frozen without any real column
+			if (!cells || cells.length <= 0) {
+				//no need to do the following computation since there is no any column
+				return;
+			}
+			
 			for (var i = 0; i < columns; i++)
 				leftWidth += cells[i].offsetWidth;
 			
