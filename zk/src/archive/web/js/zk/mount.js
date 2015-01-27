@@ -807,7 +807,7 @@ jq(function() {
 		zk.unloading = true; //to disable error message
 
 		// B65-ZK-2051: Remove desktop if is IE.
-		if (zk.ie) {
+		if (zk.ie || zk.confirmClose) {
 			rmDesktop();
 		}
 	});
