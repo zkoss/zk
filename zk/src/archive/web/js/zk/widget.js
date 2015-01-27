@@ -4462,6 +4462,7 @@ _doFooSelect: function (evt) {
 	 * For example, <code>zk.Widget.$('uuid')<code> is the same as <code>zk.Widget.$('#uuid')<code>,
 	 * and both look for a widget whose ID is 'uuid'. On the other hand,
 	 * <code>zk.Widget.$('$id') looks for a widget whose ID is 'id'.<br/>
+	 * and <code>zk.Widget.$('.className') looks for a widget whose CSS selector is 'className'. (since zk 8.0)<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
 	 * which widget it belongs to.<br/>
 	 * If the object is not a DOM element and has a property called
@@ -4500,6 +4501,9 @@ _doFooSelect: function (evt) {
 			wgt = _binds[n]; //try first (since ZHTML might use -)
 			if (!wgt)
 				wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)]: null;
+
+			if (!wgt)
+				return jq(n).zk.$();
 			return wgt;
 		}
 
