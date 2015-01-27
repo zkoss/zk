@@ -9,6 +9,7 @@ ZK 7.0.5
   ZK-2548: Initial keyboard selection causes combobox constraint error
   ZK-2553: grid with frozen JS error
   ZK-2595: The nested hflex size is not up to date when the new child added inside a hlayout or vlayout
+  ZK-2588: Uncheck a Listitem will auto scroll back to another selected item
 
 * Upgrade Notes
 
