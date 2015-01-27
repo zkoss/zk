@@ -131,11 +131,16 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 
 				public void onEvent(Event event) throws Exception {
 					Component target = event.getTarget();
-					if (target instanceof ComponentCtrl) {
+					if (target instanceof ComponentCtrl && target.getDesktop() != null) {
 						for (ShadowElement se : new ArrayList<ShadowElement>(((ComponentCtrl)target).getShadowRoots())) {
 							if (se instanceof HtmlShadowElement) {
 								((HtmlShadowElement) se).rebuildShadowTree();
 							}
+						}
+					} else { // cleanup
+						Iterable<EventListener<? extends Event>> eventListeners = target.getEventListeners(ON_REBUILD_SHADOW_TREE_LATER);
+						for (EventListener<? extends Event> listener : eventListeners) {
+							target.removeEventListener(ON_REBUILD_SHADOW_TREE_LATER, listener);
 						}
 					}
 				}
@@ -239,7 +244,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			onHostDetached((Component)host);
 		}
 		setParent0(null);
-		if (prevhost != null) {
+		if (prevhost != null && prevhost.getDesktop() != null) {
 			prevhost.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, prevhost);
 		}
 	}
