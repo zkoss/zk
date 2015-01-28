@@ -18,6 +18,7 @@ ZK 6.5.8
   ZK-2464: Possible XSS Vulnerability in HTTP Header
   ZK-2487: ZK on iOS 8.0.2 Safari not working ?
   ZK-2506: href with mailto: causes session timeout
+  ZK-2551: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader
   
   --------
 ZK 6.5.7
