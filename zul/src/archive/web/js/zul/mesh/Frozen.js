@@ -230,7 +230,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			phead = p.head, 
 			firstHdcell, fhcs;
 		if (p._nativebar && phead) {
-			firstHdcell = phead.$n().cells[0];
+			//B70-ZK-2558: frozen will onSize before other columns, 
+			//so there might be no any column in the beginning
+			var n = phead.$n();
+			firstHdcell = n? (n.cells? n.cells[0]: null) : null;
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
 				fhcs = firstHdcell.style;
