@@ -163,6 +163,10 @@ public class ExecutionResolver implements VariableResolverX {
 			if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
 				return o;
 
+			o = comp.getShadowVariable(name, true);
+			if (o != null)
+				return o;
+			
 			o = comp.getAttributeOrFellow(name, true);
 			if (o != null)
 				return o;
@@ -171,10 +175,6 @@ public class ExecutionResolver implements VariableResolverX {
 			if (o != null)
 				return o;
 			
-
-			o = comp.getShadowVariable(name, true);
-			if (o != null)
-				return o;
 
 			if (page != null) {
 				o = page.getXelVariable(ctx, null, name, true);
