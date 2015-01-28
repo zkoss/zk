@@ -11,6 +11,7 @@ ZK 7.0.5
   ZK-2595: The nested hflex size is not up to date when the new child added inside a hlayout or vlayout
   ZK-2588: Uncheck a Listitem will auto scroll back to another selected item
   ZK-2590: Type numpad 1 but combobox selects an item starting with 'A'
+  ZK-2551: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader
 
 * Upgrade Notes
 
