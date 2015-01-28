@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2550.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan 28, 2015  4:55:25 PM, Created by Han
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <window border="normal" title="hello" >
+    	<vbox>
+          <label value="1. Scroll to the far right in the listbox"/>
+          <label value="2. Click the button to fire CONTENTS_CHANGED for first item in model"/>
+          <label value="3. The horisontal scroll should not be reset to its leftmost position"/>
+    Listbox
+  	<listbox id="lb" mold="paging" width="300px" height="120px" >
+        <listhead>
+        	<listheader label="col2" width="400px"/>            
+    	</listhead>
+    </listbox>
+    Grid
+    <grid id="gd" mold="paging" width="300px" height="120px" >
+        <columns >
+        	<column label="col2" width="400px"/>            
+    	</columns >
+    </grid>
+	<button id="btn" label="Click to fire CONTENTS_CHANGED for first item in model." onClick="changeModel()"/>
+  <zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	model.add("a");
+	model.add("b");
+	model.add("a");
+	model.add("b");
+	model.add("a");
+	model.add("b");
+	model.add("a");
+	model.add("b");
+	model.add("a");
+	model.add("b");
+                                                                 
+	lb.setModel(model);
+	gd.setModel(model);
+	public void changeModel() {
+		model.set(0, "replaced");
+//		model.add("added");
+	}
+]]></zscript>
+  </vbox>
+  </window>
+</zk>
