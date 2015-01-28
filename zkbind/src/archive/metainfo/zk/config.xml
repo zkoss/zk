@@ -31,4 +31,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.bind.impl.ClientBinderCommandParser</listener-class>
 	</listener>
+	
+	<listener>
+		<pluggable>true</pluggable>
+		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
+	</listener>
 </config>

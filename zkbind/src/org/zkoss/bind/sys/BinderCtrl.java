@@ -158,18 +158,32 @@ public interface BinderCtrl {
 	 */
 	public List<Binding> getLoadPromptBindings(Component comp, String attr);
 	
-	
+
 	/**
-	 * get the {@link PhaseListener}
+	 * get the first {@link PhaseListener}
 	 * @return the {@link PhaseListener}
+	 * @deprecated As of release ZK 8.0.0, please use {@link #getPhaseListeners()} instead.
 	 */
 	public PhaseListener getPhaseListener();
+	/**
+	 * get the first {@link PhaseListener}
+	 * @return the {@link PhaseListener}
+	 */
+	public List<PhaseListener> getPhaseListeners();
 	
 	/**
 	 * set the {@link PhaseListener}
 	 * @param listener the {@link PhaseListener}
+	 * @deprecated As of release ZK 8.0.0, please use {@link BinderCtrl#addPhaseListener(PhaseListener)} instead. 
 	 */
 	public void setPhaseListener(PhaseListener listener);
+	
+	/**
+	 * Add the {@link PhaseListener}
+	 * @param listener
+	 * @since 8.0.0
+	 */
+	public void addPhaseListener(PhaseListener listener);
 	
 	/**
 	 * check if binder is in activating state

@@ -107,6 +107,7 @@ public class Configuration {
 		_initiators = new FastReadArray<Class<?>>(Class.class),
 		_seoRends = new FastReadArray<Class<?>>(Class.class),
 		_resolvers = new FastReadArray<Class<?>>(Class.class),
+		_pluggables = new FastReadArray<Class<?>>(Class.class), // since 8.0
 		_parsers = new FastReadArray<Class<?>>(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
@@ -235,6 +236,17 @@ public class Configuration {
 	 * @see Desktop#addListener
 	 */
 	public void addListener(Class<?> klass) throws Exception {
+		addListener(klass, false);
+	}
+	/**
+	 * Adds a listener class, and if pluggable is true, the instener will be added
+	 * into a pluggable pool for addon developer to use it later. 
+	 * @param klass
+	 * @param pluggable
+	 * @throws Exception
+	 * @since 8.0.0
+	 */
+	public void addListener(Class<?> klass, boolean pluggable) throws Exception {
 		boolean added = false;
 		Object listener = null;
 
@@ -385,6 +397,11 @@ public class Configuration {
 			added = true;
 		}
 		
+		if (pluggable) {
+			_pluggables.add(klass);
+			added = true;
+		}
+		
 
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
@@ -431,6 +448,7 @@ public class Configuration {
 		_seoRends.remove(klass);
 		_resolvers.remove(klass);
 		_parsers.remove(klass);
+		_pluggables.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
 		_uriIntcps.removeBy(sc, true);
@@ -439,6 +457,27 @@ public class Configuration {
 		_propRends.removeBy(sc, true);
 
 		_eis.removeEventInterceptor(klass);
+	}
+	
+	/**
+	 * Returns the pluggableListener from the given class type.
+	 * @since 8.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getPluggableListener(Class<T> klass) {
+		final Class<T>[] pluggableclses = (Class<T>[]) _pluggables.toArray();
+		if (pluggableclses.length == 0)
+			return Collections.EMPTY_LIST;
+
+		final List<T> pluggable = new LinkedList<T>();
+		for (int j = 0; j < pluggableclses.length; ++j) {
+			try {
+				pluggable.add((T)pluggableclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + pluggableclses[j]);
+			}
+		}
+		return pluggable;
 	}
 
 	/** Constructs a list of {@link EventThreadInit} instances and invokes

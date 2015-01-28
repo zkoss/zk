@@ -20,9 +20,23 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 				break;
 		}
 		if (w) {
-			return new zkbind.Binder(w, this);
+			if (!w._$binder)
+				w._$binder = new zkbind.Binder(w, this); 
+			return w._$binder;
 		}
 		return null;
+	},
+	$afterCommand: function (command) {
+		var binder = this.$binder();
+		if (binder)
+			binder.$doAfterCommand(command);
+	},
+	unbind_: function () {
+		if (this._$binder) {
+			this._$binder.destroy();
+			this._$binder = null;
+		}
+		_WidgetX.unbind_.apply(this, arguments);
 	}
 });
 /**
@@ -32,8 +46,43 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 zkbind.Binder = zk.$extends(zk.Object, {
 	$init: function (widget, currentTarget) {
 		this.$supers('$init', arguments);
-		this.$widget = widget;
+		this.$view = widget;
 		this.$currentTarget = currentTarget;
+		this._aftercmd = {};
+	},
+	/**
+	 * Registers a callback after some command executed.
+	 * @param String command the name of the command
+	 * @param Function func the function to execute
+	 */
+	after: function (cmd, fn) {
+		var ac = this._aftercmd[cmd];
+		if (!ac) this._aftercmd[cmd] = [fn];
+		else {
+			ac.push(fn);
+		}
+		return this;
+	},
+	/**
+	 * Unregisters a callback after some command executed.
+	 * @param String command the name of the command
+	 * @param Function func the function to execute
+	 */
+	unAfter: function (cmd, fn) {
+		var ac = this._aftercmd[cmd];
+		for (var j = ac ? ac.length: 0; j--;) {
+			if (ac[j] == fn)
+				ac.splice(j, 1);
+		}
+		return this;
+	},
+	/**
+	 * Destroy this binder.
+	 */
+	destroy: function () {
+		this._aftercmd = null;
+		this.$view = null;
+		this.$currentTarget = null;
 	},
 	/**
 	 * Post a command to the binder
@@ -50,7 +99,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param int timeout to delay the post.
 	 */
 	$command0: function (cmd, args, timeout) {
-		var wgt = this.$widget;
+		var wgt = this.$view;
 		if (timeout) {
 			setTimeout(function () {
 				zAu.send(new zk.Event(wgt, "onBindCommand", {cmd: cmd, args: args}, {toServer:true}));
@@ -74,13 +123,19 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param int timeout to delay the post.
 	 */
 	$globalCommand0: function (cmd, args, timeout) {
-		var wgt = this.$widget;
+		var wgt = this.$view;
 		if (timeout) {
 			setTimeout(function () {
 				zAu.send(new zk.Event(wgt, "onBindGlobalCommand", {cmd: cmd, args: args}, {toServer:true}));
 			}, timeout); // make command at the end of this request
 		} else {
 			zAu.send(new zk.Event(wgt, "onBindGlobalCommand", {cmd: cmd, args: args}, {toServer:true}));
+		}
+	},
+	$doAfterCommand: function (cmd) {
+		var ac = this._aftercmd[cmd];
+		for (var i = 0, j = ac ? ac.length: 0; i < j; i++) {
+			ac[i].apply(this);
 		}
 	}
 }, {

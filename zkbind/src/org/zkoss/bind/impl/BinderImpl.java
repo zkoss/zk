@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -91,6 +92,8 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -174,10 +177,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
-	private PhaseListener _phaseListener;
-	private boolean _phaseListenerSet = false;
-	private static PhaseListener _sharedPhaseListener;
-	private static boolean _sharedPhaseListenerSet = false;
+	private List<PhaseListener> _phaseListeners;
 	private Tracker _tracker;
 	private final Component _dummyTarget = new AbstractComponent();//a dummy target for post command
 	
@@ -258,6 +258,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_quename = qname != null && !Strings.isEmpty(qname) ? qname : DEFAULT_QUEUE_NAME;
 		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : DEFAULT_QUEUE_SCOPE;
 		_queueListener = new QueueListener();
+		_phaseListeners = new LinkedList<PhaseListener>(WebApps.getCurrent().getConfiguration().getPluggableListener(PhaseListener.class));
+		
+		String clz = Library.getProperty(PHASE_LISTENER_CLASS_KEY);
+		if (!Strings.isEmpty(clz)) {
+			try {
+				addPhaseListener((PhaseListener) Classes.forNameByThread(clz).newInstance());
+			} catch (Exception e) {
+				_log.error("Error when initial phase listener:"+clz , e);
+			}
+		}
 	}
 	
 	private class QueueListener implements EventListener<Event>,Serializable{
@@ -1663,17 +1673,18 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(collector!=null){
 			collector.pushStack(phase.name());
 		}
-		final PhaseListener listener = getPhaseListener();
-		if (listener != null) {
-			listener.prePhase(phase, ctx);
+		for (PhaseListener listener : getPhaseListeners()) {
+			if (listener != null) {
+				listener.prePhase(phase, ctx);
+			}
 		}
 	}
 	
 	/*package*/ void doPostPhase(Phase phase, BindContext ctx) {
-		final PhaseListener listener = getPhaseListener();
-		
-		if (listener != null) {
-			listener.postPhase(phase, ctx);
+		for (PhaseListener listener : getPhaseListeners()) {
+			if (listener != null) {
+				listener.postPhase(phase, ctx);
+			}
 		}
 		BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(collector!=null){
@@ -2260,31 +2271,21 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	
 	public void setPhaseListener(PhaseListener listener) {
-		_phaseListener = listener;
-		_phaseListenerSet = true;
+		addPhaseListener(listener);
 	}
 	
+	public void addPhaseListener(PhaseListener listener) {
+		_phaseListeners.add(listener);
+	}
+	public PhaseListener getPhaseListener() {
+		List<PhaseListener> list = getPhaseListeners();
+		if (list != null && !list.isEmpty())
+			return list.get(0);
+		return null;
+	}
 	
-	public PhaseListener getPhaseListener(){
-		if(_phaseListenerSet){
-			//return local phase listener if it was set by setPahseListener
-			return _phaseListener;
-		}
-		//otherwise, check if there is a shared default phase listener.
-		if (!_sharedPhaseListenerSet) {
-			synchronized (BinderImpl.class) {
-				_sharedPhaseListenerSet = true;
-				String clz = Library.getProperty(PHASE_LISTENER_CLASS_KEY);
-				if (!Strings.isEmpty(clz)) {
-					try {
-						_sharedPhaseListener = (PhaseListener) Classes.forNameByThread(clz).newInstance();
-					} catch (Exception e) {
-						_log.error("Error when initial phase listener:"+clz , e);
-					}
-				}
-			}
-		}
-		return _sharedPhaseListener;
+	public List<PhaseListener> getPhaseListeners(){
+		return _phaseListeners;
 	}
 
 	private void subscribeQueue(String quename, String quescope, EventListener<Event> listener) {

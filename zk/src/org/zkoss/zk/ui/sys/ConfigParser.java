@@ -254,7 +254,7 @@ public class ConfigParser {
 	}
 	private static void parseListener(Configuration config, Element el) {
 		try {
-			config.addListener(parseClass(el, "listener-class", null, true));
+			config.addListener(parseClass(el, "listener-class", null, true), Boolean.parseBoolean(el.getElementValue("pluggable", true)));
 		} catch (Exception ex) {
 			log.error("Unable to load a listenr, "+el.getLocator(), ex);
 		}
