@@ -70,7 +70,7 @@ public class ExpressionBuilder implements NodeVisitor {
     }
 
     private static final ConcurrentCache<String, Node> cache =
-            new ConcurrentCache<>(CACHE_SIZE);
+            new ConcurrentCache<String, Node>(CACHE_SIZE);
 
     protected FunctionMapper fnMapper;
 

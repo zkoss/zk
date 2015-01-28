@@ -36,7 +36,7 @@ public class FunctionMapperImpl extends FunctionMapper implements
 
     private static final long serialVersionUID = 1L;
 
-    protected Map<String, Function> functions = new ConcurrentHashMap<>();
+    protected Map<String, Function> functions = new ConcurrentHashMap<String, Function>();
 
     /*
      * (non-Javadoc)

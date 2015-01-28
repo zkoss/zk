@@ -31,7 +31,7 @@ public class VariableMapperImpl extends VariableMapper implements Externalizable
 
     private static final long serialVersionUID = 1L;
 
-    private Map<String, ValueExpression> vars = new HashMap<>();
+    private Map<String, ValueExpression> vars = new HashMap<String, ValueExpression>();
 
     public VariableMapperImpl() {
         super();

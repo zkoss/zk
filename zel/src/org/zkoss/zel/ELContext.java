@@ -34,9 +34,9 @@ public abstract class ELContext {
 
     private ImportHandler importHandler = null;
 
-    private List<EvaluationListener> listeners = new ArrayList<>();
+    private List<EvaluationListener> listeners = new ArrayList<EvaluationListener>();
 
-    private Deque<Map<String,Object>> lambdaArguments = new LinkedList<>();
+    private Deque<Map<String,Object>> lambdaArguments = new LinkedList<Map<String,Object>>();
 
     public ELContext() {
         this.resolved = false;
@@ -80,7 +80,7 @@ public abstract class ELContext {
         }
 
         if (this.map == null) {
-            this.map = new HashMap<>();
+            this.map = new HashMap<Class<?>, Object>();
         }
 
         this.map.put(key, contextObject);

@@ -94,8 +94,13 @@ public final class AstIdentifier extends SimpleNode {
         if (result != null) {
             try {
                 return ((Class<?>) result).getField(this.image).get(null);
-            } catch (IllegalArgumentException | IllegalAccessException
-                    | NoSuchFieldException | SecurityException e) {
+            } catch (IllegalArgumentException e) {
+                throw new ELException(e);
+            } catch (IllegalAccessException e) {
+                throw new ELException(e);
+            } catch (NoSuchFieldException e) {
+                throw new ELException(e);
+            } catch (SecurityException e) {
                 throw new ELException(e);
             }
         }

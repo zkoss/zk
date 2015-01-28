@@ -103,7 +103,7 @@ public class Stream {
     public Stream distinct() {
         Iterator<Object> downStream = new OpIterator() {
 
-            private Set<Object> values = new HashSet<>();
+            private Set<Object> values = new HashSet<Object>();
 
             
             protected void findNext() {
@@ -139,7 +139,7 @@ public class Stream {
 
             @SuppressWarnings({ "rawtypes", "unchecked" })
             private final void sort() {
-                List list = new ArrayList<>();
+                List list = new ArrayList();
                 while (iterator.hasNext()) {
                     list.add(iterator.next());
                 }
@@ -169,7 +169,7 @@ public class Stream {
 
             @SuppressWarnings({ "rawtypes", "unchecked" })
             private final void sort(LambdaExpression le) {
-                List list = new ArrayList<>();
+                List list = new ArrayList();
                 Comparator<Object> c = new LambdaExpressionComparator(le);
                 while (iterator.hasNext()) {
                     list.add(iterator.next());
@@ -246,7 +246,7 @@ public class Stream {
 
 
     public List<Object> toList() {
-        List<Object> result = new ArrayList<>();
+        List<Object> result = new ArrayList();
         while (iterator.hasNext()) {
             result.add(iterator.next());
         }
@@ -255,7 +255,7 @@ public class Stream {
 
 
     public Object[] toArray() {
-        List<Object> result = new ArrayList<>();
+        List<Object> result = new ArrayList();
         while (iterator.hasNext()) {
             result.add(iterator.next());
         }

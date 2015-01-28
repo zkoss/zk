@@ -81,7 +81,7 @@ class Util {
 
     private static final CacheValue nullTcclFactory = new CacheValue();
     private static final ConcurrentMap<CacheKey, CacheValue> factoryCache =
-            new ConcurrentHashMap<>();
+            new ConcurrentHashMap<CacheKey, CacheValue>();
 
     /**
      * Provides a per class loader cache of ExpressionFactory instances without
@@ -144,7 +144,7 @@ class Util {
 
         public CacheKey(ClassLoader key) {
             hash = key.hashCode();
-            ref = new WeakReference<>(key);
+            ref = new WeakReference<ClassLoader>(key);
         }
 
         
@@ -184,7 +184,7 @@ class Util {
         }
 
         public void setExpressionFactory(ExpressionFactory factory) {
-            ref = new WeakReference<>(factory);
+            ref = new WeakReference<ExpressionFactory>(factory);
         }
     }
 
@@ -227,7 +227,7 @@ class Util {
     private static Wrapper findWrapper(Class<?> clazz, List<Wrapper> wrappers,
             String name, Class<?>[] paramTypes, Object[] paramValues) {
 
-        Map<Wrapper,MatchResult> candidates = new HashMap<>();
+        Map<Wrapper,MatchResult> candidates = new HashMap<Wrapper,MatchResult>();
 
         int paramCount;
         if (paramTypes == null) {
@@ -644,7 +644,7 @@ class Util {
     private abstract static class Wrapper {
 
         public static List<Wrapper> wrap(Method[] methods, String name) {
-            List<Wrapper> result = new ArrayList<>();
+            List<Wrapper> result = new ArrayList<Wrapper>();
             for (Method method : methods) {
                 if (method.getName().equals(name)) {
                     result.add(new MethodWrapper(method));
@@ -654,7 +654,7 @@ class Util {
         }
 
         public static List<Wrapper> wrap(Constructor<?>[] constructors) {
-            List<Wrapper> result = new ArrayList<>();
+            List<Wrapper> result = new ArrayList<Wrapper>();
             for (Constructor<?> constructor : constructors) {
                 result.add(new ConstructorWrapper(constructor));
             }
@@ -758,19 +758,24 @@ class Util {
             return bridge;
         }
 
-        
+        public static int compare(int x, int y) {
+            return (x < y) ? -1 : ((x == y) ? 0 : 1);
+        }
+        public static int compare(boolean x, boolean y) {
+            return (x == y) ? 0 : (x ? 1 : -1);
+        }
         public int compareTo(MatchResult o) {
-            int cmp = Integer.compare(this.getExact(), o.getExact());
+            int cmp = compare(this.getExact(), o.getExact());
             if (cmp == 0) {
-                cmp = Integer.compare(this.getAssignable(), o.getAssignable());
+                cmp = compare(this.getAssignable(), o.getAssignable());
                 if (cmp == 0) {
-                    cmp = Integer.compare(this.getCoercible(), o.getCoercible());
+                    cmp = compare(this.getCoercible(), o.getCoercible());
                     if (cmp == 0) {
                         // The nature of bridge methods is such that it actually
                         // doesn't matter which one we pick as long as we pick
                         // one. That said, pick the 'right' one (the non-bridge
                         // one) anyway.
-                        cmp = Boolean.compare(o.isBridge(), this.isBridge());
+                        cmp = compare(o.isBridge(), this.isBridge());
                     }
                 }
             }

@@ -59,7 +59,7 @@ public class AstLambdaExpression extends SimpleNode {
                 ctx.getFunctionMapper(), ctx.getVariableMapper(), null);
 
         // Build a LambdaExpression
-        List<String> formalParameters = new ArrayList<>();
+        List<String> formalParameters = new ArrayList<String>();
         if (formalParamNodes != null) {
             for (Node formalParamNode : formalParamNodes) {
                 formalParameters.add(formalParamNode.getImage());

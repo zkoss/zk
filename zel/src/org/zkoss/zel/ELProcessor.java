@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public class ELProcessor {
 
-    private static final Set<String> PRIMITIVES = new HashSet<>();
+    private static final Set<String> PRIMITIVES = new HashSet<String>();
     static {
         PRIMITIVES.add("boolean");
         PRIMITIVES.add("byte");
@@ -272,35 +272,22 @@ public class ELProcessor {
                         boolean isPrimitive = PRIMITIVES.contains(parameterTypeName);
                         if (isPrimitive && dimension > 0) {
                             // When in an array, class name changes for primitive
-                            switch(parameterTypeName)
-                            {
-                                case "boolean":
-                                    parameterTypeName = "Z";
-                                    break;
-                                case "byte":
-                                    parameterTypeName = "B";
-                                    break;
-                                case "char":
-                                    parameterTypeName = "C";
-                                    break;
-                                case "double":
-                                    parameterTypeName = "D";
-                                    break;
-                                case "float":
-                                    parameterTypeName = "F";
-                                    break;
-                                case "int":
-                                    parameterTypeName = "I";
-                                    break;
-                                case "long":
-                                    parameterTypeName = "J";
-                                    break;
-                                case "short":
-                                    parameterTypeName = "S";
-                                    break;
-                                default:
-                                    // Should never happen
-                                    break;
+                        	if ("boolean".equals(parameterTypeName)) {
+                            	parameterTypeName = "Z";
+                            } else if ("byte".equals(parameterTypeName)) {
+                            	parameterTypeName = "B";
+                            } else if ("char".equals(parameterTypeName)) {
+                            	parameterTypeName = "C";
+                            } else if ("double".equals(parameterTypeName)) {
+                            	parameterTypeName = "D";
+                            } else if ("float".equals(parameterTypeName)) {
+                            	parameterTypeName = "F";
+                            } else if ("int".equals(parameterTypeName)) {
+                            	parameterTypeName = "I";
+                            } else if ("long".equals(parameterTypeName)) {
+                            	parameterTypeName = "J";
+                            } else if ("short".equals(parameterTypeName)) {
+                            	parameterTypeName = "S";
                             }
                         } else  if (!isPrimitive &&
                                 !parameterTypeName.contains(".")) {

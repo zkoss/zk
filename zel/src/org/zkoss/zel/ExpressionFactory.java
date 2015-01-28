@@ -58,7 +58,7 @@ public abstract class ExpressionFactory {
 
     private static final CacheValue nullTcclFactory = new CacheValue();
     private static final ConcurrentMap<CacheKey, CacheValue> factoryCache =
-            new ConcurrentHashMap<>();
+            new ConcurrentHashMap<CacheKey, CacheValue>();
 
     static {
         if (IS_SECURITY_ENABLED) {
@@ -188,7 +188,15 @@ public abstract class ExpressionFactory {
                     (ExpressionFactory) constructor.newInstance(properties);
             }
 
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
+        } catch (InstantiationException e) {
+            throw new ELException(
+                    "Unable to create ExpressionFactory of type: " + clazz.getName(),
+                    e);
+        } catch (IllegalAccessException e) {
+            throw new ELException(
+                    "Unable to create ExpressionFactory of type: " + clazz.getName(),
+                    e);
+        } catch (IllegalArgumentException e) {
             throw new ELException(
                     "Unable to create ExpressionFactory of type: " + clazz.getName(),
                     e);
@@ -287,7 +295,7 @@ public abstract class ExpressionFactory {
 
         public CacheKey(ClassLoader cl) {
             hash = cl.hashCode();
-            ref = new WeakReference<>(cl);
+            ref = new WeakReference<ClassLoader>(cl);
         }
 
         
@@ -400,8 +408,11 @@ public abstract class ExpressionFactory {
 
         if (is != null) {
             String line = null;
-            try (InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-                    BufferedReader br = new BufferedReader(isr)) {
+            InputStreamReader isr = null;
+            BufferedReader br = null;
+            try {
+            	isr = new InputStreamReader(is, "UTF-8");
+            	br = new BufferedReader(isr);
                 line = br.readLine();
                 if (line != null && line.trim().length() > 0) {
                     return line.trim();
@@ -425,7 +436,9 @@ public abstract class ExpressionFactory {
     private static String getClassNameJreDir() {
         File file = new File(PROPERTY_FILE);
         if (file.canRead()) {
-            try (InputStream is = new FileInputStream(file)){
+        	InputStream is = null;
+            try {
+            	is = new FileInputStream(file);
                 Properties props = new Properties();
                 props.load(is);
                 String value = props.getProperty(PROPERTY_NAME);
@@ -436,6 +449,10 @@ public abstract class ExpressionFactory {
                 // Should not happen - ignore it if it does
             } catch (IOException e) {
                 throw new ELException("Failed to read " + PROPERTY_FILE, e);
+            } finally {
+            	try {
+                    is.close();
+                } catch (IOException ioe) {/*Ignore*/}
             }
         }
         return null;

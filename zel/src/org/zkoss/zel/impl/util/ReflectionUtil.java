@@ -143,7 +143,7 @@ public class ReflectionUtil {
         }
 
         Method[] methods = base.getClass().getMethods();
-        Map<Method,MatchResult> candidates = new HashMap<>();
+        Map<Method,MatchResult> candidates = new HashMap<Method,MatchResult>();
 
         for (Method m : methods) {
             if (!m.getName().equals(methodName)) {
@@ -481,19 +481,24 @@ public class ReflectionUtil {
             return bridge;
         }
 
-        
+        public static int compare(int x, int y) {
+            return (x < y) ? -1 : ((x == y) ? 0 : 1);
+        }
+        public static int compare(boolean x, boolean y) {
+            return (x == y) ? 0 : (x ? 1 : -1);
+        }
         public int compareTo(MatchResult o) {
-            int cmp = Integer.compare(this.getExact(), o.getExact());
+            int cmp = compare(this.getExact(), o.getExact());
             if (cmp == 0) {
-                cmp = Integer.compare(this.getAssignable(), o.getAssignable());
+                cmp = compare(this.getAssignable(), o.getAssignable());
                 if (cmp == 0) {
-                    cmp = Integer.compare(this.getCoercible(), o.getCoercible());
+                    cmp = compare(this.getCoercible(), o.getCoercible());
                     if (cmp == 0) {
                         // The nature of bridge methods is such that it actually
                         // doesn't matter which one we pick as long as we pick
                         // one. That said, pick the 'right' one (the non-bridge
                         // one) anyway.
-                        cmp = Boolean.compare(o.isBridge(), this.isBridge());
+                        cmp = compare(o.isBridge(), this.isBridge());
                     }
                 }
             }

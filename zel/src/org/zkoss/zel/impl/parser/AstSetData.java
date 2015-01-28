@@ -31,7 +31,7 @@ public class AstSetData extends SimpleNode {
 
     
     public Object getValue(EvaluationContext ctx) throws ELException {
-        Set<Object> result = new HashSet<>();
+        Set<Object> result = new HashSet<Object>();
 
         if (children != null) {
             for (Node child : children) {

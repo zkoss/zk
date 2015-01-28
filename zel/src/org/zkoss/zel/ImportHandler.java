@@ -30,9 +30,9 @@ import java.util.Map;
  */
 public class ImportHandler {
 
-    private List<String> packages = new ArrayList<>();
-    private Map<String,Class<?>> clazzes = new HashMap<>();
-    private Map<String,Class<?>> statics = new HashMap<>();
+    private List<String> packages = new ArrayList<String>();
+    private Map<String,Class<?>> clazzes = new HashMap<String,Class<?>>();
+    private Map<String,Class<?>> statics = new HashMap<String,Class<?>>();
 
 
     public ImportHandler() {

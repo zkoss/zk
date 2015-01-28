@@ -30,7 +30,7 @@ public class AstListData extends SimpleNode {
 
     
     public Object getValue(EvaluationContext ctx) throws ELException {
-        List<Object> result = new ArrayList<>();
+        List<Object> result = new ArrayList<Object>();
 
         if (children != null) {
             for (Node child : children) {
