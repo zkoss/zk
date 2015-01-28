@@ -95,7 +95,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	rightSelect: true,
 	_anchorTop:0,
-	_anchorLeft:0,	
+	_anchorLeft:0,
+	_isSelecting: true,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
@@ -599,7 +600,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return false;
 	},
 	focusA_: function(btn, timeout) { //called by derived class
-		zk(btn).focus(timeout);
+		//B70-ZK-2588: don't jump the focus if item is deselected and _multiple is true
+		if (!this._multiple || this._isSelecting)
+			zk(btn).focus(timeout);
 	},
 	bind_: function () {
 		this.$supers(SelectWidget, 'bind_', arguments);
@@ -1076,6 +1079,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Toggle the selection and notifies server. */
 	_toggleSelect: function (row, toSel, evt, skipFocus) {
+		//B70-ZK-2588: don't jump the focus if item is deselected and _multiple is true 
+		this._isSelecting = toSel;
 		if (!this._multiple) {
 			var old = this.getSelectedItem();
 			if (row != old && toSel)
