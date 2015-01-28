@@ -325,6 +325,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				evt.stop();
 				break;
 			default:
+				//B70-ZK-2590: dealing with numpad keyDown, only 0~9
+				if (keyCode >= 96 && keyCode <= 105)
+					keyCode -= 48;
 				var v = String.fromCharCode(keyCode);
 				var sel = this._findItem0(v, true, true, !!this._sel);
 				if (sel)
