@@ -723,7 +723,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var header = this.heads[i],
 					emptyHeader = true;
 				for (var w = header.firstChild; w; w = w.nextSibling) {
-					if (hdsmin && !this.ehdfaker.childNodes[i].style.width && !w._nhflex) {
+					//B70-ZK-2559: when dynamic adding auxhead, there has already 
+					//been auxhead widget while dom element hasn't attached yet
+					var childNode = this.ehdfaker.childNodes[i]; 
+					if (!childNode) continue;
+					if (hdsmin && !childNode.style.width && !w._nhflex) {
 						// B50-3357475: assume header hflex min if width/hflex unspecified
 						w._hflex = 'min';
 						w._nhflex = -65500; // min
@@ -737,8 +741,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					}
 				}
 				
-				if(header._visible)
-					header.$n().style.display = emptyHeader ? 'none' : ''; // Bug ZK-2348
+				if(header._visible) {
+					//B70-ZK-2559: description as mentioned 
+					var n = header.$n();
+					if (n)
+						n.style.display = emptyHeader ? 'none' : ''; // Bug ZK-2348						
+				}
 			}
 			var old = this.ehead.style.display,
 				tofix = force && flex && this.isRealVisible(); //Bug ZK-1647: no need to consider empty header for flex calculation
