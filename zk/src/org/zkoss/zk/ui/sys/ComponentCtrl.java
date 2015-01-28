@@ -524,5 +524,5 @@ public interface ComponentCtrl {
 	 * @return 0 if the component and its children have no binding annotation , more than 0 if they have binding annotation
 	 * @since 8.0.0
 	 */
-	public int getSubBinderAnnotionCount();
+	public int getSubBindingAnnotationCount();
 }

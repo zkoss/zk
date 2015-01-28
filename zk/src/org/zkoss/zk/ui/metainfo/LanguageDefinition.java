@@ -120,6 +120,17 @@ public class LanguageDefinition {
 	 */
 	public static final String NATIVE_NAMESPACE_PREFIX = "native:";
 
+	/** The namespace for ZK shadow components.
+	 * @since 8.0.0
+	 */
+	public static final String SHADOW_NAMESPACE = "http://www.zkoss.org/2015/zk/shadow";
+	
+	/** The names of ZK shadow components.
+	 * @since 8.0.0
+	 */
+	public static final String SHADOW_NAME = "shadow";
+	
+	
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;
 	/** name */

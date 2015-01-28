@@ -1412,4 +1412,20 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		ComponentCtrl host = (ComponentCtrl)_host;
 		return "<" + clsnm + "@" + host.getShadowRoots().indexOf(this) +" (" + _host + ")>";
 	}
+	
+	@Override
+	protected void updateSubBindingAnnotationCount(int diff) {
+		for (AbstractComponent node = this; node != null; ) {
+			setSubBindingAnnotationCount(diff, node);
+			AbstractComponent p = (AbstractComponent) node.getParent();
+		 	if (p != null) {
+		 		node = p;
+		 	} else {
+		 		node = (AbstractComponent) ((HtmlShadowElement)node).getShadowHost();
+		 		if (node != null) 
+		 			node.updateSubBindingAnnotationCount(diff);
+		 		break;
+		 	}
+		}
+	}
 }

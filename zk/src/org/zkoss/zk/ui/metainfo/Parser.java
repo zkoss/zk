@@ -1495,7 +1495,8 @@ public class Parser {
 			return langdef.hasShadowDefinition(nm) || (!"xul/html".equals(langdef.getName()) && 
 					LanguageDefinition.lookup("xul/html").hasShadowDefinition(nm));
 		ComponentDefinition componentDefinition = pgdef.getComponentDefinitionMap().get(nm);
-		if (componentDefinition instanceof ShadowDefinitionImpl)
+		// F80 - support another namespace
+		if (componentDefinition instanceof ShadowDefinitionImpl || LanguageDefinition.SHADOW_NAMESPACE.equals(uri) || LanguageDefinition.SHADOW_NAME.equals(uri))
 			return true;
 		if (isDefaultNS(langdef, pref, uri))
 			return !bNativeContent && langdef.hasShadowDefinition(nm);
