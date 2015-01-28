@@ -12,6 +12,7 @@ ZK 7.0.5
   ZK-2588: Uncheck a Listitem will auto scroll back to another selected item
   ZK-2590: Type numpad 1 but combobox selects an item starting with 'A'
   ZK-2550: Listbox doesn't keep scrollbar position when replacing an item of ListModelList and ROD enabled
+  ZK-2558: adding and freezing columns dynamically causes a JS error
   ZK-2551: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader
 
 * Upgrade Notes
