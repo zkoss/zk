@@ -1220,7 +1220,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			onChildAdded(nc);
 			triggerAfterHostChildAdded(nc);
 			//F80 - store subtree's binder annotation count
-			updateBindingAnntationCount(initAuxInfo().subAnnotCnt + nc.initAuxInfo().subAnnotCnt);
+			updateSubBindingAnnotationCount(nc.initAuxInfo().subAnnotCnt);
 		}
 		return true;
 	}
@@ -1397,7 +1397,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		--_chdinf.nChild;
 		onChildRemoved(child);
 		//F80 - store subtree's binder annotation count
-		updateBindingAnntationCount(initAuxInfo().subAnnotCnt - oc.initAuxInfo().subAnnotCnt);
+		updateSubBindingAnnotationCount(-oc.initAuxInfo().subAnnotCnt);
 		triggerAfterHostChildRemoved(child);
 		return true;
 	}
@@ -3776,14 +3776,17 @@ w:use="foo.MyWindow"&gt;
 		return _auxinf != null && _auxinf.subAnnotCnt > 0;
 	}
 	
-	public int getSubBinderAnnotionCount() {
+	public int getSubBindingAnnotationCount() {
 		return _auxinf == null ? 0 : _auxinf.subAnnotCnt;
 	}
 	
-	private void updateBindingAnntationCount(int count) {
-		int diff = count - initAuxInfo().subAnnotCnt; 
+	protected void updateSubBindingAnnotationCount(int diff) {
 		for (AbstractComponent node = this; node != null; node = (AbstractComponent) node.getParent())
-			node.initAuxInfo().subAnnotCnt += diff;
+			setSubBindingAnnotationCount(diff, node);
+	}
+	
+	protected void setSubBindingAnnotationCount(int diff, AbstractComponent node) {
+		node.initAuxInfo().subAnnotCnt += diff;
 	}
 	
 	public void enableBindingAnnotation() {
@@ -3797,9 +3800,9 @@ w:use="foo.MyWindow"&gt;
 		AuxInfo auxinf = initAuxInfo();
 		boolean old = auxinf.hasBindingAnnot;
 		if (old != hasBindingAnnot) {
-			int count = hasBindingAnnot ? 1 : -1;
+			int diff = hasBindingAnnot ? 1 : -1;
 			auxinf.hasBindingAnnot = hasBindingAnnot;
-			updateBindingAnntationCount(auxinf.subAnnotCnt + count);
+			updateSubBindingAnnotationCount(diff);
 		}
 	}
 }
