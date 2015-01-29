@@ -1358,6 +1358,14 @@ public class Parser {
 							attrAnnHelper = new AnnotationHelper();
 						applyAttrAnnot(attrAnnHelper, compInfo, attnm,
 								attvaltrim, true, location(attr));
+						//F80 - store subtree's binder annotation count
+						Set<String> binderAnnotations = WebApps.getCurrent().getConfiguration().getBinderAnnotations();
+						for (String annot : binderAnnotations) {
+							if (attvaltrim.indexOf(annot) != -1) {
+								compInfo.enableBindingAnnotation();
+								break;
+							}
+						}
 					} else {
 						compInfo.addProperty(attnm, attval, null);
 						if (attrAnnHelper != null)
