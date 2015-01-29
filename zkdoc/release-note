@@ -19,7 +19,8 @@ ZK 7.0.5
   ZK-2555: grid with groups model does not support dynamic templates
   ZK-2541: Attempt to install CometAsyncServlet in Servlet 2.5 compliant container
   ZK-2603: unlisten model listener when the component has detached, and listen it again when attached.
-  
+  ZK-2552: Tabbox model NotifyChange problem
+
 * Upgrade Notes
 
   --------
