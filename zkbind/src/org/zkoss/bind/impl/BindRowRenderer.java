@@ -37,8 +37,10 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 		final Rows rows = (Rows)row.getParent();
 		final Grid grid = (Grid)rows.getParent();
 		final int size = grid.getModel().getSize();
-		final String tmn = row instanceof Group?"model:group":row instanceof Groupfoot?"model:groupfoot":"model";
-		final Template tm = resolveTemplate(grid,row,data,index,size,tmn);
+		//B70-ZK-2555: in order to handle dynamic template name
+		final String subtype = row instanceof Group ? "group" : row instanceof Groupfoot ? "groupfoot" : null;
+		final Template tm = resolveTemplate(grid, row, data, index, size, "model", subtype);
+		
 		if (tm == null) {
 			final Label label = newRenderLabel(Objects.toString(data));
 			label.applyProperties();

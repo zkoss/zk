@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2555.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan 28, 2015  4:20:51 PM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+<label multiline="true">
+1. render this page without error (server test)
+</label>
+	<zscript><![CDATA[
+		public class Item {
+			private String label;
+			Item(String label) {
+				this.label = label;
+			}
+			public String getLabel() {return label;}
+			public String getDesc() {return label + " description";}
+		}
+		public class Flag {
+			private boolean flag;
+			public boolean getFlag() {return flag;}
+			public void setFlag(boolean flag) {this.flag = flag;}
+		}
+		GroupsModel model = new SimpleGroupsModel(
+				new Item[][] {
+						{new Item("apple"), new Item("pear")}, 
+						{new Item("bitburger"), new Item("augustiner"), new Item("budweiser")}, 
+						{new Item("dollar"), new Item("euro"), new Item("yen")}},
+				new String[] {"fruit", "beers", "money"});
+		Flag useCustom = new Flag();
+	]]></zscript>
+
+	<window title="" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		validationMessages="@id('vmsgs')">
+
+		<checkbox label="use custom template" checked="@bind(useCustom.flag)"/>
+<!-- custom template name fails -->
+		<grid model="@load(model) @template(useCustom.flag ? 'custom' : 'model')">
+			<template name="model:group">
+				<group spans="2" label="@load(each)"/>
+			</template>
+			<template name="model" var="a">
+				<row>
+					<label value="@load(a.label)"/>
+					<label value="@load(a.desc)"/>
+				</row>
+			</template>
+
+			<template name="custom:group">
+				<group spans="1" label="@load(each)"/>
+			</template>
+			<template name="custom" var="a">
+				<row>
+					<label value="@load(a.label)" style="color: red;"/>
+				</row>
+			</template>
+		</grid>
+
+	</window>
+</zk>
