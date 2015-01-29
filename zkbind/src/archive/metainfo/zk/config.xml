@@ -36,4 +36,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<pluggable>true</pluggable>
 		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
 	</listener>
+	
+	<binder-config>
+		<binder-init-attribute>viewModel</binder-init-attribute>
+		<binding-annotations>
+			<list>
+				<value>id</value>
+				<value>init</value>
+				<value>load</value>
+				<value>save</value>
+				<value>bind</value>
+				<value>ref</value>
+				<value>command</value>
+				<value>global-command</value>
+				<value>converter</value>
+				<value>validator</value>
+				<value>template</value>
+			</list>
+		</binding-annotations>
+	</binder-config>
 </config>

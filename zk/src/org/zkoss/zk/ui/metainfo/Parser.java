@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
@@ -71,6 +73,7 @@ import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * Used to parse the ZUL file
@@ -972,7 +975,16 @@ public class Parser {
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
 							//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
-							if ("viewModel".equals(attnm)) isMVVM = true;
+							Configuration config = WebApps.getCurrent().getConfiguration();
+							if (config.getBinderInitAttribute().equals(attnm)) isMVVM = true;
+							//F80 - store subtree's binder annotation count
+							Set<String> binderAnnotations = config.getBinderAnnotations();
+							for (String annot : binderAnnotations) {
+								if (attvaltrim.indexOf(annot) != -1) {
+									compInfo.enableBindingAnnotation();
+									break;
+								}
+							}
 						} else {
 							boolean handled = false;
 							for (NamespaceParser nsParser: _nsParsers) {

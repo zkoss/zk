@@ -88,6 +88,9 @@ public class ComponentInfo extends ForEachBranchInfo {
 	private ExValue _wgtcls;
 	private String _replaceableText;
 
+	//F80 - store subtree's binder annotation count
+	private boolean _hasBindingAnnotation = false;
+	
 	/** Constructs the information about how to create component.
 	 * @param parent the parent; never null.
 	 * @param compdef the component definition; never null
@@ -882,5 +885,16 @@ public class ComponentInfo extends ForEachBranchInfo {
 		public boolean removeChild(NodeInfo child) {
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	//F80 - store subtree's binder annotation count
+	public boolean hasBindingAnnotation() {
+		return _hasBindingAnnotation;
+	}
+	public void enableBindingAnnotation() {
+		this._hasBindingAnnotation = true;
+	}
+	public void disableBindingAnnotation() {
+		this._hasBindingAnnotation = false;
 	}
 }
