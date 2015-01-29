@@ -148,11 +148,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_def = compInfo.getComponentDefinition();
 				addSharedAnnotationMap(_def.getAnnotationMap());
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
+				//F80 - store subtree's binder annotation count
+				if (compInfo.hasBindingAnnotation()) enableBindingAnnotation();
 			} else if (curInfo instanceof ShadowInfo) {
 				final ShadowInfo compInfo = (ShadowInfo)curInfo;
 				_def = compInfo.getComponentDefinition();
 				addSharedAnnotationMap(_def.getAnnotationMap());
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
+				//F80 - store subtree's binder annotation count
+				if (compInfo.hasBindingAnnotation()) enableBindingAnnotation();
 			} else {
 				_def = (ComponentDefinition)curInfo;
 				addSharedAnnotationMap(_def.getAnnotationMap());
