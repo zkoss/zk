@@ -182,6 +182,10 @@ public class Configuration {
 	private String _initCrashScript;
 	private int _initCrashTimeout = -1;
 
+	//F80 - store subtree's binder annotation count
+	private String _binderInitAttribute = null;
+	private Set<String> _binderAnnotations;
+	
 	/** Constructor.
 	 */
 	public Configuration() {
@@ -3050,5 +3054,39 @@ public class Configuration {
 	 */
 	public int getInitCrashTimeout() {
 		return _initCrashTimeout;
+	}
+
+	/**
+	 * Returns binder init attribute name
+	 * @return String
+	 * @since 8.0.0
+	 */
+	public String getBinderInitAttribute() {
+		return _binderInitAttribute;
+	}
+
+	/**
+	 * Set binder init attribute name
+	 * @since 8.0.0
+	 */
+	public void setBinderInitAttribute(String _binderInitAttribute) {
+		this._binderInitAttribute = _binderInitAttribute;
+	}
+
+	/**
+	 * Returns binder annotations
+	 * @return Set
+	 * @since 8.0.0
+	 */
+	public Set<String> getBinderAnnotations() {
+		return _binderAnnotations;
+	}
+
+	/**
+	 * Set binder annotations 
+	 * @since 8.0.0
+	 */
+	public void setBinderAnnotations(Set<String> binderAnnotations) {
+		this._binderAnnotations = new HashSet<String>(binderAnnotations);
 	}
 }

@@ -44,7 +44,9 @@ public class ShadowInfo extends BranchInfo {
 	private final String _tag;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
-
+	//F80 - store subtree's binder annotation count
+	private boolean _hasBindingAnnotation = false;
+	
 	/** Creates a shadow.
 	 *
 	 * @param parent the parent node (never null)
@@ -207,5 +209,16 @@ public class ShadowInfo extends BranchInfo {
 			for (Property name: _props)
 				sb.append(' ').append(name.getName());
 		return sb.append(']').toString();
+	}
+
+	//F80 - store subtree's binder annotation count
+	public boolean hasBindingAnnotation() {
+		return _hasBindingAnnotation;
+	}
+	public void enableBindingAnnotation() {
+		this._hasBindingAnnotation = true;
+	}
+	public void disableBindingAnnotation() {
+		this._hasBindingAnnotation = false;
 	}
 }

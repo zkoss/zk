@@ -22,10 +22,12 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,6 +193,9 @@ public class ConfigParser {
 						if (config != null) {
 							parseListeners(config, el);
 							parsePreferences(config, el);
+							//F80 - store subtree's binder annotation count
+							if (config.getBinderInitAttribute() == null && "zkbind".equals(el.getElement("config-name").getText()))
+								parseBinderConfig(config, el);
 						}
 					}
 				} catch (Exception ex) {
@@ -835,4 +840,18 @@ public class ConfigParser {
 	private static final int POSITIVE_ONLY = 2;
 	private static final int NON_NEGATIVE = 1;
 	private static final int ANY_VALUE = 0;
+	
+	//F80 - store subtree's binder annotation count
+	private static void parseBinderConfig(Configuration config, Element conf) {
+		Element binderConf = conf.getElement("binder-config");
+		if (binderConf != null) {
+			config.setBinderInitAttribute(binderConf.getElement("binder-init-attribute").getText());
+			List<Element> values = binderConf.getElement("binding-annotations").getElement("list").getElements();
+			Set<String> annots = new HashSet<String>();
+			for (Element val : values) {
+				annots.add("@" + val.getText() + "(");
+			}
+			config.setBinderAnnotations(annots);
+		}
+	}
 }
