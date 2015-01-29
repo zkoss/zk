@@ -69,7 +69,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			radiogroup.setAttribute(varnm, data);
 			radiogroup.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(radiogroup, item, null, null));
+			final Component[] items = filterOutShadows(radiogroup, tm.create(radiogroup, item, null, null));
 			
 			radiogroup.setAttribute(varnm, oldVar);
 			radiogroup.setAttribute(itervarnm, oldIter);

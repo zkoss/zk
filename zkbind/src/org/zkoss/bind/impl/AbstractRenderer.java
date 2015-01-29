@@ -23,6 +23,10 @@ import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.Template;
 
 /**
@@ -73,6 +77,27 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		return template;
 	}
 	
+	protected Component[] filterOutShadows(Component parent, Component[] items) {
+		boolean hasShadow = false;
+		if (parent instanceof ComponentCtrl) {
+			ComponentCtrl pCtrl = (ComponentCtrl) parent;
+			for (ShadowElement se : pCtrl.getShadowRoots()) {
+				if (se instanceof HtmlShadowElement) {
+					HtmlShadowElement hse = (HtmlShadowElement) se;
+					
+					// used for shadow addon to be rendered directly
+					hse.setAttribute(BinderCtrl.BINDRENDERING, true);
+					try {
+						Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, hse));
+					} finally {
+						hse.removeAttribute(BinderCtrl.BINDRENDERING);
+					}
+				}
+				hasShadow = true;
+			}
+		}
+		return  hasShadow ? ShadowElementsCtrl.filterOutShadows(items) : items;
+	}
     //ZK-739: Allow dynamic template for collection binding.
 	protected void addTemplateTracking(Component templateComp, final Component eachComp,final Object data, final int index, final int size) {
 		final Binder binder = BinderUtil.getBinder(eachComp, true);

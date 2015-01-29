@@ -177,7 +177,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
-	private List<PhaseListener> _phaseListeners;
+	private transient List<PhaseListener> _phaseListeners;
 	private Tracker _tracker;
 	private final Component _dummyTarget = new AbstractComponent();//a dummy target for post command
 	
@@ -258,6 +258,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_quename = qname != null && !Strings.isEmpty(qname) ? qname : DEFAULT_QUEUE_NAME;
 		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : DEFAULT_QUEUE_SCOPE;
 		_queueListener = new QueueListener();
+		init();
+	}
+	
+	private void init() {
 		_phaseListeners = new LinkedList<PhaseListener>(WebApps.getCurrent().getConfiguration().getPluggableListener(PhaseListener.class));
 		
 		String clz = Library.getProperty(PHASE_LISTENER_CLASS_KEY);
@@ -2525,5 +2529,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if (result == null)
 			return Collections.EMPTY_SET;
 		return result;
+	}
+	
+	private void readObject(java.io.ObjectInputStream s)
+			throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		init();
 	}
 }

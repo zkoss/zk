@@ -235,7 +235,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				item.setValue(data);
 			} else {
 				final GroupingInfo groupingInfo = info;
-				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(listbox, item,
+				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(listbox, item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {

@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
+import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -82,7 +83,12 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			if (selfBinder == null) {
 				//check if parent exists any binder
 				Binder parentBinder = BinderUtil.getBinder(comp,true);
-				
+				if (parentBinder == null && comp instanceof ShadowElement) {
+					Component shadowHost = ((ShadowElement) comp).getShadowHost();
+					if (shadowHost != null)
+						parentBinder = BinderUtil.getBinder(shadowHost, true);
+				}
+					
 				//post event to let the binder to handle binding later
 				if (parentBinder != null && (parentBinder instanceof BinderImpl)) {
 					//ZK-603, ZK-604, ZK-605
@@ -107,7 +113,13 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							//check if there any parent binder again, don't use out-side parentBinder, it is not correct
 							Binder binder = BinderUtil.getBinder(comp,true);
 							if (binder == null) {
-								return;
+								if (comp instanceof ShadowElement) {
+									Component shadowHost = ((ShadowElement) comp).getShadowHost();
+									if (shadowHost != null)
+										binder = BinderUtil.getBinder(shadowHost, true);
+								}
+								if (binder == null)
+									return;
 							}
 							
 							//ZK-1699 Performance issue ZK-Bind getters are called multiple times

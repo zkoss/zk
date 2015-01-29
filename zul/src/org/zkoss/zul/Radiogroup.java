@@ -552,7 +552,7 @@ public class Radiogroup extends XulElement {
 				item.setLabel(Objects.toString(data));
 				item.setValue(data);
 			} else {
-				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(item.getParent(), item,
+				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(item.getParent(), item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {

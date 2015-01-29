@@ -346,7 +346,7 @@ public class Selectbox extends HtmlBasedComponent {
 			if (tm == null)
 				return Objects.toString(data);
 			else {
-				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(owner, null,
+				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(owner, null,
 						new VariableResolver() {
 							public Object resolveVariable(String name) {
 								if ("each".equals(name)) {

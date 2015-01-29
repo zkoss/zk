@@ -73,7 +73,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			grid.setAttribute(varnm, data);
 			grid.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(rows, row, null, null));
+			final Component[] items = filterOutShadows(rows, tm.create(rows, row, null, null));
 			
 			grid.setAttribute(varnm, oldVar);
 			grid.setAttribute(itervarnm, oldIter);

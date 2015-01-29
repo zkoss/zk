@@ -78,7 +78,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			parent.setAttribute(varnm, data);
 			parent.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(parent, item, null, null));
+			final Component[] items = filterOutShadows(parent, tm.create(parent, item, null, null));
 			
 			parent.setAttribute(varnm, oldVar);
 			parent.setAttribute(itervarnm, oldIter);

@@ -74,7 +74,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			tabs.setAttribute(varnm, data);
 			tabs.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(tabs, item, null, null));
+			final Component[] items = filterOutShadows(tabs, tm.create(tabs, item, null, null));
 			
 			tabs.setAttribute(varnm, oldVar);
 			tabs.setAttribute(itervarnm, oldIter);

@@ -1976,7 +1976,7 @@ public class Tree extends MeshElement {
 				}
 				tc.setParent(tr);
 			} else {
-				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(ti.getParent(), ti,
+				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(ti.getParent(), ti,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {

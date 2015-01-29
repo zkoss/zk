@@ -72,7 +72,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			listbox.setAttribute(varnm, data);
 			listbox.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(listbox, item, null, null));
+			final Component[] items = filterOutShadows(listbox, tm.create(listbox, item, null, null));
 			
 			listbox.setAttribute(varnm, oldVar);
 			listbox.setAttribute(itervarnm, oldIter);

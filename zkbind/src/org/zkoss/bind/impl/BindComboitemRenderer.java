@@ -72,7 +72,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			cb.setAttribute(varnm, data);
 			cb.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(cb, item, null, null));
+			final Component[] items = filterOutShadows(cb, tm.create(cb, item, null, null));
 			
 			cb.setAttribute(varnm, oldVar);
 			cb.setAttribute(itervarnm, oldIter);

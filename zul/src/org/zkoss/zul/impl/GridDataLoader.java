@@ -257,7 +257,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				row.setValue(data);
 			} else {
 				final GroupingInfo groupingInfo = info;
-				final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(rows, row,
+				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(rows, row,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {

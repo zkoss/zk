@@ -78,7 +78,9 @@ public interface BinderCtrl {
 	public static final String FORM_ID = "$FORM_ID$";
 	public static final String CHILDREN_ATTR = "$CHILDREN$";
 	public static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
-	
+
+	// since ZK 8.0.0
+	public static final String BINDRENDERING = "$BINDRENDERING$"; //for bind renderer to use
 	//ZK-2545 - Children binding support list model
 	public static final String CHILDREN_BINDING_RENDERED_COMPONENTS = "$CHILDREN_BINDING_RENDERED_COMPONENTS$";
 	

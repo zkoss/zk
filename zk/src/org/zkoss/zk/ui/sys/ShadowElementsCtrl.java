@@ -61,12 +61,12 @@ public class ShadowElementsCtrl {
 	}
 
 	/**
-	 * Returns the component array in range from the give components or shadows,
-	 * if possible. (Most often used for the component developer to invoke
+	 * Returns the component array filter out shadows if any. (Most often used
+	 * for the component developer to invoke
 	 * {@link Template#create(Component, Component, org.zkoss.xel.VariableResolver, org.zkoss.zk.ui.util.Composer)}
-	 * by themselves.
+	 * by themselves and invoke this to filter out shadows.
 	 */
-	public static final Component[] convertToComponents(Component[] shadows) {
+	public static final Component[] filterOutShadows(Component[] shadows) {
 		if (shadows == null || shadows.length == 0)
 			return shadows;
 		int length = shadows.length;
@@ -76,14 +76,23 @@ public class ShadowElementsCtrl {
 				return se.getDistributedChildren().toArray(new Component[0]);
 			}
 		} else {
+			Component parent = null;
 			Component start = null;
 			if (shadows[0] instanceof ShadowElementCtrl) {
 				ShadowElementCtrl se = ((ShadowElementCtrl) shadows[0]);
 				start = se.getFirstInsertion();
 			} else {
 				start = shadows[0];
+				parent = start.getParent();
 			}
-
+			
+			if (parent instanceof ComponentCtrl) {
+				ComponentCtrl pCtrl = (ComponentCtrl) parent;
+				if (pCtrl.getShadowRoots().isEmpty())
+					return shadows; // no shadow available here, we can skip the filter.
+			}
+			
+			// the following code will filter the shadow element if any.
 			Component end = null;
 			if (shadows[0] instanceof ShadowElementCtrl) {
 				ShadowElementCtrl se = ((ShadowElementCtrl) shadows[length - 1]);

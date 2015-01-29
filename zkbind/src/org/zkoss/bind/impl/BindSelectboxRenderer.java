@@ -69,7 +69,7 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			owner.setAttribute(varnm, data);
 			owner.setAttribute(itervarnm, iterStatus);
 			
-			final Component[] items = ShadowElementsCtrl.convertToComponents(tm.create(owner, null, null, null));
+			final Component[] items = filterOutShadows(owner, tm.create(owner, null, null, null));
 			
 			owner.setAttribute(varnm, oldVar);
 			owner.setAttribute(itervarnm, oldIter);
