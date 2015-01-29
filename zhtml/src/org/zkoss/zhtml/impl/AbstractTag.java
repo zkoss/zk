@@ -20,10 +20,11 @@ import java.lang.Object;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 import org.zkoss.html.HTMLs;
-
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
@@ -37,6 +38,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DirectContent;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * The raw component used to generate raw HTML elements.
@@ -131,9 +133,21 @@ implements DynamicPropertied, RawId {
 		if ("style".equals(name)) {
 			sval = filterStyle(sval);
 			setDynaProp(name, sval);
+		} else if ("src".equals(name)) {
+			sval = getEncodedURL(sval);
+			setDynaProp(name, sval);
+		} else if ("textContent".equals(name)) {
+			setDynaProp(name, sval);
+			if (!getChildren().isEmpty())
+				invalidate();
 		} else
 			setDynaProp(name, value);
 		smartUpdate("dynamicProperty", new String[] {name, sval});
+	}
+	private String getEncodedURL(String src) {
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
+		return dt != null ? dt.getExecution()
+			.encodeURL(src != null ? src: "~./img/spacer.gif"): "";
 	}
 	/** Processes the style. */
 	private String filterStyle(String style) {
@@ -297,7 +311,7 @@ implements DynamicPropertied, RawId {
 	 * @param hideUuidIfNoId whether not to generate UUID if possible
 	 */
 	/*package*/ String getPrologHalf(boolean hideUuidIfNoId) {
-		final StringBuffer sb = new StringBuffer(128)
+		final StringBuilder sb = new StringBuilder(128)
 			.append('<').append(_tagnm);
 
 		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
@@ -315,7 +329,13 @@ implements DynamicPropertied, RawId {
 		if (!isOrphanTag())
 			sb.append('/');
 
-		return sb.append('>').toString();
+		sb.append('>');
+		
+
+		Object textContent = getDynamicProperty("textContent");
+		if (textContent != null)
+			sb.append((String)textContent);
+		return sb.toString();
 	}
 	/*package*/ String getEpilogHalf() {
 		return isOrphanTag() ? "</" + _tagnm + '>': "";
