@@ -104,9 +104,9 @@ public class AuUploader implements AuExtension {
 		try {
 			if (!isMultipartContent(request)) {
 				if ("uploadInfo".equals(request.getParameter("cmd"))) {
-					// ZK-2056: XSS Vulnerability
-					uuid = XMLs.encodeText(request.getParameter("wid"));
-					sid = XMLs.encodeText(request.getParameter("sid"));
+					// refix ZK-2056: should escape both XML and Javascript
+					uuid = escapeParam(request.getParameter("wid"));
+					sid = escapeParam(request.getParameter("sid"));
 					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(XMLs.encodeText(request.getParameter("dtid")));
 					
 					Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
@@ -127,9 +127,9 @@ public class AuUploader implements AuExtension {
 				} else 
 					alert = "enctype must be multipart/form-data";
 			} else {
-				// ZK-2056: XSS Vulnerability
-				uuid = XMLs.encodeText(request.getParameter("uuid"));
-				sid = XMLs.encodeText(request.getParameter("sid"));
+				// refix ZK-2056: should escape both XML and Javascript
+				uuid = escapeParam(request.getParameter("uuid"));
+				sid = escapeParam(request.getParameter("sid"));
 				
 				if (uuid == null || uuid.length() == 0) {
 					alert = "uuid is required!";
@@ -137,8 +137,8 @@ public class AuUploader implements AuExtension {
 					attrs.put("uuid", uuid);
 					attrs.put("sid", sid);
 
-					// ZK-2056: XSS Vulnerability
-					final String dtid = XMLs.encodeText(request.getParameter("dtid"));
+					// refix ZK-2056: should escape both XML and Javascript
+					final String dtid = escapeParam(request.getParameter("dtid"));
 					if (dtid == null || dtid.length() == 0) {
 						alert = "dtid is required!";
 					} else {
@@ -404,6 +404,13 @@ public class AuUploader implements AuExtension {
 				name = name.substring(k + seps[j].length());
 		}
 		return name;
+	}
+	
+	/** 
+	 * Internal Use Only.
+	 */
+	private static String escapeParam(String param) {
+		return Strings.escape(XMLs.encodeText(param), Strings.ESCAPE_JAVASCRIPT);
 	}
 
 	/** Returns whether the request contains multipart content.

@@ -1,5 +1,5 @@
-<zk>
-	<button label="Upload Image" upload="true,maxsize=300">
+<zk xmlns:n="native">
+	<button id="upl" label="Upload Image" upload="true,maxsize=300">
 		<attribute name="onUpload"><![CDATA[
 	org.zkoss.util.media.Media media = event.getMedia();
 	if (media instanceof org.zkoss.image.Image) {
@@ -14,5 +14,72 @@
 ]]></attribute>
 	</button>
 	<separator />
-	<vlayout id="pics" height="360px" style="overflow:auto" />
+	<vlayout id="pics" height="60px" style="overflow:auto" />
+	
+<!-- 	<n:iframe name="uplIframe"/> -->
+<!-- 	<n:form id="xssform" method="POST" action="/zksupport/zkau/upload?uuid=${upl.uuid}&amp;dtid=${desktop.id}&amp;sid=0&amp;maxsize=300"> -->
+	<n:form id="xssform" method="POST" action="/zktest/zkau/upload?uuid=${upl.uuid}\u0027);alert(\u0027xss\u0027)}//&amp;dtid=${desktop.id}&amp;sid=0&amp;maxsize=300">
+		<n:input id="xssfile" type="file"/><n:br/>
+		<n:button type="submit">send</n:button>
+	</n:form>
+	
+ 	<script defer="true"> 
+		// Grab the files and set them to our variable
+		function prepareUpload(event) {
+		  console.log(event.target.files);
+		  files = event.target.files;
+		}
+		
+		jq('#xssfile').change(prepareUpload);
+
+		
+		jq('#xssform').submit(uploadFiles);
+
+		// Catch the form submit and upload the files
+		function uploadFiles(event)
+		{
+		  event.stopPropagation(); // Stop stuff happening
+		    event.preventDefault(); // Totally stop stuff happening
+		
+		    // START A LOADING SPINNER HERE
+		
+		    // Create a formdata object and add the files
+		    var data = new FormData();
+		    jq.each(files, function(key, value) {
+		        data.append(key, value);
+		    });
+		
+		    jq.ajax({
+		        url: xssform.action,
+		        type: 'POST',
+		        data: data,
+		        cache: false,
+		        dataType: 'xml',
+		        processData: false, // Don't process the files
+		        contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+		        success: function(data, textStatus, jqXHR)
+		        {
+		            if(typeof data.error === 'undefined')
+		            {
+		                // Success so call function to process the form
+		                console.log(event, data);
+		            }
+		            else
+		            {
+		                // Handle errors here
+		                console.log('ERRORS: ' + data.error);
+		            }
+		        },
+		        error: function(jqXHR, textStatus, errorThrown)
+		        {
+		            // Handle errors here
+		            console.log('ERRORS: ' + textStatus);
+		            // STOP LOADING SPINNER
+		        }
+		    });
+		}
+		
+		
+	</script>
+
 </zk>
