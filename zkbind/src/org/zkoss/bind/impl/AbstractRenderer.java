@@ -84,13 +84,15 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			for (ShadowElement se : pCtrl.getShadowRoots()) {
 				if (se instanceof HtmlShadowElement) {
 					HtmlShadowElement hse = (HtmlShadowElement) se;
-					
-					// used for shadow addon to be rendered directly
 					hse.setAttribute(BinderCtrl.BINDRENDERING, true);
-					try {
-						Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, hse));
-					} finally {
-						hse.removeAttribute(BinderCtrl.BINDRENDERING);
+					if (hse.hasBindingAnnotation() || hse.hasSubBindingAnnotation()) {
+						// used for shadow addon to be rendered directly
+						hse.setAttribute(BinderCtrl.BINDRENDERING, true);
+						try {
+							Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, hse));
+						} finally {
+							hse.removeAttribute(BinderCtrl.BINDRENDERING);
+						}
 					}
 				}
 				hasShadow = true;
