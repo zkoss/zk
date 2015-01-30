@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
@@ -36,7 +35,7 @@ public class Title extends AbstractTag {
 		return true;
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (!HtmlPageRenders.isDirectContent(null))
+		if (!(this.getParent() instanceof Head))
 			throw new UnsupportedOperationException("Parent of title must be head");
 
 		super.redraw(out);
