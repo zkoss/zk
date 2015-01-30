@@ -334,7 +334,7 @@ implements DynamicPropertied, RawId {
 
 		Object textContent = getDynamicProperty("textContent");
 		if (textContent != null)
-			sb.append((String)textContent);
+			sb.append(XMLs.escapeXML((String)textContent));
 		return sb.toString();
 	}
 	/*package*/ String getEpilogHalf() {
