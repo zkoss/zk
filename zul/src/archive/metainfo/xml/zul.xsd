@@ -1634,6 +1634,7 @@
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
+		<xs:attribute name="span" type="xs:string" use="optional" />
 	</xs:complexType>
 
     <!-- groupbox -->
@@ -1898,6 +1899,7 @@
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
+		<xs:attribute name="span" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="pagingPositionAttrType">
 		<xs:union>
@@ -2810,6 +2812,7 @@
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
+		<xs:attribute name="span" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />
