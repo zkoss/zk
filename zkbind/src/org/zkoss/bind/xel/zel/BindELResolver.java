@@ -72,7 +72,14 @@ public class BindELResolver extends XelELResolver {
 	throws PropertyNotFoundException, ELException {
 		Object value = super.getValue(ctx, base, property);
 		
-		final BindELContext bctx = (BindELContext)((EvaluationContext)ctx).getELContext();
+		// in order to support more complex case, ex: .stream().filter(x -> x.contains(vm.value))
+		final BindELContext bctx;
+		ELContext ec = ((EvaluationContext)ctx).getELContext();
+		if (ec instanceof BindELContext)
+			bctx = (BindELContext)ec;
+		else {
+			bctx = (BindELContext)((EvaluationContext)ec).getELContext();
+		}
 		
 		Object ignoreRefVal = bctx.getAttribute(BinderImpl.IGNORE_REF_VALUE);
 		
@@ -143,7 +150,14 @@ public class BindELResolver extends XelELResolver {
 
 	//update dependency and notify changed
 	protected void tieValue(ELContext elCtx, Object base, Object property, Object value, boolean allownotify) {
-		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
+		//in order to support more complex case, ex: .stream().filter(x -> x.contains(vm.value))
+		final BindELContext ctx;
+		ELContext ec = ((EvaluationContext)elCtx).getELContext();
+		if (ec instanceof BindELContext)
+			ctx = (BindELContext)ec;
+		else {
+			ctx = (BindELContext)((EvaluationContext)ec).getELContext();
+		}
 		
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();

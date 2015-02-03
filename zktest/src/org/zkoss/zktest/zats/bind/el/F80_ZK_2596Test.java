@@ -38,7 +38,7 @@ public class F80_ZK_2596Test extends ZATSTestCase {
 			assertEquals("one value two", lb8.as(Label.class).getValue());
 			assertEquals("11", lb9.as(Label.class).getValue());
 			assertEquals("11", lb10.as(Label.class).getValue());
-			assertEquals("4", lb11.as(Label.class).getValue());
+			assertEquals("21", lb11.as(Label.class).getValue());
 			assertEquals("120", lb12.as(Label.class).getValue());
 			btn1.click();
 			assertEquals("value6", lb13.as(Label.class).getValue());

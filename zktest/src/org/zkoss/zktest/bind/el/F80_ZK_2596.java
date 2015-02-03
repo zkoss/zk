@@ -30,12 +30,13 @@ public class F80_ZK_2596 {
 	public static void main(String[] args) {
 		ELProcessor elProc = new ELProcessor();
 		
-		System.out.println(elProc.eval("xxx.xxx"));
-		System.out.println(elProc.eval("var = 'hi'; var.xxx"));
-		elProc.defineBean("foo", new BigDecimal("123"));
-		elProc.defineBean("bar", "blahblah");
+		//System.out.println(elProc.eval("xxx.xxx"));
+		//System.out.println(elProc.eval("var = 'hi'; var.xxx"));
+		//elProc.defineBean("foo", new BigDecimal("123"));
+		//elProc.defineBean("bar", "blahblah");
 		//System.out.println(elProc.eval("Math.sqrt(16)"));
 		//System.out.println(elProc.eval("incr = x -> x+1; incr(10)"));
+		System.out.println(elProc.eval("[1, 2, 3, 4, 5].stream().sum()"));
 		
 		String expression = "bar += 'hi' += foo";
 		String ret1 = (String) elProc.getValue(expression, String.class);

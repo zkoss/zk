@@ -36,6 +36,7 @@ import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.ResourceBundleELResolver;
 import org.zkoss.zel.StaticFieldELResolver;
+import org.zkoss.zel.impl.stream.StreamELResolverImpl;
 
 /**
  * An XEL implementation of ZEL ELResolver.
@@ -52,6 +53,7 @@ public class XelELResolver extends ELResolver {
 		DEFAULT.add(new BeanNameELResolver(
                 new StandardBeanNameResolver(localBeans))); // for semicolon expression
 		DEFAULT.add(new CompositeELResolver());
+		DEFAULT.add(new StreamELResolverImpl()); // for stream operations
 		DEFAULT.add(new StaticFieldELResolver()); //for calling static method
 		DEFAULT.add(new MapELResolver());
 		DEFAULT.add(new ResourceBundleELResolver());

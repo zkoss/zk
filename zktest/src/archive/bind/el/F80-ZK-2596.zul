@@ -39,7 +39,7 @@
 		<label id="lb10" value="${incr = x -> x+1; incr(10)}"></label>
 		<separator></separator>
 		[1, 2, 3, 4].get(3): 
-		<label id="lb11" value="${[1, 2, 3, 4].get(3)}"></label>
+		<label id="lb11" value="${[1, 2, 3, 4, 5, 6].stream().sum()}"></label>
 		<separator></separator>
 		fact(5): 
 		<label id="lb12" value="${fact = n-> n == 0 ? 1 : n * fact(n-1); fact(5)}"></label>
