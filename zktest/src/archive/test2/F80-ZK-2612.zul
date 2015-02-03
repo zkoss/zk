@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2612.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 03, 2015  3:17:52 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		
+		class Pojo {
+		   private String selected = "aaa";
+		   public void setSelected(String sel) {selected = sel;}
+		   public String getSelected() {return selected;} 
+		}
+
+		Pojo pojo = new Pojo();
+		pojo.setSelected("bbb");
+	]]>
+	</zscript>	
+	You should see "bbb" below
+	<div apply="org.zkoss.bind.BindComposer">
+		<x:label xmlns:x="xhtml" textContent="@load(pojo.selected)"/>
+	</div>
+</zk>
