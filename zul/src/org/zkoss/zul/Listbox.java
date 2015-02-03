@@ -2995,6 +2995,17 @@ public class Listbox extends MeshElement {
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
+		if (_model != null && _dataListener != null) {
+			_model.removeListDataListener(_dataListener);
+			_model.addListDataListener(_dataListener);
+		}
+	}
+
+	public void onPageDetached(Page page) {
+		super.onPageDetached(page);
+		if (_model != null && _dataListener != null) {
+			_model.removeListDataListener(_dataListener);
+		}
 	}
 
 	private void resetDataLoader() {
