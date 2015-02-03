@@ -9,6 +9,7 @@ ZK 8.0.0
   ZK-2584: Support @command and @global-command for client side to use
   ZK-2613: ZHTML component's src attribute support encodeURL like Image in Zul
   ZK-2612: ZHTML support textContent attribute for dynamic data binding
+  ZK-2614: ZK DataBinding support client callback function after some command triggered
 
   
 * Bugs

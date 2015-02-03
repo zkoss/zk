@@ -675,4 +675,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
       <name>org.zkoss.zk.WPD.cache</name>
       <value>false</value>
   </library-property>
+  
+  	<!--  F80-ZK-2614 -->
+	<listener>
+		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener
+	</listener-class>
+</listener>
 </zk>

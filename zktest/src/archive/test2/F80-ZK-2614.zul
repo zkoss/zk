@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2614.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 03, 2015  3:59:10 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click the "Click" button, you should see "clicked !!" in the textarea.
+
+<separator/>
+
+<label multiline="true" style="font-style:italic"><![CDATA[
+Note: If it doesn't work, please make sure the following listener is specified into the zk.xml.
+<listener>
+<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
+</listener>
+]]></label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2614_VM')">
+		<button label="Click" onClick="@command('clickable')"/>
+	</div>
+	<script>
+	zk.afterMount(function () {
+		var binder = zk.Widget.$(jq("@button")).$binder();
+		binder.after('clickable', function () {
+			zk.log('clicked !!');
+		});
+	});
+	</script>
+</zk>

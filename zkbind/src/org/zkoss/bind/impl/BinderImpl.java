@@ -48,6 +48,7 @@ import org.zkoss.bind.annotation.DefaultGlobalCommand;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.SmartNotifyChange;
+import org.zkoss.bind.init.ZKBinderPhaseListeners;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
@@ -262,7 +263,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	private void init() {
-		_phaseListeners = new LinkedList<PhaseListener>(WebApps.getCurrent().getConfiguration().getPluggableListener(PhaseListener.class));
+		_phaseListeners = new LinkedList<PhaseListener>(ZKBinderPhaseListeners.getSystemPhaseListeners());
 		
 		String clz = Library.getProperty(PHASE_LISTENER_CLASS_KEY);
 		if (!Strings.isEmpty(clz)) {

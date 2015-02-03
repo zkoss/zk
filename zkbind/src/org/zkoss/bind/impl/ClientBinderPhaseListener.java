@@ -19,7 +19,15 @@ import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
- * A client command binding phase listener
+ * A client command binding phase listener.
+ * <p>
+ * Enable the client bind command callback mechanism.
+ * Specifying this class in WEB-INF/zk.xml as a listener.
+ *  for example:<pre>{@code
+<listener>
+	<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
+</listener>
+ * }</pre>
  * @author jumperchen
  * @since 8.0.0
  */

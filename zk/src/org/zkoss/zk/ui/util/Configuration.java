@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -107,10 +109,11 @@ public class Configuration {
 		_initiators = new FastReadArray<Class<?>>(Class.class),
 		_seoRends = new FastReadArray<Class<?>>(Class.class),
 		_resolvers = new FastReadArray<Class<?>>(Class.class),
-		_pluggables = new FastReadArray<Class<?>>(Class.class), // since 8.0
 		_parsers = new FastReadArray<Class<?>>(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
+	private final FastReadArray<AggregationListener>
+	_aggregations = new FastReadArray<AggregationListener>(AggregationListener.class); // since 8.0
 	private final FastReadArray<URIInterceptor>
 		_uriIntcps = new FastReadArray<URIInterceptor>(URIInterceptor.class);
 	private final FastReadArray<RequestInterceptor>
@@ -240,17 +243,6 @@ public class Configuration {
 	 * @see Desktop#addListener
 	 */
 	public void addListener(Class<?> klass) throws Exception {
-		addListener(klass, false);
-	}
-	/**
-	 * Adds a listener class, and if pluggable is true, the instener will be added
-	 * into a pluggable pool for addon developer to use it later. 
-	 * @param klass
-	 * @param pluggable
-	 * @throws Exception
-	 * @since 8.0.0
-	 */
-	public void addListener(Class<?> klass, boolean pluggable) throws Exception {
 		boolean added = false;
 		Object listener = null;
 
@@ -351,6 +343,17 @@ public class Configuration {
 		//for better performance, the following listeners are instantiated
 		//here and shared in the whole application
 
+
+		if (AggregationListener.class.isAssignableFrom(klass)) {
+			try {
+				_aggregations.add((AggregationListener)
+					(listener = getInstance(klass, listener)));
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
+		
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
 				_uriIntcps.add((URIInterceptor)
@@ -401,9 +404,13 @@ public class Configuration {
 			added = true;
 		}
 		
-		if (pluggable) {
-			_pluggables.add(klass);
-			added = true;
+		if (!added) {
+			for (AggregationListener al : (List<AggregationListener>)Arrays.asList(_aggregations.toArray())) {
+				if (al.isHandled(klass)) {
+					added = true;
+					break;
+				}
+			}
 		}
 		
 
@@ -452,36 +459,16 @@ public class Configuration {
 		_seoRends.remove(klass);
 		_resolvers.remove(klass);
 		_parsers.remove(klass);
-		_pluggables.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
+
+		_aggregations.removeBy(sc, true);
 		_uriIntcps.removeBy(sc, true);
 		_reqIntcps.removeBy(sc, true);
 		_uiCycles.removeBy(sc, true);
 		_propRends.removeBy(sc, true);
 
 		_eis.removeEventInterceptor(klass);
-	}
-	
-	/**
-	 * Returns the pluggableListener from the given class type.
-	 * @since 8.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> List<T> getPluggableListener(Class<T> klass) {
-		final Class<T>[] pluggableclses = (Class<T>[]) _pluggables.toArray();
-		if (pluggableclses.length == 0)
-			return Collections.EMPTY_LIST;
-
-		final List<T> pluggable = new LinkedList<T>();
-		for (int j = 0; j < pluggableclses.length; ++j) {
-			try {
-				pluggable.add((T)pluggableclses[j].newInstance());
-			} catch (Throwable ex) {
-				log.error("Failed to instantiate " + pluggableclses[j]);
-			}
-		}
-		return pluggable;
 	}
 
 	/** Constructs a list of {@link EventThreadInit} instances and invokes
