@@ -16,6 +16,7 @@ ZK 7.0.5
   ZK-2558: adding and freezing columns dynamically causes a JS error
   ZK-2551: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader
   ZK-2575: errors in zul.xsd
+  ZK-2541: Attempt to install CometAsyncServlet in Servlet 2.5 compliant container
 
 * Upgrade Notes
 
