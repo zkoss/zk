@@ -55,11 +55,11 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		ShadowElement, ShadowElementCtrl {
 	private static final Logger log = LoggerFactory.getLogger(HtmlShadowElement.class);
 	private static final long serialVersionUID = 20141022145906L;
-	private transient Component _firstInsertion;
-	private transient Component _lastInsertion;
-	private transient Component _nextInsertion;
-	private transient Component _previousInsertion;
-	protected transient boolean _afterComposed = false;
+	private Component _firstInsertion;
+	private Component _lastInsertion;
+	private Component _nextInsertion;
+	private Component _previousInsertion;
+	protected boolean _afterComposed = false;
 	
 	private Component _host;
 	
