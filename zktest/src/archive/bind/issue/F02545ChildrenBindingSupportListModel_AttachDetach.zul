@@ -1,0 +1,40 @@
+<zk>
+	<label multiline="true">
+	1. you should see "init list1" and "init list2"
+	2. click the "detach" button, you should only see "init list1".
+	3. click the "add" button, you should see "init list1" is added.
+	4. click the "attach" button, you should see "init list1" and "init list2" are added, and the content of both block are the same
+	</label>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F02545ChildrenBindingSupportListModelVM')">
+		<hlayout>
+			<div>
+				<label value="init list1" />
+				<vlayout id="list1" children="@init(vm.model_l)" use="MyVlayout">
+				<template name="children">
+					<label value="@load(each.id)"/>
+				</template>
+			</vlayout>
+			</div>
+			<div id="d2">
+				<label value="init list2" />
+				<vlayout id="list2" children="@init(vm.model_l)" use="MyVlayout">
+					<template name="children">
+						<label value="@load(each.id)"/>
+					</template>
+				</vlayout>
+			</div>
+		</hlayout>
+		<button label="detach">
+			<attribute name="onClick">
+				Component list2 = list2;
+				list2.detach();
+			</attribute>
+		</button>
+		<button label="attach">
+			<attribute name="onClick">
+				list2.setParent(d2);
+			</attribute>
+		</button>
+		<button id="add" label="add" onClick="@command('add')" />
+	</window>
+</zk>

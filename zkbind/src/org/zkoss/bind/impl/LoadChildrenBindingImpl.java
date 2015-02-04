@@ -98,9 +98,13 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			//ZK-2545 - Children binding support list model
 			boolean isUsingListModel = old instanceof ListModel;
 			if (isUsingListModel) {
-				((ListModel<?>) old).addListDataListener(new ChildrenBindingListDataListener(comp, ctx, conv));
-				if (comp.hasAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS))
+				Object model = comp.getAttribute(BinderCtrl.CHILDREN_BINDING_MODEL);
+				if (model != null && !old.equals(model)) //when model is changed
 					comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+				ListDataListener dataListener = new ChildrenBindingListDataListener(comp, ctx, conv);
+				((ListModel<?>) old).addListDataListener(dataListener);
+				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL, old);
+				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER, dataListener);
 			}
 			int size = data.size();
 			for(int i = 0; i < size; i++) {

@@ -83,6 +83,8 @@ public interface BinderCtrl {
 	public static final String BINDRENDERING = "$BINDRENDERING$"; //for bind renderer to use
 	//ZK-2545 - Children binding support list model
 	public static final String CHILDREN_BINDING_RENDERED_COMPONENTS = "$CHILDREN_BINDING_RENDERED_COMPONENTS$";
+	public static final String CHILDREN_BINDING_MODEL = "$CHILDREN_BINDING_MODEL$";
+	public static final String CHILDREN_BINDING_MODEL_LISTENER = "$CHILDREN_BINDING_MODEL_LISTENER$";
 	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
