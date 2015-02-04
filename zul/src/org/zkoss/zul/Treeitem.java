@@ -672,9 +672,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 				// Bug #2838782
 				tree.focus();
 			}
-			
-			
-			
+
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

@@ -1873,7 +1873,8 @@ public class Tree extends MeshElement {
 			if (!model.isOpenEmpty()) {
 				if (!isLeaf) {
 					if (path == null)
-						path = getPath0(parent, i);
+						//B70-ZK-2547: use the right way to get path
+						path = getTreeitemPath(this, ti);
 					ti.setOpen(model.isPathOpened(path));
 				}
 			}
