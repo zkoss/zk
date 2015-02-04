@@ -41,6 +41,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.UiLifeCycle;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.event.ListDataListener;
 
 /**
  * Track Binding CRUD and dependent tracking management. 
@@ -169,7 +171,13 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		//ZK-2022, make it is in queue of remove.
 		comp.setAttribute(REMOVE_MARK, Boolean.TRUE);
 		//ZK-2545 - Children binding support list model
-		comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		if (comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS) != null) {
+			ListModel<?> model = (ListModel<?>) comp.getAttribute(BinderCtrl.CHILDREN_BINDING_MODEL);
+			ListDataListener listener = (ListDataListener) comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER);
+			if (model != null && listener != null) {
+				model.removeListDataListener(listener);
+			}
+		}
 		// post ON_BIND_INIT event
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
 	}

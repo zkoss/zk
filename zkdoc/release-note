@@ -10,7 +10,7 @@ ZK 8.0.0
   ZK-2613: ZHTML component's src attribute support encodeURL like Image in Zul
   ZK-2612: ZHTML support textContent attribute for dynamic data binding
   ZK-2614: ZK DataBinding support client callback function after some command triggered
-
+  ZK-2545: Children binding support list model
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
