@@ -89,7 +89,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param String command the name of the command
 	 * @param Map args the arguments for this command. (the value should be json type)
 	 */
-	$command: function (cmd, args) {
+	command: function (cmd, args) {
 		this.$command0(cmd, args);
 	},
 	/**
@@ -113,7 +113,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param String command the name of the command
 	 * @param Map args the arguments for this command. (the value should be json type)
 	 */
-	$globalCommand: function (cmd, args) {
+	globalCommand: function (cmd, args) {
 		this.$globalCommand0(cmd, args);
 	},
 	/**
@@ -150,7 +150,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		if (w) {
 			var binder = w.$binder();
 			if (binder) {
-				binder.$command(command, args);
+				binder.command(command, args);
 			}
 		}
 	},
@@ -165,7 +165,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		if (w) {
 			var binder = w.$binder();
 			if (binder) {
-				binder.$globalCommand(command, args);
+				binder.globalCommand(command, args);
 			}
 		}
 	}

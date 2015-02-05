@@ -52,20 +52,20 @@ public class ClientBinderCommandParser implements NamespaceParser {
 			if (value.startsWith("@command(")) {
 				final String subValue = value.substring(9, value.lastIndexOf(')'));
 				final String[] strings = subValue.split(",");
-				addAttribute(compInfo, name, String.format(SCRIPT, "postCommand", Strings.join(strings)));
+				addAttribute(compInfo, attr, name, String.format(SCRIPT, "postCommand", Strings.join(strings)));
 				return true;
 			} else if (value.startsWith("@global-command(")) {
 				final String subValue = value.substring(16, value.lastIndexOf(')'));
 				final String[] strings = subValue.split(",");
-				addAttribute(compInfo, name, String.format(SCRIPT, "postGlobalCommand", Strings.join(strings)));
+				addAttribute(compInfo, attr, name, String.format(SCRIPT, "postGlobalCommand", Strings.join(strings)));
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private void addAttribute(ComponentInfo compInfo, String name, String value) {
-		if (compInfo instanceof NativeInfo) {
+	private void addAttribute(ComponentInfo compInfo, Attribute attr, String name, String value) {
+		if (compInfo instanceof NativeInfo || isNative(attr.getNamespaceURI())) {
 			compInfo.addProperty(name, value, null);
 		} else {
 			compInfo.addWidgetListener(name, value, null);
