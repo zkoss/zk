@@ -1334,6 +1334,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
 		var allwidths = true,
+			isHeadVisible = head.isVisible(), // ZK-2610
 			// IE6/7 bug in F30-1904532.zul
 			totalWidth = 0, shallCheckSize = zk.ie < 8;
 		
@@ -1358,8 +1359,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
+		// ZK-2610: only clear faker's width when head is visible
 		out.push('<th id="', head.uuid, fakeId, 'flex"', 
-				(allwidths || this.isSizedByContent() ? '' : ' style="width:0px"'), '></th></tr></tbody>');
+				((allwidths || this.isSizedByContent()) && isHeadVisible ? '' : ' style="width:0px"'), '></th></tr></tbody>');
 	},
 
 	//super//
