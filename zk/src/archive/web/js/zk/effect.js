@@ -53,8 +53,8 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	destroy: function () {
 		jq(this.stackup).remove();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
+		zWatch.unlisten({ onVParent: [this.node, zk.eff._onVParent] }); // ZK-2586
 		this.wgt = this.node = this.stackup = null;
-		zWatch.unlisten({ onVParent: [this.node, zk.eff._onVParent] });
 	},
 	hide: function(){
 		jq(this.stackup).hide();
