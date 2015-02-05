@@ -21,6 +21,7 @@ ZK 7.0.5
   ZK-2603: unlisten model listener when the component has detached, and listen it again when attached.
   ZK-2547: Sometimes we cannot close a Treeitem in one click
   ZK-2552: Tabbox model NotifyChange problem
+  ZK-2586: datebox performance on IE11
 
 * Upgrade Notes
 

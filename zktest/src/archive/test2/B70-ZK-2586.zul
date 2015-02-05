@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2586.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Feb 04, 2015  6:36:25 PM, Created by hanshu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		opening a single datebox several times 15-20+ will gradually get slower on IE11 resulting in significant delay making the widget unusable
+	</label>
+	<separator />
+	<datebox/>
+</zk>
