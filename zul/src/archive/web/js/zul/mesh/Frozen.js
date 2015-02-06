@@ -160,9 +160,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (p._nativebar) {
 			//B70-ZK-2130: No need to reset when beforeSize, ZK-343 with native bar works fine too.
 			zWatch.listen({onSize: this});
-			var scroll = this.$n('scrollX');
+			var scroll = this.$n('scrollX'),
+				scrollbarWidth = jq.scrollbarWidth();
+			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
 			this.$n().style.height = this.$n('cave').style.height = scroll.style.height
-				 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
+				 = scroll.firstChild.style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
 
