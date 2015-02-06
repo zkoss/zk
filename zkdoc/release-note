@@ -11,6 +11,7 @@ ZK 8.0.0
   ZK-2612: ZHTML support textContent attribute for dynamic data binding
   ZK-2614: ZK DataBinding support client callback function after some command triggered
   ZK-2545: Children binding support list model
+  ZK-2620: Upgrade Font Awesome to 4.3 version
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
@@ -20,6 +21,23 @@ ZK 8.0.0
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
   + Deprecated the class of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl and org.zkoss.bind.impl.FormExt.
+  + Renaming icons for upgrading Font Awesome to 4.3
+  	*. z-icon-move to z-icon-arrows
+  	*. z-icon-resize-full to z-icon-expand
+  	*. z-icon-resize-small to z-icon-compress
+  	*. z-icon-resize-vertical to z-icon-arrows-v
+  	*. z-icon-resize-horizontal to z-icon-arrows-h
+  	*. z-icon-fullscreen to z-icon-arrows-alt
+  	*. z-icon-hospital to z-icon-hospital-o
+  	*. z-icon-unlock-o to z-icon-unlock-alt
+  	*. z-icon-ellipsis-horizontal to z-icon-ellipsis-h
+  	*. z-icon-ellipsis-vertical to z-icon-ellipsis-v
+  + Removed the icons for upgrading Font Awesome to 4.3
+  	*. z-icon-expand-o
+  	*. z-icon-collapse-o
+
+
+
   --------
 ZK 7.0.5
 * Features

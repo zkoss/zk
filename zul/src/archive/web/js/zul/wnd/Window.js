@@ -1270,10 +1270,10 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		return 'z-icon-times';
 	},
 	getMaximizableIconClass_: function () {
-		return 'z-icon-resize-full';
+		return 'z-icon-expand';
 	},
 	getMaximizedIconClass_: function () {
-		return 'z-icon-resize-small';
+		return 'z-icon-compress';
 	},
 	getMinimizableIconClass_: function () {
 		return 'z-icon-minus';
