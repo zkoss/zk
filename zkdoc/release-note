@@ -23,6 +23,7 @@ ZK 7.0.5
   ZK-2552: Tabbox model NotifyChange problem
   ZK-2568: Group/Listgroup row has wrong colspan value
   ZK-2586: datebox performance on IE11
+  ZK-2554: Context menu is closed automatically when tooltip showed
 
 * Upgrade Notes
 
