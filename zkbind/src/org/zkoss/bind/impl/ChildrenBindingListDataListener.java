@@ -97,8 +97,7 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 				cbrCompsList.remove(i);
 			}
 			refreshOwnerCBAttr = true;
-		} else
-			syncModel(model);
+		}
 		if (refreshOwnerCBAttr) 
 			_owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
 	}
