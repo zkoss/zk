@@ -42,7 +42,7 @@ public class Html extends AbstractTag {
 	public void invalidate() {
 		final Execution exec = Executions.getCurrent();
 		if (exec != null && exec.isAsyncUpdate(getPage()))
-			throw new UnsupportedOperationException("html.invalidate() now allowed");
+			throw new UnsupportedOperationException("html.invalidate() not allowed");
 		super.invalidate();
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
