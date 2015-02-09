@@ -47,6 +47,7 @@ public class TreeDataEvent {
 	private final int _indexFrom;
 	private final int _indexTo;
 	private final int[] _nodePath;
+	private final int[] _affectedPath;
 
 	/** Constructor.
 	 *
@@ -60,6 +61,7 @@ public class TreeDataEvent {
 	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
+	 * @param affectedPath the path to be removed or added
 	 */
 	public TreeDataEvent(TreeModel model, int type,
 	int[] nodePath, int indexFrom, int indexTo) {
@@ -68,6 +70,16 @@ public class TreeDataEvent {
 		_nodePath = nodePath;
 		_indexFrom = indexFrom;
 		_indexTo = indexTo;
+		_affectedPath = null;
+	}
+	public TreeDataEvent(TreeModel model, int type,
+	int[] nodePath, int indexFrom, int indexTo, int[] affectedPath) {
+		_model = model;
+		_type = type;
+		_nodePath = nodePath;
+		_indexFrom = indexFrom;
+		_indexTo = indexTo;
+		_affectedPath = affectedPath;
 	}
 	
 	/** Returns the tree model that fires this event.
@@ -109,6 +121,14 @@ public class TreeDataEvent {
 	 */
 	public int getIndexTo(){
 		return _indexTo;
+	}
+	
+	/**
+	 * Return the path of removed node
+	 * @return the node that is removed 
+	 */
+	public int[] getAffectedPath() {
+		return _affectedPath;
 	}
 
 }

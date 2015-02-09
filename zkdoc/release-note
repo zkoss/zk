@@ -25,6 +25,7 @@ ZK 7.0.5
   ZK-2586: datebox performance on IE11
   ZK-2554: Context menu is closed automatically when tooltip showed
   ZK-2583: frozen grid/listbox scrolling controls partially broken on IE
+  ZK-2611: Inconsistency in TreeModel when changing the model
 
 * Upgrade Notes
 
