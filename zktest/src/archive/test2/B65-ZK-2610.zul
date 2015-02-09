@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2610.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Feb 05, 2015  3:56:35 PM, Created by hanhsu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label>
+	Header labels are hidden as expected. However, the only item in each row consumes just half of the table width.
+</label>
+<listbox width="200px">
+    <listhead visible="false">
+        <listheader label="Listheader 1" hflex="1"/>
+    </listhead>
+    <listitem style="background-color:pink" label="Listitem 1"/>
+    <listitem label="Listitem 2"/>
+    <listitem label="Listitem 3"/>
+    <listitem label="Listitem 4"/>
+    <listitem label="Listitem 5"/>
+</listbox>
+<separator />
+<grid width="200px">
+    <columns visible="false">
+        <column label="Column Label" hflex="1"/>
+    </columns>
+    <rows>
+        <row><cell style="background-color:pink">Cell 1</cell></row>
+        <row><cell>Cell 2</cell></row>
+        <row><cell>Cell 3</cell></row>
+        <row><cell>Cell 4</cell></row>
+        <row><cell>Cell 5</cell></row>
+    </rows>
+</grid>
+<separator />
+<tree width="200px">
+    <treecols visible="false">
+        <treecol label="Tree Column 1" hflex="1"/>
+    </treecols>
+    <treechildren>
+        <treeitem label="Tree Node 1">
+            <treechildren>
+                <treeitem label="Tree Node 1.1" />
+                <treeitem label="Tree Node 1.2">
+                    <treechildren>
+                        <treeitem label="Tree Node 1.2.1"/>
+                        <treeitem label="Tree Node 1.2.2"/>
+                    </treechildren>
+                </treeitem>
+            </treechildren>
+        </treeitem>
+    </treechildren>
+</tree>
+</zk>

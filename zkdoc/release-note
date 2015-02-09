@@ -21,6 +21,7 @@ ZK 6.5.8
   ZK-2550: Listbox doesn't keep scrollbar position when replacing an item of ListModelList and ROD enabled
   ZK-2551: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader
   ZK-2541: Attempt to install CometAsyncServlet in Servlet 2.5 compliant container
+  ZK-2610: Wrong hflex calculation when header widgets are invisible
   
   --------
 ZK 6.5.7
