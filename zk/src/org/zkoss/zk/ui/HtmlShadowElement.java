@@ -1349,7 +1349,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				//if o has the same parent (since we have to move)
 		}
 	}
-	
+
+	// refer to AnnotateBinderHelper.INIT_ANNO
+	final static protected String INIT_ANNO = "init";
 	// refer to AnnotateBinderHelper.BIND_ANNO
 	final static protected String BIND_ANNO = "bind";
 	// refer to AnnotateBinderHelper.BIND_ANNO
@@ -1372,7 +1374,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				final String annoName = anno.getName();
 				if (annoName.equals(BIND_ANNO) || annoName.equals(LOAD_ANNO)
 						|| annoName.equals(SAVE_ANNO)
-						|| annoName.equals(REFERENCE_ANNO)) {
+						|| annoName.equals(REFERENCE_ANNO)
+						|| annoName.equals(INIT_ANNO)) {
 					return true;
 				}
 			}
