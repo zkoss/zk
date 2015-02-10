@@ -92,6 +92,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.util.PageSerializationListener;
+import org.zkoss.zk.ui.util.Template;
 
 /**
  * An implementation of {@link Page} and {@link PageCtrl}.
@@ -160,6 +161,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private boolean _complete;
 	private List<String> _impclss;
 
+	private Map<String, Template> _templates;
 	/** Constructs a page by giving the page definition.
 	 *
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
@@ -1123,7 +1125,25 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
 		_expfcls = expfcls;
 	}
+	
+	//ZK-2623: page scope template
+	public void addTemplate(String name, Template template) {
+		if (name == null)
+			throw new IllegalArgumentException("template name should not be null");
+		if (_templates == null)
+			_templates = new LinkedHashMap<String, Template>();
+		if (template != null)
+			_templates.put(name, template);
+	}
 
+	public void removeTemplate(String name) {
+		_templates.remove(name);
+	}
+	
+	public Template getTemplate(String name) {
+		return _templates.get(name);
+	}
+	
 	//-- Serializable --//
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)

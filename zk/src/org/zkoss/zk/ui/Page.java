@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
+import org.zkoss.zk.ui.util.Template;
 
 /**
  * A page. A desktop consists of a set of pages.
@@ -654,4 +655,26 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
 	public ComponentDefinition getComponentDefinition(Class<? extends Component> cls, boolean recurse);
+	
+	/**
+	 * Adds page scope template
+	 * @param name
+	 * @param template
+	 * @since 8.0.0
+	 */
+	public void addTemplate(String name, Template template);
+	
+	/**
+	 * Removes page scope template
+	 * @param name
+	 * @since 8.0.0
+	 */
+	public void removeTemplate(String name);
+	
+	/**
+	 * Gets page scope template by name
+	 * @param name
+	 * @since 8.0.0
+	 */
+	public Template getTemplate(String name);
 }

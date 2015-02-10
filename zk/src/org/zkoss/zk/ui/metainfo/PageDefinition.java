@@ -105,6 +105,9 @@ public class PageDefinition implements NodeInfo {
 	private Boolean _cacheable;
 	private Boolean _autoTimeout;
 	private boolean _complete;
+	
+	//ZK-2623: page scope template
+	private Map<String, TemplateInfo> _templatesInfo;
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -885,6 +888,29 @@ public class PageDefinition implements NodeInfo {
 		return _mapper != Expressions.EMPTY_MAPPER ? _mapper: null;
 	}
 
+	/** Adds a template info
+	 * The previous src of the same name will be replaced.
+	 *
+	 * @param src the src. If null, the attribute is removed.
+	 * @since 8.0.0
+	 */
+	public void addTemplateInfo(TemplateInfo info) {
+		if (info == null)
+			throw new IllegalArgumentException();
+
+		if (_templatesInfo == null)
+			_templatesInfo = new LinkedHashMap<String, TemplateInfo>();
+		
+		_templatesInfo.put(info.getName(), info);
+	}
+	
+	/** Gets templates info map
+	 * @since 8.0.0
+	 */
+	public Map<String, TemplateInfo> getTemplatesInfo() {
+		return _templatesInfo;
+	}
+	
 	/** Initializes the context for the given page before rendering
 	 * this page definition.
 	 * <p>It is called before {@link Initiator#doInit} and {@link #init}.
