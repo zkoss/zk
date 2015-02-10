@@ -264,7 +264,7 @@ implements DynamicPropertied, RawId {
 		}
 
 		out.write(getPrologHalf(false));
-		rc.renderBegin(this, getClientEvents(), false);
+		rc.renderBegin(this, getClientEvents(), getSpecialRendererOutput(this), false);
 
 		redrawChildrenDirectly(rc, exec, out);
 
@@ -293,7 +293,7 @@ implements DynamicPropertied, RawId {
 				((ComponentCtrl)child).redraw(out);
 			} else {
 				HtmlPageRenders.setDirectContent(exec, false);
-				rc.renderBegin(child, null, true);
+				rc.renderBegin(child, null, getSpecialRendererOutput(child), true);
 				HtmlPageRenders.outStandalone(exec, child, out);
 				rc.renderEnd(child);
 				HtmlPageRenders.setDirectContent(exec, true);

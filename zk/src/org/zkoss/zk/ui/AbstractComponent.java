@@ -1849,6 +1849,17 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 
+	protected String getSpecialRendererOutput(Component comp) throws IOException {
+		if (_page != null) {
+			final JsContentRenderer renderer = new JsContentRenderer();
+			PropertiesRenderer[] prs = _page.getDesktop().getWebApp()
+					.getConfiguration().getPropertiesRenderers();
+			for (int j = 0; j < prs.length; j++)
+				prs[j].renderProperties(comp, renderer);
+			return renderer.getBuffer().toString();
+		}
+		return "";
+	}
 	
 	public boolean disableClientUpdate(boolean disable) {
 		final UiEngine uieng =

@@ -70,7 +70,7 @@ public class TagRenderContext {
 	 * Specifies true if the widget is created somewhere else.
 	 */
 	public void
-	renderBegin(Component comp, Map clientEvents, boolean lookup) {
+	renderBegin(Component comp, Map clientEvents, String specialRendererOutput, boolean lookup) {
 		if (_2ndChild.isEmpty())
 			_jsout.append("zkx(");
 		else if (_2ndChild.get(0) == Boolean.TRUE)
@@ -118,6 +118,13 @@ public class TagRenderContext {
 					}
 				}
 			}
+			if (!Strings.isEmpty(specialRendererOutput)) {
+				if (first) first = false;
+				else _jsout.append(',');
+				_jsout.append(specialRendererOutput);
+			}
+		} else if (!Strings.isEmpty(specialRendererOutput)) {
+			_jsout.append(specialRendererOutput);
 		}
 
 		_jsout.append("},[");

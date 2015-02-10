@@ -353,7 +353,10 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 		} else {
 			if (_props == null)
 				_props = new LinkedHashMap<String, Object>();
-			_props.put(name, value);
+			if ("sclass".equals(name))
+				_props.put("class", value);
+			else
+				_props.put(name, value);
 		}
 	}
 

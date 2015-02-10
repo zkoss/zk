@@ -145,7 +145,7 @@ public class Text extends AbstractComponent implements RawId {
 
 		final TagRenderContext rc = PageRenderer.getTagRenderContext(exec);
 		if (rc != null) {
-			rc.renderBegin(this, getClientEvents(), false);
+			rc.renderBegin(this, getClientEvents(), getSpecialRendererOutput(this), false);
 			rc.renderEnd(this);
 		}
 	}
