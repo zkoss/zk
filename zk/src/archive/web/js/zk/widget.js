@@ -5120,7 +5120,7 @@ zk.Native = zk.$extends(zk.Widget, {
 				}
 			}
 			// B65-ZK-1836 and B70-ZK-2622
-			out.push(this.$class.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
+			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
 			if (this.value && s.startsWith('<textarea'))
 				out.push(this.value);
 		}
@@ -5148,7 +5148,7 @@ zk.Native = zk.$extends(zk.Widget, {
 						// enclose with <script></script>
 						if (substr.length >= 17) {
 							var cnt = substr.substring(8, substr.length - 9);
-							var cnt2 = this.replaceScriptContent(cnt);
+							var cnt2 = zk.Native.replaceScriptContent(cnt);
 							if (cnt != cnt2)
 								str = str.replace(cnt, cnt2);
 						}
