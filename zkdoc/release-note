@@ -27,6 +27,7 @@ ZK 7.0.5
   ZK-2583: frozen grid/listbox scrolling controls partially broken on IE
   ZK-2611: Inconsistency in TreeModel when changing the model
   ZK-2589: Tree ROD failing after open/close a node
+  ZK-2622: Native component with nested script tag will cause JS error
 
 * Upgrade Notes
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2622_1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 10, 2015  3:12:09 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk:zk xmlns:zk="zk" xmlns="native">
+  <div>
+  <script>zk.log('hello');</script>
+    <script>
+    var s = "&lt;/Script>";
+    zk.log(s);
+    </script>
+  </div>
+</zk:zk>
