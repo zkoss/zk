@@ -269,8 +269,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (sel)
 			zk(sel).scrollIntoView(this.$n('pp'));
-
-		this._select(sel, {sendOnSelect:true});
+		
+		//B70-ZK-2548: fire onChange event to notify server the current value 
+		this._select(sel, {sendOnSelect: true, sendOnChange: true});
 		evt.stop();
 	},
 	_next: (function() {
@@ -324,6 +325,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				evt.stop();
 				break;
 			default:
+				//B70-ZK-2590: dealing with numpad keyDown, only 0~9
+				if (keyCode >= 96 && keyCode <= 105)
+					keyCode -= 48;
 				var v = String.fromCharCode(keyCode);
 				var sel = this._findItem0(v, true, true, !!this._sel);
 				if (sel)

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2583.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Feb 06, 2015 12:54:35 PM, Created by Han
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		the horizontal scrolling control only works for dragging on IE (10/11 tested)
+		clicking the arrows, or the area next to the scroll handle does not work
+	</label>
+	<grid>
+		<frozen columns="1"></frozen>
+		<columns>
+			<column label="aaa"/>
+			<column label="bbb"/>
+			<column label="ccc"/>
+			<column label="ddd"/>
+		</columns>
+		<rows>
+			<row><cell>111</cell><cell>222</cell><cell>333</cell><cell>444</cell></row>
+			<row><cell>111</cell><cell>222</cell><cell>333</cell><cell>444</cell></row>
+			<row><cell>111</cell><cell>222</cell><cell>333</cell><cell>444</cell></row>
+			<row><cell>111</cell><cell>222</cell><cell>333</cell><cell>444</cell></row>
+			<row style="background-color:pink"><cell>111</cell><cell>222</cell><cell>333</cell><cell>444</cell></row>
+		</rows>
+	</grid>
+	<listbox>
+		<frozen columns="1"></frozen>
+		<listhead>
+			<listheader label="aaa"/>
+			<listheader label="bbb"/>
+			<listheader label="ccc"/>
+			<listheader label="ddd"/>
+		</listhead>
+		<listitem><listcell>111</listcell><listcell>222</listcell><listcell>333</listcell><listcell>444</listcell></listitem>
+		<listitem><listcell>111</listcell><listcell>222</listcell><listcell>333</listcell><listcell>444</listcell></listitem>
+		<listitem><listcell>111</listcell><listcell>222</listcell><listcell>333</listcell><listcell>444</listcell></listitem>
+		<listitem><listcell>111</listcell><listcell>222</listcell><listcell>333</listcell><listcell>444</listcell></listitem>
+		<listitem><listcell>111</listcell><listcell>222</listcell><listcell>333</listcell><listcell>444</listcell></listitem>
+	</listbox>
+</zk>

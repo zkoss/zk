@@ -74,6 +74,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				columns = wgt._columns,
 				leftWidth = 0;
 			
+			//B70-ZK-2553: one may specify frozen without any real column
+			if (!cells || cells.length <= 0) {
+				//no need to do the following computation since there is no any column
+				return;
+			}
+			
 			for (var i = 0; i < columns; i++)
 				leftWidth += cells[i].offsetWidth;
 			
@@ -154,9 +160,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (p._nativebar) {
 			//B70-ZK-2130: No need to reset when beforeSize, ZK-343 with native bar works fine too.
 			zWatch.listen({onSize: this});
-			var scroll = this.$n('scrollX');
+			var scroll = this.$n('scrollX'),
+				scrollbarWidth = jq.scrollbarWidth();
+			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
 			this.$n().style.height = this.$n('cave').style.height = scroll.style.height
-				 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
+				 = scroll.firstChild.style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
 
@@ -224,7 +232,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			phead = p.head, 
 			firstHdcell, fhcs;
 		if (p._nativebar && phead) {
-			firstHdcell = phead.$n().cells[0];
+			//B70-ZK-2558: frozen will onSize before other columns, 
+			//so there might be no any column in the beginning
+			var n = phead.$n();
+			firstHdcell = n? (n.cells? n.cells[0]: null) : null;
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
 				fhcs = firstHdcell.style;

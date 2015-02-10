@@ -807,7 +807,7 @@ jq(function() {
 		zk.unloading = true; //to disable error message
 
 		// B65-ZK-2051: Remove desktop if is IE.
-		if (zk.ie) {
+		if (zk.ie || !zk.rmDesktoping) {
 			rmDesktop();
 		}
 	});
@@ -819,6 +819,7 @@ jq(function() {
 		//a cached page, its content. OTOH, IE/FF/Safari cannot.
 		var bRmDesktop = !zk.opera && !zk.keepDesktop;
 		if (bRmDesktop || zk.pfmeter) {
+			zk.rmDesktoping = true;
 			try {
 				var dts = zk.Desktop.all;
 				for (var dtid in dts)

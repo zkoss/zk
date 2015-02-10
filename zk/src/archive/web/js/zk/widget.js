@@ -5119,8 +5119,8 @@ zk.Native = zk.$extends(zk.Widget, {
 					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j); 
 				}
 			}
-			// B65-ZK-1836
-			out.push(s.replace(/ sclass=/ig, ' class=').replace(/<\/(?=script>)/ig, '<\\/'));
+			// B65-ZK-1836 and B70-ZK-2622
+			out.push(this.$class.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
 			if (this.value && s.startsWith('<textarea'))
 				out.push(this.value);
 		}
@@ -5132,7 +5132,33 @@ zk.Native = zk.$extends(zk.Widget, {
 		if (s) out.push(s);
 	}
 }, {
-	$redraw: _zkf
+	$redraw: _zkf,
+	replaceScriptContent: (function () {
+		var Script_RE = new RegExp(/<script[^>]*>([\s\S]*?)<\/script>/g);
+		var Replace_RE = new RegExp(/<\/(?=script>)/ig);
+		return function (str) {
+			try {
+				var result = str.match(Script_RE);
+				if (!result)
+					return str.replace(Replace_RE, '<\\/');
+				else {
+					for (var i = 0, j = result.length; i < j; i++) {
+						var substr = result[i];
+						
+						// enclose with <script></script>
+						if (substr.length >= 17) {
+							var cnt = substr.substring(8, substr.length - 9);
+							var cnt2 = this.replaceScriptContent(cnt);
+							if (cnt != cnt2)
+								str = str.replace(cnt, cnt2);
+						}
+					}
+				}
+				return str;
+			} catch (e) {/*eat the exception if happen*/}
+			return str;
+		};
+	})()
 });
 
 /** A macro widget.

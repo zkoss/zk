@@ -308,9 +308,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		this.close({sendOnOpen:true});
 	},
+	onVParent: function (ctl) {
+		// ZK-2554: call _doFloatUp when triggered onVParent only if _shallToggle is true
+		if (this._shallToggle)
+			this._doFloatUp(ctl);
+	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);
-		zWatch.listen({onFloatUp: this, onShow: this, onVParent: [this, this._doFloatUp]});
+		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -322,7 +327,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._openInfo)
 			this._openInfo = null;
 		this._shallToggle = null;
-		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: [this, this._doFloatUp]});
+		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},

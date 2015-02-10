@@ -250,9 +250,12 @@ Cloneable, java.io.Serializable  {
 				((DefaultTreeNode<E>) child).setParent(DefaultTreeNode.this);
 			
 			DefaultTreeModel<E> model = getModel();
+			int[] path = model != null ? model.getPath(child) : null;
+			
 			if (model != null)
+				//fire event to carry path information
 				model.fireEvent(TreeDataEvent.INTERVAL_ADDED,
-					model.getPath(DefaultTreeNode.this), index, index);
+					model.getPath(DefaultTreeNode.this), index, index, path);
 			
 		}
 		
@@ -274,8 +277,10 @@ Cloneable, java.io.Serializable  {
 				((DefaultTreeNode<E>)child).setParent(null);
 			
 			if (model != null)
+				//fire event to carry path information
 				model.fireEvent(TreeDataEvent.INTERVAL_REMOVED,
-					model.getPath(DefaultTreeNode.this), index, index);
+						model.getPath(DefaultTreeNode.this), index, index, path);
+
 			return child;
 		}
 		

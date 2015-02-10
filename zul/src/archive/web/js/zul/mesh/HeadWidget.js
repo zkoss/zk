@@ -261,10 +261,22 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		return true;
 	},
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
-		var wgt = this.parent;
+		var wgt = this.parent,
+			ebody = wgt.ebody,
+			ehead = wgt.ehead,
+			efoot = wgt.efoot,
+			currentLeft = wgt._currentLeft;
 		if (wgt) {
 			wgt._adjFlexWd();
 			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
+			// ZK-2551: need to restore scroll pos after flexs are fixed
+			if (zk(ebody).hasHScroll() && currentLeft != ebody.scrollLeft) {
+				ebody.scrollLeft = currentLeft;
+				if (ehead)
+					ehead.scrollLeft = currentLeft;
+				if (efoot)
+					efoot.scrollLeft = currentLeft;
+			}
 		}
 	},
 	deferRedrawHTML_: function (out) {

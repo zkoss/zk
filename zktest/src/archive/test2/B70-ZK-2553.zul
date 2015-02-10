@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2553.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jan 26, 2015  2:27:19 PM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. load this page without js error
+	</label>
+	<grid>
+		<frozen columns="1"/>
+		<columns>
+			
+		</columns>
+		<rows>
+		</rows>
+	</grid>
+</zk>

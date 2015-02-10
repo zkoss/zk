@@ -269,6 +269,17 @@ public class Tree extends MeshElement {
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
+		if (_model != null && _dataListener != null) {
+			_model.removeTreeDataListener(_dataListener);
+			_model.addTreeDataListener(_dataListener);
+		}
+	}
+	
+	public void onPageDetached(Page page) {
+		super.onPageDetached(page);
+		if (_model != null && _dataListener != null) {
+			_model.removeTreeDataListener(_dataListener);
+		}
 	}
 	
 	private class ModelInitListener implements SerializableEventListener<Event>,
@@ -1863,7 +1874,8 @@ public class Tree extends MeshElement {
 			if (!model.isOpenEmpty()) {
 				if (!isLeaf) {
 					if (path == null)
-						path = getPath0(parent, i);
+						//B70-ZK-2547: use the right way to get path
+						path = getTreeitemPath(this, ti);
 					ti.setOpen(model.isPathOpened(path));
 				}
 			}

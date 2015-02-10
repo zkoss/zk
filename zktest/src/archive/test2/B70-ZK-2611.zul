@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2611.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Feb 04, 2015 11:24:06 AM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+<label multiline="true">
+1. check model.getOpenPaths() and model.getOpenObjects()
+2. the result should be consistent to clicking remove button
+3. server test 
+</label>
+	<div apply="org.zkoss.zktest.test2.B70_ZK_2611_Composer">
+		<tree id="tree" height="200px" checkmark="true">
+			<template name="model">
+				<treeitem label="${each}"/>
+			</template>
+		</tree>
+		
+		<button id="removeButton" label="remove 1"/>
+		<button id="addButton" label="add"/>
+	</div>
+</zk>

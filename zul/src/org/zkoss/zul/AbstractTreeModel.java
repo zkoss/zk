@@ -17,20 +17,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Collection;
 import java.util.Set;
-import java.util.LinkedHashSet;
-import org.zkoss.lang.Objects;
-import org.zkoss.io.Serializables;
 
+import org.zkoss.io.Serializables;
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.event.TreeDataListener;
+import org.zkoss.zul.ext.Openable;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
-import org.zkoss.zul.ext.Selectable;
-import org.zkoss.zul.ext.Openable;
-import org.zkoss.zul.event.TreeDataListener;
-import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  * A skeletal implementation for {@link TreeModel}.
@@ -75,6 +77,61 @@ java.io.Serializable {
 	 */
 	public AbstractTreeModel(E root) {
 		_root = root;
+		//ZK-2611: only for TreeDataEvent.INTERVAL_REMOVED and INTERVAL_ADDED:
+		addTreeDataListener(new TreeDataListener() {
+			public void onChange(TreeDataEvent event) {
+				updatePath(event);
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void updatePath(TreeDataEvent event) {
+		final int type = event.getType();
+		final int[] affectedPath = event.getAffectedPath();
+		if (affectedPath == null || affectedPath.length < 1) return;
+		switch (type) {
+		case TreeDataEvent.INTERVAL_REMOVED:
+			List<Path> l = new ArrayList<Path>(_opens);
+			Collections.sort(l);
+			for (int i = 0; i < l.size(); i++) {
+				Path p = l.get(i);
+				_opens.remove(p); //remove anywhere, because p may be updated
+				boolean isPrefix = p.isPrefix(affectedPath, -1);
+				//update set
+				if (!isPrefix) _opens.add(p);
+			}
+			
+			l = new ArrayList<Path>(_selection);
+			Collections.sort(l);
+			for (int i = 0; i < l.size(); i++) {
+				Path p = l.get(i);
+				_selection.remove(p); //remove anywhere, because p may be updated
+				boolean isPrefix = p.isPrefix(affectedPath, -1);
+				//update set
+				if (!isPrefix) _selection.add(p);
+			}
+			break;
+		case TreeDataEvent.INTERVAL_ADDED:
+			l = new ArrayList<Path>(_opens);
+			Collections.sort(l);
+			for (int i = l.size() - 1; i > -1; i--) {
+				Path p = l.get(i);
+				_opens.remove(p);
+				p.isPrefix(affectedPath, 1); //no remove
+				_opens.add(p);
+			}
+			
+			l = new ArrayList<Path>(_selection);
+			Collections.sort(l);
+			for (int i = 0; i < l.size(); i++) {
+				Path p = l.get(i);
+				_opens.remove(p);
+				p.isPrefix(affectedPath, 1); //no remove
+				_opens.add(p);
+			}
+			break;
+		}
 	}
 
 	/**
@@ -104,6 +161,18 @@ java.io.Serializable {
 	public void fireEvent(int evtType, int[] path, int indexFrom, int indexTo) {
 		final TreeDataEvent evt =
 			new TreeDataEvent(this, evtType, path, indexFrom, indexTo);
+		for (TreeDataListener l : _listeners)
+			l.onChange(evt);
+	}
+	/**
+	 * Has the same functionality with {@link #fireEvent(int, int[], int, int)},
+	 * while this is used for node removal only
+	 * 
+	 * @since 7.0.5
+	 */
+	public void fireEvent(int evtType, int[] path, int indexFrom, int indexTo, int[] affectedPath) {
+		final TreeDataEvent evt =
+			new TreeDataEvent(this, evtType, path, indexFrom, indexTo, affectedPath);
 		for (TreeDataListener l : _listeners)
 			l.onChange(evt);
 	}
@@ -608,7 +677,7 @@ java.io.Serializable {
 	/** Represents a tree path.
 	 * @since 6.0.0
 	 */
-	protected static class Path implements java.io.Serializable {
+	protected static class Path implements java.io.Serializable, Comparable {
 		public final int[] path;
 		protected Path(int[] path) {
 			this.path = path;
@@ -620,6 +689,78 @@ java.io.Serializable {
 		
 		public boolean equals(Object o) {
 			return o instanceof Path && Objects.equals(path, ((Path)o).path);
+		}
+
+		public int compareTo(Object o) {
+			if (!(o instanceof Path))
+				throw new WrongValueException(o + " is not Path object");
+			int length = path.length;
+			Path toCompared = (Path)o;
+			int[] toPath = toCompared.path;
+			int toLength = toCompared.path.length;
+			//should handle empty path case
+			if (length < 1 || toLength < 1)
+				throw new WrongValueException(this + " can't sort with empty path: " + o);
+
+			int smaller = (length < toLength? length : toLength);
+			for (int i = 0; i < smaller; i++) {
+				if (path[i] != toPath[i])
+					return path[i] - toPath[i];
+			}
+			return length - toLength;
+		}
+		
+		public boolean isPrefix(int[] path) {
+			return isPrefix(path, 0);
+		}
+		
+		/**
+		 * Test if this object's path match the given path when removal or addition,
+		 * and there are three situations:
+		 * 1. if this.path is fully matched, then it should be removed or updated
+		 * 2. if this.path match the given path except the last digit, they are
+		 * sibling, and we have to update the value by "update"
+		 * value of update:
+		 * 0 -> not update
+		 * 1 -> add one if behind prefix path (when model added)
+		 * -1 -> remove one if behind prefix path (when model removed
+		 * 3. if it failed matching before last digit, they are not sibling,
+		 * and just ignore this.path
+		 * 
+		 * Note: Because it will update this.path, be careful to use this function.
+		 * @param path the path to be matched
+		 * @param update 
+		 * @return boolean
+		 * @since 7.0.5
+		 */
+		public boolean isPrefix(int[] path, int update) {
+			if (path.length > this.path.length)
+				return false;
+			int i = 0;
+			for (; i < path.length; i++) {
+				if (path[i] != this.path[i])
+					break;
+			}
+			
+			if (i == path.length) { //fully match prefix, should be removed
+				if (update == 1) //only for add case
+					this.path[i-1] += update;
+				return true;
+			} else if (i == path.length - 1) { //different on last digit
+				this.path[i] += update;
+				return false;
+			} else {
+				return false;
+			}		
+		}
+		
+		public String toString() {
+			String result = "[";
+			for (int i = 0; i < path.length; i++) {
+				result += path[i] + ", ";
+			}
+			result = result.substring(0, result.length() - 2) + "]";
+			return result;
 		}
 	}
 	private static class States<E> {

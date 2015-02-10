@@ -46,6 +46,28 @@ ZK 7.0.5
   ZK-2564: vm.items not sync after window serialization and deserialization
   ZK-2538: Updating a treeitem in a large tree with paging causes client-side stack overflow
   ZK-2539: Getting selected count from a large tree with paging causes server-side stack overflow
+  ZK-2548: Initial keyboard selection causes combobox constraint error
+  ZK-2553: grid with frozen JS error
+  ZK-2595: The nested hflex size is not up to date when the new child added inside a hlayout or vlayout
+  ZK-2588: Uncheck a Listitem will auto scroll back to another selected item
+  ZK-2590: Type numpad 1 but combobox selects an item starting with 'A'
+  ZK-2550: Listbox doesn't keep scrollbar position when replacing an item of ListModelList and ROD enabled
+  ZK-2559: adding auxheaders together with columns causes JS errors
+  ZK-2558: adding and freezing columns dynamically causes a JS error
+  ZK-2551: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader
+  ZK-2575: errors in zul.xsd
+  ZK-2555: grid with groups model does not support dynamic templates
+  ZK-2541: Attempt to install CometAsyncServlet in Servlet 2.5 compliant container
+  ZK-2603: unlisten model listener when the component has detached, and listen it again when attached.
+  ZK-2547: Sometimes we cannot close a Treeitem in one click
+  ZK-2552: Tabbox model NotifyChange problem
+  ZK-2568: Group/Listgroup row has wrong colspan value
+  ZK-2586: datebox performance on IE11
+  ZK-2554: Context menu is closed automatically when tooltip showed
+  ZK-2583: frozen grid/listbox scrolling controls partially broken on IE
+  ZK-2611: Inconsistency in TreeModel when changing the model
+  ZK-2589: Tree ROD failing after open/close a node
+  ZK-2622: Native component with nested script tag will cause JS error
 
 * Upgrade Notes
   --------
