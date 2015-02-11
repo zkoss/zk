@@ -12,13 +12,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
@@ -162,5 +162,36 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			item.detach();
 		}
 	}
-
+	
+	// ZK-2552: this method is used to update binding references when items are removed from model
+	public void updateTabboxReferences (Tabbox tabbox) {
+		final Tabs tabs = tabbox.getTabs();
+		final Tabpanels panels = tabbox.getTabpanels();
+		final int size = tabbox.getModel().getSize();
+		final String tmn = "model";
+		for (Component child : tabs.getChildren()) {
+			if (child instanceof Tab) {
+				final int index = ((Tab) child).getIndex();
+				final Object value = ((Tab) child).getValue();
+				final Template tm = resolveTemplate(tabbox, child, value, index, size, tmn, "tab");
+				if (tm != null) {
+					final String var = (String) tm.getParameters().get(EACH_ATTR);
+					final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+					addItemReference(tabbox, child, index, varnm);
+				}
+			}
+		}
+		
+		for (Component child : panels.getChildren()) {
+			if (child  instanceof Tabpanel) {
+				final int index = ((Tabpanel) child).getIndex();
+				final Template tm = resolveTemplate(tabbox, child, null, index, size, tmn, "tabpanel");
+				if (tm != null) {
+					final String var = (String) tm.getParameters().get(EACH_ATTR);
+					final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+					addItemReference(tabbox, child, index, varnm);
+				}
+			}
+		}
+	}
 }
