@@ -320,9 +320,11 @@ implements DynamicPropertied, RawId {
 		if (_props != null) {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				sb.append(' ').append(me.getKey()).append("=\"")
-					.append(XMLs.encodeAttribute(Objects.toString(me.getValue())))
-					.append('"');
+				if (!"textContent".equals(me.getKey())) { // ignore textContent
+					sb.append(' ').append(me.getKey()).append("=\"")
+						.append(XMLs.encodeAttribute(Objects.toString(me.getValue())))
+						.append('"');
+				}
 			}
 		}
 
