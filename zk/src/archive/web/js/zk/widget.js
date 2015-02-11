@@ -4743,6 +4743,15 @@ zk.Widget.getClass('combobox');
 	 */
 	auDelay: 38
 });
+/**	
+ * A shortcut of <code>zk.Widget.$()<code> function.
+ * @return zk.Widget
+ * @since 8.0.0
+ * @see zk.Widget.$
+ */
+zk.$ = function (n, opts) {
+	return zk.Widget.$(n, opts);
+}
 zkreg = Widget.register; //a shortcut for WPD loader
 
 /** A reference widget. It is used as a temporary widget that will be

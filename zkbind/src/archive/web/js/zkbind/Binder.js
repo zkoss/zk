@@ -39,6 +39,40 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 		_WidgetX.unbind_.apply(this, arguments);
 	}
 });
+/** Retrieves the binder if any.
+ * @param Object n the object to look for. If it is a string,
+ * it is assumed to be UUID, unless it starts with '$'.
+ * For example, <code>zkbind.$('uuid')<code> is the same as <code>zkbind.$('#uuid')<code>,
+ * and both look for a widget whose ID is 'uuid'. On the other hand,
+ * <code>zkbind.$('$id') looks for a widget whose ID is 'id'.<br/>
+ * and <code>zkbind.$('.className') looks for a widget whose CSS selector is 'className'.<br/>
+ * If it is an DOM element ({@link DOMElement}), it will look up
+ * which widget it belongs to.<br/>
+ * If the object is not a DOM element and has a property called
+ * <code>target</code>, then <code>target</code> is assumed.
+ * Thus, you can pass an instance of {@link jq.Event} or {@link zk.Event},
+ * and the target widget will be returned.
+ * @param Map opts [optional] the options. Allowed values:
+ * <ul>
+ * <li>exact - id must exactly match uuid (i.e., uuid-xx ignored).
+ * It also implies strict</li>
+ * <li>strict - whether not to look up the parent node.(since 5.0.2)
+ * If omitted, false is assumed (and it will look up parent).</li>
+ * <li>child - whether to ensure the given element is a child element
+ * of the widget's main element ({@link #$n}). In most cases, if ID
+ * of an element is xxx-yyy, the the element must be a child of
+ * the element whose ID is xxx. However, there is some exception
+ * such as the shadow of a window.</li>
+ * </ul>
+ * @return zkbind.Binder
+ * @since 8.0.0
+ */
+zkbind.$ = function (n, opts) {
+	var widget = zk.Widget.$(n, opts);
+	if (widget)
+		return widget.$binder();
+	zk.error('Not found ZK Binder with [' + n + ']');
+};
 /**
  * A data binder utile widget.
  * @since 8.0.0
