@@ -122,7 +122,7 @@ public class Text extends AbstractComponent implements RawId {
 	}
 	public void invalidate() {
 		if (!invalidateParent()) super.invalidate();
-		else getParent().invalidate();
+		else if (getParent() != null) getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();

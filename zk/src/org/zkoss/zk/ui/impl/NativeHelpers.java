@@ -54,7 +54,7 @@ public class NativeHelpers {
 		if (props != null && !props.isEmpty()) {
 			for (Map.Entry<String, Object> me: props.entrySet()) {
 				HTMLs.appendAttribute(sb,
-					me.getKey(), Objects.toString(me.getValue()));
+					me.getKey(), Objects.toString(me.getValue()), false);
 			}
 		}
 	}
