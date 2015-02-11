@@ -595,7 +595,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 			if (vert) lastsz -= vsz;
 			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit)
+			if (!isInit && vert)
 				zUtl.fireSized(cwgt);
 		}
 		//last one with vflex
@@ -617,7 +617,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				chdex.style.height = jq.px0(lastsz - $chdex.marginHeight());
 			}
 			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit)
+			if (!isInit && vert)
 				zUtl.fireSized(cwgt);
 		}
 		
@@ -642,7 +642,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 			if (!vert) lastsz -= hsz;
 			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit)
+			if (!isInit && !vert)
 				zUtl.fireSized(cwgt);
 		}
 		//last one with hflex
@@ -662,7 +662,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				chdex.style.width = jq.px0(lastsz - $chdex.marginWidth());
 			}
 			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit)
+			if (!isInit && !vert)
 				zUtl.fireSized(cwgt);
 		}
 		
