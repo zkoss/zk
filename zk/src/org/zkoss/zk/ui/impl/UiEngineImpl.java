@@ -427,6 +427,14 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 
+					//ZK-2623: page scope template
+					Map<String, TemplateInfo> pageTemplates = pagedef.getTemplatesInfo();
+					if (pageTemplates != null) {
+						for (Map.Entry<String, TemplateInfo> entry : pageTemplates.entrySet()) {
+							page.addTemplate(entry.getKey(), new TemplateImpl(entry.getValue(), null));
+						}
+					}
+					
 					final Component[] comps;
 					final String uri = pagedef.getForwardURI(page);
 					if (uri != null) {

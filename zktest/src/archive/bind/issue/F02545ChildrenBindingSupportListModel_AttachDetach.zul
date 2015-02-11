@@ -9,7 +9,7 @@
 		<hlayout>
 			<div>
 				<label value="init list1" />
-				<vlayout id="list1" children="@init(vm.model_l)" use="MyVlayout">
+				<vlayout id="list1" children="@init(vm.model_l)">
 				<template name="children">
 					<label value="@load(each.id)"/>
 				</template>
@@ -17,7 +17,7 @@
 			</div>
 			<div id="d2">
 				<label value="init list2" />
-				<vlayout id="list2" children="@init(vm.model_l)" use="MyVlayout">
+				<vlayout id="list2" children="@init(vm.model_l)">
 					<template name="children">
 						<label value="@load(each.id)"/>
 					</template>

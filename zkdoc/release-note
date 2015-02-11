@@ -12,6 +12,7 @@ ZK 8.0.0
   ZK-2614: ZK DataBinding support client callback function after some command triggered
   ZK-2545: Children binding support list model
   ZK-2620: Upgrade Font Awesome to 4.3 version
+  ZK-2623: Page scope template
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

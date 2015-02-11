@@ -325,6 +325,11 @@ public class Parser {
 				new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
 		} else if ("import".equals(target)) { //import
 			throw new UiException(message("The import directive can be used only at the top level", pi));
+		} else if ("template".equals(target)) { //ZK-2623: page scope template
+			final String name = params.remove("name");
+			final String src = params.remove("src");
+			if (name != null && name.length() != 0 && src != null && src.length() != 0)
+				pgdef.addTemplateInfo(new TemplateInfo(null, name, src, params, null));
 		} else {
 			log.warn(message("Unknown processing instruction: "+target, pi));
 		}
