@@ -34,6 +34,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String STATUS_ATTR = TemplateResolver.STATUS_ATTR;
 	protected static final String STATUS_POST_VAR = "Status";
 	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
+	protected static final String IS_TEMPLATE_MODEL_ENABLED_ATTR = "$isTemplateModelEnabled$";
+	protected static final String CURRENT_INDEX_RESOLVER_ATTR = "$currentIndexResolver$";
 	
 	private String _attributeName;
 	
@@ -112,7 +114,14 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		} else {
 			final Binder binder = BinderUtil.getBinder(comp, true);
 			if (binder == null) return; //no binder
-			final String expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
+			// ZK-2552: use an expression instead of solid number to represent index
+			final String expression;
+			if (comp.getAttribute(IS_TEMPLATE_MODEL_ENABLED_ATTR) != null) {
+				expression = BindELContext.getModelName(modelOwner) 
+						+ "[self.getAttribute('" + CURRENT_INDEX_RESOLVER_ATTR + "').getCurrentIndex(self)]";
+			} else {
+				expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
+			}
 			//should not use binder.addReferenceBinding(comp, varnm, expression, null); here, it will mark comp bound.
 			//it is safe that we set to comp attr here since the component is created by renderer/binder. 
 			comp.setAttribute(varnm, new ReferenceBindingImpl(binder, comp, varnm, expression)); //reference

@@ -89,6 +89,9 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 				//so I set the value directly.
 				nci.setAttribute(varnm, data);
 			}else{
+				// ZK-2552
+				nci.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
+				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
 				addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			}
 			
