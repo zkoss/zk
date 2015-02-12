@@ -718,6 +718,12 @@ public class Parser {
 				
 				//consider as a label
 				if (isNativeText(pi)) {
+					
+					// trim the cdata when in the XHTML parser which will retain the syntax
+					String newLabel = label.trim();
+					if (newLabel.startsWith("<![CDATA[") && newLabel.endsWith("]]>")) {
+						label = newLabel.substring(9, newLabel.length() - 3);
+					}
 					new TextInfo(parent, label);
 						//Don't trim if native (3.5.0)
 				} else {

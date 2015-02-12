@@ -228,6 +228,10 @@ public class HtmlTreeBuilder implements TreeBuilder {
 
 	private ProcessingInstruction convert(XmlDeclaration xd) {
 		String data = xd.getWholeDeclaration();
+		
+		// like <?taglib?>, we need to ignore the last char '?' here
+		if (data.endsWith("?"))
+			data = data.substring(0, data.length() - 1);
 		String target = "";
 		int index = data.indexOf(' ');
 		if (index > 0) {
