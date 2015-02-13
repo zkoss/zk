@@ -242,7 +242,8 @@ public class Parser {
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
 		if (root != null)
-			parseItem(pgdef, pgdef, root, new AnnotationHelper(), false);
+			parseItem(pgdef, pgdef, root, new AnnotationHelper(), false, ParsingState.ROOT); //ZK-2632: Parser support disorder template tag
+			
 		return pgdef;
 	}
 	/** Parses a list of string separated by comma, into a String array.
@@ -667,11 +668,19 @@ public class Parser {
 			}
 		final boolean isXHTML = "xhtml".equals(parentlang.getName());
 		boolean breakLine = false;
+		
+		//ZK-2632: Parser support disorder template tag
+		for (Iterator it = items.iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof Element)
+				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent, ParsingState.FIRST);
+		}
+		
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
 				breakLine = false;
-				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent);
+				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent, ParsingState.SECOND);
 			} else if (o instanceof ProcessingInstruction) {
 				breakLine = false;
 				parse(pgdef, (ProcessingInstruction)o);
@@ -754,7 +763,7 @@ public class Parser {
 				breakLine = false;
 			}
 		}
-
+		
 		if (textAsBuffer != null) { //parent might be TempalteInfo
 			String trimLabel = textAsBuffer.toString();
 			
@@ -818,7 +827,7 @@ public class Parser {
 	 * It is true if a component definition with text-as is found
 	 */
 	private void parseItem(PageDefinition pgdef, NodeInfo parent,
-	Element el, AnnotationHelper annHelper, boolean bNativeContent)
+	Element el, AnnotationHelper annHelper, boolean bNativeContent, int parsingState)
 	throws Exception {
 		final String nm = el.getLocalName();
 		final Namespace ns = el.getNamespace();
@@ -831,238 +840,244 @@ public class Parser {
 		|| "annotation".equals(uri))
 			throw new UiException(message("Namespace, "+uri+", no longer supported element's annotation", el));
 
-		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			checkZScriptEnabled(el);
-			parseZScript(parent, el, annHelper);
-		} else if ("attribute".equals(nm)
-		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
-			if (!(parent instanceof ComponentInfo))
-				throw new UiException(message("<attribute> cannot be the root element", el));
-
-			parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
-		} else if ("custom-attributes".equals(nm)
-		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
-			parseCustomAttributes(langdef, parent, el, annHelper);
-		} else if ("variables".equals(nm)
-		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
-			parseVariables(langdef, parent, el, annHelper);
-		} else if ("template".equals(nm)
-		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
-			parseItems(pgdef, parseTemplate(parent, el, annHelper),
-				el.getChildren(), annHelper, bNativeContent);
-		} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseItems(pgdef, parseZk(parent, el, annHelper),
-					el.getChildren(), annHelper, bNativeContent);
-		} else if (isShadowElement(langdef, pgdef, nm, pref, uri, bNativeContent)) {
-			parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper),
-				el.getChildren(), annHelper, bNativeContent);
-		} else {
-			//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
-			if (isZkSwitch(parent))
-				throw new UiException(message("Only <zk> can be used in <zk switch>", el));
-
-			boolean prefRequired =
-				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
-			boolean bNative = bNativeContent || prefRequired
-				|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
-				|| "native".equals(uri);
-
-			if (!bNative && langdef.isNative()
-			&& !langdef.getNamespace().equals(uri))
-				bNative = prefRequired =
-					("".equals(pref) && "".equals(uri))
-					|| !LanguageDefinition.exists(uri);
-				//Spec: if pref/URI not specified => native
-				//		if uri unknown => native
-
-			final ComponentInfo compInfo;
-			if (bNative) {
-				if (annHelper.clear())
-					log.warn(message("Annotations are ignored since native doesn't support them", el));
-
-				final NativeInfo ni;
-				compInfo = ni = new NativeInfo(
-					parent, langdef.getNativeDefinition(),
-					prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
-
-				//add declared namespace if starting with native:
-				final Collection<Namespace> dns = el.getDeclaredNamespaces();
-				if (!dns.isEmpty())
-					addDeclaredNamespace(ni, dns, langdef);
-			} else {
-				final boolean defaultNS = isDefaultNS(langdef, pref, uri);
-				final LanguageDefinition complangdef =
-					defaultNS ? langdef: LanguageDefinition.lookup(uri);
-				ComponentDefinition compdef =
-					defaultNS ? pgdef.getComponentDefinitionMap().get(nm): null;
-				if (compdef != null) {
-					compInfo = new ComponentInfo(parent, compdef, nm);
-				} else if (complangdef.hasComponentDefinition(nm)) {
-					compdef = complangdef.getComponentDefinition(nm);
-					compInfo = new ComponentInfo(parent, compdef, nm);
-					langdef = complangdef;
-				} else {
-					compdef = complangdef.getDynamicTagDefinition();
-					if (compdef == null)
-						throw new DefinitionNotFoundException(message("Component definition not found: "+nm+" in "+complangdef, el));
-					compInfo = new ComponentInfo(parent, compdef, nm);
-					langdef = complangdef;
-				}
-
-				//process use first because addProperty needs it
-				String use = el.getAttributeValue("use");
-				if (use != null) {
-					use = use.trim();
-					if (use.length() != 0)
-						compInfo.setImplementation(use);
-						//Resolve later since might defined in zscript
-				}
+		//ZK-2632: Parser support disorder template tag
+		if (parsingState != ParsingState.SECOND) {
+			if (parsingState != 1 && "attribute".equals(nm)	&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+				if (!(parent instanceof ComponentInfo))
+					throw new UiException(message("<attribute> cannot be the root element", el));
+				parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
+			} else if (parsingState != 1 && "custom-attributes".equals(nm)	&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+				parseCustomAttributes(langdef, parent, el, annHelper);
+			} else if (parsingState != 1 && "template".equals(nm)
+				&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+				parseItems(pgdef, parseTemplate(parent, el, annHelper), el.getChildren(), annHelper, bNativeContent);
 			}
+		}
+		
+		if (parsingState != ParsingState.FIRST) {
+			if ("attribute".equals(nm) || "custom-attributes".equals(nm) || "template".equals(nm))
+				return;
+			if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+				checkZScriptEnabled(el);
+				parseZScript(parent, el, annHelper);
+			} else if ("variables".equals(nm)
+			&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+				parseVariables(langdef, parent, el, annHelper);
+			} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+				parseItems(pgdef, parseZk(parent, el, annHelper),
+						el.getChildren(), annHelper, bNativeContent);
+			} else if (isShadowElement(langdef, pgdef, nm, pref, uri, bNativeContent)) {
+				parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper),
+					el.getChildren(), annHelper, bNativeContent);
+				
+			} else {
+				//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
+				if (isZkSwitch(parent))
+					throw new UiException(message("Only <zk> can be used in <zk switch>", el));
 
-			String ifc = null, unless = null,
-				forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
-			AnnotationHelper attrAnnHelper = null;
-			//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
-			boolean isMVVM = false;
-			for (Iterator it = el.getAttributeItems().iterator();
-			it.hasNext();) {
-				final Attribute attr = (Attribute)it.next();
-				final Namespace attrns = attr.getNamespace();
-				final String attURI = attrns != null ? attrns.getURI(): "";
-				final String attnm = attr.getLocalName();
-				final String attval = attr.getValue();
-				final String attPref = attrns != null ? attrns.getPrefix(): "";
-				
-				
-				// ZK-2494: use getName instead of getLocalName when namespace is native or xml and attribute uri 
-				// is not one of known namespaces in zk. Exclude xmlns to avoid redefine.
-				if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName) || "xml".equals(langName)) {
-					if (!isZkAttr(langdef, attrns) && !isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
-							&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						compInfo.addProperty(attr.getName(), attval, null);
-						continue;
-					} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
-						compInfo.addProperty(attnm, attval, null);
-						continue;
+				boolean prefRequired =
+					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+				boolean bNative = bNativeContent || prefRequired
+					|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
+					|| "native".equals(uri);
+
+				if (!bNative && langdef.isNative()
+				&& !langdef.getNamespace().equals(uri))
+					bNative = prefRequired =
+						("".equals(pref) && "".equals(uri))
+						|| !LanguageDefinition.exists(uri);
+					//Spec: if pref/URI not specified => native
+					//		if uri unknown => native
+
+				final ComponentInfo compInfo;
+				if (bNative) {
+					if (annHelper.clear())
+						log.warn(message("Annotations are ignored since native doesn't support them", el));
+
+					final NativeInfo ni;
+					compInfo = ni = new NativeInfo(
+						parent, langdef.getNativeDefinition(),
+						prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
+
+					//add declared namespace if starting with native:
+					final Collection<Namespace> dns = el.getDeclaredNamespaces();
+					if (!dns.isEmpty())
+						addDeclaredNamespace(ni, dns, langdef);
+				} else {
+					final boolean defaultNS = isDefaultNS(langdef, pref, uri);
+					final LanguageDefinition complangdef =
+						defaultNS ? langdef: LanguageDefinition.lookup(uri);
+					ComponentDefinition compdef =
+						defaultNS ? pgdef.getComponentDefinitionMap().get(nm): null;
+					if (compdef != null) {
+						compInfo = new ComponentInfo(parent, compdef, nm);
+					} else if (complangdef.hasComponentDefinition(nm)) {
+						compdef = complangdef.getComponentDefinition(nm);
+						compInfo = new ComponentInfo(parent, compdef, nm);
+						langdef = complangdef;
+					} else {
+						compdef = complangdef.getDynamicTagDefinition();
+						if (compdef == null)
+							throw new DefinitionNotFoundException(message("Component definition not found: "+nm+" in "+complangdef, el));
+						compInfo = new ComponentInfo(parent, compdef, nm);
+						langdef = complangdef;
+					}
+
+					//process use first because addProperty needs it
+					String use = el.getAttributeValue("use");
+					if (use != null) {
+						use = use.trim();
+						if (use.length() != 0)
+							compInfo.setImplementation(use);
+							//Resolve later since might defined in zscript
 					}
 				}
-				
-				if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
-					compInfo.setApply(attval);
-				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
-					compInfo.setForward(attval);
-				} else if ("if".equals(attnm) && isZkAttr(langdef, attrns)) {
-					ifc = attval;
-				} else if ("unless".equals(attnm) && isZkAttr(langdef, attrns)) {
-					unless = attval;
-				} else if ("forEach".equals(attnm) && isZkAttr(langdef, attrns)) {
-					forEach = attval;
-				} else if ("forEachStep".equals(attnm) && isZkAttr(langdef, attrns)) {
-					forEachStep = attval;
-				} else if ("forEachBegin".equals(attnm) && isZkAttr(langdef, attrns)) {
-					forEachBegin = attval;
-				} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
-					forEachEnd = attval;
-				} else if ("fulfill".equals(attnm)
-				&& isZkAttr(langdef, attrns, bNativeContent)) {
-					compInfo.setFulfill(attval);
-				} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI)
-				|| "annotation".equals(attURI)) {
-					//ZK 6: annotation namespace mandates annotation
-					if (attrAnnHelper == null)
-						attrAnnHelper = new AnnotationHelper();
-					applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), true, location(attr));
-				} else if (!"use".equals(attnm)
-				|| !isZkAttr(langdef, attrns, bNativeContent)) {
-					final String attvaltrim;
-					if (!"xmlns".equals(attPref)
-					&& !("xmlns".equals(attnm) && "".equals(attPref))
-					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						if (!bNativeContent && !bNative
-								//ZK 6: non-annotation namespace mandates non-annotation
-								&& (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
-								&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
-							if (attrAnnHelper == null)
-								attrAnnHelper = new AnnotationHelper();
-							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
-							//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
-							Configuration config = WebApps.getCurrent().getConfiguration();
-							if (config.getBinderInitAttribute().equals(attnm)) isMVVM = true;
-							//F80 - store subtree's binder annotation count
-							Set<String> binderAnnotations = config.getBinderAnnotations();
-							for (String annot : binderAnnotations) {
-								if (attvaltrim.indexOf(annot) != -1) {
-									compInfo.enableBindingAnnotation();
-									break;
-								}
-							}
-						} else {
-							boolean handled = false;
-							for (NamespaceParser nsParser: _nsParsers) {
-								if (nsParser.isMatched(attURI)) {
-									if (nsParser.parse(attr, compInfo, pgdef)) {
-										handled = true;
+
+				String ifc = null, unless = null,
+					forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
+				AnnotationHelper attrAnnHelper = null;
+				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+				boolean isMVVM = false;
+				for (Iterator it = el.getAttributeItems().iterator();
+				it.hasNext();) {
+					final Attribute attr = (Attribute)it.next();
+					final Namespace attrns = attr.getNamespace();
+					final String attURI = attrns != null ? attrns.getURI(): "";
+					final String attnm = attr.getLocalName();
+					final String attval = attr.getValue();
+					final String attPref = attrns != null ? attrns.getPrefix(): "";
+					
+					
+					// ZK-2494: use getName instead of getLocalName when namespace is native or xml and attribute uri 
+					// is not one of known namespaces in zk. Exclude xmlns to avoid redefine.
+					if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName) || "xml".equals(langName)) {
+						if (!isZkAttr(langdef, attrns) && !isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
+								&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
+							compInfo.addProperty(attr.getName(), attval, null);
+							continue;
+						} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
+							compInfo.addProperty(attnm, attval, null);
+							continue;
+						}
+					}
+					
+					if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
+						compInfo.setApply(attval);
+					} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
+						compInfo.setForward(attval);
+					} else if ("if".equals(attnm) && isZkAttr(langdef, attrns)) {
+						ifc = attval;
+					} else if ("unless".equals(attnm) && isZkAttr(langdef, attrns)) {
+						unless = attval;
+					} else if ("forEach".equals(attnm) && isZkAttr(langdef, attrns)) {
+						forEach = attval;
+					} else if ("forEachStep".equals(attnm) && isZkAttr(langdef, attrns)) {
+						forEachStep = attval;
+					} else if ("forEachBegin".equals(attnm) && isZkAttr(langdef, attrns)) {
+						forEachBegin = attval;
+					} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
+						forEachEnd = attval;
+					} else if ("fulfill".equals(attnm)
+					&& isZkAttr(langdef, attrns, bNativeContent)) {
+						compInfo.setFulfill(attval);
+					} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI)
+					|| "annotation".equals(attURI)) {
+						//ZK 6: annotation namespace mandates annotation
+						if (attrAnnHelper == null)
+							attrAnnHelper = new AnnotationHelper();
+						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), true, location(attr));
+					} else if (!"use".equals(attnm)
+					|| !isZkAttr(langdef, attrns, bNativeContent)) {
+						final String attvaltrim;
+						if (!"xmlns".equals(attPref)
+						&& !("xmlns".equals(attnm) && "".equals(attPref))
+						&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
+							if (!bNativeContent && !bNative
+									//ZK 6: non-annotation namespace mandates non-annotation
+									&& (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
+									&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
+								if (attrAnnHelper == null)
+									attrAnnHelper = new AnnotationHelper();
+								applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
+								//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+								Configuration config = WebApps.getCurrent().getConfiguration();
+								if (config.getBinderInitAttribute().equals(attnm)) isMVVM = true;
+								//F80 - store subtree's binder annotation count
+								Set<String> binderAnnotations = config.getBinderAnnotations();
+								for (String annot : binderAnnotations) {
+									if (attvaltrim.indexOf(annot) != -1) {
+										compInfo.enableBindingAnnotation();
 										break;
 									}
 								}
-							}
-							if (!handled) {
-								addAttribute(compInfo, attrns, attnm, attval, null,
-									attr.getLocator());
-								if (attrAnnHelper != null)
-									attrAnnHelper.applyAnnotations(compInfo, attnm, true);
+							} else {
+								boolean handled = false;
+								for (NamespaceParser nsParser: _nsParsers) {
+									if (nsParser.isMatched(attURI)) {
+										if (nsParser.parse(attr, compInfo, pgdef)) {
+											handled = true;
+											break;
+										}
+									}
+								}
+								if (!handled) {
+									addAttribute(compInfo, attrns, attnm, attval, null,
+										attr.getLocator());
+									if (attrAnnHelper != null)
+										attrAnnHelper.applyAnnotations(compInfo, attnm, true);
+								}
 							}
 						}
 					}
 				}
-			}
 
-			//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
-			if (isMVVM) {
-				String apply = compInfo.getApply();
-				if (apply != null && apply.indexOf("org.zkoss.bind.BindComposer") != -1) {
-					//Warnning
-					log.warn(message("If the attribute of viewModel is being used, then \"org.zkoss.bind.BindComposer\" will be applied automatically", el));
-				} else {
-					if (apply == null) apply = "";
-					else apply += ",";
-					compInfo.setApply(apply + "org.zkoss.bind.BindComposer");
+				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
+				if (isMVVM) {
+					String apply = compInfo.getApply();
+					if (apply != null && apply.indexOf("org.zkoss.bind.BindComposer") != -1) {
+						//Warnning
+						log.warn(message("If the attribute of viewModel is being used, then \"org.zkoss.bind.BindComposer\" will be applied automatically", el));
+					} else {
+						if (apply == null) apply = "";
+						else apply += ",";
+						compInfo.setApply(apply + "org.zkoss.bind.BindComposer");
+					}
 				}
-			}
-			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
-			compInfo.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
-			annHelper.applyAnnotations(compInfo, null, true);
-			
+				compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
+				compInfo.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
+				annHelper.applyAnnotations(compInfo, null, true);
+				
 
-			//only provide if there already has other annotation
-			if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
-				//provide component location info as a annotation with it's location.
-				compInfo.addAnnotation(null, "ZKLOC", null, Locators.toLocation(el.getLocator()));
-			}
+				//only provide if there already has other annotation
+				if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
+					//provide component location info as a annotation with it's location.
+					compInfo.addAnnotation(null, "ZKLOC", null, Locators.toLocation(el.getLocator()));
+				}
 
-			final Collection<Item> items = el.getChildren();
-			String textAs = null;
-			if (!bNativeContent && !items.isEmpty() //if empty, no need to check
-			&& (textAs = compInfo.getTextAs()) != null) {
-				//if textAs is specified, we detect if any child element
-				//if so, we parse them as property
-				//if not, we handle it normally and text, if any, will be
-				//trimmed and assigned as a property (in parseItems)
-				if (compInfo.isChildAllowedInTextAs() //don't consider it as text if childable and element found
-				|| !textAsAllowed(langdef, items, bNativeContent))
-					textAs = null; 
-			}
+				final Collection<Item> items = el.getChildren();
+				String textAs = null;
+				if (!bNativeContent && !items.isEmpty() //if empty, no need to check
+				&& (textAs = compInfo.getTextAs()) != null) {
+					//if textAs is specified, we detect if any child element
+					//if so, we parse them as property
+					//if not, we handle it normally and text, if any, will be
+					//trimmed and assigned as a property (in parseItems)
+					if (compInfo.isChildAllowedInTextAs() //don't consider it as text if childable and element found
+					|| !textAsAllowed(langdef, items, bNativeContent))
+						textAs = null; 
+				}
 
-			if (textAs != null)
-				parseAsProperty(pgdef, compInfo, textAs, items, annHelper, null);
-			else
-				parseItems(pgdef, compInfo, items, annHelper, bNativeContent);
+				if (textAs != null)
+					parseAsProperty(pgdef, compInfo, textAs, items, annHelper, null);
+				else
+					parseItems(pgdef, compInfo, items, annHelper, bNativeContent);
 
-			//optimize native components
-			if (compInfo instanceof NativeInfo
-			&& !compInfo.getChildren().isEmpty())
-				optimizeNativeInfos((NativeInfo)compInfo);
-		} //end-of-else//
+				//optimize native components
+				if (compInfo instanceof NativeInfo
+				&& !compInfo.getChildren().isEmpty())
+					optimizeNativeInfos((NativeInfo)compInfo);
+			} //end-of-else//
+		}
 	}
 	private boolean textAsAllowed(LanguageDefinition langdef,
 	Collection<Item> items, boolean bNativeContent) {
@@ -1817,5 +1832,12 @@ public class Parser {
 	 */
 	private static boolean isClientAttrNamespace(String uri) {
 		return "client/attribute".equals(uri) || LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri);
+	}
+	
+	//ZK-2632: Parser support disorder template tag
+	private static class ParsingState {
+		private static int ROOT = -1;
+		private static int FIRST = 0;
+		private static int SECOND = 1;
 	}
 }
