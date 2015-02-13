@@ -72,7 +72,7 @@ public class BindChildRenderer extends AbstractRenderer{
 				return index;
 			}
 			
-			public Object getEach(){
+			public Object getCurrent(){
 				return data;
 			}
 			
