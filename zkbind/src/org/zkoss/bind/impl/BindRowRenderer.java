@@ -84,6 +84,10 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 
 			final Row nr = (Row)items[0];
 			nr.setAttribute(BinderImpl.VAR, varnm);
+			
+			// ZK-2552
+			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
+			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
 			addItemReference(grid, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, iterStatus);

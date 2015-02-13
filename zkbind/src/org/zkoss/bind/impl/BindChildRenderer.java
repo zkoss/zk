@@ -69,6 +69,27 @@ public class BindChildRenderer extends AbstractRenderer{
 		
 		final Component[] items = tm.create(owner, null, null, null);
 		
+		// ZK-2552: define own iterStatus since children inside template could be more than 1 for children binding
+		final ForEachStatus bindChildIterStatus = new AbstractForEachStatus() { // provide iteration status in this context
+			private static final long serialVersionUID = 1L;
+			
+			public int getIndex() {
+				return index;
+			}
+			
+			public Object getEach(){
+				return data;
+			}
+			
+			public Integer getEnd(){
+				return size;
+			}
+			
+			public Integer getCurrentIndex(Component comp) { 
+				return comp.getParent().getChildren().indexOf(comp) / items.length;
+			}
+		};
+		
 		owner.setAttribute(varnm, oldVar);
 		owner.setAttribute(itervarnm, oldIter);
 		
@@ -77,6 +98,10 @@ public class BindChildRenderer extends AbstractRenderer{
 		
 		for(Component comp: items){
 			comp.setAttribute(BinderImpl.VAR, varnm);
+			
+			// ZK-2552
+			comp.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
+			comp.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, bindChildIterStatus);
 			addItemReference(owner, comp, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			comp.setAttribute(itervarnm, iterStatus);
 			
