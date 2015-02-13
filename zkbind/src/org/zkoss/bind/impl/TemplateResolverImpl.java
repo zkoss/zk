@@ -128,7 +128,17 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 				return (Template) value;
 			}else if(value instanceof String){
 				//lookup from each, to allow put template in rows
-				Template template = lookupTemplate(eachComp,subType==null?(String)value:(String)value+":"+subType);
+				Template template;
+				//B70-ZK-2555: for backward compatibility				
+				if (subType == null) {
+					template = lookupTemplate(eachComp, (String)value);
+				} else {
+					template = lookupTemplate(eachComp, (String)value + ":" + subType);
+					if (template == null) { //if not found, try lookup for value only
+						template = lookupTemplate(eachComp, (String)value);
+					}
+				}
+				
 				if (template == null && ((String)value).indexOf('.') > 0) { //might be a class path
 					try {
 						template = (Template) _comp.getPage().resolveClass(((String)value)).newInstance();
