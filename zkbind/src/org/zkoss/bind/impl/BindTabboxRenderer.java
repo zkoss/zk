@@ -17,8 +17,6 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
@@ -84,6 +82,10 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 
 			final Tab ntab = (Tab)items[0];
 			ntab.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
+			
+			// ZK-2552
+			ntab.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
+			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
 			addItemReference(tabbox, ntab, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			ntab.setAttribute(itervarnm, iterStatus);
@@ -148,6 +150,9 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 
 			final Tabpanel ntabpanel = (Tabpanel)items[0];
 			ntabpanel.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
+			// ZK-2552
+			ntabpanel.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
+			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
 			addItemReference(tabbox, ntabpanel, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			ntabpanel.setAttribute(itervarnm, iterStatus);

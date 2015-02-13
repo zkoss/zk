@@ -758,8 +758,12 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment
 			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string
-			pattern = _innerDateFormat + db.getTimeFormat(),
-			date = db.coerceFromString_(dateTime, pattern);
+			pattern = _innerDateFormat + db.getTimeFormat();
+		
+		// add 'AM' by default, if pattern specified AMPM 
+		dateTime += pattern.indexOf('a') > -1 ? 
+				dateTime.indexOf('AM') < 0 && dateTime.indexOf('PM') < 0 ? 'AM' : '' : '';
+		var	date = db.coerceFromString_(dateTime, pattern);
 
 		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "
 		if(date instanceof Date) {

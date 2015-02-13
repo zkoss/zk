@@ -18,7 +18,7 @@ package org.zkoss.zul;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,53 +85,34 @@ java.io.Serializable {
 		});
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void updatePath(TreeDataEvent event) {
 		final int type = event.getType();
 		final int[] affectedPath = event.getAffectedPath();
 		if (affectedPath == null || affectedPath.length < 1) return;
 		switch (type) {
 		case TreeDataEvent.INTERVAL_REMOVED:
-			List<Path> l = new ArrayList<Path>(_opens);
-			Collections.sort(l);
-			for (int i = 0; i < l.size(); i++) {
-				Path p = l.get(i);
-				_opens.remove(p); //remove anywhere, because p may be updated
-				boolean isPrefix = p.isPrefix(affectedPath, -1);
-				//update set
-				if (!isPrefix) _opens.add(p);
-			}
-			
-			l = new ArrayList<Path>(_selection);
-			Collections.sort(l);
-			for (int i = 0; i < l.size(); i++) {
-				Path p = l.get(i);
-				_selection.remove(p); //remove anywhere, because p may be updated
-				boolean isPrefix = p.isPrefix(affectedPath, -1);
-				//update set
-				if (!isPrefix) _selection.add(p);
-			}
+			internalDataChange(_opens, affectedPath, true);
+			internalDataChange(_selection, affectedPath, true);
 			break;
 		case TreeDataEvent.INTERVAL_ADDED:
-			l = new ArrayList<Path>(_opens);
-			Collections.sort(l);
-			for (int i = l.size() - 1; i > -1; i--) {
-				Path p = l.get(i);
-				_opens.remove(p);
-				p.isPrefix(affectedPath, 1); //no remove
-				_opens.add(p);
-			}
-			
-			l = new ArrayList<Path>(_selection);
-			Collections.sort(l);
-			for (int i = 0; i < l.size(); i++) {
-				Path p = l.get(i);
-				_opens.remove(p);
-				p.isPrefix(affectedPath, 1); //no remove
-				_opens.add(p);
-			}
+			internalDataChange(_opens, affectedPath, false);
+			internalDataChange(_selection, affectedPath, false);
 			break;
 		}
+	}
+	
+	private void internalDataChange(Set<Path> openOrSelect, int[] affectedPath, boolean isRemoved) {
+		List<Path> list = new LinkedList<Path>(openOrSelect);
+		int update = isRemoved ? -1 : 1;
+		for (Iterator<Path> it = list.iterator(); it.hasNext();) {
+			Path p = it.next();
+			// p.verifyPrefix should be execute anyway
+			if (p.verifyPrefix(affectedPath, update) && isRemoved) {
+				it.remove();
+			}
+		}
+		openOrSelect.clear();
+		openOrSelect.addAll(list);
 	}
 
 	/**
@@ -527,9 +508,9 @@ java.io.Serializable {
 	 */
 	protected Object beforeSort() {
 		final States<E> states = new States<E>();
-		for (final Path path: _selection)
+		for (final Path path : _selection)
 			states.selection.add(getChild(path.path));
-		for (final Path path: _opens)
+		for (final Path path : _opens)
 			states.opens.add(getChild(path.path));
 		return states;
 	}
@@ -683,6 +664,14 @@ java.io.Serializable {
 			this.path = path;
 		}
 		
+		protected Path(Path p) {
+			int length = p.path.length;
+			this.path = new int[length];
+			for (int i = 0; i < length; i++) {
+				this.path[i] = p.path[i];
+			}
+		}
+		
 		public int hashCode() {
 			return Objects.hashCode(path);
 		}
@@ -698,9 +687,6 @@ java.io.Serializable {
 			Path toCompared = (Path)o;
 			int[] toPath = toCompared.path;
 			int toLength = toCompared.path.length;
-			//should handle empty path case
-			if (length < 1 || toLength < 1)
-				throw new WrongValueException(this + " can't sort with empty path: " + o);
 
 			int smaller = (length < toLength? length : toLength);
 			for (int i = 0; i < smaller; i++) {
@@ -710,8 +696,8 @@ java.io.Serializable {
 			return length - toLength;
 		}
 		
-		public boolean isPrefix(int[] path) {
-			return isPrefix(path, 0);
+		private boolean verifyPrefix(int[] path) {
+			return verifyPrefix(path, 0);
 		}
 		
 		/**
@@ -733,7 +719,7 @@ java.io.Serializable {
 		 * @return boolean
 		 * @since 7.0.5
 		 */
-		public boolean isPrefix(int[] path, int update) {
+		private boolean verifyPrefix(int[] path, int update) {
 			if (path.length > this.path.length)
 				return false;
 			int i = 0;
@@ -746,8 +732,9 @@ java.io.Serializable {
 				if (update == 1) //only for add case
 					this.path[i-1] += update;
 				return true;
-			} else if (i == path.length - 1) { //different on last digit
-				this.path[i] += update;
+			} else if (i == path.length - 1) { //different on last digit, sibling
+				if (this.path[i] > path[i]) //this.path is later
+					this.path[i] += update;
 				return false;
 			} else {
 				return false;

@@ -31,5 +31,41 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 				</tabpanel>
 			</template>
 		</tabbox>
+		
+		<listbox model="@load(vm.tabsModel)">
+			<template name="model:listitem" var="node">
+		        <listitem>
+		            <listcell label="@load(node)"/>
+		        </listitem>
+		    </template>
+		</listbox>
+
+		<combobox model="@load(vm.tabsModel)">
+		    <template name="model:comboitem" var="node">
+		        <comboitem label="@load(node)"/>
+		    </template>
+		</combobox>
+
+		<radiogroup model="@load(vm.tabsModel)">
+			<template name="model:radio" var="node">
+            	<radio label="@load(node)" />
+            </template>
+        </radiogroup>
+
+		<grid model="@load(vm.tabsModel)">
+		    <template name="model:row" var="node">
+		        <row>
+		            <label value="@load(node)"/>
+		        </row>
+		    </template>
+		</grid>
+
+		<div children="@load(vm.tabsModel)">
+			<template name="children" var="node">
+				<div>=== CONTENTS_BEFORE ===</div>
+				<div><label value="@load(node)"></label></div>
+				<div>=== CONTENTS_AFTER ===</div>
+			</template>
+		</div>
 	</window>
 </zk>
