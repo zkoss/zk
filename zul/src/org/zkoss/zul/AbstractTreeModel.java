@@ -103,11 +103,11 @@ java.io.Serializable {
 	
 	private void internalDataChange(Set<Path> openOrSelect, int[] affectedPath, boolean isRemoved) {
 		List<Path> list = new LinkedList<Path>(openOrSelect);
-		Iterator<Path> it = list.iterator();
-		while(it.hasNext()) {
+		int update = isRemoved ? -1 : 1;
+		for (Iterator<Path> it = list.iterator(); it.hasNext();) {
 			Path p = it.next();
-			int update = isRemoved ? -1 : 1;
-			if(p.verifyPrefix(affectedPath, update) && isRemoved) {
+			// p.verifyPrefix should be execute anyway
+			if (p.verifyPrefix(affectedPath, update) && isRemoved) {
 				it.remove();
 			}
 		}
