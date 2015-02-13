@@ -1141,7 +1141,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	
 	public Template getTemplate(String name) {
-		return _templates.get(name);
+		return _templates != null ? _templates.get(name) : null;
 	}
 	
 	//-- Serializable --//
