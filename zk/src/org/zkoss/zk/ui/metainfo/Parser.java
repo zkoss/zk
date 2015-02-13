@@ -827,7 +827,7 @@ public class Parser {
 	 * It is true if a component definition with text-as is found
 	 */
 	private void parseItem(PageDefinition pgdef, NodeInfo parent,
-	Element el, AnnotationHelper annHelper, boolean bNativeContent, int parsingState)
+	Element el, AnnotationHelper annHelper, boolean bNativeContent, ParsingState parsingState)
 	throws Exception {
 		final String nm = el.getLocalName();
 		final Namespace ns = el.getNamespace();
@@ -842,13 +842,13 @@ public class Parser {
 
 		//ZK-2632: Parser support disorder template tag
 		if (parsingState != ParsingState.SECOND) {
-			if (parsingState != 1 && "attribute".equals(nm)	&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+			if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				if (!(parent instanceof ComponentInfo))
 					throw new UiException(message("<attribute> cannot be the root element", el));
 				parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
-			} else if (parsingState != 1 && "custom-attributes".equals(nm)	&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+			} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				parseCustomAttributes(langdef, parent, el, annHelper);
-			} else if (parsingState != 1 && "template".equals(nm)
+			} else if ("template".equals(nm)
 				&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				parseItems(pgdef, parseTemplate(parent, el, annHelper), el.getChildren(), annHelper, bNativeContent);
 			}
@@ -864,12 +864,10 @@ public class Parser {
 			&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				parseVariables(langdef, parent, el, annHelper);
 			} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-				parseItems(pgdef, parseZk(parent, el, annHelper),
-						el.getChildren(), annHelper, bNativeContent);
+				parseItems(pgdef, parseZk(parent, el, annHelper), el.getChildren(), annHelper, bNativeContent);
 			} else if (isShadowElement(langdef, pgdef, nm, pref, uri, bNativeContent)) {
 				parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper),
 					el.getChildren(), annHelper, bNativeContent);
-				
 			} else {
 				//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
 				if (isZkSwitch(parent))
@@ -1835,9 +1833,7 @@ public class Parser {
 	}
 	
 	//ZK-2632: Parser support disorder template tag
-	private static class ParsingState {
-		private static int ROOT = -1;
-		private static int FIRST = 0;
-		private static int SECOND = 1;
+	private enum ParsingState {
+		ROOT, FIRST, SECOND
 	}
 }
