@@ -84,7 +84,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 
 		HtmlShadowElement node = queryIntersectedShadowIfAny(insertIndex, indexMap);
 		if (node != null)
-			return node.getShadowVariable(name, recurse);
+			return node.resolveVariable(child, name, recurse);
 		return null;
 	}
 	/**
