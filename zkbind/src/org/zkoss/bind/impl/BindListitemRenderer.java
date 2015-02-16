@@ -20,6 +20,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Group;
+import org.zkoss.zul.Groupfoot;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listgroupfoot;
@@ -38,8 +40,9 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 	throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
 		final int size = listbox.getModel().getSize();
-		final String tmn = item instanceof Listgroup?"model:group":item instanceof Listgroupfoot?"model:groupfoot":"model";
-		final Template tm = resolveTemplate(listbox,item,data,index,size,tmn);
+		//B70-ZK-2555: in order to handle dynamic template name
+		final String subtype = item instanceof Listgroup ? "group" : item instanceof Listgroupfoot ? "groupfoot" : null;
+		final Template tm = resolveTemplate(listbox, item, data, index, size, "model", subtype);
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
