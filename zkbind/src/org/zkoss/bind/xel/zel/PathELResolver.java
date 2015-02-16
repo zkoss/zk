@@ -77,18 +77,20 @@ public class PathELResolver extends ELResolver {
             throw new NullPointerException();
         }
 
-        Integer numOfKids = _numOfKids.pop();
-        Path path = _paths.pop();
-        
-    	//maintain the number of kids
-    	int nums = numOfKids.intValue() - 1;
-    	numOfKids = new Integer(nums);
-    	ctx.putContext(Integer.class, numOfKids);
-
-    	//maintain the form path field
-    	path.add(toNodeString(ctx), Objects.toString(property));
-    	ctx.putContext(Path.class, path);
-    	
+        // for null object with form binding
+        if (!_numOfKids.isEmpty()) {
+	        Integer numOfKids = _numOfKids.pop();
+	        Path path = _paths.pop();
+	        
+	    	//maintain the number of kids
+	    	int nums = numOfKids.intValue() - 1;
+	    	numOfKids = new Integer(nums);
+	    	ctx.putContext(Integer.class, numOfKids);
+	
+	    	//maintain the form path field
+	    	path.add(toNodeString(ctx), Objects.toString(property));
+	    	ctx.putContext(Path.class, path);
+        }
     	return null;
 
 	}
