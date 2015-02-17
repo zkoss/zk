@@ -39,8 +39,9 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 	throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
 		final int size = listbox.getModel().getSize();
-		final String tmn = item instanceof Listgroup?"model:group":item instanceof Listgroupfoot?"model:groupfoot":"model";
-		final Template tm = resolveTemplate(listbox,item,data,index,size,tmn);
+		//B70-ZK-2555: in order to handle dynamic template name
+		final String subtype = item instanceof Listgroup ? "group" : item instanceof Listgroupfoot ? "groupfoot" : null;
+		final Template tm = resolveTemplate(listbox, item, data, index, size, "model", subtype);
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
