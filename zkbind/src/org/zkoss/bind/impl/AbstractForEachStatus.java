@@ -14,7 +14,6 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 
 import org.zkoss.bind.annotation.Immutable;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ForEachStatus;
 
 /**
@@ -36,10 +35,5 @@ public abstract class AbstractForEachStatus implements ForEachStatus, Serializab
 	//default 0
 	public Integer getBegin(){
 		return 0;
-	}
-	
-	// ZK-2552: for internal use only    
-	public Integer getCurrentIndex(Component comp) {
-		return comp.getParent().getChildren().indexOf(comp);
 	}
 }
