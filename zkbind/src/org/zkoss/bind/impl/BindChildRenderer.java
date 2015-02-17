@@ -96,9 +96,8 @@ public class BindChildRenderer extends AbstractRenderer{
 			public Integer getEnd(){
 				return size;
 			}
-			
-			// the old index is used to distinguish with other expression. 
-			public int getCurrentIndex(Component comp, int index) { 
+			 
+			public int getCurrentIndex(Component comp) { 
 				int result = -1;
 				if (comp instanceof Listitem) {
 					result = ((Listitem) comp).getIndex();

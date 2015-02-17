@@ -44,9 +44,8 @@ public abstract class AbstractForEachStatus implements ForEachStatus, Serializab
 	public Integer getStep() {
 		return null;
 	}
-	// ZK-2552: for internal use only    
-	// the old index is used to distinguish with other expression. 
-	public int getCurrentIndex(Component comp, int oldIndex) {
+	// ZK-2552: for internal use only 
+	public int getCurrentIndex(Component comp) {
 		int result = -1;
 		if (comp instanceof Listitem) {
 			result = ((Listitem) comp).getIndex();

@@ -257,6 +257,22 @@ public class TrackerImpl implements Tracker, Serializable {
 						if (node == null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 							continue;
 						}
+
+						// ZK-2552: we need to ignore if the target component in reference binding
+						// is different from the given comopnent, because they may bind with a same
+						// data object with the same EL expression.
+						boolean ignore = false;
+						for (ReferenceBinding refBinding : node.getReferenceBindings()) {
+							if (refBinding.getComponent() == comp) {
+								ignore = false;
+								break;
+							}
+							ignore = true;
+						}
+						// don't need to update with a wrong target component.
+						if (ignore)
+							continue;
+						
 						propNodes.add(node);
 						if (BindELContext.isBracket((String)script)) {
 							baseNode.tieProperty(propName, script);
