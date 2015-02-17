@@ -37,7 +37,7 @@ public class PathELResolver extends ELResolver {
 	
 	private String toNodeString(ELContext ctx) {
 		final Node node0 = (Node) ctx.getContext(Node.class);
-		return BindELContext.toNodeString(node0, new StringBuffer());
+		return BindELContext.toNodeString(node0, new StringBuilder());
 	}
 	
 	

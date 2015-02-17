@@ -150,7 +150,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			final String expression;
 			if (comp.getAttribute(IS_TEMPLATE_MODEL_ENABLED_ATTR) != null) {
 				expression = BindELContext.getModelName(modelOwner) 
-						+ "[self.getAttribute('" + CURRENT_INDEX_RESOLVER_ATTR + "').getCurrentIndex(self)]";
+						+ "[self.getAttribute('" + CURRENT_INDEX_RESOLVER_ATTR + "').getCurrentIndex(self, "+ index+")]";
 			} else {
 				expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
 			}

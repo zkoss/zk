@@ -16,6 +16,9 @@ import java.io.Serializable;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ForEachStatus;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Row;
+import org.zkoss.zul.Treeitem;
 
 /**
  * The Class AbstractForEachStatus.
@@ -42,8 +45,18 @@ public abstract class AbstractForEachStatus implements ForEachStatus, Serializab
 		return null;
 	}
 	// ZK-2552: for internal use only    
-	public Integer getCurrentIndex(Component comp) {
-		return comp.getParent().getChildren().indexOf(comp);
+	// the old index is used to distinguish with other expression. 
+	public int getCurrentIndex(Component comp, int oldIndex) {
+		int result = -1;
+		if (comp instanceof Listitem) {
+			result = ((Listitem) comp).getIndex();
+		} else if (comp instanceof Row) {
+			result = ((Row) comp).getIndex();
+		}  else if (comp instanceof Treeitem) {
+			result = ((Treeitem) comp).getIndex();
+		} else 
+			result = comp.getParent().getChildren().indexOf(comp);
+		return result;
 	}
 	public boolean isFirst() {
 		return getCount() == 1;

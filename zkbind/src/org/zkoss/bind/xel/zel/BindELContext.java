@@ -44,6 +44,7 @@ import org.zkoss.xel.zel.XelELContext;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.impl.parser.AstBracketSuffix;
 import org.zkoss.zel.impl.parser.AstDotSuffix;
+import org.zkoss.zel.impl.parser.AstMethodParameters;
 import org.zkoss.zel.impl.parser.AstValue;
 import org.zkoss.zel.impl.parser.Node;
 import org.zkoss.zk.ui.Component;
@@ -237,6 +238,15 @@ public class BindELContext extends XelELContext {
     		}
 		} else if (next instanceof AstDotSuffix) {
 			path.append(".").append(next.getImage());
+		} else if (next instanceof AstMethodParameters) {
+			StringBuilder subPath = new StringBuilder();
+			for(int j = 0, len = next.jjtGetNumChildren(); j < len; ++j) {
+				if (j > 0)
+					subPath.append(',');
+    			final Node kid = next.jjtGetChild(j);
+    			toNodeString(kid, subPath); //recursive
+    		}
+			path.append("(").append(subPath).append(")");
 		} else {
 			path.append(next.getImage());
 		}
@@ -254,6 +264,15 @@ public class BindELContext extends XelELContext {
     		}
 		} else if (next instanceof AstDotSuffix) {
 			path.append(".").append(next.getImage());
+		} else if (next instanceof AstMethodParameters) {
+			StringBuilder subPath = new StringBuilder();
+			for(int j = 0, len = next.jjtGetNumChildren(); j < len; ++j) {
+				if (j > 0)
+					subPath.append(',');
+    			final Node kid = next.jjtGetChild(j);
+    			toNodeString(kid, subPath); //recursive
+    		}
+			path.append("(").append(subPath).append(")");
 		} else {
 			path.append(next.getImage());
 		}

@@ -23,6 +23,9 @@ import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Row;
+import org.zkoss.zul.Treeitem;
 
 /**
  * to renderer children of component
@@ -61,9 +64,23 @@ public class BindChildRenderer extends AbstractRenderer{
 		Object oldIter = owner.getAttribute(itervarnm);
 		owner.setAttribute(varnm, data);
 		owner.setAttribute(itervarnm, iterStatus);
-		
-		final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(owner, null, null, null));
-		
+
+		// For bug ZK-2552
+		Component insertBefore = null;
+		List<Component[]> cbrCompsList = (List<Component[]>) owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		if (cbrCompsList != null) {
+			int newIndex = 0;
+			int steps = 0;
+			for (Component[] cmps : cbrCompsList) {
+				if (steps++ >= index)
+					break;
+				newIndex += cmps.length;
+			}
+			if (owner.getChildren().size() > newIndex) {
+				insertBefore = owner.getChildren().get(newIndex);
+			} 
+		}
+		final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(owner, insertBefore, null, null));
 		// ZK-2552: define own iterStatus since children inside template could be more than 1 for children binding
 		final ForEachStatus bindChildIterStatus = new AbstractForEachStatus() { // provide iteration status in this context
 			private static final long serialVersionUID = 1L;
@@ -80,8 +97,20 @@ public class BindChildRenderer extends AbstractRenderer{
 				return size;
 			}
 			
-			public Integer getCurrentIndex(Component comp) { 
-				return comp.getParent().getChildren().indexOf(comp) / items.length;
+			// the old index is used to distinguish with other expression. 
+			public int getCurrentIndex(Component comp, int index) { 
+				int result = -1;
+				if (comp instanceof Listitem) {
+					result = ((Listitem) comp).getIndex();
+				} else if (comp instanceof Row) {
+					result = ((Row) comp).getIndex();
+				}  else if (comp instanceof Treeitem) {
+					result = ((Treeitem) comp).getIndex();
+				} else 
+					result = comp.getParent().getChildren().indexOf(comp);
+				
+				result = result / items.length;
+				return result;
 			}
 		};
 		
@@ -93,7 +122,7 @@ public class BindChildRenderer extends AbstractRenderer{
 		
 		//ZK-2545 - Children binding support list model
 		if (isListModel) {
-			List<Component[]> cbrCompsList = (List<Component[]>) owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+			cbrCompsList = (List<Component[]>) owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 			if (cbrCompsList == null) cbrCompsList = new LinkedList<Component[]>();
 			cbrCompsList.add(items);
 			owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
