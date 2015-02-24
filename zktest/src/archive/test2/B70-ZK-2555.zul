@@ -41,13 +41,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		Flag useCustom = new Flag();
 	]]></zscript>
 
-	<window title="" border="normal"
+	<window id="win" title="" border="normal"
 		apply="org.zkoss.bind.BindComposer"
 		validationMessages="@id('vmsgs')">
 
-		<checkbox label="use custom template" checked="@bind(useCustom.flag)"/>
+		<checkbox id="check" label="use custom template" checked="@bind(useCustom.flag)"/>
 <!-- custom template name fails -->
-		<grid model="@load(model) @template(useCustom.flag ? 'custom' : 'model')">
+		<grid id="grid" model="@load(model) @template(useCustom.flag ? 'custom' : 'model')">
 			<template name="model:group">
 				<group spans="2" label="@load(each)"/>
 			</template>
