@@ -137,6 +137,7 @@ public class Selectbox extends HtmlBasedComponent {
 	public void setItemRenderer(ItemRenderer<?> renderer) {
 		if (_renderer != renderer) {
 			_renderer = renderer;
+			postOnInitRender(); // Bug ZK-2607
 			invalidate();
 		}
 	}
