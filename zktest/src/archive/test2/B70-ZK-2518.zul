@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2518.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 24, 2015  3:47:34 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+	import org.zkoss.util.media.Media;;
+  	public void myProcessUpload(UploadEvent event){
+  		System.out.println("uploaded");
+  		Media media = event.getMedia();
+  		System.out.println("uploaded "+media.getName()+", size:"+(media.getByteData().length/1024)+" k bytes");
+  	}
+  ]]>
+  </zscript>
+<button label="file extension" upload="true,maxsize=-1,accept=.png|.pdf" onUpload="myProcessUpload(event)"/>
+</zk>
