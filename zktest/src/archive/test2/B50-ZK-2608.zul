@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-2608.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 24, 2015  4:35:52 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please scroll down to the end of the list, you should be able to see "100" in "Jan" column for IE browser
+	<zscript>Object[] obj = new Object[101];</zscript>
+	<grid id="tableViewerGrid" vflex="1">
+		<custom-attributes org.zkoss.zul.grid.rod="true" />
+		<columns sizable="true" >
+			<column label="Jan"/><column label="Feb"/><column label="Mar"/>
+			<column label="Apr"/><column label="May"/><column label="Jun"/>
+			<column label="Jul"/><column label="Aug"/><column label="Sep"/>
+			<column label="Oct"/><column label="Nov"/><column label="Dec"/>
+		</columns>
+		<rows>
+			<row forEach="${obj}">
+				<label value="${forEachStatus.index}"/><label value="1,100"/><label value="1,200"/>
+				<label value="1,300"/><label value="1,400"/><label value="1,500"/>
+				<label value="1,600"/><label value="1,700"/><label value="1,800"/>
+				<label value="1,900"/><label value="2,000"/><label value="2,100"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

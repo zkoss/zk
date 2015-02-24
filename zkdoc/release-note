@@ -3,6 +3,7 @@ ZK 5.0.14
   
 * Bugs
   ZK-2046: Scroll position is reset to top if resize column of a grid with rod
+  ZK-2608: Last row in Grid not showing when row size is 101 and ROD enabled in IE
 
 	--------
 ZK 5.0.13
