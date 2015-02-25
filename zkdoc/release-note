@@ -31,6 +31,7 @@ ZK 7.0.5
   ZK-2607: Setting new itemRenderer does not refresh Selectbox
   ZK-2574: Long operation Pattern (generic approach) not working for Servlet 3
   ZK-1132: Support for .zul files taken from web-fragment projects
+  ZK-2626: treerow height for autopaging is not consistency with default mold
 
 * Upgrade Notes
 
