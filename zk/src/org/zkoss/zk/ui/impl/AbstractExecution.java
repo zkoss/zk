@@ -43,6 +43,7 @@ import org.zkoss.zk.au.http.AuRedirect;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -54,6 +55,7 @@ import org.zkoss.zk.ui.sys.ExecutionInfo;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Callback;
 
 /**
  * A skeletal implementation of {@link Execution}.
@@ -80,6 +82,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	/** The information of the event being served, or null if not under event processing. */
 	private ExecutionInfo _execinf;
 	private List<VariableResolver> _resolvers;
+
+	protected final static String Add_ON_ACTIVATE = "org.zkoss.zk.ui.executions.addOnActivate";
+	protected final static String Add_ON_DEACTIVATE = "org.zkoss.zk.ui.executions.addOnDeactivate";
 
 	/** Constructs an execution.
 	 * @param creating which page is being creating for this execution, or
@@ -205,11 +210,34 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public boolean isActivated() {
 		return getVisualizer() != null;
 	}
+	@SuppressWarnings("unchecked")
 	public void onActivate() {
+		if (_desktop != null) {
+			List<Callback> callbacks = (List<Callback>) _desktop.getAttribute(Add_ON_ACTIVATE);
+			if (callbacks != null) {
+				for (Iterator<Callback> it = callbacks.iterator(); it.hasNext();) {
+					Callback callback = it.next();
+					callback.call();
+					it.remove();
+				}
+			}
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public void onBeforeDeactivate() {
+		if (_desktop != null) {
+			List<Callback> callbacks = (List<Callback>) _desktop.getAttribute(Add_ON_DEACTIVATE);
+			if (callbacks != null) {
+				for (Iterator<Callback> it = callbacks.iterator(); it.hasNext();) {
+					Callback callback = it.next();
+					callback.call();
+					it.remove();
+				}
+			}
+		}
 	}
 	public void onDeactivate() {
 	}
-
 	public boolean isRecovering() {
 		Visualizer uv = getVisualizer();
 		return uv != null && uv.isRecovering();
@@ -492,6 +520,47 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			_desktop.getWebApp().log(msg, ex);
 		else
 			_zklog.error(msg, ex);
+	}
+
+	/**
+	 * Adds a callback method to be executed only once after the execution
+	 * activated.
+	 * @param callback
+	 * @since 7.0.5
+	 */
+	public void addOnActivate(Callback callback) {
+		Execution exec = Executions.getCurrent();
+		if (exec == null)
+			throw new IllegalStateException("Execution cannot be null!");
+		Desktop desktop = exec.getDesktop();
+		if (desktop != null) {
+			List<Callback> callbacks = (List<Callback>) desktop.getAttribute(Add_ON_ACTIVATE);
+			if (callbacks == null) {
+				callbacks = new LinkedList<Callback>();
+				desktop.setAttribute(Add_ON_ACTIVATE, callbacks);
+			}
+			callbacks.add(callback);
+		}
+	}
+	/**
+	 * Adds a callback method to be executed only once after the execution
+	 * deactivated.
+	 * @param callback
+	 * @since 7.0.5
+	 */
+	public void addOnDeactivate(Callback callback) {
+		Execution exec = Executions.getCurrent();
+		if (exec == null)
+			throw new IllegalStateException("Execution cannot be null!");
+		Desktop desktop = exec.getDesktop();
+		if (desktop != null) {
+			List<Callback> callbacks = (List<Callback>) desktop.getAttribute(Add_ON_DEACTIVATE);
+			if (callbacks == null) {
+				callbacks = new LinkedList<Callback>();
+				desktop.setAttribute(Add_ON_DEACTIVATE, callbacks);
+			}
+			callbacks.add(callback);
+		}
 	}
 
 	//Object//

@@ -26,6 +26,8 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.util.Callback;
 
 /**
  * A simple implementation of {@link EventQueueProvider}.
@@ -127,7 +129,18 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 				eq = eqs.remove(name);
 			}
 			if (eq != null) {
-				eq.close();
+				Execution execution = Executions.getCurrent();
+				if (execution == null) {
+					eq.close();
+				} else {
+					// Bug ZK-2574
+					final EventQueue callbackEq = eq;
+					((ExecutionCtrl)execution).addOnDeactivate(new Callback() {
+						public void call() {
+							callbackEq.close();
+						}
+					});
+				}
 				if (log.isDebugEnabled()) {
 					log.debug("Remove the event queue: name [{}], scope [{}]", name, ctxscope);
 				}
