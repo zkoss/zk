@@ -30,6 +30,7 @@ ZK 7.0.5
   ZK-2518: The "accept" attribute of Button used to upload doesn't work for multiple file type
   ZK-2607: Setting new itemRenderer does not refresh Selectbox
   ZK-2574: Long operation Pattern (generic approach) not working for Servlet 3
+  ZK-1132: Support for .zul files taken from web-fragment projects
 
 * Upgrade Notes
 

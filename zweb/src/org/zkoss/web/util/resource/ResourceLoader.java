@@ -76,8 +76,9 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	public V load(ResourceInfo src) throws Exception {
 		if (src.url != null)
 			return parse(src.path, src.url, src.extra);
-
-		if (!src.file.exists()) {
+		
+		// Bug ZK-1132
+		if (!src.file.exists() && src.extra != null && ((ServletContextLocator) src.extra).getResourceAsStream(src.path) == null) {
 			if (log.isDebugEnabled()) log.debug("Not found: "+src.file);
 			return null; //File not found
 		}

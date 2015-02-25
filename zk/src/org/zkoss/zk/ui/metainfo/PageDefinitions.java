@@ -16,8 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
@@ -28,6 +31,7 @@ import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ResourceCache;
 import org.zkoss.web.util.resource.ResourceCaches;
 import org.zkoss.web.util.resource.ResourceLoader;
@@ -205,7 +209,26 @@ public class PageDefinitions {
 		throws Exception {
 			final Locator locator =
 				extra != null ? (Locator)extra: getLocator(_wapp, path);
-			return new Parser(_wapp, locator).parse(file, path);
+			Parser parser = new Parser(_wapp, locator);
+			// Bug ZK-1132
+			if (file.exists()) {
+				return parser.parse(file, path);
+			} else {
+				InputStream stream = parser.getLocator().getResourceAsStream(
+						path);
+				BufferedReader reader = null;
+				try {
+						reader = new BufferedReader(
+							new InputStreamReader(stream));
+					PageDefinition pgdef = parser.parse(reader,
+							Servlets.getExtension(path));
+					pgdef.setRequestPath(path);
+					return pgdef;
+				} finally {
+					if (reader != null)
+						reader.close();
+				}
+			}
 		}
 		protected PageDefinition parse(String path, URL url, Object extra)
 		throws Exception {
