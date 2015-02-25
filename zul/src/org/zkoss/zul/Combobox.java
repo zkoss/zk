@@ -198,11 +198,16 @@ public class Combobox extends Textbox {
 			if (!getItems().isEmpty()) getItems().clear();
 		}
 	}
-	
+
+	private static int INVALIDATE_THRESHOLD = 10;
 	private void initDataListener() {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					final ListModel _model = getModel();
+					final int newsz = _model.getSize(), oldsz = getItemCount();
+					int min = event.getIndex0(), max = event.getIndex1(), cnt;
+					
 					// Bug B30-1906748.zul
 					switch (event.getType()) {
 					case ListDataEvent.SELECTION_CHANGED:
@@ -210,8 +215,50 @@ public class Combobox extends Textbox {
 						return; //nothing changed so need to rerender
 					case ListDataEvent.MULTIPLE_CHANGED:
 						return; //nothing to do
+					case ListDataEvent.INTERVAL_ADDED:
+						cnt = newsz - oldsz;
+						if (cnt <= 0)
+							throw new UiException("Adding causes a smaller list?");
+						if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD))
+							invalidate();
+								//Also better performance (outer better than remove a lot)
+						if (min < 0)
+							if (max < 0) min = 0;
+							else min = max - cnt + 1;
+						if (min > oldsz) min = oldsz;
+
+						ComboitemRenderer renderer = null;
+						final Component next =
+							min < oldsz ? getItemAtIndex(min): null;
+						while (--cnt >= 0) {
+							if (renderer == null)
+								renderer = (ComboitemRenderer) getRealRenderer();
+							insertBefore(newUnloadedItem(renderer), next);
+						}
+						break;
+					case ListDataEvent.INTERVAL_REMOVED:
+						cnt = oldsz - newsz;
+						if (cnt <= 0)
+							throw new UiException("Removal causes a larger list?");
+						if (min >= 0) max = min + cnt - 1;
+						else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
+						if (max > oldsz - 1) max = oldsz - 1;
+
+						if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD))
+							invalidate();
+								//Also better performance (outer better than remove a lot)
+
+						//detach from end (due to groupfoot issue)
+						Component comp = getItemAtIndex(max);
+						while (--cnt >= 0) {
+							Component p = comp.getPreviousSibling();
+							comp.detach();
+							comp = p;
+						}
+						break;
+					default:
+						postOnInitRender(null);
 					}
-					postOnInitRender(null);
 				}
 			};
 		if (_eventListener == null)
