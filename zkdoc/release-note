@@ -33,6 +33,7 @@ ZK 7.0.5
   ZK-1132: Support for .zul files taken from web-fragment projects
   ZK-2626: treerow height for autopaging is not consistency with default mold
   ZK-2636: Form validator didn't get value to validate selectedItem attribute if adding new item to Combobox's ListModel
+  ZK-2562: Wrong tree rendering after adding node with tree model
 
 * Upgrade Notes
 

@@ -467,6 +467,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					if (dom) { //Bug ZK-1739: treerow may removed
 						jq(dom).before(childHTML);
 						return;
+					} else if (tbody.firstChild) { // Bug ZK-2562
+						jq(tbody.firstChild).before(childHTML);
+						return;
 					}
 				}
 			}
