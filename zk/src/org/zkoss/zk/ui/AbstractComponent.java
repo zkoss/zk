@@ -550,7 +550,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	public String getUuid() {
 		if (_uuid == null) {
-			final Execution exec = _page != null ? Executions.getCurrent(): null;
+			Execution exec = null; // ZK-2606: if parent has _page, child is in the same component tree 
+			for (Component comp = this; comp != null; comp = comp.getParent()) {
+				if (comp.getPage() != null) {
+					exec = Executions.getCurrent();
+					break;
+				}
+			}
 			_uuid = exec == null ? ANONYMOUS_ID + _anonymousId++: nextUuid(exec.getDesktop());
 				//OK to race for _anonymousId (since ok to be the same)
 		}
