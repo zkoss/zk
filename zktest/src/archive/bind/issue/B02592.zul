@@ -1,0 +1,30 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+	<window title="" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.zk2592.FromValidationViewModel')"
+		validationMessages="@id('vmsgs')">
+
+		<grid form="@id('fx') 
+					@load(vm.personDto) 
+					@save(vm.personDto, after='submit') 
+					@validator('formBeanValidator', prefix='p_')" >
+			<rows>
+				<row>
+					<cell>
+						<intbox value="@bind(fx.age)"/>
+						<label id="err1" value="@load(vmsgs['p_age'])"/>
+					</cell>
+					<cell>
+						<textbox value="@bind(fx.nameDto.name)"/>
+						<label id="err2" value="@load(vmsgs['p_nameDto.name'])"/>
+<!-- 						workaround but not ideal -->
+<!-- 						<textbox value="@bind(fx.nameDto.name) @validator('beanValidator')" errorMessage="@load(vmsgs[self])"/> -->
+					</cell>
+				</row>
+			</rows>
+		</grid>
+		<button label="submit" onClick="@command('submit')"/>
+
+	</window>
+</zk>

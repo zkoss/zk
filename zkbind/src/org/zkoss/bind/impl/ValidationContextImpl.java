@@ -78,19 +78,15 @@ public class ValidationContextImpl implements ValidationContext{
 		if(mp!=null) return mp;
 		mp = new HashMap<String,Property>();
 		m.put(base, mp);
-
-		Object obase = base;
-		if (obase instanceof FormProxyObject) {
-			obase = ((FormProxyObject)obase).getOriginObject();
-		}
+		
 		for(Entry<String, Property[]> e:_properties.entrySet()){
 			for(Property p:e.getValue()){
 				Object pbase = p.getBase();
 				if (pbase instanceof FormProxyObject) {
 					pbase = ((FormProxyObject)pbase).getOriginObject();
 				}
-				if (obase.equals(pbase)) {
-					mp.put(e.getKey(), p);
+				if (base.equals(p.getBase()) || base.equals(pbase)) {
+					mp.put(e.getKey(), new PropertyImpl(base, p.getProperty(), p.getValue()));
 				}
 			}
 		}
