@@ -59,11 +59,14 @@ public class BeanValidator extends AbstractValidator {
 	 * @param clz the class of bean
 	 * @param property the property of bean
 	 * @param value the value to be validated.
+	 * @param gruops the validation groups (since 8.0.0)
 	 * @return the ConstraintViolation set.
 	 *  @since 6.0.1
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Set<ConstraintViolation<?>> validate(Class clz, String property, Object value){
+	protected Set<ConstraintViolation<?>> validate(Class clz, String property, Object value, Class<?>[] groups){
+		if (groups != null)
+			return getValidator().validateValue(clz, property, value, groups);
 		return getValidator().validateValue(clz, property, value);
 	}
 	
@@ -134,8 +137,9 @@ public class BeanValidator extends AbstractValidator {
 		Object[] info = getValidationInfo(ctx, base, property);
 		Class<?> clz = (Class<?>)info[0];
 		property = (String)info[1];
-		 
-		Set<ConstraintViolation<?>> violations = validate(clz, property, value);
+		final Class<?>[] groups = (Class<?>[]) ctx.getValidatorArg("groups");
+		
+		Set<ConstraintViolation<?>> violations = validate(clz, property, value, groups);
 		
 		handleConstraintViolation(ctx, violations);
 	}
