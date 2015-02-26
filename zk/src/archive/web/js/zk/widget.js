@@ -96,6 +96,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var ret = f.apply(wgt, args);
 			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
+			if (evt.stopped) devt.originalEvent['zkstopped'] = true;
 			return devt.type == 'dblclick' && ret === undefined ? false: ret;
 		};
 	}

@@ -550,7 +550,7 @@ jq(function() {
 					wgt[fn].call(wgt, wevt);
 				}
 			}
-			if (!wevt.stopped)
+			if (!wevt.stopped && (!wevt.originalEvent || !wevt.originalEvent['zkstopped'])) // Bug ZK-2544
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
 				wevt.domEvent.stop();

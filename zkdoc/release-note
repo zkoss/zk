@@ -35,6 +35,7 @@ ZK 7.0.5
   ZK-2636: Form validator didn't get value to validate selectedItem attribute if adding new item to Combobox's ListModel
   ZK-2562: Wrong tree rendering after adding node with tree model
   ZK-2516: center content flickers in ZK 7 when invalidating
+  ZK-2544: Clicking on combobox button does not select listitem when nonselectableTags=""
 
 * Upgrade Notes
 
