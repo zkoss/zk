@@ -19,21 +19,23 @@ package org.zkoss.zhtml;
 import java.lang.Object;
 import java.io.StringWriter;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zhtml.impl.PageRenderer;
-
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zul.Include;
 /**
  * The HTML tag.
  *
  * @author tomyeh
  */
 public class Html extends AbstractTag {
+	private boolean _isInstant = false;
+	
 	public Html() {
 		super("html");
 	}
@@ -50,8 +52,17 @@ public class Html extends AbstractTag {
 		final StringWriter bufout = new StringWriter();
 		final Page page = getPage();
 		final Object ret = PageRenderer.beforeRenderHtml(exec, page, bufout);
+		
+		// ZK-2567: when included in instant mode, set direct content render to false
+		if (this._isInstant) {
+			HtmlPageRenders.setDirectContent(exec, false);
+		}
 		super.redraw(bufout);
-		PageRenderer.afterRenderHtml(exec, page, bufout, ret);
+		
+		// ZK-2567: shouldn't call after render html if it's rendered in instant mode
+		if (!this._isInstant) {
+			PageRenderer.afterRenderHtml(exec, page, bufout, ret);
+		}
 
 		final StringBuffer buf = bufout.getBuffer();
 		if (exec != null)
@@ -66,7 +77,11 @@ public class Html extends AbstractTag {
 	}
 
 	public void beforeParentChanged(Component parent) {
-		if (parent != null)
+		// ZK-2567: should also support include in instant mode
+		if (parent instanceof Include) {
+			this._isInstant = true;
+		}
+		if (parent != null && !this._isInstant)
 			throw new UiException("Html must be the root component, not "+parent);
 		super.beforeParentChanged(parent);
 	}

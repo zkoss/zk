@@ -356,6 +356,12 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				if (i > 0) {
 					ext = ext.substring(0, i);
 				}
+				
+				// ZK-2567: jsp should be included in defer mode
+				if ("jsp".equals(ext)) {
+					_instantMode = false;
+					return;
+				}
 				LanguageDefinition lang = LanguageDefinition.getByExtension(ext);
 				_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
 			} else

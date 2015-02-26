@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2567.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jan 30, 2015  6:13:03 PM, Created by hanhsu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window width="100%">
+	<label>This page should be rendered without any exception</label>
+	<include id="in1" src="B70-ZK-2567.html" />
+	<include id="in2" src="B70-ZK-2567.jsp" />
+	<button label="change page1" onClick='in1.setSrc("B70-ZK-2567.jsp")' />
+	<button label="change page2" onClick='in2.setSrc("B70-ZK-2567.html")' />
+</window>

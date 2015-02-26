@@ -164,7 +164,7 @@ public class HtmlPageRenders {
 	 */
 	public static String outUnavailable(Execution exec) {
 		if (exec.getAttribute(ATTR_UNAVAILABLE_GENED) == null
-		&& !exec.isAsyncUpdate(null)) {
+		&& !exec.isAsyncUpdate(null) && HtmlPageRenders.isDirectContent(exec)) {
 			exec.setAttribute(ATTR_UNAVAILABLE_GENED, Boolean.TRUE);
 
 			final Device device = exec.getDesktop().getDevice();
