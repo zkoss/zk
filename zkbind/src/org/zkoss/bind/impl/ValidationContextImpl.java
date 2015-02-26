@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
+import org.zkoss.bind.proxy.FormProxyObject;
 /**
  * the default implementation of validation context
  * @author dennis
@@ -77,10 +78,18 @@ public class ValidationContextImpl implements ValidationContext{
 		if(mp!=null) return mp;
 		mp = new HashMap<String,Property>();
 		m.put(base, mp);
-		
+
+		Object obase = base;
+		if (obase instanceof FormProxyObject) {
+			obase = ((FormProxyObject)obase).getOriginObject();
+		}
 		for(Entry<String, Property[]> e:_properties.entrySet()){
 			for(Property p:e.getValue()){
-				if(base.equals(p.getBase())){
+				Object pbase = p.getBase();
+				if (pbase instanceof FormProxyObject) {
+					pbase = ((FormProxyObject)pbase).getOriginObject();
+				}
+				if (obase.equals(pbase)) {
 					mp.put(e.getKey(), p);
 				}
 			}
