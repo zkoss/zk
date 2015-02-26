@@ -365,6 +365,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		} finally {
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
+				// Bug ZK-2516
+				zWatch.fire('onCommandReady', null, {timeout:-1, rtags: rtags}); //won't use setTimeout
+
 				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
 				if (rtags.onClientInfo) {
 					setTimeout(zk.endProcessing, 50); // always stop the processing
