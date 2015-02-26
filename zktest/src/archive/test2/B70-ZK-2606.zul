@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2606.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Feb 25, 2015 10:30:31 AM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <label multiline="true">
+  1. click setParent btn
+  2. item1 should be selected
+  3. server test
+  </label>
+  <window id="win1" border="normal" title="list item add">
+    <button id="btn1" label="clearSelection" onClick="lb.clearSelection();" />
+    <button id="btn2" label="lb.appendChild(listitem)" onClick="lb.appendChild(createSelectedListitem());" />
+    <button id="btn3" label="lb.insertBefore(listitem)" onClick="lb.insertBefore(createSelectedListitem(), null);" />
+    <button id="btn4" label="listitem.setParent(lb)" onClick="createSelectedListitem().setParent(lb)" />
+    <listbox id="lb"/>
+  </window>
+  <window id="win2" border="normal" title="multiple list item add">
+    <button id="btn1" label="clearSelection" onClick="lb.clearSelection();" />
+    <button id="btn2" label="lb.appendChild(listitem)" onClick="lb.appendChild(createSelectedListitem());" />
+    <button id="btn3" label="lb.insertBefore(listitem)" onClick="lb.insertBefore(createSelectedListitem(), null);" />
+    <button id="btn4" label="listitem.setParent(lb)" onClick="createSelectedListitem().setParent(lb)" />
+    <listbox id="lb" multiple="true" checkmark="true"/>
+  </window>
+  <zscript>
+    int count = 1;
+    public Listitem createSelectedListitem() {
+       Listitem item = new Listitem("item" + count++);
+       item.setSelected(true);
+       return item;
+    }
+  </zscript>
+</zk>
