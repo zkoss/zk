@@ -80,13 +80,9 @@ public class ValidationContextImpl implements ValidationContext{
 		m.put(base, mp);
 		
 		for(Entry<String, Property[]> e:_properties.entrySet()){
-			for(Property p:e.getValue()){
-				Object pbase = p.getBase();
-				if (pbase instanceof FormProxyObject) {
-					pbase = ((FormProxyObject)pbase).getOriginObject();
-				}
-				if (base.equals(p.getBase()) || base.equals(pbase)) {
-					mp.put(e.getKey(), new PropertyImpl(base, p.getProperty(), p.getValue()));
+			for(Property p:e.getValue()) {
+				if (base.equals(p.getBase())) {
+					mp.put(e.getKey(), p);
 				}
 			}
 		}

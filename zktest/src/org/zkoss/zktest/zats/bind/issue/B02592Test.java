@@ -1,6 +1,9 @@
 package org.zkoss.zktest.zats.bind.issue;
 
 import static org.junit.Assert.*;
+
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -22,21 +25,26 @@ public class B02592Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
         
         //the following five are labels
-        ComponentAgent intbox = desktop.query("intbox");
+        List<ComponentAgent> intboxes = desktop.queryAll("intbox");
         ComponentAgent textbox = desktop.query("textbox");
         ComponentAgent button = desktop.query("button");
         ComponentAgent err1 = desktop.query("#err1");
         ComponentAgent err2 = desktop.query("#err2");
-		assertEquals("30", String.valueOf(intbox.as(Intbox.class).getValue()));
+        ComponentAgent err3 = desktop.query("#err3");
+		assertEquals("30", String.valueOf(intboxes.get(0).as(Intbox.class).getValue()));
+		assertEquals("0", String.valueOf(intboxes.get(1).as(Intbox.class).getValue()));
 		assertEquals("Peter", textbox.as(Textbox.class).getValue());
 		button.click();
 		assertEquals("", err1.as(Label.class).getValue());
 		assertEquals("", err2.as(Label.class).getValue());
-		intbox.type("300");
+		assertEquals("", err3.as(Label.class).getValue());
+		intboxes.get(0).type("300");
+		intboxes.get(1).type("300");
 		textbox.type("a2");
 		button.click();
 
 		assertEquals("must be less than or equal to 120",  err1.as(Label.class).getValue());
 		assertEquals("size must be between 4 and 10", err2.as(Label.class).getValue());
+		assertEquals("", err3.as(Label.class).getValue());
 	}
 }

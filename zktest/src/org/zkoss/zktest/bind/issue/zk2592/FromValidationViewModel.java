@@ -29,9 +29,11 @@ public class FromValidationViewModel {
 		return personDto;
 	}
 
+	public Class[] getValidationGroups() {
+		return new Class[]{GroupValidation.class};
+	}
 	public Validator getNameValidator() {
 		return new AbstractValidator() {
-			@Override
 			public void validate(ValidationContext ctx) {
 				String value = (String) ctx.getProperty().getValue();
 				if(value.length() < 3) {

@@ -4,9 +4,9 @@ import javax.validation.constraints.Size;
 
 public class NameDto {
 	
-	@Size(min=4, max=10)
 	private String name;
 
+	@Size(min=4, max=10, groups=GroupValidation.class)
 	public String getName() {
 		return name;
 	}

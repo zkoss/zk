@@ -8,7 +8,7 @@
 		<grid form="@id('fx') 
 					@load(vm.personDto) 
 					@save(vm.personDto, after='submit') 
-					@validator('formBeanValidator', prefix='p_')" >
+					@validator('formBeanValidator', prefix='p_', groups=vm.validationGroups)" >
 			<rows>
 				<row>
 					<cell>
@@ -20,6 +20,10 @@
 						<label id="err2" value="@load(vmsgs['p_nameDto.name'])"/>
 <!-- 						workaround but not ideal -->
 <!-- 						<textbox value="@bind(fx.nameDto.name) @validator('beanValidator')" errorMessage="@load(vmsgs[self])"/> -->
+					</cell>
+					<cell>
+						<intbox value="@bind(fx.age2)"/>
+						<label id="err3" value="@load(vmsgs['p_age2'])"/>
 					</cell>
 				</row>
 			</rows>
