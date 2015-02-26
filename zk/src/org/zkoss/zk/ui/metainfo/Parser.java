@@ -668,6 +668,7 @@ public class Parser {
 			}
 		final boolean isXHTML = "xhtml".equals(parentlang.getName());
 		boolean breakLine = false;
+		NativeInfo preNativeInfo = null; //check if brother is native
 		
 		//ZK-2632: Parser support disorder template tag
 		for (Iterator it = items.iterator(); it.hasNext();) {
@@ -680,7 +681,7 @@ public class Parser {
 			final Object o = it.next();
 			if (o instanceof Element) {
 				breakLine = false;
-				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent, ParsingState.SECOND);
+				preNativeInfo = (NativeInfo) parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent, ParsingState.SECOND);
 			} else if (o instanceof ProcessingInstruction) {
 				breakLine = false;
 				parse(pgdef, (ProcessingInstruction)o);
@@ -753,10 +754,13 @@ public class Parser {
 								continue; //ignore
 							label = trimLabel;
 						}
-						final ComponentInfo labelInfo =
-							parentlang.newLabelInfo(parent, label);
-						if (trimLabel.length() == 0)
-							labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
+						if (isXHTML && preNativeInfo != null && label.trim().length() == 0) { //Merge break line between two NativeInfo when using zhtml
+							preNativeInfo.addEpilogChild(new TextInfo(null, label));
+						} else {
+							final ComponentInfo labelInfo = parentlang.newLabelInfo(parent, label);
+							if (trimLabel.length() == 0)
+								labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
+						}
 					}
 				}
 			} else {
@@ -825,8 +829,9 @@ public class Parser {
 	/** Parse an component definition specified in the given element.
 	 * @param bNativeContent whether to consider the child elements all native
 	 * It is true if a component definition with text-as is found
+	 * @return native item for optimization
 	 */
-	private void parseItem(PageDefinition pgdef, NodeInfo parent,
+	private Object parseItem(PageDefinition pgdef, NodeInfo parent,
 	Element el, AnnotationHelper annHelper, boolean bNativeContent, ParsingState parsingState)
 	throws Exception {
 		final String nm = el.getLocalName();
@@ -856,7 +861,7 @@ public class Parser {
 		
 		if (parsingState != ParsingState.FIRST) {
 			if ("attribute".equals(nm) || "custom-attributes".equals(nm) || "template".equals(nm))
-				return;
+				return null;
 			if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				checkZScriptEnabled(el);
 				parseZScript(parent, el, annHelper);
@@ -1071,11 +1076,13 @@ public class Parser {
 					parseItems(pgdef, compInfo, items, annHelper, bNativeContent);
 
 				//optimize native components
-				if (compInfo instanceof NativeInfo
-				&& !compInfo.getChildren().isEmpty())
+				if (compInfo instanceof NativeInfo && !compInfo.getChildren().isEmpty()) {
 					optimizeNativeInfos((NativeInfo)compInfo);
+					return compInfo;
+				}
 			} //end-of-else//
 		}
+		return null;
 	}
 	private boolean textAsAllowed(LanguageDefinition langdef,
 	Collection<Item> items, boolean bNativeContent) {
