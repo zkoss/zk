@@ -37,6 +37,7 @@ ZK 7.0.5
   ZK-2516: center content flickers in ZK 7 when invalidating
   ZK-2544: Clicking on combobox button does not select listitem when nonselectableTags=""
   ZK-2606: listitem.setParent loses selected flag
+  ZK-2624: Page controls didn't show when using autopaging in Grid/Tree
 
 * Upgrade Notes
 
