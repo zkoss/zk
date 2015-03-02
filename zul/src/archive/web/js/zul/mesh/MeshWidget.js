@@ -653,7 +653,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._bindDomNode();
 		if (this._hflex != 'min')
 			this._fixHeaders();
-		if ((zk.webkit || zk.ie < 11) && this.ehead) //sync scroll for input tab key scroll
+		if (this.ehead) //sync scroll for input tab key scroll
 			this.domListen_(this.ehead, 'onScroll', '_doSyncScroll');
 		
 		var ebody = this.ebody;
@@ -670,7 +670,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, onResponse: this});
-		if ((zk.webkit || zk.ie < 11) && this.ehead) //sync scroll for input tab key scroll
+		if (this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
 		var ebody = this.ebody;
 		if (this._nativebar && ebody && this.efrozen)
