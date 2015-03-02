@@ -227,13 +227,23 @@ public class Combobox extends Textbox {
 							else min = max - cnt + 1;
 						if (min > oldsz) min = oldsz;
 
-						ComboitemRenderer renderer = null;
+						final Renderer renderer = new Renderer();
 						final Component next =
 							min < oldsz ? getItemAtIndex(min): null;
-						while (--cnt >= 0) {
-							if (renderer == null)
-								renderer = (ComboitemRenderer) getRealRenderer();
-							insertBefore(newUnloadedItem(renderer), next);
+						int index = min < oldsz ? min : min - 1;
+						try {
+							ComboitemRenderer cirenderer = null;
+							while (--cnt >= 0) {
+								if (cirenderer == null)
+									cirenderer = (ComboitemRenderer) getRealRenderer();
+								Comboitem item = newUnloadedItem(cirenderer);
+								insertBefore(item, next);
+								renderer.render(item, _model.getElementAt(index), index++);
+							}
+						} catch (Throwable ex) {
+							renderer.doCatch(ex);
+						} finally {
+							renderer.doFinally();
 						}
 						break;
 					case ListDataEvent.INTERVAL_REMOVED:
