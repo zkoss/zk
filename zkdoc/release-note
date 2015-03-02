@@ -39,6 +39,7 @@ ZK 7.0.5
   ZK-2606: listitem.setParent loses selected flag
   ZK-2624: Page controls didn't show when using autopaging in Grid/Tree
   ZK-2639: performance issue with AbstractTreeModel and render on demand
+  ZK-2567: Include html file throw UiException with auto mode
 
 * Upgrade Notes
 

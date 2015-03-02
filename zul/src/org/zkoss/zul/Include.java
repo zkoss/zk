@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -356,8 +357,15 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				if (i > 0) {
 					ext = ext.substring(0, i);
 				}
-				LanguageDefinition lang = LanguageDefinition.getByExtension(ext);
-				_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
+				
+				// ZK-2567: use defer mode for unrecognized files
+				try {
+					LanguageDefinition lang = LanguageDefinition.getByExtension(ext);
+					_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
+				} catch (DefinitionNotFoundException e) {
+					_instantMode = false;
+				}
+				
 			} else
 				_instantMode = false;
 		} else
