@@ -41,6 +41,7 @@ ZK 7.0.5
   ZK-2639: performance issue with AbstractTreeModel and render on demand
   ZK-2567: Include html file throw UiException with auto mode
   ZK-2640: Navigate textboxes in mesh widget headers by tab key misaligned headers with cell content [FF, IE11]
+  ZK-2587: Firefox drag and drop problem within tabbox
 
 * Upgrade Notes
 
