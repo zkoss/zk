@@ -230,7 +230,7 @@ public class Combobox extends Textbox {
 						final Renderer renderer = new Renderer();
 						final Component next =
 							min < oldsz ? getItemAtIndex(min): null;
-						int index = min < oldsz ? min : min - 1;
+						int index = min;
 						try {
 							ComboitemRenderer cirenderer = null;
 							while (--cnt >= 0) {
