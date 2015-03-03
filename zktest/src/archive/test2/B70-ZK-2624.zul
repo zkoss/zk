@@ -14,6 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+<zscript>Object[] obj = new Object[19]</zscript>
 	You should be able to see the paging control for each component.
 	<hlayout height="150px">
 		<tree mold="paging" pageSize="1" vflex="1" hflex="1">
@@ -33,7 +34,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 				<treecol label="Treecell 16px with paging and pageSize 1 and autopaging" />
 			</treecols>
 			<treechildren>
-				<treeitem forEach="1,2,3,4,5">
+				<treeitem forEach="${obj}">
 					<treerow>
 						<treecell label="Item ${each}" />
 					</treerow>
