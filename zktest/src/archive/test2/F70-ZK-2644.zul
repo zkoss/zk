@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F70-ZK-2644.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Mar 04, 2015 10:47:54 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <window border="normal" title="hello" ctrlKeys="^k" onCtrlKey='Clients.log("keydown");'>
+    <div>
+      <label multiline="true">
+        1. Click the blank area at the bottom, and press Ctrl + K, you should be able to see a log with "keydown" (In ZK 8, you should not see this).
+        2. Click the button "doModal" and then press "ESC" to close the window and then press Ctrl + K,
+        you should see a log with "keydown" in eithor ZK 7.0.5 and later or ZK 8.
+      </label>
+      </div>
+    <button label="doModal" onClick='Messagebox.show("Test")'/>
+    <label id="msg"/>
+    <script>
+      zk.afterMount(function () {
+        jq('$msg').html("Enable: " + !!zk.invokeFirstRootForAfterKeyDown);
+      })
+    </script>
+  </window>
+</zk>
+
