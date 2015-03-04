@@ -649,7 +649,7 @@ jq(function() {
 				if (wevt.domStopped)
 					wevt.domEvent.stop();
 			}
-		} else
+		} else if (zk.invokeFirstRootForAfterKeyDown)
 			_afterKeyDown(wevt);
 
 		if (evt.keyCode == 27
