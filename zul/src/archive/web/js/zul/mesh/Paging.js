@@ -169,12 +169,19 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 
 					// Bug 2931951
 					if (this.parent.$instanceof(zul.mesh.MeshWidget)) {
-						var n = this.parent.$n();
-
-						// reset and recalculate
-						if (n && n._lastsz)
-							n._lastsz = null;
-						this.parent.onSize();
+						var self = this;
+						// Bug ZK-2624
+						setTimeout(function () {
+							if (self.desktop) {
+								var n = self.parent.$n();
+		
+								// reset and recalculate
+								if (n && n._lastsz) {
+									n._lastsz = null;
+									self.parent.onSize();
+								}
+							}
+						});
 					}
 				}
 			}

@@ -449,7 +449,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._windowX = window.pageXOffset;
 			this._windowY = window.pageYOffset;
 		}
-		evt.stop();
+		// Bug ZK-2544
+		evt.stop({propagation:1});
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);

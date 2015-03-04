@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -104,6 +105,32 @@ public interface ExecutionCtrl {
 	 */
 	public void onDeactivate();
 
+	/** Called when this execution is about to become a non-current execution.
+	 *
+	 * <p>It is used as callback notification.
+	 *
+	 * <p>Note: don't throw any exception in this method.
+	 *
+	 * @see #onDeactivate
+	 * @since 7.0.5
+	 */
+	public void onBeforeDeactivate();
+	/**
+	 * Adds a callback method to be executed only once after the execution
+	 * activated.
+	 * @param callback
+	 * @since 7.0.5
+	 */
+	public void addOnActivate(Callback callback);
+
+	/**
+	 * Adds a callback method to be executed only once after the execution
+	 * being deactivated (i.e. do the callback in {@link ExecutionCtrl#onBeforeDeactivate()}.
+	 * @param callback
+	 * @since 7.0.5
+	 */
+	public void addOnDeactivate(Callback callback);
+	
 	/** Returns whether this execution is in recovering.
 	 * In other words, it is in the invocation of {@link FailoverManager#recover}.
 	 * If in recovering, no response is sent to the client.

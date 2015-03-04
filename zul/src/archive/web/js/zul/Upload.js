@@ -151,7 +151,7 @@ zul.Upload = zk.$extends(zk.Object, {
 				 + '<input name="file" type="file"'
 				// multiple="" for Firefox, multiple for Chrome
 				 + (this.multiple == 'true' ? ' multiple="" multiple' : '')
-				 + (this.accept ? ' accept="' + this.accept + '"' : '')
+				 + (this.accept ? ' accept="' + this.accept.replace('|', ',') + '"' : '')
 				 + ' hidefocus="true" style="height:'
 				 + ref.offsetHeight + 'px"/></form></span>';
 		

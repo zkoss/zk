@@ -116,13 +116,13 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(Borderlayout, 'bind_', arguments);
-		zWatch.listen({onSize: this, onResponse: this});
+		zWatch.listen({onSize: this, onCommandReady: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onResponse: this});
+		zWatch.unlisten({onSize: this, onCommandReady: this});
 		this.$supers(Borderlayout, 'unbind_', arguments);
 	},
-	onResponse: function () {
+	onCommandReady: function () {
 		if (this._shallResize)
 			this.resize();
 	},

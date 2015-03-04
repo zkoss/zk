@@ -210,21 +210,11 @@ java.io.Serializable {
 
 	
 	public E getChild(int[] path) {
-		E parent = getRoot();
-		if (path.length == 0) return parent;
-		
-		E node = null;
-		int childCount = _childCount(parent);
-		for (int i = 0; i < path.length; i++) {
-			if (path[i] < 0 || path[i] > childCount)
+		E node = getRoot();		
+		for (int childCount = 0, i = 0; i < path.length && node != null; i++) {
+			if (path[i] < 0 || path[i] > (childCount = _childCount(node)))
 				return null;
-			node = getChild(parent, path[i]);
-
-			if (node != null && (childCount = _childCount(node)) > 0) {
-				parent = node;
-			} else if (i != path.length - 1) {
-				return null;
-			}
+			node = getChild(node, path[i]);
 		}
 		return node;
 	}

@@ -241,6 +241,11 @@ public class Wpds {
 		//since ZK 6.5.5
 		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.processMask.enabled")))
 			sb.append("zk.processMask=true;\n");
+		
+		//since ZK 7.0.5
+		//since ZK 8.0.0 default is false
+		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled", "false")))
+			sb.append("if (zk.invokeFirstRootForAfterKeyDown == undefined)zk.invokeFirstRootForAfterKeyDown=true;\n");
 			
 		return sb.toString();
 	}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2562.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Feb 25, 2015  4:59:12 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	DefaultTreeNode example:
+	<window width="100%" border="none" mode="embedded"
+		apply="org.zkoss.zktest.test2.B70_ZK_2562">
+		<button id="mybtn" label="Insert node" />
+		<tree id="mytree">
+			<treecols>
+				<treecol label="Name" />
+			</treecols>
+		</tree>
+	</window>
+</zk>

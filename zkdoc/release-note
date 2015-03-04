@@ -40,12 +40,14 @@ ZK 8.0.0
   + Removed the icons for upgrading Font Awesome to 4.3
   	*. z-icon-expand-o
   	*. z-icon-collapse-o
+  + The library property of org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled is false by default.
 
 
 
   --------
 ZK 7.0.5
 * Features
+  ZK-2644: Add a way to turn off the seeking first root widget for afterKeyDown event
 
 * Bugs
   ZK-2564: vm.items not sync after window serialization and deserialization
@@ -72,6 +74,23 @@ ZK 7.0.5
   ZK-2611: Inconsistency in TreeModel when changing the model
   ZK-2589: Tree ROD failing after open/close a node
   ZK-2622: Native component with nested script tag will cause JS error
+  ZK-2518: The "accept" attribute of Button used to upload doesn't work for multiple file type
+  ZK-2607: Setting new itemRenderer does not refresh Selectbox
+  ZK-2574: Long operation Pattern (generic approach) not working for Servlet 3
+  ZK-1132: Support for .zul files taken from web-fragment projects
+  ZK-2626: treerow height for autopaging is not consistency with default mold
+  ZK-2636: Form validator didn't get value to validate selectedItem attribute if adding new item to Combobox's ListModel
+  ZK-2562: Wrong tree rendering after adding node with tree model
+  ZK-2516: center content flickers in ZK 7 when invalidating
+  ZK-2544: Clicking on combobox button does not select listitem when nonselectableTags=""
+  ZK-2606: listitem.setParent loses selected flag
+  ZK-2624: Page controls didn't show when using autopaging in Grid/Tree
+  ZK-2639: performance issue with AbstractTreeModel and render on demand
+  ZK-2567: Include html file throw UiException with auto mode
+  ZK-2640: Navigate textboxes in mesh widget headers by tab key misaligned headers with cell content [FF, IE11]
+  ZK-2587: Firefox drag and drop problem within tabbox
+  ZK-2619: Errorbox not shown when WrongValueException is thrown on a multiline textbox
+  ZK-2635: Navbar (collapsible) changes position when selecting
 
 * Upgrade Notes
   --------

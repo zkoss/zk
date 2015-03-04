@@ -2006,6 +2006,11 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		try {
+			try {
+				execCtrl.onBeforeDeactivate();
+			} catch (Throwable ex) {
+				log.warn("Failed to be deactiving", ex);
+			}
 			//Unlock desktop
 			final Object uvlock = desktopCtrl.getActivationLock();
 			synchronized (uvlock) {
