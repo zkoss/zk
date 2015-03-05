@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -130,7 +131,9 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			}
 			if (eq != null) {
 				Execution execution = Executions.getCurrent();
-				if (execution == null) {
+				
+				// if the runtime is not in servlet 3.0, we use the original way to close.
+				if (execution == null || WebApps.getCurrent().getServletContext().getMajorVersion() < 3) {
 					eq.close();
 				} else {
 					// Bug ZK-2574
