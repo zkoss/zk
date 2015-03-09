@@ -500,24 +500,10 @@ public interface ComponentCtrl {
 	public void enableBindingAnnotation();
 	
 	/**
-	 * Set to enable the component with binding annotation. (Internal or component developer use only.)
-	 * @param recursive update parents
-	 * @since 8.0.0
-	 */
-	public void enableBindingAnnotation(boolean recursive);
-	
-	/**
 	 * Set to disable the component with binding annotation. (Internal or component developer use only.)
 	 * @since 8.0.0
 	 */
 	public void disableBindingAnnotation();
-	
-	/**
-	 * Set to disable the component with binding annotation. (Internal or component developer use only.)
-	 * @param recursive update parents
-	 * @since 8.0.0
-	 */
-	public void disableBindingAnnotation(boolean recursive);
 	
 	/**
 	 * Returns whether the component itself has binding annotation or not. (Internal or component developer use only.)

@@ -86,9 +86,6 @@ public interface BinderCtrl {
 	public static final String CHILDREN_BINDING_MODEL = "$CHILDREN_BINDING_MODEL$";
 	public static final String CHILDREN_BINDING_MODEL_LISTENER = "$CHILDREN_BINDING_MODEL_LISTENER$";
 	
-	//F80: Speed up render, check component's subBinderAnnotation
-	public static final String UPDATE_SUBBINDING_RECURSIVE = "$UPDATE_SUBBINDING_RECURSIVE$";
-	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
 	 * @param associatedComp associated component inside a form binding

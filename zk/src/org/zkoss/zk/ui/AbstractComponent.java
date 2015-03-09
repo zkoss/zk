@@ -3811,31 +3811,20 @@ w:use="foo.MyWindow"&gt;
 	}
 	
 	public void enableBindingAnnotation() {
-		setBindingAnnotation0(true, true);
-	}
-	
-	public void enableBindingAnnotation(boolean recursive) {
-		setBindingAnnotation0(true, recursive);
+		setBindingAnnotation0(true);
 	}
 	
 	public void disableBindingAnnotation() {
-		setBindingAnnotation0(false, true);
+		setBindingAnnotation0(false);
 	}
 	
-	public void disableBindingAnnotation(boolean recursive) {
-		setBindingAnnotation0(true, recursive);
-	}
-	
-	private void setBindingAnnotation0(boolean hasBindingAnnot, boolean recursive) {
+	private void setBindingAnnotation0(boolean hasBindingAnnot) {
 		AuxInfo auxinf = initAuxInfo();
 		boolean old = auxinf.hasBindingAnnot;
 		if (old != hasBindingAnnot) {
 			int diff = hasBindingAnnot ? 1 : -1;
 			auxinf.hasBindingAnnot = hasBindingAnnot;
-			if (recursive)
-				updateSubBindingAnnotationCount(diff);
-			else
-				setSubBindingAnnotationCount(diff, this);
+			updateSubBindingAnnotationCount(diff);
 		}
 	}
 }

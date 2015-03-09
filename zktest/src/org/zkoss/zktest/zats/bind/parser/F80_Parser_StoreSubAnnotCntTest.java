@@ -20,9 +20,10 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 		ComponentAgent rt = desktop.query("#root");
 		ComponentAgent w1 = desktop.query("#root #w1");
 		ComponentAgent l1 = desktop.query("#root #w1").getChild(0);
+		ComponentAgent dabtn = desktop.query("#root #w1").getChild(1);
 		ComponentAgent w2 = desktop.query("#root #w1 #w2");
 		ComponentAgent l2 = desktop.query("#root #w1 #w2").getChild(0);
-		ComponentAgent testb1 =  desktop.query("#root #w1 #w2 #test1");
+		ComponentAgent testb1 = desktop.query("#root #w1 #w2 #test1");
 		ComponentAgent w3 = desktop.query("#root #w3");
 		ComponentAgent l3 = desktop.query("#root #w3").getChild(0);
 		ComponentAgent testb2 =  desktop.query("#root #w3 #test2");
@@ -32,6 +33,7 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 		int rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
 		int w1_scnt = w1.as(Window.class).getSubBindingAnnotationCount();
 		int l1_scnt = l1.as(Label.class).getSubBindingAnnotationCount();
+		int dabtn_scnt = dabtn.as(Button.class).getSubBindingAnnotationCount();
 		int w2_scnt = w2.as(Window.class).getSubBindingAnnotationCount();
 		int l2_scnt = l2.as(Label.class).getSubBindingAnnotationCount();
 		int testb1_scnt = testb1.as(Button.class).getSubBindingAnnotationCount();
@@ -48,17 +50,33 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 
 		//button
 		assertEquals(testb1_scnt, 1);
+		assertEquals(dabtn_scnt, 1);
 		assertEquals(testb2_scnt, 1);
 		assertEquals(testb3_scnt, 1);
 		
 		//windows
 		assertEquals(w2_scnt, l2_scnt + testb1_scnt+ 1);
-		assertEquals(w1_scnt, l1_scnt + w2_scnt + 1);
+		assertEquals(w1_scnt, l1_scnt + w2_scnt + dabtn_scnt + 1);
 		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt + 1);
 		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
 		
 		//children binding
 		assertEquals(c_scnt, 5);
+		
+		//Event - detach then attach (Composer)
+		dabtn.click();
+		w2 = desktop.query("#root #w1 #w2");
+		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+		w1_scnt = w1.as(Window.class).getSubBindingAnnotationCount();
+		w2_scnt = w2.as(Window.class).getSubBindingAnnotationCount();
+		l2_scnt = l2.as(Label.class).getSubBindingAnnotationCount();
+		assertEquals(l1_scnt, 1);
+		assertEquals(l2_scnt, 1);
+		assertEquals(testb1_scnt, 1);
+		//windows
+		assertEquals(w2_scnt, l2_scnt + testb1_scnt+ 1);
+		assertEquals(w1_scnt, l1_scnt + dabtn_scnt + w2_scnt + 1);
+		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
 		
 		//Event - add label
 		ComponentAgent add = desktop.query("#root #add");
@@ -143,7 +161,7 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 		w2_scnt = w2.as(Window.class).getSubBindingAnnotationCount();
 		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
 	   
-		assertEquals(w1_scnt, l1_scnt + 1);
+		assertEquals(w1_scnt, l1_scnt + dabtn_scnt + 1);
 		assertEquals(w2_scnt, l2_scnt + testb1_scnt + 1);
 		assertEquals(rt_scnt,  w1_scnt + w2_scnt + w3_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
 		
@@ -155,7 +173,7 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 		w2_scnt = w2.as(Window.class).getSubBindingAnnotationCount();
 		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
 		assertEquals(w2_scnt, l2_scnt + testb1_scnt + 1);
-		assertEquals(w1_scnt, l1_scnt + w2_scnt + 1);
+		assertEquals(w1_scnt, l1_scnt + dabtn_scnt + w2_scnt + 1);
 		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
 		
 		//Event - remove w3

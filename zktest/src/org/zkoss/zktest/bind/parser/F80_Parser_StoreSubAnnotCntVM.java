@@ -7,16 +7,27 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zktest.bind.basic.ChildrenSimpleVM;
 import org.zkoss.zktest.bind.basic.ChildrenSimpleVM.Node;
+import org.zkoss.zul.Window;
 
 public class F80_Parser_StoreSubAnnotCntVM {
+	
+	@Wire("#w1")
+	private Window w1;
+	@Wire("#w2")
+	private Window w2;
 	
 	private String label1 = "test1";
 	private String label2 = "test2";
@@ -34,21 +45,29 @@ public class F80_Parser_StoreSubAnnotCntVM {
 		return label3;
 	}
 
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
+	}
+	
 	@Command @NotifyChange("label1")
 	public void func1() {
-		System.out.println("func1");
 		label1 += "<f1>";
+	}
+	
+	@Command
+	public void detach_attach() {
+	    w2.detach();
+	    w1.appendChild(w2);
 	}
 	
 	@Command @NotifyChange("label2")
 	public void func2() {
-		System.out.println("func2");
 		label2 += "<f2>";
 	}
 	
 	@Command @NotifyChange("label3")
 	public void func3() {
-		System.out.println("func3");
 		label3 += "<f3>";
 	}
 	
