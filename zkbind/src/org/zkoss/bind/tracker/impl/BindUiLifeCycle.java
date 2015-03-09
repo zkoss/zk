@@ -55,6 +55,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	static final Logger log = LoggerFactory.getLogger(BindUiLifeCycle.class);
 	private static final String ON_ZKBIND_LATER = "onZKBindLater";
 	private static final String REMOVE_MARK = "$$RemoveMark$$";
+	//F80: Speed up render, check component's subBinderAnnotation
+	private static final String SKIP_BIND_INIT = "$$SkipBindInitMark$$";
 	private static Extension _ext;
 	
 	public void afterComponentAttached(Component comp, Page page) {
@@ -62,6 +64,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 	
 	protected void handleComponentAttached(Component comp){
+		//F80: Speed up render, check component's subBinderAnnotation
+		if (!Boolean.FALSE.equals(comp.removeAttribute(SKIP_BIND_INIT)) && comp instanceof ComponentCtrl 
+				&& !((ComponentCtrl)comp).hasSubBindingAnnotation() && !(comp instanceof ShadowElement))
+			return;
+		
 		//ZK-2022, check if this component is in queue for removal 
 		//if yes, then post and do processing later
 		boolean removeMark = Boolean.TRUE.equals(comp.getAttribute(REMOVE_MARK));
@@ -165,6 +172,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				final Component comp = event.getTarget();
 				comp.removeAttribute(REMOVE_MARK);
 				comp.removeEventListener(BinderImpl.ON_BIND_CLEAN, this);
+				//F80: Speed up render, check component's subBinderAnnotation
+				comp.setAttribute(BinderCtrl.UPDATE_SUBBINDING_RECURSIVE, false);
 				removeBindings(comp);
 			}
 		});
@@ -178,6 +187,9 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				model.removeListDataListener(listener);
 			}
 		}
+		
+		//F80: Speed up render, check component's subBinderAnnotation
+		comp.setAttribute(SKIP_BIND_INIT, false);
 		// post ON_BIND_INIT event
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
 	}
