@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2647.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Mar 09, 2015 11:14:56 AM, Created by Han
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="native">
+	<label multiline="true">
+		1. Open the page, there should not be any maximum call stack size exceeded js error shown
+		2. Resize the page, the page rendering should not be blocked by infinate loop
+	</label>
+	<hbox align="start" pack="start" spacing="0px"  vflex="1" hflex="1">
+<!-- 	causes the problem: width="100%" + hflex -->
+	    <tabbox tabscroll="true" orient="top" maximalHeight="false" onCreate="self.selectedIndex = 0" width="100%" vflex="1" hflex="100">
+<!-- 	fixes the problem: no width="100%" just hflex -->
+<!-- 	    <tabbox tabscroll="true" orient="top" maximalHeight="false" onCreate="self.selectedIndex = 0" vflex="1" hflex="100"> -->
+	        <tabs>
+	            <tab selected="true" label="Willkommen" sclass="gof_objecttab" tooltiptext="Willkommen"/>
+	        </tabs>
+	        <tabpanels>
+	        </tabpanels>
+	    </tabbox>
+    </hbox>
+</zk>
