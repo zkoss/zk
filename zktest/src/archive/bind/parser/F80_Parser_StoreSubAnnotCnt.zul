@@ -3,6 +3,7 @@
 	<window id="root" apply="org.zkoss.zktest.bind.parser.F80_Parser_StoreSubAnnotCntComposer">
 		<window id="w1" viewModel="@id('vm1') @init('org.zkoss.zktest.bind.parser.F80_Parser_StoreSubAnnotCntVM')" >
 			<label id="l1" value="@load(vm1.label1)" />
+			<button id="detach_attach" label="detach_attach" onClick="@command('detach_attach')"/>/>
 			<window id="w2" viewModel="@id('vm2') @init('org.zkoss.zktest.bind.parser.F80_Parser_StoreSubAnnotCntVM')" >
 				<label id="l2" value="@load(vm2.label2)" />
 				<button id="test1" label="@load(vm2.label1)" onClick="@command('func1')"/>

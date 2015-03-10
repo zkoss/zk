@@ -64,11 +64,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 	
 	protected void handleComponentAttached(Component comp){
-		//F80: Speed up render, check component's subBinderAnnotation
-		if (!Boolean.FALSE.equals(comp.removeAttribute(SKIP_BIND_INIT)) && comp instanceof ComponentCtrl 
-				&& !((ComponentCtrl)comp).hasSubBindingAnnotation() && !(comp instanceof ShadowElement))
-			return;
-		
 		//ZK-2022, check if this component is in queue for removal 
 		//if yes, then post and do processing later
 		boolean removeMark = Boolean.TRUE.equals(comp.getAttribute(REMOVE_MARK));
@@ -85,6 +80,10 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			});
 			Events.postEvent(new Event(ON_ZKBIND_LATER, comp));
 			return;
+		} else if (!Boolean.FALSE.equals(comp.removeAttribute(SKIP_BIND_INIT))){
+			//F80: Speed up render, check component's subBinderAnnotation
+			if (comp instanceof ComponentCtrl && !((ComponentCtrl)comp).hasSubBindingAnnotation() && !(comp instanceof ShadowElement))
+				return;
 		}
 		if (comp.getDesktop() != null || comp instanceof ShadowElement) {
 			//check if this component already binded
@@ -172,8 +171,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				final Component comp = event.getTarget();
 				comp.removeAttribute(REMOVE_MARK);
 				comp.removeEventListener(BinderImpl.ON_BIND_CLEAN, this);
-				//F80: Speed up render, check component's subBinderAnnotation
-				comp.setAttribute(BinderCtrl.UPDATE_SUBBINDING_RECURSIVE, false);
 				removeBindings(comp);
 			}
 		});
