@@ -301,7 +301,13 @@ public class TrackerImpl implements Tracker, Serializable {
 			removeBeanMap(node);
 			
 			//add into _beanMap
-			if (!BindELContext.isImmutable(value)) {
+
+			// comment out the if condition is to support the method expression with parameter for tracker nodes
+			// For example, MODEL$uuid[self.getAttribute("something").getCurrentIndex(self)]
+			// If the returned value of self.getAttribute("something") is an immutable object,
+			// we still need it to be trackable so that the tracker node with getCurrentIndex(self) will be found
+			// when the given seeking object is that retuned by getAttribute("something")
+			//if (!BindELContext.isImmutable(value)) {
 				Set<TrackerNode> nodes = _beanMap.get(value);
 				//ZK-2289
 				final Set<TrackerNode> nodes0 = AllocUtil.inst.addLinkedHashSet(nodes, node);
@@ -313,7 +319,7 @@ public class TrackerImpl implements Tracker, Serializable {
 				}
 				//only when value is not a primitive that we shall store it
 				node.setBean(value);
-			}
+			//}
 		}
 		
 		//maybe a head node, try remove it from the nullMap

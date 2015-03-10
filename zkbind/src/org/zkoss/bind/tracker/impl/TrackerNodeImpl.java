@@ -70,7 +70,12 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 			set.add(kid);
 		}
 
-		final Object script = _brackets.get(property);
+		Object script = _brackets.get(property);
+		if (script == null && _brackets != null && property instanceof String) {
+			String prop = (String) property;
+			if (prop.startsWith("[") && prop.endsWith("]"))
+				script = _brackets.get(prop.substring(1, prop.length() - 1));
+		}
 		if (script != null) {
 			kid = getDependent0(script);
 		}

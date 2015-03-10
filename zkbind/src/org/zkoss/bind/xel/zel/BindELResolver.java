@@ -33,10 +33,12 @@ import org.zkoss.zel.CompositeELResolver;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
+import org.zkoss.zel.MethodNotFoundException;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.StandardELContext;
 import org.zkoss.zel.impl.lang.EvaluationContext;
+import org.zkoss.zel.impl.parser.AstMethodParameters;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -102,6 +104,49 @@ public class BindELResolver extends XelELResolver {
 		return value;
 	}
 	
+	@Override
+	public Object invoke(ELContext ctx, Object base, Object method,
+			Class[] paramTypes, Object[] params) throws MethodNotFoundException {
+		Object value = super.invoke(ctx, base, method, paramTypes, params);
+		// in order to support more complex case, ex: .stream().filter(x -> x.contains(vm.value))
+		final BindELContext bctx;
+		ELContext ec = ((EvaluationContext)ctx).getELContext();
+		if (ec instanceof BindELContext)
+			bctx = (BindELContext)ec;
+		else {
+			bctx = (BindELContext)((EvaluationContext)ec).getELContext();
+		}
+		
+		Object ignoreRefVal = bctx.getAttribute(BinderImpl.IGNORE_REF_VALUE);
+		
+		//ZK-950: The expression reference doesn't update while change the instant of the reference
+		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding)value : null;
+		if (rbinding != null) {
+			//ZK-1299 Use @ref and save after will cause null point exception
+			if (Boolean.TRUE.equals(ignoreRefVal)) {
+				return rbinding;
+			}
+//			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
+			value = rbinding.getValue(bctx);
+			final Object invalidateRef = bctx.getAttribute(BinderCtrl.INVALIDATE_REF_VALUE);
+			if ("true".equalsIgnoreCase(String.valueOf(invalidateRef)))
+				rbinding.invalidateCache();
+		}
+		
+		AstMethodParameters mps = (AstMethodParameters) bctx.getContext(AstMethodParameters.class);
+		
+		if (mps != null) {
+			String result = BindELContext.toNodeString(mps, new StringBuilder());
+			
+			Path newPath = new Path();
+			newPath.add(String.valueOf(method) +  result, String.valueOf(method) + result);
+			bctx.putContext(Path.class, newPath);
+		}
+		//If value evaluated to a ReferenceBinding, always tie the ReferenceBinding itself as the 
+		//evaluated bean, @see TrackerImpl#getLoadBindings0() and TrackerImpl#getAllTrackerNodesByBeanNodes()
+		tieValue(ctx, base, method, rbinding != null ? rbinding : value, false);
+		return value;
+	}
 	public void setValue(ELContext ctx, Object base, Object property, Object value)
 	throws PropertyNotFoundException, PropertyNotWritableException, ELException {
 		
@@ -163,7 +208,9 @@ public class BindELResolver extends XelELResolver {
 		final Binding binding = ctx.getBinding();
 		//only there is a binding that needs tie tracking to value
 		if (binding != null) {
-        	final int nums = ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
+			// In F80-ZK-2696.zul test case, the getContext() with Integer.class may be null
+			// so we put -1 to skip the following condition with nums.
+        	final int nums = ctx.getContext(Integer.class) == null ? -1 : ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
         	final Path path = getPathList(ctx);
         	
         	String script = null;

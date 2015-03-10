@@ -168,9 +168,14 @@ public final class AstValue extends SimpleNode {
                 }
                 // This is a method
                 Object[] paramValues = mps.getParameters(ctx);
+
+				// for BindELResolver to use
+                ctx.putContext(AstMethodParameters.class, mps);
+                
                 /*base = resolver.invoke(ctx, base, suffix, null, paramValues);*/
                 base = resolver.invoke(ctx, base, suffix,
                         getTypesFromValues(paramValues), paramValues);
+                
                 i+=2;
             } else {
                 // This is a property
