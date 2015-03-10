@@ -187,12 +187,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					for (var it = this.getBodyWidgetIterator(); selected-- >=0;)
 						w = it.next();
 					if (w) {
+						var isMultiSelected = this._selItems.length > 1;
 						this._selectOne(w, true);
-						var bar = this._scrollbar;
-						if (bar)
-							bar.scrollToElement(item.$n());
-						else
-							zk(w).scrollIntoView(this.ebody);
+						
+						// refix ZK-1483: do not have to scroll selected item into view when multiple items are selected
+						if (!isMultiSelected) {
+							var bar = this._scrollbar;
+							if (bar)
+								bar.scrollToElement(item.$n());
+							else
+								zk(w).scrollIntoView(this.ebody);
+						}
 					}
 				}
 			}
@@ -300,14 +305,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (!item)
 			this.clearSelection();
 		else {
+			var isMultiSelected = this._selItems.length > 1;
 			this._selectOne(item, true);
-			// Bug ZK-1483: Jumpy scrollbar for listbox with rod when items are selected
-			var bar = this._scrollbar;
-			if (bar)
-				bar.scrollToElement(item.$n());
-			if (this._nativebar)
-				zk(item).scrollIntoView(this.ebody);
-		
+			
+			// refix ZK-1483: do not have to scroll selected item into view when multiple items are selected
+			if (!isMultiSelected) {
+				var bar = this._scrollbar;
+				if (bar)
+					bar.scrollToElement(item.$n());
+				if (this._nativebar)
+					zk(item).scrollIntoView(this.ebody);
+			}
+			
 			if (zk.ff >= 4 && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop; 
