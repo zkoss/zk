@@ -46,7 +46,8 @@ ZK 7.0.5
   ZK-2619: Errorbox not shown when WrongValueException is thrown on a multiline textbox
   ZK-2635: Navbar (collapsible) changes position when selecting
   ZK-2645: Listbox rendered incorrect when ROD enabled
-
+  ZK-2648: Icons are not centered vertically inside paging control
+  
 * Upgrade Notes
 
   --------
