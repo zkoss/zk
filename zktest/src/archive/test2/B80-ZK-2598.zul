@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2598.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Mar 23, 2015  4:16:25 PM, Created by hanhsu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. the page should be rendered without any exception
+		2. click on each of the three buttons, should all alert the forward event.
+	</label>
+	<include src="B80-ZK-2598_forward.zul"/>
+</zk>
