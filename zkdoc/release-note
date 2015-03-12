@@ -47,7 +47,8 @@ ZK 7.0.5
   ZK-2635: Navbar (collapsible) changes position when selecting
   ZK-2645: Listbox rendered incorrect when ROD enabled
   ZK-2648: Icons are not centered vertically inside paging control
-  
+  ZK-2652: Chosenbox popup is fixed in position during mouse wheel scrolling when ca:data-scrollable="true"
+
 * Upgrade Notes
 
   --------
