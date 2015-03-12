@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2650.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Mar 12, 2015 11:40:54 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window xmlns:w="client">
+	Please click the button, you should see "myData" in the zk log console. (EE version only)
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2650')">
+		<button label="Click Me" w:onClick='zkbind.$(this).command("dataChange", {data:{title: "myData"}});'/> 
+	</div>
+</window>

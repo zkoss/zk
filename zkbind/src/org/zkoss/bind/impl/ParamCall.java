@@ -14,10 +14,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 
+
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Converter;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.SelectorParam;
 import org.zkoss.bind.annotation.ContextParam;
@@ -32,8 +37,8 @@ import org.zkoss.bind.annotation.Scope;
 import org.zkoss.bind.annotation.ScopeParam;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ReferenceBinding;
+import org.zkoss.json.JSONAware;
 import org.zkoss.lang.Classes;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -54,6 +59,7 @@ public class ParamCall {
 	private ContextObjects _contextObjects;
 	
 	private static final String COOKIE_CACHE = "$PARAM_COOKIES$";
+	public static final String  BINDING_PARAM_CALL_TYPE = "org.zkoss.bind.BindingParamCall.type";
 	
 	private Component _root = null;
 	private Component _component = null;
@@ -101,8 +107,26 @@ public class ParamCall {
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
 			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
-				Object val = bindingArgs.get(((BindingParam) anno).value()); 
-				return val==null?null:Classes.coerce(returnType, val);
+				Object val = bindingArgs.get(((BindingParam) anno).value());
+				if (val instanceof JSONAware) {
+					BindContext bindContext = getBindContext();
+					Binder binder = getBinder();
+					@SuppressWarnings("rawtypes")
+					Converter converter = binder.getConverter("jsonBindingParam");
+					if (converter != null) {
+						try {
+							bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, returnType);
+							@SuppressWarnings("unchecked")
+							Object result = converter.coerceToBean(val, binder.getView(), bindContext);
+							return result;
+						} finally {
+							bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, null);
+						}
+					} else 
+						return Classes.coerce(returnType, val);
+				} else {
+					return val==null?null:Classes.coerce(returnType, val);
+				}
 			}
 		});
 	}

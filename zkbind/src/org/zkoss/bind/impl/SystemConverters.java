@@ -22,8 +22,8 @@ import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
+import org.zkoss.bind.converter.sys.DefaultJSONBindingParamConverter;
 import org.zkoss.lang.Classes;
-
 import org.zkoss.zk.ui.UiException;
 /**
  * To keep system level converters, the built-in converters are initialized when first accessing.
@@ -52,6 +52,9 @@ public class SystemConverters {
 			
 			//zk 1548
 			set0("childrenBinding", new ChildrenBindingConverter());
+
+			// ZK-2650 new feature.
+			set0("jsonBindingParam", new DefaultJSONBindingParamConverter());
 			
 			_init = true;
 		}
