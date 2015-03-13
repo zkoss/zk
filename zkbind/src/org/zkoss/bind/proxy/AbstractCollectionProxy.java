@@ -29,11 +29,14 @@ import org.zkoss.lang.Objects;
  * @since 8.0.0
  */
 public abstract class AbstractCollectionProxy<E> implements Collection<E>,
-		Proxy, FormProxyObject, Serializable {
+		Proxy, FormProxyObject, Serializable, FormProxyObjectListener{
 	private Collection<E> _cache;
 	private static final long serialVersionUID = 20141225142801L;
 	private Object _origin;
 	protected boolean _dirty;
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	private FormProxyObjectListener _listener;
+	
 	public AbstractCollectionProxy(Collection<E> origin) {
 		_origin = origin;
 		_cache = initCache();
@@ -56,6 +59,27 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 		return old;
 	}
 
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	public void addFormProxyObjectListener(FormProxyObjectListener l) {
+		if (_listener == null) _listener = l;
+	}
+	
+	public void onDirtyChange() {
+		if (_listener != null) _listener.onDirtyChange();
+	}
+	
+	public void onDataChange(Object o) {
+		if (_listener != null) _listener.onDataChange(o);
+	}	
+	
+	protected void setDirty(boolean d) {
+		if (_dirty != d) {
+			_dirty = d;
+			onDirtyChange();
+		}
+		if (d) onDataChange(this);
+	}
+	
 	public void setHandler(MethodHandler mi) {
 		throw new UnsupportedOperationException("Not support!");
 	}
@@ -83,7 +107,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	}
 
 	public void clear() {
-		_dirty = true;
+		setDirty(true);
 		_cache.clear();
 	}
 	
@@ -100,16 +124,16 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	}
 	
 	public boolean add(E e) {
-		if (_cache.add(ProxyHelper.createProxyIfAny(e))) {
-			_dirty = true;
+		if (_cache.add(createProxyObject(e))) {
+			setDirty(true);
 			return true;
 		}
 		return false;
 	}
 
 	public boolean remove(Object o) {
-		if (_cache.remove(ProxyHelper.createProxyIfAny(o))) {
-			_dirty = true;
+		if (_cache.remove(createProxyObject(o))) {
+			setDirty(true);
 			return true;
 		}
 		return false;
@@ -123,7 +147,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 			modified = true;
 		}
 		if (modified)
-			_dirty = true;
+			setDirty(true);
 		return modified;
 	}
 
@@ -139,7 +163,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	public boolean removeAll(Collection<?> c) {
 		boolean modified = false;
 		Iterator<?> e = iterator();
-		c = ProxyHelper.createProxyIfAny(c); // use a proxy object to compare
+		c = createProxyObject(c); // use a proxy object to compare
 		while (e.hasNext()) {
 			if (c.contains(e.next())) {
 				e.remove();
@@ -147,7 +171,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 			}
 		}
 		if (modified)
-			_dirty = true;
+			setDirty(true);
 		return modified;
 	}
 
@@ -168,7 +192,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	public boolean retainAll(Collection<?> c) {
 		boolean modified = false;
 		Iterator<E> e = iterator();
-		c = ProxyHelper.createProxyIfAny(c); // use a proxy object to compare
+		c = createProxyObject(c); // use a proxy object to compare
 		while (e.hasNext()) {
 			if (!c.contains(e.next())) {
 				e.remove();
@@ -176,16 +200,16 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 			}
 		}
 		if (modified)
-			_dirty = true;
+			setDirty(true);
 		return modified;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void resetFromOrigin() {
 		getCache().clear();
-		_dirty = false;
+		setDirty(false);
 		for (E e : (Collection<E>)getOriginObject()) {
-			getCache().add(ProxyHelper.createProxyIfAny(e));
+			getCache().add(createProxyObject(e));
 		}
 	}
 
@@ -228,5 +252,15 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	
 	public void setFormOwner(Object owner, FormBinding binding) {
 		throw new IllegalAccessError("Not supported");
+	}
+	
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	private <T extends Object> T createProxyObject(T t) {
+		T p = ProxyHelper.createProxyIfAny(t);
+		if (p instanceof FormProxyObject) {
+			FormProxyObject fpo = (FormProxyObject) p;
+			fpo.addFormProxyObjectListener(this);
+		}
+		return p;
 	}
 }

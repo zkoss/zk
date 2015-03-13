@@ -47,4 +47,9 @@ public interface FormProxyObject {
 	 * @param owner the object associated with this form.
 	 */
 	public void setFormOwner(Object owner, FormBinding binding);
+	
+	/**
+	 * Add listener
+	 */
+	public void addFormProxyObjectListener(FormProxyObjectListener l);
 }

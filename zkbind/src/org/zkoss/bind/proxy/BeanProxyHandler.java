@@ -127,6 +127,9 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 							}
 						}
 						return dirty;
+				} else if ("addFormProxyObjectListener".equals(method.getName())) {
+					//F80: formProxyObject support notifyChange with Form.isDirty
+					return null;
 				} else {
 					throw new IllegalAccessError("Not implemented yet for FormProxyObject interface: [" + method.getName() + "]");
 				}
