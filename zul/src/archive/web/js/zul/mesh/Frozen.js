@@ -262,7 +262,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	beforeParentChanged_: function (p) {
 		//bug B50-ZK-238
-		if (this._lastScale) //if large then 0
+		//ZK-2651: JS Error showed when clear grid children component that include frozen
+		if (this.desktop && this._lastScale) //if large then 0
 			this._doScroll(0);
 		
 		this.$supers('beforeParentChanged_', arguments);
