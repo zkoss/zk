@@ -1,0 +1,4 @@
+<?init class="org.zkoss.zktest.test2.B70_ZK_2649RedirectInit" ?>
+<zk>
+	If you see this, the bug still remains
+</zk>

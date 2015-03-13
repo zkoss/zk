@@ -1019,7 +1019,32 @@ public class HtmlPageRenders {
 				.append("');").append(outSpecialJS(desktop))
 				.append("\n</script>\n");
 		}
-
+		
+		// Bug ZK-2649
+		if ("complete".equals(exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL))) {
+			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+			final Collection responses = execCtrl.getResponses();
+			if (responses != null && !responses.isEmpty()) {
+				execCtrl.setResponses(null);
+				sb.append("\n<script>zk.afterMount(function(){\n");
+				for (Iterator it = responses.iterator(); it.hasNext();) {
+					final AuResponse response = (AuResponse)it.next();
+					sb.append("zAu.process('").append(response.getCommand())
+						.append("'");
+	
+					final List encdata = response.getEncodedData();
+					if (encdata != null)
+						sb.append(",'")
+							.append(Strings.escape(
+								org.zkoss.json.JSONArray.toJSONString(encdata),
+								Strings.ESCAPE_JAVASCRIPT))
+							.append('\'');
+					sb.append(");\n");
+				}
+				sb.append("});\n</script>\n");
+			}
+		}
+		
 		return sb.toString();
 	}
 	/** Returns if the ZK specific HTML tags are generated.

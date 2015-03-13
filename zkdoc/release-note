@@ -47,6 +47,7 @@ ZK 7.0.5
   ZK-2635: Navbar (collapsible) changes position when selecting
   ZK-2645: Listbox rendered incorrect when ROD enabled
   ZK-2648: Icons are not centered vertically inside paging control
+  ZK-2649: Executions.sendRedirect() doesn't work when invoke them from .zhtml page
   
 * Upgrade Notes
 
