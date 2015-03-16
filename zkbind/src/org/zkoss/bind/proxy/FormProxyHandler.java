@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -125,7 +126,21 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 					return _status;
 				}
 				
-				return super.invoke(self, method, proceed, args);
+				//F80: formProxyObject support notifyChange with Form.isDirty
+				Object o =  super.invoke(self, method, proceed, args);
+				if (o instanceof FormProxyObject && mname.startsWith("get")) {
+					FormProxyObject fpo = (FormProxyObject)o;
+					fpo.addFormProxyObjectListener(new FormProxyObjectListener() {
+						public void onDataChange(Object o) {
+							_binding.getBinder().notifyChange(o, ".");
+						}
+
+						public void onDirtyChange() {
+							_binding.getBinder().notifyChange(_binding.getFormBean().getFormStatus(), ".");
+						}
+					});
+				}
+				return o;
 			}
 		} catch (Exception e) {
 			throw new UiException(e);

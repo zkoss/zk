@@ -31,10 +31,12 @@ import org.zkoss.bind.sys.FormBinding;
  * @since 8.0.0
  */
 public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
-		Serializable {
+		Serializable, FormProxyObjectListener{
 	private Map<K, V> _cache;
 	private boolean _dirty;
 	private Map<K, V> _origin;
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	private FormProxyObjectListener _listener;
 
 	private static final long serialVersionUID = 20141226161502L;
 
@@ -62,9 +64,9 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	@SuppressWarnings("unchecked")
 	public void resetFromOrigin() {
 		_cache.clear();
-		_dirty = false;
+		setDirty(false);
 		for (Map.Entry<K, V> me : ((Map<K, V>)getOriginObject()).entrySet()) {
-			_cache.put(me.getKey(), ProxyHelper.createProxyIfAny(me.getValue()));
+			_cache.put(me.getKey(), createProxyObject(me.getValue()));
 		}
 	}
 
@@ -81,9 +83,30 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 				_origin.put(me.getKey(), me.getValue());
 			}
 		}
-		_dirty = false;
+		setDirty(false);
 	}
 
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	public void addFormProxyObjectListener(FormProxyObjectListener l) {
+		if (_listener == null) _listener = l;
+	}
+	
+	public void onDirtyChange() {
+		if (_listener != null) _listener.onDirtyChange();
+	}
+	
+	public void onDataChange(Object o) {
+		if (_listener != null) _listener.onDataChange(o);
+	}	
+	
+	protected void setDirty(boolean d) {
+		if (_dirty != d) {
+			_dirty = d;
+			onDirtyChange();
+		}
+		if (d) onDataChange(this);
+	}
+	
 	public boolean isFormDirty() {
 		if (_dirty) {
 			return true;
@@ -111,12 +134,12 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	}
 
 	public boolean containsKey(Object key) {
-		return _cache.containsKey(ProxyHelper.createProxyIfAny(key));
+		return _cache.containsKey(createProxyObject(key));
 	}
 
 	public boolean containsValue(Object value) {
 		Iterator<V> it = _cache.values().iterator();
-		Object proxyValue = ProxyHelper.createProxyIfAny(value);
+		Object proxyValue = createProxyObject(value);
 		while (it.hasNext()) {
 			if (AbstractCollectionProxy.testEquals(it.next(), proxyValue))
 				return true;
@@ -125,17 +148,17 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	}
 
 	public V get(Object key) {
-		return _cache.get(ProxyHelper.createProxyIfAny(key));
+		return _cache.get(createProxyObject(key));
 	}
 
 	public V put(K key, V value) {
-		_dirty = true;
-		return _cache.put(ProxyHelper.createProxyIfAny(key), ProxyHelper.createProxyIfAny(value));
+		setDirty(true);
+		return _cache.put(createProxyObject(key), createProxyObject(value));
 	}
 
 	public V remove(Object key) {
-		_dirty = true;
-		return _cache.remove(ProxyHelper.createProxyIfAny(key));
+		setDirty(true);
+		return _cache.remove(createProxyObject(key));
 	}
 
 	public void putAll(Map<? extends K, ? extends V> m) {
@@ -144,7 +167,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	}
 
 	public void clear() {
-		_dirty = true;
+		setDirty(true);
 		_cache.clear();
 	}
 
@@ -159,4 +182,15 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	public void setFormOwner(Object owner, FormBinding binding) {
 		throw new IllegalAccessError("Not supported");
 	}
+	
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	private <T extends Object> T createProxyObject(T t) {
+		T p = ProxyHelper.createProxyIfAny(t);
+		if (p instanceof FormProxyObject) {
+			FormProxyObject fpo = (FormProxyObject) p;
+			fpo.addFormProxyObjectListener(this);
+		}
+		return p;
+	}
+
 }
