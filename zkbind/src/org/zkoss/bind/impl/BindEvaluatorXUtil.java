@@ -95,7 +95,7 @@ public class BindEvaluatorXUtil {
 				clz = (Class<BindEvaluatorX>) Classes.forNameByThread(clznm);
 				return clz.getConstructor(FunctionMapper.class).newInstance(fnampper);
 			} catch (Exception e) {
-				throw new UiException("Can't initialize BindEvaluatorX", e);
+				UiException.Aide.wrap(e, "Can't initialize BindEvaluatorX");
 			}
 		}
 		return new BindEvaluatorXImpl(fnampper, org.zkoss.bind.xel.BindXelFactory.class);

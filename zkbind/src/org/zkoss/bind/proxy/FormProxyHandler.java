@@ -143,7 +143,7 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 				return o;
 			}
 		} catch (Exception e) {
-			throw new UiException(e);
+			throw UiException.Aide.wrap(e);
 		}
 	}
 }

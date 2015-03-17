@@ -157,7 +157,7 @@ public class MiscUtil {
 			if(ex instanceof RuntimeException){
 				return (RuntimeException) ex;
 			}else{
-				return new UiException(ex.getMessage(),ex);
+				throw UiException.Aide.wrap(ex, ex.getMessage());
 			}
 		}else{
 			String orgMsg = ex.getMessage();
@@ -167,12 +167,12 @@ public class MiscUtil {
 				if(ex instanceof RuntimeException){
 					return (RuntimeException) ex;
 				}else{
-					return new UiException(ex.getMessage(),ex);
+					throw UiException.Aide.wrap(ex, ex.getMessage());
 				}
 			}else{
-				msg = formatLocationMessage(orgMsg,location,showColumn);
+				msg = ex.getClass().getName() + ": " + formatLocationMessage(orgMsg,location,showColumn);
 				//no way to change exception's message, so use the most common UiException
-				return new UiException(msg,ex);
+				throw UiException.Aide.wrap(ex, msg);
 			}
 			
 		}
