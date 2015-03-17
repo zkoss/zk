@@ -50,6 +50,7 @@ ZK 7.0.5
   ZK-2652: Chosenbox popup is fixed in position during mouse wheel scrolling when ca:data-scrollable="true"
   ZK-2649: Executions.sendRedirect() doesn't work when invoke them from .zhtml page
   ZK-2651: JS Error showed when clear grid children component that include frozen
+  ZK-2627: Text for 2233 message Reload is incorrect in russian localization
 
 * Upgrade Notes
 
