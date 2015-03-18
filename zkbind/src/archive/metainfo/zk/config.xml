@@ -36,6 +36,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.bind.init.ZKBinderPhaseListeners</listener-class>
 	</listener>
 	
+	<listener>
+		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
+	</listener>
+	
+	
 	<binder-config>
 		<binder-init-attribute>viewModel</binder-init-attribute>
 		<binding-annotations>

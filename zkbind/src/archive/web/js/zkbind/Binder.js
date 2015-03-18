@@ -26,10 +26,10 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 		}
 		return null;
 	},
-	$afterCommand: function (command) {
+	$afterCommand: function (command, args) {
 		var binder = this.$binder();
 		if (binder)
-			binder.$doAfterCommand(command);
+			binder.$doAfterCommand(command, args);
 	},
 	unbind_: function () {
 		if (this._$binder) {
@@ -125,6 +125,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 */
 	command: function (cmd, args) {
 		this.$command0(cmd, args);
+		return this;
 	},
 	/**
 	 * Post a command to the binder with a timeout if any.
@@ -149,6 +150,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 */
 	globalCommand: function (cmd, args) {
 		this.$globalCommand0(cmd, args);
+		return this;
 	},
 	/**
 	 * Post a global command from the binder with a timeout if any.
@@ -166,10 +168,10 @@ zkbind.Binder = zk.$extends(zk.Object, {
 			zAu.send(new zk.Event(wgt, "onBindGlobalCommand", {cmd: cmd, args: args}, {toServer:true}));
 		}
 	},
-	$doAfterCommand: function (cmd) {
+	$doAfterCommand: function (cmd, args) {
 		var ac = this._aftercmd[cmd];
 		for (var i = 0, j = ac ? ac.length: 0; i < j; i++) {
-			ac[i].apply(this);
+			ac[i].apply(this, [args]);
 		}
 	}
 }, {

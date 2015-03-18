@@ -15,6 +15,8 @@ import java.io.Serializable;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
+import org.zkoss.bind.impl.ParamCall;
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -31,8 +33,7 @@ public class DefaultJSONBindingParamConverter implements Converter,
 	}
 
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
-		// yes, we just return the original value here.
-		return val;
+		return Classes.coerce((Class)ctx.getAttribute(ParamCall.BINDING_PARAM_CALL_TYPE), val);	
 	}
 
 }
