@@ -23,6 +23,7 @@ ZK 8.0.0
   ZK-2078: FormBinding with collections does not cache the changes
   ZK-2552: Tabbox model NotifyChange problem
   ZK-2592: @validator('formBeanValidator'... does not validate nested properties
+  ZK-2663: Popup does not show up when its parent is native
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
