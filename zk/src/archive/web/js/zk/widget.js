@@ -4861,7 +4861,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 * @param String id the ID
 	 * @return zk.Widget this widget
 	 */
-	setId: zk.$void
+	setId: zk.$void,
+	
+	//ZK-2663: Popup does not show up when its parent is native
+	isRealVisible: function() {
+		return true;
+	}
 },{
 	/** Returns the desktop of the specified desktop ID, widget, widget UUID, or DOM element.
 	 * <p>Notice that the desktop's ID and UUID are the same.
