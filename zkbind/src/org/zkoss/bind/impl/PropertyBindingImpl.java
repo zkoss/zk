@@ -108,7 +108,8 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		return this._accessInfo.getConditionType();
 	}
 	
-	/*package*/ ExpressionX getProperty() {
+	//F80-ZK-2668: New Build-in Converter - FormattedTimeConverter
+	public ExpressionX getProperty() {
 		return this._accessInfo.getProperty();
 	}
 	

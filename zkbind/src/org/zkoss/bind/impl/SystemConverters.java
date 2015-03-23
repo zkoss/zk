@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
+import org.zkoss.bind.converter.FormattedTimeConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
@@ -56,6 +57,8 @@ public class SystemConverters {
 			// ZK-2650 new feature.
 			set0("jsonBindingParam", new DefaultJSONBindingParamConverter());
 			
+			//F80-ZK-2668: New Build-in Converter - FormattedTimeConverter
+			set0("formattedTime", new FormattedTimeConverter());
 			_init = true;
 		}
 	}

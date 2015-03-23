@@ -14,6 +14,7 @@ package org.zkoss.bind.sys;
 import java.util.Map;
 
 import org.zkoss.bind.Converter;
+import org.zkoss.xel.ExpressionX;
 
 /**
  * A binding tells how to deal with Load or Save a field of a source object
@@ -56,4 +57,10 @@ public interface PropertyBinding extends Binding {
 	 * @return an argument <tags, object> pairs map for converter.
 	 */
 	public Map<String,Object> getConverterArgs();
+	
+	/**
+	 * @return the property expression of binding
+	 * @since 8.0.0
+	 */
+	public ExpressionX getProperty();
 }
