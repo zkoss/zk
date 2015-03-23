@@ -1,0 +1,8 @@
+<zk>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.DateTimeboxVM')">
+		Timebox: <timebox id="tb" cols="14" format="a hh:mm:ss" value="@bind(vm.date)"/>
+		<separator/>
+		Datebox: <datebox id="db" cols="25" format="yyyy/MM/dd a hh:mm:ss" value="@bind(vm.date)"/>
+		<separator/>
+	</window>
+</zk>
