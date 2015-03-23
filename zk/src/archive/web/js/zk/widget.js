@@ -4040,8 +4040,6 @@ wgt.setListeners({
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
-	 * @see #doMouseEnter_
-	 * @see #doMouseLeave_
 	 * @see #doMouseOver_
 	 * @see #doMouseOut_
 	 * @see #doMouseDown_
@@ -4063,8 +4061,6 @@ wgt.setListeners({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @see #doMouseMove_
-	 * @see #doMouseEnter_
-	 * @see #doMouseLeave_
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_

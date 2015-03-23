@@ -10,6 +10,10 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
+/**
+ * A FileuploadDlg.
+ * 
+ */
 zul.fud.FileuploadDlg = zk.$extends(zul.wnd.Window, {
 	getZclass: function () { // keep the window's zclass
 		return this._zclass == null ? 'z-window' : this._zclass;
