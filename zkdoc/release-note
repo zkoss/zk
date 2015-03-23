@@ -16,6 +16,7 @@ ZK 8.0.0
   ZK-2631: Parser support another namespace for shadow element
   ZK-2632: Parser support disorder template tag
   ZK-2650: BindingParam annotation support converting from JSON to POJO automatically
+  ZK-2598: forward event behaves inconsistent inside an include
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

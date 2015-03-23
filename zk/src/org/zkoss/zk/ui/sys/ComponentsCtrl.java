@@ -219,16 +219,18 @@ public class ComponentsCtrl {
 			String path = evtexpr.substring(0, j);
 			if (path.length() > 0) {
 				target = null;
-				if (path.indexOf("${") >= 0) {
-					final Object v =
+				
+				// ZK-2598: try to evaluate the path even if its not enclosed by ${}
+				path = path.indexOf("${") >= 0 ? path : "${" + path + "}";
+				
+				final Object v =
 						Executions.evaluate(comp, path, Object.class);
-					if (v instanceof Component) {
-						target = v;
-					} else if (v == null) {
-						throw new ComponentNotFoundException("EL evaluated to null: "+path);
-					} else {
-						path = Objects.toString(v);
-					}
+				if (v instanceof Component) {
+					target = v;
+				} else if (v == null) {
+					throw new ComponentNotFoundException("EL evaluated to null: "+path);
+				} else {
+					path = Objects.toString(v);
 				}
 
 				if (target == null) {
