@@ -90,6 +90,11 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param Function func the function to execute
 	 */
 	after: function (cmd, fn) {
+		if (!fn && jq.isFunction(cmd)) {
+			fn = cmd;
+			cmd = this._lastcmd;
+		}
+			
 		var ac = this._aftercmd[cmd];
 		if (!ac) this._aftercmd[cmd] = [fn];
 		else {
@@ -142,6 +147,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		} else {
 			zAu.send(new zk.Event(wgt, "onBindCommand", {cmd: cmd, args: args}, {toServer:true}));
 		}
+		this._lastcmd = cmd;
 	},
 	/**
 	 * Post a global command from the binder.
@@ -167,6 +173,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		} else {
 			zAu.send(new zk.Event(wgt, "onBindGlobalCommand", {cmd: cmd, args: args}, {toServer:true}));
 		}
+		this._lastcmd = cmd;
 	},
 	$doAfterCommand: function (cmd, args) {
 		var ac = this._aftercmd[cmd];
