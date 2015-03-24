@@ -35,6 +35,7 @@ function _dumpWgt(out, wgt, nLevel, inf) {
 var _defaultIgnore = {draggable: 'false', droppable: 'false', mold: 'default', colspan: 1,
 		scrollTop: 0, scrollLeft: 0, innerWidth: '100%', cols: 0, model: true,
 		sortDirection: 'natural', sortAscending: 'none', sortDescending: 'none',
+		visible: true,
 		columnshide: true, columnsgroup: true},
 	// ignore special attribute for specific component
 	_specialIgnore = {
@@ -42,7 +43,7 @@ var _defaultIgnore = {draggable: 'false', droppable: 'false', mold: 'default', c
 		rows: {visibleItemCount: 1},
 		columns: {menupopup: 1},
 		treeitem: {image: 1, label: 1, zclass: 1},
-		listitem: {label: 1, zclass: 1},
+		listitem: {label: 1, zclass: 1, checkable: 1},
 		include: {content: 1},
 		center: {maxsize: 1, minsize: 1, cmargins: 1, margins: 1, open: 1},
 		paging: {pageCount: 1}
@@ -81,6 +82,31 @@ function _dumpAttrs0(out, nm, wgt) {
 					}
 				}
 					
+			} catch (e) {}
+		}
+	} else if (nm.startsWith('is') && nm.length > 2 && !nm.endsWith('_')) {
+		var setting = 'set' + nm.substring(2),
+			getting = 'get' + nm.substring(2),
+			widgetName = wgt.widgetName;
+		if (typeof wgt[setting] == 'function' && typeof wgt[getting] != 'function') {
+			var key = nm.charAt(2).toLowerCase() + nm.substring(3);
+			try {
+				if (_specialIgnore[widgetName] && _specialIgnore[widgetName][key])
+					return;
+				
+				var value = wgt[nm]();
+				if (typeof value != 'object' && typeof value != 'function' && value != null && value !== '') {
+					if (_defaultIgnore[key] === undefined) {
+						if (key != 'zclass' || value != 'z-' + widgetName) {
+							if (key == "selectedIndex") 
+								out.push(' onCreate="self.selectedIndex = ', value, '"');
+							else 
+								out.push(' ', key, '="', zUtl.encodeXML(zUtl.encodeXML(value)), '"');
+						}
+					} else if (_defaultIgnore[key] !== value && value != 'fromServer') {
+						out.push(' ', key, '="', value, '"');
+					}
+				}
 			} catch (e) {}
 		}
 	}

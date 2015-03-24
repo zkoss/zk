@@ -52,6 +52,7 @@ ZK 8.0.0
 
   --------
 ZK 7.0.5
+March 24, 2015
 * Features
   ZK-2644: Add a way to turn off the seeking first root widget for afterKeyDown event
 
@@ -97,6 +98,13 @@ ZK 7.0.5
   ZK-2587: Firefox drag and drop problem within tabbox
   ZK-2619: Errorbox not shown when WrongValueException is thrown on a multiline textbox
   ZK-2635: Navbar (collapsible) changes position when selecting
+  ZK-2645: Listbox rendered incorrect when ROD enabled
+  ZK-2648: Icons are not centered vertically inside paging control
+  ZK-2652: Chosenbox popup is fixed in position during mouse wheel scrolling when ca:data-scrollable="true"
+  ZK-2649: Executions.sendRedirect() doesn't work when invoke them from .zhtml page
+  ZK-2651: JS Error showed when clear grid children component that include frozen
+  ZK-2627: Text for 2233 message Reload is incorrect in russian localization
+  ZK-2656: ZK 7 JQ selectors not completely working
 
 * Upgrade Notes
   --------

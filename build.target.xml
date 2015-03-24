@@ -331,6 +331,7 @@ if="deploy.tomcat.required">
 	 ]]></bottom>
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
+			<pathelement path="${dist.lib.dir}/zcommons-el.jar"/>
 		</classpath>
 	</javadoc>
 

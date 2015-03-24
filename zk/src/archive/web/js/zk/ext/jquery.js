@@ -2536,7 +2536,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 		function( elem, context, xml ) {
 			//Jumper Chen, Potix 20130509
 			if (hasZTag || hasZID) {
-				var wgt = zk.Widget.$(elem),
+				var wgt = zk.Widget.$(elem, {exact: 1}),
 				getParent = function (wgt) {
 					if (dir === "parentNode")
 						return wgt.parent;
@@ -2545,7 +2545,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 				};
 			
 				// we cannot use dom elem for treechildren, treeitem, and treerow
-				while ((wgt = getParent(wgt)) && (elem = zk.isLoaded('zul.sel') &&
+				while ((wgt = wgt ? getParent(wgt) : zk.Widget.$(elem)) && (elem = zk.isLoaded('zul.sel') &&
 						wgt.$instanceof(zul.sel.Treechildren, zul.sel.Treeitem) ?
 						elem : wgt.$n())) {
 					// don't use cache in this case
@@ -2573,7 +2573,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 				dirkey = dirruns + " " + doneName;
 			
 			if (hasZTag || hasZID) {
-				var wgt = zk.Widget.$(elem),
+				var wgt = zk.Widget.$(elem, {exact: 1}),
 					getParent = function (wgt) {
 						if (dir === "parentNode")
 							return wgt.parent;
@@ -2582,7 +2582,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 					};
 				
 				// we cannot use dom elem for treechildren, treeitem, and treerow
-				while ((wgt = getParent(wgt)) && (elem = wgt.isRealElement() ?
+				while ((wgt = wgt ? getParent(wgt) : zk.Widget.$(elem)) && (elem = wgt.isRealElement() ?
 						wgt.$n() : elem)) {
 					// don't use cache in this case
 					if (matcher( elem, context, xml, wgt ))
