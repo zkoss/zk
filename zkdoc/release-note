@@ -18,6 +18,8 @@ ZK 8.0.0
   ZK-2650: BindingParam annotation support converting from JSON to POJO automatically
   ZK-2598: forward event behaves inconsistent inside an include
   ZK-2668: New Build-in Converter - FormattedTimeConverter
+  ZK-2675: Add an annotation for client command
+  ZK-2674: Add an annotation for notify command
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

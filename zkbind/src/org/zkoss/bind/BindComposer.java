@@ -69,7 +69,7 @@ public class BindComposer<T extends Component> implements Composer<T>,
 	
 	private static final Logger _log = LoggerFactory.getLogger(BindComposer.class);
 	
-	protected static final String VM_ID = "$VM_ID$";
+	public static final String VM_ID = "$VM_ID$";
 	protected static final String BINDER_ID = "$BINDER_ID$";
 	
 	private Object _viewModel;

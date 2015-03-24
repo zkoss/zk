@@ -11,23 +11,23 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Map;
+
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
+import org.zkoss.bind.annotation.ClientCommand;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.json.JSONValue;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
  * A client command binding phase listener.
- * <p>
- * Enable the client bind command callback mechanism.
- * Specifying this class in WEB-INF/zk.xml as a listener.
- *  for example:<pre>{@code
-<listener>
-	<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
-</listener>
- * }</pre>
  * @author jumperchen
  * @since 8.0.0
  */
@@ -43,7 +43,24 @@ public class ClientBinderPhaseListener implements PhaseListener {
 		switch (phase) {
 		case COMMAND:
 			final String commandName = ctx.getCommandName();
-			Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));
+			final Binder binder = ctx.getBinder();
+			final Object vm = binder.getViewModel();
+			if (binder instanceof BinderImpl && vm != null) {
+				ClientCommand ccmd = vm.getClass().getAnnotation(ClientCommand.class);
+				if (ccmd != null && Arrays.asList(ccmd.value()).contains(commandName)) {
+					final Map<String, Object> args = (Map<String, Object>) ctx.getAttribute(BindContextImpl.COMMAND_ARGS);
+					if (args != null) {
+						if (args.size() == 1) {
+							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
+								JSONValue.parse((String)binder.getConverter("jsonBindingParam").coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx))}));
+						} else {
+							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
+									JSONValue.parse((String)binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx))}));
+						}
+					} else {
+						Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));
+					}
+				}			}
 			break;
 		}
 	}

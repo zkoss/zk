@@ -47,6 +47,8 @@ import org.zkoss.bind.annotation.DefaultCommand;
 import org.zkoss.bind.annotation.DefaultGlobalCommand;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyCommand;
+import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
 import org.zkoss.bind.init.ZKBinderPhaseListeners;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -419,6 +421,28 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_rootComp.setAttribute(BinderCtrl.VM, vm);
 		_hasGetConverterMethod = true;//reset to true
 		_hasGetValidatorMethod = true;//reset to true
+		collectNotifyCommands(vm);
+	}
+	
+	private transient Map<String, NotifyCommand> _notifyCommands;
+	private void collectNotifyCommands(Object vm) {
+		NotifyCommands commands = vm.getClass().getAnnotation(NotifyCommands.class);
+		NotifyCommand command = vm.getClass().getAnnotation(NotifyCommand.class);
+		if (_notifyCommands != null)
+			_notifyCommands.clear();
+		
+		if (command != null) {
+			for (String cmd : command.value()) {
+				_notifyCommands = AllocUtil.inst.putMap(_notifyCommands, cmd, command);
+			}
+		}
+		if (commands != null) {
+			for (NotifyCommand nc : commands.value()) {
+				for (String cmd : nc.value()) {
+					_notifyCommands = AllocUtil.inst.putMap(_notifyCommands, cmd, command);
+				}
+			}
+		}
 	}
 	
 	public Object getViewModel() {
@@ -1856,7 +1880,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					notifys.addAll(BindELContext.getNotifys(method, viewModel,
 							(String) null, (Object) null, ctx)); // collect notifyChange
 				}				
-			}else{
+			} else if (_notifyCommands == null || !_notifyCommands.containsKey(command)) {
 				throw new UiException(MiscUtil.formatLocationMessage("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel,comp));
 			}
 			if(_log.isDebugEnabled()){
@@ -2188,17 +2212,63 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	 * Internal Use only. init and load the component
 	 */
 	public void loadComponent(Component comp,boolean loadinit) {
-		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
-		try{
-//			if(collector!=null){
-//				collector.pushStack("BINDER_API");
-//			}
-			loadComponent0(comp,loadinit);
-		}finally{
-//			if(collector!=null){
-//				collector.popStack();
-//			}
+		loadComponent0(comp,loadinit);
+		if (comp == getView() && _notifyCommands != null) {
+			// init notifyCommands here
+			initNotifyCommands(comp);
 		}
+	}
+	private void initNotifyCommands(Component comp) {
+		for (Map.Entry<String, NotifyCommand> me: _notifyCommands.entrySet()) {
+			addPropertyLoadBindings4Command(comp, me.getValue().onChange(), me.getKey());
+		}
+	}
+	
+	// since 8.0.0
+	private Map<String, Object> _dynamicAttrs = new HashMap<String, Object>(5) {
+		public Object put(final String key, Object value) {
+			Object oldValue = super.put(key, null); // yes, we put "null" to save the memory
+			BinderImpl.this.postCommand(key, Collections.singletonMap("", value));
+			return oldValue;
+		}
+	};
+	
+	/**
+	 * Internal use only.
+	 * @since 8.0.0
+	 */
+	public Map<String, Object> getDynamicAttrs() {
+		return _dynamicAttrs;
+	}
+	/**
+	 * Internal use only.
+	 * @since 8.0.0
+	 */
+	public void setDynamicAttrs(String command, Object value) {
+		_dynamicAttrs.put(command, value);
+	}
+	private void addPropertyLoadBindings4Command(Component comp, String loadExpr, String command) {
+		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
+		final String attr = "dynamicAttrs['" + command + "']";
+		String vmname = (String) comp.getAttribute(BindComposer.VM_ID);
+		if (vmname != null)
+			loadExpr = vmname + "." + loadExpr;
+		final String loadAttr = "attributes['" + BinderCtrl.BINDER + "']." + attr;
+		LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadAttr, null, loadExpr, ConditionType.PROMPT, null,  null, null,null);
+		addBinding(comp, attr, binding);
+		
+		
+		//if no command , always add to prompt binding, a prompt binding will be load when , 
+		//1.load a component property binding
+		//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding 
+		final BindingKey bkey = getBindingKey(comp, attr);
+		_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
+		
+		if(collector!=null){
+			collector.addInfo(new AddBindingInfo(AddBindingInfo.PROP_LOAD, comp, "", binding.getPropertyString(), binding.getFieldName(), null,null));
+		}
+
+		_propertyBindingHandler.doLoad(comp,bkey);
 	}
 	
 	private void loadComponent0(Component comp,boolean loadinit) {
