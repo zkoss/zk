@@ -52,15 +52,16 @@ public class ClientBinderPhaseListener implements PhaseListener {
 					if (args != null) {
 						if (args.size() == 1) {
 							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
-								JSONValue.parse((String)binder.getConverter("jsonBindingParam").coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx))}));
+								JSONValue.parse(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx)))}));
 						} else {
 							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
-									JSONValue.parse((String)binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx))}));
+									JSONValue.parse(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx)))}));
 						}
 					} else {
 						Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));
 					}
-				}			}
+				}
+			}
 			break;
 		}
 	}
