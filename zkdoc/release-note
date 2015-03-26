@@ -16,10 +16,10 @@ ZK 8.0.0
   ZK-2631: Parser support another namespace for shadow element
   ZK-2632: Parser support disorder template tag
   ZK-2650: BindingParam annotation support converting from JSON to POJO automatically
-  ZK-2598: forward event behaves inconsistent inside an include
   ZK-2668: New Build-in Converter - FormattedTimeConverter
   ZK-2675: Add an annotation for client command
   ZK-2674: Add an annotation for notify command
+  ZK-1972: K bind support access vm properties in client side
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
@@ -28,6 +28,7 @@ ZK 8.0.0
   ZK-2552: Tabbox model NotifyChange problem
   ZK-2592: @validator('formBeanValidator'... does not validate nested properties
   ZK-2663: Popup does not show up when its parent is native
+  ZK-2598: forward event behaves inconsistent inside an include
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
