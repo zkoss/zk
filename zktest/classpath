@@ -2,6 +2,7 @@
 ../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/zul.jar
+../dist/lib/zel.jar
 ../dist/lib/zkbind.jar
 ../dist/lib/zkplus.jar
 ../dist/lib/zkmax.jar
@@ -22,3 +23,4 @@
 ../dist/lib/ext/javassist.jar
 ../dist/lib/ext/gson.jar
 ../dist/lib/ext/jackson-databind.jar
+../dist/lib/ext/jackson-core.jar
