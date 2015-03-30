@@ -847,4 +847,12 @@ public class Listheader extends HeaderElement {
 			return _gcmpr.compareGroup(o1, o2);
 		}
 	}
+	
+	//Since 8.0.0, B80-ZK-2660
+	protected void updateByClient(String name, Object value) {
+		if ("visible".equals(name))
+			this.setVisibleDirectly(((Boolean)value).booleanValue());
+		else
+			super.updateByClient(name, value);
+	}
 }
