@@ -51,11 +51,24 @@ public class ClientBinderPhaseListener implements PhaseListener {
 					final Map<String, Object> args = (Map<String, Object>) ctx.getAttribute(BindContextImpl.COMMAND_ARGS);
 					if (args != null) {
 						if (args.size() == 1) {
-							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
-								JSONValue.parse(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx)))}));
+							Object data = String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx));
+							try {
+								data = JSONValue.parse((String)data);
+							} catch (Exception e) {
+								// eat the exception.
+							}
+							Clients.response(new AuInvoke(ctx.getBinder()
+									.getView(), "$afterCommand", new Object[] {
+									commandName, data }));
 						} else {
+							Object data = String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx));
+							try {
+								data = JSONValue.parse((String)data);
+							} catch (Exception e) {
+								// eat the exception.
+							}
 							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
-									JSONValue.parse(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx)))}));
+									data}));
 						}
 					} else {
 						Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));

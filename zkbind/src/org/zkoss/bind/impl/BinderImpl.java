@@ -2251,6 +2251,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		final String attr = "dynamicAttrs['" + command + "']";
 		String vmname = (String) comp.getAttribute(BindComposer.VM_ID);
+		if (vmname != null)
+			loadExpr = loadExpr.replaceAll("_vm_", vmname);
+		
 		final String loadAttr = "attributes['" + BinderCtrl.BINDER + "']." + attr;
 		LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadAttr, null, loadExpr, ConditionType.PROMPT, null,  null, null,null);
 		addBinding(comp, attr, binding);
