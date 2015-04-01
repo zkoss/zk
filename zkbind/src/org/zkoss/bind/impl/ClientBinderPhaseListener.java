@@ -11,7 +11,6 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -20,10 +19,8 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.annotation.ClientCommand;
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.json.JSONValue;
+import org.zkoss.json.JavaScriptValue;
 import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
@@ -51,22 +48,16 @@ public class ClientBinderPhaseListener implements PhaseListener {
 					final Map<String, Object> args = (Map<String, Object>) ctx.getAttribute(BindContextImpl.COMMAND_ARGS);
 					if (args != null) {
 						if (args.size() == 1) {
-							Object data = String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx));
-							try {
-								data = JSONValue.parse((String)data);
-							} catch (Exception e) {
-								// eat the exception.
-							}
+							Object data = new JavaScriptValue(
+									String.valueOf(binder.getConverter(
+											"jsonBindingParam").coerceToUi(
+											args.values().iterator().next(),
+											ctx.getComponent(), ctx)));
 							Clients.response(new AuInvoke(ctx.getBinder()
 									.getView(), "$afterCommand", new Object[] {
 									commandName, data }));
 						} else {
-							Object data = String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx));
-							try {
-								data = JSONValue.parse((String)data);
-							} catch (Exception e) {
-								// eat the exception.
-							}
+							Object data = new JavaScriptValue(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx)));
 							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
 									data}));
 						}
