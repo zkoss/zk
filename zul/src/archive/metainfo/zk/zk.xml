@@ -20,4 +20,9 @@
 		 -->
 		<theme-resolver-class>org.zkoss.zul.theme.CookieThemeResolver</theme-resolver-class>
 	</desktop-config>
+	
+	<system-config>
+		<web-app-factory-class>org.zkoss.zk.ui.sys.WebAppFactoryImpl</web-app-factory-class>
+	</system-config>
+
 </zk>
