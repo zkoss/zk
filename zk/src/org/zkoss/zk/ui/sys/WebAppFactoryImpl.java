@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.util.Configuration;
 public class WebAppFactoryImpl implements WebAppFactory {
 
 	public WebApp newWebApp(Object ctx, Configuration config) {
-		// the implementation is the same is org.zkoss.zk.ui.http.WebManager
+		// the implementation is the same as org.zkoss.zk.ui.http.WebManager
 		Class<?> cls = config.getWebAppClass();
 		if (cls != null) {
 			try {
