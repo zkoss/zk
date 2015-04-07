@@ -106,7 +106,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 				if (fieldName != null) {
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
 						if(_log.isDebugEnabled()){
-							_log.debug("add save-field '%s' to form '%s'", fieldName,formBean);
+							_log.debug("add save-field '{}' to form '{}'", fieldName,formBean);
 						}
 						if(formBean instanceof FormExt ){
 							((FormExt)formBean).addSaveFieldName(fieldName);
@@ -115,7 +115,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 					} else if (binding instanceof LoadPropertyBinding 
 							|| binding instanceof LoadChildrenBinding || binding instanceof ReferenceBinding) {
 						if(_log.isDebugEnabled()){
-							_log.debug("add load-field '%s' to form '%s'", fieldName,formBean);
+							_log.debug("add load-field '{}' to form '{}'", fieldName,formBean);
 						}
 						if(formBean instanceof FormExt){
 							((FormExt)formBean).addLoadFieldName(fieldName);

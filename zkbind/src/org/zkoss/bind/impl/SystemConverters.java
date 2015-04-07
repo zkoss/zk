@@ -71,7 +71,7 @@ public class SystemConverters {
 	}
 	static private void set0(String name,Converter converter){
 		if(_log.isDebugEnabled()){
-			_log.debug("set converter [%s]=[%s]",name,converter);
+			_log.debug("set converter [{}]=[{}]",name,converter);
 		}
 		synchronized(_converters){
 			_converters.put(name, converter);

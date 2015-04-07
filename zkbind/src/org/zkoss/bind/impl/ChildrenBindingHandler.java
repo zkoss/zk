@@ -91,7 +91,7 @@ import org.zkoss.zk.ui.Component;
 		}
 		try { 
 			if(_log.isDebugEnabled()){
-				_log.debug("doLoadChildrenBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
+				_log.debug("doLoadChildrenBinding:binding.load(),component=[{}],binding=[{}],context=[{}],command=[{}]",comp,binding,ctx,command);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);

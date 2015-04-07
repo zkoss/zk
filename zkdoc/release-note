@@ -3,6 +3,7 @@ ZK 7.0.6
 * Features
 
 * Bugs
+  ZK-2692: SLF4J logging argument syntax
 
 * Upgrade Notes
 
