@@ -1,0 +1,31 @@
+<zk>
+	<style>
+	.yellow {border:1px solid #f1da36}
+	.red {color: red}
+	.green {color: green}
+	.blue {background: blue; color: white;}
+	</style>
+	<zscript>
+	 org.zkoss.zktest.zats.zuti.bean.Person p = new org.zkoss.zktest.zats.zuti.bean.Person("Foo", "Foo@zkoss.org");
+	</zscript>
+	<window id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
+		<div>
+			<apply>
+				<template>
+					<apply template="@load(vm.template)" />
+				</template>
+				<template name="readonly">
+					<label class="yellow">1</label>
+				</template>
+				<template name="second">
+					<label class="green">2</label>
+				</template>
+			</apply>
+		</div>
+		<div>
+			<apply templateURI="/test/mvvm/include/basicMerge.zul" person="${p}"/>	
+		</div>
+	</window>
+	<debugger rootId="host" />
+</zk>

@@ -1,0 +1,8 @@
+<grid>
+	<columns>
+		<apply template="@load(columnTemplate)"/>
+	</columns>
+	<rows>
+		<apply template="@load(rowTemplate)"/>
+	</rows>
+</grid>

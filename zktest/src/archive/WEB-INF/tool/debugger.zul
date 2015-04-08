@@ -1,0 +1,40 @@
+<zk>
+<script src="/js/d3.js" />
+<script src="/js/d3.layout.js" />
+<script src="/js/dtree.js" />
+<style>
+.node circle {
+  cursor: pointer;
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+.node circle.component {
+	stroke: steelblue;
+  	fill: steelblue!important;
+}
+
+.node text {
+  font-size: 12px;
+}
+.node text.prev,
+.node text.first,
+.node text.last,
+.node text.next {
+ 	fill: #1e5799;
+}
+path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+</style>
+	<groupbox title="Debugging Tool">
+	<div apply="org.zkoss.zktest.zats.zuti.composer.DebuggerComposer">
+		<custom-attributes rootId="${arg.rootId}"/>
+		<button id="printShadowTree" label="Print Shadow Tree"/>
+		<button id="printWholeTree" label="Print Whole Tree"/>
+		<n:div id="body" xmlns:n="native"/>
+	</div>
+	</groupbox>
+</zk>

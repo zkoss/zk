@@ -1,0 +1,13 @@
+<zk xmlns:x="xhtml">
+	<!-- avoid space text component -->
+	<x:table id="host" border="1">
+		<forEach begin="1" end="9" var="x">
+			<x:tr>
+				<forEach begin="1" end="9" var="y">
+					<x:td>${x} X ${y} = ${x * y}</x:td>
+				</forEach>
+			</x:tr>
+		</forEach>
+	</x:table>
+	<debugger rootId="host" />
+</zk>

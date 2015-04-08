@@ -129,11 +129,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
-	<!-- Turn on if you want to use language addons.
+	<!-- Turn on if you want to use language addons. -->
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
-	 -->
+	
 	<language-config>
 		<addon-uri>/WEB-INF/ZK-1345.xml</addon-uri>
 	</language-config>

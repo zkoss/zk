@@ -5,7 +5,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.ZatsEnvironment;
 
 public abstract class ZATSTestCase {
@@ -32,24 +31,24 @@ public abstract class ZATSTestCase {
 	}
 	
 	public DesktopAgent connect(String location){
-		if (location == null || location.length() <= 0)
+		if (location == null || location.length() <= 0) {
+			String filePath = getFileLocation();
 			try {
-				return env.newClient().connect(getFileLocation());
+				return env.newClient().connect(filePath);
 			} catch (Exception e) {
 				try {
-					return env.newClient().connect(getFileLocation().replace("_", "-"));
+					return env.newClient().connect(filePath.replace("_", "-"));
 				} catch (Exception e2) {
-					return env.newClient().connect(getFileLocation().replace("-", "_"));
+					return env.newClient().connect(filePath.replace("-", "_"));
 				}
 			}
-		else
+		} else
 			return env.newClient().connect(location);
 	}
 
-	private String getFileLocation() {
+	protected String getFileLocation() {
 		String className = this.getClass().getName().replace("org.zkoss.zktest.zats", "").replace(".","/");
 		int lastTest = className.lastIndexOf("Test");
 		return className.substring(0, lastTest) + ".zul";
 	}
-
 }

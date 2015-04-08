@@ -1,0 +1,63 @@
+<zk>
+	<vlayout>
+		<div style="border:1px solid red;" id="host">
+			begin=0, end=3
+			<forEach begin="0" end="3">
+				<div style="color:blue">
+					**Start** 
+					<forEach begin="0" end="1" var="nestedEach">
+						<div style="color:blue">${each} - ${nestedEach} Template</div>
+					</forEach>
+					**End**
+				</div>
+			</forEach>
+		</div>
+		<div style="border:1px solid red;">
+			begin=0, end=3, step=2
+			<forEach begin="0" end="3" step="2">
+				<div style="color:blue">
+					**Start** 
+					<forEach begin="0" end="1" step="2" var="nestedEach">
+						<div style="color:blue">${each} - ${nestedEach} Template</div>
+					</forEach>
+					**End**
+				</div>
+			</forEach>
+		</div>
+		<div style="border:1px solid red;">
+			<zscript>
+	items = Arrays.asList(new Object[] { "one", "two", "three" });
+</zscript>
+			items={'one', 'two', 'three'}
+			<forEach items="${items}" var="item">
+				<div style="color:blue">
+					**Start** 
+					<forEach items="${items}" var="nested">
+						<div style="color:blue">
+							${item} - ${nested} Template
+						</div>
+					</forEach>
+					**End**
+				</div>
+			</forEach>
+		</div>
+		<div style="border:1px solid red;">
+			begin=1, end=2; items={'one', 'two', 'three'}
+			<forEach items="${items}" begin="1" end="2"
+				varStatus="status">
+				<div style="color:blue">
+					**Start** 
+					<forEach items="${items}" begin="1" end="2"
+						varStatus="nestedStatus">
+						<div style="color:blue">
+							${status.current} - ${nestedStatus.current} Template
+						</div>
+					</forEach>
+					**End**
+				</div>
+			</forEach>
+		</div>
+	</vlayout>
+
+	<debugger rootId="host" />
+</zk>

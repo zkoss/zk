@@ -1,0 +1,4 @@
+<div>
+	<apply var="abc">${var} - ${arg.var}</apply>
+	<apply templateURI="/test/simple/include/includedApplyParam.zul?foo=fooName"/>
+</div>

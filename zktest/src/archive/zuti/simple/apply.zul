@@ -1,0 +1,27 @@
+<zk>
+	<vlayout id="host">
+		<template name="host">
+			<div style="color:blue">With Host's Template Name</div>
+		</template>
+		Without Template Name:
+		<apply>
+			<template>
+				<div style="color:blue">Without Template Name</div>
+			</template>
+		</apply>
+		With Template Name:
+		<apply template="default">
+			<template>
+				<div style="color:blue">You should not see this Template</div>
+			</template>
+			<template name="default">
+				<div style="color:blue">With Template Name</div>
+			</template>
+		</apply>
+		With Template URI:
+		<apply templateURI="include/apply.zul"/>
+		With Host's Template Name:
+		<apply template="host"/>
+	</vlayout>
+	<debugger rootId="host"/>
+</zk>

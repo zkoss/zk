@@ -1,0 +1,8 @@
+<?component name="foo" templateURI="../include/nestedMacroApply.zul"?> 
+<div id="host">
+	**Start**
+	<foo/>
+	**Middle**
+	<foo/>
+	**End**
+</div>
