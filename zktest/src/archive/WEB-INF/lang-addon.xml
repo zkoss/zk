@@ -34,11 +34,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</component>
  	-->
  	
-	<!-- a macro component
 	<component>
-		<component-name>hello</component-name>
-		<macro-uri>/hello.zul</macro-uri>
-		<component-class>org.zkoss.zktest.test.Hello</component-class>
+		<component-name>debugger</component-name>
+		<macro-uri>/WEB-INF/tool/debugger.zul</macro-uri>
+		<inline>true</inline>
 	</component>
-	-->
 </language-addon>

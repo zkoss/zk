@@ -1,0 +1,5 @@
+<zk>
+	<div class="yellow">
+		<label value="${arg.person.name}" />
+	</div>
+</zk>

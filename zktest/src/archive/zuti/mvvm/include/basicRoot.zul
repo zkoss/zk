@@ -1,0 +1,5 @@
+<zk>
+	<div>Nested Shadow:
+		<apply uri="@ref(simpleTemplateURI)" templateURI="@load(uri)"/>
+	</div>	
+</zk>

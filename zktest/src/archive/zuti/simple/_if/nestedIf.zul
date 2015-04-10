@@ -1,0 +1,35 @@
+<zk>
+	<zscript>
+	isVisible = true;
+</zscript>
+	<div style="border:1px solid red;" id="host">
+		<if test="${isVisible}">
+			<div style="background:yellow">
+				1. First
+				<if test="${isVisible}">
+					<div style="background:yellow">
+						Without Template
+					</div>
+				</if>
+				3. Last
+			</div>
+		</if>
+	</div>
+	<div style="border:1px solid red;">
+		<if test="${isVisible}">
+			<template>
+				<div style="background:yellow">
+					1. First
+					<if test="${isVisible}">
+						<template>
+							<div style="background:yellow">
+								With Template
+							</div>
+						</template>
+					</if>
+					3. Last
+				</div>
+			</template>
+		</if>
+	</div>
+</zk>

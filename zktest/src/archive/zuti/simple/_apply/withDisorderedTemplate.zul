@@ -1,0 +1,6 @@
+<div>
+	<apply template="name">
+		<template>test</template>
+	</apply>
+	<template name="name">test with a name</template>
+</div>

@@ -1,0 +1,66 @@
+<?component name="navigation" templateURI="include/navigation_menu.zul"?>
+<zk>
+	<window id="window" border="normal" width="600px" height="500px"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.NavigationViewModel')"
+		validationMessages="@id('vmsgs')">
+		<vlayout vflex="1" id="host">
+			<hlayout>
+				<checkbox label="multiple" checked="@load(vm.multiple)"
+					onCheck="@command('changeMultiple')" />
+				<checkbox label="verticle orient"
+					checked="@load(vm.verticle)" onCheck="@command('changeOrient')" />
+			</hlayout>
+			<navigation data="@ref(vm.data)"
+				multiple="@ref(vm.multiple)" activeCommand="@ref('doActive')" />
+				
+			<!-- content panel area -->	
+			<apply template="@load(vm.verticle ? 'row' : 'column')">
+				<template name="row">
+					<vlayout hflex="1" vflex="1">
+						<apply template="content" />
+					</vlayout>
+				</template>
+				<template name="column">
+					<hlayout hflex="1" vflex="1">test
+						<apply template="content" />
+					</hlayout>
+				</template>
+				<template name="content">
+					<if test="@load(not empty vm.selectedItems)">
+						<forEach items="@load(vm.selectedItems)">
+							<choose>
+								<when test="@load(each.label eq 'Home')">
+									<panel hflex="1" vflex="1"
+										border="normal" title="@load(each.label)">
+										<panelchildren>
+											HOME!!!!!!!!!!!!!!!!!!
+										</panelchildren>
+									</panel>
+								</when>
+								<when
+									test="@load(each.label eq 'Services')">
+									<window hflex="1" vflex="1"
+										title="@load(each.label)" border="normal">
+										Services!!!!!!!!!!!!!!!!!!
+									</window>
+								</when>
+								<when test="@load(each.label eq 'About')">
+									<groupbox hflex="1" vflex="1"
+										title="@load(each.label)" mold="3d">
+										About!!!!!!!!!!!!!!!!!!
+									</groupbox>
+								</when>
+								<otherwise>
+									<div hflex="1" vflex="1"
+										style="border: 1px solid blue">
+										Contact us
+									</div>
+								</otherwise>
+							</choose>
+						</forEach>
+					</if>
+				</template>
+			</apply>
+		</vlayout>
+	</window>
+</zk>

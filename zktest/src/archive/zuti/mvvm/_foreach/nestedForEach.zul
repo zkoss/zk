@@ -1,0 +1,18 @@
+<zk xmlns:x="xhtml">
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachVM')">
+		<x:table id="host" border="1">
+			<forEach begin="@load(vm.begin)" end="@load(vm.end)"
+				var="x">
+				<x:tr>
+					<forEach begin="@load(vm.begin)" end="@load(vm.end)"
+						var="y"><x:td><label
+								value='@load(vm.begin) @converter(vm.concatConverter,x=x,y=y,z=x*y, format="%s X %s = %s")' /></x:td></forEach>
+				</x:tr>
+			</forEach>
+		</x:table>
+		<button label="update range 1~5" onClick='@command("updateRange",begin=1,end=5)'/>
+		<button label="update range 5~9" onClick='@command("updateRange",begin=5,end=9)'/>
+	</div>
+	<debugger rootId="host" />
+</zk>

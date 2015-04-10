@@ -1,0 +1,106 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<div id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ChooseVM')">
+		**Start**
+		<choose>
+			<when test="@load(c:startsWith(vm.direction, 'top'))">
+				<choose>
+					<when
+						test="@load(c:endsWith(vm.direction, 'left'))">
+						<div style="background:blue">Template</div>
+					</when>
+					<when
+						test="@load(c:endsWith(vm.direction, 'right'))">
+						<div style="background:yellow">Template</div>
+					</when>
+					<otherwise>
+						<div style="background:red">Template</div>
+					</otherwise>
+				</choose>
+			</when>
+			<when test="@load(c:startsWith(vm.direction, 'bottom'))">
+				<choose>
+					<when
+						test="@load(c:endsWith(vm.direction, 'left'))">
+						<div style="background:white">Template</div>
+					</when>
+					<when
+						test="@load(c:endsWith(vm.direction, 'right'))">
+						<div style="background:green">Template</div>
+					</when>
+					<otherwise>
+						<div style="background:gray">Template</div>
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when
+						test="@load(c:endsWith(vm.direction, 'left'))">
+						<div style="background:pink">Template</div>
+					</when>
+					<when
+						test="@load(c:endsWith(vm.direction, 'right'))">
+						<div style="background:khaki">Template</div>
+					</when>
+					<otherwise>
+						<div style="background:brown">Template</div>
+					</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+		**Middle**
+		<choose>
+			<when test="@load(c:startsWith(vm.direction, 'top'))">
+				<choose>
+					<when
+						test="@load(c:endsWith(vm.direction, 'left'))">
+						<div style="background:blue">Template</div>
+					</when>
+					<when
+						test="@load(c:endsWith(vm.direction, 'right'))">
+						<div style="background:yellow">Template</div>
+					</when>
+					<otherwise>
+						<div style="background:red">Template</div>
+					</otherwise>
+				</choose>
+			</when>
+			<when test="@load(c:startsWith(vm.direction, 'bottom'))">
+				<choose>
+					<when
+						test="@load(c:endsWith(vm.direction, 'left'))">
+						<div style="background:white">Template</div>
+					</when>
+					<when
+						test="@load(c:endsWith(vm.direction, 'right'))">
+						<div style="background:green">Template</div>
+					</when>
+					<otherwise>
+						<div style="background:gray">Template</div>
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when
+						test="@load(c:endsWith(vm.direction, 'left'))">
+						<div style="background:pink">Template</div>
+					</when>
+					<when
+						test="@load(c:endsWith(vm.direction, 'right'))">
+						<div style="background:khaki">Template</div>
+					</when>
+					<otherwise>
+						<div style="background:brown">Template</div>
+					</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+		**End**
+		<button label="update direction"
+			onClick="@command('updateDirection', direction='middlecenter')" />
+	</div>
+	<debugger rootId="host" />
+</zk>

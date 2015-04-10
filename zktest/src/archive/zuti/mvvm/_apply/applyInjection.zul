@@ -1,0 +1,39 @@
+<?component name="fooGrid" templateURI="/test/mvvm/include/applyInjection.zul"?>
+<zk>
+	<window id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
+		<fooGrid name="@load(vm.person.name)"
+			address="@load(vm.person.address)" person="@ref(vm.person)"
+			columnTemplate="column" rowTemplate="row">
+			<template name="column">
+				<column>Name</column>
+				<column>Content</column>
+			</template>
+			<template name="row">
+				<row>
+					<cell>User Name:@</cell>
+					<cell>
+						<label value="@load(person.name)" />
+					</cell>
+				</row>
+				<row>
+					<cell>Address:@</cell>
+					<cell>
+						<label value="@load(person.address)" />
+					</cell>
+				</row>
+				<row>
+					<cell>Apply's values:$</cell>
+					<cell>[${name}][${address}]</cell>
+				</row>
+				<row>
+					<cell colspan="2" align="center">
+						<button label="Edit Profile"
+							onClick="@command('editProfile', profile=person)" />
+					</cell>
+				</row>
+			</template>
+		</fooGrid>
+	</window>
+	<debugger rootId="host" />
+</zk>

@@ -1,0 +1,49 @@
+<zk>
+<window id="host" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
+    <apply template="@load(vm.template)" person="@ref(vm.person)">
+            <template name="readonly">
+	            <grid>
+					<rows>
+						<row>
+							<cell>User Name:@</cell>
+							<cell><label value="@load(person.name)"/></cell>
+						</row>
+						<row>
+							<cell>Address:@</cell>
+							<cell><label value="@load(person.address)"/></cell>
+						</row>
+						<row>
+							<cell colspan="2" align="center">
+								<button label="Edit Profile"
+									onClick="@command('editProfile', profile=person)" />
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</template>
+			<template name="edit">
+				<grid>
+					<rows>
+						<row>
+							<cell>User Name:@</cell>
+							<cell><textbox value="@bind(person.name)"/></cell>
+						</row>
+						<row>
+							<cell>Address:@</cell>
+							<cell><textbox value="@bind(person.address)"/></cell>
+						</row>
+						<row>
+							<cell colspan="2" align="center">
+								<button label="Save Profile"
+									onClick="@command('updateProfile')" />
+							</cell>
+						</row>
+					</rows>
+				</grid>		
+			</template>
+    </apply>
+            
+</window>
+<debugger rootId="host"/>
+</zk>

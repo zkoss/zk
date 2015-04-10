@@ -1,0 +1,72 @@
+<zk>
+	<div id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ChooseVM')">
+		<choose>
+			<when test="@load(vm.smallNumber lt 4)">
+				<div>
+					<choose>
+						<when test="@load(vm.smallNumber eq 1)">
+							<div style="background:blue">
+								Template
+							</div>
+						</when>
+						<when test="@load(vm.smallNumber eq 2)">
+							<div style="background:yellow">
+								Template
+							</div>
+						</when>
+						<otherwise>
+							<div style="background:red">
+								Template
+							</div>
+						</otherwise>
+					</choose>
+				</div>
+			</when>
+			<when test="@load(vm.smallNumber lt 7)">
+				<div>
+					<choose>
+						<when test="@load(vm.smallNumber eq 4)">
+							<div style="background:green">
+								Template
+							</div>
+						</when>
+						<when test="@load(vm.smallNumber eq 5)">
+							<div style="background:gray">
+								Template
+							</div>
+						</when>
+						<otherwise>
+							<div style="background:brown">
+								Template
+							</div>
+						</otherwise>
+					</choose>
+				</div>
+			</when>
+			<otherwise>
+				<div>
+					<choose>
+						<when test="@load(vm.smallNumber eq 7)">
+							<div style="background:cyan">
+								Template
+							</div>
+						</when>
+						<when test="@load(vm.smallNumber eq 8)">
+							<div style="background:khaki">
+								Template
+							</div>
+						</when>
+						<otherwise>
+							<div style="background:pink">
+								Template
+							</div>
+						</otherwise>
+					</choose>
+				</div>
+			</otherwise>
+		</choose>
+		<button label="update numbers" onClick="@command('updateNumber', small=4, large=9)"/>
+	</div>
+	<debugger rootId="host" />
+</zk>

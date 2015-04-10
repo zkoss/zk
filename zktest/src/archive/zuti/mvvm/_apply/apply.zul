@@ -1,0 +1,9 @@
+<?component name="foo" templateURI="/test/mvvm/include/apply.zul"?>
+<zk>
+<window id="host" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
+    <foo name="@load(vm.person.name)" address="@load(vm.person.address)"
+            person="@ref(vm.person)" templateURI="@load(vm.templateURI)"/>
+</window>
+<debugger rootId="host"/>
+</zk>

@@ -1,0 +1,9 @@
+<zk:zk xmlns:zk="zk" xmlns="native">
+	<div style="color:blue">
+		With Template URI 1-1
+	</div>
+	111
+	<div style="color:blue">
+		With Template URI 1-2
+	</div>
+</zk:zk>

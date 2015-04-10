@@ -1,0 +1,58 @@
+<zk>
+
+	<zscript><![CDATA[
+		class Pojo {
+		   private String name = "aaa";
+		   public Pojo() {}
+		   public Pojo(String name) {this.name = name;}
+		   public void setName(String sel) {name = sel;}
+		   public String getName() {return name;} 
+		}
+		class Vm {
+		   private Pojo selected = null;
+		   public void setSelected(Pojo sel) {selected = sel;}
+		   public Pojo getSelected() {return selected;} 
+		}
+		
+		ListModelList mymodel = new ListModelList();
+		mymodel.add(new Pojo("aaa")); 
+		mymodel.add(new Pojo("bbb")); 
+		mymodel.add(new Pojo("ccc")); 
+		mymodel.add(new Pojo("ddd")); 
+		
+		Vm vm = new Vm();
+		vm.setSelected(mymodel.get(0));
+		
+	]]></zscript>	
+
+	<div apply="org.zkoss.bind.BindComposer" >
+		<listbox model="@init(mymodel)" selectedItem="@bind(vm.selected)">
+			<template name="model">
+				<listitem>
+					<apply> <!-- without the apply-tag there is no problem -->
+						<listcell label="@init(each.name)"/>
+					</apply>
+				</listitem>
+			</template>
+		</listbox>
+		<apply paramRef="@ref(vm.selected)">
+			<if test="@load(paramRef ne null)">
+				<div form="@id('fx') @load(paramRef)">
+					<textbox value="@bind(fx.name)"/>
+				</div>
+			</if>
+		</apply>
+		<button label="set the selected to False">
+			<attribute name="onClick"><![CDATA[
+			    vm.setSelected(null);
+				BindUtils.postNotifyChange(null, null, vm, "selected");
+			]]></attribute>
+		</button>
+		<button label="set the selected to True">
+			<attribute name="onClick"><![CDATA[
+			    vm.setSelected(mymodel.get(0));
+				BindUtils.postNotifyChange(null, null, vm, "selected");
+			]]></attribute>
+		</button>
+	</div>
+</zk>

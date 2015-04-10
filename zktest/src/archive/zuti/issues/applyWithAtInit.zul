@@ -1,0 +1,33 @@
+<zk>
+<zscript>
+public class Person {
+	String name;
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getName() {
+		return this.name;
+	}
+}
+Person person = new Person();
+</zscript>
+<div apply="org.zkoss.bind.BindComposer">
+	@Ref:
+	<apply item="@ref(person)">
+		<textbox value="@bind(item.name)"/>
+		<label value="@load(item.name)"/>
+	</apply>
+	<separator/>
+	@Init
+	<apply item1="@init(person)">
+		<textbox value="@bind(item1.name)"/>
+		<label value="@load(item1.name)"/>
+	</apply>
+	<separator/>
+	@Load
+	<apply item2="@load(person)">
+		<textbox value="@bind(item2.name)"/>
+		<label value="@load(item2.name)"/>
+	</apply>
+</div>
+</zk>

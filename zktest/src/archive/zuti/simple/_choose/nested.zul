@@ -1,0 +1,79 @@
+<zk>
+	<zscript>
+	int each = 1;
+</zscript>
+	<div style="border:1px solid red;" id="host">
+		<choose>
+			<when test="${each == 0}">
+				<div style="color:blue">
+					1. First
+					<choose>
+						<when test="${each == 0}">
+							<div style="color:blue">
+								${each} Template
+							</div>
+						</when>
+						<when test="${each == 1}">
+							<div style="color:green">
+								${each} Template
+							</div>
+						</when>
+						<otherwise>
+							<div style="color:red">
+								${each} Template
+							</div>
+						</otherwise>
+					</choose>
+					3. Last
+				</div>
+			</when>
+			<when test="${each == 1}">
+				<div style="color:green">
+					1. First
+					<choose>
+						<when test="${each == 0}">
+							<div style="color:blue">
+								${each} Template
+							</div>
+						</when>
+						<when test="${each == 1}">
+							<div style="color:green">
+								${each} Template
+							</div>
+						</when>
+						<otherwise>
+							<div style="color:red">
+								${each} Template
+							</div>
+						</otherwise>
+					</choose>
+					3. Last
+				</div>
+			</when>
+			<otherwise>
+				<div style="color:red">
+					1. First
+					<choose>
+						<when test="${each == 0}">
+							<div style="color:blue">
+								${each} Template
+							</div>
+						</when>
+						<when test="${each == 1}">
+							<div style="color:green">
+								${each} Template
+							</div>
+						</when>
+						<otherwise>
+							<div style="color:red">
+								${each} Template
+							</div>
+						</otherwise>
+					</choose>
+					3. Last
+				</div>
+			</otherwise>
+		</choose>
+	</div>
+	<debugger rootId="host" />
+</zk>

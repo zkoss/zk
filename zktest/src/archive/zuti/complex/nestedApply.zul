@@ -1,0 +1,19 @@
+<zk>
+ <zscript> 
+  ListModelList model = new ListModelList(Arrays.asList(Locale.getAvailableLocales()));
+ </zscript>
+ 
+ <div id="host" apply="org.zkoss.bind.BindComposer">
+  <template name="row">
+   <row>
+    <label value="${each.displayName}"/>
+   </row>
+  </template>
+ 
+  <grid model="@init(model)" onCreate="self.renderAll();">
+   <template name="model">
+    <apply template="row"/>
+   </template>
+  </grid>
+ </div>
+</zk>
