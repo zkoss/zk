@@ -8,6 +8,14 @@ ZK 7.0.6
 * Upgrade Notes
 
   --------
+ZK 7.0.5.1
+April 13, 2015
+* Features
+
+* Bugs
+  ZK-2702: Server push crash since a pair of execution activate and deactive were called
+  
+  --------
 ZK 7.0.5
 March 24, 2015
 * Features
