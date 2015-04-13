@@ -152,9 +152,8 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 		private DesktopInfo(Desktop desktop, EQService service, EQCleanup cleanup) {
 			_desktop = desktop;
 			_que = new DesktopEventQueue<T>();
-			_spEnabled = !desktop.isServerPushEnabled();
-			if (_spEnabled)
-				((DesktopCtrl)desktop).enableServerPush(true, this);
+			_spEnabled = true; // for bug ZK-2702, we always enable it here
+			((DesktopCtrl)desktop).enableServerPush(true, this);
 			desktop.addListener(_service = service);
 			desktop.addListener(_cleanup = cleanup);
 				//OK to call addListener since it is the current desktop
