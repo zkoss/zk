@@ -2,6 +2,7 @@
 ../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/zul.jar
+../dist/lib/zhtml.jar
 ../dist/lib/zel.jar
 ../dist/lib/zkbind.jar
 ../dist/lib/zkplus.jar
