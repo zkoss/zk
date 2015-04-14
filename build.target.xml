@@ -194,16 +194,20 @@ if="deploy.tomcat.required">
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
 		<fileset dir="${codegen.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, **/**.less, **/${ignoreZKMaxCodegenFolder}/**, **/${ignoreZulCodegenFolder}/**"/>
+		 excludes="META-INF/MANIFEST.MF, **/**.less, **/${ignoreZKMaxCodegenFolder}/**, **/${ignoreZutiCodegenFolder}/**, **/${ignoreZulCodegenFolder}/**"/>
 	</jar>
 </target>
 <target name="build.jar2" depends="build.jar" if="build.jar2.required">
 	<condition property="ignoreZKMaxCodegenFolder" value="NAN" else="zkmax">
 		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
 	</condition>
+	<condition property="ignoreZutiCodegenFolder" value="NAN" else="zuti">
+		<equals arg1="${jar.name}" arg2="zuti.jar" trim="true"/>
+	</condition>
 	 <condition property="ignoreZulCodegenFolder" value="zul" else="NAN">
 	 	<or>
 			<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+			<equals arg1="${jar.name}" arg2="zuti.jar" trim="true"/>
 			<equals arg1="${jar.name}" arg2="zkex.jar" trim="true"/>
 		</or>
 	</condition>
@@ -214,7 +218,7 @@ if="deploy.tomcat.required">
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
 		<fileset dir="${codegen.archive.dir}" includes="**" 
-		 excludes="META-INF/MANIFEST.MF, **/*.src.js, **/**.less, **/${ignoreZKMaxCodegenFolder}/**, **/${ignoreZulCodegenFolder}/**"/>
+		 excludes="META-INF/MANIFEST.MF, **/*.src.js, **/**.less, **/${ignoreZKMaxCodegenFolder}/**, **/${ignoreZutiCodegenFolder}/**, **/${ignoreZulCodegenFolder}/**"/>
 	</jar>
 </target>
 <target name="gentime" depends="config" if="gentime.required">
@@ -480,6 +484,14 @@ if="deploy.tomcat.required">
 		<param name="dir" value="${ZKCML}"/>
 		<param name="check.xel.config.uid" value="true"/>
 		<param name="check.zk.config.uid" value="true"/>
+		<param name="check.lang-addon.uid" value="true"/>
+		<param name="check.lang-addon.zk-version" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zuti"/>
+		<param name="dir" value="${ZKCML}"/>
+		<param name="check.zk.config.uid" value="true"/>
+		<param name="check.zk.config.zk-version" value="true"/>
 		<param name="check.lang-addon.uid" value="true"/>
 		<param name="check.lang-addon.zk-version" value="true"/>
 	</antcall>
