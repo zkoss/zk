@@ -331,7 +331,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		if(viewModel instanceof Composer<?> && !(viewModel instanceof BindComposer<?>)){//do we need to warn this?
 			//show a warn only
-			_log.warn("you are using a composer [%s] as a view model",viewModel);
+			_log.warn("you are using a composer [{}] as a view model",viewModel);
 		}
 		new AbstractAnnotatedMethodInvoker<Init>(Init.class, _initMethodCache){
 			protected boolean shouldLookupSuperclass(Init annotation) {
@@ -348,7 +348,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void doPropertyChange(Object base, String prop) {
 		if(_log.isDebugEnabled()){
-			_log.debug("doPropertyChange:base=[%s],prop=[%s]",base,prop);
+			_log.debug("doPropertyChange:base=[{}],prop=[{}]",base,prop);
 		}
 		
 		//zk-1468, 
@@ -385,7 +385,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			try { 
 				if(_log.isDebugEnabled()){
-					_log.debug("doPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
+					_log.debug("doPropertyChange:binding.load(),binding=[{}],context=[{}]",binding,ctx);
 				}
 				doPrePhase(Phase.LOAD_BINDING, ctx);
 				binding.load(ctx);
@@ -623,7 +623,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void addFormInitBinding0(Component comp, String formId, String initExpr, Map<String, Object> bindingArgs) {
 		
 		if(_log.isDebugEnabled()){
-			_log.debug("add init-form-binding: comp=[%s],form=[%s],expr=[%s]", comp,formId,initExpr);
+			_log.debug("add init-form-binding: comp=[{}],form=[{}],expr=[{}]", comp,formId,initExpr);
 		}
 		final String attr = formId;
 		
@@ -689,7 +689,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					final LoadFormBinding binding = newLoadFormBinding(comp, formId, loadExpr,ConditionType.BEFORE_COMMAND,cmd, bindingArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add before command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
+						_log.debug("add before command-load-form-binding: comp=[{}],attr=[{}],expr=[{}],command=[{}]", comp,attr,loadExpr,cmd);
 					}
 					_formBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
@@ -703,7 +703,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					final LoadFormBinding binding = newLoadFormBinding(comp, formId, loadExpr,ConditionType.AFTER_COMMAND,cmd, bindingArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add after command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
+						_log.debug("add after command-load-form-binding: comp=[{}],attr=[{}],expr=[{}],command=[{}]", comp,attr,loadExpr,cmd);
 					}
 					_formBindingHandler.addLoadAfterBinding(cmd, binding);
 					
@@ -728,7 +728,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				final SaveFormBinding binding = newSaveFormBinding(comp, formId, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
 				addBinding(comp, formId, binding);
 				if(_log.isDebugEnabled()){
-					_log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formId,saveExpr,cmd);
+					_log.debug("add before command-save-form-binding: comp=[{}],attr=[{}],expr=[{}],command=[{}]", comp,formId,saveExpr,cmd);
 				}
 				_formBindingHandler.addSaveBeforeBinding(cmd, binding);
 				
@@ -742,7 +742,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				final SaveFormBinding binding = newSaveFormBinding(comp, formId, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
 				addBinding(comp, formId, binding);
 				if(_log.isDebugEnabled()){
-					_log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formId,saveExpr,cmd);
+					_log.debug("add after command-save-form-binding: comp=[{}],attr=[{}],expr=[{}],command=[{}]", comp,formId,saveExpr,cmd);
 				}
 				_formBindingHandler.addSaveAfterBinding(cmd, binding);
 				
@@ -850,7 +850,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		loadrep = loadrep == null ? attr : loadrep;
 		
 		if(_log.isDebugEnabled()){
-			_log.debug("add init-binding: comp=[%s],attr=[%s],expr=[%s],converter=[%s]", comp,attr,initExpr,converterArgs);
+			_log.debug("add init-binding: comp=[{}],attr=[{}],expr=[{}],converter=[{}]", comp,attr,initExpr,converterArgs);
 		}
 		
 		InitPropertyBinding binding = newInitPropertyBinding(comp, attr, loadrep, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
@@ -1051,7 +1051,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		if(prompt){
 			if(_log.isDebugEnabled()){
-				_log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converterArgs);
+				_log.debug("add event(prompt)-load-binding: comp=[{}],attr=[{}],expr=[{}],evtnm=[{}],converter=[{}]", comp,attr,loadExpr,evtnm,converterArgs);
 			}
 			LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadRep, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
 			addBinding(comp, attr, binding);
@@ -1077,7 +1077,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadRep, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
+						_log.debug("add before command-load-binding: comp=[{}],att=r[{}],expr=[{}],converter=[{}]", comp,attr,loadExpr,converterExpr);
 					}
 					_propertyBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
@@ -1091,7 +1091,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					LoadPropertyBinding binding = newLoadPropertyBinding(comp, attr, loadRep, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
+						_log.debug("add after command-load-binding: comp=[{}],att=r[{}],expr=[{}],converter=[{}]", comp,attr,loadExpr,converterExpr);
 					}
 					_propertyBindingHandler.addLoadAfterBinding(cmd, binding);
 					
@@ -1143,7 +1143,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			final SavePropertyBinding binding = newSavePropertyBinding(comp, attr, saveRep, saveExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 			addBinding(comp, attr, binding);
 			if(_log.isDebugEnabled()){
-				_log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
+				_log.debug("add event(prompt)-save-binding: comp=[{}],attr=[{}],expr=[{}],evtnm=[{}],converter=[{}],validate=[{}]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
 			}
 			registerCommandEventListener(comp, evtnm); //prompt
 			addBinding(comp, evtnm, binding);//to mark evtnm has a this binding, so we can remove it in removeComponent
@@ -1159,7 +1159,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					final SavePropertyBinding binding = newSavePropertyBinding(comp, attr, saveRep, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add before command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
+						_log.debug("add before command-save-binding: comp=[{}],att=r[{}],expr=[{}],converter=[{}],validator=[{}]", comp,attr,saveExpr,converterExpr,validatorExpr);
 					}
 					_propertyBindingHandler.addSaveBeforeBinding(cmd, binding);
 					
@@ -1173,7 +1173,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					final SavePropertyBinding binding = newSavePropertyBinding(comp, attr, saveRep, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 					addBinding(comp, attr, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add after command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
+						_log.debug("add after command-save-binding: comp=[{}],att=r[{}],expr=[{}],converter=[{}],validator=[{}]", comp,attr,saveExpr,converterExpr,validatorExpr);
 					}
 					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);
 					
@@ -1226,7 +1226,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String converterExpr, Map<String, Object> converterArgs) {
 		
 		if(_log.isDebugEnabled()){
-			_log.debug("add children-init-binding: comp=[%s],expr=[%s]", comp,initExpr);
+			_log.debug("add children-init-binding: comp=[{}],expr=[{}]", comp,initExpr);
 		}
 		
 		InitChildrenBinding binding = newInitChildrenBinding(comp, initExpr, bindingArgs,converterExpr,converterArgs);
@@ -1248,7 +1248,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		if(prompt){
 			if(_log.isDebugEnabled()){
-				_log.debug("add event(prompt)-children-load-binding: comp=[%s],expr=[%s]", comp,loadExpr);
+				_log.debug("add event(prompt)-children-load-binding: comp=[{}],expr=[{}]", comp,loadExpr);
 			}
 			LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.PROMPT, null,  bindingArgs,converterExpr,converterArgs);
 			addBinding(comp, CHILDREN_ATTR, binding);
@@ -1266,7 +1266,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs,converterExpr,converterArgs);
 					addBinding(comp, CHILDREN_ATTR, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add before command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
+						_log.debug("add before command children-load-binding: comp=[{}],expr=[{}],cmd=[{}]", comp,loadExpr, cmd);
 					}
 					_childrenBindingHandler.addLoadBeforeBinding(cmd, binding);
 					
@@ -1280,7 +1280,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs,converterExpr,converterArgs);
 					addBinding(comp, CHILDREN_ATTR, binding);
 					if(_log.isDebugEnabled()){
-						_log.debug("add after command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
+						_log.debug("add after command children-load-binding: comp=[{}],expr=[{}],cmd=[{}]", comp,loadExpr, cmd);
 					}
 					_childrenBindingHandler.addLoadAfterBinding(cmd, binding);
 					
@@ -1303,7 +1303,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private void addReferenceBinding0(Component comp, String attr, String loadExpr, Map<String, Object> bindingArgs) {
 		if(_log.isDebugEnabled()){
-			_log.debug("add reference-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
+			_log.debug("add reference-binding: comp=[{}],attr=[{}],expr=[{}]", comp,attr,loadExpr);
 		}
 		ReferenceBindingImpl binding = new ReferenceBindingImpl(this, comp, attr, loadExpr);
 		
@@ -1440,7 +1440,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			boolean promptResult = true;
 			String command = null;
 			if(_log.isDebugEnabled()){
-				_log.debug("====Start command event [%s]",event);
+				_log.debug("====Start command event [{}]",event);
 			}
 			//BUG ZK-757, The timing of saving textbox's value attribute to ViewModel is later than command execution on onChange event
 			//We should save the prompt with validation first. 
@@ -1478,7 +1478,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			notifyVMsgsChanged();//always, no better way to know which properties of validation are changed
 			
 			if(_log.isDebugEnabled()){
-				_log.debug("There are [%s] property need to be notify after event = [%s], command = [%s]",notifys.size(),evtnm, command);
+				_log.debug("There are [{}] property need to be notify after event = [{}], command = [{}]",notifys.size(),evtnm, command);
 			}
 			fireNotifyChanges(notifys);
 			
@@ -1501,7 +1501,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 			
 			if(_log.isDebugEnabled()){
-				_log.debug("====End command event [%s]",event);
+				_log.debug("====End command event [{}]",event);
 			}
 		}
 	}
@@ -1566,7 +1566,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private int doCommand(Component comp, CommandBinding commandBinding, String command, Event evt, Map<String, Object> commandArgs, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
 		if(_log.isDebugEnabled()){
-			_log.debug("Start doCommand comp=[%s],command=[%s],evtnm=[%s]",comp,command,evtnm);
+			_log.debug("Start doCommand comp=[{}],command=[{}],evtnm=[{}]",comp,command,evtnm);
 		}
 		BindContext ctx = BindContextUtil.newBindContext(this, commandBinding, false, command, comp, evt);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
@@ -1613,7 +1613,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private void doGlobalCommand(Component comp, String command, Map<String, Object> commandArgs, Set<Property> notifys) {
 		if(_log.isDebugEnabled()){
-			_log.debug("Start doGlobalCommand comp=[%s],command=[%s]",comp,command);
+			_log.debug("Start doGlobalCommand comp=[{}],command=[{}]",comp,command);
 		}
 		
 		
@@ -1637,7 +1637,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void doGlobalCommandExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx,Set<Property> notifys) {
 		try {
 			if(_log.isDebugEnabled()){
-				_log.debug("before doGlobalCommandExecute comp=[%s],command=[%s]",comp,command);
+				_log.debug("before doGlobalCommandExecute comp=[{}],command=[{}]",comp,command);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 			
@@ -1686,11 +1686,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}else{
 				//do nothing
 				if(_log.isDebugEnabled()){
-					_log.debug("no global command method in [%s]", viewModel);
+					_log.debug("no global command method in [{}]", viewModel);
 				}
 			}
 			if(_log.isDebugEnabled()){
-				_log.debug("after doGlobalCommandExecute notifys=[%s]", notifys);
+				_log.debug("after doGlobalCommandExecute notifys=[{}]", notifys);
 			}
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
@@ -1725,7 +1725,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private boolean doSaveEvent(Component comp, Event evt, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
 		if(_log.isDebugEnabled()){
-			_log.debug("doSaveEvent comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
+			_log.debug("doSaveEvent comp=[{}],evtnm=[{}],notifys=[{}]",comp,evtnm,notifys);
 		}
 		final BindingKey bkey = getBindingKey(comp, evtnm);
 		return _propertyBindingHandler.doSaveEvent(bkey, comp, evt, notifys);
@@ -1734,7 +1734,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//for event -> prompt only, no command
 	private void doLoadEvent(Component comp, Event evt) {
 		if(_log.isDebugEnabled()){
-			_log.debug("doLoadEvent comp=[%s],evtnm=[%s]",comp,evt.getName());
+			_log.debug("doLoadEvent comp=[{}],evtnm=[{}]",comp,evt.getName());
 		}
 		final BindingKey bkey = getBindingKey(comp, evt.getName()); 
 		_propertyBindingHandler.doLoadEvent(bkey, comp, evt);
@@ -1745,7 +1745,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final Set<Property> validates = new HashSet<Property>();
 		try {
 			if(_log.isDebugEnabled()){
-				_log.debug("doValidate comp=[%s],command=[%s],evt=[%s],context=[%s]",comp,command,evt,ctx);
+				_log.debug("doValidate comp=[{}],command=[{}],evt=[{}],context=[{}]",comp,command,evt,ctx);
 			}
 			doPrePhase(Phase.VALIDATE, ctx);
 			
@@ -1777,7 +1777,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				return true;
 			} else {
 				if(_log.isDebugEnabled()){
-					_log.debug("doValidate validates=[%s]",validates);
+					_log.debug("doValidate validates=[{}]",validates);
 				}
 				boolean valid = true;
 				
@@ -1835,7 +1835,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx, Set<Property> notifys) {
 		try {
 			if(_log.isDebugEnabled()){
-				_log.debug("before doExecute comp=[%s],command=[%s],notifys=[%s]",comp,command,notifys);
+				_log.debug("before doExecute comp=[{}],command=[{}],notifys=[{}]",comp,command,notifys);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 			
@@ -1884,7 +1884,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				throw new UiException(MiscUtil.formatLocationMessage("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel,comp));
 			}
 			if(_log.isDebugEnabled()){
-				_log.debug("after doExecute notifys=[%s]", notifys);
+				_log.debug("after doExecute notifys=[{}]", notifys);
 			}
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
@@ -1961,7 +1961,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//doCommand -> doSaveBefore
 	private void doSaveBefore(Component comp, String command, Event evt,  BindContext ctx, Set<Property> notifys) {
 		if(_log.isDebugEnabled()){
-			_log.debug("doSaveBefore, comp=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,command,evt,notifys);
+			_log.debug("doSaveBefore, comp=[{}],command=[{}],evt=[{}],notifys=[{}]",comp,command,evt,notifys);
 		}
 		try {
 			doPrePhase(Phase.SAVE_BEFORE, ctx);		
@@ -1975,7 +1975,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private void doSaveAfter(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
 		if(_log.isDebugEnabled()){
-			_log.debug("doSaveAfter, comp=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,command,evt,notifys);
+			_log.debug("doSaveAfter, comp=[{}],command=[{}],evt=[{}],notifys=[{}]",comp,command,evt,notifys);
 		}
 		try {
 			doPrePhase(Phase.SAVE_AFTER, ctx);
@@ -1990,7 +1990,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private void doLoadBefore(Component comp, String command, BindContext ctx) {
 		if(_log.isDebugEnabled()){
-			_log.debug("doLoadBefore, comp=[%s],command=[%s]",comp,command);
+			_log.debug("doLoadBefore, comp=[{}],command=[{}]",comp,command);
 		}
 		try {
 			doPrePhase(Phase.LOAD_BEFORE, ctx);		
@@ -2004,7 +2004,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	private void doLoadAfter(Component comp, String command, BindContext ctx) {
 		if(_log.isDebugEnabled()){
-			_log.debug("doLoadAfter, comp=[%s],command=[%s]",comp,command);
+			_log.debug("doLoadAfter, comp=[{}],command=[{}]",comp,command);
 		}
 		try {
 			doPrePhase(Phase.LOAD_AFTER, ctx);
@@ -2320,14 +2320,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public void notifyChange(Object base, String attr) {
 		checkInit();
 		if(_log.isDebugEnabled()){
-			_log.debug("notifyChange base=[%s],attr=[%s]",base,attr);
+			_log.debug("notifyChange base=[{}],attr=[{}]",base,attr);
 		}
 		getEventQueue().publish(new PropertyChangeEvent(_rootComp, base, attr));
 	}
 	
 	private void postGlobalCommand(Component comp, CommandBinding commandBinding, String command, Event evt, Map<String, Object> args) {
 		if(_log.isDebugEnabled()){
-			_log.debug("postGlobalCommand command=[%s], args=[%s]",command,args);
+			_log.debug("postGlobalCommand command=[{}], args=[{}]",command,args);
 		}
 		
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
@@ -2502,7 +2502,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void didActivate() {
 		_activating = true;
 		try{
-			_log.debug("didActivate : [%s]",BinderImpl.this);
+			_log.debug("didActivate : [{}]",BinderImpl.this);
 			//re-tie value to tracker.
 			loadComponent(_rootComp, false);
 		}finally{

@@ -57,7 +57,7 @@ public class SystemValidators {
 	
 	static private void set0(String name,Validator validator){
 		if(_log.isDebugEnabled()){
-			_log.debug("set validator [%s]=[%s]",name,validator);
+			_log.debug("set validator [{}]=[{}]",name,validator);
 		}
 		synchronized(_validators){
 			_validators.put(name, validator);

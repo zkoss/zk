@@ -52,8 +52,21 @@ ZK 8.0.0
   	*. z-icon-collapse-o
   + The library property of org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled is false by default.
 
+  --------
+ZK 7.0.6
+* Features
 
+* Bugs
+  ZK-2692: SLF4J logging argument syntax
 
+  --------
+ZK 7.0.5.1
+April 13, 2015
+* Features
+
+* Bugs
+  ZK-2702: Server push crash since a pair of execution activate and deactive were called
+  
   --------
 ZK 7.0.5
 March 24, 2015

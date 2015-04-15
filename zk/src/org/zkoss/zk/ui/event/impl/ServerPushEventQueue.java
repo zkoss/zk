@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.util.DesktopCleanup;
 
 /**
@@ -151,9 +152,8 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 		private DesktopInfo(Desktop desktop, EQService service, EQCleanup cleanup) {
 			_desktop = desktop;
 			_que = new DesktopEventQueue<T>();
-			_spEnabled = !desktop.isServerPushEnabled();
-			if (_spEnabled)
-				desktop.enableServerPush(true);
+			_spEnabled = true; // for bug ZK-2702, we always enable it here
+			((DesktopCtrl)desktop).enableServerPush(true, this);
 			desktop.addListener(_service = service);
 			desktop.addListener(_cleanup = cleanup);
 				//OK to call addListener since it is the current desktop
@@ -188,7 +188,7 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 
 					if (_desktop.isAlive())
 						try {
-							_desktop.enableServerPush(false);
+							((DesktopCtrl)_desktop).enableServerPush(false, this);
 						} catch (Throwable ex) {
 							log.warn("Ingored: unable to stop server push", ex);
 						}

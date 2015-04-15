@@ -104,7 +104,7 @@ import org.zkoss.zk.ui.event.Event;
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 		try {
 			if(_log.isDebugEnabled()){
-				_log.debug("doSavePropertyBinding:binding.save() comp=[%s],binding=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,binding,command,evt,notifys);
+				_log.debug("doSavePropertyBinding:binding.save() comp=[{}],binding=[{}],command=[{}],evt=[{}],notifys=[{}]",comp,binding,command,evt,notifys);
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
@@ -127,7 +127,7 @@ import org.zkoss.zk.ui.event.Event;
 		}
 		try { 
 			if(_log.isDebugEnabled()){
-				_log.debug("doLoadPropertyBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
+				_log.debug("doLoadPropertyBinding:binding.load(),component=[{}],binding=[{}],context=[{}],command=[{}]",comp,binding,ctx,command);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
@@ -180,7 +180,7 @@ import org.zkoss.zk.ui.event.Event;
 				doPrePhase(Phase.VALIDATE, ctx);
 				final Property p = binding.getValidate(ctx); 
 				if(_log.isDebugEnabled()){
-					_log.debug("doValidateSaveEvent comp=[%s],binding=[%s],evt=[%s],validate=[%s]",comp,binding,evt,p);
+					_log.debug("doValidateSaveEvent comp=[{}],binding=[{}],evt=[{}],validate=[{}]",comp,binding,evt,p);
 				}
 				if(p==null){
 					throw new UiException("no main property for save-binding "+binding);
@@ -195,7 +195,7 @@ import org.zkoss.zk.ui.event.Event;
 				binding.validate(vctx);
 				boolean valid = vctx.isValid();
 				if(_log.isDebugEnabled()){
-					_log.debug("doValidateSaveEvent result=[%s]",valid);
+					_log.debug("doValidateSaveEvent result=[{}]",valid);
 				}
 				
 				

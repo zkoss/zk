@@ -106,7 +106,7 @@ import org.zkoss.zk.ui.event.Event;
 		//TODO converter args when we support converter in form
 		try {
 			if(_log.isDebugEnabled()){
-				_log.debug("doSaveFormBinding:binding.save() comp=[%s],binding=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,binding,command,evt,notifys);
+				_log.debug("doSaveFormBinding:binding.save() comp=[{}],binding=[{}],command=[{}],evt=[{}],notifys=[{}]",comp,binding,command,evt,notifys);
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
@@ -129,7 +129,7 @@ import org.zkoss.zk.ui.event.Event;
 		//TODO converter args when we support converter in form
 		try {
 			if(_log.isDebugEnabled()){
-				_log.debug("doLoadFormBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
+				_log.debug("doLoadFormBinding:binding.load(),component=[{}],binding=[{}],context=[{}],command=[{}]",comp,binding,ctx,command);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);

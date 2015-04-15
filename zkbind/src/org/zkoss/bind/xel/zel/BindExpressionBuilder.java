@@ -101,7 +101,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 				if (fieldName != null) {
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
 						if(_log.isDebugEnabled()){
-							_log.debug("add save-field '%s' to form '%s'", fieldName,formBean);
+							_log.debug("add save-field '{}' to form '{}'", fieldName,formBean);
 						}
 						((BinderCtrl)binder).addSaveFormFieldName(formBean, fieldName);
 						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding)binding, fieldName);
