@@ -66,13 +66,13 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		}
 	}
 	public Desktop getDesktopIfAny(String desktopId) {
-		synchronized (_desktops) {
-			final boolean old = _desktops.disableExpunge(true);
-			try {
+		final boolean old = _desktops.disableExpunge(true);
+		try {
+			synchronized (_desktops) {
 				return _desktops.get(desktopId);
-			} finally {
-				_desktops.disableExpunge(old);
 			}
+		} finally {
+			_desktops.disableExpunge(old);
 		}
 	}
 	public Desktop getDesktop(String desktopId) {
@@ -85,16 +85,18 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		return desktop;
 	}
 	public void addDesktop(Desktop desktop) {
-		final boolean added;
+		//final boolean added;
 		final Desktop old;
 		synchronized (_desktops) {
 			old = _desktops.put(desktop.getId(), desktop);
 		}
 		if (old != null) {
 			_desktops.put((old).getId(), old); //recover
-			log.warn(
-				desktop == old ? "Register a desktop twice: "+desktop:
-					"Replicated ID: "+desktop+"; already used by "+old);
+			if (log.isWarnEnabled()) {
+				log.warn(
+					desktop == old ? "Register a desktop twice: "+desktop:
+						"Replicated ID: "+desktop+"; already used by "+old);
+			}
 		}
 		//if (log.isDebugEnabled()) log.debug("After added, desktops: "+_desktops);
 	}
@@ -161,43 +163,55 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	 * desktops it cached.
 	 */
 	public void sessionWillPassivate(Session sess) {
-		synchronized (_desktops) {
-			final boolean old = _desktops.disableExpunge(true);
-			try {
-				for (Desktop desktop: _desktops.values())
-					((DesktopCtrl)desktop).sessionWillPassivate(sess);
-			} finally {
-				_desktops.disableExpunge(old);
+		final boolean old = _desktops.disableExpunge(true);
+		try {
+			ArrayList<Desktop> desktops = null;
+			synchronized (_desktops) {
+				desktops = new ArrayList<Desktop>(_desktops.values());
 			}
+			
+			for (Desktop desktop : desktops)
+				((DesktopCtrl) desktop).sessionWillPassivate(sess);
+
+		} finally {
+			_desktops.disableExpunge(old);
 		}
 	}
 	/** Invokes {@link DesktopCtrl#sessionDidActivate} for each
 	 * desktops it cached.
 	 */
 	public void sessionDidActivate(Session sess) {
-		synchronized (_desktops) {
-			final boolean old = _desktops.disableExpunge(true);
-			try {
-				for (Desktop desktop: _desktops.values())
-					((DesktopCtrl)desktop).sessionDidActivate(sess);
-			} finally {
-				_desktops.disableExpunge(old);
+		final boolean old = _desktops.disableExpunge(true);
+
+		try {
+			ArrayList<Desktop> desktops = null;
+			synchronized (_desktops) {
+				desktops = new ArrayList<Desktop>(_desktops.values());
 			}
+			
+			for (Desktop desktop: desktops)
+				((DesktopCtrl)desktop).sessionDidActivate(sess);
+			
+		} finally {
+			_desktops.disableExpunge(old);
 		}
 	}
 
 	public void stop() {
-		synchronized (_desktops) {
-			if (log.isDebugEnabled()) log.debug("Invalidated and remove: "+_desktops);
-			final boolean old = _desktops.disableExpunge(true);
-			try {
-				for (Desktop desktop: new ArrayList<Desktop>(_desktops.values())) {
-					desktopDestroyed(desktop);
-				}
+		if (log.isDebugEnabled())
+			log.debug("Invalidated and remove: " + _desktops);
+		final boolean old = _desktops.disableExpunge(true);
+		try {
+			ArrayList<Desktop> desktops = null;
+			synchronized (_desktops) {
+				desktops = new ArrayList<Desktop>(_desktops.values());
 				_desktops.clear();
-			} finally {
-				_desktops.disableExpunge(old);
 			}
+			for (Desktop desktop: desktops) {
+				desktopDestroyed(desktop);
+			}
+		} finally {
+			_desktops.disableExpunge(old);
 		}
 	}
 
