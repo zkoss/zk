@@ -934,6 +934,11 @@ public void run() {
 	 * <p>Note: you don't need to invoke this method in the event listener
 	 * since it is already activated when an event listen starts execution.
 	 *
+	 * <p> Note: When you call this method, ZK framework would require a lock on the
+	 * thread. In the rare case that the framework, at the same time, is waiting
+	 * on the release of another lock from your application, then a deadlock
+	 * would result.
+     *
 	 * @exception InterruptedException if it is interrupted by other thread
 	 * @exception IllegalStateException if the server push is not enabled.
 	 * @exception DesktopUnavailableException if the desktop is removed
@@ -950,7 +955,11 @@ public void run() {
 	 * to access, the desktop no longer exists,
 	 * some other thread interrupts this thread,
 	 * or a certain amount of real time has elapsed.
-	 *
+	 * <p> Note: When you call this method, ZK framework would require a lock on the
+	 * thread. In the rare case that the framework, at the same time, is waiting
+	 * on the release of another lock from your application, then a deadlock
+	 * would result.
+     *
 	 * @param timeout the maximum time to wait in milliseconds.
 	 * Ignored (i.e., never timeout) if non-positive.
 	 * @return whether it is activated or it is timeout.
