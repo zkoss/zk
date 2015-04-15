@@ -21,6 +21,7 @@ ZK 8.0.0
   ZK-2674: Add an annotation for notify command
   ZK-1972: K bind support access vm properties in client side
   ZK-2576: Support a shadow element concept for Databinding or EL expression
+  ZK-2638: simplify exception handling (avoid wrapping RuntimeExceptions)
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

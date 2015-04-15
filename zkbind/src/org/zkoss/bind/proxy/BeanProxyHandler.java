@@ -94,7 +94,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 									BindELContext.addNotifys(m, _origin, me.getKey(),
 											value, (BindContext) args[0]);
 								} catch (NoSuchMethodException e) {
-									throw new UiException(e);
+									throw UiException.Aide.wrap(e);
 								}
 							}
 						}
@@ -187,7 +187,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 				}
 			}
 		} catch (Exception e) {
-			throw new UiException(e);
+			throw UiException.Aide.wrap(e);
 		}
 		return null;
 	}

@@ -44,7 +44,7 @@ public class ImageContentConverter implements Serializable, Converter<Object, Ob
 				 return Images.encode("a.png", awtImg);
 				
 			} catch (java.io.IOException ex) {
-				throw new UiException(ex);
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 		return beanProp;

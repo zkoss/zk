@@ -61,7 +61,7 @@ public class ProxyHelper {
 			try {
 				p1 = proxyClass.newInstance();
 			} catch (Exception e) {
-				throw new UiException("Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.", e);
+				throw UiException.Aide.wrap(e, "Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
 			}
 
 			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
@@ -85,7 +85,7 @@ public class ProxyHelper {
 		try {
 			p1 = proxyClass.newInstance();
 		} catch (Exception e) {
-			throw new UiException("Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.", e);
+			throw UiException.Aide.wrap(e, "Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
 		}
 
 		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));

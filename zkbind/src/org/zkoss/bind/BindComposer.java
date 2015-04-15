@@ -317,7 +317,7 @@ public class BindComposer<T extends Component> implements Composer<T>,
 						binder = ((Class<?>)binder).getDeclaredConstructor(String.class, String.class).newInstance(name, scope);
 					}
 				} catch (Exception e) {
-					throw new UiException(e.getMessage(),e);
+					throw UiException.Aide.wrap(e, e.getMessage());
 				}
 				if(!(binder instanceof AnnotateBinder)){
 					throw new UiException(MiscUtil.formatLocationMessage("evaluated binder is not a binder is "+binder,initanno));
@@ -345,7 +345,7 @@ public class BindComposer<T extends Component> implements Composer<T>,
 				return (AnnotateBinder) 
 						Classes.newInstanceByThread(clznm, new Class[] {String.class, String.class}, new String[] {name, scope});
 			} catch (Exception e) {
-				throw new UiException("Can't initialize binder",e);
+				throw UiException.Aide.wrap(e, "Can't initialize binder");
 			}
 		} else {
 			return new AnnotateBinder(name, scope);
@@ -386,7 +386,7 @@ public class BindComposer<T extends Component> implements Composer<T>,
 					vmessages = ((Class<?>)vmessages).newInstance();
 				}
 			} catch (Exception e) {
-				throw new UiException(MiscUtil.formatLocationMessage(e.getMessage(),initanno),e);
+				throw UiException.Aide.wrap(e, MiscUtil.formatLocationMessage(e.getMessage(),initanno));
 			}
 			if(!(vmessages instanceof ValidationMessages)){
 				throw new UiException(MiscUtil.formatLocationMessage("evaluated validationMessages is not a ValidationMessages is "+vmessages,initanno));

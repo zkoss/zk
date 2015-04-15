@@ -542,7 +542,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				renderer = Classes.newInstanceByThread(name);
 				RENDERERS.put(name, renderer); //assume renderer is state-less
 			} catch (IllegalAccessException e) {
-				throw new UiException(e.getMessage(),e);
+				throw UiException.Aide.wrap(e, e.getMessage());
 			} catch (Exception e) {
 				//ignore
 			}
@@ -843,7 +843,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				try {
 					attrType = Classes.forNameByThread(type);
 				} catch (ClassNotFoundException e) {
-					throw new UiException(e.getMessage(),e);
+					throw UiException.Aide.wrap(e, e.getMessage());
 				}
 			}
 		}
@@ -921,7 +921,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 						try {
 							Fields.set(comp, values[0], renderer, false);
 						} catch (Exception  e) {
-							throw new UiException(e.getMessage(),e);
+							throw UiException.Aide.wrap(e, e.getMessage());
 						}
 						
 						if(renderer instanceof TemplateRendererCtrl){
@@ -1043,7 +1043,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				try {
 					attrType = Classes.forNameByThread(type);
 				} catch (ClassNotFoundException e) {
-					throw new UiException(e.getMessage(),e);
+					throw UiException.Aide.wrap(e, e.getMessage());
 				}
 			}
 		}
@@ -1809,7 +1809,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				return valid;
 			}
 		} catch (Exception e) {
-			throw new UiException(e.getMessage(),e);
+			throw UiException.Aide.wrap(e, e.getMessage());
 		} finally {
 			doPostPhase(Phase.VALIDATE, ctx);
 		}
@@ -2170,7 +2170,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			TemplateResolver resolver = c.newInstance(binderImpl, comp, attr,templateExpr, templateArgs);
 			return resolver;
 		} catch (Exception e) {
-			throw new UiException("Can't initialize template resolver ",e);
+			throw UiException.Aide.wrap(e, "Can't initialize template resolver ");
 		}
 	}
 
@@ -2200,7 +2200,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 					clz = (Class<Tracker>)Classes.forNameByThread(clznm);
 					_tracker = clz.newInstance();
 				} catch (Exception e) {
-					throw new UiException("Can't initialize tracker",e);
+					throw UiException.Aide.wrap(e, "Can't initialize tracker");
 				} 
 			}else
 				_tracker = new TrackerImpl();

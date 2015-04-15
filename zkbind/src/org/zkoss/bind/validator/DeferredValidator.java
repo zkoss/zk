@@ -59,7 +59,7 @@ public class DeferredValidator implements Validator,Serializable{
 		try {
 			getValidator().validate(ctx);
 		} catch (Exception e) {
-			throw new UiException(e.getMessage(),e);
+			throw UiException.Aide.wrap(e, e.getMessage());
 		}
 	}
 

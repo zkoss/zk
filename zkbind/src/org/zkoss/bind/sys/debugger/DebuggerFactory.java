@@ -62,7 +62,7 @@ public abstract class DebuggerFactory {
 					try {
 						_factory = (DebuggerFactory)Classes.forNameByThread(clz).newInstance();
 					} catch (Exception e) {
-						throw new UiException(e.getMessage(),e);
+						throw UiException.Aide.wrap(e, e.getMessage());
 					}
 				}else{ 
 					_factory = new DefaultDebuggerFactory();

@@ -19,6 +19,7 @@ package org.zkoss.zk.ui;
 import org.zkoss.lang.SystemException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
+import org.zkoss.zel.ELException;
 
 /**
  * Represents a UI-relevant runtime exception.
@@ -38,9 +39,16 @@ public class UiException extends SystemException {
 		 */
 		public static UiException wrap(Throwable t) {
 			t = Exceptions.unwrap(t);
+			boolean skipWrapping = false;
 			if (t instanceof Expectable)
+				skipWrapping = true;
+			else if (t instanceof ELException && t.getCause() instanceof RuntimeException) {
+				skipWrapping = true;
+				t = t.getCause();
+			}
+			if (skipWrapping)
 				return (OperationException)
-					Exceptions.wrap(t, OperationException.class);
+						Exceptions.wrap(t, OperationException.class);
 			return (UiException)
 				Exceptions.wrap(t, UiException.class);
 		}
@@ -50,9 +58,17 @@ public class UiException extends SystemException {
 		 */
 		public static UiException wrap(Throwable t, String msg) {
 			t = Exceptions.unwrap(t);
+			boolean skipWrapping = false;
 			if (t instanceof Expectable)
+				skipWrapping = true;
+			else if (t instanceof ELException && t.getCause() instanceof RuntimeException) {
+				skipWrapping = true;
+				t = t.getCause();
+			}
+			if (skipWrapping)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, msg);
+
 			return (UiException)
 				Exceptions.wrap(t, UiException.class, msg);
 		}
@@ -62,7 +78,14 @@ public class UiException extends SystemException {
 		 */
 		public static UiException wrap(Throwable t, int code, Object[] fmtArgs) {
 			t = Exceptions.unwrap(t);
+			boolean skipWrapping = false;
 			if (t instanceof Expectable)
+				skipWrapping = true;
+			else if (t instanceof ELException && t.getCause() instanceof RuntimeException) {
+				skipWrapping = true;
+				t = t.getCause();
+			}
+			if (skipWrapping)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, code, fmtArgs);
 			return (UiException)
@@ -74,7 +97,14 @@ public class UiException extends SystemException {
 		 */
 		public static UiException wrap(Throwable t, int code, Object fmtArg) {
 			t = Exceptions.unwrap(t);
+			boolean skipWrapping = false;
 			if (t instanceof Expectable)
+				skipWrapping = true;
+			else if (t instanceof ELException && t.getCause() instanceof RuntimeException) {
+				skipWrapping = true;
+				t = t.getCause();
+			}
+			if (skipWrapping)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, code, fmtArg);
 			return (UiException)
@@ -86,7 +116,14 @@ public class UiException extends SystemException {
 		 */
 		public static UiException wrap(Throwable t, int code) {
 			t = Exceptions.unwrap(t);
+			boolean skipWrapping = false;
 			if (t instanceof Expectable)
+				skipWrapping = true;
+			else if (t instanceof ELException && t.getCause() instanceof RuntimeException) {
+				skipWrapping = true;
+				t = t.getCause();
+			}
+			if (skipWrapping)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, code);
 			return (UiException)

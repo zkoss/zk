@@ -92,7 +92,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				synchronized(annoMethodCache){//remove it for the hot deploy case if getting any error
 					annoMethodCache.remove(vmClz);
 				}
-				throw new UiException(e.getMessage(),e);
+				throw UiException.Aide.wrap(e, e.getMessage());
 			}
 		}
 	}
