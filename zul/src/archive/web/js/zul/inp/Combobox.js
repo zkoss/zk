@@ -124,7 +124,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	validateStrict: function (val) {
 		var cst = this._cst;
 		return this._findItem(val, true) ? null: 
-			(cst ? cst._errmsg: '') || msgzul.VALUE_NOT_MATCHED;
+			(cst ? cst._errmsg['STRICT'] ? cst._errmsg['STRICT'] : '' : '') || msgzul.VALUE_NOT_MATCHED;
 	},
 	_findItem: function (val, strict) {
 		return this._findItem0(val, strict);

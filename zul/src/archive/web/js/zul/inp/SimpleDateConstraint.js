@@ -31,6 +31,7 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	format: 'yyyyMMdd',
 	parseConstraint_: function(constraint){
 		var len = this.format.length + 1;
+		var arr = this._cstArr;
 		if (constraint.startsWith("between")) {
 			var j = constraint.indexOf("and", 7);
 			if (j < 0 && zk.debugJS) 
@@ -45,15 +46,15 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				
 			this._beg.setHours(0,0,0,0);
 			this._end.setHours(0,0,0,0);
-			return;
+			arr[arr.length] = 'between';
 		} else if (constraint.startsWith("before") && !constraint.startsWith("before_")) {
 			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format);
 			this._end.setHours(0,0,0,0);
-			return;
+			arr[arr.length] = 'before';
 		} else if (constraint.startsWith("after") && !constraint.startsWith("after_")) {
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format);
 			this._beg.setHours(0,0,0,0);
-			return;
+			arr[arr.length] = 'after';
 		}
 		return this.$supers('parseConstraint_', arguments);
 	},
@@ -62,9 +63,9 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			var msg = this._errmsg;
 			var v = new Date(val.getFullYear(), val.getMonth(), val.getDate());
 			if (this._beg != null && this._beg.getTime() > v.getTime())
-				return msg || this.outOfRangeValue();
+				return msg['between'] || msg['after'] || this.outOfRangeValue();
 			if (this._end != null && this._end.getTime() < v.getTime())
-				return msg || this.outOfRangeValue();
+				return msg['between'] || msg['before'] || this.outOfRangeValue();
 		}
 		return this.$supers('validate', arguments);
 	},
