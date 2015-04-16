@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2641.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Apr 15, 2015 12:32:05 PM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+	0. new feature to support multiple customized error messages 
+	1. focus on each input widget
+	2. input something or nothing and blur
+	3. please see zul file and make some test
+	</label>
+	<vlayout>
+	<label>textbox</label>
+	<textbox constraint="no empty: no empty, /.+@.+\.[a-z]+/: email only"></textbox>
+	<label>intbox</label>
+	<intbox constraint="no negative: no neg, no positive: no pos"></intbox>
+	<intbox constraint="no zero: no zero, no positive: no pos, no empty: no empty"></intbox>
+	<label>datebox</label>
+	<datebox constraint="no empty: no empty, no future: no future"/>
+	<datebox constraint="after 20150416: no before, before 20150420: no after" format="yyyyMMdd"/>
+	<datebox constraint="between 20150416 and 20150420: between , no empty: no empty" format="yyyyMMdd"/>
+	<label>combobox</label>
+	<combobox constraint="strict: strict, no empty: no empty">
+	    <comboitem label="1"/>
+	    <comboitem label="2"/>
+	    <comboitem label="3"/>
+	</combobox>
+	
+	</vlayout>
+</window>

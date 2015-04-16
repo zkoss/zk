@@ -36,6 +36,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	$init: function (a, b, c) {
 		if (typeof a == 'string') {
 			this._flags = {};
+			this._errmsg = {};
+			this._cstArr = [];
 			this._init(a);
 		} else {
 			this._flags = typeof a == 'number' ? this._cvtNum(a): a||{};
@@ -64,11 +66,22 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						if (cc == '\\') ++k; //skip one
 					}
 					this._regex = new RegExp(k >= 0 ? cst.substring(j, k): cst.substring(j), 'g');
+					this._cstArr[this._cstArr.length] = 'regex'; 
 					continue l_out;
 				}
 				if (cc == ':') {
-					this._errmsg = cst.substring(j + 1).trim();
-					return; //done
+					for (k = ++j;; ++k) { //look for ending
+						if (k >= len) { //no ending
+							k = -1;
+							break;
+						}
+
+						cc = cst.charAt(k);
+						if (cc == ',') break; //msg ending found
+					}
+					this._errmsg[this._cstArr[this._cstArr.length - 1]] = k >= 0 ? 
+							cst.substring(j, k).trim() : cst.substring(j).trim();
+					continue l_out;
 				}
 				if (!zUtl.isChar(cc,{whitespace:1}))
 					break;
@@ -112,25 +125,36 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 */
 	parseConstraint_: function (cst) {
 		var f = this._flags;
-		if (cst == "no positive")
+		var arr = this._cstArr;
+		
+		if (cst == "no positive") {
 			f.NO_POSITIVE = true;
-		else if (cst == "no negative")
+			arr[arr.length] = 'NO_POSITIVE'; 
+		} else if (cst == "no negative") {
 			f.NO_NEGATIVE = true;
-		else if (cst == "no zero")
+			arr[arr.length] = 'NO_NEGATIVE';
+		} else if (cst == "no zero") {
 			f.NO_ZERO = true;
-		else if (cst == "no empty")
+			arr[arr.length] = 'NO_ZERO';
+		} else if (cst == "no empty") {
 			f.NO_EMPTY = true;
-		else if (cst == "no future")
+			arr[arr.length] = 'NO_EMPTY';
+		} else if (cst == "no future") {
 			f.NO_FUTURE = true;
-		else if (cst == "no past")
+			arr[arr.length] = 'NO_FUTURE';
+		} else if (cst == "no past") {
 			f.NO_PAST = true;
-		else if (cst == "no today")
+			arr[arr.length] = 'NO_PAST';
+		} else if (cst == "no today") {
 			f.NO_TODAY = true;
-		else if (cst == "strict")
+			arr[arr.length] = 'NO_TODAY';
+		} else if (cst == "strict") {
 			f.STRICT = true;
-		else if (cst == "server") {
+			arr[arr.length] = 'STRICT';
+		} else if (cst == "server") {
 			f.SERVER = true;
 			this.serverValidate = true;
+			arr[arr.length] = 'SERVER';
 		} else if (cst && _posAllowed.$contains(cst))
 			this._pos = cst;
 		else if (zk.debugJS)
@@ -181,13 +205,13 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		switch (typeof val) {
 		case 'string':
 			if (f.NO_EMPTY && (!val || !val.trim()))
-				return msg || msgzul.EMPTY_NOT_ALLOWED;
+				return msg['NO_EMPTY'] || msgzul.EMPTY_NOT_ALLOWED;
 			var regex = this._regex;
 			if (regex) {
 				// Bug 3214754
 				var val2 = val.match(regex);
 				if (!val2 || val2.join('') != val)
-					return msg || msgzul.ILLEGAL_VALUE;
+					return msg['regex'] || msgzul.ILLEGAL_VALUE;
 			}
 			if (f.STRICT && val && wgt.validateStrict) {
 				msg = wgt.validateStrict(val);
@@ -196,11 +220,11 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			return;
 		case 'number':
 			if (val > 0) {
-				if (f.NO_POSITIVE) return msg || this._msgNumDenied();
+				if (f.NO_POSITIVE) return msg['NO_POSITIVE'] || this._msgNumDenied();
 			} else if (val == 0) {
-				if (f.NO_ZERO) return msg || this._msgNumDenied();
+				if (f.NO_ZERO) return msg['NO_ZERO'] || this._msgNumDenied();
 			} else
-				if (f.NO_NEGATIVE) return msg || this._msgNumDenied();
+				if (f.NO_NEGATIVE) return msg['NO_NEGATIVE'] || this._msgNumDenied();
 			return;
 		}
 
@@ -208,40 +232,40 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			var today = zUtl.today(),
 				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
 			if ((today - val)/ 86400000 < 0) {
-				if (f.NO_FUTURE) return msg || this._msgDateDenied();
+				if (f.NO_FUTURE) return msg['NO_FUTURE'] || this._msgDateDenied();
 			} else if (val - today == 0) {
-				if (f.NO_TODAY) return msg || this._msgDateDenied();
+				if (f.NO_TODAY) return msg['NO_TODAY'] || this._msgDateDenied();
 			} else
-				if (f.NO_PAST) return msg || this._msgDateDenied();
+				if (f.NO_PAST) return msg['NO_PAST'] || this._msgDateDenied();
 			return;
 		}
 
-		if (!val && f.NO_EMPTY) return msg || msgzul.EMPTY_NOT_ALLOWED;
+		if (!val && f.NO_EMPTY) return msg['NO_EMPTY'] || msgzul.EMPTY_NOT_ALLOWED;
 	},
 	_msgNumDenied: function () {
 		var f = this._flags,
 			msg = this._errmsg;
 		if (f.NO_POSITIVE)
-			return msg || (f.NO_ZERO ?
+			return msg['NO_POSITIVE'] || (f.NO_ZERO ?
 				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE_ZERO: msgzul.NO_POSITIVE_ZERO:
 				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE: msgzul.NO_POSITIVE);
 		else if (f.NO_NEGATIVE)
-			return msg || (f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO: msgzul.NO_NEGATIVE);
+			return msg['NO_NEGATIVE'] || (f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO: msgzul.NO_NEGATIVE);
 		else if (f.NO_ZERO)
-			return msg || msgzul.NO_ZERO;
+			return msg['NO_ZERO'] || msgzul.NO_ZERO;
 		return msg || msgzul.ILLEGAL_VALUE;
 	},
 	_msgDateDenied: function () {
 		var f = this._flags,
 			msg = this._errmsg;
 		if (f.NO_FUTURE)
-			return msg || (f.NO_TODAY ?
+			return msg['NO_FUTURE'] || (f.NO_TODAY ?
 				f.NO_PAST ? NO_FUTURE_PAST_TODAY: msgzul.NO_FUTURE_TODAY:
 				f.NO_PAST ? msgzul.NO_FUTURE_PAST: msgzul.NO_FUTURE);
 		else if (f.NO_PAST)
-			return msg || (f.NO_TODAY ? msgzul.NO_PAST_TODAY: msgzul.NO_PAST);
+			return msg['NO_PAST'] || (f.NO_TODAY ? msgzul.NO_PAST_TODAY: msgzul.NO_PAST);
 		else if (f.NO_TODAY)
-			return msg || msgzul.NO_TODAY;
+			return msg['NO_TODAY'] || msgzul.NO_TODAY;
 		return msg || msgzul.ILLEGAL_VALUE;
 	}
 });
