@@ -23,10 +23,10 @@ import org.zkoss.zktest.zats.zuti.bean.Person;
  */
 public class ApplyVM {
 	private Person person;
-	private String templateURI = "/test/mvvm/include/apply.zul";
-	private String simpleTemplateURI = "/test/mvvm/include/basic.zul";
-	private String simpleRootTemplateURI = "/test/mvvm/include/basicRoot.zul";
-	private String simpleNestedTemplateURI = "/test/mvvm/include/basicNested.zul";
+	private String templateURI = "../include/apply.zul";
+	private String simpleTemplateURI = "../include/basic.zul";
+	private String simpleRootTemplateURI = "../include/basicRoot.zul";
+	private String simpleNestedTemplateURI = "../include/basicNested.zul";
 	private String template = "readonly";
 	@Init
 	public void init() {
@@ -77,13 +77,13 @@ public class ApplyVM {
 	@Command
 	public void editProfile(@BindingParam("profile") Person p) {
 		person = p;
-		templateURI = "/test/mvvm/include/editApply.zul";
+		templateURI = "../include/editApply.zul";
 		template = "edit";
 	}
 	@NotifyChange({"person", "templateURI", "template"})
 	@Command
 	public void updateProfile() {
-		templateURI = "/test/mvvm/include/apply.zul";
+		templateURI = "../include/apply.zul";
 		template = "readonly";
 	}
 

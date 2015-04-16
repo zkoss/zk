@@ -19,7 +19,7 @@
 			</apply>
 		</div>
 		<div>
-			<apply templateURI="/test/mvvm/include/basicRootMerge.zul" simpleTemplateURI="/test/mvvm/include/basic.zul" person="@ref(vm.person)"/>	
+			<apply templateURI="../include/basicRootMerge.zul" simpleTemplateURI="../include/basic.zul" person="@ref(vm.person)"/>	
 		</div>
 		<button label="Change Nested Template" onClick='@command("changeSimpleTemplate")'/>
 		<button label="Change Template" onClick='@command("changeNestedTemplate")'/>

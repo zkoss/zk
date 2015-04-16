@@ -1,4 +1,4 @@
-<?component name="foo" templateURI="/test/mvvm/include/apply.zul"?>
+<?component name="foo" templateURI="../include/apply.zul"?>
 <zk>
 <window id="host" apply="org.zkoss.bind.BindComposer"
         viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">

@@ -220,8 +220,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				switch (HtmlShadowElement.inRange(prevOwner, lastChild)) {
 				case NEXT:
 				case AFTER_NEXT:
-				case UNKNOWN:
 					prev = lastChild;
+					break;
+				case UNKNOWN:
+					boolean skip = false;
+					for (ShadowElement se : shadowRoots) {
+						if (asShadow(se)._previousInsertion == lastChild) {
+							skip = true;
+							break;
+						}
+					}
+					if (!skip)
+						prev = lastChild;
 					break;
 				default:
 					// prev is the lastShadowElement 

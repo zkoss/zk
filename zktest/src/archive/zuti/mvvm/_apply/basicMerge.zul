@@ -24,7 +24,7 @@
 			</apply>
 		</div>
 		<div>
-			<apply templateURI="/test/mvvm/include/basicMerge.zul" person="${p}"/>	
+			<apply templateURI="../include/basicMerge.zul" person="${p}"/>	
 		</div>
 	</window>
 	<debugger rootId="host" />

@@ -29,14 +29,14 @@ public class ZhtmlVM {
 
 	@Init
 	public void init() {
-		templateURI = "/test/mvvm/include/zhtmlApply1.zhtml";
+		templateURI = "../include/zhtmlApply1.zhtml";
 	}
 	
 
 	@NotifyChange("templateURI")
 	@Command
 	public void changeTemplate() {
-		this.templateURI = "/test/mvvm/include/zhtmlApply2.zhtml";
+		this.templateURI = "../include/zhtmlApply2.zhtml";
 	}
 	
 }

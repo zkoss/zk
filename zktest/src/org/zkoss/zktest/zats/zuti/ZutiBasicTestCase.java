@@ -81,4 +81,11 @@ public class ZutiBasicTestCase extends ZATSTestCase {
 		String file = String.valueOf(simple.charAt(0)).toLowerCase() + simple.substring(1).replace("Test", ".zul");
 		return name + file;
 	}
+	
+	protected String getTestURL(String file) {
+		String simple = this.getClass().getSimpleName();
+		String name = this.getClass().getName().replace("org.zkoss.zktest.zats", "").replace(".","/").replace(simple, "");
+		
+		return name + file;
+	}
 }

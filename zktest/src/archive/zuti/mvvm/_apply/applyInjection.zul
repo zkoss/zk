@@ -1,4 +1,4 @@
-<?component name="fooGrid" templateURI="/test/mvvm/include/applyInjection.zul"?>
+<?component name="fooGrid" templateURI="../include/applyInjection.zul"?>
 <zk>
 	<window id="host" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
