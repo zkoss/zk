@@ -1392,7 +1392,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	loadScript: function (url, callback, once) {
 		jq.ajax( {
-			dataType: "script",
+			dataType: 'script',
 			cache: once,
 			url: url
 		} ).done(function () {
