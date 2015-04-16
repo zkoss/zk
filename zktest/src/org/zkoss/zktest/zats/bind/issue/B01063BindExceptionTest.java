@@ -16,16 +16,17 @@ public class B01063BindExceptionTest extends ZATSTestCase {
 		ComponentAgent tb1 = desktop.query("#tb1");
 		ComponentAgent lb2 = desktop.query("#lb2");
 		ComponentAgent tb2 = desktop.query("#tb2");
-		ComponentAgent lb3 = desktop.query("#lb3");
 		ComponentAgent tb3 = desktop.query("#tb3");
 		tb1.type("1");
 		assertEquals("1", lb1.as(Label.class).getValue());
 		tb2.type("2");
 		assertEquals("2", lb2.as(Label.class).getValue());
+		String exceptionMsg = "";
 		try {
 			tb3.type("3");
 		} catch(Exception e) {
-			assertTrue(e.getCause().getCause().toString().contains("UiException: Property 'valuex' not found"));
+			exceptionMsg = e.getCause().toString();
 		}
+		assertTrue(exceptionMsg.contains("Property 'valuex' not found"));
 	}
 }
