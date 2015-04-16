@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.util;
 import java.util.List;
 import java.util.Locale;
 
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -502,5 +503,45 @@ public class Clients {
 	public static final void log(String msg) {
 		response(new AuLog(msg));
 	}
-	
+
+	/**
+	 * Loads a JavaScript file to client and execute it.
+	 * <p> By default, this method won't cache the JavaScript file, but you can
+	 * enable it by invoking {@link #loadScript(String, String, boolean)}.
+	 * @param url
+	 *            the JavasScript file path, it will be encoded with
+	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}
+	 *            if any.
+	 * @since 8.0.0
+	 * @see Encodes#encodeURL(String)
+	 * @see #loadScript(String, String, boolean)
+	 */
+	public static final void loadScript(String url) {
+		response(new AuLoadScript(url, null, false));
+	}
+
+	/**
+	 * Loads a JavaScript file to client and execute it.
+	 * 
+	 * @param url
+	 *            the JavasScript file path, it will be encoded with
+	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}
+	 *            if any.
+	 * @param callback a callback script to execute when the JavaScript file has loaded.
+	 * @param cache true means the url will be cached and executed only once.
+	 * @since 8.0.0
+	 * @see Encodes#encodeURL(String)
+	 */
+	public static final void loadScript(String url, String callback, boolean cache) {
+		response(new AuLoadScript(url, callback, cache));
+	}
+
+	/**
+	 * Loads a CSS file.
+	 * @param url the URL of the CSS file
+	 * @since 8.0.0
+	 */
+	public static final void loadCSS(String url) {
+		response(new AuLoadCSS(url));
+	}
 }

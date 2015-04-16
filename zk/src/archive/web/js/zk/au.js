@@ -1382,7 +1382,30 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			else zk(id).scrollIntoView();
 			this.__delay__ = false;
 		}, 50);
-	}
+	},
+	/**
+	 * Loads a JavaScript file and execute it.
+	 * @param String url the JavaScript file path
+	 * @param String callback the function to execute after the JavaScript file loaded.
+	 * @param boolean once true means the JavaScript file will be cached.
+	 * @since 8.0.0
+	 */
+	loadScript: function (url, callback, once) {
+		jq.ajax( {
+			dataType: "script",
+			cache: once,
+			url: url
+		} ).done(function () {
+			jq.globalEval(callback);
+		});
+	},
+	/** Loads a CSS file.
+	 * @param String href the URL of the CSS file.
+	 * @param String id the identifier. Ignored if not specified.
+	 * @param String media the media attribute. Ignored if not specified.
+	 * @since 8.0.0
+	 */
+	loadCSS: zk.loadCSS
 };
 /** @class zk.AuCmd1
  * The AU command handler for processes commands related to widgets,
