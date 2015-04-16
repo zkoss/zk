@@ -1,4 +1,5 @@
 ../dist/lib/zcommon.jar
+../dist/lib/zel.jar
 ../dist/lib/zweb.jar
 ../dist/lib/ext/commons-fileupload.jar
 ../dist/lib/ext/servlet-api.jar
