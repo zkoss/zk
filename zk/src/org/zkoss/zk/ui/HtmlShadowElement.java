@@ -615,13 +615,11 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				Component newNext = child._nextInsertion;
 				if (newNext == null) {
 					setPrevInsertion(this, child);
-				} else {
-					setPrevInsertion(this, newNext);
 				}
-				if (_firstInsertion == child._firstInsertion)
+				if (_firstInsertion == child._firstInsertion || _firstInsertion == child._previousInsertion)
 					_firstInsertion = null; // reset
 
-				if (_lastInsertion == child._lastInsertion)
+				if (_lastInsertion == child._lastInsertion || _lastInsertion == child._nextInsertion)
 					_lastInsertion = null; // reset
 			}
 		}
@@ -651,10 +649,14 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			// remove children reference
 			++ parent._chdinf.modCntChd;
 			-- parent._chdinf.nChild;
-			if (this._prev == null)
+			if (parent._chdinf.first == this)
 				parent._chdinf.first = this._next;
-			if (this._next == null)
-				parent._chdinf.last = this._prev;
+			if (parent._chdinf.last == this) {
+				if (parent._chdinf.first != null)
+					parent._chdinf.last = this._prev;
+				else
+					parent._chdinf.last = null;
+			}
 			
 			return true;
 		}

@@ -1,0 +1,14 @@
+<zk>
+	<vlayout>
+		<div>
+			Order successful!
+		</div>
+		<div>
+			Shipment: <label value="@bind(vm.order.shippingAddress)"/>
+		</div>
+		<div>
+			Payment: <label value="@bind(vm.order.paymentDetails)"/>
+		</div>
+	</vlayout>
+	<a focus="true"/> <!-- dummy anchor to receive focus -->
+</zk>
