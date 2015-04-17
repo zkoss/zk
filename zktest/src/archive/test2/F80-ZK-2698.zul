@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2698.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 16, 2015 12:48:07 PM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+	1. a lightweight rich editor
+	2. supports onChange, onChanging events
+	3. supports flex
+	4. play with textbox and buttons
+	</label>
+	<zscript><![CDATA[
+	    import java.util.*;
+	    import org.zkoss.json.JavaScriptValue;
+		Map config = new HashMap();
+		config.put("btns", new JavaScriptValue("['bold', 'italic', '|', 'link']"));
+		config.put("closable", true);
+		
+	]]></zscript>
+	<window title="Hello World!!" border="normal" width="100%" height="100%" 
+		viewModel='@id("vm") @init("org.zkoss.zktest.test2.F80_ZK_2698VM")'>
+			<tbeditor id="myComp" value="@bind(vm.value)"  vflex="2" width="100%" 
+				onChange="@command('printValue', val=self.value)" 
+				 
+				w:onChange="console.log('from zul: ' + zk.$('$myComp').getValue())"/>
+
+			<div vflex="1" style="background: green;">
+				<textbox id="tb" onOK="@command('changeValue', val=self.value)"
+					value="@bind(vm.value)"></textbox>
+				<button onClick="myComp.setConfig(config);">setConfig</button>
+				<button onClick="@command('printValue', val=myComp.getValue())">print value</button>
+				<button onClick="Clients.showNotification(myComp.getValue())">print value</button>
+			</div>
+	</window>
+</zk>
