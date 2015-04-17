@@ -225,10 +225,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				case UNKNOWN:
 					boolean skip = false;
 					for (ShadowElement se : shadowRoots) {
-						if (asShadow(se)._previousInsertion == lastChild) {
-							skip = true;
+						if (se == prevOwner)
 							break;
+						
+						// we need to check if the lastChild is contained in a shadow already.
+						switch (HtmlShadowElement.inRange(asShadow(se), lastChild)) {
+							case UNKNOWN:
+								break;
+							default:
+								skip = true; // yes, we found it.
 						}
+						if (skip)
+							break;
 					}
 					if (!skip)
 						prev = lastChild;
@@ -599,18 +607,20 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 					_lastInsertion = null; // reset
 			}
 		} else { // merge to host
+			Component previous = _previousInsertion;
 			for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
-				Component previous = _previousInsertion;
+				
 				
 				child.mergeToHost(_host);
 				
 				if (previous != null) {
 					Component newPrevious = child._previousInsertion;
-					if (newPrevious == null) {
+					if (newPrevious == null && previous != null) {
 						setPrevInsertion(child, previous);
-					} else {
+					} else if (previous != null) {
 						setPrevInsertion(newPrevious, previous);
 					}
+					previous = null;
 				}
 				Component newNext = child._nextInsertion;
 				if (newNext == null) {
