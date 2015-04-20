@@ -24,6 +24,7 @@ ZK 8.0.0
   ZK-2638: simplify exception handling (avoid wrapping RuntimeExceptions)
   ZK-2641: Support custom error message for input element that has multiple constraints
   ZK-2713: Clients.java support loadScript and loadCSS API
+  ZK-2698: Add a lightweight rich editor
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
