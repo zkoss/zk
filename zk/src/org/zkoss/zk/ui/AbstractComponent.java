@@ -971,11 +971,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						destroyIndexCacheMap(); // reset
 					}
 					initIndexCacheMap();
-					
+
 					for (HtmlShadowElement shadow : shadowRoots) {
-						val = shadow.resolveVariable(baseChild, name, recurse);
-						if (val != null)
-							return val;
+						if (shadow.getShadowHost() != baseChild) {
+							switch (HtmlShadowElement.inRange(shadow, baseChild)) {
+							case IN_RANGE:
+							case FIRST:
+							case LAST:
+								val = shadow.resolveVariable(baseChild, name, recurse);
+								if (val != null)
+									return val;
+								break;
+							}
+						} else {
+							val = shadow.resolveVariable(baseChild, name, recurse);
+							if (val != null)
+								return val;
+						}
 					}
 				} finally {
 					ShadowElementsCtrl.setDistributedIndexInfo(indexCacheMap);

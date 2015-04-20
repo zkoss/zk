@@ -48,6 +48,30 @@ public class CompositionTest extends ZutiBasicTestCase {
 		
 	}
 	@Test
+	public void testResolverIssue() {
+		
+		DesktopAgent desktop = connect(getTestURL("resolverIssue.zul"));
+
+		ComponentAgent hostAgent = desktop.query("#host");
+		ComponentAgent next = hostAgent.getFirstChild();
+
+		assertEquals("AAA", next.as(Label.class).getValue());
+
+		next = next.getNextSibling();
+		
+		assertEquals("aaaRef", next.as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+		
+		assertEquals("BBB", next.as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+		
+		assertEquals("bbbRef", next.as(Label.class).getValue());
+		
+		checkVerifier(hostAgent.getOwner(), HierarchyVerifier.class);	
+	}
+	@Test
 	public void testBasicVariable() {
 		
 		DesktopAgent desktop = connect(getTestURL("basicVariable.zul"));

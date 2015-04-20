@@ -11,6 +11,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zk.ui;
 
+import java.io.Writer;
 import java.util.AbstractList;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
@@ -763,7 +764,15 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			
 			Map<Component, Integer> indexMap = fillUpIndexMap(_firstInsertion, _lastInsertion);
 			int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion, fillUpIndexMap(_firstInsertion, _lastInsertion));
-			if (selfIndex[1] < indexOfChild) return; // out of our range;
+			if (selfIndex[1] < indexOfChild) {
+				// resync index
+				if (_previousInsertion == child) {
+					setPrevInsertion(this, child.getPreviousSibling());
+				} else if (_nextInsertion == child) {
+					setPrevInsertion(child.getNextSibling(), this);
+				}
+				return; // out of our range;
+			}
 
 			HtmlShadowElement node = queryIntersectedShadowIfAny(indexOfChild, indexMap);
 			if (node != null) {

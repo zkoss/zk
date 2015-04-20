@@ -1,0 +1,16 @@
+<zk xmlns:sh="shadow">
+	<div id="host" apply="org.zkoss.bind.BindComposer">
+		<sh:apply name="AAA" name2="@ref('aaaRef')">
+			<template>
+				<label value="@load(name)"/>
+				<label value="@load(name2)"/>
+			</template> 
+		</sh:apply>
+		<sh:apply name="BBB" name2="@ref('bbbRef')">
+			<template>
+				<label value="@load(name)"/>
+				<label value="@load(name2)"/>
+			</template> 
+		</sh:apply>
+	</div>
+</zk>
