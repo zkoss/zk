@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-1983.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Apr 20, 2015  2:51:33 PM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+	1. There is a link that helps us jump to today by set "showTodayLink" property as true
+	2. buttons to toggle this feature
+	</label>
+	<datebox id="db" showTodayLink="true" ></datebox>
+	<calendar id="cal" showTodayLink="true"></calendar>
+
+	<button onClick="db.setShowTodayLink(!db.getShowTodayLink())">toggle datebox today button</button>
+	<button onClick="cal.setShowTodayLink(!cal.getShowTodayLink())">toggle calendar today button</button>
+</zk>
+

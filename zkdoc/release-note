@@ -26,6 +26,7 @@ ZK 8.0.0
   ZK-2641: Support custom error message for input element that has multiple constraints
   ZK-2713: Clients.java support loadScript and loadCSS API
   ZK-2724: Add a callback mechanism for component at redraw phase
+  ZK-1983: add a "today" button to datebox's calendar popup
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

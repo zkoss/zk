@@ -21,7 +21,8 @@ function (out) {
 		tagnm = zk.ie < 11 || zk.gecko ? 'a' : 'button',
 		localizedSymbols = this.getLocalizedSymbols(),
 		icon = this.$s('icon'),
-		outRange = this.isOutOfRange(true) ? ' disabled="disabled"' : '';
+		outRange = this.isOutOfRange(true) ? ' disabled="disabled"' : '',
+		showTodayLink = this._showTodayLink;
 	
 	// header
 	out.push('<div id="', uuid, '"', this.domAttrs_(), '><div class="',
@@ -48,6 +49,14 @@ function (out) {
 		renderer.decadeView(this, out, localizedSymbols);
 		break;
 	}
+	
+	if (showTodayLink) {
+		out.push('<div class="', this.$s('header'), '"><a id="', uuid, '-today" href="javascript:;" class="',
+				this.$s('title'), '">');
+		renderer.todayView(this, out, localizedSymbols);
+		out.push('</a></div>');
+	}
+	
 	out.push('<', tagnm, ' id="', uuid,
 		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 		tagnm, '></div>');

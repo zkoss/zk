@@ -53,6 +53,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Calendar extends XulElement {
 	private Date _value;
 	private boolean _weekOfYear;
+	private boolean _showTodayLink = false;
 	
 	/** The name. */
 	private String _name;
@@ -157,6 +158,27 @@ public class Calendar extends XulElement {
 			smartUpdate("name", _name);
 		}
 	}
+	
+    /**
+     * Returns whether enable to show the link that jump to today in day view
+     * <p>Default: false
+     * @since 8.0.0
+     * @return boolean
+     */
+	public boolean getShowTodayLink() {
+		return _showTodayLink;
+	}
+	/**
+	 * Sets whether enable to show the link that jump to today in day view
+	 * @since 8.0.0
+	 * @param boolean
+	 */
+	public void setShowTodayLink(boolean showTodayLink) {
+		if (_showTodayLink != showTodayLink) {
+			_showTodayLink = showTodayLink;
+			smartUpdate("showTodayLink", _showTodayLink);
+		}
+	}
 
 	//-- super --//
 	public String getZclass() {
@@ -195,5 +217,6 @@ public class Calendar extends XulElement {
 			render(renderer, "name", _name);
 		render(renderer, "weekOfYear", _weekOfYear);
 		render(renderer, "value", _value);
+		render(renderer, "showTodayLink", _showTodayLink);
 	}
 }
