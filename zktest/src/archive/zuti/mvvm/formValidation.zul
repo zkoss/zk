@@ -1,0 +1,33 @@
+<zk xmlns:sh="shadow" xmlns:x="xhtml">
+	
+	<style>
+		.errorClass {
+			border: 2px solid red; 
+		}
+	</style>
+	
+	<div id="host" viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.FormValidationVM')" 
+		validationMessages="@id('vmsgs')">
+		
+		<div form="@id('fx') @load(vm.pojo) @save(vm.pojo, before='submit') @validator(vm.pojoValidator)" onOK="@command('submit')">
+			<sh:apply template="formGroup" value="@ref(fx.name)" error="@ref(vmsgs['name'])"/>
+			<sh:apply template="formGroup" value="@ref(fx.address)" error="@ref(vmsgs['address'])"/>
+	
+			<template name="formGroup">
+				<div>
+					<sh:apply>
+						<textbox value="@bind(value)" sclass="@load(empty error ? '' : 'errorClass')"/>
+					</sh:apply>
+					<sh:if test="@load(!empty error)">
+						<div style="border: 1px solid red; display: inline-block; width: 200px; height: 20px;">
+							<label value="@load(error)"/>
+						</div>
+					</sh:if>
+				</div>
+			</template>
+		</div>
+		
+		<button label="validate/submit" onClick="@command('submit')"/>
+	</div>
+
+</zk>
