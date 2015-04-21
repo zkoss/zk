@@ -956,7 +956,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_variableSeeking = false;
 		}
 	}
-	protected Object getShadowVariable0(AbstractComponent baseChild, String name, boolean recurse) {
+	protected Object getShadowVariable0(Component baseChild, String name, boolean recurse) {
 		Object val = getAttribute(name);
 		if (val != null || hasAttribute(name))
 			return val;
@@ -978,10 +978,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 							case IN_RANGE:
 							case FIRST:
 							case LAST:
-								val = shadow.resolveVariable(baseChild, name, recurse);
-								if (val != null)
-									return val;
-								break;
+								return shadow.resolveVariable(baseChild, name, recurse);
 							}
 						} else {
 							val = shadow.resolveVariable(baseChild, name, recurse);
@@ -1007,7 +1004,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						}
 						return null; // avoid deadloop
 					}
-					return shadowHost.getShadowVariable(name, recurse);
+					if (this == baseChild) {
+						if (shadowHost.getParent() != null)
+							return shadowHost.getParent().getShadowVariable(name, recurse);
+					} else 
+						return shadowHost.getShadowVariable(name, recurse);
 				}
 			}
 		}
