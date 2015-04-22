@@ -142,7 +142,8 @@ implements DynamicPropertied, RawId {
 				invalidate();
 		} else
 			setDynaProp(name, value);
-		smartUpdate("dynamicProperty", new String[] {name, sval});
+		//B80-ZK-2716: style and textContent are both dynamiccProperty
+		smartUpdate("dynamicProperty", new String[] {name, sval}, true);
 	}
 	private String getEncodedURL(String src) {
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
