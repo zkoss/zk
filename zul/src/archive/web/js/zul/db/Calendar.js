@@ -287,6 +287,18 @@ zul.db.Renderer = {
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
+	},
+	/**
+	 * Renderer the today link for this calendar
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param Array out an array to output HTML fragments.
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @since 8.0.0
+	 */
+	todayView: function (wgt, out, localizedSymbols) {
+		var val = zUtl.today(wgt.parent);
+		val = new zk.fmt.Calendar().formatDate(val, wgt.getFormat(), localizedSymbols);
+		out.push(val);
 	}
 };
 var Calendar =
@@ -404,6 +416,20 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		weekOfYear: function () {
 			if (this.desktop && zk.feature.ee)
 				this.rerender();
+		},
+		/**
+		 * Sets whether enable to show the link that jump to today in day view
+    	 * @since 8.0.0
+    	 * @param boolean
+		 */
+	    /**
+	     * Returns whether enable to show the link that jump to today in day view
+	     * <p>Default: false
+	     * @since 8.0.0
+	     * @return boolean
+	     */
+		showTodayLink: function () {
+			this.rerender();
 		}
 	},
 	//@Override
@@ -537,7 +563,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			title = this.$n('title'),
 			mid = this.$n('mid'),
 			left = this.$n('left'),
-			right = this.$n('right');
+			right = this.$n('right'),
+			today = this.$n('today');
 		if (this._view != 'decade') 
 			this._markCal({silent: true});
 
@@ -545,6 +572,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(mid, 'onClick', '_clickDate')
 			.domListen_(left, 'onClick', '_clickArrow')
 			.domListen_(right, 'onClick', '_clickArrow')
+			.domListen_(today, 'onClick', '_clickToday')
 			.domListen_(node, 'onMousewheel');
 
 		this._updFormData(this.getTime());
@@ -554,11 +582,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			title = this.$n('title'),
 			mid = this.$n('mid'),
 			left = this.$n('left'),
-			right = this.$n('right');
+			right = this.$n('right'),
+			today = this.$n('today');
 		this.domUnlisten_(title, 'onClick', '_changeView')
 			.domUnlisten_(mid, 'onClick', '_clickDate')
 			.domUnlisten_(left, 'onClick', '_clickArrow')		
 			.domUnlisten_(right, 'onClick', '_clickArrow')
+			.domUnlisten_(today, 'onClick', '_clickToday')
 			.domUnlisten_(node, 'onMousewheel')
 			.$supers(Calendar, 'unbind_', arguments);
 		this.efield = null;
@@ -582,6 +612,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (jq(node).attr('disabled'))
 			return;
 		this._shiftView(jq(node).hasClass(this.$s('left')) ? -1 : 1);
+	},
+	_clickToday: function () {
+		this.setValue(zUtl.today(this.parent));
+		this._setView('day');
 	},
 	_shiftView: function (ofs, disableAnima) {
 		switch(this._view) {

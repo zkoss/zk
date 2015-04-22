@@ -76,6 +76,7 @@ public class Datebox extends FormatInputElement {
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
 	private static Map<Locale, Object> _symbols = new HashMap<Locale, Object>(8);
 	private boolean _weekOfYear;
+	private boolean _showTodayLink = false;
 	
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT|CE_DUPLICATE_IGNORE);
@@ -851,6 +852,28 @@ the short time styling.
 	public String getZclass() {
 		return _zclass == null ? "z-datebox" : _zclass;
 	}
+	
+	/**
+     * Returns whether enable to show the link that jump to today in day view
+     * <p>Default: false
+     * @since 8.0.0
+     * @return boolean
+     */
+	public boolean getShowTodayLink() {
+		return _showTodayLink;
+	}
+	/**
+	 * Sets whether enable to show the link that jump to today in day view
+	 * @since 8.0.0
+	 * @param boolean
+	 */
+	public void setShowTodayLink(boolean showTodayLink) {
+		if (_showTodayLink != showTodayLink) {
+			_showTodayLink = showTodayLink;
+			smartUpdate("showTodayLink", _showTodayLink);
+		}
+		
+	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
@@ -883,5 +906,7 @@ the short time styling.
 
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols(_locale, this));
+		
+		render(renderer, "showTodayLink", _showTodayLink);
 	}
 }

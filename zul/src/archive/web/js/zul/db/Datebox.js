@@ -258,6 +258,22 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		weekOfYear: function (v) {
 			if (this._pop)
 				this._pop.setWeekOfYear(v);
+		},
+		/**
+		 * Sets whether enable to show the link that jump to today in day view
+    	 * @since 8.0.0
+    	 * @param boolean
+		 */
+	    /**
+	     * Returns whether enable to show the link that jump to today in day view
+	     * <p>Default: false
+	     * @since 8.0.0
+	     * @return boolean
+	     */
+		showTodayLink: function (v) {
+			if (this._pop) {
+				this._pop.setShowTodayLink(v);
+			}
 		}
 	},
 	getIconClass_: function () {
