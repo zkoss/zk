@@ -958,63 +958,66 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_variableSeeking = false;
 		}
 	}
+	
 	protected Object getShadowVariable0(Component baseChild, String name, boolean recurse) {
-		Object val = getAttribute(name);
-		if (val != null || hasAttribute(name))
-			return val;
-		
-		if (!(this instanceof ShadowElement)) {
-			ComponentCtrl ctrl = this;
-			List<HtmlShadowElement> shadowRoots = ctrl.getShadowRoots();
-			if (!shadowRoots.isEmpty()) {
-				Map<Component, Integer> indexCacheMap = getIndexCacheMap();
-				try {
-					if (indexCacheMap != null) {
-						destroyIndexCacheMap(); // reset
-					}
-					initIndexCacheMap();
-
-					for (HtmlShadowElement shadow : shadowRoots) {
-						if (shadow.getShadowHost() != baseChild) {
-							switch (HtmlShadowElement.inRange(shadow, baseChild)) {
-							case IN_RANGE:
-							case FIRST:
-							case LAST:
-								return shadow.resolveVariable(baseChild, name, recurse);
-							}
-						} else {
-							val = shadow.resolveVariable(baseChild, name, recurse);
-							if (val != null)
-								return val;
-						}
-					}
-				} finally {
-					ShadowElementsCtrl.setDistributedIndexInfo(indexCacheMap);
-				}
-			}
-		}
-		if (recurse) {
-			if (_parent != null)
-				return _parent.getShadowVariable0(this, name, recurse);
+		try {
+			_variableSeeking = true;
+			Object val = getAttribute(name);
+			if (val != null || hasAttribute(name))
+				return val;
 			
-			if (this instanceof ShadowElement) {
-				AbstractComponent shadowHost = (AbstractComponent)((ShadowElement) this).getShadowHost();
-				if (shadowHost != null) {
-					if (shadowHost._variableSeeking) {
-						if (shadowHost.getParent() != null) {
-							return ((AbstractComponent)shadowHost.getParent()).getShadowVariable(name, recurse);
+			if (!(this instanceof ShadowElement)) {
+				ComponentCtrl ctrl = this;
+				List<HtmlShadowElement> shadowRoots = ctrl.getShadowRoots();
+				if (!shadowRoots.isEmpty()) {
+					Map<Component, Integer> indexCacheMap = getIndexCacheMap();
+					try {
+						if (indexCacheMap != null) {
+							destroyIndexCacheMap(); // reset
 						}
-						return null; // avoid deadloop
+						initIndexCacheMap();
+	
+						for (HtmlShadowElement shadow : shadowRoots) {
+							if (shadow.getShadowHost() != baseChild) {
+								switch (HtmlShadowElement.inRange(shadow, baseChild)) {
+								case IN_RANGE:
+								case FIRST:
+								case LAST:
+									return shadow.resolveVariable(baseChild, name, recurse);
+								}
+							} else {
+								val = shadow.resolveVariable(baseChild, name, recurse);
+								if (val != null)
+									return val;
+							}
+						}
+					} finally {
+						ShadowElementsCtrl.setDistributedIndexInfo(indexCacheMap);
 					}
-					if (this == baseChild) {
-						if (shadowHost.getParent() != null)
-							return shadowHost.getParent().getShadowVariable(name, recurse);
-					} else 
-						return shadowHost.getShadowVariable(name, recurse);
 				}
 			}
+			if (recurse) {
+				if (_parent != null)
+					return _parent.getShadowVariable0(this, name, recurse);
+				
+				if (this instanceof ShadowElement) {
+					AbstractComponent shadowHost = (AbstractComponent)((ShadowElement) this).getShadowHost();
+					if (shadowHost != null) {
+						if (shadowHost._variableSeeking) {
+							if (shadowHost.getParent() != null) {
+								return ((AbstractComponent)shadowHost.getParent()).getShadowVariable0(shadowHost, name, recurse);
+							}
+							return null; // avoid deadloop
+						}
+						if (shadowHost.getParent() != null)
+								return ((AbstractComponent)shadowHost.getParent()).getShadowVariable0(shadowHost, name, recurse);
+					}
+				}
+			}
+			return null;
+		} finally {
+			_variableSeeking = false;
 		}
-		return null;
 	}
 	public boolean hasAttributeOrFellow(String name, boolean recurse) {
 		if (hasAttribute(name)

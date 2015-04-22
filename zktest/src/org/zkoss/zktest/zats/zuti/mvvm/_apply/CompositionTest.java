@@ -115,6 +115,97 @@ public class CompositionTest extends ZutiBasicTestCase {
 		
 		checkVerifier(hostAgent.getOwner(), HierarchyVerifier.class);	
 	}
+
+	@Test
+	public void testResolverIssue3() {
+		
+		DesktopAgent desktop = connect(getTestURL("resolverIssue3.zul"));
+
+		ComponentAgent hostAgent = desktop.query("#host");
+		ComponentAgent next = hostAgent.getFirstChild();
+
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("BBB", next.getChild(1).as(Label.class).getValue());
+		assertEquals("CCC-ref", next.getChild(2).as(Label.class).getValue());
+		assertEquals("DDD", next.getChild(3).as(Label.class).getValue());
+
+		next = next.getNextSibling();
+
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("BBB", next.getChild(1).as(Label.class).getValue());
+		assertEquals("", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("BBB2", next.getChild(1).as(Label.class).getValue());
+		assertEquals("", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+		
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("", next.getChild(1).as(Label.class).getValue());
+		assertEquals("", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+		
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("", next.getChild(1).as(Label.class).getValue());
+		assertEquals("CCC3", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		
+		checkVerifier(hostAgent.getOwner(), HierarchyVerifier.class);	
+	}
+
+
+	@Test
+	public void testResolverIssue4() {
+		
+		DesktopAgent desktop = connect(getTestURL("resolverIssue4.zul"));
+
+		ComponentAgent hostAgent = desktop.query("#host");
+		ComponentAgent next = hostAgent.getFirstChild();
+
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("BBB", next.getChild(1).as(Label.class).getValue());
+		assertEquals("CCC-ref", next.getChild(2).as(Label.class).getValue());
+		assertEquals("DDD", next.getChild(3).as(Label.class).getValue());
+
+		next = next.getNextSibling();
+
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("BBB", next.getChild(1).as(Label.class).getValue());
+		assertEquals("", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("BBB2", next.getChild(1).as(Label.class).getValue());
+		assertEquals("", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+		
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("", next.getChild(1).as(Label.class).getValue());
+		assertEquals("", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		next = next.getNextSibling();
+		
+		assertEquals("AAA", next.getChild(0).as(Label.class).getValue());
+		assertEquals("", next.getChild(1).as(Label.class).getValue());
+		assertEquals("CCC3", next.getChild(2).as(Label.class).getValue());
+		assertEquals("", next.getChild(3).as(Label.class).getValue());
+		
+		
+		checkVerifier(hostAgent.getOwner(), HierarchyVerifier.class);	
+	}
 	@Test
 	public void testBasicVariable() {
 		

@@ -1,0 +1,22 @@
+<zk xmlns:sh="shadow">
+	<div id="host" apply="org.zkoss.bind.BindComposer">
+		<sh:apply template="with-params" param1="AAA" param2="BBB" param3="@ref('CCC-ref')" param4="DDD" />
+		<sh:apply template="with-params" param1="AAA" param2="BBB" />
+		<sh:apply template="with-params" param1="AAA" param2="BBB2" />
+		<sh:apply template="with-params" param1="AAA" />
+		<sh:apply template="with-params" param1="AAA" param3="CCC3"/>
+	
+		<template name="with-params">
+			<div>
+				<sh:apply template="nested">
+					<template name="nested">
+						<label value="@load(param1)"/>
+						<label value="@load(param2)"/>
+						<label value="@load(param3)"/>
+						<label value="@load(param4)"/>
+					</template>
+				</sh:apply>
+			</div>
+		</template>
+	</div>
+</zk>
