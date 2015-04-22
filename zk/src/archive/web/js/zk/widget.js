@@ -3838,6 +3838,11 @@ wgt.setListeners({
 		for (var evt in infs)
 			this.setListener(evt, infs[evt]);
 	},
+	// since 8.0
+	setListeners0: function (infs) { //used by server
+		for (var evt in infs)
+			this.setListener0(evt, infs[evt]);
+	},
 	/** Sets a listener that can be unlistened easily.
 	 * It is designed to be called from server.
 	 * For client-side programming, it is suggested to use {@link #listen}.
@@ -3877,6 +3882,22 @@ wgt.setListeners({
 			inf[evt] = oldfn
 			this.unlisten(inf);
 		}
+		if (fn) {
+			inf[evt] = bklsns[evt]
+				= typeof fn != 'function' ? new Function('var event=arguments[0];'+fn): fn;
+			this.listen(inf);
+		}
+	},
+	// since 8.0, it won't unlisten the old function.
+	setListener0: function (evt, fn) { //used by server
+		if (jq.isArray(evt)) {
+			fn = evt[1];
+			evt = evt[0]
+		}
+
+		var bklsns = this._bklsns,
+			oldfn = bklsns[evt],
+			inf = {};
 		if (fn) {
 			inf[evt] = bklsns[evt]
 				= typeof fn != 'function' ? new Function('var event=arguments[0];'+fn): fn;

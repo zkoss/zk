@@ -217,7 +217,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			if (callbacks != null) {
 				for (Iterator<Callback> it = callbacks.iterator(); it.hasNext();) {
 					Callback callback = it.next();
-					callback.call();
+					callback.call(null);
 					it.remove();
 				}
 			}
@@ -230,7 +230,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			if (callbacks != null) {
 				for (Iterator<Callback> it = callbacks.iterator(); it.hasNext();) {
 					Callback callback = it.next();
-					callback.call();
+					callback.call(null);
 					it.remove();
 				}
 			}

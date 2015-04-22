@@ -138,8 +138,8 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 				} else {
 					// Bug ZK-2574
 					final EventQueue callbackEq = eq;
-					((ExecutionCtrl)execution).addOnDeactivate(new Callback() {
-						public void call() {
+					((ExecutionCtrl)execution).addOnDeactivate(new Callback<Object>() {
+						public void call(Object data) {
 							callbackEq.close();
 						}
 					});

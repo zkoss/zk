@@ -3,6 +3,7 @@ ZK 8.0.0
 * Features
   ZK-2596: Support JSR 341: Expression Language 3.0
   ZK-2476: Support to plug a different parser for parsing a page
+  ZK-2698: Add a lightweight rich editor
   ZK-2508: Enhance ForEachStatus to be consistent with JSTL's varStatus properties
   ZK-2578: Add one more phase when initial bindings
   ZK-2581: Add a @SmartNotifyChange annotation that triggering the notification once the value of the property is changed
@@ -24,7 +25,7 @@ ZK 8.0.0
   ZK-2638: simplify exception handling (avoid wrapping RuntimeExceptions)
   ZK-2641: Support custom error message for input element that has multiple constraints
   ZK-2713: Clients.java support loadScript and loadCSS API
-  ZK-2698: Add a lightweight rich editor
+  ZK-2724: Add a callback mechanism for component at redraw phase
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

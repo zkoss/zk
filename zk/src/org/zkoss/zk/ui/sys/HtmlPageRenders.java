@@ -622,6 +622,7 @@ public class HtmlPageRenders {
 			if (contained)
 				appendProp(props, "ct", Boolean.TRUE);
 			out.write(props.toString());
+			out.write("},{"); // preserved for shadow element
 			out.write("},[");
 
 			for (Component root = page.getFirstRoot(); root != null;

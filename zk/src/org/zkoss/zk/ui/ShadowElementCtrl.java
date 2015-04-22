@@ -104,4 +104,13 @@ public interface ShadowElementCtrl {
 	 */
 	public Component getLastInsertion();
 
+	/**
+	 * Called when a child of a host is added into this shadow element.
+	 */
+	public void onHostChildAdded(Component child);
+
+	/**
+	 * Called when a child of a host is added into this shadow element.
+	 */
+	public void onHostChildRemoved(Component child);
 }

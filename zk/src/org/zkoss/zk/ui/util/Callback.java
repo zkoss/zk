@@ -21,9 +21,9 @@ import java.io.Serializable;
  * @author jumperchen
  * @since 7.0.5
  */
-public interface Callback extends Serializable {
+public interface Callback<T> extends Serializable {
 	/**
 	 * Executes the callback method.
 	 */
-	public void call();
+	public void call(T data);
 }

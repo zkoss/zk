@@ -197,7 +197,7 @@ function zkamn(pkg, fn) {
 		if (type)
 			types[type] = dt;
 
-		for (var children = wi[3], j = children.length; j--;)
+		for (var children = wi[4], j = children.length; j--;)
 			getTypes(types, dt, children[j]);
 	}
 	//mount for browser loading
@@ -332,7 +332,8 @@ function zkamn(pkg, fn) {
 		var wgt, stub, v,
 			type = wi[0],
 			uuid = wi[1],
-			props = wi[2]||{};
+			props = wi[2]||{},
+			seProps = wi[3]||{};
 		if (type === 0) { //page
 			type = zk.cut(props, 'wc')
 			var cls = type ? zk.$import(type): zk.Page;
@@ -358,7 +359,7 @@ function zkamn(pkg, fn) {
 				(wgt = new cls(zkac)).inServer = true;
 					//zkac used as token to optimize the performance of zk.Widget.$init
 				wgt.uuid = uuid;
-				if (v = wi[4])
+				if (v = wi[5])
 					wgt.setMold(v);
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
@@ -369,12 +370,29 @@ function zkamn(pkg, fn) {
 					for (var p in v)
 						wgt.set(p, v[p](), true); //value must be func; fromServer
 				});
+			
+			if (v = zk.cut(seProps, 'z$al'))
+				zk.afterLoad(function () {
+					for (var i = 0, j = v.length; i < j; i++) {
+						var vv = v[i];
+						for (var p in vv)
+							wgt.set(p, vv[p](), true); //value must be func; fromServer
+					}
+				});
 		}
 
 		for (var nm in props)
 			wgt.set(nm, props[nm], true); //fromServer
 
-		for (var j = 0, childs = wi[3], len = childs.length;
+		for (var nm in seProps) {
+			var v = seProps[nm];
+			for (var i = 0, j = v.length; i < j; i++) {
+				var vv = v[i];
+				wgt.set(nm, vv, true); //fromServer
+			}
+		}
+
+		for (var j = 0, childs = wi[4], len = childs.length;
 		j < len; ++j)
 			create(wgt, childs[j]);
 		return wgt;
@@ -411,6 +429,13 @@ function zkamn(pkg, fn) {
 	},
 
 	//widget creations
+	// wi's index meaning
+	// wi[0] = widget type
+	// wi[1] = uuid
+	// wi[2] = widget properties
+	// wi[3] = shadow properties - since ZK 8.0.0
+	// wi[4] = children
+	// wi[5] = mold
 	zkx: function (wi, extra, aucmds, js) { //extra is either delay (BL) or [stub, filter] (AU)
 		zk.mounting = true;
 

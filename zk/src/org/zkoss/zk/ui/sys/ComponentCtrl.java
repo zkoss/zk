@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.au.AuRequest;
@@ -525,4 +526,24 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public int getSubBindingAnnotationCount();
+	
+	/**
+	 * Adds a callback at component redraw phase.
+	 * @param callback
+	 * @since 8.0.0
+	 */
+	public boolean addRedrawCallback(Callback<ContentRenderer> callback);
+	
+	/**
+	 * Removes a callback for component redraw phase.
+	 * @param callback
+	 * @since 8.0.0
+	 */
+	public boolean removeRedrawCallback(Callback<ContentRenderer> callback);
+	
+	/**
+	 * Returns all of callbacks for component redraw phase
+	 * @since 8.0.0
+	 */
+	public Collection<Callback<ContentRenderer>> getRedrawCallback();
 }

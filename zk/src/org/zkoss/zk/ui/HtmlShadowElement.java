@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 
 /**
@@ -750,6 +751,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				if (isEdge && getParent() != null) {
 					asShadow(getParent()).shrinkRange(oldFirst, oldLast);
 				}
+				// a callback
+				onHostChildRemoved(child);
 				return; // finish
 			} else if (isAncestor(this, asShadow(currentInfo))) {// do only my descendent
 				asShadow(currentInfo).beforeHostChildRemoved(child, indexOfChild);
@@ -882,7 +885,16 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		
 		return subTree; // subTree is the intersection node.
 	}
-	
+	/** Default: does nothing.
+	 * @see ComponentCtrl#onChildAdded
+	 */
+	public void onHostChildRemoved(Component child) {
+	}
+	/** Default: does nothing.
+	 * @see ComponentCtrl#onChildAdded
+	 */
+	public void onHostChildAdded(Component child) {
+	}
 	public void beforeHostParentChanged(Component parent) {
 		if (log.isDebugEnabled()) {
 			log.debug("beforeHostParentChanged " + parent + ", in this shadow "  + 
@@ -1200,6 +1212,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				if (getParent() != null && isEdge) {
 					asShadow(getParent()).stretchRange(_firstInsertion, _lastInsertion);
 				}
+
+				// a callback
+				onHostChildAdded(child);
 				return; // finish
 			} else if (isAncestor(this, asShadow(currentInfo))) {// do only my descendent
 				asShadow(currentInfo).afterHostChildAdded(child, indexOfChild);
@@ -1450,7 +1465,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		ComponentCtrl host = (ComponentCtrl)_host;
 		return "<" + clsnm + "@" + host.getShadowRoots().indexOf(this) +" (" + _host + ")>";
 	}
-	
 	@Override
 	protected void updateSubBindingAnnotationCount(int diff) {
 		for (AbstractComponent node = this; node != null; ) {

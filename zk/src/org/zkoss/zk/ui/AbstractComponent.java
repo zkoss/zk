@@ -84,6 +84,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventListenerMap;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.JSCumulativeContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
@@ -92,6 +93,7 @@ import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
@@ -1886,6 +1888,38 @@ w:use="foo.MyWindow"&gt;
 		return uieng != null && uieng.disableClientUpdate(this, disable);
 	}
 
+	public boolean addRedrawCallback(Callback<ContentRenderer> callback) {
+		if (callback == null)
+			throw new IllegalArgumentException();
+		
+		if (initAuxInfo().callbacks == null)
+			_auxinf.callbacks = new LinkedHashMap<String, List<Callback<?>>>(2);
+		List<Callback<?>> list = _auxinf.callbacks.get("redraw");
+		if (list == null) {
+			list = new LinkedList<Callback<?>>();
+			_auxinf.callbacks.put("redraw", list);
+		}
+		return list.add(callback);
+	}
+	
+	public boolean removeRedrawCallback(Callback<ContentRenderer> callback) {
+		if (initAuxInfo().callbacks != null) {
+			List<Callback<?>> list = _auxinf.callbacks.get("redraw");
+			if (list != null)
+				return list.remove(callback);
+		}
+		return false;
+	}
+	
+	public Collection<Callback<ContentRenderer>> getRedrawCallback() {
+		if (initAuxInfo().callbacks != null) {
+			List<Callback<?>> list = _auxinf.callbacks.get("redraw");
+			if (list != null)
+				return cast(list);
+		}
+		return Collections.<Callback<ContentRenderer>>emptyList();
+	}
+	
 	//-- in the redrawing phase --//
 	/** Redraws this component and all its descendants.
 	 * <p>Default: It uses {@link JsContentRenderer} to render all information
@@ -1929,7 +1963,19 @@ w:use="foo.MyWindow"&gt;
 				for (int j = 0; j < prs.length; j++)
 					prs[j].renderProperties(this, renderer);
 			}
+			
+			// support a way to callback for shadow element
+			JSCumulativeContentRenderer serenderer = null;
 
+			Collection<Callback<ContentRenderer>> redrawCallback = getRedrawCallback();
+			
+			if (!redrawCallback.isEmpty()) {
+				 serenderer = new JSCumulativeContentRenderer();
+				for (Callback<ContentRenderer> callback : redrawCallback) {
+					callback.call(serenderer);
+				}
+			}
+			
 			final String wgtcls = getWidgetClass();
 			if (wgtcls == null)
 				throw new UiException("Widget class required for "+this+" with "+getMold());
@@ -1939,6 +1985,8 @@ w:use="foo.MyWindow"&gt;
 			out.write(getUuid());
 			out.write("',{");
 			out.write(renderer.getBuffer().toString());
+			out.write("},{");
+			out.write(serenderer == null ? "" : serenderer.toString());
 			out.write("},[");
 
 			redrawChildren(out);
@@ -3411,6 +3459,8 @@ w:use="foo.MyWindow"&gt;
 		private Map<String, String> wgtovds;
 		/** A map of client DOM attributes to set, Map(String name, String value). */
 		private Map<String, String> wgtattrs;
+		/** A map of component lifecycle callback to set. Since 8.0.0  */
+		private Map<String, List<Callback<?>>> callbacks;
 		/** The AU tag. */
 		private String autag;
 
@@ -3444,6 +3494,8 @@ w:use="foo.MyWindow"&gt;
 				clone.wgtovds = new LinkedHashMap<String, String>(wgtovds);
 			if (wgtattrs != null)
 				clone.wgtattrs = new LinkedHashMap<String, String>(wgtattrs);
+			if (callbacks != null)
+				clone.callbacks = new LinkedHashMap<String, List<Callback<?>>>(callbacks);
 
 			//clone annotation and event handlers
 			if (!annotsShared && annots != null)
