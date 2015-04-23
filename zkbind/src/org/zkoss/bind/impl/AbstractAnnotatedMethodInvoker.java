@@ -33,6 +33,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.zel.impl.util.ProxyUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -68,7 +69,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		Component rootComp = binder.getView();
 		Object viewModel = rootComp.getAttribute(VM);
 		
-		final Class<?> vmClz = viewModel.getClass();
+		final Class<?> vmClz = ProxyUtils.getTargetClass(viewModel);
 		List<Method> methods = getAnnotateMethods(annoClass, vmClz);
 		if(methods.size()==0) return;//no annotated method
 		

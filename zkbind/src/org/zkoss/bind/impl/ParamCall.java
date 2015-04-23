@@ -1,8 +1,10 @@
 package org.zkoss.bind.impl;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,6 +14,9 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+
+
 
 
 
@@ -39,6 +44,7 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.json.JSONAware;
 import org.zkoss.lang.Classes;
+import org.zkoss.zel.impl.util.ProxyUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -145,7 +151,14 @@ public class ParamCall {
 			}
 			
 			method.setAccessible(true); // Bug ZK-2428
-			method.invoke(base, params);
+			
+			Class<?> clazz = base.getClass();
+			if(ProxyUtils.isSpringJdkDynamicProxy(clazz)|| Proxy.isProxyClass(clazz)){
+              InvocationHandler iv = Proxy.getInvocationHandler(base);
+              iv.invoke(base, method, params);
+            } else {
+              method.invoke(base, params);
+            }
 		} catch(InvocationTargetException invokEx){ 
 			//Ian YT Tsai (2012.06.20), while InvocationTargetException,
 			//using original exception is much meaningful.
@@ -153,7 +166,7 @@ public class ParamCall {
 			if(c == null) c = invokEx;
 			_log.error("", c);
 			throw UiException.Aide.wrap(c);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			_log.error("", e);
 			throw UiException.Aide.wrap(e);
 		}

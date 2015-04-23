@@ -21,6 +21,7 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.ExpressionX;
+import org.zkoss.zel.impl.util.ProxyUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -56,7 +57,7 @@ public class CommandBindingImpl extends BindingImpl implements CommandBinding {
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		final String methodName = (String) eval.getValue(ctx, comp, getCommand());
 		try {
-			final Method method = Classes.getMethodInPublic(base.getClass(), methodName, new Class[] {Map.class});
+			final Method method = Classes.getMethodInPublic(ProxyUtils.getTargetClass(base), methodName, new Class[] {Map.class});
 			method.invoke(getBinder().getViewModel(), ctx.getAttributes());
 		} catch (Exception e) {
 			throw UiException.Aide.wrap(e);

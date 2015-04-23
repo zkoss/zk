@@ -88,6 +88,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
+import org.zkoss.zel.impl.util.ProxyUtils;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -456,7 +457,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		Converter converter = null;
 		if(_hasGetConverterMethod){
 			Object vm = getViewModel();
-			Class<? extends Object> clz = vm.getClass();
+			Class<? extends Object> clz = ProxyUtils.getTargetClass(vm);
 			Method m = null;
 			Object result = null;
 			try {
@@ -498,7 +499,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		Validator validator = null;
 		if(_hasGetValidatorMethod){
 			Object vm = getViewModel();
-			Class<? extends Object> clz = vm.getClass();
+			Class<? extends Object> clz = ProxyUtils.getTargetClass(vm);
 			Method m = null;
 			Object result = null;
 			try {
@@ -1643,7 +1644,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final Object viewModel = getViewModel();
 			
-			Method method = getCommandMethod(viewModel.getClass(), command, _globalCommandMethodInfoProvider,_globalCommandMethodCache);
+			Method method = getCommandMethod(ProxyUtils.getTargetClass(viewModel), command, _globalCommandMethodInfoProvider,_globalCommandMethodCache);
 			
 			if (method != null) {
 				
@@ -1841,7 +1842,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			final Object viewModel = getViewModel();
 			
-			Method method = getCommandMethod(viewModel.getClass(), command, _commandMethodInfoProvider, _commandMethodCache);
+			Method method = getCommandMethod(ProxyUtils.getTargetClass(viewModel), command, _commandMethodInfoProvider, _commandMethodCache);
 			
 			if (method != null) {
 				

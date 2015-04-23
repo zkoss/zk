@@ -24,8 +24,10 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Arrays;
@@ -37,6 +39,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.zkoss.zel.impl.util.ClassUtil;
+import org.zkoss.zel.impl.util.ProxyUtils;
 
 public class BeanELResolver extends ELResolver {
 
@@ -99,7 +102,16 @@ public class BeanELResolver extends ELResolver {
         context.setPropertyResolved(base, property);
         Method m = this.property(context, base, property).read(context);
         try {
-        	final Object result = m.invoke(base, (Object[]) null);
+            Object value = null;
+            Class<?> clazz = base.getClass();
+            if(ProxyUtils.isSpringJdkDynamicProxy(clazz)|| Proxy.isProxyClass(clazz)) {
+              InvocationHandler iv = Proxy.getInvocationHandler(base);
+              value = iv.invoke(base, m, (Object[]) null);
+            } else {
+              value = m.invoke(base, (Object[]) null);
+            }
+            
+            final Object result = value;
         	context.putContext(Method.class, m);
         	return result;
         } catch (InvocationTargetException e) {
@@ -107,7 +119,7 @@ public class BeanELResolver extends ELResolver {
             Util.handleThrowable(cause);
             throw new ELException(Util.message(context, "propertyReadError",
                     base.getClass().getName(), property.toString()), cause);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new ELException(e);
         }
     }
@@ -134,7 +146,7 @@ public class BeanELResolver extends ELResolver {
       //for ZK-1178: check type of mehtod's parameter is the same as type of value
         //XXX refactored into write() ?
         if (!checkType(m, value)) {
-        	Class<?> baseClass = base.getClass();
+        	Class<?> baseClass = ProxyUtils.getTargetClass(base);
     		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
     		//XXX the same in AstValue#setValue()
     		String propertySetterName = property.toString();
@@ -163,7 +175,14 @@ public class BeanELResolver extends ELResolver {
     	//// <=ZK-1178
         
         try {
-            m.invoke(base, value);
+            Class<?> clazz = base.getClass();
+            if(ProxyUtils.isSpringJdkDynamicProxy(clazz)|| Proxy.isProxyClass(clazz)) {
+              InvocationHandler iv = Proxy.getInvocationHandler(base);
+              iv.invoke(base, m, new Object[] {value});
+            } else {
+              m.invoke(base, value);
+            }
+          
             context.putContext(Method.class, m);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
@@ -174,7 +193,7 @@ public class BeanELResolver extends ELResolver {
         	throw new ELException(Util.message(context, "propertyWriteError",
                     new Object[] { base.getClass().getName(),
                             property.toString() }), e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new ELException(e);
         }
     }
@@ -206,7 +225,7 @@ public class BeanELResolver extends ELResolver {
 
 		// Find the matching method
 		Method matchingMethod = null;
-		Class<?> clazz = base.getClass();
+		Class<?> clazz = ProxyUtils.getTargetClass(base);
 		if (paramTypes != null) {
 			try {
 				matchingMethod = Util.getMethod(clazz, clazz.getMethod(methodName, paramTypes));
@@ -307,7 +326,13 @@ public class BeanELResolver extends ELResolver {
         }
         Object result = null;
 		try {
-			result = matchingMethod.invoke(base, parameters);
+  		  Class<?> baseClazz = base.getClass();
+            if(ProxyUtils.isSpringJdkDynamicProxy(baseClazz)|| Proxy.isProxyClass(baseClazz)) {
+              InvocationHandler iv = Proxy.getInvocationHandler(base);
+              result = iv.invoke(base, matchingMethod, parameters);
+            } else {
+              result = matchingMethod.invoke(base, parameters);
+            }
 		} catch (IllegalArgumentException e) {
 			throw new ELException(e);
 		} catch (IllegalAccessException e) {
@@ -321,7 +346,9 @@ public class BeanELResolver extends ELResolver {
 				throw (VirtualMachineError) cause;
 			}
 			throw new ELException(cause);
-		}
+		} catch (Throwable e) {
+          throw new ELException(e);
+        }
         
         context.setPropertyResolved(true);
         return result;  
