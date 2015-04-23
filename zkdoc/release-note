@@ -27,6 +27,7 @@ ZK 8.0.0
   ZK-2713: Clients.java support loadScript and loadCSS API
   ZK-2724: Add a callback mechanism for component at redraw phase
   ZK-1983: add a "today" button to datebox's calendar popup
+  ZK-2718: Forbidden to set hflex/vflex and width/height at the same time
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
