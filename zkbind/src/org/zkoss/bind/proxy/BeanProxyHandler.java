@@ -86,10 +86,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 							} else if (_dirtyFieldNames.contains(me.getKey())) {
 								final String mname = toSetter(me.getKey());
 								try {
-									final AccessibleObject ao = Classes.getAccessibleObject(
-											_origin.getClass(), mname,
-											new Class[] { value.getClass() },Classes.B_SET|Classes.B_PUBLIC_ONLY);
-									final Method m = (Method)ao;
+									final Method m = Classes.getMethodByObject(_origin.getClass(), mname, new Object[]{value});
 									m.invoke(_origin, Classes.coerce(m.getParameterTypes()[0], value));
 									BindELContext.addNotifys(m, _origin, me.getKey(),
 											value, (BindContext) args[0]);
