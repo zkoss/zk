@@ -526,6 +526,10 @@ function zkamn(pkg, fn) {
 	zkme: function () {
 		_mntctx.curdt = null;
 		_mntctx.bindOnly = false;
+	},
+	// register data-attributres handler (since 8.0.0
+	zkdh: function (name, script) {
+		zk.addDataHandler('data-' + name, script);
 	}
   });
 

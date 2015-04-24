@@ -64,6 +64,6 @@ public class WidgetAttribute extends ConditionValue {
 
 	public void assign(Component comp) {
 		if (isEffective(comp))
-			comp.setWidgetAttribute(_name, getValue(comp));
+			comp.setClientAttribute(_name, getValue(comp));
 	}
 }

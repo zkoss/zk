@@ -90,10 +90,14 @@ public interface ContentRenderer {
 	 * <code>{name1: value1, name2: value2}</code>.
 	 */
 	public void renderWidgetOverrides(Map<String, String> overrides);
+	/** @deprecated As released of ZK 8.0.0, please use {@link #renderClientAttributes(Map)}
+	 * instead.
+	 */
+	public void renderWidgetAttributes(Map<String, String> attrs);
 	/** Renders the client's DOM attributes for the peer widgets.
 	 * @param attrs the map of attributes. The key is the attribute's name,
 	 * while the value is the attribute's value. They are both instances of String.
-	 * @since 5.0.3
+	 * @since 8.0.0
 	 */
-	public void renderWidgetAttributes(Map<String, String> attrs);
+	public void renderClientAttributes(Map<String, String> attrs);
 }

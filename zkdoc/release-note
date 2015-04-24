@@ -29,6 +29,7 @@ ZK 8.0.0
   ZK-1983: add a "today" button to datebox's calendar popup
   ZK-2718: Forbidden to set hflex/vflex and width/height at the same time
   ZK-2725: New ZK message support - Danish translation
+  ZK-2730: Support client data attributes handler
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
@@ -59,6 +60,8 @@ ZK 8.0.0
   	*. z-icon-expand-o
   	*. z-icon-collapse-o
   + The library property of org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled is false by default.
+  + Deprecated the method of setWidgetAttribute() and getWidgetAttribute() of org.zkoss.zk.ui.Component, use
+    setClientAttribute() and getClientAttribute() method instead.
 
   --------
 ZK 7.0.6

@@ -243,6 +243,9 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	}
 
 	public void renderWidgetAttributes(Map<String, String> attrs) {
+		renderClientAttributes(attrs);
+	}
+	public void renderClientAttributes(Map<String, String> attrs) {
 		fetch("domExtraAttrs").add(attrs);
 	}
 	private String renderValue(char value) {

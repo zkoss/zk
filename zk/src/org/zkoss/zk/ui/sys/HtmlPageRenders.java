@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.lang.reflect.Field;
 
@@ -40,6 +42,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.fn.ThemeFns;
+import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.device.Device;
@@ -56,8 +59,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.DataHandlerInfo;
 import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
@@ -338,6 +343,19 @@ public class HtmlPageRenders {
 		String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
+		
+		Map<String, DataHandlerInfo> dataHandlers = wapp.getConfiguration().getDataHandlers();
+		Set<String> depends = new HashSet<String>();
+		for (DataHandlerInfo info : dataHandlers.values()) {
+			List<String> depends2 = info.getDepends();
+			if (depends2 != null)
+				depends.addAll(depends2);
+		}
+		for (String src : depends) {
+			sb.append("<script type=\"text/javascript\" src=\"")
+			.append(src)
+			.append("\" charset=\"UTF-8\"></script>\n");
+		}
 		return sb.toString();
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
@@ -765,6 +783,18 @@ public class HtmlPageRenders {
 				}
 			}
 			out.write(");\n");
+			WebApp webApp = WebApps.getCurrent();
+			Configuration configuration = webApp.getConfiguration();
+			Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
+			for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
+				DataHandlerInfo handler = me.getValue();
+				String script = handler.getScript();
+				String scriptUri = handler.getScriptUri();
+				if (scriptUri != null) {
+					script = Devices.loadJavaScript(exec, scriptUri);
+				}
+				out.write("zkdh('" + me.getKey() + "', " + script + ");");
+			}
 			out.write(extra);
 		}
 	}

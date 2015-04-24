@@ -2435,8 +2435,20 @@ function () {
 			out.push(' class="', s, '"');
 		if ((!no || !no.tooltiptext) && (s = this.domTooltiptext_()))
 			out.push(' title="', zUtl.encodeXML(s), '"'); // ZK-676
-		for (var nm in (attrs = this.domExtraAttrs))
+		var dh = {},
+			has = false;
+		for (var nm in (attrs = this.domExtraAttrs)) {
+			if (zk.hasDataHandler(nm)) {
+				has = true;
+				dh[nm] = attrs[nm];
+			}
 			out.push(' ', nm, '="', attrs[nm]||'', '"'); //generate even if val is empty
+		}
+		if (has)
+			this.listen({onBind: function () {
+				for(var nm in dh)
+					zk.dataHandler(nm).run(this, dh[nm]);
+			}});
 		return out.join('');
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.

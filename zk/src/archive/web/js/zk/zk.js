@@ -1279,6 +1279,43 @@ zk.log('value is", value);
 		if (zk.contextURI == null) //it might be ""
 			zk.contextURI = contextURI;
 		return dt || new Desktop(dtid, contextURI, updateURI, reqURI, true);
+	},
+	/**
+	 * Adds data attribute handler
+	 * @param String name the attribute name
+	 * @param String script the JS content
+	 * @since 8.0 
+	 */
+	addDataHandler: function (name, script) {
+		if (!zk.dataHandlers)
+			zk.dataHandlers = {};
+		zk.dataHandlers[name] = script;
+	},
+	/**
+	 * Test whether the name of the data attribute exists.
+	 * @return boolean ture if existing.
+	 * @since 8.0
+	 */
+	hasDataHandler: function (name) {
+		return zk.dataHandlers && !!zk.dataHandlers[name];
+	},
+	/**
+	 * Returns the dataHandler from the given name
+	 * @return Object with a run method to run
+	 * @since 8.0
+	 */
+	dataHandler: function (name) {
+		if (zk.hasDataHandler(name)) {
+			return {run: function (wgt, dataValue) {
+				var fun = zk.dataHandlers[name];
+				if (!jq.isFunction(fun))
+					fun = jq.evalJSON(fun);
+				try {
+					dataValue = jq.evalJSON(dataValue);
+				} catch (e){}
+				fun.call(this, wgt, dataValue)
+			}};
+		}
 	}
 });
 

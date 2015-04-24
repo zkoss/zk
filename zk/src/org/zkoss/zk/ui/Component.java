@@ -1026,6 +1026,17 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Set<String> getWidgetOverrideNames();
 
+	/**
+	 * @deprecated As released of ZK 8.0.0, please use {@link #setClientAttribute(String, String)}
+	 * instead.
+	 */
+	public String setWidgetAttribute(String name, String value);
+	/** 
+	 * @deprecated As released of ZK 8.0.0, please use {@link #getClientAttribute(String)}
+	 * instead.
+	 */
+	public String getWidgetAttribute(String name);
+
 	/*** Sets or removes a DOM attribute of the peer widget (at the client).
 	 * ZK pass the attributes directly to the DOM attribute generated
 	 * at the client.
@@ -1046,13 +1057,13 @@ w:use="foo.MyWindow"&gt;
 	 * If null, the attribute will be removed. Make sure to specify an empty
 	 * string if you want an attribute with an empty value.
 	 * @return the previous value if any
-	 * @since 5.0.3
+	 * @since 8.0.0
 	 */
-	public String setWidgetAttribute(String name, String value);
+	public String setClientAttribute(String name, String value);
 	/** Returns the value of a DOM attribute
-	 * @since 5.0.3
+	 * @since 8.0.0
 	 */
-	public String getWidgetAttribute(String name);
+	public String getClientAttribute(String name);
 	/** Returns a read-only collection of additions DOM attributes that shall be
 	 * generated. That is, they are the attributes added by {@link #setWidgetAttribute}.
 	 * @since 5.0.3

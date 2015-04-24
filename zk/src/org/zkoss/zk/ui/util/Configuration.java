@@ -135,6 +135,9 @@ public class Configuration {
 	private final Map<String, Map<Integer,String>> _errURIs = new HashMap<String, Map<Integer,String>>();
 	/** Map(String deviceType, TimeoutURIInfo ti) */
 	private final Map<String, TimeoutURIInfo> _timeoutURIs = Collections.synchronizedMap(new HashMap<String, TimeoutURIInfo>());
+	/** Since 8.0.0 Map(String String) */
+	private final Map<String, DataHandlerInfo> _dataHandlers = new HashMap<String, DataHandlerInfo>();
+	
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
 	private ExecutionMonitor _execmon;
@@ -3075,5 +3078,29 @@ public class Configuration {
 	 */
 	public void setBinderAnnotations(Set<String> binderAnnotations) {
 		this._binderAnnotations = new HashSet<String>(binderAnnotations);
+	}
+	
+	/**
+	 * Adds client data attribute handler
+	 * @since 8.0.0
+	 */
+	public void addDataHandler(DataHandlerInfo info) {
+		final String name = info.getName();
+		DataHandlerInfo old = _dataHandlers.put(name, info);
+		if (info.isOverride()) {
+			if (old == null)
+				log.warn("The data handler cannot be overridden! Not existing: [" + name + "]");
+		} else {
+			if (old != null)
+				log.warn("The data handler has been defined! [" + name + "]\n Please use <override>true</override> to disable the warning.");
+		}
+	}
+	
+	/**
+	 * Returns all of the client data attribute handlers
+	 * @since
+	 */
+	public Map<String,DataHandlerInfo> getDataHandlers() {
+		return _dataHandlers;
 	}
 }

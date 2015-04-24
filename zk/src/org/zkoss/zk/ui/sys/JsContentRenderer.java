@@ -411,14 +411,10 @@ public class JsContentRenderer implements ContentRenderer {
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
-	/** Renders the client's DOM attributes for the peer widgets.
-	 * This method generates DOM attributes into a map and stores it
-	 * in a widget property called <code>domExtraAttrs</code>
-	 * and it will be used to generate DOM attributes when the peer widget
-	 * is bound to the DOM tree.
-	 * @since 5.0.3
-	 */
 	public void renderWidgetAttributes(Map<String, String> attrs) {
+		renderClientAttributes(attrs);
+	}
+	public void renderClientAttributes(Map<String, String> attrs) {
 		if (attrs == null || attrs.isEmpty())
 			return;
 

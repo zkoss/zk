@@ -1391,12 +1391,15 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @since 8.0.0
 	 */
 	loadScript: function (url, callback, once) {
-		jq.ajax( {
+		jq.ajax({
 			dataType: 'script',
 			cache: once,
 			url: url
-		} ).done(function () {
-			jq.globalEval(callback);
+		}).done(function () {
+			if (jq.isFunction(callback)) {
+				callback();
+			} else
+				jq.globalEval(callback);
 		});
 	},
 	/** Loads a CSS file.

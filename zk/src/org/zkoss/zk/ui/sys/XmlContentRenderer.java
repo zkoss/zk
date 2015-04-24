@@ -135,10 +135,12 @@ public class XmlContentRenderer implements ContentRenderer {
 	public void renderWidgetOverrides(Map<String, String> overrides) {
 		renderWidgetListeners(overrides);
 	}
-	/** Renders every entry in attrs by use of {@link #render(String, Object)}.
-	 * @since 5.0.3
-	 */
+	
 	public void renderWidgetAttributes(Map<String, String> attrs) {
+		renderClientAttributes(attrs);
+	}
+	
+	public void renderClientAttributes(Map<String, String> attrs) {
 		renderWidgetListeners(attrs);
 	}
 }

@@ -40,7 +40,6 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
-
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.web.fn.ThemeFns;
@@ -58,6 +57,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.DataHandlerInfo;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.util.URIInfo;
 
@@ -724,7 +724,30 @@ public class ConfigParser {
 		it.hasNext();) {
 			config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
 		}
-
+		
+		//client data-attr handlers
+		for (Iterator<Element> it = conf.getElements("data-handler").iterator();
+		it.hasNext();) {
+			//config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
+			final Element el = it.next();
+			String dataName =	IDOMs.getRequiredElementValue(el, "name");
+			String script = el.getElementValue("script", true);
+			String scriptUri = el.getElementValue("script-uri", true);
+			boolean override = Boolean.parseBoolean(el.getElementValue("override", true));
+			
+			if (script == null && scriptUri == null)
+				throw new UiException(message("either <script> or <script-uri> is required for <data-handler>", el));
+			List<Element> elements = el.getElements("depends");
+			List<String> depends = null;
+			if (!elements.isEmpty()) {
+				depends = new LinkedList<String>();
+				for (Iterator<Element> itt = el.getElements("depends").iterator();
+						itt.hasNext();) {
+					depends.add(itt.next().getText(true));
+				}
+			}
+			config.addDataHandler(new DataHandlerInfo(dataName,script, scriptUri, depends, override));
+		}
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();
 		it.hasNext();) {

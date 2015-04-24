@@ -765,26 +765,32 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public String setWidgetAttribute(String name, String value) {
+		return setClientAttribute(name, value);
+	}
+	public String setClientAttribute(String name, String value) {
 		if (name == null)
 			throw new IllegalArgumentException();
 
 		final String old;
 		if (value != null) {
-			if (initAuxInfo().wgtattrs == null)
-				_auxinf.wgtattrs = new LinkedHashMap<String, String>(4);
-			old = _auxinf.wgtattrs.put(name, value);
+			if (initAuxInfo().domattrs == null)
+				_auxinf.domattrs = new LinkedHashMap<String, String>(4);
+			old = _auxinf.domattrs.put(name, value);
 		} else
-			old = _auxinf != null && _auxinf.wgtattrs != null ?
-				_auxinf.wgtattrs.remove(name): null;
+			old = _auxinf != null && _auxinf.domattrs != null ?
+				_auxinf.domattrs.remove(name): null;
 		return old;
 	}
 	public String getWidgetAttribute(String name) {
-		return _auxinf != null && _auxinf.wgtattrs != null ?
-			_auxinf.wgtattrs.get(name): null;
+		return getClientAttribute(name);
+	}
+	public String getClientAttribute(String name) {
+		return _auxinf != null && _auxinf.domattrs != null ?
+			_auxinf.domattrs.get(name): null;
 	}
 	public Set<String> getWidgetAttributeNames() {
-		if (_auxinf.wgtattrs != null)
-			return _auxinf.wgtattrs.keySet();
+		if (_auxinf.domattrs != null)
+			return _auxinf.domattrs.keySet();
 		return Collections.emptySet();
 	}
 
@@ -3461,7 +3467,7 @@ w:use="foo.MyWindow"&gt;
 		/** A map of client properties to override, Map(String name, String script). */
 		private Map<String, String> wgtovds;
 		/** A map of client DOM attributes to set, Map(String name, String value). */
-		private Map<String, String> wgtattrs;
+		private Map<String, String> domattrs;
 		/** A map of component lifecycle callback to set. Since 8.0.0  */
 		private Map<String, List<Callback<?>>> callbacks;
 		/** The AU tag. */
@@ -3495,8 +3501,8 @@ w:use="foo.MyWindow"&gt;
 				clone.wgtlsns = new LinkedHashMap<String, String>(wgtlsns);
 			if (wgtovds != null)
 				clone.wgtovds = new LinkedHashMap<String, String>(wgtovds);
-			if (wgtattrs != null)
-				clone.wgtattrs = new LinkedHashMap<String, String>(wgtattrs);
+			if (domattrs != null)
+				clone.domattrs = new LinkedHashMap<String, String>(domattrs);
 			if (callbacks != null)
 				clone.callbacks = new LinkedHashMap<String, List<Callback<?>>>(callbacks);
 
@@ -3574,7 +3580,7 @@ w:use="foo.MyWindow"&gt;
 		throws IOException {
 			renderer.renderWidgetListeners(wgtlsns);
 			renderer.renderWidgetOverrides(wgtovds);
-			renderer.renderWidgetAttributes(wgtattrs);
+			renderer.renderClientAttributes(domattrs);
 		}
 	}
 
