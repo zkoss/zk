@@ -2447,7 +2447,7 @@ function () {
 		if (has)
 			this.listen({onBind: function () {
 				for(var nm in dh)
-					zk.dataHandler(nm).run(this, dh[nm]);
+					zk.getDataHandler(nm).run(this, dh[nm]);
 			}});
 		return out.join('');
 	},

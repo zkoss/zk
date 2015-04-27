@@ -1304,7 +1304,7 @@ zk.log('value is", value);
 	 * @return Object with a run method to run
 	 * @since 8.0
 	 */
-	dataHandler: function (name) {
+	getDataHandler: function (name) {
 		if (zk.hasDataHandler(name)) {
 			return {run: function (wgt, dataValue) {
 				var fun = zk.dataHandlers[name];
