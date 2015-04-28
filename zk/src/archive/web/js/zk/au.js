@@ -1134,7 +1134,16 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @see #echoGx
 	 */
 	echo: function (dtid) {
-		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'dummy', null, {ignorable: true}));
+		var dt = zk.Desktop.$(dtid),
+			aureqs = zAu.getAuRequests(dt);
+		// Bug ZK-2741
+		for (var i = 0, j = aureqs.length; i < j; i++) {
+	 		var aureq0 = aureqs[i];
+	 		if ((!aureq0.target || aureq0.target.$instanceof(zk.Desktop)) && aureq0.name == 'dummy') {
+	 			return; //no need to send more
+	 		}
+	 	}
+		zAu.send(new zk.Event(dt, 'dummy', null, {ignorable: true}));
 	},
 	/** Ask the client to echo back globally.
 	 * <p>Unlike {@link #echo}, it will search all browser windows for
