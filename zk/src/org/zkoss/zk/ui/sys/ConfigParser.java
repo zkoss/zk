@@ -731,8 +731,9 @@ public class ConfigParser {
 			//config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
 			final Element el = it.next();
 			String dataName =	IDOMs.getRequiredElementValue(el, "name");
-			String script = el.getElementValue("script", true);
-			String scriptUri = el.getElementValue("script-uri", true);
+			final Element scriptEl = IDOMs.getRequiredElement(el, "script");
+			String script = scriptEl.getText(true);
+			String scriptUri = scriptEl.getAttributeValue("src");
 			boolean override = Boolean.parseBoolean(el.getElementValue("override", true));
 			
 			if (script == null && scriptUri == null)
