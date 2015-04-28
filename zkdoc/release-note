@@ -71,6 +71,14 @@ ZK 7.0.6
   ZK-2692: SLF4J logging argument syntax
 
   --------
+ZK 7.0.5.2
+April 28, 2015
+* Features
+
+* Bugs
+  ZK-2741: Optimize dummy request call
+  
+  --------
 ZK 7.0.5.1
 April 13, 2015
 * Features
