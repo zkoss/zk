@@ -30,6 +30,7 @@ ZK 8.0.0
   ZK-2718: Forbidden to set hflex/vflex and width/height at the same time
   ZK-2725: New ZK message support - Danish translation
   ZK-2730: Support client data attributes handler
+  ZK-2707: Add a timepicker component
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
