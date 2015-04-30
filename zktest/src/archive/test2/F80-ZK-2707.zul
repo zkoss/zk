@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2707.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 23, 2015 11:30:24 AM, Created by JamesChu
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. the theme of combobox and timepicker should be the same 
+	2. change timebox, and the value of timepicker would change at the same time.
+	3. change datebox, and it won't affect timepicker, vice versa
+	</label>
+	<vlayout viewModel='@id("vm") @init("org.zkoss.zktest.test2.F80_ZK_2707VM")'>
+		<label value="Old components" />
+		<combobox>
+			<comboitem label="Simple and Rich" />
+			<comboitem label="Cool!" />
+			<comboitem label="Thumbs Up!" />			
+		</combobox>
+		<timebox format="HH:mm a" value="@bind(vm.time)" width="200px"/>
+		<datebox value="@bind(vm.time)"/>
+		<label value="New component: timepicker" />
+		<hlayout>
+			<label value="HH:mm" />
+			<timepicker format="HH:mm" value="@bind(vm.time)" width="200px"/>
+		</hlayout>
+		<hlayout>
+			<label value="HH:mm a" />
+			<timepicker format="HH:mm a" value="@bind(vm.time)" min="@load(vm.min)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<hlayout>
+			<label value="HH:mm:ss" />
+			<timepicker format="HH:mm:ss" value="@bind(vm.time)" min="@load(vm.min)" max="@load(vm.max)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<hlayout>
+			<label value="HH:mm:ss a" />
+			<timepicker format="HH:mm:ss a" value="@bind(vm.time)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<hlayout>
+			<label value="hh:mm:ss a" />
+			<timepicker format="hh:mm:ss a" value="@bind(vm.time)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<button label="change min time" onClick="@command('change_min')" />
+		<button label="change max time" onClick="@command('change_max')" />
+		<button label="change interval" onClick="@command('change_interval')" />
+	</vlayout>
+</zk>
