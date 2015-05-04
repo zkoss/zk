@@ -12,13 +12,18 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.lang.Objects;
 
@@ -36,10 +41,19 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	protected boolean _dirty;
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	private FormProxyObjectListener _listener;
+	protected boolean isImmutableElements;
 	
-	public AbstractCollectionProxy(Collection<E> origin) {
+	public AbstractCollectionProxy(Collection<E> origin, Annotation[] callerAnnots) {
 		_origin = origin;
 		_cache = initCache();
+		if (callerAnnots != null) {
+			for (Annotation annot : callerAnnots) {
+				if (annot.annotationType().isAssignableFrom(ImmutableElements.class)) {
+					isImmutableElements = true;
+					break;
+				}
+			}
+		}
 	}
 	
 	protected abstract Collection<E> initCache();
@@ -256,7 +270,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	private <T extends Object> T createProxyObject(T t) {
-		T p = ProxyHelper.createProxyIfAny(t);
+		T p = isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);
 		if (p instanceof FormProxyObject) {
 			FormProxyObject fpo = (FormProxyObject) p;
 			fpo.addFormProxyObjectListener(this);

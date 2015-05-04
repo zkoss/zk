@@ -358,7 +358,8 @@ public class BindELContext extends XelELContext {
 		return cls.isPrimitive() //value is primitive 
 			|| Primitives.toPrimitive(cls) != null //or a wrapper
 			|| value instanceof String //or a String
-			|| isAnnotatedImmutable(cls); //or an Immutable
+			|| isAnnotatedImmutable(cls) //or an Immutable
+			|| cls.isEnum(); // value is enum class
 	}
 	
 	public static String getModelName(Component comp) {

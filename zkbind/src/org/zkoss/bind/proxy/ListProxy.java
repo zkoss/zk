@@ -11,6 +11,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.proxy;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,9 +27,11 @@ import org.zkoss.bind.BindContext;
  */
 public class ListProxy<E> extends AbstractCollectionProxy<E> implements List<E> {
 	private static final long serialVersionUID = 20141225150833L;
+	private Annotation[] _callerAnnots;
 	
-	public ListProxy(Collection<E> origin) {
-		super(origin);
+	public ListProxy(Collection<E> origin, Annotation[] callerAnnots) {
+		super(origin, callerAnnots);
+		_callerAnnots = callerAnnots;
 		resetFromOrigin();
 	}
 	
@@ -98,7 +101,7 @@ public class ListProxy<E> extends AbstractCollectionProxy<E> implements List<E> 
 	}
 
 	public List<E> subList(int fromIndex, int toIndex) {
-		return ProxyHelper.createProxyIfAny(((List<E>) getCache()).subList(fromIndex, toIndex));
+		return ProxyHelper.createProxyIfAny(((List<E>) getCache()).subList(fromIndex, toIndex), _callerAnnots);
 	}
 
 }

@@ -11,6 +11,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.proxy;
 
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,8 +24,8 @@ import java.util.Set;
 public class SetProxy<E> extends AbstractCollectionProxy<E> implements Set<E> {
 	private static final long serialVersionUID = 20141229141520L;
 
-	public SetProxy(Collection<E> origin) {
-		super(origin);
+	public SetProxy(Collection<E> origin, Annotation[] callerAnnots) {
+		super(origin, callerAnnots);
 		resetFromOrigin();
 	}
 

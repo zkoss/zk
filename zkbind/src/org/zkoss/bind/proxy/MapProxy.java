@@ -12,9 +12,13 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,6 +26,8 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.annotation.Immutable;
+import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.sys.FormBinding;
 
 /**
@@ -37,12 +43,21 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	private Map<K, V> _origin;
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	private FormProxyObjectListener _listener;
-
+	private List<Annotation> _callerAnnots;
 	private static final long serialVersionUID = 20141226161502L;
+	private boolean isImmutableElements;
 
-	public MapProxy(Map<K, V> origin) {
+	public MapProxy(Map<K, V> origin, Annotation[] callerAnnots) {
 		_origin = origin;
 		_cache = new LinkedHashMap<K, V>(origin.size());
+		if (callerAnnots != null) {
+			for (Annotation annot : callerAnnots) {
+				if (annot.annotationType().isAssignableFrom(ImmutableElements.class)) {
+					isImmutableElements = true;
+					break;
+				}
+			}
+		}
 		resetFromOrigin();
 	}
 
@@ -185,7 +200,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject,
 	
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	private <T extends Object> T createProxyObject(T t) {
-		T p = ProxyHelper.createProxyIfAny(t);
+		T p = isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);
 		if (p instanceof FormProxyObject) {
 			FormProxyObject fpo = (FormProxyObject) p;
 			fpo.addFormProxyObjectListener(this);

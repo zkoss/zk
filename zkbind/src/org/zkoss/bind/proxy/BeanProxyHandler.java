@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.annotation.Immutable;
+import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
@@ -70,13 +72,14 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 	public Object invoke(Object self, Method method, Method proceed,
 			Object[] args) throws Exception {
 		try {
-			if (method.getName().equals("hashCode")) {
+			final String mname = method.getName();
+			if (mname.equals("hashCode")) {
 				int a = (_origin != null) ? (Integer) method.invoke(_origin, args) : 0;
 				return 37 * 31 + a; 
 			}
 			if (method.getDeclaringClass().isAssignableFrom(
 					FormProxyObject.class)) {
-				if ("submitToOrigin".equals(method.getName())) {
+				if ("submitToOrigin".equals(mname)) {
 					if (_dirtyFieldNames != null && _origin != null) {
 						for (Map.Entry<String, Object> me : _cache.entrySet()) {
 							final Object value = me.getValue();
@@ -84,9 +87,9 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 								((FormProxyObject) value)
 										.submitToOrigin((BindContext) args[0]);
 							} else if (_dirtyFieldNames.contains(me.getKey())) {
-								final String mname = toSetter(me.getKey());
+								final String setter = toSetter(me.getKey());
 								try {
-									final Method m = Classes.getMethodByObject(_origin.getClass(), mname, new Object[]{value});
+									final Method m = Classes.getMethodByObject(_origin.getClass(), setter, new Object[]{value});
 									m.invoke(_origin, Classes.coerce(m.getParameterTypes()[0], value));
 									BindELContext.addNotifys(m, _origin, me.getKey(),
 											value, (BindContext) args[0]);
@@ -97,14 +100,14 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						}
 						_dirtyFieldNames.clear();
 					}
-				} else if ("getOriginObject".equals(method.getName())) {
+				} else if ("getOriginObject".equals(mname)) {
 					return _origin;
-				} else if ("resetFromOrigin".equals(method.getName())) {
+				} else if ("resetFromOrigin".equals(mname)) {
 					if (_dirtyFieldNames != null)
 						_dirtyFieldNames.clear();
 					if (_cache != null)
 						_cache.clear();
-				} else if ("isFormDirty".equals(method.getName())) {
+				} else if ("isFormDirty".equals(mname)) {
 						boolean dirty = false;
 						
 						if (_dirtyFieldNames != null && _cache != null) {
@@ -124,61 +127,50 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 							}
 						}
 						return dirty;
-				} else if ("addFormProxyObjectListener".equals(method.getName())) {
+				} else if ("addFormProxyObjectListener".equals(mname)) {
 					//F80: formProxyObject support notifyChange with Form.isDirty
 					return null;
 				} else {
-					throw new IllegalAccessError("Not implemented yet for FormProxyObject interface: [" + method.getName() + "]");
+					throw new IllegalAccessError("Not implemented yet for FormProxyObject interface: [" + mname + "]");
 				}
-			} else {
-				if (method.getName().startsWith("get")) {
+			} else {				
+				if (mname.startsWith("get")) {
+					if (_origin == null)
+						return null;
+					
 					final String attr = toAttrName(method);
-					Object value = null;
-					if (_cache == null) {
-						if (_origin == null)
-							return null;
-						Object invoke = method.invoke(_origin, args);
-						if (invoke != null) {
-							value = ProxyHelper.createProxyIfAny(invoke);
-							addCache(attr, value);
-							if (value instanceof FormProxyObject) {
-								addDirtyField(attr); // it may be changed.
-							}
+					if (_cache != null) {
+						if (_cache.containsKey(attr)) {
+							return _cache.get(attr);
 						}
-					} else {
-						value = _cache.get(attr);
-						if (!_cache.containsKey(attr)) {
-							if (_origin == null)
-								return null;
-							Object invoke = method.invoke(_origin, args);
-							if (invoke != null) {
-								value = ProxyHelper.createProxyIfAny(invoke);
-								addCache(attr, value);
-								if (value instanceof FormProxyObject) {
-									addDirtyField(attr); // it may be changed.
-								}
-							}
+					}
+
+					Object value = method.invoke(_origin, args);
+					if (value != null) {
+						
+						// ZK-2736 Form proxy with Immutable values
+						value = ProxyHelper.createProxyIfAny(value, method.getAnnotations());
+						
+						addCache(attr, value);
+						if (value instanceof FormProxyObject) {
+							addDirtyField(attr); // it may be changed.
 						}
 					}
 					return value;
-				} else if (method.getName().startsWith("is")) {
+				} else if (mname.startsWith("is")) {
+					if (_origin == null)
+						return false;
+					
 					final String attr = toAttrName(method, 2);
-					Object value = null;
-					if (_cache == null) {
-						if (_origin == null)
-							return false;
-						value = method.invoke(_origin, args);
-					} else {
-						value = _cache.get(attr);
-						if (!_cache.containsKey(attr)) {
-							if (_origin == null)
-								return false;
-							value = method.invoke(_origin, args);
+					if (_cache != null) {
+						if (_cache.containsKey(attr)) {
+							return _cache.get(attr);
 						}
 					}
-					return value;
+					return method.invoke(_origin, args);
 				} else {
-					String attrName = toAttrName(method);
+					final String attrName = toAttrName(method);
+					
 					addCache(attrName, args[0]);
 					addDirtyField(attrName);
 				}
