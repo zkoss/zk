@@ -12,18 +12,14 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.annotation.Immutable;
-import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.reflect.Fields;
 import org.zkoss.zk.ui.UiException;
 
 import javassist.util.proxy.MethodFilter;
