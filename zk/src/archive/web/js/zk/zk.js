@@ -1311,11 +1311,12 @@ zk.log('value is", value);
 				if (!jq.isFunction(fun))
 					fun = jq.evalJSON(fun);
 				try {
-					dataValue = jq.evalJSON(dataValue);
+					dataValue = jq.parseJSON(dataValue);
 				} catch (e){}
 				fun.call(this, wgt, dataValue)
 			}};
 		}
+		zk.error('not found: '+ name);
 	}
 });
 
