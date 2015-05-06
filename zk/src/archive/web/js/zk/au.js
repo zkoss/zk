@@ -27,7 +27,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		Widget = zk.Widget,
 		_portrait = {'0': true, '180': true}, //default portrait definition
 		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
-		_initDefault = _portrait[window.orientation]; //default orientation
+		_initDefault = _portrait[window.orientation], //default orientation
+		_aftAuResp = []; //store callbacks to be triggered when au is back
 	
 	// Checks whether to turn off the progress prompt
 	function checkProgressing() {
@@ -292,6 +293,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			req = setting.xhr();
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		try {
+			zk.ausending = true;
 			req.onreadystatechange = onResponseReady;
 			req.open('POST', reqInf.uri, true);
 			req.setRequestHeader('Content-Type', setting.contentType);
@@ -375,6 +377,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				}
 					
 			}
+			zk.ausending = false;
+			zk.doAfterAuResponse();
 		}
 		if (ex)
 			throw ex;
@@ -1610,6 +1614,15 @@ zAu.cmd1 = /*prototype*/ {
 		zUtl.fireSized(wgt, 1); //force cleanup
 	}
 };
+zk.afterAuResponse = function (fn) {
+    if (fn)
+        _aftAuResp.push(fn);
+}
+zk.doAfterAuResponse = function () {
+    for (var fn; fn = _aftAuResp.shift();) {
+        fn();
+    }
+}
 })();
 
 function onIframeURLChange(uuid, url) { //doc in jsdoc
