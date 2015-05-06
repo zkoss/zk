@@ -25,6 +25,8 @@
 		<gmapsz.version>3.0.1</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
+		<report.dir>report/</report.dir>
+		<test.dir>debug/classes</test.dir>
 	</properties>
 	<version>8.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -404,6 +406,20 @@
 					<scanTargets>
 						<scanTarget>${project.basedir}/src/archive/</scanTarget>
 					</scanTargets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<runOrder>alphabetical</runOrder>
+					<testClassesDirectory>${test.dir}</testClassesDirectory>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<reportsDirectory>${report.dir}</reportsDirectory>
+					<argLine>-Xmx256m -XX:MaxPermSize=128m</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
