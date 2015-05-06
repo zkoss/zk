@@ -20,7 +20,7 @@ ZK 8.0.0
   ZK-2668: New Build-in Converter - FormattedTimeConverter
   ZK-2675: Add an annotation for client command
   ZK-2674: Add an annotation for notify command
-  ZK-1972: K bind support access vm properties in client side
+  ZK-1972: ZK bind support access vm properties in client side
   ZK-2576: Support a shadow element concept for Databinding or EL expression
   ZK-2638: simplify exception handling (avoid wrapping RuntimeExceptions)
   ZK-2641: Support custom error message for input element that has multiple constraints

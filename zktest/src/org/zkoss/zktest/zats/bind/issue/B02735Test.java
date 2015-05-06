@@ -19,7 +19,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
-import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.proxy.ProxyHelper;
 
 /**
