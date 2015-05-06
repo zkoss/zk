@@ -645,6 +645,7 @@
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
 			<xs:element ref="tablelayout" />
+			<xs:element ref="tbeditor" />
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
 			<xs:element ref="timebox" />
@@ -731,6 +732,7 @@
 				<xs:element ref="spinner" />
 				<xs:element ref="style" />
 				<xs:element ref="tabbox" />
+				<xs:element ref="tbeditor" />
 				<xs:element ref="textbox" />
 				<xs:element ref="timer" />
 				<xs:element ref="timebox" />
@@ -2566,6 +2568,19 @@
 		</xs:choice>
 		<xs:attribute name="columns" type="intType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- tbeditor -->
+	<xs:element name="tbeditor" type="tbeditorType" />
+	<xs:complexType name="tbeditorType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="abstractComponentAttrGroup" />
+		<xs:attribute name="width" type="xs:string" use="optional" />
+		<xs:attribute name="height" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="hflex" type="xs:string" use="optional" />
+		<xs:attribute name="vflex" type="xs:string" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- template -->
 	<xs:element name="template" type="templateType" />
