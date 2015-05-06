@@ -44,6 +44,7 @@ ZK 8.0.0
   ZK-2598: forward event behaves inconsistent inside an include
   ZK-2660: Sync grid column visible state in client/server side when show/hide column through menupopup
   ZK-2716: xhtml component dynamic updates
+  ZK-2744: pause comet server push while au isn't ready
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
