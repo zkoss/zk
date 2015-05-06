@@ -634,6 +634,7 @@
 			<xs:element ref="progressmeter" />
 			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
+			<xs:element ref="rowlayout" />
 			<xs:element ref="script" />
 			<xs:element ref="scrollview" />
 			<xs:element ref="selectbox" />
@@ -647,6 +648,7 @@
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
 			<xs:element ref="timebox" />
+			<xs:element ref="timepicker" />
 			<xs:element ref="toolbar" />
 			<xs:element ref="toolbarbutton" />
 			<xs:element ref="tree" />
@@ -719,6 +721,7 @@
 				<xs:element ref="progressmeter" />
 				<xs:element ref="radio" />
 				<xs:element ref="radiogroup" />
+				<xs:element ref="rowlayout" />
 				<xs:element ref="script" />
 				<xs:element ref="scrollview" />
 				<xs:element ref="selectbox" />
@@ -731,6 +734,7 @@
 				<xs:element ref="textbox" />
 				<xs:element ref="timer" />
 				<xs:element ref="timebox" />
+				<xs:element ref="timepicker" />
 				<xs:element ref="toolbar" />
 				<xs:element ref="toolbarbutton" />
 				<xs:element ref="tree" />
@@ -2311,6 +2315,25 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
+	<!-- rowchildren -->
+	<xs:element name="rowchildren" type="rowchildrenType" />
+	<xs:complexType name="rowchildrenType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="panel" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- rowlayout -->
+	<xs:element name="rowlayout" type="rowlayoutType" />
+	<xs:complexType name="rowlayoutType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="rowchildren" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+	</xs:complexType>
     <!-- script -->
 	<xs:element name="script" type="scriptType" />
 	<xs:complexType name="scriptType" mixed="true">
@@ -2637,6 +2660,20 @@
 		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
+		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
+		<xs:attribute name="locale" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- timepicker -->
+	<xs:element name="timepicker" type="timepickerType" />
+	<xs:complexType name="timepickerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
+		<xs:attribute name="value" type="dateType" use="optional" />
+		<xs:attribute name="min" type="dateType" use="optional" />
+		<xs:attribute name="max" type="dateType" use="optional" />
+		<xs:attribute name="interval" type="xs:integer" use="optional" />
 		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
 		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
