@@ -1614,6 +1614,16 @@ zAu.cmd1 = /*prototype*/ {
 		zUtl.fireSized(wgt, 1); //force cleanup
 	}
 };
+/** @partial zk
+ */
+//@{
+    /** Adds a function that will be executed after onResponse events are done.
+     * That means, after au responses, the function added in the afterAuResponse() will be invoked
+     * @param Function fn the function to execute after au responses
+     * @since 8.0.0
+     */
+	//afterAuResponse: function () {}
+//@};
 zk.afterAuResponse = function (fn) {
     if (fn)
         _aftAuResp.push(fn);
