@@ -67,7 +67,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
-			this.smartUpdate('visible', visible);
+			if (this.desktop)
+				this.smartUpdate('visible', visible);
 		}
 	},
 	
