@@ -51,12 +51,25 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 	protected T _origin;
 
 	protected Map<String, Object> _cache;
+	protected T _clone; // Bug ZK-2737 - for special case that is not pure POJO object.
 	protected Set<String> _dirtyFieldNames; // field name that is dirty
 
 	public BeanProxyHandler(T origin) {
 		_origin = origin;
+		cloneOneIfAny();
 	}
 
+	@SuppressWarnings("unchecked")
+	private void cloneOneIfAny() {
+		if (_origin instanceof Cloneable) {
+			try {
+				Method m = Classes.getMethodByObject(_origin.getClass(), "clone", null);
+				_clone = (T) m.invoke(_origin, null);
+			} catch (Exception e) {
+				throw UiException.Aide.wrap(e);
+			}
+		}
+	}
 	private void addCache(String key, Object value) {
 		_cache = AllocUtil.inst.putMap(_cache, key, value);
 	}
@@ -103,6 +116,9 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						_dirtyFieldNames.clear();
 					if (_cache != null)
 						_cache.clear();
+					
+					// reset clone object
+					cloneOneIfAny();
 				} else if ("isFormDirty".equals(mname)) {
 						boolean dirty = false;
 						
@@ -129,7 +145,31 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 				} else {
 					throw new IllegalAccessError("Not implemented yet for FormProxyObject interface: [" + mname + "]");
 				}
-			} else {				
+			} else {
+				// Bug ZK-2737
+				if (_clone != null) {
+					final String attr = mname.startsWith("is") ? 
+							toAttrName(method, 2) : toAttrName(method);
+							
+					Object value = method.invoke(_clone, args);
+					if (mname.startsWith("get")) {
+						if (value != null) {
+							
+							// ZK-2736 Form proxy with Immutable values
+							value = ProxyHelper.createProxyIfAny(value, method.getAnnotations());
+							
+							addCache(attr, value);
+							if (value instanceof FormProxyObject) {
+								addDirtyField(attr); // it may be changed.
+							}
+						}
+					} else if (mname.startsWith("set")) {
+						addCache(attr, args[0]);
+
+						addDirtyField(attr);
+					}
+					return value;
+				}
 				if (mname.startsWith("get")) {
 					if (_origin == null)
 						return null;

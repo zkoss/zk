@@ -28,18 +28,18 @@ import org.zkoss.bind.proxy.ProxyHelper;
 public class B02736Test {
 	@Test
 	public void testEnumInProxy() {
-		Pojo pojo = new Pojo();
+		B02736Pojo pojo = new B02736Pojo();
 		pojo.setCount(new Integer(1234));
 		pojo.setLength(new Double(34.457656));
 		pojo.setPrice(new BigDecimal("13.99"));
-		Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
+		B02736Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
 
 		Assert.assertSame(pojo.getCount(), proxy.getCount());
 		Assert.assertSame(pojo.getLength(), proxy.getLength());
 		Assert.assertSame(pojo.getPrice(), proxy.getPrice()); //ERROR and don't expect to create a proxy here
 	}
 
-	public static class Pojo {
+	public static class B02736Pojo {
 		private BigDecimal price;
 		private Double length;
 		private Integer count;
