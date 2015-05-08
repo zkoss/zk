@@ -744,8 +744,8 @@ public class Parser {
 							else if (!(parent instanceof TemplateInfo))
 								throw new UnsupportedOperationException(
 									message("Not allowed in text-as", ((Item)o).getParent()));
-					} else { // shadow element and template shouldn't support empty LabelInfo
-						if ((parent instanceof ShadowInfo || parent instanceof TemplateInfo)) {
+					} else { // shadow element shouldn't support empty LabelInfo
+						if (parent instanceof ShadowInfo) {
 							if (trimLabel.isEmpty())
 								continue; //ignore
 						}
