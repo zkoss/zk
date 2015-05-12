@@ -21,7 +21,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<separator/>
 	3. You should see the scrollbar won't jump to the top of the tree.
 	<tree id="groupTree" mold="paging" pageSize="500" vflex="true"
-		height="100%" zclass="z-dottree">
+		 zclass="z-dottree">
 		<treecols>
 			<treecol hflex="min" />
 		</treecols>
