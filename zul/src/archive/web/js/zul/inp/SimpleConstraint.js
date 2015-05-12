@@ -42,7 +42,11 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		} else {
 			this._flags = typeof a == 'number' ? this._cvtNum(a): a||{};
 			this._regex = typeof b == 'string' ? new RegExp(b): b;
-			this._errmsg = c; 
+			this._errmsg = {};
+			for (flag in this._flags) {
+				this._errmsg[flag] = c;
+			}
+			
 			if (this._flags.SERVER)
 				this.serverValidate = true;
 		}

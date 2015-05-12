@@ -36,6 +36,9 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	    <comboitem label="2"/>
 	    <comboitem label="3"/>
 	</combobox>
-	
+	<label>assign a function to intbox</label>
+	<intbox id="intbox" />
+	<button label="add constraint"
+	onClick="intbox.constraint = new SimpleConstraint(SimpleConstraint.NO_NEGATIVE)" />
 	</vlayout>
 </window>
