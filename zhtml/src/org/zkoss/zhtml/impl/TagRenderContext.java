@@ -127,7 +127,7 @@ public class TagRenderContext {
 			_jsout.append(specialRendererOutput);
 		}
 
-		_jsout.append("},[");
+		_jsout.append("},{},[");
 	}
 	/** Renders the ending JavaScript code snippet for the component.
 	 * It must be called after rendering the children.
