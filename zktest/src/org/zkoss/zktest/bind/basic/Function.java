@@ -15,6 +15,10 @@ public class Function {
 	public String bar(String bar) {
 		return foo + ":" + bar;
 	}
+	
+	public String bar() {
+		return foo + ":" + "bar";
+	}
 
 	public String cat(String a, String b) {
 		return foo + ":" + a + ":" + b;
@@ -25,19 +29,19 @@ public class Function {
 	}
 
 	@Command
-	@NotifyChange("foo")
+	@NotifyChange({"foo", "foo()"})
 	public void cmd1() {
 		foo = "foo" + i++;
 	}
 
 	@Command
-	@NotifyChange({ "foo", "bar" })
+	@NotifyChange({ "foo", "foo()", "bar('2bar')" })
 	public void cmd2() {
 		foo = "foo" + i++;
 	}
 	
 	@Command
-	@NotifyChange({ "cat"})
+	@NotifyChange({ "cat(vm.foo,'b')"})
 	public void cmd3() {
 		foo = "foo" + i++;
 	}
