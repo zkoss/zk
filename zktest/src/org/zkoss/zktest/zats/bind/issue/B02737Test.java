@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.bind.issue;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.proxy.ProxyHelper;
 
@@ -47,30 +48,30 @@ public class B02737Test {
 	}
 
 //	A limitation case, we cannot support the sub-delegator object
-//	@Test
-//	public void testEnumInProxy2() {
-//		Pojo pojo = new Pojo();
-//		pojo.setWidth(50);
-//		pojo.setHeight(45);
-//		Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
-//
-//		Assert.assertEquals(50, proxy.getWidth());
-//		Assert.assertEquals(45, proxy.getHeight());
-//		Assert.assertEquals(2250, proxy.getAreal());
-//
-//		proxy.getSubPojo().setWidth(100);
-//		
-//		Assert.assertEquals(100, proxy.getWidth());
-//		Assert.assertEquals(45, proxy.getHeight());
-//		Assert.assertEquals(4500, proxy.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
-//		
-//		((FormProxyObject)proxy).submitToOrigin(null);
-//		
-//		Assert.assertEquals(100, pojo.getWidth());
-//		Assert.assertEquals(45, pojo.getHeight());
-//		Assert.assertEquals(4500, pojo.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
-//	}
-	public static class B02737Pojo implements Cloneable {
+	@Test
+	public void testEnumInProxy2() {
+		B02737Pojo pojo = new B02737Pojo();
+		pojo.setWidth(50);
+		pojo.setHeight(45);
+		B02737Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
+
+		Assert.assertEquals(50, proxy.getWidth());
+		Assert.assertEquals(45, proxy.getHeight());
+		Assert.assertEquals(2250, proxy.getAreal());
+
+		proxy.getSubPojo().setWidth(100);
+		
+		Assert.assertEquals(100, proxy.getWidth());
+		Assert.assertEquals(45, proxy.getHeight());
+		Assert.assertEquals(4500, proxy.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
+		
+		((FormProxyObject)proxy).submitToOrigin(null);
+		
+		Assert.assertEquals(100, pojo.getWidth());
+		Assert.assertEquals(45, pojo.getHeight());
+		Assert.assertEquals(4500, pojo.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
+	}
+	public static class B02737Pojo {
 		private int height;
 		private SubPojo _sub;
 		public B02737Pojo() {
@@ -79,6 +80,7 @@ public class B02737Test {
 		public SubPojo getSubPojo() {
 			return _sub;
 		}
+		@Transient
 		public int getWidth() {
 			return getSubPojo().getWidth();
 		}
@@ -92,36 +94,22 @@ public class B02737Test {
 			this.height = height;
 		}
 
+		public void setAreal(long d) {
+			
+		}
 		//readonly (or transient) field
+		@Transient
 		public long getAreal() {
 			return (long)getWidth() * getHeight();
 		}
-		public Object clone() {
-			try {
-				return super.clone();
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
 	}
-	public static class SubPojo implements Cloneable {
+	public static class SubPojo {
 		private int width;
 		public int getWidth() {
 			return width;
 		}
 		public void setWidth(int width) {
 			this.width = width;
-		}
-		public Object clone() {
-			try {
-				return super.clone();
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
 		}
 	}
 }
