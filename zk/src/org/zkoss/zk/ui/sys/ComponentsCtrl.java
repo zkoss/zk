@@ -221,15 +221,17 @@ public class ComponentsCtrl {
 				target = null;
 				
 				// ZK-2598: try to evaluate the path even if its not enclosed by ${}
-				path = path.indexOf("${") >= 0 ? path : "${" + path + "}";
+				String el_path = path.indexOf("${") >= 0 ? path : "${" + path + "}";
 				
-				final Object v =
-						Executions.evaluate(comp, path, Object.class);
+				Object v = null;
+				try {
+					v = Executions.evaluate(comp, el_path, Object.class);
+				} catch (Exception e) {
+					//eat, path may be . or ..
+				}
 				if (v instanceof Component) {
 					target = v;
-				} else if (v == null) {
-					throw new ComponentNotFoundException("EL evaluated to null: "+path);
-				} else {
+				} else if (v != null) {
 					path = Objects.toString(v);
 				}
 
@@ -242,6 +244,10 @@ public class ComponentsCtrl {
 							Path.getComponent(comp.getSpaceOwner(), path);
 					if (target == null && comp instanceof IdSpace && comp.getParent() != null) {
 						target = Path.getComponent(comp.getParent().getSpaceOwner(), path);
+					}
+					//if target is still null
+					if (target == null) {
+						throw new ComponentNotFoundException("EL evaluated to null: " + path);
 					}
 				}
 			} else {
