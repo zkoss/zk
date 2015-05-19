@@ -667,7 +667,7 @@ public class Parser {
 				break; //found
 			}
 		final boolean isXHTML = "xhtml".equals(parentlang.getName());
-		final boolean isBlankPreserved = !"false".equals(Library.getProperty("preserve-all-blank"));
+		final boolean isAllBlankPreserved = !"false".equals(Library.getProperty("preserve-all-blank"));
 		boolean breakLine = false;
 		NativeInfo preNativeInfo = null; //check if brother is native
 		
@@ -720,10 +720,11 @@ public class Parser {
 				}
 
 				//Ignore blank text if no need to preserved
-				if (trimLabel.length() == 0
-				&& ((pi != null && !pi.isBlankPreserved() && !isNativeText(pi)) || !isBlankPreserved))
+				if (trimLabel.length() == 0	&& ((pi != null && !pi.isBlankPreserved() && !isNativeText(pi))))
 					continue;
-
+				else if (label.trim().isEmpty() && !isAllBlankPreserved)
+					continue;
+				
 				if (!isXHTML && (o instanceof Text) && label.trim().isEmpty())
 					breakLine = true;
 				
