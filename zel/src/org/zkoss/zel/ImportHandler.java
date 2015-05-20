@@ -33,10 +33,22 @@ public class ImportHandler {
     private List<String> packages = new ArrayList<String>();
     private Map<String,Class<?>> clazzes = new HashMap<String,Class<?>>();
     private Map<String,Class<?>> statics = new HashMap<String,Class<?>>();
+    private static ImportHandler singleIH = null;
 
 
-    public ImportHandler() {
+    private ImportHandler() {
         importPackage("java.lang");
+    }
+    
+    public static ImportHandler getImportHandler() {
+    	if (singleIH == null) {
+    		synchronized(ImportHandler.class) {
+    			if (singleIH == null)
+    				singleIH = new ImportHandler();	
+    		}
+    		
+    	}
+    	return singleIH;
     }
 
 

@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 
+import org.zkoss.zel.ImportHandler;
+
 /**
  * The class resolve that allows to import classes and packages, like Java's
  * import statement does.
@@ -52,6 +54,8 @@ public class ImportedClassResolver implements ClassResolver, java.io.Serializabl
 
 		final int j = clsptn.lastIndexOf('.');
 		final String nm;
+		ImportHandler elih = ImportHandler.getImportHandler();
+		
 		if (j >= 0) {
 			nm = clsptn.substring(j + 1);
 			if ("*".equals(nm)) {
@@ -60,11 +64,15 @@ public class ImportedClassResolver implements ClassResolver, java.io.Serializabl
 				final String pkg = clsptn.substring(0, j + 1);  //including '.'
 				if (!_pkgs.contains(pkg))
 					_pkgs.add(pkg);
+				
+				elih.importPackage(clsptn.substring(0, j));
 				return;
 			}
 		} else {
 			nm = clsptn;
 		}
+		
+		elih.importClass(clsptn);
 
 		if (_clses == null)
 			_clses = new HashMap<String, Class<?>>(4);
