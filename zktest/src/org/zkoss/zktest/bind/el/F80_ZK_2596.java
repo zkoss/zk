@@ -8,6 +8,10 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zel.ELProcessor;
 
 public class F80_ZK_2596 {
+	public static String staticMethod() {
+		return "staticMethod";
+	}
+	public static String staticField = "staticField";
 	
 	private String value;
 	

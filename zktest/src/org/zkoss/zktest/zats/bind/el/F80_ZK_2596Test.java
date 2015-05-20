@@ -28,6 +28,8 @@ public class F80_ZK_2596Test extends ZATSTestCase {
 			ComponentAgent lb14 = desktop.query("#lb14");
 			ComponentAgent btn1 = desktop.query("#btn1");
 			ComponentAgent btn2 = desktop.query("#btn2");
+			ComponentAgent lb15 = desktop.query("#lb15");
+			ComponentAgent lb16 = desktop.query("#lb16");
 			
 			assertEquals("4.0", lb2.as(Label.class).getValue());
 			assertEquals("4", lb3.as(Label.class).getValue());
@@ -44,6 +46,8 @@ public class F80_ZK_2596Test extends ZATSTestCase {
 			assertEquals("value6", lb13.as(Label.class).getValue());
 			btn2.click();
 			assertEquals("value611", lb14.as(Label.class).getValue());
+			assertEquals("staticMethod", lb15.as(Label.class).getValue());
+			assertEquals("staticField", lb16.as(Label.class).getValue());
 		} catch (Exception e) {
 			// can't go here
 			assertTrue(false);

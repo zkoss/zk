@@ -119,7 +119,7 @@ public abstract class ELContext {
      */
     public ImportHandler getImportHandler() {
         if (importHandler == null) {
-            importHandler = new ImportHandler();
+            importHandler = ImportHandler.getImportHandler();
         }
         return importHandler;
     }
