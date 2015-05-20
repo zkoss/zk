@@ -34,6 +34,7 @@ ZK 8.0.0
   ZK-2707: Add a timepicker component
   ZK-2708: Add a rowlayout component
   ZK-2748: Configure to ignore break line when parsing in a library property
+  ZK-2753: el3 enhancement for invoking customized static method
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

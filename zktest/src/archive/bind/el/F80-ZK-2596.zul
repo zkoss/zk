@@ -1,3 +1,6 @@
+<!-- <?import org.zkoss.zktest.bind.el.* ?> this also works-->
+<?import org.zkoss.zktest.bind.el.F80_ZK_2596 ?>
+
 <zk>
 	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.el.F80_ZK_2596')">
 		@load(xxx.xxx): there should be no exception
@@ -5,6 +8,12 @@
 		<separator></separator>
 		@load((Math.sqrt(16))):
 		<label id="lb2" value="@load((Math.sqrt(16)))"></label>
+		<separator></separator>
+		@load(F80_ZK_2596.staticMethod()):
+		<label id="lb15" value="@load(F80_ZK_2596.staticMethod())"></label>
+		<separator></separator>
+		@load(F80_ZK_2596.staticField):
+		<label id="lb16" value="@load(F80_ZK_2596.staticField)"></label>
 		<separator></separator>
 		@load(([1, 2, 3, 4].get(3))):
 		<label id="lb3" value="@load(([1, 2, 3, 4].get(3)))"></label>
