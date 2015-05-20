@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2675.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 20 14:12:47 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<vlayout>
+	<window id="vm" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2675VM')">
+		Please click the button, you should see a message "clicked" in zk log.
+		<button label="Click Me" onClick="@command('doEventClicked')"/>
+		<script>
+		zk.afterMount(function () {
+			zkbind.$('$vm').after('doEventClicked', function () {
+				zk.log('clicked');
+			});
+		});
+		</script>
+	</window>
+	<window id="vm1" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2675VM1')">
+		Please click the following two button, you should see a message "clicked 2" in zk log.
+		<button label="Click Me" onClick="@command('doEventClicked')"/>
+		<button label="Click Me, without message" onClick="@command('doDayClicked')"/>
+		<script>
+		zk.afterMount(function () {
+			zkbind.$('$vm1').after('doEventClicked', function () {
+				zk.log('clicked 2');
+			}).after('doDayClicked', function () {
+				zk.log('clicked 2');
+			});
+		});
+		</script>
+	</window>
+	<window id="vm2" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2675VM2')">
+		Please click the button, you should NOT see a message "clicked 3" in zk log.
+		<button label="Click Me" onClick="@command('doDayClicked')"/>
+		<script>
+		zk.afterMount(function () {
+			zkbind.$('$vm2').after('doDayClicked', function () {
+				zk.log('clicked 3');
+			});
+		});
+		</script>
+	</window>
+</vlayout>

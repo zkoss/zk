@@ -12,13 +12,14 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
-import org.zkoss.bind.annotation.ClientCommand;
+import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.util.Clients;
@@ -43,26 +44,30 @@ public class ClientBinderPhaseListener implements PhaseListener {
 			final Binder binder = ctx.getBinder();
 			final Object vm = binder.getViewModel();
 			if (binder instanceof BinderImpl && vm != null) {
-				ClientCommand ccmd = vm.getClass().getAnnotation(ClientCommand.class);
-				if (ccmd != null && Arrays.asList(ccmd.value()).contains(commandName)) {
-					final Map<String, Object> args = (Map<String, Object>) ctx.getAttribute(BindContextImpl.COMMAND_ARGS);
-					if (args != null) {
-						if (args.size() == 1) {
-							Object data = new JavaScriptValue(
-									String.valueOf(binder.getConverter(
-											"jsonBindingParam").coerceToUi(
-											args.values().iterator().next(),
-											ctx.getComponent(), ctx)));
-							Clients.response(new AuInvoke(ctx.getBinder()
-									.getView(), "$afterCommand", new Object[] {
-									commandName, data }));
+				ToClientCommand ccmd = vm.getClass().getAnnotation(ToClientCommand.class);
+				if (ccmd != null) { 
+					List<String> asList = Arrays.asList(ccmd.value());
+				
+					if (asList.contains("*") || asList.contains(commandName)) {
+						final Map<String, Object> args = (Map<String, Object>) ctx.getAttribute(BindContextImpl.COMMAND_ARGS);
+						if (args != null) {
+							if (args.size() == 1) {
+								Object data = new JavaScriptValue(
+										String.valueOf(binder.getConverter(
+												"jsonBindingParam").coerceToUi(
+												args.values().iterator().next(),
+												ctx.getComponent(), ctx)));
+								Clients.response(new AuInvoke(ctx.getBinder()
+										.getView(), "$afterCommand", new Object[] {
+										commandName, data }));
+							} else {
+								Object data = new JavaScriptValue(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx)));
+								Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
+										data}));
+							}
 						} else {
-							Object data = new JavaScriptValue(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx)));
-							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
-									data}));
+							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));
 						}
-					} else {
-						Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));
 					}
 				}
 			}

@@ -676,9 +676,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
       <value>false</value>
   </library-property>
   
-  	<!--  F80-ZK-2614 -->
-	<listener>
-		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener
-	</listener-class>
-</listener>
 </zk>

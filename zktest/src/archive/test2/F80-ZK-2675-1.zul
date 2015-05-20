@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2675-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 20 14:12:47 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<vlayout xmlns:w="client">
+	<window id="vm" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2675_1VM')">
+		Please click the button, you should see a message "clicked" in zk log.
+		<button label="Click Me" w:onClick="zkbind.$('$vm').command('doEventClicked')"/>
+	</window>
+	<window id="vm1" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2675_1VM1')">
+		Please click the following two button, you should see a message "clicked 2" in zk log.
+		<button label="Click Me" w:onClick="zkbind.$('$vm1').command('doEventClicked')"/>
+		<button label="Click Me, without message" w:onClick="zkbind.$('$vm1').command('doDayClicked')"/>
+	</window>
+	<window id="vm2" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2675_1VM2')">
+		Please click the button, you should NOT see a message "clicked 3" in zk log.
+		<button label="Click Me" w:onClick="zkbind.$('$vm2').command('doDayClicked')"/>
+	</window>
+</vlayout>

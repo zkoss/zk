@@ -13,6 +13,7 @@ package org.zkoss.bind;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +25,8 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.ToClientCommand;
+import org.zkoss.bind.annotation.ToServerCommand;
 import org.zkoss.bind.impl.AbstractAnnotatedMethodInvoker;
 import org.zkoss.bind.impl.AnnotationUtil;
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
@@ -516,17 +519,19 @@ public class BindComposer<T extends Component> implements Composer<T>,
 
 	public boolean service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if ("onBindCommand".equals(cmd)) {
+		if ("onBindCommand".equals(cmd) || "onBindGlobalCommand".equals(cmd)) {
 			Map<String, Object> data = request.getData();
 			String vcmd = data.get("cmd").toString();
-
-			_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));
-			return true;
-		} else if ("onBindGlobalCommand".equals(cmd)) {
-			Map<String, Object> data = request.getData();
-			String vcmd = data.get("cmd").toString();
-
-			BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd, (Map<String, Object>) data.get("args"));
+			
+			ToServerCommand ccmd = getViewModel().getClass().getAnnotation(ToServerCommand.class);
+			List<String> asList = Arrays.asList(ccmd.value());
+			if (asList.contains("*") || asList.contains(vcmd)) {
+				if ("onBindCommand".equals(cmd)) {				
+					_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));
+				} else if ("onBindGlobalCommand".equals(cmd)) {
+					BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd, (Map<String, Object>) data.get("args"));
+				}
+			}
 			return true;
 		}
 		return false;
