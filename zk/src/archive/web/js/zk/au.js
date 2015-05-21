@@ -1627,12 +1627,12 @@ zAu.cmd1 = /*prototype*/ {
 zk.afterAuResponse = function (fn) {
     if (fn)
         _aftAuResp.push(fn);
-}
+};
 zk.doAfterAuResponse = function () {
     for (var fn; fn = _aftAuResp.shift();) {
         fn();
     }
-}
+};
 })();
 
 function onIframeURLChange(uuid, url) { //doc in jsdoc

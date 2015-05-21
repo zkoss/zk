@@ -161,12 +161,12 @@ function zkamn(pkg, fn) {
     zk.afterResize = function (fn) {
         if (fn)
             _aftResizes.push(fn);
-    }
+    };
     zk.doAfterResize = function () {
         for (var fn; fn = _aftResizes.shift();) {
             fn();
         }
-    }
+    };
 	function _curdt() {
 		return _mntctx.curdt || (_mntctx.curdt = zk.Desktop.$());
 	}
