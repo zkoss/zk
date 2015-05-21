@@ -520,16 +520,18 @@ public class BindComposer<T extends Component> implements Composer<T>,
 	public boolean service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if ("onBindCommand".equals(cmd) || "onBindGlobalCommand".equals(cmd)) {
-			Map<String, Object> data = request.getData();
-			String vcmd = data.get("cmd").toString();
+			final Map<String, Object> data = request.getData();
+			final String vcmd = data.get("cmd").toString();
 			
-			ToServerCommand ccmd = getViewModel().getClass().getAnnotation(ToServerCommand.class);
-			List<String> asList = Arrays.asList(ccmd.value());
-			if (asList.contains("*") || asList.contains(vcmd)) {
-				if ("onBindCommand".equals(cmd)) {				
-					_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));
-				} else if ("onBindGlobalCommand".equals(cmd)) {
-					BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd, (Map<String, Object>) data.get("args"));
+			final ToServerCommand ccmd = getViewModel().getClass().getAnnotation(ToServerCommand.class);
+			if (ccmd != null) {
+				List<String> asList = Arrays.asList(ccmd.value());
+				if (asList.contains("*") || asList.contains(vcmd)) {
+					if ("onBindCommand".equals(cmd)) {				
+						_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));
+					} else if ("onBindGlobalCommand".equals(cmd)) {
+						BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd, (Map<String, Object>) data.get("args"));
+					}
 				}
 			}
 			return true;
