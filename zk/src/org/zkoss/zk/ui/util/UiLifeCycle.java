@@ -49,7 +49,7 @@ public interface UiLifeCycle {
 	 *
 	 * <p>Note: exception thrown by this method is ignored (but logged).
 	 *
-	 * @param prevpage the previous host that shadow belongs to.
+	 * @param prevhost the previous host that shadow belongs to.
 	 * @since 8.0.0
 	 */
 	public void afterShadowDetached(ShadowElement shadow, Component prevhost);

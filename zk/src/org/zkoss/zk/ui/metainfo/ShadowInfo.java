@@ -54,7 +54,6 @@ public class ShadowInfo extends BranchInfo {
 	 * @param tag the tag name; Note: if component implements
 	 * {@link DynamicTag}, this argument must be specified.
 	 * If {@link DynamicTag} is not implemented, this argument is optional.
-	 * @param params the map of attribute. Ignored if null.
 	 */
 	public ShadowInfo(NodeInfo parent, ComponentDefinition compdef, String tag, ConditionImpl cond) {
 		super(parent, cond);
@@ -78,8 +77,6 @@ public class ShadowInfo extends BranchInfo {
 	 * <p>Note: annotations are applied to the component when a component
 	 * is created. So, this method doesn't and need not to copy them.
 	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
-	 *
-	 * <p>Note: the widget class ({@link #setWidgetClass}) is set by this method.
 	 *
 	 */
 	public void applyProperties(Component comp) {
@@ -120,9 +117,9 @@ public class ShadowInfo extends BranchInfo {
 	/** Creates a shadow element based on this info (never null).
 	 * It is the same as newInstance(page, null).
 	 *
-	 * <p>If the implementation class ({@link #getImplementation})
-	 * doesn't have any EL expression, or its EL expression doesn't
-	 * have reference to the self variable, the result is the same.
+	 * <p>If the implementation class doesn't have any EL expression,
+	 * or its EL expression doesn't have reference to the self variable,
+	 * the result is the same.
 	 *
 	 * <p>This method is preserved for backward compatibility.
 	 * It is better to use {@link #newInstance(Page, Component)}.
