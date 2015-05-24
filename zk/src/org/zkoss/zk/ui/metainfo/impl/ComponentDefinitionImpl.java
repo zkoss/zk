@@ -140,8 +140,8 @@ implements ComponentDefinition, java.io.Serializable {
 	 */
 	public static final ComponentDefinition newShadowDefinition(
 	LanguageDefinition langdef, PageDefinition pgdef, String name,
-	Class<? extends Component> cls, String templateURi) {
-		return new ShadowDefinitionImpl(langdef, pgdef, name, cls, templateURi);
+	Class<? extends Component> cls, String templateURI) {
+		return new ShadowDefinitionImpl(langdef, pgdef, name, cls, templateURI);
 	}
 	/** Constructs a macro component definition.
 	 * It is the component definition used to implement the macros.

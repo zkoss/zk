@@ -517,7 +517,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	}
 	/**
 	 * Creates the distributed children after apply dynamic properties
-	 * {@link #setDynamicProperty}.
 	 * <p>
 	 * If a shadow element is created by ZK loader, this method is invoked
 	 * automatically. Developers rarely need to invoke this method.
@@ -641,7 +640,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	 * Merge the host into the current shadow, unlike
 	 * {@link #setShadowHost(Component, Component)}
 	 * 
-	 * @param child
+	 * @param host
 	 */
 	public boolean mergeToHost(Component host) {
 		if (host == null)

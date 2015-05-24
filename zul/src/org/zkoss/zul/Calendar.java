@@ -171,7 +171,7 @@ public class Calendar extends XulElement {
 	/**
 	 * Sets whether enable to show the link that jump to today in day view
 	 * @since 8.0.0
-	 * @param boolean
+	 * @param showTodayLink show or hidden
 	 */
 	public void setShowTodayLink(boolean showTodayLink) {
 		if (_showTodayLink != showTodayLink) {

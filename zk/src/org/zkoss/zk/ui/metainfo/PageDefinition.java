@@ -891,7 +891,7 @@ public class PageDefinition implements NodeInfo {
 	/** Adds a template info
 	 * The previous src of the same name will be replaced.
 	 *
-	 * @param src the src. If null, the attribute is removed.
+	 * @param info the src. If null, the attribute is removed.
 	 * @since 8.0.0
 	 */
 	public void addTemplateInfo(TemplateInfo info) {

@@ -59,7 +59,7 @@ public class BeanValidator extends AbstractValidator {
 	 * @param clz the class of bean
 	 * @param property the property of bean
 	 * @param value the value to be validated.
-	 * @param gruops the validation groups (since 8.0.0)
+	 * @param groups the validation groups (since 8.0.0)
 	 * @return the ConstraintViolation set.
 	 *  @since 6.0.1
 	 */

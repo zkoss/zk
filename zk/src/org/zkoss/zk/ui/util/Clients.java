@@ -513,7 +513,7 @@ public class Clients {
 	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}
 	 *            if any.
 	 * @since 8.0.0
-	 * @see Encodes#encodeURL(String)
+	 * @see Encodes#encodeURL
 	 * @see #loadScript(String, String, boolean)
 	 */
 	public static final void loadScript(String url) {
@@ -530,7 +530,7 @@ public class Clients {
 	 * @param callback a callback script to execute when the JavaScript file has loaded.
 	 * @param cache true means the url will be cached and executed only once.
 	 * @since 8.0.0
-	 * @see Encodes#encodeURL(String)
+	 * @see Encodes#encodeURL
 	 */
 	public static final void loadScript(String url, String callback, boolean cache) {
 		response(new AuLoadScript(url, callback, cache));
