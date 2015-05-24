@@ -420,7 +420,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		/**
 		 * Sets whether enable to show the link that jump to today in day view
     	 * @since 8.0.0
-    	 * @param boolean
+    	 * @param boolean showTodayLink
 		 */
 	    /**
 	     * Returns whether enable to show the link that jump to today in day view
