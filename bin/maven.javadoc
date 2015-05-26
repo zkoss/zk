@@ -64,4 +64,5 @@ cd $ZKCML
 jvdoc zml
 jvdoc zkex
 jvdoc zkmax
+jvdoc zuti
 cd $maindir
