@@ -35,3 +35,8 @@ commons-codec.jar
 slf4j-api.jar
 slf4j-jdk14.jar
 zsoup.jar
+gson.jar
+jackson-annotations.jar
+jackson-core.jar
+jackson-databind.jar
+javassist.jar

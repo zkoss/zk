@@ -40,6 +40,13 @@ if [ ! -d "$folder2" ] && [ ! -f "$folder2" ] ; then
 fi
 
 maindir="$(pwd)"
+tmpdir="$maindir"
+os="$(uname)"
+
+if [ $os == "Darwin" ]; then
+	tmpdir=$TMPDIR
+fi
+
 tmp1="checktmp1"
 tmp2="checktmp2"
 
@@ -54,7 +61,7 @@ function checkFileSize {
 	if [ -d $1 ] ; then
 		cd $1
 	fi
-	du -abh * >> $maindir/$2.log
+	du -ah * >> $tmpdir/$2.log
 }
 
 function checkFileSizeMaven {
@@ -66,7 +73,7 @@ function checkFileSizeMaven {
 	cd $maindir/tmp
 	unzipJar
 	cd $maindir/tmp
-	du -abh * >> $maindir/$2.log
+	du -ah * >> $tmpdir/$2.log
 	rm -rf $maindir/tmp
 }
 
@@ -107,7 +114,7 @@ else
 	checkFileSize "$folder2" "$tmp2"
 fi
 
-cd $maindir
+cd $tmpdir
 
 if [ $# != 2 ] ; then
 	sed -i "s/$ver1/{VER}/g" $tmp1.log
@@ -119,11 +126,18 @@ sort -n $tmp2.log -o $tmp2.log
 
 diff $tmp1.log $tmp2.log
 if [ $? != 0 ] ; then
-	TortoiseMerge.exe $tmp1.log $tmp2.log
+	if [ -f TortoiseMerge.exe ] ; then
+		TortoiseMerge.exe $tmp1.log $tmp2.log
+	elif [ $os == "Darwin" ]; then
+		opendiff $tmp1.log $tmp2.log
+	else 
+		vimdiff $tmp1.log $tmp2.log
+	fi
 else
 	echo "All files are matched!"
 fi
 
-
-rm $tmp1.log
-rm $tmp2.log
+if [ $os != "Darwin" ]; then
+	rm $tmp1.log
+	rm $tmp2.log
+fi
