@@ -86,7 +86,7 @@
 		<dependency>
 		  <groupId>org.zkoss</groupId>
 		  <artifactId>zsoup</artifactId>
-		  <version>1.8.2.4</version>
+		  <version>1.8.2.5</version>
 		</dependency>
 	</dependencies>
 	<build>

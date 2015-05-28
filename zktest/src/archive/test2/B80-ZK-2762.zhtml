@@ -1,0 +1,9 @@
+<html>
+<head>
+	<zk:zscript xmlns:zk="zk">var="someobject"</zk:zscript>
+        <title>${var}</title>
+</head>
+<body>
+You should be able to see browser's title with "someobject"
+</body>
+</html>
