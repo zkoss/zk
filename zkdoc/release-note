@@ -50,7 +50,7 @@ ZK 8.0.0
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
-  + Deprecated the class of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl and org.zkoss.bind.impl.FormExt.
+  + Removed the classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl and org.zkoss.bind.impl.FormExt, please use Form Proxy mechanism instead.
   + Renaming icons for upgrading Font Awesome to 4.3
   	*. z-icon-move to z-icon-arrows
   	*. z-icon-resize-full to z-icon-expand
