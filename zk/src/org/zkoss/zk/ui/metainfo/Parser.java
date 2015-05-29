@@ -1042,10 +1042,8 @@ public class Parser {
 					if (apply != null && apply.indexOf("org.zkoss.bind.BindComposer") != -1) {
 						//Warnning
 						log.warn(message("If the attribute of viewModel is being used, then \"org.zkoss.bind.BindComposer\" will be applied automatically", el));
-					} else {
-						if (apply == null) apply = "";
-						else apply += ",";
-						compInfo.setApply(apply + "org.zkoss.bind.BindComposer");
+					} else if (apply == null || apply.length() == 0){ //ZK-2763: only auto apply "BindComposer" when the attribute "apply" isn't used.
+						compInfo.setApply("org.zkoss.bind.BindComposer");
 					}
 				}
 				compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
