@@ -17,8 +17,6 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -49,7 +47,7 @@ import org.zkoss.zk.ui.Component;
 public class TrackerImpl implements Tracker, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	protected LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
-	protected Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
+	protected Map<Object, Set<TrackerNode>> _nullMap = new LinkedHashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	protected transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 	protected transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
 	
@@ -121,7 +119,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	public void removeTrackings(Set<Component> comps) {
-		final Set<TrackerNode> removed = new HashSet<TrackerNode>();
+		final Set<TrackerNode> removed = new LinkedHashSet<TrackerNode>();
 		for(Component comp:comps){
 			final Map<Object, TrackerNode> nodesMap = (Map<Object, TrackerNode>) _compMap.remove(comp);
 			if (nodesMap != null) {
@@ -140,7 +138,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	public void removeTrackings(Component comp) {
 		final Map<Object, TrackerNode> nodesMap = (Map<Object, TrackerNode>) _compMap.remove(comp);
 		if (nodesMap != null) {
-			final Set<TrackerNode> removed = new HashSet<TrackerNode>();
+			final Set<TrackerNode> removed = new LinkedHashSet<TrackerNode>();
 			final Collection<TrackerNode> nodes = nodesMap.values();
 			for (TrackerNode node : nodes) {
 				removed.add(node);
@@ -179,7 +177,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	
 	public Set<LoadBinding> getLoadBindings(Object base, String prop) {
 		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
-		final Set<TrackerNode> visited = new HashSet<TrackerNode>();
+		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
 		collectLoadBindings(base, prop, bindings, visited);
 		return bindings;
 	}
@@ -435,7 +433,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	
 	//get dependents of a group of TrackerNodes.
 	private Set<TrackerNode> getDependents(Set<TrackerNode> parentnodes, String prop) {
-		final Set<TrackerNode> kidnodes = new HashSet<TrackerNode>();
+		final Set<TrackerNode> kidnodes = new LinkedHashSet<TrackerNode>();
 		for (TrackerNode node : parentnodes) {
 			for (TrackerNode kid : node.getDependents(prop)) {
 				if (kid != null) {
