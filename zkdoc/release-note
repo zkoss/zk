@@ -47,6 +47,7 @@ ZK 8.0.0
   ZK-2660: Sync grid column visible state in client/server side when show/hide column through menupopup
   ZK-2716: xhtml component dynamic updates
   ZK-2744: pause comet server push while au isn't ready
+  ZK-2763: Property 'bindingAttributes' not found on type org.zkoss.bind.BindComposer
   ZK-2758: unset parameter affects following template invocation
 
 * Upgrade Notes
