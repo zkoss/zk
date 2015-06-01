@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2729.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun  1 14:37:05 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div xmlns:h="native" width="100%" height="100%" style="overflow-y: auto">
+	    <style>
+	    .photo { 
+	        border: 1px dashed grey; 
+	        border-radius: 10px; 
+	        width: 100px; 
+	        height: 100px; 
+	        background-color: #eee;
+	    }
+	    .dropzone {
+	        border: 1px solid grey;
+	        min-height: 100px;
+	    }
+	    </style>
+	    <label multiline="true">
+		1. drag a file to gray area
+		2. scroll the page down a little
+		3. drag a file again
+		4. the overlay's position should sync with the anchor
+		</label>
+	    <separator spacing="100px"/>
+	    <div>
+	        <image id="img" sclass="photo" />
+	        <dropupload maxsize="50" detection="browser" anchor="${img}" content="Drag your photo here (size &lt; 50KB)" />
+	    </div>
+	    <separator spacing="500px"/>
+	</div>
+</zk>
