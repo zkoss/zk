@@ -847,4 +847,11 @@ public class Listheader extends HeaderElement {
 			return _gcmpr.compareGroup(o1, o2);
 		}
 	}
+	//B70-ZK-1816, also add in zk 8, ZK-2660
+	protected void updateByClient(String name, Object value) {
+		if ("visible".equals(name))
+			this.setVisibleDirectly(((Boolean)value).booleanValue());
+		else
+			super.updateByClient(name, value);
+	}
 }
