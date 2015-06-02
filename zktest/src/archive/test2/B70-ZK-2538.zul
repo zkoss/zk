@@ -16,7 +16,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 <zk>
 	<label multiline="true">
 		1. Open the page
-		2. Mavigate to the last page
+		2. Navigate to the last page
 		3. Click the "Simulate content changed" button in the first row"
 		There should not be any JS error shown
 	</label>
