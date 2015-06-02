@@ -62,6 +62,14 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			}
 		}]
 	},
+	//B70-ZK-1816, also add in zk 8, ZK-2660
+	setVisible: function (visible) {
+		if (this.isVisible() != visible) {
+			this.$supers('setVisible', arguments);
+			if (this.desktop)
+				this.smartUpdate('visible', visible);
+		}
+	},
 	/** Groups and sorts the items ({@link Listitem}) based on
 	 * {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
