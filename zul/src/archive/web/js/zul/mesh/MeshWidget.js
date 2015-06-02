@@ -1385,7 +1385,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						ftcol = ftcol.nextSibling;
 					continue;
 				} else {
-					wds[i] = wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) || 0);
+					wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
 					var stylew = jq.px0(wd);
 					count -= wd;
 					visj = i;
