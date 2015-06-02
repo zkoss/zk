@@ -8,6 +8,7 @@ ZK 7.0.6
   ZK-1816: listbox menupopup=auto when a column is hidden and the listheader is clicked for sorting, the hidden column re-appears
   ZK-2720: Setting automatic-timeout to true didn't redirect to timeout page based on session timeout time
   ZK-2747: Executions.schedule API behavior didn't follow its javadoc description
+  ZK-2630: Window caption didn't align with close icon in Firefox
 
 * Upgrade Notes
 
