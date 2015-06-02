@@ -164,7 +164,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						ajaxReqResend(reqInf);
 						return;
 					}
-					if (v != 410) //not timeout (SC_GONE)
+					if (v != 410 && //not timeout (SC_GONE)
+							(!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout 
 						zAu._resetTimeout();
 
 					if (pushReqCmds(reqInf, req)) { //valid response

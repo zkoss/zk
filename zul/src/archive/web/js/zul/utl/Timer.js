@@ -100,7 +100,9 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	},
 	_tmfn: function () {
 		if (!this._repeats) this._running = false;
-		this.fire('onTimer', null, {ignorable: true});
+		this.fire('onTimer', null, {ignorable: true,
+				rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout 
+			});
 	},
 
 	//super//
