@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2720.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun  2 10:57:04 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+	To test this case, you have to add the zk.xml with the following setting.
+	**** Start This Line ****
+	<session-config>
+		<device-type>ajax</device-type>
+		<session-timeout>10</session-timeout>
+		<timer-keep-alive>false</timer-keep-alive>
+		<automatic-timeout>true</automatic-timeout>
+		<timeout-uri>/timeout.zul</timeout-uri>
+	</session-config>
+	**** End This Line ****
+	]]></label>
+	Test automatic-timeout with timer component, the timeout redirect will happen in 15 seconds. (if you click the "reset Timeout" button, the timeout redirect will happen in 15 seconds after you clicked.)
+	<zscript><![CDATA[
+	void show() {
+		Clients.log("Timer" + new Date());
+	}
+	]]></zscript>
+	<timer id="timer" delay="1000" repeats="true" onTimer="show()" onCreate="self.start()" />
+	<button label="reset Timeout" onClick='Clients.log("reset timeout countdown")'/>
+</zk>
