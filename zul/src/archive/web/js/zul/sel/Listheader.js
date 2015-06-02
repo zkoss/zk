@@ -63,7 +63,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		}]
 	},
 	
-	//Since 8.0.0, B80-ZK-2660
+	//B70-ZK-1816, also add in zk 8, ZK-2660
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);

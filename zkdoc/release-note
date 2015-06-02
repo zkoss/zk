@@ -77,7 +77,17 @@ ZK 7.0.6
 
 * Bugs
   ZK-2692: SLF4J logging argument syntax
+  ZK-2722: Clearing a Grid's model causes ArrayIndexOutOfBoundsException
+  ZK-1816: listbox menupopup=auto when a column is hidden and the listheader is clicked for sorting, the hidden column re-appears
 
+  --------
+ZK 7.0.5.2
+April 28, 2015
+* Features
+
+* Bugs
+  ZK-2741: Optimize dummy request call
+  
   --------
 ZK 7.0.5.2
 April 28, 2015
