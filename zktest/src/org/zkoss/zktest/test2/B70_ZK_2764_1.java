@@ -1,4 +1,4 @@
-/** B70_ZK_2764.java.
+/** B70_ZK_2764_1.java.
 
 	Purpose:
 		
@@ -32,7 +32,7 @@ import org.zkoss.zul.Treerow;
  * @author jumperchen
  *
  */
-public class B70_ZK_2764 extends SelectorComposer<Component> {
+public class B70_ZK_2764_1 extends SelectorComposer<Component> {
 	private static final long serialVersionUID = 1L;
 
 	private int count = 0;
@@ -53,7 +53,7 @@ public class B70_ZK_2764 extends SelectorComposer<Component> {
 	//causes the problem
 	@Listen("onClick = #updateButton")
 	public void updateData() {
-		updateDataRecursively(treeModel.getRoot());
+		updateDataRecursively(treeModel.getRoot().getChildren().get(0));
 	}
 
 	private void updateDataRecursively(TreeNode<String> node) {
