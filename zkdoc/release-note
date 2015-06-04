@@ -17,6 +17,7 @@ ZK 7.0.6
   ZK-2768: client ROD causes JS error with popup.open
   ZK-2690: Grid's non-frozen columns disappear after scrolling
   ZK-2712: Tree scroll position didn't clear when setting new model and then invalidate
+  ZK-2757: textboxes onChange with native drag'n'drop
 
 * Upgrade Notes
 
