@@ -828,6 +828,9 @@ zAu.beforeSend = function (uri, req, dt) {
 	 * for other condition, this method returns false.
 	 */
 	sendNow: function (dt) {
+		if (zAu.disabledRequest) {
+			return false;
+		}
 		var es = dt._aureqs;
 		if (es.length == 0)
 			return false;
@@ -1051,6 +1054,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (v && (v = v.requestPath))
 			msg = msg.replace(dtid, v + ' (' + dtid + ')');
 
+		zAu.disabledRequest = true;
+
 		jq.alert(msg, {
 			icon: 'ERROR',
 			button: {
@@ -1074,6 +1079,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	redirect: function (url, target) {
 		try {
 			zUtl.go(url, {target: target});
+			zAu.disabledRequest = true; // Bug ZK-2616
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
 		}

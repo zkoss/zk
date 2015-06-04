@@ -24,6 +24,8 @@ ZK 6.5.8
   ZK-2610: Wrong hflex calculation when header widgets are invisible
   ZK-2562: Wrong tree rendering after adding node with tree model
   ZK-2764: TreeNode.setData() causes incorrect re-positioning of treeitems
+  ZK-2616: Timeout on long running redirect if user triggers more events
+
   
   --------
 ZK 6.5.7
