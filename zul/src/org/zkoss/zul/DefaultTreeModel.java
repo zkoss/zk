@@ -171,7 +171,7 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	private void sort0(TreeNode<E> node, Comparator<TreeNode<E>> cmpr) {
 		if (node.getChildren() == null) return;
 		if (node instanceof DefaultTreeNode)
-			((TreeNodeChildrenList)node.getChildren()).sort(cmpr);
+			((TreeNodeChildrenList)node.getChildren()).treeSort(cmpr);
 		else
 			Collections.sort(node.getChildren(), cmpr);
 		for (TreeNode<E> child: node.getChildren())
