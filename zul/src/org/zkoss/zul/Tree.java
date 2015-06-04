@@ -1666,6 +1666,7 @@ public class Tree extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeTreeDataListener(_dataListener);
+					resetPosition(); //ZK-2712: set different model, reset scroll and anchor position
 				} else {
 					if (_treechildren != null) _treechildren.detach();
 						//don't call getItems().clear(), since it readonly
@@ -2465,6 +2466,18 @@ public class Tree extends MeshElement {
 			prevSeldItems.removeAll(currentSelection);
 		return prevSeldItems;
 	}
+	
+	/**
+	 * Resets scroll and anchor position.
+	 * @since 7.0.6
+	 */
+	private void resetPosition() {
+		_currentTop = 0;
+		_currentLeft = 0;
+		_anchorTop = 0;
+		_anchorLeft = 0 ;
+	}
+	
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
