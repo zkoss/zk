@@ -356,7 +356,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					cellWidth;
 				
 				if (cnt-- <= 0) { //show
-					var wd = isVisible ? n.offsetWidth : 0,
+					var wd = isVisible ? 
+							(zk.ie ? jq(n).width() : n.offsetWidth) // Bug ZK-2690
+							: 0,
 						nativebar = mesh._nativebar;
 					// ZK-2071: nativebar behavior should be same as fakebar
 					if (force
@@ -366,7 +368,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
-				} else if (force || n.offsetWidth != 0) { //hide
+				} else if (force ||
+						 // Bug ZK-2690
+						((zk.ie ? jq(n).width() : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					hdWgt._origWd = hdWgt._origWd || faker.style.width;
 					cellWidth = '0px';
