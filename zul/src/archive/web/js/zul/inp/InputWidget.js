@@ -492,6 +492,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (x != windowX || y != windowY)
 				window.scrollTo(windowX, windowY);
 		}
+		this._lastKeyDown = null;
 	},
 	_doTouch: zk.ios ? function (evt) {
 		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
@@ -801,7 +802,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')
-			.domListen_(n, 'onSelect');
+			.domListen_(n, 'onSelect')
+			.domListen_(n, 'onInput', 'doInput_');
 		
 		if (zk.ios)
 			this.domListen_(n, 'onTouchStart', '_doTouch');
@@ -815,7 +817,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var n = this.getInputNode();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
-			.domUnlisten_(n, 'onSelect');
+			.domUnlisten_(n, 'onSelect')
+			.domUnlisten_(n, 'onInput', 'doInput_');
 		
 		if (zk.ios)
 			this.domUnlisten_(n, 'onTouchStart', '_doTouch');
@@ -825,6 +828,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.$supers(InputWidget, 'unbind_', arguments);
 	},
+	doInput_: function (evt) {
+		//ZK-2757, fire onChange when native drag'n' drop in different browsers
+		var wgt = this;
+		//in IE, current focus changes after onInput event
+		setTimeout(function () {
+			if (!zk.chrome && !wgt._lastKeyDown && zk.currentFocus != wgt)
+				wgt.doBlur_(evt); //fire onBlur again
+		}, 10);
+	},
 	resetSize_: function(orient) {
 		var n;
 		if (this.$n() != (n = this.getInputNode()))
@@ -833,6 +845,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
+		this._lastKeyDown = keyCode;
 		if (this._readonly && keyCode == 8 && evt.target == this) {
 			evt.stop(); // Bug #2916146
 			return;
