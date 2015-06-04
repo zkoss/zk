@@ -1109,6 +1109,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	redirect: function (url, target) {
 		try {
 			zUtl.go(url, {target: target});
+			zAu.disabledRequest = true; // Bug ZK-2616
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
 		}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2764.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun  2 17:06:56 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please open the tree node "node 1" and "node 1.1" to display the node "node 1.1.1"
+<separator/>
+2. click the button "update data", the tree structure should be the same as before, only all the content are updated
+<separator/>
+3. click the button "rebuild model", the tree structure should be the same as before, only all the content are updated
+
+	<div apply="org.zkoss.zktest.test2.B70_ZK_2764">
+		<tree id="dyntree" width="400px"/>
+		<button id="updateButton" label="update data"/>
+		<button id="rebuildButton" label="rebuild model"/>
+	</div>
+</zk>
+

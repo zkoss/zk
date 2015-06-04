@@ -406,13 +406,18 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 			
 			if (tarWgt) {
-				var dom = tarWgt.$n();
-				if (tarWgt.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
-					var lastChild = tarWgt.treechildren.lastChild;
+				var dom = tarWgt.$n(),
+					current = tarWgt;
+				while (current && current.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+					var lastChild = current.treechildren.lastChild;
+					
+					if (!lastChild) break;
+					
 					for (;lastChild; lastChild = lastChild.previousSibling) {
 						var n = lastChild.$n();
 						if (n) { //Bug ZK-1739: treerow may removed
 							dom = n;
+							current = lastChild;
 							break;
 						}
 					}
@@ -439,6 +444,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				var dom = tarWgt.$n();
 				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
 					var firstChild = this.treechildren.firstChild;
+					
 					for (;firstChild; firstChild = firstChild.nextSibling) {
 						var n = firstChild.$n();
 						if (n) { //Bug ZK-1739: treerow may removed
@@ -446,6 +452,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 							break;
 						}
 					}
+
 				}
 				jq(dom).before(childHTML);
 				return;
