@@ -428,24 +428,19 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		if (w = this.nextSibling) {
 			tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
 			if (tarWgt) {
-				var dom = tarWgt.$n(),
-					current = tarWgt;
-			
-				while (current && current.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
-					var firstChild = current.treechildren.firstChild;
-					
-					if (!firstChild) break;
+				var dom = tarWgt.$n();
+				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
+					var firstChild = this.treechildren.firstChild;
 					
 					for (;firstChild; firstChild = firstChild.nextSibling) {
 						var n = firstChild.$n();
 						if (n) { //Bug ZK-1739: treerow may removed
 							dom = n;
-							current = firstChild;
 							break;
 						}
 					}
 				}
-
+				
 				jq(dom).before(childHTML);
 				return;
 			}
