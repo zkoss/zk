@@ -13,6 +13,7 @@ ZK 7.0.6
   ZK-2759: Grid header and content misaligned when using span="true"
   ZK-2729: Dropupload overlay does not cover its anchor after scrolling
   ZK-2767: dropupload problems with native drop after first upload
+  ZK-2616: Timeout on long running redirect if user triggers more events
 
 * Upgrade Notes
 
