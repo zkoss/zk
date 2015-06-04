@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2768_expl.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  4 13:51:26 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<div vflex="1" style="border: 1px solid red">explorerWindowInternals.zul</div>
+
