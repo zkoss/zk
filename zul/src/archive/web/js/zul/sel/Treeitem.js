@@ -420,6 +420,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 							current = lastChild;
 							break;
 						}
+						current = null; //reset to avoid dead loop here.
 					}
 				}
 				jq(dom).after(childHTML);
@@ -437,7 +438,13 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					}
 				}
 			} else {
-				tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+				tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively			
+				
+				if (!tarWgt) {
+					// Bug ZK-2764-2 test case
+					// if preivousSibling and nextSibling are all not found, we should try to seek itself.
+					tarWgt = _searchNextRenderedItem(this);
+				}
 			}
 			
 			if (tarWgt) {
