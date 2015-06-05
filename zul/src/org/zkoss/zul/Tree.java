@@ -345,11 +345,7 @@ public class Tree extends MeshElement {
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
 				setFixedLayout(true);
-				_currentTop = 0;
-				_currentLeft = 0;
-				_anchorTop = 0;
-				_anchorLeft = 0 ;
-				invalidate(); //non-paging mold -> paging mold
+				resetPosition(true); //non-paging mold -> paging mold
 			}
 		}
 	}
@@ -1488,6 +1484,7 @@ public class Tree extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeTreeDataListener(_dataListener);
+					resetPosition(false); //ZK-2712: set different model, reset scroll and anchor position
 				} else {
 					if (_treechildren != null) _treechildren.detach();
 						//don't call getItems().clear(), since it readonly
@@ -2184,6 +2181,19 @@ public class Tree extends MeshElement {
 	}
 	private static Boolean _ckDeselectOther;
 
+	/**
+	 * Resets scroll and anchor position.
+	 * @param shouldInvalidate should invalidate or not
+	 * @since 6.5.8
+	 */
+	private void resetPosition(boolean shouldInvalidate) {
+		_currentTop = 0;
+		_currentLeft = 0;
+		_anchorTop = 0;
+		_anchorLeft = 0;
+		if (shouldInvalidate) invalidate();
+	}
+	
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
