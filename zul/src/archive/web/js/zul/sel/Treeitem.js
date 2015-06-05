@@ -419,6 +419,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 							current = lastChild;
 							break;
 						}
+						current = null; //reset to avoid dead loop here.
 					}
 				}
 				jq(dom).after(childHTML);
@@ -427,6 +428,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 		if (w = this.nextSibling) {
 			tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+			
+			if (!tarWgt) {
+				// Bug ZK-2764-2 test case
+				// if preivousSibling and nextSibling are all not found, we should try to seek itself.
+				tarWgt = _searchNextRenderedItem(this);
+			}
 			if (tarWgt) {
 				var dom = tarWgt.$n();
 				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
@@ -445,6 +452,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				return;
 			}
 		}
+		
 		if (w = this.getParentItem()) {
 			// B65-ZK-1608 add new treerow after parent node.
 			var n = w.$n();

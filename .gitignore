@@ -18,3 +18,4 @@ dist/lib/osgi
 */.settings/*.xml
 */nbactions.xml
 */bin/*
+bin/node_modules
