@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2712.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun 04, 2015  6:30:23 PM, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="hello">
+	    <label multiline="true">
+	    	1. Scroll to most bottom and click on item98 to select it.
+			2. Click "Switch to smaller model" button. The scrollbar should disappear and you should see "New item".
+		</label>
+		<zscript><![CDATA[
+		DefaultTreeNode root = new DefaultTreeNode("root", new ArrayList());
+		for (int i = 0; i < 99; i++) {
+		    root.add(new DefaultTreeNode("item " + i));
+		}
+		DefaultTreeModel model = new DefaultTreeModel(root);
+	    void invalidate() {
+		    root.getChildren().clear();
+		    root.getChildren().add(new DefaultTreeNode("New item"));
+		    tree.setModel(new DefaultTreeModel(root));
+		    tree.invalidate();
+		}
+		]]></zscript>
+        <button id="btn" label="Switch to smaller model" onClick="invalidate()" />
+        <vlayout height="400px" width="200px">
+            <tree id="tree" model="${model}" vflex="1">
+                <treecols>
+                    <treecol label="Treecol" />
+                </treecols>
+            </tree>
+        </vlayout>
+    </window>
+</zk>
+

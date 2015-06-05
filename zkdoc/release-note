@@ -25,7 +25,7 @@ ZK 6.5.8
   ZK-2562: Wrong tree rendering after adding node with tree model
   ZK-2764: TreeNode.setData() causes incorrect re-positioning of treeitems
   ZK-2616: Timeout on long running redirect if user triggers more events
-
+  ZK-2712: Tree scroll position didn't clear when setting new model and then invalidate
   
   --------
 ZK 6.5.7
