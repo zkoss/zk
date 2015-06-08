@@ -399,85 +399,92 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				w.removeHTML_(cn);
 		}
 	},
-	_renderChildHTML: function (childHTML) {
-		var w, tarWgt;
-		//Bug ZK-1726: search correct siblings
-		if (w = this.previousSibling) {
-			tarWgt = _searchPrevRenderedItem(w); //Bug ZK-1766: search rendered item recursively
-			if (tarWgt) {
-				var dom = tarWgt.$n(),
-					current = tarWgt;
-				while (current && current.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
-					var lastChild = current.treechildren.lastChild;
-					
-					if (!lastChild) break;
-					
-					for (;lastChild; lastChild = lastChild.previousSibling) {
-						var n = lastChild.$n();
-						if (n) { //Bug ZK-1739: treerow may removed
-							dom = n;
-							current = lastChild;
-							break;
-						}
-						current = null; //reset to avoid dead loop here.
+	_renderChildHTML: (function () {
+		function _getTreePath(tree, node) {
+			var p = node,
+				paths = [p.getChildIndex()];
+			while (p) {
+				p = p.parent.parent;
+				if (p.$instanceof(zul.sel.Treeitem)) {
+					paths.unshift(p.getChildIndex());
+				} else {
+					break;
+				}
+			}
+			return paths;
+		}
+		
+		// return -1 if thisPath is before itemPath,
+		// return 1 if thisPath is after itemPath,
+		function _compareTreePath(thisPath, itemPath) {
+			var depth = 0;
+			while (true) {
+				if (thisPath[depth] < itemPath[depth]) {
+					return -1;
+				} else if (thisPath[depth] > itemPath[depth]) {
+					return 1;
+				} else if (thisPath[depth] == itemPath[depth]) {
+					if (thisPath[depth] == undefined) //just in case, it should never be run into this line.
+						break;
+					depth++;
+					continue;
+				} else {
+					if (thisPath[depth] == undefined) { // shorter is at before
+						return -1;
+					} else {
+						return 1;
 					}
 				}
-				jq(dom).after(childHTML);
-				return;
 			}
+			return 1;
 		}
-		if (w = this.nextSibling) {
-			tarWgt = _searchNextRenderedItem(w); //Bug ZK-1766: search rendered item recursively
+		return function (childHTML) {
+			var tree = this.getTree(),
+				erows = tree.$n('rows');
 			
-			if (!tarWgt) {
-				// Bug ZK-2764-2 test case
-				// if preivousSibling and nextSibling are all not found, we should try to seek itself.
-				tarWgt = _searchNextRenderedItem(this);
-			}
-			if (tarWgt) {
-				var dom = tarWgt.$n();
-				if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
-					var firstChild = this.treechildren.firstChild;
+			// has children
+			if (erows && erows.childNodes.length) {
+				// do binary search for the insertion point
+				var low = 0,
+					children = erows.childNodes,
+					high = children.length - 1,
+					mid = 0,
+					thisPath = _getTreePath(tree, this),
+					treePaths = {}; // store the calculated path for performance.
+				
+				treePaths[this.uuid] = thisPath;
+				while (low <= high) {
+					mid = (low + high) >>> 1;
 					
-					for (;firstChild; firstChild = firstChild.nextSibling) {
-						var n = firstChild.$n();
-						if (n) { //Bug ZK-1739: treerow may removed
-							dom = n;
-							break;
-						}
+					var item = zk.Widget.$(children[mid].id).parent,
+						itemPath = treePaths[item.uuid];
+					
+					if (!itemPath) {
+						itemPath = _getTreePath(tree, item);
+						treePaths[item.uuid] = itemPath;
+					}
+					if (_compareTreePath(thisPath, itemPath) == 1) {
+						low = mid + 1;
+					} else {
+						high = mid - 1;
+						if (low >= high)
+							mid -= 1;
+						
 					}
 				}
 				
-				jq(dom).before(childHTML);
-				return;
+				if (mid >= 0)
+					jq(children[mid]).after(childHTML);
+				else if (erows.firstChild) // the first one
+					jq(erows.firstChild).before(childHTML);
+				else
+					jq(erows).append(childHTML);
+			} else {
+				jq(erows).append(childHTML);
 			}
-		}
-		
-		if (w = this.getParentItem()) {
-			// B65-ZK-1608 add new treerow after parent node.
-			var n = w.$n();
-			if (n)
-			    jq(n).after(childHTML);
-			else
-				w._renderChildHTML(childHTML);
-		} else if ((w = this.getTree())) {
-			var tbody = w.$n('rows');
-			if (this.isContainer()) { //Bug ZK-1733: Check if treechildren is rendered yet
-				var firstChild = this.treechildren.firstChild;
-				if (firstChild) {
-					var dom = firstChild.$n();
-					if (dom) { //Bug ZK-1739: treerow may removed
-						jq(dom).before(childHTML);
-						return;
-					} else if (tbody.firstChild) { // Bug ZK-2562
-						jq(tbody.firstChild).before(childHTML);
-						return;
-					}
-				}
-			}
-			jq(tbody).append(childHTML);
-		}
-	},
+			
+		};
+	})(),
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_(): null)
 			jq(before).before(child.redrawHTML_());
