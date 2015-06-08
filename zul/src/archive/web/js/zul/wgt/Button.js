@@ -350,9 +350,11 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		this._ads = ads;
 	},
 	onResponse: function () {
-		for (var ads = this._ads, ad; ad = ads.shift();)
+		for (var ads = this._ads, ad; ad = ads.shift();) {
 			// B60-ZK-1176: distinguish from other usages
 			ad.setDisabled(false, {adbs: false, skip: true});
+			if (zk.chrome) ad.domListen_(ad.$n(), 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
+		}
 		zWatch.unlisten({onResponse: this});
 	}
 },{ //static
@@ -362,6 +364,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 	autodisable: function(wgt) {
 		var ads = wgt._autodisable, aded, uplder;
 		if (ads) {
+			if (zk.chrome) wgt.domUnlisten_(wgt.$n(), 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
 			ads = ads.split(',');
 			for (var j = ads.length; j--;) {
 				var ad = ads[j].trim();

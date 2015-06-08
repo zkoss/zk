@@ -19,6 +19,7 @@ ZK 7.0.6
   ZK-2712: Tree scroll position didn't clear when setting new model and then invalidate
   ZK-2757: textboxes onChange with native drag'n'drop
   ZK-2750: shifting separator in borderlayout
+  ZK-2739: Modal window didn't focus on previously focused button when button have autodisabled setted
 
 * Upgrade Notes
 
