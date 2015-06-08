@@ -438,20 +438,14 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					children = erows.childNodes,
 					high = children.length - 1,
 					mid = 0,
-					thisPath = _getTreePath(tree, this),
-					treePaths = {}; // store the calculated path for performance.
+					thisPath = _getTreePath(tree, this);
 				
-				treePaths[this.uuid] = thisPath;
 				while (low <= high) {
 					mid = (low + high) >>> 1;
 					
 					var item = zk.Widget.$(children[mid].id).parent,
-						itemPath = treePaths[item.uuid];
-					
-					if (!itemPath) {
 						itemPath = _getTreePath(tree, item);
-						treePaths[item.uuid] = itemPath;
-					}
+					
 					if (_compareTreePath(thisPath, itemPath) == 1) {
 						low = mid + 1;
 					} else {
