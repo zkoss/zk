@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2739_1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 5, 2015  14:30:59 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window id="modal" border="normal" title="Test Modal Detach" mode="modal">
+		Click to close the modal, and check the focus behavior.
+		<button id="btn" label="Close" onClick="modal.detach()" />
+	</window>
+</zk>
