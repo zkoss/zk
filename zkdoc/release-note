@@ -24,6 +24,7 @@ ZK 7.0.6
   ZK-2773: The popup position of datebox shows at wrong position when the page is longer than screen
   ZK-2709: Modified time doesn't update in a Datebox in Firefox
   ZK-2704: combobox immediately closes when loading comboitems on demand
+  ZK-2673: The nav items size is not adapted in case further items are added on demand
 
 * Upgrade Notes
 
