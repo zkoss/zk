@@ -28,6 +28,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	    void invalidate() {
 		    root.getChildren().clear();
 		    root.getChildren().add(new DefaultTreeNode("New item"));
+		    tree.setModel(new DefaultTreeModel(root));
 		    tree.invalidate();
 		}
 		]]></zscript>

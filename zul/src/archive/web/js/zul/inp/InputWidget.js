@@ -833,7 +833,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var wgt = this;
 		//in IE, current focus changes after onInput event
 		setTimeout(function () {
-			if (!zk.chrome && !wgt._lastKeyDown && zk.currentFocus != wgt)
+			if (wgt && !zk.chrome && !wgt._lastKeyDown && zk.currentFocus != wgt)
 				wgt.doBlur_(evt); //fire onBlur again
 		}, 10);
 	},

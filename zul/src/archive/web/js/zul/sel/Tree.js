@@ -258,6 +258,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 					return;
 				}
 		}
+		this.doResizeScroll_();
 	},
 	/**
 	 * Returns the head widget class. i.e. {@link Treecols}

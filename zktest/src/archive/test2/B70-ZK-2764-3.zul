@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2764-3.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun  4 10:06:56 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please open the tree node "node 1" and "node 1.1" and "node 1.2" to display the nodes "node 1.1.1" and "node 1.1.2"
+<separator/>
+2. Please open the tree node "node 3" and "node 3.1" and "node 3.2" to display the nodes "node 3.1.1" and "node 3.2.1"
+<separator/>
+3. click the button "update data (10 random)", the tree structure should be the same as before, only all the content are updated (try testing more times)
+<separator/>
+4. click the button "update data (Pre Order)", the tree structure should be the same as before, only all the content are updated
+<separator/>
+5. click the button "update data (Post Order)", the tree structure should be the same as before, only all the content are updated
+	
+	<div apply="org.zkoss.zktest.test2.B70_ZK_2764_3">
+		<tree id="dyntree" width="400px">
+			<treecols>
+				<treecol></treecol>
+			</treecols>
+		</tree>
+		<button id="updateButton" label="update data (Pre Order)"/>
+		<button id="updateButtonReverse" label="update data (Post Order)"/>
+		<button id="updateButtonRandom" label="update data (10 random)"/>
+		<button id="rebuildButton" label="rebuild model"/>
+	</div>
+</zk>
