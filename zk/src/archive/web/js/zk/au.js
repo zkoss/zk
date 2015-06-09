@@ -1273,7 +1273,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	showNotification: function (msg, type, pid, ref, pos, off, dur, closable) {
 		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
 		if (notif) {
-			notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable});
+			var opts = {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable};
+			//ZK-2687, show notif after zAu.cmd0.scrollIntoView
+			zk.delayFunction(ref.uuid, function () {
+				notif.show(msg, pid, opts);
+			});
 		} else {
 			// TODO: provide a hook to customize
 			jq.alert(msg); // fall back to alert when zul is not available
@@ -1298,10 +1302,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (!uuid)
 			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy:true});
 		else if (w) {
-			w.effects_.showBusy = new zk.eff.Mask( {
-				id: w.uuid + '-shby',
-				anchor: w.$n(),
-				message: msg
+			zk.delayFunction(uuid, function () {
+				w.effects_.showBusy = new zk.eff.Mask( {
+					id: w.uuid + '-shby',
+					anchor: w.$n(),
+					message: msg
+				});
 			});
 		}
 	},
@@ -1348,23 +1354,20 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @see #clearWrongValue
 	 */
 	wrongValue: function () {
-		var args = arguments,
-			func = function () {
-				for (var i = 0, len = args.length - 1; i < len; i += 2) {
-					var uuid = args[i], msg = args[i + 1],
-						wgt = Widget.$(uuid);
-					if (wgt) {
-						if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
-						else zAu.wrongValue_(wgt, msg);
-					} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
-						jq.alert(msg);
-				}
-			};
+		var args = arguments;
+		for (var i = 0, len = args.length - 1; i < len; i += 2) {
+			var uuid = args[i], msg = args[i + 1],
+				wgt = Widget.$(uuid);
+			if (wgt) {
+				zk.delayFunction(uuid, function () {
+					if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
+					else zAu.wrongValue_(wgt, msg);
+				});
+			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
+				jq.alert(msg);
+		}
         // for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
-		if (this.__delay__) 
-			setTimeout(func, 100);
-		else
-			func();
+		// has been removed since 7.0.6
 	},
 	/** Submit a form.
 	 * This method looks for the widget first. If found and the widget
@@ -1387,12 +1390,17 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the DOM element.
 	 */
 	scrollIntoView: function (id) {
-		this.__delay__ = setTimeout(function () {
-			var w = Widget.$(id);
-			if (w) w.scrollIntoView();
-			else zk(id).scrollIntoView();
-			this.__delay__ = false;
-		}, 50);
+		var w = Widget.$(id);
+		if (w) {
+			zk.delayFunction(w.uuid, function () {
+				w.scrollIntoView();
+			});
+		} else {
+			var zkjq = zk(id); 
+			zk.delayFunction(zkjq.$().uuid, function () {
+				zkjq.scrollIntoView();
+			});
+		}
 	}
 };
 /** @class zk.AuCmd1

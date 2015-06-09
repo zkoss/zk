@@ -667,13 +667,41 @@ zjq.prototype = {
 						c = _scrlIntoView(p, n, c, true);
 				} else {
 					// use browser's scrollIntoView() method instead of ours for F70-ZK-1924.zul
-					setTimeout(function () {
+					zk.delayFunction(this.$().uuid, function () {
 						n.scrollIntoView();
-					}, 20);
+					}, {urgent: true});
 				}
 			}
 		}
 		return this;
+	},
+	/**
+	 * Checks whether the element is shown in the current viewport (consider both native and fake scrollbar).
+	 * @return boolean if false, it means the element is not shown.
+	 * @since 7.0.6
+	 */
+	isRealScrollIntoView: function () {
+		var wgt = this.$(),
+			desktop = wgt.desktop,
+			p = wgt.parent,
+			n = this.jq[0],
+			bar = null, 
+			inView = true;
+
+		// ZK-2069: check whether the input is shown in parents' viewport.
+		if (!zk.ie8_) // fine tune for ie8
+			while (p && p != desktop) {
+				bar = p._scrollbar;
+				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+					inView = bar.isScrollIntoView(n);
+					if (!inView)
+						return inView;
+				}
+				bar = null;
+				p = p.parent;
+			}
+		// ZK-2069: should check native and fake scrollbar case
+		return inView && this.isScrollIntoView(true);
 	},
 	/**
 	 * Checks whether the element is shown in the current viewport.
@@ -2611,4 +2639,42 @@ zk.copy(jq.Event, {
 		return new zk.Event(target, 'on' + type, data, {}, evt);
 	}
 });
+zk.delayQue = {}; //key is uuid, value is array of pending functions
+/**
+ * Execute function related to specified widget after a while, 
+ * and will insure the execution order.
+ * @param String uuid wgt's uuid
+ * @param Function func a function to be executed
+ * @param Map opts [optional] the options. Allowed options:
+ * <ul>
+ * <li>int timeout: number of milliseconds to wait before executing the function. Default: 50</li>
+ * <li>boolean urgent: whether to execute function as soon as possible</li> 
+ * </ul>
+ * Note: timeout is only meaningful for the first function added to wgt
+ */
+zk.delayFunction = function (uuid, func, opts) {
+	if (uuid && typeof func == 'function') {
+		if (!opts)
+			opts = {};
+		var timeout = opts.timeout,
+			urgent = opts.urgent, //indicate the func should be executed as soon as possible
+			idQue = zk.delayQue[uuid];
+		if (!idQue || !idQue.length) { //execute directly
+			zk.delayQue[uuid] = idQue = [func];
+			setTimeout(function () {
+				var pendFunc = idQue.shift(); 
+				while (pendFunc) {
+					pendFunc();
+					pendFunc = idQue.shift();
+				}
+			}, timeout >= 0 ? timeout : 50);
+		} else { //put func to queue
+			if (urgent)
+				idQue.splice(0, 0, func);
+			else
+				idQue.push(func);
+		}
+	}
+};
+
 })(document, window);
