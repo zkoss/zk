@@ -219,7 +219,7 @@ public class Combobox extends Textbox {
 						cnt = newsz - oldsz;
 						if (cnt <= 0)
 							throw new UiException("Adding causes a smaller list?");
-						if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD))
+						if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !isOpen())//ZK-2704: don't invalidate when the combobox is open
 							invalidate();
 								//Also better performance (outer better than remove a lot)
 						if (min < 0)
@@ -254,7 +254,7 @@ public class Combobox extends Textbox {
 						else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 						if (max > oldsz - 1) max = oldsz - 1;
 
-						if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD))
+						if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !isOpen())//ZK-2704: don't invalidate when the combobox is open
 							invalidate();
 								//Also better performance (outer better than remove a lot)
 
