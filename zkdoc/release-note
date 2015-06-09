@@ -26,6 +26,7 @@ ZK 7.0.6
   ZK-2704: combobox immediately closes when loading comboitems on demand
   ZK-2673: The nav items size is not adapted in case further items are added on demand
   ZK-2711: Combobox popup position becomes incorrect when soft keyboard is displayed on iPad
+  ZK-2717: Issue with combobox popup during orientation change
 
 * Upgrade Notes
 
