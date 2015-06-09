@@ -21,6 +21,7 @@ ZK 7.0.6
   ZK-2750: shifting separator in borderlayout
   ZK-2739: Modal window didn't focus on previously focused button when button have autodisabled setted
   ZK-2694: client side tree open/close and virtual scrollbars
+  ZK-2773: The popup position of datebox shows at wrong position when the page is longer than screen
 
 * Upgrade Notes
 

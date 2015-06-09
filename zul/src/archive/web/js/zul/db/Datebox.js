@@ -24,10 +24,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _reposition(db, silent) {
 		if (!db.$n()) return;
 		var pp = db.$n('pp'),
+			n = db.$n(),
 			inp = db.getInputNode();
 
 		if(pp) {
-			zk(pp).position(inp, 'after_start');
+			zk(pp).position(n, 'after_start', {dodgeRef: n});
 			db._pop.syncShadow();
 			if (!silent)
 				zk(inp).focus();
@@ -602,8 +603,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd;
 		}
-		var inp = db.getInputNode();
-		zk(pp).position(inp, 'after_start');
+		var inp = db.getInputNode(),
+			dbEl = db.$n();
+		zk(pp).position(dbEl, 'after_start', {dodgeRef: dbEl});
 		delete db._shortcut;
 		
 		var self = this;
