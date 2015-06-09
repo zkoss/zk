@@ -17,6 +17,12 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	<custom-attributes org.zkoss.zul.nativebar="false"/>
 	<borderlayout height="400px" width="600px">
 		<west size="150px">
+		<label multiline="true">
+		1. Please click the first "div toggle tree on click"
+		2. Open tree item "1", "1.1", "2" and then close "1"
+		3. Open tree item "2.1" and then open "1"
+		4. You should see a scrollbar appears
+		</label>
 		</west>
 		<center autoscroll="true" id="center">
 			<grid id="grid">
