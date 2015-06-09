@@ -246,6 +246,19 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this._stackup.style.display = 'none';
 		// F70-ZK-2007: Clear toggle type.
 		this._shallToggle = false;
+		
+		// firefox only
+		try {
+			if (zk.ff && zk.currentFocus) {
+				var n = zk.currentFocus.getInputNode ?
+						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
+				if (jq.nodeName(n, "input"))
+					jq(n).blur(); // trigger a missing blur event.
+			}
+		} catch (e) {
+			// do nothing
+		}
+			
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
 	/** The effect for closing the popup. Override this function to provide
