@@ -795,10 +795,22 @@ jq(function() {
 		}
 	};
 	
-	if(zk.mobile)
+	if (zk.mobile) {
 		jq(window).bind('orientationchange', _sizeHandler);
-	else
+		
+		// Bug ZK-2697
+		if (zk.ios) {
+			jq(window).bind('pagehide', function () {
+				zk.unloading = true; //to disable error message
+
+				if (!zk.rmDesktoping) {
+					rmDesktop();
+				}	
+			});
+		}
+	} else {
 		jq(window).resize(_sizeHandler);
+	}
 
 	jq(window).scroll(function () {
 		zWatch.fire('onScroll'); //notify all
