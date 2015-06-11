@@ -1275,7 +1275,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (notif) {
 			var opts = {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable};
 			//ZK-2687, show notif after zAu.cmd0.scrollIntoView
-			zk.delayFunction(ref.uuid, function () {
+			zk.delayFunction(ref ? ref.uuid : 'nouuid', function () {
 				notif.show(msg, pid, opts);
 			});
 		} else {

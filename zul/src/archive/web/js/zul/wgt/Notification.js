@@ -226,12 +226,17 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			dur = opts.dur,
 			ntf = new zul.wgt.Notification(msg, opts),
 			off = opts.off,
+			n, isInView = true;
+		
+		if (ref) {
 			n = ref.$n('real') || ref.$n();
+			isInview = zk(n).isRealScrollIntoView();
+		}
 		
 		// TODO: allow user to specify arrow direction?
 		
 		//ZK-2687, don't show notification if wgt is not in view
-		if (ref && !zk(n).isRealScrollIntoView())
+		if (!isInView)
 			return;
 		
 		if (!pos && !off)
