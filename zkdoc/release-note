@@ -28,6 +28,7 @@ ZK 7.0.6
   ZK-2711: Combobox popup position becomes incorrect when soft keyboard is displayed on iPad
   ZK-2717: Issue with combobox popup during orientation change
   ZK-2697: rmDesktop not reliable on iPhone/iPad safari
+  ZK-2687: Clients.showNotification should consider the target component is in parent's scroll viewport or not
 
 * Upgrade Notes
 
