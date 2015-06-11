@@ -123,21 +123,24 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @since 6.0.1
 	 */
 	afterOpenAnima_: function (ref, offset, position, opts) {
-		var node = this.$n();
+		var node = this.$n(),
+			sendOnOpen = opts && opts.sendOnOpen;
 		this.setVisible(true);
 		if ((!opts || !opts.disableMask) && this.isListen('onOpen', {asapOnly:true})) {
 			//Racing? Previous onResponse has not been fired and user triggers open again
 			if (this.mask) this.mask.destroy(); 
 			
-			// use a progress bar to hide the popup
-			this.mask = new zk.eff.Mask({
-				id: this.uuid + '-mask',
-				anchor: node
-			});
-			
-			// register onResponse to remove the progress bar after receiving
-			// the response from server.
-			zWatch.listen({onResponse: this});		
+			//ZK-2775, only trigger open() with doClick_ will set sendOnOpen to true
+			if (sendOnOpen) {
+				// use a progress bar to hide the popup
+				this.mask = new zk.eff.Mask({
+					id: this.uuid + '-mask',
+					anchor: node
+				});
+				// register onResponse to remove the progress bar after receiving
+				// the response from server.
+				zWatch.listen({onResponse: this});
+			}
 		}
 		
 		// B30-1819264 : should skip null
@@ -153,7 +156,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 		}
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
-		if (opts && opts.sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
+		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 		//add extra CSS class for easy customize
 		jq(node).addClass(this.$s('open'));
 		
