@@ -71,17 +71,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (parent.eheadtbl && parent._nativebar) {
 			var cells = parent._getFirstRowCells(parent.eheadrows),
 				totalcols = cells.length,
+				cellsSize = totalcols,
 				columns = wgt._columns,
 				leftWidth = 0;
 			
 			//B70-ZK-2553: one may specify frozen without any real column
-			if (!cells || cells.length <= 0) {
+			if (!cells || cellsSize <= 0) {
 				//no need to do the following computation since there is no any column
 				return;
 			}
 			
-			for (var i = 0; i < columns; i++)
-				leftWidth += cells[i].offsetWidth;
+			//ZK-2776, don't take hidden column into account at init state
+			for (var i = 0; i < cellsSize; i++) {
+				var cellWidth = cells[i].offsetWidth;
+				if (i < columns)
+					leftWidth += cellWidth;
+				else if (cellWidth < 1) {
+					//column is hidden at init
+					totalcols -= 1;
+				}
+			}
 			
 			parent._deleteFakeRow(parent.eheadrows);
 			
@@ -354,6 +363,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					isVisible = hdWgt && hdWgt.isVisible(),
 					shallUpdate = false,
 					cellWidth;
+				
+				//ZK-2776, once a column is hidden, there is an additional style
+				var style = n.style;
+				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
+					continue; //skip column which is hide
 				
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ? 
