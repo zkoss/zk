@@ -541,6 +541,11 @@
 	width: 50pt;
 	text-overflow: ellipsis;
 }
+<%-- ZK-2780 --%>
+button.z-messagebox-btn {
+	width: 100%;
+}
+
 .z-messagebox-btn table {
 	width: 100%;
 }
@@ -549,10 +554,18 @@
 .z-messagebox-btn {
 	width: 48pt;
 }
+<%-- ZK-2780 --%>
+button.z-messagebox-btn {
+	width: 100%;
+}
 </c:if>
 <c:if test="${zk.opera > 0}">
 .z-messagebox-btn {
 	width: 50pt;
+}
+<%-- ZK-2780 --%>
+button.z-messagebox-btn {
+	width: 100%;
 }
 </c:if>
 

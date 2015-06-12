@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2780.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 12 11:03:21 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+	org.zkoss.lang.Library.setProperty("org.zkoss.zul.Button.mold", "default");
+	</zscript>
+	<label multiline="true">
+		1. Please make sure the button is run on default mold not trendy mold and the browser's language is in Japanese
+		2. Please check the "Cancel" button of the Messagebox in Japanese language won't take two lines to display.
+	</label>
+	<button label="Show Messagebox">
+		<attribute name="onClick"><![CDATA[
+		Messagebox.show("Do you really want to delete the object(s)", "Confirmation", Messagebox.OK + Messagebox.CANCEL, null);
+		]]></attribute>
+	</button>
+</zk>
