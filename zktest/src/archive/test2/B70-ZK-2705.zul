@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2705.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 15 14:18:56 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml" xmlns:zk="zk">
+	<label multiline="true">
+	0. in IE 11
+	1. click stop button
+	2. you should see applet stops animation
+	</label>
+	<vlayout>
+		<button label="Stop Applet" onClick='simpleApplet.invoke("stop")'></button>
+		<button label="Start Applet" onClick='simpleApplet.invoke("start")'></button>
+		<applet id="simpleApplet" codebase="classes" code="ticker" width="500px" height="300px" />
+	</vlayout>
+</zk>
