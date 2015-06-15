@@ -2476,6 +2476,14 @@ public class Tree extends MeshElement {
 		if (shouldInvalidate) invalidate();
 	}
 	
+	private boolean isAllRendered() {
+		for (Treeitem item : getItems()) {
+			if (!item.isRendered() || !item.isLoaded())
+				return false;
+		}
+		return true;
+	}
+	
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -2531,7 +2539,7 @@ public class Tree extends MeshElement {
 						((TreeSelectableModel)_model).clearSelection();
 				}
 				
-				if (!_multiple || (!paging && (curSeldItems == null || curSeldItems.size() <= 1))) {
+				if (!_multiple || (!paging && isAllRendered() && (curSeldItems == null || curSeldItems.size() <= 1))) {
 					final Treeitem item =
 							curSeldItems != null && curSeldItems.size() > 0 ?
 								curSeldItems.iterator().next(): null;

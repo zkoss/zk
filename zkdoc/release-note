@@ -32,6 +32,7 @@ ZK 7.0.6
   ZK-2775: initially open popup does not clear loading mask
   ZK-2776: Hide a Grid's column and columns become mis-aligned
   ZK-2784: double virtual scrollbars for grid inside borderlayout
+  ZK-2779: TreeModel selection size is incorrect when tree node is not rendered yet
 
 * Upgrade Notes
 
