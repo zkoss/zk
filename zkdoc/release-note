@@ -34,6 +34,7 @@ ZK 7.0.6
   ZK-2784: double virtual scrollbars for grid inside borderlayout
   ZK-2779: TreeModel selection size is incorrect when tree node is not rendered yet
   ZK-2705: ZUL's applet invoke does not correctly call method on Internet Explorer
+  ZK-2680: navbar open items out of synch
 
 * Upgrade Notes
 
