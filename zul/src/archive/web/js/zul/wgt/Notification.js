@@ -230,7 +230,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		
 		if (ref) {
 			n = ref.$n('real') || ref.$n();
-			isInview = zk(n).isRealScrollIntoView();
+			isInView = zk(n).isRealScrollIntoView();
 		}
 		
 		// TODO: allow user to specify arrow direction?
