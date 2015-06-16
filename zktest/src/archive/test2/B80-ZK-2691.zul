@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2691.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jun 9, 2015  10:30:29 AM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click chosenbox and select few options, you should see the options and selecions rendered correctly.
+		2. click button 'invalidate', and the previously selected items should not be lost.
+	</label>
+	<zscript><![CDATA[
+		ItemRenderer chosenBoxRenderer = new ItemRenderer() {
+			public String render(Component owner, Object data, int index)
+					throws Exception {
+				Locale locale = (Locale)data;
+				return "<div><i class=\"z-icon z-icon-globe\"/>"+locale.getDisplayLanguage()+"-"+locale.getDisplayCountry()+"</div>";
+			}
+		};
+		ListModelList choices = new ListModelList(Locale.getAvailableLocales());
+	]]></zscript>
+
+	<chosenbox id="mychosenbox" width="350px" model="${choices}" creatable="true" itemRenderer="${chosenBoxRenderer}" />
+
+	<zscript><![CDATA[
+		choices.addToSelection(choices.get(0));
+		choices.addToSelection(choices.get(121));
+		choices.addToSelection(choices.get(10));
+	]]></zscript>
+
+	<button label="invalidate">
+		<attribute name="onClick"><![CDATA[
+			mychosenbox.invalidate();                        
+		]]></attribute>
+	</button>
+</zk>
