@@ -81,16 +81,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return;
 			}
 			
-			//ZK-2776, don't take hidden column into account at init state
-			for (var i = 0; i < cellsSize; i++) {
-				var cellWidth = cells[i].offsetWidth;
-				if (i < columns)
-					leftWidth += cellWidth;
-				else if (cellWidth < 1) {
-					//column is hidden at init
+			//ZK-2776: don't take hidden column, like setVisible(false), into account
+			for (var hdcol = parent.ehdfaker.firstChild; hdcol; hdcol = hdcol.nextSibling) {
+				var style = hdcol.style;
+				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
 					totalcols -= 1;
-				}
 			}
+			for (var i = 0; i < columns; i++)
+					leftWidth += cells[i].offsetWidth;
 			
 			parent._deleteFakeRow(parent.eheadrows);
 			
@@ -386,7 +384,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						 // Bug ZK-2690
 						((zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
-					hdWgt._origWd = hdWgt._origWd || faker.style.width;
+					//ZK-2776: consider faker's width first for layout consistent
+					hdWgt._origWd = faker.style.width || hdWgt._origWd;
 					cellWidth = '0px';
 					shallUpdate = true;
 				}
