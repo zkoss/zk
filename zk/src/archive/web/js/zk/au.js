@@ -583,6 +583,11 @@ zAu = {
 	 * be shown if an error occurs.
 	 */
 	send: function (aureq, timeout) {
+		//ZK-2790: when unload event is triggered, the desktop is destroyed
+		//we shouldn't send request back to server
+		if (zk.unloading)
+			return;
+		
 		if (timeout < 0)
 			aureq.opts = zk.copy(aureq.opts, {defer: true});
 

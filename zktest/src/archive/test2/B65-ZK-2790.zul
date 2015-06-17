@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2790.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 17 14:48:38 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. after load this page (about 2 sec)
+	2. reload again
+	3. click either anchor or button within 2 sec
+	4. this page shouldn't redirect to timeout.zul
+	</label>
+    <div onCreate="org.zkoss.lang.Threads.sleep(2000)">
+        <a label="click me after page reload [F5]" onClick=''/>
+        <button onClick="">button</button>
+    </div>
+</zk>
