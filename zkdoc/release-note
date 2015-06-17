@@ -27,6 +27,7 @@ ZK 6.5.8
   ZK-2616: Timeout on long running redirect if user triggers more events
   ZK-2712: Tree scroll position didn't clear when setting new model and then invalidate
   ZK-2780: Button height in Messagebox is inconsistency in Japanese language
+  ZK-2786: zk.unloading=true IE9/10
   
   --------
 ZK 6.5.7
