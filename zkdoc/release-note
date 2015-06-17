@@ -28,6 +28,7 @@ ZK 6.5.8
   ZK-2712: Tree scroll position didn't clear when setting new model and then invalidate
   ZK-2780: Button height in Messagebox is inconsistency in Japanese language
   ZK-2786: zk.unloading=true IE9/10
+  ZK-2790: timeout after AU during page reload
   
   --------
 ZK 6.5.7
