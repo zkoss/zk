@@ -337,6 +337,10 @@ zFlex = { //static methods
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0,
 					cwgt = zk.Widget.$(c, {exact: 1});
+					
+				//ZK-2776: we can't and shouldn't set width to auxheader
+				if (cwgt && cwgt.$instanceof(zul.mesh.Auxheader))
+					continue;
 				
 				//Bug ZK-1647: should consider header width
 				//Bug Flex-138: skip if width exists
