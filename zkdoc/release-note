@@ -50,6 +50,7 @@ ZK 8.0.0
   ZK-2763: Property 'bindingAttributes' not found on type org.zkoss.bind.BindComposer
   ZK-2758: unset parameter affects following template invocation
   ZK-2691: chosenbox rendering inconsistently and losing selections
+  ZK-2792: sh:forEach insert item at wrong position
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.

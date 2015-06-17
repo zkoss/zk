@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2792.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 17 13:06:50 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml" xmlns:sh="shadow">
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("1");
+		model.add("2");
+		model.add("3");
+		model.add("4");
+	]]></zscript>
+	<div id="bind" apply="org.zkoss.bind.BindComposer" >
+		<button label="insert" onClick='model.add(2, "2.5");'/>
+		<sh:forEach items="@load(model)" var="item">
+			<div>
+				<label value="@init(item)"/>
+			</div>
+		</sh:forEach>
+	</div>
+</zk>
