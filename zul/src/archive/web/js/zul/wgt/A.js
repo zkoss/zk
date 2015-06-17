@@ -136,6 +136,10 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function(evt) {
 		var href = this.getHref();
+		//ZK-2786: relate to ZK-2422 in zk 7, and here is the same fix
+		if (zk.ie < 11 && !href) {
+			evt.stop({dom: true});
+		}
 		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
 			var ifrm = jq.newFrame('mailtoFrame', href, null);

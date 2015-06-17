@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2786.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 17 11:45:32 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+	1. click the link
+	2. you should see label's value is set to 'null' not 'true'
+	</label>
+	<a id="editLink" label="click me on IE9/10" 
+		onClick='' w:onClick="setTimeout(function () {jq('@label').last().text(zk.unloading ? 'true' : 'null')}, 1000)"/>
+	<separator />
+	<label id="lb">label</label>
+</zk>

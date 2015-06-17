@@ -617,5 +617,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
  	<library-property>
 		<name>org.zkoss.zk.ui.versionInfo.enabled</name>
 		<value>false</value>
+	</library-property>
+	
+	<library-property>
+    	<name>org.zkoss.zk.WPD.cache</name>
+    	<value>false</value>
 	</library-property> 
 </zk>
