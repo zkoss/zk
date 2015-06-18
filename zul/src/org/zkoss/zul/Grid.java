@@ -966,6 +966,8 @@ public class Grid extends MeshElement {
 				!isIgnoreSortWhenChanged()) {
 			doSort(this);
 		} else {
+			//ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
+			if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) || hasAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED)) return;
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
 			

@@ -204,6 +204,8 @@ public class Combobox extends Textbox {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					//ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
+					if (hasAttribute("zul.Combobox.ON_INITRENDER")) return;
 					final ListModel _model = getModel();
 					final int newsz = _model.getSize(), oldsz = getItemCount();
 					int min = event.getIndex0(), max = event.getIndex1(), cnt;

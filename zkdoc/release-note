@@ -37,6 +37,7 @@ ZK 7.0.6
   ZK-2680: navbar open items out of synch
   ZK-2790: timeout after AU during page reload
   ZK-2793: Datebox popup in mobile cannot scroll year properly
+  ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
 
 * Upgrade Notes
 
