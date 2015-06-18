@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2754-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 9, 2015  16:00:29 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div apply="org.zkoss.zktest.test2.B70_ZK_2754_Composer1" style="border: 1px dashed red">
+	    Inside iFrame
+	    <button id="p1">publish to queue 1</button>
+	    <button id="p2">publish to queue 2</button>
+	    <button id="both">publish to both queues</button>
+	</div>
+</zk>
