@@ -175,7 +175,7 @@ public class JSONValue {
 	/**
 	 * Escape quotes, \, /, \r, \n, \b, \f, \t and other control characters (U+0000 through U+001F).
 	 * @param s
-	 * @return
+	 * @return escaped String
 	 */
 	static String escape(String s){
 		if(s==null)

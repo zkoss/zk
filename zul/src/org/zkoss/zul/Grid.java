@@ -722,7 +722,7 @@ public class Grid extends MeshElement {
 	
 	/**
 	 * Sort the rows based on {@link Column#getSortDirection}.
-	 * @return
+	 * @return boolean
 	 */
 	private static boolean doSort(Grid grid) {
 		Columns cols = grid.getColumns();

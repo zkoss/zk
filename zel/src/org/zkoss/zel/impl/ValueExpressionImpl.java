@@ -150,7 +150,7 @@ public final class ValueExpressionImpl extends ValueExpression implements
     }
 
     /**
-     * @return
+     * @return Node
      * @throws ELException
      */
     private Node getNode() throws ELException {
