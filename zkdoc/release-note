@@ -41,6 +41,7 @@ ZK 7.0.6
   ZK-2754: Problem with two group scoped event queues and iframe
   ZK-2785: dropupload freezes when dropping a folder (in Chrome)
   ZK-2686: incorrect borderlayout resizing to 0px in tabbox
+  ZK-2769: Listfooter is not aligned with listhead on changing width
 
 * Upgrade Notes
 
