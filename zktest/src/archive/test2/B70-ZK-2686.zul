@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2686.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jun 24, 2015  16:30:29 AM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1.Use ZK CE,PE version.
+		2.Click button
+		3.Select second and third panel, you see non-zero px border-layout
+	</label>
+	<button onClick="" label="onResponse causes never opened west-elements to resize to 0px"/>
+	<tabbox width="500px" height="300px">
+		<tabs>
+			<tab label="tab1"/>
+			<tab label="tab2"/>
+			<tab label="tab3"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<borderlayout id="bl1">
+					<west title="West" splittable="true" collapsible="true" open="true" size="150px"/>
+					<center>CENTER</center>
+				</borderlayout>
+			</tabpanel>
+			<tabpanel>
+				<borderlayout id="bl2">
+					<west title="West" splittable="true" collapsible="true" open="true" size="200px"/>
+					<center>CENTER</center>
+				</borderlayout>
+			</tabpanel>
+			<tabpanel>
+				<borderlayout id="bl3">
+					<west title="West" splittable="true" collapsible="true" open="true" size="250px"/>
+					<center>CENTER</center>
+				</borderlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

@@ -161,7 +161,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_resize: function (isOnSize) {
 		this._shallResize = false;
 		this._isOnSize = isOnSize;
-		if (!this.isRealVisible()) return;
+		if (!zk(this.$n()).isRealVisible()) return; //ZK-2686: incorrect borderlayout resizing to 0px in tabbox
 
 		//make sure all regions size is resolved
 		var rs = ['north', 'south', 'west', 'east'], k = rs.length; 

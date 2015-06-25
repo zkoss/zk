@@ -40,7 +40,8 @@ ZK 7.0.6
   ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
   ZK-2754: Problem with two group scoped event queues and iframe
   ZK-2785: dropupload freezes when dropping a folder (in Chrome)
-  
+  ZK-2686: incorrect borderlayout resizing to 0px in tabbox
+
 * Upgrade Notes
 
   --------
