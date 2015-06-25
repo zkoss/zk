@@ -359,7 +359,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			cidx = zk(wgt.$n()).cellIndex();
 		
 		var hdcols = hdfaker.childNodes,
-			bdcols = bdfaker.childNodes;
+			bdcols = bdfaker.childNodes,
+			ftcols = ftfaker.childNodes;
 		
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width
@@ -374,14 +375,19 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			} else {
 				w._width = wds[i] = isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth);
 			}
-			if (!isFixedWidth)
+			if (!isFixedWidth) {
 				hdcols[i].style.width = bdcols[i].style.width = w._width;
+				if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
+					ftcols[i].style.width = w._width;
+			}
 		}
 
 		//2. set resized width to colgroup col
 		if (!wgt.origWd)
 			wgt._width = wds[cidx] = wd;
 		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
+		if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
+			ftcols[cidx].style.width = wd;
 		
 		//3. clear width=100% setting, otherwise it will try to expand to whole width
 		mesh.eheadtbl.width = '';
