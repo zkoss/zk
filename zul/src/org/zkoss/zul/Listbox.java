@@ -2583,8 +2583,6 @@ public class Listbox extends MeshElement {
 		} else if (type == ListDataEvent.MULTIPLE_CHANGED) {
 			setMultiple(((Selectable)_model).isMultiple());
 		} else {
-			//ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
-			if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) || hasAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED)) return;
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
 			
