@@ -43,6 +43,7 @@ ZK 7.0.6
   ZK-2686: incorrect borderlayout resizing to 0px in tabbox
   ZK-2769: Listfooter is not aligned with listhead on changing width
   ZK-2746: Errorbox still not shown when WrongValueException is thrown on a multiline textbox
+  ZK-2783: empty comboitem renders without height
 
 * Upgrade Notes
 
