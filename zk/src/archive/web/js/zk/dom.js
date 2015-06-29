@@ -747,18 +747,10 @@ zjq.prototype = {
 				var oels = _overflowElement(this, recursive),
 					inView = true;
 				for (var i = 0; i < oels.length; i++) {
-					// ZK-2619 : ignore when its parent is page
+					// ZK-2619 : Errorbox not shown when WrongValueException is thrown on a multiline textbox
 					var oel = oels[i],
-					    eqX = this.jq[0] == oel[0],
-					    eqY = this.jq[0] == oel[1],
-					    nodeX = zk(eqX ? oel[0].parentNode : oel[0]),
-					    nodeY = zk(eqY ? oel[1].parentNode : oel[1]),
-					    pW;
-					if (eqX && (pW = nodeX.$()) && pW.$instanceof(zk.Page)) continue;
-					if (eqY && (pW = nodeY.$()) && pW.$instanceof(zk.Page)) continue;
-					var lex = nodeX.viewportOffset()[0],
-					    tey = nodeY.viewportOffset()[1];
-				
+						lex = zk(this.jq[0] == oel[0] ? oel[0] = oel[0].parentNode : oel[0]).viewportOffset()[0],
+						tey = zk(this.jq[0] == oel[1] ? oel[1] = oel[1].parentNode : oel[1]).viewportOffset()[1];
 					// scrollbar's viewport
 					inView = (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
 					if (!inView)
