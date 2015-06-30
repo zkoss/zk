@@ -45,6 +45,7 @@ ZK 7.0.6
   ZK-2746: Errorbox still not shown when WrongValueException is thrown on a multiline textbox
   ZK-2783: empty comboitem renders without height
   ZK-2765: Support orientation change event to modify datebox popup window's size and position
+  ZK-2679: Previous and next arrows in calendar control trigger onbeforeunload in IE<=10
 
 * Upgrade Notes
 
