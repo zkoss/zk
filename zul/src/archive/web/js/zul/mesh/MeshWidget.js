@@ -1528,10 +1528,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_adjMinWd(this);
 	},
 	_getFirstRowCells: function (tbody) {
-		if (tbody && tbody.rows && tbody.rows.length) {
-			var cells = tbody.rows[0].cells,
+		var rowsLength, tbodyrows;
+		if (tbody && (tbodyrows = tbody.rows) && (rowsLength = tbodyrows.length)) {
+			var cells = tbodyrows[0].cells,
 				length = cells.length,
 				ncols = 0;
+			//ZK-2752: find the first visible row
+			//keep the same behavior even there isn't any row visible to avoid other side effects 
+			for (var i = 0; i < rowsLength; i++) {
+				if (tbodyrows[i].style.display != 'none') {
+					cells = tbodyrows[i].cells;
+					length = cells.length;
+					break;
+				}
+			}
 			for (var i = 0; i < length; i++) {
 				var span = cells[i].colSpan;
 				ncols += span != 1 ? span : 1;
@@ -1545,9 +1555,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				for (var i = 0; i < ncols; i++)
 					out.push('<td></td>');
 				out.push('</tr>');
-				jq(tbody.rows[0]).before(out.join(''));
+				jq(tbodyrows[0]).before(out.join(''));
 				out = null;
-				return tbody.rows[0].cells;
+				return tbodyrows[0].cells;
 			}
 		}
 	},
