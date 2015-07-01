@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2569.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 26, 2015  3:00:29 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<label multiline="true">
+	1.click two upload buttons
+	2.upload more the 1KB file
+	3.you can see customized messages
+</label>
+	<zscript>
+		String msg = "current:{currentSize}";
+	</zscript>
+	<vlayout>
+		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" upload="maxsize=1,maxSizeErrorMessage='This is an error. current:{currentSize_MB}(B:{currentSize_B} KB:{currentSize_KB}) max:{maxSize_MB}"/>
+		<toolbarbutton upload="true,maxsize=1,maxSizeErrorMessage=${msg}" label="Fileupload" onUpload="" />
+	</vlayout>
+</window>
