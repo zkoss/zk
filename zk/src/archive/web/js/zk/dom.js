@@ -1803,7 +1803,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	setSelectionRange: function (start, end) {
 		var inp = this.jq[0],
-			len = inp.value.length;
+			len = inp.value ? inp.value.length : 0; //ZK-2805
 		if (start == null || start < 0) start = 0;
 		if (start > len) start = len;
 		if (end == null || end > len) end = len;
