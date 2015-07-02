@@ -44,19 +44,6 @@ public abstract class AbstractForEachStatus implements ForEachStatus, Serializab
 	public Integer getStep() {
 		return null;
 	}
-	// ZK-2552: for internal use only 
-	public int getCurrentIndex(Component comp) {
-		int result = -1;
-		if (comp instanceof Listitem) {
-			result = ((Listitem) comp).getIndex();
-		} else if (comp instanceof Row) {
-			result = ((Row) comp).getIndex();
-		}  else if (comp instanceof Treeitem) {
-			result = ((Treeitem) comp).getIndex();
-		} else 
-			result = comp.getParent().getChildren().indexOf(comp);
-		return result;
-	}
 	public boolean isFirst() {
 		return getCount() == 1;
 	}

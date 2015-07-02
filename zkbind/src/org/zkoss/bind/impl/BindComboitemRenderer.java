@@ -12,19 +12,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
 import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.ListSubModel;
 
 /**
@@ -81,7 +85,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Comboitem nci = (Comboitem)items[0];
-			nci.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
+			nci.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			
 			if(model instanceof ListSubModel){
 				//ZK-992 wrong item when binding to combbox with submodel implementation
@@ -92,7 +96,34 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			}else{
 				// ZK-2552
 				nci.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
+				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+					public Binder getBinder() {
+						return BinderUtil.getBinder(nci, true);
+					}
+
+					@SuppressWarnings("unchecked")
+					public void setValue(BindELContext ctx, Object value) {
+						int idx = nci.getIndex() / items.length;
+						ListModel<?> listmodel = cb.getModel();
+						if (idx >= 0 && idx < listmodel.getSize()) {
+			            	if (listmodel instanceof ListModelArray){
+			            		((ListModelArray<Object>)listmodel).set(idx, value);
+			            	} else if(listmodel instanceof ListModelList<?>){
+			            		((ListModelList<Object>)listmodel).set(idx, value);
+			            	}
+			            } else {
+			            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+			            }
+					}
+					
+					public Component getComponent() {
+						return nci;
+					}
+
+					public Object getValue(BindELContext ctx) {
+						return model.getElementAt(nci.getIndex() / items.length);
+					}
+				});
 				addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			}
 			
@@ -112,7 +143,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			
 			//bug #ZK-677: combobox selection is lost after reload model
 			//binding Comboitem immediately, @see BindUiLifeCycle#afterComponentAttached
-			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, nci));
+			Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, nci));
 		}
 	}
 }

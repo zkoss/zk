@@ -13,14 +13,19 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.TabboxRenderer;
@@ -81,11 +86,37 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Tab ntab = (Tab)items[0];
-			ntab.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
+			ntab.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			
 			// ZK-2552
 			ntab.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
+			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+				public Binder getBinder() {
+					return BinderUtil.getBinder(ntab, true);
+				}
+
+				public void setValue(BindELContext ctx, Object value) {
+					int idx = ntab.getIndex() / items.length;
+					ListModel<?> listmodel = tabbox.getModel();
+					if (idx >= 0 && idx < listmodel.getSize()) {
+		            	if (listmodel instanceof ListModelArray){
+		            		((ListModelArray<Object>)listmodel).set(idx, value);
+		            	} else if(listmodel instanceof ListModelList<?>){
+		            		((ListModelList<Object>)listmodel).set(idx, value);
+		            	}
+		            } else {
+		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+		            }
+				}
+				
+				public Component getComponent() {
+					return ntab;
+				}
+
+				public Object getValue(BindELContext ctx) {
+					return tabbox.getModel().getElementAt(ntab.getIndex() / items.length);
+				}
+			});
 			addItemReference(tabbox, ntab, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			ntab.setAttribute(itervarnm, iterStatus);
@@ -149,10 +180,36 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Tabpanel ntabpanel = (Tabpanel)items[0];
-			ntabpanel.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
+			ntabpanel.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			// ZK-2552
 			ntabpanel.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
+			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+				public Binder getBinder() {
+					return BinderUtil.getBinder(ntabpanel, true);
+				}
+
+				@SuppressWarnings("unchecked")
+				public void setValue(BindELContext ctx, Object value) {
+					int idx = ntabpanel.getIndex() / items.length;
+					ListModel<?> listmodel = tabbox.getModel();
+					if (idx >= 0 && idx < listmodel.getSize()) {
+		            	if (listmodel instanceof ListModelArray){
+		            		((ListModelArray<Object>)listmodel).set(idx, value);
+		            	} else if(listmodel instanceof ListModelList<?>){
+		            		((ListModelList<Object>)listmodel).set(idx, value);
+		            	}
+		            } else {
+		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+		            }
+				}
+				public Component getComponent() {
+					return ntabpanel;
+				}
+
+				public Object getValue(BindELContext ctx) {
+					return tabbox.getModel().getElementAt(ntabpanel.getIndex() / items.length);
+				}
+			});
 			addItemReference(tabbox, ntabpanel, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			ntabpanel.setAttribute(itervarnm, iterStatus);

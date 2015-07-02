@@ -12,10 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
-import static org.zkoss.lang.Generics.cast;
-
 import java.lang.reflect.Method;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,8 +30,9 @@ import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 
 /**
@@ -84,7 +83,11 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		}
 		if(activating) return;//don't load to component if activating
 		
-		comp.getChildren().clear();
+		// force to call onBindClean before onBindInit that BindChildRenderer will trigger onBindInit directly
+		for (Component cmp : new ArrayList<Component>(comp.getChildren())) {
+			cmp.detach();
+			Events.sendEvent(new Event(BinderCtrl.ON_BIND_CLEAN, comp));
+		}
 		BindELContext.removeModel(comp);
 		if(value!=null){
 			List<Object> data = null;

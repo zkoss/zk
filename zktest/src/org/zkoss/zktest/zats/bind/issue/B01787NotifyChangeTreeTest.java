@@ -38,14 +38,14 @@ public class B01787NotifyChangeTreeTest extends ZATSTestCase {
 		String[] answer0 = { "Item A:0","Item A1:0","Item A2:0",
 				"Item B:0","Item B1:0","Item B2:0",
 				"Item A:0","Item B:0" };
-		String[] answer1 = { "Item A:1","Item A1:0","Item A2:0",
-				"Item B:1","Item B1:0","Item B2:0",
+		String[] answer1 = { "Item A:0","Item A1:0","Item A2:0",
+				"Item B:0","Item B1:0","Item B2:0",
 				"Item A:1","Item B:1" };
 		String[] answer2 = { "Item A.*:x:0","Item A1:1","Item A2:1",
-				"Item B:2","Item B1:1","Item B2:1",
+				"Item B:1","Item B1:1","Item B2:1",
 				"Item A.*:0","Item B:1" };
 		String[] answer3 = { "Item A.name:x:0","Item A1:1","Item A2:1",
-				"Item B:2","Item B1:1","Item B2:1",
+				"Item B:1","Item B1:1","Item B2:1",
 				"Item A.name:0","Item B:1" };
 		String[] answer4 = { "Item A.name:x:1","Item A1:2","Item A2:2",
 				"Item B.*:x:0","Item B1:2","Item B2:2",

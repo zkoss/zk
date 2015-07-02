@@ -148,9 +148,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			if (binder == null) return; //no binder
 			// ZK-2552: use an expression instead of solid number to represent index
 			final String expression;
-			if (comp.getAttribute(IS_TEMPLATE_MODEL_ENABLED_ATTR) != null) {
-				expression = BindELContext.getModelName(modelOwner) 
-						+ "[self.getAttribute('" + CURRENT_INDEX_RESOLVER_ATTR + "').getCurrentIndex(self)]";
+			if (comp.hasAttribute(IS_TEMPLATE_MODEL_ENABLED_ATTR)) {
+				expression = CURRENT_INDEX_RESOLVER_ATTR;
 			} else {
 				expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
 			}

@@ -11,11 +11,16 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
+import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.zel.PropertyNotFoundException;
+import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -23,9 +28,6 @@ import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Row;
-import org.zkoss.zul.Treeitem;
 
 /**
  * to renderer children of component
@@ -43,6 +45,7 @@ public class BindChildRenderer extends AbstractRenderer{
 		render(owner, data, index, size, false);
 	}
 		
+	@SuppressWarnings("unchecked")
 	public void render(final Component owner, final Object data, final int index, final int size, final boolean isListModel){
 		final Template tm = resolveTemplate(owner,owner,data,index,size,"children");
 		if (tm == null) {
@@ -81,37 +84,6 @@ public class BindChildRenderer extends AbstractRenderer{
 			} 
 		}
 		final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(owner, insertBefore, null, null));
-		// ZK-2552: define own iterStatus since children inside template could be more than 1 for children binding
-		final ForEachStatus bindChildIterStatus = new AbstractForEachStatus() { // provide iteration status in this context
-			private static final long serialVersionUID = 1L;
-			
-			public int getIndex() {
-				return index;
-			}
-			
-			public Object getCurrent(){
-				return data;
-			}
-			
-			public Integer getEnd(){
-				return size;
-			}
-			 
-			public int getCurrentIndex(Component comp) { 
-				int result = -1;
-				if (comp instanceof Listitem) {
-					result = ((Listitem) comp).getIndex();
-				} else if (comp instanceof Row) {
-					result = ((Row) comp).getIndex();
-				}  else if (comp instanceof Treeitem) {
-					result = ((Treeitem) comp).getIndex();
-				} else 
-					result = comp.getParent().getChildren().indexOf(comp);
-				
-				result = result / items.length;
-				return result;
-			}
-		};
 		
 		owner.setAttribute(varnm, oldVar);
 		owner.setAttribute(itervarnm, oldIter);
@@ -127,12 +99,48 @@ public class BindChildRenderer extends AbstractRenderer{
 			owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
 		}
 		
-		for(Component comp: items){
-			comp.setAttribute(BinderImpl.VAR, varnm);
-			
+		for(final Component comp: items){
+			comp.setAttribute(BinderCtrl.VAR, varnm);
 			// ZK-2552
 			comp.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			comp.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, bindChildIterStatus);
+			comp.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+				public Binder getBinder() {
+					return BinderUtil.getBinder(comp, true);
+				}
+				
+				public Component getComponent() {
+					return comp;
+				}
+
+				public void setValue(BindELContext ctx, Object value) {
+					int index = comp.getParent().getChildren().indexOf(comp) / items.length;
+					Collection<?> collection = (Collection<?>) owner.getAttribute(BindELContext.getModelName(owner));
+					if (collection instanceof List<?>) {
+						List<Object> list = (List<Object>) collection;
+						try {
+			                list.set(index, value);
+			            } catch (UnsupportedOperationException e) {
+			                throw new PropertyNotWritableException(e);
+			            } catch (IndexOutOfBoundsException e) {
+			                throw new PropertyNotFoundException(e);
+			            }
+					}
+				}
+				public Object getValue(BindELContext ctx) {
+					final int index = comp.getParent().getChildren().indexOf(comp) / items.length;
+					Collection<Object> collection = (Collection<Object>) owner.getAttribute(BindELContext.getModelName(owner));
+					if (collection != null) {
+						int i = -1;
+						for (Object o : collection) {
+							i++;
+							if (i == index)
+								return o;
+						}
+					}
+					return null;
+				}
+			});
+			
 			addItemReference(owner, comp, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			comp.setAttribute(itervarnm, iterStatus);
 			
@@ -146,10 +154,11 @@ public class BindChildRenderer extends AbstractRenderer{
 			}
 			
 			//to force init and load
-			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, comp));
+			Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, comp));
 		}
 		
 	}
+
 	
 	private class ChildrenBindingForEachStatus extends AbstractForEachStatus {
 		private static final long serialVersionUID = 1L;

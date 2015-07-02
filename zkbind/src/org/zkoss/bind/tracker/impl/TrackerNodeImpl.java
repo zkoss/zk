@@ -25,6 +25,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.TrackerNode;
+import org.zkoss.bind.xel.zel.BindELContext;
 
 /**
  * @author henrichen
@@ -71,16 +72,16 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		}
 
 		Object script = _brackets.get(property);
-		if (script == null && _brackets != null && property instanceof String) {
+		if (script == null && property instanceof String) {
 			String prop = (String) property;
-			if (prop.startsWith("[") && prop.endsWith("]"))
+			if (BindELContext.isBracket(prop))
 				script = _brackets.get(prop.substring(1, prop.length() - 1));
 		}
 		if (script != null) {
 			kid = getDependent0(script);
+			if (kid != null)
+				set.add(kid);
 		}
-		if (kid != null)
-			set.add(kid);
 		return set;
 	}
 	

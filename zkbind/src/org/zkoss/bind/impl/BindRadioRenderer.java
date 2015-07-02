@@ -14,13 +14,18 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.RadioRenderer;
 import org.zkoss.zul.Radiogroup;
@@ -78,11 +83,37 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Radio nr = (Radio)items[0];
-			nr.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
+			nr.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			
 			// ZK-2552
 			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, iterStatus);
+			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+				public Binder getBinder() {
+					return BinderUtil.getBinder(nr, true);
+				}
+
+				@SuppressWarnings("unchecked")
+				public void setValue(BindELContext ctx, Object value) {
+					int idx = radiogroup.getChildren().indexOf(nr) / items.length;
+					ListModel<?> listmodel = radiogroup.getModel();
+					if (idx >= 0 && idx < listmodel.getSize()) {
+		            	if (listmodel instanceof ListModelArray){
+		            		((ListModelArray<Object>)listmodel).set(idx, value);
+		            	} else if(listmodel instanceof ListModelList<?>){
+		            		((ListModelList<Object>)listmodel).set(idx, value);
+		            	}
+		            } else {
+		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+		            }
+				}
+				public Component getComponent() {
+					return nr;
+				}
+
+				public Object getValue(BindELContext ctx) {
+					return radiogroup.getModel().getElementAt(radiogroup.getChildren().indexOf(nr) / items.length);
+				}
+			});
 			addItemReference(radiogroup, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, iterStatus);

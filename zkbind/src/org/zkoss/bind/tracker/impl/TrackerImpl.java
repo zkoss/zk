@@ -20,17 +20,23 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.impl.AllocUtil;
+import org.zkoss.bind.impl.IndirectBinding;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.LoadBinding;
+import org.zkoss.bind.sys.LoadChildrenBinding;
+import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
@@ -38,6 +44,14 @@ import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.util.IdentityHashSet;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Radiogroup;
+import org.zkoss.zul.Tabbox;
 
 /**
  * Implementation of dependency tracking.
@@ -46,13 +60,19 @@ import org.zkoss.zk.ui.Component;
  */
 public class TrackerImpl implements Tracker, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
-	protected LinkedHashMap<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
+	protected Map<Component, Map<Object, TrackerNode>> _compMap; //comp -> path -> head TrackerNode
 	protected Map<Object, Set<TrackerNode>> _nullMap = new LinkedHashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	protected transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 	protected transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
 	
 	public TrackerImpl() {
 		_equalBeansMap = newEqualBeansMap(); 
+		_compMap = initCompMap();
+	}
+	
+	// provide a way for sub-class to override it for some situation
+	protected Map<Component, Map<Object, TrackerNode>> initCompMap() {
+		return new LinkedHashMap<Component, Map<Object, TrackerNode>>();
 	}
 
 	protected EqualBeansMap newEqualBeansMap() {
@@ -121,7 +141,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	public void removeTrackings(Set<Component> comps) {
 		final Set<TrackerNode> removed = new LinkedHashSet<TrackerNode>();
 		for(Component comp:comps){
-			final Map<Object, TrackerNode> nodesMap = (Map<Object, TrackerNode>) _compMap.remove(comp);
+			final Map<Object, TrackerNode> nodesMap = _compMap.remove(comp);
 			if (nodesMap != null) {
 				final Collection<TrackerNode> nodes = nodesMap.values();
 				for (TrackerNode node : nodes) {
@@ -136,7 +156,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 	}
 	public void removeTrackings(Component comp) {
-		final Map<Object, TrackerNode> nodesMap = (Map<Object, TrackerNode>) _compMap.remove(comp);
+		final Map<Object, TrackerNode> nodesMap = _compMap.remove(comp);
 		if (nodesMap != null) {
 			final Set<TrackerNode> removed = new LinkedHashSet<TrackerNode>();
 			final Collection<TrackerNode> nodes = nodesMap.values();
@@ -162,17 +182,61 @@ public class TrackerImpl implements Tracker, Serializable {
 		} else if ("*".equals(prop)) { //all binding properties of the base object
 			for (TrackerNode node : nodes) {
 				final Set<TrackerNode> kids = node.getDirectDependents();
+				
+				// refix for ZK-1787 test cases.
+				for (LoadBinding binding : node.getLoadBindings()) {
+					if (testBindingRendererCase(binding))
+						bindings.add(binding);
+				}
+				
 				getNodesLoadBindings(kids, bindings, kidbases, visited);
 			}
 		} else {
+			boolean bracket = BindELContext.isBracket(prop);
+			int index = bracket ? Integer.parseInt(prop.substring(1, prop.length() - 1)) : -1; 
 			for (TrackerNode node : nodes) {
-				for (TrackerNode kid : node.getDependents(prop)) {
-					if (kid != null) {
-						getLoadBindings0(kid, bindings, kidbases, visited);
+				Set<TrackerNode> dependents = node.getDependents(prop);
+				if (bracket && dependents.isEmpty()) {
+					Object bean = node.getBean();
+					if (bean instanceof List<?>) {
+						kidbases.add(((List<?>) bean).get(index));
+					} else if (bean instanceof ListModel<?>) {
+						if (bean instanceof ListModelArray){
+		            		kidbases.add(((ListModelArray<Object>)bean).get(index));
+		            	} else if(bean instanceof ListModelList<?>){
+		            		kidbases.add(((ListModelList<Object>)bean).get(index));
+		            	}
+					}
+				} else {
+					for (TrackerNode kid : dependents) {
+						if (kid != null) {
+							getLoadBindings0(kid, bindings, kidbases, visited);
+						}
 					}
 				}
 			}
 		}
+	}
+	
+	// refix for ZK-2552
+	// we need to add an indirect binding here.
+	private boolean testBindingRendererCase(LoadBinding binding) {
+		if (binding instanceof LoadChildrenBinding)
+			return true;
+		if (binding instanceof LoadPropertyBinding) {
+			LoadPropertyBinding lb = (LoadPropertyBinding) binding;
+			if ("model".equals(lb.getFieldName())) {
+				Component comp = lb.getComponent();
+				if (comp instanceof Listbox
+						|| comp instanceof Grid
+						|| comp instanceof Tabbox
+						|| comp instanceof Radiogroup
+						|| comp instanceof Combobox)
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public Set<LoadBinding> getLoadBindings(Object base, String prop) {
@@ -188,7 +252,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		if (nodesMaps != null && !nodesMaps.isEmpty()) {
 			all = new LinkedHashSet<TrackerNode>();
 			for(Map<Object, TrackerNode> nodesMap : nodesMaps) {
-				final Collection<TrackerNode> nodes = (Collection<TrackerNode>) nodesMap.values();
+				final Collection<TrackerNode> nodes = nodesMap.values();
 				if (nodes != null) {
 					all.addAll(nodes);
 				}
@@ -233,7 +297,12 @@ public class TrackerImpl implements Tracker, Serializable {
 		return bindingNodes != null ? bindingNodes.get(script) : null;
 	}
 	
+	Logger logger = LoggerFactory.getLogger(TrackerImpl.class);
+	
 	public void tieValue(Object comp, Object base, Object script, Object propName, Object value, Object basePath) {
+		if (value instanceof IndirectBinding) {
+			value = ((IndirectBinding) value).getValue(null);
+		}
 		if (base == null) { //track from component
 			final TrackerNode node = getTrackerNodePerComponentScript(comp, script);
 			//ZK-877: NPE in a save only binding
@@ -247,7 +316,9 @@ public class TrackerImpl implements Tracker, Serializable {
 				}
 			}
 		} else {
+			
 			final Set<TrackerNode> baseNodes = getAllTrackerNodesByBean(base);
+//			logger.info("base: " + base + ", size: " + baseNodes.size());
 			if (baseNodes != null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 				final Set<TrackerNode> propNodes = new LinkedHashSet<TrackerNode>(); //normal nodes; i.e. a base + property node. e.g. vm.selectedPerson
 				for (TrackerNode baseNode : baseNodes) {
@@ -510,6 +581,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		
 		_beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 		_equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
+		_compMap = initCompMap();
 	}
 	protected static boolean testEqualsBean(Object nodeBean, Object bean) {
 		if (nodeBean == bean)
