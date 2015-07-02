@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2245.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul  1 14:40:43 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<label multiline="true">
+	1. open this page on ios devices
+	2. click the button
+	3. if ios >= 7 -> current page will load a pdf
+	3. otherwise -> load pdf in new tab
+	</label>
+	<button label="download" onClick='Filedownload.save("/test2/B1896797.pdf", "application/pdf");'></button>
+</zk>
