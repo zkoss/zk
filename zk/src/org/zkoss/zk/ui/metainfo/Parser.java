@@ -424,6 +424,9 @@ public class Parser {
 				pgdef.setFirstLine("<?xml " + val + "?>");
 			} else if ("complete".equals(nm)) {
 				pgdef.setComplete("true".equals(val));
+			} else if ("mold".equals(nm)) {//ZK-2774: Page scope mold
+				noEmpty("mold", val, pi);
+				pgdef.setMoldInfo(val);
 			} else {
 				log.warn(message("Ignored unknown attribute: "+nm, pi));
 			}
