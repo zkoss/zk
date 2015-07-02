@@ -162,6 +162,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private List<String> _impclss;
 
 	private Map<String, Template> _templates;
+	private Map<String, String> _moldsInfo; //ZK-2774: Page scope mold
 	/** Constructs a page by giving the page definition.
 	 *
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
@@ -1142,6 +1143,24 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	
 	public Template getTemplate(String name) {
 		return _templates != null ? _templates.get(name) : null;
+	}
+	
+	//ZK-2774: Page scope mold
+	public void addMoldInfo(String name, String value) {
+		if (name == null)
+			throw new IllegalArgumentException("Mold info should not be null");
+		if (_moldsInfo == null)
+			_moldsInfo = new LinkedHashMap<String, String>();
+		if (value != null)
+			_moldsInfo.put(name, value);
+	}
+
+	public void removeMoldInfo(String name) {
+		if (_moldsInfo != null) _moldsInfo.remove(name);
+	}
+	
+	public String getMoldInfo(String name) {
+		return _moldsInfo != null ? _moldsInfo.get(name) : null;
 	}
 	
 	//-- Serializable --//

@@ -394,6 +394,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					//Not allow developers to access two desktops simultaneously
 				checkIdSpacesDown(this, page);
 
+				//ZK-2774: Page scope mold
+				String mold = page.getMoldInfo(getClass().getName() + ".mold");
+				if (mold != null && mold.length() > 0 && !DEFAULT.equals(mold))
+					initAuxInfo().mold = mold;
+				
 				//No need to check UUID since checkIdSpacesDown covers it
 				//-- a page is an ID space
 			} else { //detach from a page
