@@ -435,17 +435,6 @@ public class UiEngineImpl implements UiEngine {
 						}
 					}
 					
-					//ZK-2774: Page scope mold
-					String moldInfo = pagedef.getMoldInfo();
-					if (moldInfo != null && moldInfo.length() != 0) {
-						String[] molds = moldInfo.split(";");
-						for (String mold : molds) {
-							String [] data = mold.split("=");
-							if (data.length < 2) continue;
-							page.addMoldInfo(data[0], data[1]);
-						}
-					}
-					
 					final Component[] comps;
 					final String uri = pagedef.getForwardURI(page);
 					if (uri != null) {

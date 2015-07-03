@@ -677,26 +677,4 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 8.0.0
 	 */
 	public Template getTemplate(String name);
-	
-	/**
-	 * Adds page scope mold info
-	 * @param name
-	 * @param value
-	 * @since 8.0.0
-	 */
-	public void addMoldInfo(String name, String value);
-	
-	/**
-	 * Removes page scope mold info by name
-	 * @param name
-	 * @since 8.0.0
-	 */
-	public void removeMoldInfo(String name);
-	
-	/**
-	 * Gets page scope mold info
-	 * @param name
-	 * @since 8.0.0
-	 */
-	public String getMoldInfo(String name);
 }

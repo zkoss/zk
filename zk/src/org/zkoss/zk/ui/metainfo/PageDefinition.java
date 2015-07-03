@@ -108,8 +108,6 @@ public class PageDefinition implements NodeInfo {
 	
 	//ZK-2623: page scope template
 	private Map<String, TemplateInfo> _templatesInfo;
-	//ZK-2774: Page scope mold
-	private String _moldInfo;
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -911,22 +909,6 @@ public class PageDefinition implements NodeInfo {
 	 */
 	public Map<String, TemplateInfo> getTemplatesInfo() {
 		return _templatesInfo;
-	}
-	
-	/** Sets a mold info
-	 *
-	 * @param mold string
-	 * @since 8.0.0
-	 */
-	public void setMoldInfo(String mold) {
-		_moldInfo = mold;
-	}
-	
-	/** Gets mold info
-	 * @since 8.0.0
-	 */
-	public String getMoldInfo() {
-		return _moldInfo;
 	}
 	
 	/** Initializes the context for the given page before rendering

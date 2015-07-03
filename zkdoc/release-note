@@ -36,7 +36,6 @@ ZK 8.0.0
   ZK-2748: Configure to ignore break line when parsing in a library property
   ZK-2753: el3 enhancement for invoking customized static method
   ZK-2569: Provide localized message for fileupload
-  ZK-2774: Page scope mold
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
