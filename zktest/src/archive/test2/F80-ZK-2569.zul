@@ -20,10 +20,10 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	3.you can see customized messages
 </label>
 	<zscript>
-		String msg = "current:{currentSize}";
+		String msg = "current:{currentSize}, max:{maxSize}";
 	</zscript>
 	<vlayout>
-		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" upload="maxsize=1,maxSizeErrorMessage='This is an error. current:{currentSize_MB}(B:{currentSize_B} KB:{currentSize_KB}) max:{maxSize_MB}"/>
-		<toolbarbutton upload="true,maxsize=1,maxSizeErrorMessage=${msg}" label="Fileupload" onUpload="" />
+		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" upload="maxsize=1,maxSizeErrorMessage={This is an error. current:{currentSize_MB}(B:{currentSize_B} KB:{currentSize_KB}), max:{maxSize_MB}}"/>
+		<toolbarbutton upload="true,maxsize=1,maxSizeErrorMessage={${msg}}" label="Fileupload" onUpload="" />
 	</vlayout>
 </window>

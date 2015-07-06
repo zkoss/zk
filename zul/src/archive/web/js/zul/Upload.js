@@ -94,6 +94,27 @@ zul.Upload = zk.$extends(zk.Object, {
 		this.uploaders = {};
 
 		var cls;
+		
+		//ZK-2569: Provide localized message for fileupload
+		var msg = clsnm.match(new RegExp(/maxSizeErrorMessage=\{(.*)\}/));
+		if (msg) {
+			var regex = new RegExp(/(\{(current|max)Size(_.{1,2})?\})/g),
+				reg_result,
+				content = msg[1];
+				result = [];
+			while ((reg_result = regex.exec(content)) != null) {
+				var o = [],
+					rv = reg_result[1];
+				o['label'] = rv;
+				var v = rv.substring(1, rv.length - 1).split('_');
+				if (v.length > 1) o['unit'] = v[1].replace('}', ''); 
+				result.push(o);
+			}
+			result.msg = content;
+			wgt._maxSizeErrorMessage = result;
+			clsnm = clsnm.replace(msg[0], '');
+		}
+		
 		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
 			var attr = attrs[i].trim(); 
 			if (attr.startsWith('maxsize='))
@@ -104,24 +125,7 @@ zul.Upload = zk.$extends(zk.Object, {
 				this.accept = attr.match(new RegExp(/accept=([^,]*)/))[1];
 			else if (attr == 'native')
 				this.isNative = true;
-			else if (attr.startsWith('maxSizeErrorMessage=')) { //ZK-2569: Provide localized message for fileupload
-				var msg = attr.match(new RegExp(/maxSizeErrorMessage=([^,]*)/))[1];
-				if (msg.length != 0) {
-					var regex = new RegExp(/(\{(current|max)Size(_.{1,2})?\})/g),
-						reg_result,
-						result = [];
-					while ((reg_result = regex.exec(msg)) != null) {
-						var o = [],
-							rv = reg_result[1];
-						o['label'] = rv;
-						var v = rv.substring(1, rv.length - 1).split('_');
-						if (v.length > 1) o['unit'] = v[1].replace('}', ''); 
-						result.push(o);
-					}
-					result.msg = msg;
-					wgt._maxSizeErrorMessage = result;
-				}
-			} else if (attr != 'true')
+			else if (attr != 'true')
 				cls = attr;
 		}
 		
