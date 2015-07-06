@@ -1534,12 +1534,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				length = cells.length,
 				ncols = 0;
 			//ZK-2752: find the first visible row
-			//keep the same behavior even there isn't any row visible to avoid other side effects 
-			for (var i = 0; i < rowsLength; i++) {
-				if (tbodyrows[i].style.display != 'none') {
-					cells = tbodyrows[i].cells;
-					length = cells.length;
-					break;
+			//keep the same behavior even there isn't any row visible to avoid other side effects
+			if (tbody.offsetHeight > 0) {
+				for (var i = 0; i < rowsLength; i++) {
+					if (jq(tbodyrows[i]).css('display') != 'none') {
+						cells = tbodyrows[i].cells;
+						length = cells.length;
+						break;
+					}
 				}
 			}
 			for (var i = 0; i < length; i++) {
