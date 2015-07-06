@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2795.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul  6 12:39:44 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+** IE 11 only **
+1. open the popup
+2. click inside the popup
+3. directly click inside the textbox and change the value without clicking anywhere else
+4. click the submit button
+5. you should see a update message with a changed value.
+	</label>
+	<a popup="popup" label="1. open the popup"/>
+
+    <popup id="popup" width="200px">
+    	2. Click inside the Popup
+    </popup>
+
+    <textbox id="testInput" multiline="true" rows="5" value="3. focus here and change value"/>
+
+    <button label="4. submit" onClick="testLabel.setValue(testInput.getValue());"/>
+    <label id="testLabel" />
+
+    <textbox multiline="true" rows="5" value="focus test" onFocus='Clients.showNotification("Focus")'/>
+</zk>

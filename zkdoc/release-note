@@ -50,6 +50,7 @@ ZK 7.0.6
   ZK-2805: call ListModelList.add() and a chosenbox throws a javascript error
   ZK-2752: Grid column width is incorrect when set hflex to min and first row is invisible
   ZK-2245: Filedownload not working on IOS
+  ZK-2795: popup causing lost onFocus/onChange event
 
 * Upgrade Notes
 

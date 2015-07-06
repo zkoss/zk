@@ -575,7 +575,7 @@ jq(function() {
 		
 		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
 		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
-		if (old && zk.ie < 11) {
+		if (old && zk.ie) { // Bug ZK-2795, IE11 still fails in this case. 
 			var n = jq(old)[0];
 			if (n)
 				setTimeout(function () {
