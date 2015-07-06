@@ -1278,8 +1278,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//	Bug ZK-1473: when using template to render listbox,
 		//   the item will be remove but current this._focusItem still remain, 
 		//   disable it to prevent keyboard navigation jump back to top
-		if (this._focusItem == child)
+		if (this._focusItem == child) {
 			this._focusItem = null;
+			//ZK-2804: the first selected item may be removed in rod when 
+			//select multiple items with shift key
+			this._itemForSelect = child;
+		}
 	},
 	//@Override
 	replaceWidget: function (newwgt) {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2804.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul  2 14:59:45 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. select 1st item
+	2. scroll to the bottom
+	3. press shift and select the last item
+	3. scroll back to the top
+	4. you should see all items are selected
+	</label>
+	<zscript><![CDATA[
+		ListModelList elements = new ListModelList(Locale.getAvailableLocales());
+		elements.setMultiple(true);
+		String t = Locale.getAvailableLocales().length + "";
+	]]></zscript>
+	<listbox model="${elements}" width="400px" height="300px" checkmark="true" onSelect='count.setValue("" + elements.getSelection().size())'>
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<listhead>
+			<listheader label="language" sort="auto('displayLanguage')"/>
+			<listheader label="country" sort="auto('displayCountry')"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each.displayLanguage}"/>			
+				<listcell label="${each.displayCountry}"/>			
+			</listitem>
+		</template>
+	</listbox>
+	Number of selected Items: <label id="count"/>
+	Number of all items: <label id="total" value="${t}"></label>
+</zk>
