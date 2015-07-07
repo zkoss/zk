@@ -188,7 +188,7 @@ zk.load('zul.utl', function () {
 		jq.head().appendChild(e);
 		return this;
 	},
-	/* Loads a CSS file.
+	/** Loads a CSS file.
 	 * @param String href the URL of the CSS file.
 	 * @param String id the identifier. Ignored if not specified.
 	 * @param String media the media attribute. Ignored if not specified.
