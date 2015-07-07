@@ -37,6 +37,7 @@ ZK 8.0.0
   ZK-2753: el3 enhancement for invoking customized static method
   ZK-2569: Provide localized message for fileupload
   ZK-2800: replacing a listmodel item should re-renders only one item
+  ZK-2662: Forbidden to set width/height/hflex/vflex in Auxheader
   
 * Bugs
   ZK-2083: MVVM Form Binding with References
