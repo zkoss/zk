@@ -469,7 +469,7 @@ public class Radiogroup extends XulElement {
 				final int index = j + ofs;
 				final Object value = subset.getElementAt(index);
 				renderer.render(item, value, index);
-				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new item is created to replace the existent one
 					item = (Radio)v;
 				if (getSelectableModel().isSelected(value))
@@ -585,7 +585,7 @@ public class Radiogroup extends XulElement {
 				final Radio nci = (Radio)items[0];
 				if (nci.getValue() == null) //template might set it
 					nci.setValue(data);
-				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
+				item.setAttribute(Attributes.MODEL_RENDERAS, nci);
 					//indicate a new item is created to replace the existent one
 				item.detach();
 			}

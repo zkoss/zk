@@ -43,4 +43,9 @@ public class Attributes {
 	 * @since 5.0.0
 	 */
 	public static final String SHALL_RENDER_ITEM = "org.zkoss.zul.ShallRenderItem";
+	
+	/**
+	 * It is used to store the items which are rendered from model 
+	 */
+	public static final String MODEL_RENDERAS = "org.zkoss.zul.model.renderAs";
 }

@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.RadioRenderer;
 import org.zkoss.zul.Radiogroup;
@@ -91,7 +92,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			if (nr.getValue() == null) //template might set it
 				nr.setValue(data);
 
-			item.setAttribute("org.zkoss.zul.model.renderAs", nr);
+			item.setAttribute(Attributes.MODEL_RENDERAS, nr);
 			//indicate a new item is created to replace the existent one
 			item.detach();
 		}
