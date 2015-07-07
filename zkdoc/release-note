@@ -53,6 +53,7 @@ ZK 7.0.6
   ZK-2795: popup causing lost onFocus/onChange event
   ZK-2804: listbox select range with ROD
   ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
+  ZK-2664: Remove a Grid's row and first row gets focus
 
 * Upgrade Notes
 
