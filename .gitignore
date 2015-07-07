@@ -19,3 +19,5 @@ bin/node_modules
 */.settings/*.xml
 */nbactions.xml
 */bin/*
+.idea
+*/*.iml
