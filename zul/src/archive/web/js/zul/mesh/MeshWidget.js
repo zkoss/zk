@@ -981,6 +981,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var items = [],
 			min = zul.mesh.Scrollbar.getScrollPosV(this),
 			max = min + this.ebody.offsetHeight;
+		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden:true}),
 				len = rows.length, w; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
