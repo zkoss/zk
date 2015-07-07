@@ -44,6 +44,7 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
+import org.zkoss.zul.Attributes;
 
 /**
  * Generic {@link Listbox} data loader.
@@ -282,7 +283,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				
 				if (nli.getValue() == null) //template might set it
 					nli.setValue(data);
-				item.setAttribute("org.zkoss.zul.model.renderAs", nli);
+				item.setAttribute(Attributes.MODEL_RENDERAS, nli);
 					//indicate a new item is created to replace the existent one
 				item.detach();
 			}

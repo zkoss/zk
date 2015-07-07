@@ -80,7 +80,7 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	  			
 		  		//Bug #2010389
 	  			//if combobox is going to do onInitRender (syncModel), no need to setSelectedItem
-	  			if (cbbox.getAttribute("zul.Combobox.ON_INITRENDER") != null) {
+	  			if (cbbox.getAttribute("org.zkoss.zul.Combobox.onInitRender") != null) {
 	  				//ZK-927 zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
 	  				if(model instanceof Selectable){
 	    				((Selectable)model).addToSelection(val);

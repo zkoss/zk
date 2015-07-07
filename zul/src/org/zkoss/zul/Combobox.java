@@ -112,6 +112,8 @@ public class Combobox extends Textbox {
 	/**Used to detect whether to sync Comboitem's index later. */
 	private boolean _syncItemIndicesLater;
 
+	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
+	
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
 		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
@@ -205,7 +207,7 @@ public class Combobox extends Textbox {
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
 					//ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
-					if (hasAttribute("zul.Combobox.ON_INITRENDER")) return;
+					if (hasAttribute(ATTR_ON_INIT_RENDER)) return;
 					final ListModel _model = getModel();
 					final int newsz = _model.getSize(), oldsz = getItemCount();
 					int min = event.getIndex0(), max = event.getIndex1(), cnt;
@@ -406,7 +408,7 @@ public class Combobox extends Textbox {
 	@SuppressWarnings("rawtypes")
 	public void onInitRender(Event data) {
   		//Bug #2010389
-		removeAttribute("zul.Combobox.ON_INITRENDER"); //clear syncModel flag
+		removeAttribute(ATTR_ON_INIT_RENDER); //clear syncModel flag
 		final Renderer renderer = new Renderer();
 		final List<Object> subModel =
 			_model instanceof ListSubModel ? new ArrayList<Object>(): null;
@@ -436,9 +438,9 @@ public class Combobox extends Textbox {
 	
 	private void postOnInitRender(String idx) {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
-		if (getAttribute("zul.Combobox.ON_INITRENDER") == null) {
+		if (getAttribute(ATTR_ON_INIT_RENDER) == null) {
 	  		//Bug #2010389
-			setAttribute("zul.Combobox.ON_INITRENDER", Boolean.TRUE); //flag syncModel
+			setAttribute(ATTR_ON_INIT_RENDER, Boolean.TRUE); //flag syncModel
 			Events.postEvent("onInitRender", this, idx);
 		}
 	}
@@ -491,7 +493,7 @@ public class Combobox extends Textbox {
 				final Comboitem nci = (Comboitem)items[0];
 				if (nci.getValue() == null) //template might set it
 					nci.setValue(data);
-				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
+				item.setAttribute(Attributes.MODEL_RENDERAS, nci);
 					//indicate a new item is created to replace the existent one
 				item.detach();
 			}
@@ -530,7 +532,7 @@ public class Combobox extends Textbox {
 					m.setAccessible(true);
 					m.invoke(_renderer, new Object[] {item, value});
 				}
-				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new item is created to replace the existent one
 					item = (Comboitem)v;
 			} catch (Throwable ex) {

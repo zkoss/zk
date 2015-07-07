@@ -42,6 +42,7 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
+import org.zkoss.zul.Attributes;
 
 /**
  * Generic {@link Grid} data loader.
@@ -304,7 +305,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				
 				if (nr.getValue() == null) //template might set it
 					nr.setValue(data);
-				row.setAttribute("org.zkoss.zul.model.renderAs", nr);
+				row.setAttribute(Attributes.MODEL_RENDERAS, nr);
 					//indicate a new row is created to replace the existent one
 				row.detach();
 			}

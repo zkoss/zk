@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listgroupfoot;
@@ -99,7 +100,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			
 			if (nli.getValue() == null) //template might set it
 				nli.setValue(data);
-			item.setAttribute("org.zkoss.zul.model.renderAs", nli);
+			item.setAttribute(Attributes.MODEL_RENDERAS, nli);
 				//indicate a new item is created to replace the existent one
 			item.detach();
 		}

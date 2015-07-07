@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
 import org.zkoss.zul.Treeitem;
@@ -102,7 +103,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			
 			if (ti.getValue() == null) //template might set it
 				ti.setValue(data);
-			item.setAttribute("org.zkoss.zul.model.renderAs", ti);
+			item.setAttribute(Attributes.MODEL_RENDERAS, ti);
 				//indicate a new item is created to replace the existent one
 			item.detach();
 		}
