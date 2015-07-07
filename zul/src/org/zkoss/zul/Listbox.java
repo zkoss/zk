@@ -3543,6 +3543,8 @@ public class Listbox extends MeshElement {
 					for (final Listitem item: curSeldItems) {
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
+							if (smodel != null) //still have to add selection if not multiple select
+								smodel.addToSelection(_model.getElementAt(item.getIndex()));
 						}
 					}
 					while (start >= 0 && end >= 0 && start <= end) {
