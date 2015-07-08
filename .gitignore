@@ -19,3 +19,5 @@ dist/lib/osgi
 */nbactions.xml
 */bin/*
 bin/node_modules
+.idea
+*/*.iml
