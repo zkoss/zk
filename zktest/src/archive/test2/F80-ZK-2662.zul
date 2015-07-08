@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2662.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jul 7, 2015  5:00:29 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+	
+<zk>
+	<label>should throw exception loading this page</label>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	model = model.subList(0,4);
+	 
+	]]></zscript>
+	<window>
+		<grid model="${model}">
+			<frozen columns="4" start="0"></frozen>
+			<columns id="cols">
+				<column>1</column>
+				<column>2</column>
+				<column>3</column>
+				<column>4</column>
+				<column>5</column>
+				<column>6</column>
+				<column>7</column>
+				<column>8</column>
+				<column>9</column>
+				<column>10</column>
+				<column>11</column>
+				<column>12</column>
+				<column>13</column>
+				<column>14</column>
+			</columns>
+			<auxhead id="head">
+				<auxheader colspan="4" />
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>
+				<auxheader colspan="1" width="40px" >
+					<button label="test"/>
+				</auxheader>			
+			</auxhead>
+			<template name="model">
+				<row>
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+					<label value="${each}" />
+				</row>
+			</template>
+		</grid>
+	</window>
+</zk>

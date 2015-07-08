@@ -76,6 +76,39 @@ public class Auxheader extends HeaderElement {
 			smartUpdate("rowspan", _rowspan);
 		}
 	}
+	
+	/**
+	 * @since 8.0.0
+	 */
+	@Override
+	public void setHeight(String height) {
+		throw new UiException("Not allowed to set height in auxhead.");
+	}
+
+	/**
+	 * @since 8.0.0
+	 */
+	@Override
+	public void setWidth(String width) {
+		throw new UiException("Not allowed to set width in auxhead.");
+	}
+
+	/**
+	 * @since 8.0.0
+	 */
+	@Override
+	public void setVflex(String flex) {
+		throw new UiException("Not allowed to set vflex in auxhead.");
+	}
+
+	/**
+	 * @since 8.0.0
+	 */
+	@Override
+	public void setHflex(String flex) {
+		throw new UiException("Not allowed to set hflex in auxhead.");
+	}
+
 
 	//super//
 	public String getZclass() {
