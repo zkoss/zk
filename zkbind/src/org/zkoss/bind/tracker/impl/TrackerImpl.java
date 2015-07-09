@@ -12,20 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.tracker.impl;
 
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.WeakHashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.impl.AllocUtil;
@@ -52,6 +38,20 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Tabbox;
+
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * Implementation of dependency tracking.
@@ -581,7 +581,6 @@ public class TrackerImpl implements Tracker, Serializable {
 		
 		_beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 		_equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
-		_compMap = initCompMap();
 	}
 	protected static boolean testEqualsBean(Object nodeBean, Object bean) {
 		if (nodeBean == bean)

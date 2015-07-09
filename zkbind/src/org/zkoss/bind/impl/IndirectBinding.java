@@ -11,9 +11,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
-import java.util.Map;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.ReferenceBinding;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * An indirect binding, a kind of reference binding, but it won't create a sub-tracking
@@ -22,7 +24,8 @@ import org.zkoss.bind.sys.ReferenceBinding;
  * @author jumperchen
  * @since 8.0.0
  */
-public abstract class IndirectBinding implements ReferenceBinding {
+public abstract class IndirectBinding implements ReferenceBinding,
+		Serializable {
 	
 	/**
 	 * do nothing for this method

@@ -11,14 +11,14 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.bind.proxy;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.Proxy;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyFactoryX;
+import javassist.util.proxy.ProxyObject;
+import javassist.util.proxy.SerializedProxyX;
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -26,7 +26,11 @@ import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.UiException;
 
-import javassist.util.proxy.MethodFilter;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A form proxy handler
@@ -76,7 +80,7 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 	private class FormStatusImpl implements FormStatus, Serializable {
 		private static final long serialVersionUID = 1L;
 
-		private FormProxyObject self;
+		private transient FormProxyObject self;
 		public FormStatusImpl() {
 		}
 		public void setOwner(FormProxyObject self) {
@@ -95,6 +99,40 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 		public Object getOrigin() {
 			return self;
 		}
+
+		// Fix an issue for javassist - https://issues.jboss.org/browse/JASSIST-247
+		private synchronized void writeObject(java.io.ObjectOutputStream s)
+				throws java.io.IOException {
+			s.defaultWriteObject();
+			Class clazz = self.getClass();
+
+			MethodHandler methodHandler = null;
+			if (self instanceof ProxyObject)
+				methodHandler = ((ProxyObject)self).getHandler();
+			else if (self instanceof Proxy)
+				methodHandler = ProxyFactory.getHandler((Proxy) self);
+
+			s.writeObject(new SerializedProxyX(clazz, ProxyFactoryX
+					.getFilterSignature(clazz), methodHandler));
+		}
+
+		//Fix an issue for javassist - https://issues.jboss.org/browse/JASSIST-247
+		@SuppressWarnings("rawtypes")
+		private void readObject(java.io.ObjectInputStream s)
+				throws java.io.IOException, ClassNotFoundException {
+			s.defaultReadObject();
+			Object read = s.readObject();
+			if (read instanceof FormProxyObject)
+				self = (FormProxyObject) read;
+			else if (self instanceof SerializedProxyX) {
+				try {
+					self = (FormProxyObject) ((SerializedProxyX) self).readResolve();
+				} catch (Exception e) {
+					throw UiException.Aide.wrap(e);
+				}
+			}
+		}
+
 	}
 
 	public Object invoke(Object self, Method method, Method proceed,
