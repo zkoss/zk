@@ -37,7 +37,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return wd;
 	},
 	onSize: function () {
-		this._fixWidth();
+		this._fixWidth(true); //ZK-2810: set height to tabbox when onSize (maybe setHeight or setWidth)
 		
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck('init');
@@ -286,12 +286,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_fixWidth: function() {
+	_fixWidth: function(toSel) {
 		var tabs = this.$n(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
 			btnsize = tabbox._scrolling ? this._getArrowSize() : 0;
-		this._fixHgh();
+		this._fixHgh(toSel); //ZK-2810: don't set height to tabbox when deselect
 		if (tabbox.isVertical()) {
 			var panels = tabbox.getTabpanels();
 			if (panels)
@@ -337,7 +337,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_fixHgh: function () {
+	_fixHgh: function (toSel) {
 		var tabbox = this.getTabbox();
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
@@ -349,12 +349,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				cave =  this.$n('cave'),
 				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
+			
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
-				var tabsHgh = allTab.length * allTab[0].offsetHeight, // default height
-					seldPanel = tabbox.getSelectedPanel(),
-					panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0 ,  //B60-ZK-965
-				realHgh = Math.max(tabsHgh, panelsHgh);
-				tbx.style.height = jq.px0(realHgh + zk(tbx).padBorderHeight());
+				if (!toSel) { //ZK-2810: clear height of tabbox when deselect
+					jq(tbx).css('height', '');
+				} else {
+					var tabsHgh = allTab.length * allTab[0].offsetHeight, // default height
+						seldPanel = tabbox.getSelectedPanel(),
+						panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0 ,  //B60-ZK-965
+					realHgh = Math.max(tabsHgh, panelsHgh);
+					tbx.style.height = jq.px0(realHgh + zk(tbx).padBorderHeight());
+				}
 			}
 			tabs.style.height =  jq.px0(zk(tbx).contentHeight() - zk(tabs).marginHeight());
 			
