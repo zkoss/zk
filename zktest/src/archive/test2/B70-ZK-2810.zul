@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2810.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul  8 10:59:41 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<div>
+	<label multiline="true">
+	1. switch between each tab
+	2. the height of tabpanel should adjust with the content
+	</label>
+    <tabbox orient="left" width="300px">
+        <tabs width="100px">
+            <tab label="Tab short" />
+            <tab label="Tab long" />
+            <tab label="Tab even longer" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+            	<div height="200px" style="background-color: red;"/>
+            </tabpanel>
+            <tabpanel>
+            	<div height="400px" style="background-color: green;"/>
+            </tabpanel>
+            <tabpanel>
+            	<div height="600px" style="background-color: blue;"/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+</div>

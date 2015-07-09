@@ -165,7 +165,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 
 		if (!tabbox.inAccordionMold()) {
 			var tabs = this.parent;
-			if (tabs) tabs._fixWidth();
+			if (tabs) tabs._fixWidth(toSel); //ZK-2810: don't set height to tabbox when deselect
 		}
 		
 		if (tab == this) {
