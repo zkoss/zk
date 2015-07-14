@@ -1395,16 +1395,19 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the DOM element.
 	 */
 	scrollIntoView: function (id) {
+		if (!id) return;
 		var w = Widget.$(id);
 		if (w) {
 			zk.delayFunction(w.uuid, function () {
 				w.scrollIntoView();
 			});
 		} else {
-			var zkjq = zk(id); 
-			zk.delayFunction(zkjq.$().uuid, function () {
-				zkjq.scrollIntoView();
-			});
+			var zkjq = zk(id);
+			if (zkjq.$()) {
+				zk.delayFunction(zkjq.$().uuid, function () {
+					zkjq.scrollIntoView();
+				});
+			}
 		}
 	}
 };
