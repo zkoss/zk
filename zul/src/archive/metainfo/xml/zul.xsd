@@ -1654,6 +1654,7 @@
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- group -->
 	<xs:element name="group" type="groupType" />
@@ -2317,22 +2318,11 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="type" type="scriptTypeAttrType" use="required" />
+		<xs:attribute name="type" type="xs:string" use="optional" />
 		<xs:attribute name="charset" type="xs:string" use="optional" />
 		<xs:attribute name="defer" type="booleanType" use="optional" />
 	</xs:complexType>
-	<xs:simpleType name="scriptTypeAttrType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="text/javascript" />
-				</xs:restriction>
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
-	</xs:simpleType>
+	
 	<!-- scrollview -->
 	<xs:element name="scrollview" type="scrollviewType" />
 	<xs:complexType name="scrollviewType" mixed="true">
