@@ -16,12 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.sys.Storage;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Represents a desktop.
@@ -294,4 +295,11 @@ public interface Desktop extends Scope {
 	 * @since 3.0.6
 	 */
 	public void invalidate();
+
+	/**
+	 * Returns the storage in a desktop scope.
+	 * @return a storage implementation, never null.
+	 * @since 8.0.0
+	 */
+	public <T> Storage<T> getStorage();
 }

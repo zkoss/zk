@@ -12,23 +12,26 @@
 */
 package org.zkoss.zk.ui.event.impl;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import static org.zkoss.lang.Generics.cast;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Callback;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.zkoss.lang.Generics.cast;
 
 /**
  * A simple implementation of {@link EventQueueProvider}.
@@ -45,15 +48,24 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 
 	public <T extends Event>
 	EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
-		final Execution exec = Executions.getCurrent();
-		if (exec == null)
-			throw new IllegalStateException("Not in an execution");
 
 		final boolean bAppScope = EventQueues.APPLICATION.equals(scope);
+
+		// if the scope is in session or application, it won't need an Execution
+		// to work with this event queue for publishing
 		if (bAppScope || EventQueues.SESSION.equals(scope)) {
-			return lookup0(name, bAppScope ?
-				(Scope)exec.getDesktop().getWebApp(): exec.getSession(), autoCreate);
+			if (Sessions.getCurrent() == null)
+				throw new IllegalStateException("Not in an execution");
+
+			return lookup0(name,
+					bAppScope ? (Scope) WebApps.getCurrent() :
+							Sessions.getCurrent(), autoCreate);
 		} else  if (EventQueues.DESKTOP.equals(scope)) {
+			final Execution exec = Executions.getCurrent();
+
+			if (exec == null)
+				throw new IllegalStateException("Not in an execution");
+
 			final Desktop desktop = exec.getDesktop();
 			Map<String, EventQueue<T>> eqs = cast((Map)desktop.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)

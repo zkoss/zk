@@ -28,6 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +41,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.CollectionsX;
-
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -85,6 +87,7 @@ import org.zkoss.zk.ui.sys.RequestQueue;
 import org.zkoss.zk.ui.sys.Scheduler;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.Storage;
 import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
@@ -187,6 +190,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private transient Visualizer _uv;
 	private transient Object _uvLock;
+	private final Lock _storageLock = new ReentrantLock(); // since ZK 8.0.0
 	/** List<RecycleInfo>: used to recycle detached component's UUID. */
 	private transient List<RecycleInfo> _uuidRecycle;
 
@@ -1593,6 +1597,35 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			if (((PageCtrl)page).getOwner() == null)
 				page.invalidate();
 	}
+
+	public <T> Storage<T> getStorage() {
+		_storageLock.lock();
+		try {
+			Storage<T> storage = (Storage<T>) getAttribute(
+					this.getClass().getName());
+			if (storage == null) {
+				setAttribute(this.getClass().getName(), storage = new Storage<T>() {
+							private ConcurrentHashMap<String, T> _cache = new ConcurrentHashMap<String, T>();
+
+							public T getItem(String key) {
+								return _cache.get(key);
+							}
+
+							public void setItem(String key, T value) {
+								_cache.put(key, value);
+							}
+
+							public T removeItem(String key) {
+								return _cache.remove(key);
+							}
+						});
+			}
+			return storage;
+		} finally {
+			_storageLock.unlock();
+		}
+	}
+
 	private static class ReqResult {
 		private final String id;
 		private final Object response;
