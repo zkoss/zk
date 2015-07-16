@@ -8,6 +8,7 @@ ZK 8.0.0
   ZK-2578: Add one more phase when initial bindings
   ZK-2581: Add a @SmartNotifyChange annotation that triggering the notification once the value of the property is changed
   ZK-2584: Support @command and @global-command for client side to use
+  ZK-2822: Provide a channel to communicate between client and server with ZK composer
   ZK-2819: Provide a websocket channel to share application data between ZK and non-ZK application
   ZK-2613: ZHTML component's src attribute support encodeURL like Image in Zul
   ZK-2612: ZHTML support textContent attribute for dynamic data binding

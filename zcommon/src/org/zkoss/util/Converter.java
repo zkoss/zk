@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
+import java.util.Collection;
+
 /**
  * A converter used to convert a value to another.
  *

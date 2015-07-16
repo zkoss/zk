@@ -42,7 +42,6 @@ import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.lang.Threads;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
 import org.zkoss.zk.au.AuRequest;
@@ -2107,7 +2106,12 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null)
 			_auxinf.render(renderer);
 
-		Object o = getAttribute(Attributes.CLIENT_ROD);
+		// feature ZK-2822
+		Object o = getAttribute("$composer");
+		if (o != null)
+			renderer.render("$ZKAUS$", Boolean.TRUE);
+
+		o = getAttribute(Attributes.CLIENT_ROD);
 		if (o != null)
 			renderer.render("z$rod",
 				(o instanceof Boolean && ((Boolean)o).booleanValue())

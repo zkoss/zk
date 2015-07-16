@@ -20,11 +20,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -34,11 +32,10 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.CreateEvent;
-import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.ConventionWires;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 
 /**
  * <p>A skeletal composer that you can extend and write intuitive onXxx 
@@ -392,6 +389,9 @@ implements ComponentCloneListener, ComponentActivationListener {
 				ConventionWires.wireImplicit(comp, this); //Bug ZK-546. Shall re-wire transient implicit variables only
 			}
 		}
+
+		//feature #ZK-2822
+		ConventionWires.wireServiceCommand(comp, this);
 	}
 	public void willPassivate(Component comp) {
 	}

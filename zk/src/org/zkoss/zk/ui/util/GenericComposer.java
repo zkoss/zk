@@ -111,6 +111,9 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 		//assign this composer as a variable
 		//feature #2778508
 		ConventionWires.wireController(comp, this);
+
+		//feature #ZK-2822
+		ConventionWires.wireServiceCommand(comp, this);
 	}
 	
 	public boolean doCatch(Throwable ex) throws Exception { //do nothing

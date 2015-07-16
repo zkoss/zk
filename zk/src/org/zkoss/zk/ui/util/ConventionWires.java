@@ -13,14 +13,27 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.util.Converter;
+import org.zkoss.util.Pair;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.annotation.Command;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.select.impl.Reflections;
 
 /**
  * Utilities to wire variables by name conventions.
@@ -222,6 +235,112 @@ public class ConventionWires {
 		wireController(comp, controller, '$');
 	}
 
+	private interface WireAuService extends AuService {
+	}
+	/**
+	 * Wire controller's command method to be an AuService command that the command
+	 * can be triggered from client side JavaScript.
+	 * <p>For example,</p>
+	 * <pre><code>
+	 *     zkservice.$('$foo').command('commandName', [{bar: 0}, {bar2: 'bar2'}]);
+	 * </code></pre>
+	 * <p>Developer can specify the <tt>org.zkoss.zk.ui.jsonServiceParamConverter</tt>
+	 * in zk.xml or lang-addon.xml to provide a specific JSON converter which implements {@link Converter}
+	 * </p>
+	 * @param comp
+	 * @param controller
+	 * @since 8.0.0
+	 */
+	public static final void wireServiceCommand(final Component comp, final Object controller) {
+		Reflections.forMethods(controller.getClass(), Command.class,
+				new Reflections.MethodRunner<Command>() {
+					public void onMethod(Class<?> clazz, final Method method,
+							Command annotation) {
+						if ((method.getModifiers() & Modifier.STATIC) != 0)
+							throw new UiException(
+									"Cannot add forward to static method: "
+											+ method.getName());
+						AuService auService = comp.getAuService();
+						// no need to chain the same WireAuService it happens in a serializable case
+						final AuService prevAuService = auService instanceof WireAuService ? null : auService;
+						comp.setAuService(new WireAuService() {
+							private Converter<Pair<Class<?>, Object>, Object> converter;
+
+							{
+								String property = Library.getProperty(
+										"org.zkoss.zk.ui.jsonServiceParamConverter.class");
+								if (property == null) {
+									converter = new Converter<Pair<Class<?>, Object>, Object>() {
+										public Object convert(
+												Pair<Class<?>, Object> pair) {
+											return pair.getY();
+										}
+									};
+								} else {
+
+									try {
+										converter = (Converter) Classes
+												.newInstanceByThread(property);
+									} catch (Exception x) {
+										log.error(x.getMessage(), x);
+									}
+								}
+							}
+
+							public boolean service(AuRequest request,
+									boolean everError) {
+								String command = request.getCommand();
+								if ("onAuServiceCommand".equals(command)) {
+									Map<String, Object> data = request
+											.getData();
+									final String cmd = (String) data.get("cmd");
+									final List<Object> args = (List<Object>) data
+											.get("args");
+									final List<String> stringList = new LinkedList<String>(
+											Arrays.asList(method.getAnnotation(
+													Command.class).value()));
+									stringList.add(method.getName());
+									if (stringList.contains(cmd)) {
+										try {
+											Class<?>[] types = method
+													.getParameterTypes();
+											if (types.length == 0)
+												method.invoke(controller);
+											else {
+												if (args == null || args.size()
+														!= types.length) {
+													throw new IllegalArgumentException(
+															"The number of the parameters from the json value are not the same as the method parameters");
+												}
+
+												Object[] params = new Object[types.length];
+												int index = 0;
+												for (Class<?> type : types) {
+													params[index] = converter
+															.convert(
+																	new Pair<Class<?>, Object>(
+																			type,
+																			args.get(
+																					index)));
+													index++;
+												}
+												method.invoke(controller,
+														params);
+											}
+										} catch (Exception e) {
+											throw UiException.Aide.wrap(e);
+										}
+									}
+									return true;
+								}
+								if (prevAuService != null)
+									return prevAuService.service(request, everError);
+								return false;
+							}
+						});
+					}
+				});
+	}
 	/** Wire controller as an attribute of the specified component with a custom separator.
 	 * <p>The separator is used to separate the component ID and the controller.
 	 * By default, it is '$'. However, for Groovy or other environment that

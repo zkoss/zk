@@ -2805,6 +2805,24 @@ function () {
 		return n;
 	},
 	/**
+	 * Returns the service instance from the current widget, if any.
+	 * @since 8.0.0
+	 * @return zk.Service
+	 */
+	$service: function () {
+		var w = this;
+		for (; w ; w = w.parent) {
+			if (w['$ZKAUS$'])
+				break;
+		}
+		if (w) {
+			if (!w._$service)
+				w._$service = new zk.Service(w, this);
+			return w._$service;
+		}
+		return null;
+	},
+	/**
 	 * Returns whether the widget has its own element bound to HTML DOM tree.
 	 * @return boolean
 	 * @since 7.0.0
@@ -2919,6 +2937,10 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	unbind: function (skipper) {
+		if (this._$service) {
+			this._$service.destroy();
+			this._$service = null;
+		}
 		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
 			_unbindrod(this);
@@ -5253,6 +5275,88 @@ zk.Macro = zk.$extends(zk.Widget, {
 		out.push('</', this._enclosingTag, '>');
 	}
 });
+
+/** Retrieves the service if any.
+ * @param Object n the object to look for. If it is a string,
+ * it is assumed to be UUID, unless it starts with '$'.
+ * For example, <code>zkservice.$('uuid')<code> is the same as <code>zkservice.$('#uuid')<code>,
+ * and both look for a widget whose ID is 'uuid'. On the other hand,
+ * <code>zkservice.$('$id') looks for a widget whose ID is 'id'.<br/>
+ * and <code>zkservice.$('.className') looks for a widget whose CSS selector is 'className'.<br/>
+ * If it is an DOM element ({@link DOMElement}), it will look up
+ * which widget it belongs to.<br/>
+ * If the object is not a DOM element and has a property called
+ * <code>target</code>, then <code>target</code> is assumed.
+ * Thus, you can pass an instance of {@link jq.Event} or {@link zk.Event},
+ * and the target widget will be returned.
+ * @param Map opts [optional] the options. Allowed values:
+ * <ul>
+ * <li>exact - id must exactly match uuid (i.e., uuid-xx ignored).
+ * It also implies strict</li>
+ * <li>strict - whether not to look up the parent node.(since 5.0.2)
+ * If omitted, false is assumed (and it will look up parent).</li>
+ * <li>child - whether to ensure the given element is a child element
+ * of the widget's main element ({@link #$n}). In most cases, if ID
+ * of an element is xxx-yyy, the the element must be a child of
+ * the element whose ID is xxx. However, there is some exception
+ * such as the shadow of a window.</li>
+ * </ul>
+ * @return zk.Service
+ * @since 8.0.0
+ */
+zkservice = {
+	$: function (n, opts) {
+		var widget = zk.Widget.$(n, opts);
+		if (widget)
+			return widget.$service();
+		zk.error('Not found ZK Service with [' + n + ']');
+	}
+};
+
+/**
+ * A service utile widget
+ * @since 8.0.0
+ */
+zk.Service = zk.$extends(zk.Object, {
+	$init: function (widget, currentTarget) {
+		this.$supers('$init', arguments);
+		this.$view = widget;
+		this.$currentTarget = currentTarget;
+	},
+	/**
+	 * Destroy this binder.
+	 */
+	destroy: function () {
+		this.$view = null;
+		this.$currentTarget = null;
+	},
+	/**
+	 * Post a command to the service
+	 * @param String command the name of the command
+	 * @param Array args the arguments for this command. (the value should be json type)
+	 */
+	command: function (cmd, args) {
+		this.$command0(cmd, args);
+		return this;
+	},
+	/**
+	 * Post a command to the service with a timeout if any.
+	 * @param String command the name of the command
+	 * @param Array args the arguments for this command. (the value should be json type)
+	 * @param int timeout to delay the post.
+	 */
+	$command0: function (cmd, args, timeout) {
+		var wgt = this.$view;
+		if (timeout) {
+			setTimeout(function () {
+				zAu.send(new zk.Event(wgt, "onAuServiceCommand", {cmd: cmd, args: args}, {toServer:true}));
+			}, timeout); // make command at the end of this request
+		} else {
+			zAu.send(new zk.Event(wgt, "onAuServiceCommand", {cmd: cmd, args: args}, {toServer:true}));
+		}
+		this._lastcmd = cmd;
+	}
+ });
 
 /** A skipper is an object working with {@link zk.Widget#rerender}
  * to rerender portion(s) of a widget (rather than the whole widget).

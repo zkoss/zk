@@ -102,6 +102,9 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		_self = comp;
 		ConventionWires.wireController(comp, this);
+
+		//feature #ZK-2822
+		ConventionWires.wireServiceCommand(comp, this);
 	}
 	
 	public void doAfterCompose(T comp) throws Exception {
@@ -244,7 +247,10 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		Selectors.rewireComponentsOnActivate(comp, this);
 		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
 		Selectors.rewireEventListeners(comp, this);
-		
+
+		//feature #ZK-2822
+		ConventionWires.wireServiceCommand(comp, this);
+
 		Object subsInfo = getUtilityHandler().resubscribeEventQueues(this);
 		if(subsInfo!=null){
 			getUtilityHandler().postSubscriptionHandling(subsInfo,comp);
