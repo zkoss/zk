@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.0.201507161600">
     <!--
     SIMPLETYPE
     -->
@@ -577,6 +577,7 @@
 			<xs:element ref="a" />
 			<xs:element ref="absolutelayout"/>
 			<xs:element ref="anchorlayout"/>
+			<xs:element ref="apply"/>
 			<xs:element ref="audio" />
 			<xs:element ref="bandbox" />
 			<xs:element ref="biglistbox" />
@@ -590,8 +591,9 @@
 			<xs:element ref="chart" />
 			<xs:element ref="charts" />
 			<xs:element ref="checkbox" />
-			<xs:element ref="ckeditor" />
+			<xs:element ref="choose" />
 			<xs:element ref="chosenbox" />
+			<xs:element ref="ckeditor" />
 			<xs:element ref="colorbox" />
 			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
@@ -606,6 +608,7 @@
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="flash" />
 			<xs:element ref="flashchart" />
+			<xs:element ref="forEach" />
 			<xs:element ref="fusionchart" />
 			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
@@ -615,6 +618,7 @@
 			<xs:element ref="hlayout" />
 			<xs:element ref="html" />
 			<xs:element ref="idspace" />
+			<xs:element ref="if" />
 			<xs:element ref="iframe" />
 			<xs:element ref="image" />
 			<xs:element ref="imagemap" />
@@ -626,6 +630,7 @@
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
 			<xs:element ref="navbar" />
+			<xs:element ref="otherwise" />
 			<xs:element ref="paging" />
 			<xs:element ref="panel" />
 			<xs:element ref="pivottable" />
@@ -655,6 +660,7 @@
 			<xs:element ref="tree" />
 			<xs:element ref="vbox" />
 			<xs:element ref="vlayout" />
+			<xs:element ref="when" />
 			<xs:element ref="window" />
 			<xs:element ref="zscript" />
 		</xs:choice>
@@ -665,6 +671,7 @@
 				<xs:element ref="a" />
 				<xs:element ref="absolutelayout"/>
 				<xs:element ref="anchorlayout"/>
+				<xs:element ref="apply"/>
 				<xs:element ref="audio" />
 				<xs:element ref="bandbox" />
 				<xs:element ref="biglistbox" />
@@ -678,6 +685,7 @@
 				<xs:element ref="chart" />
 				<xs:element ref="charts" />
 				<xs:element ref="checkbox" />
+				<xs:element ref="choose" />
 				<xs:element ref="chosenbox" />
 				<xs:element ref="ckeditor" />
 				<xs:element ref="colorbox" />
@@ -694,6 +702,7 @@
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="flash" />
 				<xs:element ref="flashchart" />
+				<xs:element ref="forEach" />
 				<xs:element ref="fusionchart" />
 				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
@@ -703,6 +712,7 @@
 				<xs:element ref="hlayout" />
 				<xs:element ref="html" />
 				<xs:element ref="idspace" />
+				<xs:element ref="if" />
 				<xs:element ref="iframe" />
 				<xs:element ref="image" />
 				<xs:element ref="imagemap" />
@@ -714,6 +724,7 @@
 				<xs:element ref="menubar" />
 				<xs:element ref="menupopup" />
 				<xs:element ref="navbar" />
+				<xs:element ref="otherwise" />
 				<xs:element ref="paging" />
 				<xs:element ref="panel" />
 				<xs:element ref="pivottable" />
@@ -742,6 +753,7 @@
 				<xs:element ref="tree" />
 				<xs:element ref="vbox" />
 				<xs:element ref="vlayout" />
+				<xs:element ref="when" />
 				<xs:element ref="window" />
 				<xs:element ref="zscript" />
 			</xs:choice>
@@ -3417,6 +3429,45 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<!-- shadow element: apply -->
+	<xs:element name="apply" type="applyType" />
+	<xs:complexType name="applyType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="template" type="xs:string" use="required" />
+	</xs:complexType>
+	<!-- shadow element: forEach -->
+	<xs:element name="forEach" type="forEachType" />
+	<xs:complexType name="forEachType">
+		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+		<xs:attribute name="items" type="xs:string" use="required" />
+		<xs:attribute name="begin" type="intType" use="optional" />
+		<xs:attribute name="end" type="intType" use="optional" />
+	</xs:complexType>
+	<!-- shadow element: choose -->
+	<xs:element name="choose" type="chooseType" />
+	<xs:complexType name="chooseType">
+		<xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="when" />
+			</xs:sequence>
+			<xs:element ref="otherwise" />
+		</xs:sequence>
+		<!--no attrs-->
+	</xs:complexType>
+	<!-- shadow element: when -->
+	<xs:element name="when" type="ifType" />
+	<!-- shadow element: otherwise -->
+	<xs:element name="otherwise" type="otherwiseType" />
+	<xs:complexType name="otherwiseType">
+		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+		<!--no attrs-->
+	</xs:complexType>
+	<!-- shadow element: if -->
+	<xs:element name="if" type="ifType" />
+	<xs:complexType name="ifType">
+		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+		<xs:attribute name="test" type="booleanType" use="required" />
+	</xs:complexType>
 
 
 </xs:schema>
