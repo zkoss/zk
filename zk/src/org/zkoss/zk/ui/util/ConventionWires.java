@@ -244,7 +244,7 @@ public class ConventionWires {
 	 * <pre><code>
 	 *     zkservice.$('$foo').command('commandName', [{bar: 0}, {bar2: 'bar2'}]);
 	 * </code></pre>
-	 * <p>Developer can specify the <tt>org.zkoss.zk.ui.jsonServiceParamConverter</tt>
+	 * <p>Developer can specify the <tt>org.zkoss.zk.ui.jsonServiceParamConverter.class</tt>
 	 * in zk.xml or lang-addon.xml to provide a specific JSON converter which implements {@link Converter}
 	 * </p>
 	 * @param comp
