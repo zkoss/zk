@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -2522,16 +2523,20 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	public void sessionWillPassivate(Page page) {
+		Set<Object> uniqueAttrs = new LinkedHashSet<Object>(); //ZK-2701: use set to record unique attrs and listeners
 		if (_auxinf != null && _auxinf.attrs != null) {
-			willPassivate(_auxinf.attrs.getAttributes().values());
+			uniqueAttrs.addAll(_auxinf.attrs.getAttributes().values());
+			willPassivate(uniqueAttrs); //ZK-2701: only passivate the same object once
 			willPassivate(_auxinf.attrs.getListeners());
 		}
 
 		if (_auxinf != null && _auxinf.listeners != null)
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
 			it.hasNext();)
-				for (EventListenerInfo li: it.next())
-					willPassivate(li.listener);
+				for (EventListenerInfo li : it.next()) {
+					if (uniqueAttrs.add(li.listener)) //ZK-2701: only passivate the same object once
+						willPassivate(li.listener);
+				}
 
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
@@ -2541,8 +2546,10 @@ w:use="foo.MyWindow"&gt;
 	public void sessionDidActivate(Page page) {
 		_page = page;
 
+		Set<Object> uniqueAttrs = new LinkedHashSet<Object>(); //ZK-2701: use set to record unique attrs and listeners
 		if (_auxinf != null && _auxinf.attrs != null) {
-			didActivate(_auxinf.attrs.getAttributes().values());
+			uniqueAttrs.addAll(_auxinf.attrs.getAttributes().values());
+			didActivate(uniqueAttrs); //ZK-2701: only activate the same object once
 			didActivate(_auxinf.attrs.getListeners());
 			if (_parent == null)
 				_auxinf.attrs.notifyParentChanged(_page);
@@ -2551,8 +2558,10 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.listeners != null)
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
 			it.hasNext();)
-				for (EventListenerInfo li: it.next())
-					didActivate(li.listener);
+				for (EventListenerInfo li: it.next()) {
+					if (uniqueAttrs.add(li.listener)) //ZK-2701: only activate the same object once
+						didActivate(li.listener);
+				}
 
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)

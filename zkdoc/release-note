@@ -55,6 +55,7 @@ ZK 7.0.6
   ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
   ZK-2664: Remove a Grid's row and first row gets focus
   ZK-2810: vertical (left/right) tabbox content sizing issue
+  ZK-2701: serialization callbacks called multiple times
 
 * Upgrade Notes
 
