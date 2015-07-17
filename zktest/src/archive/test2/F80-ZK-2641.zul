@@ -40,5 +40,6 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	<intbox id="intbox" />
 	<button label="add constraint"
 	onClick="intbox.constraint = new SimpleConstraint(SimpleConstraint.NO_NEGATIVE)" />
+	<textbox constraint="no empty: {hi, no empty}, /.+@.+\.[a-z]+/: {hi, email only} "></textbox>
 	</vlayout>
 </window>

@@ -74,6 +74,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					continue l_out;
 				}
 				if (cc == ':') {
+					var leftBraceIdx = 0, rightBraceIdx = len;
 					for (k = ++j;; ++k) { //look for ending
 						if (k >= len) { //no ending
 							k = -1;
@@ -81,9 +82,18 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						}
 
 						cc = cst.charAt(k);
-						if (cc == ',') break; //msg ending found
+						if (cc == '{') { // ZK-2641: in order to support comma, enclose with curly braces
+							leftBraceIdx = k + 1;
+							for (++k;; ++k) {
+								if (cst.charAt(k) == '}') { //find enclosing '}'
+									rightBraceIdx = k;
+									break;
+								}
+							}
+						} else if (cc == ',') break; //msg ending found
 					}
-					this._errmsg[this._cstArr[this._cstArr.length - 1]] = k >= 0 ? 
+					this._errmsg[this._cstArr[this._cstArr.length - 1]] = leftBraceIdx ?
+							cst.substring(leftBraceIdx, rightBraceIdx).trim() : k >= 0 ?
 							cst.substring(j, k).trim() : cst.substring(j).trim();
 					continue l_out;
 				}
