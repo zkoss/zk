@@ -343,6 +343,18 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			case GroupsDataEvent.MULTIPLE_CHANGED:
 				type = ListDataEvent.MULTIPLE_CHANGED;
 				break;
+			case GroupsDataEvent.GROUPS_OPENED: //ZK-2812: onOpen event listener didn't trigger when using GroupsModel
+				int index = event.getGroupIndex();
+				if (event.getModel().getChildCount(index) <= 0) return;
+				init();//re-initialize the model information
+				boolean open = _gpopens[index];
+				if (open)
+					type = ListDataEvent.INTERVAL_ADDED;
+				else
+					type = ListDataEvent.INTERVAL_REMOVED;
+				j0 = _gpofs[index] + 1;
+				j1 = 0;
+				break;
 			default:
 				init();//re-initialize the model information
 				break;
