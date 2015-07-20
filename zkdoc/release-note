@@ -78,7 +78,7 @@ ZK 8.0.0
   + The library property of org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled is false by default.
   + Deprecated the method of setWidgetAttribute() and getWidgetAttribute() of org.zkoss.zk.ui.Component, use
     setClientAttribute() and getClientAttribute() method instead.
-
+  + Add a restriction that it's forbidden to set width/height/hflex/vflex in Auxheader.
   --------
 ZK 7.0.6
 * Features
