@@ -295,7 +295,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		}
 		if (_opens[groupIndex] != open) {
 			_opens[groupIndex] = open;
-			fireEvent(GroupsDataEvent.GROUPS_CHANGED,groupIndex, -1, -1);
+			fireEvent(GroupsDataEvent.GROUPS_OPENED,groupIndex, -1, -1);
 			return true;
 		}
 		return false;

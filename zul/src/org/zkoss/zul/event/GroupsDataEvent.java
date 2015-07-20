@@ -84,6 +84,10 @@ public class GroupsDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 9;
+	/** Identifies the Group opened.
+	 *  @since 7.0.6
+	 */
+	public static final int GROUPS_OPENED = 10;
 	
 	private final GroupsModel _model;
 	private final int _type, _groupIndex, _index0, _index1;
