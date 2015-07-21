@@ -1103,6 +1103,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		try {
 			return _langdef.getComponentDefinition(name);
 		} catch (DefinitionNotFoundException ex) {
+			try { // try with shadow element
+				return _langdef.getShadowDefinition(name);
+			} catch (DefinitionNotFoundException exe) {
+			}
 		}
 		return null;
 	}
@@ -1114,6 +1118,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		try {
 			return _langdef.getComponentDefinition(cls);
 		} catch (DefinitionNotFoundException ex) {
+			try { // try with shadow element
+				return _langdef.getShadowDefinition(cls);
+			} catch (DefinitionNotFoundException eex) {
+			}
 		}
 		return null;
 	}

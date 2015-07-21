@@ -1,0 +1,8 @@
+<window>
+    <apply template="editing" name="MyName"/>
+    <template name="editing">
+        <if test="${name == 'MyName'}">
+            <textbox value="${name}"/>
+        </if>
+    </template>
+</window>

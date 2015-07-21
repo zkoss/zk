@@ -1006,6 +1006,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					return _parent.getShadowVariable0(this, name, recurse);
 				
 				if (this instanceof ShadowElement) {
+
+					// Bug fixed for the test case SimpleELResolverTest.java
+					final Object value = ((ShadowElementCtrl)this).resolveVariable(null, name, recurse);
+					if (value != null)
+						return value;
+
 					AbstractComponent shadowHost = (AbstractComponent)((ShadowElement) this).getShadowHost();
 					if (shadowHost != null) {
 						if (shadowHost._variableSeeking) {
@@ -3517,7 +3523,7 @@ w:use="foo.MyWindow"&gt;
 				clone.evthds = (EventHandlerMap)evthds.clone();
 			return clone;
 		}
-		/** Clone for the stub component ({@link replaceWith}). */
+		/** Clone for the stub component ({@link #replaceWith(AbstractComponent, boolean, boolean, boolean)}). */
 		private AuxInfo cloneStub(AbstractComponent owner, boolean bListener) {
 			//No need to clone visible since it is meaningless in StubComponent
 			if (bListener && (evthds != null || listeners != null)) {
@@ -3774,7 +3780,8 @@ w:use="foo.MyWindow"&gt;
 				final int indexOf = getChildren().indexOf(child);
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
-						((ShadowElementCtrl)se).beforeHostChildRemoved(child, indexOf);
+						((ShadowElementCtrl)se).beforeHostChildRemoved(child,
+								indexOf);
 					}
 				}
 			} finally {
@@ -3805,7 +3812,8 @@ w:use="foo.MyWindow"&gt;
 				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
-						((ShadowElementCtrl)se).beforeHostChildAdded(child, insertBefore, indexOfInsertBefore);
+						((ShadowElementCtrl)se).beforeHostChildAdded(child,
+								insertBefore, indexOfInsertBefore);
 					}
 				}
 			} finally {
@@ -3845,6 +3853,14 @@ w:use="foo.MyWindow"&gt;
 		return false;
 	}
 	public boolean addShadowRoot(ShadowElement shadow) {
+		if (shadow == null) {
+			throw new IllegalArgumentException("Shadow element cannot be null!");
+		}
+		if (shadow.getShadowHost() == null) {
+			((ShadowElementCtrl) shadow).setShadowHost(this, null);
+		} else if (shadow.getShadowHost() != this) {
+			throw new IllegalAccessError("The shadow element is not belonged to this host: [" + this + "]");
+		}
 		AuxInfo auxinf = initAuxInfo();
 		if (auxinf.seRoots == null)
 			auxinf.seRoots = new LinkedList<ShadowElement>();
@@ -3854,6 +3870,9 @@ w:use="foo.MyWindow"&gt;
 	}
 	public boolean addShadowRootBefore(ShadowElement shadow,
 			ShadowElement insertBefore) {
+		if (shadow == null) {
+			throw new IllegalArgumentException("Shadow element cannot be null!");
+		}
 		if (insertBefore == null)
 			return addShadowRoot(shadow);
 		if (insertBefore.getShadowHost() != this)
