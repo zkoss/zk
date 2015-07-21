@@ -299,6 +299,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					this.fire('onCheck', this.isChecked());
 				}
 				this.fireX(evt);
+				//ZK-2679: prevent default behavior of clicking anchor
+				evt.stop();
 			} else if (anc.href.toLowerCase().startsWith('mailto:')) { // ZK-2506
 				var ifrm = jq.newFrame('mailtoFrame', anc.href, null);
 				jq(ifrm).remove();
