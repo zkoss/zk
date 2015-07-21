@@ -299,8 +299,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					this.fire('onCheck', this.isChecked());
 				}
 				this.fireX(evt);
-				//ZK-2679: prevent default behavior of clicking anchor
-				evt.stop();
+				//ZK-2679: prevent default behavior when upload=false
+				if (!this._upload) //if upload=true, it won't fire onbeforeunload in IE <= 10
+					evt.stop(); //if we stop evt when upload=true, it won't open upload window in IE <= 10
 			} else if (anc.href.toLowerCase().startsWith('mailto:')) { // ZK-2506
 				var ifrm = jq.newFrame('mailtoFrame', anc.href, null);
 				jq(ifrm).remove();
