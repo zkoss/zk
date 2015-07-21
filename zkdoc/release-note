@@ -57,6 +57,7 @@ ZK 8.0.0
   ZK-2691: chosenbox rendering inconsistently and losing selections
   ZK-2792: sh:forEach insert item at wrong position
   ZK-2799: sh:forEach with multiple inserts
+  ZK-2823: forEach error when clearing ListModelList
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
