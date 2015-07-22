@@ -360,7 +360,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		var hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes,
-			ftcols = ftfaker.childNodes;
+			ftcols = ftfaker ? ftfaker.childNodes : null;
 		
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width

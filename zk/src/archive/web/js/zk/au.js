@@ -586,7 +586,7 @@ zAu = {
 	send: function (aureq, timeout) {
 		//ZK-2790: when unload event is triggered, the desktop is destroyed
 		//we shouldn't send request back to server
-		if (zk.unloading)
+		if (zk.unloading && zk.rmDesktoping) //it's safer to check if both zk.unloading and zk.rmDesktoping are true
 			return;
 		
 		if (timeout < 0)
@@ -1364,10 +1364,14 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var uuid = args[i], msg = args[i + 1],
 				wgt = Widget.$(uuid);
 			if (wgt) {
-				zk.delayFunction(uuid, function () {
-					if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
-					else zAu.wrongValue_(wgt, msg);
-				});
+				//ZK-2687: create a closure to record the current wgt
+				var toSetErrMsg = function (w, m) {
+					return function () {
+						if (w.setErrorMessage) w.setErrorMessage(m);
+						else zAu.wrongValue_(w, m);
+					}
+				};
+				zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
 			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
 				jq.alert(msg);
 		}
