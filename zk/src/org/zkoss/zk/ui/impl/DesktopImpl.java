@@ -1598,25 +1598,25 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				page.invalidate();
 	}
 
-	public <T> Storage<T> getStorage() {
+	public Storage getStorage() {
 		_storageLock.lock();
 		try {
-			Storage<T> storage = (Storage<T>) getAttribute(
+			Storage storage = (Storage) getAttribute(
 					this.getClass().getName());
 			if (storage == null) {
-				setAttribute(this.getClass().getName(), storage = new Storage<T>() {
-							private ConcurrentHashMap<String, T> _cache = new ConcurrentHashMap<String, T>();
+				setAttribute(this.getClass().getName(), storage = new Storage() {
+							private ConcurrentHashMap<String, Object> _cache = new ConcurrentHashMap<String, Object>();
 
-							public T getItem(String key) {
-								return _cache.get(key);
+							public <T> T getItem(String key) {
+								return (T) _cache.get(key);
 							}
 
-							public void setItem(String key, T value) {
-								_cache.put(key, value);
+							public <T> void setItem(String key, T value) {
+								_cache.put(key, (Object) value);
 							}
 
-							public T removeItem(String key) {
-								return _cache.remove(key);
+							public <T> T removeItem(String key) {
+								return (T) _cache.remove(key);
 							}
 						});
 			}

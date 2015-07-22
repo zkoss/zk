@@ -21,20 +21,20 @@ import java.io.Serializable;
  * @author jumperchen
  * @since 8.0.0
  */
-public interface Storage<T> extends Serializable {
+public interface Storage extends Serializable {
 	/**
 	 * Returns the value from the given key.
 	 */
-	public T getItem(String key);
+	public <T> T getItem(String key);
 
 	/**
 	 * Sets a data value with a given key
 	 */
-	public void setItem(String key, T value);
+	public <T> void setItem(String key, T value);
 
 	/**
 	 * Removes the value from the given key, if any.
 	 * @return a removed value or null
 	 */
-	public T removeItem(String key);
+	public <T> T removeItem(String key);
 }
