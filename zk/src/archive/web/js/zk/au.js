@@ -585,7 +585,7 @@ zAu = {
 	send: function (aureq, timeout) {
 		//ZK-2790: when unload event is triggered, the desktop is destroyed
 		//we shouldn't send request back to server
-		if (zk.unloading)
+		if (zk.unloading && zk.rmDesktoping) //it's safer to check if both zk.unloading and zk.rmDesktoping are true
 			return;
 		
 		if (timeout < 0)
