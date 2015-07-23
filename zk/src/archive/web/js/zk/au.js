@@ -28,6 +28,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		_portrait = {'0': true, '180': true}, //default portrait definition
 		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation]; //default orientation
+		_aftAuResp = []; //store callbacks to be triggered when au is back
 	
 	// Checks whether to turn off the progress prompt
 	function checkProgressing() {
@@ -293,6 +294,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			req = setting.xhr();
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		try {
+			zk.ausending = true;
 			req.onreadystatechange = onResponseReady;
 			req.open('POST', reqInf.uri, true);
 			req.setRequestHeader('Content-Type', setting.contentType);
@@ -376,6 +378,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				}
 					
 			}
+			zk.ausending = false;
+            zk.doAfterAuResponse();
 		}
 		if (ex)
 			throw ex;
@@ -1322,15 +1326,17 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	/** Removes the busy message covering the whole browser.
 	 */
 	clearBusy: function (uuid) {
-		var w = uuid ? Widget.$(uuid): null,
-			efs = w ? w.effects_: null;
-		if (efs && efs.showBusy) {
-			efs.showBusy.destroy();
-			delete efs.showBusy;
-		}
+		zk.delayFunction(uuid, function () {
+			var w = uuid ? Widget.$(uuid): null,
+				efs = w ? w.effects_: null;
+			if (efs && efs.showBusy) {
+				efs.showBusy.destroy();
+				delete efs.showBusy;
+			}
 
-		if (!uuid)
-			zUtl.destroyProgressbox('zk_showBusy', {busy:true}); //since user might want to show diff msg
+			if (!uuid)
+				zUtl.destroyProgressbox('zk_showBusy', {busy:true}); //since user might want to show diff msg
+		});
 	},
 	/** Closes the all error messages related to the specified widgets.
 	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
@@ -1342,11 +1348,15 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	clearWrongValue: function () {
 		for (var i = arguments.length; i--;) {
 			var wgt = Widget.$(arguments[i]);
-			if (wgt)
-				if (wgt.clearErrorMessage)
-					wgt.clearErrorMessage();
-				else
-					zAu.wrongValue_(wgt, false);
+			if (wgt) {
+				var toClearErrMsg = function (w) {
+					return function() {
+						if (w.clearErrorMessage) w.clearErrorMessage();
+						else zAu.wrongValue_(w, false);
+					}
+				};
+				zk.delayFunction(wgt.uuid, toClearErrMsg(wgt));
+			}
 		}
 	},
 	/** Shows the error messages for the specified widgets.
@@ -1605,6 +1615,25 @@ zAu.cmd1 = /*prototype*/ {
 	resizeWgt: function (wgt) {
 		zUtl.fireSized(wgt, 1); //force cleanup
 	}
+};
+/** @partial zk
+ */
+//@{
+    /** Adds a function that will be executed after onResponse events are done.
+     * That means, after au responses, the function added in the afterAuResponse() will be invoked
+     * @param Function fn the function to execute after au responses
+     * @since 7.0.6
+     */
+	//afterAuResponse: function () {}
+//@};
+zk.afterAuResponse = function (fn) {
+    if (fn)
+        _aftAuResp.push(fn);
+};
+zk.doAfterAuResponse = function () {
+    for (var fn; fn = _aftAuResp.shift();) {
+        fn();
+    }
 };
 })();
 
