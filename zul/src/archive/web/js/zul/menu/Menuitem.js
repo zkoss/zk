@@ -275,7 +275,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!this._canActivate(evt)) return;
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			else
+			else if (!zk.ie || zk.ie > 10)
 				this._uplder.openFileDialog();
 
 			var topmost = this.isTopmost(),
