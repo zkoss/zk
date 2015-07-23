@@ -464,6 +464,7 @@ span.z-upload input {
 	z-index: -1; margin: 0; padding: 0;
 	opacity: 0;
 	filter: alpha(opacity=0); <%-- IE --%>
+	<c:if test="${zk.ie <= 10}">z-index:1;</c:if>
 }
 .z-upload-icon {
 	overflow: hidden;
