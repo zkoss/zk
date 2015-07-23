@@ -58,6 +58,7 @@ ZK 7.0.6
   ZK-2701: serialization callbacks called multiple times
   ZK-2812: onOpen event listener didn't trigger when using GroupsModel
   ZK-2825: Looping javascript array should not include zk defined function
+  ZK-2818: Busy message cannot be cleared under server push
 
 * Upgrade Notes
 
