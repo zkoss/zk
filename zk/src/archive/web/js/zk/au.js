@@ -1326,17 +1326,17 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	/** Removes the busy message covering the whole browser.
 	 */
 	clearBusy: function (uuid) {
-		zk.delayFunction(uuid, function () {
-			var w = uuid ? Widget.$(uuid): null,
-				efs = w ? w.effects_: null;
-			if (efs && efs.showBusy) {
-				efs.showBusy.destroy();
-				delete efs.showBusy;
-			}
-
-			if (!uuid)
-				zUtl.destroyProgressbox('zk_showBusy', {busy:true}); //since user might want to show diff msg
-		});
+		if (uuid) {
+			zk.delayFunction(uuid, function () {
+				var w = Widget.$(uuid),
+					efs = w ? w.effects_: null;
+				if (efs && efs.showBusy) {
+					efs.showBusy.destroy();
+					delete efs.showBusy;
+				}
+            });
+		} else
+			zUtl.destroyProgressbox('zk_showBusy', {busy:true}); //since user might want to show diff msg
 	},
 	/** Closes the all error messages related to the specified widgets.
 	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
