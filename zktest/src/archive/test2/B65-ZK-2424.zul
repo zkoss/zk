@@ -1,16 +1,17 @@
 <zk>
 	<window>
 		<label multiline="true">
-			Mouse hover to the fileupload button, should pop up the tooltiptext
+			1.Mouse hover to the fileupload button, should pop up the tooltiptext
+			2.Upload a file, you should see the file name in log. 
 		</label>
-		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" />
+		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="Clients.log(event.getMedia().getName())" />
 		<menubar width="200px" scrollable="true">
 			<menu label="Menu1">
 				<menupopup>
-				    <menuitem upload="true" label="Customized Attach" onUpload="" />
+				    <menuitem upload="true" label="Customized Attach - Fileupload" onUpload="Clients.log(event.getMedia().getName())" />
 				</menupopup>
 			</menu>
 		</menubar>
-		<toolbarbutton upload="true" label="Fileupload" onUpload="" />
+		<toolbarbutton upload="true" label="Fileupload" onUpload="Clients.log(event.getMedia().getName())" />
 	</window>
 </zk>
