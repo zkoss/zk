@@ -1921,22 +1921,28 @@ w:use="foo.MyWindow"&gt;
 		for (Map.Entry<String, Integer> me: getClientEvents().entrySet()) {
 			final String evtnm = me.getKey();
 			final int flags = me.getValue().intValue();
+			boolean isImportant = false;
+			boolean isListened = false;
 			if ((flags & CE_IMPORTANT) != 0) {
 				if (shallHandleImportant == null)
 					shallHandleImportant = Boolean.valueOf(
 						Utils.markClientInfoPerDesktop(desktop, getWidgetClass()));
 				if (shallHandleImportant.booleanValue())
 					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
+				isImportant = true;
 			}
-			if ((flags & CE_DUPLICATE_IGNORE) != 0) {
+			if (Events.isListened(this, evtnm, false)) {
+				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
+				//$onClick and so on
+				isListened = true;
+			}
+			//only render the following two types when event flag is important or listened
+			if ((flags & CE_DUPLICATE_IGNORE) != 0 && (isImportant || isListened)) {
 				renderer.render("$$0" + evtnm, true);
 			}
-			if ((flags & CE_REPEAT_IGNORE) != 0) {
+			if ((flags & CE_REPEAT_IGNORE) != 0 && (isImportant || isListened)) {
 				renderer.render("$$1" + evtnm, true);
 			}
-			if (Events.isListened(this, evtnm, false))
-				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
-					//$onClick and so on
 		}
 
 		if (_auxinf != null)
