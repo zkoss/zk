@@ -1850,7 +1850,7 @@ public class Tree extends MeshElement {
 	private void renderChildren0(Renderer renderer, Treechildren parent, Treeitem ti,
 			Object childNode, int i) throws Throwable {
 		renderer.render(ti, childNode, i);
-		Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
+		Object v = ti.getAttribute(Attributes.MODEL_RENDERAS);
 		if (v != null) {//a new item is created to replace the existent one
 			(ti = (Treeitem) v).setOpen(false);
 		}
@@ -2044,7 +2044,7 @@ public class Tree extends MeshElement {
 				final Treeitem nti = (Treeitem)items[0];
 				if (nti.getValue() == null) //template might set it
 					nti.setValue(node);
-				ti.setAttribute("org.zkoss.zul.model.renderAs", nti);
+				ti.setAttribute(Attributes.MODEL_RENDERAS, nti);
 					//indicate a new item is created to replace the existent one
 				ti.detach();
 			}
@@ -2073,7 +2073,7 @@ public class Tree extends MeshElement {
 						item.getTreerow().detach();
 					Treechildren tc = item.getTreechildren();
 					_renderer.render(item, node, index);
-					Object newTreeitem = item.getAttribute("org.zkoss.zul.model.renderAs");
+					Object newTreeitem = item.getAttribute(Attributes.MODEL_RENDERAS);
 					if (newTreeitem instanceof Treeitem) {
 						Treeitem newItem = ((Treeitem)newTreeitem);
 						// B65-ZK-1765 : Add new Tree node cause Null Pointer Exception (treechildren is null, in case of a leaf node)
@@ -2233,7 +2233,7 @@ public class Tree extends MeshElement {
 			renderChildren(renderer, tc, node);
 		}
 
-		Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+		Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 		if (v != null) //a new item is created to replace the existent one
 			(item = (Treeitem)v).setOpen(false);
 		item.setLoaded(true);
@@ -2497,6 +2497,14 @@ public class Tree extends MeshElement {
 		if (shouldInvalidate) invalidate();
 	}
 	
+	private boolean isAllRendered() {
+		for (Treeitem item : getItems()) {
+			if (!item.isRendered() || !item.isLoaded())
+				return false;
+		}
+		return true;
+	}
+	
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -2552,7 +2560,7 @@ public class Tree extends MeshElement {
 						((TreeSelectableModel)_model).clearSelection();
 				}
 				
-				if (!_multiple || (!paging && (curSeldItems == null || curSeldItems.size() <= 1))) {
+				if (!_multiple || (!paging && isAllRendered() && (curSeldItems == null || curSeldItems.size() <= 1))) {
 					final Treeitem item =
 							curSeldItems != null && curSeldItems.size() > 0 ?
 								curSeldItems.iterator().next(): null;

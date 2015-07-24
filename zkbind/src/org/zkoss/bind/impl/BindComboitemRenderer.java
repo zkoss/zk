@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
@@ -137,7 +138,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			
 			if (nci.getValue() == null) //template might set it
 				nci.setValue(data);
-			item.setAttribute("org.zkoss.zul.model.renderAs", nci);
+			item.setAttribute(Attributes.MODEL_RENDERAS, nci);
 				//indicate a new item is created to replace the existent one
 			item.detach();
 			

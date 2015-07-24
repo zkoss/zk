@@ -588,6 +588,11 @@ zAu = {
 	 * be shown if an error occurs.
 	 */
 	send: function (aureq, timeout) {
+		//ZK-2790: when unload event is triggered, the desktop is destroyed
+		//we shouldn't send request back to server
+		if (zk.unloading && zk.rmDesktoping) //it's safer to check if both zk.unloading and zk.rmDesktoping are true
+			return;
+		
 		if (timeout < 0)
 			aureq.opts = zk.copy(aureq.opts, {defer: true});
 
@@ -1277,7 +1282,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	showNotification: function (msg, type, pid, ref, pos, off, dur, closable) {
 		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
 		if (notif) {
-			notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable});
+			var opts = {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable};
+			//ZK-2687, show notif after zAu.cmd0.scrollIntoView
+			zk.delayFunction(ref ? ref.uuid : 'nouuid', function () {
+				notif.show(msg, pid, opts);
+			});
 		} else {
 			// TODO: provide a hook to customize
 			jq.alert(msg); // fall back to alert when zul is not available
@@ -1302,10 +1311,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (!uuid)
 			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy:true});
 		else if (w) {
-			w.effects_.showBusy = new zk.eff.Mask( {
-				id: w.uuid + '-shby',
-				anchor: w.$n(),
-				message: msg
+			zk.delayFunction(uuid, function () {
+				w.effects_.showBusy = new zk.eff.Mask( {
+					id: w.uuid + '-shby',
+					anchor: w.$n(),
+					message: msg
+				});
 			});
 		}
 	},
@@ -1315,14 +1326,16 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	/** Removes the busy message covering the whole browser.
 	 */
 	clearBusy: function (uuid) {
-		var w = uuid ? Widget.$(uuid): null,
-			efs = w ? w.effects_: null;
-		if (efs && efs.showBusy) {
-			efs.showBusy.destroy();
-			delete efs.showBusy;
-		}
-
-		if (!uuid)
+		if (uuid) {
+			zk.delayFunction(uuid, function () {
+				var w = Widget.$(uuid),
+					efs = w ? w.effects_: null;
+				if (efs && efs.showBusy) {
+					efs.showBusy.destroy();
+					delete efs.showBusy;
+				}
+            });
+		} else
 			zUtl.destroyProgressbox('zk_showBusy', {busy:true}); //since user might want to show diff msg
 	},
 	/** Closes the all error messages related to the specified widgets.
@@ -1335,11 +1348,15 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	clearWrongValue: function () {
 		for (var i = arguments.length; i--;) {
 			var wgt = Widget.$(arguments[i]);
-			if (wgt)
-				if (wgt.clearErrorMessage)
-					wgt.clearErrorMessage();
-				else
-					zAu.wrongValue_(wgt, false);
+			if (wgt) {
+				var toClearErrMsg = function (w) {
+					return function() {
+						if (w.clearErrorMessage) w.clearErrorMessage();
+						else zAu.wrongValue_(w, false);
+					}
+				};
+				zk.delayFunction(wgt.uuid, toClearErrMsg(wgt));
+			}
 		}
 	},
 	/** Shows the error messages for the specified widgets.
@@ -1352,23 +1369,24 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @see #clearWrongValue
 	 */
 	wrongValue: function () {
-		var args = arguments,
-			func = function () {
-				for (var i = 0, len = args.length - 1; i < len; i += 2) {
-					var uuid = args[i], msg = args[i + 1],
-						wgt = Widget.$(uuid);
-					if (wgt) {
-						if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
-						else zAu.wrongValue_(wgt, msg);
-					} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
-						jq.alert(msg);
-				}
-			};
+		var args = arguments;
+		for (var i = 0, len = args.length - 1; i < len; i += 2) {
+			var uuid = args[i], msg = args[i + 1],
+				wgt = Widget.$(uuid);
+			if (wgt) {
+				//ZK-2687: create a closure to record the current wgt
+				var toSetErrMsg = function (w, m) {
+					return function () {
+						if (w.setErrorMessage) w.setErrorMessage(m);
+						else zAu.wrongValue_(w, m);
+					}
+				};
+				zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
+			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
+				jq.alert(msg);
+		}
         // for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
-		if (this.__delay__) 
-			setTimeout(func, 100);
-		else
-			func();
+		// has been removed since 7.0.6
 	},
 	/** Submit a form.
 	 * This method looks for the widget first. If found and the widget
@@ -1391,12 +1409,20 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the DOM element.
 	 */
 	scrollIntoView: function (id) {
-		this.__delay__ = setTimeout(function () {
-			var w = Widget.$(id);
-			if (w) w.scrollIntoView();
-			else zk(id).scrollIntoView();
-			this.__delay__ = false;
-		}, 50);
+		if (!id) return;
+		var w = Widget.$(id);
+		if (w) {
+			zk.delayFunction(w.uuid, function () {
+				w.scrollIntoView();
+			});
+		} else {
+			var zkjq = zk(id);
+			if (zkjq.$()) {
+				zk.delayFunction(zkjq.$().uuid, function () {
+					zkjq.scrollIntoView();
+				});
+			}
+		}
 	},
 	/**
 	 * Loads a JavaScript file and execute it.
@@ -1622,7 +1648,7 @@ zAu.cmd1 = /*prototype*/ {
     /** Adds a function that will be executed after onResponse events are done.
      * That means, after au responses, the function added in the afterAuResponse() will be invoked
      * @param Function fn the function to execute after au responses
-     * @since 8.0.0
+     * @since 7.0.6
      */
 	//afterAuResponse: function () {}
 //@};

@@ -24,10 +24,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _reposition(db, silent) {
 		if (!db.$n()) return;
 		var pp = db.$n('pp'),
+			n = db.$n(),
 			inp = db.getInputNode();
 
 		if(pp) {
-			zk(pp).position(inp, 'after_start');
+			zk(pp).position(n, 'after_start', {dodgeRef: n});
 			db._pop.syncShadow();
 			if (!silent)
 				zk(inp).focus();
@@ -565,6 +566,19 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			pp = db.$n('pp');
 
 		if (!pp || !zk(pp).isVisible()) return;
+
+		// firefox only
+		try {
+			if (zk.ff && zk.currentFocus) {
+				var n = zk.currentFocus.getInputNode ?
+						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
+				if (jq.nodeName(n, "input"))
+					jq(n).blur(); // trigger a missing blur event.
+			}
+		} catch (e) {
+			// do nothing
+		}
+		
 		if (this._shadow) {
 			// B65-ZK-1904: Make shadow behavior the same as ComboWidget
 			this._shadow.destroy();
@@ -618,8 +632,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd;
 		}
-		var inp = db.getInputNode();
-		zk(pp).position(inp, 'after_start');
+		var inp = db.getInputNode(),
+			dbEl = db.$n();
+		zk(pp).position(dbEl, 'after_start', {dodgeRef: dbEl});
 		delete db._shortcut;
 		
 		var self = this;

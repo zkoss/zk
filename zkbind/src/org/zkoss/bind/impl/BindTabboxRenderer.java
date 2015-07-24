@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelArray;
@@ -129,7 +130,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			
 			if (ntab.getValue() == null) //template might set it
 				ntab.setValue(data);
-			item.setAttribute("org.zkoss.zul.model.renderAs", ntab);
+			item.setAttribute(Attributes.MODEL_RENDERAS, ntab);
 				//indicate a new item is created to replace the existent one
 			item.detach();
 		}
@@ -220,7 +221,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			//add template dependency
 			addTemplateTracking(tabpanels, ntabpanel, data, index, size);
 			
-			item.setAttribute("org.zkoss.zul.model.renderAs", ntabpanel);
+			item.setAttribute(Attributes.MODEL_RENDERAS, ntabpanel);
 				//indicate a new item is created to replace the existent one
 			item.detach();
 		}

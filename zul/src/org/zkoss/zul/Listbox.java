@@ -2695,7 +2695,7 @@ public class Listbox extends MeshElement {
 					m.setAccessible(true);
 					m.invoke(_renderer, new Object[] {item, value});
 				}
-				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new listitem is created to replace the existent one
 					item = (Listitem)v;
 			} catch (Throwable ex) {
@@ -3494,12 +3494,15 @@ public class Listbox extends MeshElement {
 			
 			if (curSeldItems == null)
 				curSeldItems = new HashSet<Listitem>(); //just in case
+			
+			int start = -1;
+			int end = -1;
 			if (_rod) { // Bug: ZK-592
 				Map<String, Object> m = cast((Map) data.get("range"));
 				if (m != null) {
 					curSeldItems.addAll(_selItems); // keep other selected items.
-					int start = AuRequests.getInt(m, "start", -1);
-					int end = AuRequests.getInt(m, "end", -1);
+					start = AuRequests.getInt(m, "start", -1);
+					end = AuRequests.getInt(m, "end", -1);
 					for (Iterator<Listitem> it = _items.iterator(); it.hasNext();) {
 						Listitem item = it.next();
 						int index = item.getIndex();
@@ -3537,13 +3540,17 @@ public class Listbox extends MeshElement {
 						getSelectableModel().setSelection(selObjs);
 					}
 				} else {
-
 					for (final Listitem item: curSeldItems) {
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
-							if (smodel != null)
+							if (smodel != null) //still have to add selection if not multiple select
 								smodel.addToSelection(_model.getElementAt(item.getIndex()));
 						}
+					}
+					while (start >= 0 && end >= 0 && start <= end) {
+						//ZK-2804: add those items not in _items as selected
+						if (smodel != null)
+							smodel.addToSelection(_model.getElementAt(start++));
 					}
 					for (final Listitem item: prevSeldItems) {
 						if (!curSeldItems.contains(item)) {

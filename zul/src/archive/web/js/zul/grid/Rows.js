@@ -156,6 +156,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tbody', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tbody>');
+	},
+	focus_: function () { //ZK-2664: Remove a Grid's row and first row gets focus
 	}
 });
 })();

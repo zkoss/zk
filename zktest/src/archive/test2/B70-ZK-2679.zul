@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2679.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 30 15:43:02 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window width="100%" height="100%" border="normal" title="ZK ${desktop.webApp.version}">
+	<label multiline="true">
+	1. Open zul page in IE version &lt;= 10
+	2. Click the calendar icon to open the calendar control
+	3. Click the previous or next arrow
+	3.1 click menuitem
+	4. you won't see "invoke beforeUnload" log message
+	</label>
+    <script type="text/javascript"><![CDATA[
+        zk.afterMount(function () {
+            zk.beforeUnload(function() {
+                zk.log("invoke beforeUnload") 
+            });
+        });
+    ]]></script>
+    <datebox />
+	<menubar>
+		<menuitem label="item" autocheck="true"/>
+	</menubar>
+</window>

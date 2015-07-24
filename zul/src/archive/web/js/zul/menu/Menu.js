@@ -371,6 +371,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		} else {
 			this._showContentHandler();
 		}
+		evt.stop();
 	},
 	doMouseOver_: function () {
 		if (!this.isTopmost()) {

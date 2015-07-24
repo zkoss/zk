@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2711.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 9, 2015  16:00:29 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout>
+		<label multiline="true">
+    		1. use ipad and safari
+    		2. click input to let keyboard appear
+    		3. click combobox button and the popup should be in correct position 
+		</label>
+		<separator spacing="100px"></separator>
+		<combobox>
+			<comboitem label="Comboitem 1" />
+			<comboitem label="Comboitem 2" />
+			<comboitem label="Comboitem 3" />
+		</combobox>
+		<datebox />
+		<timebox />
+	 </vlayout>
+</zk>

@@ -582,6 +582,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onSize: function () {
 		var wgt = this;
+		
+		// Bug ZK-2784 we should reset the height of the target before doing children's onSize
+		if (this._fixBarHeight && this.firstChild) {
+			var child = this.firstChild.$n();
+			if (child)
+				child.style.height = '';
+		}
+		
 		setTimeout(function () {
 			if (wgt.desktop) {
 				// ZK-2217: should init scrollbar if the cave first child exists
@@ -625,6 +633,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					if (c.offsetHeight);
 					
 					cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+					this._fixBarHeight = true;
+				} else {
+					this._fixBarHeight = false;
 				}
 				bar.scroller = c;
 				bar.syncSize(showBar);

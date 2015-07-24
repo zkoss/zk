@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2717.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun  5 16:31:54 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+1. open this page with mobile devices
+2. click combo button
+3. change the orientation many times
+4. the position of popup should always be at the bottom
+</label>
+<combobox>
+    <comboitem label="Item 1"/>
+    <comboitem label="Item 2"/>
+    <comboitem label="Item 3"/>
+</combobox>
+</zk>

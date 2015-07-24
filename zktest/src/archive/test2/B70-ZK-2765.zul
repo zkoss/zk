@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2765.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 29 17:25:28 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window border="normal" title="hello" onClientInfo="changeOrientation(event)">
+	<label multiline="true">
+	1. open each component's popup in mobile devices (especially nexus 7)
+	2. change orientation several times
+	3. the popup should always appear at the bottom of screen
+	</label>
+	<zscript><![CDATA[
+	void changeOrientation(ClientInfoEvent event) {
+		System.out.println(event.getOrientation());
+	}
+	]]></zscript>
+	<vlayout>
+		<combobox>
+		    <comboitem label="Item 1"/>
+		    <comboitem label="Item 2"/>
+		    <comboitem label="Item 3"/>
+		</combobox>
+		<timebox />
+		<datebox format="dd/MM/yyyy" />
+	</vlayout>
+</window>

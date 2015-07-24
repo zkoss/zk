@@ -1363,7 +1363,8 @@ zk.log('value is", value);
 		jq.browser = browser;
 	}
 	var browser = jq.browser,
-		agent = zk.agent = navigator.userAgent.toLowerCase();
+		agent = zk.agent = navigator.userAgent.toLowerCase(),
+		iosver;
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla 
 		&& (agent.indexOf('trident') < 0) && _ver(browser.version);
@@ -1372,7 +1373,9 @@ zk.log('value is", value);
 	zk.webkit = browser.webkit;
 	zk.chrome = browser.chrome;
 	zk.safari = browser.webkit && !zk.chrome; // safari only
-	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent);
+	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent) && 
+		//ZK-2245: add version info to zk.ios
+		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '');
 	zk.android = zk.webkit && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;

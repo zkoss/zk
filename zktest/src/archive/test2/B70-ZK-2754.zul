@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2754.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 9, 2015  16:00:29 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click every button.You should see all button work.
+	</label>
+	<div apply="org.zkoss.zktest.test2.B70_ZK_2754_Composer">
+	    <button id="publish1">publish to queue 1</button>
+	    <button id="publish2">publish to queue 2</button>
+	    
+	    <iframe src="B70-ZK-2754-1.zul"/>
+	    <label id="label1"/>
+	    <label id="label2"/>
+	</div>
+</zk>

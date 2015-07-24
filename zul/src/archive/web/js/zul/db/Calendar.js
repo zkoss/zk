@@ -612,6 +612,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (jq(node).attr('disabled'))
 			return;
 		this._shiftView(jq(node).hasClass(this.$s('left')) ? -1 : 1);
+		//ZK-2679: prevent default behavior of clicking anchor
+		evt.stop();
 	},
 	_clickToday: function () {
 		this.setValue(zUtl.today(this.parent));

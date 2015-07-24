@@ -71,17 +71,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (parent.eheadtbl && parent._nativebar) {
 			var cells = parent._getFirstRowCells(parent.eheadrows),
 				totalcols = cells.length,
+				cellsSize = totalcols,
 				columns = wgt._columns,
 				leftWidth = 0;
 			
 			//B70-ZK-2553: one may specify frozen without any real column
-			if (!cells || cells.length <= 0) {
+			if (!cells || cellsSize <= 0) {
 				//no need to do the following computation since there is no any column
 				return;
 			}
 			
+			//ZK-2776: don't take hidden column, like setVisible(false), into account
+			for (var hdcol = parent.ehdfaker.firstChild; hdcol; hdcol = hdcol.nextSibling) {
+				var style = hdcol.style;
+				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
+					totalcols -= 1;
+			}
 			for (var i = 0; i < columns; i++)
-				leftWidth += cells[i].offsetWidth;
+					leftWidth += cells[i].offsetWidth;
 			
 			parent._deleteFakeRow(parent.eheadrows);
 			
@@ -355,9 +362,14 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					shallUpdate = false,
 					cellWidth;
 				
+				//ZK-2776, once a column is hidden, there is an additional style
+				var style = n.style;
+				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
+					continue; //skip column which is hide
+				
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ? 
-							(zk.ie ? jq(n).width() : n.offsetWidth) // Bug ZK-2690
+							(zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) // Bug ZK-2690
 							: 0,
 						nativebar = mesh._nativebar;
 					// ZK-2071: nativebar behavior should be same as fakebar
@@ -370,9 +382,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				} else if (force ||
 						 // Bug ZK-2690
-						((zk.ie ? jq(n).width() : n.offsetWidth) != 0)) { //hide
+						((zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
-					hdWgt._origWd = hdWgt._origWd || faker.style.width;
+					//ZK-2776: consider faker's width first for layout consistent
+					hdWgt._origWd = faker.style.width || hdWgt._origWd;
 					cellWidth = '0px';
 					shallUpdate = true;
 				}

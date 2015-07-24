@@ -667,13 +667,41 @@ zjq.prototype = {
 						c = _scrlIntoView(p, n, c, true);
 				} else {
 					// use browser's scrollIntoView() method instead of ours for F70-ZK-1924.zul
-					setTimeout(function () {
+					zk.delayFunction(this.$().uuid, function () {
 						n.scrollIntoView();
-					}, 20);
+					}, {urgent: true});
 				}
 			}
 		}
 		return this;
+	},
+	/**
+	 * Checks whether the element is shown in the current viewport (consider both native and fake scrollbar).
+	 * @return boolean if false, it means the element is not shown.
+	 * @since 7.0.6
+	 */
+	isRealScrollIntoView: function () {
+		var wgt = this.$(),
+			desktop = wgt.desktop,
+			p = wgt.parent,
+			n = this.jq[0],
+			bar = null, 
+			inView = true;
+
+		// ZK-2069: check whether the input is shown in parents' viewport.
+		if (!zk.ie8_) // fine tune for ie8
+			while (p && p != desktop) {
+				bar = p._scrollbar;
+				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+					inView = bar.isScrollIntoView(n);
+					if (!inView)
+						return inView;
+				}
+				bar = null;
+				p = p.parent;
+			}
+		// ZK-2069: should check native and fake scrollbar case
+		return inView && this.isScrollIntoView(true);
 	},
 	/**
 	 * Checks whether the element is shown in the current viewport.
@@ -719,18 +747,10 @@ zjq.prototype = {
 				var oels = _overflowElement(this, recursive),
 					inView = true;
 				for (var i = 0; i < oels.length; i++) {
-					// ZK-2619 : ignore when its parent is page
+					// ZK-2619 : Errorbox not shown when WrongValueException is thrown on a multiline textbox
 					var oel = oels[i],
-					    eqX = this.jq[0] == oel[0],
-					    eqY = this.jq[0] == oel[1],
-					    nodeX = zk(eqX ? oel[0].parentNode : oel[0]),
-					    nodeY = zk(eqY ? oel[1].parentNode : oel[1]),
-					    pW;
-					if (eqX && (pW = nodeX.$()) && pW.$instanceof(zk.Page)) continue;
-					if (eqY && (pW = nodeY.$()) && pW.$instanceof(zk.Page)) continue;
-					var lex = nodeX.viewportOffset()[0],
-					    tey = nodeY.viewportOffset()[1];
-				
+						lex = zk(this.jq[0] == oel[0] ? oel[0] = oel[0].parentNode : oel[0]).viewportOffset()[0],
+						tey = zk(this.jq[0] == oel[1] ? oel[1] = oel[1].parentNode : oel[1]).viewportOffset()[1];
 					// scrollbar's viewport
 					inView = (x >= lex && x1 <= lex + oel[0].offsetWidth && y >= tey && y1 <= tey + oel[1].offsetHeight);
 					if (!inView)
@@ -1783,7 +1803,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	setSelectionRange: function (start, end) {
 		var inp = this.jq[0],
-			len = inp.value.length;
+			len = inp.value ? inp.value.length : 0; //ZK-2805
 		if (start == null || start < 0) start = 0;
 		if (start > len) start = len;
 		if (end == null || end > len) end = len;
@@ -2611,4 +2631,42 @@ zk.copy(jq.Event, {
 		return new zk.Event(target, 'on' + type, data, {}, evt);
 	}
 });
+zk.delayQue = {}; //key is uuid, value is array of pending functions
+/**
+ * Execute function related to specified widget after a while, 
+ * and will insure the execution order.
+ * @param String uuid wgt's uuid
+ * @param Function func a function to be executed
+ * @param Map opts [optional] the options. Allowed options:
+ * <ul>
+ * <li>int timeout: number of milliseconds to wait before executing the function. Default: 50</li>
+ * <li>boolean urgent: whether to execute function as soon as possible</li> 
+ * </ul>
+ * Note: timeout is only meaningful for the first function added to wgt
+ */
+zk.delayFunction = function (uuid, func, opts) {
+	if (uuid && typeof func == 'function') {
+		if (!opts)
+			opts = {};
+		var timeout = opts.timeout,
+			urgent = opts.urgent, //indicate the func should be executed as soon as possible
+			idQue = zk.delayQue[uuid];
+		if (!idQue || !idQue.length) { //execute directly
+			zk.delayQue[uuid] = idQue = [func];
+			setTimeout(function () {
+				var pendFunc = idQue.shift(); 
+				while (pendFunc) {
+					pendFunc();
+					pendFunc = idQue.shift();
+				}
+			}, timeout >= 0 ? timeout : 50);
+		} else { //put func to queue
+			if (urgent)
+				idQue.splice(0, 0, func);
+			else
+				idQue.push(func);
+		}
+	}
+};
+
 })(document, window);

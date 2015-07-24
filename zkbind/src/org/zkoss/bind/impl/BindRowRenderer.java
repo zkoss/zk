@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
 import org.zkoss.zul.Groupfoot;
@@ -137,7 +138,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			
 			if (nr.getValue() == null) //template might set it
 				nr.setValue(data);
-			row.setAttribute("org.zkoss.zul.model.renderAs", nr);
+			row.setAttribute(Attributes.MODEL_RENDERAS, nr);
 				//indicate a new row is created to replace the existent one
 			row.detach();
 		}

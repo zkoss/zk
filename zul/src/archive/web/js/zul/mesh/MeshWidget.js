@@ -461,7 +461,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @see #getSpan
 		 */
 		span: function(v) {
-			var x = (true === v || 'true' == v) ? -65500 : (false === v || 'false' == v) ? 0 : (zk.parseInt(v) + 1);
+			//ZK-2776: if span="false", !isSpan() will return false, because "false" is string not boolean
+			var isTrue = true === v || 'true' == v;
+			var isFalse = false === v || 'false' == v;
+			this._span = isTrue ? true : isFalse ? false : v;
+			
+			var x = isTrue ? -65500 : isFalse ? 0 : (zk.parseInt(v) + 1);
 			this._nspan = x < 0 && x != -65500 ? 0 : x;
 			this.rerender();
 		},
@@ -976,6 +981,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var items = [],
 			min = zul.mesh.Scrollbar.getScrollPosV(this),
 			max = min + this.ebody.offsetHeight;
+		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden:true}),
 				len = rows.length, w; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
@@ -1523,10 +1529,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_adjMinWd(this);
 	},
 	_getFirstRowCells: function (tbody) {
-		if (tbody && tbody.rows && tbody.rows.length) {
-			var cells = tbody.rows[0].cells,
+		var rowsLength, tbodyrows;
+		if (tbody && (tbodyrows = tbody.rows) && (rowsLength = tbodyrows.length)) {
+			var cells = tbodyrows[0].cells,
 				length = cells.length,
 				ncols = 0;
+			//ZK-2752: find the first visible row
+			//keep the same behavior even there isn't any row visible to avoid other side effects
+			if (tbody.offsetHeight > 0) {
+				for (var i = 0; i < rowsLength; i++) {
+					if (jq(tbodyrows[i]).css('display') != 'none') {
+						cells = tbodyrows[i].cells;
+						length = cells.length;
+						break;
+					}
+				}
+			}
 			for (var i = 0; i < length; i++) {
 				var span = cells[i].colSpan;
 				ncols += span != 1 ? span : 1;
@@ -1540,9 +1558,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				for (var i = 0; i < ncols; i++)
 					out.push('<td></td>');
 				out.push('</tr>');
-				jq(tbody.rows[0]).before(out.join(''));
+				jq(tbodyrows[0]).before(out.join(''));
 				out = null;
-				return tbody.rows[0].cells;
+				return tbodyrows[0].cells;
 			}
 		}
 	},

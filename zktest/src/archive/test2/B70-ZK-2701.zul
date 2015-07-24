@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2701.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 15 13:02:28 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+		1. before open this page, set the following maven jetty config
+		<webAppConfig implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+			<!-- 						<defaultsDescriptor>${project.build.outputDirectory}/META-INF/webdefault.xml</defaultsDescriptor> -->
+			<contextPath>${jetty.contextRoot}</contextPath>
+			<sessionHandler implementation="org.eclipse.jetty.server.session.SessionHandler">
+				<sessionManager implementation="org.eclipse.jetty.server.session.HashSessionManager">
+					<storeDirectory>${project.basedir}/target/jetty-sessions</storeDirectory>
+					<idleSavePeriod>1</idleSavePeriod>
+				</sessionManager>
+			</sessionHandler>
+		</webAppConfig>
+		2. after serialization setting, execute "mvn jetty:run" and open this page and wait a few seconds
+		3. you should see console logs that both composer's passivation are called only one time
+	]]></label>
+	<window apply="org.zkoss.zktest.test2.B70_ZK_2701SC">
+		<button id="btn1" label="1"/>
+		<button id="btn2" label="2"/>
+		<button id="btn3" label="3"/>
+	</window>
+
+	<window apply="org.zkoss.zktest.test2.B70_ZK_2701GFC">
+		<button id="btn1" label="1"/>
+		<button id="btn2" label="2"/>
+		<button id="btn3" label="3"/>
+	</window>
+</zk>
