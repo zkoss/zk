@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2268-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu, Jul 23, 2015  3:47:34 PM, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window vflex="min" width="400px" position="center, center" closable="true" title="Test Modal Win">
+	<toolbarbutton label="Open Messagebox" autodisable="self">
+		<attribute name="onClick">
+			Messagebox.show("Test", "Test", Messagebox.OK, Messagebox.EXCLAMATION);
+		</attribute>
+	</toolbarbutton>
+	<button label="Open Messagebox" autodisable="self">
+		<attribute name="onClick">
+			Messagebox.show("Test", "Test", Messagebox.OK, Messagebox.EXCLAMATION);
+		</attribute>
+	</button>
+</window>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2268.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jul 23, 2015  3:47:34 PM, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window height="100%" width="100%" position="center, center">
+		<label multiline="true">
+			1.press button
+			2.press the two buttons (IE 8~10)
+			3.you should see the second popup messagebox on the topmost
+		</label>
+		<button label="Open Modal Window">
+			<attribute name="onClick">
+				((Window) Executions.createComponents("B70-ZK-2268-1.zul",self.getParent(),null)).doModal();
+			</attribute>
+		</button>
+	</window>
+</zk>

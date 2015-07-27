@@ -97,7 +97,19 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		    	return v;
 			}, 
 			function (v, opts) {
-				this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
+				var self = this,
+					doDisable = function() {
+						if (self.desktop) {
+							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+							if (self._upload)
+								v ? _cleanUpld(self) : _initUpld(self);
+						}
+					};
+
+				if (this._type == 'submit')
+					setTimeout(doDisable, 50);
+				else
+					doDisable();
 			}
 		],
 		/** Returns the href that the browser shall jump to, if an user clicks
