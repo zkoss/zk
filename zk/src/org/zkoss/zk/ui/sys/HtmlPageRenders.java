@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.sys;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,22 +28,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.lang.reflect.Field;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.html.HTMLs;
-import org.zkoss.lang.Classes;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
 import org.zkoss.io.Files;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.fn.ThemeFns;
-import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.device.Device;
@@ -59,7 +57,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.Includer;
-import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DataHandlerInfo;
@@ -610,6 +607,20 @@ public class HtmlPageRenders {
 				if (aupg) out.write('[');
 				else {
 					out.write(outSpecialJS(desktop));
+
+					// zkdh should run before zkmx()
+					WebApp webApp = WebApps.getCurrent();
+					Configuration configuration = webApp.getConfiguration();
+					Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
+					for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
+						DataHandlerInfo handler = me.getValue();
+						String script = handler.getScript();
+						String scriptUri = handler.getScriptUri();
+						if (scriptUri != null) {
+							script = Devices.loadJavaScript(exec, scriptUri);
+						}
+						out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
+					}
 					out.write(divRequired ? "zkmx(": "zkx(");
 				}
 			} else if (order > 0) //not first child
@@ -783,18 +794,7 @@ public class HtmlPageRenders {
 				}
 			}
 			out.write(");\n");
-			WebApp webApp = WebApps.getCurrent();
-			Configuration configuration = webApp.getConfiguration();
-			Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
-			for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
-				DataHandlerInfo handler = me.getValue();
-				String script = handler.getScript();
-				String scriptUri = handler.getScriptUri();
-				if (scriptUri != null) {
-					script = Devices.loadJavaScript(exec, scriptUri);
-				}
-				out.write("zkdh('" + me.getKey() + "', " + script + ");");
-			}
+
 			out.write(extra);
 		}
 	}
@@ -931,8 +931,22 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(comp.getPage(), out);
 			}
 
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\nzkmx(");
+			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\n");
 
+			// zkdh should run before zkmx()
+			WebApp webApp = WebApps.getCurrent();
+			Configuration configuration = webApp.getConfiguration();
+			Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
+			for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
+				DataHandlerInfo handler = me.getValue();
+				String script = handler.getScript();
+				String scriptUri = handler.getScriptUri();
+				if (scriptUri != null) {
+					script = Devices.loadJavaScript(exec, scriptUri);
+				}
+				out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
+			}
+			out.write("\nzkmx(");
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
 			else
