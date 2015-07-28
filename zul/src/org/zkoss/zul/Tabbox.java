@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 import java.util.Iterator;
 
+import org.zkoss.io.Serializables;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -101,7 +102,7 @@ public class Tabbox extends XulElement {
 	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
 	private transient TabboxRenderer<?> _renderer;
-	private TabboxEngine _engine;
+	private transient TabboxEngine _engine;
 	
 	public Tabbox() {
 		init();
@@ -734,12 +735,30 @@ public class Tabbox extends XulElement {
 	}
 
 	// -- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws java.io.IOException {
+		s.defaultWriteObject();
+
+		willSerialize(_model);
+		Serializables.smartWrite(s, _model);
+		willSerialize(_renderer);
+		Serializables.smartWrite(s, _renderer);
+	}
 	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
+		_model = (ListModel) s.readObject();
+		didDeserialize(_model);
+		_renderer = (TabboxRenderer) s.readObject();
+		didDeserialize(_renderer);
+
 		init();
 		afterUnmarshal(-1);
+
+		if (_model != null) {
+			initDataListener();
+		}
 	}
 
 	private class Listener implements EventListener<Event>, Deferrable {

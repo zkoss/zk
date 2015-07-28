@@ -59,7 +59,8 @@ ZK 7.0.6
   ZK-2812: onOpen event listener didn't trigger when using GroupsModel
   ZK-2825: Looping javascript array should not include zk defined function
   ZK-2818: Busy message cannot be cleared under server push
-  ZK-2268: Messagebox becomes hidden behind Modal window
+  ZK-2268: Messagebox becomes hidden behind Modal 
+  ZK-2829: TabboxEngineImpl not serializable
 
 * Upgrade Notes
 
