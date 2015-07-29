@@ -40,6 +40,12 @@ if [ ! -d "$folder2" ] && [ ! -f "$folder2" ] ; then
 fi
 
 maindir="$(pwd)"
+os="$(uname)"
+
+if [ $os == "Darwin" ]; then
+	maindir=$TMPDIR
+fi
+
 tmp1="checktmp1"
 tmp2="checktmp2"
 function checkFile {
@@ -55,7 +61,10 @@ function checkFile {
 function listFile {
 	for f in `ls | sort`; do
 		if [ ! -d "$f" ] ; then
-			checkFile "$f" "$1"
+			result=$(echo "$f" | awk '/.md5$/{print "yes"}')
+			if [ "$result" != "yes" ] ; then
+				checkFile "$f" "$1"
+			fi
 		else
 			cd "$f"
 			listFile "$1"
@@ -94,11 +103,19 @@ fi
 
 diff $tmp1.log $tmp2.log
 if [ $? != 0 ] ; then
-	TortoiseMerge.exe $tmp1.log $tmp2.log
+	if [ -f TortoiseMerge.exe ] ; then
+		TortoiseMerge.exe $tmp1.log $tmp2.log
+	elif [ $os == "Darwin" ]; then
+		opendiff $tmp1.log $tmp2.log
+	else 
+		vimdiff $tmp1.log $tmp2.log
+	fi
+
 else
 	echo "All files are matched!"
 fi
 
-
-rm $tmp1.log
-rm $tmp2.log
+if [ $os != "Darwin" ]; then
+	rm $tmp1.log
+	rm $tmp2.log
+fi
