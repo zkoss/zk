@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2807.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 28 11:04:32 CST 2015, Created by Christopher
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+	<label multiline="true">
+			1. All 3 buttons will change the underlying model color values to all red
+			2. changeColors button: all 3 "is red?" become true
+			3. changeColors workaround: all 3 "is red?" become true
+			4. changeColors workaround 2: all 3 "is red?" become true, only works in zk8 PE/EE
+	</label>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2807_ViewModel')"
+		validationMessages="@id('vmsgs')">
+		
+		<grid id="grid" model="@init(vm.cars)" width="500px">
+			<columns>
+				<column label="is red?"/>
+			</columns>
+			<template name="model">
+				<row>
+					<label value="@load(vm.isRed(each.color))"/>
+				</row>
+			</template>
+		</grid>
+		<button id="btn1" label="changeColors" onClick="@command('changeAllRed')"/>
+		<button label="changeColors workaround" onClick="@command('changeAllRedWorkAround')"/>
+		<button label="changeColors workaround 2" onClick="@command('changeAllRedWorkAround2')"/>
+	</div>
+</zk>
