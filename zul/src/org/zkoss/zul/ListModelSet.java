@@ -139,6 +139,21 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		}
 	}
 
+	/**
+	 * Updates the same element to trigger an event of {@link ListDataEvent#CONTENTS_CHANGED}.
+	 * @param element
+	 * @return true if the element exists
+	 * @since 8.0.0
+	 */
+	public boolean update(E element) {
+		int i = indexOf(element);
+		if (i >= 0) {
+			fireEvent(ListDataEvent.CONTENTS_CHANGED, i, i);
+			return true;
+		}
+		return false;
+	}
+
 	//-- Set --//
 	/**
 	 * This implementation optimized on the LinkedHashSet(which guarantees the sequence of the added item). 

@@ -161,7 +161,22 @@ implements Sortable<E>, List<E>, java.io.Serializable {
  		_list.add(index, element);
  		fireEvent(ListDataEvent.INTERVAL_ADDED, index, index);
  	}
- 	
+
+	/**
+	 * Updates the same element to trigger an event of {@link ListDataEvent#CONTENTS_CHANGED}.
+	 * @param element
+	 * @return true if the element exists
+	 * @since 8.0.0
+	 */
+	public boolean update(E element) {
+		int i = _list.indexOf(element);
+		if (i >= 0) {
+			fireEvent(ListDataEvent.CONTENTS_CHANGED, i, i);
+			return true;
+		}
+		return false;
+	}
+
 	public boolean add(E o) {
 		int i1 = _list.size();
 		boolean ret = _list.add(o);
