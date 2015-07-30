@@ -21,7 +21,7 @@ function zkpi(nm, wv) {
 //ZK JSP: page creation (backward compatible)
 function zkpb(pguid, dtid, contextURI, updateURI, reqURI, props) {
 	zkx([0, pguid,
-		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, ru: reqURI}),[]]);
+		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, ru: reqURI}),{},[]]);
 }
 //ZK JSP (useless; backward compatible)
 zkpe = zk.$void;
