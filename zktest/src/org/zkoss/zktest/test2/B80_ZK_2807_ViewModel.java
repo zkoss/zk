@@ -14,8 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.test2;
 
-import java.util.function.Consumer;
-
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -39,32 +37,26 @@ private ListModelList<Car> cars;
 	
 	@Command
 	public void changeAllRed() {
-		cars.forEach(new Consumer<Car>() {
-			public void accept(Car car) {
-				car.setColor("red");
-			}
-		});
+		for(Car car : cars){
+			car.setColor("red");
+		}
 		BindUtils.postNotifyChange(null, null, this, "isRed"); //notifying the method only does not work in ZK 8
 //		BindUtils.postNotifyChange(null, null, this, "isRed(each.color)"); //only this exact syntax works in ZK 8
 	}
 	
 	@Command
 	public void changeAllRedWorkAround() {
-		cars.forEach(new Consumer<Car>() {
-			public void accept(Car car) {
-				car.setColor("red");
-				BindUtils.postNotifyChange(null,  null, car, "color");
-			}
-		});
+		for(Car car : cars){
+			car.setColor("red");
+			BindUtils.postNotifyChange(null,  null, car, "color");
+		}
 	}
 	
 	@Command
 	public void changeAllRedWorkAround2() {
-		cars.forEach(new Consumer<Car>() {
-			public void accept(Car car) {
-				car.setColor("red");
-			}
-		});
+		for(Car car : cars){
+			car.setColor("red");
+		}
 //		BindUtils.postNotifyChange(null, null, this, "isRed"); //notifying the method only does not work in ZK 8
 		BindUtils.postNotifyChange(null, null, this, "isRed(each.color)"); //only this exact syntax works in ZK 8
 	}
