@@ -2100,7 +2100,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="navitem" />
 		</xs:choice>
-		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- navbar -->
