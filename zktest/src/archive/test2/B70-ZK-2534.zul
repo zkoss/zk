@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2534.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 30 16:54:47 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+List names = new ArrayList();
+	names.add("Jasmin");
+	names.add("David");
+	names.add("Richard");
+	names.add("Jean");
+	names.add("Norman");
+	names.add("Thomas");
+	names.add("Leonard");
+	names.add("Janine");
+	names.add("Daniel");
+	names.add("Michael");
+	names.add("Julia");
+	names.add("Vitali");
+	names.add("Katharina");
+	names.add("Marie");
+	names.add("Jenny");
+	names.add("Reinhard");
+	names.add("Christoph");
+	names.add("Heiko");
+	names.add("Ludwig");
+	names.add("Nico");
+	names.add("Rolf");
+	ListModelList model = new ListModelList(names);
+]]>
+</zscript>
+	<custom-attributes org.zkoss.zul.listbox.rod="false" />
+	<listbox model="${model}" rows="5" multiple="true" checkmark="true">
+		<listhead>
+			<listheader hflex="min" />
+			<listheader label="Name" />
+		</listhead>
+		<template name="model">
+			<listitem checkable="${forEachStatus.index % 2 eq 0}">
+				<listcell />
+				<listcell label="${each}" />
+			</listitem>
+		</template>
+	</listbox>
+</zk>
