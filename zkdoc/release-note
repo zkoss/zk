@@ -61,6 +61,7 @@ ZK 7.0.6
   ZK-2818: Busy message cannot be cleared under server push
   ZK-2268: Messagebox becomes hidden behind Modal 
   ZK-2829: TabboxEngineImpl not serializable
+  ZK-2832: Nav's selectedItem causes a JS error when the navitem is being invalidated
 
 * Upgrade Notes
 
