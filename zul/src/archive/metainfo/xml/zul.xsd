@@ -2126,6 +2126,7 @@
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="selected" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- navseparator -->
 	<xs:element name="navseparator" type="navseparatorType" />
