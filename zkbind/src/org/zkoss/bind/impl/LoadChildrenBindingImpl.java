@@ -43,7 +43,7 @@ import org.zkoss.zul.event.ListDataListener;
 public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		LoadChildrenBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-//	private Set<String> _doneDependsOn;
+	private Set<String> _doneDependsOn;
 	
 	public LoadChildrenBindingImpl(Binder binder, Component comp,
 		String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs,
@@ -157,13 +157,13 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 	 * Internal Use Only.
 	 */
 	public void addDependsOnTrackings(List<String> srcpath, String basepath, String[] props) {
-//		if (srcpath != null) {
-//			final String src = BindELContext.pathToString(srcpath);
-//			if (_doneDependsOn != null && _doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
-//				return;
-//			}
-//			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
-//		}
+		if (srcpath != null) {
+			final String src = BindELContext.pathToString(srcpath);
+			if (_doneDependsOn != null && _doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
+				return;
+			}
+			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
+		}
 
 		for(String prop : props) {
 			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2833.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug  3 09:25:27 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+	If you can see this page with any exception, the bug is fixed.
+	<window title="" border="normal" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2833VM')"
+		validationMessages="@id('vmsgs')">
+		
+		<textbox instant="true" value="@bind(vm.word)"/> 
+		&lt;-&gt;
+		<textbox instant="true" value="@bind(vm.reverse)"/>
+	</window>
+</zk>

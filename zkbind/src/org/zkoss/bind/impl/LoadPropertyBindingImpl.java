@@ -13,7 +13,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +38,7 @@ import org.zkoss.zk.ui.Component;
 public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-//	private Set<String> _doneDependsOn;
+	private Set<String> _doneDependsOn;
 	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
 	private final Class<?> _attrType;
 	
@@ -129,13 +128,13 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	 * Internal Use Only.
 	 */
 	public void addDependsOnTrackings(List<String> srcpath, String basepath, String[] props) {
-//		if (srcpath != null) {
-//			final String src = BindELContext.pathToString(srcpath);
-//			if (_doneDependsOn != null && _doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
-//				return;
-//			}
-//			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
-//		}
+		if (srcpath != null) {
+			final String src = BindELContext.pathToString(srcpath);
+			if (_doneDependsOn != null && _doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
+				return;
+			}
+			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
+		}
 		for(String prop : props) {
 			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);
 		}
