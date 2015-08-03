@@ -63,6 +63,7 @@ ZK 7.0.6
   ZK-2829: TabboxEngineImpl not serializable
   ZK-2832: Nav's selectedItem causes a JS error when the navitem is being invalidated
   ZK-2827: asynch invalidate() causing client error
+  ZK-2628: Combo item does not display icon
 
 * Upgrade Notes
 

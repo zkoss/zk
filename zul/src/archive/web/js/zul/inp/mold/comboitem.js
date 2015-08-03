@@ -13,9 +13,32 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<li', this.domAttrs_({text:true}), '><span class="',
-		this.$s('image'), '">', this.domImage_(), '</span><span class="',
-		this.$s('text'), '">', this.domLabel_());
+	out.push('<li', this.domAttrs_({text:true}), '>');
+
+	var icon = this.domIcon_(), img = this.domImage_();
+	if (img) {
+		if (icon) {
+			out.push('<span class="', this.$s('image'), '">', img, '</span><span class="',
+                    this.$s('icon'), '">', icon, '</span><span class="',
+					this.$s('text'), '">', this.domLabel_());
+		} else {
+			out.push('<span class="',
+					this.$s('image'), '">', img, '</span><span class="',
+					this.$s('text'), '">', this.domLabel_());
+		}
+	} else {
+		if (icon) {
+			out.push('<span class="',
+					this.$s('icon'), '">', icon, '</span><span class="',
+					this.$s('text'), '">', this.domLabel_());
+		} else {
+			// if no image specified, we still output the image for backward compatibility.
+			out.push('<span class="',
+            		this.$s('image'), '">', img, '</span><span class="',
+            		this.$s('text'), '">', this.domLabel_());
+		}
+	}
+
 
 	var v;
 	if (v = this._description)
