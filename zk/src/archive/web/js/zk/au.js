@@ -109,6 +109,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					return zAu.showError('ILLEGAL_RESPONSE', 'uuid required', cmd);
 
 				data[0] = Widget.$(data[0]); //might be null (such as rm)
+
+				// Bug ZK-2827
+				if (!data[0]) {
+					return;
+				}
+
 			} else {
 				//2. process zAu.cmd0
 				fn = zAu.cmd0[cmd];
