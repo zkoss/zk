@@ -1313,7 +1313,21 @@ zk.log('value is", value);
 				try {
 					dataValue = jq.parseJSON(dataValue);
 				} catch (e){}
-				fun.call(this, wgt, dataValue)
+				var dataHandlerService,
+					w = wgt;
+				for (; w ; w = w.parent) {
+					if (w['$ZKBINDER$']) {
+						if (!w._$binder) w._$binder = new zkbind.Binder(w, this);
+						dataHandlerService =  w._$binder;
+						break;
+					} else if (w['$ZKAUS$']) {
+						if (!w._$service) w._$service = new zk.Service(w, this);
+						dataHandlerService = w._$service;
+						break;
+					}
+				}
+				if (w && dataHandlerService) $.extend(this, dataHandlerService);
+				fun.call(this, wgt, dataValue);
 			}};
 		}
 		zk.error('not found: '+ name);

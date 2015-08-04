@@ -21,16 +21,11 @@ import static org.zkoss.lang.Generics.cast;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zkoss.idom.Attribute;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
@@ -742,12 +737,25 @@ public class ConfigParser {
 			List<String> depends = null;
 			if (!elements.isEmpty()) {
 				depends = new LinkedList<String>();
-				for (Iterator<Element> itt = el.getElements("depends").iterator();
-						itt.hasNext();) {
+				for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
 					depends.add(itt.next().getText(true));
 				}
 			}
-			config.addDataHandler(new DataHandlerInfo(dataName,script, scriptUri, depends, override));
+			elements = el.getElements("links");
+			List<Map<String, String>> links = null;
+			if (!elements.isEmpty()) {
+				links = new LinkedList<Map<String, String>>();
+				for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
+					Element e = itt.next();
+					List<Attribute> attrs = e.getAttributeItems();
+					if (attrs == null || attrs.isEmpty()) continue;
+					Map<String, String> attrMap = new LinkedHashMap<String, String>();
+					for (Attribute a : attrs)
+						attrMap.put(a.getName(), a.getValue());
+					links.add(attrMap);
+				}
+			}
+			config.addDataHandler(new DataHandlerInfo(dataName, script, scriptUri, depends, override, links));
 		}
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();

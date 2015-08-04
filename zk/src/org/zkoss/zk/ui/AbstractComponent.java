@@ -50,6 +50,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.au.out.AuEcho;
+import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -793,7 +794,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return _auxinf.domattrs.keySet();
 		return Collections.emptySet();
 	}
-
+	public String setClientDataAttribute(String name, String value) {
+		name = "data-" + name;
+		String old = setClientAttribute(name, value);
+		if (old != null) invalidate();
+		return old;
+	}
 	public Map<String, Object> getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:

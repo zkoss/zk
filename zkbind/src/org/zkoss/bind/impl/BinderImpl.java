@@ -439,7 +439,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if (commands != null) {
 			for (NotifyCommand nc : commands.value()) {
 				for (String cmd : nc.value()) {
-					_notifyCommands = AllocUtil.inst.putMap(_notifyCommands, cmd, command);
+					_notifyCommands = AllocUtil.inst.putMap(_notifyCommands, cmd, nc);
 				}
 			}
 		}
