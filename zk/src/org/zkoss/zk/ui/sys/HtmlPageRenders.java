@@ -634,7 +634,7 @@ public class HtmlPageRenders {
 					for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
 						DataHandlerInfo handler = me.getValue();
 						String script = handler.getScript();
-						String scriptUri = exec.encodeURL(handler.getScriptUri());
+						String scriptUri = handler.getScriptUri();
 						if (scriptUri != null) {
 							script = Devices.loadJavaScript(exec, scriptUri);
 						}
