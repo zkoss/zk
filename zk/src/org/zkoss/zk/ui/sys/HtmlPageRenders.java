@@ -342,7 +342,7 @@ public class HtmlPageRenders {
 			sb.append(s).append('\n');
 		
 		Map<String, DataHandlerInfo> dataHandlers = wapp.getConfiguration().getDataHandlers();
-		Set<String> depends = new HashSet<String>();
+		Set<String> depends = new LinkedHashSet<String>();
 		for (DataHandlerInfo info : dataHandlers.values()) {
 			List<String> depends2 = info.getDepends();
 			if (depends2 != null)
@@ -350,7 +350,7 @@ public class HtmlPageRenders {
 		}
 		for (String src : depends) {
 			sb.append("<script type=\"text/javascript\" src=\"")
-			.append(src)
+			.append(Executions.encodeURL(src))
 			.append("\" charset=\"UTF-8\"></script>\n");
 		}
 		return sb.toString();
@@ -395,6 +395,25 @@ public class HtmlPageRenders {
 			append(sb, ss, exec, null);
 
 		if (sb.length() > 0) sb.append('\n');
+
+		if (wapp == null) wapp = exec.getDesktop().getWebApp();
+		Map<String, DataHandlerInfo> dataHandlers = wapp.getConfiguration().getDataHandlers();
+		Set<Map<String, String>> links = new LinkedHashSet<Map<String, String>>();
+		for (DataHandlerInfo info : dataHandlers.values()) {
+			List<Map<String, String>> links2 = info.getLinks();
+			if (links2 != null)
+				links.addAll(links2);
+		}
+		for (Map<String, String> info : links) {
+			sb.append("\n<link");
+			for (Map.Entry<String, String> entry : info.entrySet()) {
+				if ("href".equals(entry.getKey()))
+					HTMLs.appendAttribute(sb, entry.getKey(), Executions.encodeURL(entry.getValue()), true);
+				else
+					HTMLs.appendAttribute(sb, entry.getKey(), entry.getValue(), true);
+			}
+			sb.append("/>");
+		}
 		return sb.toString();
 	}
 
@@ -615,7 +634,7 @@ public class HtmlPageRenders {
 					for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
 						DataHandlerInfo handler = me.getValue();
 						String script = handler.getScript();
-						String scriptUri = handler.getScriptUri();
+						String scriptUri = exec.encodeURL(handler.getScriptUri());
 						if (scriptUri != null) {
 							script = Devices.loadJavaScript(exec, scriptUri);
 						}
