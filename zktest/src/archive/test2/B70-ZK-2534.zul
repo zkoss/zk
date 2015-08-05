@@ -15,42 +15,75 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <zscript><![CDATA[
-List names = new ArrayList();
-	names.add("Jasmin");
-	names.add("David");
-	names.add("Richard");
-	names.add("Jean");
-	names.add("Norman");
-	names.add("Thomas");
-	names.add("Leonard");
-	names.add("Janine");
-	names.add("Daniel");
-	names.add("Michael");
-	names.add("Julia");
-	names.add("Vitali");
-	names.add("Katharina");
-	names.add("Marie");
-	names.add("Jenny");
-	names.add("Reinhard");
-	names.add("Christoph");
-	names.add("Heiko");
-	names.add("Ludwig");
-	names.add("Nico");
-	names.add("Rolf");
-	ListModelList model = new ListModelList(names);
+
 ]]>
 </zscript>
-	<custom-attributes org.zkoss.zul.listbox.rod="false" />
-	<listbox model="${model}" rows="5" multiple="true" checkmark="true">
-		<listhead>
-			<listheader hflex="min" />
-			<listheader label="Name" />
-		</listhead>
-		<template name="model">
-			<listitem checkable="${forEachStatus.index % 2 eq 0}">
-				<listcell />
-				<listcell label="${each}" />
-			</listitem>
-		</template>
-	</listbox>
+	<label multiline="true">
+		1. Please test each of the following listbox with select all functionality.
+		2. Test steps:
+			2.1. Check the select all checkmark on the header and navigate to each page that the selectAll checkmark on the header should be checked as well.(paging or list mold)
+			2.2. Uncheck anyone of the checked item, and navigate to each page that the selectAll checkmark on the header should not be checked as well. (paging or list mold)
+		3. Test select range for list mold only.
+			3.1. Please uncheck the select all checkmark on the header of the two list mold cases.
+			3.2. Please select the first item and scroll to the end of the list and then press the SHIFT key and select the last item.
+			3.3. The select all checkmark should be checked and please scroll up to the first item, the new rendered item should be checked as well.
+	</label>
+	<vlayout>
+		Listbox with ROD
+		<listbox apply="org.zkoss.zktest.test2.B70_ZK_2534" rows="5" checkmark="true" mold="paging" pageSize="5">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" />
+			<listhead>
+				<listheader hflex="min" />
+				<listheader label="Name" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="${each}" />
+				</listitem>
+			</template>
+		</listbox>
+		Listbox with ROD
+		<listbox apply="org.zkoss.zktest.test2.B70_ZK_2534" rows="5" checkmark="true">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" />
+			<listhead>
+				<listheader hflex="min" />
+				<listheader label="Name" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="${each}" />
+				</listitem>
+			</template>
+		</listbox>
+		Listbox without ROD
+		<listbox  apply="org.zkoss.zktest.test2.B70_ZK_2534" rows="5" multiple="true" checkmark="true" mold="paging" pageSize="5">
+			<custom-attributes org.zkoss.zul.listbox.rod="false" />
+			<listhead>
+				<listheader hflex="min" />
+				<listheader label="Name" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="${each}" />
+				</listitem>
+			</template>
+		</listbox>
+		Listbox without ROD
+		<listbox  apply="org.zkoss.zktest.test2.B70_ZK_2534" rows="5" multiple="true" checkmark="true">
+			<custom-attributes org.zkoss.zul.listbox.rod="false" />
+			<listhead>
+				<listheader hflex="min" />
+				<listheader label="Name" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="${each}" />
+				</listitem>
+			</template>
+		</listbox>
+	</vlayout>
 </zk>

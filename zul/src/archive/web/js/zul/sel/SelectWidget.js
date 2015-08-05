@@ -50,6 +50,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _updHeaderCM(box) { //update header's checkmark
+		if (box.$$selectAll != undefined)
+			return; // update by server's state
+
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-checked',
 				$headercm = jq(box._headercm);
@@ -870,7 +873,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		
 		if (step > 0 || (step < 0 && row)) {
-			if (row && shift && !row.isDisabled()) // Bug ZK-1715: not select item if disabled.
+			if (row && shift && !row.isDisabled() && row.isSelectable()) // Bug ZK-1715: not select item if disabled.
 				this._toggleSelect(row, true, evt);
 			var nrow = row ? row.$n() : null;
 			for (;;) {
@@ -902,7 +905,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				var r = zk.Widget.$(nrow);
 				if (r.$instanceof(zul.sel.Treerow))
 					r = r.parent;
-				if (!r.isDisabled()) {
+				if (!r.isDisabled() && r.isSelectable()) {
 					if (shift) this._toggleSelect(r, true, evt);
 
 					if (zk(nrow).isVisible()) {
@@ -1006,7 +1009,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			// ZK-1096: this._lastSelectedItem is only updated when doBlur
 			lastSelected = this._focusItem || this._lastSelectedItem; 
 		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w; (w = it.next());) {
-			if (w.isDisabled()) continue; // Bug: 2030986
+			if (w.isDisabled() || !w.isSelectable()) continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(w, true);
 				if (w == row)
@@ -1043,7 +1046,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
-			if (!w.isDisabled())
+			if (w._loaded && !w.isDisabled() && w.isSelectable())
 				this._changeSelect(w, true);
 		if (notify && evt !== true)
 			this.fireOnSelect(this.getSelectedItem(), evt);
@@ -1099,7 +1102,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._changeSelect(row, toSel);
 		if (!skipFocus) {
 			
-			// ZK-2140: should focus closest selected item after deselecting item 
+			// ZK-2140: should focus closest selected item after deselecting item
 			var rowIndex = this.indexOfItem(row), 
 				min = Number.MAX_VALUE, 
 				closestSelItem;
@@ -1139,7 +1142,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				data.push(it[j]);
 
 		var edata, keep = true;
-		var checkSelectAll = evt.domTarget.id && evt.domTarget.id.endsWith('-cm');
+		var checkSelectAll = false;
+		if (this._multiple && this._headercm) {
+			checkSelectAll = jq(this._headercm).hasClass(zk.Widget.$(this._headercm).$s('checked'));
+		}
 		if (evt) {
 			edata = evt.data;
 			if (this._multiple) // B50-ZK-421
@@ -1214,17 +1220,67 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
 	},
+	$fireService: function (evtName, data, callback) {
+		if (!this._$services) {
+			this._$services = {};
+		}
+		if (!this._$services[evtName]) {
+			this._$services[evtName] = [];
+		}
+		this._$services[evtName].push(callback);
+		this.fire(evtName, data, {toServer: true}, 250);
+	},
+	$doService: function (evtName, data) {
+		var s = this._$services && this._$services[evtName];
+		if (s) {
+			while (s.length)
+				s.shift().call(this, data);
+
+			this._$services[evtName] = null;
+		}
+	},
+	$hasService: function (evtName) {
+		return this._$services && this._$services[evtName];
+	},
 	_isAllSelected: function () {
 		//B70-ZK-1953: if selectedItems is empty return false.
 		if (!this._selItems.length)
 			return false;
-		var isGroupSelect = this.groupSelect;
-		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
-			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
-			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
-				continue;
-			if (!w.isDisabled() && !w.isSelected())
-				return false;
+		if (this._model) {
+			if (!this.$hasService("onUpdateSelectAll")) {
+				this.$fireService("onUpdateSelectAll", null, function (v) {
+					if (this.desktop && this._headercm && this._multiple) {
+						var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
+							$headercm = jq(this._headercm);
+						$headercm[v ? 'addClass': 'removeClass'](zcls);
+						this.$$selectAll = v;
+					}
+				});
+			}
+
+			// use the server's state
+			if (this.$$selectAll != undefined) {
+				return this.$$selectAll;
+			}
+
+			var isGroupSelect = this.groupSelect;
+			for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+				//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
+				if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
+					continue;
+				if (w._loaded && !w.isDisabled() && w.isSelectable() && !w.isSelected())
+					return false;
+			}
+            return true;
+		} else {
+			var isGroupSelect = this.groupSelect;
+			for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+				//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
+				if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
+					continue;
+				if (w._loaded && !w.isDisabled() && w.isSelectable() && !w.isSelected())
+					return false;
+			}
 		}
 		return true;
 	},
@@ -1260,6 +1316,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncFocus(child);
 			this._shallSyncFocus = false;
 		}
+		if (this._shallSyncCM) {
+			this._updHeaderCM();
+			this._shallSyncCM = false;
+		}
 		this.$supers(SelectWidget, 'onResponse', arguments);
 	},
 	onChildAdded_: function (child) {
@@ -1280,6 +1340,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//   disable it to prevent keyboard navigation jump back to top
 		if (this._focusItem == child) {
 			this._focusItem = null;
+			// Bug in test case ZK-2534, we need to resync the lastSelectedItem if onBlur event is not triggered.
+			this._lastSelectedItem = this._focusItem;
+
 			//ZK-2804: the first selected item may be removed in rod when 
 			//select multiple items with shift key
 			this._itemForSelect = child;

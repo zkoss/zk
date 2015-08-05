@@ -124,7 +124,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			//B70-ZK-2053:make sure checkmark won't display on multiple listgroup
 			if (box.isCheckmark() && !_isListgroupfoot(p) 
 					&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
-				var chkable = p.isCheckable(),
+				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
 				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable') 
 					+ ' ' + (multi ? p.$s('checkbox') : p.$s('radio'));

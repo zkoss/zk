@@ -37,7 +37,7 @@ public class Listitem extends XulElement {
 	private transient Object _value;
 	/** The index in the parent (only for implementation purpose). */
 	private int _index = -1; //no parent at beginning
-	private boolean _selected, _disabled, _checkable = true;
+	private boolean _selected, _disabled, _selectable = true;
 	/** whether the content of this item is loaded; used if
 	 * the listbox owning this item is using a list model.
 	 */
@@ -74,25 +74,47 @@ public class Listitem extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-listitem" : _zclass;
 	}
-	/** Returns whether it is checkable.
-	 * <p>Default: true.
-	 * @since 3.0.4
+	/**
+	 * @deprecated As of release 8.0.0, please use {@link #isSelectable()}
 	 */
 	public boolean isCheckable() {
-		return _checkable;
+		return isSelectable();
 	}
-	/** Sets whether it is checkable.
-	 * 
-	 * <p>Note that it is only applied when isCheckmark() of Listbox is true.
-	 * <p>Default: true.
-	 * @since 3.0.4
+
+	/**
+	 * @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
 	 */
 	public void setCheckable(boolean checkable) {
-		if (_checkable != checkable) {
-			_checkable = checkable;
-			smartUpdate("checkable", checkable);
+		setSelectable(checkable);
+	}
+
+	/**
+	 * Returns whether it is selectable.
+	 * <p>Default: true.</p>
+	 * @since 8.0.0
+	 */
+	public boolean isSelectable() {
+		return _selectable;
+	}
+
+	/** Sets whether it is selectable.
+	 *
+	 * <p>If the listbox is in a checkmark mode, the selectable state will affect
+	 * the checkable icon to display or not.</p>
+	 * <p>Default: true.</p>
+	 * @param selectable
+	 */
+	public void setSelectable(boolean selectable) {
+		if (_selectable != selectable) {
+			_selectable = selectable;
+
+			// non-checkable cannot be selected
+			if (!_selectable)
+				setSelected(false);
+			smartUpdate("selectable", selectable);
 		}
 	}
+
 	
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of getParent().getMaxlength();
@@ -333,7 +355,7 @@ public class Listitem extends XulElement {
 
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
-		render(renderer, "_loaded", _loaded);
+		render(renderer, "_loaded", _loaded ? _loaded : getListbox().getModel() == null);
 		renderer.render("_index", _index);
 		
 		if (_value instanceof String && getListbox().getName() != null)

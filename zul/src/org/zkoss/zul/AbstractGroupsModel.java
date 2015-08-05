@@ -28,6 +28,7 @@ import org.zkoss.io.Serializables;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 
 /**
  * A skeletal implementation for {@link GroupsModel}.
@@ -52,6 +53,7 @@ Selectable<E>, java.io.Serializable {
 	/** The current selection. */
 	protected transient Set<E> _selection;
 	private boolean _multiple;
+	private SelectionControl<E> _ctrl;
 	
 	protected AbstractGroupsModel() {
 		_selection = newEmptySelection();
@@ -66,6 +68,14 @@ Selectable<E>, java.io.Serializable {
 			new GroupsDataEvent(this, type, groupIndex, index0, index1);
 		for (GroupsDataListener l: _listeners)
 			l.onChange(evt);
+	}
+
+	public void setSelectionControl(SelectionControl ctrl) {
+		_ctrl = ctrl;
+	}
+
+	public SelectionControl getSelectionControl() {
+		return _ctrl;
 	}
 
 	//-- GroupsModel --//

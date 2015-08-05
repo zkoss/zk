@@ -23,17 +23,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
 zul.sel.ItemWidget = zk.$extends(zul.Widget, {
-	_checkable: true,
+	_selectable: true,
 	$define: {
-		/** Returns whether it is checkable.
+		/** @deprecated As of release 8.0.0, please use {@link #isSelectable()}
+		 */
+		/** @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
+		 */
+		checkable: function (checkable) {
+			this.setSelectable(checkable);
+		},
+		/** Returns whether it is selectable.
 		 * <p>Default: true.
 		 * @return boolean
+		 * @since 8.0.0
 		 */
-		/** Sets whether it is checkable.
+		/** Sets whether it is selectable.
 		 * <p>Default: true.
-		 * @param boolean checkable
+		 * @param boolean selectable
+		 * @since 8.0.0
 		 */
-		checkable: function () {
+		selectable: function () {
 			if (this.desktop)
 				this.rerender();
 		},
@@ -81,13 +90,16 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	_setSelectedDirectly: function (selected) {
 		var n = this.$n();
+
+		// do this before _updHeaderCM(), otherwise, it will call too many times to sync the state.
+		this._selected = selected;
+
 		if (n) {
 			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected'));
 			// B70-ZK-2050: Replace icon with image in IE8.
             //zk(n).redoCSS(-1, {'fixFontIcon': true});
 			this._updHeaderCM();
 		}
-		this._selected = selected;
 	},
 	/** Returns the label of the {@link Listcell} or {@link Treecell} it contains, or null
 	 * if no such cell.
@@ -184,7 +196,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			var zcls = zk.Widget.$(box._headercm).$s('checked'),
 				$headercm = jq(box._headercm);
 
-			if (!this.isSelected())
+			if (!this.isSelected() && this._userSelection) // only update for user's selection
 				$headercm.removeClass(zcls);
 			else if (!$headercm.hasClass(zcls))
 				box._updHeaderCM(); //update in batch since we have to examine one-by-one
@@ -192,25 +204,34 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	//@Override
 	beforeParentChanged_: function (newp) {
-		if (!newp) //remove
-			this._updHeaderCM(true);
+		if (!newp) {//remove
+			var mesh = this.getMeshWidget();
+			if (mesh) mesh._shallSyncCM = true;
+		}
 		this.$supers('beforeParentChanged_', arguments);
 	},
 	//@Override
 	afterParentChanged_: function () {
-		if (this.parent) //add
-			this._updHeaderCM();
+		if (this.parent) {//add
+			var mesh = this.getMeshWidget();
+			if (mesh) mesh._shallSyncCM = true;
+		}
 		this.$supers('afterParentChanged_', arguments);
 	},
 
 	// event
 	doSelect_: function(evt) {
-		if (this.isDisabled() || !this.isCheckable()) return;
-		if (!evt.itemSelected) {
-			this.getMeshWidget()._doItemSelect(this, evt);
-			evt.itemSelected = true;
+		if (this.isDisabled() || !this.isSelectable()) return;
+		try {
+			this._userSelection = true;
+			if (!evt.itemSelected) {
+				this.getMeshWidget()._doItemSelect(this, evt);
+				evt.itemSelected = true;
+			}
+			this.$supers('doSelect_', arguments);
+		} finally {
+			this._userSelection = null;
 		}
-		this.$supers('doSelect_', arguments);
 	},
 	doKeyDown_: function (evt) {
 		var mesh = this.getMeshWidget();

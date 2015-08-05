@@ -70,6 +70,7 @@ import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
@@ -80,7 +81,6 @@ import org.zkoss.zul.impl.XulElement;
 /**
  *  A container which can be used to hold a tabular
  * or hierarchical set of rows of elements.
- *
  * <p>Event:
  * <ol>
  * <li>{@link org.zkoss.zk.ui.event.SelectEvent} is sent when user changes
@@ -1865,6 +1865,14 @@ public class Tree extends MeshElement {
 					getSelectedCount() != model.getSelectionCount() &&
 					model.isPathSelected(path = getPath0(parent, i)))
 				addItemToSelection(ti);
+		}
+		if (_model instanceof Selectable) {
+			Selectable smodel = (Selectable) _model;
+			SelectionControl control = smodel
+					.getSelectionControl();
+			if (control != null)
+				ti.setSelectable(control.isSelectable(childNode));
+
 		}
 		if (_model instanceof TreeOpenableModel) {
 			TreeOpenableModel model = (TreeOpenableModel) _model;

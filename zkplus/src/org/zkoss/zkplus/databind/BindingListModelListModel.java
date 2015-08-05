@@ -26,6 +26,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 
 /**
  * <p>This is the {@link BindingListModel} as a {@link ListModel} to be used with 
@@ -44,7 +45,7 @@ public class BindingListModelListModel<E> implements BindingListModel<E>, Select
 	protected ListModel<E> _model;
 	private Selectable<E> _selectable;
 	private boolean distinct = true;
-	
+
 	public BindingListModelListModel(ListModel<E> model) {
 		_model = model;
 	}
@@ -89,7 +90,15 @@ public class BindingListModelListModel<E> implements BindingListModel<E>, Select
 	private static class EmptySelectable<E> implements Selectable<E>, java.io.Serializable {
 		private static final long serialVersionUID = 7942486785062723611L;
 
-		
+
+		private SelectionControl<E> _ctrl;
+		public void setSelectionControl(SelectionControl ctrl) {
+			_ctrl = ctrl;
+		}
+
+		public SelectionControl getSelectionControl() {
+			return _ctrl;
+		}
 		public Set<E> getSelection() {
 			return null;
 		}
@@ -141,7 +150,15 @@ public class BindingListModelListModel<E> implements BindingListModel<E>, Select
 		
 		return _selectable;
 	}
-	
+
+	public void setSelectionControl(SelectionControl ctrl) {
+		getSelectModel().setSelectionControl(ctrl);
+	}
+
+	public SelectionControl getSelectionControl() {
+		return getSelectModel().getSelectionControl();
+	}
+
 	public Set<E> getSelection() {
 		return getSelectModel().getSelection();
 	}

@@ -59,6 +59,7 @@ ZK 8.0.0
   ZK-2799: sh:forEach with multiple inserts
   ZK-2823: forEach error when clearing ListModelList
   ZK-2807: notifyChange on method name only in ZK 8
+  ZK-2534: Listbox allows selection with checkable="false"
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
@@ -81,6 +82,9 @@ ZK 8.0.0
   + Deprecated the method of setWidgetAttribute() and getWidgetAttribute() of org.zkoss.zk.ui.Component, use
     setClientAttribute() and getClientAttribute() method instead.
   + Add a restriction that it's forbidden to set width/height/hflex/vflex in Auxheader.
+  + Deprecated the method of setCheckable() and isCheckable() for Treeitem and Listitem component, use setSelectable() and isSelectable() instead.
+  + The selectAll checkmark on listhead can support on Listbox with model in paging or non-paging mold, no matter whether in ROD or non-ROD mode.
+  + For Listitem and Treeitem component, if the value of isSelectable() or isCheckable() is false, it means the item cannot be selectable or navigable.
   --------
 ZK 7.0.6
 * Features

@@ -39,12 +39,14 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.io.Serializables;
+import org.zkoss.json.JSONAware;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -61,6 +63,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
@@ -70,6 +73,7 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
@@ -2683,6 +2687,10 @@ public class Listbox extends MeshElement {
 			//bug #3039843: Paging Listbox without rod, ListModel shall not fully loaded
 			//check if the item is a selected item and add into selected set
 			final Object value = _model.getElementAt(index);
+
+			final SelectionControl ctrl = getSelectableModel().getSelectionControl();
+			final boolean selectable = ctrl == null ? true : ctrl.isSelectable(value);
+
 			//bug #ZK-675: Selection was lost if a render replace the listitem
 			final boolean selected = ((Selectable) _model).isSelected(value);
 			final boolean oldFlag = setReplacingItem(true); //skipFixItemIndices when rendering
@@ -2697,7 +2705,7 @@ public class Listbox extends MeshElement {
 				}
 				Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new listitem is created to replace the existent one
-					item = (Listitem)v;
+					item = (Listitem) v;
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -2711,11 +2719,15 @@ public class Listbox extends MeshElement {
 				if (item.getChildren().isEmpty())
 					cell.setParent(item);
 			}
-			
+
 			//bug #ZK-675: Selection was lost if a render replace the listitem
 			//Also we have to add it to selection when rendered
 			if (selected)
 				addItemToSelection(item);
+
+			if (ctrl != null)
+				item.setSelectable(selectable);
+
 			item.setLoaded(true);
 			_rendered = true;
 		}
@@ -3234,9 +3246,9 @@ public class Listbox extends MeshElement {
 			renderer.render("rows", getRows());
 
 		render(renderer, "name", _name);
-		
+
 		render(renderer, "emptyMessage", _emptyMessage);
-		
+
 		// Feature ZK-2531: Support tab ordering in default and paging mold
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
@@ -3252,36 +3264,45 @@ public class Listbox extends MeshElement {
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());
 
-			if (_model != null)
-				render(renderer, "model", _model instanceof GroupsListModel || _model instanceof GroupsModel ? "group" : true);
+			if (_model != null) {
+				render(renderer, "model", _model instanceof GroupsListModel
+						|| _model instanceof GroupsModel ? "group" : true);
 
+				if (isMultiple()) {
+					SelectionControl selectionControl = getSelectableModel()
+							.getSelectionControl();
+					if (selectionControl != null) {
+						// cannot use render(renderer) here, we have to send a false state
+						// to client.
+						renderer.render("$$selectAll", selectionControl.isSelectAll());
+					}
+				}
+			}
 			if (!"100%".equals(_innerWidth))
 				render(renderer, "innerWidth", _innerWidth);
 			if (_currentTop != 0)
 				renderer.render("_currentTop", _currentTop);
 			if (_currentLeft != 0)
 				renderer.render("_currentLeft", _currentLeft);
-			
+
 			//ZK-798
 			if (_anchorTop != 0)
 				renderer.render("_anchorTop", _anchorTop);
 			if (_anchorLeft != 0)
 				renderer.render("_anchorLeft", _anchorLeft);
-			
 
 			renderer.render("_topPad", _topPad);
 			renderer.render("_totalSize", getDataLoader().getTotalSize());
 			renderer.render("_offset", getDataLoader().getOffset());
 
-			if (_rod) { 
-				if (((Cropper)getDataLoader()).isCropper())//bug #2936064
+			if (_rod) {
+				if (((Cropper) getDataLoader()).isCropper())//bug #2936064
 					renderer.render("_listbox$rod", true);
 				int sz = initRodSize();
 				if (sz != INIT_LIMIT)
 					renderer.render("initRodSize", initRodSize());
 				if (!inPagingMold() && _jsel >= 0)
 					renderer.render("_selInView", _jsel); // B50-ZK-56
-				renderer.render("_listbox$noSelectAll", true); // B50-ZK-873, separate the select all condition and isCropper
 			}
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
@@ -3294,8 +3315,15 @@ public class Listbox extends MeshElement {
 			if (isSelectOnHighlightDisabled()) // F70-ZK-2433
 				renderer.render("selectOnHighlightDisabled", true);
 		}
-		if (_pgi != null && _pgi instanceof Component)
+		if (_pgi != null && _pgi instanceof Component) {
 			renderer.render("paginal", _pgi);
+
+			// ZK 8, if no model used in paging mold, we don't support select all in this case
+			if (_model == null) {
+				renderer.render("_listbox$noSelectAll",
+						true); // B50-ZK-873, separate the select all condition and isCropper
+			}
+		}
 		if (_focusIndex > -1)
 			renderer.render("focusIndex", _focusIndex); // F60-ZK-715
 	}
@@ -3437,7 +3465,7 @@ public class Listbox extends MeshElement {
 			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
-		} else if(cmd.equals("onAnchorPos")){
+		} else if (cmd.equals("onAnchorPos")) {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
@@ -3445,9 +3473,10 @@ public class Listbox extends MeshElement {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals(Events.ON_SELECT)) {
 			if (_rod && Executions.getCurrent().getAttribute(
-					"zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
+					"zkoss.zul.listbox.onDataLoading." + this.getUuid())
+					!= null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
-			
+
 			Desktop desktop = request.getDesktop();
 			Map data = request.getData();
 			List<String> sitems = cast((List) data.get("items"));
@@ -3458,11 +3487,12 @@ public class Listbox extends MeshElement {
 			Set<Listitem> realPrevSeldItems = new LinkedHashSet<Listitem>(prevSeldItems);
 			Set<Object> prevSeldObjects = _model != null ? new LinkedHashSet<Object>(getSelectableModel().getSelection()) : new LinkedHashSet<Object>();
 			// fine tune with B50-ZK-547.
-			Selectable<Object> smodel = _model != null ? getSelectableModel(): null;
-			
+			Selectable<Object> smodel =
+					_model != null ? getSelectableModel() : null;
+
 			// ZK-2089: prevSeldItems should skip listgroup if listgroup is not selectable
 			if (!isListgroupSelectable() && prevSeldItems.size() > 0) {
-				// use toArray() to prevent java.util.ConcurrentModificationException 
+				// use toArray() to prevent java.util.ConcurrentModificationException
 				for (Object item : prevSeldItems.toArray()) {
 					if (item instanceof Listgroup) {
 						prevSeldItems.remove(item);
@@ -3470,7 +3500,7 @@ public class Listbox extends MeshElement {
 					}
 				}
 			}
-						
+
 			int from, to;
 			Paginal pgi = getPaginal();
 			if (pgi != null) {
@@ -3481,9 +3511,10 @@ public class Listbox extends MeshElement {
 				from = 0;
 				to = 0;
 			}
-			
+
 			// remove the selection in other page
-			if (paging && (!isCheckmarkDeselectOther() || (isCheckmarkDeselectOther() && selectAll))) { 
+			if (paging && (!isCheckmarkDeselectOther() || (
+					isCheckmarkDeselectOther() && selectAll))) {
 				// use toArray() to prevent java.util.ConcurrentModificationException
 				for (Object item : realPrevSeldItems.toArray()) {
 					int index = ((Listitem) item).getIndex();
@@ -3491,10 +3522,12 @@ public class Listbox extends MeshElement {
 						realPrevSeldItems.remove(item);
 				}
 			}
-			
+
 			if (curSeldItems == null)
 				curSeldItems = new HashSet<Listitem>(); //just in case
-			
+
+			SelectionControl ctrl =
+					smodel != null ? smodel.getSelectionControl() : null;
 			int start = -1;
 			int end = -1;
 			if (_rod) { // Bug: ZK-592
@@ -3506,59 +3539,71 @@ public class Listbox extends MeshElement {
 					for (Iterator<Listitem> it = _items.iterator(); it.hasNext();) {
 						Listitem item = it.next();
 						int index = item.getIndex();
-						if (index >= start && index <= end) {							
+						if (index >= start && index <= end) {
 							// the same logic come from JS file (SelectWidget)
 							// for Bug: 2030986
-							if (!item.isDisabled()) 
+							if (!item.isDisabled() && item.isSelectable())
 								curSeldItems.add(item);
 						}
 					}
 				}
 			}
-			
+
 			disableClientUpdate(true);
 			final boolean oldIDSE = _ignoreDataSelectionEvent;
 			_ignoreDataSelectionEvent = true;
-			
+
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
 					if (_model != null)
-						((Selectable)_model).clearSelection();
+						((Selectable) _model).clearSelection();
 				}
-				
-				if (!_multiple
-				|| (_model == null && !_rod && !paging && curSeldItems.size() <= 1)) {
-				//If _model, selItems is only a subset (so we can't optimize it)
-					final Listitem item = curSeldItems.size() > 0 ? curSeldItems
-							.iterator().next() : null;
+
+				if (!_multiple || (_model == null && !_rod && !paging
+						&& curSeldItems.size() <= 1)) {
+					//If _model, selItems is only a subset (so we can't optimize it)
+					final Listitem item = curSeldItems.size() > 0 ?
+							curSeldItems.iterator().next() :
+							null;
 					selectItem(item);
 					if (_model != null) {
 						final List<Object> selObjs = new ArrayList<Object>();
-						if (item != null)
-							selObjs.add(_model.getElementAt(item.getIndex()));
+						if (item != null) {
+							Object ele = _model.getElementAt(item.getIndex());
+							if (ctrl == null || ctrl.isSelectable(ele))
+								selObjs.add(ele);
+						}
 						getSelectableModel().setSelection(selObjs);
 					}
 				} else {
-					for (final Listitem item: curSeldItems) {
+					for (final Listitem item : curSeldItems) {
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
-							if (smodel != null) //still have to add selection if not multiple select
-								smodel.addToSelection(_model.getElementAt(item.getIndex()));
+							if (smodel != null) {//still have to add selection if not multiple select
+								Object ele = _model
+										.getElementAt(item.getIndex());
+								if (ctrl == null || ctrl.isSelectable(ele))
+									smodel.addToSelection(ele);
+							}
 						}
 					}
 					while (start >= 0 && end >= 0 && start <= end) {
 						//ZK-2804: add those items not in _items as selected
-						if (smodel != null)
-							smodel.addToSelection(_model.getElementAt(start++));
+						if (smodel != null) {
+							Object ele = _model.getElementAt(start++);
+							if (ctrl == null || ctrl.isSelectable(ele))
+								smodel.addToSelection(ele);
+						}
 					}
-					for (final Listitem item: prevSeldItems) {
+					for (final Listitem item : prevSeldItems) {
 						if (!curSeldItems.contains(item)) {
 							final int index = item.getIndex();
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
 								if (smodel != null)
-									smodel.removeFromSelection(_model.getElementAt(index));
+									smodel.removeFromSelection(
+											_model.getElementAt(index));
 							}
 						}
 					}
@@ -3567,15 +3612,16 @@ public class Listbox extends MeshElement {
 				_ignoreDataSelectionEvent = oldIDSE;
 				disableClientUpdate(false);
 			}
-			
+
 			Set<Listitem> unselectedItems;
 			if (_model != null && paging) {
 				prevSeldItems = null;
 				unselectedItems = null;
 			} else {
-				unselectedItems = collectUnselectedObjects(realPrevSeldItems, curSeldItems);
+				unselectedItems = collectUnselectedObjects(realPrevSeldItems,
+						curSeldItems);
 			}
-			
+
 			Set<Object> unselectedObjects;
 			Set<Object> selectedObjects = new LinkedHashSet<Object>();
 			if (_model == null) {
@@ -3584,11 +3630,16 @@ public class Listbox extends MeshElement {
 			} else {
 				for (Listitem i : curSeldItems)
 					selectedObjects.add(_model.getElementAt(i.getIndex()));
-				unselectedObjects = collectUnselectedObjects(prevSeldObjects, smodel.getSelection());
+				unselectedObjects = collectUnselectedObjects(prevSeldObjects,
+						smodel.getSelection());
+			}
+			if (ctrl != null) {
+				if (selectAll)
+					ctrl.setSelectAll(true);
 			}
 			if (sitems == null || sitems.isEmpty() || _model == null)
 				selectedObjects = null;
-			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems, selectedObjects, 
+			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems, selectedObjects,
 						prevSeldObjects, unselectedObjects, desktop.getComponentByUuidIfAny((String)data.get("reference")),  null, AuRequests.parseKeys(data));
 			Events.postEvent(evt);
 		} else if (cmd.equals("onInnerWidth")) {
@@ -3635,7 +3686,7 @@ public class Listbox extends MeshElement {
 			}
 
 			Listbox.this.renderItems(items);
-			
+
 		} else if (cmd.equals("onAcrossPage")) { // F60-ZK-715
 			final Map<String, Object> data = request.getData();
 			int page = AuRequests.getInt(data, "page", 0);
@@ -3650,9 +3701,10 @@ public class Listbox extends MeshElement {
 			final int tsz = getItemCount();
 			final int toUI = Math.min(to, tsz - 1); // capped by size
 			if (!isMultiple() || shift == 0) {
-				
+
 				// B65-ZK-1969 and B65-1715
-				if ((_model == null && index >= tsz) || (_model != null && index >= _model.getSize()))
+				if ((_model == null && index >= tsz) || (_model != null
+						&& index >= _model.getSize()))
 					index = tsz - 1;
 				setSelectedIndex(index);
 				setFocusIndex(offset < 0 ? pageSize - 1 : offset);
@@ -3683,15 +3735,39 @@ public class Listbox extends MeshElement {
 					_ignoreDataSelectionEvent = oldIDSE;
 				}
 			}
-			
+
 			// B60-ZK-815: simulate onSelect event when going across page
 			SelectEvent<Listitem, Object> evt = new SelectEvent<Listitem, Object>(
-					"onSelect", this, getSelectedItems(), 
-					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
+					"onSelect", this, getSelectedItems(), getItemAtIndex(index),
+					shift != 0 ? SelectEvent.SHIFT_KEY : 0);
 			Events.postEvent(evt);
 		} else if (cmd.equals("onCheckSelectAll")) { // F65-ZK-2014
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			if (_model != null) {
+				final Selectable<Object> selectableModel = getSelectableModel();
+				SelectionControl selectionControl = selectableModel
+						.getSelectionControl();
+				if (selectionControl == null)
+					throw new IllegalStateException(
+							"SelectionControl cannot be null, please implement SelectionControl interface for SelectablModel");
+				selectionControl.setSelectAll(evt.isChecked());
+			}
 			Events.postEvent(evt);
+		} else if (cmd.equals("onUpdateSelectAll")) {
+			if (_model != null) {
+				final SelectionControl selectionControl = getSelectableModel()
+						.getSelectionControl();
+				if (selectionControl != null) {
+					Clients.response(new AuInvoke(this, "$doService",
+						new Object[] {cmd, new JSONAware() {
+							public String toJSONString() {
+								return String.valueOf(
+										selectionControl.isSelectAll());
+							}
+						}}
+					));
+				}
+			}
 		} else
 			super.service(request, everError);
 	}

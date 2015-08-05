@@ -31,6 +31,7 @@ import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
 
@@ -69,6 +70,14 @@ java.io.Serializable {
 	protected Set<Path> _opens = new LinkedHashSet<Path>();
 	private boolean _multiple;
 
+	private SelectionControl<E> _ctrl;
+	public void setSelectionControl(SelectionControl ctrl) {
+		_ctrl = ctrl;
+	}
+
+	public SelectionControl getSelectionControl() {
+		return _ctrl;
+	}
 	/**
 	 * Creates a {@link AbstractTreeModel}.
 	 * 

@@ -93,4 +93,17 @@ public interface Selectable<E> {
 	 * @since 6.0.0
 	 */
 	public boolean isMultiple();
+
+	/**
+	 * Sets the selection control for the selection model
+	 * @param ctrl
+	 * @since 8.0.0
+	 */
+	public void setSelectionControl(SelectionControl ctrl);
+
+	/**
+	 * Returns the selection control for the selection model, if any.
+	 * @since 8.0.0
+	 */
+	public SelectionControl getSelectionControl();
 }

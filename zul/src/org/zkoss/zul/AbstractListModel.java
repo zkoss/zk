@@ -28,6 +28,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 
 /**
  * A skeletal implementation for {@link ListModel} and {@link Selectable}
@@ -40,6 +41,7 @@ Selectable<E>, java.io.Serializable {
 
 	/** The current selection. */
 	protected transient Set<E> _selection;
+	private SelectionControl<E> _ctrl;
 	private boolean _multiple;
 
 	protected AbstractListModel() {
@@ -189,6 +191,14 @@ Selectable<E>, java.io.Serializable {
 				fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
 			}
 		}
+	}
+
+	public void setSelectionControl(SelectionControl ctrl) {
+		_ctrl = ctrl;
+	}
+
+	public SelectionControl getSelectionControl() {
+		return _ctrl;
 	}
 
 	/** Instantiation an empty set of the section.

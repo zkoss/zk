@@ -52,7 +52,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private boolean _open = true;
 	private boolean _selected;
 	private boolean _disabled;
-	private boolean _checkable = true;
+	private boolean _selectable = true;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
@@ -73,23 +73,44 @@ implements org.zkoss.zk.ui.ext.Disable {
 		setValue(value);
 	}
 
-	/** Returns whether it is checkable.
-	 * <p>Default: true.
-	 * @since 3.0.4
+	/**
+	 * @deprecated As of release 8.0.0, please use {@link #isSelectable()}
 	 */
 	public boolean isCheckable() {
-		return _checkable;
+		return isSelectable();
 	}
-	/** Sets whether it is checkable.
-	 * 
-	 * <p>Note that it is only applied when isCheckmark() of Tree is true.
-	 * <p>Default: true.
-	 * @since 3.0.4
+
+	/**
+	 * @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
 	 */
 	public void setCheckable(boolean checkable) {
-		if (_checkable != checkable) {
-			_checkable = checkable;
-			smartUpdate("checkable", checkable);
+		setSelectable(checkable);
+	}
+
+	/**
+	 * Returns whether it is selectable.
+	 * <p>Default: true.</p>
+	 * @since 8.0.0
+	 */
+	public boolean isSelectable() {
+		return _selectable;
+	}
+
+	/** Sets whether it is selectable.
+	 *
+	 * <p>If the listbox is in a checkmark mode, the selectable state will affect
+	 * the checkable icon to display or not.</p>
+	 * <p>Default: true.</p>
+	 * @param selectable
+	 */
+	public void setSelectable(boolean selectable) {
+		if (_selectable != selectable) {
+			_selectable = selectable;
+
+			// non-checkable cannot be selected
+			if (!_selectable)
+				setSelected(false);
+			smartUpdate("selectable", selectable);
 		}
 	}
 	
@@ -605,7 +626,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
 		if (!isOpen()) renderer.render("open", false);
-		if (!isCheckable()) renderer.render("checkable", false);
+		if (!isSelectable()) renderer.render("checkable", false);
 		render(renderer, "_loadedChildren", isLoaded());
 		render(renderer, "_loaded", isRendered());
 		

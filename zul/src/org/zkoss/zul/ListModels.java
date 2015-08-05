@@ -27,6 +27,7 @@ import java.util.Set;
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 
 /**
  * A utility for handling {@link ListModel}.
@@ -109,6 +110,17 @@ public class ListModels {
 		private final Comparator<E> _comparator;
 
 		private final int _nRows;
+
+		public void setSelectionControl(SelectionControl ctrl) {
+			if (_model instanceof Selectable)
+				((Selectable) _model).setSelectionControl(ctrl);
+		}
+
+		public SelectionControl getSelectionControl() {
+			if (_model instanceof Selectable)
+				return ((Selectable) _model).getSelectionControl();
+			return null;
+		}
 
 		private SubModel(ListModel<E> model, Comparator<E> comparator, int nRows) {
 			_model = model;

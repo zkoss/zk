@@ -267,7 +267,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			$n.removeClass(this.$s('checked'));
 			box._select(null, evt);
 		}
-		box.fire('onCheckSelectAll', this._checked);
+		box.$$selectAll = this._checked;
+		box.fire('onCheckSelectAll', this._checked, {toServer: true});
 	},
 	//@Override
 	doClick_: function (evt) {
@@ -287,7 +288,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		if (box != null && this.parent.firstChild == this 
 				&& box._checkmark && box._multiple && !box._listbox$noSelectAll) // B50-ZK-873
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable') + 
-				'"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
+				(box.$$selectAll ? ' ' + this.$s('checked') : '')+'"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
 				+ (s ? '&nbsp;' + s:'');
 		return s;
 	},

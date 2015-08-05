@@ -163,8 +163,8 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		// B50-3322970: need to clear Listheader _check cache
 		var box, lh;
 		if (!this.isSelected() && (box = this.getListbox()) 
-			&& box._headercm && box._multiple && 
-				(lh = box.listhead) && (lh = lh.firstChild))
+			&& box._headercm && box._multiple && box.$$selectAll != undefined
+				&& (lh = box.listhead) && (lh = lh.firstChild))
 			lh._checked = false;
 		this.$supers('_updHeaderCM', arguments);
 	},
