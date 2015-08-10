@@ -93,6 +93,8 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			nr.setAttribute(BinderCtrl.VAR, varnm);
 			
 			// ZK-2552
+			recordRenderedIndex(grid, items.length);
+
 			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
 				public Binder getBinder() {
@@ -100,7 +102,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 				}
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = nr.getIndex() / items.length;
+					int idx = BindRowRenderer.this.getRenderedIndex(grid, nr.getIndex());
 					ListModel<?> listmodel = grid.getListModel();
 					if (idx >= 0 && idx < listmodel.getSize()) {
 		            	if (listmodel instanceof ListModelArray){
@@ -118,7 +120,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return grid.getModel().getElementAt(nr.getIndex() / items.length);
+					return grid.getModel().getElementAt(BindRowRenderer.this.getRenderedIndex(grid, nr.getIndex()));
 				}
 			});
 			addItemReference(grid, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT

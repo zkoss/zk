@@ -96,6 +96,8 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 				nci.setAttribute(varnm, data);
 			}else{
 				// ZK-2552
+				recordRenderedIndex(cb, items.length);
+
 				nci.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
 					public Binder getBinder() {
@@ -104,7 +106,8 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 
 					@SuppressWarnings("unchecked")
 					public void setValue(BindELContext ctx, Object value) {
-						int idx = nci.getIndex() / items.length;
+						int idx = BindComboitemRenderer.this.getRenderedIndex(
+								cb, nci.getIndex());
 						ListModel<?> listmodel = cb.getModel();
 						if (idx >= 0 && idx < listmodel.getSize()) {
 			            	if (listmodel instanceof ListModelArray){
@@ -122,7 +125,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 					}
 
 					public Object getValue(BindELContext ctx) {
-						return model.getElementAt(nci.getIndex() / items.length);
+						return model.getElementAt(BindComboitemRenderer.this.getRenderedIndex(cb, nci.getIndex()));
 					}
 				});
 				addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT

@@ -34,7 +34,7 @@ import org.zkoss.zul.Label;
  * @author dennis
  * @since 6.0.0
  */
-public class BindChildRenderer extends AbstractRenderer{
+public class BindChildRenderer extends AbstractRenderer {
 	private static final long serialVersionUID = 1L;
 
 	public BindChildRenderer(){
@@ -44,7 +44,35 @@ public class BindChildRenderer extends AbstractRenderer{
 	public void render(final Component owner, final Object data, final int index, final int size) {
 		render(owner, data, index, size, false);
 	}
-		
+
+	protected void recordRenderedIndex(Component owner, int itemSize) {
+		List<Component[]> indexList = (List<Component[]>) owner
+				.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		if (indexList == null) {
+			super.recordRenderedIndex(owner, itemSize);
+		}
+	}
+
+	protected int getRenderedIndex(Component owner, int childIndex) {
+		List<Component[]> indexList = (List<Component[]>) owner
+				.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		if (indexList == null) {
+			return super.getRenderedIndex(owner, childIndex);
+		} else {
+			if (childIndex == 0) return 0; // speed up
+			if (indexList != null) {
+				int index = 0;
+				int currentIndex = 0;
+				for (Component[] list : indexList) {
+					if ((currentIndex += list.length) > childIndex)
+						break;
+					index++;
+				}
+				return index;
+			}
+			return childIndex;
+		}
+	}
 	@SuppressWarnings("unchecked")
 	public void render(final Component owner, final Object data, final int index, final int size, final boolean isListModel){
 		final Template tm = resolveTemplate(owner,owner,data,index,size,"children");
@@ -97,6 +125,8 @@ public class BindChildRenderer extends AbstractRenderer{
 			if (cbrCompsList == null) cbrCompsList = new LinkedList<Component[]>();
 			cbrCompsList.add(items);
 			owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
+		} else {
+			recordRenderedIndex(owner, items.length);
 		}
 		
 		for(final Component comp: items){
@@ -113,7 +143,8 @@ public class BindChildRenderer extends AbstractRenderer{
 				}
 
 				public void setValue(BindELContext ctx, Object value) {
-					int index = comp.getParent().getChildren().indexOf(comp) / items.length;
+					int index = BindChildRenderer.this.getRenderedIndex(owner,
+							comp.getParent().getChildren().indexOf(comp));
 					Collection<?> collection = (Collection<?>) owner.getAttribute(BindELContext.getModelName(owner));
 					if (collection instanceof List<?>) {
 						List<Object> list = (List<Object>) collection;
@@ -127,14 +158,20 @@ public class BindChildRenderer extends AbstractRenderer{
 					}
 				}
 				public Object getValue(BindELContext ctx) {
-					final int index = comp.getParent().getChildren().indexOf(comp) / items.length;
+					final int index = BindChildRenderer.this.getRenderedIndex(owner,
+							comp.getParent().getChildren().indexOf(comp));
 					Collection<Object> collection = (Collection<Object>) owner.getAttribute(BindELContext.getModelName(owner));
+
 					if (collection != null) {
-						int i = -1;
-						for (Object o : collection) {
-							i++;
-							if (i == index)
-								return o;
+						if (collection instanceof List<?>) {
+							return ((List<Object>) collection).get(index);
+						} else {
+							int i = -1;
+							for (Object o : collection) {
+								i++;
+								if (i == index)
+									return o;
+							}
 						}
 					}
 					return null;

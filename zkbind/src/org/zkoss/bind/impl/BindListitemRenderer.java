@@ -91,6 +91,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			nli.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
 			// ZK-2552
+			recordRenderedIndex(listbox, items.length);
 			nli.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 
 			nli.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
@@ -100,7 +101,8 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = nli.getIndex() / items.length;
+					int idx = BindListitemRenderer.this.getRenderedIndex(
+							listbox, nli.getIndex());
 					ListModel<?> listmodel = listbox.getListModel();
 					if (idx >= 0 && idx < listmodel.getSize()) {
 		            	if (listmodel instanceof ListModelArray){
@@ -118,7 +120,8 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return listbox.getModel().getElementAt(nli.getIndex() / items.length);
+					return listbox.getModel().getElementAt(
+							BindListitemRenderer.this.getRenderedIndex(listbox, nli.getIndex()));
 				}
 			});
 			addItemReference(listbox, nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT

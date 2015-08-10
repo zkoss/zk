@@ -12,7 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -21,7 +23,6 @@ import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -44,7 +45,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
 	protected static final String IS_TEMPLATE_MODEL_ENABLED_ATTR = "$isTemplateModelEnabled$";
 	protected static final String CURRENT_INDEX_RESOLVER_ATTR = "$currentIndexResolver$";
-	
+	protected static final String RENDERED_COMPONENTS = "$RENDERED_COMPONENTS$";
+
 	private String _attributeName;
 	
 	
@@ -78,7 +80,37 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		}
 		return template;
 	}
-	
+
+	private boolean isFirstTime = false;
+	protected void recordRenderedIndex(Component owner, int itemSize) {
+
+		// clean up first for first time to invoke
+		if (!isFirstTime) {
+			isFirstTime = true;
+			owner.removeAttribute(RENDERED_COMPONENTS);
+		}
+		Map<String, Integer> indexes = (Map<String, Integer>) owner.getAttribute(RENDERED_COMPONENTS);
+		if (indexes == null) {
+			indexes = new LinkedHashMap<String, Integer>();
+			owner.setAttribute(RENDERED_COMPONENTS, indexes);
+		}
+		int index = indexes.isEmpty() ? 0 :
+					new LinkedList<Integer>(indexes.values()).getLast().intValue() + 1;
+		for (int size = indexes.size(), start = 0; start < itemSize; start++) {
+			indexes.put(String.valueOf(size + start), index);
+		}
+	}
+
+	protected int getRenderedIndex(Component owner, int childIndex) {
+		Map<String, Integer> indexes = (Map<String, Integer>) owner.getAttribute(RENDERED_COMPONENTS);
+		if (indexes != null) {
+			Integer result = indexes.get(String.valueOf(childIndex));
+			if (result == null)
+				return childIndex;
+			return result;
+		}
+		return childIndex;
+	}
 	protected Component[] filterOutShadows(Component parent, Component[] items) {
 		boolean hasShadow = false;
 		if (parent instanceof ComponentCtrl) {

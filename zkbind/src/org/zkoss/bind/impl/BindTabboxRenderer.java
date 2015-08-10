@@ -90,6 +90,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			ntab.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			
 			// ZK-2552
+			recordRenderedIndex(tabs, items.length);
 			ntab.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
 				public Binder getBinder() {
@@ -97,7 +98,8 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				}
 
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = ntab.getIndex() / items.length;
+					int idx = BindTabboxRenderer.this.getRenderedIndex(
+							tabs, ntab.getIndex());
 					ListModel<?> listmodel = tabbox.getModel();
 					if (idx >= 0 && idx < listmodel.getSize()) {
 		            	if (listmodel instanceof ListModelArray){
@@ -115,7 +117,8 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return tabbox.getModel().getElementAt(ntab.getIndex() / items.length);
+					return tabbox.getModel().getElementAt(BindTabboxRenderer.this.getRenderedIndex(
+							tabs, ntab.getIndex()));
 				}
 			});
 			addItemReference(tabbox, ntab, index, varnm); //kept the reference to the data, before ON_BIND_INIT
@@ -183,6 +186,8 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			final Tabpanel ntabpanel = (Tabpanel)items[0];
 			ntabpanel.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			// ZK-2552
+			recordRenderedIndex(tabpanels, items.length);
+
 			ntabpanel.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
 				public Binder getBinder() {
@@ -191,7 +196,8 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = ntabpanel.getIndex() / items.length;
+					int idx = BindTabboxRenderer.this.getRenderedIndex(
+							tabpanels, ntabpanel.getIndex());
 					ListModel<?> listmodel = tabbox.getModel();
 					if (idx >= 0 && idx < listmodel.getSize()) {
 		            	if (listmodel instanceof ListModelArray){
@@ -208,7 +214,8 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return tabbox.getModel().getElementAt(ntabpanel.getIndex() / items.length);
+					return tabbox.getModel().getElementAt(BindTabboxRenderer.this.getRenderedIndex(
+							tabpanels, ntabpanel.getIndex()));
 				}
 			});
 			addItemReference(tabbox, ntabpanel, index, varnm); //kept the reference to the data, before ON_BIND_INIT

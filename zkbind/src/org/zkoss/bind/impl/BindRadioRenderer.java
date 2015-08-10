@@ -87,6 +87,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			nr.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			
 			// ZK-2552
+			recordRenderedIndex(radiogroup, items.length);
 			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
 				public Binder getBinder() {
@@ -95,7 +96,8 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = radiogroup.getChildren().indexOf(nr) / items.length;
+					int idx = BindRadioRenderer.this.getRenderedIndex(
+							radiogroup, radiogroup.getChildren().indexOf(nr));
 					ListModel<?> listmodel = radiogroup.getModel();
 					if (idx >= 0 && idx < listmodel.getSize()) {
 		            	if (listmodel instanceof ListModelArray){
@@ -112,7 +114,8 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return radiogroup.getModel().getElementAt(radiogroup.getChildren().indexOf(nr) / items.length);
+					return radiogroup.getModel().getElementAt(BindRadioRenderer.this.getRenderedIndex(
+							radiogroup, radiogroup.getChildren().indexOf(nr)));
 				}
 			});
 			addItemReference(radiogroup, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
