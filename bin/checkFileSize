@@ -40,6 +40,12 @@ if [ ! -d "$folder2" ] && [ ! -f "$folder2" ] ; then
 fi
 
 maindir="$(pwd)"
+os="$(uname)"
+
+if [ $os == "Darwin" ]; then
+	maindir=$TMPDIR
+fi
+
 tmp1="checktmp1"
 tmp2="checktmp2"
 
@@ -54,20 +60,20 @@ function checkFileSize {
 	if [ -d $1 ] ; then
 		cd $1
 	fi
-	du -abh * >> $maindir/$2.log
+	du -ah * >> $maindir/$2.log
 }
 
 function checkFileSizeMaven {
-	if [ -d $maindir/tmp ] ; then
-		rm -rf $maindir/tmp
+	if [ -d $maindir/zktmpcheck ] ; then
+		rm -rf $maindir/zktmpcheck
 	fi
-	mkdir $maindir/tmp
-	cp -r $1 $maindir/tmp
-	cd $maindir/tmp
+	mkdir $maindir/zktmpcheck
+	cp -r $1 $maindir/zktmpcheck
+	cd $maindir/zktmpcheck
 	unzipJar
-	cd $maindir/tmp
-	du -abh * >> $maindir/$2.log
-	rm -rf $maindir/tmp
+	cd $maindir/zktmpcheck
+	du -ah * >> $maindir/$2.log
+	rm -rf $maindir/zktmpcheck
 }
 
 function unzipJar {
@@ -79,7 +85,7 @@ function unzipJar {
 				unzip $f -d $tmpDir
 				rm -rf $f
 			else
-				cp $f $maindir/tmp
+				cp $f $maindir/zktmpcheck
 			fi
 		elif [ -d "$f" ] ; then
 			cd $f
@@ -95,8 +101,8 @@ fi
 if [ -f "$maindir/$tmp2.log" ] ; then
 	rm $maindir/$tmp2.log
 fi
-if [ -d "$maindir/tmp" ] ; then
-	rm -rf $maindir/tmp
+if [ -d "$maindir/zktmpcheck" ] ; then
+	rm -rf $maindir/zktmpcheck
 fi
 
 if [ "$isMaven" = "true" ] ; then
@@ -119,11 +125,18 @@ sort -n $tmp2.log -o $tmp2.log
 
 diff $tmp1.log $tmp2.log
 if [ $? != 0 ] ; then
-	TortoiseMerge.exe $tmp1.log $tmp2.log
+	if [ -f TortoiseMerge.exe ] ; then
+		TortoiseMerge.exe $tmp1.log $tmp2.log
+	elif [ $os == "Darwin" ]; then
+		opendiff $tmp1.log $tmp2.log
+	else 
+		vimdiff $tmp1.log $tmp2.log
+	fi
 else
 	echo "All files are matched!"
 fi
 
-
-rm $tmp1.log
-rm $tmp2.log
+if [ $os != "Darwin" ]; then
+	rm $tmp1.log
+	rm $tmp2.log
+fi

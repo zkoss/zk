@@ -1,7 +1,7 @@
   --------
 ZK 7.0.6
 * Features
-
+August 11, 2015
 * Bugs
   ZK-2692: SLF4J logging argument syntax
   ZK-2722: Clearing a Grid's model causes ArrayIndexOutOfBoundsException
