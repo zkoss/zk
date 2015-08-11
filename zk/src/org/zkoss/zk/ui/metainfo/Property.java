@@ -17,6 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ConditionImpl;
@@ -235,7 +238,14 @@ public class Property extends ConditionValue {
 		//ZK-2831: if deferred syntax is found and not evaluated yet, store the information and return for later evaluation
 		String vals;
 		if (_deferredVal == null && val != null && (vals = val.toString()).indexOf("#{") > -1) {
-			comp.addDeferredProps(this, vals);
+			Object attr = comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
+			Map<Property, String> deferredProps;
+			if (attr == null)
+				deferredProps = new HashMap<Property, String>(2);
+			else
+				deferredProps = (Map<Property, String>)attr;
+			deferredProps.put(this, vals);
+			comp.setAttribute(Attributes.DEFERRED_PROPERTIES, deferredProps);
 			return;
 		}
 

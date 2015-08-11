@@ -101,6 +101,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Clients;
@@ -2315,7 +2316,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 		}
 		//ZK-2831: evaluate deferred syntax (#{ })
-		Map<org.zkoss.zk.ui.metainfo.Property, String> deferredProps = comp.getDeferredProps();
+		Object attr = comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
+		Map<org.zkoss.zk.ui.metainfo.Property, String> deferredProps = attr == null ? null : (Map<org.zkoss.zk.ui.metainfo.Property, String>)attr;
 		if (deferredProps != null) {
 			BindEvaluatorX eval = this.getEvaluatorX();
 			for (Entry<org.zkoss.zk.ui.metainfo.Property, String> deferredProp : deferredProps.entrySet()) {

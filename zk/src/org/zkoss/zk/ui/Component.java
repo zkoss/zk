@@ -28,7 +28,6 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.au.AuService;
-import org.zkoss.zk.ui.metainfo.Property;
 
 /**
  * An UI component.
@@ -1153,18 +1152,4 @@ w:use="foo.MyWindow"&gt;
 	 * @see #query
 	 */
 	public Iterable<Component> queryAll(String selector);
-
-	/**
-	 * Set deferred properties which will be evaluated later with binder's information.
-	 * @param prop {@link org.zkoss.zk.ui.metainfo.Property} which contains deferred expression.
-	 * @param value property's value after evaluation
-	 * @Since 8.0.0
-	 */
-	public void addDeferredProps(Property prop, String value);
-
-	/**
-	 * Return those properties with deferred expression.
-	 * @Since 8.0.0
-	 */
-	public Map<Property, String> getDeferredProps();
 }

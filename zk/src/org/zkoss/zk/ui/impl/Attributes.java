@@ -39,6 +39,12 @@ public class Attributes extends org.zkoss.zk.ui.sys.Attributes {
 	 * @since 5.0.4
 	 */
 	public static final String ECHO_DATA = "org.zkoss.zk.ui.event.echo.data";
+	/**
+	 * A component attribute used to store a map of properties ({@link org.zkoss.zk.ui.metainfo.Property})
+	 * which have deferred expressions.
+	 * @since 8.0.0
+	 */
+	public static final String DEFERRED_PROPERTIES = "org.zkoss.zk.ui.metainfo.deferred.properties";
 
 	//Session//
 	
