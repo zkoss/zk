@@ -68,6 +68,11 @@ public class Property extends ConditionValue {
 	 */
 	private transient Method[] _mtds;
 
+	/**
+	 * To prevent invoking {@link #assign(Component)}} again causes redundant value evaluation with deferred expression.
+	 */
+	private Object _deferredVal;
+
 	/** Constructs a property with a class that is known in advance.
 	 * @exception IllegalArgumentException if name is null
 	 */
@@ -95,6 +100,7 @@ public class Property extends ConditionValue {
 		_navval = navval;
 		_value = navval != null ? null: new ExValue(value, Object.class);
 			//type will be fixed when mapped to a method
+		_deferredVal = null;
 	}
 
 	/** Returns the name of the property.
@@ -224,7 +230,14 @@ public class Property extends ConditionValue {
 		Class type =
 			mtd != null ? mtd.getParameterTypes()[0]: Object.class;
 		if (_value != null) _value.setExpectedType(type);
-		Object val = getValue(comp);
+		Object val = _deferredVal == null ? getValue(comp) : _deferredVal;
+
+		//ZK-2831: if deferred syntax is found and not evaluated yet, store the information and return for later evaluation
+		String vals;
+		if (_deferredVal == null && val != null && (vals = val.toString()).indexOf("#{") > -1) {
+			comp.addDeferredProps(this, vals);
+			return;
+		}
 
 		Method m = null;
 		if (mtd != null) {
@@ -283,6 +296,25 @@ public class Property extends ConditionValue {
 		}
 		m.invoke(comp, val);
 	}
+
+	/**
+	 * Returns the deferred value
+	 * @since 8.0.0
+	 */
+	public Object getDeferredVal() {
+		return _deferredVal;
+	}
+
+	/**
+	 * Set deferred value after evaluation. Usually {@link #assign(Component)} again after evaluation with binder's information.
+	 * <p>Note: Internal use only.</p>
+	 * @param deferredVal
+	 * @since 8.0.0
+	 */
+	public void setDeferredVal(Object deferredVal) {
+		this._deferredVal = deferredVal;
+	}
+
 	private static Method findExact(final Method[] mtds, final Object val) {
 		if (val != null) {
 			final Class vcls = val.getClass();

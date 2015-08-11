@@ -50,7 +50,6 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.au.out.AuEcho;
-import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -73,6 +72,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.Property;
 import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.select.Selectors;
@@ -131,6 +131,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/*package*/ transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
+
+	/** store those properties which their value starts with #{} to support deferred evaluation */
+	private Map<Property, String> _deferredProps; //property -> value after evaluation
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -3945,4 +3948,19 @@ w:use="foo.MyWindow"&gt;
 			updateSubBindingAnnotationCount(diff);
 		}
 	}
+
+	//since 8.0.0, support deferred evaluation
+	private final Map<Property, String> initDeferredProps() {
+		if (_deferredProps == null)
+			_deferredProps = new HashMap<Property, String>();
+		return _deferredProps;
+	}
+
+	public void addDeferredProps(Property prop, String value) {
+		initDeferredProps().put(prop, value);
+	}
+	public Map<Property, String> getDeferredProps() {
+		return _deferredProps;
+	}
+
 }

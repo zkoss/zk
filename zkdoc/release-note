@@ -40,6 +40,7 @@ ZK 8.0.0
   ZK-2569: Provide localized message for fileupload
   ZK-2800: replacing a listmodel item should re-renders only one item
   ZK-2662: Forbidden to set width/height/hflex/vflex in Auxheader
+  ZK-2831: Support deferred evaluation like JSF #{}
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

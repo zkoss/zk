@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2831.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 31 11:09:16 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label value="include src: "></label>
+	<button label="#{abc += ' in include'}"></button>
+</zk>
