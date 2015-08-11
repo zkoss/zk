@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2837.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 10 16:51:49 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:sh="shadow">
+
+<zscript><![CDATA[
+	public class TestViewModel {
+		boolean showDetails = true;
+		ListModelList details = new ListModelList();
+		details.add("initial detail");
+		public boolean isShowDetails() {return !details.isEmpty();}
+		public ListModelList getDetails() {return details;}
+	}
+]]></zscript>
+	<label multiline="true">
+		<!-- bug description
+		1. replacing the elements in the listmodel does not clear the details labels rendered with the "detailsLabel" template, it simply appends a new item in the UI even though the model was cleared before adding the new item.
+		2. removing the only element in the model, and trying add it again causes a NullPointerException. when adding the new element: -->
+		1. Please Check the message below in order. "Before", "Details:", "Detail: initial detail", and then "After"
+		2. Click the button "replace model content", and check the message below in order. "Before", "Details:", "Detail: new detail", and then "After"
+		3. Click the button "replace model content" again, you should not see any exception.
+		4. Click the button "remove one element" and check the message below in order. "Before" and "After"
+		5. Click the button "replace model content", and check the message below in order. "Before", "Details:", "Detail: new detail", and then "After"
+	</label>
+	<div id="host" viewModel="@id('vm') @init('TestViewModel')">
+		<div>
+			Before
+		</div>
+		<sh:if test="@load(vm.showDetails)">
+			<div>
+				Details:
+				<sh:forEach items="@init(vm.details)">
+					<sh:apply template="detailsLabel"/>
+				</sh:forEach>
+			</div>
+		</sh:if>
+		<div>
+			After
+		</div>
+		
+		<template name="detailsLabel">
+			<div style="background-color: red;">
+			<label value="@bind(('Detail: ' += each))"/>
+			</div>
+		</template>
+		
+		<button label="replace model content" >
+			<attribute name="onClick"><![CDATA[
+				vm.getDetails().clear();
+				List newDetails = new ArrayList();
+				newDetails.add("added");
+				vm.getDetails().add("new detail");
+				BindUtils.postNotifyChange(null, null, vm, "showDetails");
+			]]></attribute>
+		</button>
+		<button label="remove one element" >
+			<attribute name="onClick"><![CDATA[
+				vm.getDetails().remove(0);
+				BindUtils.postNotifyChange(null, null, vm, "showDetails");
+			]]></attribute>
+		</button>
+	</div>
+	<debugger rootId="host"/>
+</zk>

@@ -60,6 +60,7 @@ ZK 8.0.0
   ZK-2823: forEach error when clearing ListModelList
   ZK-2807: notifyChange on method name only in ZK 8
   ZK-2534: Listbox allows selection with checkable="false"
+  ZK-2837: nested foreach/if/apply problems
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.

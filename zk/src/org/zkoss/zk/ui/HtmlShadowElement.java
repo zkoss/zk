@@ -11,40 +11,24 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zk.ui;
 
-import java.io.Writer;
-import java.util.AbstractList;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Generics;
-import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zk.ui.ShadowElementCtrl;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 
 /**
@@ -896,8 +880,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 	}
 	public void beforeHostParentChanged(Component parent) {
 		if (log.isDebugEnabled()) {
-			log.debug("beforeHostParentChanged " + parent + ", in this shadow "  + 
-				ShadowElementsCtrl.getCurrentInfo());
+			log.debug(
+					"beforeHostParentChanged " + parent + ", in this shadow " +
+							ShadowElementsCtrl.getCurrentInfo());
 		}
 		if (parent == null) {
 			((ComponentCtrl) _host).removeShadowRoot(this);
@@ -1022,6 +1007,14 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				for (Iterator<HtmlShadowElement> sit = children.iterator(); sit.hasNext();) {
 					if (adjustInsertionForRemove(sit.next(), removed))
 						return true;
+				}
+			} else { // Bug ZK-2837
+				if (direction == Direction.FIRST) {
+					se.shrinkRange(se._firstInsertion, se._firstInsertion);
+					return true;
+				} else if (direction == Direction.LAST){
+					se.shrinkRange(se._lastInsertion, se._lastInsertion);
+					return true;
 				}
 			}
 		default:
