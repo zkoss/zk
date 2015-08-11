@@ -95,8 +95,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -109,6 +107,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ExecutionInit;
+import org.zkoss.zk.xel.Evaluators;
 
 /**
  * Implementation of Binder.
@@ -1996,7 +1995,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			doPrePhase(Phase.LOAD_BEFORE, ctx);		
 			_propertyBindingHandler.doLoadBefore(comp, command);
 			_formBindingHandler.doLoadBefore(comp, command);
-			_childrenBindingHandler.doLoadBefore(comp,command);
+			_childrenBindingHandler.doLoadBefore(comp, command);
 		} finally {
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
@@ -2144,7 +2143,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			((ComponentCtrl)comp).enableBindingAnnotation();
 			
 		//associate component with this binder, which means, one component can only bind by one binder
-		BinderUtil.markHandling(comp,this);
+		BinderUtil.markHandling(comp, this);
 	}
 	
 	
@@ -2163,7 +2162,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	@SuppressWarnings("unchecked")
 	private TemplateResolver newTemplateResolverImpl(BinderImpl binderImpl, Component comp, String attr,
 			String templateExpr, Map<String, Object> templateArgs) {
-		String clznm = Library.getProperty("org.zkoss.bind.TemplateResolver.class",TemplateResolverImpl.class.getName());
+		String clznm = Library.getProperty("org.zkoss.bind.TemplateResolver.class", TemplateResolverImpl.class.getName());
 		try {
 			Class<TemplateResolver> clz = (Class<TemplateResolver>)Classes.forNameByThread(clznm);
 			Constructor<TemplateResolver> c = clz.getDeclaredConstructor(Binder.class,Component.class,String.class,String.class,Map.class);
@@ -2313,6 +2312,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				}
 					
 				_childrenBindingHandler.doLoad(comp,bkey);
+			}
+		}
+		//ZK-2831: evaluate deferred syntax (#{ })
+		Map<org.zkoss.zk.ui.metainfo.Property, String> deferredProps = comp.getDeferredProps();
+		if (deferredProps != null) {
+			BindEvaluatorX eval = this.getEvaluatorX();
+			for (Entry<org.zkoss.zk.ui.metainfo.Property, String> deferredProp : deferredProps.entrySet()) {
+				org.zkoss.zk.ui.metainfo.Property prop = deferredProp.getKey();
+				String value = deferredProp.getValue();
+
+				Object o = Evaluators.evaluate(eval, comp, value, Object.class);
+
+				prop.setDeferredVal(o); //to avoid evaluate value again
+				prop.assign(comp);
 			}
 		}
 	}

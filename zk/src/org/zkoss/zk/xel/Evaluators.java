@@ -28,26 +28,32 @@ import org.zkoss.zk.ui.Page;
  */
 public class Evaluators {
 	/** Evaluates the specified expression (which might or might not
-	 * contain ${).
+	 * contain ${ or #{).
 	 *
 	 * @param comp the component to represent the self variable
 	 */
 	public static Object evaluate(Evaluator eval, Component comp,
 	String expr, Class<?> expectedClass) {
-		if (expr != null && expr.indexOf("${") >= 0) {
+		boolean isDeferred = false;
+		if (expr != null && (expr.indexOf("${") >= 0 || (isDeferred = expr.indexOf("#{") >= 0))) {
+			if (isDeferred)
+				expr = expr.replace("#{", "${");
 			return eval.evaluate(comp, eval.parseExpression(expr, expectedClass));
 		} else {
 			return Classes.coerce(expectedClass, expr);
 		}
 	}
 	/** Evaluates the specified expression (which might or might not
-	 * contain ${).
+	 * contain ${ or #{}).
 	 *
 	 * @param page the page to represent the self variable
 	 */
 	public static Object evaluate(Evaluator eval, Page page,
 	String expr, Class<?> expectedClass) {
-		if (expr != null && expr.indexOf("${") >= 0) {
+		boolean isDeferred = false;
+		if (expr != null && (expr.indexOf("${") >= 0 || (isDeferred = expr.indexOf("#{") >= 0))) {
+			if (isDeferred)
+				expr = expr.replace("#{", "${");
 			return eval.evaluate(page, eval.parseExpression(expr, expectedClass));
 		} else {
 			return Classes.coerce(expectedClass, expr);
