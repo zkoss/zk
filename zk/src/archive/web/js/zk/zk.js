@@ -1326,7 +1326,15 @@ zk.log('value is", value);
 						break;
 					}
 				}
-				if (w && dataHandlerService) $.extend(this, dataHandlerService);
+				if (w && dataHandlerService) {
+					$.extend(this, dataHandlerService);
+					var oldCommand = this.command,
+						subName = name.indexOf('data-') == 0 ? name.substring(5) : name;
+					this.command = function () {
+						arguments[0] = subName + arguments[0];
+						oldCommand.call(this, arguments);
+					}
+				}
 				fun.call(this, wgt, dataValue);
 			}};
 		}
