@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -58,6 +59,7 @@ import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.impl.DataLoader;
@@ -517,6 +519,12 @@ public class Grid extends MeshElement {
 							smartUpdate("paginal", _pgi);
 					}
 				}
+				// Bug ZK-1696: model also preserves paging information
+				if (_model instanceof Pageable) {
+					Pageable m = (Pageable) _model;
+					m.setActivePage(_pgi.getActivePage());
+					m.setPageSize(_pgi.getPageSize());
+				}
 			}
 		}
 	}
@@ -541,6 +549,10 @@ public class Grid extends MeshElement {
 			Events.postEvent(
 				new PagingEvent(event.getName(), Grid.this,
 					event.getPageable(), event.getActivePage()));
+			//Bug ZK-1696: model also preserves paging information
+			if (_model instanceof Pageable) {
+				((Pageable) _model).setActivePage(event.getActivePage());
+			}
 		}
 		
 		public Object willClone(Component comp) {
@@ -560,6 +572,11 @@ public class Grid extends MeshElement {
 					getDataLoader().syncModel(ofs, pgsz);
 				}
 				postOnPagingInitRender();
+			}
+			
+			// Bug ZK-1696: model also preserves paging information
+			if (_model instanceof Pageable && event instanceof PagingEvent) {
+				((Pageable) _model).setActivePage(((PagingEvent) event).getActivePage());
 			}
 			
 			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
@@ -704,6 +721,12 @@ public class Grid extends MeshElement {
 			if (_rows != null) _rows.getChildren().clear();
 			smartUpdate("model", false);
 		}
+		
+		// Bug ZK-1696: need to set active page before rendering
+		if (_pgi != null && _model instanceof Pageable) {
+			_pgi.setActivePage(((Pageable) _model).getActivePage());
+		}
+		
 		getDataLoader().updateModelInfo();
 	}
 	
@@ -1693,5 +1716,23 @@ public class Grid extends MeshElement {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
+	}
+	
+	@Override
+	public void setActivePage(int pg) throws WrongValueException {
+		// Bug ZK-1696: model also preserves paging information
+		if (_model instanceof Pageable) {
+			((Pageable) _model).setActivePage(pg);
+		}
+		super.setActivePage(pg);
+	}
+
+	@Override
+	public void setPageSize(int pgsz) throws WrongValueException {
+		// Bug ZK-1696: model also preserves paging information
+		if (_model instanceof Pageable) {
+			((Pageable) _model).setPageSize(pgsz);
+		}
+		super.setPageSize(pgsz);
 	}
 }

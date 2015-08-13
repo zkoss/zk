@@ -1,3 +1,4 @@
+
 /* AbstractTreeModel.java
 
 	Purpose:
@@ -30,6 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.ext.Openable;
+import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.TreeOpenableModel;
@@ -58,7 +60,7 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  */
 abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 TreeSelectableModel, TreeOpenableModel, Selectable<E>, Openable<E>,
-java.io.Serializable {
+java.io.Serializable, Pageable {
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
@@ -90,6 +92,7 @@ java.io.Serializable {
 		addTreeDataListener(new TreeDataListener() {
 			public void onChange(TreeDataEvent event) {
 				updatePath(event);
+				invalidatePageCount();
 			}
 		});
 	}
@@ -752,5 +755,85 @@ java.io.Serializable {
 	private static class States<E> {
 		private final Set<E> selection = new LinkedHashSet<E>();
 		private final Set<E> opens = new LinkedHashSet<E>();
+	}
+
+	// Pageable //
+	private int _pageSize = 20; // same default as paging
+	private int _activePage = 0; // same default as paging
+	private int _pageCount = -1; // pending calculation
+
+	// Pageable //
+	public int getPageSize() {
+		return _pageSize;
+	}
+
+	public void setPageSize(int size) throws WrongValueException {
+		if (size < 0) {
+			throw new WrongValueException("expecting positive non zero value, got: " + size);
+		}
+		_pageSize = size;
+		invalidatePageCount();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <br><br>
+	 * Note: the entire tree will be traversed once to count the number of tree nodes, 
+	 * although the result will be cached until the model has changed (open/add/remove/etc.), 
+	 * it is still a VERY EXPENSIVE operation, please @Override to provide your 
+	 * own implementation for better performance
+	 * 
+	 * @return number of pages, or 1 if the model is empty
+	 * @since 8.0.0 
+	 */
+	public int getPageCount() {
+		if (_pageCount < 1) { // dirty/invalid value, re-calculation required
+			if (_root != null) {
+				int count = getChildNodeCount(_root);
+				if (count <= 0) { // got no child, return one page anyway
+					_pageCount = 1;
+				} else {
+					int pageCount = count / _pageSize;
+					if (count % _pageSize == 0) {
+						_pageCount = pageCount;
+					} else {
+						_pageCount = pageCount + 1;
+					}
+				}
+			} else {
+				_pageCount = 1; // will always have at least one page
+			}
+		}
+		return _pageCount;
+	}
+
+	// count the number of child nodes, will traverse into any opened child 
+	// nodes, depth-first style
+	private int getChildNodeCount(E node) {
+		int c = getChildCount(node);
+		int count = c;
+		for (int i = 0; i < c; i++) {
+			E child = getChild(node, i);
+			if (isPathOpened(getPath(child))) {
+				count += getChildNodeCount(child);
+			}
+		}
+		return count;
+	}
+	
+	//ZK-1696: set to a invalid value to trigger re-calculation when getPageCount() is called
+	private void invalidatePageCount() {
+		_pageCount = -1;
+	}
+
+	public int getActivePage() {
+		return _activePage;
+	}
+
+	public void setActivePage(int pg) throws WrongValueException {
+		if (pg < 0) {
+			throw new WrongValueException("expecting positive non zero value, got: " + pg);
+		}
+		_activePage = pg;
 	}
 }

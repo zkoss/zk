@@ -62,6 +62,7 @@ ZK 8.0.0
   ZK-2807: notifyChange on method name only in ZK 8
   ZK-2534: Listbox allows selection with checkable="false"
   ZK-2837: nested foreach/if/apply problems
+  ZK-1696: Active page of tree not sync while model changed
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.

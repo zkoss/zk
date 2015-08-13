@@ -68,6 +68,7 @@ import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
@@ -240,7 +241,6 @@ public class Tree extends MeshElement {
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 		addClientEvent(Tree.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.11 / 6.0.0
-		
 	}
 
 	public Tree() {
@@ -286,8 +286,7 @@ public class Tree extends MeshElement {
 			CloneableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
-				Tree.this
-						.removeEventListener("onInitModel", _modelInitListener);
+				Tree.this.removeEventListener("onInitModel", _modelInitListener);
 				_modelInitListener = null;
 			}
 			if (_model != null) { //rows not created yet
@@ -301,7 +300,6 @@ public class Tree extends MeshElement {
 				}
 			}
 		}
-		
 		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
@@ -446,6 +444,12 @@ public class Tree extends MeshElement {
 							smartUpdate("paginal", _pgi);
 					}
 				}
+				// Bug ZK-1696: model also preserves paging information
+				if (_model instanceof Pageable) {
+					Pageable m = (Pageable) _model;
+					m.setActivePage(_pgi.getActivePage());
+					m.setPageSize(_pgi.getPageSize());
+				}
 			}
 		}
 	}
@@ -473,6 +477,11 @@ public class Tree extends MeshElement {
 			Events.postEvent(
 				new PagingEvent(event.getName(),
 					Tree.this, event.getPageable(), event.getActivePage()));
+			// Bug ZK-1696: model also preserves paging information
+			if (_model instanceof Pageable) {
+				((Pageable) _model).setActivePage(event.getActivePage());
+				((Pageable) _model).setPageSize(event.getPageable().getPageSize());
+			}
 		}
 		
 		public Object willClone(Component comp) {
@@ -496,7 +505,7 @@ public class Tree extends MeshElement {
 					// if mps is less than 0, we don't store the index.
 					if (mps >= 0 && !_rodPagingIndex.contains(ap)) {
 						_rodPagingIndex.add(ap);
-					}	
+					}
 					
 					if (mps >= 1 && mps < _rodPagingIndex.size()) {
 						LinkedList<Integer> sortedIndex = new LinkedList<Integer>();
@@ -564,10 +573,8 @@ public class Tree extends MeshElement {
 				}
 				invalidate();
 			}
-			
 		}
 
-		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}
@@ -612,6 +619,10 @@ public class Tree extends MeshElement {
 	public void setPageSize(int pgsz) throws WrongValueException {
 		if (pgsz < 0 || !inPagingMold()) return;
 		pgi().setPageSize(pgsz);
+		// Bug ZK-1696: model need to preserve paging information, too
+		if (_model instanceof Pageable) {
+			((Pageable) _model).setPageSize(pgsz);
+		}
 	}
 
 	protected Paginal pgi() {
@@ -636,7 +647,7 @@ public class Tree extends MeshElement {
 	 * @param fixedLayout true to outline this grid by browser
 	 */
 	public void setFixedLayout(boolean fixedLayout) {
-		 setSizedByContent(!fixedLayout);
+		setSizedByContent(!fixedLayout);
 	}
 	/**
 	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
@@ -908,7 +919,6 @@ public class Tree extends MeshElement {
 				if (pg != getActivePage())
 					setActivePage(pg);
 			}
-
 		}
 	}
 	/**
@@ -1658,7 +1668,7 @@ public class Tree extends MeshElement {
 	public void setModel(TreeModel<?> model) {
 		if (model != null) {
 			if (!(model instanceof TreeSelectableModel))
-				throw new UiException(model.getClass() + " must implement "+TreeSelectableModel.class);
+				throw new UiException(model.getClass() + " must implement " + TreeSelectableModel.class);
 
 			if (_model != model) {
 				if (_model != null) {
@@ -1670,9 +1680,14 @@ public class Tree extends MeshElement {
 					//bug# 3095453: tree can't expand if model is set in button onClick
 					smartUpdate("model", true);
 				}
-
 				setModelDirectly(model);
 				initDataListener();
+				// Bug ZK-1696: when model is switched(model 1 -> model 2), the 
+				// new model does not know the current page size, have to set it 
+				// manually for the model to calculate the correct page count
+				if (_pgi != null && _model instanceof Pageable) {
+					((Pageable) _model).setPageSize(_pgi.getPageSize());
+				}
 			}
 			doSort(this);
 			postOnInitRender();
@@ -1702,7 +1717,9 @@ public class Tree extends MeshElement {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
-			Events.postEvent("onInitRender", this, null);
+			// Bug ZL-1696: manipulate tree from api might happen before tree
+			// render, use sendEvent instead of postEvent to render tree first
+			Events.sendEvent("onInitRender", this, null);
 		}
 	}
 
@@ -1760,8 +1777,7 @@ public class Tree extends MeshElement {
 			NoSuchMethodException, IllegalAccessException,
 			InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
-			setItemRenderer((TreeitemRenderer) Classes
-					.newInstanceByThread(clsnm));
+			setItemRenderer((TreeitemRenderer) Classes.newInstanceByThread(clsnm));
 	}
 
 
@@ -1822,6 +1838,10 @@ public class Tree extends MeshElement {
 			renderer.doCatch(ex);
 		} finally {
 			renderer.doFinally();
+		}
+		// Bug ZL-1696: get active page from model after render
+		if (_pgi != null && _model instanceof Pageable) {
+			_pgi.setActivePage(((Pageable) _model).getActivePage());
 		}
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tree when items have been rendered.
 	}
@@ -1890,6 +1910,7 @@ public class Tree extends MeshElement {
 			tc.setParent(ti);
 		}
 	}
+	
 	/*
 	 * Renders the direct children for the specified parent
 	 */
@@ -1899,16 +1920,19 @@ public class Tree extends MeshElement {
 		for (int i = 0, j = _model.getChildCount(node); i < j; i++) {
 			Treeitem ti = newUnloadedItem();
 			ti.setParent(parent);
-			if (initSize >= 0 && i >= initSize) {
-				ti.appendChild(new Treerow());
-				ti.getTreerow().appendChild(new Treecell());
+			Object childNode = _model.getChild(node, i);
+			// Bug ZK-1696: must render all opened node to have correct page count
+			TreeOpenableModel model = (TreeOpenableModel) _model;
+			// only render opened node or nodes within ROD range
+			if (model.isPathOpened(_model.getPath(childNode)) || (initSize >= 0 && i < initSize)) {
+				renderChildren0(renderer, parent, ti, childNode, i);
 				continue;
 			}
-			Object childNode = _model.getChild(node, i);
-			renderChildren0(renderer, parent, ti, childNode, i);
+			ti.appendChild(new Treerow());
+			ti.getTreerow().appendChild(new Treecell());
 		}
 	}
-
+	
 	/** 
 	 * Returns the number of rows to preload when receiving the rendering
 	 * request from the client.
@@ -1939,7 +1963,7 @@ public class Tree extends MeshElement {
 	 */
 	private int maxRodPageSize() {
 		if (WebApps.getFeature("ee")) {
-			 return Utils.getIntAttribute(this, "org.zkoss.zul.tree.maxRodPageSize",
+			return Utils.getIntAttribute(this, "org.zkoss.zul.tree.maxRodPageSize",
 						INIT_LIMIT, true);
 		}
 		return -1;
@@ -1954,12 +1978,12 @@ public class Tree extends MeshElement {
 	 */
 	private int initRodSize() {
 		if (WebApps.getFeature("ee")) {
-			 // ZK-2165: should return page size in paging mold
-			 if (inPagingMold())
-				 return getPageSize();
-			 else
-				 return Utils.getIntAttribute(this, "org.zkoss.zul.tree.initRodSize", 
-					 INIT_LIMIT, true);
+			// ZK-2165: should return page size in paging mold
+			if (inPagingMold())
+				return getPageSize();
+			else
+				return Utils.getIntAttribute(this, "org.zkoss.zul.tree.initRodSize",
+					INIT_LIMIT, true);
 		}
 		return -1;
 	}
@@ -2734,5 +2758,14 @@ public class Tree extends MeshElement {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
+	}
+	
+	@Override
+	public void setActivePage(int pg) throws WrongValueException {
+		// Bug ZK-1696: model need to preserve paging information, too
+		if (_model instanceof Pageable) {
+			((Pageable) _model).setActivePage(pg);
+		}
+		super.setActivePage(pg);
 	}
 }

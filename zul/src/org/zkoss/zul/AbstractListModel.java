@@ -25,8 +25,10 @@ import java.util.Set;
 
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
 
@@ -36,7 +38,7 @@ import org.zkoss.zul.ext.SelectionControl;
  * @author tomyeh
  */
 abstract public class AbstractListModel<E> implements ListModel<E>,
-Selectable<E>, java.io.Serializable {
+Selectable<E>, java.io.Serializable, Pageable {
 	private transient List<ListDataListener> _listeners = new ArrayList<ListDataListener>();
 
 	/** The current selection. */
@@ -254,5 +256,46 @@ Selectable<E>, java.io.Serializable {
 		clone._selection = clone.newEmptySelection();
 		clone._selection.addAll(_selection);
 		return clone;
+	}
+	
+	// Pageable //
+	private int _pageSize = 20; // same default as paging
+	private int _activePage = 0; // same default as paging
+
+	// Pageable // ZK-1696
+	public int getPageSize() {
+		return _pageSize;
+	}
+
+	public void setPageSize(int size) throws WrongValueException {
+		if (size < 0) {
+			throw new WrongValueException("page size should >= 0");
+		}
+		_pageSize = size;
+	}
+
+	public int getPageCount() {
+		int size = getSize();
+		if(size > 0){
+			int pageCount = size / _pageSize;
+			if(size % _pageSize == 0){
+				return pageCount;
+			} else{
+				return pageCount + 1;
+			}
+		} else{
+			return 1;
+		}
+	}
+
+	public int getActivePage() {
+		return _activePage;
+	}
+
+	public void setActivePage(int pg) throws WrongValueException {
+		if (pg < 0) {
+			throw new WrongValueException("active page index should >= 0");
+		}
+		_activePage = pg;
 	}
 }

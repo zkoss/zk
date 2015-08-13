@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-1696-list.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 11 16:39:35 CST 2015, Created by Christopher
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModel modelThree = new ListModelList();
+		modelThree.add("item 1");
+		modelThree.add("item 2");
+		modelThree.add("item 3");
+		modelThree.add("item 4");
+		modelThree.add("item 5");
+		modelThree.add("item 6");
+		modelThree.add("item 7");
+		modelThree.add("item 8");
+		modelThree.add("item 9");
+		modelThree.add("item 10");
+		
+		ListModel modelFour = new ListModelList();
+		modelFour.add("item a");
+		modelFour.add("item b");
+		modelFour.add("item c");
+		modelFour.add("item d");
+		modelFour.add("item e");
+		modelFour.add("item f");
+		modelFour.add("item g");
+		modelFour.add("item h");
+		modelFour.add("item i");
+		modelFour.add("item j");
+	]]></zscript>
+	<label multiline="true">
+		one listbox view with multiple list models, every model should preserve its own select and paging state
+		1. listbox is set to modelOne by default
+		2. change page with paging mold buttons, the label under listbox view should show the correct page index
+		3. switch to modelTwo using the "change to modelTwo" button
+		4. the label should show the correct model name with page: 0
+		5. switch back to modelOne with the "change to modelOne" button
+		6. the label should show whatever page index modelOne had before switching to modelTwo
+	</label>
+	<listbox id="list" model="${modelThree}" mold="paging" pageSize="3">
+		<attribute name="onCreate"><![CDATA[
+			String value = "model: " + (self.getModel() == modelThree? "modelThree" : "modelFour");
+			lb2.setValue(value + ", page: " + self.getActivePage());
+		]]></attribute>
+		<attribute name="onPaging"><![CDATA[
+			String value = "model: " + (self.getModel() == modelThree? "modelThree" : "modelFour");
+			lb2.setValue(value + ", page: " + self.getActivePage());
+		]]></attribute>
+	</listbox>
+	<label id="lb2" />
+	<button id="btn1" label="change to modelThree">
+		<attribute name="onClick"><![CDATA[
+			list.setModel(modelThree);
+			lb2.setValue("model: modelThree, page: " + list.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn2" label="change to modelThree change after set">
+		<attribute name="onClick"><![CDATA[
+			list.setModel(modelThree);
+			list.setActivePage(1);
+			lb2.setValue("model: modelThree, page: " + list.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn3" label="change to modelThree change before set">
+		<attribute name="onClick"><![CDATA[
+			list.setActivePage(1);
+			list.setModel(modelThree);
+			lb2.setValue("model: modelThree, page: " + list.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn4" label="change to modelFour">
+		<attribute name="onClick"><![CDATA[
+			list.setModel(modelFour);
+			lb2.setValue("model: modelFour, page: " + list.getActivePage());
+		]]></attribute>
+	</button>
+</zk>

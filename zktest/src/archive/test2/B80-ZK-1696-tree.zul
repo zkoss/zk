@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-1696-tree.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 11 16:39:27 CST 2015, Created by Christopher
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		TreeModel modelOne = new DefaultTreeModel(
+			new DefaultTreeNode(null,
+				new DefaultTreeNode[] {
+					new DefaultTreeNode("item 1"),
+					new DefaultTreeNode("item 2", 
+						new DefaultTreeNode[] {
+							new DefaultTreeNode("item 21"),
+							new DefaultTreeNode("item 22"),
+							new DefaultTreeNode("item 23"),
+							new DefaultTreeNode("item 24"),
+							new DefaultTreeNode("item 25"),
+							new DefaultTreeNode("item 26")
+						}
+					),
+					new DefaultTreeNode("item 3"),
+					new DefaultTreeNode("item 4"),
+					new DefaultTreeNode("item 5"),
+					new DefaultTreeNode("item 6", 
+						new DefaultTreeNode[] {
+							new DefaultTreeNode("item 61"),
+							new DefaultTreeNode("item 62"),
+							new DefaultTreeNode("item 63"),
+							new DefaultTreeNode("item 64"),
+							new DefaultTreeNode("item 65"),
+							new DefaultTreeNode("item 66")
+						}
+					)
+			}
+		));
+		TreeModel modelTwo = new DefaultTreeModel(
+			new DefaultTreeNode(null,
+				new DefaultTreeNode[] {
+					new DefaultTreeNode("item a"),
+					new DefaultTreeNode("item b"),
+					new DefaultTreeNode("item c"),
+					new DefaultTreeNode("item d"),
+					new DefaultTreeNode("item e"),
+					new DefaultTreeNode("item f")
+			}
+		));
+	]]></zscript>
+	<label multiline="true">
+		one tree view with multiple tree models, every model should preserve its own open, select, and paging state
+		1. tree is set to modelOne by default
+		2. change page with paging mold buttons, the label under tree view should show the correct page index
+		3. switch to modelTwo using the "change to modelTwo" button
+		4. the label should show the correct model name with page: 0
+		5. switch back to modelOne with the "change to modelOne" button
+		6. the label should show whatever page index modelOne had before switching to modelTwo
+		Note: whenever the "get model PageCount" button is pressed, it should show the correct page count, same as the page count in the paging component
+	</label>
+	<tree id="tree" model="${modelOne}" mold="paging" pageSize="3">
+		<attribute name="onCreate"><![CDATA[
+			String value = "model: " + (self.getModel() == modelOne? "modelOne" : "modelTwo");
+			lb.setValue(value + ", page: " + self.getActivePage());
+		]]></attribute>
+		<attribute name="onPaging"><![CDATA[
+			String value = "model: " + (self.getModel() == modelOne? "modelOne" : "modelTwo");
+			lb.setValue(value + ", page: " + self.getActivePage());
+		]]></attribute>
+	</tree>
+	<label id="lb" />
+	<button id="btn1" label="change to modelOne">
+		<attribute name="onClick"><![CDATA[
+			tree.setModel(modelOne);
+			lb.setValue("model: modelOne, page: " + tree.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn2" label="change to modelOne change after set">
+		<attribute name="onClick"><![CDATA[
+			tree.setModel(modelOne);
+			modelOne.addOpenObject(modelOne.getRoot().getChildAt(1));
+			tree.setActivePage(1);
+			lb.setValue("model: modelOne, page: " + tree.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn3" label="change to modelOne change before set">
+		<attribute name="onClick"><![CDATA[
+			modelOne.addOpenObject(modelOne.getRoot().getChildAt(1));
+			tree.setActivePage(1);
+			tree.setModel(modelOne);
+			lb.setValue("model: modelOne, page: " + tree.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn4" label="change to modelTwo">
+		<attribute name="onClick"><![CDATA[
+			tree.setModel(modelTwo);
+			lb.setValue("model: modelTwo, page: " + tree.getActivePage());
+		]]></attribute>
+	</button>
+	<button id="btn5" label="get model PageCount">
+		<attribute name="onClick"><![CDATA[
+			lb2.setValue("page count: " + tree.getModel().getPageCount());
+		]]></attribute>
+	</button>
+	<label id="lb2" />
+</zk>
