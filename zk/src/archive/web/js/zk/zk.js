@@ -1331,9 +1331,13 @@ zk.log('value is", value);
 					var oldCommand = this.command,
 						subName = name.indexOf('data-') == 0 ? name.substring(5) : name;
 					this.command = function () {
-						arguments[0] = subName + arguments[0];
-						oldCommand.call(this, arguments);
-					}
+						oldCommand.call(this, subName + arguments[0], arguments[1]);
+					};
+					var oldAfter = this.after;
+					if (oldAfter)
+						this.after = function () {
+							oldAfter.call(this, subName + arguments[0], arguments[1]);
+						};
 				}
 				fun.call(this, wgt, dataValue);
 			}};
