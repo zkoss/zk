@@ -15,5 +15,5 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label value="include src: "></label>
-	<button label="#{abc += ' in include'}"></button>
+	<button label="#{mytitle += ' in include'}"></button>
 </zk>

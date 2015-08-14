@@ -931,6 +931,9 @@ public class UiEngineImpl implements UiEngine {
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by application developers
 
+			//ZK-2831: post event for deferred evaluation
+			Events.postEvent(Events.ON_DEFERRED_EVALUATION, child, null);
+
 			//Bug ZK-504: even might be listened later (in parent's composer)
 			//See also ZK-759
 			Events.postEvent(

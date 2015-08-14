@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -30,12 +30,16 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.xel.DeferredEvaluator;
 import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.xel.ExValue;
 
@@ -75,6 +79,10 @@ public class Property extends ConditionValue {
 	 * To prevent invoking {@link #assign(Component)}} again causes redundant value evaluation with deferred expression.
 	 */
 	private Object _deferredVal;
+	/**
+	 * Avoid creating too many instances.
+	 */
+	private static DeferredEvaluator _deferredEvaluator = null;
 
 	/** Constructs a property with a class that is known in advance.
 	 * @exception IllegalArgumentException if name is null
@@ -238,16 +246,26 @@ public class Property extends ConditionValue {
 		//ZK-2831: if deferred syntax is found and not evaluated yet, store the information and return for later evaluation
 		String vals;
 		if (_deferredVal == null && val != null && (vals = val.toString()).indexOf("#{") > -1) {
-			Object attr = comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
-			Map<Property, String> deferredProps;
-			if (attr == null)
-				deferredProps = new HashMap<Property, String>(2);
-			else
-				deferredProps = (Map<Property, String>)attr;
+			Map<Property, String> deferredProps =
+					(Map<Property, String>)comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
+			if (deferredProps == null) {
+				deferredProps = new LinkedHashMap<Property, String>(2);
+				//add event listener
+				comp.addEventListener(Events.ON_DEFERRED_EVALUATION, new EventListener<Event>() {
+					public void onEvent(Event event) throws Exception {
+						DeferredEvaluator de = Property.getDeferredEvaluator();
+						if (de != null) { //do nothing if DeferredEvaluator not found
+							Component comp = event.getTarget();
+							de.evaluate(comp, comp.getAttribute(Attributes.DEFERRED_PROPERTIES));
+						}
+					}
+				});
+			}
 			deferredProps.put(this, vals);
 			comp.setAttribute(Attributes.DEFERRED_PROPERTIES, deferredProps);
 			return;
 		}
+		_deferredVal = null; //clear _deferredVal to enforce Property evaluate value when reload
 
 		Method m = null;
 		if (mtd != null) {
@@ -432,5 +450,17 @@ public class Property extends ConditionValue {
 		} else {
 			((DynamicPropertied)comp).setDynamicProperty(name, value);
 		}
+	}
+
+	//ZK-2831
+	private static DeferredEvaluator getDeferredEvaluator() {
+		if (_deferredEvaluator == null) {
+			try {
+				_deferredEvaluator = (DeferredEvaluator) Classes.newInstanceByThread("org.zkoss.bind.BindDeferredEvaluator");
+			} catch (Exception e) {
+				_deferredEvaluator = null;
+			}
+		}
+		return _deferredEvaluator;
 	}
 }
