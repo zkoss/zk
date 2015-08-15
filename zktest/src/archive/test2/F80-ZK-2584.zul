@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2584.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 14 12:28:38 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window xmlns:w="client" id="win" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2584VM')">
+    <label multiline="true">
+        1. Click the button "Test 1", you should see "Foo0 Bar0" message in the zk log area.
+        2. Click the button "Test 2", you should see "Foo0 Bar0" messages twice in the zk log area.
+        3. Click the button "Test 3", you should see "Foo2 Bar2" messsage in the zk log area.
+    </label>
+    <button label="Test 1" w:onClick="send(0)"/>
+    <button label="Test 2" w:onClick="send(0);send(0)"/>
+    <button label="Test 3" w:onClick="send(3)"/>
+    <script><![CDATA[
+        function send(count) {
+            if (!count) {
+                zkbind.$('$win').command('toServer', {foo: {foo: 'Foo0'}, bar: {bar: 'Bar0'}});
+            } else {
+                for (var i = 0; i < count; i++) {
+                    zkbind.$('$win').command('toServer', {foo: {foo: 'Foo' + i}, bar: {bar: 'Bar' + i}}, {duplicateIgnore: {'toServer': true}});
+                }
+            }
+        }
+        zk.afterMount(function () {
+            zkbind.$('$win').after('toClient', function (msg) {
+                if (msg)
+                    zk.log(msg);
+            });
+        });
+    ]]></script>
+</window>

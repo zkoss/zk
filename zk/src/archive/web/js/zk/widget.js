@@ -5317,7 +5317,16 @@ zkservice = {
 		zk.error('Not found ZK Service with [' + n + ']');
 	}
 };
-
+(function () {
+	function _fixCommandName(prefix, opts, prop) {
+		if (opts[prop]) {
+			var ignores = {};
+			for (var key in opts[prop]) {
+				ignores[prefix+key] = opts[prop][key];
+			}
+			opts[prop] = ignores;
+		}
+	}
 /**
  * A service utile widget
  * @since 8.0.0
@@ -5339,30 +5348,29 @@ zk.Service = zk.$extends(zk.Object, {
 	 * Post a command to the service
 	 * @param String command the name of the command
 	 * @param Array args the arguments for this command. (the value should be json type)
-	 */
-	command: function (cmd, args) {
-		this.$command0(cmd, args);
-		return this;
-	},
-	/**
-	 * Post a command to the service with a timeout if any.
-	 * @param String command the name of the command
-	 * @param Array args the arguments for this command. (the value should be json type)
+	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout to delay the post.
 	 */
-	$command0: function (cmd, args, timeout) {
+	command: function (cmd, args, opts, timeout) {
 		var wgt = this.$view;
-		if (timeout) {
-			setTimeout(function () {
-				zAu.send(new zk.Event(wgt, "onAuServiceCommand", {cmd: cmd, args: args}, {toServer:true}));
-			}, timeout); // make command at the end of this request
-		} else {
-			zAu.send(new zk.Event(wgt, "onAuServiceCommand", {cmd: cmd, args: args}, {toServer:true}));
+		if (opts) {
+			if (opts.duplicateIgnore)
+				_fixCommandName('onAuServiceCommand$', opts, 'duplicateIgnore');
+			if (opts.repeatIgnore)
+				_fixCommandName('onAuServiceCommand$', opts, 'repeatIgnore');
 		}
-		this._lastcmd = cmd;
+        if (timeout) {
+            setTimeout(function () {
+                zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
+            }, timeout); // make command at the end of this request
+        } else {
+            zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
+        }
+        this._lastcmd = cmd;
+		return this;
 	}
  });
-
+})();
 /** A skipper is an object working with {@link zk.Widget#rerender}
  * to rerender portion(s) of a widget (rather than the whole widget).
  * It can improve the performance a lot if it can skip a lot of portions, such as a lot of child widgets. 

@@ -290,7 +290,7 @@ public class ConventionWires {
 							public boolean service(AuRequest request,
 									boolean everError) {
 								String command = request.getCommand();
-								if ("onAuServiceCommand".equals(command)) {
+								if (command.startsWith("onAuServiceCommand$")) {
 									Map<String, Object> data = request
 											.getData();
 									final String cmd = (String) data.get("cmd");

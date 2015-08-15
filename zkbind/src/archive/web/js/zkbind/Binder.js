@@ -73,6 +73,15 @@ zkbind.$ = function (n, opts) {
 		return widget.$binder();
 	zk.error('Not found ZK Binder with [' + n + ']');
 };
+	function _fixCommandName(prefix, opts, prop) {
+		if (opts[prop]) {
+			var ignores = {};
+			for (var key in opts[prop]) {
+				ignores[prefix+key] = opts[prop][key];
+			}
+			opts[prop] = ignores;
+		}
+	}
 /**
  * A data binder utile widget.
  * @since 8.0.0
@@ -127,53 +136,51 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * Post a command to the binder
 	 * @param String command the name of the command
 	 * @param Map args the arguments for this command. (the value should be json type)
-	 */
-	command: function (cmd, args) {
-		this.$command0(cmd, args);
-		return this;
-	},
-	/**
-	 * Post a command to the binder with a timeout if any.
-	 * @param String command the name of the command
-	 * @param Map args the arguments for this command. (the value should be json type)
+	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout to delay the post.
 	 */
-	$command0: function (cmd, args, timeout) {
+	command: function (cmd, args, opts, timeout) {
 		var wgt = this.$view;
+		if (opts) {
+			if (opts.duplicateIgnore)
+				_fixCommandName('onBindCommand$', opts, 'duplicateIgnore');
+			if (opts.repeatIgnore)
+				_fixCommandName('onBindCommand$', opts, 'repeatIgnore');
+		}
 		if (timeout) {
 			setTimeout(function () {
-				zAu.send(new zk.Event(wgt, "onBindCommand", {cmd: cmd, args: args}, {toServer:true}));
+				zAu.send(new zk.Event(wgt, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
 			}, timeout); // make command at the end of this request
 		} else {
-			zAu.send(new zk.Event(wgt, "onBindCommand", {cmd: cmd, args: args}, {toServer:true}));
+			zAu.send(new zk.Event(wgt, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
 		}
 		this._lastcmd = cmd;
+		return this;
 	},
 	/**
 	 * Post a global command from the binder.
 	 * @param String command the name of the command
 	 * @param Map args the arguments for this command. (the value should be json type)
-	 */
-	globalCommand: function (cmd, args) {
-		this.$globalCommand0(cmd, args);
-		return this;
-	},
-	/**
-	 * Post a global command from the binder with a timeout if any.
-	 * @param String command the name of the command
-	 * @param Map args the arguments for this command. (the value should be json type)
+	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout to delay the post.
 	 */
-	$globalCommand0: function (cmd, args, timeout) {
+	globalCommand: function (cmd, args, timeout) {
 		var wgt = this.$view;
+		if (opts) {
+			if (opts.duplicateIgnore)
+				_fixCommandName('onBindGlobalCommand$', opts, 'duplicateIgnore');
+			if (opts.repeatIgnore)
+				_fixCommandName('onBindGlobalCommand$', opts, 'repeatIgnore');
+		}
 		if (timeout) {
 			setTimeout(function () {
-				zAu.send(new zk.Event(wgt, "onBindGlobalCommand", {cmd: cmd, args: args}, {toServer:true}));
+				zAu.send(new zk.Event(wgt, "onBindGlobalCommand$" + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
 			}, timeout); // make command at the end of this request
 		} else {
-			zAu.send(new zk.Event(wgt, "onBindGlobalCommand", {cmd: cmd, args: args}, {toServer:true}));
+			zAu.send(new zk.Event(wgt, "onBindGlobalCommand$" + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
 		}
 		this._lastcmd = cmd;
+		return this;
 	},
 	$doAfterCommand: function (cmd, args) {
 		var ac = this._aftercmd[cmd];
@@ -187,13 +194,14 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param DOMElement dom the target of the dom element.
 	 * @param String command the name of the command
 	 * @param Map args the arguments for this command. (the value should be json type)
+	 * @param int timeout to delay the post.
 	 */
-	postCommand: function (dom, command, args) {
+	postCommand: function (dom, command, args, timeout) {
 		var w = zk.Widget.$(dom);
 		if (w) {
 			var binder = w.$binder();
 			if (binder) {
-				binder.command(command, args);
+				binder.command(command, args, timeout);
 			}
 		}
 	},
@@ -202,13 +210,14 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param DOMElement dom the target of the dom element.
 	 * @param String command the name of the command
 	 * @param Map args the arguments for this command. (the value should be json type)
+	 * @param int timeout to delay the post.
 	 */
-	postGlobalCommand: function (dom, command, args) {
+	postGlobalCommand: function (dom, command, args, timeout) {
 		var w = zk.Widget.$(dom);
 		if (w) {
 			var binder = w.$binder();
 			if (binder) {
-				binder.globalCommand(command, args);
+				binder.globalCommand(command, args, timeout);
 			}
 		}
 	}
