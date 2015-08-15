@@ -933,6 +933,8 @@ public class HtmlPageRenders {
 	}
 	private static Boolean _groupingAllowed;
 		
+    /** Used to indicate ZK Data Handler Scripts are generated. */
+    private static final String ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED = "zkDataHandlerScriptsGenerated";
 	/** Generates the content of a standalone component that
 	 * the peer widget is not a child of the page widget at the client.
 	 * @param comp the component to render. It is null if no child component
@@ -955,16 +957,21 @@ public class HtmlPageRenders {
 			// zkdh should run before zkmx()
 			WebApp webApp = WebApps.getCurrent();
 			Configuration configuration = webApp.getConfiguration();
-			Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
-			for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
-				DataHandlerInfo handler = me.getValue();
-				String script = handler.getScript();
-				String scriptUri = handler.getScriptUri();
-				if (scriptUri != null) {
-					script = Devices.loadJavaScript(exec, scriptUri);
-				}
-				out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
-			}
+
+            if (exec.getAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED) == null) {
+                Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
+                for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
+                    DataHandlerInfo handler = me.getValue();
+                    String script = handler.getScript();
+                    String scriptUri = handler.getScriptUri();
+                    if (scriptUri != null) {
+                        script = Devices.loadJavaScript(exec, scriptUri);
+                    }
+                    out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
+                }
+                exec.setAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED, true);
+            }
+
 			out.write("\nzkmx(");
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -1070,8 +1077,8 @@ public class HtmlPageRenders {
 		exec.setAttribute(ATTR_ZK_TAGS_GENERATED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512).append('\n')
-			.append(outLangStyleSheets(exec, wapp, deviceType))
-			.append(outLangJavaScripts(exec, wapp, deviceType));
+            .append(outLangJavaScripts(exec, wapp, deviceType))
+            .append(outLangStyleSheets(exec, wapp, deviceType));
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
