@@ -1064,6 +1064,31 @@ w:use="foo.MyWindow"&gt;
 	 * @since 8.0.0
 	 */
 	public String getClientAttribute(String name);
+
+    /*** Sets a DOM data attribute of the peer widget (at the client).
+     * If it has previous value, the component will invalidate.
+     * ZK pass the attributes directly to the DOM attribute generated
+     * at the client.
+     * <p>Notice that the parameter - name would be expanded by adding the prefix
+     * "data-" automatically.
+     * @param name the attribute name to generate to the DOM element,
+     * such as <code>mask</code>.
+     * @param value the value of the attribute. It could be anything
+     * depending on the attribute.
+     * If null, the attribute will be removed. Make sure to specify an empty
+     * string if you want an attribute with an empty value.
+     * @return the previous value if any
+     * @since 8.0.0
+     * @see {@link #setClientDataAttribute(String, String)}
+     */
+    public String setClientDataAttribute(String name, String value);
+    /** Returns the value of a DOM data attribute
+     * <p>Notice that the parameter - name would be expanded by adding the prefix
+     * "data-" automatically.
+     * @since 8.0.0
+     * @see {@link #getClientDataAttribute(String)}
+     */
+    public String getClientDataAttribute(String name);
 	/** Returns a read-only collection of additions DOM attributes that shall be
 	 * generated. That is, they are the attributes added by {@link #setWidgetAttribute}.
 	 * @since 5.0.3

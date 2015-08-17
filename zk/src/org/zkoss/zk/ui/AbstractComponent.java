@@ -794,12 +794,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return Collections.emptySet();
 	}
 	public String setClientDataAttribute(String name, String value) {
-		name = "data-" + name;
-		String old = setClientAttribute(name, value);
+		String old = setClientAttribute("data-" + name, value);
 		if (old != null) invalidate();
 		return old;
 	}
-	public Map<String, Object> getAttributes(int scope) {
+
+    public String getClientDataAttribute(String name) {
+        return getClientAttribute("data-" + name);
+    }
+
+    public Map<String, Object> getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:
 			if (this instanceof IdSpace)
