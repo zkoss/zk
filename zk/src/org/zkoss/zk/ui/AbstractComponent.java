@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.io.Serializables;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
@@ -115,6 +116,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final String ANONYMOUS_ID = "z__i";
 	/** Used to generate an anonymous ID. */
 	private static int _anonymousId;
+	/** Library property key. */
+	private static final String AUTO_REMOVE_NULL = "org.zkoss.zk.ui.component.autoRemoveNullAttribute.enabled";
 
 	/*package*/ transient Page _page;
 	private String _id = "";
@@ -850,21 +853,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public boolean hasAttribute(String name, int scope) {
 		return getAttributes(scope).containsKey(name);
 	}
+
+	// Bug ZK-2789: allow null attribute values. If auto remove lib prop is 
+	// enabled, then set null attribute value = remove attribute
 	public Object setAttribute(String name, Object value, int scope) {
-		if (value != null) {
-			final Map<String, Object> attrs = getAttributes(scope);
-			if (attrs == Collections.EMPTY_MAP)
-				throw new IllegalStateException("This component, "+this
-					+", doesn't belong to the "+Components.scopeToString(scope)+" scope");
-			return attrs.put(name, value);
-		} else {
+		if (value == null && Boolean.parseBoolean(Library.getProperty(AUTO_REMOVE_NULL))) {
+			// null value + old method = remove attribute
 			return removeAttribute(name, scope);
 		}
+		// either 1. null value + new method or 2. non null value + old/new method
+		final Map<String, Object> attrs = getAttributes(scope);
+		if (attrs == Collections.EMPTY_MAP)
+			throw new IllegalStateException("This component, " + this + ", doesn't belong to the "
+					+ Components.scopeToString(scope) + " scope");
+		return attrs.put(name, value);
 	}
+
 	public Object removeAttribute(String name, int scope) {
-			final Map attrs = getAttributes(scope);
-			if (attrs == Collections.emptyMap())
-				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
+		final Map attrs = getAttributes(scope);
+		if (attrs == Collections.emptyMap())
+			throw new IllegalStateException("This component doesn't belong to any ID space: " + this);
 		return attrs.remove(name);
 	}
 
@@ -877,9 +885,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public boolean hasAttribute(String name) {
 		return _auxinf != null && _auxinf.attrs != null && _auxinf.attrs.hasAttribute(name);
 	}
+	
+	// Bug ZK-2789: allow null attribute values. If auto remove lib prop is enabled,
+	// then set null attribute value = remove attribute
 	public Object setAttribute(String name, Object value) {
-		return value != null ? attrs().setAttribute(name, value): removeAttribute(name);
+		if (value == null && Boolean.parseBoolean(Library.getProperty(AUTO_REMOVE_NULL))) {
+			// null value + old method = remove attribute
+			return removeAttribute(name);
+		}
+		// either 1. null value + new method or 2. non null value + old/new method
+		return attrs().setAttribute(name, value);
 	}
+	
 	public Object removeAttribute(String name) {
 		return _auxinf != null && _auxinf.attrs != null ? _auxinf.attrs.removeAttribute(name): null;
 	}

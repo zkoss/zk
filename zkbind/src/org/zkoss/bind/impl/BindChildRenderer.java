@@ -113,8 +113,17 @@ public class BindChildRenderer extends AbstractRenderer {
 		}
 		final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(owner, insertBefore, null, null));
 		
-		owner.setAttribute(varnm, oldVar);
-		owner.setAttribute(itervarnm, oldIter);
+		// Bug ZK-2789: do not use setAttribute when actually trying to removeAttribute
+		if (oldVar != null) {
+			owner.setAttribute(varnm, oldVar);
+		} else {
+			owner.removeAttribute(varnm);
+		}
+		if (oldIter != null) {
+			owner.setAttribute(itervarnm, oldIter);
+		} else {
+			owner.removeAttribute(itervarnm);
+		}
 		
 
 		boolean templateTracked = false;
@@ -149,12 +158,12 @@ public class BindChildRenderer extends AbstractRenderer {
 					if (collection instanceof List<?>) {
 						List<Object> list = (List<Object>) collection;
 						try {
-			                list.set(index, value);
-			            } catch (UnsupportedOperationException e) {
-			                throw new PropertyNotWritableException(e);
-			            } catch (IndexOutOfBoundsException e) {
-			                throw new PropertyNotFoundException(e);
-			            }
+							list.set(index, value);
+						} catch (UnsupportedOperationException e) {
+							throw new PropertyNotWritableException(e);
+						} catch (IndexOutOfBoundsException e) {
+							throw new PropertyNotFoundException(e);
+						}
 					}
 				}
 				public Object getValue(BindELContext ctx) {
@@ -185,7 +194,13 @@ public class BindChildRenderer extends AbstractRenderer {
 			if (!templateTracked) {
 				//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
 				//move TEMPLATE_OBJECT (was set in resoloveTemplate) to current for check in addTemplateTracking
-				comp.setAttribute(TemplateResolver.TEMPLATE_OBJECT, owner.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
+				Object obj = owner.removeAttribute(TemplateResolver.TEMPLATE_OBJECT);
+				// Bug ZK-2789: do not use setAttribute when actually trying to removeAttribute
+				if (obj != null) {
+					comp.setAttribute(TemplateResolver.TEMPLATE_OBJECT, obj);
+				} else {
+					comp.removeAttribute(TemplateResolver.TEMPLATE_OBJECT);
+				}
 				addTemplateTracking(owner, comp, data, index, size);
 				templateTracked = true;
 			}
@@ -193,10 +208,8 @@ public class BindChildRenderer extends AbstractRenderer {
 			//to force init and load
 			Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, comp));
 		}
-		
 	}
 
-	
 	private class ChildrenBindingForEachStatus extends AbstractForEachStatus {
 		private static final long serialVersionUID = 1L;
 		

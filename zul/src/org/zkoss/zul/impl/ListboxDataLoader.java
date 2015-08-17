@@ -315,7 +315,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		try {
 			syncModel0(offset, limit);
 		} finally {
-			_listbox.setAttribute(Listbox.SYNCING_MODEL, null);
+			//Bug ZK-2789: do not use setAttribute when actually trying to removeAttribute
+			_listbox.removeAttribute(Listbox.SYNCING_MODEL);
 		}
 	}
 	private void syncModel0(int offset, int limit) {
