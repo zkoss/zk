@@ -1,4 +1,3 @@
-
 /* AbstractTreeModel.java
 
 	Purpose:
