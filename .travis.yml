@@ -1,0 +1,7 @@
+language: java
+branches:
+  only:
+    - master
+before_install:
+	- npm install zkless-engine
+script: ./build zel zcommon zweb zhtml zk zul zkbind zkplus
