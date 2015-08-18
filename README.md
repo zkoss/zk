@@ -1,4 +1,4 @@
-# [ZK](http://www.zkoss.org/) [![Build Status](https://travis-ci.org/zkoss/zk.svg?branch=master)](https://travis-ci.org/zkoss/zk)
+# [ZK](http://www.zkoss.org/) [![Build Status](https://travis-ci.org/zkoss/zk.svg?branch=master)](https://travis-ci.org/zkoss/zk) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk)
 ZK is a highly productive Java framework for building amazing enterprise web
 and mobile applications.
 
