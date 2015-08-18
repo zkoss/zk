@@ -113,8 +113,17 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 			final Object value = eval.getValue(ctx, eachComp, _expression);
 			return value;
 		} finally {
-			eachComp.setAttribute(EACH_VAR, oldEach);
-			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
+			//Bug ZK-2789: do not use setAttribute when actually trying to removeAttribute
+			if (oldEach != null) {
+				eachComp.setAttribute(EACH_VAR, oldEach);
+			} else {
+				eachComp.removeAttribute(EACH_VAR);
+			}
+			if (oldStatus != null) {
+				eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
+			} else {
+				eachComp.removeAttribute(EACH_STATUS_VAR);
+			}
 		}
 	}
 	
@@ -191,6 +200,4 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 		sb.append("[").append(_templateExpr).append("]").append(super.toString());
 		return sb.toString();
 	}
-	
-	
 }

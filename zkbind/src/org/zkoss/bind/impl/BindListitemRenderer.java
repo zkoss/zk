@@ -81,8 +81,17 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			
 			final Component[] items = filterOutShadows(listbox, tm.create(listbox, item, null, null));
 			
-			listbox.setAttribute(varnm, oldVar);
-			listbox.setAttribute(itervarnm, oldIter);
+			//Bug ZK-2789: do not use setAttribute when actually trying to removeAttribute
+			if (oldVar != null) {
+				listbox.setAttribute(varnm, oldVar);
+			} else {
+				listbox.removeAttribute(varnm);
+			}
+			if (oldIter != null) {
+				listbox.setAttribute(itervarnm, oldIter);
+			} else {
+				listbox.removeAttribute(itervarnm);
+			}
 			
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
@@ -105,14 +114,14 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 							listbox, nli.getIndex());
 					ListModel<?> listmodel = listbox.getListModel();
 					if (idx >= 0 && idx < listmodel.getSize()) {
-		            	if (listmodel instanceof ListModelArray){
-		            		((ListModelArray<Object>)listmodel).set(idx, value);
-		            	} else if(listmodel instanceof ListModelList<?>){
-		            		((ListModelList<Object>)listmodel).set(idx, value);
-		            	}
-		            } else {
-		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
-		            }
+						if (listmodel instanceof ListModelArray) {
+							((ListModelArray<Object>) listmodel).set(idx, value);
+						} else if (listmodel instanceof ListModelList<?>) {
+							((ListModelList<Object>) listmodel).set(idx, value);
+						}
+					} else {
+						// out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+					}
 				}
 				
 				public Component getComponent() {
@@ -135,14 +144,21 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			
 			//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
 			//move TEMPLATE_OBJECT (was set in resoloveTemplate) to current for check in addTemplateTracking
-			nli.setAttribute(TemplateResolver.TEMPLATE_OBJECT, item.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
+			Object obj = item.removeAttribute(TemplateResolver.TEMPLATE_OBJECT);
+			//Bug ZK-2789: do not use setAttribute when actually trying to removeAttribute
+			if (obj != null) {
+				nli.setAttribute(TemplateResolver.TEMPLATE_OBJECT, obj);
+			} else {
+				nli.removeAttribute(TemplateResolver.TEMPLATE_OBJECT);
+			}
+			
 			//add template dependency
 			addTemplateTracking(listbox, nli, data, index, size);
 			
 			if (nli.getValue() == null) //template might set it
 				nli.setValue(data);
 			item.setAttribute(Attributes.MODEL_RENDERAS, nli);
-				//indicate a new item is created to replace the existent one
+			//indicate a new item is created to replace the existent one
 			item.detach();
 		}
 	}
