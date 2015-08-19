@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2839.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 19 11:43:43 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    Please click the following two buttons, you should see some messages in zk.log by each click.
+       <zscript><![CDATA[
+       import org.zkoss.zk.au.out.AuInvoke;
+       ]]></zscript>
+       <script><![CDATA[
+             function f1() { zk.log("hello from global f1()"); }
+       ]]></script>
+       <window title="Hello World!!" border="normal" width="640px" height="480px">
+             <attribute w:name="f2"><![CDATA[
+           function() { zk.log("hello from local f2()"); }
+        ]]></attribute>
+             <vbox hflex="1" vflex="1">
+                    <label id="l" value="You are using ZK version: ${desktop.webApp.version}" style="color:blue"/>
+                    <space/>
+                    <hlayout>
+                           <button label="global" height="100px">
+                                  <attribute name="onClick"><![CDATA[
+                                        Clients.response(new AuInvoke("f1", null));
+                                  ]]></attribute>
+                           </button>
+                           <button label="local" height="100px">
+                                  <attribute name="onClick"><![CDATA[
+                                        Clients.response(new AuInvoke(self.parent.parent.parent, "f2", null));
+                                  ]]></attribute>
+                           </button>
+                    </hlayout>
+             </vbox>
+       </window>
+</zk>
