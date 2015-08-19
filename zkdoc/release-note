@@ -1,4 +1,12 @@
   --------
+ZK 6.5.8.2
+October 18, 2016
+* Features
+
+* Bugs
+  ZK-2844: after redirect to another page, the au is disabled
+
+  --------
 ZK 6.5.8.1
 July 30, 2015
 * Features
