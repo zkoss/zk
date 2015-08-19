@@ -2315,21 +2315,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_childrenBindingHandler.doLoad(comp,bkey);
 			}
 		}
-		//ZK-2831: evaluate deferred syntax (#{ })
-		Object attr = comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
-		Map<org.zkoss.zk.ui.metainfo.Property, String> deferredProps = attr == null ? null : (Map<org.zkoss.zk.ui.metainfo.Property, String>)attr;
-		if (deferredProps != null) {
-			BindEvaluatorX eval = this.getEvaluatorX();
-			for (Entry<org.zkoss.zk.ui.metainfo.Property, String> deferredProp : deferredProps.entrySet()) {
-				org.zkoss.zk.ui.metainfo.Property prop = deferredProp.getKey();
-				String value = deferredProp.getValue();
-
-				Object o = Evaluators.evaluate(eval, comp, value, Object.class);
-
-				prop.setDeferredVal(o); //to avoid evaluate value again
-				prop.assign(comp);
-			}
-		}
 	}
 	
 	public void notifyChange(Object base, String attr) {
