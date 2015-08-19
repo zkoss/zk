@@ -1,7 +1,16 @@
   --------
-ZK 7.0.6
+ZK 7.0.6.1
+August 19, 2015
 * Features
+
+* Bugs
+  ZK-2844: after redirect to another page, the au is disabled
+
+  --------
+ZK 7.0.6
 August 11, 2015
+* Features
+
 * Bugs
   ZK-2692: SLF4J logging argument syntax
   ZK-2722: Clearing a Grid's model causes ArrayIndexOutOfBoundsException
