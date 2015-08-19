@@ -94,6 +94,7 @@ java.io.Serializable, Pageable {
 				invalidatePageCount();
 			}
 		});
+		_ctrl = new DefaultSelectionControl(this);
 	}
 	
 	private void updatePath(TreeDataEvent event) {
@@ -834,5 +835,70 @@ java.io.Serializable, Pageable {
 			throw new WrongValueException("expecting positive non zero value, got: " + pg);
 		}
 		_activePage = pg;
+	}
+
+	private List<E> getAllNodes() {
+		E root = getRoot();
+		List all = new LinkedList();
+		if (root != null) {
+			getChildNodes(all, root);
+		}
+		return all;
+	}
+
+	private void getChildNodes(List<E> all, E parent) {
+		for (int i = 0, j = getChildNodeCount(parent); i < j; i++) {
+			E child = getChild(parent, i);
+			if (child != null) {
+				all.add(child);
+				getChildNodes(all, child);
+			}
+		}
+	}
+	/**
+	 * A default selection control implementation for {@link AbstractTreeModel},
+	 * by default it assumes all elements are selectable.
+	 * <p>Note: the implementation is not used for a huge data model, if in this case,
+	 * please implement your own one to speed up.</p>
+	 * @since 8.0.0
+	 */
+	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
+		private AbstractTreeModel model;
+		public DefaultSelectionControl(AbstractTreeModel model) {
+			this.model = model;
+		}
+		public boolean isSelectable(E e) {
+			return true;
+		}
+		public void setSelectAll(boolean selectAll) {
+			if (selectAll) {
+				List all = new LinkedList();
+				List<E> allNodes = model.getAllNodes();
+				for (E o : allNodes) {
+					if (isSelectable(o)) // check whether it can be selectable or not
+						all.add(o);
+				}
+
+				// avoid scroll into view at client side.
+				model.fireEvent(TreeDataEvent.DISABLE_CLIENT_UPDATE, null, -1, -1);
+
+				if (model instanceof AbstractTreeModel)
+					try {
+						((Selectable)model).setSelection(all);
+					} finally {
+						model.fireEvent(TreeDataEvent.ENABLE_CLIENT_UPDATE, null, -1, -1);
+					}
+			} else {
+				((Selectable)model).clearSelection();
+			}
+		}
+		public boolean isSelectAll() {
+			List<E> allNodes = model.getAllNodes();
+			for (E o : allNodes) {
+				if (isSelectable(o) && !((Selectable)model).isSelected(o))
+					return false;
+			}
+			return true;
+		}
 	}
 }

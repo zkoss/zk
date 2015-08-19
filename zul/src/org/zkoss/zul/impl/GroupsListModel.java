@@ -16,9 +16,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -29,12 +29,15 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
+import org.zkoss.zul.Rows;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
+import org.zkoss.zul.ext.GroupsSelectableModel;
 import org.zkoss.zul.ext.GroupsSortableModel;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.SelectionControl;
 
 /**
  * Encapsulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
@@ -44,7 +47,8 @@ import org.zkoss.zul.ext.Selectable;
  * @author tomyeh
  * @since 3.5.0
  */
-public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
+public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implements
+	GroupsSelectableModel<Object> {
 	protected GroupsModel<D, G, F> _model;
 	private transient int _size;
 	/** An array of the group offset.
@@ -168,7 +172,8 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return _model.equals(o instanceof GroupsListModel ? ((GroupsListModel)o)._model: o);
+		return _model.equals(
+				o instanceof GroupsListModel ? ((GroupsListModel) o)._model : o);
 	}
 	public int hashCode() {
 		return _model.hashCode();
@@ -270,7 +275,23 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		else
 			super.setMultiple(multiple);
 	}
-	
+
+	public SelectionControl getSelectionControl() {
+		if (_model instanceof GroupsSelectableModel) {
+			return ((GroupsSelectableModel) _model).getSelectionControl();
+		} else {
+			return super.getSelectionControl();
+		}
+	}
+
+	public void setSelectionControl(SelectionControl ctrl) {
+		if (_model instanceof GroupsSelectableModel) {
+			((GroupsSelectableModel) _model).setSelectionControl(ctrl);
+		} else {
+			super.setSelectionControl(ctrl);
+		}
+	}
+
 	//Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
@@ -295,7 +316,20 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		clone._listener = null;
 		return clone;
 	}
-	
+
+	public void setGroupSelectable(boolean groupSelectable) {
+		if (_model instanceof GroupsSelectableModel) {
+			((GroupsSelectableModel) _model).setGroupSelectable(groupSelectable);
+		}
+	}
+
+	public boolean isGroupSelectable() {
+		if (_model instanceof GroupsSelectableModel) {
+			return ((GroupsSelectableModel) _model).isGroupSelectable();
+		}
+		return false;
+	}
+
 	private class DataListener implements GroupsDataListener {
 		public void onChange(GroupsDataEvent event) {
 			int type = event.getType(),
@@ -355,6 +389,12 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 				j0 = _gpofs[index] + 1;
 				j1 = 0;
 				break;
+			case GroupsDataEvent.DISABLE_CLIENT_UPDATE:
+				type = ListDataEvent.DISABLE_CLIENT_UPDATE;
+				break;
+			case GroupsDataEvent.ENABLE_CLIENT_UPDATE:
+				type = ListDataEvent.ENABLE_CLIENT_UPDATE;
+				break;
 			default:
 				init();//re-initialize the model information
 				break;
@@ -375,7 +415,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		/** The index of the group. */
 		private int _groupIndex;
 		/** The offset of an element in a group.
-		 * It is meaningful only if {@link #type} is {@link #ELEMENT}.
+		 * It is meaningful only if its type is {@link #ELEMENT}.
 		 */
 		private int _offset;
 		/** The type of the data.
@@ -383,7 +423,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		 */
 		private byte _type;
 		/** Whether the group is closed.
-		 * It is meaningful only if {@link #type} is {@link #GROUP}.
+		 * It is meaningful only if its type is {@link #GROUP}.
 		 */
 		private boolean _open;
 
@@ -452,4 +492,5 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		}
 		return null; // no need to clone
 	}
+
 }

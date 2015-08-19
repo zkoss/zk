@@ -12,10 +12,10 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.zk.ui.select.SelectorComposer;
+import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 
@@ -51,36 +51,10 @@ public class B70_ZK_2534 extends SelectorComposer<Listbox> {
 		}
 		final ListModelList model = new ListModelList(names);
 		model.setMultiple(true);
-		model.setSelectionControl(new org.zkoss.zul.ext.SelectionControl() {
+		model.setSelectionControl(new AbstractListModel.DefaultSelectionControl(model) {
 			public boolean isSelectable(Object e) {
 				int i = model.indexOf(e);
 				return i % 2 == 0;
-			}
-			public void setSelectAll(boolean selectAll) {
-				if (selectAll) {
-					List all = new LinkedList();
-					for (int i = 0, j = model.size(); i < j; i++) {
-						Object o = model.getElementAt(i);
-						if (isSelectable(o))
-							all.add(o);
-					}
-					comp.disableClientUpdate(true);
-					try {
-						model.setSelection(all);
-					} finally {
-						comp.disableClientUpdate(false);
-					}
-				} else {
-					model.clearSelection();
-				}
-			}
-			public boolean isSelectAll() {
-				for (int i = 0, j = model.size(); i < j; i++) {
-					Object o = model.getElementAt(i);
-					if (isSelectable(o) && !model.isSelected(o))
-						return false;
-				}
-				return true;
 			}
 		});
 		comp.setModel(model);

@@ -43,6 +43,16 @@ public class ListDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 6;
+	/**
+	 * Identified the state that Component's client update to be disabled
+	 * @since 8.0.0
+	 */
+	public static final int DISABLE_CLIENT_UPDATE = 11;
+	/**
+	 * Identified the state that Component's client update to be enabled
+	 * @since 8.0.0
+	 */
+	public static final int ENABLE_CLIENT_UPDATE = 12;
 
 	private final ListModel _model;
 	private final int _type, _index0, _index1;

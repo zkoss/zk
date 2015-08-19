@@ -19,14 +19,14 @@ package org.zkoss.zul;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.zkoss.io.Serializables;
-
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
+import org.zkoss.zul.ext.GroupsSelectableModel;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
 
@@ -47,16 +47,18 @@ import org.zkoss.zul.ext.SelectionControl;
  * @see Selectable
  */
 abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, H, F>,
-Selectable<E>, java.io.Serializable {
+		GroupsSelectableModel<E>, java.io.Serializable {
 	private transient List<GroupsDataListener> _listeners = new LinkedList<GroupsDataListener>();
 	
 	/** The current selection. */
 	protected transient Set<E> _selection;
 	private boolean _multiple;
 	private SelectionControl<E> _ctrl;
+	private boolean _groupSelectable;
 	
 	protected AbstractGroupsModel() {
 		_selection = newEmptySelection();
+		_ctrl = new DefaultSelectionControl(this);
 	}
 	/** Fires a {@link GroupsDataEvent} for all registered listener
 	 * (thru {@link #addGroupsDataListener}.
@@ -186,6 +188,14 @@ Selectable<E>, java.io.Serializable {
 		}
 	}
 
+	public boolean isGroupSelectable() {
+		return _groupSelectable;
+	}
+
+	public void setGroupSelectable(boolean groupSelectable) {
+		_groupSelectable = groupSelectable;
+	}
+
 	/** Instantiation an empty set of the section.
 	 * It is used to initialize {@link #_selection}.
 	 * <p>By default, it instantiates an instance of LinkedHashMap.
@@ -209,7 +219,99 @@ Selectable<E>, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		_selection = (Set<E>)s.readObject();
 	}
-	
+	/**
+	 * A default selection control implementation for {@link AbstractGroupsModel},
+	 * by default it assumes all elements are selectable.
+	 * <p>Note: the implementation is not used for a huge data model, if in this case,
+	 * please implement your own one to speed up.</p>
+	 * @since 8.0.0
+	 */
+	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
+		private AbstractGroupsModel model;
+		public DefaultSelectionControl(AbstractGroupsModel model) {
+			this.model = model;
+		}
+		public boolean isSelectable(E e) {
+			return true;
+		}
+		public void setSelectAll(boolean selectAll) {
+			if (selectAll) {
+				boolean isGroupSelectable = model.isGroupSelectable();
+				List all = new LinkedList();
+				for (int i = 0, j = model.getGroupCount(); i < j; i++) {
+					if (isGroupSelectable) {
+						Object group = model.getGroup(i);
+						if (isSelectable((E)group)) {
+							all.add(group);
+						}
+						for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
+							Object child = model.getChild(i, childIndex);
+							if (isSelectable((E) child)) {
+								all.add(child);
+							}
+						}
+						if (model.hasGroupfoot(i)) {
+							group = model.getGroupfoot(i);
+							if (isSelectable((E)group)) {
+								all.add(group);
+							}
+						}
+					} else {
+						for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
+							Object child = model.getChild(i, childIndex);
+							if (isSelectable((E) child)) {
+								all.add(child);
+							}
+						}
+					}
+				}
+
+				// avoid scroll into view at client side.
+				model.fireEvent(GroupsDataEvent.DISABLE_CLIENT_UPDATE, -1, -1, -1);
+
+				if (model instanceof AbstractGroupsModel)
+					try {
+						((Selectable)model).setSelection(all);
+					} finally {
+						model.fireEvent(GroupsDataEvent.ENABLE_CLIENT_UPDATE, -1, -1, -1);
+					}
+			} else {
+				((Selectable)model).clearSelection();
+			}
+		}
+		public boolean isSelectAll() {
+			Selectable smodel = (Selectable) model;
+			boolean isGroupSelectable = model.isGroupSelectable();
+			for (int i = 0, j = model.getGroupCount(); i < j; i++) {
+				if (isGroupSelectable) {
+					Object group = model.getGroup(i);
+					if (isSelectable((E)group) && !smodel.isSelected(group)) {
+						return false;
+					}
+					for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
+						Object child = model.getChild(i, childIndex);
+						if (isSelectable((E) child) && !smodel.isSelected(child)) {
+							return false;
+						}
+					}
+					if (model.hasGroupfoot(i)) {
+						group = model.getGroupfoot(i);
+						if (isSelectable((E)group) && !smodel.isSelected(group)) {
+							return false;
+						}
+					}
+				} else {
+					for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
+						Object child = model.getChild(i, childIndex);
+						if (isSelectable((E) child) && !smodel.isSelected(child)) {
+							return false;
+						}
+					}
+				}
+			}
+			return true;
+		}
+	}
 	//Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {

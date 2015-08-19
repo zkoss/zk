@@ -1,29 +1,36 @@
-package org.zkoss.zktest.bind.issue;
+/* B70_ZK_2534.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		10:07 AM 8/4/15, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+*/
+package org.zkoss.zktest.test2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zul.GroupsModelArray;
 
 /**
- *
+ * @author jumperchen
  */
-public class B00807GroupModelListboxMultiple {
-
+public class B70_ZK_2534Group {
 	private MyGroupsModelArray groupsModel;
 
-	
-	Set<Food> selected;
-	
-	public B00807GroupModelListboxMultiple() {
+
+	Object selected;
+
+	public B70_ZK_2534Group() {
 		groupsModel = new MyGroupsModelArray(FoodData.getAllFoodsArray(), new FoodComparator());
 		groupsModel.setMultiple(true);
 	}
@@ -32,24 +39,13 @@ public class B00807GroupModelListboxMultiple {
 		return groupsModel;
 	}
 
-	public Set<Food> getSelected() {
+	public Object getSelected() {
 		return selected;
 	}
 
-	@NotifyChange({"selected","sortedName"})
-	public void setSelected(Set<Food> selected) {
+	public void setSelected(Object selected) {
 		this.selected = selected;
-	}
-	
-	public List<Food> getSortedName(){
-		if(selected==null) return null;
-		List sorted = new ArrayList();
-		for(Food f:selected){
-			sorted.add(f.getName());
-		}
-		Collections.sort(sorted);
-		return sorted;
-		
+		System.out.println(">>selected:"+selected);
 	}
 
 	public String getTemplate(Object data) {
@@ -61,12 +57,14 @@ public class B00807GroupModelListboxMultiple {
 			return "row";
 		}
 	}
-	
-	@Command @NotifyChange({"selected","sortedName"})
-	public void select(){
-		selected = new HashSet<Food>();
-		selected.add((Food)groupsModel.getChild(0,0));
-		selected.add((Food)groupsModel.getChild(1,1));
+
+	@Command @NotifyChange("selected")
+	public void select1(){
+		selected = groupsModel.getChild(0,0);
+	}
+	@Command @NotifyChange("selected")
+	public void select2(){
+		selected = groupsModel.getChild(1,0);
 	}
 
 	public static class MyGroupsModelArray extends GroupsModelArray {
@@ -89,11 +87,30 @@ public class B00807GroupModelListboxMultiple {
 
 		private static List<Food> foods = new ArrayList<Food>();
 		static {
-			foods.add(new Food("Vegetables", "Asparagus"));
-			foods.add(new Food("Vegetables", "Beets"));
-			foods.add(new Food("Seafood", "Salmon"));
-			foods.add(new Food("Seafood", "Shrimp"));
-			foods.add(new Food("Fruits", "Apples"));
+			for (int y = 0; y < 5; y++) {
+				for (int i = 0; i < 3; i++) {
+					foods.add(new Food("Vegetables" + y, "Asparagus" + i));
+					foods.add(new Food("Vegetables" + y, "Beets" + i));
+					foods.add(new Food("Vegetables" + y, "Corns" + i));
+					foods.add(new Food("Vegetables" + y, "Lettuces" + i));
+					foods.add(new Food("Vegetables" + y, "Mushrooms" + i));
+					foods.add(new Food("Vegetables" + y, "Pumpkins" + i));
+				}
+				for (int i = 0; i < 3; i++) {
+					foods.add(new Food("Seafood" + y, "Basa"));
+					foods.add(new Food("Seafood" + y, "Bluefish"));
+					foods.add(new Food("Seafood" + y, "Dorade"));
+					foods.add(new Food("Seafood" + y, "Salmon"));
+					foods.add(new Food("Seafood" + y, "Shrimp"));
+				}
+				for (int i = 0; i < 3; i++) {
+					foods.add(new Food("Fruits" + y, "Apples"));
+					foods.add(new Food("Fruits" + y, "Bananas"));
+					foods.add(new Food("Fruits" + y, "Oranges"));
+					foods.add(new Food("Fruits" + y, "Grapes"));
+					foods.add(new Food("Fruits" + y, "Guavas"));
+				}
+			}
 		}
 
 		public static List getAllFoods() {
@@ -155,9 +172,9 @@ public class B00807GroupModelListboxMultiple {
 			this.name = name;
 		}
 	}
-	
+
 	public class FoodComparator implements Comparator, Serializable {
-		
+
 		public int compare(Object o1, Object o2) {
 			Food data = (Food) o1;
 			Food data2 = (Food) o2;

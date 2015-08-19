@@ -71,6 +71,7 @@ import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.GroupsSelectableModel;
 import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Selectable;
@@ -2301,6 +2302,10 @@ public class Listbox extends MeshElement {
 			if (!(model instanceof Selectable))
 				throw new UiException(model.getClass() + " must implement "+Selectable.class);
 
+
+			if (model instanceof GroupsSelectableModel) {
+				((GroupsSelectableModel) model).setGroupSelectable(isListgroupSelectable());
+			}
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
@@ -2384,6 +2389,9 @@ public class Listbox extends MeshElement {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void setModel(GroupsModel<?, ?, ?> model) {
+		if (model instanceof AbstractGroupsModel) {
+			((AbstractGroupsModel) model).setGroupSelectable(isListgroupSelectable());
+		}
 		setModel((ListModel) (model != null ? GroupsListModel.toListModel(model) : null));
 	}
 
@@ -2596,9 +2604,8 @@ public class Listbox extends MeshElement {
 	private void onListDataChange(ListDataEvent event) {
 		//sort when add
 		int type = event.getType();
-		if ((type == ListDataEvent.INTERVAL_ADDED || 
-				type == ListDataEvent.CONTENTS_CHANGED) && 
-				!isIgnoreSortWhenChanged()) {
+		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
+				&& !isIgnoreSortWhenChanged()) {
 			doSort(this);
 		} else if (type == ListDataEvent.SELECTION_CHANGED) {
 			if (!_ignoreDataSelectionEvent) {
@@ -2609,7 +2616,11 @@ public class Listbox extends MeshElement {
 				doSelectionChanged();
 			}
 		} else if (type == ListDataEvent.MULTIPLE_CHANGED) {
-			setMultiple(((Selectable)_model).isMultiple());
+			setMultiple(((Selectable) _model).isMultiple());
+		} else if (type == ListDataEvent.DISABLE_CLIENT_UPDATE) {
+			disableClientUpdate(true);
+		} else if (type == ListDataEvent.ENABLE_CLIENT_UPDATE) {
+			disableClientUpdate(false);
 		} else {
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
@@ -2693,8 +2704,9 @@ public class Listbox extends MeshElement {
 
 		/* package */@SuppressWarnings({ "unchecked", "rawtypes" })
 		void render(Listitem item, int index) throws Throwable {
-			if (item.isLoaded())
+			if (item.isLoaded()) {
 				return; // nothing to do
+			}
 
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl) _renderer).doTry();

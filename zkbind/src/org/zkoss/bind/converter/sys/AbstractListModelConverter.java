@@ -86,6 +86,7 @@ public abstract class AbstractListModelConverter<C extends Component> implements
 			model =  new ListModelArray((Object[]) ((Class)val).getEnumConstants(), false);//ZK-1528, doesn't use live
 		} else if (val instanceof GroupsModel) { //feature#2866506: Data Binding shall support GroupsModel with Listbox/Grid
 			model =  GroupsListModel.toListModel((GroupsModel) val);
+			return model;
 		} else {
 			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, or ListModel only. "+val.getClass());
 		}

@@ -25,6 +25,7 @@ public class B00967GroupModelListboxMultiple {
 	
 	public B00967GroupModelListboxMultiple() {
 		groupsModel = new MyGroupsModelArray(FoodData.getAllFoodsArray(), new FoodComparator());
+		groupsModel.setMultiple(true);
 	}
 
 	public MyGroupsModelArray getGroupsModel() {

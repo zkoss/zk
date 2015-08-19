@@ -88,6 +88,9 @@ ZK 8.0.0
   + Add a restriction that it's forbidden to set width/height/hflex/vflex in Auxheader.
   + Deprecated the method of setCheckable() and isCheckable() for Treeitem and Listitem component, use setSelectable() and isSelectable() instead.
   + The selectAll checkmark on listhead can support on Listbox with model in paging or non-paging mold, no matter whether in ROD or non-ROD mode.
+  + The Selectable interface adds two new methods, setSelectionControl(SelectionControl) and getSelectionControl(), for select all function. By default
+    it has a simple implementation for AbstractGroupsModel and AbstractListModel to assume all elements are selectable, if the default behavior is not
+    the same as that in your application, please implement your own one to speed up the performane for a huge data model.
   + For Listitem and Treeitem component, if the value of isSelectable() or isCheckable() is false, it means the item cannot be selectable or navigable.
   --------
 ZK 7.0.6

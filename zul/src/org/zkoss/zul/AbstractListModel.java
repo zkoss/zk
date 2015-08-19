@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +49,7 @@ Selectable<E>, java.io.Serializable, Pageable {
 
 	protected AbstractListModel() {
 		_selection = newEmptySelection();
+		_ctrl = new DefaultSelectionControl<E>(this);
 	}	
 
 	/**
@@ -90,7 +92,7 @@ Selectable<E>, java.io.Serializable, Pageable {
 			if (selection.isEmpty()) {
 				fireSelectionEvent(null);
 			} else
-				fireSelectionEvent(selection.iterator().next());
+				fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
 		}
 	}
 	private boolean isSelectionChanged(Collection<? extends E> selection) {
@@ -201,6 +203,53 @@ Selectable<E>, java.io.Serializable, Pageable {
 
 	public SelectionControl getSelectionControl() {
 		return _ctrl;
+	}
+
+	/**
+	 * A default selection control implementation for {@link AbstractListModel},
+	 * by default it assumes all elements are selectable.
+	 * <p>Note: the implementation is not used for a huge data model, if in this case,
+	 * please implement your own one to speed up.</p>
+	 * @since 8.0.0
+	 */
+	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
+		private AbstractListModel model;
+		public DefaultSelectionControl(AbstractListModel model) {
+			this.model = model;
+		}
+		public boolean isSelectable(E e) {
+			return true;
+		}
+		public void setSelectAll(boolean selectAll) {
+			if (selectAll) {
+				List all = new LinkedList();
+				for (int i = 0, j = model.getSize(); i < j; i++) {
+					E o = (E) model.getElementAt(i);
+					if (isSelectable(o)) // check whether it can be selectable or not
+						all.add(o);
+				}
+
+				// avoid scroll into view at client side.
+				model.fireEvent(ListDataEvent.DISABLE_CLIENT_UPDATE, -1, -1);
+
+				if (model instanceof AbstractListModel)
+					try {
+						((Selectable)model).setSelection(all);
+					} finally {
+						model.fireEvent(ListDataEvent.ENABLE_CLIENT_UPDATE, -1, -1);
+					}
+			} else {
+				((Selectable)model).clearSelection();
+			}
+		}
+		public boolean isSelectAll() {
+			for (int i = 0, j = model.getSize(); i < j; i++) {
+				E o = (E) model.getElementAt(i);
+				if (isSelectable(o) && !((Selectable)model).isSelected(o))
+					return false;
+			}
+			return true;
+		}
 	}
 
 	/** Instantiation an empty set of the section.
