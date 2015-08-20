@@ -7,7 +7,7 @@
 	History:
 		Fri Aug 14 12:20:05 CST 2015, Created by chunfu
 
-Copyright (C)  Potix Corporation. All Rights Reserved.
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
