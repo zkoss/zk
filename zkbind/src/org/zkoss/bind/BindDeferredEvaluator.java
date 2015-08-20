@@ -7,7 +7,7 @@
 	History:
 		Fri Aug 14 12:24:31 CST 2015, Created by chunfu
 
-Copyright (C)  Potix Corporation. All Rights Reserved.
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
@@ -19,9 +19,8 @@ import java.util.Map;
 import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.xel.DeferredEvaluator;
-import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.metainfo.Property;
+import org.zkoss.zk.xel.DeferredEvaluator;
 import org.zkoss.zk.xel.Evaluators;
 
 /**

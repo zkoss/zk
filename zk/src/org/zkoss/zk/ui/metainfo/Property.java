@@ -82,7 +82,14 @@ public class Property extends ConditionValue {
 	/**
 	 * Avoid creating too many instances.
 	 */
-	private static DeferredEvaluator _deferredEvaluator = null;
+	private static DeferredEvaluator _deferredEvaluator;
+	static {
+		try {
+			_deferredEvaluator = (DeferredEvaluator) Classes.newInstanceByThread("org.zkoss.bind.BindDeferredEvaluator");
+		} catch (Exception e) {
+			_deferredEvaluator = null;
+		}
+	}
 
 	/** Constructs a property with a class that is known in advance.
 	 * @exception IllegalArgumentException if name is null
@@ -253,10 +260,9 @@ public class Property extends ConditionValue {
 				//add event listener
 				comp.addEventListener(Events.ON_DEFERRED_EVALUATION, new EventListener<Event>() {
 					public void onEvent(Event event) throws Exception {
-						DeferredEvaluator de = Property.getDeferredEvaluator();
-						if (de != null) { //do nothing if DeferredEvaluator not found
+						if (_deferredEvaluator != null) { //do nothing if DeferredEvaluator not found
 							Component comp = event.getTarget();
-							de.evaluate(comp, comp.getAttribute(Attributes.DEFERRED_PROPERTIES));
+							_deferredEvaluator.evaluate(comp, comp.getAttribute(Attributes.DEFERRED_PROPERTIES));
 						}
 					}
 				});
@@ -450,17 +456,5 @@ public class Property extends ConditionValue {
 		} else {
 			((DynamicPropertied)comp).setDynamicProperty(name, value);
 		}
-	}
-
-	//ZK-2831
-	private static DeferredEvaluator getDeferredEvaluator() {
-		if (_deferredEvaluator == null) {
-			try {
-				_deferredEvaluator = (DeferredEvaluator) Classes.newInstanceByThread("org.zkoss.bind.BindDeferredEvaluator");
-			} catch (Exception e) {
-				_deferredEvaluator = null;
-			}
-		}
-		return _deferredEvaluator;
 	}
 }
