@@ -106,9 +106,8 @@ zkbind.Binder = zk.$extends(zk.Object, {
 			
 		var ac = this._aftercmd[cmd];
 		if (!ac) this._aftercmd[cmd] = [fn];
-		else {
+		else
 			ac.push(fn);
-		}
 		return this;
 	},
 	/**
@@ -172,9 +171,8 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	},
 	$doAfterCommand: function (cmd, args) {
 		var ac = this._aftercmd[cmd];
-		for (var i = 0, j = ac ? ac.length: 0; i < j; i++) {
+		for (var i = 0, j = ac ? ac.length: 0; i < j; i++)
 			ac[i].apply(this, [args]);
-		}
 	}
 }, {
 	/**

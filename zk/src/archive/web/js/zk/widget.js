@@ -2822,6 +2822,11 @@ function () {
 		}
 		return null;
 	},
+	$afterCommand: function (command, args) {
+		var service = this.$service();
+		if (service)
+			service.$doAfterCommand(command, args);
+	},
 	/**
 	 * Returns whether the widget has its own element bound to HTML DOM tree.
 	 * @return boolean
@@ -5336,11 +5341,43 @@ zk.Service = zk.$extends(zk.Object, {
 		this.$supers('$init', arguments);
 		this.$view = widget;
 		this.$currentTarget = currentTarget;
+		this._aftercmd = {};
+	},
+	/**
+	 * Registers a callback after some command executed.
+	 * @param String command the name of the command
+	 * @param Function func the function to execute
+	 */
+	after: function (cmd, fn) {
+		if (!fn && jq.isFunction(cmd)) {
+			fn = cmd;
+			cmd = this._lastcmd;
+		}
+
+		var ac = this._aftercmd[cmd];
+		if (!ac) this._aftercmd[cmd] = [fn];
+		else
+			ac.push(fn);
+		return this;
+	},
+	/**
+	 * Unregisters a callback after some command executed.
+	 * @param String command the name of the command
+	 * @param Function func the function to execute
+	 */
+	unAfter: function (cmd, fn) {
+		var ac = this._aftercmd[cmd];
+		for (var j = ac ? ac.length: 0; j--;) {
+			if (ac[j] == fn)
+				ac.splice(j, 1);
+		}
+		return this;
 	},
 	/**
 	 * Destroy this binder.
 	 */
 	destroy: function () {
+		this._aftercmd = null;
 		this.$view = null;
 		this.$currentTarget = null;
 	},
@@ -5362,6 +5399,11 @@ zk.Service = zk.$extends(zk.Object, {
         zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), timeout != undefined ? timeout : 38);
         this._lastcmd = cmd;
 		return this;
+	},
+	$doAfterCommand: function (cmd, args) {
+		var ac = this._aftercmd[cmd];
+		for (var i = 0, j = ac ? ac.length: 0; i < j; i++)
+			ac[i].apply(this, [args]);
 	}
  });
 })();

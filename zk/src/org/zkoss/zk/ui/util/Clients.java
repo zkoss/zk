@@ -544,4 +544,15 @@ public class Clients {
 	public static final void loadCSS(String url) {
 		response(new AuLoadCSS(url));
 	}
+
+    /**
+     * Send a command to client (afterCommand)
+     * @param component target component
+     * @param commandName the command name which would be triggered in client
+     * @param data data which would be sent to client
+     * @since 8.0.0
+     */
+    public static final void sendClientCommand(Component component, String commandName, Object data) {
+        response(new AuInvoke(component, "$afterCommand", new Object[] {commandName, data }));
+    }
 }

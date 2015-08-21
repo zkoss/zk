@@ -39,6 +39,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
+import org.zkoss.util.Pair;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.fn.ThemeFns;
 import org.zkoss.xml.XMLs;
@@ -342,16 +343,23 @@ public class HtmlPageRenders {
 			sb.append(s).append('\n');
 		
 		Map<String, DataHandlerInfo> dataHandlers = wapp.getConfiguration().getDataHandlers();
-		Set<String> depends = new LinkedHashSet<String>();
+		Set<Pair<String, String>> scripts = new LinkedHashSet<Pair<String, String>>();
 		for (DataHandlerInfo info : dataHandlers.values()) {
-			List<String> depends2 = info.getDepends();
-			if (depends2 != null)
-				depends.addAll(depends2);
+			List<Pair<String, String>> scripts2 = info.getScripts();
+            int size;
+			if (scripts2 != null && (size = scripts2.size()) > 1)
+                scripts.addAll(scripts2.subList(0, size - 1));
 		}
-		for (String src : depends) {
-			sb.append("<script type=\"text/javascript\" src=\"")
-			.append(Executions.encodeURL(src))
-			.append("\" charset=\"UTF-8\"></script>\n");
+		for (Pair<String, String> scriptInfo : scripts) {
+            String src = scriptInfo.getX();
+            sb.append("<script type=\"text/javascript\"");
+            if (src != null)
+                sb.append(" src=\"")
+                    .append(Executions.encodeURL(src))
+                    .append("\" charset=\"UTF-8\">");
+            else
+                sb.append(">").append(scriptInfo.getY());
+            sb.append("</script>\n");
 		}
 		return sb.toString();
 	}
@@ -633,10 +641,12 @@ public class HtmlPageRenders {
 					Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
 					for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
 						DataHandlerInfo handler = me.getValue();
-						String script = handler.getScript();
-						String scriptUri = handler.getScriptUri();
-						if (scriptUri != null) {
-							script = Devices.loadJavaScript(exec, scriptUri);
+						List<Pair<String, String>> scripts = handler.getScripts();
+                        Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
+						String scriptSrc = scriptInfo.getX();
+                        String script = scriptInfo.getY();
+                        if (scriptSrc != null) {
+							script = Devices.loadJavaScript(exec, scriptSrc);
 						}
 						out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
 					}
@@ -962,11 +972,12 @@ public class HtmlPageRenders {
                 Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
                 for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
                     DataHandlerInfo handler = me.getValue();
-                    String script = handler.getScript();
-                    String scriptUri = handler.getScriptUri();
-                    if (scriptUri != null) {
-                        script = Devices.loadJavaScript(exec, scriptUri);
-                    }
+                    List<Pair<String, String>> scripts = handler.getScripts();
+                    Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
+                    String scriptSrc = scriptInfo.getX();
+                    String script = scriptInfo.getY();
+                    if (scriptSrc != null)
+                        script = Devices.loadJavaScript(exec, scriptSrc);
                     out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
                 }
                 exec.setAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED, true);

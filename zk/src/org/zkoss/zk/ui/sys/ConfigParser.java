@@ -33,7 +33,10 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
+import org.zkoss.mesg.MCommon;
 import org.zkoss.util.Cache;
+import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.Pair;
 import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
@@ -725,23 +728,22 @@ public class ConfigParser {
 		it.hasNext();) {
 			//config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
 			final Element el = it.next();
-			String dataName =	IDOMs.getRequiredElementValue(el, "name");
-			final Element scriptEl = IDOMs.getRequiredElement(el, "script");
-			String script = scriptEl.getText(true);
-			String scriptUri = scriptEl.getAttributeValue("src");
-			boolean override = Boolean.parseBoolean(el.getElementValue("override", true));
-			
-			if (script == null && scriptUri == null)
-				throw new UiException(message("either <script> or <script-uri> is required for <data-handler>", el));
-			List<Element> elements = el.getElements("depends");
-			List<String> depends = null;
-			if (!elements.isEmpty()) {
-				depends = new LinkedList<String>();
-				for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
-					depends.add(itt.next().getText(true));
-				}
-			}
-			elements = el.getElements("links");
+			String dataName = IDOMs.getRequiredElementValue(el, "name");
+            List<Element> elements = el.getElements("script");
+            List<Pair<String, String>> scripts = null;
+            if (!elements.isEmpty()) {
+                scripts = new LinkedList<Pair<String, String>>();
+                for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
+                    Element e = itt.next();
+                    scripts.add(new Pair<String, String>(e.getAttribute("src"), e.getText(true)));
+                }
+            }
+            if (scripts == null)
+                throw new IllegalSyntaxException(MCommon.XML_ELEMENT_REQUIRED, new Object[] {"script", el.getLocator()});
+
+            boolean override = Boolean.parseBoolean(el.getElementValue("override", true));
+
+			elements = el.getElements("link");
 			List<Map<String, String>> links = null;
 			if (!elements.isEmpty()) {
 				links = new LinkedList<Map<String, String>>();
@@ -755,7 +757,7 @@ public class ConfigParser {
 					links.add(attrMap);
 				}
 			}
-			config.addDataHandler(new DataHandlerInfo(dataName, script, scriptUri, depends, override, links));
+			config.addDataHandler(new DataHandlerInfo(dataName, scripts, override, links));
 		}
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();

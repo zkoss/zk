@@ -11,6 +11,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
+import org.zkoss.util.Pair;
 import java.util.List;
 import java.util.Map;
 
@@ -21,25 +22,19 @@ import java.util.Map;
  */
 public class DataHandlerInfo {
 	final private String name;
-	final private String script;
-	final private String scriptUri;
-	final private List<String> depends;
+	final private List<Pair<String, String>> scripts;
 	final private List<Map<String, String>> links;
 	final private boolean override;
 	
 	/**
 	 * Construct the data handler info
 	 * @param name the data attribute name
-	 * @param script the script of the data attribute handler (Optional)
-	 * @param scriptUri the script uri of the data attribute handler (Optional)
-	 * @param depends a list of Javascript files where the script depends on. (Optional)
+	 * @param scripts a list of Javascript files or the scripts of the data attribute handler (one or many)
 	 * @param override true if the data handler is to override to another one. (Optional)
 	 */
-	public DataHandlerInfo(String name, String script, String scriptUri, List<String> depends, boolean override, List<Map<String, String>> links) {
+	public DataHandlerInfo(String name, List<Pair<String, String>> scripts, boolean override, List<Map<String, String>> links) {
 		this.name = name;
-		this.script = script;
-		this.scriptUri = scriptUri;
-		this.depends = depends;
+		this.scripts = scripts;
 		this.override = override;
 		this.links = links;
 	}
@@ -51,22 +46,10 @@ public class DataHandlerInfo {
 		return name;
 	}
 	/**
-	 * Returns the script of the data handler.
+	 * Returns a list of Javascript files or the scripts of the data attribute handler.
 	 */
-	public String getScript() {
-		return script;
-	}
-	/**
-	 * Returns the script uri of the data handler.
-	 */
-	public String getScriptUri() {
-		return scriptUri;
-	}
-	/**
-	 * Returns a list of Javascript files where the script depends on
-	 */
-	public List<String> getDepends() {
-		return depends;
+	public List<Pair<String, String>> getScripts() {
+		return scripts;
 	}
 	/**
 	 * Returns whether the handler is to override another one.
