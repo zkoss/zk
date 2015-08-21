@@ -1,7 +1,7 @@
 <zk>
 <zscript>
 public class Person {
-	String name;
+	String name = "old Name";
 	public void setName(String name) {
 		this.name = name;
 	}

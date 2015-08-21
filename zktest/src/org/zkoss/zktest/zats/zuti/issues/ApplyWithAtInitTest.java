@@ -11,9 +11,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.issues;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -35,6 +35,11 @@ public class ApplyWithAtInitTest extends ZutiBasicTestCase {
 			DesktopAgent desktop = connect();
 			List<ComponentAgent> textboxes = desktop.queryAll("textbox");
 			assertEquals(3, textboxes.size());
+			for (ComponentAgent next : textboxes) {
+				assertEquals("old Name", next.as(Textbox.class).getValue());
+				assertEquals("old Name", next.getNextSibling().as(Label.class).getValue());
+			}
+
 			textboxes.get(1).type("Test");
 			
 			for (ComponentAgent next : textboxes) {

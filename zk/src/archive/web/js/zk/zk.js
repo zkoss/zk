@@ -603,23 +603,32 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 	 * @see #$import(String)
 	 * @see #load
 	 */
-	$import: function (name, fn) {
-		for (var j = 0, ref = window;;) {
-			var k = name.indexOf('.', j),
-				nm = k >= 0 ? name.substring(j, k): name.substring(j);
-			var nxt = ref[nm];
-			if (k < 0 || !nxt) {
-				if (fn)
-					if (nxt) fn(nxt);
-					else
-						zk.load(name.substring(0, name.lastIndexOf('.')),
-							function () {fn(zk.$import(name));});
-				return nxt;
+	$import: (function() {
+		var _caches = {};
+		return function (name, fn) {
+			var last;
+			if (last = _caches[name]) {
+				if (fn) fn(last);
+				return last;
 			}
-			ref = nxt;
-			j = k + 1;
-		}
-	},
+			for (var j = 0, ref = window;;) {
+				var k = name.indexOf('.', j),
+					nm = k >= 0 ? name.substring(j, k): name.substring(j);
+				var nxt = ref[nm];
+				if (k < 0 || !nxt) {
+					if (fn)
+						if (nxt) fn(nxt);
+						else
+							zk.load(name.substring(0, name.lastIndexOf('.')),
+								function () {fn(zk.$import(name));});
+					_caches[name] = nxt;
+					return nxt;
+				}
+				ref = nxt;
+				j = k + 1;
+			}
+		};
+	})(),
 
 	/** Defines a class. It returns the class being defined.
 	 * <p>Example:
