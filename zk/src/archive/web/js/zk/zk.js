@@ -1343,10 +1343,9 @@ zk.log('value is", value);
 						oldCommand.call(this, subName + arguments[0], arguments[1]);
 					};
 					var oldAfter = this.after;
-					if (oldAfter)
-						this.after = function () {
-							oldAfter.call(this, subName + arguments[0], arguments[1]);
-						};
+					this.after = function () {
+						oldAfter.call(this, subName + arguments[0], arguments[1]);
+					};
 				}
 				fun.call(this, wgt, dataValue);
 			}};
