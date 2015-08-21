@@ -5349,7 +5349,7 @@ zk.Service = zk.$extends(zk.Object, {
 	 * @param String command the name of the command
 	 * @param Array args the arguments for this command. (the value should be json type)
 	 * @param Map opts a map of options to zk.Event, if any.
-	 * @param int timeout to delay the post.
+	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
 	command: function (cmd, args, opts, timeout) {
 		var wgt = this.$view;
@@ -5359,13 +5359,7 @@ zk.Service = zk.$extends(zk.Object, {
 			if (opts.repeatIgnore)
 				_fixCommandName('onAuServiceCommand$', opts, 'repeatIgnore');
 		}
-        if (timeout) {
-            setTimeout(function () {
-                zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
-            }, timeout); // make command at the end of this request
-        } else {
-            zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), 38);
-        }
+        zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), timeout != undefined ? timeout : 38);
         this._lastcmd = cmd;
 		return this;
 	}
