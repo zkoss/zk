@@ -33,4 +33,13 @@ public class Select extends AbstractTag {
 	public Select() {
 		super("select");
 	}
+
+	//-- Component --//
+	/** Returns the widget class, "zhtml.Input".
+	 * @since 8.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Input";
+	}
+
 }

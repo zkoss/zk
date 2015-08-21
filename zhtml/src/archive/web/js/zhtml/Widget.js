@@ -49,24 +49,6 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 			}
 		}
 	},
-	_doChange: function (evt) {
-		var n = this.$n();
-		if (n) {
-			var val = n.value;
-			if (val != this._defValue) {
-				this._defValue = val;
-				this.fire('onChange', this._onChangeData(val), null);
-			}
-		}
-	},
-	_onChangeData: function (val, selbak) {
-		return {value: val,
-			start: zk(this.$n()).getSelectionRange()[0],
-			marshal: this._onChangeMarshal}
-	},
-	_onChangeMarshal: function () {
-		return [this.value, false, this.start];
-	},
 	doClick_: function (wevt) {
 		var n = this.$n();
 		if (n)
@@ -88,20 +70,6 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 				this.fire('onCheck', val);
 			}
 		}
-	},
-	bind_: function () {
-		this.$supers(zhtml.Widget, 'bind_', arguments);
-		var n;
-		if (this.isListen('onChange', {any:true}) && (n = this.$n())) {
-			this._defValue = n.value;
-			this.domListen_(n, 'onChange');
-		}
-		if (this.isListen('onCheck', {any:true}) && (n = this.$n()))
-			this._defChecked = n.checked;
-	},
-	unbind_: function () {
-		this.domUnlisten_(this.$n(), 'onChange');
-		this.$supers(zhtml.Widget, 'unbind_', arguments);
 	},
 	redraw: zk.Native.$redraw
 });

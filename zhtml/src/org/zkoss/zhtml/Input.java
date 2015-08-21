@@ -66,6 +66,15 @@ public class Input extends AbstractTag {
 		setDynamicProperty("checked", Boolean.valueOf(checked));
 	}
 
+	//-- Component --//
+	/** Returns the widget class, "zhtml.Input".
+	 * @since 8.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Input";
+	}
+
+
 	//super//
 	protected void smartUpdate(String attr, Object value) {
 		if (!_byClient)

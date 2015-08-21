@@ -71,7 +71,15 @@ public class Textarea extends Input implements AfterCompose {
 	public Object getDynamicProperty(String name) {
 		return "value".equals(name) ? _value: super.getDynamicProperty(name);
 	}
-	
+
+	//-- Component --//
+	/** Returns the widget class, "zhtml.Input".
+	 * @since 8.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Input";
+	}
+
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
