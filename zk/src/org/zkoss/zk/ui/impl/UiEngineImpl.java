@@ -831,6 +831,8 @@ public class UiEngineImpl implements UiEngine {
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
 
+			//ZK-2831: post event for deferred evaluation
+			Events.postEvent(Events.ON_DEFERRED_EVALUATION, child, null);
 		} catch (Throwable ex) {
 			boolean ignore = false;
 			if (!ignore) {

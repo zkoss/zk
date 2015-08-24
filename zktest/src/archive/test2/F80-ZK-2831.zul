@@ -13,8 +13,8 @@ F80-ZK-2831.zul
 Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native">
-	<div>
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<div id="forSerialization">
 	<div id="win" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2831')">
 		<label multiline="true">
 			1. you should see this page with the same information as follows:
@@ -25,6 +25,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 			2. click "eval deferred" button
 			3. you should one label shows "deferred evaluation in command"
 			4. click "update title" button, nothing changes
+			----------------------
+			shadow test
+			1. label shows "deferred evaluation in shadow" with background is green
+			2. text input shows "deferred evaluation in native comp" with bg is green
+			3. label shows "chunfu" with bg is pink
+			4. span shows "native prolog: chunfu" with bg is pink
+			5. xhtml shows "xhtml text: chunfu" with bg is pink
 		</label>
 		<div id="host" style="background: red;">
 			<n:input type="text" value="#{vm.title}"/>
@@ -46,6 +53,15 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 					<n:input type="text" value="#{vm.title += ' in native comp'}"/>
 				</div>
 			</if>
+			<apply item="#{vm.person}">
+				<div style="background: pink;">
+					<label value="#{item.name}"/>
+					<n:br></n:br>
+					<n:span>native prolog: #{item.name}</n:span>
+					<n:br></n:br>
+					<x:text>xhtml text: #{vm.person.name}</x:text>
+				</div>
+			</apply>
 			<button id="btn3" onClick="@command('emptyTitle')">empty title</button>
 		</div>
 		<button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win, msg)' />
