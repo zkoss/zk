@@ -742,7 +742,8 @@ public class Combobox extends Textbox {
 		if (item != _selItem) {
 			_selItem = item;
 			if (item != null) {
-				setValue(item.getLabel());
+                setValueDirectly(item.getLabel());
+                smartUpdate("selectedItemUuid", item.getUuid());
 			} else {
 				//Bug#2919037: don't call setRawValue(), or the error message will be cleared
 				if (_value != null && !"".equals(_value)) {
@@ -832,6 +833,8 @@ public class Combobox extends Textbox {
 			renderer.render("autocomplete", false);
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
+        if (_selItem != null)
+            renderer.render("selectedItemUuid", _selItem.getUuid());
 	}
 	/** Processes an AU request.
 	 *
@@ -888,11 +891,18 @@ public class Combobox extends Textbox {
 				}
 			});
 			Set<Comboitem> selItems = evt.getSelectedItems();
-			_selItem = selItems != null && !selItems.isEmpty()?
-				(Comboitem)selItems.iterator().next(): null;
-			_lastCkVal = getValue(); //onChange is sent before onSelect
+			_selItem = selItems != null && !selItems.isEmpty() ? (Comboitem)selItems.iterator().next(): null;
 
+            //ZK-1987: Combobox item selection rely items label string
+            String newVal = "";
+            final Object oldVal = _value;
+            if (_selItem != null) {
+                newVal = _selItem.getLabel();
+                setValueDirectly(newVal);
+            }
+			_lastCkVal = getValue();
 			syncSelectionToModel();
+            Events.postEvent(new InputEvent(Events.ON_CHANGE, this, newVal, oldVal));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGE)) {
 			super.service(request, everError);
