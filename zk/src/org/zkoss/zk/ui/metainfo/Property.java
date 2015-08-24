@@ -252,6 +252,7 @@ public class Property extends ConditionValue {
 
 		//ZK-2831: if deferred syntax is found and not evaluated yet, store the information and return for later evaluation
 		String vals;
+		final Class expectedType = type;
 		if (_deferredVal == null && val != null && (vals = val.toString()).indexOf("#{") > -1) {
 			Map<Property, String> deferredProps =
 					(Map<Property, String>)comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
@@ -262,7 +263,7 @@ public class Property extends ConditionValue {
 					public void onEvent(Event event) throws Exception {
 						if (_deferredEvaluator != null) { //do nothing if DeferredEvaluator not found
 							Component comp = event.getTarget();
-							_deferredEvaluator.evaluate(comp, comp.getAttribute(Attributes.DEFERRED_PROPERTIES));
+							_deferredEvaluator.evaluate(comp, expectedType);
 						}
 					}
 				});

@@ -25,11 +25,14 @@ import java.util.LinkedHashMap;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Namespace;
 
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
@@ -39,6 +42,7 @@ import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.impl.NativeHelpers;
+import org.zkoss.zk.xel.DeferredEvaluator;
 
 /**
  * A component used to represent XML elements that are associated
@@ -71,6 +75,18 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 	private Map<String, Object> _props;
 	/** Declared namespaces ({@link Namespace}). */
 	private List<Namespace> _dns;
+
+	/**
+	 * Avoid creating too many instances.
+	 */
+	private static DeferredEvaluator _deferredEvaluator;
+	static {
+		try {
+			_deferredEvaluator = (DeferredEvaluator) Classes.newInstanceByThread("org.zkoss.bind.BindDeferredEvaluator");
+		} catch (Exception e) {
+			_deferredEvaluator = null;
+		}
+	}
 
 	/** Constructs a {@link HtmlNativeComponent} component.
 	 * 
@@ -129,6 +145,17 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 	}
 	public void setPrologContent(String prolog) {
 		_prolog = prolog != null ? prolog: "";
+		//ZK-2831: support deferred expression in native prolog
+		if (_prolog.indexOf("#{") >= 0) {
+			addEventListener(Events.ON_DEFERRED_EVALUATION, new EventListener<Event>() {
+				public void onEvent(Event event) throws Exception {
+					if (_deferredEvaluator != null) { //do nothing if DeferredEvaluator not found
+						Component comp = event.getTarget();
+						_deferredEvaluator.evaluate(comp, "prolog");
+					}
+				}
+			});
+		}
 	}
 	public String getEpilogContent() {
 		return _epilog;

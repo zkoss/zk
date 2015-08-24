@@ -40,6 +40,7 @@ import org.zkoss.zul.Window;
 public class F80_ZK_2831 implements Serializable {
 	String title = "deferred evaluation";
 	String command = "";
+	Person person = new Person();
 
 	public void setTitle(String title) {
 		this.title = title;
@@ -55,6 +56,14 @@ public class F80_ZK_2831 implements Serializable {
 
 	public void setCommand(String command) {
 		this.command = command;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	@Command
@@ -114,5 +123,14 @@ public class F80_ZK_2831 implements Serializable {
 		((ComponentCtrl)newwin).sessionDidActivate(newwin.getPage());//simulate
 
 		((Label)newwin.getFellow("msg")).setValue("done deserialize: "+_bytes.length);
+	}
+	public class Person implements Serializable {
+		String name = "chunfu";
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return this.name;
+		}
 	}
 }
