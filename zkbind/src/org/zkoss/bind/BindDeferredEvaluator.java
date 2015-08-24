@@ -61,14 +61,12 @@ public class BindDeferredEvaluator implements DeferredEvaluator {
 		} else if (comp instanceof Native && "prolog".equals(data.toString())) {
 			Native nc = (Native) comp;
 			String prolog = nc.getPrologContent();
-			if (prolog != null && prolog.contains("#{")) {
-				Binder binder = BinderUtil.getBinder(comp, true);
-				Evaluator eval = binder == null ? Executions.getEvaluator(comp, null) : binder.getEvaluatorX();
+			Binder binder = BinderUtil.getBinder(comp, true);
+			Evaluator eval = binder == null ? Executions.getEvaluator(comp, null) : binder.getEvaluatorX();
 
-				Object o = Evaluators.evaluate(eval, comp, prolog, String.class);
+			Object o = Evaluators.evaluate(eval, comp, prolog, String.class);
 
-				nc.setPrologContent(o.toString());
-			}
+			nc.setPrologContent(o.toString());
 		}
 	}
 }
