@@ -56,14 +56,14 @@ public class JsContentRenderer implements ContentRenderer {
 	}
 	private void renderName(String name) {
 		if (_buf.length() > 0) _buf.append(',');
-		_buf.append(name).append(':');
+		_buf.append('"').append(name).append("\":");
 	}
 	private void renderValue(String value) {
 		if (value == null) _buf.append((String)null);
 		else {
-			_buf.append('\'');
-			Strings.escape(_buf, value, Strings.ESCAPE_JAVASCRIPT);
-			_buf.append('\'');
+			_buf.append('\"');
+			Strings.escape(_buf, value, Strings.ESCAPE_JSON_VALUE);
+			_buf.append('\"');
 		}
 	}
 	/** Renders a Date property.
@@ -82,7 +82,7 @@ public class JsContentRenderer implements ContentRenderer {
 	}
 	private void renderValue(Component value) {
 		if (value == null || value.getPage() == null) _buf.append((String)null);
-		else _buf.append("{$u:'").append(value.getUuid()).append("'}");
+		else _buf.append("{\"$u\":\"").append(value.getUuid()).append("\"}");
 	}
 	/** Renders an arbitrary object. */
 	public void render(String name, Object value) {
@@ -146,7 +146,7 @@ public class JsContentRenderer implements ContentRenderer {
 				final Map.Entry me = (Map.Entry)it.next();
 				if (first) first = false;
 				else _buf.append(',');
-				_buf.append('\'').append(me.getKey()).append("':");
+				_buf.append('"').append(me.getKey()).append("\":");
 				renderValue(me.getValue());
 			}
 			_buf.append('}');
@@ -335,7 +335,7 @@ public class JsContentRenderer implements ContentRenderer {
 		renderValue(value);
 	}
 	private void renderValue(char value) {
-		_buf.append('\'');
+		_buf.append('"');
 		switch (value) {
 		case '\'':
 		case '\\': _buf.append('\\'); break;
@@ -344,7 +344,7 @@ public class JsContentRenderer implements ContentRenderer {
 		case '\r': _buf.append('\\'); value = 'r'; break;
 		case '\f': _buf.append('\\'); value = 'f'; break;
 		}
-		_buf.append(value).append('\'');
+		_buf.append(value).append('"');
 	}
 
 	/** Renders the JavaScript code snippet.

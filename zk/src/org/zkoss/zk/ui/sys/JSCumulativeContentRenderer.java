@@ -57,7 +57,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	private String renderValue(String value) {
 		if (value == null) return null;
 		else {
-			return Strings.escape(value, Strings.ESCAPE_JAVASCRIPT);
+			return Strings.escape(value, Strings.ESCAPE_JSON_VALUE);
 		}
 	}
 	private String renderValue(Date value) {
@@ -68,7 +68,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	}
 	private String renderValue(Component value) {
 		if (value == null || value.getPage() == null) return null;
-		else return new StringBuilder().append("{$u:'").append(value.getUuid()).append("'}").toString();
+		else return new StringBuilder().append("{\"$u\":\"").append(value.getUuid()).append("\"}").toString();
 	}
 	private String renderValue(Object value) {
 		if (value == null || value instanceof String) {
@@ -91,7 +91,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 				final Map.Entry me = (Map.Entry)it.next();
 				if (first) first = false;
 				else buf.append(',');
-				buf.append('\'').append(me.getKey()).append("':");
+				buf.append('"').append(me.getKey()).append("\":");
 				renderValue(me.getValue());
 			}
 			buf.append('}');
@@ -250,7 +250,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	}
 	private String renderValue(char value) {
 		StringBuilder buf = new StringBuilder();
-		buf.append('\'');
+		buf.append('"');
 		switch (value) {
 		case '\'':
 		case '\\': buf.append('\\'); break;
@@ -259,7 +259,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		case '\r': buf.append('\\'); value = 'r'; break;
 		case '\f': buf.append('\\'); value = 'f'; break;
 		}
-		buf.append(value).append('\'');
+		buf.append(value).append('\"');
 		return buf.toString();
 	}
 	public String toString() {
@@ -356,6 +356,6 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 
 	private void renderName(StringBuilder sb, String name) {
 		if (sb.length() > 0) sb.append(',');
-		sb.append(name).append(':');
+		sb.append('"').append(name).append("\":");
 	}
 }

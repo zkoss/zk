@@ -2020,11 +2020,11 @@ w:use="foo.MyWindow"&gt;
 			final String wgtcls = getWidgetClass();
 			if (wgtcls == null)
 				throw new UiException("Widget class required for "+this+" with "+getMold());
-			out.write("\n['");
+			out.write("\n[\"");
 			out.write(wgtcls);
-			out.write("','");
+			out.write("\",\"");
 			out.write(getUuid());
-			out.write("',{");
+			out.write("\",{");
 			out.write(renderer.getBuffer().toString());
 			out.write("},{");
 			out.write(serenderer == null ? "" : serenderer.toString());
@@ -2035,9 +2035,9 @@ w:use="foo.MyWindow"&gt;
 			out.write(']');
 			final String mold = getMold();
 			if (!DEFAULT.equals(mold)) {
-				out.write(",'");
+				out.write(",\"");
 				out.write(mold);
-				out.write('\'');
+				out.write('\"');
 			}
 			out.write(']');
 
@@ -2047,9 +2047,9 @@ w:use="foo.MyWindow"&gt;
 		if (order < 0) {
 			if (aupg) {
 				if (extra.length() > 0) {
-					out.write(",0,null,'");
+					out.write(",0,null,\"");
 					out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
-					out.write('\'');
+					out.write('\"');
 				}
 				out.write(']');
 			} else {

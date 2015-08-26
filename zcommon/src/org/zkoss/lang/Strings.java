@@ -29,6 +29,12 @@ public class Strings {
 	 * JavaScript. It assumes the string will be enclosed with a single quote.
 	 */
 	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/!";
+	/**
+	 /** Used with {@link #escape} to escape a string in
+	 * JSON value. It assumes the string will be enclosed with double single quote.
+	 * @since 8.0.0
+	 */
+	public static final String ESCAPE_JSON_VALUE = "\"\n\r\t\f\\/!";
 	public static final String EMPTY = "";
 	/**
 	 * Returns true if the string is null or empty.
