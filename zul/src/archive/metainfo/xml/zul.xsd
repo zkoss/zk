@@ -466,10 +466,12 @@
 		<xs:attribute name="stubonly" type="xs:string" use="optional" />		
 		<xs:attribute name="use" type="xs:string" use="optional" />
 		<xs:attribute name="viewModel" type="xs:string" use="optional" />
+		<xs:attribute name="validationMessages" type="xs:string" use="optional" />
 		<xs:attribute name="visible" type="booleanType" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="htmlBasedComponentAttrGroup">
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />
+		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attribute name="width" type="xs:string" use="optional" />
 		<xs:attribute name="height" type="xs:string" use="optional" />
 		<xs:attribute name="sclass" type="xs:string" use="optional" />
@@ -531,6 +533,7 @@
 	</xs:attributeGroup>
 	<xs:attributeGroup name="labelImageElementAttrGroup">
 		<xs:attributeGroup ref="labelElementAttrGroup" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="imageContent" type="mediaType" use="optional" />
 		<xs:attribute name="hoverImage" type="xs:string" use="optional" />
