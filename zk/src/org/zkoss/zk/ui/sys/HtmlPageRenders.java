@@ -21,6 +21,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -653,9 +654,9 @@ public class HtmlPageRenders {
 				}
 			} else if (order > 0) //not first child
 				out.write(',');
-			out.write("\n[0,\""); //0: page
+			out.write("\n[0,'"); //0: page
 			out.write(page.getUuid());
-			out.write("\",{");
+			out.write("',{");
 
 			final StringBuffer props = new StringBuffer(128);
 			final String pgid = page.getId();
@@ -828,12 +829,12 @@ public class HtmlPageRenders {
 	}
 	private static void appendProp(StringBuffer sb, String name, Object value) {
 		if (sb.length() > 0) sb.append(',');
-		sb.append('"').append(name).append("\":");
+		sb.append(name).append(':');
 		boolean quote = value instanceof String;
 		if (quote) {
-			sb.append('"');
+			sb.append('\'');
 			sb.append(HTMLs.encodeJavaScript((String)value));
-			if (quote) sb.append('"');
+			if (quote) sb.append('\'');
 		} else {
 			sb.append(value); //no escape, so use with care
 		}

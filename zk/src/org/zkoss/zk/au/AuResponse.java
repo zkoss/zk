@@ -254,7 +254,7 @@ public class AuResponse {
 			_comp = comp;
 		}
 		public String toJSONString() {
-			return _comp.getPage() == null ? "null": "{\"$u\":\"" + _comp.getUuid() + "\"}";
+			return _comp.getPage() == null ? "null": "{$u:'" + _comp.getUuid() + "'}";
 		}
 	}
 }

@@ -213,9 +213,7 @@
             return str('', {'': value});
         };
 //Tom: don't use eval(s) directly, since it won't (and cann't) be compressed)
-	$.evalJSON = !zk.safari && !zk.ie8_ && window.JSON && window.JSON.parse ? function (s) {
-		return window.JSON.parse(s);
-	} : function (s) {
+	$.evalJSON = function (s) {
 		return (new Function('return (' + s +')'))(); //won't count on the current scope
 		//return $eval("(" + s + ")"); //assume the current scope
 	};
