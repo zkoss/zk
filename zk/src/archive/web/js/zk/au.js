@@ -111,7 +111,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				data[0] = Widget.$(data[0]); //might be null (such as rm)
 
 				// Bug ZK-2827
-				if (!data[0]) {
+				if (!data[0] && cmd != 'invoke' /*Bug ZK-2839*/) {
 					return;
 				}
 
@@ -1120,7 +1120,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	redirect: function (url, target) {
 		try {
 			zUtl.go(url, {target: target});
-			zAu.disabledRequest = true; // Bug ZK-2616
+
+			// Bug ZK-2844
+			if (!target)
+				zAu.disabledRequest = true; // Bug ZK-2616
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
 		}

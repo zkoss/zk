@@ -97,6 +97,21 @@ ZK 8.0.0
     or an array. So we changed the response outputs from single quotes to double quotes for string values, and this changed may break the backward compatibility
     for the old version of ZK addons or Webapps, if so, please use the following script to make it work backward compatiable with the old versions.
         `jq.evalJSON = function (str) {return (new Function('return (' + str +')'))();}`
+    --------
+ZK 7.0.7
+* Features
+
+* Bugs
+
+  --------
+ZK 7.0.6.1
+August 19, 2015
+* Features
+
+* Bugs
+  ZK-2844: after redirect to another page, the au is disabled
+  ZK-2839: Invoke a global javascript function doesn't work
+
   --------
 ZK 7.0.6
 * Features
