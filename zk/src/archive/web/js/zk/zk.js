@@ -35,7 +35,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!init.$copied) {
 				init.$copied = true;
 				var cf = init.$copyf;
-				delete init.$copyf;
+				init.$copyf = null;
 				cf();
 			}
 			this.$oid = ++_oid;
@@ -43,7 +43,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 			var ais = this._$ais;
 			if (ais) {
-				delete this._$ais;
+				this._$ais = null;
 				for (var j = ais.length; j--;)
 					ais[j].call(this);
 			}
@@ -79,7 +79,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (o !== v || (opts && opts.force)) {
 				this.__fname__ = nm.substring(1);
 				after.apply(this, arguments);
-				delete this.__fname__;
+				this.__fname__ = null;
 			}
 			return this;
 		};
@@ -88,7 +88,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return function (/*v, opts*/) {
 			this.__fname__ = nm.substring(1);
 			this[nm] = before.apply(this, arguments);
-			delete this.__fname__;
+			this.__fname__ = null;
 			return this;
 		};
 	}
@@ -99,7 +99,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this[nm] = v = before.apply(this, arguments);
 			if (o !== v || (opts && opts.force))
 				after.apply(this, arguments);
-			delete this.__fname__;
+			this.__fname__ = null;
 			return this;
 		};
 	}
