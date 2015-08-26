@@ -17,8 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +28,11 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.DeferredEvaluator;
 import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.xel.ExValue;
 
@@ -75,22 +68,6 @@ public class Property extends ConditionValue {
 	 */
 	private transient Method[] _mtds;
 
-	/**
-	 * To prevent invoking {@link #assign(Component)}} again causes redundant value evaluation with deferred expression.
-	 */
-	private Object _deferredVal;
-	/**
-	 * Avoid creating too many instances.
-	 */
-	private static DeferredEvaluator _deferredEvaluator;
-	static {
-		try {
-			_deferredEvaluator = (DeferredEvaluator) Classes.newInstanceByThread("org.zkoss.bind.BindDeferredEvaluator");
-		} catch (Exception e) {
-			_deferredEvaluator = null;
-		}
-	}
-
 	/** Constructs a property with a class that is known in advance.
 	 * @exception IllegalArgumentException if name is null
 	 */
@@ -118,7 +95,6 @@ public class Property extends ConditionValue {
 		_navval = navval;
 		_value = navval != null ? null: new ExValue(value, Object.class);
 			//type will be fixed when mapped to a method
-		_deferredVal = null;
 	}
 
 	/** Returns the name of the property.
@@ -248,31 +224,7 @@ public class Property extends ConditionValue {
 		Class type =
 			mtd != null ? mtd.getParameterTypes()[0]: Object.class;
 		if (_value != null) _value.setExpectedType(type);
-		Object val = _deferredVal == null ? getValue(comp) : _deferredVal;
-
-		//ZK-2831: if deferred syntax is found and not evaluated yet, store the information and return for later evaluation
-		String vals;
-		final Class expectedType = type;
-		if (_deferredVal == null && val != null && (vals = val.toString()).indexOf("#{") > -1) {
-			Map<Property, String> deferredProps =
-					(Map<Property, String>)comp.getAttribute(Attributes.DEFERRED_PROPERTIES);
-			if (deferredProps == null) {
-				deferredProps = new LinkedHashMap<Property, String>(2);
-				//add event listener
-				comp.addEventListener(Events.ON_DEFERRED_EVALUATION, new EventListener<Event>() {
-					public void onEvent(Event event) throws Exception {
-						if (_deferredEvaluator != null) { //do nothing if DeferredEvaluator not found
-							Component comp = event.getTarget();
-							_deferredEvaluator.evaluate(comp, expectedType);
-						}
-					}
-				});
-			}
-			deferredProps.put(this, vals);
-			comp.setAttribute(Attributes.DEFERRED_PROPERTIES, deferredProps);
-			return;
-		}
-		_deferredVal = null; //clear _deferredVal to enforce Property evaluate value when reload
+		Object val = getValue(comp);
 
 		Method m = null;
 		if (mtd != null) {
@@ -330,24 +282,6 @@ public class Property extends ConditionValue {
 			}
 		}
 		m.invoke(comp, val);
-	}
-
-	/**
-	 * Returns the deferred value
-	 * @since 8.0.0
-	 */
-	public Object getDeferredVal() {
-		return _deferredVal;
-	}
-
-	/**
-	 * Set deferred value after evaluation. Usually {@link #assign(Component)} again after evaluation with binder's information.
-	 * <p>Note: Internal use only.</p>
-	 * @param deferredVal
-	 * @since 8.0.0
-	 */
-	public void setDeferredVal(Object deferredVal) {
-		this._deferredVal = deferredVal;
 	}
 
 	private static Method findExact(final Method[] mtds, final Object val) {

@@ -105,8 +105,6 @@ public class ExValue implements java.io.Serializable {
 	 */
 	public Object getValue(Evaluator eval, Component comp)
 	throws XelException {
-		if (_value != null && _value.indexOf("#{") >= 0)
-			return _value;
 		if (_expr == null) init(eval);
 		return _expr == Expressions.DUMMY_EXPRESSION ?
 			coerce(): eval.evaluate(comp, _expr);

@@ -830,9 +830,6 @@ public class UiEngineImpl implements UiEngine {
 
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
-
-			//ZK-2831: post event for deferred evaluation
-			Events.postEvent(Events.ON_DEFERRED_EVALUATION, child, null);
 		} catch (Throwable ex) {
 			boolean ignore = false;
 			if (!ignore) {
@@ -932,9 +929,6 @@ public class UiEngineImpl implements UiEngine {
 				//to it child (thought rarely happens)
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by application developers
-
-			//ZK-2831: post event for deferred evaluation
-			Events.postEvent(Events.ON_DEFERRED_EVALUATION, child, null);
 
 			//Bug ZK-504: even might be listened later (in parent's composer)
 			//See also ZK-759

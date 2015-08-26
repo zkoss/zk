@@ -34,10 +34,7 @@ public class Evaluators {
 	 */
 	public static Object evaluate(Evaluator eval, Component comp,
 	String expr, Class<?> expectedClass) {
-		boolean isDeferred = false;
-		if (expr != null && ((isDeferred = expr.indexOf("#{") >= 0 || expr.indexOf("${") >= 0))) {
-			if (isDeferred)
-				expr = expr.replace("#{", "${");
+		if (expr != null && expr.indexOf("${") >= 0) {
 			return eval.evaluate(comp, eval.parseExpression(expr, expectedClass));
 		} else {
 			return Classes.coerce(expectedClass, expr);
@@ -50,10 +47,7 @@ public class Evaluators {
 	 */
 	public static Object evaluate(Evaluator eval, Page page,
 	String expr, Class<?> expectedClass) {
-		boolean isDeferred = false;
-		if (expr != null && ((isDeferred = expr.indexOf("#{") >= 0) || expr.indexOf("${") >= 0)) {
-			if (isDeferred)
-				expr = expr.replace("#{", "${");
+		if (expr != null && expr.indexOf("${") >= 0) {
 			return eval.evaluate(page, eval.parseExpression(expr, expectedClass));
 		} else {
 			return Classes.coerce(expectedClass, expr);
