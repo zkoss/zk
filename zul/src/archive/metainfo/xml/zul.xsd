@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.0.201507161600">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.0.201508261532">
     <!--
     SIMPLETYPE
     -->
