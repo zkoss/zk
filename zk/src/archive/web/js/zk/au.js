@@ -111,7 +111,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				data[0] = Widget.$(data[0]); //might be null (such as rm)
 
 				// Bug ZK-2827
-				if (!data[0] && cmd != 'invoke' /*Bug ZK-2839*/) {
+				if (!data[0] && cmd != 'invoke' && cmd != 'addChd' /*Bug ZK-2839*/) {
 					return;
 				}
 
