@@ -1976,7 +1976,8 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
-		jq.onSyncScroll(this);
+		if (this.desktop)
+			jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been removed to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
@@ -1985,7 +1986,8 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
-		jq.onSyncScroll(this);
+		if (this.desktop)
+			jq.onSyncScroll(this);
 	},
 	/** A callback called after a child has been replaced.
 	 * Unlike {@link #onChildAdded_} and {@link #onChildRemoved_}, this

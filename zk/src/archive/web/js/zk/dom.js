@@ -2487,8 +2487,8 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 */
 	onSyncScroll: function (wgt) {
 		var sync = this._syncScroll;
-		if (!sync[wgt.id])
-			sync[wgt.id] = wgt;
+		if (!sync[wgt.uuid])
+			sync[wgt.uuid] = wgt;
 	},
 	/** To invoke the <code>doSyncScroll</code> method of the registered objects.
 	 * <p><code>doSyncScroll</code> is called automatically when {@link zWatch}
@@ -2503,8 +2503,8 @@ text = jq.toJSON([new Date()], function (key, value) {
 		var sync = this._syncScroll;
 		for (var id in sync) {
 			sync[id].doResizeScroll_();
-			delete sync[id];
 		}
+		this._syncScroll = {}; // reset
 	},
 	/** To unregister one object for the <code>doSyncScroll</code> invocation.
 	 * For example,
