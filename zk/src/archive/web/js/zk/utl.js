@@ -168,50 +168,78 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @return String the encoded text.
 	 */
-	encodeXML: function (txt, opts) {
-		txt = txt != null ? String(txt):'';
-		var tl = txt.length,
-			pre = opts && opts.pre,
-			multiline = pre || (opts && opts.multiline),
-			maxlength = opts ? opts.maxlength : 0;
+	encodeXML: (function () {
 
-		if (!multiline && maxlength && tl > maxlength) {
-			var j = maxlength;
-			while (j > 0 && txt.charAt(j - 1) == ' ')
-				--j;
-			opts.maxlength = 0; //no limit
-			return zUtl.encodeXML(txt.substring(0, j) + '...', opts);
+		// The following escape map implementation is referred from Underscore.js 1.8.3
+		// which is under MIT license
+		// List of HTML entities for escaping.
+		var escapeMap = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#x27;',
+			'`': '&#x60;'
+		};
+		 // Functions for escaping and unescaping strings to/from HTML interpolation.
+
+		var escaper = function(match) {
+			return escapeMap[match];
+		};
+		// Regexes for identifying a key that needs to be escaped
+		var source = '(?:&|<|>|"|\'|`)';
+		var testRegexp = RegExp(source);
+		var replaceRegexp = RegExp(source, 'g');
+
+		function _encodeXML0(string) {
+			string = string == null ? '' : '' + string;
+			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
-		var out = '', k = 0, enc;
-		if (multiline || pre)
-			for (var j = 0; j < tl; ++j) {
-				var cc = txt.charAt(j);
-				if (enc = _encs[cc]) {
-					out += txt.substring(k, j) + '&' + enc + ';';
-					k = j + 1;
-				} else if (multiline && cc == '\n') {
-					out += txt.substring(k, j) + '<br/>\n';
-					k = j + 1;
-				} else if (pre && (cc == ' ' || cc == '\t')) {
-					out += txt.substring(k, j) + '&nbsp;';
-					if (cc == '\t')
-						out += '&nbsp;&nbsp;&nbsp;';
-					k = j + 1;
+		return function (txt, opts) {
+			txt = txt != null ? String(txt):'';
+
+			if (!opts) // speed up the replacement.
+   				return _encodeXML0(txt);
+
+			var tl = txt.length,
+				pre = opts && opts.pre,
+				multiline = pre || (opts && opts.multiline),
+				maxlength = opts ? opts.maxlength : 0;
+
+			if (!multiline && maxlength && tl > maxlength) {
+				var j = maxlength;
+				while (j > 0 && txt.charAt(j - 1) == ' ')
+					--j;
+				opts.maxlength = 0; //no limit
+				return zUtl.encodeXML(txt.substring(0, j) + '...', opts);
+			}
+
+			var out = '', k = 0, enc;
+			if (multiline || pre) {
+				for (var j = 0; j < tl; ++j) {
+					var cc = txt.charAt(j);
+					if (enc = _encs[cc]) {
+						out += txt.substring(k, j) + '&' + enc + ';';
+						k = j + 1;
+					} else if (multiline && cc == '\n') {
+						out += txt.substring(k, j) + '<br/>\n';
+						k = j + 1;
+					} else if (pre && (cc == ' ' || cc == '\t')) {
+						out += txt.substring(k, j) + '&nbsp;';
+						if (cc == '\t')
+							out += '&nbsp;&nbsp;&nbsp;';
+						k = j + 1;
+					}
 				}
 			}
-		else
-			for (var j = 0; j < tl; ++j)
-				if (enc = _encs[txt.charAt(j)]) {
-					out += txt.substring(k, j) + '&' + enc + ';';
-					k = j + 1;
-				}
 
-		if (!k) return txt;
-		if (k < tl)
-			out += txt.substring(k);
-		return out;
-	},
+			if (!k) return txt;
+			if (k < tl)
+				out += txt.substring(k);
+			return out;
+		};
+	})(),
 	/** Decodes the XML string into a normal string.
 	 * For example, &amp;lt; is convert to &lt;
 	 * @param String txt the text to decode
