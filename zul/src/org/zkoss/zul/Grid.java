@@ -728,6 +728,8 @@ public class Grid extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+                    // ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
+                    if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) || hasAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED)) return;
 					// ZK-1864: share listmodelist cause un-predictable reload
 					if (event.getType() != ListDataEvent.SELECTION_CHANGED)
 						onListDataChange(event);
