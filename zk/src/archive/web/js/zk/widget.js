@@ -1262,31 +1262,64 @@ wgt.$f().main.setTitle("foo");
 	 * @param Object extra the extra argument. It could be anything.
 	 * @return zk.Widget this widget
 	 */
-	set: function (name, value, extra) {
-		var cc;
-		if ((cc = value && value.$u) //value.$u is UUID
-		&& !(value = Widget.$(cc))) { //not created yet
-			var self = this;
-			zk.afterMount(function () {
-				var v = Widget.$(cc);
-				// ZK-1069: may not be ready even in afterMount
-				if (v)
-					zk._set(self, name, v, extra);
-				else
-					setTimeout(function () {
-						zk._set(self, name, Widget.$(cc), extra);
-					});
-			}, -1);
-			return this;
-		}
+	set: (function () {
 
-		if (cc = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
-		//to optimize the performance we check the method first (most common)
-			zk._set2(this, cc, null, value, extra);
-			return this;
+		// cache the naming lookup
+		var _setCaches = {};
+		function _setterName(name) {
+			var setter = {name : 'set' + name.charAt(0).toUpperCase() + name.substring(1)},
+				cc;
+			if ((cc = name.charAt(0)) == '$') {
+				setter.func = function (wgt, nm, val, extra) {
+					var result = wgt._setServerListener(nm, val);
+					if (!result)
+						zk._set2(wgt, null, nm, val, extra);
+					return wgt;
+				};
+			} else if (cc == 'o' && name.charAt(1) == 'n'
+				&& ((cc = name.charAt(2)) <= 'Z' && cc >= 'A')) {
+				setter.func = function (wgt, nm, val, extra) {
+					wgt.setListener(nm, val);
+					return wgt;
+				};
+			} else {
+				setter.func = function (wgt, nm, val, extra) {
+					var fun;
+					if (fun = wgt[setter.name]) {
+                		//to optimize the performance we check the method first (most common)
+                		zk._set2(wgt, fun, null, val, extra);
+                		return wgt;
+                	}
+                	zk._set2(wgt, null, nm, val, extra);
+                	return wgt;
+				};
+			}
+			_setCaches[name] = setter;
+			return setter;
 		}
-
-		if ((cc = name.charAt(0)) == '$') {
+		return function (name, value, extra) {
+			var cc;
+			if ((cc = value && value.$u) //value.$u is UUID
+			&& !(value = Widget.$(cc))) { //not created yet
+				var self = this;
+				zk.afterMount(function () {
+					var v = Widget.$(cc);
+					// ZK-1069: may not be ready even in afterMount
+					if (v)
+						zk._set(self, name, v, extra);
+					else
+						setTimeout(function () {
+							zk._set(self, name, Widget.$(cc), extra);
+						});
+				}, -1);
+				return this;
+			}
+			var setter = _setCaches[name] || _setterName(name);
+			return setter.func.call(this, this, name, value, extra);
+		};
+	})(),
+	_setServerListener: function (name, value) {
+   		if (name.startsWith('$$')) {
 			if (name.startsWith('$$on')) {
 				var cls = this.$class,
 					ime = cls._importantEvts;
@@ -1302,18 +1335,11 @@ wgt.$f().main.setTitle("foo");
 					ime = cls._repeatIgnoreEvts;
 				(ime || (cls._repeatIgnoreEvts = {}))[name.substring(3)] = value;
 				return this;
-			} else if (name.startsWith('$on')) {
-				this._asaps[name.substring(1)] = value;
-				return this;
 			}
-		} else if (cc == 'o' && name.charAt(1) == 'n'
-			&& ((cc = name.charAt(2)) <= 'Z' && cc >= 'A')) {
-			this.setListener(name, value);
+		} else if (name.startsWith('$on')) {
+			this._asaps[name.substring(1)] = value;
 			return this;
 		}
-
-		zk._set2(this, null, name, value, extra);
-		return this;
 	},
 	/** Retrieves a value from the specified property.
 	 * @param String name the name of property.
