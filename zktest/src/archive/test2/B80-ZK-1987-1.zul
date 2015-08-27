@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-1987-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 15 16:00:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="MVVM">
+        <panel viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_1987VM')">
+            <panelchildren>
+                <vbox>
+                    <combobox model="@load(vm.elements)" selectedItem="@bind(vm.selectedElement)"
+                              itemRenderer="@init(vm.renderer)">
+                    </combobox>
+                    <hbox>
+                        Selected ID: <label value="@load(vm.selectedElement)"/>
+                    </hbox>
+                </vbox>
+            </panelchildren>
+        </panel>
+    </window>
+</zk>

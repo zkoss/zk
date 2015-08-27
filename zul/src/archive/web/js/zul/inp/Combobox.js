@@ -96,6 +96,29 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this._shallSyncPopupPosition = false;
 		}
 	},
+
+	setSelectedItemUuid: function (v) {
+		if (this.desktop) {
+			if (!this._sel || v != this._sel.uuid) {
+				var oldSel = this._sel,
+					sel;
+				this._sel = this._lastsel = null;
+				for (var w = this.firstChild; w; w = w.nextSibling) {
+					if (v == w.uuid) {
+						sel = w;
+						var label = w.getLabel();
+						this._value = label;
+						this.getInputNode().value = label;
+						break;
+					}
+				}
+				this._hiliteOpt(oldSel, this._sel = sel);
+				this._lastsel = sel;
+			}
+		} else
+			this._initSelUuid = v;
+	},
+
 	setValue: function (val) {
 		this.$supers('setValue', arguments);
 		this._reIndex();
@@ -156,15 +179,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var oldsel = this._sel;
 		this._sel = sel;
 
-		if (oldsel && oldsel.parent == this) { //we don't clear _sel precisely, so...
-			var n = oldsel.$n();
-			if (n) {
-				jq(n).removeClass(oldsel.$s('selected'));
-			}
-		}
-
-		if (sel && !sel.isDisabled())
-			jq(sel.$n()).addClass(sel.$s('selected'));
+		this._hiliteOpt(oldsel, sel);
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			this._lastsel = sel;
@@ -184,12 +199,20 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 
-			this.fire('onSelect', {items: sel?[sel]:[], reference: sel, prevSeld: oldsel});
-				//spec change (diff from zk 3): onSelect fired after onChange
-				//purpose: onSelect can retrieve the value correctly
-				//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
-			
+			//ZK-1987: Now only fire onSelect (then trigger onChange in Server)
+			this._value = this.getInputNode().value;
+			this.fire('onSelect', {items: sel?[sel]:[], reference: sel, prevSeld: oldsel}, {toServer:true}, 90);
 		}
+	},
+	_hiliteOpt: function (oldTarget, newTarget) {
+		if (oldTarget && oldTarget.parent == this) {
+			var n = oldTarget.$n();
+			if (n)
+				jq(n).removeClass(oldTarget.$s('selected'));
+		}
+
+		if (newTarget && !newTarget.isDisabled())
+			jq(newTarget.$n()).addClass(newTarget.$s('selected'));
 	},
 	_isStrict: function () {
 		var strict = this.getConstraint();
@@ -391,8 +414,10 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (this.isListen('onOpen'))
 			this.listen({onChanging: zk.$void}, -1000);
 		// Bug ZK-1256, ZK-1276: set initial selected item
-		if (this._value && !this._sel)
-			this.setValue(this._value, true);
+		if (this._initSelUuid) {
+			this.setSelectedItemUuid(this._initSelUuid);
+			this._initSelUuid = null;
+		}
 	},
 	unbind_: function () {
 		this._hilite2();
