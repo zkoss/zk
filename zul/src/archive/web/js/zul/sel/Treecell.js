@@ -223,7 +223,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			if (name.indexOf('close') > -1)
 				icon = this.getIconCloseClass_();
 			
-			openCloseIcon += '<i id="'z + id + '" class="' + icon + ' ' + iconScls +
+			openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls +
 					'-' + name + '"></i>';
 		}
 		if (button) {

@@ -25,7 +25,7 @@ If see the black block, it is correct
 <borderlayout>
 <west id="westborder" size="27%" maxsize="350" minsize="265"
 splittable="true" collapsible="true">
-<window vflex="1" height="100%">
+<window vflex="1">
 <tree height="100%" width="99%"
 style="background-color:black;" >
 </tree>
