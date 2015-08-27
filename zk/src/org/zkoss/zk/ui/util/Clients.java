@@ -555,4 +555,12 @@ public class Clients {
     public static final void sendClientCommand(Component component, String commandName, Object data) {
         response(new AuInvoke(component, "$afterCommand", new Object[] {commandName, data }));
     }
+
+    /** Logs the message to the client.
+     * @param msg message, cast to String
+     * @since 8.0.0
+     */
+    public static final void log(Object msg) {
+        response(new AuLog((String)msg));
+    }
 }
