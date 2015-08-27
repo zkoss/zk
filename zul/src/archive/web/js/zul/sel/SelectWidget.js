@@ -287,12 +287,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			jq(this.efield).children().remove();
 
 			// don't use jq.newHidden() in this case, because the performance is not good.
-			var data = [],
+			var data = '',
 				tmp = '<input type="hidden" name="' + this._name + '" value="';
 			for (var i = 0, j = this._selItems.length; i < j; i++)
-				data.push(tmp, this._selItems[i].getValue(), '"/>');
+				data += tmp + this._selItems[i].getValue() + '"/>';
 
-			jq(this.efield).append(data.join(''));
+			jq(this.efield).append(data);
 		} else if (this.efield) {
 			jq(this.efield).remove();
 			this.efield = null;

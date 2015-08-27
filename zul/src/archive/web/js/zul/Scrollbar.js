@@ -808,28 +808,26 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			hv = isH ? 'horizontal' : 'vertical',
 			lu = isH ? 'left' : 'up',
 			rd = isH ? 'right' : 'down',
-			out = [];
+			out = '';
 		
 		if (this.opts.embed) {
-			out.push('<div id="', uid, '-embed" class="z-scrollbar-', hv,
-					'-embed"></div>');
+			out += '<div id="' + uid + '-embed" class="z-scrollbar-' + hv + '-embed"></div>';
 		}
-		out.push(
-		'<div id="', uid, '" class="z-scrollbar z-scrollbar-', hv, '">',
-			'<div id="', uid, '-', lu, '" class="z-scrollbar-', lu, '">',
-				'<i class="z-icon-caret-', lu, '"></i>',
-			'</div>',
-			'<div id="', uid,'-wrapper" class="z-scrollbar-wrapper">',
-				'<div id="', uid,'-indicator" class="z-scrollbar-indicator">',
-					'<i class="z-scrollbar-icon z-icon-reorder"></i></div>',
-				'<div id="', uid,'-rail" class="z-scrollbar-rail"></div>',
-			'</div>',
-			'<div id="', uid, '-', rd, '" class="z-scrollbar-', rd, '">',
-				'<i class="z-icon-caret-', rd, '"></i>',
-			'</div>',
-		'</div>');
-		jq(cave).append(out.join(''));
-		out = null;
+		out +=
+		'<div id="' + uid + '" class="z-scrollbar z-scrollbar-' + hv + '">' +
+			'<div id="' + uid + '-' + lu + '" class="z-scrollbar-' + lu + '">' +
+				'<i class="z-icon-caret-' + lu + '"></i>' +
+			'</div>' +
+			'<div id="' + uid + '-wrapper" class="z-scrollbar-wrapper">' +
+				'<div id="' + uid + '-indicator" class="z-scrollbar-indicator">' +
+					'<i class="z-scrollbar-icon z-icon-reorder"></i></div>' +
+				'<div id="' + uid + '-rail" class="z-scrollbar-rail"></div>' +
+			'</div>' +
+			'<div id="' + uid + '-' + rd + '" class="z-scrollbar-' + rd + '">' +
+				'<i class="z-icon-caret-' + rd + '"></i>' +
+			'</div>' +
+		'</div>';
+		jq(cave).append(out);
 	}
 });
 })(zk);

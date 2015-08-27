@@ -90,11 +90,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				})(wgt._timezone)});
 				break;
 			default:
-				var ary = [],
+				var ary = '',
 					start = i,
 					end = i;
 
-				while ((ary.push(c)) && ++end < l) {
+				while ((ary += c) && ++end < l) {
 					c = fmt.charAt(end);
 					if (LEGAL_CHARS.indexOf(c) != -1) {
 						end--;
@@ -105,7 +105,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					return function() {
 						return text;
 					};
-				})(ary.join(''))});
+				})(ary)});
 				i = end;
 			}
 		}
@@ -127,7 +127,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			selEnd = sel[1],
 			fmthdler = wgt._fmthdler,
 			index = fmthdler.$indexOf(startHandler),
-			text = [],
+			text = '',
 			hdler = startHandler,
 			isFirst = true,
 			prevStart, ofs, hStart, hEnd, posOfs;
@@ -148,7 +148,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (hEnd >= selEnd && hdler.type) {
 				ofs = selEnd - hStart;
 				while (ofs-- > 0) //replace by space (after)
-					text.push(' ');
+					text += ' ';
 				break;
 			}
 			
@@ -159,12 +159,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 			ofs = hStart - prevStart;
 			while (ofs-- > 0) //replace by space (before)
-				text.push(' ');
+				text += ' ';
 									
-			text.push(hdler.format());
+			text += hdler.format();
 			
 		} while (hdler = fmthdler[++index]);
-		return text.join('');
+		return text;
 	}
 	function _getMaxLen (wgt) {
 		var val = wgt.getInputNode().value,
@@ -251,17 +251,17 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function (date) {
 		if (!this._changed && !date && arguments.length) return '';
-		var out = [], th, text, offset;
+		var out = '', th, text, offset;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
 			text = th.format(date);
-			out.push(text);
+			out += text;
 			//sync handler index
 			if (th.type && (offset = th.isSingleLength()) !== false && 
 				(offset += text.length - 1))
 				th._doShift(this, offset);
 		}
-		return out.join('');
+		return out;
 	},
 	coerceFromString_: function (val) {
 		var unf = Timebox._unformater;

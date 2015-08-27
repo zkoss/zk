@@ -171,7 +171,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	encloseChildHTML_: function (opts) {
-		var out = opts.out || [],
+		var out = opts.out || new zk.Buffer(),
 			child = opts.child,
 			isCell = child.$instanceof(zul.wgt.Cell);
 		if (!isCell) {

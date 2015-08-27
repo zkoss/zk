@@ -1407,6 +1407,9 @@ zk.log('value is", value);
 	zk.webkit = browser.webkit;
 	zk.chrome = browser.chrome;
 	zk.safari = browser.webkit && !zk.chrome; // safari only
+
+	// support W$'s Edge
+	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0) && _ver(agent.substring(iosver+5));
 	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent) && 
 		//ZK-2245: add version info to zk.ios
 		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '');
@@ -1470,6 +1473,47 @@ zk.log('value is", value);
 	
 	zk.vendor_ = zk.vendor.toLowerCase();
 })();
+
+if (!zk.ie && !zk.edge) {
+	/** @class zk.Buffer
+	 * A string concatenation implementation to speed up the rendering performance
+	 * in the modern browsers, except IE or MS's Edge. The implementation is to
+	 * cheat the mold js of the ZK widgets' implementation that it assumed the
+	 * argument is an array type in the early ZK version.
+	 * <p>Note: if the default implementation breaks the backward compatibility,
+	 * please use the following script to overwrite the implementation as the same
+	 * as the early ZK version. For example,
+<pre><code>
+zk.Buffer = Array;
+</code></pre>
+	 * </p>
+	 * @since 8.0.0
+	 */
+	zk.Buffer = function () {
+		this.out = '';
+	};
+
+	zk.Buffer.prototype = new Array;
+	zk.copy(zk.Buffer.prototype, {
+		push: function () {
+			for (var i = 0, j = arguments.length; i<j;i++)
+				if (arguments[i] != null || arguments[i] != undefined)
+					this.out += arguments[i];
+		},
+		join: function (str) {
+			if (str)
+				throw "Wrong usage here! Please run the script `zk.Buffer = Array;` instead."
+			return this.out;
+		},
+		shift: _zkf = function () {throw "Wrong usage here! Please run the script `zk.Buffer = Array;` instead.";},
+		unshift: _zkf,
+		pop: _zkf,
+		slice: _zkf,
+		sort: _zkf
+	});
+} else {
+	zk.Buffer = Array;
+}
 
 //zk.Object//
 	function getProxy(o, f) { //used by zk.Object
@@ -1722,17 +1766,17 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 			$id = '#' + id,
 			click = zk.mobild ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
- 			html = ['<div class="z-error" id="', id, '">',
- 			        '<div id="', id, '-p">',
- 			        '<div class="errornumbers">', ++_errcnt, ' Errors</div>',
- 					'<div class="button"', click, '="zk._Erbx.remove()">',
- 					'<i class="z-icon-times"></i></div>',
- 					'<div class="button"', click, '="zk._Erbx.redraw()">',
- 					'<i class="z-icon-refresh"></i></div></div>',
- 					'<div class="messagecontent"><div class="messages">',
- 			        zUtl.encodeXML(msg, {multiline : true}), '</div></div></div>'];
+ 			html = '<div class="z-error" id="' + id + '">' +
+ 			        '<div id="' + id + '-p">' +
+ 			        '<div class="errornumbers">' + (++_errcnt) + ' Errors</div>' +
+ 					'<div class="button"' + click + '="zk._Erbx.remove()">' +
+ 					'<i class="z-icon-times"></i></div>' +
+ 					'<div class="button"' + click + '="zk._Erbx.redraw()">' +
+ 					'<i class="z-icon-refresh"></i></div></div>' +
+ 					'<div class="messagecontent"><div class="messages">' +
+ 			        zUtl.encodeXML(msg, {multiline : true}) + '</div></div></div>';
 
-		jq(document.body).append(html.join(''));
+		jq(document.body).append(html);
 		_erbx = this;
 		this.id = id;
 		try {

@@ -23,21 +23,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		return spacing && spacing.startsWith('0') && !zk.parseInt(spacing);
 	}
 	function _spacingHTML(box, child) {
-		var oo = [],
+		var oo = '',
 			spacing = box._spacing,
 			spacing0 = _spacing0(spacing),
 			vert = box.isVertical(),
 			spstyle = spacing && spacing != 'auto' ? (vert?'height:':'width:') + spacing: '';
 
-		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
-			'-chdex2" class="', box.$s('separator'), '"');
+		oo += '<t' + (vert ? 'r' : 'd') + ' id="' + child.uuid +
+			'-chdex2" class="' + box.$s('separator') + '"';
 
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
-		if (s) oo.push(' style="', s, '"');
+		if (s) oo += ' style="' + s + '"';
 
-		oo.push('>', vert?'<td>':'', zUtl.img0, vert?'</td></tr>':'</td>');
-		return oo.join('');
+		oo += '>' + (vert ? '<td>' : '') + zUtl.img0 + (vert ? '</td></tr>' : '</td>');
+		return oo;
 	}
 
 	//notice it is invoked as a member of Box (so no need to pass box as argument

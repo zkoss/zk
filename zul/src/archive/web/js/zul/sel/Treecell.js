@@ -154,7 +154,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		if (this.parent.firstChild == this) {
 			var item = this.parent.parent,
 				tree = item.getTree(),
-				sb = [];
+				sb = new zk.Buffer();
 			if (tree) {
 				if (tree.isCheckmark()) {
 					var chkable = item.isSelectable(),
@@ -206,11 +206,11 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		return pitems;
 	},
 	_appendIcon: function (sb, iconScls, name, button) {
-		var openCloseIcon = [];
+		var openCloseIcon = '';
 		sb.push('<span class="');
 		if (name == 'spacer') {
 			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
-			openCloseIcon.push('&nbsp;');
+			openCloseIcon += '&nbsp;';
 		} else {
 			var id = '';
 			if (button) {
@@ -223,15 +223,15 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			if (name.indexOf('close') > -1)
 				icon = this.getIconCloseClass_();
 			
-			openCloseIcon.push('<i id="', id, '" class="', icon, ' ', iconScls, 
-					'-', name, '"></i>');
+			openCloseIcon += '<i id="'z + id + '" class="' + icon + ' ' + iconScls +
+					'-' + name + '"></i>';
 		}
 		if (button) {
 			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd() 
 			if (item)
 				sb.push(' id="', item.uuid, '-open"');
 		}
-		sb.push('>', openCloseIcon.join(''), '</span>');
+		sb.push('>', openCloseIcon, '</span>');
 		openCloseIcon = null;
 	},
 	getIconOpenClass_: function () {

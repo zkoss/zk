@@ -212,7 +212,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				'-info">', this.infoText_(), '</span></div>');
 	},
 	_innerTags: function () {
-		var out = [],
+		var out = new zk.Buffer(),
 			pinc = this._pageIncrement,
 			pcount = this._pageCount,
 			acp = this._activePage,

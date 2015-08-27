@@ -284,15 +284,15 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
 	},
 	domClass_: function(no){
-		var scls = [this.$supers('domClass_', arguments)], 
+		var scls = this.$supers('domClass_', arguments),
 			zcls = this.getZclass(),
 			nozcls = (!no || !no.zclass);
 		
-		if(this._mode == 'toggle' && this._checked && nozcls && zcls ) {
-			scls.push(' ', this.$s('checked'));
+		if (this._mode == 'toggle' && this._checked && nozcls && zcls) {
+			scls += ' ' + this.$s('checked');
 		}
 		
-		return scls.join('');
+		return scls;
 	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments),

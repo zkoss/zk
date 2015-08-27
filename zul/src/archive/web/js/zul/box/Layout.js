@@ -122,11 +122,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	 * @return String
 	 */
 	encloseChildHTML_: function (child, out) {
-		var oo = [],
+		var oo = new zk.Buffer(),
 			vert = this.isVertical_(),
 			spc = this._spacing;
 
-		oo.push('<div id="', child.uuid, '-chdex" class="', this.$s('inner'), '"');
+		oo.push('<div id="' + child.uuid + '-chdex" class="' + this.$s('inner') + '"');
 		if (spc && spc != 'auto') {
 			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
 			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
@@ -139,8 +139,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		oo.push('</div>');
 		if (!out) return oo.join('');
 
-		for (var j = 0, len = oo.length; j < len; ++j)
-			out.push(oo[j]);
+		out.push(oo.join(''));
 	},
 	/**
 	 * Returns whether the layout is vertical

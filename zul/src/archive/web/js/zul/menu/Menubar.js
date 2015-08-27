@@ -284,7 +284,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		jq(child.$n('chdextr')).remove();
 	},
 	encloseChildHTML_: function (opts) {
-		var out = opts.out || [],
+		var out = opts.out || new zk.Buffer(),
 			child = opts.child;
 		child.redraw(out);
 		if (!opts.out) return out.join('');

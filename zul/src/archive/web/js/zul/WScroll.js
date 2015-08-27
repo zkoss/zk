@@ -689,16 +689,16 @@ zul.WScroll = zk.$extends(zk.Object, {
 			ocls = this._isVer ? 'vertical' : 'horizontal',
 			uuid = this.uid + '-' + orient + 'bar',
 			zcls = this.widget.$s('wscroll');
-		jq(p).append(['<div id="', uuid, '" class="', zcls, '-', ocls ,'">',
-				'<div class="', zcls, '-drag">',
-					'<div class="', zcls, '-home" title="', msgzul.WS_HOME, '"></div>',
-					'<div class="', zcls, '-up" title="', msgzul.WS_PREV, '"></div>',
-					'<div class="', zcls, '-down" title="', msgzul.WS_NEXT, '"></div>',
-					'<div class="', zcls, '-end" title="', msgzul.WS_END, '"></div>',
-				'</div>',
-				'<div class="', zcls, '-pos"></div>',
-				'<div class="', zcls, '-endbar"></div>',
-			'</div>'].join(''));
+		jq(p).append('<div id="' + uuid + '" class="' + zcls + '-' + ocls + '">' +
+				'<div class="' + zcls + '-drag">' +
+					'<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>' +
+					'<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>' +
+					'<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>' +
+					'<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>' +
+				'</div>' +
+				'<div class="' + zcls + '-pos"></div>' +
+				'<div class="' + zcls + '-endbar"></div>' +
+			'</div>');
 	}
 }, {
 	/**

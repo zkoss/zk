@@ -1696,7 +1696,7 @@ wgt.$f().main.setTitle("foo");
 
 		if (fc = this.desktop) {
 			//3. generate HTML
-			var out = [];
+			var out = new zk.Buffer();
 			if (tagBeg) out.push(tagBeg);
 			for (var j = 0, len = wgts.length; j < len; ++j)
 				wgts[j].redraw(out);
@@ -2354,29 +2354,29 @@ redraw: function (out) {
 	 * @see #domAttrs_
 	 */
 	domStyle_: function (no) {
-		var out = [], s;
+		var out = '', s;
 		if (s = this.z$display) //see au.js
-			out.push('display:', s, ';');
+			out += 'display:' + s + ';';
 		else if (!this.isVisible() && (!no || !no.visible))
-			out.push('display:none;');
+			out += 'display:none;';
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
 			s = s.replace(REGEX_DQUOT,'\'');  // B50-ZK-647
-			out.push(s);
+			out += s;
 			if (s.charAt(s.length - 1) != ';')
-				out.push(';');
+				out += ';';
 		}
 		if ((!no || !no.width) && (s = this.getWidth()))
-			out.push('width:', s, ';');
+			out += 'width:' + s + ';';
 		if ((!no || !no.height) && (s = this.getHeight())) 
-			out.push('height:', s, ';');
+			out += 'height:' + s + ';';
 		if ((!no || !no.left) && (s = this.getLeft()))
-			out.push('left:', s, ';');
+			out += 'left:' + s + ';';
 		if ((!no || !no.top) && (s = this.getTop()))
-			out.push('top:', s, ';');
+			out += 'top:' + s + ';';
 		if ((!no || !no.zIndex) && (s = this.getZIndex()) >= 0)
-			out.push('z-index:', s, ';');
-		return out.join('');
+			out += 'z-index:' + s + ';';
+		return out;
 	},
 	/** Returns the class name(s) used for the DOM element of this widget.
 	 * <p>Default: a concatenation of {@link #getZclass} and {@link #getSclass}. 
@@ -2426,15 +2426,15 @@ function () {
 	 * @return String 
 	 */
 	domAttrs_: function (no) {
-		var out = [], attrs, s;
+		var out = '', attrs, s;
 		if ((!no || !no.id) && (s = this.uuid))
-			out.push(' id="', s, '"')
+			out += ' id="' + s + '"';
 		if ((!no || !no.domStyle) && (s = this.domStyle_(no)))
-			out.push(' style="', s, '"');
+			out += ' style="' + s + '"';
 		if ((!no || !no.domClass) && (s = this.domClass_(no)))
-			out.push(' class="', s, '"');
+			out += ' class="' + s + '"';
 		if ((!no || !no.tooltiptext) && (s = this.domTooltiptext_()))
-			out.push(' title="', zUtl.encodeXML(s), '"'); // ZK-676
+			out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
 		var dh = {},
 			has = false;
 		for (var nm in (attrs = this.domExtraAttrs)) {
@@ -2442,14 +2442,14 @@ function () {
 				has = true;
 				dh[nm] = attrs[nm];
 			}
-			out.push(' ', nm, '="', attrs[nm]||'', '"'); //generate even if val is empty
+			out += ' ' + nm + '="' + (attrs[nm] || '') + '"'; //generate even if val is empty
 		}
 		if (has)
 			this.listen({onBind: function () {
 				for(var nm in dh)
 					zk.getDataHandler(nm).run(this, dh[nm]);
 			}});
-		return out.join('');
+		return out;
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.
 	 * <p>Default: return {@link #getTooltiptext}.
@@ -2553,7 +2553,7 @@ function () {
 	 * @return String the HTML fragment
 	 */
 	redrawHTML_: function (skipper, trim) {
-		var out = []; // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
+		var out = new zk.Buffer(); // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
 		this.redraw(out, skipper);
 		out = out.join('');
 		return trim ? out.trim(): out;

@@ -1552,13 +1552,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (ncols == length)
 				return cells;
 			else {
-				var out = [];
-				out.push('<tr id="', tbody.id,
-						'-fakeRow" style="visibility:hidden;height:0">');
+				var out = '';
+				out += '<tr id="' + tbody.id +
+						'-fakeRow" style="visibility:hidden;height:0">';
 				for (var i = 0; i < ncols; i++)
-					out.push('<td></td>');
-				out.push('</tr>');
-				jq(tbodyrows[0]).before(out.join(''));
+					out += '<td></td>';
+				out += '</tr>';
+				jq(tbodyrows[0]).before(out);
 				out = null;
 				return tbodyrows[0].cells;
 			}

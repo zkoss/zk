@@ -183,34 +183,34 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return zUtl.encodeXML(txt.substring(0, j) + '...', opts);
 		}
 
-		var out = [], k = 0, enc;
+		var out = '', k = 0, enc;
 		if (multiline || pre)
 			for (var j = 0; j < tl; ++j) {
 				var cc = txt.charAt(j);
 				if (enc = _encs[cc]) {
-					out.push(txt.substring(k, j), '&', enc, ';');
+					out += txt.substring(k, j) + '&' + enc + ';';
 					k = j + 1;
 				} else if (multiline && cc == '\n') {
-					out.push(txt.substring(k, j), '<br/>\n');
+					out += txt.substring(k, j) + '<br/>\n';
 					k = j + 1;
 				} else if (pre && (cc == ' ' || cc == '\t')) {
-					out.push(txt.substring(k, j), '&nbsp;');
+					out += txt.substring(k, j) + '&nbsp;';
 					if (cc == '\t')
-						out.push('&nbsp;&nbsp;&nbsp;');
+						out += '&nbsp;&nbsp;&nbsp;';
 					k = j + 1;
 				}
 			}
 		else
 			for (var j = 0; j < tl; ++j)
 				if (enc = _encs[txt.charAt(j)]) {
-					out.push(txt.substring(k, j), '&', enc, ';');
+					out += txt.substring(k, j) + '&' + enc + ';';
 					k = j + 1;
 				}
 
 		if (!k) return txt;
 		if (k < tl)
-			out.push(txt.substring(k));
-		return out.join('');
+			out += txt.substring(k);
+		return out;
 	},
 	/** Decodes the XML string into a normal string.
 	 * For example, &amp;lt; is convert to &lt;

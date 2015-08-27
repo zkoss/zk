@@ -787,7 +787,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this.rerender();
 					return;
 				}
-				var out = [],
+				var out = new zk.Buffer(),
 					localizedSymbols = this.getLocalizedSymbols();
 				
 				Renderer[view + 'View'](this, out, localizedSymbols);
