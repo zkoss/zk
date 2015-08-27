@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -45,6 +46,7 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.image.AImage;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -231,6 +233,30 @@ public class AuUploader implements AuExtension {
 	 */
 	protected String handleError(Throwable ex) {
 		log.error("Failed to upload", ex);
+        if (ex instanceof FileUploadBase.SizeLimitExceededException) {
+            try {
+                FileUploadBase.SizeLimitExceededException fex = (FileUploadBase.SizeLimitExceededException) ex;
+                long size = fex.getActualSize();
+                long limit = fex.getPermittedSize();
+                final Class<?> msgClass = Classes.forNameByThread("org.zkoss.zul.mesg.MZul");
+                Field msgField = msgClass.getField("UPLOAD_ERROR_EXCEED_MAXSIZE");
+                int divisor1 = 1024;
+                int divisor2 = 1024 * 1024;
+                String[] units = new String[] {" Bytes", " KB", " MB"};
+                int i1 = (int)(Math.log(size) / Math.log(1024));
+                int i2 = (int)(Math.log(limit) / Math.log(1024));
+                String size_auto = Math.round(size / Math.pow(1024, i1)) + units[i1];
+                String limit_auto = Math.round(limit / Math.pow(1024, i2)) + units[i2];
+
+                Object[] args = new Object[] {size_auto, limit_auto, size, limit,
+                        String.valueOf((Long)(size / divisor1)) + units[1], String.valueOf((Long) (limit / divisor1)) + units[1],
+                        String.valueOf((Long)(size / divisor2)) + units[2], String.valueOf((Long) (limit / divisor2)) + units[2]};
+
+                return Messages.get(msgField.getInt(null), args);
+            } catch (Throwable e) {
+                log.error("Failed to parse upload error message..", ex);
+            }
+        }
 		return Exceptions.getMessage(ex);
 	}
 

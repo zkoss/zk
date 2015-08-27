@@ -95,26 +95,6 @@ zul.Upload = zk.$extends(zk.Object, {
 
 		var cls;
 		
-		//ZK-2569: Provide localized message for fileupload
-		var msg = clsnm.match(new RegExp(/maxSizeErrorMessage=\{(.*)\}/));
-		if (msg) {
-			var regex = new RegExp(/(\{(current|max)Size(_.{1,2})?\})/g),
-				reg_result,
-				content = msg[1];
-				result = [];
-			while ((reg_result = regex.exec(content)) != null) {
-				var o = [],
-					rv = reg_result[1];
-				o['label'] = rv;
-				var v = rv.substring(1, rv.length - 1).split('_');
-				if (v.length > 1) o['unit'] = v[1].replace('}', ''); 
-				result.push(o);
-			}
-			result.msg = content;
-			wgt._maxSizeErrorMessage = result;
-			clsnm = clsnm.replace(msg[0], '');
-		}
-		
 		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
 			var attr = attrs[i].trim(); 
 			if (attr.startsWith('maxsize='))
@@ -270,37 +250,9 @@ zul.Upload = zk.$extends(zk.Object, {
 	error: function (msg, uuid, sid) {
 		var wgt = zk.Widget.$(uuid);
 		if (wgt) {
-			//ZK-2569: Provide localized message for fileupload
-			if (msg.indexOf('the request was rejected because its size') != -1 && wgt._maxSizeErrorMessage) {
-				var errMsg = wgt._maxSizeErrorMessage;
-				if (errMsg.length > 0 && errMsg.msg) {
-					// get original number
-					msg = msg.replace('the request was rejected because its size (', '');
-					msg = msg.replace(') exceeds the configured maximum (', '_');
-					msg = msg.replace(')', '');
-					var v1 = parseInt(msg.substring(0, msg.indexOf('_'))),
-						v2 = parseInt(msg.substring(msg.indexOf('_') + 1, msg.length)),
-						newMsg = errMsg.msg;
-					
-					for (var i = 0, l = errMsg.length; i < l; i++) {
-						var nVal = errMsg[i].label.startsWith('{current') ? v1 : v2;
-						nVal = this._bytesToSize(nVal, errMsg[i].unit);
-						newMsg = newMsg.replace(errMsg[i].label, nVal);
-					}
-					msg = newMsg;
-				}
-			}
 			jq.alert(msg, {desktop: wgt.desktop, icon: 'ERROR'});
 			zul.Upload.close(uuid, sid);
 		}
-	},
-	
-	_bytesToSize: function (b, unit) {
-		var units = ['B', 'KB', 'MB', 'GB', 'TB'],
-			i;
-		if (!unit || (i = units.indexOf(unit)) == -1)
-			i = parseInt(Math.floor(Math.log(b) / Math.log(1024)));
-		return Math.round(b / Math.pow(1024, i), 2) + ' ' + units[i];
 	},
 	
 	/**

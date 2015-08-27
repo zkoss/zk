@@ -37,6 +37,7 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int UPLOAD_CANCEL = 0x2102 + MESSAGE_ID;
 	static final int UPLOAD_SUBMIT = 0x2103 + MESSAGE_ID;
 	static final int UPLOAD_BROWSE = 0x2104 + MESSAGE_ID;
+    static final int UPLOAD_ERROR_EXCEED_MAXSIZE = 0x2105 + MESSAGE_ID;
 	static final int OK = 0x2200 + MESSAGE_ID;
 	static final int CANCEL = 0x2201 + MESSAGE_ID;
 	static final int YES = 0x2220 + MESSAGE_ID;
