@@ -2427,28 +2427,43 @@ function () {
 	 */
 	domAttrs_: function (no) {
 		var out = '', attrs, s;
-		if ((!no || !no.id) && (s = this.uuid))
-			out += ' id="' + s + '"';
-		if ((!no || !no.domStyle) && (s = this.domStyle_(no)))
-			out += ' style="' + s + '"';
-		if ((!no || !no.domClass) && (s = this.domClass_(no)))
-			out += ' class="' + s + '"';
-		if ((!no || !no.tooltiptext) && (s = this.domTooltiptext_()))
-			out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
-		var dh = {},
-			has = false;
-		for (var nm in (attrs = this.domExtraAttrs)) {
-			if (zk.hasDataHandler(nm)) {
-				has = true;
-				dh[nm] = attrs[nm];
-			}
-			out += ' ' + nm + '="' + (attrs[nm] || '') + '"'; //generate even if val is empty
+		if (!no) {
+			if ((s = this.uuid))
+        		out += ' id="' + s + '"';
+        	if ((s = this.domStyle_(no)))
+        		out += ' style="' + s + '"';
+        	if ((s = this.domClass_(no)))
+        		out += ' class="' + s + '"';
+        	if ((s = this.domTooltiptext_()))
+        		out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
+		} else {
+			if (!no.id && (s = this.uuid))
+				out += ' id="' + s + '"';
+			if (!no.domStyle && (s = this.domStyle_(no)))
+				out += ' style="' + s + '"';
+			if (!no.domClass && (s = this.domClass_(no)))
+				out += ' class="' + s + '"';
+			if (!no.tooltiptext && (s = this.domTooltiptext_()))
+				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
 		}
-		if (has)
-			this.listen({onBind: function () {
-				for(var nm in dh)
-					zk.getDataHandler(nm).run(this, dh[nm]);
-			}});
+		if (this.domExtraAttrs) {
+			var dh = {},
+				has = false;
+
+			for (var nm in (attrs = this.domExtraAttrs)) {
+				if (zk.hasDataHandler(nm)) {
+					has = true;
+					dh[nm] = attrs[nm];
+				}
+				out += ' ' + nm + '="' + (attrs[nm] || '') + '"'; //generate even if val is empty
+			}
+			if (has) {
+				this.listen({onBind: function () {
+					for(var nm in dh)
+						zk.getDataHandler(nm).run(this, dh[nm]);
+				}});
+			}
+		}
 		return out;
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.
