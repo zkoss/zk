@@ -645,7 +645,7 @@ public class HtmlPageRenders {
                         Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
 						String scriptSrc = scriptInfo.getX();
                         String script = scriptInfo.getY();
-                        if (scriptSrc != null) {
+                        if (scriptSrc != null && scriptSrc.length() != 0) {
 							script = Devices.loadJavaScript(exec, scriptSrc);
 						}
 						out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
