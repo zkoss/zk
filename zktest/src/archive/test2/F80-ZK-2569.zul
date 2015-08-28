@@ -17,13 +17,10 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 <label multiline="true">
 	1.click two upload buttons
 	2.upload more the 1KB file
-	3.you can see customized messages
+	3.you can see customized messages in KB format.
 </label>
-	<zscript>
-		String msg = "current:{currentSize}, max:{maxSize}";
-	</zscript>
 	<vlayout>
-		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" upload="maxsize=1,maxSizeErrorMessage={This is an error. current:{currentSize_MB}(B:{currentSize_B} KB:{currentSize_KB}), max:{maxSize_MB}}"/>
-		<toolbarbutton upload="true,maxsize=1,maxSizeErrorMessage={${msg}}" label="Fileupload" onUpload="" />
+		<fileupload label="Upload" tooltiptext="Please select your file!!!" onUpload="" upload="maxsize=1"/>
+		<toolbarbutton upload="true,maxsize=1" label="Fileupload" onUpload="" />
 	</vlayout>
 </window>
