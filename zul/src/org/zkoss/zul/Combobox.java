@@ -743,7 +743,7 @@ public class Combobox extends Textbox {
 			_selItem = item;
 			if (item != null) {
                 setValueDirectly(item.getLabel());
-                smartUpdate("selectedItemUuid", item.getUuid());
+                smartUpdate("selectedItemUuid_", item.getUuid());
 			} else {
 				//Bug#2919037: don't call setRawValue(), or the error message will be cleared
 				if (_value != null && !"".equals(_value)) {
@@ -834,7 +834,7 @@ public class Combobox extends Textbox {
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
         if (_selItem != null)
-            renderer.render("selectedItemUuid", _selItem.getUuid());
+            renderer.render("selectedItemUuid_", _selItem.getUuid());
 	}
 	/** Processes an AU request.
 	 *
@@ -902,6 +902,7 @@ public class Combobox extends Textbox {
             }
 			_lastCkVal = getValue();
 			syncSelectionToModel();
+            // For backward compatible, fire onChange before onSelect
             Events.postEvent(new InputEvent(Events.ON_CHANGE, this, newVal, oldVal));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGE)) {

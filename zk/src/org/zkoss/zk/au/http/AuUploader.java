@@ -254,7 +254,7 @@ public class AuUploader implements AuExtension {
 
                 return Messages.get(msgField.getInt(null), args);
             } catch (Throwable e) {
-                log.error("Failed to parse upload error message..", ex);
+                log.error("Failed to parse upload error message..", e);
             }
         }
 		return Exceptions.getMessage(ex);

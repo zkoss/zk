@@ -97,20 +97,21 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		}
 	},
 
-	setSelectedItemUuid: function (v) {
+	/**
+	*  For internal use only
+	*/
+	setSelectedItemUuid_: function (v) {
 		if (this.desktop) {
 			if (!this._sel || v != this._sel.uuid) {
 				var oldSel = this._sel,
 					sel;
 				this._sel = this._lastsel = null;
-				for (var w = this.firstChild; w; w = w.nextSibling) {
-					if (v == w.uuid) {
-						sel = w;
-						var label = w.getLabel();
-						this._value = label;
-						this.getInputNode().value = label;
-						break;
-					}
+				var w = zk.$(v);
+				if (w) {
+					sel = w;
+					var label = w.getLabel();
+					this._value = label;
+					this.getInputNode().value = label;
 				}
 				this._hiliteOpt(oldSel, this._sel = sel);
 				this._lastsel = sel;
@@ -415,7 +416,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this.listen({onChanging: zk.$void}, -1000);
 		// Bug ZK-1256, ZK-1276: set initial selected item
 		if (this._initSelUuid) {
-			this.setSelectedItemUuid(this._initSelUuid);
+			this.setSelectedItemUuid_(this._initSelUuid);
 			this._initSelUuid = null;
 		}
 	},
