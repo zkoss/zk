@@ -3,7 +3,8 @@ ZK 7.0.7
 * Features
 
 * Bugs
-
+  ZK-2843: MVVM does not support WireVariable rewireOnActivate
+  
 * Upgrade Notes
 
   --------

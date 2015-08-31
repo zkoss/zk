@@ -34,12 +34,11 @@ import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
 import org.zkoss.bind.tracker.impl.BindUiLifeCycle;
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -50,6 +49,7 @@ import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.ConventionWires;
@@ -60,7 +60,8 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * @since 6.0.0
  */
 @SuppressWarnings("rawtypes")
-public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
+public class BindComposer<T extends Component> implements Composer<T>,
+		ComponentActivationListener, ComposerExt<T>, Serializable {
 	
 	private static final long serialVersionUID = 1463169907348730644L;
 	
@@ -411,7 +412,16 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	public void notifyChange(Object bean, String property) {
 		getBinder().notifyChange(bean, property);
 	}
-	
+
+	// Bug fixed for B70-ZK-2843
+	public void didActivate(Component comp) {
+		Selectors.rewireVariablesOnActivate(comp, this.getViewModel(),
+				Selectors.newVariableResolvers(this.getViewModel().getClass(), null));
+	}
+
+	public void willPassivate(Component comp) {
+
+	}
 
 	/**
 	 * 
