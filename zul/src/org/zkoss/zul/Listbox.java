@@ -484,6 +484,8 @@ public class Listbox extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+                    // ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
+                    if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) || hasAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED)) return;
 					onListDataChange(event);
 				}
 			};

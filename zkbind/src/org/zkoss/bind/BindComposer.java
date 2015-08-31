@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.ConventionWires;
@@ -64,7 +65,8 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * @since 6.0.0
  */
 @SuppressWarnings("rawtypes") public class BindComposer<T extends Component>
-		implements Composer<T>, ComposerExt<T>, Serializable, AuService {
+		implements Composer<T>, ComposerExt<T>, Serializable, AuService,
+		ComponentActivationListener {
 
 	private static final long serialVersionUID = 1463169907348730644L;
 
@@ -470,6 +472,15 @@ import org.zkoss.zk.ui.util.ConventionWires;
 		getBinder().notifyChange(bean, property);
 	}
 
+	// Bug fixed for B70-ZK-2843
+	public void didActivate(Component comp) {
+		Selectors.rewireVariablesOnActivate(comp, this.getViewModel(),
+				Selectors.newVariableResolvers(this.getViewModel().getClass(), null));
+	}
+
+	public void willPassivate(Component comp) {
+
+	}
 	/**
 	 * <p>A parsing scope context for storing Binders, and handle there loadComponent
 	 * invocation properly.</p>

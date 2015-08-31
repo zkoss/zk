@@ -165,17 +165,26 @@ public class Selectors {
 	 * Component (non-null) or a non-empty Collection.
 	 */
 	public static void wireComponents(Page page, Object controller, boolean ignoreNonNull) {
-		new Wirer(controller, false).wireComponents(new PageFunctor(page), ignoreNonNull);
+		new Wirer(controller, false).wireComponents(new PageFunctor(page),
+				ignoreNonNull);
 	}
-	
-	/*package*/ static void rewireVariablesOnActivate(Component component, 
+
+	/**
+	 * Rewire the variables on session activation
+	 * @since 7.0.7
+	 */
+	public static void rewireVariablesOnActivate(Component component,
 			Object controller, List<VariableResolver> extraResolvers) {
 		// called when activated
 		new Wirer(controller, true).wireVariables(
 				new ComponentFunctor(component), extraResolvers);
 	}
-	
-	/*package*/ static void rewireComponentsOnActivate(Component component, 
+
+	/**
+	 * Rewire the components on session activation
+	 * @since 7.0.7
+	 */
+	public static void rewireComponentsOnActivate(Component component,
 			Object controller) {
 		// called when activated
 		new Wirer(controller, true).wireComponents(
