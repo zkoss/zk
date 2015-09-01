@@ -353,19 +353,21 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			if (_src != null && !_progressing && !_localized) {
 				// refix-ZK-2473: take off the parameters in _src
 				String ext = Servlets.getExtension(_src);
-				int i = ext.indexOf("?");
-				if (i > 0) {
-					ext = ext.substring(0, i);
-				}
-				
-				// ZK-2567: use defer mode for unrecognized files
-				try {
-					LanguageDefinition lang = LanguageDefinition.getByExtension(ext);
-					_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
-				} catch (DefinitionNotFoundException e) {
+
+				// according to the spec if query string exists, it should be defer
+				// mode automatically.
+				if (ext.contains("?")) {
 					_instantMode = false;
+				} else {
+					// ZK-2567: use defer mode for unrecognized files
+					try {
+						LanguageDefinition lang = LanguageDefinition
+								.getByExtension(ext);
+						_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
+					} catch (DefinitionNotFoundException e) {
+						_instantMode = false;
+					}
 				}
-				
 			} else
 				_instantMode = false;
 		} else
@@ -485,7 +487,9 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					final int j = _src.indexOf('?');
 					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
 							this, _dynams);
-					// TODO: convert query string to arg
+
+					if (j >= 0)
+						log.warn("Query string is not allowed in instant mode: [" + _src + "]");
 					exec.setAttribute(attrRenderedKey, _src);
 				} finally {
 					restoreDynams(exec, old);

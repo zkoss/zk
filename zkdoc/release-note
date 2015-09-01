@@ -4,6 +4,7 @@ ZK 7.0.7
 
 * Bugs
   ZK-2843: MVVM does not support WireVariable rewireOnActivate
+  ZK-2854: Parameters are ignored if include zul page with query string
   
 * Upgrade Notes
 
