@@ -21,12 +21,14 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
+import org.zkoss.bind.impl.SimpleBindXelContext;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELResolver;
 import org.zkoss.zel.CompositeELResolver;
@@ -36,7 +38,6 @@ import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.MethodNotFoundException;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
-import org.zkoss.zel.StandardELContext;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zel.impl.parser.AstMethodParameters;
 import org.zkoss.zk.ui.Component;
@@ -48,6 +49,8 @@ import org.zkoss.zk.ui.Component;
  */
 public class BindELResolver extends XelELResolver {
 	protected CompositeELResolver _resolver;
+	private PathELResolver _pathResolver;
+	private ImplicitObjectELResolver _implicitResolver;
 	
 	public BindELResolver(XelContext ctx) {
 		super(ctx);
@@ -55,11 +58,19 @@ public class BindELResolver extends XelELResolver {
 	}
 	protected void init() {
 		_resolver = new CompositeELResolver();
-		_resolver.add(new PathELResolver()); //must be the first
+		if (_pathResolver == null)
+			_resolver.add(_pathResolver = new PathELResolver()); //must be the first
+		else
+			_resolver.add(_pathResolver);
+
 		_resolver.add(new ListModelELResolver());
 		_resolver.add(new TreeModelELResolver());
 		_resolver.add(new ValidationMessagesELResolver());
-		_resolver.add(new ImplicitObjectELResolver());//ZK-1032 Able to wire Event to command method
+		if (_implicitResolver == null)
+			_resolver.add(_implicitResolver = new ImplicitObjectELResolver());//ZK-1032 Able to wire Event to command method
+		else
+			_resolver.add(_implicitResolver);
+
 		_resolver.add(new DynamicPropertiedELResolver());//ZK-1472 Bind Include Arg
 		
 		_resolver.add(super.getELResolver());
@@ -72,7 +83,38 @@ public class BindELResolver extends XelELResolver {
 	//ELResolver//
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
-		Object value = super.getValue(ctx, base, property);
+		Object value = null;
+		if (base == null) {
+			if (_pathResolver == null) {
+				_pathResolver = new PathELResolver(); // init
+				_implicitResolver = new ImplicitObjectELResolver();
+			}
+			_pathResolver.getValue(ctx, base, property);
+
+			if (value == null && _ctx instanceof SimpleBindXelContext) {
+				SimpleBindXelContext bctxt = (SimpleBindXelContext) _ctx;
+				if ("self".equals(property)) {
+					value = bctxt.getSelf();
+				}
+				if (Objects.equals(bctxt.getViewModelName(), property))
+					value = bctxt.getViewModel();
+			}
+
+			// resolver first.
+			if (value == null) {
+				value = resolve(ctx, base, property);
+			}
+			if (value == null)
+				value = _implicitResolver.getValue(ctx, base, property);
+
+			// it may be BeanName resolver
+			if (value == null) {
+				value = super.getELResolver().getValue(ctx, base, property);
+			}
+			if (value != null) ctx.setPropertyResolved(true);
+		} else {
+			value = super.getValue(ctx, base, property);
+		}
 		
 		// in order to support more complex case, ex: .stream().filter(x -> x.contains(vm.value))
 		final BindELContext bctx;

@@ -74,7 +74,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
 			.getLogger(BindComposer.class);
 
 	public static final String VM_ID = "$VM_ID$";
-	protected static final String BINDER_ID = "$BINDER_ID$";
+	public static final String BINDER_ID = "$BINDER_ID$";
 
 	private Object _viewModel;
 	private AnnotateBinder _binder;
@@ -315,7 +315,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
 						"name of binder is empty", idanno));
 			}
 		} else {
-			bname = "binder";
+			bname = BINDER_ATTR;
 		}
 
 		if (initanno != null) {

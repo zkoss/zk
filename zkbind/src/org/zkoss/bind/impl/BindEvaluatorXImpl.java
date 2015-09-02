@@ -17,13 +17,11 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.ExpressionX;
-import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
-import org.zkoss.xel.util.SimpleXelContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
@@ -121,7 +119,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			}};
 		
 //		final XelContext xelc = super.newXelContext(comp);
-		final XelContext xelc = new SimpleXelContext(resolver, mapper);//super.newXelContext(comp);
+		final XelContext xelc = new SimpleBindXelContext(comp, ctx != null ? ctx.getBinder() : null, resolver, mapper);//super.newXelContext(comp);
 		
 		xelc.setAttribute(BinderImpl.BINDCTX, ctx);
 		if (ctx != null) {

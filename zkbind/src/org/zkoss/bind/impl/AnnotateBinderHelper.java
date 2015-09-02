@@ -14,15 +14,13 @@ package org.zkoss.bind.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
@@ -91,7 +89,10 @@ public class AnnotateBinderHelper {
 		processComponentBindings0(comp);
 		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
-			processAllComponentsBindings(kid); //recursive to each child
+
+			// it may be a nested binder.
+			if (!kid.hasAttribute(BindComposer.BINDER_ID))
+				processAllComponentsBindings(kid); //recursive to each child
 		}
 
 		// support shadow element

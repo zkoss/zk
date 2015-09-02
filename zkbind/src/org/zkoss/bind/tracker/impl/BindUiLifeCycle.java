@@ -23,6 +23,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.AnnotateBinder;
+import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
@@ -35,7 +36,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -119,7 +119,15 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							
 							//ZK-1640 command send 2 wrong ViewModel
 							//check if there any parent binder again, don't use out-side parentBinder, it is not correct
-							Binder binder = BinderUtil.getBinder(comp,true);
+							Binder binder = null;
+							String bid = (String) comp.getAttribute(BindComposer.BINDER_ID);
+							if (bid != null) {
+								// comp is the binder owner.
+								// fixed for B01887DetachAttach issue since 8.0.0 optimised some part of code.
+								binder = (Binder) comp.getAttribute(bid);
+							} else {
+								binder = BinderUtil.getBinder(comp, true);
+							}
 							if (binder == null) {
 								if (comp instanceof ShadowElement) {
 									Component shadowHost = ((ShadowElement) comp).getShadowHost();
@@ -214,7 +222,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 	public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
 		if (shadow instanceof Component) // just in case
-			handleComponentDetached((Component)shadow);
+			handleComponentDetached((Component) shadow);
 	}
 	
 	private void removeBindings(Component comp) {
@@ -227,7 +235,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 	
 	private void removeBindingsRecursively(Component comp,Map<Binder,Set<Component>> batchRemove) {
-		removeBindings0(comp,batchRemove);
+		removeBindings0(comp, batchRemove);
 		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
 			if (kid != null) {
