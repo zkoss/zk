@@ -351,14 +351,14 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
-				// refix-ZK-2473: take off the parameters in _src
-				String ext = Servlets.getExtension(_src);
 
 				// according to the spec if query string exists, it should be defer
 				// mode automatically.
-				if (ext.contains("?")) {
+				if (_src.contains("?")) {
 					_instantMode = false;
 				} else {
+					String ext = Servlets.getExtension(_src);
+
 					// ZK-2567: use defer mode for unrecognized files
 					try {
 						LanguageDefinition lang = LanguageDefinition
