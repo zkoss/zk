@@ -22,12 +22,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-
+import java.util.TreeMap;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -68,8 +68,17 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private Desktop _desktop;
 	private Page _curpage;
 	private PageDefinition _curpgdef;
-	/** A list of EventInfo. */
-	private final List<EventInfo> _evtInfos = new LinkedList<EventInfo>();
+
+	/* A list of EventInfo within the same priority.
+	 */
+	private final Map<Integer, List<EventInfo>> _evtInfos = new TreeMap<Integer, List<EventInfo>>(
+		new Comparator<Integer>() {
+			public int compare(Integer o1, Integer o2) {
+				// reverse it, returning the greater one first.
+				return o2.compareTo(o1);
+			}
+		});
+
 	/** A stack of args being pushed by {@link #pushArg}. */
 	private List<Map<?, ?>> _args;
 	//private Event _evtInProc;
@@ -122,18 +131,18 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (evt == null)
 			throw new IllegalArgumentException("null");
 
-		evt = ((DesktopCtrl)_desktop).beforePostEvent(evt);
+		evt = ((DesktopCtrl) _desktop).beforePostEvent(evt);
 		if (evt == null)
 			return; //done (ignored)
 
-		for (ListIterator<EventInfo> it = _evtInfos.listIterator(_evtInfos.size());;) {
-			EventInfo ei = it.hasPrevious() ? it.previous(): null;
-			if (ei == null || ei.priority >= priority) {
-				if (ei != null) it.next();
-				it.add(new EventInfo(priority, evt));
-				break;
-			}
-		}	
+		List<EventInfo> eventInfos = _evtInfos.get(priority);
+		if (eventInfos != null) {
+			eventInfos.add(new EventInfo(priority, evt));
+		} else {
+			eventInfos = new LinkedList<EventInfo>();
+			eventInfos.add(new EventInfo(priority, evt));
+			_evtInfos.put(priority, eventInfos);
+		}
 	}
 	public void postEvent(int priority, Component realTarget, Event evt) {
 		postEvent(priority,
@@ -196,14 +205,30 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Event getNextEvent() {
-		if (!_evtInfos.isEmpty())
-			return _evtInfos.remove(0).event;
+		if (!_evtInfos.isEmpty()) {
+			for (Map.Entry<Integer, List<EventInfo>> me : _evtInfos.entrySet()) {
+				List<EventInfo> value = me.getValue();
+				EventInfo remove = value.remove(0);
+				if (value.isEmpty()) {
+					_evtInfos.remove(me.getKey());
+				}
+				return remove.event;
+			}
+		}
 
 		// ZK-770: EventQueue has extra delay if scope is SESSION
 		((DesktopCtrl)_desktop).onPiggyback();
 
-		if (!_evtInfos.isEmpty())
-			return _evtInfos.remove(0).event;
+		if (!_evtInfos.isEmpty()) {
+			for (Map.Entry<Integer, List<EventInfo>> me : _evtInfos.entrySet()) {
+				List<EventInfo> value = me.getValue();
+				EventInfo remove = value.remove(0);
+				if (value.isEmpty()) {
+					_evtInfos.remove(me.getKey());
+				}
+				return remove.event;
+			}
+		}
 		return null;
 	}
 
