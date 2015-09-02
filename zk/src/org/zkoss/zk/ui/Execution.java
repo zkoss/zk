@@ -773,8 +773,9 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
 	 * @since 8.0.0
 	 */
-	public Component createComponents(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver,  Map<?, ?> arg);
+	public Component[] createComponents(String uri, Component parent,
+	Component insertBefore, VariableResolver resolver, Map<?, ?> arg);
+
 	/** Creates components from the raw content specified by a string
 	 * with a custom variable resolver and inserts before a particular component.
 	 * The created components become the child of the specified parent,

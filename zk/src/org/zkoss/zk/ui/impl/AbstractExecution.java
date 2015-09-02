@@ -299,9 +299,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	Component insertBefore, VariableResolver resolver) {
 		return createComponents0(uri, parent, insertBefore, resolver, null);
 	}
-	public Component createComponents(String uri, Component parent,
+	public Component[] createComponents(String uri, Component parent,
 	Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
-		return createComponents0(uri, parent, insertBefore, resolver, arg);
+		final Component[] cs = getUiEngine().createComponents(
+				this, getPageDefinition(uri), getCurrentPage(), parent, insertBefore, resolver, arg);
+		return cs.length > 0 ? cs : null;
 	}
 	private Component createComponents0(String uri, Component parent,
 	Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {

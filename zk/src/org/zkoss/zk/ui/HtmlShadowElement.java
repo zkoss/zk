@@ -931,6 +931,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 				} else { // in front of the shadow root.
 					_previousInsertion = child; 
 				}
+			} else if (_nextInsertion == insertBefore) {
+				//point _nextInsertion to the previous sibling, which is child
+				_nextInsertion = child;
 			}
 		}
 	}
