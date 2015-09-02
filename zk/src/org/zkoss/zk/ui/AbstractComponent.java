@@ -2915,8 +2915,8 @@ w:use="foo.MyWindow"&gt;
 		final ExecInfo execinf;
 		((ExecutionCtrl)exec).setExecutionInfo(execinf = new ExecInfo(event));
 		if (listeners != null)
-			for (Iterator it = CollectionsX.comodifiableIterator(listeners); it.hasNext();) {
-				final EventListenerInfo li = (EventListenerInfo)it.next();
+			for (Iterator<EventListenerInfo> it = new LinkedList<EventListenerInfo>(listeners).iterator(); it.hasNext();) {
+				final EventListenerInfo li = it.next();
 				if (li.priority < 1000)
 					break; //no more
 
@@ -2939,8 +2939,8 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		if (listeners != null)
-			for (Iterator it = CollectionsX.comodifiableIterator(listeners); it.hasNext();) {
-				final EventListenerInfo li = (EventListenerInfo)it.next();
+			for (Iterator<EventListenerInfo> it = new LinkedList<EventListenerInfo>(listeners).iterator(); it.hasNext();) {
+				final EventListenerInfo li = it.next();
 				if (li.priority < 1000) {
 					execinf.update(null, li.listener, null);
 					onEvent(li.listener, event);
