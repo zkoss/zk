@@ -35,14 +35,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -787,12 +784,16 @@ public class Servlets {
 	 */	
 	public static final String getUserAgent(ServletRequest req) {
 		if (req instanceof HttpServletRequest) {
-			final String s = ((HttpServletRequest)req).getHeader("user-agent");
+			String s = ((HttpServletRequest)req).getHeader("user-agent");
 			if (s != null) {
+				String cache = (String) req.getAttribute("$$zkagent$$");
+				if (cache != null)
+					return cache;
 				double[] ieCompatibilityInfo = getIECompatibilityInfo(req);
 				if(ieCompatibilityInfo != null) {
-					return s + "; MSIE " + ieCompatibilityInfo[2];
+					s += "; MSIE " + ieCompatibilityInfo[2];
 				}
+				req.setAttribute("$$zkagent$$", s);
 				return s;
 			}
 		}

@@ -3093,7 +3093,6 @@ w:use="foo.MyWindow"&gt;
 			_modCntSnap = modCntChd();
 		}
 		public boolean hasNext() {
-			checkComodification();
 			return _j < nChild();
 		}
 		public Component next() {
@@ -3107,7 +3106,6 @@ w:use="foo.MyWindow"&gt;
 			return _lastRet;
 		}
 		public boolean hasPrevious() {
-			checkComodification();
 			return _j > 0;
 		}
 		public Component previous() {
