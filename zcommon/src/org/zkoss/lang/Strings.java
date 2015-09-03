@@ -16,6 +16,8 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
+import java.util.Arrays;
+
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.IllegalSyntaxException;
 
@@ -278,10 +280,11 @@ public class Strings {
 		if (src == null)
 			return null;
 
-		StringBuffer sb = null;
+		final char[] chars = src.toCharArray();
+		StringBuilder sb = null;
 		int j = 0;
 		l_out:
-		for (int j2 = 0, len = src.length();;) {
+		for (int j2 = 0, len = chars.length;;) {
 			String enc = null;
 			char cc;
 			int k = j2;
@@ -289,7 +292,7 @@ public class Strings {
 				if (k >= len)
 					break l_out;
 
-				cc = src.charAt(k);
+				cc = chars[k];
 				if (shallEncodeUnicode(cc, specials)) {
 					enc = encodeUnicode(cc);
 					break;
@@ -305,15 +308,15 @@ public class Strings {
 			}
 
 			if (sb == null)
-				sb = new StringBuffer(len + 4);
-			sb.append(src.substring(j, k)).append('\\');
+				sb = new StringBuilder(len + 4);
+			sb.append(Arrays.copyOfRange(chars, j, k)).append('\\');
 			if (enc != null) sb.append(enc);
 			else sb.append(cc);
 			j2 = j = k + 1;
 		}
 		if (sb == null)
 			return src; //nothing changed
-		return sb.append(src.substring(j)).toString();
+		return sb.append(Arrays.copyOfRange(chars, j, chars.length)).toString();
 	}
 	private static char escapeSpecial(CharSequence src,
 	char cc, int k, String specials) {
@@ -388,6 +391,54 @@ public class Strings {
 			j2 = j = k + 1;
 		}
 	}
+
+	/** Escapes (a.k.a. quote) the special characters with backslash
+	 * and appends it the specified string buffer.
+	 *
+	 * @param dst the destination buffer to append to.
+	 * @param src the source to escape from.
+	 * @param specials a string of characters that shall be escaped/quoted
+	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
+	 * @since 8.0.0
+	 */
+	public static final
+	StringBuilder escape(StringBuilder dst, CharSequence src, String specials) {
+		if (src == null)
+			return dst;
+		String str = src.toString();
+
+		char[] chars = str.toCharArray();
+		for (int j = 0, j2 = 0, len = chars.length;;) {
+			String enc = null;
+			char cc;
+			int k = j2;
+			for (;; ++k) {
+				if (k >= len) {
+					return dst.append(Arrays.copyOfRange(chars, j, len));
+				}
+
+				cc = chars[k];
+				if (shallEncodeUnicode(cc, specials)) {
+					enc = encodeUnicode(cc);
+					break;
+				}
+				if (specials.indexOf(cc) >= 0)
+					break;
+			}
+
+			if (enc == null
+					&& (cc = escapeSpecial(src, cc, k, specials)) == (char)0) {
+				j2 = k + 1;
+				continue;
+			}
+
+			dst.append(Arrays.copyOfRange(chars, j, k)).append('\\');
+			if (enc != null) dst.append(enc);
+			else dst.append(cc);
+			j2 = j = k + 1;
+		}
+	}
+
 	private static final boolean shallEncodeUnicode(char cc, String specials) {
 		return ESCAPE_JAVASCRIPT.equals(specials) && cc > (char)255
 			&& !Character.isLetterOrDigit(cc);
@@ -396,7 +447,7 @@ public class Strings {
 	}
 	/** Return "u????". */
 	private static final String encodeUnicode(int cc) {
-		final StringBuffer sb = new StringBuffer(6)
+		final StringBuilder sb = new StringBuilder(6)
 			.append('u').append(Integer.toHexString(cc));
 		while (sb.length() < 5)
 			sb.insert(1, '0');
@@ -410,11 +461,11 @@ public class Strings {
 	public static final String unescape(String s) {
 		if (s == null)
 			return null;
-		StringBuffer sb = null;
+		StringBuilder sb = null;
 		int j = 0;
 		for (int k; (k = s.indexOf('\\', j)) >= 0;) {
 			if (sb == null)
-				sb = new StringBuffer(s.length());
+				sb = new StringBuilder(s.length());
 
 			char cc = s.charAt(k + 1);
 			switch (cc) {
@@ -458,7 +509,7 @@ public class Strings {
 	public static final
 	Result substring(String src, int from, char until, boolean escBackslash) {
 		final int len = src.length();
-		final StringBuffer sb = new StringBuffer(len);
+		final StringBuilder sb = new StringBuilder(len);
 		for (boolean quoted = false; from < len; ++from) {
 			char cc = src.charAt(from);
 			if (quoted) {

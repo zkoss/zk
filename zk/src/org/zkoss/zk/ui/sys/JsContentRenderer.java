@@ -36,16 +36,17 @@ import org.zkoss.zk.ui.UiException;
  * @since 5.0.0
  */
 public class JsContentRenderer implements ContentRenderer {
-	private final StringBuffer _buf = new StringBuffer(128);
+	private final StringBuilder _buf = new StringBuilder(128);
 
 	public JsContentRenderer() {
 	}
 
 	/** Returns the content being rendered.
 	 */
-	public StringBuffer getBuffer() {
+	public CharSequence getBuffer() {
 		return _buf;
 	}
+
 	/** Renders a string property.
 	 * @param name the property name. Note: it must be a legal JavaScript
 	 * variable name.
