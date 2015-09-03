@@ -57,7 +57,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	private String renderValue(String value) {
 		if (value == null) return null;
 		else {
-			return Strings.escape(value, Strings.ESCAPE_JAVASCRIPT);
+			return Strings.escapeJavaScript(value);
 		}
 	}
 	private String renderValue(Date value) {

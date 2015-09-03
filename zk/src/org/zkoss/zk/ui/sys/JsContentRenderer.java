@@ -17,15 +17,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
-import java.util.Date;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
-
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -63,7 +62,7 @@ public class JsContentRenderer implements ContentRenderer {
 		if (value == null) _buf.append((String)null);
 		else {
 			_buf.append('\'');
-			Strings.escape(_buf, value, Strings.ESCAPE_JAVASCRIPT);
+			_buf.append(Strings.escapeJavaScript(value));
 			_buf.append('\'');
 		}
 	}

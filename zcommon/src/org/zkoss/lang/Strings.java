@@ -438,6 +438,15 @@ public class Strings {
 			j2 = j = k + 1;
 		}
 	}
+	/** Escapes (a.k.a. quote) the special characters with backslash.
+	 * <p>Note: this implementation is referred from <a href="https://github.com/unbescape/unbescape">unbescape</a></p>
+	 * @since 8.0.0
+	 */
+	public static final String escapeJavaScript(String text) {
+		// We utilize the unbescape project's implementation to do the escape for Javascript value
+		// which license is under Apache License 2.0 - https://github.com/unbescape/unbescape
+		return JavaScriptEscape.escapeJavaScript(text);
+	}
 
 	private static final boolean shallEncodeUnicode(char cc, String specials) {
 		return ESCAPE_JAVASCRIPT.equals(specials) && cc > (char)255
