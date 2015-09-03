@@ -232,7 +232,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 						k = j + 1;
 					}
 				}
-			}
+			} else {
+				// fixed B65-ZK-1836 that opt may be an empty object.
+   				return _encodeXML0(txt);
+   			}
 
 			if (!k) return txt;
 			if (k < tl)
