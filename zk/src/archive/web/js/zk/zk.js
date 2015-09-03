@@ -1451,9 +1451,16 @@ zk.log('value is", value);
 			zk.css3 = zk.ie >= 9;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
 			zk.vendor = 'ms';
+		} else if (zk.edge) {
+			bodycls = 'edge';
 		} else {
-			if (zk.webkit)
-				bodycls = 'webkit webkit' + Math.floor(zk.webkit);
+			if (zk.chrome) {
+				bodycls = 'webkit chrome';
+			} else if (zk.safari) {
+				bodycls = 'webkit safari';
+			} else if (zk.webkit) {
+				bodycls = 'webkit';
+			}
 			if (zk.mobile) {
 				bodycls = (bodycls || '') + ' mobile';
 				if (zk.ios)
