@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2845.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Sep  2, 2015  5:59:16 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="customComp" templateURI="B80-ZK-2845-comp.zul"?>
+<zk xmlns:h="native" xmlns:x="xhtml">
+	<label multiline="true">
+		native and xhtml elements will preserve whitespaces between tags,
+		using a shadow-like custom component, it only accepts template and other shadow elements
+		test case:
+			if this page rendered correctly without exception, the bug is fixed
+	</label>
+	<label value="================= case 1 customComp inside native div" />
+	<h:div>
+		<customComp>
+			<template name="insideContent">
+				<label value="this is the content: native" />
+			</template>
+		</customComp>
+	</h:div>
+	<label value="================= case 2 customComp inside xhtml div" />
+	<x:div>
+		<customComp>
+			<template name="insideContent">
+				<label value="this is the content: xhtml" />
+			</template>
+		</customComp>
+	</x:div>
+</zk>

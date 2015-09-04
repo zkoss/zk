@@ -736,8 +736,11 @@ public class Parser {
 					if (newLabel.startsWith("<![CDATA[") && newLabel.endsWith("]]>")) {
 						label = newLabel.substring(9, newLabel.length() - 3);
 					}
-					new TextInfo(parent, label);
-						//Don't trim if native (3.5.0)
+					// Bug ZK-2845: ShadowInfo does not allow TextInfo as child
+					if (!(parent instanceof ShadowInfo)) {
+						new TextInfo(parent, label);
+					}
+					//Don't trim if native (3.5.0)
 				} else {
 					if (textAs != null) { //implies pi != null (parent is ComponentInfo)
 						if (trimLabel.length() != 0)
