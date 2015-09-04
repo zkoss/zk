@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2845-comp.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Sep  2, 2015  6:03:29 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<h:div xmlns:h="native">
+	<label value="this is the container" />
+	<apply template="insideContent" />
+</h:div>
