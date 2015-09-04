@@ -131,36 +131,7 @@ public class BeanELResolver extends ELResolver {
 
         Method m = this.property(context, base, property).write(context);
         
-      //for ZK-1178: check type of mehtod's parameter is the same as type of value
-        //XXX refactored into write() ?
-        if (!checkType(m, value)) {
-        	Class<?> baseClass = base.getClass();
-    		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
-    		//XXX the same in AstValue#setValue()
-    		String propertySetterName = property.toString();
-    		if(propertySetterName != null && propertySetterName.length()>0){
-    			propertySetterName = 
-    				"set"+ 
-    				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
-    				propertySetterName.substring(1);
-    		}
-    		////
-    		
-        	for (Method method : baseClass.getMethods()) {
-        		//method name must the same as t.property (getter)
-        		if (method.getName().equals(propertySetterName)) {
-        			Class<?>[] clazzes = method.getParameterTypes();
-        			if (clazzes.length!=1) { //not standard setter
-        				break;
-        			}
-        			if (ClassUtil.isInstance(value, clazzes[0])) {
-        				m = method;
-        				break;
-        			}
-        		}
-        	}        	
-        }        
-    	//// <=ZK-1178
+
         
         try {
             m.invoke(base, value);
@@ -171,9 +142,51 @@ public class BeanELResolver extends ELResolver {
             throw new ELException(Util.message(context, "propertyWriteError",
                     base.getClass().getName(), property.toString()), cause);
         } catch (IllegalArgumentException e) {
-        	throw new ELException(Util.message(context, "propertyWriteError",
-                    new Object[] { base.getClass().getName(),
-                            property.toString() }), e);
+			//for ZK-1178: check type of mehtod's parameter is the same as type of value
+			//XXX refactored into write() ?
+			if (!checkType(m, value)) {
+				Class<?> baseClass = base.getClass();
+				//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
+				//XXX the same in AstValue#setValue()
+				String propertySetterName = property.toString();
+				if(propertySetterName != null && propertySetterName.length()>0){
+					propertySetterName =
+							"set"+
+									propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
+									propertySetterName.substring(1);
+				}
+				////
+
+				for (Method method : baseClass.getMethods()) {
+					//method name must the same as t.property (getter)
+					if (method.getName().equals(propertySetterName)) {
+						Class<?>[] clazzes = method.getParameterTypes();
+						if (clazzes.length!=1) { //not standard setter
+							break;
+						}
+						if (ClassUtil.isInstance(value, clazzes[0])) {
+							m = method;
+							break;
+						}
+					}
+				}
+			}
+			try {
+				m.invoke(base, value);
+				context.putContext(Method.class, m);
+			} catch (InvocationTargetException ee) {
+				Throwable cause = ee.getCause();
+				Util.handleThrowable(cause);
+				throw new ELException(Util.message(context, "propertyWriteError",
+						base.getClass().getName(), property.toString()), cause);
+			} catch (IllegalArgumentException ee) {
+				throw new ELException(Util.message(context, "propertyWriteError",
+						new Object[] { base.getClass().getName(),
+								property.toString() }), ee);
+			} catch (Exception ee) {
+				throw new ELException(ee);
+			}
+			//// <=ZK-1178
         } catch (Exception e) {
             throw new ELException(e);
         }

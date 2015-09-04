@@ -734,76 +734,84 @@ public class UiEngineImpl implements UiEngine {
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
 			//might be called from a page other than instance's
-		final ReplaceableText replaceableText = new ReplaceableText();
-		for (Iterator it = parentInfo.getChildren().iterator(); it.hasNext();) {
-			final Object meta = it.next();
-			if (meta instanceof ComponentInfo) {
-				final ComponentInfo childInfo = (ComponentInfo)meta;
-				final ForEach forEach = childInfo.resolveForEach(page, parent);
-				if (forEach == null) {
-					if (isEffective(childInfo, page, parent)) {
-						final Component[] children =
-							execCreateChild(ci, parent, childInfo,
-								replaceableText, insertBefore);
-						for (int j = 0; j < children.length; ++j)
-							created.add(children[j]);
-					}
-				} else {
-					while (forEach.next()) {
+		if (!parentInfo.getChildren().isEmpty()) {
+			final ReplaceableText replaceableText = new ReplaceableText();
+			for (Iterator it = parentInfo.getChildren().iterator(); it
+					.hasNext(); ) {
+				final Object meta = it.next();
+				if (meta instanceof ComponentInfo) {
+					final ComponentInfo childInfo = (ComponentInfo) meta;
+					final ForEach forEach = childInfo
+							.resolveForEach(page, parent);
+					if (forEach == null) {
 						if (isEffective(childInfo, page, parent)) {
-							final Component[] children =
-								execCreateChild(ci, parent, childInfo,
-									replaceableText, insertBefore);
+							final Component[] children = execCreateChild(ci,
+									parent, childInfo, replaceableText,
+									insertBefore);
 							for (int j = 0; j < children.length; ++j)
 								created.add(children[j]);
 						}
-					}
-				}
-			} else if (meta instanceof ZkInfo) {
-				final ZkInfo childInfo = (ZkInfo)meta;
-				final ForEach forEach = childInfo.resolveForEach(page, parent);
-				if (forEach == null) {
-					if (isEffective(childInfo, page, parent)) {
-						final Component[] children =
-							execCreateChild(ci, parent, childInfo,
-								replaceableText, insertBefore);
-						for (int j = 0; j < children.length; ++j)
-							created.add(children[j]);
-					}
-				} else {
-					while (forEach.next()) {
-						if (isEffective(childInfo, page, parent)) {
-							final Component[] children =
-								execCreateChild(ci, parent, childInfo,
-									replaceableText, insertBefore);
-							for (int j = 0; j < children.length; ++j)
-								created.add(children[j]);
-						}
-					}
-				}
-			} else if (meta instanceof TextInfo) {
-				//parent must be a native component
-				final String s = ((TextInfo)meta).getValue(parent);
-				if (s != null && s.length() > 0)
-					if (parent != null) {
-						parent.insertBefore(
-							((Native)parent).getHelper().newNative(s), insertBefore);
-					} else if (page != null) {
-						created.add(ci.uf.newComponent(page, null,
-							page.getLanguageDefinition().newLabelInfo(null, s),
-							insertBefore));
 					} else {
-						throw new UnsupportedOperationException("parent or page required for native label: "+s);
+						while (forEach.next()) {
+							if (isEffective(childInfo, page, parent)) {
+								final Component[] children = execCreateChild(ci,
+										parent, childInfo, replaceableText,
+										insertBefore);
+								for (int j = 0; j < children.length; ++j)
+									created.add(children[j]);
+							}
+						}
 					}
-			} else if (meta instanceof ShadowInfo) {
-				final ShadowInfo shadow = (ShadowInfo) meta;
-				if (isEffective(shadow, page, parent)) {
-					final Component[] children = execCreateChild(ci, parent, shadow,  insertBefore);
-					for (int j = 0; j < children.length; ++j)
-						created.add(children[j]);
+				} else if (meta instanceof ZkInfo) {
+					final ZkInfo childInfo = (ZkInfo) meta;
+					final ForEach forEach = childInfo
+							.resolveForEach(page, parent);
+					if (forEach == null) {
+						if (isEffective(childInfo, page, parent)) {
+							final Component[] children = execCreateChild(ci,
+									parent, childInfo, replaceableText,
+									insertBefore);
+							for (int j = 0; j < children.length; ++j)
+								created.add(children[j]);
+						}
+					} else {
+						while (forEach.next()) {
+							if (isEffective(childInfo, page, parent)) {
+								final Component[] children = execCreateChild(ci,
+										parent, childInfo, replaceableText,
+										insertBefore);
+								for (int j = 0; j < children.length; ++j)
+									created.add(children[j]);
+							}
+						}
+					}
+				} else if (meta instanceof TextInfo) {
+					//parent must be a native component
+					final String s = ((TextInfo) meta).getValue(parent);
+					if (s != null && s.length() > 0)
+						if (parent != null) {
+							parent.insertBefore(
+									((Native) parent).getHelper().newNative(s),
+									insertBefore);
+						} else if (page != null) {
+							created.add(ci.uf.newComponent(page, null, page.getLanguageDefinition()
+											.newLabelInfo(null, s), insertBefore));
+						} else {
+							throw new UnsupportedOperationException(
+									"parent or page required for native label: "
+											+ s);
+						}
+				} else if (meta instanceof ShadowInfo) {
+					final ShadowInfo shadow = (ShadowInfo) meta;
+					if (isEffective(shadow, page, parent)) {
+						final Component[] children = execCreateChild(ci, parent,
+								shadow, insertBefore);
+						for (int j = 0; j < children.length; ++j)
+							created.add(children[j]);
+					}
+				} else {
+					execNonComponent(ci, parent, meta);
 				}
-			} else {
-				execNonComponent(ci, parent, meta);
 			}
 		}
 		return created.toArray(new Component[created.size()]);
@@ -977,30 +985,36 @@ public class UiEngineImpl implements UiEngine {
 	private static Component[] execSwitch(CreateInfo ci, ZkInfo switchInfo,
 	Component parent, Component insertBefore) {
 		final Page page = ci.page;
-		final Object switchCond = switchInfo.resolveSwitch(page, parent);
-		for (Iterator it = switchInfo.getChildren().iterator(); it.hasNext();) {
-			final ZkInfo caseInfo = (ZkInfo)it.next();
-			final ForEach forEach = caseInfo.resolveForEach(page, parent);
-			if (forEach == null) {
-				if (isEffective(caseInfo, page, parent)
-				&& isCaseMatched(caseInfo, page, parent, switchCond)) {
-					return execCreateChild(ci, parent, caseInfo, null, insertBefore);
-				}
-			} else {
-				final List<Component> created = new LinkedList<Component>();
-				while (forEach.next()) {
-					if (isEffective(caseInfo, page, parent)
-					&& isCaseMatched(caseInfo, page, parent, switchCond)) {
-						final Component[] children =
-							execCreateChild(ci, parent, caseInfo, null, insertBefore);
-						for (int j = 0; j < children.length; ++j)
-							created.add(children[j]);
-						return created.toArray(new Component[created.size()]);
+		if (!switchInfo.getChildren().isEmpty()) {
+			final Object switchCond = switchInfo.resolveSwitch(page, parent);
+
+			for (Iterator it = switchInfo.getChildren().iterator(); it
+					.hasNext(); ) {
+				final ZkInfo caseInfo = (ZkInfo) it.next();
+				final ForEach forEach = caseInfo.resolveForEach(page, parent);
+				if (forEach == null) {
+					if (isEffective(caseInfo, page, parent) && isCaseMatched(
+							caseInfo, page, parent, switchCond)) {
+						return execCreateChild(ci, parent, caseInfo, null,
+								insertBefore);
+					}
+				} else {
+					final List<Component> created = new LinkedList<Component>();
+					while (forEach.next()) {
+						if (isEffective(caseInfo, page, parent) && isCaseMatched(caseInfo, page, parent,
+								switchCond)) {
+							final Component[] children = execCreateChild(ci,
+									parent, caseInfo, null, insertBefore);
+							for (int j = 0; j < children.length; ++j)
+								created.add(children[j]);
+							return created
+									.toArray(new Component[created.size()]);
 							//only once (AND condition)
+						}
 					}
 				}
 			}
-		}			
+		}
 		return new Component[0];
 	}
 	private static boolean isCaseMatched(ZkInfo caseInfo, Page page,

@@ -14,7 +14,7 @@ package org.zkoss.bind.xel.zel;
 
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
-import java.util.Stack;
+import java.util.LinkedList;
 
 import org.zkoss.bind.impl.Path;
 import org.zkoss.lang.Objects;
@@ -32,8 +32,8 @@ import org.zkoss.zel.impl.parser.Node;
  * @since 6.0.0
  */
 public class PathELResolver extends ELResolver {
-	private Stack<Integer> _numOfKids = new Stack<Integer>();
-	private Stack<Path> _paths = new Stack<Path>();
+	private LinkedList<Integer> _numOfKids = new LinkedList<Integer>();
+	private LinkedList<Path> _paths = new LinkedList<Path>();
 	
 	private String toNodeString(ELContext ctx) {
 		final Node node0 = (Node) ctx.getContext(Node.class);
@@ -46,13 +46,15 @@ public class PathELResolver extends ELResolver {
         if (ctx == null) {
             throw new NullPointerException();
         }
+		Integer numOfKids;
+		Path path;
         if (base == null) { //init
-        	final Integer numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
-			_numOfKids.push(numOfKids);
-			_paths.push(new Path());
-        }
-        Integer numOfKids = _numOfKids.pop();
-        Path path = _paths.pop();
+        	numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
+			path = new Path();
+        } else {
+			numOfKids = _numOfKids.removeFirst();
+			path = _paths.removeFirst();
+		}
         
     	//maintain the number of kids
     	int nums = numOfKids.intValue() - 1;
@@ -64,8 +66,8 @@ public class PathELResolver extends ELResolver {
     	ctx.putContext(Path.class, path);
 
         if (nums > 0) { //still more property
-        	_numOfKids.push(numOfKids);
-        	_paths.push(path);
+        	_numOfKids.addFirst(numOfKids);
+        	_paths.addFirst(path);
         }
         return null;
 	}
@@ -79,8 +81,8 @@ public class PathELResolver extends ELResolver {
 
         // for null object with form binding
         if (!_numOfKids.isEmpty()) {
-	        Integer numOfKids = _numOfKids.pop();
-	        Path path = _paths.pop();
+	        Integer numOfKids = _numOfKids.removeFirst();
+	        Path path = _paths.removeFirst();
 	        
 	    	//maintain the number of kids
 	    	int nums = numOfKids.intValue() - 1;
