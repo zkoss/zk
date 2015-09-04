@@ -65,6 +65,7 @@ ZK 8.0.0
   ZK-1696: Active page of tree not sync while model changed
   ZK-2789: leaking "each" variable with nested childen/model binding
   ZK-1987: Combobox item selection rely items label string
+  ZK-2861: JSON objects in parsed with doublequotes (")
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.

@@ -2483,7 +2483,7 @@ function () {
 					has = true;
 					dh[nm] = attrs[nm];
 				}
-				out += ' ' + nm + '="' + (attrs[nm] || '') + '"'; //generate even if val is empty
+				out += ' ' + nm + '="' + zUtl.encodeXMLAttribute(attrs[nm] || '') + '"'; //generate even if val is empty
 			}
 			if (has) {
 				this.listen({onBind: function () {

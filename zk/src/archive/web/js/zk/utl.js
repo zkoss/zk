@@ -156,7 +156,41 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 		return map;
 	},
+	/** Encodes the string to a valid XML attribute string.
+	 * Refer to {@link Utl} for more XML utilities.
+	 * @param String txt the text to encode
+	 * @return String the encoded text.
+	 * @since 8.0.0
+	 */
+	encodeXMLAttribute: (function () {
 
+		// The following escape map implementation is referred from Underscore.js 1.8.3
+		// which is under MIT license
+		// List of HTML entities for escaping.
+		var escapeMap = {
+			'"': '&quot;',
+			"'": '&#x27;',
+			'`': '&#x60;'
+		};
+		 // Functions for escaping and unescaping strings to/from HTML interpolation.
+
+		var escaper = function(match) {
+			return escapeMap[match];
+		};
+		// Regexes for identifying a key that needs to be escaped
+		var source = '(?:"|\'|`)';
+		var testRegexp = RegExp(source);
+		var replaceRegexp = RegExp(source, 'g');
+
+		function _encodeXML0(string) {
+			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+		}
+
+		return function (txt) {
+			txt = txt != null ? String(txt):'';
+   			return _encodeXML0(txt);
+   		};
+	})(),
 	/** Encodes the string to a valid XML string.
 	 * Refer to {@link Utl} for more XML utilities.
 	 * @param String txt the text to encode
@@ -192,7 +226,6 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		var replaceRegexp = RegExp(source, 'g');
 
 		function _encodeXML0(string) {
-			string = string == null ? '' : '' + string;
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
