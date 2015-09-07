@@ -52,7 +52,6 @@ public class XelELResolver extends ELResolver {
 		//add resolver in order to support EL 3.0
 		DEFAULT.add(new BeanNameELResolver(
                 new StandardBeanNameResolver(localBeans))); // for semicolon expression
-		DEFAULT.add(new CompositeELResolver());
 		DEFAULT.add(new StreamELResolverImpl()); // for stream operations
 		DEFAULT.add(new StaticFieldELResolver()); //for calling static method
 		DEFAULT.add(new MapELResolver());

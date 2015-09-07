@@ -21,6 +21,7 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.xel.zel.ImplicitObjectELResolver;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.zk.ui.Component;
@@ -106,6 +107,17 @@ public class BindEvaluatorXUtil {
 	}
 	@SuppressWarnings("unchecked")
 	public static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType,Map<String, Object> implicit){
+		if (Strings.isBlank(expression))
+			return null;
+		final int len = expression.length();
+		if (len > 2) {
+			// string only
+			if (expression.charAt(0) == '\'' && expression.charAt(len - 1) == '\'') {
+				String result = expression.substring(1, len - 1);
+				if (!result.contains("'"))
+					return (T) result;
+			}
+		}
 		BindContext ctx = null;
 		ctx = new BindContextImpl(null,null,false,null,comp,null);
 		if(implicit!=null){

@@ -84,7 +84,10 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
-		eval.setValue(null, comp, _fieldExpr, value);
+		if (_fieldExpr instanceof PropertyExpression) {
+			_fieldExpr.setValue(null, value);
+		} else
+			eval.setValue(null, comp, _fieldExpr, value);
 
 		if(collector!=null){
 			collector.addInfo(new LoadInfo(LoadInfo.PROP_LOAD,comp,getConditionString(ctx),

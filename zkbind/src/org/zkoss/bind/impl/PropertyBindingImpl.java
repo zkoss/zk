@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
@@ -35,6 +36,8 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	private final Map<String, Object> _converterArgs;
 	private String _filedName;
 
+	private final static Pattern FIELD_COMPILER = Pattern.compile("(?:\\(|\\)|\\[|\\]|\\.)");
+
 	/**
 	 * @param binder
 	 * @param comp
@@ -53,13 +56,20 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		super(binder,comp, bindingArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Class<Object> returnType = Object.class;
-		this._fieldExpr = eval.parseExpressionX(null, fieldExpr, returnType);
+		if (!FIELD_COMPILER.matcher(fieldName).find()) {
+			if (fieldExpr.contains("self."))
+				this._fieldExpr = new PropertyExpression(comp, fieldExpr.substring(5));
+			else // use old implementation
+				this._fieldExpr = eval.parseExpressionX(null, fieldExpr, returnType);
+		} else {
+			this._fieldExpr = eval.parseExpressionX(null, fieldExpr, returnType);
+		}
 		this._accessInfo = AccessInfo.create(this, accessExpr, returnType, conditionType, command, ignoreTracker());
 		_converterArgs = converterArgs;
 		_converter = converterExpr==null?null:parseConverter(eval,converterExpr);
 		_filedName =  fieldName;
 	}
-	
+
 	public Map<String, Object> getConverterArgs() {
 		return _converterArgs;
 	}
