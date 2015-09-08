@@ -68,6 +68,7 @@ ZK 8.0.0
   ZK-2861: JSON objects in parsed with doublequotes (")
   ZK-2845: whitespace issue with shadow element and native element
   ZK-2855: multiple templates in the same component are ignored
+  ZK-2542: @converter causes a big performance issue on the nested children binding
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.
