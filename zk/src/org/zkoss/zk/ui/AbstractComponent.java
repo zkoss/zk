@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +112,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final long serialVersionUID = 20100719L;
 
 	/** Map(Class, Map(String name, Integer flags)). */
-	private static final Map<Class<? extends Component>, Map<String, Integer>> _clientEvents = new HashMap<Class<? extends Component>, Map<String, Integer>>(128);
+	private static final Map<Class<? extends Component>, Map<String, Integer>> _clientEvents = new ConcurrentHashMap<Class<? extends Component>, Map<String, Integer>>(128);
 	private static final String DEFAULT = Impls.DEFAULT;
 	private static final String ANONYMOUS_ID = "z__i";
 	/** Used to generate an anonymous ID. */
@@ -2215,10 +2216,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Map<String, Integer> getClientEvents() {
 		for (Class cls = getClass(); cls != null; cls = cls.getSuperclass()) {
-			Map<String, Integer> events;
-			synchronized (_clientEvents) {
-				events = _clientEvents.get(cls);
-			}
+			Map<String, Integer> events = _clientEvents.get(cls);
 			if (events != null) return events;
 		}
 		return Collections.emptyMap();
@@ -2251,40 +2249,28 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	protected static void addClientEvent(Class<? extends Component> cls, String evtnm, int flags) {
-		Map<String, Integer> events;
-		synchronized (_clientEvents) {
-			events = _clientEvents.get(cls);
-		}
+		Map<String, Integer> events = _clientEvents.get(cls);
 
 		if (events == null) {
 			synchronized (cls) {
-				synchronized (_clientEvents) {
-					events = _clientEvents.get(cls);
-				}
+				events = _clientEvents.get(cls);
 				if (events == null) {
 					//for better performance, we pack all event names of super
 					//classes, though it costs more memory
-					events = new HashMap<String, Integer>(8);
+					events = new ConcurrentHashMap<String, Integer>(8);
 					for (Class c = cls ; c != null; c = c.getSuperclass()) {
-						final Map<String, Integer> evts;
-						synchronized (_clientEvents) {
-							evts = _clientEvents.get(c);
-						}
+						final Map<String, Integer> evts = _clientEvents.get(c);
 						if (evts != null) {
 							events.putAll(evts);
 							break;
 						}
 					}
-					synchronized (_clientEvents) {
-						_clientEvents.put(cls, events);
-					}
+					_clientEvents.put(cls, events);
 				}
 			}
 		}
 
-		synchronized (events) {
-			events.put(evtnm, new Integer(flags));
-		}
+		events.put(evtnm, new Integer(flags));
 	}
 
 	//Event//
