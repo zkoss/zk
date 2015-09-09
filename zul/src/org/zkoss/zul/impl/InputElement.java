@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuSelect;
 import org.zkoss.zk.au.out.AuWrongValue;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.ErrorEvent;
 import org.zkoss.zk.ui.event.Events;
@@ -34,6 +36,11 @@ import org.zkoss.zk.ui.event.SelectionEvent;
 import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.ext.Readonly;
 import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.ClientConstraint;
 import org.zkoss.zul.Constraint;
@@ -429,6 +436,15 @@ implements Constrainted, Readonly, Disable {
 	 * @since 6.0.0
 	 */
 	public boolean getInstant() {
+		return isInstant();
+	}
+
+	/** Returns true if onChange event is sent as soon as user types in the input
+	 * component.
+	 * <p>Default: false
+	 * @since 8.0.0
+	 */
+	public boolean isInstant() {
 		return _auxinf != null && _auxinf.instant;
 	}
 	/** Sets the instant attribute. When the attribute is true, onChange event 
@@ -838,6 +854,117 @@ implements Constrainted, Readonly, Disable {
 			renderer.render("constraint", "[s");
 
 		Utils.renderCrawlableText(coerceToString(_value));
+	}
+
+
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(10);
+	static {
+		_properties.put("name", new StringPropertyAccess() {
+			public void setValue(Component cmp, String name) {
+				((InputElement) cmp).setName(name);
+			}
+
+			public String getValue(Component cmp) {
+				return ((InputElement) cmp).getName();
+			}
+		});
+		_properties.put("rawValue", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object rawValue) {
+				((InputElement) cmp).setRawValue(rawValue);
+			}
+
+			public Object getValue(Component cmp) {
+				return ((InputElement) cmp).getRawValue();
+			}
+		});
+		_properties.put("disabled", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean disabled) {
+				((InputElement) cmp).setDisabled(disabled);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((InputElement) cmp).isDisabled();
+			}
+		});
+
+		_properties.put("readonly", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean readonly) {
+				((InputElement) cmp).setReadonly(readonly);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((InputElement) cmp).isReadonly();
+			}
+		});
+
+		_properties.put("placeholder", new StringPropertyAccess() {
+			public void setValue(Component cmp, String placeholder) {
+				((InputElement) cmp).setPlaceholder(placeholder);
+			}
+
+			public String getValue(Component cmp) {
+				return ((InputElement) cmp).getPlaceholder();
+			}
+		});
+
+		_properties.put("inplace", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean inplace) {
+				((InputElement) cmp).setInplace(inplace);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((InputElement) cmp).isInplace();
+			}
+		});
+
+		_properties.put("instant", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean instant) {
+				((InputElement) cmp).setInstant(instant);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((InputElement) cmp).isInstant();
+			}
+		});
+
+		_properties.put("maxlength", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer maxlength) {
+				((InputElement) cmp).setMaxlength(maxlength);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((InputElement) cmp).getMaxlength();
+			}
+		});
+
+		_properties.put("cols", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer cols) {
+				((InputElement) cmp).setCols(cols);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((InputElement) cmp).getCols();
+			}
+		});
+
+		_properties.put("tabindex", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer tabindex) {
+				((InputElement) cmp).setTabindex(tabindex);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((InputElement) cmp).getTabindex();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	//Cloneable//

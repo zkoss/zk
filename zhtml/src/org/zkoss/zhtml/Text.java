@@ -16,23 +16,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import java.lang.Object;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.lang.Object;
+import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
+import org.zkoss.zhtml.impl.PageRenderer;
+import org.zkoss.zhtml.impl.TagRenderContext;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zhtml.impl.PageRenderer;
-import org.zkoss.zhtml.impl.TagRenderContext;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * Represents a piece of text (of DOM).
@@ -166,5 +170,35 @@ public class Text extends AbstractComponent implements RawId {
 		return new ExtraCtrl();
 	}
 	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+	static {
+		_properties.put("encode", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Text) cmp).setEncode(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Text) cmp).isEncode();
+			}
+		});
+		_properties.put("value", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((Text) cmp).setValue(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((Text) cmp).getValue();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

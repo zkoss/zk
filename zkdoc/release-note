@@ -41,6 +41,7 @@ ZK 8.0.0
   ZK-2800: replacing a listmodel item should re-renders only one item
   ZK-2662: Forbidden to set width/height/hflex/vflex in Auxheader
   ZK-2838: Shadow Template Support MVC
+  ZK-2546: Component EL resolver performance boost
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

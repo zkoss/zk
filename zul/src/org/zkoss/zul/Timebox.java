@@ -36,7 +36,10 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.text.DateFormats;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.mesg.MZul;
 
@@ -375,5 +378,39 @@ will be used to retrieve the real format.
 	
 	private String getFormattedTimezone(){
 		return getDateFormat("z").format(_dummyDate);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+	static {
+		_properties.put("value", new PropertyAccess<Date>() {
+			public void setValue(Component cmp, Date value) {
+				((Timebox) cmp).setValue(value);
+			}
+
+			public Class<Date> getType() {
+				return Date.class;
+			}
+
+			public Date getValue(Component cmp) {
+				return ((Timebox) cmp).getValue();
+			}
+		});
+		_properties.put("buttonVisible", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Timebox) cmp).setButtonVisible(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Timebox) cmp).isButtonVisible();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

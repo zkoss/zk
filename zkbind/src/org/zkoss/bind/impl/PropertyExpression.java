@@ -11,6 +11,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
@@ -18,6 +19,8 @@ import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 
 /**
  * An implementation of component property expression to evaluate it with a reflection
@@ -37,6 +40,12 @@ public class PropertyExpression implements ExpressionX, java.io.Serializable {
 
 	public Object evaluate(XelContext ctx) throws XelException {
 		try {
+			if (cmp instanceof ComponentCtrl) {
+				PropertyAccess propertyAccess = ((ComponentCtrl) cmp)
+						.getPropertyAccess(field);
+				if (propertyAccess != null)
+					return propertyAccess.getValue(cmp);
+			}
 			return Fields.get(cmp, field);
 		} catch (NoSuchMethodException e) {
 			if (cmp instanceof DynamicPropertied) {
@@ -52,6 +61,15 @@ public class PropertyExpression implements ExpressionX, java.io.Serializable {
 
 	public void setValue(XelContext ctx, Object value) throws XelException {
 		try {
+			if (cmp instanceof ComponentCtrl) {
+				PropertyAccess propertyAccess = ((ComponentCtrl) cmp)
+						.getPropertyAccess(field);
+				if (propertyAccess != null) {
+					propertyAccess.setValue(cmp, Classes.coerce(propertyAccess.getType(), value));
+					return;// done
+				}
+			}
+
 			Fields.set(cmp, field, value, true);
 		} catch (NoSuchMethodException e) {
 			if (cmp instanceof DynamicPropertied) {

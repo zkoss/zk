@@ -16,8 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.WrongValueException;
+import java.util.HashMap;
 
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zul.impl.InputElement;
 
 /**
@@ -157,6 +163,62 @@ public class Textbox extends InputElement {
 		return clone;
 	}
 
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+	static {
+		_properties.put("value", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((Textbox) cmp).setValue(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((Textbox) cmp).getValue();
+			}
+		});
+		_properties.put("type", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((Textbox) cmp).setType(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((Textbox) cmp).getType();
+			}
+		});
+		_properties.put("tabbable", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Textbox) cmp).setTabbable(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Textbox) cmp).isTabbable();
+			}
+		});
+		_properties.put("rows", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer value) {
+				((Textbox) cmp).setRows(value);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Textbox) cmp).getRows();
+			}
+		});
+		_properties.put("multiline", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean multiline) {
+				((Textbox) cmp).setMultiline(multiline);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Textbox) cmp).isMultiline();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
+	}
 	//-- super --//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

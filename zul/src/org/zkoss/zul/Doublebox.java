@@ -18,9 +18,12 @@ package org.zkoss.zul;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
 
 import org.zkoss.zk.ui.ArithmeticWrongValueException;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.impl.NumberInputElement;
 
@@ -133,5 +136,28 @@ public class Doublebox extends NumberInputElement {
 		// only replace MINUS and DECIMAL as toPlainString() implementation
 		// only involves these two chars. 
 		return df.format(v).toString().replace('.', DECIMAL).replace('-', MINUS);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+	static {
+		_properties.put("value", new PropertyAccess<Double>() {
+			public void setValue(Component cmp, Double value) {
+				((Doublebox) cmp).setValue(value);
+			}
+			public Class<Double> getType() {
+				return Double.class;
+			}
+			public Double getValue(Component cmp) {
+				return ((Doublebox) cmp).getValue();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

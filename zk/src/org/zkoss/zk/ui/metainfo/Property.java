@@ -30,7 +30,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.EvaluatorRef;
@@ -193,6 +195,14 @@ public class Property extends ConditionValue {
 		return new Object[] {mtd, mtds};
 	}
 	private void assign0(Component comp) throws Exception {
+		if (comp instanceof ComponentCtrl) {
+			ComponentCtrl ctrl = ((ComponentCtrl) comp);
+			PropertyAccess propertyAccess = ctrl.getPropertyAccess(_name);
+			if (propertyAccess != null) {
+				propertyAccess.setValue(comp, Classes.coerce(propertyAccess.getType(), getValue(comp)));
+				return;
+			}
+		}
 		//Note: we have to synchronize since metainfo is shared
 		//(unless it is initialized at the constructor)
 		final Class cls = comp.getClass();

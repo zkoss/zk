@@ -15,9 +15,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
-
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -124,6 +129,44 @@ public class Label extends XulElement {
 	public void setHyphen(boolean hyphen) {
 	}
 
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+	static {
+		_properties.put("value", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((Label) cmp).setValue(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((Label) cmp).getValue();
+			}
+		});
+		_properties.put("multiline", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean multiline) {
+				((Label) cmp).setMultiline(multiline);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Label) cmp).isMultiline();
+			}
+		});
+		_properties.put("maxlength", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer maxlength) {
+				((Label) cmp).setMaxlength(maxlength);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Label) cmp).getMaxlength();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
+	}
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {

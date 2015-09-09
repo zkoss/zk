@@ -17,14 +17,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import java.awt.image.RenderedImage;
+import java.util.HashMap;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.image.Images;
-import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
+import org.zkoss.image.Images;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A XUL element with a label ({@link #getLabel}) 
@@ -328,6 +332,69 @@ abstract public class LabelImageElement extends LabelElement {
 		}
 	}
 
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+	static {
+		_properties.put("iconSclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String iconSclass) {
+				((LabelImageElement) cmp).setIconSclass(iconSclass);
+			}
+
+			public String getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getIconSclass();
+			}
+		});
+		_properties.put("image", new StringPropertyAccess() {
+			public void setValue(Component cmp, String image) {
+				((LabelImageElement) cmp).setImage(image);
+			}
+
+			public String getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getImage();
+			}
+		});
+		_properties.put("imageContent", new PropertyAccess<Image>() {
+			public void setValue(Component cmp, Image image) {
+				((LabelImageElement) cmp).setImageContent(image);
+			}
+			public Class<Image> getType() {
+				return Image.class;
+			}
+
+			public Image getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getImageContent();
+			}
+		});
+		_properties.put("hoverImage", new StringPropertyAccess() {
+			public void setValue(Component cmp, String hoverImage) {
+				((LabelImageElement) cmp).setHoverImage(hoverImage);
+			}
+
+			public String getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getHoverImage();
+			}
+		});
+		_properties.put("hoverImageContent", new PropertyAccess<Image>() {
+			public void setValue(Component cmp, Image image) {
+				((LabelImageElement) cmp).setHoverImageContent(image);
+			}
+			public Class<Image> getType() {
+				return Image.class;
+			}
+
+			public Image getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getHoverImageContent();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
+	}
 	//Cloneable//
 	public Object clone() {
 		final LabelImageElement clone = (LabelImageElement)super.clone();
