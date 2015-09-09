@@ -792,6 +792,10 @@ public class PageDefinition implements NodeInfo {
 		try {
 			return getLanguageDefinition().getComponentDefinition(cls);
 		} catch (DefinitionNotFoundException ex) {
+			try { // try with shadow element
+				return getLanguageDefinition().getShadowDefinition(cls);
+			} catch (DefinitionNotFoundException eex) {
+			}
 		}
 		return null;
 	}

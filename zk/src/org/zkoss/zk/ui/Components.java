@@ -1096,8 +1096,8 @@ public class Components {
 			exec().log(msg, ex);
 		}
 
-		public Component createComponents(String uri, Component parent,
-				Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
+		public Component[] createComponents(String uri, Component parent,
+			Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
 			return exec().createComponents(uri, parent, insertBefore, resolver, arg);
 		}
 	}
