@@ -25,29 +25,30 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.text.DateFormats;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.WaitLock;
-
-import org.zkoss.text.DateFormats;
-
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.http.Utils;
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -873,6 +874,49 @@ the short time styling.
 			smartUpdate("showTodayLink", _showTodayLink);
 		}
 		
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+	static {
+		_properties.put("value", new PropertyAccess<Date>() {
+			public void setValue(Component cmp, Date value) {
+				((Datebox) cmp).setValue(value);
+			}
+
+			public Class<Date> getType() {
+				return Date.class;
+			}
+
+			public Date getValue(Component cmp) {
+				return ((Datebox) cmp).getValue();
+			}
+		});
+		_properties.put("buttonVisible", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Datebox) cmp).setButtonVisible(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Datebox) cmp).isButtonVisible();
+			}
+		});
+		_properties.put("lenient", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Datebox) cmp).setLenient(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Datebox) cmp).isLenient();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

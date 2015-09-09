@@ -16,14 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
-
-import static org.zkoss.lang.Generics.cast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +34,11 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
-import org.zkoss.zk.ui.util.ComponentCloneListener;
-import org.zkoss.zk.ui.util.ForEachStatus;
-import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -49,6 +46,12 @@ import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.ext.Blockable;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.ForEachStatus;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
@@ -1018,5 +1021,44 @@ public class Combobox extends Textbox {
 		super.sessionDidActivate(page);
 		didActivate(_model);
 		didActivate(_renderer);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+	static {
+		_properties.put("buttonVisible", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Combobox) cmp).setButtonVisible(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Combobox) cmp).isButtonVisible();
+			}
+		});
+		_properties.put("autocomplete", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Combobox) cmp).setAutocomplete(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Combobox) cmp).isAutocomplete();
+			}
+		});
+		_properties.put("autodrop", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Combobox) cmp).setAutodrop(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Combobox) cmp).isAutodrop();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

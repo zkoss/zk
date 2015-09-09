@@ -18,9 +18,9 @@ package org.zkoss.zul.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -29,8 +29,12 @@ import org.zkoss.json.JSONValue;
 import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.Locales;
 import org.zkoss.math.RoundingModes;
+import org.zkoss.util.Locales;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A skeletal implementation for number-type input box.
@@ -326,5 +330,35 @@ abstract public class NumberInputElement extends FormatInputElement {
 
 		return new Object[] {
 			(sb != null ? sb.toString(): val), new Integer(divscale)};
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+	static {
+		_properties.put("roundingMode", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer roundingMode) {
+				((NumberInputElement) cmp).setRoundingMode(roundingMode);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((NumberInputElement) cmp).getRoundingMode();
+			}
+		});
+		_properties.put("locale", new StringPropertyAccess() {
+			public void setValue(Component cmp, String locale) {
+				((NumberInputElement) cmp).setLocale(locale);
+			}
+
+			public String getValue(Component cmp) {
+				return ((NumberInputElement) cmp).getLocale().toString();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

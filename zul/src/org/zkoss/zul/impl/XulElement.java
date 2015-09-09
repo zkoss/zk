@@ -17,11 +17,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.DeferredValue;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zul.Popup;
 
 /**
@@ -330,6 +334,57 @@ abstract public class XulElement extends HtmlBasedComponent {
 		// ZK-816
 		render(renderer, "tooltip", getTooltip());
 		render(renderer, "ctrlKeys", getCtrlKeys());
+	}
+
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+	static {
+		_properties.put("context", new StringPropertyAccess() {
+			public void setValue(Component cmp, String context) {
+				((XulElement) cmp).setContext(context);
+			}
+
+			public String getValue(Component cmp) {
+				return ((XulElement) cmp).getContext();
+			}
+		});
+		_properties.put("popup", new StringPropertyAccess() {
+			public void setValue(Component cmp, String popup) {
+				((XulElement) cmp).setPopup(popup);
+			}
+
+			public String getValue(Component cmp) {
+				return ((XulElement) cmp).getPopup();
+			}
+		});
+
+		_properties.put("tooltip", new StringPropertyAccess() {
+			public void setValue(Component cmp, String tooltip) {
+				((XulElement) cmp).setTooltip(tooltip);
+			}
+
+			public String getValue(Component cmp) {
+				return ((XulElement) cmp).getTooltip();
+			}
+		});
+
+		_properties.put("ctrlKeys", new StringPropertyAccess() {
+			public void setValue(Component cmp, String ctrlKeys) {
+				((XulElement) cmp).setCtrlKeys(ctrlKeys);
+			}
+
+			public String getValue(Component cmp) {
+				return ((XulElement) cmp).getCtrlKeys();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	//Cloneable//

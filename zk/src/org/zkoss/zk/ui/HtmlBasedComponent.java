@@ -16,14 +16,25 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import org.zkoss.lang.Objects;
+import java.util.HashMap;
 
-import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.ext.render.PrologAllowed;
-import org.zkoss.zk.ui.ext.DragControl;
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
+import org.zkoss.zk.ui.event.AfterSizeEvent;
+import org.zkoss.zk.ui.event.DropEvent;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.KeyEvent;
+import org.zkoss.zk.ui.event.MouseEvent;
+import org.zkoss.zk.ui.event.MoveEvent;
+import org.zkoss.zk.ui.event.SizeEvent;
+import org.zkoss.zk.ui.event.SwipeEvent;
+import org.zkoss.zk.ui.event.ZIndexEvent;
+import org.zkoss.zk.ui.ext.DragControl;
+import org.zkoss.zk.ui.ext.render.PrologAllowed;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A skeletal implementation for HTML based components.
@@ -608,6 +619,151 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(20);
+	static {
+		_properties.put("width", new StringPropertyAccess() {
+			public void setValue(Component cmp, String width) {
+				((HtmlBasedComponent) cmp).setWidth(width);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getWidth();
+			}
+		});
+		_properties.put("height", new StringPropertyAccess() {
+			public void setValue(Component cmp, String height) {
+				((HtmlBasedComponent) cmp).setHeight(height);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getHeight();
+			}
+		});
+		_properties.put("sclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String sclass) {
+				((HtmlBasedComponent) cmp).setSclass(sclass);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getSclass();
+			}
+		});
+		_properties.put("zclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String zclass) {
+				((HtmlBasedComponent) cmp).setZclass(zclass);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getZclass();
+			}
+		});
+		_properties.put("style", new StringPropertyAccess() {
+			public void setValue(Component cmp, String style) {
+				((HtmlBasedComponent) cmp).setStyle(style);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getStyle();
+			}
+		});
+		_properties.put("left", new StringPropertyAccess() {
+			public void setValue(Component cmp, String left) {
+				((HtmlBasedComponent) cmp).setLeft(left);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getLeft();
+			}
+		});
+		_properties.put("top", new StringPropertyAccess() {
+			public void setValue(Component cmp, String top) {
+				((HtmlBasedComponent) cmp).setTop(top);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getTop();
+			}
+		});
+		_properties.put("draggable", new StringPropertyAccess() {
+			public void setValue(Component cmp, String draggable) {
+				((HtmlBasedComponent) cmp).setDraggable(draggable);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getDraggable();
+			}
+		});
+		_properties.put("droppable", new StringPropertyAccess() {
+			public void setValue(Component cmp, String droppable) {
+				((HtmlBasedComponent) cmp).setDroppable(droppable);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getDroppable();
+			}
+		});
+		_properties.put("tooltiptext", new StringPropertyAccess() {
+			public void setValue(Component cmp, String tooltiptext) {
+				((HtmlBasedComponent) cmp).setTooltiptext(tooltiptext);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getTooltiptext();
+			}
+		});
+		_properties.put("zindex", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer zindex) {
+				((HtmlBasedComponent) cmp).setZindex(zindex);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getZIndex();
+			}
+		});
+		_properties.put("renderdefer", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer renderdefer) {
+				((HtmlBasedComponent) cmp).setRenderdefer(renderdefer);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getRenderdefer();
+			}
+		});
+		_properties.put("action", new StringPropertyAccess() {
+			public void setValue(Component cmp, String action) {
+				((HtmlBasedComponent) cmp).setAction(action);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getAction();
+			}
+		});
+		_properties.put("hflex", new StringPropertyAccess() {
+			public void setValue(Component cmp, String hflex) {
+				((HtmlBasedComponent) cmp).setHflex(hflex);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getHflex();
+			}
+		});
+		_properties.put("vflex", new StringPropertyAccess() {
+			public void setValue(Component cmp, String vflex) {
+				((HtmlBasedComponent) cmp).setVflex(vflex);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getVflex();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: it handles onClick, onDoubleClick, onRightClick

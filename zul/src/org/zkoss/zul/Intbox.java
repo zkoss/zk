@@ -16,10 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.WrongValueException;
+import java.util.HashMap;
 
-import org.zkoss.zul.mesg.MZul;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.impl.NumberInputElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * An edit box for holding an integer.
@@ -81,5 +85,26 @@ public class Intbox extends NumberInputElement {
 	protected String coerceToString(Object value) {
 		return value != null && getFormat() == null ?
 			value.toString(): formatNumber(value, null);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+	static {
+		_properties.put("value", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer value) {
+				((Intbox) cmp).setValue(value);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Intbox) cmp).getValue();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

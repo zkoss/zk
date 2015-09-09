@@ -16,9 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import org.zkoss.lang.Objects;
+import java.util.HashMap;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A skeletal implementation for an input box with format.
@@ -60,5 +64,26 @@ abstract public class FormatInputElement extends InputElement {
 	 */
 	protected String getRealFormat() {
 		return _format;
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+	static {
+		_properties.put("format", new StringPropertyAccess() {
+			public void setValue(Component cmp, String name) {
+				((FormatInputElement) cmp).setFormat(name);
+			}
+
+			public String getValue(Component cmp) {
+				return ((FormatInputElement) cmp).getFormat();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

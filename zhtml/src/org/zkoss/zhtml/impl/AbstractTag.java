@@ -16,29 +16,31 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml.impl;
 
-import java.lang.Object;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
-import org.zkoss.html.HTMLs;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DirectContent;
-import org.zkoss.zul.impl.Utils;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * The raw component used to generate raw HTML elements.
@@ -354,6 +356,54 @@ implements DynamicPropertied, RawId {
 		return !HTMLs.isOrphanTag(_tagnm);
 	}
 
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+	static {
+		_properties.put("id", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((AbstractTag) cmp).setId(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((AbstractTag) cmp).getId();
+			}
+		});
+		_properties.put("sclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((AbstractTag) cmp).setSclass(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((AbstractTag) cmp).getSclass();
+			}
+		});
+		_properties.put("style", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((AbstractTag) cmp).setStyle(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((AbstractTag) cmp).getStyle();
+			}
+		});
+		_properties.put("visible", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((AbstractTag) cmp).setVisible(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((AbstractTag) cmp).isVisible();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
+	}
 	//Cloneable//
 	public Object clone() {
 		final AbstractTag clone = (AbstractTag)super.clone();

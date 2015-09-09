@@ -366,6 +366,15 @@ public interface ComponentCtrl {
 	 */
 	public Object getExtraCtrl();
 
+	/**
+	 * Returns the corresponding property access object from the given property
+	 * name, if any.
+	 * @param prop the name of the property
+	 * @return null it means not to support for the property name.
+	 * @since 8.0.0
+	 */
+	public PropertyAccess getPropertyAccess(String prop);
+
 	/** Notifies that an {@link WrongValueException} instance is thrown,
 	 * and {@link WrongValueException#getComponent} is the component
 	 * causing the exception.

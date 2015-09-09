@@ -16,9 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import org.zkoss.json.JSONValue;
-import org.zkoss.json.JavaScriptValue;
+import java.util.HashMap;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A XUL element with a label.
@@ -64,5 +67,26 @@ abstract public class LabelElement extends XulElement {
 	 */
 	protected void renderCrawlable(String label) throws java.io.IOException {
 		org.zkoss.zul.impl.Utils.renderCrawlableText(label);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+	static {
+		_properties.put("label", new StringPropertyAccess() {
+			public void setValue(Component cmp, String label) {
+				((LabelElement) cmp).setLabel(label);
+			}
+
+			public String getValue(Component cmp) {
+				return ((LabelElement) cmp).getLabel();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

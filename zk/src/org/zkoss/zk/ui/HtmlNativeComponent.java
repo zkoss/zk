@@ -18,6 +18,7 @@ package org.zkoss.zk.ui;
 
 import java.util.Collections;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
@@ -38,6 +39,8 @@ import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.impl.NativeHelpers;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A component used to represent XML elements that are associated
@@ -396,6 +399,55 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 		}
 	}
 
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+	static {
+		_properties.put("id", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((HtmlNativeComponent) cmp).setId(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlNativeComponent) cmp).getId();
+			}
+		});
+
+		_properties.put("tag", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((HtmlNativeComponent) cmp).setTag(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlNativeComponent) cmp).getTag();
+			}
+		});
+
+		_properties.put("epilogContent", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((HtmlNativeComponent) cmp).setEpilogContent(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlNativeComponent) cmp).getEpilogContent();
+			}
+		});
+		_properties.put("prologContent", new StringPropertyAccess() {
+			public void setValue(Component cmp, String value) {
+				((HtmlNativeComponent) cmp).setPrologContent(value);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlNativeComponent) cmp).getPrologContent();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
+	}
 	
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();

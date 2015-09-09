@@ -78,6 +78,7 @@ import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
@@ -90,7 +91,9 @@ import org.zkoss.zk.ui.sys.JSCumulativeContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -2669,7 +2672,7 @@ w:use="foo.MyWindow"&gt;
 	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(propName, annotName,
-			fixAttrValues(annotAttrs), null);
+				fixAttrValues(annotAttrs), null);
 	}
 	/** Used to resolve the backward compatibility:
 	 * ZK 6 expects String[], but ZK 5 might pass String as the value.
@@ -2814,6 +2817,41 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Object getExtraCtrl() {
 		return null;
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+	static {
+		_properties.put("id", new StringPropertyAccess() {
+			public void setValue(Component cmp, String id) {
+				cmp.setId(id);
+			}
+
+			public String getValue(Component cmp) {
+				return cmp.getId();
+			}
+		});
+		_properties.put("mold", new StringPropertyAccess() {
+			public void setValue(Component cmp, String mold) {
+				cmp.setMold(mold);
+			}
+
+			public String getValue(Component cmp) {
+				return cmp.getMold();
+			}
+		});
+		_properties.put("visible", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean visible) {
+				cmp.setVisible(visible);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return cmp.isVisible();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		return _properties.get(prop);
 	}
 
 	/** Notifies that an {@link WrongValueException} instance is thrown,
