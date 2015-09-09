@@ -3427,7 +3427,8 @@
 	<xs:element name="apply" type="applyType" />
 	<xs:complexType name="applyType">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attribute name="template" type="xs:string" use="required" />
+        <xs:attribute name="template" type="xs:string" use="required" />
+        <xs:attribute name="templateURI" type="xs:string" use="required" />
 	</xs:complexType>
 	<!-- shadow element: forEach -->
 	<xs:element name="forEach" type="forEachType" />
@@ -3436,6 +3437,9 @@
 		<xs:attribute name="items" type="xs:string" use="required" />
 		<xs:attribute name="begin" type="intType" use="optional" />
 		<xs:attribute name="end" type="intType" use="optional" />
+        <xs:attribute name="step" type="intType" use="optional" />
+        <xs:attribute name="var" type="xs:string" use="required" />
+        <xs:attribute name="varStatus" type="xs:string" use="required" />
 	</xs:complexType>
 	<!-- shadow element: choose -->
 	<xs:element name="choose" type="chooseType" />
