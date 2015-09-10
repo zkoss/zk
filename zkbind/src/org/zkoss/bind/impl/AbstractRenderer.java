@@ -111,7 +111,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		}
 		return childIndex;
 	}
-	protected Component[] filterOutShadows(Component parent, Component[] items) {
+	private boolean checkShadowElementAndCreateSubChildren(Component parent) {
 		boolean hasShadow = false;
 		if (parent instanceof ComponentCtrl) {
 			ComponentCtrl pCtrl = (ComponentCtrl) parent;
@@ -131,6 +131,15 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 				}
 				hasShadow = true;
 			}
+		}
+		return hasShadow;
+	}
+	protected Component[] filterOutShadows(Component parent, Component[] items) {
+		boolean hasShadow = checkShadowElementAndCreateSubChildren(parent);
+
+		// check children with shadow for Bug ZK-2868
+		for (Component item : items) {
+			checkShadowElementAndCreateSubChildren(item);
 		}
 		return  hasShadow ? ShadowElementsCtrl.filterOutShadows(items) : items;
 	}
