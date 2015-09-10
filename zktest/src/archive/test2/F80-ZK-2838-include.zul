@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2838-include.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 10 11:30:31 CST 2015, Created by chunfu
+
+Copyright (C)  2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div style="background: pink">
+		<label>uri ${each}</label>
+	</div>
+</zk>
