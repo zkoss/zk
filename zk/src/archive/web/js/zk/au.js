@@ -1467,6 +1467,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		return el && el.nodeType == 3 //textnode
 			&& (txt=el.nodeValue) && !txt.trim().length;
 	}
+
+	//Check whether the wgt can support batch update or not.
+	function _canBatchUpdate(wgt) {
+		return wgt && wgt.insertChildHTML_ === zk.Widget.prototype.insertChildHTML_;
+	}
 /** @class zk.AuCmd1
  * The AU command handler for processes commands related to widgets,
  * sent from the server.
@@ -1549,6 +1554,17 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param String... codes the JavaScript code snippet to generate new widget(s).
 	 */
 	addBfr: function (wgt) {
+		// add one by one if not support
+		if (!_canBatchUpdate(wgt)) {
+			for (var args = arguments, j = 1; j < args.length; ++j)
+				zkx_(args[j], function (child) {
+					var act = _beforeAction(child, 'show');
+					wgt.parent.insertBefore(child, wgt);
+					if (!_afterAction(child, act) && !child.z_rod)
+						zUtl.fireSized(child);
+				});
+			return; // done
+		}
 		// optimised to add all of children in a batch
     	var wgts = [], acts = [];
 
@@ -1624,6 +1640,15 @@ zAu.cmd1 = /*prototype*/ {
 				 //possible if <?page complete="true"?>
 				zkx_(args[j], _asBodyChild);
 			}
+		} else if (!_canBatchUpdate(wgt)) {
+			// add one by one if not support
+			for (var args = arguments, j = 1; j < args.length; ++j)
+				zkx_(args[j], function (child) {
+					var act = _beforeAction(child, 'show');
+					wgt.appendChild(child);
+					if (!_afterAction(child, act) && !child.z_rod)
+						zUtl.fireSized(child);
+				});
 		} else { // append in a batch
 			var wgts = [], acts = [];
 
