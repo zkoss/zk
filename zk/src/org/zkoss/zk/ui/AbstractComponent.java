@@ -672,7 +672,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public Collection<Component> getFellows() {
 		if (this instanceof IdSpace)
-			return Collections.unmodifiableCollection(_auxinf.spaceInfo.fellows.values());
+			return Collections.unmodifiableCollection(
+					_auxinf.spaceInfo.fellows.values());
 
 		final IdSpace idspace = getSpaceOwner();
 		if (idspace != null)
@@ -893,11 +894,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public boolean hasAttribute(String name) {
 		return _auxinf != null && _auxinf.attrs != null && _auxinf.attrs.hasAttribute(name);
 	}
-	
+
+	private Boolean hasInited = null;
+	private boolean shallAutoRemove() {
+		if (hasInited == null) {
+			hasInited = Boolean.parseBoolean(Library.getProperty(AUTO_REMOVE_NULL));
+		}
+		return hasInited.booleanValue();
+	}
 	// Bug ZK-2789: allow null attribute values. If auto remove lib prop is enabled,
 	// then set null attribute value = remove attribute
 	public Object setAttribute(String name, Object value) {
-		if (value == null && Boolean.parseBoolean(Library.getProperty(AUTO_REMOVE_NULL))) {
+		if (value == null && shallAutoRemove()) {
 			// null value + old method = remove attribute
 			return removeAttribute(name);
 		}
