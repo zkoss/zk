@@ -893,7 +893,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 
 	public void beforeHostChildAdded(Component child, Component insertBefore, int indexOfInsertBefore) {
 		if (log.isDebugEnabled()) {
-			log.warn("beforeHostChildAdded " + child + ", " + insertBefore + ", in this shadow "  + 
+			log.debug("beforeHostChildAdded " + child + ", " + insertBefore + ", in this shadow "  +
 					ShadowElementsCtrl.getCurrentInfo());
 		}
 		
