@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2869.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 11 09:44:37 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml">
+    <label multiline="true">
+        Click both "fails" and "works" buttons, you should be able to see a message "CONTENT" being rendered in red and green border.
+    </label>
+    <div apply="org.zkoss.bind.BindComposer">
+        <button id="trigger" label="fails"/>
+        <button id="trigger2" label="works"/>
+
+        <div fulfill="trigger.onClick" style="border: 1px solid red">
+            <apply template="mainContent" templateName="contentTemplateFails"/>
+        </div>
+
+        <div fulfill="trigger2.onClick" style="border: 1px solid green">
+            <apply template="mainContent" templateName="contentTemplateWorks"/>
+        </div>
+
+        <template name="mainContent">
+            <div>
+                <apply template="@load(templateName)" />
+            </div>
+        </template>
+
+        <template name="contentTemplateFails">
+            <x:div id="abc"><!-- PROBLEM with x:div -->
+                <apply template="content"/>
+            </x:div>
+        </template>
+
+        <template name="contentTemplateWorks">
+            <div><!-- works with div -->
+                <apply template="content"/>
+            </div>
+        </template>
+
+        <template name="content">
+            CONTENT
+        </template>
+    </div>
+</zk>
+

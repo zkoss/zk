@@ -4556,6 +4556,14 @@ _doFooSelect: function (evt) {
 	}
 
 }, {
+	// internal use, since zk 8.0.0
+	disableChildCallback: function () {
+		_noChildCallback = true;
+	},
+	// internal use, since zk 8.0.0
+	enableChildCallback: function () {
+		_noChildCallback = false;
+	},
 	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
 	 * it is assumed to be UUID, unless it starts with '$'.

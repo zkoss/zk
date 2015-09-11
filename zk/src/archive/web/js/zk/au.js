@@ -1534,9 +1534,8 @@ zAu.cmd1 = /*prototype*/ {
 				zAu.cmd1.addChd.apply(this, arguments);
 			}
 		} else {
-			var n = wgt.$n();
-			for (var args = arguments, j = args.length; --j;)
-				zkx_(args[j], function (child) {
+			var n = wgt.$n(),
+				execFunc = function (child) {
 					var	act = _beforeAction(child, 'show');
 					if (n)
 						jq(n).after(child, wgt.desktop);
@@ -1544,7 +1543,9 @@ zAu.cmd1 = /*prototype*/ {
 						_asBodyChild(child);
 					if (!_afterAction(child, act) && !child.z_rod)
 						zUtl.fireSized(child);
-				});
+				};
+			for (var args = arguments, j = args.length; --j;)
+				zkx_(args[j], execFunc);
 		}
 
 	},
@@ -1556,77 +1557,90 @@ zAu.cmd1 = /*prototype*/ {
 	addBfr: function (wgt) {
 		// add one by one if not support
 		if (!_canBatchUpdate(wgt)) {
+			var execFunc = function (child) {
+				var act = _beforeAction(child, 'show');
+				wgt.parent.insertBefore(child, wgt);
+				if (!_afterAction(child, act) && !child.z_rod)
+					zUtl.fireSized(child);
+			};
 			for (var args = arguments, j = 1; j < args.length; ++j)
-				zkx_(args[j], function (child) {
-					var act = _beforeAction(child, 'show');
-					wgt.parent.insertBefore(child, wgt);
-					if (!_afterAction(child, act) && !child.z_rod)
-						zUtl.fireSized(child);
-				});
+				zkx_(args[j], execFunc);
 			return; // done
 		}
-		// optimised to add all of children in a batch
-    	var wgts = [], acts = [];
 
-		for (var args = arguments, j = 1; j < args.length; ++j) {
-			zkx_(args[j], function (child) {
+		// optimised to add all of children in a batch
+    	var wgts = [], acts = [],
+    		args = arguments,
+    		endLen = args.length - 1,
+    		// for batch mode to collect all widgets
+    		collectFunc = function (child) {
 				wgts.push(child);
 				acts.push(_beforeAction(child, 'show'));
-			});
-		}
-		_noChildCallback = true; //no callback
-		var fc;
-		try {
-			//2. insert (but don't update DOM)
-			for (var j = 0, len = wgts.length; j < len; ++j)
-				wgt.parent.insertBefore(wgts[j], wgt, true); //no dom
-		} finally {
-			_noChildCallback = false;
-		}
 
-		if (fc = wgt.desktop) {
-			//3. generate HTML
-			var out = new zk.Buffer();
-			for (var j = 0, len = wgts.length; j < len; ++j)
-				wgts[j].redraw(out);
+				// if ends the collecting, we should execute it
+				if (wgts.length == endLen)
+					execFunc(); // do it now. for Bug ZK-2868
+			},
+			execFunc = function () {
 
-
-			//4. update DOM
-			var before, ben, rendered;
-			if (wgt.$instanceof(zk.Native)) { //native.$n() is usually null
-				ben = wgt.previousSibling;
-				if (ben) {
-					if (ben && (ben = ben.$n())) {
-						jq(ben).after(out.join(''));
-						rendered = true;
-					}
+				zk.Widget.disableChildCallback(); //no callback
+				var fc;
+				try {
+					//2. insert (but don't update DOM)
+					for (var j = 0, len = wgts.length; j < len; ++j)
+						wgt.parent.insertBefore(wgts[j], wgt, true); //no dom
+				} finally {
+					zk.Widget.enableChildCallback();;
 				}
-				//FUTURE: it is not correct to go here, but no better choice yet
-			} else {
-				before = wgt.getFirstNode_();
-			}
-			if (!rendered) {
-				if (before) {
-					var sib = before.previousSibling;
-					if (_isProlog(sib)) before = sib;
-					jq(before).before(out.join(''));
-				} else
-					jq(ben).append(out.join(''));
-			}
 
-			var len = wgts.length;
-			var hugeChildren = wgt.parent.nChildren - len < len;
-			//5. bind
-			for (var j = 0; j < len; ++j) {
-				var child = wgts[j];
-				child.bind(fc);
+				if (fc = wgt.desktop) {
+					//3. generate HTML
+					var out = new zk.Buffer();
+					for (var j = 0, len = wgts.length; j < len; ++j)
+						wgts[j].redraw(out);
 
-				if (!_afterAction(child, acts[j]) && !child.z_rod && !hugeChildren)
-					zUtl.fireSized(child);
-			}
 
-			if (hugeChildren)
-				zUtl.fireSized(wgt.parent);
+					//4. update DOM
+					var before, ben, rendered;
+					if (wgt.$instanceof(zk.Native)) { //native.$n() is usually null
+						ben = wgt.previousSibling;
+						if (ben) {
+							if (ben && (ben = ben.$n())) {
+								jq(ben).after(out.join(''));
+								rendered = true;
+							}
+						}
+						//FUTURE: it is not correct to go here, but no better choice yet
+					} else {
+						before = wgt.getFirstNode_();
+					}
+					if (!rendered) {
+						if (before) {
+							var sib = before.previousSibling;
+							if (_isProlog(sib)) before = sib;
+							jq(before).before(out.join(''));
+						} else
+							jq(ben).append(out.join(''));
+					}
+
+					var len = wgts.length;
+					var hugeChildren = wgt.parent.nChildren - len < len;
+					//5. bind
+					for (var j = 0; j < len; ++j) {
+						var child = wgts[j];
+						child.bind(fc);
+
+						if (!_afterAction(child, acts[j]) && !child.z_rod && !hugeChildren)
+							zUtl.fireSized(child);
+					}
+
+					if (hugeChildren)
+						zUtl.fireSized(wgt.parent);
+				}
+			}; //execFunc end
+
+		for (var j = 1; j < args.length; ++j) {
+			zkx_(args[j], collectFunc);
 		}
 	},
 	/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
@@ -1642,76 +1656,86 @@ zAu.cmd1 = /*prototype*/ {
 			}
 		} else if (!_canBatchUpdate(wgt)) {
 			// add one by one if not support
+			var execFunc = function (child) {
+				var act = _beforeAction(child, 'show');
+				wgt.appendChild(child);
+				if (!_afterAction(child, act) && !child.z_rod)
+					zUtl.fireSized(child);
+			};
 			for (var args = arguments, j = 1; j < args.length; ++j)
-				zkx_(args[j], function (child) {
-					var act = _beforeAction(child, 'show');
-					wgt.appendChild(child);
-					if (!_afterAction(child, act) && !child.z_rod)
-						zUtl.fireSized(child);
-				});
+				zkx_(args[j], execFunc);
 		} else { // append in a batch
-			var wgts = [], acts = [];
-
-			for (var args = arguments, j = 1; j < args.length; ++j) {
-				zkx_(args[j], function (child) {
+			var wgts = [], acts = [],
+				args = arguments,
+				endLen = args.length - 1,
+				collectFunc = function (child) {
 					wgts.push(child);
 					acts.push(_beforeAction(child, 'show'));
-				});
-			}
-			_noChildCallback = true; //no callback
-			var fc;
-			try {
-				//2. insert (but don't update DOM)
-				for (var j = 0, len = wgts.length; j < len; ++j)
-					wgt.appendChild(wgts[j], true); //no dom
-			} finally {
-				_noChildCallback = false;
-			}
+					// if ends the collecting, we should execute it
+					if (wgts.length == endLen)
+						execFunc(); // do it now. for Bug ZK-2868
+				},
+				execFunc = function () {
 
-			if (fc = wgt.desktop) {
-				//3. generate HTML
-				var out = new zk.Buffer();
-				for (var j = 0, len = wgts.length; j < len; ++j)
-					wgts[j].redraw(out);
-
-
-				//4. update DOM
-				var before, ben, rendered;
-				for (var w = wgt;;) {
-					ben = w.getCaveNode();
-					if (ben) break;
-
-					var w2 = w.nextSibling;
-					if (w2 && (before = w2.getFirstNode_()))
-						break;
-
-					if (!(w = w.parent)) {
-						ben = document.body;
-						break;
+					zk.Widget.disableChildCallback(); //no callback
+					var fc;
+					try {
+						//2. insert (but don't update DOM)
+						for (var j = 0, len = wgts.length; j < len; ++j)
+							wgt.appendChild(wgts[j], true); //no dom
+					} finally {
+						zk.Widget.enableChildCallback();
 					}
-				}
 
-				if (before) {
-					var sib = before.previousSibling;
-					if (_isProlog(sib)) before = sib;
-					jq(before).before(out.join(''));
-				} else
-					jq(ben).append(out.join(''));
+					if (fc = wgt.desktop) {
+						//3. generate HTML
+						var out = new zk.Buffer();
+						for (var j = 0, len = wgts.length; j < len; ++j)
+							wgts[j].redraw(out);
 
-				var len = wgts.length;
-				var hugeChildren = wgt.nChildren - len < len;
 
-				//5. bind
-				for (var j = 0; j < len; ++j) {
-					var child = wgts[j];
-					child.bind(fc);
+						//4. update DOM
+						var before, ben, rendered;
+						for (var w = wgt;;) {
+							ben = w.getCaveNode();
+							if (ben) break;
 
-					if (!_afterAction(child, acts[j]) && !child.z_rod && !hugeChildren)
-						zUtl.fireSized(child);
-				}
+							var w2 = w.nextSibling;
+							if (w2 && (before = w2.getFirstNode_()))
+								break;
 
-				if (hugeChildren)
-					zUtl.fireSized(wgt);
+							if (!(w = w.parent)) {
+								ben = document.body;
+								break;
+							}
+						}
+
+						if (before) {
+							var sib = before.previousSibling;
+							if (_isProlog(sib)) before = sib;
+							jq(before).before(out.join(''));
+						} else
+							jq(ben).append(out.join(''));
+
+						var len = wgts.length;
+						var hugeChildren = wgt.nChildren - len < len;
+
+						//5. bind
+						for (var j = 0; j < len; ++j) {
+							var child = wgts[j];
+							child.bind(fc);
+
+							if (!_afterAction(child, acts[j]) && !child.z_rod && !hugeChildren)
+								zUtl.fireSized(child);
+						}
+
+						if (hugeChildren)
+							zUtl.fireSized(wgt);
+					}
+				}; // execFun end
+
+			for (var j = 1; j < args.length; ++j) {
+				zkx_(args[j], collectFunc);
 			}
 		}
 	},
