@@ -61,6 +61,6 @@ public class B80_ZK_2865Model extends DefaultTreeModel<String> {
 	@SuppressWarnings("unchecked")
 	public static DefaultTreeNode<String> node(String data, TreeNode<?>... children) {
 		return new DefaultTreeNode<String>(data, (Collection<? extends TreeNode<String>>) Arrays
-				.asList(children));
+				.asList((TreeNode<String>[])children));
 	}
 }
