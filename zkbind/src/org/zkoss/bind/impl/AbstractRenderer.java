@@ -124,6 +124,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 						hse.setAttribute(BinderCtrl.BINDRENDERING, true);
 						try {
 							Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, hse));
+							// fixed for @ref case
+							Events.sendEvent(new Event("onBindingReady", hse));
 						} finally {
 							hse.removeAttribute(BinderCtrl.BINDRENDERING);
 						}
