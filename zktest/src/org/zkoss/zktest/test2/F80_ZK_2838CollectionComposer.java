@@ -135,13 +135,13 @@ public class F80_ZK_2838CollectionComposer extends SelectorComposer<Component> {
 		ctTrue.apply(host3);
 	}
 
-	@Listen("onClick = #btn12")
-	public void clickBtn12() {
+	@Listen("onClick = #btn11")
+	public void clickBtn11() {
 		p.setName("new name");
 	}
 
-	@Listen("onClick = #btn13")
-	public void clickBtn13() {
+	@Listen("onClick = #btn12")
+	public void clickBtn12() {
 		ctTrue.setTemplate(null);
 		ctTrue.setTemplateURI("F80-ZK-2838-include.zul");
 		ctTrue.apply(host3);

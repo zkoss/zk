@@ -60,8 +60,8 @@ j
 		</div>
 		<button id="btn9">add item to model</button>
 		<button id="btn10">change model</button>
-		<button id="btn12">change person name</button>
-		<button id="btn13">template with uri</button>
+		<button id="btn11">change person name</button>
+		<button id="btn12">template with uri</button>
 		<template name="one">
 			<div>
 			<label value="zul one ${each += item.name} "></label>
