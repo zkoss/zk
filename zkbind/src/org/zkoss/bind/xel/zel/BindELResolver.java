@@ -74,9 +74,11 @@ public class BindELResolver extends XelELResolver {
 //  PropertyExpression will handle this
 // 	_resolver.add(new DynamicPropertiedELResolver());//ZK-1472 Bind Include Arg
 		
-		_resolver.add(super.getELResolver());
+		_resolver.add(getSuperELResolver());
 	}
-	
+	protected ELResolver getSuperELResolver () {
+		return super.getELResolver();
+	}
 	protected ELResolver getELResolver() {
 		return _resolver;
 	}

@@ -167,7 +167,7 @@ public class XelELResolver extends ELResolver {
 	 * @author Chunfu
 	 *
 	 */
-	protected static class StandardBeanNameResolver extends BeanNameResolver {
+	public static class StandardBeanNameResolver extends BeanNameResolver {
 
         private final Map<String,Object> beans;
 
