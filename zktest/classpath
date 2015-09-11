@@ -7,6 +7,7 @@
 ../dist/lib/zkbind.jar
 ../dist/lib/zkplus.jar
 ../dist/lib/zkmax.jar
+../dist/lib/zuti.jar
 ../dist/lib/ext/hibernate3.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/jasperreports.jar
