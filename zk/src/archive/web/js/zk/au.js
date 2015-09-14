@@ -1615,6 +1615,21 @@ zAu.cmd1 = /*prototype*/ {
 						before = wgt.getFirstNode_();
 					}
 					if (!rendered) {
+						if (!before) {
+							for (var w = wgt;;) {
+								ben = w.getCaveNode();
+								if (ben) break;
+
+								var w2 = w.nextSibling;
+								if (w2 && (before = w2.getFirstNode_()))
+									break;
+
+								if (!(w = w.parent)) {
+									ben = document.body;
+									break;
+								}
+							}
+						}
 						if (before) {
 							var sib = before.previousSibling;
 							if (_isProlog(sib)) before = sib;
