@@ -63,18 +63,12 @@ td.z-splitter-outer {
 			
 			&.z-icon-ellipsis-vertical {
 				font-size: @fontSizeXSmall;
-				<c:if test="${zk.ie == 8}">
-					font-size: @baseFontSize;
-				</c:if>
 				top: -21px;
 				left: 2px;
 				cursor: e-resize;
 			}
 			&.z-icon-ellipsis-vertical ~ .z-splitter-icon.z-icon-ellipsis-vertical {
 				top: 39px;
-				<c:if test="${zk.ie == 8}">
-					top: 37px;
-				</c:if>
 			}
 		}
 	}
@@ -100,16 +94,9 @@ td.z-splitter-outer {
 				top: -2px;
 				left: -16px;
 				cursor: s-resize;
-				<c:if test="${zk.ie == 8}">
-					font-size: @baseFontSize;
-					top: -3px;
-				</c:if>
 			}
 			&.z-icon-ellipsis-horizontal ~ .z-splitter-icon.z-icon-ellipsis-horizontal {
 				left: 36px;
-				<c:if test="${zk.ie == 8}">
-					left: 38px;
-				</c:if>
 			}
 		}
 	}
@@ -145,5 +132,33 @@ td.z-splitter-outer {
 .z-icon-caret-left {
 	.z-splitter-button:hover & {
 		.opacity(1);
+	}
+}
+
+.ie8 {
+	.z-splitter {
+		&-horizontal {
+			.gradientFallback(@splitterGradientStart, @splitterGradientEnd);
+			.z-splitter-icon {
+				&.z-icon-ellipsis-vertical {
+					font-size: @baseFontSize;
+				}
+				&.z-icon-ellipsis-vertical ~ .z-splitter-icon.z-icon-ellipsis-vertical {
+					top: 37px;
+				}
+			}
+		}
+		&-vertical {
+			.gradientFallback(@splitterGradientStart, @splitterGradientEnd);
+			.z-splitter-icon {
+				&.z-icon-ellipsis-horizontal {
+					font-size: @baseFontSize;
+					top: -3px;
+				}
+				&.z-icon-ellipsis-horizontal ~ .z-splitter-icon.z-icon-ellipsis-horizontal {
+					left: 38px;
+				}
+			}
+		}
 	}
 }

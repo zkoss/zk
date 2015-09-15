@@ -98,3 +98,20 @@
 	text-shadow: 0 1px #FFFFFF;
 	white-space:nowrap;
 }
+
+.ie8 {
+	.z-toolbar {
+		.gradientFallback(@baseGradientStart, @baseGradientEnd);
+	}
+	.z-toolbarbutton {
+		&:hover {
+			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
+		}
+		&:active {
+			.gradientFallback(@activeGradientStart, @activeGradientEnd);
+		}
+	}
+	.z-toolbarbutton-checked {
+		.gradientFallback(@checkedGradientStart, @checkedGradientEnd);
+	}
+}

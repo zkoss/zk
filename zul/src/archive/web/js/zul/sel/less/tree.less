@@ -22,9 +22,7 @@
 	//tree header div
 	&-header {
 		width: 100%;
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@baseGradientStart, @baseGradientEnd);
-		</c:if>
+		.verGradient(@baseGradientStart, @baseGradientEnd);
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -91,9 +89,7 @@
 	border-left: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@baseGradientStart, @baseGradientEnd);
-	</c:if>
+	.verGradient(@baseGradientStart, @baseGradientEnd);
 	background-clip: padding-box;
 	position: relative;
 	overflow: hidden;
@@ -103,9 +99,7 @@
 		cursor: pointer;
 		
 		&:hover {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
-			</c:if>
+			.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
 		}
 		.z-treecol-sorticon {
 			color: @iconColor;
@@ -130,9 +124,7 @@
 	}
 	&:hover {
 		> .z-treecell {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
-			</c:if>
+			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
 			background-clip: padding-box;
 			position: relative;
 
@@ -159,9 +151,7 @@
 	//selected tree cell
 	&.z-treerow-selected {
 		> .z-treecell {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@selectedGradientStart, @selectedGradientEnd);
-			</c:if>
+			.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			background-clip: padding-box;
 			position: relative;
 
@@ -172,10 +162,7 @@
 		
 		&:hover {
 			> .z-treecell {
-				<c:if test="${zk.ie != 8}">
-					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-				</c:if>
-
+				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				> .z-treecell-content {
 					color: @selectedHoverColor;
 				}

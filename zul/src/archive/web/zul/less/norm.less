@@ -49,11 +49,12 @@ legend {
 	padding: 0;
 }
 
-<c:if test="${zk.gecko > 0}">
-button::-moz-focus-inner {
-	border: 0;
+.gecko {
+	button::-moz-focus-inner {
+		border: 0;
+	}
 }
-</c:if>
+
 <c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
 	margin: 0;
@@ -324,68 +325,84 @@ input[type="checkbox"] {
 }
 
 //Shadow for not CSS3
-<c:if test="${zk.ie < 9}">
-.z-shadow {
-	display: none;
-	position: absolute;
-	left: 0;
-	top: 0;
-	overflow: hidden;
+.ie8 {
+	.z-shadow {
+		display: none;
+		position: absolute;
+		left: 0;
+		top: 0;
+		overflow: hidden;
+	}
 }
-.z-shadow-wrapper {
-	height: 100%;
-	padding-bottom: 6px;
+.ie8 {
+	.z-shadow-wrapper {
+		height: 100%;
+		padding-bottom: 6px;
+	}
 }
-.z-shadow .z-shadow-cl {
-	height: 100%;
-	padding-left: 6px;
-	background: transparent repeat-y 0 0;
-	.encodeThemeURL(background-image, '~./zul/img/shadow-cl.png');
-	overflow: hidden;
-	zoom: 1;
+.ie8 {
+	.z-shadow .z-shadow-cl {
+		height: 100%;
+		padding-left: 6px;
+		background: transparent repeat-y 0 0;
+		.encodeThemeURL(background-image, '~./zul/img/shadow-cl.png');
+		overflow: hidden;
+		zoom: 1;
+	}
 }
-.z-shadow .z-shadow-cr {
-	height: 100%;
-	padding-right: 6px;
-	background: transparent repeat-y right;
-	.encodeThemeURL(background-image, '~./zul/img/shadow-cr.png');
-	overflow: hidden;
-	zoom: 1;
+.ie8 {
+	.z-shadow .z-shadow-cr {
+		height: 100%;
+		padding-right: 6px;
+		background: transparent repeat-y right;
+		.encodeThemeURL(background-image, '~./zul/img/shadow-cr.png');
+		overflow: hidden;
+		zoom: 1;
+	}
 }
-.z-shadow .z-shadow-cm {
-	height: 100%;
-	background: transparent repeat 0 0;
-	.encodeThemeURL(background-image, '~./zul/img/shadow-m.png');
-	overflow: hidden;
-	zoom: 1;
+.ie8 {
+	.z-shadow .z-shadow-cm {
+		height: 100%;
+		background: transparent repeat 0 0;
+		.encodeThemeURL(background-image, '~./zul/img/shadow-m.png');
+		overflow: hidden;
+		zoom: 1;
+	}
 }
 
-.z-shadow .z-shadow-tl,
-.z-shadow .z-shadow-tr,
-.z-shadow .z-shadow-bl,
-.z-shadow .z-shadow-br {
-	font-size: 0;
-	height: 6px;
-	margin-right: 6px;
-	line-height: 0;
-	background: transparent no-repeat 0 top;
-	zoom: 1;
+.ie8 {
+	.z-shadow .z-shadow-tl,
+	.z-shadow .z-shadow-tr,
+	.z-shadow .z-shadow-bl,
+	.z-shadow .z-shadow-br {
+		font-size: 0;
+		height: 6px;
+		margin-right: 6px;
+		line-height: 0;
+		background: transparent no-repeat 0 top;
+		zoom: 1;
+	}
 }
-.z-shadow .z-shadow-tr,
-.z-shadow .z-shadow-br {
-	background-position: right -6px;
-	margin-right: -6px;
-	position: relative;
+.ie8 {
+	.z-shadow .z-shadow-tr,
+	.z-shadow .z-shadow-br {
+		background-position: right -6px;
+		margin-right: -6px;
+		position: relative;
+	}
 }
-.z-shadow .z-shadow-tl,
-.z-shadow .z-shadow-tr {
-	.encodeThemeURL(background-image, '~./zul/img/shadow-tlr.png');
+.ie8 {
+	.z-shadow .z-shadow-tl,
+	.z-shadow .z-shadow-tr {
+		.encodeThemeURL(background-image, '~./zul/img/shadow-tlr.png');
+	}
 }
-.z-shadow .z-shadow-bl,
-.z-shadow .z-shadow-br {
-	.encodeThemeURL(background-image, '~./zul/img/shadow-blr.png');
+.ie8 {
+	.z-shadow .z-shadow-bl,
+	.z-shadow .z-shadow-br {
+		.encodeThemeURL(background-image, '~./zul/img/shadow-blr.png');
+	}
 }
-</c:if>
 
 //Drag-Drop
 .z-dragged {
@@ -402,12 +419,12 @@ input[type="checkbox"] {
 }
 
 // ZK-2250: all children inside row should apply '-moz-user-select: none' when mouse over
-.z-draggable-over {
-	<c:if test="${zk.gecko > 0}">
-	* {
-		-moz-user-select: none;
+.gecko {
+	.z-draggable-over {
+		* {
+			-moz-user-select: none;
+		}
 	}
-	</c:if>
 }
 .z-drop {
 	&-allow {
@@ -486,16 +503,26 @@ span.z-upload input {
 	position: absolute;
 	cursor: pointer;
 	z-index: -1;
-	<c:if test="${zk.ie <= 10}">
-	z-index: 1;
-	</c:if>
 }
+
+.ie8, .ie9, .ie10 {
+	span.z-upload input {
+		z-index: 1;
+	}
+}
+
 .z-upload-icon {
 	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter.png');
 	overflow: hidden;
 }
 
-.ie8, .ie9, .ie10 {
+.ie8 {
+	.z-upload-hover {
+		border-color: @hoverBorderColor;
+		.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
+	}
+}
+.ie9, .ie10 {
 	.z-upload-hover {
 		border-color: @hoverBorderColor;
 		.verGradient(@hoverGradientStart, @hoverGradientEnd);
@@ -661,5 +688,24 @@ span.z-upload input {
 	}
 	&-right {
 		right: 0;
+	}
+}
+
+.ie8 {
+	.z-scrollbar {
+		&-vertical {
+			.z-scrollbar {
+				&-indicator {
+					.gradientFallback(@scrollbarGradientStart, @scrollbarGradientEnd);
+				}
+			}
+		}
+		&-horizontal {
+			.z-scrollbar {
+				&-indicator {
+					.gradientFallback(@scrollbarGradientStart, @scrollbarGradientEnd);
+				}
+			}
+		}
 	}
 }

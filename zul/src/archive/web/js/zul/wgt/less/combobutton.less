@@ -13,9 +13,7 @@
 		.borderRadius(@borderRadiusSmall);
 		padding: 4px 30px 4px 5px;
 		line-height: @baseLineHeight;
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@buttonGradientStart, @buttonGradientEnd);
-		</c:if>
+		.verGradient(@buttonGradientStart, @buttonGradientEnd);
 		vertical-align: middle;
 		position: relative;
 		white-space: nowrap;
@@ -47,9 +45,7 @@
 		.z-combobutton-content,
 		.z-combobutton-button {
 			border-color: @hoverBorderColor;
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@hoverGradientStart, @hoverGradientEnd);
-			</c:if>
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		}
 	}
 	&:focus {
@@ -117,23 +113,43 @@
 	}
 }
 
-.ie8 .z-combobutton {
-	min-height: @baseButtonHeight - 10;
-
-	&-content {
-		.gradientFallback(@baseGradientEnd, @baseGradientStart);
+.ie8 {
+	.z-combobutton {
 		min-height: @baseButtonHeight - 10;
-	}
-	&-toolbar {
-		.z-combobutton-content,
-		.z-combobutton-button {
-			background: transparent;
+
+		&-content {
+			.gradientFallback(@baseGradientEnd, @baseGradientStart);
+			min-height: @baseButtonHeight - 10;
 		}
-	}
-	&:hover {
-		.z-combobutton-content,
-		.z-combobutton-button {
-			background: @hoverGradientEnd;
+		&-toolbar {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				background: transparent;
+			}
+			&:active {
+				.z-combobutton-content,
+				.z-combobutton-button {
+					.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
+				}
+			}
+		}
+		&:hover {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				background: @hoverGradientEnd;
+			}
+		}
+		&:focus {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				.gradientFallback(@focusGradientStart, @focusGradientEnd);
+			}
+		}
+		&:active {
+			.z-combobutton-content,
+			.z-combobutton-button {
+				.gradientFallback(@activeGradientStart, @activeGradientEnd);
+			}
 		}
 	}
 }

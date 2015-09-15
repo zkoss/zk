@@ -18,50 +18,162 @@
 .encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
 	background-image: url(${c:encodeThemeURL('@{url}')});
 }
-.encodeURL-horGradient(@url, @start, @end) {
-	background: url(${c:encodeURL('@{url}')}), ${t:gradValue('hor', '@{start} 0%; @{end} 100%')};
-}
+// only tablet.less uses this, no need render css for old IE
 .encodeURL-verGradient(@url, @start, @end) {
-	background: url(${c:encodeURL('@{url}')}), ${t:gradValue('ver', '@{start} 0%; @{end} 100%')};
+	background:	url(${c:encodeURL('@{url}')});
+	background:	url(${c:encodeURL('@{url}')}), -moz-linear-gradient(top, @start 0%, @end 100%); /* FF3.6+ */
+	background:	url(${c:encodeURL('@{url}')}), -webkit-gradient(linear, left top, left bottom, color-stop(0%, @start),color-stop(100%, @end)); /* Chrome,Safari4+ */
+	background:	url(${c:encodeURL('@{url}')}), -webkit-linear-gradient(top, @start 0%, @end 100%); /* Chrome10+,Safari5.1+ */
+	background:	url(${c:encodeURL('@{url}')}), -o-linear-gradient(top, @start 0%, @end 100%); /* Opera 11.10+ */
+	background:	url(${c:encodeURL('@{url}')}), -ms-linear-gradient(top, @start 0%, @end 100%); /* IE10+ */
+	background:	url(${c:encodeURL('@{url}')}), linear-gradient(to bottom, @start 0%, @end 100%); /* W3C */
 }
 //---------------------------------------------
 // theme.dsp.tld
 //---------------------------------------------
 // gradient
 .gradient(@direction, @value) {
-	${t:gradient('@{direction}', '@{value}')};
+	// can be used directly for all except old webkit
+	@valueList: ~`(function(a){return a.replace('/;/g', ',')})(@{value})`;
+	@fallbackColor: ~`(function(a){return a.split(';')[0].trim().split(/\s(\d+%)$/g)[0]})(@{value})`;
+	// for old webkit
+	@valuesWebkit: ~`(function(a){var result='';var b=a.split(';');b.forEach(function(c){var d=c.trim().split(/\s(\d+%)$/g);result+='color-stop(' + d[1] + ',' + d[0] + '),';});return result.slice(0, -1)})(@{value})`;
+	// for ie9, color stop is the same in all gradient direction, only prefix/suffix are different
+	@svgContent: ~`(function(a){var result='';var b=a.split(';');b.forEach(function(c){var d=c.trim().split(/\s(\d+%)$/g);result+='<stop offset="' + d[1] + '" stop-color="' + d[0] + '"/>';});return result})(@{value})`;
+	.gradient-ver();
+	.gradient-hor();
+	.gradient-diagm();
+	.gradient-diagp();
+	.gradient-rad();
 }
-.gradValue(@direction, @value) {
-	background: ${t:gradValue('@{direction}', '@{value}')};
+.gradient-ver() when (@direction = 'ver') {
+	background:	@fallbackColor; /* Old browsers */
+	background:	-moz-linear-gradient(top, @valueList); /* FF3.6+ */
+	background:	-webkit-gradient(linear, left top, left bottom, @valuesWebkit); /* Chrome,Safari4+ */
+	background:	-webkit-linear-gradient(top, @valueList); /* Chrome10+,Safari5.1+ */
+	background:	-o-linear-gradient(top, @valueList); /* Opera 11.10+ */
+	background:	-ms-linear-gradient(top, @valueList); /* IE10+ */
+	background:	linear-gradient(to bottom, @valueList); /* W3C */
+	@svgPrefix: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><linearGradient id="zkie9" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="0%" y2="100%">';
+	@svgSuffix: ~'</linearGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	@svg: e('@{svgPrefix}@{svgContent}@{svgSuffix}');
+	.base64DataUriBackground(@svg);
 }
-.gradients(@direction, @value) {
-	${t:gradients('@{direction}', '@{value}')};
+
+.gradient-hor() when (@direction = 'hor') {
+	background:	@fallbackColor; /* Old browsers */
+	background:	-moz-linear-gradient(left, @valueList); /* FF3.6+ */
+	background:	-webkit-gradient(linear, left top, right top, @valuesWebkit); /* Chrome,Safari4+ */
+	background:	-webkit-linear-gradient(left, @valueList); /* Chrome10+,Safari5.1+ */
+	background:	-o-linear-gradient(left, @valueList); /* Opera 11.10+ */
+	background:	-ms-linear-gradient(left, @valueList); /* IE10+ */
+	background:	linear-gradient(to right, @valueList); /* W3C */
+	@svgPrefix: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><linearGradient id="zkie9" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">';
+	@svgSuffix: ~'</linearGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	@svg: e('@{svgPrefix}@{svgContent}@{svgSuffix}');
+	.base64DataUriBackground(@svg);
 }
+.gradient-diagm() when (@direction = 'diag-') {
+	background:	@fallbackColor; /* Old browsers */
+	background:	-moz-linear-gradient(-45deg, @valueList); /* FF3.6+ */
+	background:	-webkit-gradient(linear, left top, right bottom, @valuesWebkit); /* Chrome,Safari4+ */
+	background:	-webkit-linear-gradient(-45deg, @valueList); /* Chrome10+,Safari5.1+ */
+	background:	-o-linear-gradient(-45deg, @valueList); /* Opera 11.10+ */
+	background:	-ms-linear-gradient(-45deg, @valueList); /* IE10+ */
+	background:	linear-gradient(135deg, @valueList); /* W3C */
+	@svgPrefix: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><linearGradient id="zkie9" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="100%">';
+	@svgSuffix: ~'</linearGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	@svg: e('@{svgPrefix}@{svgContent}@{svgSuffix}');
+	.base64DataUriBackground(@svg);
+}
+.gradient-diagp() when (@direction = 'diag+') {
+	background:	@fallbackColor; /* Old browsers */
+	background:	-moz-linear-gradient(45deg, @valueList); /* FF3.6+ */
+	background:	-webkit-gradient(linear, left bottom, right top, @valuesWebkit); /* Chrome,Safari4+ */
+	background:	-webkit-linear-gradient(45deg, @valueList); /* Chrome10+,Safari5.1+ */
+	background:	-o-linear-gradient(45deg, @valueList); /* Opera 11.10+ */
+	background:	-ms-linear-gradient(45deg, @valueList); /* IE10+ */
+	background:	linear-gradient(45deg, @valueList); /* W3C */
+	@svgPrefix: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><linearGradient id="zkie9" gradientUnits="userSpaceOnUse" x1="0%" y1="100%" x2="100%" y2="0%">';
+	@svgSuffix: ~'</linearGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	@svg: e('@{svgPrefix}@{svgContent}@{svgSuffix}');
+	.base64DataUriBackground(@svg);
+}
+.gradient-rad() when (@direction = 'rad') {
+	background:	@fallbackColor; /* Old browsers */
+	background:	-moz-radial-gradient(center, ellipse cover, @valueList); /* FF3.6+ */
+	background:	-webkit-gradient(radial, center center, 0px, center center, 100%, @valuesWebkit); /* Chrome,Safari4+ */
+	background:	-webkit-radial-gradient(center, ellipse cover, @valueList); /* Chrome10+,Safari5.1+ */
+	background:	-o-radial-gradient(center, ellipse cover, @valueList); /* Opera 11.10+ */
+	background:	-ms-radial-gradient(center, ellipse cover, @valueList); /* IE10+ */
+	background:	radial-gradient(ellipse at center, @valueList); /* W3C */
+	@svgPrefix: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><radialGradient id="zkie9" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="50%">';
+	@svgSuffix: ~'</radialGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	@svg: e('@{svgPrefix}@{svgContent}@{svgSuffix}');
+	.base64DataUriBackground(@svg);
+}
+
 // box layout
-.box(@name, @value) {
-	${t:box('@{name}', '@{value}')};
+.boxOrientHor() {
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	-o-box-orient: horizontal;
+	-ms-box-orient: horizontal;
+	box-orient: horizontal;
 }
-.box2(@name, @value, @name2, @value2) {
-	${t:box2('@{name}', '@{value}', '@{name2}', '@{value2}')};
-}
-.box3(@name, @value, @name2, @value2, @name3, @value3) {
-	${t:box3('@{name}', '@{value}', '@{name2}', '@{value2}', '@{name3}', '@{value3}')};
+.boxOrientHorFlex() {
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	-o-box-orient: horizontal;
+	-ms-box-orient: horizontal;
+	box-orient: horizontal;
+
+	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
+	-o-box-flex: 1;
+	-ms-box-flex: 1;
+	box-flex: 1;
 }
 // box-shadow
 .boxShadow(@value) {
-	${t:boxShadow('@{value}')};
+	-webkit-box-shadow: e(@value);
+	-moz-box-shadow: e(@value);
+	-o-box-shadow: e(@value);
+	-ms-box-shadow: e(@value);
+	box-shadow: e(@value);
 }
 // border-radius
 .borderRadius(@size) {
-	${t:borderRadius('@{size}')};
+	-webkit-border-radius: e(@size);
+	-moz-border-radius: e(@size);
+	-o-border-radius: e(@size);
+	-ms-border-radius: e(@size);
+	border-radius: e(@size);
 }
 // transform
 .transform(@value) {
-	${t:transform('@{value}')};
+	-webkit-transform: e(@value);
+	-moz-transform: e(@value);
+	-o-transform: e(@value);
+	-ms-transform: e(@value);
+	transform: e(@value)
 }
 // CSS3
 .applyCSS3(@key, @value) {
-	${t:applyCSS3('@{key}', '@{value}')};
+	@ekey: e(@key);
+	-webkit-@{ekey}: e(@value);
+	-moz-@{ekey}: e(@value);
+	-o-@{ekey}: e(@value);
+	-ms-@{ekey}: e(@value);
+	@{ekey}: e(@value)
 }
 
 //---------------------------------------------
@@ -69,16 +181,38 @@
 //---------------------------------------------
 // gradient utility
 .horGradient(@start, @end) when (@start = @end) {
-	background: @start;
+	background: e(@start);
 }
 .horGradient(@start, @end) when not (@start = @end) {
-	${t:gradient('hor', '@{start} 0%; @{end} 100%')};
+	background:	e(@start); /* Old browsers */
+	background:	-moz-linear-gradient(left, e(@start) 0%, @end 100%); /* FF3.6+ */
+	background:	-webkit-gradient(linear, left top, right top, color-stop(0%,e(@start)), color-stop(100%, e(@end))); /* Chrome,Safari4+ */
+	background:	-webkit-linear-gradient(left, e(@start) 0%, e(@end) 100%); /* Chrome10+,Safari5.1+ */
+	background:	-o-linear-gradient(left, e(@start) 0%, e(@end) 100%); /* Opera 11.10+ */
+	background:	-ms-linear-gradient(left, e(@start) 0%, e(@end) 100%); /* IE10+ */
+	background:	linear-gradient(to right, e(@start) 0%, e(@end) 100%); /* W3C */
+	@svg: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><linearGradient id="zkie9" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%"><stop stop-color="@{start}" offset="0%"/><stop stop-color="@{end}" offset="100%"/></linearGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	.base64DataUriBackground(@svg); /* IE9 */
 }
 .verGradient(@start, @end) when (@start = @end) {
-	background: @start;
+	background: e(@start);
 }
 .verGradient(@start, @end) when not (@start = @end) {
-	${t:gradient('ver', '@{start} 0%; @{end} 100%')};
+	background:	e(@start); /* Old browsers */
+	background:	-moz-linear-gradient(top, e(@start) 0%, e(@end) 100%); /* FF3.6+ */
+	background:	-webkit-gradient(linear, left top, left bottom, color-stop(0%, e(@start)),color-stop(100%, e(@end))); /* Chrome,Safari4+ */
+	background:	-webkit-linear-gradient(top, e(@start) 0%, e(@end) 100%); /* Chrome10+,Safari5.1+ */
+	background:	-o-linear-gradient(top, e(@start) 0%, e(@end) 100%); /* Opera 11.10+ */
+	background:	-ms-linear-gradient(top, e(@start) 0%, e(@end) 100%); /* IE10+ */
+	background:	linear-gradient(to bottom, e(@start) 0%, e(@end) 100%); /* W3C */
+	@svg: ~'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none"><linearGradient id="zkie9" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="0%" y2="100%"><stop stop-color="@{start}" offset="0%"/><stop stop-color="@{end}" offset="100%"/></linearGradient><rect x="0" y="0" width="1" height="1" fill="url(#zkie9)" /></svg>';
+	.base64DataUriBackground(@svg); /* IE9 */
+}
+.base64DataUriBackground(@svgToEncode, @type: ~"image/svg+xml") {
+	@dataUriPrefix: ~"url(data:@{type};base64,";
+	@dataUriSuffix: ~")";
+	@b64DataUri: ~`(function(a,b,c){function e(a){a=a.replace(/\r\n/g,'\n');var b='';for(var c=0;c<a.length;c++){var d=a.charCodeAt(c);if(d<128){b+=String.fromCharCode(d)}else if(d>127&&d<2048){b+=String.fromCharCode(d>>6|192);b+=String.fromCharCode(d&63|128)}else{b+=String.fromCharCode(d>>12|224);b+=String.fromCharCode(d>>6&63|128);b+=String.fromCharCode(d&63|128)}}return b}function f(a){var b='';var c,f,g,h,i,j,l;var m=0;a=e(a);while(m<a.length){c=a.charCodeAt(m++);f=a.charCodeAt(m++);g=a.charCodeAt(m++);h=c>>2;i=(c&3)<<4|f>>4;j=(f&15)<<2|g>>6;l=g&63;if(isNaN(f)){j=l=64}else if(isNaN(g)){l=64}b=b+d.charAt(h)+d.charAt(i)+d.charAt(j)+d.charAt(l)}return b}var d='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';return a+f(b)+c})('@{dataUriPrefix}','@{svgToEncode}','@{dataUriSuffix}')`;
+	background: @b64DataUri;
 }
 .gradientFallback(@start, @end) {
 	background: average(@start, @end);
@@ -90,39 +224,50 @@
 
 // border-radius utility
 .topBorderRadius(@size) {
-	${t:borderRadius('@{size} @{size} 0 0')};
+	-webkit-border-radius: e(@size) e(@size) 0 0;
+	-moz-border-radius: e(@size) e(@size) 0 0;
+	-o-border-radius: e(@size) e(@size) 0 0;
+	-ms-border-radius: e(@size) e(@size) 0 0;
+	border-radius: e(@size) e(@size) 0 0;
 }
 .rightBorderRadius(@size) {
-	${t:borderRadius('0 @{size} @{size} 0')};
+	-webkit-border-radius: 0 e(@size) e(@size) 0;
+	-moz-border-radius: 0 e(@size) e(@size) 0;
+	-o-border-radius: 0 e(@size) e(@size) 0;
+	-ms-border-radius: 0 e(@size) e(@size) 0;
+	border-radius: 0 e(@size) e(@size) 0;
 }
 .bottomBorderRadius(@size) {
-	${t:borderRadius('0 0 @{size} @{size}')};
+	-webkit-border-radius: 0 0 e(@size) e(@size);
+	-moz-border-radius: 0 0 e(@size) e(@size);
+	-o-border-radius: 0 0 e(@size) e(@size);
+	-ms-border-radius: 0 0 e(@size) e(@size);
+	border-radius: 0 0 e(@size) e(@size);
 }
 .leftBorderRadius(@size) {
-	${t:borderRadius('@{size} 0 0 @{size}')};
-}
-
-// transition utility
-.transition(@property, @duration, @timingFunc, @delay: 0) {
-	${t:applyCSS3('transition', '@{property} @{duration} @{timingFunc} @{delay}')};
+	-webkit-border-radius: e(@size) 0 0 e(@size);
+	-moz-border-radius: e(@size) 0 0 e(@size);
+	-o-border-radius: e(@size) 0 0 e(@size);
+	-ms-border-radius: e(@size) 0 0 e(@size);
+	border-radius: e(@size) 0 0 e(@size);
 }
 
 // opacity utility
 .opacity(@opacity) {
 	opacity: @opacity;
 	@opacity100: @opacity * 100;
-	filter: ~"alpha(opacity=@{opacity100})";
+	filter: ~'alpha(opacity=@{opacity100});';
 }
 
 // icon font utility
 .baseIconFont() {
-  display: inline-block;
-  font: normal normal normal @fa-font-size-base/1 FontAwesome; // shortening font declaration
-  font-size: inherit; // can't have font-size inherit on line above, so need to override
-  text-rendering: auto; // optimizelegibility throws things off #1094
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translate(0, 0); // ensures no half-pixel rendering in firefox
+	display: inline-block;
+	font: normal normal normal @fa-font-size-base/1 FontAwesome; // shortening font declaration
+	font-size: inherit; // can't have font-size inherit on line above, so need to override
+	text-rendering: auto; // optimizelegibility throws things off #1094
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	transform: translate(0, 0); // ensures no half-pixel rendering in firefox
 }
 
 // other utility

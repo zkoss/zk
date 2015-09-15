@@ -13,14 +13,18 @@
 		overflow-x: scroll;
 		overflow-y: hidden;
 		float: right;
-		<c:if test="${zk.ie > 0}">
-			<%-- Bug 3244126: scroll bar cannot click then move with IE --%>
-			padding-top: 1px;
-			margin-top: -1px;
-		</c:if>
-		
+
 		div {
 			height: 100%;
+		}
+	}
+}
+
+.ie8, .ie9, .ie10 {
+	.z-frozen {
+		&-inner {
+			padding-top: 1px;
+			margin-top: -1px;
 		}
 	}
 }

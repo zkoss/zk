@@ -38,6 +38,21 @@
 	}
 }
 
-.ie8 .z-button {
-	min-height: @baseButtonHeight - 8; //minus padding border height
+.ie8 {
+	.z-button {
+		min-height: @baseButtonHeight - 8; //minus padding border height
+		.gradientFallback(@buttonGradientStart, @buttonGradientEnd);
+		&:hover {
+			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
+		}
+		&:focus {
+			.gradientFallback(@focusGradientStart, @focusGradientEnd);
+		}
+		&:active {
+			.gradientFallback(@activeGradientStart, @activeGradientEnd);
+		}
+		&[disabled] {
+			.gradientFallback(@buttonGradientStart, @buttonGradientEnd);
+		}
+	}
 }

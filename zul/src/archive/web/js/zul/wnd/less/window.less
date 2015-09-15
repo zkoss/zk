@@ -45,9 +45,7 @@
 		.borderRadius(@baseBorderRadius);
 		margin: auto 1px;
 		line-height: @baseButtonHeight;
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@baseGradientStart, @baseGradientEnd);
-		</c:if>
+		.verGradient(@baseGradientStart, @baseGradientEnd);
 		text-align: center;
 		overflow: hidden;
 		cursor: pointer;
@@ -63,7 +61,7 @@
 
 	&-close {
 		font-size: @fontSizeXLarge;
-	    line-height: 23px;
+		line-height: 23px;
 	}
 
 	&-minimize {
@@ -94,12 +92,6 @@
 		.z-window-header {
 			padding: 7px 4px 5px 4px;
 		}
-
-		<c:if test="${zk.ie == 8}">
-		.z-window-icon {
-			.opacity(1);
-		}
-		</c:if>
 
 		dl {
 			font-size: 0;
@@ -215,9 +207,18 @@
 	}
 }
 
-.ie8 .z-window-icon {
-	.gradientFallback(@baseGradientStart, @baseGradientEnd);
-	.z-icon-minus {
-		margin-left: 1px;			
+.ie8 {
+	.z-window-icon {
+		.gradientFallback(@baseGradientStart, @baseGradientEnd);
+		.z-icon-minus {
+			margin-left: 1px;
+		}
+	}
+	.z-window {
+		&-move-ghost {
+			.z-window-icon {
+				.opacity(1);
+			}
+		}
 	}
 }

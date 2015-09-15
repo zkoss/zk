@@ -78,9 +78,6 @@
 			font-weight: bold;
 			height: auto;
 			min-height: @baseBarHeight;
-			<c:if test="${zk.ie == 8}">
-				min-height: @baseBarHeight - 8;
-			</c:if>
 			border-bottom: 1px solid @baseBorderColor;
 			padding: 3px 4px;
 			.verGradient(@baseGradientStart, @baseGradientEnd);
@@ -98,6 +95,17 @@
 			.z-caption-content {
 				padding: 4px 0px 4px 0px;
 				line-height: @baseIconHeight;
+			}
+		}
+	}
+}
+
+.ie8 {
+	.z-groupbox {
+		&-3d {
+			> .z-groupbox-header {
+				min-height: @baseBarHeight - 8;
+				.gradientFallback(@baseGradientStart, @baseGradientEnd);
 			}
 		}
 	}
