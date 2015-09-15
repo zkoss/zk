@@ -377,10 +377,6 @@
 		top: 50%;
 		left: 5px;
 		cursor: pointer;
-		<c:if test="${zk.ie == 8}">
-			margin-top: -7px;
-			font-size: 14px;
-		</c:if>
 	}
 
 	&-text {
@@ -471,10 +467,41 @@
 }
 
 // ZK-2158: Tab should not be click on blank area next to last tab
-.ie9 .z-tabs {
-    line-height: 1px;
+.ie9 {
+	.z-tabs {
+		line-height: 1px;
+		> .z-tabs-content {
+			display: inline-block;
+		}
+	}
+}
 
-    > .z-tabs-content {
-	    display: inline-block;
+.ie8 {
+	.z-tab {
+		.gradientFallback(@baseGradientStart, @baseGradientEnd);
+		&:hover {
+			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
+		}
+		&-icon {
+			margin-top: -7px;
+			font-size: 14px;
+		}
+		&-disabled {
+			&:hover {
+				.gradientFallback(@baseGradientStart, @baseGradientEnd);
+			}
+		}
+	}
+	.z-tabbox {
+		&-icon {
+			.gradientFallback(@baseGradientStart, @baseGradientEnd);
+		}
+		&-accordion {
+			.z-tabpanel > .z-tab {
+				&-selected {
+					.gradientFallback(@baseGradientStart, @baseGradientEnd);
+				}
+			}
+		}
 	}
 }

@@ -12,9 +12,7 @@
 		.size(@baseIconWidth, @baseIconHeight);
 		border: 1px solid @sliderBorderColor;
 		.borderRadius(@borderRadiusSmall);
-		<c:if test="${zk.ie != 8}">
-			.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
-		</c:if>
+		.gradient('ver', '#FFFFFF 0%; #FEFEFE 50%; #EFEFEF 100%');
 		position: relative;
 		cursor: pointer;
 
@@ -36,9 +34,7 @@
 		.z-slider-center {
 			.size(100%, @baseHeight - 2);
 			margin-top: -3px;
-			<c:if test="${zk.ie != 8}">
-				.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
-			</c:if>	
+			.gradient('ver', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
 			position: relative;
 			top: 50%;
 		}
@@ -62,9 +58,7 @@
 		.z-slider-center {
 			.size(@baseWidth - 2, 100%);
 			margin: auto;
-			<c:if test="${zk.ie != 8}">
-				.gradient('hor', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
-			</c:if>
+			.gradient('hor', 'rgba(157, 157, 157, 0.5) 0%; rgba(130, 140, 149, 0.5) 13%; rgba(215, 215, 215, 0.5) 100%');
 		}
 	}
 
@@ -79,7 +73,7 @@
 
 	&-sphere {
 		.z-slider-vertical .z-slider-button {
-			bottom: 0;			
+			bottom: 0;
 		}
 	}
 
@@ -95,13 +89,18 @@
 	}
 }
 
-.ie8 .z-slider {
-	&-button {
-		.gradientFallback(#FFFFFF, #EFEFEF);
-	}
+.ie8 {
+	.z-slider {
+		&-button {
+			.gradientFallback(#FFFFFF, #EFEFEF);
+			&:active {
+				.gradientFallback(@baseGradientEnd, @baseGradientStart);
+			}
+		}
 
-	&-vertical .z-slider-center, 
-	&-horizontal .z-slider-center {
-		.gradientFallback(rgb(157,157,157), rgb(215,215,215));
+		&-vertical .z-slider-center, 
+		&-horizontal .z-slider-center {
+			.gradientFallback(rgb(157,157,157), rgb(215,215,215));
+		}
 	}
 }

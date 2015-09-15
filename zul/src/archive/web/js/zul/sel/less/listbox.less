@@ -22,9 +22,7 @@
 	//listbox header
 	&-header {
 		width: 100%;
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@baseGradientStart, @baseGradientEnd);
-		</c:if>
+		.verGradient(@baseGradientStart, @baseGradientEnd);
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -77,18 +75,14 @@
 	border-left: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@baseGradientStart, @baseGradientEnd);
-	</c:if>
+	.verGradient(@baseGradientStart, @baseGradientEnd);
 	background-clip: padding-box;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
 	
 	&-hover {
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
-		</c:if>
+		.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
 	}
 	&-sort {
 		.z-listheader-content {
@@ -136,9 +130,7 @@
 		.boxShadow('inset 1px 0 #FFFFFF');
 		
 		&:hover {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(darken(@meshTitleHoverStart, 5%), darken(@meshTitleHoverEnd, 10%));
-			</c:if>
+			.verGradient(darken(@meshTitleHoverStart, 5%), darken(@meshTitleHoverEnd, 10%));
 		}
 	}
 	&-sizing,
@@ -163,9 +155,7 @@
 	}
 	&:hover {
 		> .z-listcell {
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
-			</c:if>
+			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
 			background-clip: padding-box;
 			position: relative;
 
@@ -193,9 +183,7 @@
 	&.z-listitem-selected {
 		> .z-listcell {
 			border-color: @selectedGradientStart;
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@selectedGradientStart, @selectedGradientEnd);
-			</c:if>
+			.verGradient(@selectedGradientStart, @selectedGradientEnd);
 			background-clip: padding-box;
 			position: relative;
 
@@ -207,9 +195,7 @@
 		&:hover {
 			> .z-listcell {
 				border-color: @selectedHoverGradientStart;
-				<c:if test="${zk.ie != 8}">
-					.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-				</c:if>
+				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				position: relative;
 			}
 			.z-listcell-content {
@@ -261,9 +247,7 @@
 		border: 1px solid @meshTitleBorderColor;
 		border-left: none;
 		border-right: none;
-		<c:if test="${zk.ie != 8}">
-			.verGradient(@groupGradientStart, @groupGradientEnd);
-		</c:if>
+		.verGradient(@groupGradientStart, @groupGradientEnd);
 		position: relative;
 		overflow: hidden;
 		
@@ -314,9 +298,7 @@
 	}
 }
 .z-listgroupfoot-inner {
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@groupGradientEnd, @groupGradientStart);
-	</c:if>
+	.verGradient(@groupGradientEnd, @groupGradientStart);
 	overflow: hidden;
 }
 //content

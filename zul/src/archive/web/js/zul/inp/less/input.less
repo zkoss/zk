@@ -7,9 +7,6 @@
 .z-doublebox {
 	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
 	min-height: @baseButtonHeight;
-	<c:if test="${zk.ie == 8}">
-		min-height: @baseButtonHeight - 10 + 1;
-	</c:if>	
 	border: 1px solid @inputBorderColor;
 	.borderRadius(@borderRadiusSmall);
 	margin: 0;
@@ -44,10 +41,6 @@
 		padding: 3px;
 		background: none;
 		resize: none;
-		<c:if test="${zk.ie == 8}">
-			min-height: @baseButtonHeight - 6;
-			line-height: @baseIconHeight;
-		</c:if>
 	}
 }
 
@@ -120,16 +113,10 @@
 	top: 8px;
 	right: 8px;
 	cursor: pointer;
-	<c:if test="${zk.ie != 8}">
-		.opacity(0.6);
-	</c:if>
 
 	&:hover {
 		border: 1px solid @errorboxBorderColor;
 		.borderRadius(@borderRadiusSmall - 1);
-		<c:if test="${zk.ie != 8}">
-			.opacity(1);
-		</c:if>
 	}
 }
 .z-errorbox-icon {
@@ -152,4 +139,28 @@
 }
 .z-errorbox-up ~ .z-errorbox-close {
 	top: 15px;
+}
+
+.ie8 {
+	.z-textbox,
+	.z-decimalbox,
+	.z-intbox,
+	.z-longbox,
+	.z-doublebox {
+		min-height: @baseButtonHeight - 10 + 1;
+		// Inplace editing
+		&-inplace {
+			min-height: @baseButtonHeight - 6;
+			line-height: @baseIconHeight;
+		}
+	}
+}
+
+body:not(.ie8) {
+	.z-errorbox-close {
+		.opacity(0.6);
+		&:hover {
+			.opacity(1);
+		}
+	}
 }

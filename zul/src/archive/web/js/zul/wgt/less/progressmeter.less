@@ -16,3 +16,11 @@
 		.verGradient(@progressmeterGradientStart, @progressmeterGradientEnd);
 	}
 }
+
+.ie8 {
+	.z-progressmeter {
+		&-image {
+			.gradientFallback(@progressmeterGradientStart, @progressmeterGradientEnd);
+		}
+	}
+}

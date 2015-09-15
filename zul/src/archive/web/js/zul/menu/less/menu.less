@@ -2,15 +2,11 @@
 
 .hoverStyle() {
 	border-color: @hoverBorderColor;
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-	</c:if>
+	.verGradient(@hoverGradientStart, @hoverGradientEnd);
 }
 .activeStyle() {
 	border-color: @menuActiveBorderColorTR @menuActiveBorderColorBL @menuActiveBorderColorBL @menuActiveBorderColorTR;
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@baseGradientStart, @baseGradientEnd);
-	</c:if>
+	.verGradient(@baseGradientStart, @baseGradientEnd);
 	.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
 }
 .restUl() {
@@ -251,10 +247,6 @@
 		position: absolute;
 		top: 5px;
 		left: 7px;
-		<c:if test="${zk.ie == 8}">
-			top: 6px;
-			left: 8px;
-		</c:if>
 	}
 	.z-menu-content {
 		padding-right: 16px;
@@ -357,6 +349,13 @@
 
 		&-selected > &-content {
 			.gradientFallback(@baseGradientStart, @baseGradientEnd);
+		}
+	}
+
+	.z-menupopup {
+		.z-menuitem-icon {
+			top: 6px;
+			left: 8px;
 		}
 	}
 }

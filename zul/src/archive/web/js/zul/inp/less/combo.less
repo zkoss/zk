@@ -37,9 +37,6 @@
 		.iconFontStyle(@baseFontSize, @iconColor);
 		display: inline-block;
 		min-width: @baseButtonWidth;
-		<c:if test="${zk.ie == 8}">
-			min-width: @baseButtonWidth - 10;
-		</c:if>
 		height: @baseButtonHeight;
 		border: 1px solid @inputBorderColor;
 		.rightBorderRadius(@borderRadiusSmall);
@@ -53,15 +50,11 @@
 
 		&:hover {
 			border-color: @hoverBorderColor;
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@hoverGradientStart, @hoverGradientEnd);
-			</c:if>
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		}
 		&:active {
 			border-color: @activeBorderColor;
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@activeGradientStart, @activeGradientEnd);
-			</c:if>
+			.verGradient(@activeGradientStart, @activeGradientEnd);
 			.boxShadow('inset 1px 1px 1px #91AAB7');
 		}
 		input[disabled] + & {
@@ -124,10 +117,6 @@
 .z-combobox-button {
 	font-size: @fontSizeLarge;
 	min-height: @baseButtonHeight;
-	<c:if test="${zk.ie == 8}">
-		min-width: @baseButtonHeight - 13;
-		min-height: @baseButtonWidth - 11;
-	</c:if>	
 	padding-left: 7px;
 	padding-top: 5px;
 }
@@ -140,9 +129,6 @@
 .z-timebox-button,
 .z-spinner-button,
 .z-doublespinner-button {
-	<c:if test="${zk.ie == 8}">
-		min-width: @baseButtonWidth - 2;
-	</c:if>	
 	padding: 0;
 	position: relative;
 
@@ -171,15 +157,11 @@
 		}
 		&:hover {
 			border-color: @hoverBorderColor;
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@hoverGradientStart, @hoverGradientEnd);
-			</c:if>
+			.verGradient(@hoverGradientStart, @hoverGradientEnd);
 		}
 		&:active {
 			border-color: @activeBorderColor;
-			<c:if test="${zk.ie != 8}">
-				.verGradient(@activeGradientStart, @activeGradientEnd);
-			</c:if>	
+			.verGradient(@activeGradientStart, @activeGradientEnd);
 			.boxShadow('inset 1px 1px 1px #91AAB7');
 		}
 	}
@@ -280,22 +262,16 @@
 	text-decoration: none;
 }
 .z-comboitem:hover {
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-	</c:if>
+	.verGradient(@hoverGradientStart, @hoverGradientEnd);
 }
 .z-comboitem-selected {
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@selectedGradientStart, @selectedGradientEnd);
-	</c:if>
+	.verGradient(@selectedGradientStart, @selectedGradientEnd);
 	.z-comboitem-text {
 		color: @selectedColor;
 	}
 }
 .z-comboitem-selected:hover {
-	<c:if test="${zk.ie != 8}">
-		.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-	</c:if>
+	.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 	.z-comboitem-text {
 		color: @selectedHoverColor;
 	}
@@ -363,6 +339,7 @@
 	.z-spinner,
 	.z-doublespinner {
 		&-button {
+			min-width: @baseButtonWidth - 10;
 			&:hover {
 				.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
 			}
@@ -376,6 +353,7 @@
 	.z-spinner,
 	.z-doublespinner {
 		&-button {
+			min-width: @baseButtonWidth - 2;
 			& > a {
 				&:hover {
 					.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
@@ -387,8 +365,13 @@
 		}
 	}
 
+	.z-combobox-button {
+		min-width: @baseButtonHeight - 13;
+		min-height: @baseButtonWidth - 11;
+	}
+
 	.z-comboitem {
-		&-selected {			
+		&-selected {
 			.gradientFallback(@selectedGradientStart, @selectedGradientEnd);
 		}
 		&:hover {

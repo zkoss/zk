@@ -4,9 +4,6 @@
 	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayLight);
 	border: 1px solid @baseBorderColor;
 	min-width: 230px;
-	<c:if test="${zk.ie == 8}">
-		min-width: 224px;
-	</c:if>
 	padding: 2px;
 
 	a {
@@ -66,9 +63,6 @@
 		color: @calendarCellColor;
 		min-width:  @baseButtonWidth;
 		min-height: @baseButtonHeight;
-		<c:if test="${zk.ie == 8}">
-			min-height: @baseButtonHeight - 6;
-		</c:if>
 		padding: 3px 0;
 		line-height: @baseLineHeight + 3;
 		background: @baseBackgroundColor;
@@ -184,4 +178,13 @@
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
+}
+
+.ie8 {
+	.z-calendar {
+		min-width: 224px;
+		&-cell {
+			min-height: @baseButtonHeight - 6;
+		}
+	}
 }
