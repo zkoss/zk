@@ -49,7 +49,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class BindELResolver extends XelELResolver {
 	protected CompositeELResolver _resolver;
-	private PathELResolver _pathResolver;
+	protected PathELResolver _pathResolver;
 	private ImplicitObjectELResolver _implicitResolver;
 	
 	public BindELResolver(XelContext ctx) {
@@ -66,10 +66,7 @@ public class BindELResolver extends XelELResolver {
 		_resolver.add(new ListModelELResolver());
 		_resolver.add(new TreeModelELResolver());
 		_resolver.add(new ValidationMessagesELResolver());
-		if (_implicitResolver == null)
-			_resolver.add(_implicitResolver = new ImplicitObjectELResolver());//ZK-1032 Able to wire Event to command method
-		else
-			_resolver.add(_implicitResolver);
+		_resolver.add(getImplicitResolver());//ZK-1032 Able to wire Event to command method
 
 //  PropertyExpression will handle this
 // 	_resolver.add(new DynamicPropertiedELResolver());//ZK-1472 Bind Include Arg
@@ -82,6 +79,11 @@ public class BindELResolver extends XelELResolver {
 	protected ELResolver getELResolver() {
 		return _resolver;
 	}
+	protected ImplicitObjectELResolver getImplicitResolver() {
+		if (_implicitResolver == null)
+			_implicitResolver = new ImplicitObjectELResolver();
+		return _implicitResolver;
+	}
 	
 	//ELResolver//
 	public Object getValue(ELContext ctx, Object base, Object property)
@@ -90,7 +92,6 @@ public class BindELResolver extends XelELResolver {
 		if (base == null) {
 			if (_pathResolver == null) {
 				_pathResolver = new PathELResolver(); // init
-				_implicitResolver = new ImplicitObjectELResolver();
 			}
 			_pathResolver.getValue(ctx, base, property);
 
@@ -108,7 +109,7 @@ public class BindELResolver extends XelELResolver {
 				value = resolve(ctx, base, property);
 			}
 			if (value == null)
-				value = _implicitResolver.getValue(ctx, base, property);
+				value = getImplicitResolver().getValue(ctx, base, property);
 
 			// it may be BeanName resolver
 			if (value == null) {
