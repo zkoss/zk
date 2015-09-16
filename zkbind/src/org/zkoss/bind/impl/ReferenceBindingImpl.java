@@ -35,17 +35,28 @@ import org.zkoss.zk.ui.Component;
 public class ReferenceBindingImpl extends BindingImpl implements ReferenceBinding {
 	private static final long serialVersionUID = 20120204122151L;
 	private final static Object NULL_VALUE = new Object();
-	private final ExpressionX _exprX;
+
+	// make lazy init
+	private ExpressionX _exprX;
+	private final String _expression;
 	private transient Object _cacheValue; //null means invalid
 	private final String _attr;
 	
 	public ReferenceBindingImpl(Binder binder, Component comp, String attr,String expression) {
 		super(binder, comp, null);
-		final BindContext ctx = newBindContext();
-		_exprX = binder.getEvaluatorX().parseExpressionX(ctx, expression, Object.class);
+		_expression = expression;
 		_attr = attr;
 	}
 
+	// make lazy init
+	private ExpressionX initExpressionX() {
+		if (_exprX == null) {
+			final BindContext ctx = newBindContext();
+			_exprX = getBinder().getEvaluatorX().parseExpressionX(ctx, _expression, Object.class);
+		}
+
+		return _exprX;
+	}
 	
 	public Object getValue(BindELContext ctx) {
 		load(null);
@@ -56,7 +67,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	public void setValue(BindELContext ctx, Object val) {
 		invalidateCache();
 		final BindContext bctx = newBindContext();
-		getBinder().getEvaluatorX().setValue(bctx, getComponent(), _exprX, val);
+		getBinder().getEvaluatorX().setValue(bctx, getComponent(), initExpressionX(), val);
 		
 		
 		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
@@ -79,7 +90,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	public void load(BindContext ctx) {
 		if (_cacheValue == null) {
 			final BindContext bctx = newBindContext();
-			final Object val = getBinder().getEvaluatorX().getValue(bctx, getComponent(), _exprX);
+			final Object val = getBinder().getEvaluatorX().getValue(bctx, getComponent(), initExpressionX());
 			_cacheValue = val == null ? NULL_VALUE : val;
 			
 			final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
@@ -91,7 +102,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 
 	
 	public String getPropertyString() {
-		return BindEvaluatorXUtil.getExpressionString(_exprX);
+		return BindEvaluatorXUtil.getExpressionString(initExpressionX());
 	}
 
 	
@@ -107,6 +118,6 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	
 	/*package*/ ValueReference getValueReference() {
 		final BindContext bctx = newBindContext();
-		return getBinder().getEvaluatorX().getValueReference(bctx, getComponent(), _exprX);
+		return getBinder().getEvaluatorX().getValueReference(bctx, getComponent(), initExpressionX());
 	}
 }

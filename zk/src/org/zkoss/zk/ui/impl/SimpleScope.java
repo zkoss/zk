@@ -44,7 +44,9 @@ import org.zkoss.zk.ui.ext.ScopeListener;
 public class SimpleScope implements Scope {
 	private final Scope _owner;
 	private Map<String, Object> _attrs;
-	private final ScopeListeners _listeners;
+
+	// make it lazy init
+	private ScopeListeners _listeners;
 
 	/** Constructor.
 	 * @param owner the real scope that an user can access.
@@ -52,7 +54,12 @@ public class SimpleScope implements Scope {
 	 */
 	public SimpleScope(Scope owner) {
 		_owner = owner != null ? owner: this;
-		_listeners = new ScopeListeners(_owner);
+	}
+
+	private ScopeListeners initListeners() {
+		if (_listeners == null)
+			_listeners = new ScopeListeners(_owner);
+		return _listeners;
 	}
 
 	/*package*/ Map<String, Object> newInitMap() {
@@ -96,10 +103,10 @@ public class SimpleScope implements Scope {
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
-		return _listeners.addScopeListener(listener);
+		return initListeners().addScopeListener(listener);
 	}
 	public boolean removeScopeListener(ScopeListener listener) {
-		return _listeners.removeScopeListener(listener);
+		return initListeners().removeScopeListener(listener);
 	}
 
 	/** Invokes {@link ScopeListener#parentChanged} for registered
@@ -108,7 +115,7 @@ public class SimpleScope implements Scope {
 	 * @see #addScopeListener
 	 */
 	public void notifyParentChanged(Scope newparent) {
-		_listeners.notifyParentChanged(newparent);
+		initListeners().notifyParentChanged(newparent);
 	}
 	/** Invokes {@link ScopeListener#idSpaceChanged} for registered
 	 * listeners.
@@ -117,12 +124,12 @@ public class SimpleScope implements Scope {
 	 * @since 5.0.1
 	 */
 	public void notifyIdSpaceChanged(IdSpace newIdSpace) {
-		_listeners.notifyIdSpaceChanged(newIdSpace);
+		initListeners().notifyIdSpaceChanged(newIdSpace);
 	}
 	/** Returns a ist of all scope listners (never null).
 	 */
 	public List<ScopeListener> getListeners() {
-		return _listeners.getListeners();
+		return initListeners().getListeners();
 	}
 
 	//clone//
@@ -144,13 +151,13 @@ public class SimpleScope implements Scope {
 			}
 		}
 
-		for (ScopeListener val: _listeners.getListeners()) {
+		for (ScopeListener val: initListeners().getListeners()) {
 			if (val instanceof ComponentCloneListener
 			&& owner instanceof Component) {
 				val = (ScopeListener)((ComponentCloneListener)val).willClone((Component)owner);
 				if (val == null) continue; //don't use it in clone
 			}
-			clone._listeners.addScopeListener(val);
+			clone.initListeners().addScopeListener(val);
 		}
 		return clone;
 	}
@@ -168,13 +175,17 @@ public class SimpleScope implements Scope {
 		
 		public Object remove(Object key) {
 			final Object o = super.remove(key);
-			if (o != null) _listeners.notifyRemoved((String)key);
+			if (o != null && _listeners != null) _listeners.notifyRemoved((String)key);
 			return o;
 		}
 		public Object put(String key, Object val) {
 			final Object o = super.put(key, val);
-			if (o != null) _listeners.notifyReplaced(key, val);
-			else _listeners.notifyAdded(key, val);
+			if (_listeners != null) {
+				if (o != null)
+					_listeners.notifyReplaced(key, val);
+				else
+					_listeners.notifyAdded(key, val);
+			}
 			return o;
 		}
 		@SuppressWarnings("unchecked")
@@ -201,24 +212,29 @@ public class SimpleScope implements Scope {
 			@SuppressWarnings("unchecked")
 			public boolean add(Object o) {
 				if (_set.add(o)) {
-					if (_entry) {
-						final Map.Entry me = (Map.Entry)o;
-						_listeners.notifyAdded((String)me.getKey(), me.getValue());
-					} else
-						_listeners.notifyAdded((String)o, null);
+					if (_listeners != null) {
+						if (_entry) {
+							final Map.Entry me = (Map.Entry) o;
+							_listeners.notifyAdded((String) me.getKey(), me.getValue());
+						} else
+							_listeners.notifyAdded((String) o, null);
+					}
 					return true;
 				} else {
-					if (_entry) {
-						final Map.Entry me = (Map.Entry)o;
-						_listeners.notifyReplaced((String)me.getKey(), me.getValue());
-					} else
-						_listeners.notifyReplaced((String)o, null);
+					if (_listeners != null) {
+						if (_entry) {
+							final Map.Entry me = (Map.Entry) o;
+							_listeners.notifyReplaced((String) me.getKey(), me.getValue());
+						} else
+							_listeners.notifyReplaced((String) o, null);
+					}
 					return false;
 				}
 			}
 			public boolean remove(Object o) {
 				if (_set.remove(o)) {
-					_listeners.notifyRemoved((String)(_entry ? ((Map.Entry)o).getKey(): o));
+					if (_listeners != null)
+						_listeners.notifyRemoved((String)(_entry ? ((Map.Entry)o).getKey(): o));
 					return true;
 				}
 				return false;
@@ -240,7 +256,8 @@ public class SimpleScope implements Scope {
 				}
 				public void remove() {
 					_it.remove();
-					_listeners.notifyRemoved((String)(_entry ? ((Map.Entry)_last).getKey(): _last));
+					if (_listeners != null)
+						_listeners.notifyRemoved((String)(_entry ? ((Map.Entry)_last).getKey(): _last));
 				}
 			}
 		}
