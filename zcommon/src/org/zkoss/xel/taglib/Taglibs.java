@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +28,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -39,6 +37,7 @@ import org.zkoss.util.resource.AbstractLoader;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
@@ -321,16 +320,14 @@ public class Taglibs {
 			final Map<String, URL> urls = new HashMap<String, URL>();
 			try {
 				final ClassLocator loc = new ClassLocator();
-				for (Enumeration<URL> en = loc.getResources("metainfo/tld/config.xml");
-				en.hasMoreElements();) {
-					final URL url = en.nextElement();
-					if (log.isDebugEnabled()) log.debug("Loading "+url);
+				for (XMLResourcesLocator.Resource res :
+								loc.getDependentXMLResources("metainfo/tld/config.xml", "config-name", "depends")) {
+					if (log.isDebugEnabled()) log.debug("Loading "+ res.url);
 					try {
-						final Document doc = new SAXBuilder(false, false, true).build(url);
-						if (IDOMs.checkVersion(doc, url))
-							parseConfig(urls, doc.getRootElement(), loc);
+						if (IDOMs.checkVersion(res.document, res.url))
+							parseConfig(urls, res.document.getRootElement(), loc);
 					} catch (Exception ex) {
-						log.error("Failed to parse "+url, ex); //keep running
+						log.error("Failed to parse "+ res.url, ex); //keep running
 					}
 				}
 			} catch (Exception ex) {

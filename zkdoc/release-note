@@ -42,6 +42,7 @@ ZK 8.0.0
   ZK-2662: Forbidden to set width/height/hflex/vflex in Auxheader
   ZK-2838: Shadow Template Support MVC
   ZK-2546: Component EL resolver performance boost
+  ZK-2876: ZK Custom Taglib should support the depends attribute to load them in order
   
 * Bugs
   ZK-2083: MVVM Form Binding with References

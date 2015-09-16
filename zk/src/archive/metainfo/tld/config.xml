@@ -12,6 +12,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
 <config>
+    <config-name>zk</config-name><!-- used to resolve dependency -->
+    <depends>zweb</depends>
 	<version>
 		<version-class>org.zkoss.zk.Version</version-class>
 		<version-uid>8.0.0</version-uid>
