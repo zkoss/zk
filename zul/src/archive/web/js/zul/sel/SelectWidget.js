@@ -1262,25 +1262,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.$$selectAll != undefined) {
 				return this.$$selectAll;
 			}
+		}
 
-			var isGroupSelect = this.groupSelect;
-			for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
-				//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
-				if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
-					continue;
-				if (w._loaded && !w.isDisabled() && w.isSelectable() && !w.isSelected())
-					return false;
-			}
-            return true;
-		} else {
-			var isGroupSelect = this.groupSelect;
-			for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
-				//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
-				if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
-					continue;
-				if (w._loaded && !w.isDisabled() && w.isSelectable() && !w.isSelected())
-					return false;
-			}
+		var isGroupSelect = this.groupSelect;
+		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
+			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
+				continue;
+			if (w._loaded && !w.isDisabled() && w.isSelectable() && !w.isSelected())
+				return false;
 		}
 		return true;
 	},
