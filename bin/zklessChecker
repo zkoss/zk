@@ -6,11 +6,7 @@ if [ -z "$nodeChecker" ] ; then
 fi
 
 cd bin
-checker=`npm list zkless-engine | grep "empty"`
-if [ -n "$checker" ] ; then
-	echo zkless-engine is not installed
-	echo installing zkless-engine.......
-	npm install zkless-engine
-else
-	exit 1
-fi
+
+# install zkless-engine anyway
+echo "installing zkless-engine@latest"
+npm install zkless-engine
