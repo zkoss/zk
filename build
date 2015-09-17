@@ -105,6 +105,7 @@ fi
 
 #check if node.js and zkless-engine are installed
 if [ "$1" = "" ] || [ "$1" = "lessc" ] ; then
+	chmod +x $maindir/bin/zklessChecker
 	$maindir/bin/zklessChecker
 fi
 
