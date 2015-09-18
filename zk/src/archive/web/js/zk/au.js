@@ -1584,16 +1584,19 @@ zAu.cmd1 = /*prototype*/ {
 			execFunc = function () {
 
 				zk.Widget.disableChildCallback(); //no callback
-				var fc;
+				var fc, hasROD;
 				try {
 					//2. insert (but don't update DOM)
-					for (var j = 0, len = wgts.length; j < len; ++j)
-						wgt.parent.insertBefore(wgts[j], wgt, true); //no dom
+					for (var j = 0, len = wgts.length; j < len; ++j) {
+						if (hasROD === undefined)
+							hasROD = wgt.parent.shallChildROD_(wgts[j]);
+						wgt.parent.insertBefore(wgts[j], wgt, !hasROD); //no dom
+					}
 				} finally {
 					zk.Widget.enableChildCallback();;
 				}
 
-				if (fc = wgt.desktop) {
+				if (fc = wgt.desktop && !hasROD) {
 					//3. generate HTML
 					var out = new zk.Buffer();
 					for (var j = 0, len = wgts.length; j < len; ++j)
@@ -1651,6 +1654,12 @@ zAu.cmd1 = /*prototype*/ {
 
 					if (hugeChildren)
 						zUtl.fireSized(wgt.parent);
+				} else if (fc) { // hasROD, do it as the same as the past
+					for (var j = 0, len = wgts.length; j < len; ++j) {
+						var child = wgts[j];
+						if (!_afterAction(child, acts[j]) && !child.z_rod)
+							zUtl.fireSized(child);
+					}
 				}
 			}; //execFunc end
 
@@ -1693,16 +1702,19 @@ zAu.cmd1 = /*prototype*/ {
 				execFunc = function () {
 
 					zk.Widget.disableChildCallback(); //no callback
-					var fc;
+					var fc, hasROD;
 					try {
 						//2. insert (but don't update DOM)
-						for (var j = 0, len = wgts.length; j < len; ++j)
-							wgt.appendChild(wgts[j], true); //no dom
+						for (var j = 0, len = wgts.length; j < len; ++j) {
+							if (hasROD === undefined)
+								hasROD = wgt.shallChildROD_(wgts[j]);
+							wgt.appendChild(wgts[j], !hasROD); //no dom
+						}
 					} finally {
 						zk.Widget.enableChildCallback();
 					}
 
-					if (fc = wgt.desktop) {
+					if (fc = wgt.desktop && !hasROD) { // only for non-ROD case, Bug 2880
 						//3. generate HTML
 						var out = new zk.Buffer();
 						for (var j = 0, len = wgts.length; j < len; ++j)
@@ -1746,6 +1758,12 @@ zAu.cmd1 = /*prototype*/ {
 
 						if (hugeChildren)
 							zUtl.fireSized(wgt);
+					} else if (fc) { // hasROD, do it as the same as the past
+						for (var j = 0, len = wgts.length; j < len; ++j) {
+							var child = wgts[j];
+							if (!_afterAction(child, acts[j]) && !child.z_rod)
+								zUtl.fireSized(child);
+						}
 					}
 				}; // execFun end
 
