@@ -19,6 +19,9 @@ import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.event.TreeDataListener;
+import org.zkoss.zul.ext.TreeSelectableModel;
+import org.zkoss.zul.ext.TreeOpenableModel;
+
 
 public class Test14105Window extends Window implements AfterCompose {
 	private Tree tree;
@@ -35,7 +38,54 @@ public class MyTreeitemRenderer implements TreeitemRenderer {
 		treeitem.setSelected(true);
 	}
 }
-public class MyTreeModel implements TreeModel {
+public class MyTreeModel implements TreeModel, TreeOpenableModel, TreeSelectableModel {
+	public void setMultiple(boolean multiple) {
+
+	}
+
+	public boolean isMultiple() {
+		return true;
+	}
+
+	public boolean addSelectionPath(int[] path) {
+		return false;
+	}
+
+	public boolean addSelectionPaths(int[][] paths) {
+		return false;
+	}
+
+	public boolean removeSelectionPath(int[] path) {
+		return false;
+	}
+
+	public boolean removeSelectionPaths(int[][] paths) {
+		return false;
+	}
+
+	public boolean isPathSelected(int[] path) {
+		return false;
+	}
+
+	public boolean isSelectionEmpty() {
+		return false;
+	}
+
+	public void clearSelection() {
+
+	}
+
+	public int[] getSelectionPath() {
+		return new int[0];
+	}
+
+	public int[][] getSelectionPaths() {
+		return new int[0][];
+	}
+
+	public int getSelectionCount() {
+		return 0;
+	}
 	public void addTreeDataListener(TreeDataListener arg0) {
 		// TODO Auto-generated method stub	
 	}
@@ -105,9 +155,47 @@ public class MyTreeModel implements TreeModel {
 
 	public void removeTreeDataListener(TreeDataListener arg0) {
 		// TODO Auto-generated method stub
-	}public void setMultiple(boolean multiple) {
-		// TODO Auto-generated method stub
+	}
 
+
+	public boolean addOpenPath(int[] path) {
+		return false;
+	}
+
+	public boolean addOpenPaths(int[][] paths) {
+		return false;
+	}
+
+	public boolean removeOpenPath(int[] path) {
+		return false;
+	}
+
+	public boolean removeOpenPaths(int[][] paths) {
+		return false;
+	}
+
+	public boolean isPathOpened(int[] path) {
+		return false;
+	}
+
+	public boolean isOpenEmpty() {
+		return false;
+	}
+
+	public void clearOpen() {
+
+	}
+
+	public int getOpenCount() {
+		return 0;
+	}
+
+	public int[] getOpenPath() {
+		return new int[0];
+	}
+
+	public int[][] getOpenPaths() {
+		return new int[0][];
 	}
 }
 ]]></zscript>

@@ -1723,9 +1723,9 @@ public class Tree extends MeshElement {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
-			// Bug ZL-1696: manipulate tree from api might happen before tree
+			// Bug ZK-1696: manipulate tree from api might happen before tree
 			// render, use sendEvent instead of postEvent to render tree first
-			Events.sendEvent("onInitRender", this, null);
+			Events.postEvent("onInitRender", this, null);
 		}
 	}
 

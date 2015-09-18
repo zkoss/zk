@@ -2587,7 +2587,7 @@ public class Listbox extends MeshElement {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			// Bug ZL-1696: manipulate list from api might happen before list 
 			// render, use sendEvent instead of postEvent to render list first
-			Events.sendEvent("onInitRender", this, null);
+			Events.postEvent("onInitRender", this, null);
 		}
 	}
 	
