@@ -1584,12 +1584,12 @@ zAu.cmd1 = /*prototype*/ {
 			execFunc = function () {
 
 				zk.Widget.disableChildCallback(); //no callback
-				var fc, hasROD;
+				var fc, hasROD = wgt.parent.shallChildROD_(wgt); // wgt may be in rod for B50-2943533.zul
 				try {
 					//2. insert (but don't update DOM)
 					for (var j = 0, len = wgts.length; j < len; ++j) {
 						if (hasROD === undefined)
-							hasROD = wgt.parent.shallChildROD_(wgts[j]);
+							hasROD = !!wgt.parent.shallChildROD_(wgts[j]);
 						wgt.parent.insertBefore(wgts[j], wgt, !hasROD); //no dom
 					}
 				} finally {
@@ -1707,7 +1707,7 @@ zAu.cmd1 = /*prototype*/ {
 						//2. insert (but don't update DOM)
 						for (var j = 0, len = wgts.length; j < len; ++j) {
 							if (hasROD === undefined)
-								hasROD = wgt.shallChildROD_(wgts[j]);
+								hasROD = !!wgt.shallChildROD_(wgts[j]);
 							wgt.appendChild(wgts[j], !hasROD); //no dom
 						}
 					} finally {
