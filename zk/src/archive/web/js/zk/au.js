@@ -1714,7 +1714,7 @@ zAu.cmd1 = /*prototype*/ {
 						zk.Widget.enableChildCallback();
 					}
 
-					if (fc = wgt.desktop && !hasROD) { // only for non-ROD case, Bug 2880
+					if ((fc = wgt.desktop) && !hasROD) { // only for non-ROD case, Bug 2880
 						//3. generate HTML
 						var out = new zk.Buffer();
 						for (var j = 0, len = wgts.length; j < len; ++j)
