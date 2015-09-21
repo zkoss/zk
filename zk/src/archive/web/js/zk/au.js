@@ -1460,6 +1460,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	loadCSS: zk.loadCSS
 };
+	// since ZK 8, support batch mode update
+	// user can use the following code to turn it off.
+	// <?script content="zk.BatchUpdate=false"?>
+	zk.BatchUpdate = true;
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -1470,7 +1474,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 
 	//Check whether the wgt can support batch update or not.
 	function _canBatchUpdate(wgt) {
-		return wgt && wgt.insertChildHTML_ === zk.Widget.prototype.insertChildHTML_;
+		return zk.BatchUpdate && wgt && wgt.insertChildHTML_ === zk.Widget.prototype.insertChildHTML_;
 	}
 /** @class zk.AuCmd1
  * The AU command handler for processes commands related to widgets,
@@ -1596,7 +1600,7 @@ zAu.cmd1 = /*prototype*/ {
 					zk.Widget.enableChildCallback();;
 				}
 
-				if (fc = wgt.desktop && !hasROD) {
+				if ((fc = wgt.desktop) && !hasROD) {
 					//3. generate HTML
 					var out = new zk.Buffer();
 					for (var j = 0, len = wgts.length; j < len; ++j)
