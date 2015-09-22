@@ -24,5 +24,9 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		<separator />
 		<listbox id="listb" />
 		<separator />
+		<grid id="gdp"/>
+		<separator />
+		<listbox id="listbp"/>
+		<separator />
 	</div>
 </zk>

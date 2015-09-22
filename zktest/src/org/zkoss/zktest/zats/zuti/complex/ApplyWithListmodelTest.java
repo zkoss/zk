@@ -45,6 +45,7 @@ public class ApplyWithListmodelTest extends ZutiBasicTestCase {
 			}
 			button.click();
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
 	}
