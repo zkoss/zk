@@ -56,7 +56,7 @@ public class B70_ZK_2636VM {
 			return validator;
 		}
 
-		public class Bean {
+		public static class Bean {
 
 			private String letter;
 
