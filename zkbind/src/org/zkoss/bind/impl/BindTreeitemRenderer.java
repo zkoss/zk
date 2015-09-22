@@ -16,7 +16,6 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Attributes;
@@ -80,10 +79,19 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			parent.setAttribute(itervarnm, iterStatus);
 			
 			final Component[] items = filterOutShadows(parent, tm.create(parent, item, null, null));
-			
-			parent.setAttribute(varnm, oldVar);
-			parent.setAttribute(itervarnm, oldIter);
-			
+
+			// Bug ZK-2882
+			if (oldVar == null) {
+				parent.removeAttribute(varnm);
+			} else {
+				parent.setAttribute(varnm, oldVar);
+			}
+			if (oldIter == null) {
+				parent.removeAttribute(itervarnm);
+			} else {
+				parent.setAttribute(itervarnm, oldIter);
+			}
+
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 

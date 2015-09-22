@@ -79,10 +79,19 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			tabs.setAttribute(itervarnm, iterStatus);
 			
 			final Component[] items = filterOutShadows(tabs, tm.create(tabs, item, null, null));
-			
-			tabs.setAttribute(varnm, oldVar);
-			tabs.setAttribute(itervarnm, oldIter);
-			
+
+			// Bug ZK-2882
+			if (oldVar == null) {
+				tabs.removeAttribute(varnm);
+			} else {
+				tabs.setAttribute(varnm, oldVar);
+			}
+			if (oldIter == null) {
+				tabs.removeAttribute(itervarnm);
+			} else {
+				tabs.setAttribute(itervarnm, oldIter);
+			}
+
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 

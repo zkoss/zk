@@ -76,10 +76,19 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			radiogroup.setAttribute(itervarnm, iterStatus);
 			
 			final Component[] items = filterOutShadows(radiogroup, tm.create(radiogroup, item, null, null));
-			
-			radiogroup.setAttribute(varnm, oldVar);
-			radiogroup.setAttribute(itervarnm, oldIter);
-			
+
+			// Bug ZK-2882
+			if (oldVar == null) {
+				radiogroup.removeAttribute(varnm);
+			} else {
+				radiogroup.setAttribute(varnm, oldVar);
+			}
+			if (oldIter == null) {
+				radiogroup.removeAttribute(itervarnm);
+			} else {
+				radiogroup.setAttribute(itervarnm, oldIter);
+			}
+
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 

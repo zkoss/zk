@@ -82,9 +82,18 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			grid.setAttribute(itervarnm, iterStatus);
 			
 			final Component[] items = filterOutShadows(rows, tm.create(rows, row, null, null));
-			
-			grid.setAttribute(varnm, oldVar);
-			grid.setAttribute(itervarnm, oldIter);
+
+			// Bug ZK-2882
+			if (oldVar == null) {
+				grid.removeAttribute(varnm);
+			} else {
+				grid.setAttribute(varnm, oldVar);
+			}
+			if (oldIter == null) {
+				grid.removeAttribute(itervarnm);
+			} else {
+				grid.setAttribute(itervarnm, oldIter);
+			}
 			
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one row, not "+items.length);

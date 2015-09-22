@@ -78,9 +78,18 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			cb.setAttribute(itervarnm, iterStatus);
 			
 			final Component[] items = filterOutShadows(cb, tm.create(cb, item, null, null));
-			
-			cb.setAttribute(varnm, oldVar);
-			cb.setAttribute(itervarnm, oldIter);
+
+			// Bug ZK-2882
+			if (oldVar == null) {
+				cb.removeAttribute(varnm);
+			} else {
+				cb.setAttribute(varnm, oldVar);
+			}
+			if (oldIter == null) {
+				cb.removeAttribute(itervarnm);
+			} else {
+				cb.setAttribute(itervarnm, oldIter);
+			}
 			
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
