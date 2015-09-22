@@ -269,6 +269,11 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (wgt) {
 			wgt._adjFlexWd();
 			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
+
+			// ZK-2772 Misaligned Grid columns
+			if (wgt.frozen && !wgt._isAllWidths()) {
+				wgt._calcSize(); // yes, we need to do it again.
+			}
 			// ZK-2551: need to restore scroll pos after flexs are fixed
 			if (zk(ebody).hasHScroll() && currentLeft != ebody.scrollLeft) {
 				ebody.scrollLeft = currentLeft;

@@ -72,6 +72,7 @@ ZK 8.0.0
   ZK-2855: multiple templates in the same component are ignored
   ZK-2542: @converter causes a big performance issue on the nested children binding
   ZK-2868: apply template creates unexpected empty label
+  ZK-2772: Misaligned Grid columns
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.

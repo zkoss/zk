@@ -373,10 +373,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 							: 0,
 						nativebar = mesh._nativebar;
 					// ZK-2071: nativebar behavior should be same as fakebar
-					if (force
-							|| (!nativebar && (wd == 0 || wd == 0.1)) 
-							|| (nativebar && (wd == 0 || wd == 0.1))) {
+					if (force || (wd < 1)) {
 						cellWidth = hdWgt._origWd || jq.px(wd);
+						// ZK-2772: consider faker's width first for layout consistent
+						// if the column is visible.
+						if ((wd > 1) && (faker = jq('#' + n.id + '-hdfaker')[0]) && faker.style.width)
+							cellWidth = faker.style.width;
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
@@ -385,7 +387,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						((zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
-					hdWgt._origWd = faker.style.width || hdWgt._origWd;
+					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
+						hdWgt._origWd = faker.style.width
 					cellWidth = '0px';
 					shallUpdate = true;
 				}

@@ -68,6 +68,8 @@ abstract public class HeaderElement extends LabelImageElement {
 		}
 	}
 	void setWidthByClient(String width) {
+		// reset hflex min first; for Bug ZK-2772 Misaligned Grid columns
+		setHflexByClient("false");
 		setWidthDirectly(width);
 	}
 	//feature#3177275: Listheader should override hflex when sized by end user
