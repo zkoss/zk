@@ -209,8 +209,6 @@ public class Combobox extends Textbox {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					//ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
-					if (hasAttribute(ATTR_ON_INIT_RENDER)) return;
 					final ListModel _model = getModel();
 					final int newsz = _model.getSize(), oldsz = getItemCount();
 					int min = event.getIndex0(), max = event.getIndex1(), cnt;
@@ -224,8 +222,10 @@ public class Combobox extends Textbox {
 						return; //nothing to do
 					case ListDataEvent.INTERVAL_ADDED:
 						cnt = newsz - oldsz;
-						if (cnt <= 0)
+						if (cnt < 0)
 							throw new UiException("Adding causes a smaller list?");
+						if (cnt == 0) //no change, nothing to do here
+							return;
 						if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !isOpen())//ZK-2704: don't invalidate when the combobox is open
 							invalidate();
 								//Also better performance (outer better than remove a lot)
@@ -255,8 +255,10 @@ public class Combobox extends Textbox {
 						break;
 					case ListDataEvent.INTERVAL_REMOVED:
 						cnt = oldsz - newsz;
-						if (cnt <= 0)
+						if (cnt < 0)
 							throw new UiException("Removal causes a larger list?");
+						if (cnt == 0) //no change, nothing to do here
+							return;
 						if (min >= 0) max = min + cnt - 1;
 						else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 						if (max > oldsz - 1) max = oldsz - 1;

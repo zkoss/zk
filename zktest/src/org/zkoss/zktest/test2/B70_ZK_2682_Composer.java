@@ -32,14 +32,27 @@ public class B70_ZK_2682_Composer extends SelectorComposer<Component> {
 	private Grid gd;
 	@Wire
 	private Listbox listb;
+	@Wire
+	private Grid gdp;
+	@Wire
+	private Listbox listbp;
 	
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
-		ListModelList<Object> infos = new ListModelList<Object>(new String[] {"Apple", "Orange", "Mango"});
+		ListModelList<Object> infos = new ListModelList<Object>(new String[] {"Banana", "Kiwi", "Pineapple"});
 		combo.setModel(infos);
 		gd.setModel(infos);
 		listb.setModel(infos);
 		
-		infos.remove(0);
+		gdp.setMold("paging");
+		gdp.setPageSize(1);
+		gdp.setModel(infos);
+		listbp.setMold("paging");
+		listbp.setPageSize(1);
+		listbp.setModel(infos);
+		
+		infos.clear();
+		infos.add("Apple");
+		infos.add("Orange");
 	}
 }
