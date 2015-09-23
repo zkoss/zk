@@ -57,12 +57,20 @@ public class B80_ZK_1696_gridTest extends ZATSTestCase {
 		
 		desktop.query("#btn4").click(); //switch to 2nd model
 		//check render result after changing model
-		Assert.assertEquals(0, mygrid.getActivePage());
+		Assert.assertEquals(1, mygrid.getActivePage());
 		rows = gridAgent.queryAll("row");
-		Assert.assertEquals("item a", rows.get(0).as(Row.class).getValue());
-		Assert.assertEquals("item b", rows.get(1).as(Row.class).getValue());
-		Assert.assertEquals("item c", rows.get(2).as(Row.class).getValue());
+		Assert.assertEquals("item d", rows.get(0).as(Row.class).getValue());
+		Assert.assertEquals("item e", rows.get(1).as(Row.class).getValue());
+		Assert.assertEquals("item f", rows.get(2).as(Row.class).getValue());
 		
+		paging.moveTo(2); //2nd model change to page 3
+		//check render result after changing model
+		Assert.assertEquals(2, mygrid.getActivePage());
+		rows = gridAgent.queryAll("row");
+		Assert.assertEquals("item g", rows.get(0).as(Row.class).getValue());
+		Assert.assertEquals("item h", rows.get(1).as(Row.class).getValue());
+		Assert.assertEquals("item i", rows.get(2).as(Row.class).getValue());
+
 		desktop.query("#btn1").click(); //switch back to 1st model
 		//check render result after switching back to original model
 		Assert.assertEquals(1, mygrid.getActivePage());

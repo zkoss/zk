@@ -57,6 +57,7 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.PagingListener;
 import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Pageable;
@@ -240,8 +241,7 @@ public class Grid extends MeshElement {
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private EventListener<PagingEvent> _pgListener;
-	private EventListener<Event> _pgImpListener, _modelInitListener;
+	private EventListener<Event> _pgListener, _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
@@ -537,21 +537,33 @@ public class Grid extends MeshElement {
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
+		if(_model instanceof Pageable && ((Pageable) _model).getPageSize() != -1) {
+			paging.setPageSize(((Pageable) _model).getPageSize());
+		}
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
+		if(_model instanceof Pageable && ((Pageable) _model).getActivePage() != -1) {
+			paging.setActivePage(((Pageable) _model).getActivePage());
+		}
 		paging.setParent(this);
 		
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
-	private class PGListener implements SerializableEventListener<PagingEvent>,
-			CloneableEventListener<PagingEvent> {
-		public void onEvent(PagingEvent event) {
-			Events.postEvent(
-				new PagingEvent(event.getName(), Grid.this,
-					event.getPageable(), event.getActivePage()));
-			//Bug ZK-1696: model also preserves paging information
-			if (_model instanceof Pageable) {
-				((Pageable) _model).setActivePage(event.getActivePage());
+	private class PGListener extends PagingListener {
+		public void onEvent(Event event) {
+			if (event instanceof PagingEvent) {
+				PagingEvent pe = (PagingEvent) event;
+				int pgsz = pe.getPageable().getPageSize();
+				int actpg = pe.getActivePage();
+				if (PagingEventPublisher.INTERNAL_EVENT.equals(pe.getName())) {
+					if (pgsz != -1) _pgi.setPageSize(pgsz);
+					if (actpg != -1) _pgi.setActivePage(actpg);
+				} else if (_model instanceof Pageable) {
+					//Bug ZK-1696: model also preserves paging information
+					((Pageable) _model).setActivePage(actpg);
+				}
+				Events.postEvent(new PagingEvent(event.getName(), Grid.this,
+						pe.getPageable(), actpg));
 			}
 		}
 		
@@ -559,24 +571,23 @@ public class Grid extends MeshElement {
 			return null; // skip to clone
 		}
 	}
-	private class PGImpListener implements SerializableEventListener<Event>,
-			CloneableEventListener<Event> {
+	private class PGImpListener extends PagingListener {
 		public void onEvent(Event event) {
 			if (_rows != null && _model != null && inPagingMold()) {
 			//theoretically, _rows shall not be null if _model is not null when
 			//this method is called. But, just in case -- if sent manually
 				final Paginal pgi = getPaginal();
 				int pgsz = pgi.getPageSize();
-				final int ofs = pgi.getActivePage() * pgsz;
+				int ofs = pgi.getActivePage() * pgsz;
+				if (event instanceof PagingEvent) {
+					// Bug ZK-1696: PagingEvent have the newest paging information
+					pgsz = ((PagingEvent) event).getPageable().getPageSize();
+					ofs = ((PagingEvent) event).getActivePage() * pgsz;
+				}
 				if (_rod) {
 					getDataLoader().syncModel(ofs, pgsz);
 				}
 				postOnPagingInitRender();
-			}
-			
-			// Bug ZK-1696: model also preserves paging information
-			if (_model instanceof Pageable && event instanceof PagingEvent) {
-				((Pageable) _model).setActivePage(((PagingEvent) event).getActivePage());
 			}
 			
 			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
@@ -599,6 +610,9 @@ public class Grid extends MeshElement {
 		if (_pgListener == null)
 			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
+		if (_model instanceof PagingEventPublisher) {
+			((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
+		}
 
 		if (_pgImpListener == null)
 			_pgImpListener = new PGImpListener();
@@ -606,6 +620,9 @@ public class Grid extends MeshElement {
 	}
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
+		if (_model instanceof PagingEventPublisher) {
+			((PagingEventPublisher) _model).removePagingEventListener((PagingListener) _pgListener);
+		}
 		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
 		pgi.removeEventListener("onPagingImpl", _pgImpListener);
 	}
@@ -694,6 +711,30 @@ public class Grid extends MeshElement {
 				_model = model;
 				initDataListener();
 			}
+			
+			if (inPagingMold()) { 
+				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
+				//must update paginal totalSize or exception in setActivePage
+				final Paginal pgi = getPaginal();
+				Pageable m = _model instanceof Pageable ? (Pageable) _model : null;
+				//if pageable model contain non-default values, sync from model to pgi
+				//otherwise, sync from pgi to model
+				if (m != null) {
+					if (m.getPageSize() != -1) {
+						pgi.setPageSize(m.getPageSize());
+					} else {
+						m.setPageSize(pgi.getPageSize());
+					}
+				}
+				pgi.setTotalSize(getDataLoader().getTotalSize());
+				if (m != null) {
+					if (m.getActivePage() != -1) {
+						pgi.setActivePage(m.getActivePage());
+					} else {
+						m.setActivePage(pgi.getActivePage());
+					}
+				}
+			}
 
 			final Execution exec = Executions.getCurrent();
 			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
@@ -701,11 +742,6 @@ public class Grid extends MeshElement {
 			//Always syncModel because it is easier for user to enforce reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1); //create rows if necessary
-			} else if (inPagingMold()) { 
-				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
-				//must update paginal totalSize or exception in setActivePage
-				final Paginal pgi = getPaginal();
-				pgi.setTotalSize(getDataLoader().getTotalSize());
 			}
 			if (!doSort(this))
 				postOnInitRender();
@@ -720,11 +756,6 @@ public class Grid extends MeshElement {
 			_model = null;
 			if (_rows != null) _rows.getChildren().clear();
 			smartUpdate("model", false);
-		}
-		
-		// Bug ZK-1696: need to set active page before rendering
-		if (_pgi != null && _model instanceof Pageable) {
-			_pgi.setActivePage(((Pageable) _model).getActivePage());
 		}
 		
 		getDataLoader().updateModelInfo();
@@ -756,7 +787,6 @@ public class Grid extends MeshElement {
 						onListDataChange(event);
 				}
 			};
-			
 		_model.addListDataListener(_dataListener);
 	}
 	

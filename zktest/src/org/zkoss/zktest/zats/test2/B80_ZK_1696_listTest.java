@@ -57,11 +57,19 @@ public class B80_ZK_1696_listTest extends ZATSTestCase {
 		
 		desktop.query("#btn4").click(); //switch to 2nd model
 		//check render result after changing model
-		Assert.assertEquals(0, mylist.getActivePage());
+		Assert.assertEquals(1, mylist.getActivePage());
 		listcells = listAgent.queryAll("listcell");
-		Assert.assertEquals("item a", listcells.get(0).as(Listcell.class).getLabel());
-		Assert.assertEquals("item b", listcells.get(1).as(Listcell.class).getLabel());
-		Assert.assertEquals("item c", listcells.get(2).as(Listcell.class).getLabel());
+		Assert.assertEquals("item d", listcells.get(0).as(Listcell.class).getLabel());
+		Assert.assertEquals("item e", listcells.get(1).as(Listcell.class).getLabel());
+		Assert.assertEquals("item f", listcells.get(2).as(Listcell.class).getLabel());
+		
+		paging.moveTo(2); //2nd model change to page 3
+		//check render result after changing model
+		Assert.assertEquals(2, mylist.getActivePage());
+		listcells = listAgent.queryAll("listcell");
+		Assert.assertEquals("item g", listcells.get(0).as(Listcell.class).getLabel());
+		Assert.assertEquals("item h", listcells.get(1).as(Listcell.class).getLabel());
+		Assert.assertEquals("item i", listcells.get(2).as(Listcell.class).getLabel());
 		
 		desktop.query("#btn1").click(); //switch back to 1st model
 		//check render result after switching back to original model

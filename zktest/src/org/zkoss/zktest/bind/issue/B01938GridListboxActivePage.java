@@ -8,6 +8,7 @@ import org.zkoss.bind.annotation.Command;
 public class B01938GridListboxActivePage {
 
 	private int pageIndex = 0;
+	private int pageSize = 3;
 	
 	List<String> data;
 	
@@ -31,5 +32,13 @@ public class B01938GridListboxActivePage {
 
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
+	}
+	
+	public int getPageSize() {
+		return pageSize;
+	}
+	
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 }

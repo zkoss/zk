@@ -27,8 +27,11 @@ import java.util.Set;
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.PagingListener;
 import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
@@ -39,8 +42,9 @@ import org.zkoss.zul.ext.SelectionControl;
  * @author tomyeh
  */
 abstract public class AbstractListModel<E> implements ListModel<E>,
-Selectable<E>, java.io.Serializable, Pageable {
+Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	private transient List<ListDataListener> _listeners = new ArrayList<ListDataListener>();
+	private transient List<PagingListener> _pagingListeners = new ArrayList<PagingListener>();
 
 	/** The current selection. */
 	protected transient Set<E> _selection;
@@ -308,8 +312,8 @@ Selectable<E>, java.io.Serializable, Pageable {
 	}
 	
 	// Pageable //
-	private int _pageSize = 20; // same default as paging
-	private int _activePage = 0; // same default as paging
+	private int _pageSize = -1;
+	private int _activePage = -1;
 
 	// Pageable // ZK-1696
 	public int getPageSize() {
@@ -321,6 +325,13 @@ Selectable<E>, java.io.Serializable, Pageable {
 			throw new WrongValueException("page size should >= 0");
 		}
 		_pageSize = size;
+		for (PagingListener p : _pagingListeners) {
+			try {
+				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public int getPageCount() {
@@ -332,7 +343,7 @@ Selectable<E>, java.io.Serializable, Pageable {
 			} else{
 				return pageCount + 1;
 			}
-		} else{
+		} else {
 			return 1;
 		}
 	}
@@ -346,5 +357,21 @@ Selectable<E>, java.io.Serializable, Pageable {
 			throw new WrongValueException("active page index should >= 0");
 		}
 		_activePage = pg;
+		for (PagingListener p : _pagingListeners) {
+			try {
+				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, pg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addPagingEventListener(PagingListener l) {
+		if (l == null)
+			throw new NullPointerException();
+		_pagingListeners.add(l);
+	}
+	public void removePagingEventListener(PagingListener l) {
+		_pagingListeners.remove(l);
 	}
 }
