@@ -83,7 +83,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public void doListDataChange(ListDataEvent event) {
 		//when this is called _model is never null
 		final Rows rows = _grid.getRows();
-		final int newsz = event.getModel().getSize(), oldsz = rows.getChildren().size();
+		final int newsz = event.getModel().getSize(), oldsz = rows == null ? 0 : rows.getChildren().size();
 		int min = event.getIndex0(), max = event.getIndex1(), cnt;
 
 		switch (event.getType()) {
