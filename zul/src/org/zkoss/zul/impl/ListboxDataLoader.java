@@ -88,8 +88,10 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		switch (event.getType()) {
 		case ListDataEvent.INTERVAL_ADDED:
 			cnt = newsz - oldsz;
-			if (cnt <= 0)
+			if (cnt < 0)
 				throw new UiException("Adding causes a smaller list?");
+			if (cnt == 0) //no change, nothing to do here
+				return;
 			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
 				_listbox.invalidate();
 					//Bug 3147518: avoid memory leak
@@ -111,8 +113,10 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 		case ListDataEvent.INTERVAL_REMOVED:
 			cnt = oldsz - newsz;
-			if (cnt <= 0)
+			if (cnt < 0)
 				throw new UiException("Removal causes a larger list?");
+			if (cnt == 0) //no change, nothing to do here
+				return;
 			if (min >= 0) max = min + cnt - 1;
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 			if (max > oldsz - 1) max = oldsz - 1;

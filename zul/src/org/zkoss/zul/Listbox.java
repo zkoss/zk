@@ -478,8 +478,6 @@ public class Listbox extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-                    // ZK-2682: Remove a ListModel's item before a Combobx renders throws an exception
-                    if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) || hasAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED)) return;
 					onListDataChange(event);
 				}
 			};
@@ -2547,6 +2545,7 @@ public class Listbox extends MeshElement {
 		return c instanceof Listitem ? (Listitem)c: null;
 			//listitem must be placed contineously
 	}
+
 	private void postOnInitRender() {
 		// 20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
