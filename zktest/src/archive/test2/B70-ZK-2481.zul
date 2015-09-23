@@ -1,4 +1,6 @@
 <window width="100%" height="100%" title="Testing with ZK ${desktop.webApp.version}" border="normal">
+    Click the navbar to open the second layer, you should see it visible. (both navbars should work fine).
+    <separator height="100px"/>
     <navbar orient="horizontal" collapsed="false">
         <nav label="Application Menu">
             <navitem label="Dashbaord"/>
