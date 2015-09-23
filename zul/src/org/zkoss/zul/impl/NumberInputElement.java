@@ -334,15 +334,6 @@ abstract public class NumberInputElement extends FormatInputElement {
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
 	static {
-		_properties.put("roundingMode", new StringPropertyAccess() {
-			public void setValue(Component cmp, String roundingMode) {
-				((NumberInputElement) cmp).setRoundingMode(roundingMode);
-			}
-
-			public String getValue(Component cmp) {
-				return RoundingModes.toString(((NumberInputElement) cmp).getRoundingMode());
-			}
-		});
 		_properties.put("locale", new StringPropertyAccess() {
 			public void setValue(Component cmp, String locale) {
 				((NumberInputElement) cmp).setLocale(locale);

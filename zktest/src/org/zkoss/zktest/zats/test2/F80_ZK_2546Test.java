@@ -536,11 +536,6 @@ public class F80_ZK_2546Test {
 	public void testNumberInputElement() {
 		Intbox d = new Intbox();
 
-		// test roundingMode
-		d.getPropertyAccess("roundingMode").setValue(d, 3);
-		assertEquals(3, d.getRoundingMode());
-		assertEquals(3, d.getPropertyAccess("roundingMode").getValue(d));
-
 		// test locale
 		d.getPropertyAccess("locale").setValue(d, "zh_TW");
 		assertEquals("zh_TW", d.getLocale().toString());

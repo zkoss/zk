@@ -12,7 +12,7 @@
 		1. click "change default caption label", the element "tag Label" should not be removed
 		2. after 1, click "hide another label", there should not be any js errors
 	</label>
-	<panel id="mPanel" border="normal" width="100%" height="100%"
+	<panel id="mPanel" border="normal" width="100%"
 		vflex="1" sizable="false" sclass="tn-window">
 		<caption id="mPanelCaption" sclass='tn-panel-div' label="Caption label">
 			<label id="tagLabel" sclass='tagStyle' style='' value="tag Label"
