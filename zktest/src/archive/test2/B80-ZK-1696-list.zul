@@ -26,6 +26,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		modelThree.add("item 8");
 		modelThree.add("item 9");
 		modelThree.add("item 10");
+		modelThree.setPageSize(3);
 		
 		ListModel modelFour = new ListModelList();
 		modelFour.add("item a");
@@ -38,6 +39,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		modelFour.add("item h");
 		modelFour.add("item i");
 		modelFour.add("item j");
+		modelFour.setPageSize(3);
 	]]></zscript>
 	<label multiline="true">
 		one listbox view with multiple list models, every model should preserve its own select and paging state
@@ -48,41 +50,41 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		5. switch back to modelOne with the "change to modelOne" button
 		6. the label should show whatever page index modelOne had before switching to modelTwo
 	</label>
-	<listbox id="list" model="${modelThree}" mold="paging" pageSize="3">
+	<listbox id="list" model="${modelThree}" mold="paging" >
 		<attribute name="onCreate"><![CDATA[
 			String value = "model: " + (self.getModel() == modelThree? "modelThree" : "modelFour");
-			lb2.setValue(value + ", page: " + self.getActivePage());
+			lb2.setValue(value + ", page: " + self.getModel().getActivePage() + ", listbox page: " + self.getActivePage());
 		]]></attribute>
 		<attribute name="onPaging"><![CDATA[
 			String value = "model: " + (self.getModel() == modelThree? "modelThree" : "modelFour");
-			lb2.setValue(value + ", page: " + self.getActivePage());
+			lb2.setValue(value + ", page: " + self.getModel().getActivePage() + ", listbox page: " + self.getActivePage());
 		]]></attribute>
 	</listbox>
 	<label id="lb2" />
 	<button id="btn1" label="change to modelThree">
 		<attribute name="onClick"><![CDATA[
 			list.setModel(modelThree);
-			lb2.setValue("model: modelThree, page: " + list.getActivePage());
+			lb2.setValue("model: modelThree, page: " + modelThree.getActivePage() + ", listbox page: " + list.getActivePage());
 		]]></attribute>
 	</button>
 	<button id="btn2" label="change to modelThree change after set">
 		<attribute name="onClick"><![CDATA[
 			list.setModel(modelThree);
-			list.setActivePage(1);
-			lb2.setValue("model: modelThree, page: " + list.getActivePage());
+			modelThree.setActivePage(1);
+			lb2.setValue("model: modelThree, page: " + modelThree.getActivePage() + ", listbox page: " + list.getActivePage());
 		]]></attribute>
 	</button>
 	<button id="btn3" label="change to modelThree change before set">
 		<attribute name="onClick"><![CDATA[
-			list.setActivePage(1);
+			modelThree.setActivePage(1);
 			list.setModel(modelThree);
-			lb2.setValue("model: modelThree, page: " + list.getActivePage());
+			lb2.setValue("model: modelThree, page: " + modelThree.getActivePage() + ", listbox page: " + list.getActivePage());
 		]]></attribute>
 	</button>
 	<button id="btn4" label="change to modelFour">
 		<attribute name="onClick"><![CDATA[
 			list.setModel(modelFour);
-			lb2.setValue("model: modelFour, page: " + list.getActivePage());
+			lb2.setValue("model: modelFour, page: " + modelFour.getActivePage() + ", listbox page: " + list.getActivePage());
 		]]></attribute>
 	</button>
 </zk>
