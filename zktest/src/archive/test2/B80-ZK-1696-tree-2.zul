@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B80-ZK-1696-tree.zul
+B80-ZK-1696-tree-2.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Aug 11 16:39:27 CST 2015, Created by Christopher
+		Thu, Sep 24, 2015 10:14:42 PM, Created by Christopher
 
-Copyright (C)  Potix Corporation. All Rights Reserved.
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
@@ -50,25 +50,22 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 				new DefaultTreeNode[] {
 					new DefaultTreeNode("item a"),
 					new DefaultTreeNode("item b"),
-					new DefaultTreeNode("item c"),
-					new DefaultTreeNode("item d"),
-					new DefaultTreeNode("item e"),
-					new DefaultTreeNode("item f")
+					new DefaultTreeNode("item c")
 			}
 		));
-		modelTwo.setPageSize(3);
+		modelTwo.setPageSize(2);
 	]]></zscript>
 	<label multiline="true">
 		one tree view with multiple tree models, every model should preserve its own open, select, and paging state
 		1. tree is set to modelOne by default
 		2. change page with paging mold buttons, the label under tree view should show the correct page index
 		3. switch to modelTwo using the "change to modelTwo" button
-		4. the label should show the correct model name with page: 0
+		4. the label should show the correct model name with inherited page number, or whatever max page number is
 		5. switch back to modelOne with the "change to modelOne" button
 		6. the label should show whatever page index modelOne had before switching to modelTwo
 		Note: whenever the "get model PageCount" button is pressed, it should show the correct page count, same as the page count in the paging component
 	</label>
-	<tree id="tree" model="${modelOne}" mold="paging" >
+	<tree id="tree" mold="paging" model="${modelOne}" >
 		<attribute name="onCreate"><![CDATA[
 			String value = "model: " + (self.getModel() == modelOne? "modelOne" : "modelTwo");
 			lb.setValue(value + ", page: " + self.getModel().getActivePage() + ", tree page: " + self.getActivePage());

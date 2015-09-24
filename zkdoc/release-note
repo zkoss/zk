@@ -73,6 +73,7 @@ ZK 8.0.0
   ZK-2542: @converter causes a big performance issue on the nested children binding
   ZK-2868: apply template creates unexpected empty label
   ZK-2772: Misaligned Grid columns
+  ZK-2881: unexpected focus class location
 
 * Upgrade Notes
   + Deprecated the method of getEach() in org.zkoss.zk.ui.util.ForEachStatus, use getCurrent() method instead.

@@ -64,6 +64,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.PagingListener;
 import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
@@ -218,8 +219,7 @@ public class Tree extends MeshElement {
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private EventListener<PagingEvent> _pgListener, _pgImpListener;
-	private EventListener<Event> _modelInitListener;
+	private EventListener<Event> _pgListener, _pgImpListener, _modelInitListener;
 
 	private int _currentTop = 0; // since 5.0.8 scroll position
 	private int _currentLeft = 0;
@@ -391,6 +391,19 @@ public class Tree extends MeshElement {
 				else newInternalPaging();
 				setFixedLayout(true);
 				resetPosition(true); //non-paging mold -> paging mold
+				if (_model instanceof Pageable) {
+					Pageable m = (Pageable) _model;
+					if (m.getPageSize() != -1) {
+						_pgi.setPageSize(m.getPageSize());
+					} else {
+						m.setPageSize(_pgi.getPageSize());
+					}
+					if (m.getActivePage() != -1) {
+						_pgi.setActivePage(m.getActivePage());
+					} else {
+						m.setActivePage(_pgi.getActivePage());
+					}
+				}
 			}
 		}
 	}
@@ -447,8 +460,8 @@ public class Tree extends MeshElement {
 				// Bug ZK-1696: model also preserves paging information
 				if (_model instanceof Pageable) {
 					Pageable m = (Pageable) _model;
-					m.setActivePage(_pgi.getActivePage());
 					m.setPageSize(_pgi.getPageSize());
+					m.setActivePage(_pgi.getActivePage());
 				}
 			}
 		}
@@ -462,25 +475,37 @@ public class Tree extends MeshElement {
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
+		if(_model instanceof Pageable && ((Pageable) _model).getPageSize() != -1) {
+			paging.setPageSize(((Pageable) _model).getPageSize());
+		}
 		paging.setTotalSize(getVisibleItemCount());
+		if(_model instanceof Pageable && ((Pageable) _model).getActivePage() != -1) {
+			paging.setActivePage(((Pageable) _model).getActivePage());
+		}
 		paging.setParent(this);
 		
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
-	private class PGListener implements SerializableEventListener<PagingEvent>,
-			CloneableEventListener<PagingEvent> {
-		public void onEvent(PagingEvent event) {
+	private class PGListener implements PagingListener {
+		public void onEvent(Event event) {
 			//Bug ZK-1622: reset anchor position after changing page
 			_anchorTop = 0;
 			_anchorLeft = 0;
-			Events.postEvent(
-				new PagingEvent(event.getName(),
-					Tree.this, event.getPageable(), event.getActivePage()));
-			// Bug ZK-1696: model also preserves paging information
-			if (_model instanceof Pageable) {
-				((Pageable) _model).setActivePage(event.getActivePage());
-				((Pageable) _model).setPageSize(event.getPageable().getPageSize());
+			if (event instanceof PagingEvent) {
+				PagingEvent pe = (PagingEvent) event;
+				int pgsz = pe.getPageable().getPageSize();
+				int actpg = pe.getActivePage();
+				if (PagingEventPublisher.INTERNAL_EVENT.equals(pe.getName())) {
+					if (pgsz != -1) _pgi.setPageSize(pgsz);
+					if (actpg != -1) _pgi.setActivePage(actpg);
+				} else if (_model instanceof Pageable) {
+					// Bug ZK-1696: model also preserves paging information
+					// additional check to avoid infinite loop
+					((Pageable) _model).setActivePage(actpg);
+				}
+				Events.postEvent(new PagingEvent(event.getName(),
+						Tree.this, pe.getPageable(), actpg));
 			}
 		}
 		
@@ -489,16 +514,16 @@ public class Tree extends MeshElement {
 		}
 	}
 	
-	private class PGImpListener implements SerializableEventListener<PagingEvent>,
-			CloneableEventListener<PagingEvent> {
-		public void onEvent(PagingEvent event) {
-			if (inPagingMold()) {
+	private class PGImpListener implements PagingListener {
+		public void onEvent(Event event) {
+			if (inPagingMold() && event instanceof PagingEvent) {
+				PagingEvent pe = (PagingEvent) event;
 				if (WebApps.getFeature("ee") && getModel() != null) {
 					if (_rodPagingIndex == null)
 						_rodPagingIndex = new LinkedList<Integer>();
 					
-					int ap =  event.getActivePage();
-					int size = Tree.this.getPaginal().getPageSize();
+					int ap =  pe.getActivePage();
+					int size = pe.getPageable().getPageSize();
 					int mps = maxRodPageSize();
 
 					
@@ -547,7 +572,7 @@ public class Tree extends MeshElement {
 					int end = start + size;
 					int i = 0;
 					final Renderer renderer = new Renderer();
-					try {							
+					try {
 						for (Treeitem ti : new ArrayList<Treeitem>(Tree.this.getItems())) {
 							if (i < start) {
 								i++;
@@ -584,7 +609,9 @@ public class Tree extends MeshElement {
 		if (_pgListener == null)
 			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-
+		if (_model instanceof PagingEventPublisher) {
+			((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
+		}
 		if (_pgImpListener == null)
 			_pgImpListener = new PGImpListener();
 		
@@ -592,6 +619,9 @@ public class Tree extends MeshElement {
 	}
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
+		if (_model instanceof PagingEventPublisher) {
+			((PagingEventPublisher) _model).removePagingEventListener((PagingListener) _pgListener);
+		}
 		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
 		pgi.removeEventListener("onPagingImpl", _pgImpListener);
 	}
@@ -1679,6 +1709,9 @@ public class Tree extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeTreeDataListener(_dataListener);
+					if (_model instanceof PagingEventPublisher && _pgListener != null) {
+						((PagingEventPublisher) _model).removePagingEventListener((PagingListener) _pgListener);
+					}
 					resetPosition(false); //ZK-2712: set different model, reset scroll and anchor position
 				} else {
 					if (_treechildren != null) _treechildren.detach();
@@ -1688,11 +1721,17 @@ public class Tree extends MeshElement {
 				}
 				setModelDirectly(model);
 				initDataListener();
-				// Bug ZK-1696: when model is switched(model 1 -> model 2), the 
-				// new model does not know the current page size, have to set it 
-				// manually for the model to calculate the correct page count
-				if (_pgi != null && _model instanceof Pageable) {
-					((Pageable) _model).setPageSize(_pgi.getPageSize());
+			}
+			if (inPagingMold()) {
+				if (_model instanceof PagingEventPublisher && _pgListener != null) {
+					((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
+				}
+				if (_model instanceof Pageable) {
+					Pageable m = (Pageable) _model;
+					if (m.getPageSize() == -1)
+						m.setPageSize(_pgi.getPageSize());
+					if (m.getActivePage() == -1)
+						m.setActivePage(_pgi.getActivePage());
 				}
 			}
 			doSort(this);
@@ -1723,8 +1762,6 @@ public class Tree extends MeshElement {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
-			// Bug ZK-1696: manipulate tree from api might happen before tree
-			// render, use sendEvent instead of postEvent to render tree first
 			Events.postEvent("onInitRender", this, null);
 		}
 	}
@@ -1844,10 +1881,6 @@ public class Tree extends MeshElement {
 			renderer.doCatch(ex);
 		} finally {
 			renderer.doFinally();
-		}
-		// Bug ZL-1696: get active page from model after render
-		if (_pgi != null && _model instanceof Pageable) {
-			_pgi.setActivePage(((Pageable) _model).getActivePage());
 		}
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tree when items have been rendered.
 	}
@@ -2773,5 +2806,32 @@ public class Tree extends MeshElement {
 			((Pageable) _model).setActivePage(pg);
 		}
 		super.setActivePage(pg);
+	}
+	
+	@Override
+	public int getActivePage() {
+		if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) && _model instanceof Pageable) {
+			if (((Pageable) _model).getActivePage() != -1) {
+				return ((Pageable) _model).getActivePage();
+			}
+		}
+		return super.getActivePage();
+	}
+	
+	public void onAfterRender() {
+		if (inPagingMold() && _model instanceof Pageable) {
+			Pageable m = (Pageable) _model;
+			if (m.getPageSize() != -1) {
+				_pgi.setPageSize(m.getPageSize());
+			} else {
+				m.setPageSize(_pgi.getPageSize());
+			}
+			_pgi.setTotalSize(getVisibleItemCount());
+			if (m.getActivePage() != -1) {
+				_pgi.setActivePage(m.getActivePage());
+			} else {
+				m.setActivePage(_pgi.getActivePage());
+			}
+		}
 	}
 }

@@ -1,4 +1,4 @@
-/* B80_ZK_1696_treeTest.java
+/* B80_ZK_1696_tree_2Test.java
 
 	Purpose:
 		
@@ -33,7 +33,7 @@ import junit.framework.Assert;
  * 
  * @author Christopher
  */
-public class B80_ZK_1696_treeTest extends ZATSTestCase {
+public class B80_ZK_1696_tree_2Test extends ZATSTestCase {
 	@Test
 	public void noOpenTest(){
 		DesktopAgent desktop = connect();
@@ -61,17 +61,15 @@ public class B80_ZK_1696_treeTest extends ZATSTestCase {
 		//check render result after changing model
 		Assert.assertEquals(1, mytree.getActivePage());
 		treeCells = treeAgent.queryAll("treecell");
-		Assert.assertEquals("item a", treeCells.get(0).as(Treecell.class).getLabel());
-		Assert.assertEquals("item b", treeCells.get(1).as(Treecell.class).getLabel());
 		Assert.assertEquals("item c", treeCells.get(2).as(Treecell.class).getLabel());
 		
 		desktop.query("#btn1").click(); //switch back to 1st model
 		//check render result after switching back to original model
 		Assert.assertEquals(1, mytree.getActivePage());
 		treeCells = treeAgent.queryAll("treecell");
-		Assert.assertEquals("item 4", treeCells.get(3).as(Treecell.class).getLabel());
-		Assert.assertEquals("item 5", treeCells.get(4).as(Treecell.class).getLabel());
-		Assert.assertEquals("item 6", treeCells.get(5).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 4", treeCells.get(0).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 5", treeCells.get(1).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 6", treeCells.get(2).as(Treecell.class).getLabel());
 	}
 	
 	@Test
@@ -107,8 +105,6 @@ public class B80_ZK_1696_treeTest extends ZATSTestCase {
 		Assert.assertEquals(1, mytree.getActivePage());
 		//check render result after changing model
 		treeCells = treeAgent.queryAll("treecell");
-		Assert.assertEquals("item a", treeCells.get(0).as(Treecell.class).getLabel());
-		Assert.assertEquals("item b", treeCells.get(1).as(Treecell.class).getLabel());
 		Assert.assertEquals("item c", treeCells.get(2).as(Treecell.class).getLabel());
 		
 		//switch back to original model
@@ -116,9 +112,9 @@ public class B80_ZK_1696_treeTest extends ZATSTestCase {
 		Assert.assertEquals(1, mytree.getActivePage());
 		//check render result after switching back to original model
 		treeCells = treeAgent.queryAll("treecell");
-		Assert.assertEquals("item 22", treeCells.get(3).as(Treecell.class).getLabel());
-		Assert.assertEquals("item 23", treeCells.get(4).as(Treecell.class).getLabel());
-		Assert.assertEquals("item 24", treeCells.get(5).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 22", treeCells.get(1).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 23", treeCells.get(2).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 24", treeCells.get(3).as(Treecell.class).getLabel());
 	}
 	
 	@Test
@@ -154,8 +150,6 @@ public class B80_ZK_1696_treeTest extends ZATSTestCase {
 		Assert.assertEquals(1, mytree.getActivePage());
 		//check render result after switching to 2nd model
 		treeCells = treeAgent.queryAll("treecell");
-		Assert.assertEquals("item a", treeCells.get(0).as(Treecell.class).getLabel());
-		Assert.assertEquals("item b", treeCells.get(1).as(Treecell.class).getLabel());
 		Assert.assertEquals("item c", treeCells.get(2).as(Treecell.class).getLabel());
 		
 		//switch back to original model
@@ -163,9 +157,9 @@ public class B80_ZK_1696_treeTest extends ZATSTestCase {
 		Assert.assertEquals(3, mytree.getActivePage());
 		//check render result after switching back to original model
 		treeCells = treeAgent.queryAll("treecell");
-		Assert.assertEquals("item 64", treeCells.get(7).as(Treecell.class).getLabel());
-		Assert.assertEquals("item 65", treeCells.get(8).as(Treecell.class).getLabel());
-		Assert.assertEquals("item 66", treeCells.get(9).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 64", treeCells.get(4).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 65", treeCells.get(5).as(Treecell.class).getLabel());
+		Assert.assertEquals("item 66", treeCells.get(6).as(Treecell.class).getLabel());
 	}
 	
 	@Test
@@ -184,7 +178,6 @@ public class B80_ZK_1696_treeTest extends ZATSTestCase {
 		List<ComponentAgent> treeCells = treeAgent.queryAll("treecell");
 		Assert.assertEquals("item a", treeCells.get(0).as(Treecell.class).getLabel());
 		Assert.assertEquals("item b", treeCells.get(1).as(Treecell.class).getLabel());
-		Assert.assertEquals("item c", treeCells.get(2).as(Treecell.class).getLabel());
 		
 		//switch to 1st model, open 2nd node, and switch to 2nd page
 		desktop.query("#btn2").click();
