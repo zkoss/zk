@@ -359,6 +359,9 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 		if (pg < 0) {
 			throw new WrongValueException("active page index should >= 0");
 		}
+		if (pg >= getPageCount()) {
+			pg = getPageCount() - 1; //set to last valid page
+		}
 		_activePage = pg;
 		for (PagingListener p : _pagingListeners) {
 			try {

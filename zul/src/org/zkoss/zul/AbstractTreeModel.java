@@ -27,6 +27,8 @@ import java.util.Set;
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.PagingListener;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.ext.Openable;
@@ -59,12 +61,13 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  */
 abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 TreeSelectableModel, TreeOpenableModel, Selectable<E>, Openable<E>,
-java.io.Serializable, Pageable {
+java.io.Serializable, Pageable, PagingEventPublisher {
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
 	private E _root;
 	private transient List<TreeDataListener> _listeners = new LinkedList<TreeDataListener>();
+	private transient List<PagingListener> _pagingListeners = new ArrayList<PagingListener>();
 	/** The selection. */
 	protected Set<Path> _selection = new LinkedHashSet<Path>();
 	/** The open information. */
@@ -758,8 +761,8 @@ java.io.Serializable, Pageable {
 	}
 
 	// Pageable //
-	private int _pageSize = 20; // same default as paging
-	private int _activePage = 0; // same default as paging
+	private int _pageSize = -1;
+	private int _activePage = -1;
 	private int _pageCount = -1; // pending calculation
 
 	// Pageable //
@@ -772,6 +775,13 @@ java.io.Serializable, Pageable {
 			throw new WrongValueException("expecting positive non zero value, got: " + size);
 		}
 		_pageSize = size;
+		for (PagingListener p : _pagingListeners) {
+			try {
+				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		invalidatePageCount();
 	}
 
@@ -834,7 +844,18 @@ java.io.Serializable, Pageable {
 		if (pg < 0) {
 			throw new WrongValueException("expecting positive non zero value, got: " + pg);
 		}
+		int pc = _pageCount == -1 ? getPageCount() : _pageCount;
+		if (pg >= pc) {
+			pg = pc - 1; //set to last valid page
+		}
 		_activePage = pg;
+		for (PagingListener p : _pagingListeners) {
+			try {
+				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, pg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private List<E> getAllNodes() {
@@ -900,5 +921,15 @@ java.io.Serializable, Pageable {
 			}
 			return true;
 		}
+	}
+	
+	public void addPagingEventListener(PagingListener listener) {
+		if (listener == null)
+			throw new NullPointerException();
+		_pagingListeners.add(listener);
+	}
+
+	public void removePagingEventListener(PagingListener listener) {
+		_pagingListeners.remove(listener);
 	}
 }
