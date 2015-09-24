@@ -14,22 +14,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.test2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zuti.zul.CollectionTemplate;
+import org.zkoss.zuti.zul.CollectionTemplateResolver;
 
 /**
  * 
  * @author chunfu
  */
 public class F80_ZK_2838CollectionComposer extends SelectorComposer<Component> {
+	@Wire
+	Div root;
 	@Wire
 	Div host1;
 	@Wire
@@ -149,12 +154,46 @@ public class F80_ZK_2838CollectionComposer extends SelectorComposer<Component> {
 
 	public class Person {
 		String name = "old name";
+		boolean isMale = true;
+		public Person() {}
+		public Person(boolean isMale) {
+			this.isMale = isMale;
+		}
 		public void setName(String name) {
 			this.name = name;
 		}
 		public String getName() {
 			return this.name;
 		}
+
+		public boolean getGender() {
+			return isMale;
+		}
 	}
 
+	ListModelList<Person> humanbeings = new ListModelList<Person>(new ArrayList<Person>() {{
+		add(new Person(true));
+		add(new Person(false));
+		add(new Person(false));
+		add(new Person(true));
+	}});
+
+	public class MyCollectionTemplateResolver<E extends Person> implements CollectionTemplateResolver<E> {
+
+		public Template resolve(E o) {
+			if (o.getGender())
+				return root.getTemplate("male");
+			else
+				return root.getTemplate("female");
+		}
+	}
+	@Listen("onClick = #btn13")
+	public void clickBtn13() {
+		ctFalse.setTemplateResolver(new MyCollectionTemplateResolver<Person>());
+		ctFalse.setModel(humanbeings);
+		ctFalse.apply(host1);
+		ctTrue.setTemplateResolver(new MyCollectionTemplateResolver<Person>());
+		ctTrue.setModel(humanbeings);
+		ctTrue.apply(ctTrue.getShadowHost());
+	}
 }
