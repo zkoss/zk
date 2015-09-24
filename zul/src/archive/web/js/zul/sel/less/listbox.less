@@ -191,7 +191,6 @@
 				color: @selectedColor;
 			}
 		}
-		
 		&:hover {
 			> .z-listcell {
 				border-color: @selectedHoverGradientStart;
@@ -202,9 +201,20 @@
 				color: @selectedHoverColor;
 			}
 		}
+		
+	}
+	&-focus {
+		> .z-listcell {
+			border-color: @selectedFocusGradientStart;
+			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
+			position: relative;
+		}
+		.z-listcell-content {
+			color: @selectedFocusColor;
+		}
 	}
 	//selected check mark
-	&-selected {		
+	&-selected {
 		> .z-listcell > .z-listcell-content 
 			> .z-listitem-checkable .z-listitem-icon {
 			color: @checkedColor;
