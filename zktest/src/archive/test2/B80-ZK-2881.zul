@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2881.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Sep 16, 2015 11:30:58 AM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+
+<window title="Listbox" border="normal">
+<style>
+.z-listitem-focus:before {
+    content: '';
+    width: 20px;
+    height: 10px;
+    border-style: solid;
+    border-width: 5px 0 5px 10px;
+    border-color: transparent transparent transparent #007bff;
+    position: absolute;
+    top: 11px;
+    left: -3px;
+    display: inline-block;
+}
+  
+.z-focus-a:focus {
+  outline: 2px solid red;
+  width: 10px!important;
+  height: 10px!important;
+}
+</style>
+	<separator bar="true"/>
+	<listbox multiple="true" checkmark="true">
+		<listhead sizable="true">
+			<listheader align="center" width="40px"
+				image="http://www.zkoss.org/zksandbox/img/Centigrade-Widget-Icons/ArrowsUpDown-16x16.png" />
+			<listheader align="center" width="40px" image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/Envelope-16x16.png" />
+			<listheader align="center" width="40px"
+				image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/PaperClip-16x16.png" />
+			<listheader label="Subject" sort="auto"/>
+			<listheader label="Received" sort="auto"/>
+		</listhead>
+		<listitem height="28px" onCreate='self.focus = true; self.selected= true'>
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/ArrowUpOrange-16x16.png" />
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/EnvelopeOpen-16x16.png" />
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/PaperClip-16x16.png" />
+			<listcell label="ZK Jet 0.8.0 is released" />
+			<listcell label="2008/11/17 17:41:29" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/ArrowDown-16x16.png" />
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/Envelope-16x16.png" />
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/PaperClip-16x16.png" />
+			<listcell label="URLs for iPhone-Optimized Google Sites" />
+			<listcell label="2008/11/17 15:56:37" />
+		</listitem>
+		<listitem height="28px">
+			<listcell label="&#160;" />
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/EnvelopeOpen-16x16.png" />
+			<listcell label="&#160;" />
+			<listcell label="Style Guide for ZK 3.5 released" />
+			<listcell label="2008/11/14 13:23:07" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/ArrowUpOrange-16x16.png" />
+			<listcell image="http://www.zkoss.org/zksandbox//img/Centigrade-Widget-Icons/EnvelopeOpen-16x16.png" />
+			<listcell label="&#160;" />
+			<listcell label="ZK Studio 0.9.0 released." />
+			<listcell label="2008/11/16 10:26:37" />
+		</listitem>
+	</listbox>
+</window>

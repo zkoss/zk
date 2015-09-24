@@ -16,8 +16,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.fn;
 
-import java.awt.Color;
-
 /**
  *
  * @author simonpai
@@ -106,5 +104,4 @@ import java.awt.Color;
 			cs[j] = c;
 		return new String(cs);
 	}
-	
 }

@@ -16,7 +16,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.web.fn;
 
-import java.awt.Color;
 import java.io.UnsupportedEncodingException;
 import java.util.Comparator;
 import java.util.HashMap;

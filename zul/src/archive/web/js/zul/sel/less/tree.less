@@ -169,6 +169,15 @@
 			}
 		}
 	}
+	&-focus {
+		> .z-treecel {
+			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
+			position: relative;
+			> .z-treecell-content {
+				color: @selectedFocusColor;
+			}
+		}
+	}
 	//selected check mark
 	&-selected {
 		> .z-treecell > .z-treecell-content 

@@ -604,7 +604,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (this._currentTop)
 					btn.style.top = this._currentTop + 'px';
 				if (this._currentLeft)
-					btn.style.left = this._currentLeft + 'px'; 	
+					btn.style.left = this._currentLeft + 'px';
 			}
 			this.focusA_(btn, timeout);
 			return true;
@@ -612,9 +612,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return false;
 	},
 	focusA_: function(btn, timeout) { //called by derived class
-		//B70-ZK-2588: don't jump the focus if item is deselected and _multiple is true
-		if (!this._multiple || this._isSelecting)
-			zk(btn).focus(timeout);
+		zk(btn).focus(timeout);
 	},
 	bind_: function () {
 		this.$supers(SelectWidget, 'bind_', arguments);
@@ -644,7 +642,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (row) row._doFocusIn();
 		this.$supers('doFocus_', arguments);
 	},
-	doBlur_: function (evt) {
+	doBlur_: function (evt) { //if clicking on the selected item, don't lose focus
 		if (this._focusItem) {
 			this._lastSelectedItem = this._focusItem;
 			this._focusItem._doFocusOut();
@@ -1007,7 +1005,24 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var focusfound = false, rowfound = false,
 			// ZK-1096: this._lastSelectedItem is only updated when doBlur
-			lastSelected = this._focusItem || this._lastSelectedItem; 
+			lastSelected = this._focusItem || this._lastSelectedItem;
+		//Bugfix: if lastSelected is no longer selected, look for closest selected item as starting point
+		if (!lastSelected.isSelected()) {
+			var rowIndex = this.indexOfItem(row), 
+				min = Number.MAX_VALUE, 
+				closestSelItem;
+			for (var i = 0; i < this._selItems.length; ++i) {
+				var item = this._selItems[i],
+					index = this.indexOfItem(item),
+					diff = rowIndex - index,
+					oldmin = min;
+				if ((diff <= 0) && closestSelItem) 
+					break;
+				min = Math.min(diff, min);
+				if (min != oldmin)
+					lastSelected = item;
+			}
+		}
 		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w; (w = it.next());) {
 			if (w.isDisabled() || !w.isSelectable()) continue; // Bug: 2030986
 			if (focusfound) {
@@ -1100,29 +1115,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		this._changeSelect(row, toSel);
-		if (!skipFocus) {
-			
-			// ZK-2140: should focus closest selected item after deselecting item
-			var rowIndex = this.indexOfItem(row), 
-				min = Number.MAX_VALUE, 
-				closestSelItem;
-			for (var i = 0; i < this._selItems.length; ++i) {
-				var item = this._selItems[i],
-					index = this.indexOfItem(item),
-					diff = rowIndex - index,
-					oldmin = min;
-				if ((diff <= 0) && closestSelItem) 
-					break;
-				min = Math.min(diff, min);
-				if (min != oldmin)
-					closestSelItem = item;
-			}
-			
-			if (toSel || !closestSelItem)
-				this._focus(row);
-			else 
-				this._focus(closestSelItem);
-		}
+		this._focus(row);
 
 		//notify server
 		this.fireOnSelect(row, evt);
