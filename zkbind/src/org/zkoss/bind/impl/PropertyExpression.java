@@ -65,8 +65,12 @@ public class PropertyExpression implements ExpressionX, java.io.Serializable {
 				PropertyAccess propertyAccess = ((ComponentCtrl) cmp)
 						.getPropertyAccess(field);
 				if (propertyAccess != null) {
-					propertyAccess.setValue(cmp, Classes.coerce(propertyAccess.getType(), value));
-					return;// done
+					try {
+						propertyAccess.setValue(cmp, Classes.coerce(propertyAccess.getType(), value));
+						return;// done
+					} catch (ClassCastException cce) {
+						// yes, ignore it here and use the old EL way.
+					}
 				}
 			}
 

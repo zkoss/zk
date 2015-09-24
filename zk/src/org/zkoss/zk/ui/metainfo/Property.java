@@ -199,8 +199,13 @@ public class Property extends ConditionValue {
 			ComponentCtrl ctrl = ((ComponentCtrl) comp);
 			PropertyAccess propertyAccess = ctrl.getPropertyAccess(_name);
 			if (propertyAccess != null) {
-				propertyAccess.setValue(comp, Classes.coerce(propertyAccess.getType(), getValue(comp)));
-				return;
+				try {
+					propertyAccess.setValue(comp,
+							Classes.coerce(propertyAccess.getType(), getValue(comp)));
+					return;
+				} catch (ClassCastException cce) {
+					// yes, ignore it here and use the old EL way.
+				}
 			}
 		}
 		//Note: we have to synchronize since metainfo is shared
