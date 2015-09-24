@@ -1291,7 +1291,7 @@ public class Listbox extends MeshElement {
 	}
 
 	@SuppressWarnings("serial")
-	private class PGListener extends PagingListener {
+	private class PGListener implements PagingListener {
 		public void onEvent(Event event) {
 			//Bug ZK-1622: reset anchor position after changing page
 			_anchorTop = 0;
@@ -1318,7 +1318,7 @@ public class Listbox extends MeshElement {
 		}
 	}
 	@SuppressWarnings("serial")
-	private class PGImpListener extends PagingListener {
+	private class PGImpListener implements PagingListener {
 		public void onEvent(Event event) {
 			if (_model != null && inPagingMold()) {
 				final Paginal pgi = getPaginal();

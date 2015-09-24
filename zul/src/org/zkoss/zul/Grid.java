@@ -549,7 +549,7 @@ public class Grid extends MeshElement {
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
-	private class PGListener extends PagingListener {
+	private class PGListener implements PagingListener {
 		public void onEvent(Event event) {
 			if (event instanceof PagingEvent) {
 				PagingEvent pe = (PagingEvent) event;
@@ -571,7 +571,7 @@ public class Grid extends MeshElement {
 			return null; // skip to clone
 		}
 	}
-	private class PGImpListener extends PagingListener {
+	private class PGImpListener implements PagingListener {
 		public void onEvent(Event event) {
 			if (_rows != null && _model != null && inPagingMold()) {
 			//theoretically, _rows shall not be null if _model is not null when
