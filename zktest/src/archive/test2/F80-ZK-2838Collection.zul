@@ -17,7 +17,7 @@ j
 	<label>
 		1. please check Composer for more information about testing
 	</label>
-	<div apply="org.zkoss.zktest.test2.F80_ZK_2838CollectionComposer">
+	<div id="root" apply="org.zkoss.zktest.test2.F80_ZK_2838CollectionComposer">
 		<div style="border: solid purple">
 			<div id="host1" style="background: green"></div>
 			<x:div id="host2" style="background: grey"></x:div>
@@ -62,6 +62,7 @@ j
 		<button id="btn10">change model</button>
 		<button id="btn11">change person name</button>
 		<button id="btn12">template with uri</button>
+		<button id="btn13">template resolver</button>
 		<template name="one">
 			<div>
 			<label value="zul one ${each += item.name} "></label>
@@ -81,6 +82,17 @@ j
 				<label value="zul three ${each += item.name} "></label>
 				<x:label>xhtml three ${each} </x:label>
 				<n:span>native three ${each} </n:span>
+			</div>
+		</template>
+
+		<template name="male">
+			<div>
+				<label>I'm male, my name is ${each.name}</label>
+			</div>
+		</template>
+		<template name="female">
+			<div>
+				<label>I'm female, my name is ${each.name}</label>
 			</div>
 		</template>
 	</div>
