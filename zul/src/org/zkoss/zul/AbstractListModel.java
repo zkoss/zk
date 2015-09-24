@@ -27,7 +27,6 @@ import java.util.Set;
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.PagingEvent;
@@ -287,6 +286,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 
 		writeSelection(s);
 		Serializables.smartWrite(s, _listeners);
+		Serializables.smartWrite(s, _pagingListeners);
 	}
 	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -295,6 +295,8 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 		readSelection(s);
 		_listeners = new ArrayList<ListDataListener>();
 		Serializables.smartRead(s, _listeners);
+		_pagingListeners = new ArrayList<PagingListener>();
+		Serializables.smartRead(s, _pagingListeners);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -306,6 +308,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 			throw new InternalError();
 		}
 		clone._listeners = new ArrayList<ListDataListener>();
+		clone._pagingListeners = new ArrayList<PagingListener>();
 		clone._selection = clone.newEmptySelection();
 		clone._selection.addAll(_selection);
 		return clone;

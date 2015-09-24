@@ -1,13 +1,13 @@
-/* ListDataListener.java
+/* PagingListener.java
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Wed Aug 17 18:05:15     2005, Created by tomyeh
+		Wed Sep 23 18:05:15 2015, Created by Christopher
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under LGPL Version 2.1 in the hope that
@@ -22,15 +22,15 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 
 /**
- * Defines the methods used to listener when the content of
- * {@link org.zkoss.zul.ListModel} is changed.
+ * Provide a shortcut for PagingEventListener
  *
  * @author Christopher
- * @see org.zkoss.zul.ListModel
  * @see PagingEvent
+ * @see SerializableEventListener
+ * @see CloneableEventListener
+ * @since 8.0.0
  */
-@SuppressWarnings("serial")
-public abstract class PagingListener implements SerializableEventListener<Event>, CloneableEventListener<Event>{
+public interface PagingListener extends SerializableEventListener<Event>, CloneableEventListener<Event>{
 	public abstract void onEvent(Event event) throws Exception;
 	public abstract Object willClone(Component comp);
 }
