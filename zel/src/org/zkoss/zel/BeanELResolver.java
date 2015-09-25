@@ -567,7 +567,7 @@ public class BeanELResolver extends ELResolver {
 
     private final BeanProperty property(ELContext ctx, Object base,
             Object property) {
-        Class<?> type = base.getClass();
+        Class<?> type = ProxyUtils.getTargetClass(base);
         String prop = property.toString();
 
         BeanProperties props = this.cache.get(type.getName());
