@@ -61,13 +61,13 @@ td.z-splitter-outer {
 			top: 9px;
 			left: 1px;
 			
-			&.z-icon-ellipsis-vertical {
+			&.z-icon-ellipsis-v {
 				font-size: @fontSizeXSmall;
 				top: -21px;
 				left: 2px;
 				cursor: e-resize;
 			}
-			&.z-icon-ellipsis-vertical ~ .z-splitter-icon.z-icon-ellipsis-vertical {
+			&.z-icon-ellipsis-v ~ .z-splitter-icon.z-icon-ellipsis-v {
 				top: 39px;
 			}
 		}
@@ -90,12 +90,12 @@ td.z-splitter-outer {
 			top: -3px;
 			left: 11px;
 			
-			&.z-icon-ellipsis-horizontal {
+			&.z-icon-ellipsis-h {
 				top: -2px;
 				left: -16px;
 				cursor: s-resize;
 			}
-			&.z-icon-ellipsis-horizontal ~ .z-splitter-icon.z-icon-ellipsis-horizontal {
+			&.z-icon-ellipsis-h ~ .z-splitter-icon.z-icon-ellipsis-h {
 				left: 36px;
 			}
 		}
@@ -140,10 +140,10 @@ td.z-splitter-outer {
 		&-horizontal {
 			.gradientFallback(@splitterGradientStart, @splitterGradientEnd);
 			.z-splitter-icon {
-				&.z-icon-ellipsis-vertical {
+				&.z-icon-ellipsis-v {
 					font-size: @baseFontSize;
 				}
-				&.z-icon-ellipsis-vertical ~ .z-splitter-icon.z-icon-ellipsis-vertical {
+				&.z-icon-ellipsis-v ~ .z-splitter-icon.z-icon-ellipsis-v {
 					top: 37px;
 				}
 			}
@@ -151,11 +151,11 @@ td.z-splitter-outer {
 		&-vertical {
 			.gradientFallback(@splitterGradientStart, @splitterGradientEnd);
 			.z-splitter-icon {
-				&.z-icon-ellipsis-horizontal {
+				&.z-icon-ellipsis-h {
 					font-size: @baseFontSize;
 					top: -3px;
 				}
-				&.z-icon-ellipsis-horizontal ~ .z-splitter-icon.z-icon-ellipsis-horizontal {
+				&.z-icon-ellipsis-h ~ .z-splitter-icon.z-icon-ellipsis-h {
 					left: 38px;
 				}
 			}
