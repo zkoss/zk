@@ -16,26 +16,12 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 <window title="Listbox" border="normal">
 <style>
-.z-listitem-focus:before {
-    content: '';
-    width: 20px;
-    height: 10px;
-    border-style: solid;
-    border-width: 5px 0 5px 10px;
-    border-color: transparent transparent transparent #007bff;
-    position: absolute;
-    top: 11px;
-    left: -3px;
-    display: inline-block;
-}
-  
 .z-focus-a:focus {
   outline: 2px solid red;
   width: 10px!important;
   height: 10px!important;
 }
 </style>
-	<separator bar="true"/>
 	<listbox multiple="true" checkmark="true">
 		<listhead sizable="true">
 			<listheader align="center" width="40px"
@@ -75,4 +61,51 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 			<listcell label="2008/11/16 10:26:37" />
 		</listitem>
 	</listbox>
+	<separator bar="true"/>
+	<tree id="tree" rows="7" multiple="true" checkmark="true">
+	<treecols>
+		<treecol label="Name"/>
+		<treecol label="Description"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 1"/>
+				<treecell label="Item 1 description"/>
+			</treerow>
+		</treeitem>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 2"/>
+				<treecell label="Item 2 description"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.1"/>
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.2"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.2"/>
+						<treecell label="Item 2.2 description"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3"/>
+	</treechildren>
+</tree>
 </window>

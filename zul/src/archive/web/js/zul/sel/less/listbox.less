@@ -201,16 +201,37 @@
 				color: @selectedHoverColor;
 			}
 		}
-		
+	}
+	&.z-listitem-selected.z-listitem-focus {
+		> .z-listcell {
+			border-color: @selectedGradientStart;
+			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
+			background-clip: padding-box;
+			position: relative;
+
+			> .z-listcell-content {
+				color: @selectedFocusColor;
+			}
+		}
+		&:hover {
+			> .z-listcell {
+				border-color: @selectedHoverGradientStart;
+				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+				position: relative;
+			}
+			.z-listcell-content {
+				color: @selectedHoverColor;
+			}
+		}
 	}
 	&-focus {
 		> .z-listcell {
-			border-color: @selectedFocusGradientStart;
-			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
+			.verGradient(@meshContentFocusStart, @meshContentFocusEnd);
+			background-clip: padding-box;
 			position: relative;
 		}
 		.z-listcell-content {
-			color: @selectedFocusColor;
+			color: @hoverColor;
 		}
 	}
 	//selected check mark
