@@ -33,7 +33,7 @@ function (out) {
 	if (noCenter) {
 		var icon = this.$s('icon'),
 			doticon = ' z-icon-ellipsis-' +
-				(BL.WEST == pos || BL.EAST == pos ? 'vertical' : 'horizontal'),
+				(BL.WEST == pos || BL.EAST == pos ? 'v' : 'h'),
 			splitIcon = '';
 
 		switch (pos) {
