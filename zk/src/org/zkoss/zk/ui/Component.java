@@ -1079,14 +1079,14 @@ w:use="foo.MyWindow"&gt;
      * string if you want an attribute with an empty value.
      * @return the previous value if any
      * @since 8.0.0
-     * @see {@link #setClientDataAttribute(String, String)}
+     * @see #setClientDataAttribute(String, String)
      */
     public String setClientDataAttribute(String name, String value);
     /** Returns the value of a DOM data attribute
      * <p>Notice that the parameter - name would be expanded by adding the prefix
      * "data-" automatically.
      * @since 8.0.0
-     * @see {@link #getClientDataAttribute(String)}
+     * @see #getClientDataAttribute(String)
      */
     public String getClientDataAttribute(String name);
 	/** Returns a read-only collection of additions DOM attributes that shall be

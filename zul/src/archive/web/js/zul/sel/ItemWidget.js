@@ -26,8 +26,10 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_selectable: true,
 	$define: {
 		/** @deprecated As of release 8.0.0, please use {@link #isSelectable()}
+		 * @return boolean
 		 */
 		/** @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
+		 * @param boolean checkable
 		 */
 		checkable: function (checkable) {
 			this.setSelectable(checkable);

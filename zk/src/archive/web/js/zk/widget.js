@@ -4855,10 +4855,12 @@ zk.Widget.getClass('combobox');
  */
 //@{
 	/**
-	 * A shortcut of <code>zk.Widget.$()<code> function.
-	 * @return zk.Widget
+	 * A shortcut of <code>Widget.$()<code> function.
+	 *
+	 * Note: Widget is the same as <code>zk.Widget</code>.
+	 * @return Widget
 	 * @since 8.0.0
-	 * @see zk.Widget.$
+	 * @see Widget#$(Object, Map)
 	 */
 	//$: function () {}
 //@};
