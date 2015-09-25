@@ -169,6 +169,25 @@
 			}
 		}
 	}
+	&.z-treerow-selected.z-treerow-focus {
+		> .z-treecell {
+			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
+			background-clip: padding-box;
+			position: relative;
+
+			> .z-treecell-content {
+				color: @selectedFocusColor;
+			}
+		}
+		&:hover {
+			> .z-treecell {
+				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
+				> .z-treecell-content {
+					color: @selectedHoverColor;
+				}
+			}
+		}
+	}
 	&-focus {
 		> .z-treecel {
 			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
