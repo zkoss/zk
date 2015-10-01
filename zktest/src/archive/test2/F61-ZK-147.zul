@@ -13,7 +13,7 @@ F61-ZK-147.zul
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 -->
-<?component name="listbox" extends=listbox" width="700px"?>
+<?component name="listbox" extends="listbox" width="700px"?>
 <zk>
 	<label style="font-weight:bold; font-size:14px">ZK EE version only (Listbox)</label>
 	<vlayout id="vb">
