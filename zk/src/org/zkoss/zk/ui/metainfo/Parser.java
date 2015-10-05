@@ -719,9 +719,11 @@ public class Parser {
 					throw new UiException(message("Only <zk> can be used in <zk switch>", (Item)o));
 				}
 
-				//Ignore blank text if no need to preserved
-				if (trimLabel.length() == 0	&& ((pi != null && !pi.isBlankPreserved() && !isNativeText(pi))))
-					continue;
+				//ZK-2760: if parent is xhtml and no other sibling and length of label is 0, don't create TextInfo to it
+				if (isXHTML && items.size() <= 1 && trimLabel.trim().length() == 0) {
+					continue; //don't create Text
+				} else if (trimLabel.length() == 0 && ((pi != null && !pi.isBlankPreserved() && !isNativeText(pi))))
+					continue; //Ignore blank text if no need to preserved
 				else if (label.trim().isEmpty() && !isAllBlankPreserved)
 					continue;
 				
