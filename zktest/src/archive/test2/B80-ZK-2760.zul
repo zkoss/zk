@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2760.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct  5 09:18:43 CST 2015, Created by chunfu
+
+Copyright (C)  2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml">
+	<label>you should see this page withous exception</label>
+	<x:input>
+	</x:input>
+</zk>
