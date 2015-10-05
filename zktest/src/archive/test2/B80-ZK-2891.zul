@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2891.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Oct 3 12:32:19 CST 2015, Created by wenninghsu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		If you see only one window, then it's correct(the two window's top position should be 100px and overlapping)
+	</label>
+	
+	<window mode="modal" hflex="min">
+		<caption label="hello" />
+		<div>content</div>
+	</window>
+
+	<window mode="modal">
+		<caption label="hello" />
+		<div>content</div>
+	</window>
+</zk>
