@@ -1,5 +1,6 @@
   --------
 ZK 8.0.0
+October 6, 2015
 * Features
   ZK-2596: Support JSR 341: Expression Language 3.0
   ZK-2476: Support to plug a different parser for parsing a page
