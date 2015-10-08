@@ -896,7 +896,9 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (this._maximized)
 			_syncMaximized(this);
 		this._fixHgh(true);
-		if (this._mode != 'embedded')
+		if (this._mode == 'modal')
+			_updDomPos(this, true, false, true); // B70-ZK-2892
+		else
 			_updDomPos(this);
 		this.zsync();
 	},
