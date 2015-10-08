@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2879.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct  8 10:23:22 CST 2015, Created by wenninghsu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+		"rows" attribute of Frozen is not supported yet!
+		Should see HTTP ERROR 500 Problem accessing /zktest/test2/B70-ZK-2879.zul. Reason: Unsupported yet! java.lang.UnsupportedOperationException: Unsupported yet!
+	</label>
+	<grid>
+		<frozen rows="1"/>
+		<columns>
+			<column width="50px">col1</column>
+			<column width="50px">col2</column>
+		</columns>
+		<rows>
+			<row>
+				<cell>1</cell>
+				<cell>2</cell>
+			</row>
+			<row>
+				<cell>1</cell>
+				<cell>2</cell>
+			</row>
+		</rows>
+	</grid>
+</window>

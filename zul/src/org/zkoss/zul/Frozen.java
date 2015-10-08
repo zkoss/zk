@@ -80,6 +80,7 @@ public class Frozen extends XulElement {
 	 * @param rows positive only
 	 */
 	public void setRows(int rows) {
+		throw new UnsupportedOperationException("Unsupported yet!"); //B70-ZK-2879
 	}
 
 	/**
