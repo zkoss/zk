@@ -385,7 +385,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						((zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
-					hdWgt._origWd = faker.style.width || hdWgt._origWd;
+					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
+						hdWgt._origWd = faker.style.width
 					cellWidth = '0px';
 					shallUpdate = true;
 				}
