@@ -19,6 +19,7 @@ August 19, 2015
   ZK-2839: Invoke a global javascript function doesn't work
   ZK-2891: Hflex/Vflex cause modal windows to be vertically centered
   ZK-2879: The "rows" attribute of Frozen doesn't work
+  ZK-2892: Modal window are not centered if content is resized by hflex
 
   --------
 ZK 7.0.6
