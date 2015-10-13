@@ -58,7 +58,7 @@ public class ConditionImpl implements java.io.Serializable {
 	 */
 	public void setIf(String cond) {
 		_if = cond != null && cond.length() > 0 ?
-			new ExValue(cond, Boolean.class): null;
+			new ExValue(cond, Boolean.TYPE): null;
 	}
 	/** Sets the unless condition.
 	 * @see #isEffective
@@ -67,7 +67,7 @@ public class ConditionImpl implements java.io.Serializable {
 	 */
 	public void setUnless(String cond) {
 		_unless = cond != null && cond.length() > 0 ?
-			new ExValue(cond, Boolean.class): null;
+			new ExValue(cond, Boolean.TYPE): null;
 	}
 
 	/** Used to evaluate whether it is effective.

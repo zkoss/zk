@@ -3,6 +3,7 @@ ZK 8.0.1
 * Features
 
 * Bugs
+  ZK-2912: Specifying a non-existing variable in "unless" attribute causes a NullPointerException if
 
 * Upgrade Notes
 
