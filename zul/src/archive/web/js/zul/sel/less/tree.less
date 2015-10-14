@@ -126,7 +126,6 @@
 		> .z-treecell {
 			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
 			background-clip: padding-box;
-			position: relative;
 
 			> .z-treecell-content {
 				color: @hoverColor;
@@ -228,6 +227,17 @@
 		}
 	}
 }
+
+body:not(.gecko) {
+	.z-treerow {
+		&:hover {
+			> .z-treecell {
+				position: relative;
+			}
+		}
+	}
+}
+
 //content
 .z-treecol-content,
 .z-treecell-content,

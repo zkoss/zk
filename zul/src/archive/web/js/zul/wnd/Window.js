@@ -896,7 +896,9 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (this._maximized)
 			_syncMaximized(this);
 		this._fixHgh(true);
-		if (this._mode != 'embedded')
+		if (this._mode == 'modal')
+			_updDomPos(this, true, false, true); // B70-ZK-2892
+		else
 			_updDomPos(this);
 		this.zsync();
 	},
@@ -1207,13 +1209,13 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	afterChildrenMinFlex_: function (orient) {
 		this.$supers('afterChildrenMinFlex_', arguments);
 		if (_isModal(this._mode)) //win hflex="min"
-			_updDomPos(this, true); //force re-position since window width might changed.
+			_updDomPos(this, true, false, true); //force re-position since window width might changed. //B70-ZK-2891
 	},
 	//@Override, children minimize flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenFlex_: function (cwgt) {
 		this.$supers('afterChildrenFlex_', arguments);
 		if (_isModal(this._mode))
-			_updDomPos(this, true); //force re-position since window width might changed.
+			_updDomPos(this, true, false, true); //force re-position since window width might changed. //B70-ZK-2891
 	},
 	//@Override, Bug ZK-1524: caption children should not considered.
 	getChildMinSize_: function (attr, wgt) {

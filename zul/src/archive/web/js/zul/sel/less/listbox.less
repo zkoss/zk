@@ -157,7 +157,6 @@
 		> .z-listcell {
 			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
 			background-clip: padding-box;
-			position: relative;
 
 			> .z-listcell-content {
 				color: @hoverColor;
@@ -272,6 +271,17 @@
 		text-decoration: none;
 	}
 }
+
+body:not(.gecko) {
+	.z-listitem {
+		&:hover {
+			> .z-listitem {
+				position: relative;
+			}
+		}
+	}
+}
+
 //Group
 .z-listgroup {
 	&-inner {
