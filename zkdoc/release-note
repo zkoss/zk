@@ -126,10 +126,10 @@ ZK 7.0.7
   ZK-2843: MVVM does not support WireVariable rewireOnActivate
   ZK-2854: Parameters are ignored if include zul page with query string
   ZK-2857: NullPointerException happened when the include query string contains slash
-  ZK-2899: Listbox's select mold issue on Firefox
   ZK-2891: Hflex/Vflex cause modal windows to be vertically centered
   ZK-2879: The "rows" attribute of Frozen doesn't work
   ZK-2892: Modal window are not centered if content is resized by hflex
+  ZK-2899: Listbox's select mold issue on Firefox
 
   --------
 ZK 7.0.6.1
