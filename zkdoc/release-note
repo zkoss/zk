@@ -6,6 +6,7 @@ ZK 7.0.7
   ZK-2843: MVVM does not support WireVariable rewireOnActivate
   ZK-2854: Parameters are ignored if include zul page with query string
   ZK-2857: NullPointerException happened when the include query string contains slash
+  ZK-2899: Listbox's select mold issue on Firefox
   
 * Upgrade Notes
 

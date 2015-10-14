@@ -167,7 +167,9 @@
 				.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
 			</c:if>
 			background-clip: padding-box;
+			<c:if test="${not (zk.ff > 0)}">
 			position: relative;
+			</c:if>
 
 			> .z-listcell-content {
 				color: @hoverColor;

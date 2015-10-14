@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2899.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 14 17:33:46 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<div>
+	Please open the select drop down, and mouse move down to the bottom of the listitem, the drop down cannot be closed automatically. (Firefox only)
+	<listbox id="outListbox"   height="450px" >
+		<listhead>
+			<listheader label="TEST" />
+			<listheader label="TEST" />
+
+		</listhead>
+
+		<listitem >
+			<listcell label="1"></listcell>
+			<listcell >
+				<listbox   mold="select" >
+					<listitem >
+						<listcell label="1"></listcell>
+					</listitem>
+					<listitem >
+						<listcell label="2"></listcell>
+					</listitem>
+				</listbox>
+			</listcell>
+		</listitem>
+		<listitem >
+			<listcell label="2"></listcell>
+			<listcell >
+				<listbox   mold="select" >
+					<listitem >
+						<listcell label="1"></listcell>
+					</listitem>
+					<listitem >
+						<listcell label="2"></listcell>
+					</listitem>
+				</listbox>
+			</listcell>
+		</listitem>
+
+	</listbox>
+</div>
