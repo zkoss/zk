@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2888.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 12:59:24 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    You should see a number below. (iphone with chrome only)
+    <separator/>
+    <label id="t"/>
+    <script defer="true">jq('$t').html("" +zk.mobile);</script>
+</zk>

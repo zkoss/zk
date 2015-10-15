@@ -8,6 +8,7 @@ ZK 8.0.1
   ZK-2879: The "rows" attribute of Frozen doesn't work
   ZK-2892: Modal window are not centered if content is resized by hflex
   ZK-2899: Listbox's select mold issue on Firefox
+  ZK-2888: support chrome on ios
 
 * Upgrade Notes
 
