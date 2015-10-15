@@ -11,6 +11,7 @@ ZK 8.0.1
   ZK-2888: support chrome on ios
   ZK-2872: Dropupload dropzone doesn't disappear after incomplete action on IE 11
   ZK-2874: onBookmarkChange isn't triggered on sendRedirect with 7.0.6.1
+  ZK-2911: Fail to assign a variable declared in zscript to a custom attribute in the page scope
 
 * Upgrade Notes
 

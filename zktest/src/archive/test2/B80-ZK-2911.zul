@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2911.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 18:06:00 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Test app"?>
+<zk>
+    You should see each of the following [] containing with 1
+    <separator/>
+    <zscript><![CDATA[
+	final Long def_value = 1L;
+]]></zscript>
+    <vlayout>
+        inside a component:
+        def_value: [${def_value}]
+        <custom-attributes value2="${def_value}" />
+        value2: [${value2}]
+    </vlayout>
+    outside a vlayout:
+    def_value: [${def_value}]
+    <custom-attributes value3="${def_value}" />
+    value3: [${value3}]
+</zk>
