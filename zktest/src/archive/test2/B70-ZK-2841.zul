@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2841.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 16:52:37 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	click "select 1" should select test1, clicking "unselect 1" should unselect test1 and close the navbar, click "select 1" once more should select test1 again.
+	<navbar orient="vertical">
+		<nav label="test" open="true">
+			<navitem id="ni1" label="test1"/>
+			<navitem id="ni2" label="test2"/>
+		</nav>
+	</navbar>
+
+	<button onClick="ni1.setSelected(true)" label="select 1"/>
+	<button onClick="ni1.setSelected(false)" label="unselect 1"/>
+	<button onClick="ni2.setSelected(true)" label="select 2"/>
+	<button onClick="ni2.setSelected(false)" label="unselect 2"/>
+</zk>
