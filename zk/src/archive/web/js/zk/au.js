@@ -215,7 +215,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
     							return;
     						}
     					}
-    
     					if (!reqInf.ignorable && !zk.unloading) {
     						var msg = req.statusText;
     						if (zAu.confirmRetry('FAILED_TO_RESPONSE', rstatus+(msg?': '+msg:''))) {
@@ -1122,7 +1121,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			zUtl.go(url, {target: target});
 
 			// Bug ZK-2844
-			if (!target)
+			if (!target && url && !url.startsWith('#')) // '#' for bookmark change only Bug ZK-2874
 				zAu.disabledRequest = true; // Bug ZK-2616
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
