@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2872.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 16:22:56 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div>Drag a file into the browser with Internet Explorer 11 but do not drop it on the Dropupload Area!
+        Drop it on this text instead (or anywhere else). The Dropupload area will not disappear (that's a bug) until another drop have been successfully completed.</div>
+
+    <dropupload>This is a drop area, use it right now!</dropupload>
+</zk>
+

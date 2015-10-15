@@ -9,6 +9,7 @@ ZK 8.0.1
   ZK-2892: Modal window are not centered if content is resized by hflex
   ZK-2899: Listbox's select mold issue on Firefox
   ZK-2888: support chrome on ios
+  ZK-2872: Dropupload dropzone doesn't disappear after incomplete action on IE 11
 
 * Upgrade Notes
 
