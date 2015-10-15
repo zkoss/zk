@@ -32,8 +32,8 @@ public class F02581Test extends ZATSTestCase {
 	public void test() {
 		DesktopAgent desktop = connect();
 		
-		ComponentAgent l1 = desktop.query("#inc1 #win2 #l1");
-		ComponentAgent l2 = desktop.query("#inc1 #win2 #l2");
+		ComponentAgent l1 = desktop.query("#win2 #l1");
+		ComponentAgent l2 = desktop.query("#win2 #l2");
 		ComponentAgent reload = desktop.query("#reload");
 		
 		String val1;
@@ -43,8 +43,8 @@ public class F02581Test extends ZATSTestCase {
 			val1 = l1.as(Label.class).getValue();
 			val2 = l2.as(Label.class).getValue();
 			reload.click();
-			l1 = desktop.query("#inc1 #win2 #l1");
-			l2 = desktop.query("#inc1 #win2 #l2");
+			l1 = desktop.query("#win2 #l1");
+			l2 = desktop.query("#win2 #l2");
 			assertTrue(val1.equals(l1.as(Label.class).getValue()));
 			assertTrue(val2.equals(l2.as(Label.class).getValue()));
 	
@@ -61,8 +61,8 @@ public class F02581Test extends ZATSTestCase {
 	public void testChange() {
 		DesktopAgent desktop = connect();
 		
-		ComponentAgent l1 = desktop.query("#inc1 #win2 #l1");
-		ComponentAgent l2 = desktop.query("#inc1 #win2 #l2");
+		ComponentAgent l1 = desktop.query("#win2 #l1");
+		ComponentAgent l2 = desktop.query("#win2 #l2");
 		ComponentAgent reload = desktop.query("#reload2");
 		
 		String val1;
@@ -72,8 +72,8 @@ public class F02581Test extends ZATSTestCase {
 			val1 = l1.as(Label.class).getValue();
 			val2 = l2.as(Label.class).getValue();
 			reload.click();
-			l1 = desktop.query("#inc1 #win2 #l1");
-			l2 = desktop.query("#inc1 #win2 #l2");
+			l1 = desktop.query("#win2 #l1");
+			l2 = desktop.query("#win2 #l2");
 			assertFalse(val1.equals(l1.as(Label.class).getValue()));
 			assertFalse(val2.equals(l2.as(Label.class).getValue()));
 	
