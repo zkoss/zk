@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2895.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 16 15:25:07 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout>
+		<label multiline="true">
+			you can see two sliders, one with the attribute hflex="1", and this slider should be 100% width.
+
+
+		</label>
+		with hflex="1"
+		<slider hflex="1"/>
+	</vlayout>
+</zk>
