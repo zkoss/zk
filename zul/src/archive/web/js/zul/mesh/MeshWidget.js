@@ -83,8 +83,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (zk.chrome)
 				wgt.ebodytbl.style.display = 'block';
 			if (ftfaker) {
-				var footcol = ftfaker.firstChild
+				var footcol = ftfaker.firstChild,
+					ftrows = wgt.efootrows,
+                	ftcells = ftrows ? ftrows.rows[0].cells : null;
 				for (var i = 0; footcol; footcol = footcol.nextSibling) {
+					if (ftcells)
+						ftcells[i].style.width = ''; // reset it
+
 					ftfakerws[i++] = footcol.style.width;
 					footcol.style.width = '';
 				}
@@ -133,7 +138,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (ftwd > wd)
 					wd = ftwd;
 				wds[i] = wd;
-				if (zk.ff > 4 || zk.ie > 8) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+				// Bug ZK-2772 don't plus one when frozen exists.
+                if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w)
@@ -148,7 +154,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				for (var cells = tr.cells, i = cells.length; i--;) {
 					var wd = cells[i].offsetWidth;
 					wds[i] = wd;
-					if (zk.ff > 4 || zk.ie > 8) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+
+					// Bug ZK-2772 don't plus one when frozen exists.
+					if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 						++wds[i];
 					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				}
@@ -1111,6 +1119,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ebody.style.width = tblwd + 'px';
 		
 		if (ehead) {
+		 	// Bug ZK-2772: Misaligned Grid columns
+		 	// don't assign width for ehead and ebody if sizedByContent is true
 			if (tblwd) {
 				ehead.style.width = tblwd + 'px';
 				if (ebody)
@@ -1368,7 +1378,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				else if (wdh && wdh.endsWith('px'))
 					wd = wds[i] = zk.parseInt(wdh);
 				else
-					wd = wds[i] = zk.parseInt(temphdcol.style.width);
+					wd = wds[i] = _minwds[i];
 				
 				width += wd;
 			}
@@ -1381,8 +1391,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			count = total,
 			visj = -1,
 			tblWidth = 0; //refix B70-ZK-2394: should sync colgroup width with table width
-		
-		if (this._nspan < 0) { //span to all columns
+
+		 //span to all columns
+		if (this._nspan < 0) {
+
+
+		 	var hasFrozenScrolled = this.frozen && this.frozen.getStart();
 			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
 				// ZK-2222: should check visibility
 				if (!zk(hdcol).isVisible(true)) {
@@ -1391,7 +1405,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						ftcol = ftcol.nextSibling;
 					continue;
 				} else {
-					wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
+
+					// for bug ZK-2772, we don't span it when frozen column has scrolled.
+                    // Instead, we use its faker width.
+					if (hasFrozenScrolled) {
+						if (extSum <= 0) {
+							wds[i] = wd = wds[i];
+						} else {
+							if (hdcol.style.width) {
+								wds[i] = wd = zk.parseInt(hdcol.style.width);
+							} else {
+								wds[i] = wd = Math.round(((wds[i] * total / width) + 0.5) || 0);
+							}
+						}
+					} else {
+                    	wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
+					}
 					var stylew = jq.px0(wd);
 					count -= wd;
 					visj = i;
@@ -1407,18 +1436,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			//compensate calc error
+			//compensate calc error but excluding scrolled frozen column
 			if (extSum > 0 && count != 0 && visj >= 0) {
 				tblWidth -= wd; //refix B70-ZK-2394: subtract the last wd (visj is the last)
 				wd = wds[visj] + count;
 				var stylew = jq.px0(wd);
-				
-				bdfaker.childNodes[visj].style.width = stylew;
-				hdfaker.childNodes[visj].style.width = stylew;
+
 				tblWidth += wd; //refix B70-ZK-2394: and add new wd
+
+				if (!hasFrozenScrolled) {
+					bdfaker.childNodes[visj].style.width = stylew;
+					hdfaker.childNodes[visj].style.width = stylew;
 				
-				if (ftfaker)
-					ftfaker.childNodes[visj].style.width = stylew;
+					if (ftfaker)
+						ftfaker.childNodes[visj].style.width = stylew;
+				}
 			}
 		} else { //feature#3184415: span to a specific column
 			visj = this._nspan - 1;
@@ -1442,7 +1474,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		
+
 		//refix B70-ZK-2394: sync colgroup width with (head, body, foot)table width
 		var allWidths = this._isAllWidths();
 		if (allWidths) {
@@ -1509,7 +1541,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				bdcol = bdcol.nextSibling;
 				if (ftcol)
 					ftcol = ftcol.nextSibling;
-			} else {
+			} else if (!this.frozen || !this.frozen.getStart()) {
 				var wd = jq.px(wds[i]);
 				hdcol.style.width = bdcol.style.width = wd;
 				hdcol = hdcol.nextSibling;

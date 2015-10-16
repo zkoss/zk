@@ -11,6 +11,7 @@ ZK 7.0.7
   ZK-2892: Modal window are not centered if content is resized by hflex
   ZK-2899: Listbox's select mold issue on Firefox
   ZK-2841: Unselecting a Navitem form Java does update the UI
+  ZK-2903: frozen columns remain hidden after resize 
   
 * Upgrade Notes
 
