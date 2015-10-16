@@ -18,6 +18,6 @@ package org.zkoss.zk.ui.sys;
  */
 public abstract class BooleanPropertyAccess implements PropertyAccess<Boolean> {
 	public Class<Boolean> getType() {
-		return Boolean.class;
+		return Boolean.TYPE; // Bug 2921, use a primitive class instead.
 	}
 }
