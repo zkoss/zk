@@ -371,6 +371,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				isFixedWidth = stylew && stylew.indexOf('%') < 0;
 
 			if (origWd) {
+				if (isFixedWidth && zk.parseFloat(stylew) > 1) {
+					origWd = stylew; // use the latest one;
+				}
 				w._width = wds[i] = origWd;
 			} else {
 				w._width = wds[i] = isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth);
@@ -380,7 +383,18 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
 					ftcols[i].style.width = w._width;
 			}
+
+			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
+			var wdInt = zk.parseInt(wds[i]);
+			if (w._hflexWidth) {
+				w.setHflex_(null);
+				w._hflexWidth = wdInt;
+			}
+			if (mesh._minWd) {
+				mesh._minWd.wds[i] = wdInt;
+			}
 		}
+
 
 		//2. set resized width to colgroup col
 		if (!wgt.origWd)
