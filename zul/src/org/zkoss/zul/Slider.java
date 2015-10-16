@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -54,7 +55,6 @@ public class Slider extends XulElement {
 
 	
 	public Slider() {
-
 	}
 	/**
 	 * @param curpos the current position (default: 0)
