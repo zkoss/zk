@@ -12,6 +12,7 @@ ZK 8.0.1
   ZK-2872: Dropupload dropzone doesn't disappear after incomplete action on IE 11
   ZK-2874: onBookmarkChange isn't triggered on sendRedirect with 7.0.6.1
   ZK-2911: Fail to assign a variable declared in zscript to a custom attribute in the page scope
+  ZK-2841: Unselecting a Navitem form Java does update the UI
 
 * Upgrade Notes
 
@@ -134,6 +135,7 @@ ZK 7.0.7
   ZK-2879: The "rows" attribute of Frozen doesn't work
   ZK-2892: Modal window are not centered if content is resized by hflex
   ZK-2899: Listbox's select mold issue on Firefox
+  ZK-2841: Unselecting a Navitem form Java does update the UI
 
   --------
 ZK 7.0.6.1
