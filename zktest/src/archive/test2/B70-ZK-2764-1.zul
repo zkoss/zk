@@ -16,7 +16,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 <zk>
 1. Please open the tree nodes "node 1" and "node 2"
 <separator/>
-2. click the button "update data", the tree structure should be the same as before, only all the content are updated
+2. click the button "update data", the tree structure should be the same as before, only node 1 and its children change content
 <separator/>
 3. click the button "rebuild model", the tree structure should be the same as before, only all the content are updated
 
