@@ -1120,8 +1120,22 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		try {
 			zUtl.go(url, {target: target});
 
+			// '#' for bookmark change only, Bug ZK-2874
+			var idx;
+			if (url && !url.startsWith('/') && (idx = url.indexOf('#')) >= 0) {
+				var uri = url.substring(0, idx),
+					hash = url.substring(idx+1),
+					locHash = window.location.hash,
+					locUrl = window.location.href;
+				if (locHash) {
+					locUrl = locUrl.substring(0, locUrl.length - locHash.length); // excluding '#'
+				}
+				if (locUrl.endsWith(uri))
+					return; // not to disable request for Bug ZK-2844
+			}
+
 			// Bug ZK-2844
-			if (!target && url && !url.startsWith('#')) // '#' for bookmark change only Bug ZK-2874
+			if (!target)
 				zAu.disabledRequest = true; // Bug ZK-2616
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
