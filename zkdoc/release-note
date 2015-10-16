@@ -13,6 +13,7 @@ ZK 8.0.1
   ZK-2874: onBookmarkChange isn't triggered on sendRedirect with 7.0.6.1
   ZK-2911: Fail to assign a variable declared in zscript to a custom attribute in the page scope
   ZK-2841: Unselecting a Navitem form Java does update the UI
+  ZK-2895: hflex cause slider without width to throw "Not allowed to set hflex and width" exception
 
 * Upgrade Notes
 
