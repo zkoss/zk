@@ -14,6 +14,7 @@ ZK 8.0.1
   ZK-2911: Fail to assign a variable declared in zscript to a custom attribute in the page scope
   ZK-2841: Unselecting a Navitem form Java does update the UI
   ZK-2921: Loading a null variable in a load binding throws a NullPointerException
+  ZK-2923: side effects when calling notify change on a null value
 
 * Upgrade Notes
 
