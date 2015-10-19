@@ -88,13 +88,13 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 			if (oldsz - newsz <= 0)
 				throw new UiException("Removal causes a larger list?");
 			for (int i = index0; i <= index1; i++) {
-				Component[] oldComps = cbrCompsList.get(i);
+				Component[] oldComps = cbrCompsList.get(index0);
 				if (oldComps != null) {
 					for (Component oc : oldComps) {
 						oc.detach();
 					}
 				}
-				cbrCompsList.remove(i);
+				cbrCompsList.remove(index0);
 			}
 			refreshOwnerCBAttr = true;
 		}

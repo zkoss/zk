@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2925.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 17:03:55 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Please click "clear" button, you should not see any exception.
+        2. All of the labels below will be removed.
+        3. Please click "fill" button, you should see one label "new item" is added.
+    </label>
+    <separator bar="true"/>
+    <zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("aaa");
+		model.add("bbb");
+		model.add("ccc");
+		model.add("ddd");
+	]]></zscript>
+
+    <div id="owner" apply="org.zkoss.bind.BindComposer">
+        <div children="@init(model)">
+            <template name="children">
+                <label value="@init(each)"/>
+            </template>
+        </div>
+        <!-- 	workaround and more efficient way -->
+        <!-- 		<forEach items="@init(model)"> -->
+        <!-- 			<label value="@init(each)"/> -->
+        <!-- 		</forEach> -->
+        <space orient="horizontal"/>
+        <button label="clear" onClick='model.clear()'/>
+        <button label="fill" onClick='model.add("new item")'/>
+    </div>
+</zk>
