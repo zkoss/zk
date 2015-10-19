@@ -17,51 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var v = zk.Widget.$(c)._colspan;
 		return v ? v : 1;
 	}
-	function _fixaux(cells, from, to) {
-		for (var j = 0, k = 0, cl = cells.length; j < cl; ++j) {
-			var ke = k + _colspan( zk.Widget.$(cells[j]));
-			// B70-ZK-2071: Calculate the colspan when scroll back.
-			if ((from >= k && ke > from) || (to <= k && ke > to)) { //found
-				for (; j < cl && k < to; ++j, k = ke) {
-					var cell = cells[j],
-						ke = k + _colspan(cell),
-						v = k - from, v2 = ke - to;
-					v = (v > 0 ? v: 0) + (v2 > 0 ? v2: 0);
-					if (v) {
-						// ZK-2071: display causes wrong in colspan case
-						// cell.style.display = '';
-						// cell.style.width = '';
-						cell.colSpan = v;
-					} 
-					// ZK-2071: display causes wrong in colspan case
-					// else {
-					//	cell.style.display = 'none';
-					//	cell.style.width = '0px';
-					// }
-				}
-				
-				// ZK-2130: should reset all columns 
-				j = 1;
-				for (; j < cl; ++j) {
-					var cell = cells[j];
-					if (zk.parseInt(cell.style.width) != 0)
-						break; //done
-					// ZK-2071: display causes wrong in colspan case
-					// if (j >= to)
-					//	cell.style.display = cell.style.width = '';
-					// else {
-					// 	cell.style.display = 'none';
-					//	cell.style.width = '0px';
-					// }
-					
-					// B70-ZK-2071: Reset the colspan when the previous cell is in viewport.
-					cell.colSpan = _colspan(cell);
-				}
-				return;
-			}
-			k = ke;
-		}
-	}
 	// Bug 3218078
 	function _onSizeLater(wgt) {		
 		var parent = wgt.parent,
@@ -426,16 +381,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						if (ftcells.length > i)
 							ftcells[i].style.width = cellWidth;
 					}
-				}
-			}
-			
-			//auxhead
-			if (mesh._nativebar) {
-				var hdr = mesh.head.$n(),
-					hdrs = mesh.eheadrows.rows;
-				for (var i = hdrs.length, r; i--;) {
-					if ((r = hdrs[i]) != hdr) //skip Column
-						_fixaux(r.cells, c + this._start, c + num); // B70-ZK-2071: Count start position.
 				}
 			}
 			

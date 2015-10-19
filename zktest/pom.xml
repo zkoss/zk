@@ -389,7 +389,7 @@
 						<contextPath>/${project.artifactId}</contextPath>
 						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
 					</webAppConfig>
-					<scanIntervalSeconds>5</scanIntervalSeconds>
+					<!--<scanIntervalSeconds>5</scanIntervalSeconds>-->
 					<scanTargets>
 						<scanTarget>${project.basedir}/src/archive/</scanTarget>
 					</scanTargets>
