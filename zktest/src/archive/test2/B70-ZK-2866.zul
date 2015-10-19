@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2866.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 16:08:44 CST 2015, Created by chunfu
+
+Copyright (C)  2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. scroll back and forth and you WILL NOT see that auxiliary headers loose sync with their associated columns
+	ex. There are only Jan and Feb in Q1 but Mar goes to Q2.
+	</label>
+	<grid>
+		<auxhead>
+			<auxheader label="H1'07" colspan="6"/>
+			<auxheader label="H2'07" colspan="6"/>
+		</auxhead>
+		<auxhead>
+			<auxheader label="Q1" colspan="3"/>
+			<auxheader label="Q2" colspan="3"/>
+			<auxheader label="Q3" colspan="3"/>
+			<auxheader label="Q4" colspan="3"/>
+		</auxhead>
+		<frozen style="background: #DFDED8" columns="1"/>
+		<columns>
+			<column label="Jan"/>
+			<column label="Feb"/>
+			<column label="Mar"/>
+			<column label="Apr"/>
+			<column label="May"/>
+			<column label="Jun"/>
+			<column label="Jul"/>
+			<column label="Aug"/>
+			<column label="Sep"/>
+			<column label="Oct"/>
+			<column label="Nov"/>
+			<column label="Dec"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="1,000"/><label value="1,100"/><label value="1,200"/>
+				<label value="1,300"/><label value="1,400"/><label value="1,500"/>
+				<label value="1,600"/><label value="1,700"/><label value="1,800"/>
+				<label value="1,900"/><label value="2,000"/><label value="2,100"/>
+			</row>
+			<row>
+				<label value="1,500"/><label value="2,100"/><label value="1,200"/>
+				<label value="1,100"/><label value="2,400"/><label value="1,700"/>
+				<label value="1,500"/><label value="3,700"/><label value="1,800"/>
+				<label value="1,300"/><label value="2,000"/><label value="2,500"/>
+			</row>
+		</rows>
+	</grid>
+</zk>
