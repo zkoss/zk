@@ -25,6 +25,7 @@ ZK 8.0.1
   ZK-2887: datebox calendar control mostly hidden on ipad
 
 * Upgrade Notes
+  + In org.zkoss.zul.Chart and org.zkoss.zkmax.zul.Fusionchart, using hflex and vflex will get exception since this version, you should use width and height instead.
 
   --------
 ZK 8.0.0

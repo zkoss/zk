@@ -14,43 +14,32 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<vlayout>
-		<label multiline="true">
-			you should see two sliders and two progressmeters
-			the first slider with the attribute width="100px", and it should be 100px width.
-			the second slider with the attribute hflex="1", and it should be 100% width.
+    <vlayout>
+        <label multiline="true">
+            you should see two sliders
+            1. the first slider should be 100px width.
+            2. the second slider should be 100% width.
+        </label>
+        <label>with width="100px"</label>
+        <slider width="100px"/>
+        <label>with hflex="1"</label>
+        <slider hflex="1"/>
+        <label multiline="true">
+            you should see two progressmeters
+            1. the first progressmeter should be 100px width.
+            2. the second progressmeter should be 100% width.
+        </label>
+        <label>with width="100px"</label>
+        <progressmeter width="100px"/>
+        <label>with hflex="1"</label>
+        <progressmeter hflex="1"/>
+    </vlayout>
+    <label multiline="true">
 
-		</label>
-		<label>with width="100px"</label>
-		<slider width="100px"/>
-
-		<label>with hflex="1"</label>
-		<slider hflex="1"/>
-		<label multiline="true">
-
-
-			Progressmeter is also fixed because of the same issue.
-			you should see two progressmeters
-			the first with the attribute width="100px", and it should be 100px width.
-			the second with the attribute hflex="1", and it should be 100% width.
-
-		</label>
-		<label>with width="100px"</label>
-		<progressmeter width="100px"/>
-		<label>with hflex="1"</label>
-		<progressmeter hflex="1"/>
-		<label multiline="true">
-
-
-			Chart is also fixed because of the same issue.
-			you should see two chart
-			the first with the attribute width="100px", and it should be 100px width.
-			the second with the attribute hflex="min", and it should be 500px width.
-
-		</label>
-		<label>with width="100px"</label>
-		<chart width="100px" height="100px"/>
-		<label>with hflex="min"</label>
-		<chart hflex="min" height="100px"/>
-	</vlayout>
+        you should see two iframes
+        1. the left iframe shoud have HTTP ERROR 500 of the reason "Set width instead of hflex".
+        2. the right iframe shoud have HTTP ERROR 500 of the reason "Set height instead of vflex".
+    </label>
+    <iframe id="iframe1" src="B80-ZK-2895-1.zul" width="300px" style="border: 1px solid gray"/>
+    <iframe id="iframe2" src="B80-ZK-2895-2.zul" width="300px" style="border: 1px solid gray"/>
 </zk>
