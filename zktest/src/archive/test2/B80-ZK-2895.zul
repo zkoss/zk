@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2895.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 18:02:34 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout>
+		<label multiline="true">
+			you should see two sliders and two progressmeters
+			the first slider with the attribute width="100px", and it should be 100px width.
+			the second slider with the attribute hflex="1", and it should be 100% width.
+
+		</label>
+		<label>with width="100px"</label>
+		<slider width="100px"/>
+
+		<label>with hflex="1"</label>
+		<slider hflex="1"/>
+		<label multiline="true">
+
+
+			Progressmeter is also fixed because of the same issue.
+			you should see two progressmeters
+			the first with the attribute width="100px", and it should be 100px width.
+			the second with the attribute hflex="1", and it should be 100% width.
+
+		</label>
+		<label>with width="100px"</label>
+		<progressmeter width="100px"/>
+		<label>with hflex="1"</label>
+		<progressmeter hflex="1"/>
+		<label multiline="true">
+
+
+			Chart is also fixed because of the same issue.
+			you should see two chart
+			the first with the attribute width="100px", and it should be 100px width.
+			the second with the attribute hflex="min", and it should be 500px width.
+
+		</label>
+		<label>with width="100px"</label>
+		<chart width="100px" height="100px"/>
+		<label>with hflex="min"</label>
+		<chart hflex="min" height="100px"/>
+	</vlayout>
+</zk>

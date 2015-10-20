@@ -189,6 +189,8 @@ public class Chart extends Imagemap {
 	private Font _yAxisTickFont; //chart's y axis tick number font
 	private Font _yAxisFont; //chart's y axis font
 	
+	private boolean _resetWidth = true; //B80-ZK-2895
+
 	public Chart() {
 		init();
 		setWidth("500px");
@@ -315,11 +317,24 @@ public class Chart extends Imagemap {
 		if (Objects.equals(w, getWidth())) {
 			return;
 		}
+		if (!Objects.equals(null, getWidth())) { //B80-ZK-2895
+			_resetWidth = false;
+		}
 		_intWidth = stringToInt(w);
 		super.setWidth(w);
 		smartDrawChart();
 	}
 	
+	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
+	 * @since 8.0.1
+	 */
+	@Override
+	public void setHflex(String flex) { //B80-ZK-2895
+		if ("min".equals(flex) || !_resetWidth)
+			super.setHflex(flex);
+		else
+			throw new UiException("Not allowed to set hflex except hflex=\"min\"");
+	}
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
 	 */
