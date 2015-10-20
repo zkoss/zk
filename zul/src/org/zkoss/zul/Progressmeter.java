@@ -30,15 +30,33 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Progressmeter extends XulElement {
 	private int _val;
+	private boolean _resetWidth = true; //B80-ZK-2895
 
 	public Progressmeter() {
-		setWidth("100px");
+		super.setWidth("100px");
 	}
 	public Progressmeter(int value) {
 		this();
 		setValue(value);
 	}
 
+	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
+	 * @since 8.0.1
+	 */
+	@Override
+	public void setWidth(String width) { //B80-ZK-2895
+		_resetWidth = false;
+		super.setWidth(width);
+	}
+	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
+	 * @since 8.0.1
+	 */
+	@Override
+	public void setHflex(String flex) { //B80-ZK-2895
+		if (_resetWidth)
+			super.setWidth("");
+		super.setHflex(flex);
+	}
 	/** Sets the current value of the progress meter.
 	 * <p>Range: 0~100.
 	 */
