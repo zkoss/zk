@@ -13,6 +13,7 @@ ZK 7.0.7
   ZK-2841: Unselecting a Navitem form Java does update the UI
   ZK-2903: frozen columns remain hidden after resize 
   ZK-2866: auxiliary headers will disapear when using <frozen/>
+  ZK-2922: Cannot close an error box after multiple error boxes created in firefox
   
 * Upgrade Notes
 

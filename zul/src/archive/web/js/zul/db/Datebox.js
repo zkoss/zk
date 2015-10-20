@@ -556,7 +556,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (zk.ff && zk.currentFocus) {
 				var n = zk.currentFocus.getInputNode ?
 						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
-				if (jq.nodeName(n, "input"))
+				if (jq.nodeName(n, "input") && jq.isAncestor(pp, n)) // Bug ZK-2922, check ancestor first.
 					jq(n).blur(); // trigger a missing blur event.
 			}
 		} catch (e) {

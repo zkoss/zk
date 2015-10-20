@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2922.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 20 12:48:49 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. focus on the first intbox (Firefox only)
+        2. press tab to switch to 2nd intbox (if the focus state is not in the 2nd intbox, it's the cause of this bug.)
+        3. repeat above 2 steps quickly for several times
+        4. you should not see more than 2 errorboxes appearing.
+    </label>
+    <window border="normal" title="hello" >
+        <intbox id="intbox1" value="1" constraint="no positive"/>
+        <separator />
+        <intbox id="intbox2" value="1" constraint="no positive"/>
+        <zscript><![CDATA[
+    intbox1.addEventListener(Events.ON_BLUR, new EventListener() {
+    	public void onEvent(Event event) throws Exception {
+    		intbox1.setErrorMessage("False");
+        }
+    });
+  
+    intbox2.addEventListener(Events.ON_BLUR, new EventListener() {
+    	public void onEvent(Event event) throws Exception {
+    		intbox2.setErrorMessage("False");
+        }
+    });
+    ]]></zscript>
+    </window>
+</zk>
