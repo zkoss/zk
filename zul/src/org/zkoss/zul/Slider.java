@@ -36,6 +36,7 @@ public class Slider extends XulElement {
 	/** The name. */
 	private String _name;
 	private String _slidingtext = "{0}";
+	private boolean _resetWidth = true;
 	
 	/** Represent integer slider.
 	 * @since 7.0.1
@@ -54,7 +55,7 @@ public class Slider extends XulElement {
 
 	
 	public Slider() {
-		setWidth("200px");
+		super.setWidth("200px");
 	}
 	/**
 	 * @param curpos the current position (default: 0)
@@ -62,6 +63,19 @@ public class Slider extends XulElement {
 	public Slider(int curpos) {
 		this();
 		setCurpos(curpos);
+	}
+	@Override
+	public void setWidth(String width) {
+		_resetWidth = false;
+		super.setWidth(width);
+	}
+	@Override
+	public void setHflex(String flex) {
+		if (_resetWidth) {
+			super.setWidth("");
+			super.setHflex(flex);
+		} else
+			super.setHflex(null);
 	}
 	/*package*/ boolean inScaleMold() {
 		return "scale".equals(getMold());

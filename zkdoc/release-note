@@ -15,6 +15,7 @@ ZK 8.0.1
   ZK-2841: Unselecting a Navitem form Java does update the UI
   ZK-2921: Loading a null variable in a load binding throws a NullPointerException
   ZK-2923: side effects when calling notify change on a null value
+  ZK-2895: hflex cause slider without width to throw "Not allowed to set hflex and width" exception
 
 * Upgrade Notes
 
