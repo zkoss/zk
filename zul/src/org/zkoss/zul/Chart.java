@@ -189,8 +189,6 @@ public class Chart extends Imagemap {
 	private Font _yAxisTickFont; //chart's y axis tick number font
 	private Font _yAxisFont; //chart's y axis font
 	
-	private boolean _resetWidth = true; //B80-ZK-2895
-
 	public Chart() {
 		init();
 		setWidth("500px");
@@ -316,9 +314,6 @@ public class Chart extends Imagemap {
 	public void setWidth(String w) {
 		if (Objects.equals(w, getWidth())) {
 			return;
-		}
-		if (getWidth() != null) { //B80-ZK-2895
-			_resetWidth = false;
 		}
 		_intWidth = stringToInt(w);
 		super.setWidth(w);
