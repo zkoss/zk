@@ -317,7 +317,7 @@ public class Chart extends Imagemap {
 		if (Objects.equals(w, getWidth())) {
 			return;
 		}
-		if (!Objects.equals(null, getWidth())) { //B80-ZK-2895
+		if (getWidth() != null) { //B80-ZK-2895
 			_resetWidth = false;
 		}
 		_intWidth = stringToInt(w);
