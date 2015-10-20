@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.0.201509091801">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.0.201510201111">
     <!--
     SIMPLETYPE
     -->
@@ -589,6 +589,7 @@
 			<xs:element ref="button" />
 			<xs:element ref="calendar" />
 			<xs:element ref="calendars" />
+			<xs:element ref="captcha" />
 			<xs:element ref="cardlayout" />
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
@@ -683,6 +684,7 @@
 				<xs:element ref="button" />
 				<xs:element ref="calendar" />
 				<xs:element ref="calendars" />
+				<xs:element ref="captcha" />
 				<xs:element ref="cardlayout" />
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
@@ -1036,6 +1038,21 @@
 	<xs:complexType name="captionType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+	</xs:complexType>
+
+	<!-- captcha -->
+	<xs:element name="captcha" type="captchaType" />
+	<xs:complexType name="captchaType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="bgColor" type="xs:string" use="optional" />
+		<xs:attribute name="engine" type="xs:string" use="optional" />
+		<xs:attribute name="exclude" type="xs:string" use="optional" />
+		<xs:attribute name="frame" type="booleanType" use="optional" />
+		<xs:attribute name="fontColor" type="xs:string" use="optional" />
+		<xs:attribute name="length" type="xs:string" use="optional" />
+		<xs:attribute name="noise" type="booleanType" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
 	
 	<!-- cardlayout -->
