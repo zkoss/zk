@@ -55,20 +55,23 @@ public class PathELResolver extends ELResolver {
 			numOfKids = _numOfKids.removeFirst();
 			path = _paths.removeFirst();
 		}
-        
-    	//maintain the number of kids
-    	int nums = numOfKids.intValue() - 1;
-    	numOfKids = new Integer(nums);
-    	ctx.putContext(Integer.class, numOfKids);
 
-    	//maintain the form path field
-    	path.add(toNodeString(ctx), Objects.toString(property));
-    	ctx.putContext(Path.class, path);
+		//ZK-2808: numOfKids may be null when calling static method or class constructor
+		if (numOfKids != null) {
+			//maintain the number of kids
+			int nums = numOfKids.intValue() - 1;
+			numOfKids = new Integer(nums);
+			ctx.putContext(Integer.class, numOfKids);
 
-        if (nums > 0) { //still more property
-        	_numOfKids.addFirst(numOfKids);
-        	_paths.addFirst(path);
-        }
+			//maintain the form path field
+			path.add(toNodeString(ctx), Objects.toString(property));
+			ctx.putContext(Path.class, path);
+
+			if (nums > 0) { //still more property
+				_numOfKids.addFirst(numOfKids);
+				_paths.addFirst(path);
+			}
+		}
         return null;
 	}
 
