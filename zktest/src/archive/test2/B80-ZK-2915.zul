@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2915.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 20 12:11:29 CST 2015, Created by chunfu
+
+Copyright (C)  2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click btn
+		2. should not rerender all labels (check uuid)
+	</label>
+
+	<div id="host" style="background:green;">
+		<template name="test">
+			<label value="${each}"/>
+		</template>
+	</div>
+
+	<zscript>
+		import org.zkoss.zuti.zul.CollectionTemplate;
+		CollectionTemplate ct = new CollectionTemplate(true);
+		ct.setTemplate("test");
+		ListModelList model = new ListModelList();
+		model.add("aaa");
+		model.add("bbb");
+		model.add("ccc");
+		model.add("ddd");
+		ct.setModel(model);
+		ct.apply(host);
+	</zscript>
+	<div style="background:pink;">
+		<forEach items="${model}">
+			<label>${each}</label>
+		</forEach>
+	</div>
+
+	<button label="add to selection" onClick='model.addToSelection("aaa");'/>
+	
+</zk>
