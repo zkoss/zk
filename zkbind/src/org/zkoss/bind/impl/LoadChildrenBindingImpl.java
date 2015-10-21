@@ -82,7 +82,11 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 			}
 		}
 		if(activating) return;//don't load to component if activating
-		
+
+		// Bug B80-ZK-2927
+		final List<Component[]> cbrCompsList = (List<Component[]>) comp.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		if (cbrCompsList != null)
+			cbrCompsList.clear();
 		// force to call onBindClean before onBindInit that BindChildRenderer will trigger onBindInit directly
 		for (Component cmp : new ArrayList<Component>(comp.getChildren())) {
 			cmp.detach();
@@ -107,7 +111,12 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 				ListDataListener dataListener = new ChildrenBindingListDataListener(comp, ctx, conv);
 				((ListModel<?>) old).addListDataListener(dataListener);
 				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL, old);
-				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER, dataListener);
+				final Object attribute = comp.setAttribute(
+						BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER,
+						dataListener);
+				if (attribute instanceof  ListDataListener) // B80-ZK-2927
+					((ListModel<?>) old).removeListDataListener(
+							(ListDataListener) attribute);
 			}
 			int size = data.size();
 			for(int i = 0; i < size; i++) {

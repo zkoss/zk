@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2927.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 21 11:03:53 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(new String[] {"aaa", "bbb", "ccc", "ddd"});
+	]]></zscript>
+	<label multiline="true">
+        1. Please click the "clear" button to remove all labels
+        2. Please click the "add" button twice or three times, and you should see some new labels are added without any exception.
+    </label>
+	<div id="owner" apply="org.zkoss.bind.BindComposer">
+		<div children="@load(model)">
+			<template name="children">
+				<label value="@init(each)"/>
+			</template>
+		</div>
+
+		<space orient="horizontal"/>
+		<button label="clear" 
+			onClick='model.clear(); 
+					 BindUtils.postNotifyChange(null, null, model, ".");'/>
+		<button label="add" 
+			onClick='model.add("new-item");  
+					 BindUtils.postNotifyChange(null, null, model, ".");'/>
+	</div>
+</zk>

@@ -25,11 +25,9 @@ import org.zkoss.bind.sys.InitChildrenBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
-import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 
 /**
@@ -92,7 +90,12 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 				ListDataListener dataListener = new ChildrenBindingListDataListener(comp, ctx, conv);
 				((ListModel<?>) old).addListDataListener(dataListener);
 				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL, old);
-				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER, dataListener);
+				final Object attribute = comp.setAttribute(
+						BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER,
+						dataListener);
+				if (attribute instanceof  ListDataListener) // B80-ZK-2927
+					((ListModel<?>) old).removeListDataListener(
+							(ListDataListener) attribute);
 			}
 			int size = data.size();
 			for(int i = 0; i < size; i++) {

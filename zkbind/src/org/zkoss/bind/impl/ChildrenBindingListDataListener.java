@@ -56,7 +56,7 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 		boolean refreshOwnerCBAttr = false;
 		if (type == ListDataEvent.INTERVAL_ADDED) {
 			int addedCount = index1 - index0 + 1;
-			if ((newsz - oldsz) <= 0)
+			if ((newsz - oldsz) < 0)
 				throw new UiException("Adding causes a smaller list?");
 			else if ((oldsz + addedCount) != newsz) { //check live data changed
 				index0 = oldsz;
