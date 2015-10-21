@@ -34,7 +34,7 @@
 // gradient
 .gradient(@direction, @value) {
 	// can be used directly for all except old webkit
-	@valueList: ~`(function(a){return a.replace('/;/g', ',')})(@{value})`;
+	@valueList: ~`(function(a){return a.replace(/;/g, ',')})(@{value})`;
 	@fallbackColor: ~`(function(a){return a.split(';')[0].trim().split(/\s(\d+%)$/g)[0]})(@{value})`;
 	// for old webkit
 	@valuesWebkit: ~`(function(a){var result='';var b=a.split(';');b.forEach(function(c){var d=c.trim().split(/\s(\d+%)$/g);result+='color-stop(' + d[1] + ',' + d[0] + '),';});return result.slice(0, -1)})(@{value})`;
