@@ -21,6 +21,7 @@ ZK 8.0.1
   ZK-2927: Children binding add and reload model
   ZK-2809: missing error message for zul import directive
   ZK-2915: collection template side effect
+  ZK-2808: constructor call causes NPE in ZK bind expression
 
 * Upgrade Notes
 

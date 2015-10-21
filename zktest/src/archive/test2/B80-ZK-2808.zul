@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2808.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 20 18:33:38 CST 2015, Created by chunfu
+
+Copyright (C)  2015 Potix Corporation. All Rights Reserved.
+
+-->
+<?import java.math.BigDecimal ?>
+<zk>
+	<label multiline="true">
+		1. you should see two lines are the same
+		2. label shows: true 3.14 true
+	</label>
+	<!-- static EL works -->
+	<label value="${Boolean(true)}"/>
+	<label value="${BigDecimal('3.14')}"/>
+	<label value="${Boolean.TRUE}"/>
+
+	<div apply="org.zkoss.bind.BindComposer">
+		<label value="@init(Boolean(true))"/>
+		<label value="@init(BigDecimal('3.14'))"/>
+		<label value="@init(Boolean.TRUE)"/>
+	</div>
+</zk>
