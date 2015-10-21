@@ -19,6 +19,7 @@ ZK 8.0.1
   ZK-2866: auxiliary headers will disapear when using <frozen/>
   ZK-2922: Cannot close an error box after multiple error boxes created in firefox
   ZK-2927: Children binding add and reload model
+  ZK-2809: missing error message for zul import directive
 
 * Upgrade Notes
 

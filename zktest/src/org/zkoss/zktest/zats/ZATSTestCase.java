@@ -1,5 +1,7 @@
 package org.zkoss.zktest.zats;
 
+import java.io.FileNotFoundException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,11 +37,17 @@ public abstract class ZATSTestCase {
 			String filePath = getFileLocation();
 			try {
 				return env.newClient().connect(filePath);
-			} catch (Exception e) {
+			} catch (RuntimeException e) {
 				try {
-					return env.newClient().connect(filePath.replace("_", "-"));
-				} catch (Exception e2) {
-					return env.newClient().connect(filePath.replace("-", "_"));
+					if (e.getCause() instanceof FileNotFoundException)
+						return env.newClient().connect(filePath.replace("_", "-"));
+					else
+						throw e;
+				} catch (RuntimeException e2) {
+					if (e2.getCause() instanceof FileNotFoundException)
+						return env.newClient().connect(filePath.replace("-", "_"));
+					else
+						throw e2;
 				}
 			}
 		} else
