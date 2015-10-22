@@ -23,6 +23,7 @@ ZK 8.0.1
   ZK-2915: collection template side effect
   ZK-2808: constructor call causes NPE in ZK bind expression
   ZK-2887: datebox calendar control mostly hidden on ipad
+  ZK-2860: grid row doesn't stripe the grid when .setVisible(false)
 
 * Upgrade Notes
   + In org.zkoss.zul.Chart and org.zkoss.zkmax.zul.Fusionchart, using hflex and vflex will get exception since this version, you should use width and height instead.
