@@ -35,7 +35,8 @@
 		</developer>
 	</developers>
 	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zul</url>
+		<connection>scm:git:https://github.com/zkoss/zk.git</connection>
+		<url>http://mavensync.zkoss.org/maven2</url>
 	</scm>
 	<repositories>
 		<repository>

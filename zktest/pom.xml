@@ -27,6 +27,9 @@
 		<timeplotz.version>1.1_50</timeplotz.version>
 	</properties>
 	<version>7.0.7-SNAPSHOT</version>
+	<name>ZK Test</name>
+	<url>http://www.zkoss.org/</url>
+	<description>ZK Test</description>
 	<packaging>war</packaging>
 	<licenses>
 		<license>
@@ -36,7 +39,8 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zktest</url>
+		<connection>scm:git:https://github.com/zkoss/zk.git</connection>
+		<url>http://mavensync.zkoss.org/maven2</url>
 	</scm>
 	<repositories>
 		<repository>
