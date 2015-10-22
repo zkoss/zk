@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2895-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 21 16:06:50 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+    <label id="c0" value="C/C++"/>
+    <doublebox id="v0" value="21.2"/>
+    <label id="c1" value="VB"/>
+    <doublebox id="v1" value="10.2"/>
+    <label id="c2" value="Java"/>
+    <doublebox id="v2" value="40.4"/>
+    <label id="c3" value="PHP"/>
+    <doublebox id="v3" value="28.2"/>
+    <zscript>
+        void update(int rowIndex) {
+            Label lb = (Label) self.getFellow("c"+rowIndex);
+            Doublebox db = (Doublebox) self.getFellow("v"+rowIndex);
+            model.setValue(lb.value, new Double(db.getValue().doubleValue()));
+        }
+        PieModel model = new SimplePieModel();
+        for(int j=0; j &lt; 4; ++j) {
+            update(j);
+        }
+    </zscript>
+    <label multiline="true">
+        with height="300px" and vflex="1"
+        should see the chart with height 300px and without any exception
+    </label>
+    <chart id="mychart" title="Pie" vflex="1" type="pie">
+        <zscript>
+            mychart.setModel(model);
+        </zscript>
+    </chart>
+</window>

@@ -324,16 +324,13 @@ public class Chart extends Imagemap {
 		super.setWidth(w);
 		smartDrawChart();
 	}
-	
-	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
+
+	/** Overrides the method in HtmlBasedComponent, and throw an exception to avoid using hflex.
 	 * @since 8.0.1
 	 */
 	@Override
 	public void setHflex(String flex) { //B80-ZK-2895
-		if ("min".equals(flex) || !_resetWidth)
-			super.setHflex(flex);
-		else
-			throw new UiException("Not allowed to set hflex except hflex=\"min\"");
+		throw new UnsupportedOperationException("Set width instead of hflex");
 	}
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
@@ -353,7 +350,14 @@ public class Chart extends Imagemap {
 		super.setHeight(h);
 		smartDrawChart();
 	}
-	
+
+	/** Overrides the method in HtmlBasedComponent, and throw an exception to avoid using vflex.
+	 * @since 8.0.1
+	 */
+	@Override
+	public void setVflex(String flex) {
+		throw new UnsupportedOperationException("Set height instead of vflex");
+	}
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
 	 */
