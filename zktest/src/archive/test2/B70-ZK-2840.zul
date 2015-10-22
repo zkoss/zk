@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2840.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 17:09:10 CST 2015, Created by chunfu
+
+Copyright (C)  2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+
+		import java.util.*;
+
+		import org.zkoss.zul.ListModelList;
+
+		public class LargeDataVM {
+
+			private ListModelList model;
+
+			public void LargeDataVM(){
+				model = new ListModelList();
+				for (int i = 0 ; i <= 100 ; i ++){
+					model.add(i);
+				}
+			}
+
+			public  List getModel(){
+				return this.model;
+			}
+		}
+	]]>
+	</zscript>
+	<label multiline="true">
+		1. you can scroll this page in mobile devices smoothly
+		2. scrollbar will not pull back to the top
+	</label>
+	<grid id="grid" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('LargeDataVM')" model="@load(vm.model)">
+		<columns>
+			<column>1</column>
+			<column>2</column>
+		</columns>
+		<template name="model">
+			<row>
+				<label value="@load(each)"/>
+				<label value="@load(each)"/>
+			</row>
+		</template>
+	</grid>
+</zk>
+

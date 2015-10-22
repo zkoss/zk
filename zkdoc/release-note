@@ -14,6 +14,7 @@ ZK 7.0.7
   ZK-2903: frozen columns remain hidden after resize 
   ZK-2866: auxiliary headers will disapear when using <frozen/>
   ZK-2922: Cannot close an error box after multiple error boxes created in firefox
+  ZK-2840: Cannot scroll down a Grid with a mobile browse
   
 * Upgrade Notes
 
