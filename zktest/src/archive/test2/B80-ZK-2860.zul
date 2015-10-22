@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2860.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 22 17:49:27 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. you should see a grid with three rows
+		2. click on the button "setVisible false on text2" below, text2 should disappear and the rows should maintain stripe.
+		3. click on the button "setVisible true on text2" below, text2 should appear and the rows should maintain stripe.
+	</label>
+	<window xmlns:w="http://www.zkoss.org/2005/zk/client">
+		<grid>
+			<rows >
+				<row >text1</row>
+				<row visible="true" id="row2a">text2</row>
+				<row>text3</row>
+			</rows>
+		</grid>
+		<button label="setVisible false on text2" onClick="row2a.setVisible(false)"/>
+		<button label="setVisible true on text2" onClick="row2a.setVisible(true)"/>
+	</window>
+</zk>
