@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2817.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Oct 22, 2015 11:30:58 AM, Created by JamesChu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+	void doSomething(KeyEvent evt) {
+		String msg = "";
+		int keyCode = evt.getKeyCode();
+		boolean ctrl = evt.isCtrlKey(),
+				alt = evt.isAltKey(),
+				shift = evt.isShiftKey();
+		if (ctrl && keyCode == 89)
+			msg = "Ctrl + Y";
+		if (ctrl && alt && keyCode == 84)
+			msg = "Ctrl + Alt + T";
+		if (ctrl && shift && keyCode == 79)
+			msg = "Ctrl + Shift + O";
+		if (alt && shift && keyCode == 75)
+			msg = "Alt + Shift + K";
+		if (ctrl && alt && shift && keyCode == 80)
+			msg = "Ctrl + Alt + Shift + P";
+		Clients.log("Key Pressed: " + msg);
+	}
+	]]></zscript>
+    <window title="Enhanced Ctrl Key Handler Sample" border="normal"
+            ctrlKeys="^y^@t^$o@$k^@$p" onCtrlKey="doSomething(event)">
+        <label multiline="true">Focus in the textbox
+            Press the following combination of keyboard shortcut, should see corresponding message in zk-log:
+            1. Ctrl + Y
+            2. Ctrl + Alt + T
+            3. Ctrl + Shift + O
+            4. Alt + Shift + K
+            5. Ctrl + Alt + Shift + P
+        </label>
+        <textbox />
+    </window>
+</zk>

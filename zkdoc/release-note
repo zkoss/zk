@@ -1,6 +1,7 @@
    --------
 ZK 8.0.1
 * Features
+  ZK-2817: Support combination of Ctrl, Alt and Shift for setCtrlKeys API
 
 * Bugs
   ZK-2912: Specifying a non-existing variable in "unless" attribute causes a NullPointerException if
