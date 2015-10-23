@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2908.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Oct 21, 2015 11:30:58 AM, Created by JamesChu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <label value="You should not see any exception in this page" />
+    <separator />
+    <div width="600px">
+        <captcha hflex="1"/>
+    </div>
+    <div height="300px">
+        <captcha vflex="1"/>
+    </div>
+</zk>
