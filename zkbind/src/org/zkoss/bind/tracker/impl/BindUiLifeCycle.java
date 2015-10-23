@@ -96,9 +96,12 @@ public class BindUiLifeCycle implements UiLifeCycle {
 					if (shadowHost != null)
 						parentBinder = BinderUtil.getBinder(shadowHost, true);
 				}
-					
+
 				//post event to let the binder to handle binding later
-				if (parentBinder != null && (parentBinder instanceof BinderImpl)) {
+				if ((parentBinder != null && (parentBinder instanceof BinderImpl))
+						// if the owner of the ViewModel has detached and then attach later,
+						// it should be re-init again.
+						|| comp.hasAttribute(BindComposer.BINDER_ID)) {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
 					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
@@ -158,7 +161,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							
 							//[Dennis,20120925], this code was added when fixing issue zk-739, 
 							//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
-							if (comp.getAttribute(BinderImpl.VAR) != null)
+							if (comp.getAttribute(BinderImpl.VAR) != null || bid != null)
 								BinderUtil.markHandling(comp, binder);
 						}
 					});
