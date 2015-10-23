@@ -256,7 +256,7 @@ public class ConfigParser {
 		try {
 			config.addListener(parseClass(el, "listener-class", null, true));
 		} catch (Exception ex) {
-			log.error("Unable to load a listenr, "+el.getLocator(), ex);
+			log.error("Unable to load a listener, "+el.getLocator(), ex);
 		}
 	}
 

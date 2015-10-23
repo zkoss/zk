@@ -15,6 +15,7 @@ ZK 7.0.7
   ZK-2866: auxiliary headers will disapear when using <frozen/>
   ZK-2922: Cannot close an error box after multiple error boxes created in firefox
   ZK-2840: Cannot scroll down a Grid with a mobile browse
+  ZK-2893: small typo in error message in ConfigParser
   
 * Upgrade Notes
 
