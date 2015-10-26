@@ -406,7 +406,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * <dd>It means Alt+F3.</dd>
 	 * </dl>
 	 *
-	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
 	 * @param String keys
 	 * @return zul.Widget
 	 */
@@ -416,18 +415,38 @@ zul.Widget = zk.$extends(zk.Widget, {
 			this._ctrlKeys = this._parsedCtlKeys = null;
 			return;
 		}
-
-		var parsed = [{}, {}, {}, {}, {}], //ext(#), ctl, alt, shft
-			which = 0;
+		//ext(#), ctrl(1), alt(2), shift(3), ctrl + alt(4), ctrl + shift(5), alt + shift(6), ctrl + alt + shift(7)
+		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0;
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
-			case '^':
-			case '$':
-			case '@':
-				if (which)
-					return _setCtrlKeysErr("Combination of Shift, Alt and Ctrl not supported: "+keys);
-				which = cc == '^' ? 1: cc == '@' ? 2: 3;
+			case '^': //ctrl
+			case '@': //alt
+			case '$': //shift
+				if (which > 0 && which < 4) {
+					if ((which == 1 && cc == '^') ||
+						(which == 2 && cc == '@') ||
+						(which == 3 && cc == '$')) {
+						return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
+					}
+					if (which == 1)
+						which = cc == '@' ? 4 : 5;
+					if (which == 2)
+						which = cc == '^' ? 4 : 6;
+					if (which == 3)
+						which = cc == '^' ? 5 : 6;
+					break;
+				}
+				if (which > 3 && which < 7) {
+					if ((which == 4 && (cc == '^' || cc == '@')) ||
+						(which == 5 && (cc == '^' || cc == '$')) ||
+						(which == 6 && (cc == '@' || cc == '$'))) {
+						return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
+					}
+					which = 7;
+					break;
+				}
+				which = cc == '^' ? 1 : cc == '@' ? 2 : 3;
 				break;
 			case '#':
 				var k = j + 1;
@@ -645,9 +664,25 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (okcancel)
 				break;
 
-			var parsed = wgt._parsedCtlKeys;
-			if (parsed
-			&& parsed[evt.ctrlKey ? 1: evt.altKey ? 2: evt.shiftKey ? 3: 0][keyCode])
+			var parsed = wgt._parsedCtlKeys, which = 0;
+			if (parsed) {
+				var ctrl = evt.ctrlKey, alt = evt.altKey, shift = evt.shiftKey;
+				if (!which && ctrl && alt && shift)
+					which = 7;
+				if (!which && ctrl && alt)
+					which = 4;
+				if (!which && ctrl && shift)
+					which = 5;
+				if (!which && alt && shift)
+					which = 6;
+				if (!which && ctrl)
+					which = 1;
+				if (!which && alt)
+					which = 2;
+				if (!which && shift)
+					which = 3;
+			}
+			if (parsed && parsed[which][keyCode])
 				break; //found
 		}
 
