@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import org.zkoss.idom.Document;
 import org.zkoss.xel.ExpressionFactory;
 
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -350,6 +351,27 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
+	/** Creates components that belong to the given page
+	 * from a page file specified by an URI.
+	 *
+	 * @param page the page, or null if you want it to attach the created components.
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @return all top-level components being created.
+	 * @see #createComponents(WebApp, PageDefinition, Map)
+	 * @see #createComponentsDirectly(WebApp, String, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
+	 * @since 8.0.1
+	 */
+	public static Component[] createComponents(String uri, Page page, VariableResolver resolver, Map<?, ?> arg) {
+		return getCurrent().createComponents(uri, page, resolver, arg);
+	}
+
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *

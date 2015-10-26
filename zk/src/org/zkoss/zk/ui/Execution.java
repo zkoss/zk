@@ -912,6 +912,28 @@ public interface Execution extends Scope {
 	 * @since 2.4.0
 	 */
 	public Component[] createComponents(String uri, Map<?, ?> arg);
+
+	/** Creates components that belong to the given page
+	 * from a page file specified by an URI.
+	 *
+	 * <p>It loads the page definition from the specified URI (by
+	 * use {@link #getPageDefinition} ), and then
+	 * invokes {@link #createComponents(PageDefinition,Map)}
+	 * to create components.
+	 *
+	 * @param page the page, or null if you want it to attach the created components.
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Map)
+	 * @see #createComponentsDirectly(String, String, Map)
+	 * @see #createComponentsDirectly(Document, String, Map)
+	 * @see #createComponentsDirectly(Reader, String, Map)
+	 * @since 8.0.1
+	 */
+	public Component[] createComponents(String uri, Page page, VariableResolver resolver, Map<?, ?> arg);
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *

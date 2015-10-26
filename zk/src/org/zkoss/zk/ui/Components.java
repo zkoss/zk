@@ -725,6 +725,11 @@ public class Components {
 			return exec().createComponents(uri, arg);
 		}
 
+		public Component[] createComponents(String uri, Page page,
+				VariableResolver resolver, Map<?, ?> arg) {
+			return exec().createComponents(uri, page, resolver, arg);
+		}
+
 		public Component[] createComponentsDirectly(String content,
 				String extension, Map<?, ?> arg) {
 			return exec().createComponentsDirectly(content, extension, arg);

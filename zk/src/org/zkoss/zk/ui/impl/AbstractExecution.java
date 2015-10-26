@@ -383,6 +383,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return getUiEngine().createComponents(
 			this, getPageDefinition(uri), null, null, null, null, arg);
 	}
+
+	public Component[] createComponents(String uri, Page page, VariableResolver resolver, Map<?, ?> arg) {
+		return getUiEngine().createComponents(
+				this, getPageDefinition(uri), page, null, null, resolver, arg);
+	}
 	public Component[] createComponents(PageDefinition pagedef, Map<?, ?> arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
