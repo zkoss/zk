@@ -26,6 +26,7 @@ ZK 8.0.1
   ZK-2887: datebox calendar control mostly hidden on ipad
   ZK-2860: grid row doesn't stripe the grid when .setVisible(false)
   ZK-2840: Cannot scroll down a Grid with a mobile browse
+  ZK-2461: Odd layout when adding columns dynamically
   ZK-2908: ZK8 hflex/vflex not working in Captcha
   ZK-2920: Chosenbox in popup loose value in IE 10
   ZK-2893: small typo in error message in ConfigParser
