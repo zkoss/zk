@@ -101,14 +101,12 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ExecutionInit;
-import org.zkoss.zk.xel.Evaluators;
 
 /**
  * Implementation of Binder.
@@ -2070,6 +2068,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 
 		BinderUtil.unmarkHandling(comp);
+
+		// if it is a nested binder, we have to put a mark for it and re-bind it
+		// when it is re-attached again.
+		if (comp.hasAttribute(BindComposer.BINDER_ID))
+			comp.setAttribute(REMOVE_BINDINGS, Boolean.TRUE);
 	}
 
 	/**

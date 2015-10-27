@@ -91,8 +91,17 @@ public class AnnotateBinderHelper {
 			final Component kid = it.next();
 
 			// it may be a nested binder.
-			if (!kid.hasAttribute(BindComposer.BINDER_ID))
+			if (!kid.hasAttribute(BindComposer.BINDER_ID)) {
 				processAllComponentsBindings(kid); //recursive to each child
+			} else if (kid.hasAttribute(
+					BinderCtrl.REMOVE_BINDINGS)) { // for nested binder
+				kid.removeAttribute(BinderCtrl.REMOVE_BINDINGS);
+				final Binder nestedBinder = (Binder) kid.getAttribute(
+						(String) kid.getAttribute(BindComposer.BINDER_ID));
+				new AnnotateBinderHelper(nestedBinder)
+						.initComponentBindings(kid);
+				BinderUtil.markHandling(kid, nestedBinder);
+			}
 		}
 
 		// support shadow element

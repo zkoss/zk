@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2917.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 12:11:13 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.decorator {
+			border: 5px solid red;
+			padding: 15px;
+		}
+		.decorator:before {
+			position: absolute;
+			content: "DECORATOR";
+			background-color: red;
+			color: white;
+			top: 0px;
+			left: 0px;
+		}
+	</style>
+	<label multiline="true">
+		1. Click the button "some command", and you should see "inner command triggered"
+		2. Click the button "1. remove decorator" and then click the button "some command" and you should see "inner command triggered"
+		3. Click the button "2. wrap in decorator" and then click the button "some command" and you should see "inner command triggered"
+	</label>
+    <separator bar="true"/>
+    Message: <label id="msg"/>
+	<vlayout id="outer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2917_OuterViewModel')" width="100%" height="80%" apply="org.zkoss.bind.BindComposer">
+		<label value="@load($VM$.testLabel)"/>
+		<label value="@load($VM$)"/>
+		<label value="@load($BINDER$)"/>
+		<div id="detailsContainer" hflex="1" vflex="1">
+			<div hflex="1" vflex="1" sclass="decorator">
+				<div id="detail" hflex="1" vflex="1"><!-- this componet gets detached and re-attached -->
+					<vlayout id="nested" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2917_InnerViewModel')" apply="org.zkoss.bind.BindComposer"
+						onAfterSize='
+							BindUtils.postNotifyChange(null, null, $VM$, ".");
+							BindUtils.postNotifyChange(null, null, $BINDER$, ".");
+							System.out.println("componentAttributes after sizing: " + self.getAttributes());' 
+						hflex="1" vflex="1">
+						<label value="@load($VM$.testLabel)"/>
+						<label value="@load(vm)"/>
+						<label value="@load($BINDER$)"/>
+						<button id="cmdBtn" label="some command" onClick="@command('someCommand')"/>
+					</vlayout>
+				</div>
+			</div>
+		</div>
+		
+		<!-- buttons performing basic component operations -->
+		<button id="rmBtn" label="1. remove decorator">
+			<attribute name="onClick"><![CDATA[
+			    msg.setValue("");
+				Component tmpDetail = detail;		    
+			    detailsContainer.getChildren().clear();
+			    detailsContainer.appendChild(tmpDetail);
+			]]></attribute>
+		</button>
+		<button id="addBtn" label="2. wrap in decorator">
+			<attribute name="onClick"><![CDATA[
+			    msg.setValue("");
+				Component tmpDetail = detail;		    
+			    detailsContainer.getChildren().clear();
+				Div decorator = new Div();
+				decorator.setHflex("1");
+				decorator.setVflex("1");
+				decorator.setSclass("decorator");
+				detailsContainer.appendChild(decorator);
+				decorator.appendChild(tmpDetail);
+			]]></attribute>
+		</button>
+	</vlayout>
+</zk>

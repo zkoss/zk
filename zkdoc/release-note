@@ -30,6 +30,7 @@ ZK 8.0.1
   ZK-2908: ZK8 hflex/vflex not working in Captcha
   ZK-2920: Chosenbox in popup loose value in IE 10
   ZK-2893: small typo in error message in ConfigParser
+  ZK-2917: MVVM relocating components with ViewModels
 
 * Upgrade Notes
   + In org.zkoss.zul.Chart and org.zkoss.zkmax.zul.Fusionchart, using hflex and vflex will get exception since this version, you should use width and height instead.
