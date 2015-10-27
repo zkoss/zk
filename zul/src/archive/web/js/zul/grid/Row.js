@@ -77,7 +77,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
-			if (this.desktop && this.isStripeable_() && this.parent)
+			if (this.desktop && this.isStripeable_())
 				this.parent._syncStripe();
 		}
 	},
