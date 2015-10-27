@@ -1274,29 +1274,36 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	onResponse: function () {
 		if (this._shallSyncFocus) {
 			var child = this._shallSyncFocus;
-			// 1. Bug ZK-1473: when using template to render listbox,
-			//   this._focusItem still remain the removed one, 
-			//   set it with the newly rendered one to prevent keyboard navigation jump back to top
-			// 2. ZK-2048: should ignore Treechildren
-			// 3. for ZK-2342 Bug, we move the invoking of this._syncFocus() from onChildRemoved_() and onChildAdded_() to here.
-			if (!child.desktop) {
-				child = this.getSelectedItem();
-				if (!child && jq.isNumeric(this.getSelectedIndex())) {
-					var selIndex = this.getSelectedIndex();
-					if (selIndex >= 0) {
-						for (var it = this.getBodyWidgetIterator(); it.hasNext();) {
-							var row = it.next();
-							if (row && row._index == selIndex) {
-								child = row;
-								break;
+
+			// Bug ZK-2901
+			if (child && child === true) { // called by Tree.js
+				jq(this.$n('a')).offset({top: 0, left: 0});
+			} else {
+
+				// 1. Bug ZK-1473: when using template to render listbox,
+				//   this._focusItem still remain the removed one,
+				//   set it with the newly rendered one to prevent keyboard navigation jump back to top
+				// 2. ZK-2048: should ignore Treechildren
+				// 3. for ZK-2342 Bug, we move the invoking of this._syncFocus() from onChildRemoved_() and onChildAdded_() to here.
+				if (!child.desktop) {
+					child = this.getSelectedItem();
+					if (!child && jq.isNumeric(this.getSelectedIndex())) {
+						var selIndex = this.getSelectedIndex();
+						if (selIndex >= 0) {
+							for (var it = this.getBodyWidgetIterator(); it.hasNext();) {
+								var row = it.next();
+								if (row && row._index == selIndex) {
+									child = row;
+									break;
+								}
+
 							}
-								
 						}
 					}
 				}
+				this._focusItem = child;
+				this._syncFocus(child);
 			}
-			this._focusItem = child;
-			this._syncFocus(child);
 			this._shallSyncFocus = false;
 		}
 		if (this._shallSyncCM) {

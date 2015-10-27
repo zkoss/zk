@@ -165,8 +165,11 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		}
 		this._onTreechildrenRemoved(item.treechildren);
 		if (fixSel) this._fixSelected();
-		if (upperItem = item.previousSibling || item.getParentItem()) this._syncFocus(upperItem);
-		else jq(this.$n('a')).offset({top: 0, left: 0});
+		if (upperItem = item.previousSibling || item.getParentItem()) {
+			this._shallSyncFocus = upperItem;
+		} else {
+			this._shallSyncFocus = true; // reset the anchor to the top;
+		}
 	},
 	_onTreechildrenAdded: function (tchs) {
 		if (!tchs || tchs.parent == this)
