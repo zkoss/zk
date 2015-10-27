@@ -28,6 +28,7 @@ ZK 8.0.1
   ZK-2840: Cannot scroll down a Grid with a mobile browse
   ZK-2908: ZK8 hflex/vflex not working in Captcha
   ZK-2920: Chosenbox in popup loose value in IE 10
+  ZK-2893: small typo in error message in ConfigParser
 
 * Upgrade Notes
   + In org.zkoss.zul.Chart and org.zkoss.zkmax.zul.Fusionchart, using hflex and vflex will get exception since this version, you should use width and height instead.
@@ -156,6 +157,7 @@ ZK 7.0.7
   ZK-2866: auxiliary headers will disapear when using <frozen/>
   ZK-2922: Cannot close an error box after multiple error boxes created in firefox
   ZK-2840: Cannot scroll down a Grid with a mobile browse
+  ZK-2893: small typo in error message in ConfigParser
   
 * Upgrade Notes
 
