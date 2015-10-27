@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2920.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 26 18:29:14 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        List model = new ListModelList();
+        model.add("AAA");
+        model.add("BBB");
+        model.add("CCC");
+        model.add("DDD");
+
+    </zscript>
+    <label multiline="true">
+        1. Click the button "show search"
+        2. Click the chosenbox to select one item "AAA"
+        3. Click outside the popup area, and then click the button "show search" again.
+        4. The content of the chosenbox should not empty. (it should display "AAA" item being selected.
+
+    </label>
+    <window border="normal" title="hello">
+
+        <button label="show search" popup="searchpopup,type=toggle,position=after_end" />
+        <popup id="searchpopup">
+            <chosenbox width="200px" createMessage="Add new {0}" creatable="true"  model="${model}" />
+        </popup>
+
+
+    </window>
+</zk>
