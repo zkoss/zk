@@ -113,6 +113,23 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				scroll.scrollLeft = this._start * 50;
 		}
 	},
+
+	/**
+	 * Synchronizes the scrollbar according to parent ebody scrollleft.
+	 */
+	syncScrollByParentBody: function () {
+		var p = this.parent,
+			ebody,
+			l;
+    	if (p && p._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
+    		var scroll = this.$n('scrollX');
+        	if (scroll) {
+        		var scrollScale = l / (ebody.scrollWidth - ebody.clientWidth);
+        		scroll.scrollLeft = Math.ceil(scrollScale * (scroll.scrollWidth - scroll.clientWidth));
+        	}
+		}
+	},
+
 	bind_: function () {
 		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
 		var p = this.parent,
