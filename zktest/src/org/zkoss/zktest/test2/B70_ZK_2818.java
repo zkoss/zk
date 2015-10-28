@@ -72,6 +72,6 @@ public class B70_ZK_2818 extends SelectorComposer<Window>implements EventListene
 	public void onEvent(Event ev) throws Exception {
 		System.out.println("clear busy 1");
 		Clients.clearBusy(getSelf());
-		Executions.createComponents("B70-ZK-2818-1.zul", getSelf(), null);
+		Executions.createComponents("/test2/B70-ZK-2818-1.zul", getSelf(), null);
 	}
 }

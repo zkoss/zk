@@ -34,7 +34,7 @@ public class B80_ZK_2772VM
 		return customers;
 	}
 
-	private static class Customer
+	public static class Customer
 	{
 		private String name0;
 

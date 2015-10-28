@@ -13,7 +13,6 @@ B80-ZK-2772-2.zul
 Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
-<?xml version="1.0" encoding="UTF-8"?>
 <zk>
     <vlayout>
         <label multiline="true">
