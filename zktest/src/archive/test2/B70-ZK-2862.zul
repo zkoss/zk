@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2862.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 18:48:14 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		the listitems should drop-down when clicking the listbox
+
+	</label>
+	<div draggable="true">
+		<listbox mold="select" >
+			<listitem label="fasfsaf" selected="true" />
+			<listitem label="fasfsaf2" />
+		</listbox>
+	</div>
+</zk>
