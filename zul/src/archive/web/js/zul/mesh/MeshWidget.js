@@ -932,6 +932,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		if (scrolled)
 			this._fireOnScrollPos();
+
+		if (this.frozen)
+			this.frozen.syncScrollByParentBody();
 	},
 	_doSyncScroll: function () { //sync scroll for input tab key scroll
 		var ehead = this.ehead,

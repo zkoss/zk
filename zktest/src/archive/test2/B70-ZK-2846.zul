@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2846.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Oct 23, 2015 16:30:58 AM, Created by JamesChu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <label multiline="true">
+        1.open Chrome or Safari
+        2.press Ctrl + f to open the search box of browser
+        3.Enter '!' and choose the second result, you should see the the listbox scroll to the rightmost. The position of scroll bar should be correct
+        4.Scroll back to the leftmost.
+        5.Enter '@' and choose the second result, you should see the the listbox scroll to the rightmost. The position of scroll bar should be correct
+        6.Scroll back to the leftmost.
+        7.Enter '#' and choose the second result, you should see the the grid scroll to the rightmost. The position of scroll bar should be correct
+        8.Scroll back to the leftmost.
+        9.Enter '$' and choose the second result, you should see the the grid scroll to the rightmost. The position of scroll bar should be correct
+    </label>
+    <zscript>
+        String[] filler = new String[] {"1", "2", "3", "4", "5", "6", "7", "8"};
+    </zscript>
+    <label value="--- listbox ---" />
+    <listbox id="lb" width="500px">
+        <frozen columns="2" start="1" />
+        <listhead sizable="true">
+            <listheader width="120px" label="${each}" forEach="${filler}"/>
+            <listheader width="120px" label="!" />
+        </listhead>
+        <listitem height="28px">
+            <listcell label="${each}" forEach="${filler}" />
+            <listcell label="@" />
+        </listitem>
+    </listbox>
+    <separator />
+    <label value="--- grid ---" />
+    <grid id="gd" sizedByContent="true" width="400px">
+        <frozen columns="2" start="1" />
+        <columns sizable="true">
+            <column width="120px" label="${each}" forEach="${filler}"/>
+            <column  width="120px" label="#" />
+        </columns>
+        <rows id="rws">
+            <row>
+                <label value="${each}" forEach="${filler}" />
+                <label value="$" />
+            </row>
+        </rows>
+    </grid>
+</zk>
