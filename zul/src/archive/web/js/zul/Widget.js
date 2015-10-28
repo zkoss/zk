@@ -415,24 +415,19 @@ zul.Widget = zk.$extends(zk.Widget, {
 			this._ctrlKeys = this._parsedCtlKeys = null;
 			return;
 		}
-		//ext(#), ctrl(1), alt(2), shift(3), ctrl + alt(4), ctrl + shift(5), alt + shift(6), ctrl + alt + shift(7)
-		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0, combinationCache = {};
+		//ext(#), ctrl(001), alt(010), ctrl + alt(011), shift(100), ctrl + shift(101), alt + shift(110), ctrl + alt + shift(111)
+		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0;
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
 			case '^': //ctrl
 			case '@': //alt
 			case '$': //shift
-				if (combinationCache[cc])
+				var flag = cc == '^' ? 1 : cc == '@' ? 2 : 4;
+				if ((which & flag) != 0)
 					return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
-				combinationCache[cc] = true;
-				v = cc == '^' ? 1 : cc == '@' ? 2 : 3;
-				if (which == 0)
-					which = v;
-				else if (which >= 1 && which <= 3) {
-					which += v + 1; //ex. ctrl(1) + alt(2) = ctrl + alt(4 -> (1 + 2) + 1)
-				} else if (which > 3 && which < 7)
-					which = 7;
+				else
+					which |= flag;
 				break;
 			case '#':
 				var k = j + 1;
@@ -467,21 +462,19 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 				parsed[which][cc] = true;
 				which = 0;
-				combinationCache = {};
 				j = k - 1;
 				break;
 			default:
 				if (!which || ((cc > 'Z' || cc < 'A') 
 				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
 					return _setCtrlKeysErr("Unexpected character "+cc+" in "+keys);
-				if (which == 3)
+				if (which == 4)
 					return _setCtrlKeysErr("$a - $z not supported (found in "+keys+"). Allowed: $#f1, $#home and so on.");
 
 				if (cc <= 'z' && cc >= 'a')
 					cc = cc.toUpperCase();
 				parsed[which][cc.charCodeAt(0)] = true;
 				which = 0;
-				combinationCache = {};
 				break;
 			}
 		}
@@ -654,18 +647,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 			var parsed = wgt._parsedCtlKeys, which = 0;
 			if (parsed) {
-				var keys = [evt.ctrlKey, evt.altKey, evt.shiftKey]
-				var ctrl = evt.ctrlKey ? 1 : 0,
-					alt = evt.altKey ? 2 : 0,
-					shift = evt.shiftKey ? 3 : 0,
-					keys = ctrl + alt + shift;
-				if (keys > 3)
-					which = keys + 1;
-				else if (keys == 3 && alt > 0) // ctrl + alt
-					which = 4;
-				else
-					which = keys;
-
+				if (evt.ctrlKey)
+					which |= 1;
+				if (evt.altKey)
+					which |= 2;
+				if (evt.shiftKey)
+					which |= 4;
 				if (parsed[which][keyCode])
 					break; //found
 			}
