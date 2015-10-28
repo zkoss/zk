@@ -1679,9 +1679,11 @@ wgt.$f().main.setTitle("foo");
 		}
 		if (cfid) {
 			cf = zk.Widget.$(cfid);
-			if (!cf)
-				_rsFocus({focus: newwgt, range: cfrg}); // restore to outer root
-			else if (zUtl.isAncestor(newwgt, cf))
+			if (!cf) {
+			    // Bug ZK-2664, we should not restore the focus to root component, which
+			    // may not be correct one.
+			    // _rsFocus({focus: newwgt, range: cfrg}); // restore to outer root
+			} else if (zUtl.isAncestor(newwgt, cf))
 				_rsFocus({focus: cf, range: cfrg});
 		}
 	},
