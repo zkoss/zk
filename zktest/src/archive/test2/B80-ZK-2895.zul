@@ -34,12 +34,28 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
         <label>with hflex="1"</label>
         <progressmeter hflex="1"/>
     </vlayout>
-    <label multiline="true">
-
-        you should see two iframes
-        1. the left iframe shoud have HTTP ERROR 500 of the reason "Set width instead of hflex".
-        2. the right iframe shoud have HTTP ERROR 500 of the reason "Set height instead of vflex".
-    </label>
-    <iframe id="iframe1" src="B80-ZK-2895-1.zul" width="300px" style="border: 1px solid gray"/>
-    <iframe id="iframe2" src="B80-ZK-2895-2.zul" width="300px" style="border: 1px solid gray"/>
+    <separator />
+    <window viewModel="@id('vm')@init('org.zkoss.zktest.test2.F65_ZK_1801_ViewModel')" width="500px">
+        <vlayout>
+            <label multiline="true">
+                The fusionchart should appear normally without exception.
+            </label>
+            <fusionchart hflex="1" title="pie" type="pie" model="@load(vm.model)" chartConfig="@bind(vm.chartConfig)"/>
+        </vlayout>
+    </window>
+    <window>
+        <zscript><![CDATA[
+            PieModel pmodel = new SimplePieModel();
+            pmodel.setValue("C/C++", new Double(21.2));
+            pmodel.setValue("VB", new Double(10.2));
+            pmodel.setValue("Java", new Double(40.4));
+            pmodel.setValue("PHP", new Double(28.2));
+        ]]></zscript>
+        <vlayout>
+            <label multiline="true">
+                The chart should appear normally without exception.
+            </label>
+            <chart id="mychart" title="Pie" hflex="1" model="${pmodel}" type="pie" />
+        </vlayout>
+    </window>
 </zk>

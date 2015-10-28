@@ -316,16 +316,16 @@ public class Chart extends Imagemap {
 			return;
 		}
 		_intWidth = stringToInt(w);
-		super.setWidth(w);
+		super.setWidth0(w); //ZK-2895: call the method which do not check vflex
 		smartDrawChart();
 	}
 
-	/** Overrides the method in HtmlBasedComponent, and throw an exception to avoid using hflex.
+	/** Overrides the method in HtmlBasedComponent, not to check using hflex and width at the same time
 	 * @since 8.0.1
 	 */
 	@Override
-	public void setHflex(String flex) { //B80-ZK-2895
-		throw new UnsupportedOperationException("Set width instead of hflex");
+	public void setHflex(String flex) {
+		super.setHflex0(flex);
 	}
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
@@ -342,16 +342,16 @@ public class Chart extends Imagemap {
 			return;
 		}
 		_intHeight = stringToInt(h);
-		super.setHeight(h);
+		super.setHeight0(h); //ZK-2895: call the method which do not check hflex
 		smartDrawChart();
 	}
 
-	/** Overrides the method in HtmlBasedComponent, and throw an exception to avoid using vflex.
+	/** Overrides the method in HtmlBasedComponent, not to check using vflex and height at the same time
 	 * @since 8.0.1
 	 */
 	@Override
 	public void setVflex(String flex) {
-		throw new UnsupportedOperationException("Set height instead of vflex");
+		super.setVflex0(flex);
 	}
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.

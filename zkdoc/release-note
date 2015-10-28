@@ -38,7 +38,6 @@ ZK 8.0.1
   ZK-2934: A control in a grid row does not count as a focusable control when giving focus to the first element of a modal window
 
 * Upgrade Notes
-  + In org.zkoss.zul.Chart and org.zkoss.zkmax.zul.Fusionchart, using hflex and vflex will get exception since this version, you should use width and height instead.
 
   --------
 ZK 8.0.0

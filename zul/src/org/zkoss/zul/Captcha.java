@@ -184,24 +184,17 @@ public class Captcha extends org.zkoss.zul.Image {
 			return;
 		}
 		_intWidth = Chart.stringToInt(w);
-        // B80-ZK-2908
-        super.setWidthDirectly(w);
-        smartUpdate("width", w);
+		super.setWidth0(w); // B80-ZK-2908
 		smartDrawCaptcha();
 	}
 
-    /** Overrides the method in HtmlBasedComponent, not to check using hflex and width at the same time
-     * @since 8.0.1
-     */
-    @Override
-    public void setHflex(String flex) {
-        if (flex != null && flex.length() == 0)
-            flex = null;
-        if (!Objects.equals(flex, getHflex())) {
-            super.setHflexDirectly(flex);
-            smartUpdate("hflex", flex);
-        }
-    }
+	/** Overrides the method in HtmlBasedComponent, not to check using hflex and width at the same time
+	 * @since 8.0.1
+	 */
+	@Override
+	public void setHflex(String flex) {
+		super.setHflex0(flex);
+	}
 	
 	/**
 	 * Get the captcha int width in pixel; to be used by the derived subclass.
@@ -218,24 +211,17 @@ public class Captcha extends org.zkoss.zul.Image {
 			return;
 		}
 		_intHeight = Chart.stringToInt(h);
-        // B80-ZK-2908
-        super.setHeightDirectly(h);
-        smartUpdate("height", h);
+		super.setHeight0(h); // B80-ZK-2908
 		smartDrawCaptcha();
 	}
 	
-    /** Overrides the method in HtmlBasedComponent, not to check using vflex and height at the same time
-     * @since 8.0.1
-     */
-    @Override
-    public void setVflex(String flex) {
-        if (flex != null && flex.length() == 0)
-            flex = null;
-        if (!Objects.equals(flex, getVflex())) {
-            super.setVflexDirectly(flex);
-            smartUpdate("vflex", flex);
-        }
-    }
+	/** Overrides the method in HtmlBasedComponent, not to check using vflex and height at the same time
+	 * @since 8.0.1
+	 */
+	@Override
+	public void setVflex(String flex) {
+		super.setVflex0(flex);
+	}
 
 	/**
 	 * Get the captcha int height in pixel; to be used by the derived subclass.

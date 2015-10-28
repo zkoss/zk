@@ -160,6 +160,12 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (getVflex() != null && !getVflex().equals("min")) {
 			throw new UiException("Not allowed to set vflex and height at the same time except vflex=\"min\"");
 		}
+		setHeight0(height);
+	}
+	/**
+	 * Internal Use Only.
+	 */
+	protected void setHeight0(String height) {
 		if (height != null && height.length() == 0)
 			height = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.height: null, height)) {
@@ -181,6 +187,12 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (getHflex() != null && !getHflex().equals("min")) {
 			throw new UiException("Not allowed to set hflex and width at the same time except hflex=\"min\"");
 		}
+		setWidth0(width);
+	}
+	/**
+	 * Internal Use Only.
+	 */
+	protected void setWidth0(String width) {
 		if (width != null && width.length() == 0)
 			width = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.width: null, width)) {
@@ -230,13 +242,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	protected void setHflexDirectly(String hflex) {
 		initAuxInfo().hflex = hflex;
 	}
-    /** Sets the vflex directly without sending back the result
-     * (smart update) to the client
-     * @since 8.0.1
-     */
-    protected void setVflexDirectly(String vflex) {
-        initAuxInfo().vflex = vflex;
-    }
 	/** Returns the text as the tooltip.
 	 * <p>Default: null.
 	 */
@@ -456,6 +461,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (getHeight() != null && !"min".equals(flex)) {
 			throw new UiException("Not allowed to set vflex and height at the same time except vflex=\"min\"");
 		}
+		setVflex0(flex);
+	}
+
+	/**
+	 * Internal Use Only.
+	 */
+	protected void setVflex0(String flex) {
 		if (flex != null && flex.length() == 0)
 			flex = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.vflex: null, flex)) {
@@ -500,6 +512,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (getWidth() != null && !"min".equals(flex)) {
 			throw new UiException("Not allowed to set hflex and width at the same time except hflex=\"min\"");
 		}
+		setHflex0(flex);
+	}
+
+	/**
+	 * Internal Use Only.
+	 */
+	protected void setHflex0(String flex) {
 		if (flex != null && flex.length() == 0)
 			flex = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.hflex: null, flex)) {
