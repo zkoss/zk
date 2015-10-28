@@ -416,37 +416,23 @@ zul.Widget = zk.$extends(zk.Widget, {
 			return;
 		}
 		//ext(#), ctrl(1), alt(2), shift(3), ctrl + alt(4), ctrl + shift(5), alt + shift(6), ctrl + alt + shift(7)
-		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0;
+		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0, combinationCache = {};
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
 			case '^': //ctrl
 			case '@': //alt
 			case '$': //shift
-				if (which > 0 && which < 4) {
-					if ((which == 1 && cc == '^') ||
-						(which == 2 && cc == '@') ||
-						(which == 3 && cc == '$')) {
-						return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
-					}
-					if (which == 1)
-						which = cc == '@' ? 4 : 5;
-					if (which == 2)
-						which = cc == '^' ? 4 : 6;
-					if (which == 3)
-						which = cc == '^' ? 5 : 6;
-					break;
-				}
-				if (which > 3 && which < 7) {
-					if ((which == 4 && (cc == '^' || cc == '@')) ||
-						(which == 5 && (cc == '^' || cc == '$')) ||
-						(which == 6 && (cc == '@' || cc == '$'))) {
-						return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
-					}
+				if (combinationCache[cc])
+					return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
+				combinationCache[cc] = true;
+				v = cc == '^' ? 1 : cc == '@' ? 2 : 3;
+				if (which == 0)
+					which = v;
+				else if (which >= 1 && which <= 3) {
+					which += v + 1; //ex. ctrl(1) + alt(2) = ctrl + alt(4 -> (1 + 2) + 1)
+				} else if (which > 3 && which < 7)
 					which = 7;
-					break;
-				}
-				which = cc == '^' ? 1 : cc == '@' ? 2 : 3;
 				break;
 			case '#':
 				var k = j + 1;
@@ -481,6 +467,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 				parsed[which][cc] = true;
 				which = 0;
+				combinationCache = {};
 				j = k - 1;
 				break;
 			default:
@@ -494,6 +481,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 					cc = cc.toUpperCase();
 				parsed[which][cc.charCodeAt(0)] = true;
 				which = 0;
+				combinationCache = {};
 				break;
 			}
 		}
@@ -666,24 +654,21 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 			var parsed = wgt._parsedCtlKeys, which = 0;
 			if (parsed) {
-				var ctrl = evt.ctrlKey, alt = evt.altKey, shift = evt.shiftKey;
-				if (!which && ctrl && alt && shift)
-					which = 7;
-				if (!which && ctrl && alt)
+				var keys = [evt.ctrlKey, evt.altKey, evt.shiftKey]
+				var ctrl = evt.ctrlKey ? 1 : 0,
+					alt = evt.altKey ? 2 : 0,
+					shift = evt.shiftKey ? 3 : 0,
+					keys = ctrl + alt + shift;
+				if (keys > 3)
+					which = keys + 1;
+				else if (keys == 3 && alt > 0) // ctrl + alt
 					which = 4;
-				if (!which && ctrl && shift)
-					which = 5;
-				if (!which && alt && shift)
-					which = 6;
-				if (!which && ctrl)
-					which = 1;
-				if (!which && alt)
-					which = 2;
-				if (!which && shift)
-					which = 3;
+				else
+					which = keys;
+
+				if (parsed[which][keyCode])
+					break; //found
 			}
-			if (parsed && parsed[which][keyCode])
-				break; //found
 		}
 
 		//Bug 3304408: SELECT fixes the selected index later than mousedown
