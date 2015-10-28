@@ -3614,8 +3614,11 @@ focus_: function (timeout) {
 			if (!opts || !opts.checkOnly) {
 				var cf = zk.currentFocus;
 				//Note: browser might change focus later, so delay a bit
-				if (cf && zUtl.isAncestor(modal, cf)) cf.focus(0);
-				else modal.focus(0);
+				if (cf && zUtl.isAncestor(modal, cf) && cf.focus(0)) {
+				    return true;
+				} else {
+				    modal.focus(0);
+				}
 			}
 			return false;
 		}

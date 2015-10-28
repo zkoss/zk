@@ -170,6 +170,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				zIndex: wgt._zIndex,
 				visible: realVisible
 			});
+			var tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
+			jq('#'+wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0 onclick="return false;" href="javascript:;" class="z-focus-a"></' + tag + '>');
+			wgt._anchor = jq('#'+wgt.uuid + '-mask-a')[0];
 		}
 		if (realVisible)
 			_markModal(wgt);
@@ -1025,7 +1028,13 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				if (w.desktop && w != cap && w.focus_(timeout))
 					return true;
 		}
-		return cap && cap.focus_(timeout);
+		if (cap && cap.focus_(timeout)) {
+			return true;
+		} else if (this._anchor) {
+			this._anchor.focus();
+			return true;
+		}
+		return false;
 	},
 	
 	domClass_: function(no) {
@@ -1133,6 +1142,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		}
 
 		if (this._mask) {
+			if (this._anchor)
+				this._anchor = null;
 			this._mask.destroy();
 			this._mask = null;
 		}

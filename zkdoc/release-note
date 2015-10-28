@@ -33,6 +33,8 @@ ZK 8.0.1
   ZK-2917: MVVM relocating components with ViewModels
   ZK-2901: getBoundingClientRect() is slow in ie
   ZK-2906: Escaped characters are not parsed back in ChosenBox > CreateMessage
+  ZK-2846: browser search issue with listbox using frozen columns
+  ZK-2935: A modal window with no focusable control will give focus to background element on tab focus.
 
 * Upgrade Notes
   + In org.zkoss.zul.Chart and org.zkoss.zkmax.zul.Fusionchart, using hflex and vflex will get exception since this version, you should use width and height instead.
@@ -163,6 +165,7 @@ ZK 7.0.7
   ZK-2840: Cannot scroll down a Grid with a mobile browse
   ZK-2893: small typo in error message in ConfigParser
   ZK-2846: browser search issue with listbox using frozen columns
+  ZK-2935: A modal window with no focusable control will give focus to background element on tab focus.
   
 * Upgrade Notes
 
