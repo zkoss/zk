@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2935.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 28 10:32:45 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the row area.
+        2. Type "TAB" to switch the focus
+        3. The focus cannot switch to the background buttons. (if true, that's a bug)
+    </label>
+	<button />
+	<button />
+	<button />
+	<button />
+	<window mode="modal">
+		<grid>
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<button label="button in grid" disabled="true" />
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>
