@@ -1190,11 +1190,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (w.style.display != 'none' && !w.id.endsWith('hdfaker-bar')) // B70-ZK-2307 and B70-ZK-2358
 						wd += zk.parseInt(w.style.width);
 				}
-				hdtbl.style.width = wd + 'px';
-				if (bdtbl)
-					bdtbl.style.width = wd + 'px';
-				if (fttbl)
-					fttbl.style.width = wd + 'px';
+				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
+					hdtbl.style.width = wd + 'px';
+					if (bdtbl)
+						bdtbl.style.width = wd + 'px';
+					if (fttbl)
+						fttbl.style.width = wd + 'px';
+				}
 			}
 		} else if (this.frozen) {
 			//B70-ZK-2468: should sync ebody width with ebodytbl width
