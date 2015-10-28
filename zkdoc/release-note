@@ -16,6 +16,7 @@ ZK 7.0.7
   ZK-2922: Cannot close an error box after multiple error boxes created in firefox
   ZK-2840: Cannot scroll down a Grid with a mobile browse
   ZK-2893: small typo in error message in ConfigParser
+  ZK-2846: browser search issue with listbox using frozen columns
   ZK-2935: A modal window with no focusable control will give focus to background element on tab focus.
   
 * Upgrade Notes
