@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -57,7 +58,7 @@ import org.zkoss.lang.Library;
  * @author tomyeh
  * @since 3.0.4
  */
-public class RepeatableReader extends Reader implements Repeatable {
+public class RepeatableReader extends Reader implements Repeatable, Serializable {
 	private static final Logger log = LoggerFactory.getLogger(RepeatableReader.class);
 
 	private Reader _org;
@@ -338,7 +339,8 @@ public class RepeatableReader extends Reader implements Repeatable {
 		super.finalize();
 	}
 
-	private static class ResetableReader extends Reader implements Repeatable {
+	private static class ResetableReader extends Reader implements Repeatable,
+			Serializable {
 		private final Reader _org;
 		ResetableReader(Reader bais) {
 			_org = bais;
@@ -360,7 +362,8 @@ public class RepeatableReader extends Reader implements Repeatable {
 			super.finalize();
 		}
 	}
-	private static class RepeatableFileReader extends Reader implements Repeatable {
+	private static class RepeatableFileReader extends Reader implements Repeatable,
+			Serializable {
 		private final File _file;
 		private Reader _in;
 		private final String _charset;
@@ -391,7 +394,8 @@ public class RepeatableReader extends Reader implements Repeatable {
 			super.finalize();
 		}
 	}
-	private static class RepeatableURLReader extends Reader implements Repeatable {
+	private static class RepeatableURLReader extends Reader implements Repeatable,
+			Serializable {
 		private final URL _url;
 		private Reader _in;
 		private final String _charset;

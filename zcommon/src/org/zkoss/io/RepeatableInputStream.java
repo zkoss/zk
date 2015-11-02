@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URL;
 
 import org.slf4j.Logger;
@@ -61,7 +62,8 @@ import org.zkoss.lang.Library;
  * @author tomyeh
  * @since 3.0.4
  */
-public class RepeatableInputStream extends InputStream implements Repeatable {
+public class RepeatableInputStream extends InputStream implements Repeatable,
+		Serializable {
 	private static final Logger log = LoggerFactory.getLogger(RepeatableInputStream.class);
 
 	/*package*/ static final String BUFFER_LIMIT_SIZE = "org.zkoss.io.bufferLimitSize";
@@ -278,7 +280,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	}
 
 	private static class ResetableInputStream extends InputStream
-	implements Repeatable {
+	implements Repeatable, Serializable {
 		private final InputStream _org;
 		ResetableInputStream(InputStream bais) {
 			_org = bais;
@@ -301,7 +303,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 		}
 	}
 	private static class RepeatableFileInputStream extends InputStream
-	implements Repeatable {
+	implements Repeatable, Serializable {
 		private final File _file;
 		private InputStream _in;
 
@@ -331,7 +333,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 		}
 	}
 	private static class RepeatableURLInputStream extends InputStream
-	implements Repeatable {
+	implements Repeatable, Serializable {
 		private final URL _url;
 		private InputStream _in;
 
