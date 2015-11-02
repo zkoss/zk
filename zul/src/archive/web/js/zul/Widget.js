@@ -425,7 +425,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			case '$': //shift
 				var flag = cc == '^' ? 1 : cc == '@' ? 2 : 4;
 				if ((which & flag) != 0)
-					return _setCtrlKeysErr('Unexcepted key combination: ' + keys);
+					return _setCtrlKeysErr('Unexpected key combination: ' + keys);
 				else
 					which |= flag;
 				break;
