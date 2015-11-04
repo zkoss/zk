@@ -37,6 +37,7 @@ ZK 8.0.1
   ZK-2935: A modal window with no focusable control will give focus to background element on tab focus
   ZK-2934: A control in a grid row does not count as a focusable control when giving focus to the first element of a modal window
   ZK-2936: NotSerializableException: org.zkoss.io.RepeatableInputStream$ResetableInputStream
+  ZK-2815: class cast exception when using a Boolean collection for MVVM
 
 * Upgrade Notes
 
@@ -170,6 +171,7 @@ ZK 7.0.7
   ZK-2934: A control in a grid row does not count as a focusable control when giving focus to the first element of a modal window
   ZK-2862: Cannot select an item in a listbox when its outer listbox is draggable
   ZK-2936: NotSerializableException: org.zkoss.io.RepeatableInputStream$ResetableInputStream
+  ZK-2815: class cast exception when using a Boolean collection for MVVM
   
 * Upgrade Notes
 
