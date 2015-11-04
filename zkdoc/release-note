@@ -22,6 +22,7 @@ ZK 7.0.7
   ZK-2862: Cannot select an item in a listbox when its outer listbox is draggable
   ZK-2936: NotSerializableException: org.zkoss.io.RepeatableInputStream$ResetableInputStream
   ZK-2815: class cast exception when using a Boolean collection for MVVM
+  ZK-2858: content type list is not complete in the contentType.properties file
   
 * Upgrade Notes
 
