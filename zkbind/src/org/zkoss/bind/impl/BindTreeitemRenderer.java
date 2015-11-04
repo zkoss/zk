@@ -14,6 +14,7 @@ package org.zkoss.bind.impl;
 
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
@@ -36,6 +37,11 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
 		final Template tm = resolveTemplate(tree,parent,data,index,-1,"model");
+		// ZK-2859: to replace the id of the the original treeitem that is not from the template
+		final String oldId = item.getId();
+		if (!Strings.isEmpty(oldId)) {
+			item.setId("$$FAKE_ID$$");
+		}
 		if (tm == null) {
 			Treecell tc = new Treecell(Objects.toString(data));
 			Treerow tr = null;
@@ -112,6 +118,10 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			
 			if (ti.getValue() == null) //template might set it
 				ti.setValue(data);
+			// ZK-2859: change the id back if ti is actually the original treeitem which is not from the template
+			if ("$$FAKE_ID$$".equals(ti.getId())) {
+				ti.setId(oldId);
+			}
 			item.setAttribute(Attributes.MODEL_RENDERAS, ti);
 				//indicate a new item is created to replace the existent one
 			item.detach();

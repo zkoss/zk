@@ -38,6 +38,7 @@ ZK 8.0.1
   ZK-2934: A control in a grid row does not count as a focusable control when giving focus to the first element of a modal window
   ZK-2936: NotSerializableException: org.zkoss.io.RepeatableInputStream$ResetableInputStream
   ZK-2815: class cast exception when using a Boolean collection for MVVM
+  ZK-2859: setting an ID on treeItem cause duplication issue with paging mold
 
 * Upgrade Notes
 
