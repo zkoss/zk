@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2858.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 28 15:36:41 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. you should only see these steps on the page
+		2. open the developer tools, you should see the dom of the svg image fontawesome-webfont.svg
+		3. in network, should have "image/svg+xml;charset=UTF-8" for content-type in the response header of the img fontawesome-webfont.svg
+	</label>
+	<image src="~./zul/less/font/fontawesome-webfont.svg"/>
+</zk>
