@@ -200,7 +200,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		final ValueReference ref = getValueReference(ctx);
 		try {
 			final Object value = getComponentValue(ctx);
-			return new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value==Converter.IGNORED_VALUE?null:value);
+			return new PropertyImpl(ref.getBase(), String.valueOf(ref.getProperty()), value==Converter.IGNORED_VALUE?null:value);
 		} catch (Exception e) {
 			// ZK-878 Exception if binding a form with errorMessage
 			// a wrong value exception might be thrown when a component has constraint

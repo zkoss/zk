@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2852.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 2 12:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window id="win" title="Window ZK Checkboxes" border="normal" width="800px" height="600px"
+			apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2815')">
+		<label multiline="true">
+			1. click checkbox 2
+			2. you should not see any exception
+		</label>
+		<vlayout id="winA" width="100%" children="@load(vm.listModel)">
+			<template name="children">
+				<hlayout row="@ref(each)" width="100%" children="@load(row.labels)">
+					<template name="children">
+						<checkbox label="@init(each)" onClick="@command('check_click')"
+								  checked="@load(row.states[forEachStatus.index]) @save(row.states[forEachStatus.index], after='check_click')"/>
+						<!--<checkbox label="@init(each)" onClick="@command('check_click')"-->
+								  <!--checked="@bind(row.states[forEachStatus.index])"/>-->
+					</template>
+				</hlayout>
+			</template>
+		</vlayout>
+		<vlayout width="100%" children="@load(vm.listModel)">
+			<template name="children">
+				<hlayout row="@ref(each)" width="100%" children="@load(row.labels)">
+					<template name="children">
+						<label value="@bind(row.states[forEachStatus.index])"/>
+					</template>
+				</hlayout>
+			</template>
+		</vlayout>
+	</window>
+</zk>
