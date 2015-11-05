@@ -1052,8 +1052,12 @@ public class UiEngineImpl implements UiEngine {
 			else attrs.apply(page);
 		} else if (meta instanceof TemplateInfo) {
 			final TemplateInfo tempInfo = (TemplateInfo)meta;
-			if (isEffective(tempInfo, page, comp))
-				comp.setTemplate(tempInfo.getName(), new TemplateImpl(tempInfo, comp));
+			if (isEffective(tempInfo, page, comp)) {
+				if (comp == null)
+					page.addTemplate(tempInfo.getName(), new TemplateImpl(tempInfo, comp));
+				else
+					comp.setTemplate(tempInfo.getName(), new TemplateImpl(tempInfo, comp));
+			}
 		} else if (meta instanceof ZScriptInfo) {
 			//Spec fix since 6.0.0: if/unless shall be evaluated first
 			final ZScriptInfo zsInfo = (ZScriptInfo)meta;
