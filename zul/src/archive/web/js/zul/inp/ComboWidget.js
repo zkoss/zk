@@ -158,6 +158,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.position = 'absolute'; //just in case
 		pp.style.display = 'block';
 
+		// B50-ZK-859: need to carry out min size here
+		if (this.presize_())
+			ppofs = this.getPopupSize_(pp);
+		// B70-ZK-2742: arrange method fixsz execution order
+		this._fixsz(ppofs);//fix size
 		// throw out
 		pp.style.visibility = 'hidden';
 		pp.style.left = '-10000px';
@@ -171,13 +176,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		$pp.makeVParent();
 		zWatch.fireDown('onVParent', this);
 		
-		// B50-ZK-859: need to carry out min size here
-		if (this.presize_()) 
-			ppofs = this.getPopupSize_(pp);
-		
 		// throw in
 		pp.style.left = '';
-		this._fixsz(ppofs);//fix size
 		
 		// given init position
 		$pp.position(inp, 'after_start');	
