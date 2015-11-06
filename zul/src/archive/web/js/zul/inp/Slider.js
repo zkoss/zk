@@ -267,7 +267,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			nextPos.top = jq.px0(height);
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
-		$btn.animate(nextPos, 'slow', function() {
+		//ZK-2332 use the speed set in the client-attribute, use the default value 'slow'
+		$btn.animate(nextPos, $btn.zk.getAnimationSpeed('slow'), function() {
 			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			pos = wgt._constraintPos(pos);
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
