@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2849.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov  4 17:45:27 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+		1. click on the combobox button, the dropdown should open
+		2. click on the button again, the dropdown should close, if not it's a bug.
+
+	</label>
+	<combobox readonly="true">
+		<comboitem label="item1"/>
+		<comboitem label="item2"/>
+		<comboitem label="item3"/>
+	</combobox>
+</window>
