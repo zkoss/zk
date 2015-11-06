@@ -210,6 +210,15 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		<separator/>
 		Speed=1000
 		<datebox cols="12" format="short" onCreate="self.value = new Date()" ca:data-animationspeed="1000" />
-		
+
+		<separator/>
+		Normal
+		<slider curpos="0" maxpos="100" />
+		<separator/>
+		Speed=0
+		<slider curpos="0" maxpos="100" ca:data-animationspeed="0" />
+		<separator/>
+		Speed=1000
+		<slider curpos="0" maxpos="100" ca:data-animationspeed="1000" />
 	</div>
 </window>
