@@ -41,6 +41,7 @@ ZK 8.0.1
   ZK-2859: setting an ID on treeItem cause duplication issue with paging mold
   ZK-2858: content type list is not complete in the contentType.properties file
   ZK-2943: The root template should be added to page scope
+  ZK-2742: Combobox popup shows at wrong position in IE10
 
 * Upgrade Notes
 
@@ -176,6 +177,7 @@ ZK 7.0.7
   ZK-2936: NotSerializableException: org.zkoss.io.RepeatableInputStream$ResetableInputStream
   ZK-2815: class cast exception when using a Boolean collection for MVVM
   ZK-2858: content type list is not complete in the contentType.properties file
+  ZK-2742: Combobox popup shows at wrong position in IE10
   
 * Upgrade Notes
 
