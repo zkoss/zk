@@ -43,6 +43,7 @@ ZK 8.0.1
   ZK-2943: The root template should be added to page scope
   ZK-2742: Combobox popup shows at wrong position in IE10
   ZK-2849: Cannot close the dropdown by clicking combobox button
+  ZK-2946: tree column align ignored
 
 * Upgrade Notes
 
@@ -180,6 +181,7 @@ ZK 7.0.7
   ZK-2858: content type list is not complete in the contentType.properties file
   ZK-2742: Combobox popup shows at wrong position in IE10
   ZK-2849: Cannot close the dropdown by clicking combobox button
+  ZK-2946: tree column align ignored
   
 * Upgrade Notes
 
