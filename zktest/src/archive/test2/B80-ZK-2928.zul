@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2928.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 28 10:03:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B80_ZK_2928VM')">
+        <label multiline="true">
+            1. Click "showSelectedItem" button and you should see "showSelectedItem:null" in log.
+            2. Click combobutton and select the first option. You should see ">>ms_MY" in log.
+            3. Click "showSelectedItem" button and you should see "showSelectedItem:ms_MY" in log.
+            4. Clear value of combobox by backspace and click "showSelectedItem" button.
+            5. You should see ">>null" and "showSelectedItem:null" in log.
+        </label>
+        <combobox model="@load(vm.model)" selectedItem="@bind(vm.ourProp)"/>
+        <button label="showSelectedItem" onClick="@command('showSelectedItem')"/>
+    </div>
+</zk>

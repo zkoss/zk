@@ -895,20 +895,16 @@ public class Combobox extends Textbox {
 					return getPreviousSelectedObjects();
 				}
 			});
+			Comboitem oldSel = _selItem;
 			Set<Comboitem> selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty() ? (Comboitem)selItems.iterator().next(): null;
+			_lastCkVal = getValue(); //onChange is sent before onSelect
 
-            //ZK-1987: Combobox item selection rely items label string
-            String newVal = "";
-            final Object oldVal = _value;
-            if (_selItem != null) {
-                newVal = _selItem.getLabel();
-                setValueDirectly(newVal);
-            }
-			_lastCkVal = getValue();
 			syncSelectionToModel();
-            // For backward compatible, fire onChange before onSelect
-            Events.postEvent(new InputEvent(Events.ON_CHANGE, this, newVal, oldVal));
+			//ZK-1987: Combobox item selection rely items label string
+			String val = _lastCkVal;
+			if (oldSel != null && !oldSel.equals(_selItem) && oldSel.getLabel().equals(val))
+				Events.postEvent(new InputEvent(Events.ON_CHANGE, this, val, val));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGE)) {
 			super.service(request, everError);

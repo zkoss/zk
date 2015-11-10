@@ -81,7 +81,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 
 			var cb = this.parent;
-			cb._select(this, {sendOnSelect:true});
+			cb._select(this, {sendOnSelect:true, sendOnChange: true});
 			this._updateHoverImage();
 			cb.close({sendOnOpen:true, focus:true});
 			
