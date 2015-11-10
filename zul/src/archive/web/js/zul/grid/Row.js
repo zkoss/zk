@@ -77,8 +77,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
-			if (visible && this.isStripeable_() && this.parent)
-				this.parent.stripe();
+			if (this.desktop && this.isStripeable_())
+				this.parent._syncStripe();
 		}
 	},
 	/** Returns the spans, which is a list of numbers separated by comma.
