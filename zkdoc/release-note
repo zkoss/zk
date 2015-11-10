@@ -182,6 +182,7 @@ ZK 7.0.7
   ZK-2742: Combobox popup shows at wrong position in IE10
   ZK-2849: Cannot close the dropdown by clicking combobox button
   ZK-2946: tree column align ignored
+  ZK-2860: grid row doesn't stripe the grid when .setVisible(false)
   
 * Upgrade Notes
 
