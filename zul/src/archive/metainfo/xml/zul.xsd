@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.0.201510201111">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.1.201511100950">
     <!--
     SIMPLETYPE
     -->
@@ -2725,6 +2725,7 @@
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="align" type="packAttrType" use="optional"/>
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
