@@ -2487,11 +2487,12 @@ function () {
 				}
 				out += ' ' + nm + '="' + zUtl.encodeXMLAttribute(attrs[nm] || '') + '"'; //generate even if val is empty
 			}
-			if (has) {
-				this.listen({onBind: function () {
+			if (has && !this.z_isDataHandlerBound) {
+				this.z_isDataHandlerBound = function () {
 					for(var nm in dh)
 						zk.getDataHandler(nm).run(this, dh[nm]);
-				}});
+				};
+				this.listen({onBind: this.z_isDataHandlerBound});
 			}
 		}
 		return out;
