@@ -48,6 +48,7 @@ ZK 8.0.1
   ZK-2919: WrongValueException prevents combobox from saving value
   ZK-2928: Clear user input doesn't sent a onChange and onSelect
   ZK-2948: Do listen "OnBind" again in Data handler when a widget trigger rerender()
+  ZK-2937: The Combobox overwrites input text with previously selected item
 
 * Upgrade Notes
 
