@@ -1428,7 +1428,21 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		return false;
 	}
 	
-	private Boolean _dynamicValue;
+	protected Boolean _dynamicValue;
+
+	/**
+	 * Sets whether the shadow element contains a dynamic value, if true means the
+	 * shadow element cannot be destroyed after evaluated, if false it will detect
+	 * its attribute automatically.
+	 * <p>Default: false (auto detection)</p>
+	 * @since 8.0.1
+	 */
+	public void setDynamicValue(boolean dynamicValue) {
+		if (dynamicValue)
+			_dynamicValue = dynamicValue;
+		else
+			_dynamicValue = null; // null means it's 'auto' detection.
+	}
 
 	public boolean isDynamicValue() {
 		if (_dynamicValue == null) {

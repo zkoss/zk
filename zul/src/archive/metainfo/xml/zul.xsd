@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.1.201511100950">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.1.201511110949">
     <!--
     SIMPLETYPE
     -->
@@ -3447,6 +3447,7 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
         <xs:attribute name="template" type="xs:string" use="required" />
         <xs:attribute name="templateURI" type="xs:string" use="required" />
+        <xs:attribute name="dynamicValue" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- shadow element: forEach -->
 	<xs:element name="forEach" type="forEachType" />

@@ -11,9 +11,6 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.ConcurrentModificationException;
-import java.util.List;
-
 /**
  * An addition interface to {@link ShadowElement}
  * @author jumperchen
@@ -64,6 +61,15 @@ public interface ShadowElementCtrl {
 	 * shadow element cannot be destroyed after evaluated.
 	 */
 	public boolean isDynamicValue();
+
+	/**
+	 * Sets whether the shadow element contains a dynamic value, if true means the
+	 * shadow element cannot be destroyed after evaluated, if false it will detect
+	 * its attribute automatically.
+	 * <p>Default: false (auto detection)</p>
+	 * @since 8.0.1
+	 */
+	public void setDynamicValue(boolean dynamicValue);
 
 	/**
 	 * Return the shadow host from it or its ancestor, if any. 
