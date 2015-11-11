@@ -49,6 +49,7 @@ ZK 8.0.1
   ZK-2928: Clear user input doesn't sent a onChange and onSelect
   ZK-2948: Do listen "OnBind" again in Data handler when a widget trigger rerender()
   ZK-2937: The Combobox overwrites input text with previously selected item
+  ZK-2930: Setting a model to a Chosenbox causes a NullPointerException
 
 * Upgrade Notes
 

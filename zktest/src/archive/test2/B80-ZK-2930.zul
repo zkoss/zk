@@ -1,0 +1,23 @@
+<!--
+B80-ZK-2930.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 10 15:03:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="btn" onClick="add()" label="add chosenbox"/>
+	<zscript><![CDATA[
+		ListModel model = new ListModelList(Locale.getAvailableLocales());
+        public void add() {
+            Chosenbox box = new Chosenbox();
+            box.setModel(model);
+        }
+]]></zscript>
+</zk>
