@@ -65,11 +65,22 @@ public interface Binder {
 	 */
 	public static final String LOAD_TYPE = "LOAD_TYPE"; //expected type of attribute
 	/**
-	 * Attribute of {@link Binder#ZKBIND} annotation, the save replacement ; e.g. selecteItem of selectbox, it save the value selectedIndex (via converter) to bean
+	 * Attribute of {@link Binder#ZKBIND} annotation, the save replacement ; e.g. selectedItem of selectbox, it save the value selectedIndex (via converter) to bean
 	 */
 	public static final String SAVE_REPLACEMENT = "SAVE_REPLACEMENT"; //loadreplacement of attribute
-	
-	
+
+	/**
+	 * Indicates the doing command is successful.
+	 * @since 8.0.1
+	 */
+	public static final int COMMAND_SUCCESS = 0;
+
+	/**
+	 * Indicates the doing command is failure with some validation errors.
+	 * @since 8.0.1
+	 */
+	public static final int COMMAND_FAIL_VALIDATE = 1;
+
 	/**
 	 * Initializes the binder with a root component and viewModel object. 
 	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
@@ -346,9 +357,10 @@ public interface Binder {
 	 * send command fired to this binder and process the command immediately
 	 * @param command command name
 	 * @param args , arguments when notifying this command, it will be passed as a arguments of execution method of vm
+	 * @return the result of the doCommand, COMMAND_SUCCESS or COMMAND_FAIL_VALIDATE (since 8.0.1)
 	 */
-	public void sendCommand(String command, Map<String, Object> args);
-	
+	public int sendCommand(String command, Map<String, Object> args);
+
 	/**
 	 * post command this binder, binder will queue the command, and fired later.
 	 * @param command command name

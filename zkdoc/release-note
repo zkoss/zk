@@ -3,6 +3,7 @@ ZK 8.0.1
 * Features
   ZK-2817: Support combination of Ctrl, Alt and Shift for setCtrlKeys API
   ZK-2950: Support a way to persist the Shadow element
+  ZK-2951: Support a way to trigger MVVM command silently
 
 * Bugs
   ZK-2912: Specifying a non-existing variable in "unless" attribute causes a NullPointerException if

@@ -125,10 +125,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
 	
-	//Command lifecycle result
-	private static final int COMMAND_SUCCESS = 0;
-	private static final int COMMAND_FAIL_VALIDATE = 1;
-	
 	
 	//TODO make it configurable
 	private final static Map<Class<?>, List<Method>> _initMethodCache = 
@@ -1531,12 +1527,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
-	public void sendCommand(String command, Map<String, Object> args) {
+	public int sendCommand(String command, Map<String, Object> args) {
 		checkInit();
 		final Set<Property> notifys = new HashSet<Property>();
 		//args come from user, we don't eval it. 
-		doCommand(_rootComp, null, command, null, args, notifys);
+		int result = doCommand(_rootComp, null, command, null, args, notifys);
+		if (result == COMMAND_FAIL_VALIDATE && _validationMessages!=null) {
+			notifys.add(new PropertyImpl(_validationMessages,".",null));
+		}
 		fireNotifyChanges(notifys);
+		return result;
 	}
 
 	private void fireNotifyChanges(Set<Property> notifys) {
@@ -1879,7 +1879,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 							(String) null, (Object) null, ctx)); // collect notifyChange
 				}				
 			} else if (_notifyCommands == null || !_notifyCommands.containsKey(command)) {
-				throw new UiException(MiscUtil.formatLocationMessage("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel,comp));
+
+				// F80-ZK-2951, ignore starting with ':' and '/'
+				if (!(command.startsWith(":") || command.startsWith("/")))
+					throw new UiException(MiscUtil.formatLocationMessage("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel,comp));
 			}
 			if(_log.isDebugEnabled()){
 				_log.debug("after doExecute notifys=[{}]", notifys);
