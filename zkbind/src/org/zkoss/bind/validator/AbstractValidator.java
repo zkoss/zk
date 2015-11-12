@@ -41,7 +41,7 @@ public abstract class AbstractValidator implements Validator {
 	protected void addInvalidMessage(ValidationContext ctx,String message) {
 		addInvalidMessages(ctx, null, new String[]{message});
 	}
-	
+
 	/**
 	 * add a message to validation context, when you call this method, it also sets context invalid.
 	 * @param ctx the validation context
@@ -50,6 +50,18 @@ public abstract class AbstractValidator implements Validator {
 	 */
 	protected void addInvalidMessage(ValidationContext ctx, String key, String message) {
 		addInvalidMessages(ctx, key, new String[]{message});
+	}
+
+	/**
+	 * add a message to validation context, when you call this method, it also sets context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param message the message of validation
+	 * @param value the value of the rejected field
+	 * @since 8.0.1
+	 */
+	protected void addInvalidMessage(ValidationContext ctx, String key, String message, Object value) {
+		addInvalidMessages(ctx, key, new String[]{message}, value);
 	}
 
 	/**
@@ -67,6 +79,18 @@ public abstract class AbstractValidator implements Validator {
 	 * @param messages messages of validation
 	 */
 	protected void addInvalidMessages(ValidationContext ctx, String key, String[] messages) {
+		addInvalidMessages(ctx, key, messages, null);
+	}
+
+	/**
+	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param messages messages of validation
+	 * @param value the value of the rejected field
+	 * @since 8.0.1
+	 */
+	protected void addInvalidMessages(ValidationContext ctx, String key, String[] messages, Object value) {
 		ctx.setInvalid();
 		ValidationMessages vmsgs = ((BinderCtrl)ctx.getBindContext().getBinder()).getValidationMessages();
 		if(vmsgs!=null){
@@ -80,7 +104,7 @@ public abstract class AbstractValidator implements Validator {
 				//ignore children binding;
 			}
 			if(attr!=null){
-				vmsgs.addMessages(ctx.getBindContext().getComponent(),attr, key, messages);
+				vmsgs.addMessages(ctx.getBindContext().getComponent(),attr, key, messages, value);
 			}
 		}else{
 			log.warn("ValidationMessages not found on binder "+ctx.getBindContext().getBinder() + ", please init it");

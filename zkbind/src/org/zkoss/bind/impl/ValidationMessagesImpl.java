@@ -54,11 +54,13 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 		final String attr;
 		final String key;
 		final String msg;
-		public Message(Component comp,String attr, String key, String msg) {
+		final Object value;
+		public Message(Component comp,String attr, String key, String msg, Object value) {
 			this.comp = comp;
 			this.attr = attr;
 			this.key = key;
 			this.msg = msg;
+			this.value = value;
 		}
 	}
 	
@@ -213,19 +215,29 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 
 	
 	public void setMessages(Component comp, String attr, String key,String[] messages) {
-		clearMessages(comp, attr);
-		addMessages(comp,attr,key,messages);
+		setMessages(comp, attr, key, messages, null);
 	}
 	
 	
 	public void addMessages(Component comp, String attr, String key, String[] messages) {
+		addMessages(comp, attr, key, messages, null);
+	}
+
+	public void setMessages(Component comp, String attr, String key,
+			String[] messages, Object value) {
+		clearMessages(comp, attr);
+		addMessages(comp,attr,key,messages, value);
+	}
+
+	public void addMessages(Component comp, String attr, String key,
+			String[] messages, Object value) {
 		List<Message> compMsgs = _compMsgsMap.get(comp);
 		if(compMsgs==null){
 			_compMsgsMap.put(comp, compMsgs = new ArrayList<Message>());
 		}
-		
+
 		for(String s:messages){
-			Message msg = new Message(comp,attr,key,s);
+			Message msg = new Message(comp,attr,key,s, value);
 			_messages.add(msg);
 			compMsgs.add(msg);
 			if(key!=null){
@@ -237,7 +249,52 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 			}
 		}
 	}
-	
+
+	private List<Message> getMessage(Component comp, String key) {
+		List<Message> compMsgs = _compMsgsMap.get(comp);
+		if(compMsgs==null || compMsgs.size()==0){
+			return null;
+		}
+		List<Message> msgs = new ArrayList<Message>();
+		for(Message msg:compMsgs){
+			if(Objects.equals(msg.key, key))
+				msgs.add(msg);
+		}
+		return msgs;
+	}
+
+	public Object getFieldValue(String key) {
+		List<Message> keyMsgs = _keyMsgsMap.get(key);
+		if (keyMsgs == null || keyMsgs.size() == 0) {
+			return null;
+		}
+		return keyMsgs.get(0).value;
+	}
+
+	public Object getFieldValue(Component comp, String key) {
+		List<Message> messages = getMessage(comp, key);
+		return messages.isEmpty() ? null : messages.get(0).value;
+	}
+
+	public Object[] getFieldValues(String key) {
+		List<Message> keyMsgs = _keyMsgsMap.get(key);
+		if (keyMsgs == null || keyMsgs.size() == 0) {
+			return null;
+		}
+		List<Object> msgs = new ArrayList<Object>();
+		for (Message msg : keyMsgs)
+			msgs.add(msg.value);
+		return msgs.toArray(new Object[0]);
+	}
+
+	public Object[] getFieldValues(Component comp, String key) {
+		List<Message> messages = getMessage(comp, key);
+		List<Object> msgs = new ArrayList<Object>();
+		for (Message msg : messages)
+			msgs.add(msg.value);
+		return msgs.toArray(new Object[0]);
+	}
+
 	//interface for collection
 
 	
