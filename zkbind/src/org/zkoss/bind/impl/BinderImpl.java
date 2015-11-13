@@ -1539,7 +1539,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		return result;
 	}
 
-	private void fireNotifyChanges(Set<Property> notifys) {
+	protected void fireNotifyChanges(Set<Property> notifys) {
 		for(Property prop : notifys) {
 			notifyChange(prop.getBase(), prop.getProperty());
 		}
@@ -1739,7 +1739,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	//doCommand -> doValidate
-	private boolean doValidate(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
+	protected boolean doValidate(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
 		final Set<Property> validates = new HashSet<Property>();
 		try {
 			if(_log.isDebugEnabled()){
@@ -1828,9 +1828,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		return call;
 	}
-	
-	
-	private void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx, Set<Property> notifys) {
+
+
+	protected void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx, Set<Property> notifys) {
 		try {
 			if(_log.isDebugEnabled()){
 				_log.debug("before doExecute comp=[{}],command=[{}],notifys=[{}]",comp,command,notifys);
@@ -1960,7 +1960,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 
 	//doCommand -> doSaveBefore
-	private void doSaveBefore(Component comp, String command, Event evt,  BindContext ctx, Set<Property> notifys) {
+	protected void doSaveBefore(Component comp, String command, Event evt,  BindContext ctx, Set<Property> notifys) {
 		if(_log.isDebugEnabled()){
 			_log.debug("doSaveBefore, comp=[{}],command=[{}],evt=[{}],notifys=[{}]",comp,command,evt,notifys);
 		}
@@ -1973,8 +1973,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 
-	
-	private void doSaveAfter(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
+
+	protected void doSaveAfter(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
 		if(_log.isDebugEnabled()){
 			_log.debug("doSaveAfter, comp=[{}],command=[{}],evt=[{}],notifys=[{}]",comp,command,evt,notifys);
 		}
@@ -1988,8 +1988,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 	}
 
-	
-	private void doLoadBefore(Component comp, String command, BindContext ctx) {
+
+	protected void doLoadBefore(Component comp, String command, BindContext ctx) {
 		if(_log.isDebugEnabled()){
 			_log.debug("doLoadBefore, comp=[{}],command=[{}]",comp,command);
 		}
@@ -2002,8 +2002,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
 	}
-	
-	private void doLoadAfter(Component comp, String command, BindContext ctx) {
+
+	protected void doLoadAfter(Component comp, String command, BindContext ctx) {
 		if(_log.isDebugEnabled()){
 			_log.debug("doLoadAfter, comp=[{}],command=[{}]",comp,command);
 		}
