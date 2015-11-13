@@ -222,6 +222,38 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		this._bover = false;
 		_setCloseTimer(this);
 	},
+	doKeyDown_: function (evt) {
+		this._doKeyDown(evt);
+		if (!evt.stopped)
+			this.$supers('doKeyDown_', arguments);
+	},
+	_doKeyDown: function (evt) { //support enter,space, arrow down, and escape
+		var keyCode = evt.keyCode,
+			bOpen = this.isOpen();
+		if (keyCode == 40 && !bOpen)
+			this.open({sendOnOpen: true});
+		else if (keyCode == 13 || keyCode == 32) {
+			this.fire('onClick');
+		} else if (keyCode == 27 && bOpen)
+			this.close();
+	},
+	focus_: function (timeout) { //support focus
+		if (this.isDisabled())
+			return false;
+		if (!zk.focusBackFix || !this._upload) {
+			var self = this,
+				n = this.$n();
+			zk.afterAnimate(function () {
+				try {
+					n.focus();
+					zk.currentFocus = self;
+					zjq.fixInput(n);
+				} catch (e) {
+				}
+			}, timeout);
+		}
+		return true;
+	},
 	ignoreDescendantFloatUp_: function (des) {
 		return des && des.$instanceof(zul.wgt.Popup);
 	},
