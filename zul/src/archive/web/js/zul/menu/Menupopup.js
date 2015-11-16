@@ -401,7 +401,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			this.close();
 			break;
 		}
-		if (keyCode != 9) // TAB
+		if (keyCode != 9 && keyCode != 27) // TAB && ESC
 			evt.stop(); // Bug ZK-442
 		this.$supers('doKeyDown_', arguments);
 	},

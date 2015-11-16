@@ -1,0 +1,34 @@
+<!--
+B70-ZK-2940.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Nov 11 14:03:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="hello">
+        <label>
+            Navigate between page components using TAB key, Combobutton component should be able to obtain Focus
+        </label>
+        <hbox hflex="1">
+            <button label="Button 1"/>
+            <button label="Button 2" />
+            <combobutton label="ComboButton" tabindex="0">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                </menupopup>
+            </combobutton>
+            <combobutton label="ComboButton" tabindex="1" focus="true">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                </menupopup>
+            </combobutton>
+        </hbox>
+    </window>
+</zk>

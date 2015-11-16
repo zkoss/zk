@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var tabi = this._tabindex,
+	var tabi = this._tabindex | 0,
 		uuid = this.uuid;
 	
 	out.push('<span ', this.domAttrs_());
@@ -21,10 +21,8 @@ function (out) {
 	if (this._disabled)
 		out.push(' disabled="disabled"');
 	
-	out.push(' ><span id="', uuid, '-real" class="', this.$s('content') ,'"');
-	
-	if (tabi)
-		out.push(' tabindex="', tabi, '"');
+	out.push(' tabindex="', tabi, '"');
+    out.push(' ><span id="', uuid, '-real" class="', this.$s('content') ,'"');
 	
 	out.push('>', this.domContent_(), 
 			 '<span id="', uuid, '-btn" class="', this.$s('button'), '">', 
