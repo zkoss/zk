@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2959.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 16 14:54:47 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.lang.Library;
+		Library.setProperty("org.zkoss.util.media.MediaTypeResolverImpl.class","org.zkoss.zktest.test2.F80_ZK_2959");
+	]]></zscript>
+	<label multiline="true">
+		1. open developer tools go to Network and reload the page
+		2. the content-type of "notif-close.gif" should be "image/gif;charset=UTF-8"
+		3. and the content-type of "fontawesome-webfont.svg" should be "image/svg+xml(F80-ZK-2959);charset=UTF-8"
+	</label>
+	<image src="~./zul/img/popup/notif-close.gif"/>
+	<image src="~./zul/less/font/fontawesome-webfont.svg"/>
+</zk>
