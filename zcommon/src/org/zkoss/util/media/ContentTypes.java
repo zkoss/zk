@@ -25,7 +25,9 @@ import java.io.InputStreamReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.SystemException;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
 
@@ -43,6 +45,8 @@ public class ContentTypes {
 	private static final Map<String, String> _ct2fmt = new HashMap<String, String>(64);
 
 	protected ContentTypes() {} //prevent from initializing
+
+	private static MediaTypeResolver _mtr;
 
 	/** Returns whether the content type is binary.
 	 * @param ctype the content type, e.g., text/plain
@@ -63,13 +67,18 @@ public class ContentTypes {
 
 		format = format.trim().toLowerCase(java.util.Locale.ENGLISH);
 		for (;;) {
+			String fmt2ct;
+			if (_mtr != null) {
+				fmt2ct = _mtr.resolve(format);
+				if (fmt2ct != null) return fmt2ct;
+			}
 			synchronized (_fmt2ct) {
-				String fmt2ct = _fmt2ct.get(format);
+				fmt2ct = _fmt2ct.get(format);
 				if (fmt2ct != null) return fmt2ct;
 			}
 
 			int j = format.indexOf('.');
-			if (j < 0) 	return null;
+			if (j < 0) return null;
 			format = format.substring(j + 1);
 		}
 	}
@@ -124,6 +133,14 @@ public class ContentTypes {
 		if (!load(flnm))
 			log.warn(Messages.get(MCommon.FILE_NOT_FOUND, flnm));
 		load("/contentTypes.properties"); //override!
+		String mtrImplClassName = Library.getProperty("org.zkoss.util.media.MediaTypeResolverImpl.class");
+		if (mtrImplClassName != null) {
+			try {
+				_mtr = (MediaTypeResolver) Class.forName(mtrImplClassName).newInstance();
+			} catch (Exception e) {
+				log.warn("", e);
+			}
+		}
 	}
 	private static final boolean load(String flnm) {
 		final InputStream strm = ContentTypes.class.getResourceAsStream(flnm);
