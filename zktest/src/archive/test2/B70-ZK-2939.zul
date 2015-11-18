@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2939.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 18 10:21:20 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button "Click me" to add a new element to the listbox
+		2. the listbox rows should have the same displays as the model rows (without s2)
+	</label>
+	<zscript>
+		<![CDATA[
+	import org.zkoss.zk.ui.util.GenericForwardComposer;
+	public class TestComposer extends GenericForwardComposer {
+		Listbox listbox;
+		ListModelList model;
+		Label label;
+		public void doAfterCompose(Component comp) throws Exception {
+			super.doAfterCompose(comp);
+			Collection list = new ArrayList();
+			list.add("s1");
+			list.add("s2");
+			list.add("s3");
+			model = new ListModelList(list);
+			listbox.setModel(model);
+		}
+		public void onClick$btn(Event e) throws InterruptedException {
+			model.add("s".concat(Integer.toString(model.size() + 1)));
+			label.setValue("model: ".concat(model.toString()));
+		}
+	}
+]]>
+	</zscript>
+	<window border="normal" title="hello" apply="TestComposer">
+		<listbox id="listbox">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" />
+			<template name="model">
+				<listitem visible='${not (each eq "s2")}'>
+					<listcell>
+						<label value="${each}" />
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<button id="btn" label="Click Me" />
+		<label id="label"/>
+	</window>
+</zk>
+
