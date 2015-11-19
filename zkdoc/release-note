@@ -29,6 +29,7 @@ ZK 7.0.7
   ZK-2860: grid row doesn't stripe the grid when .setVisible(false)
   ZK-2940: Combobutton is not tab focusable if no tabIndex or tabindex="0"
   ZK-2941: Combobutton has not keyboard behavior
+  ZK-2939: visible="false" listitems in listbox shift index of visible elements
   
 * Upgrade Notes
 
