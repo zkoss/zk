@@ -2582,13 +2582,12 @@ public class Listbox extends MeshElement {
 				realOfs = 0;
 			boolean open = true;
 			for (Listitem item = getItems().size() <= realOfs ? null: getItems().get(realOfs), nxt;
-			j < pgsz && item != null; item = nxt) {
+			j < pgsz && item != null; item = nxt, j++) {
 				nxt = nextListitem(item); //retrieve first since it might be changed
 
 				if (item.isVisible()
 				&& (open || item instanceof Listgroupfoot || item instanceof Listgroup)) {
 					renderer.render(item, j + ofs);
-					++j;
 				}
 				if (item instanceof Listgroup)
 					open = ((Listgroup) item).isOpen();
