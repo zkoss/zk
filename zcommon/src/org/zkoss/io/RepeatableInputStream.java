@@ -302,7 +302,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 			}
 		}
 		_in = new ByteArrayInputStream(
-				((ByteArrayOutputStream)_out).toByteArray());
+				((ByteArrayOutputStream) out).toByteArray());
 	}
 
 	//Object//
