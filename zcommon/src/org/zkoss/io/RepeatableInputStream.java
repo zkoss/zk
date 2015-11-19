@@ -69,10 +69,10 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 	/*package*/ static final String BUFFER_LIMIT_SIZE = "org.zkoss.io.bufferLimitSize";
 	/*package*/ static final String MEMORY_LIMIT_SIZE = "org.zkoss.io.memoryLimitSize";
 
-	private InputStream _org;
-	private OutputStream _out;
-	private InputStream _in;
-	private File _f;
+	private transient InputStream _org;
+	private transient OutputStream _out;
+	private transient InputStream _in;
+	private transient File _f;
 	/** The content size. It is meaningful only if !_nobuf.
 	 * Note: int is enough (since long makes no sense for buffering)
 	 */
@@ -265,6 +265,44 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 				_in.reset();
 			}
 		}
+	}
+
+	// -- Serializable --//
+	// NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws java.io.IOException {
+		s.defaultWriteObject();
+		if (_org != null) {
+			// write to buffer
+			while(read() != -1);
+		}
+
+		close();
+
+		final byte[] data = new byte[_memmaxsz];
+		int read;
+		while ((read = read(data)) > 0) {
+			s.writeInt(read);
+			s.write(data, 0, read);
+		}
+		s.writeInt(0);
+	}
+	private void readObject(java.io.ObjectInputStream s)
+			throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		int readInt = s.readInt();
+		final byte[] data = new byte[_memmaxsz];
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		while (readInt > 0) {
+			int read = s.read(data, 0, readInt);
+			out.write(data, 0, read);
+			readInt -= read;
+			if (readInt == 0) {
+				readInt = s.readInt();
+			}
+		}
+		_in = new ByteArrayInputStream(
+				((ByteArrayOutputStream)_out).toByteArray());
 	}
 
 	//Object//
