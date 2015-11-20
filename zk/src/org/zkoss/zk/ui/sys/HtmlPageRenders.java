@@ -353,7 +353,7 @@ public class HtmlPageRenders {
 		for (Pair<String, String> scriptInfo : scripts) {
             String src = scriptInfo.getX();
             sb.append("<script type=\"text/javascript\"");
-            if (src != null)
+            if (src != null && src.length() != 0)
                 sb.append(" src=\"")
                     .append(Executions.encodeURL(src))
                     .append("\" charset=\"UTF-8\">");
@@ -976,7 +976,7 @@ public class HtmlPageRenders {
                     Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
                     String scriptSrc = scriptInfo.getX();
                     String script = scriptInfo.getY();
-                    if (scriptSrc != null)
+                    if (scriptSrc != null && scriptSrc.length() != 0)
                         script = Devices.loadJavaScript(exec, scriptSrc);
                     out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
                 }
