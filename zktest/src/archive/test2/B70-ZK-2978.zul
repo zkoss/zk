@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2978.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 23 12:51:14 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. load this page
+        2. shrink the height less then 500px
+        3. open 2 groupbox
+        4. should appear vertical scrollbar
+
+    </label>
+    <borderlayout vflex="1" class="mainCenterArea">
+        <custom-attributes org.zkoss.zul.nativebar="false"/>
+        <west size="350px" border="0" class="menuGroupboxContainer" autoscroll="true">
+            <vbox id="menuContainer" hflex="1" spacing="0">
+                <groupbox class="menuGroupbox" open="false" hflex="1">
+                    <caption label="Layer1 A"/>
+                    <vbox>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                        <label value="Layer2 A"/>
+                    </vbox>
+                </groupbox>
+                <groupbox class="menuGroupbox" open="false" hflex="1">
+                    <caption label="Layer1 B"/>
+                    <vbox>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                        <label value="Layer2 B"/>
+                    </vbox>
+                </groupbox>
+            </vbox>
+        </west>
+    </borderlayout>
+</zk>
