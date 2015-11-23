@@ -30,6 +30,7 @@ ZK 7.0.7
   ZK-2940: Combobutton is not tab focusable if no tabIndex or tabindex="0"
   ZK-2941: Combobutton has not keyboard behavior
   ZK-2939: visible="false" listitems in listbox shift index of visible elements
+  ZK-2978: Borderlayout doesn't appear a vertical scrollbar when its content overflows
   
 * Upgrade Notes
 

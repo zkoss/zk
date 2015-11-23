@@ -255,5 +255,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 				break;
 			}
 		}
+		// ZK-2978: should appear zul.Scrollbar after setOpen
+		this.doResizeScroll_();
 	}
 });
