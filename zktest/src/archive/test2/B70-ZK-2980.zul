@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2980.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 23 12:03:46 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	Please click the "save" button, and then you should see the "edit" button got the focus state.
+	<button id="save" label="save" autodisable="save,edit">
+		<attribute name="onClick"><![CDATA[
+			save.setDisabled(true);
+			edit.setVisible(true);
+			edit.setFocus(true);
+		]]></attribute>
+	</button>
+	<button id="edit" label="edit" autodisable="save,edit">
+<!-- 		<attribute w:name="focus_"><![CDATA[ -->
+<!-- 			function(timeout) { -->
+<!-- 				console.log('focus', this.id, arguments); -->
+<!-- 				this.$focus_(timeout); -->
+<!-- 			} -->
+<!-- 		]]></attribute> -->
+<!-- 		<attribute w:name="setDisabled"><![CDATA[ -->
+<!-- 			function() { -->
+<!-- 				console.log('setDisabled', this.id, arguments); -->
+<!-- 				this.$setDisabled.apply(this, arguments);  -->
+<!-- 			} -->
+<!-- 		]]></attribute> -->
+		<attribute name="onClick"><![CDATA[
+			save.setDisabled(false);
+			edit.setVisible(false);
+			text.setFocus(true);
+		]]></attribute>
+	</button>
+
+	<textbox id="text"/>
+
+	<zscript><![CDATA[
+		edit.setVisible(false);
+		text.setFocus(true);
+	]]></zscript>
+</zk>
