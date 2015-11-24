@@ -1054,11 +1054,12 @@ public class Parser {
 				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
 				if (isMVVM) {
 					String apply = compInfo.getApply();
-					if (apply != null && apply.indexOf("org.zkoss.bind.BindComposer") != -1) {
-						//Warnning
-						log.warn(message("If the attribute of viewModel is being used, then \"org.zkoss.bind.BindComposer\" will be applied automatically", el));
+					String bindComposerStr = "org.zkoss.bind.BindComposer";
+					if (apply != null && apply.contains(bindComposerStr) && !apply.contains(",")) {
+						log.warn(message("If the attribute of viewModel is being used, then \"" + bindComposerStr + "\" will be applied automatically. " +
+								"Notice that if you want to use another Composer, you will need to apply the \"" + bindComposerStr + "\" yourself.", el));
 					} else if (apply == null || apply.length() == 0){ //ZK-2763: only auto apply "BindComposer" when the attribute "apply" isn't used.
-						compInfo.setApply("org.zkoss.bind.BindComposer");
+						compInfo.setApply(bindComposerStr);
 					}
 				}
 				compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
