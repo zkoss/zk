@@ -11,10 +11,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import static org.zkoss.lang.Generics.cast;
-
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +20,9 @@ import org.zkoss.util.resource.Location;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.DynamicTag;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.Utils;
 
 /**
  * Represent a shadow element.
@@ -38,7 +30,7 @@ import org.zkoss.zk.xel.impl.Utils;
  * @since 8.0.0
  */
 public class ShadowInfo extends BranchInfo {
-	private transient ComponentDefinition _compdef;
+	private ComponentDefinition _compdef;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List<Property> _props;
 	private final String _tag;
