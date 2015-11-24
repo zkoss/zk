@@ -58,6 +58,7 @@ ZK 8.0.1
   ZK-2939: visible="false" listitems in listbox shift index of visible elements
   ZK-2982: apply shadowElement problems with serialization
   ZK-2978: Borderlayout doesn't appear a vertical scrollbar when its content overflows
+  ZK-2984: inconsistent contains()/remove() behavior
 
 * Upgrade Notes
 

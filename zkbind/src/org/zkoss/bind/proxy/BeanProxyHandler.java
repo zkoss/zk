@@ -52,7 +52,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 			}
 			if (name.startsWith("get")
 					|| name.startsWith("is")
-					|| name.equals("hashCode"))
+					|| name.equals("hashCode")
+					|| name.equals("equals"))
 				return true;
 			try {
 				FormProxyObject.class.getMethod(m.getName(), m.getParameterTypes());
@@ -88,8 +89,20 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 				int a = (_origin != null) ? (Integer) method.invoke(_origin, args) : 0;
 				return 37 * 31 + a; 
 			}
-			if (method.getDeclaringClass().isAssignableFrom(
-					FormProxyObject.class)) {
+			if (mname.equals("equals")) {
+				if (_origin != null) {
+					if (_origin instanceof FormProxyObject) {
+						return method.invoke(((FormProxyObject) _origin).getOriginObject(), args);
+					} else if (args.length == 1 && args[0] instanceof  FormProxyObject) {
+						return method.invoke(_origin, new Object[] {((FormProxyObject) args[0]).getOriginObject()});
+					} else {
+						return method.invoke(_origin, args);
+					}
+				}
+				// check null value
+				return args.length == 1 && args[0] == null;
+			}
+			if (method.getDeclaringClass().isAssignableFrom(FormProxyObject.class)) {
 				if ("submitToOrigin".equals(mname)) {
 					if (_dirtyFieldNames != null && _origin != null) {
 						for (Map.Entry<String, Object> me : _cache.entrySet()) {
