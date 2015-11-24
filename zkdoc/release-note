@@ -61,6 +61,7 @@ ZK 8.0.1
   ZK-2984: inconsistent contains()/remove() behavior
 
 * Upgrade Notes
+  + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
 
   --------
 ZK 8.0.0
