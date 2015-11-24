@@ -85,16 +85,18 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 			} else //sync model
 				syncModel(model);
 		} else if (type == ListDataEvent.INTERVAL_REMOVED) {
-			if (oldsz - newsz <= 0)
+			if (oldsz - newsz < 0)
 				throw new UiException("Removal causes a larger list?");
-			for (int i = index0; i <= index1; i++) {
-				Component[] oldComps = cbrCompsList.get(index0);
-				if (oldComps != null) {
-					for (Component oc : oldComps) {
-						oc.detach();
+			if (cbrCompsList != null) {
+				for (int i = index0; i <= index1; i++) {
+					Component[] oldComps = cbrCompsList.get(index0);
+					if (oldComps != null) {
+						for (Component oc : oldComps) {
+							oc.detach();
+						}
 					}
+					cbrCompsList.remove(index0);
 				}
-				cbrCompsList.remove(index0);
 			}
 			refreshOwnerCBAttr = true;
 		}
