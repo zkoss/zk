@@ -73,15 +73,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			s = "0" + s;
 		return s;
 	}
-	function _ckDate(ary, txt) {
-		if (txt.length)
-			for (var j = ary.length; j--;) {
-				var k = txt.indexOf(ary[j]);
-				if (k >= 0)
-					txt = txt.substring(0, k) + txt.substring(k + ary[j].length);
-			}
-		return txt;
-	}
 	function _dayInYear(d, ref) {
 		return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate())-ref)/864e5);
 	}
@@ -254,7 +245,7 @@ zk.fmt.Date = {
 					if (!isNumber0 && token) {
 						for (var index = localizedSymbols.SMON.length, brkswch; --index >= 0;) {
 							var smon = localizedSymbols.SMON[index].toLowerCase();
-							if (mon.startsWith(smon)) {
+							if ((strict && mon == smon) || (!strict && mon.startsWith(smon))) {
 								token = localizedSymbols.SMON[index];
 								m = index;
 								brkswch = true;
@@ -388,20 +379,6 @@ zk.fmt.Date = {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
 				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec) //ignore msec (safer though not accurate)
 				return; //failed
-
-			txt = txt.trim();
-			txt = _ckDate(localizedSymbols.FDOW, txt);
-			txt = _ckDate(localizedSymbols.SDOW, txt);
-			txt = _ckDate(localizedSymbols.S2DOW, txt);
-			txt = _ckDate(localizedSymbols.FMON, txt);
-			txt = _ckDate(localizedSymbols.SMON, txt);
-			txt = _ckDate(localizedSymbols.S2MON, txt);
-			txt = _ckDate(localizedSymbols.APM, txt);
-			for (var j = txt.length; j--;) {
-				var cc = txt.charAt(j);
-				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
-					return; //failed
-			}
 		}
 		return +dt == +refval ? refval: dt;
 			//we have to use getTime() since dt == refVal always false
