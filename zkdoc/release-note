@@ -31,6 +31,7 @@ ZK 7.0.7
   ZK-2941: Combobutton has not keyboard behavior
   ZK-2939: visible="false" listitems in listbox shift index of visible elements
   ZK-2978: Borderlayout doesn't appear a vertical scrollbar when its content overflows
+  ZK-2974: Constraint error box's tooltip is confusing in German
   
 * Upgrade Notes
 
