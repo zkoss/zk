@@ -20,6 +20,7 @@ import javax.servlet.ServletRequest;
 import org.zkoss.lang.Objects;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.ext.Paginal;
@@ -247,7 +248,9 @@ abstract public class MeshElement extends XulElement implements Paginated {
 		if (Servlets.isBrowser(request, "ie8-")) {
 			return true;
 		} else {
-			boolean isMobile = Servlets.getBrowser(request, "mobile") != null;
+			// iscroll bar is only available for EE version B70-ZK-2992
+			boolean isMobile = Servlets.getBrowser(request, "mobile") != null && WebApps
+					.getFeature("ee");
 			return Utils.testAttribute(this, "org.zkoss.zul.nativebar", !isMobile, true);
 		}
 	}
