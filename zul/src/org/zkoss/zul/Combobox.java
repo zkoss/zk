@@ -181,7 +181,7 @@ public class Combobox extends Textbox {
 				
 				_model = model;
 				_subModel = null; //clean up (generated later)
-				initDataListener();
+				setAttribute(Attributes.SHALL_INIT_DATA_LISTENER, Boolean.TRUE);
 			}
 
 			postOnInitRender(null);
@@ -436,6 +436,8 @@ public class Combobox extends Textbox {
 		}
 		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
+		if (Boolean.TRUE.equals(removeAttribute(Attributes.SHALL_INIT_DATA_LISTENER)))
+			initDataListener();
 	}
 	
 	private void postOnInitRender(String idx) {

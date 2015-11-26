@@ -48,4 +48,10 @@ public class Attributes {
 	 * It is used to store the items which are rendered from model 
 	 */
 	public static final String MODEL_RENDERAS = "org.zkoss.zul.model.renderAs";
+
+	/**
+	 * It is used to check whether listbox, combobox, and grid should initialize data listener or not
+	 * @since 7.0.7
+	 */
+	public static final String SHALL_INIT_DATA_LISTENER = "org.zkoss.zul.ShallInitDataListener";
 }
