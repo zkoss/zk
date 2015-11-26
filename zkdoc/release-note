@@ -34,6 +34,7 @@ ZK 7.0.7
   ZK-2974: Constraint error box's tooltip is confusing in German
   ZK-2975: Datebox validate "mars" Incorrectly in French
   ZK-2977: A combobox popup displays at an unexpected position
+  ZK-2988: column with hflex min causes JS error in grid with footer
   
 * Upgrade Notes
 
