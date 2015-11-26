@@ -1,5 +1,6 @@
 <?page title="Checkmark Listhead Listbox" contentType="text/html;charset=UTF-8"?>
 <zk>
+    Spec. change since ZK 8.0.0, you should be able to see the listhead's checkmark.
 	<window title="Checkmark Listhead Listbox" border="normal">
 		<label value="Listhead's checkmark should be invisible "/>
 		<div>

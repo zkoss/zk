@@ -263,6 +263,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (k < 0) break;
 			j = k + 1;
 		}
+
+		// reset $$selectAll
+		this.$$selectAll = undefined;
+
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 			this._changeSelect(w, sels[w.uuid] == true);
 	},
@@ -1141,9 +1145,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		if (evt) {
 			edata = evt.data;
-			if (this._multiple) // B50-ZK-421
-				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || 
-					(this._checkmark && (!this._cdo || checkSelectAll));
+			if (this._multiple) {// B50-ZK-421
+
+			 	// Bug ZK-2969
+				if (this._headercm && jq.isAncestor(this._headercm, evt.domTarget) && !checkSelectAll) {
+					keep = false;
+				} else {
+					keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey ||
+						(this._checkmark && (!this._cdo || checkSelectAll));
+				}
+			}
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll}, edata));
@@ -1237,8 +1248,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_isAllSelected: function () {
 		//B70-ZK-1953: if selectedItems is empty return false.
-		if (!this._selItems.length)
+		if (!this._selItems.length) {
+				if (this._headercm && this._model && !this.$hasService("onUpdateSelectAll")) {
+        			var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
+						$headercm = jq(this._headercm);
+					$headercm.removeClass(zcls);
+        		}
 			return false;
+		}
 		if (this._model) {
 			if (!this.$hasService("onUpdateSelectAll")) {
 				this.$fireService("onUpdateSelectAll", null, function (v) {

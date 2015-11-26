@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2969.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 26 11:10:09 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Check the col's checkbox, you should see the result of the selected items is the same in both "onSelect" and "onCheckSelectAll" events.
+        2. Unchecked the col's checkbox, you should see the both "onSelect" and "onCheckSelectAll" events with the same empty items, i.e. '[]'
+        3. Check the col's checkbox, and unchecked one of the selected listitems, the both Listbox should have the same selected items.
+        4. test the step 1, 2, and 3 for both Non-Paging and Paging cases.
+    </label>
+    <zscript><![CDATA[
+	    //create a large model
+		ListModelList model = new ListModelList();
+	    for(int i = 1; i <= 12; i++) {
+			model.add("Item " + i);
+	    }
+	    model.setMultiple(true);
+	]]></zscript>
+    <vlayout>
+        Non-Paging
+        <listbox model="${model}" width="300px" rows="5" checkmark="true">
+            <attribute name="onSelect"><![CDATA[
+			Clients.log("onSelect:         " + model.getSelection());
+		]]></attribute>
+            <attribute name="onCheckSelectAll"><![CDATA[
+			Clients.log("onCheckSelectAll: " + model.getSelection());
+		]]></attribute>
+            <listhead>
+                <listheader label="col"/>
+            </listhead>
+        </listbox>
+        Paging
+        <listbox model="${model}" width="300px" mold="paging" pageSize="5" checkmark="true" pagingPosition="top">
+            <attribute name="onSelect"><![CDATA[
+			Clients.log("onSelect:         " + model.getSelection());
+		]]></attribute>
+            <attribute name="onCheckSelectAll"><![CDATA[
+			Clients.log("onCheckSelectAll: " + model.getSelection());
+		]]></attribute>
+            <listhead>
+                <listheader label="col"/>
+            </listhead>
+        </listbox>
+    </vlayout>
+</zk>

@@ -60,6 +60,7 @@ ZK 8.0.1
   ZK-2978: Borderlayout doesn't appear a vertical scrollbar when its content overflows
   ZK-2984: inconsistent contains()/remove() behavior
   ZK-2974: Constraint error box's tooltip is confusing in German
+  ZK-2969: onSelect / onCheckSelectAll events not consistent (paging)
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).

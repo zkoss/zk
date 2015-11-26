@@ -3577,8 +3577,7 @@ public class Listbox extends MeshElement {
 			}
 
 			// remove the selection in other page
-			if (paging && (!isCheckmarkDeselectOther() || (
-					isCheckmarkDeselectOther() && selectAll))) {
+			if (paging && (!isCheckmarkDeselectOther() || selectAll)) {
 				// use toArray() to prevent java.util.ConcurrentModificationException
 				for (Object item : realPrevSeldItems.toArray()) {
 					int index = ((Listitem) item).getIndex();
