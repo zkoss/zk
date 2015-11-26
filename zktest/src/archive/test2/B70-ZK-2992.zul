@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2992.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 26 15:28:48 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+	ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	</zscript>
+    <script>
+        zk.afterMount(function () {
+            alert("If you see the value is not true that's a bug, value = [" + zk('@grid').$()._nativebar +"] IPad with PE version only");
+        });
+    </script>
+	<window border="none" height="100%" width="100%">
+		<grid height="800px">
+			<columns>
+				<column hflex="1">1</column>
+				<column hflex="1">2</column>
+			</columns>
+			<rows>
+				<row forEach="${model}">
+					<cell valign="top">
+						<label value="${each}" />
+					</cell>
+					<cell>
+						<label value="${each}" />
+					</cell>
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>
