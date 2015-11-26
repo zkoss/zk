@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2975.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 11:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>Type 'mars 2015' and onblur, and you should not see any validation error</label>
+    <separator />
+    <datebox format="MMM yyyy" locale="fr_FR" lenient="false"/>
+</zk>
