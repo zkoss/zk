@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2977.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 15:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div id="root" >
+        <separator height="100px"/>
+        <combobox >
+            <comboitem label="Simple and Rich" />
+            <comboitem label="Cool!" />
+            <comboitem label="Thumbs Up!" />
+        </combobox>
+        fully scroll down to see combobox
+        <div height="1000px"/>
+        Open popup, popup should be displayed below combobox. Then if we scroll down a little (keeping popup open), the popup should not go above the combobox.
+        <combobox >
+            <comboitem label="Simple and Rich" />
+            <comboitem label="Cool!" />
+            <comboitem label="Thumbs Up!" />
+        </combobox>
+        <div height="350px"/>
+    </div>
+</zk>
