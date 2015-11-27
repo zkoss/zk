@@ -117,7 +117,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	},
 	doClick_: function (evt) {
 		var p = evt.domTarget;
-		if (jq.contains(this.$n('cls'), p)) {
+		if (p == this.$n('cls') || p == this.$n('clsIcon')) { //may click on font-icon
 			if ((p = this.parent) && p.clearErrorMessage) {
 				p.clearErrorMessage(true, true);
 				p.focus(0); // Bug #3159848
@@ -149,7 +149,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
 				zUtl.encodeXML(this.msg, {multiline:true}),
 				'</div><div id="', uuid, '-cls" class="',
-				this.$s('close'), '"><i class="', icon,
+				// Bug ZK-2952: added missing id for the "x" icon
+				this.$s('close'), '"><i id="', uuid, '-clsIcon" class="', icon,
 				' z-icon-times"></i></div></div>');
 	},
 	onFloatUp: function (ctl) {
