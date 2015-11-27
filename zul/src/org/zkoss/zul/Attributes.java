@@ -49,9 +49,6 @@ public class Attributes {
 	 */
 	public static final String MODEL_RENDERAS = "org.zkoss.zul.model.renderAs";
 
-	/**
-	 * It is used to check whether listbox, combobox, and grid should initialize data listener or not
-	 * @since 7.0.7
-	 */
-	public static final String SHALL_INIT_DATA_LISTENER = "org.zkoss.zul.ShallInitDataListener";
+	//Internal use
+	static final String BEFORE_MODEL_ITEMS_RENDERED = "org.zkoss.zul.BeforeModelItemsRendered";
 }

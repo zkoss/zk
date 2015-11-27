@@ -478,6 +478,7 @@ public class Listbox extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null) return;
 					onListDataChange(event);
 				}
 			};
@@ -2294,7 +2295,8 @@ public class Listbox extends MeshElement {
 					smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
 				}
 				_model = model;
-				setAttribute(Attributes.SHALL_INIT_DATA_LISTENER, Boolean.TRUE);
+				initDataListener();
+				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 			}
 
 			final Execution exec = Executions.getCurrent();
@@ -2538,8 +2540,7 @@ public class Listbox extends MeshElement {
 		}
 		
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
-		if (Boolean.TRUE.equals(removeAttribute(Attributes.SHALL_INIT_DATA_LISTENER)))
-			initDataListener();
+		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
 	private static Listitem nextListitem(Listitem item) {
 		final Component c = item.getNextSibling();
