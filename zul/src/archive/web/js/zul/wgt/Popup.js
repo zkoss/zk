@@ -324,6 +324,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		this.close({sendOnOpen:true});
 	},
+	// ZK-2990: should also change the zIndex of the stackup of the widget
+	setFloatZIndex_: function (node, zi) {
+		this.$supers('setFloatZIndex_', arguments);
+		if (this._stackup) {
+			this._stackup.style.zIndex = zi;
+		}
+	},
 	onVParent: function (ctl) {
 		// ZK-2554: call _doFloatUp when triggered onVParent only if _shallToggle is true
 		if (this._shallToggle)

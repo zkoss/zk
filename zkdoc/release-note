@@ -63,6 +63,7 @@ ZK 8.0.1
   ZK-2969: onSelect / onCheckSelectAll events not consistent (paging)
   ZK-2988: column with hflex min causes JS error in grid with footer
   ZK-2992: Using ZK PE - Grid does not scroll and scrollbar breaks in iPad
+  ZK-2990: zk.useStackup: problem with notifications and z-index
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
@@ -214,6 +215,7 @@ ZK 7.0.7
   ZK-2992: Using ZK PE - Grid does not scroll and scrollbar breaks in iPad
   ZK-2958: Error "Removal causes a larger list?" on Combobox
   ZK-2952: An error box disappears in 2 different ways when clicking different places
+  ZK-2990: zk.useStackup: problem with notifications and z-index
   
 * Upgrade Notes
 
