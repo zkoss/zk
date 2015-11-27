@@ -709,7 +709,8 @@ public class Grid extends MeshElement {
 				smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
 
 				_model = model;
-				setAttribute(Attributes.SHALL_INIT_DATA_LISTENER, Boolean.TRUE);
+				initDataListener();
+				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 			}
 			
 			if (inPagingMold()) { 
@@ -782,6 +783,7 @@ public class Grid extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null) return;
 					// ZK-1864: share listmodelist cause un-predictable reload
 					if (event.getType() != ListDataEvent.SELECTION_CHANGED)
 						onListDataChange(event);
@@ -991,8 +993,7 @@ public class Grid extends MeshElement {
 			renderer.doFinally();
 		}
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 		
-		if (Boolean.TRUE.equals(removeAttribute(Attributes.SHALL_INIT_DATA_LISTENER)))
-			initDataListener();
+		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
 	
 	private void postOnInitRender() {

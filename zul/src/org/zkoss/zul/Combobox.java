@@ -184,7 +184,8 @@ public class Combobox extends Textbox {
 				
 				_model = model;
 				_subModel = null; //clean up (generated later)
-				setAttribute(Attributes.SHALL_INIT_DATA_LISTENER, Boolean.TRUE);
+				initDataListener();
+				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 			}
 
 			postOnInitRender(null);
@@ -209,6 +210,7 @@ public class Combobox extends Textbox {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null) return;
 					final ListModel _model = getModel();
 					final int newsz = _model.getSize(), oldsz = getItemCount();
 					int min = event.getIndex0(), max = event.getIndex1(), cnt;
@@ -439,8 +441,7 @@ public class Combobox extends Textbox {
 		}
 		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
-		if (Boolean.TRUE.equals(removeAttribute(Attributes.SHALL_INIT_DATA_LISTENER)))
-			initDataListener();
+		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
 	
 	private void postOnInitRender(String idx) {
