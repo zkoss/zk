@@ -38,6 +38,7 @@ ZK 7.0.7
   ZK-2992: Using ZK PE - Grid does not scroll and scrollbar breaks in iPad
   ZK-2958: Error "Removal causes a larger list?" on Combobox
   ZK-2952: An error box disappears in 2 different ways when clicking different places
+  ZK-2990: zk.useStackup: problem with notifications and z-index
   
 * Upgrade Notes
 
