@@ -2335,7 +2335,7 @@ public class Listbox extends MeshElement {
 					smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
 				}
 				_model = model;
-				initDataListener();
+				setAttribute(Attributes.SHALL_INIT_DATA_LISTENER, Boolean.TRUE);
 			}
 
 			if (inPagingMold()) {
@@ -2600,6 +2600,8 @@ public class Listbox extends MeshElement {
 			renderer.doFinally();
 		}
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
+		if (Boolean.TRUE.equals(removeAttribute(Attributes.SHALL_INIT_DATA_LISTENER)))
+			initDataListener();
 	}
 	private static Listitem nextListitem(Listitem item) {
 		final Component c = item.getNextSibling();
