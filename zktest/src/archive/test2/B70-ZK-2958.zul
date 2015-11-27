@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2958.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Nov 26 17:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.You should see two items in each component without any exceptions.
+    </label>
+    <div id="d" apply="org.zkoss.zktest.test2.B70_ZK_2958_Composer">
+        <combobox id="combo" />
+        <separator />
+        <grid id="gd" />
+        <separator />
+        <listbox id="listb" />
+        <separator />
+        <grid id="gdp"/>
+        <separator />
+        <listbox id="listbp"/>
+        <separator />
+    </div>
+</zk>
