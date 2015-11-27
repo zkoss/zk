@@ -226,11 +226,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			ppDim = $pp.dimension(true),
 			inpDim = zk(inp).dimension(true),
 			ppBottom = ppDim.top + ppDim.height,
+			ppRelativeBottom = ppBottom - $pp.scrollOffset()[1], //minus scroll offset
 			inpBottom = inpDim.top + inpDim.height;
 
 		if ((ppBottom < inpBottom && ppBottom >= inpDim.top) ||
 				(ppDim.top >= inpDim.top && ppDim.top < inpBottom) ||
-				(ppDim.top < inpDim.top && ppBottom < inpDim.top - 2)) {
+				ppRelativeBottom >= jq.innerHeight() || (ppDim.top < inpDim.top && ppBottom < inpDim.top - 2)) {
 			return this._shallSyncPopupPosition = true;
 		}
 		return false;
