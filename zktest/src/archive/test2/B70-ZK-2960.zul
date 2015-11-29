@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2960.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 26, 2015 11:16:28 AM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(100, "test"));
+	]]></zscript>
+	<label multiline="true">
+		when combo button is clicked, an empty combobox will show first, then combo items will be added later. left comboboxes will have 0ms delay when adding the combo items, right comboboxes will have 200ms delay when adding the combo items.
+
+		when clicking the combo buttons close to the screen bottom, the combobox should display above the input area.
+	</label>
+	<vlayout vflex="1">
+		<listbox model="${model}" width="500px" ca:data-scrollable="true" vflex="1">
+			<custom-attributes org.zkoss.zul.nativebar="false"/>
+			<listhead>
+				<listheader label="col1" width="200px"/>
+				<listheader label="col2" width="200px"/>
+				<listheader label="col3" width="200px"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<combobox placeholder="combobox (immediate)" fulfill="onOpen">
+							<comboitem label="aaaa"/>
+							<comboitem label="bbbb"/>
+							<comboitem label="cccc"/>
+							<comboitem label="dddd"/>
+							<comboitem label="eeee"/>
+							<comboitem label="ffff"/>
+						</combobox>
+					</listcell>
+					<listcell>
+						<combobox placeholder="combobox (delay 200ms)" fulfill="onOpen">
+							<comboitem label="aaaa" onCreate="org.zkoss.lang.Threads.sleep(200)"/>
+							<comboitem label="bbbb"/>
+							<comboitem label="cccc"/>
+							<comboitem label="dddd"/>
+							<comboitem label="eeee"/>
+							<comboitem label="ffff"/>
+						</combobox>
+					</listcell>
+					<listcell>
+						<textbox/>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</vlayout>
+	some space at bottom
+</zk>
