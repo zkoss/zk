@@ -87,7 +87,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					ftrows = wgt.efootrows,
                 	ftcells = ftrows ? ftrows.rows[0].cells : null;
 				for (var i = 0; footcol; footcol = footcol.nextSibling) {
-					if (ftcells[i] && ftcells)
+					if (ftcells && ftcells[i])
 						ftcells[i].style.width = ''; // reset it
 
 					ftfakerws[i++] = footcol.style.width;
