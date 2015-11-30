@@ -871,7 +871,20 @@ public class Parser {
 				if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName) || "xml".equals(langName)) {
 					if (!isZkAttr(langdef, attrns) && !isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 							&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						compInfo.addProperty(attr.getName(), attval, null);
+
+						// Bug ZK-2995
+						boolean handled = false;
+						for (NamespaceParser nsParser: _nsParsers) {
+							if (nsParser.isMatched(attURI)) {
+								if (nsParser.parse(attr, compInfo, pgdef)) {
+									handled = true;
+									break;
+								}
+							}
+						}
+						if (!handled) {
+							compInfo.addProperty(attr.getName(), attval, null);
+						}
 						continue;
 					} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
 						compInfo.addProperty(attnm, attval, null);
