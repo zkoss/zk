@@ -219,6 +219,7 @@ ZK 7.0.7
   ZK-2990: zk.useStackup: problem with notifications and z-index
   ZK-2960: combobox popup opens below screen bottom
   ZK-2995: NamespaceParser should work with non-ZK namespace
+  ZK-2963: Cannot apply silvertail theme for a mobile browser
   
 * Upgrade Notes
 
