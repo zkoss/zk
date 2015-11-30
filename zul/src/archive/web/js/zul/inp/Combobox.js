@@ -81,7 +81,14 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		}
 	},
 	onResponse: function () {
-		this.$supers('onResponse',arguments);
+		// Bug ZK-2960: need to wait until the animation is finished before calling super
+		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
+			var self = this;
+			var args = arguments;
+			setTimeout(function() {self.onResponse.apply(self, args);}, 50);
+			return;
+		}
+		this.$supers('onResponse', arguments);
 		if (this._shallRedoCss) { //fix in case
 			zk(this.getPopupNode_()).redoCSS(-1);
 			this._shallRedoCss = null;
