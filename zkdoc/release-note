@@ -64,6 +64,7 @@ ZK 8.0.1
   ZK-2988: column with hflex min causes JS error in grid with footer
   ZK-2992: Using ZK PE - Grid does not scroll and scrollbar breaks in iPad
   ZK-2990: zk.useStackup: problem with notifications and z-index
+  ZK-2995: NamespaceParser should work with non-ZK namespace
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
@@ -217,6 +218,7 @@ ZK 7.0.7
   ZK-2952: An error box disappears in 2 different ways when clicking different places
   ZK-2990: zk.useStackup: problem with notifications and z-index
   ZK-2960: combobox popup opens below screen bottom
+  ZK-2995: NamespaceParser should work with non-ZK namespace
   
 * Upgrade Notes
 
