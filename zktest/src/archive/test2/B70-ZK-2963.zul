@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2963.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Nov 30, 2015 12:13:49 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window border="normal" title="hello">
+		<zscript>
+			import org.zkoss.zul.theme.Themes;
+			String theme = Themes.getCurrentTheme();
+		</zscript>
+
+		<label multiline="true">
+			open this test from tablet, or use tablet emulation.
+			should be able to see themes other than breeze.
+		</label>
+
+		current theme: ${theme}
+
+	</window>
+</zk>
