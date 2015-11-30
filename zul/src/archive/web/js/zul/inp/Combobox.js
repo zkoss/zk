@@ -85,7 +85,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
 			var self = this;
 			var args = arguments;
-			setTimeout(function() {self.onResponse.apply(self, args);}, 50);
+			setTimeout(function() {if (self.desktop) self.onResponse.apply(self, args);}, 50);
 			return;
 		}
 		this.$supers('onResponse', arguments);

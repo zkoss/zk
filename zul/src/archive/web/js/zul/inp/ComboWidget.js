@@ -76,7 +76,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			// ZK-2192: Only need to determine if popup is animating
 			if (jq(this.getPopupNode_()).is(':animated')) {
 				var self = this;
-				setTimeout(function() {self.onResponse(ctl, opts);}, 50);
+				setTimeout(function() {if (self.desktop) self.onResponse(ctl, opts);}, 50);
 				return;
 			}
 			var pp = this.getPopupNode_(),
@@ -296,7 +296,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var self = this;
 		// ZK-2192: Only need to determine if popup is animating
 		if (jq(this.getPopupNode_()).is(':animated')) {
-			setTimeout(function() {self.close(opts);}, 50);
+			setTimeout(function() {if (self.desktop) self.close(opts);}, 50);
 			return;
 		}
 		this._open = false;
