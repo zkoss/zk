@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2968.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 27 17:43:46 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. open this page in mobile device
+		2. the listbox's height should remain 320px. if height changes to 100%, it's a bug.
+
+	</label>
+	<zscript><![CDATA[
+	    //create a large model
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+		model.addAll(model); //x2
+		model.addAll(model); //x4
+		model.addAll(model); //x8
+		model.addAll(model); //x16
+	]]></zscript>
+
+	<listbox model="${model}" rows="10" width="300px">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+	</listbox>
+</zk>
