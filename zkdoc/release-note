@@ -65,6 +65,7 @@ ZK 8.0.1
   ZK-2992: Using ZK PE - Grid does not scroll and scrollbar breaks in iPad
   ZK-2990: zk.useStackup: problem with notifications and z-index
   ZK-2995: NamespaceParser should work with non-ZK namespace
+  ZK-2329: NPE at org.zkoss.zk.au.http.AuUploader.service(AuUploader.java:115)
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
@@ -220,6 +221,7 @@ ZK 7.0.7
   ZK-2960: combobox popup opens below screen bottom
   ZK-2995: NamespaceParser should work with non-ZK namespace
   ZK-2963: Cannot apply silvertail theme for a mobile browser
+  ZK-2329: NPE at org.zkoss.zk.au.http.AuUploader.service(AuUploader.java:115)
   ZK-2949: A column becomes invisible permanently after resizing a column
   
 * Upgrade Notes
