@@ -66,6 +66,7 @@ ZK 8.0.1
   ZK-2990: zk.useStackup: problem with notifications and z-index
   ZK-2995: NamespaceParser should work with non-ZK namespace
   ZK-2329: NPE at org.zkoss.zk.au.http.AuUploader.service(AuUploader.java:115)
+  ZK-2968: listbox rows-attribute ignored on ipad
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
