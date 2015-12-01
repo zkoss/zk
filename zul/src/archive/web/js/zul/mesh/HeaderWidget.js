@@ -26,7 +26,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
     	 * @param String align
     	 */
 		align: function (v) {
-			this.updateMesh_('align', v);
+			this.adjustDOMAlign_('align', v);
 		},
 		/** Returns the vertical alignment of this grid.
 		 * <p>Default: null (system default: top).
@@ -36,7 +36,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		 * @param String valign
 		 */
 		valign: function (v) {
-			this.updateMesh_('valign', v);
+			this.adjustDOMAlign_('valign', v);
 		},
 		width: _zkf = function () {
 			this.updateMesh_();
@@ -64,9 +64,21 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
 			if (wgt) {
+				var minWds = wgt._calcMinWds();
 				// B70-ZK-2036: Clear min width cache before rerender.
 				wgt._minWd = null;
 				wgt.rerender();
+				this._syncMeshSize(minWds);
+			}
+		}
+	},
+	adjustDOMAlign_: function (direction, value) {
+		var n = this.$n();
+		if (n) {
+			if (direction == 'align') {
+				n.style.textAlign = value;
+			} else if (direction == 'valign') {
+				n.style.verticalAlign = value;
 			}
 		}
 	},
@@ -273,6 +285,48 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (mw = this.getMeshWidget())
 			mw._clearCachedSize();
 	},
+	_syncMeshSize: function (minWds) {
+		var mesh = this.getMeshWidget(),
+			parent = this.parent;
+
+		if (!mesh || !parent) return;
+
+		var hdtbl = mesh.eheadtbl,
+			hdtblWd = jq(hdtbl).width(),
+			updChds = [],
+			wd = 0;
+
+		if (!hdtblWd) return;
+
+		var i = 0;
+		for (var w = parent.firstChild; w; w = w.nextSibling) {
+			if (w.isVisible()) {
+				var chdwd = w.getWidth();
+				if (chdwd && chdwd.length != 0) {
+					wd += zk.parseInt(chdwd);
+				} else {
+					updChds.push({index: i, wgt: w});
+				}
+			}
+			i++;
+		}
+		var cnt = updChds.length,
+			updWd = hdtblWd - wd,
+			expandWd = 0;
+
+		if (cnt > 0) {
+			var eachWd = updWd > 0 ? (updWd / cnt) : -1;
+			for (var j = 0; j < cnt; j++) {
+				var minWd = minWds.wds[updChds[j].index];
+
+				if (eachWd > 0 && eachWd > minWd)
+					updChds[j].wgt._width = jq.px0(eachWd);
+				else
+					updChds[j].wgt._width = jq.px0(minWd);
+			}
+		}
+		zUtl.fireSized(mesh, -1);
+	},
 	//@Override to get width/height of MeshWidget
 	getParentSize_: function() {
 		//to be overridden
@@ -376,7 +430,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 				w._width = wds[i] = origWd;
 			} else {
-				w._width = wds[i] = isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth);
+				w._width = wds[i] = w.isVisible() ? (isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth)) : '';
 			}
 			if (!isFixedWidth) {
 				hdcols[i].style.width = bdcols[i].style.width = w._width;
@@ -388,7 +442,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var wdInt = zk.parseInt(wds[i]);
 			if (w._hflexWidth) {
 				w.setHflex_(null);
-				w._hflexWidth = wdInt;
+				w._hflexWidth = undefined;
+				w._hflex = undefined;
 			}
 			if (mesh._minWd) {
 				mesh._minWd.wds[i] = wdInt;
