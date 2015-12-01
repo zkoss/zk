@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2949.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Nov 25 10:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B70_ZK_2949VM')">
+        <label multiline="true" >
+            1. There are 4 grids , resize the columns of the first 3 grids and press the button "toggle flag (mvvm)"
+            2. You should see column 4 disappeared and column 5 appear.
+            3. click button "invalidate 1st grid" and do the above steps to the 1st grid.
+            4. Resize the columns of the last grid and press the button "toggle flag (mvc)"
+            5. You should see column 4 disappeared and column 5 appear.
+            6. Press the last two buttons, you should see the corresponding result.
+        </label>
+        <separator />
+        hflex width (MVVM)
+        <grid id="grid" >
+            <columns id="cols" sizable="true">
+                <column hflex="2" label="mvvm1" align="center"/>
+                <column hflex="3" label="mvvm2" />
+                <column hflex="4" label="mvvm3" />
+                <column hflex="5" label="mvvm4" visible="@load(vm.flag)" />
+                <column hflex="5" label="mvvm5" visible="@load(!vm.flag)" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="File:"/>
+                    <textbox width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Type:"/>
+                    <hlayout>
+                        <listbox rows="1" mold="select">
+                            <listitem label="Java Files,(*.java)"/>
+                            <listitem label="All Files,(*.*)"/>
+                        </listbox>
+                        <button label="Browse..."/>
+                    </hlayout>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Options:"/>
+                    <textbox rows="3" width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+            </rows>
+        </grid>
+        <separator />
+        no width specified (MVVM)
+        <grid id="grid2">
+            <columns sizable="true">
+                <column label="mvvm1" />
+                <column label="mvvm2" />
+                <column label="mvvm3" />
+                <column label="mvvm4" visible="@load(vm.flag)" />
+                <column label="mvvm5" visible="@load(!vm.flag)" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="File:"/>
+                    <textbox width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Type:"/>
+                    <hlayout>
+                        <listbox rows="1" mold="select">
+                            <listitem label="Java Files,(*.java)"/>
+                            <listitem label="All Files,(*.*)"/>
+                        </listbox>
+                        <button label="Browse..."/>
+                    </hlayout>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Options:"/>
+                    <textbox rows="3" width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+            </rows>
+        </grid>
+        <separator />
+        fixed width (MVVM)
+        <grid id="grid3" >
+            <columns sizable="true">
+                <column width="200px" label="mvvm1" />
+                <column width="200px" label="mvvm2" />
+                <column width="200px" label="mvvm3" />
+                <column width="200px" label="mvvm4" visible="@load(vm.flag)" />
+                <column width="200px" label="mvvm5" visible="@load(!vm.flag)" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="File:"/>
+                    <textbox width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Type:"/>
+                    <hlayout>
+                        <listbox rows="1" mold="select">
+                            <listitem label="Java Files,(*.java)"/>
+                            <listitem label="All Files,(*.*)"/>
+                        </listbox>
+                        <button label="Browse..."/>
+                    </hlayout>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Options:"/>
+                    <textbox rows="3" width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+            </rows>
+        </grid>
+        <separator />
+        <button label="toggle flag (mvvm)" onClick="@command('toggle')"/>
+        <button label="invalidate 1st grid" onClick="grid.invalidate()"/>
+        <separator />
+        hflex width (MVC)
+        <grid>
+            <columns sizable="true">
+                <column hflex="2" height="100px" id="c1" label="mvc1" />
+                <column hflex="3" id="c2" label="mvc2" />
+                <column hflex="4" label="mvc3" />
+                <column hflex="5" id="c4" label="mvc4"  />
+                <column hflex="5" id="c5" label="mvc5" visible="false" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="File:"/>
+                    <textbox width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Type:"/>
+                    <hlayout>
+                        <listbox rows="1" mold="select">
+                            <listitem label="Java Files,(*.java)"/>
+                            <listitem label="All Files,(*.*)"/>
+                        </listbox>
+                        <button label="Browse..."/>
+                    </hlayout>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+                <row>
+                    <label value="Options:"/>
+                    <textbox rows="3" width="98%"/>
+                    <label value="c3"/>
+                    <label value="c4"/>
+                    <label value="c5"/>
+                </row>
+            </rows>
+        </grid>
+        <zscript><![CDATA[
+            boolean f = true;
+            public void togglef(){
+                f = !f;
+                c4.setVisible(f);
+                c5.setVisible(!f);
+            }
+            public void setAlign(){
+                c1.setAlign("center");
+            }
+            public void setVAlign(){
+                c2.setValign("top");
+            }
+            ]]></zscript>
+        <button label="toggle flag (mvc)" onClick="togglef()"/>
+        <button label="column 1 set align - center (mvc)" onClick="setAlign()"/>
+        <button label="column 2 set vertical align - top (mvc)" onClick="setVAlign()"/>
+    </vlayout>
+</zk>
