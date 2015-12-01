@@ -403,7 +403,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 							self.cancel();
 							zul.Upload.error(data.substring(6, data.length), wgt.uuid, self._sid);
 						}
-					} else if (!self.update(zk.parseInt(d[0]), zk.parseInt(d[1])))
+					} else if (!data.startsWith('ignore') && !self.update(zk.parseInt(d[0]), zk.parseInt(d[1])))
 						zul.Uploader.clearInterval(self.id);
 				},
 				complete: function(req, status) {

@@ -111,6 +111,13 @@ public class AuUploader implements AuExtension {
 					
 					Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
 					Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
+
+					// ZK-2329
+					if (percent == null || size == null) {
+						response.getWriter().write("ignore");
+						return;
+					}
+
 					final String key = uuid + '_' + sid;
 					Object sinfo = size.get(key);
 					if (sinfo instanceof String) {
