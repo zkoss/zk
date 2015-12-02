@@ -484,7 +484,6 @@ public class Listbox extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null) return;
 					onListDataChange(event);
 				}
 			};
@@ -2653,6 +2652,8 @@ public class Listbox extends MeshElement {
 		} else if (type == ListDataEvent.ENABLE_CLIENT_UPDATE) {
 			disableClientUpdate(false);
 		} else {
+			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
+					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED)) return;
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
 			

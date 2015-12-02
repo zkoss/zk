@@ -210,13 +210,15 @@ public class Combobox extends Textbox {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null) return;
+					int type = event.getType();
+					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
+							&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED)) return;
 					final ListModel _model = getModel();
 					final int newsz = _model.getSize(), oldsz = getItemCount();
 					int min = event.getIndex0(), max = event.getIndex1(), cnt;
 					
 					// Bug B30-1906748.zul
-					switch (event.getType()) {
+					switch (type) {
 					case ListDataEvent.SELECTION_CHANGED:
 						doSelectionChanged();
 						return; //nothing changed so need to rerender

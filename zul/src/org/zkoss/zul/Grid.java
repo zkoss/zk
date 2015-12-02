@@ -783,7 +783,6 @@ public class Grid extends MeshElement {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null) return;
 					// ZK-1864: share listmodelist cause un-predictable reload
 					if (event.getType() != ListDataEvent.SELECTION_CHANGED)
 						onListDataChange(event);
@@ -1022,13 +1021,15 @@ public class Grid extends MeshElement {
 				!isIgnoreSortWhenChanged()) {
 			doSort(this);
 		} else {
+			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
+					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED)) return;
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
 			
 			// TODO: We have to skip the synchronization of the target component
 			// when the event is fired from it, i.e. No need to sync the sorting
 			// status here.
-			if (event.getType() == ListDataEvent.STRUCTURE_CHANGED
+			if (type == ListDataEvent.STRUCTURE_CHANGED
 					&& _model instanceof Sortable && _cols != null) { //ZK-1704 added null check for _cols
 				Sortable<Object> smodel = cast(_model);
 				List<Column> cols = cast(_cols.getChildren());
