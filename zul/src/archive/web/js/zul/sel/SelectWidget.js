@@ -890,12 +890,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (pg) {
 						pnum = pg.getActivePage();
 						// TODO: concern ctrl
-						if (step > 0 ? (pnum + 1 < pg.getPageCount()) : pnum > 0)
+						if (step > 0 ? (pnum + 1 < pg.getPageCount()) : pnum > 0) {
 							this.fire('onAcrossPage', {
 								page: pnum + (step > 0 ? 1 : 0), 
 								offset: step > 0 ? 0 : -1,
 								shift: !this._multiple || !shift ? 0 : step > 0 ? -1 : 1
 							});
+							this.$class.shallSyncSelInView = true;
+						}
 					}
 					break;
 				}
@@ -906,7 +908,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (shift) this._toggleSelect(r, true, evt);
 
 					if (zk(nrow).isVisible()) {
-						if (!shift) lastrow = r;
+						// ZK-2971: save last row even when pressing shift
+						lastrow = r;
 						if (!endless) {
 							if (step > 0) --step;
 							else ++step;
@@ -918,10 +921,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		
 		if (lastrow) {
-			if (ctrl)
-				this._focus(lastrow);
-			else
-				this._select(lastrow, evt);
+			if (!shift) { // ZK-2971: already handled in the previous code block, ignore shift
+				if (ctrl)
+					this._focus(lastrow);
+				else
+					this._select(lastrow, evt);
+			}
 			this._syncFocus(lastrow);
 			var bar = this._scrollbar;
 			if (bar)
@@ -930,7 +935,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				// 1823278: key up until selection is out of view port, then it should scroll.
 				zk(lastrow.$n()).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
 			} 
-				
 		}
 
 		return _afterChildKey(evt);

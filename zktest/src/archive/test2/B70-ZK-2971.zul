@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2971.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Nov 30, 2015  5:19:50 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		List items = new ArrayList();
+	    for(int i = 0; i <= 199; i++) {
+	    	items.add("Item " + i);
+	    }
+	    //model.setMultiple(true);
+	]]></zscript>
+
+	<button id="select" label="select" onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());"/><intbox id="index"/>
+
+	<label multiline="true">
+		there are two bugs to test
+		A. single selection across page
+			1. in both single and multiple selection listbox, click item 6
+			2. press the "down" key on keyboard, you should be able the select item 7, and the scroll bar will move with your selection
+			3. continue pressing "down" until you reach item 19
+			4. press "down" again to select item 20 on page 2, you should see scroll bar is scrolled to the top, showing item 20
+		B. scroll bar should move with multiple selection
+			1. in the multiple selection listbox, click item 6
+			2. hold "shift" key and press "down" to perform multiple selection
+			3. after selecting item 6, 7, 8 using "shift + down" you should see scroll moves with you selection
+		C. additional test using setSelectedIndex api
+			1. alternatively, enter the index of the item to be selected, and press the button
+			2. listbox should scroll to display the newly selected item
+	</label>
+
+	<hlayout>
+		<vlayout>
+			//single selection works as expected
+			<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="false">
+				<listhead>
+					<listheader label="col"/>
+				</listhead>
+				<listitem forEach="${items}" label="${each}"/>
+			</listbox>
+		</vlayout>
+
+		<vlayout>
+			//multiple selection: the scroll position is not updated when navigating across the page to the element 20 using keyboard controls
+			<listbox id="lb2" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="true">
+				<listhead>
+					<listheader label="col"/>
+				</listhead>
+				<listitem forEach="${items}" label="${each}"/>
+			</listbox>
+		</vlayout>
+	</hlayout>
+</zk>
