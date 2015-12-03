@@ -68,6 +68,7 @@ ZK 8.0.1
   ZK-2329: NPE at org.zkoss.zk.au.http.AuUploader.service(AuUploader.java:115)
   ZK-2968: listbox rows-attribute ignored on ipad
   ZK-3000: ListSubModel doesn't support selection from model in chosenbox
+  ZK-2964: datebox format for time notation bug
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).

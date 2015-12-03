@@ -404,8 +404,10 @@ zk.fmt.Date = {
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
 				var len = 1, k;
 				for (k = j; ++k < fl; ++len)
-					if (fmt.charAt(k) != cc)
+					if (fmt.charAt(k) != cc) {
+						if (fmt.charAt(k) == 'r') k++; // ZK-2964: for nl local uur
 						break;
+					}
 
 				switch (cc) {
 				case 'y':
@@ -470,8 +472,14 @@ zk.fmt.Date = {
 				case 'Z':
 					txt += -(val.getTimezoneOffset()/60);
 					break;
+				case 'z':
+					txt += -(val.getTimezoneOffset()/60);
+					break;
 				case 'a':
 					txt += localizedSymbols.APM[val.getHours() > 11 ? 1 : 0];
+					break;
+				case 'u': // ZK-2964: for nl local uur
+					txt += 'uur';
 					break;
 				default:
 					txt += '1';
