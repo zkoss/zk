@@ -379,6 +379,14 @@ zk.fmt.Date = {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
 				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec) //ignore msec (safer though not accurate)
 				return; //failed
+			txt = txt.trim();
+			for (var j = 0; j < ts.length; j++)
+				txt = txt.replace(ts[j], '');
+			for (var k = txt.length; k--;) {
+				var cc = txt.charAt(k);
+				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
+					return; //failed
+			}
 		}
 		return +dt == +refval ? refval: dt;
 			//we have to use getTime() since dt == refVal always false
