@@ -2369,6 +2369,7 @@ public class Listbox extends MeshElement {
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1);
+				removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 			}
 			if (!doSort(this))
 				postOnInitRender();
