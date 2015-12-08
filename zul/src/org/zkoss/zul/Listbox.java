@@ -2304,6 +2304,7 @@ public class Listbox extends MeshElement {
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1);
+				removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 			} else if (inPagingMold()) {
 				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 				//must update paginal totalSize or exception in setActivePage

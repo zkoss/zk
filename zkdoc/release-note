@@ -44,6 +44,7 @@ ZK 7.0.7
   ZK-2963: Cannot apply silvertail theme for a mobile browser
   ZK-2329: NPE at org.zkoss.zk.au.http.AuUploader.service(AuUploader.java:115)
   ZK-2949: A column becomes invisible permanently after resizing a column
+  ZK-3012: IndexOutOfBoundsException when rendering a grid
   
 * Upgrade Notes
 
