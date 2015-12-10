@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2929.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec  9 16:11:39 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+		the comboboxs shouldn't have any horizontal scrollbar
+	</label>
+	<zscript><![CDATA[
+            void loadData() {
+                if (combobox.getItemCount() != 0) {
+                	combobox.getItems().clear();
+                }
+                for (int i = 0; i < 100; i++) {
+                    Comboitem item = new Comboitem();
+                    item.setLabel("" + i);
+                    int len = (int) (Math.random() * 10);
+                    StringBuffer description = new StringBuffer();
+                    description.append(len);
+                    description.append(' ');
+                    for (int j = 0; j < len; j++) {
+                        description.append("text ");
+                    }
+                    item.setDescription(description.toString());
+                    item.setHflex("min");
+                    combobox.appendChild(item);
+                }
+            }
+            ]]></zscript>
+	<combobox readonly="true" id="combobox" onOpen="loadData()" />
+	<combobox>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 30000000000000000000000000"/>
+	</combobox>
+</window>

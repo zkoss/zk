@@ -427,5 +427,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (visible && this._lastsel)
 			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 		this.$supers('afterAnima_', arguments);
+	},
+	_fixsz: function () {
+		var pp = this.getPopupNode_();
+		pp.style.width = 'auto';
+		this.$supers('_fixsz', arguments);
+		var w1 = pp.offsetWidth;
+		pp.style.width = jq.px(w1 + jq.scrollbarWidth());
 	}
 });
