@@ -449,9 +449,11 @@ zFlex = { //static methods
 		var wgt = this,
 			c = wgt.$n();
 		if (c && zk(c).isVisible()) {
-			if (wgt._hflex == 'min' && wgt._hflexsz === undefined)
+			// Bug ZK-3014: offsetWidth will be available only when wgt is real visible
+			if (wgt._hflex == 'min' && wgt._hflexsz === undefined && wgt.isRealVisible())
 				zFlex.fixMinFlex(wgt, c, 'w');
-			if (wgt._vflex == 'min' && wgt._vflexsz === undefined)
+			// Bug ZK-3014: offsetHeight will be available only when wgt is real visible
+			if (wgt._vflex == 'min' && wgt._vflexsz === undefined && wgt.isRealVisible())
 				zFlex.fixMinFlex(wgt, c, 'h');
 		}
 	},

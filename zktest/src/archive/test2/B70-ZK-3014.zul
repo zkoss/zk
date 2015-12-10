@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3014.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Dec  9, 2015  2:28:00 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window>
+	<zscript>
+		ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
+		ListModelList getMyModel(){
+		return myModel;
+		}
+		void handleButtonClick(){
+			List myList = new ArrayList();
+			myList.add("test1");
+			myList.add("test2");
+			myList.add("test3");
+			myModel = new ListModelList(myList);
+			mylistbox.setModel(myModel);
+		}
+	</zscript>
+	<label multiline="true">
+		1. click the search icon
+		2. click anywhere else to click the popup
+		3. click the change model button
+		4. click the search icon again
+		5. should see the listbox shrink to fit the size of the content
+	</label>
+		<bandbox>
+			<bandpopup hflex="min">
+					<listbox id="mylistbox"
+						height="250px"
+						model="${myModel}"
+						hflex="min">
+					</listbox>
+			</bandpopup>
+		</bandbox>
+		<button label="change model" onClick="handleButtonClick()"/>
+	</window>
+</zk>
