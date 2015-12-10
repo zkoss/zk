@@ -365,8 +365,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					shallUpdate = true;
 				}
 				
-				// ZK-2101: should give 0.1px for chrome
-				if (zk.chrome && cellWidth && (parseInt(cellWidth) == 0))
+				// ZK-2101: should give 0.1px for chrome and safari
+				if ((zk.chrome || zk.safari) && cellWidth && (parseInt(cellWidth) == 0))
 					cellWidth = '0.1px';
 				
 				if (force || shallUpdate) {
