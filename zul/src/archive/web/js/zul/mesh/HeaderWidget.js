@@ -151,7 +151,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				w = this.getWidth();
 			if (!this.isVisible()) {
 				// B70-ZK-2036: Set width to 1px if browser is safari.
-				var wd = zk.chrome ? '0.1px' : zk.safari ? '1px' : '0';
+				var wd = (zk.chrome || zk.safari) ? '0.1px' : '0';
 				$n.css('display', '');
 				// B70-ZK-2036: Change the header width.
 				$n.css('width', wd);
