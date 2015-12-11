@@ -49,6 +49,7 @@ ZK 7.0.7
   ZK-3014: Bandpopup content Listbox with hflex="min" get a 1px width if Listbox is updated while popup is not visible
   ZK-2971: listbox scrollposition not updating (keyboard control)
   ZK-2987: Going to the last page causes an empty-like listbox
+  ZK-3006: If the separator key needs to press the shift key, it doesn't work as expected
   
 * Upgrade Notes
 

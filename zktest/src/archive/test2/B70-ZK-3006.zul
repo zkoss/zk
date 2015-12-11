@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3006.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Dec 11, 2015  3:48:28 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+]]></zscript>
+<label multiline="true">
+	1. change you input method to German (add one if you don't already have it in your system)
+	2. trigger the drop down menu of the chosenbox
+	3. press down and select any item with ";" semicolon key (in german keyboard layout, you have to press "shift + ," to get the ;)
+	4. an item should be selected, instead of actually inputting ; into the chosenbox
+</label>
+<chosenbox separator=";" model="${model}" width="200px"></chosenbox>
+</zk>
