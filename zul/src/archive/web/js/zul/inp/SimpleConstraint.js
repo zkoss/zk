@@ -171,7 +171,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			arr[arr.length] = 'SERVER';
 		} else if (cst && _posAllowed.$contains(cst))
 			this._pos = cst;
-		else if (zk.debugJS)
+		else if (!arr.length && zk.debugJS)
 			zk.error("Unknown constraint: "+cst);
 	},
 	_cvtNum: function (v) { //compatible with server side
