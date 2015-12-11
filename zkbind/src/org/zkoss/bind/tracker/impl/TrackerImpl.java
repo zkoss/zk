@@ -12,8 +12,20 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.tracker.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.impl.IndirectBinding;
 import org.zkoss.bind.impl.WeakIdentityMap;
@@ -38,20 +50,6 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Tabbox;
-
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 /**
  * Implementation of dependency tracking.
@@ -296,9 +294,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		final Map<Object, TrackerNode> bindingNodes = _compMap.get(comp);
 		return bindingNodes != null ? bindingNodes.get(script) : null;
 	}
-	
-	Logger logger = LoggerFactory.getLogger(TrackerImpl.class);
-	
+
 	public void tieValue(Object comp, Object base, Object script, Object propName, Object value, Object basePath) {
 		if (value instanceof IndirectBinding) {
 			value = ((IndirectBinding) value).getValue(null);
@@ -318,7 +314,6 @@ public class TrackerImpl implements Tracker, Serializable {
 		} else {
 			
 			final Set<TrackerNode> baseNodes = getAllTrackerNodesByBean(base);
-//			logger.info("base: " + base + ", size: " + baseNodes.size());
 			if (baseNodes != null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 				final Set<TrackerNode> propNodes = new LinkedHashSet<TrackerNode>(); //normal nodes; i.e. a base + property node. e.g. vm.selectedPerson
 				for (TrackerNode baseNode : baseNodes) {
