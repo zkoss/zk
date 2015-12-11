@@ -903,7 +903,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 								offset: step > 0 ? 0 : -1,
 								shift: !this._multiple || !shift ? 0 : step > 0 ? -1 : 1
 							});
-							this.$class.shallSyncSelInView = true;
+							if (this.$class.shallSyncSelInView) {
+								this.$class.shallSyncSelInView[this.uuid] = true;
+							} else {
+								this.$class.shallSyncSelInView = {};
+								this.$class.shallSyncSelInView[this.uuid] = true;
+							}
 						}
 					}
 					break;
