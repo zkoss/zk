@@ -1027,7 +1027,27 @@ implements Component, ComponentCtrl, java.io.Serializable {
 								case IN_RANGE:
 								case FIRST:
 								case LAST:
-									return shadow.resolveVariable(baseChild, name, recurse);
+									HtmlShadowElement current = shadow;
+									label_:	{
+
+										List<ShadowElement> list = cast(current.getChildren());
+										if (!list.isEmpty()) {
+											for (ShadowElement sh : list) {
+												if (sh instanceof HtmlShadowElement) {
+													HtmlShadowElement shadow0 = (HtmlShadowElement) sh;
+													switch (HtmlShadowElement.inRange(shadow0,
+															baseChild)) {
+													case IN_RANGE:
+													case FIRST:
+													case LAST:
+														current = shadow0;
+														break label_;
+													}
+												}
+											}
+										}
+									}
+									return current.resolveVariable(baseChild, name, recurse);
 								}
 							} else {
 								val = shadow.resolveVariable(baseChild, name, recurse);

@@ -70,6 +70,7 @@ ZK 8.0.1
   ZK-3000: ListSubModel doesn't support selection from model in chosenbox
   ZK-2964: datebox format for time notation bug
   ZK-3020: NotSerializableException: java.util.logging.Logger is caused by TrackerImpl
+  ZK-3009: infinite loop with recursive apply-template
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
