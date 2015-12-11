@@ -598,8 +598,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					}
 			} else {
 				// Bug ZK-414
-				if (this._currentTop)
-					btn.style.top = this._currentTop + 'px';
+				if (this._currentTop) {
+					// Bug ZK-2987: _currentTop might still holds the value from
+					// previous page, make sure the anchor does not goes beyond
+					// table height
+					if (this._currentTop > this.ebodytbl.offsetHeight)
+						btn.style.top = this.ebodytbl.offsetHeight + 'px'
+					else
+						btn.style.top = this._currentTop + 'px';
+				}
 				if (this._currentLeft)
 					btn.style.left = this._currentLeft + 'px'; 	
 			}
