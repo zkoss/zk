@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2987.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Dec  3, 2015 11:53:50 AM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList items = new ListModelList();
+	    for(int i = 0; i <= 250; i++) {
+	    	String label = "Item "+i;
+	    	items.add(label);
+	    }
+	   //items.setMultiple(true);
+	   
+	   ListitemRenderer renderer = new ListitemRenderer(){
+	   	void render(Listitem item, Object data, int index){
+	   		item.appendChild(new Listcell());
+	   		Listcell cell = new Listcell();
+	   		Label label = new Label((String)data);
+	   		label.setMultiline(true);
+	   		label.setParent(cell);
+	   		item.appendChild(cell);
+	   	}
+	   };
+	]]></zscript>
+	<borderlayout>
+		<north>
+			<label multiline="true">
+				1. scroll to the bottom without selecting any item
+				2. switch to page 3 by clicking the paging control
+				3. should see the scroll bar is still at the bottom, showing item 241 ~ 250
+				4. switch to page 2 by clicking the paging control
+				5. should see the scroll bar is close to the middle, showing item 141 ~ 150
+			</label>
+		</north>
+		<center>
+			<listbox hflex="1" id="theListbox"  onPaging="self.focus()" mold="paging" pageSize="100" height="400px" pagingPosition="bottom" checkmark="true" multiple="true" model="${items}" itemRenderer="${renderer}">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/> 
+				<listhead>
+					<listheader/>
+					<listheader label="col"/>
+				</listhead>
+			</listbox>
+		</center>
+	</borderlayout>
+</zk>

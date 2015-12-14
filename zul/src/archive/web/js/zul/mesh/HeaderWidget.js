@@ -151,7 +151,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				w = this.getWidth();
 			if (!this.isVisible()) {
 				// B70-ZK-2036: Set width to 1px if browser is safari.
-				var wd = zk.chrome ? '0.1px' : zk.safari ? '1px' : '0';
+				var wd = (zk.chrome || zk.safari) ? '0.1px' : '0';
 				$n.css('display', '');
 				// B70-ZK-2036: Change the header width.
 				$n.css('width', wd);
@@ -293,36 +293,39 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 		var hdtbl = mesh.eheadtbl,
 			hdtblWd = jq(hdtbl).width(),
-			updChds = [],
+			hdcols = mesh.ehdfaker.childNodes,
+			updCols = [],
 			wd = 0;
 
 		if (!hdtblWd) return;
 
-		var i = 0;
-		for (var w = parent.firstChild; w; w = w.nextSibling) {
+		for (var w = parent.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			if (w.isVisible()) {
-				var chdwd = w.getWidth();
-				if (chdwd && chdwd.length != 0) {
-					wd += zk.parseInt(chdwd);
-				} else {
-					updChds.push({index: i, wgt: w});
+				var chdStyleWd = hdcols[i].style.width,
+					chdWd = w.getWidth();
+
+				if (chdWd == '-1') //sizable + visible false -> true
+                	updCols.push({index: i, wgt: w});
+				else {
+					if (chdWd)
+						wd += zk.parseInt(chdWd);
+					else
+						wd += zk.parseInt(chdStyleWd);
 				}
 			}
-			i++;
 		}
-		var cnt = updChds.length,
+		var cnt = updCols.length,
 			updWd = hdtblWd - wd,
 			expandWd = 0;
 
 		if (cnt > 0) {
 			var eachWd = updWd > 0 ? (updWd / cnt) : -1;
 			for (var j = 0; j < cnt; j++) {
-				var minWd = minWds.wds[updChds[j].index];
-
+				var minWd = minWds.wds[updCols[j].index];
 				if (eachWd > 0 && eachWd > minWd)
-					updChds[j].wgt._width = jq.px0(eachWd);
+					updCols[j].wgt._width = jq.px0(eachWd);
 				else
-					updChds[j].wgt._width = jq.px0(minWd);
+					updCols[j].wgt._width = jq.px0(minWd);
 			}
 		}
 		zUtl.fireSized(mesh, -1);
@@ -415,7 +418,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes,
 			ftcols = ftfaker ? ftfaker.childNodes : null;
-		
+
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width
 		var wds = [];
@@ -430,7 +433,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 				w._width = wds[i] = origWd;
 			} else {
-				w._width = wds[i] = w.isVisible() ? (isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth)) : '';
+				w._width = wds[i] = w.isVisible() ? (isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth)) : '-1';
 			}
 			if (!isFixedWidth) {
 				hdcols[i].style.width = bdcols[i].style.width = w._width;
