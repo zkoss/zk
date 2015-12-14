@@ -295,6 +295,25 @@ public class ValidationMessagesImpl implements ValidationMessages,Collection<Obj
 		return msgs.toArray(new Object[0]);
 	}
 
+	public Component getAssociate(String key) {
+		List<Message> keyMsgs = _keyMsgsMap.get(key);
+		if (keyMsgs == null || keyMsgs.size() == 0) {
+			return null;
+		}
+		return keyMsgs.get(0).comp;
+	}
+
+	public Component[] getAssociates(String key) {
+		List<Message> keyMsgs = _keyMsgsMap.get(key);
+		if (keyMsgs == null || keyMsgs.size() == 0) {
+			return null;
+		}
+		List<Component> msgs = new ArrayList<Component>();
+		for (Message msg : keyMsgs)
+			msgs.add(msg.comp);
+		return msgs.toArray(new Component[0]);
+	}
+
 	//interface for collection
 
 	

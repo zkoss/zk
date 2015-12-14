@@ -6,6 +6,7 @@ ZK 8.0.1
   ZK-2951: Support a way to trigger MVVM command silently
   ZK-2953: Support a way to get the invalid value from ValidationMessages with the given key
   ZK-2959: Support customized class for getting content-type
+  ZK-1993: Get to the component of validation message from code
 
 * Bugs
   ZK-2912: Specifying a non-existing variable in "unless" attribute causes a NullPointerException if

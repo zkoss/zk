@@ -148,4 +148,19 @@ public interface ValidationMessages{
 	 */
 	Object[] getFieldValues(Component comp, String key);
 
+
+	/**
+	 * Returns the first associated component from the given key, if any.
+	 * @param key the custom key refers to this messages, nullable
+	 * @since 8.0.1
+	 */
+	Component getAssociate(String key);
+
+	/**
+	 * Returns all associated components from the given key, if any.
+	 * @param key the custom key refers to this messages, nullable
+	 * @since 8.0.1
+	 */
+	Component[] getAssociates(String key);
+
 }
