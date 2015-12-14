@@ -188,8 +188,12 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers(Grid, 'onSize', arguments);
 		var self = this,
 			canInitScrollbar = this.desktop && !this._nativebar;
-		if (!this._scrollbar && canInitScrollbar)
-			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
+		// refix ZK-2840: only init scrollbar when height or vflex is set in mobile
+		if (!this._scrollbar && canInitScrollbar) {
+			if (!zk.mobile || (zk.mobile && (this.getHeight() || this.getVflex()))) {
+				this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
+			}
+		}
 		setTimeout(function () {
 			if (canInitScrollbar) {
 				self.refreshBar_();

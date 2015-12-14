@@ -168,8 +168,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'onSize', arguments);
 		var self = this,
 			canInitScrollbar =  this.desktop && !this.inSelectMold() && !this._nativebar;
-		if (!this._scrollbar && canInitScrollbar)
-			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scrollbar here
+		// refix ZK-2840: only init scrollbar when height or vflex is set in mobile
+		if (!this._scrollbar && canInitScrollbar) {
+			if (!zk.mobile || (zk.mobile && (this.getHeight() || this.getVflex()))) {
+				this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scrollbar here
+			}
+		}
 		setTimeout(function () {
 			if(self.desktop) {
 				if (canInitScrollbar) {
