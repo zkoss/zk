@@ -3832,7 +3832,7 @@ wgt.setListeners({
  onFocus: 'this.doMore();',
  onBlur: null //unlisten
 });
-<code></pre>
+</code></pre>
 	 * @param Map infos a map of event listeners.
 	 * Each key is the event name, and each value is a string, a function or null.
 	 * If the value is null, it means unlisten.
@@ -4461,9 +4461,9 @@ _doFooSelect: function (evt) {
 	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
 	 * it is assumed to be UUID, unless it starts with '$'.
-	 * For example, <code>zk.Widget.$('uuid')<code> is the same as <code>zk.Widget.$('#uuid')<code>,
+	 * For example, <code>zk.Widget.$('uuid')</code> is the same as <code>zk.Widget.$('#uuid')</code>,
 	 * and both look for a widget whose ID is 'uuid'. On the other hand,
-	 * <code>zk.Widget.$('$id') looks for a widget whose ID is 'id'.<br/>
+	 * <code>zk.Widget.$('$id') </code>looks for a widget whose ID is 'id'.<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
 	 * which widget it belongs to.<br/>
 	 * If the object is not a DOM element and has a property called

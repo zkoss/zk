@@ -177,7 +177,7 @@ Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
 	 * </ul>
 	 *
 	 * <h4>revert</h4>
-	 * <pre><code>boolean revert;
+	 * <pre><code>boolean revert;</code></pre>
 boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event} evt);
 	 * <p>The revert option could be a boolean, or a function that returns a boolean value. The boolean value decides whether to revert the dragging after dragged. If true, the element is reverted to its original location.
 	 * <p>Default: false 
@@ -189,7 +189,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 * </ul>
 	 *
 	 * <h4>constraint</h4>
-	 * <pre><code>String constraint;
+	 * <pre><code>String constraint;</code></pre>
 {@link Offset} constraint({@link zk.Draggable} dg, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Specifies the constraint. The first format specifies either 'vertical' or 'horizontal' to indicate that it can be dragged only in the vertical or horizontal direction.
 	 * <p>The second format specified a function that can modify the position dynamically. For example, you can limit the drag at the diagonal direction. 
@@ -200,7 +200,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 * <p>Returns real position, or null if the pos argument is correct
 	 *
 	 * <h4>ghosting</h4>
-	 * <pre><code>boolean ghosting;
+	 * <pre><code>boolean ghosting;</code></pre>
 {@link DOMElement} ghosting({@link zk.Draggable dg}, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Specified whether to make a copy of the element and then drag the copy instead of the element itself.
 	 * <p>If true is specified (the first format), {@link #node} is cloned and the cloned element will be dragged.
