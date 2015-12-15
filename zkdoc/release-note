@@ -1,7 +1,16 @@
   --------
+ZK 7.0.8
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+  --------
 ZK 7.0.7
 December 15, 2015
 * Features
+  ZK-2931: Atlantic theme @import google fonts
 
 * Bugs
   ZK-2843: MVVM does not support WireVariable rewireOnActivate
@@ -51,6 +60,7 @@ December 15, 2015
   ZK-2971: listbox scrollposition not updating (keyboard control)
   ZK-2987: Going to the last page causes an empty-like listbox
   ZK-3006: If the separator key needs to press the shift key, it doesn't work as expected
+  ZK-3027: Animate speed problem
   
 * Upgrade Notes
 

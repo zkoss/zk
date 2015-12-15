@@ -17,7 +17,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.bind.Version</version-class>
-		<version-uid>7.0.7</version-uid>
+		<version-uid>7.0.8</version-uid>
 	</version>
 
 	<listener>
