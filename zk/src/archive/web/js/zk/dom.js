@@ -2123,7 +2123,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	 */
 	/** Returns the text-relevant style of the specified styles
 	 * (same as HTMLs.getTextRelevantStyle in Java).
-	 * <pre>><code>
+	 * <pre><code>
 jq.filterTextStyle({width:"100px", fontSize: "10pt"});
   //return {font-size: "10pt"}
 	 *</code></pre>
@@ -2252,7 +2252,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	},
 
 	//dialog//
-	/** It is the same as <code>window.confirm</code?, except it will set
+	/** It is the same as <code>window.confirm</code>, except it will set
 	 * {@link zk#alerting} so widgets know to ignore <code>onblur</code> (since the focus will be back later).
 	 * <p>It is strongly suggested to use this method instead of <code>window.confirm</code>. 
 	 * @return boolean whether the Yes button is pressed
