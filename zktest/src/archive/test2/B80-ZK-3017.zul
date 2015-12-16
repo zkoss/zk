@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3017.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 16 14:10:58 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Type 123456 into the both textboxes and focus out of it, you should see the same error message like 'myMsg'
+        2. Type 123,456 into the both textboxes, and focus out of it, all of the error messages are gone.
+    </label>
+    <vlayout>
+        <textbox id="textbox1" constraint="/^([0-9]{1,3}(,[0-9]{1,2})?)?$/:myMsg" onChange=""/>
+        <textbox id="textbox2" onChange=""/>
+    </vlayout>
+
+    <zscript><![CDATA[
+		textbox2.setConstraint(new SimpleConstraint("^([0-9]{1,3}(,[0-9]{1,2})?)?$", "myMsg"));
+	]]></zscript>
+</zk>

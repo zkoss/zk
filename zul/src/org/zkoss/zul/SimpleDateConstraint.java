@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.regex.Pattern;
 
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
@@ -55,11 +56,36 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	}
 	/** Constructs a regular-expression constraint.
 	 *
-	 * @param regex ignored if null or empty
+	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
 	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String)}
 	 */
 	public SimpleDateConstraint(String regex, String errmsg) {
+		super(regex == null || regex.length() == 0 ?
+				null: Pattern.compile(regex), errmsg);
+		fixConstraint();
+	}
+	/** Constructs a regular-expression constraint.
+	 *
+	 * @param regex ignored if null or empty
+	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @since 8.0.1
+	 */
+	public SimpleDateConstraint(Pattern regex, String errmsg) {
 		super(regex, errmsg);
+		fixConstraint();
+	}
+	/** Constructs a constraint combining regular expression.
+	 *
+	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
+	 * {@link #NO_ZERO}, and so on.
+	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
+	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String)}
+	 */
+	public SimpleDateConstraint(int flags, String regex, String errmsg) {
+		super(flags, regex == null || regex.length() == 0 ?
+				null: Pattern.compile(regex), errmsg);
 		fixConstraint();
 	}
 	/** Constructs a constraint combining regular expression.
@@ -68,8 +94,9 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * {@link #NO_ZERO}, and so on.
 	 * @param regex ignored if null or empty
 	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @since 8.0.1
 	 */
-	public SimpleDateConstraint(int flags, String regex, String errmsg) {
+	public SimpleDateConstraint(int flags, Pattern regex, String errmsg) {
 		super(flags, regex, errmsg);
 		fixConstraint();
 	}

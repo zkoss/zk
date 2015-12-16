@@ -130,7 +130,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * {@link #NO_ZERO}, and so on.
 	 */
 	public SimpleConstraint(int flags) {
-		this(flags, null, null);
+		this(flags, (Pattern) null, null);
 	}
 	/** Constructs a constraint with flags and an error message.
 	 *
@@ -139,15 +139,38 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
 	public SimpleConstraint(int flags, String errmsg) {
-		this(flags, null, errmsg);
+		this(flags, (Pattern) null, errmsg);
+	}
+	/** Constructs a regular-expression constraint.
+	 *
+	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
+	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleConstraint(Pattern, String)}
+	 */
+	public SimpleConstraint(String regex, String errmsg) {
+		this(regex == null || regex.length() == 0 ?
+				null: Pattern.compile(regex), errmsg);
 	}
 	/** Constructs a regular-expression constraint.
 	 *
 	 * @param regex ignored if null or empty
 	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @since 8.0.1
 	 */
-	public SimpleConstraint(String regex, String errmsg) {
+	public SimpleConstraint(Pattern regex, String errmsg) {
 		this(0, regex, errmsg);
+	}
+	/** Constructs a constraint combining regular expression.
+	 *
+	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
+	 * {@link #NO_ZERO}, and so on.
+	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
+	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleConstraint(int, Pattern, String)}
+	 */
+	public SimpleConstraint(int flags, String regex, String errmsg) {
+		this(flags,  regex == null || regex.length() == 0 ?
+				null: Pattern.compile(regex), errmsg);
 	}
 	/** Constructs a constraint combining regular expression.
 	 *
@@ -155,18 +178,19 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * {@link #NO_ZERO}, and so on.
 	 * @param regex ignored if null or empty
 	 * @param errmsg the error message to display. Ignored if null or empty.
+	 * @since 8.0.1
 	 */
-	public SimpleConstraint(int flags, String regex, String errmsg) {
+	public SimpleConstraint(int flags, Pattern regex, String errmsg) {
 		_flags = flags;
-		_regex = regex == null || regex.length() == 0 ?
-			null: Pattern.compile(regex);
+		_regex = regex;
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
 		_raw = null;
 	}
 	/** Constructs a constraint with a list of constraints separated by comma.
 	 *
 	 * @param constraint a list of constraints separated by comma.
-	 * Example: no positive, no zero
+	 * Example: <code>no positive</code>, <code>no zero</code>, or use '/'
+	 * to enclose the regular expression as follows. {@code /.+@.+\.[a-z]+/: email only}
 	 * @since 3.0.2
 	 */
 	public SimpleConstraint(String constraint) {
