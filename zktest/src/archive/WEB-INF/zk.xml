@@ -18,6 +18,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>ZK Test</value>
 	</preference>
 
+	<!-- for B80-ZK-2957 -->
+	<client-config>
+		<data-handler>
+			<name>zk-2957</name> <!-- data-datepicker -->
+			<script src="/test2/js/zk-2957.js" /> <!-- jQuery UI Library -->
+			<script src="/test2/js/data-zk-2957.js" />  <!-- Data Handler Script -->
+		</data-handler>
+	</client-config>
+
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.
 	<client-config>
