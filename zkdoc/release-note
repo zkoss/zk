@@ -73,6 +73,7 @@ ZK 8.0.1
   ZK-3020: NotSerializableException: java.util.logging.Logger is caused by TrackerImpl
   ZK-3009: infinite loop with recursive apply-template
   ZK-3017: problems with complex regex
+  ZK-2957: data-handler feature doesn't work with zhtml.Widget's
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).

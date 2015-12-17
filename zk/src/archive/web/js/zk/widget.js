@@ -5254,6 +5254,11 @@ zk.Native = zk.$extends(zk.Widget, {
 					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j); 
 				}
 			}
+			// B80-ZK-2957
+			if (this.domExtraAttrs) {
+				var attrs = this.domAttrs_({id:1, domStyle:1, domClass:1, tooltiptext:1});
+				s = s.substring(0, s.indexOf("/>")) + attrs + "/>";
+			}
 			// B65-ZK-1836 and B70-ZK-2622
 			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
 			if (this.value && s.startsWith('<textarea'))
