@@ -96,6 +96,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
@@ -1378,7 +1379,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
-	private class CommandEventListener implements EventListener<Event>, Serializable{
+	private class CommandEventListener implements EventListener<Event>, Serializable, Deferrable {
 		private static final long serialVersionUID = 1L;
 	//event used to trigger command
 		private boolean _prompt = false;
@@ -1497,6 +1498,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			if(_log.isDebugEnabled()){
 				_log.debug("====End command event [{}]",event);
 			}
+		}
+
+		// ZK-2993: Provides a custom attribute to defer the event post for the specified component
+		public boolean isDeferrable() {
+			return "true".equals(_target.getAttribute("org.zkoss.bind.event.deferPost"));
 		}
 	}
 	
