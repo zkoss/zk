@@ -283,11 +283,13 @@
 // icon font utility
 .baseIconFont() {
 	display: inline-block;
-	font: normal normal normal @fa-font-size-base/1 FontAwesome; // shortening font declaration
-	font-size: inherit; // can't have font-size inherit on line above, so need to override
-	text-rendering: auto; // optimizelegibility throws things off #1094
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	font-size: inherit;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	text-rendering: auto; // optimizelegibility throws things off #1094
 	transform: translate(0, 0); // ensures no half-pixel rendering in firefox
 }
 
