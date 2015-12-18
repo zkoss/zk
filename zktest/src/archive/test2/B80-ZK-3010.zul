@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3010.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 16 17:48:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3010VM')">
+        <vlayout>
+            <label multiline="true">
+                1.Type "ban" and see "banana" option appear.
+                2.Press Enter and see the "banana" tag created.
+                3.Type "ban" and see "Create new option 'ban'".
+                4.Press Enter or Click the option and see the "ban" tag created.
+            </label>
+            <chosenbox width="200px" model="@load(vm.model)" onSearch="@command('newTag', tag=event.value)"
+                       creatable="true" createMessage="Create new option '{0}'"/>
+            <button label="List" onClick="@command('hitButton')"/>
+        </vlayout>
+    </div>
+</zk>
