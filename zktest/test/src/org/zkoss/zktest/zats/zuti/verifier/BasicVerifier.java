@@ -11,9 +11,12 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.verifier;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.HtmlShadowElement;
-import static org.junit.Assert.*;
 /**
  * @author jumperchen
  *

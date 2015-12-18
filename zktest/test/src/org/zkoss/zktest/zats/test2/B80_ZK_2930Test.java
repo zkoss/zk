@@ -11,13 +11,13 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
-
-import static org.junit.Assert.fail;
 
 /**
  * @author jameschu

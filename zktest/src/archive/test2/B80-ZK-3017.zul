@@ -16,7 +16,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 <zk>
     <label multiline="true">
         1. Type 123456 into the both textboxes and focus out of it, you should see the same error message like 'myMsg'
-        2. Type 123,456 into the both textboxes, and focus out of it, all of the error messages are gone.
+        2. Type 123,45 into the both textboxes, and focus out of it, all of the error messages are gone.
     </label>
     <vlayout>
         <textbox id="textbox1" constraint="/^([0-9]{1,3}(,[0-9]{1,2})?)?$/:myMsg" onChange=""/>

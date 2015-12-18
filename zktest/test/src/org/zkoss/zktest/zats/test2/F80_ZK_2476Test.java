@@ -1,9 +1,9 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 public class F80_ZK_2476Test extends ZATSTestCase {

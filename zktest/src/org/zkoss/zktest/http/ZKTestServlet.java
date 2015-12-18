@@ -17,9 +17,12 @@ public class ZKTestServlet extends DHtmlLayoutServlet {
 		String zktheme = request.getParameter("zktheme");
 		List<String> themes = Arrays.asList("atlantic", "silvertail", "sapphire");
 		boolean isDefaultTheme = zktheme == null || !themes.contains(zktheme.toLowerCase());
-		Cookie cookie = new Cookie("zktheme", isDefaultTheme ? null : zktheme);
-		cookie.setPath("/zktest/");
-		((HttpServletResponse) response).addCookie(cookie);
+		if (!isDefaultTheme) { // fixed for HtmlUnit issue
+			Cookie cookie = new Cookie("zktheme",
+					isDefaultTheme ? null : zktheme);
+			cookie.setPath("/zktest/");
+			((HttpServletResponse) response).addCookie(cookie);
+		}
 		super.doGet(request, response);
 	}
 }

@@ -10,12 +10,13 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zktest.zats.zuti;
 
+import static org.junit.Assert.fail;
+
 import java.util.LinkedList;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zktest.zats.zuti.verifier.Verifier;
-import static org.junit.Assert.*;
 
 /**
  * @author jumperchen

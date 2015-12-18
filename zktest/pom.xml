@@ -10,8 +10,7 @@
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
-		<servlet.version>2.4</servlet.version>
-		<jetty.version>6.1.16</jetty.version>
+		<servlet.version>3.1.0</servlet.version>
 		<jgroovy.version>1.5.6</jgroovy.version>
 		<jruby.version>1.1.2</jruby.version>
 		<jython.version>2.2.1</jython.version>
@@ -106,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -364,15 +363,34 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext7</artifactId>
-			<version>1.2.1.FL.20150120</version>
+			<version>2.0.0-SNAPSHOT</version>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
+            <scope>test</scope>
 		</dependency>
-		       
-	</dependencies>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>2.48.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
+            <version>2.48.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
@@ -391,26 +409,44 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>7.6.8.v20121106</version>
-				<configuration>
-					<webAppSourceDirectory>${project.basedir}/src/archive/</webAppSourceDirectory>
-					<webAppConfig>
-						<contextPath>/${project.artifactId}</contextPath>
-						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
-					</webAppConfig>
-					<!--<scanIntervalSeconds>5</scanIntervalSeconds>-->
-					<scanTargets>
-						<scanTarget>${project.basedir}/src/archive/</scanTarget>
-					</scanTargets>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.2.2.v20140723</version>
+                <configuration>
+                    <scanIntervalSeconds>5</scanIntervalSeconds>
+                    <stopKey>foo</stopKey>
+                    <stopPort>9999</stopPort>
+                    <webAppSourceDirectory>${project.basedir}/src/archive/</webAppSourceDirectory>
+                    <webApp>
+                        <contextPath>/${project.artifactId}</contextPath>
+                    </webApp>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <scanIntervalSeconds>0</scanIntervalSeconds>
+                            <daemon>true</daemon>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
