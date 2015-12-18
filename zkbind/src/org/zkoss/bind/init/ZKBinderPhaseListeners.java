@@ -11,8 +11,10 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.init;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +29,14 @@ import org.zkoss.zk.ui.util.AggregationListener;
  */
 public class ZKBinderPhaseListeners implements AggregationListener {
 	private static final Logger _log = LoggerFactory.getLogger(ZKBinderPhaseListeners.class);
-	private static List<PhaseListener> _listeners = new LinkedList<PhaseListener>();
+	private static Map<String, PhaseListener> _listeners = new LinkedHashMap<String, PhaseListener>();
 	
 	public boolean isHandled(Class<?> klass) {
 		if (PhaseListener.class.isAssignableFrom(klass)) {
 			try {
-				_listeners.add((PhaseListener) klass.newInstance());
+				if (!_listeners.containsKey(klass.getName())) {
+					_listeners.put(klass.getName(), (PhaseListener) klass.newInstance());
+				}
 			} catch (Exception e) {
 				_log.error("Error when initial phase listener:"+klass , e);
 			}
@@ -45,6 +49,6 @@ public class ZKBinderPhaseListeners implements AggregationListener {
 	 * Returns all of the system phase listeners
 	 */
 	public static List<PhaseListener> getSystemPhaseListeners() {
-		return _listeners;
+		return new LinkedList<PhaseListener>(_listeners.values());
 	}
 }

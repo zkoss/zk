@@ -150,21 +150,19 @@ public abstract class WebDriverTestCase {
 	}
 	@BeforeClass
 	public static void init() throws Exception {
-		if (server == null) {
-			server = new Server(new InetSocketAddress(getHost(), 0));
+		server = new Server(new InetSocketAddress(getHost(), 0));
 
-			final WebAppContext context = new WebAppContext();
-			context.setContextPath(getContextPath());
-			context.setBaseResource(Resource.newResource("./src/archive/"));
-			server.setHandler(context);
-			server.start();
+		final WebAppContext context = new WebAppContext();
+		context.setContextPath(getContextPath());
+		context.setBaseResource(Resource.newResource("./src/archive/"));
+		server.setHandler(context);
+		server.start();
 
-			for (Connector c : server.getConnectors()) {
-				if (c instanceof NetworkConnector) {
-					if (((NetworkConnector)c).getLocalPort() > 0) {
-						port = ((NetworkConnector)c).getLocalPort();
-						break;
-					}
+		for (Connector c : server.getConnectors()) {
+			if (c instanceof NetworkConnector) {
+				if (((NetworkConnector)c).getLocalPort() > 0) {
+					port = ((NetworkConnector)c).getLocalPort();
+					break;
 				}
 			}
 		}

@@ -412,6 +412,7 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+                    <encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
             <plugin>
@@ -459,7 +460,7 @@
 						<include>**/*Test.java</include>
 					</includes>
 					<reportsDirectory>${report.dir}</reportsDirectory>
-					<argLine>-Xmx256m -XX:MaxPermSize=128m</argLine>
+					<argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
