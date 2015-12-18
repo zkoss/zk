@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2993.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 17 19:13:47 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. modify "test1" to "test1m"
+		2. focus on somewhere else
+		3. t1 should change to  "testm"
+		4. modify "test2" to "test2m"
+		5. focus on somewhere else
+		6. t2 should remain "test2"
+		7. click the buttom "click me"
+		5. t2 should change to "test2m"
+
+	</label>
+	<zscript><![CDATA[
+		public class SomeVM {
+			String text1 = "test1";
+			String text2 = "test2";
+			public String getText1() {
+				return text1;
+			}
+			public void setText1(String t) {
+				text1 = t;
+			}
+			public String getText2() {
+				return text2;
+			}
+			public void setText2(String t) {
+				text2 = t;
+			}
+		}
+	]]></zscript>
+	<div viewModel="@id('vm') @init('SomeVM')">
+		<textbox id="t1" value="@bind(vm.text1)">
+			<custom-attributes org.zkoss.bind.event.deferPost="false"/>
+		</textbox>
+		<label id="lt1">t1 = </label><label id="l1" value="@load(vm.text1)"></label>
+		<separator orient="horizontal"></separator>
+		<textbox id="t2" value="@bind(vm.text2)">
+			<custom-attributes org.zkoss.bind.event.deferPost="true"/>
+		</textbox>
+		<label id="lt2">t2 = </label><label id="l2" value="@load(vm.text2)"></label>
+		<separator orient="horizontal"></separator>
+		<button id="btn" onClick='Clients.showNotification("AU request has sent")'>click me</button>
+	</div>
+</zk>
