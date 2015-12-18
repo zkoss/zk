@@ -114,11 +114,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					sel;
 				this._sel = this._lastsel = null;
 				var w = zk.$(v);
-				if (w) {
+				if (w)
 					sel = w;
-					var label = w.getLabel();
-					this._value = label;
-				}
 				this._hiliteOpt(oldSel, this._sel = sel);
 				this._lastsel = sel;
 			}
