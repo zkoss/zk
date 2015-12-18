@@ -75,6 +75,7 @@ ZK 8.0.1
   ZK-3017: problems with complex regex
   ZK-2957: data-handler feature doesn't work with zhtml.Widget's
   ZK-3010: chosenbox with listsubmodel does not fire onSearchEvent
+  ZK-3015: Combobox model setSelection does not update the textbox
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).

@@ -752,7 +752,7 @@ public class Combobox extends Textbox {
 		if (item != _selItem) {
 			_selItem = item;
 			if (item != null) {
-                setValueDirectly(item.getLabel());
+                setValue(item.getLabel());
                 smartUpdate("selectedItemUuid_", item.getUuid());
 			} else {
 				//Bug#2919037: don't call setRawValue(), or the error message will be cleared
