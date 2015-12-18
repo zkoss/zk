@@ -24,8 +24,8 @@
 		<gmapsz.version>3.0.1</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
-		<report.dir>report/</report.dir>
-		<test.dir>debug/classes</test.dir>
+		<report.dir>debug/report/</report.dir>
+		<test.dir>debug/test-classes</test.dir>
 	</properties>
 	<version>8.0.1-SNAPSHOT</version>
 	<name>ZK Test</name>
