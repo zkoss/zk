@@ -2477,23 +2477,29 @@ function () {
 				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
 		}
 		if (this.domExtraAttrs) {
-			var dh = {},
-				has = false;
+			out += this.domExtraAttrs_();
+		}
+		return out;
+	},
+	// B80-ZK-2957
+	domExtraAttrs_: function () {
+		var dh = {},
+			has = false,
+			out = '';
 
-			for (var nm in (attrs = this.domExtraAttrs)) {
-				if (zk.hasDataHandler(nm)) {
-					has = true;
-					dh[nm] = attrs[nm];
-				}
-				out += ' ' + nm + '="' + zUtl.encodeXMLAttribute(attrs[nm] || '') + '"'; //generate even if val is empty
+		for (var nm in (attrs = this.domExtraAttrs)) {
+			if (zk.hasDataHandler(nm)) {
+				has = true;
+				dh[nm] = attrs[nm];
 			}
-			if (has && !this.z_isDataHandlerBound) {
-				this.z_isDataHandlerBound = function () {
-					for(var nm in dh)
-						zk.getDataHandler(nm).run(this, dh[nm]);
-				};
-				this.listen({onBind: this.z_isDataHandlerBound});
-			}
+			out += ' ' + nm + '="' + zUtl.encodeXMLAttribute(attrs[nm] || '') + '"'; //generate even if val is empty
+		}
+		if (has && !this.z_isDataHandlerBound) {
+			this.z_isDataHandlerBound = function () {
+				for(var nm in dh)
+					zk.getDataHandler(nm).run(this, dh[nm]);
+			};
+			this.listen({onBind: this.z_isDataHandlerBound});
 		}
 		return out;
 	},
@@ -5256,8 +5262,7 @@ zk.Native = zk.$extends(zk.Widget, {
 			}
 			// B80-ZK-2957
 			if (this.domExtraAttrs) {
-				var attrs = this.domAttrs_({id:1, domStyle:1, domClass:1, tooltiptext:1});
-				s = s.substring(0, s.indexOf("/>")) + attrs + "/>";
+				s = s.substring(0, s.indexOf("/>")) + this.domExtraAttrs_() + "/>";
 			}
 			// B65-ZK-1836 and B70-ZK-2622
 			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
