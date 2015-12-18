@@ -395,6 +395,7 @@
 		<directory>${project.basedir}/debug</directory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

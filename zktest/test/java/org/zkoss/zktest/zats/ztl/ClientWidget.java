@@ -80,17 +80,17 @@ public abstract class ClientWidget extends By {
 		return _out.toString();
 	}
 	/**
-	 * Returns the evaluation string that is JavaScript format. 
+	 * Returns the evaluation string that is JavaScript format.
 	 */
 	public String toString() {
 		return _out.toString();
 	}
-	
+
 	/**
 	 * Returns the element from this client widget.
 	 */
 	abstract public Element toElement();
-	
+
 	/**
 	 * Returns the element as By element, if possible.
 	 */
