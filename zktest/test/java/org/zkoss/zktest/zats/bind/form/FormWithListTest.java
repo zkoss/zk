@@ -134,6 +134,10 @@ public class FormWithListTest extends ZATSTestCase {
 		save.click();
 		checkContent(viewGrid, "chunfu", "potix", "[first, second, third, NewItem]");
 		//checkContent(viewGrid, "chunfu", "potix", "[first, second, Tags, middle, big, addAll1, addAll2, third, NewItem]");
+
+		if (window.query("#msg").as(Label.class).getValue().startsWith("error :")) {
+			fail("Should not cause any error message");
+		}
 	}
 	
 	private void checkContent(ComponentAgent viewGrid, String val0, String val1, String val2) {

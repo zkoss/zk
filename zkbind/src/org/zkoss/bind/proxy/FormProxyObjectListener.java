@@ -11,12 +11,14 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.proxy;
 
+import java.io.Serializable;
+
 /**
  * The interface implemented by form proxy classes.
  * @author jameschu
  * @since 8.0.0
  */
-public interface FormProxyObjectListener {
+public interface FormProxyObjectListener extends Serializable {
 	/**
 	 * Call when the data in FormProxyObject change
 	 */

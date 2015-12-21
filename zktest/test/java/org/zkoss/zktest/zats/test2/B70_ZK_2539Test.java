@@ -1,7 +1,7 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -22,7 +22,7 @@ public class B70_ZK_2539Test extends ZATSTestCase {
 			btn.click();
 			assertTrue(true);
 		} catch (Exception e) {
-			assertFalse(true);
+			fail(e.getCause().toString());
 		}
 	}
 }
