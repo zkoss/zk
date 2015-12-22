@@ -52,7 +52,8 @@ public abstract class WebDriverTestCase {
 	private static final Logger log = LoggerFactory.getLogger(WebDriverTestCase.class);
 	private static Server server;
 	private static int port;
-	private static WebDriver driver;
+	private static ThreadLocal<WebDriver> _local = new ThreadLocal<WebDriver>();
+	protected WebDriver driver;
 	protected static int getPort() {
 		return port;
 	}
@@ -66,7 +67,7 @@ public abstract class WebDriverTestCase {
 		return "http://" + getHost() + ":" + getPort() + getContextPath();
 	}
 
-	public static WebDriver getWebDriver() {
+	protected WebDriver getWebDriver() {
 		if (driver == null) {
 			driver = new ZKWebDriver(true);
 		}
@@ -135,7 +136,7 @@ public abstract class WebDriverTestCase {
 				fail("Error Code: " + errCode + ", from URL[" + webDriver.lastPage().getUrl() + "]");
 			}
 		}
-
+		_local.set(webDriver);
 		return webDriver;
 	}
 
@@ -236,11 +237,11 @@ public abstract class WebDriverTestCase {
 		}
 	}
 	public static String getEval(String script) {
-		WebDriver driver = getWebDriver();
+		WebDriver driver = _local.get();
 		return String.valueOf(((JavascriptExecutor) driver).executeScript("return ("+ script+")"));
 	}
 	public static void eval(String script) {
-		WebDriver driver = getWebDriver();
+		WebDriver driver = _local.get();
 		((JavascriptExecutor) driver).executeScript("("+ script+")");
 	}
 
@@ -367,13 +368,20 @@ public abstract class WebDriverTestCase {
 	}
 
 	public static WebElement toElement(ClientWidget locator) {
+		WebDriver webDriver = _local.get();
 		if (locator instanceof Widget)
-			return (WebElement) ((JavascriptExecutor)getWebDriver()).executeScript("return (" + locator + ").$n();");
+			return (WebElement) ((JavascriptExecutor)webDriver).executeScript("return (" + locator + ").$n();");
 		else if (locator instanceof JQuery)
-			return (WebElement) ((JavascriptExecutor)getWebDriver()).executeScript("return (" + locator + ")[0];");
-		return (WebElement) ((JavascriptExecutor)getWebDriver()).executeScript("return (" + locator + ");");
+			return (WebElement) ((JavascriptExecutor)webDriver).executeScript("return (" + locator + ")[0];");
+		return (WebElement) ((JavascriptExecutor)webDriver).executeScript("return (" + locator + ");");
 	}
 
+	/**
+	 * Trims the multiline string into one line string.
+	 */
+	public static String trim(String text) {
+		return text.replaceAll("^\\s+|\\s+$|\\s*(\n)\\s*|(\\s)\\s*", "$1$2").replace("\n", "").replace("\r", "");
+	}
 	/**
 	 * Returns the text of zk.log from client side.
 	 */
