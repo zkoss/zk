@@ -420,7 +420,6 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>7.6.8.v20121106</version>
                 <configuration>
-                    <scanIntervalSeconds>5</scanIntervalSeconds>
                     <stopKey>foo</stopKey>
                     <stopPort>9999</stopPort>
                     <webAppSourceDirectory>${project.basedir}/src/archive/</webAppSourceDirectory>
