@@ -8,16 +8,15 @@
 		<commons-lang.version>2.4</commons-lang.version>
 		<bsh.version>2.0b4</bsh.version>
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>
-		<commons-io.version>2.1</commons-io.version>
+		<commons-io.version>2.4</commons-io.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
-		<servlet.version>2.4</servlet.version>
-		<jetty.version>6.1.16</jetty.version>
+		<servlet.version>3.1.0</servlet.version>
 		<jgroovy.version>1.5.6</jgroovy.version>
 		<jruby.version>1.1.2</jruby.version>
 		<jython.version>2.2.1</jython.version>
 		<js.version>1.7R4</js.version>
 		<poi.version>3.7</poi.version>
-		<jxl.version>2.6.12</jxl.version>		
+		<jxl.version>2.6.12</jxl.version>
 		<jasperreports.version>4.5.1</jasperreports.version>
 		<jfreechart.version>1.0.14</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
@@ -25,6 +24,8 @@
 		<gmapsz.version>3.0.1</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
+		<report.dir>debug/report/</report.dir>
+		<test.dir>debug/test-classes</test.dir>
 	</properties>
 	<version>7.0.8-SNAPSHOT</version>
 	<name>ZK Test</name>
@@ -58,9 +59,9 @@
 		<repository>
 			<id>ZK EE Evaluation</id>
 			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
-		</repository>		
+		</repository>
 	</repositories>
-	
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>zkmaven</id>
@@ -85,7 +86,7 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
-		<!--  
+		<!--
 		<dependency>
 			<groupId>org.zkoss.theme</groupId>
 			<artifactId>classicblue</artifactId>
@@ -104,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -228,7 +229,7 @@
 			<groupId>net.sourceforge.jexcelapi</groupId>
 			<artifactId>jxl</artifactId>
 			<version>${jxl.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
@@ -280,23 +281,23 @@
 			<artifactId>gmapsz</artifactId>
 			<version>${gmapsz.version}</version>
 		</dependency>
-		
+
 		<!--  for zkbind jsr 303 -->
-		
+
 		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>4.0.2.GA</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.6.1</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
 		</dependency>
 		<!-- <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <version>1.6.1</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
 		</dependency> -->
 		
 		
@@ -352,19 +353,39 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext7</artifactId>
-			<version>1.2.1.FL.20150120</version>
+			<version>2.0.0-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
+			<scope>test</scope>
 		</dependency>
-		       
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.48.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-htmlunit-driver</artifactId>
+			<version>2.48.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
+		<testSourceDirectory>${project.basedir}/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -379,8 +400,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -388,15 +410,46 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>7.6.8.v20121106</version>
 				<configuration>
+					<stopKey>foo</stopKey>
+					<stopPort>9999</stopPort>
 					<webAppSourceDirectory>${project.basedir}/src/archive/</webAppSourceDirectory>
-					<webAppConfig>
+					<webApp>
 						<contextPath>/${project.artifactId}</contextPath>
-						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
-					</webAppConfig>
-					<!--<scanIntervalSeconds>5</scanIntervalSeconds>-->
-					<scanTargets>
-						<scanTarget>${project.basedir}/src/archive/</scanTarget>
-					</scanTargets>
+					</webApp>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<daemon>true</daemon>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<runOrder>alphabetical</runOrder>
+					<testClassesDirectory>${test.dir}</testClassesDirectory>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<reportsDirectory>${report.dir}</reportsDirectory>
+					<argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
