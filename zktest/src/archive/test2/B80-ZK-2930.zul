@@ -12,6 +12,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+    <label multiline="true">
+        Press the button, and you should not see any exception.
+    </label>
 	<button id="btn" onClick="add()" label="add chosenbox"/>
 	<zscript><![CDATA[
 		ListModel model = new ListModelList(Locale.getAvailableLocales());
