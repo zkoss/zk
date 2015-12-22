@@ -32,9 +32,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zktest.zats.ztl.ClientWidget;
+import org.zkoss.zktest.zats.ztl.Element;
 import org.zkoss.zktest.zats.ztl.JQuery;
 import org.zkoss.zktest.zats.ztl.Widget;
 import org.zkoss.zktest.zats.ztl.ZK;
@@ -265,10 +268,18 @@ public abstract class WebDriverTestCase {
 
 	/**
 	 * Returns the Widget object of the UUID.
-	 * @param uuid the widget ID.
+	 * @param uuid the element ID.
 	 */
 	protected Widget widget(String uuid) {
 		return new Widget(uuid);
+	}
+
+	/**
+	 * Returns the Widget object of the given element.
+	 * @param element the element.
+	 */
+	protected Widget widget(Element element) {
+		return new Widget(element);
 	}
 
 	/**
@@ -344,6 +355,17 @@ public abstract class WebDriverTestCase {
 		((JavascriptExecutor) driver).executeScript(jq(widget).toLocator() + ".trigger('"+ event + "')");
 	}
 
+	/**
+	 * Waits for an element to be visible.
+	 * @param locator the element where it waits for.
+	 * @param timeoutInSeconds the timeout in seconds.
+	 */
+	protected void waitFor(ClientWidget locator, int timeoutInSeconds) {
+		WebDriverWait wait = new WebDriverWait(getWebDriver(),
+				timeoutInSeconds);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
+
 	public static WebElement toElement(ClientWidget locator) {
 		if (locator instanceof Widget)
 			return (WebElement) ((JavascriptExecutor)getWebDriver()).executeScript("return (" + locator + ").$n();");
@@ -354,32 +376,86 @@ public abstract class WebDriverTestCase {
 
 	/**
 	 * Returns the text of zk.log from client side.
-	 * @return
 	 */
 	protected String getZKLog() {
 		return getWebDriver().findElement(By.id("zk_log")).getText();
 	}
+
+	/**
+	 * Closes the zk.log console and removes it.
+	 */
 	protected void closeZKLog() {
 		jq("#zk_logbox").remove();
 	}
+
 	// browser operation
+
+	/**
+	 * Sets the focus state to the given locator.
+	 * @param locator
+	 */
 	protected void focus(ClientWidget locator) {
 		eval(jq(locator).toLocator()+ ".focus()");
 	}
+
+	/**
+	 * Sets the blur state to the given locator.
+	 * @param locator
+	 */
 	protected void blur(ClientWidget locator) {
 		eval(jq(locator).toLocator()+ ".blur()");
 	}
+
+	/**
+	 * Clicks upon the given locator.
+	 * @param locator
+	 */
 	protected void click(ClientWidget locator) {
 		toElement(locator).click();
 	}
+
+	/**
+	 * Checks the given locator. It's the same as {@link #click(ClientWidget)} internally.
+	 * @param locator
+	 */
 	protected void check(ClientWidget locator) {
 		click(locator);
 	}
-	protected void type(ClientWidget locator, String value) {
+
+	/**
+	 * Types the text into the given locator.
+	 * <p>By default, it will simulate a real user behavior to focus the input elemnt
+	 * from the given locator,
+	 * and then replace the old text with the new text and then blur the input element.</p>
+	 * @param locator
+	 * @param text
+	 */
+	protected void type(ClientWidget locator, String text) {
 		focus(locator);
 		WebElement webElement = toElement(locator);
 		webElement.clear();
-		webElement.sendKeys(value);
+		webElement.sendKeys(text);
 		blur(locator);
+	}
+
+	/**
+	 * Use this method to simulate typing into an element, which may set its value.
+	 * @param keysToSend character sequence to send to the element
+	 */
+	protected void sendKeys(ClientWidget locator, CharSequence keysToSend) {
+		getWebDriver().findElement(locator).sendKeys(keysToSend);
+	}
+
+	/**
+	 * Selects an comboitem from the given combobox.
+	 * @param combobox
+	 * @param index
+	 */
+	protected Widget selectComboitem(Widget combobox, int index) {
+		click(combobox.$n("btn"));
+		waitResponse();
+		Element element = jq(combobox.$n("pp")).find(".z-comboitem").get(index);
+		click(element);
+		return widget(element);
 	}
 }
