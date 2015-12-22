@@ -240,6 +240,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 		((ComponentCtrl) host).addShadowRoot(this);
 		host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(this, host);
 	}
+	
 	/**
 	 * Removes the relation points between shadow host and this shadow element.
 	 */
@@ -256,7 +257,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements
 			prevhost.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, prevhost);
 		}
 	}
-	
 	
 	public void setParent(Component parent) {
 		Component host = getShadowHostIfAny();

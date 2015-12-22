@@ -194,6 +194,8 @@ public class Parser {
 			return SubState.CLASS_PRE_VALUE;
 		case NTN_PSDOCLS:
 			return SubState.PSDOCLS_PRE_NAME;
+		case NTN_PSDOELEM:
+			return SubState.PSDOELEM_PRE_NAME;
 		case OPEN_BRACKET:
 			return SubState.ATTR_PRE_NAME;
 		default:
@@ -259,7 +261,19 @@ public class Parser {
 			.addTransition(Type.NTN_ID, SubState.ID_PRE_VALUE)
 			.addTransition(Type.NTN_CLASS, SubState.CLASS_PRE_VALUE)
 			.addTransition(Type.NTN_PSDOCLS, SubState.PSDOCLS_PRE_NAME)
+			.addTransition(Type.NTN_PSDOELEM, SubState.PSDOELEM_PRE_NAME)
 			.addTransition(Type.OPEN_BRACKET, SubState.ATTR_PRE_NAME);
+		
+		// ZK-2944: pseudo element TODO very similar behavior as class
+		getState(SubState.MAIN)
+			.addRoute(Type.NTN_PSDOELEM, SubState.PSDOELEM_PRE_NAME)
+			.addRoute(Type.IDENTIFIER, SubState.MAIN, 
+					new TransitionListener<Token, Type>(){
+				public void onTransit(Token input, Type inputClass) {
+					// flush pseudo class function name
+					_seq.addPseudoElement(input.source(_source));
+				}
+			});
 		
 		// attribute cycle
 		getState(SubState.MAIN)
@@ -359,8 +373,10 @@ public class Parser {
 	public enum SubState {
 		MAIN, ID_PRE_VALUE, CLASS_PRE_VALUE,
 		
-		PSDOCLS_PRE_NAME, PSDOCLS_POST_NAME, 
+		PSDOCLS_PRE_NAME, PSDOCLS_POST_NAME,
 		PSDOCLS_PRE_PARAM, PSDOCLS_POST_PARAM,
+		
+		PSDOELEM_PRE_NAME,
 		
 		ATTR_PRE_NAME, ATTR_POST_NAME, 
 		ATTR_PRE_VALUE, ATTR_POST_VALUE,

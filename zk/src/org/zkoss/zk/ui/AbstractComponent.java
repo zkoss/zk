@@ -137,6 +137,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/*package*/ transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
+	
+	private Map<String, ShadowElement> _shadowIdMap; //to speed up id only shadow selector
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -226,12 +228,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((AbstractComponent)owner).bindToIdSpace(comp);
 		else if (owner instanceof Page)
 			((AbstractPage)owner).addFellow(comp);
+		if (owner == null && comp instanceof ShadowElement)
+			addToShadowIdMap(comp);
 	}
 	private static void removeFellow(Component comp, IdSpace owner) {
 		if (owner instanceof Component)
 			((AbstractComponent)owner).unbindFromIdSpace(comp.getId());
 		else if (owner instanceof Page)
 			((AbstractPage)owner).removeFellow(comp);
+		if (owner == null && comp instanceof ShadowElement)
+			removeFromShadowIdMap(comp);
 	}
 	private static IdSpace getSpaceOwnerOfParent(Component comp) {
 		final Component parent = comp.getParent();
@@ -276,14 +282,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * excluding comp.
 	 */
 	private static void addToIdSpacesDown(Component comp) {
-		final IdSpace is = getSpaceOwnerOfParent(comp);
-		if (is != null)
-			addToIdSpacesDown(comp, is);
+		addToIdSpacesDown(comp, getSpaceOwnerOfParent(comp));
 	}
 	private static void addToIdSpacesDown(Component comp, IdSpace owner) {
 		if (!(comp instanceof NonFellow) && !isAutoId(comp.getId()))
 			addFellow(comp, owner);
-
+		
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
@@ -300,9 +304,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * excluding comp.
 	 */
 	private static void removeFromIdSpacesDown(Component comp) {
-		final IdSpace is = getSpaceOwnerOfParent(comp);
-		if (is != null)
-			removeFromIdSpacesDown(comp, is);
+		removeFromIdSpacesDown(comp, getSpaceOwnerOfParent(comp));
 	}
 	private static void removeFromIdSpacesDown(Component comp, IdSpace owner) {
 		if (!(comp instanceof NonFellow) && !isAutoId(comp.getId()))
@@ -3940,6 +3942,7 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.seRoots != null)
 			if (_auxinf.seRoots.remove(shadow)) {
 				shadow.detach();
+				removeFromShadowIdMap(this, (Component) shadow);
 				return true;
 			}
 		return false;
@@ -3956,6 +3959,11 @@ w:use="foo.MyWindow"&gt;
 		AuxInfo auxinf = initAuxInfo();
 		if (auxinf.seRoots == null)
 			auxinf.seRoots = new LinkedList<ShadowElement>();
+		
+		//ZK-2944: this comp is shadow host, init the map
+		if (_shadowIdMap == null)
+			_shadowIdMap = new HashMap<String, ShadowElement>(4);
+		
 		if (!auxinf.seRoots.contains(shadow))
 			return auxinf.seRoots.add(shadow);
 		return false;
@@ -4014,6 +4022,43 @@ w:use="foo.MyWindow"&gt;
 			int diff = hasBindingAnnot ? 1 : -1;
 			auxinf.hasBindingAnnot = hasBindingAnnot;
 			updateSubBindingAnnotationCount(diff);
+		}
+	}
+	
+	private static void addToShadowIdMap(Component comp) {
+		if (comp instanceof ShadowElementCtrl) {
+			Component host = ((ShadowElementCtrl) comp).getShadowHostIfAny();
+			if (host != null) {
+				String id = comp.getId();
+				AbstractComponent ac = (AbstractComponent) host;
+				if (ac._shadowIdMap != null) {
+					if (ac._shadowIdMap.get(id) != null) throw new InternalError("Caller shall prevent duplicated ID for shadow hosts");
+					ac._shadowIdMap.put(id, (ShadowElement) comp);
+				}
+			}
+		}
+	}
+	
+	public ShadowElement getShadowFellowIfAny(String id) {
+		return _shadowIdMap == null ? null : _shadowIdMap.get(id);
+	}
+	
+	private static void removeFromShadowIdMap(Component comp) {
+		if (comp instanceof ShadowElementCtrl) {
+			Component host = ((ShadowElementCtrl) comp).getShadowHostIfAny();
+			if (host != null) {
+				removeFromShadowIdMap(host, comp);
+			}
+		}
+	}
+	
+	private static void removeFromShadowIdMap(Component host, Component comp) {
+		if (host != null && comp instanceof ShadowElement) {
+			String id = comp.getId();
+			AbstractComponent ac = (AbstractComponent) host;
+			if (ac._shadowIdMap != null) {
+				ac._shadowIdMap.remove(id);
+			}
 		}
 	}
 }

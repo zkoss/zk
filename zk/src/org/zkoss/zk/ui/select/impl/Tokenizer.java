@@ -84,6 +84,16 @@ public class Tokenizer {
 					inputClass == CharClass.OTHER &&
 					(input=='^' || input=='$' || input=='*');
 				
+				// ZK-2944: pseudo element, two continuous colons like ::
+				if (_prevChar == ':' && input == ':' && !_inParam) {
+					flush(Type.NTN_PSDOELEM, true);
+				}
+				
+				// ZK-2944: pseudo class, added checks to avoid confusion with "the end" of pseudo element
+				if (_prevChar == ':' && input != ':' && !_inParam && previousTokenIsNotPseudoElement()) {
+					flush(_prevChar, _prevClass, false);
+				}
+				
 				// flush previous identifier/whitespace
 				if(inputClass != _prevClass &&_prevClass != null && 
 						_prevClass.isMultiple())
@@ -94,7 +104,8 @@ public class Tokenizer {
 					flush(_prevChar, _prevClass, false);
 				
 				// flush current
-				if(!inputClass.isMultiple() && !isPrefix)
+				// ZK-2944: no longer handle any pseudo class or pseudo element related input
+				if(!inputClass.isMultiple() && !isPrefix && input != ':')
 					flush(input, inputClass, true);
 				
 				// update status
@@ -171,6 +182,11 @@ public class Tokenizer {
 				throw new ParseException(_step, _current, input);
 			}
 
+			// FIXME ugly implementation
+			private boolean previousTokenIsNotPseudoElement() {
+				return _tokens.isEmpty() || !_tokens.get(_tokens.size() - 1).getType().equals(Type.NTN_PSDOELEM);
+			}
+			
 			private void flush(char input, CharClass inputClass, boolean withCurrChar){
 				int endIndex = _step + (withCurrChar? 1 : _escaped? -1 : 0);
 				_tokens.add(new Token(
@@ -178,6 +194,13 @@ public class Tokenizer {
 				doDebug("! flush: [" + _anchor + ", " + endIndex + "]");
 				_anchor = endIndex;
 				
+			}
+			
+			private void flush(Type tokenType, boolean withCurrChar) {
+				int endIndex = _step + (withCurrChar? 1 : _escaped? -1 : 0);
+				_tokens.add(new Token(tokenType, _anchor, endIndex));
+				doDebug("! flush: [" + _anchor + ", " + endIndex + "]");
+				_anchor = endIndex;
 			}
 			
 			private Type getTokenType(char input, CharClass inputClass){
@@ -206,7 +229,7 @@ public class Tokenizer {
 				case '.': //TODO
 					return (inputClass == CharClass.ATTR_GETTER_OP) ? 
 							Type.IDENTIFIER : Type.NTN_CLASS;
-				case ':':
+				case ':': // ZK-2944: not handling pseudo element
 					return Type.NTN_PSDOCLS;
 				case '\'':
 					return Type.SINGLE_QUOTE;

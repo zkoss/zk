@@ -12,9 +12,12 @@ import java.util.NoSuchElementException;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.select.impl.Selector.Combinator;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * An implementation of Iterator&lt;Component> that realizes the selector matching
@@ -30,6 +33,7 @@ public class ComponentIterator implements Iterator<Component> {
 	private final List<Selector> _selectorList;
 	private final int _posOffset;
 	private final boolean _allIds;
+	private final boolean _lookingForShadow;
 	private final Map<String, PseudoClassDef> _localDefs = 
 		new HashMap<String, PseudoClassDef>();
 	
@@ -61,12 +65,13 @@ public class ComponentIterator implements Iterator<Component> {
 		if (Strings.isEmpty(selector)) 
 			throw new IllegalArgumentException("Selector string cannot be empty.");
 		
-		_selectorList = new Parser().parse(selector);
+		_selectorList = new Parser().parse(selector.replaceAll("^::shadow", "*::shadow").replaceAll("::shadow", " > ::shadow"));
 		if (_selectorList.isEmpty())
 			throw new IllegalStateException("Empty selector");
 		
 		_posOffset = getCommonSeqLength(_selectorList);
 		_allIds = isAllIds(_selectorList, _posOffset);
+		_lookingForShadow = lookingForShadow(_selectorList);
 		
 		_root = root;
 		_page = page;
@@ -104,6 +109,17 @@ public class ComponentIterator implements Iterator<Component> {
 			if (s.size() > offset)
 				return false;
 		return true;
+	}
+	
+	private static boolean lookingForShadow(List<Selector> list) {
+		for (Selector s : list) {
+			for (SimpleSelectorSequence seq : s) {
+				if (!seq.getPseudoElements().isEmpty()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	// custom pseudo class definition //
@@ -202,12 +218,23 @@ public class ComponentIterator implements Iterator<Component> {
 	
 	private ComponentMatchCtx buildRootCtx() {
 		Component rt = _root == null ? _page.getFirstRoot() : _root;
-		
 		if (_posOffset > 0) {
 			Selector selector = _selectorList.get(0);
 			for (int i = 0; i < _posOffset; i++) {
 				SimpleSelectorSequence seq = selector.get(i);
-				Component rt2 = rt.getFellowIfAny(seq.getId());
+				
+				Component rt2 = null;
+				
+				// ZK-2944 cannot process shadow roots here, skip them
+				if (!seq.getPseudoElements().isEmpty()) { //::shadow
+					if (!((ComponentCtrl) rt).getShadowRoots().isEmpty() && seq.getId() != null) { //rt is shadow host and host id is given
+						rt2 = (Component) ((ComponentCtrl) rt).getShadowFellowIfAny(seq.getId());
+					} else {
+						continue;
+					}
+				} else {
+					rt2 = rt.getFellowIfAny(seq.getId());
+				}
 				
 				if (rt2 == null)
 					return null;
@@ -230,8 +257,12 @@ public class ComponentIterator implements Iterator<Component> {
 							return null;
 						break;
 					case CHILD:
-						if (rt2.getParent() != rt)
+						if (rt2 instanceof ShadowElement) {
+							if (((ShadowElement) rt2).getShadowHost() != rt)
+								return null;
+						} else if (rt2.getParent() != rt) {
 							return null;
+						}
 						break;
 					case GENERAL_SIBLING:
 						if (!isGeneralSibling(rt2, rt))
@@ -261,30 +292,128 @@ public class ComponentIterator implements Iterator<Component> {
 	}
 	
 	private ComponentMatchCtx buildNextCtx() {
-		
 		if (_allIds)
 			return null;
 		
 		// TODO: how to skip tree branches
 		
-		if (_currCtx.getComponent().getFirstChild() != null) 
+		// traverse shadow element tree only when selecting shadow elements
+		if (_lookingForShadow && _currCtx.isShadowHost()) {
+			return buildFirstShadowChildCtx(_currCtx);
+		}
+		
+		// traverse non shadow component tree
+		if (_currCtx.getComponent().getFirstChild() != null) {
 			return buildFirstChildCtx(_currCtx);
+		}
 		
 		while (_currCtx.getComponent().getNextSibling() == null) {
+			if (_lookingForShadow) {
+				ShadowElement se = getNextShadowRootSibling();
+				if (se != null) {
+					return buildNextShadowSiblingCtx(_currCtx, se);
+				}
+			}
 			_currCtx = _currCtx.getParent();
 			if(_currCtx == null || _currCtx.getComponent() == 
 					(_posOffset > 0 ? _offsetRoot : _root))
 				return null; // reached root
 		}
-		
 		return buildNextSiblingCtx(_currCtx);
 	}
 	
+	// shadow root have no parent, only host. Retrieve sibling from host's seRoots, if there is any.
+	private ShadowElement getNextShadowRootSibling() {
+		Component comp = _currCtx.getComponent();
+		if (comp instanceof ShadowElement) {
+			Component host = ((ShadowElement) comp).getShadowHost();
+			if (host != null && host instanceof ComponentCtrl) {
+				List<ShadowElement> seRoots = ((ComponentCtrl) host).getShadowRoots();
+				if (seRoots != null && seRoots.size() > 1) { //if equal to 1, then it is the current comp itelf
+					int index = seRoots.indexOf(comp) + 1;
+					if (index < seRoots.size()) { //
+						return seRoots.get(index);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private ComponentMatchCtx buildNextShadowSiblingCtx(ComponentMatchCtx ctx, ShadowElement se) {
+		ctx.moveToNextShadowSibling((Component) se);
+		//TODO need to match selectors
+		for (Selector selector : _selectorList) {
+			int i = selector.getSelectorIndex();
+			int posEnd = _posOffset > 0 ? _posOffset - 1 : 0;
+			int len = selector.size();
+			
+			for (int j = len - 2; j >= posEnd; j--) {
+				Combinator cb = selector.getCombinator(j);
+				ComponentMatchCtx parent = ctx.getParent();
+				
+				// ZK-2944: descendant and child combinator should have nothing to do with the previous matching status, clear it
+				if (cb.equals(Selector.Combinator.DESCENDANT) || cb.equals(Selector.Combinator.CHILD)) {
+					ctx.setQualified(i, j, false);
+				}
+				
+				switch (cb) {
+				case DESCENDANT:
+					boolean parentPass = parent != null && parent.isQualified(i, j);
+					ctx.setQualified(i, j, 
+							parentPass && checkIdSpace(selector, j+1, ctx));
+					if (parentPass && match(selector, ctx, j+1))
+						ctx.setQualified(i, j+1);
+					break;
+				case CHILD:
+					ctx.setQualified(i, j+1, parent != null && 
+							parent.isQualified(i, j) && match(selector, ctx, j+1));
+					break;
+				case GENERAL_SIBLING:
+					if (ctx.isQualified(i, j)) 
+						ctx.setQualified(i, j+1, match(selector, ctx, j+1));
+					break;
+				case ADJACENT_SIBLING:
+					ctx.setQualified(i, j+1, ctx.isQualified(i, j) && 
+							match(selector, ctx, j+1));
+					ctx.setQualified(i, j, false);
+				}
+			}
+		}
+		
+		if (_posOffset == 0)
+			matchLevel0(ctx);
+		
+		return ctx;
+	}
+	
+	private ComponentMatchCtx buildFirstShadowChildCtx(ComponentMatchCtx parent) {
+		ComponentMatchCtx ctx = new ComponentMatchCtx(
+				((HtmlShadowElement) ((ComponentCtrl) parent.getComponent()).getShadowRoots().get(0)), parent);
+		
+		if (_posOffset == 0)
+			matchLevel0(ctx);
+		
+		for (Selector selector : _selectorList) {
+			int i = selector.getSelectorIndex();
+			int posStart = _posOffset > 0 ? _posOffset - 1 : 0;
+			
+			for (int j = posStart; j < selector.size() - 1; j++) {
+				switch (selector.getCombinator(j)) {
+				case CHILD:
+					if (parent.isQualified(i, j) && match(selector, ctx, j+1)) 
+						ctx.setQualified(i, j + 1);
+					break;
+				}
+			}
+		}
+		return ctx;
+	}
+
 	private ComponentMatchCtx buildFirstChildCtx(ComponentMatchCtx parent) {
 		
 		ComponentMatchCtx ctx = new ComponentMatchCtx(
 				parent.getComponent().getFirstChild(), parent);
-		
 		if (_posOffset == 0)
 			matchLevel0(ctx);
 		
@@ -310,8 +439,7 @@ public class ComponentIterator implements Iterator<Component> {
 	}
 	
 	private ComponentMatchCtx buildNextSiblingCtx(ComponentMatchCtx ctx) {
-		
-		ctx.moveToNextSibling();
+		ctx.moveToNextSibling(); //no more status clearing when moving
 		
 		for (Selector selector : _selectorList) {
 			int i = selector.getSelectorIndex();
@@ -324,6 +452,11 @@ public class ComponentIterator implements Iterator<Component> {
 			for (int j = len - 2; j >= posEnd; j--) {
 				Combinator cb = selector.getCombinator(j);
 				ComponentMatchCtx parent = ctx.getParent();
+				
+				// ZK-2944: descendant and child combinator should have nothing to do with the previous matching status, clear it
+				if (cb.equals(Selector.Combinator.DESCENDANT) || cb.equals(Selector.Combinator.CHILD)) {
+					ctx.setQualified(i, j, false);
+				}
 				
 				switch (cb) {
 				case DESCENDANT:

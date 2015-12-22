@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * The default set of pseudo classes in Selector.
@@ -80,6 +81,27 @@ public class BasicPseudoClassDefs {
 			}
 		});
 		
+		// ZK-2944: added support shadow host
+		// :host
+		// :host(selector)
+		_defs.put("host", new PseudoClassDef() {
+			public boolean accept(ComponentMatchCtx ctx, String ... parameters) {
+				ComponentCtrl comp = (ComponentCtrl) ctx.getComponent();
+				if (comp.getShadowRoots().isEmpty()) {
+					return false; // not a shadow host
+				}
+				if (parameters.length == 0) { // select all hosts
+					return true;
+				} else { // select the hosts that match the selector
+					ComponentIterator compIter = new ComponentIterator(ctx.getComponent(), parameters[0]);
+					// only run once, since we only handle type, #id, or .class, no need to traverse component tree
+					if (compIter.hasNext() && ctx.getComponent().getUuid().equals(compIter.next().getUuid())) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
 	}
 	
 	

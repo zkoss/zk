@@ -6,6 +6,8 @@ package org.zkoss.zk.ui.select.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,15 +27,24 @@ public class SimpleSelectorSequence {
 	private Set<String> _classes;
 	private List<Attribute> _attributes;
 	private List<PseudoClass> _pseudoClasses;
+	private List<PseudoElement> _pseudoElements;
 	
 	private Attribute _currAttribute;
 	private PseudoClass _currPseudoClass;
 	
+	private List<Selectors> _toStringOrder;
+	
+	private enum Selectors {
+		TYPE, ID, CLASS, ATTRIBUTE, PSEUDO_CLASS, PSEUDO_ELEMENT
+	}
+	
 	public SimpleSelectorSequence(){
 		_combinator = Combinator.DESCENDANT;
-		_classes = new HashSet<String>();
+		_classes = new LinkedHashSet<String>();
 		_attributes = new ArrayList<Attribute>();
 		_pseudoClasses = new ArrayList<PseudoClass>();
+		_pseudoElements = new ArrayList<PseudoElement>();
+		_toStringOrder = new ArrayList<Selectors>();
 	}
 	
 	public SimpleSelectorSequence(String type){
@@ -68,6 +79,9 @@ public class SimpleSelectorSequence {
 		return Collections.unmodifiableList(_pseudoClasses);
 	}
 	
+	public List<PseudoElement> getPseudoElements(){
+		return Collections.unmodifiableList(_pseudoElements);
+	}
 	
 	
 	// setter //
@@ -77,18 +91,24 @@ public class SimpleSelectorSequence {
 	
 	public void setType(String type){
 		_type = type;
+		_toStringOrder.add(Selectors.TYPE);
 	}
 	
 	public void setId(String id){
 		_id = id;
+		_toStringOrder.add(Selectors.ID);
 	}
 	
 	public void addClass(String clazz){
-		if(!_classes.contains(clazz)) _classes.add(clazz);
+		if (!_classes.contains(clazz)) {
+			_classes.add(clazz);
+			_toStringOrder.add(Selectors.CLASS);
+		}
 	}
 	
 	public void addAttribute(String name){
 		_attributes.add(_currAttribute = new Attribute(name));
+		_toStringOrder.add(Selectors.ATTRIBUTE);
 	}
 	
 	public void attachAttributeOperator(Operator operator){
@@ -112,6 +132,7 @@ public class SimpleSelectorSequence {
 	
 	public void addPseudoClass(String function){
 		_pseudoClasses.add(_currPseudoClass = new PseudoClass(function));
+		_toStringOrder.add(Selectors.PSEUDO_CLASS);
 	}
 	
 	public void attachPseudoClassParameter(String parameter){
@@ -119,28 +140,66 @@ public class SimpleSelectorSequence {
 		_currPseudoClass.addParameter(parameter);
 	}
 	
+	public void addPseudoElement(String source) {
+		_pseudoElements.add(new PseudoElement(source));
+		_toStringOrder.add(Selectors.PSEUDO_ELEMENT);
+	}
+	
 	public String toString() {
-		if(_type == null && _id == null && _classes.isEmpty() && 
-				_pseudoClasses.isEmpty() && _attributes.isEmpty()) return "*";
+		if (_type == null &&
+			_id == null &&
+			_classes.isEmpty() &&
+			_pseudoClasses.isEmpty() &&
+			_attributes.isEmpty() &&
+			_pseudoElements.isEmpty())
+			return "*";
 		
-		StringBuffer sb = new StringBuffer(_type == null ? "" : _type.toString());
+		StringBuffer sb = new StringBuffer();
 		
-		if(_id != null) 
-			sb.append('#').append(_id);
+		Iterator<String> classIter = null;
+		if(!_classes.isEmpty())
+			classIter = _classes.iterator();
 		
-		if(!_classes.isEmpty()) 
-			for(String c : _classes) 
-				sb.append('.').append(c);
-		
-		if(!_pseudoClasses.isEmpty()) 
-			for(PseudoClass p : _pseudoClasses)
-				sb.append(p);
-		
+		Iterator<Attribute> attrIter = null;
 		if(!_attributes.isEmpty())
-			for(Attribute a : _attributes)
-				sb.append(a);
+			attrIter = _attributes.iterator();
+		
+		Iterator<PseudoClass> pseudoClassIter = null;
+		if(!_pseudoClasses.isEmpty())
+			pseudoClassIter = _pseudoClasses.iterator();
+			
+		Iterator<PseudoElement> pasueoElemIter = null;
+		if (!_pseudoElements.isEmpty())
+			pasueoElemIter = _pseudoElements.iterator();
+			
+		// ZK-2944: maintain the order of input
+		for (Selectors s : _toStringOrder) {
+			switch (s) {
+			case TYPE:
+				sb.append(_type == null ? "" : _type.toString());
+				break;
+			case ID:
+				if(_id != null) sb.append('#').append(_id);
+				break;
+			case CLASS:
+				if (classIter != null && classIter.hasNext())
+					sb.append('.').append(classIter.next());
+				break;
+			case ATTRIBUTE:
+				if (attrIter != null && attrIter.hasNext())
+					sb.append(attrIter.next());
+				break;
+			case PSEUDO_CLASS:
+				if (pseudoClassIter != null && pseudoClassIter.hasNext())
+					sb.append(pseudoClassIter.next());
+				break;
+			case PSEUDO_ELEMENT:
+				if (pasueoElemIter != null && pasueoElemIter.hasNext())
+					sb.append(pasueoElemIter.next());
+				break;
+			}
+		}
 		
 		return sb.toString();
 	}
-	
 }
