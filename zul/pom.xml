@@ -90,9 +90,6 @@
             <resource>
                 <directory>${project.basedir}/src/archive</directory>
             </resource>
-            <resource>
-                <directory>${project.basedir}/debug/archive</directory>
-            </resource>
 		</resources>
 		<plugins>
 			<!--<plugin>
@@ -119,7 +116,7 @@
 						</goals>
 						<configuration>
 							<sourceDirectory>${project.basedir}/src/archive</sourceDirectory>
-							<outputDirectory>${project.basedir}/debug/archive</outputDirectory>
+							<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
