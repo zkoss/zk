@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import org.junit.Test;
 import org.zkoss.zktest.zats.WebDriverTestCase;
@@ -25,8 +26,10 @@ import org.zkoss.zktest.zats.ztl.Widget;
  * @author jumperchen
  */
 public class B80_ZK_2964Test extends WebDriverTestCase {
-	private SimpleDateFormat sdf0 = new SimpleDateFormat("h:mm:ss a");
-	private SimpleDateFormat sdf1 = new SimpleDateFormat("h:mm a");
+	private static SimpleDateFormat sdf0 = new SimpleDateFormat("h:mm:ss a",
+			Locale.ENGLISH);
+	private static SimpleDateFormat sdf1 = new SimpleDateFormat("h:mm a",
+			Locale.ENGLISH);
 	@Test public void testZK2964() throws ParseException {
 		connect();
 		JQuery dateboxes = jq("@datebox");
