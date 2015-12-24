@@ -29,6 +29,7 @@ import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
@@ -161,7 +162,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							
 							//[Dennis,20120925], this code was added when fixing issue zk-739, 
 							//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
-							if (comp.getAttribute(BinderImpl.VAR) != null || bid != null)
+							if (comp.hasAttribute(BinderImpl.VAR) || bid != null)
 								BinderUtil.markHandling(comp, binder);
 						}
 					});
@@ -182,6 +183,17 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				final Component comp = event.getTarget();
 				comp.removeAttribute(REMOVE_MARK);
 				comp.removeEventListener(BinderImpl.ON_BIND_CLEAN, this);
+
+				// Bug ZK-3045, we need to handle the detached component
+				// to remove all its references in a tracker.
+				if (comp.hasAttribute(BinderImpl.VAR)) {
+					Object ref = comp.getAttribute(
+							(String) comp.getAttribute(
+									BinderImpl.VAR));
+					if (ref instanceof ReferenceBinding) {
+						BinderUtil.markHandling(comp, ((ReferenceBinding)ref).getBinder());
+					}
+				}
 				removeBindings(comp);
 			}
 		});
