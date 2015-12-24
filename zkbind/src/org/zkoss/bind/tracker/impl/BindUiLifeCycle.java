@@ -27,6 +27,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.BinderUtil;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
@@ -91,6 +92,17 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							//ZK-611 have wrong binding on a removed treecell in a template
 							//if it was detached, ignore it
 							if(comp.getPage()==null){
+
+								// Bug ZK-3045, we need to handle the detached component
+								// to remove all its references in a tracker.
+								if (comp.hasAttribute(BinderImpl.VAR)) {
+									Object ref = comp.getAttribute(
+											(String) comp.getAttribute(
+													BinderImpl.VAR));
+									if (ref instanceof ReferenceBinding) {
+										BinderUtil.markHandling(comp, ((ReferenceBinding)ref).getBinder());
+									}
+								}
 								return;
 							}
 							
@@ -109,6 +121,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							//ZK-1699 Performance issue ZK-Bind getters are called multiple times
 							//check if it is handling, if yes then skip to evaluate it.
 							if(getExtension().isLifeCycleHandling(comp)){
+								BinderUtil.markHandling(comp, binder); // Bug ZK-3045
 								return;
 							}
 							
@@ -125,7 +138,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							
 							//[Dennis,20120925], this code was added when fixing issue zk-739, 
 							//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
-							if (comp.getAttribute(BinderImpl.VAR) != null)
+							if (comp.hasAttribute(BinderImpl.VAR))
 								BinderUtil.markHandling(comp, binder);
 						}
 					});

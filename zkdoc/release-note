@@ -3,6 +3,7 @@ ZK 7.0.8
 * Features
 
 * Bugs
+  ZK-3045: Memory leak in MVVM binding
 
 * Upgrade Notes
 
