@@ -17,21 +17,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.xel.impl;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.zkoss.util.resource.Labels;
-import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.HtmlShadowElement;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -152,13 +149,23 @@ public class ExecutionResolver implements VariableResolverX {
 
 			//We have to look getZScriptVariable first and then namespace
 			//so it is in the same order of interpreter
-			final Page page = Components.getCurrentPage(comp);
-			if (page != null) {
-				final Object o = page.getZScriptVariable(comp, name);
-				if (o != null)
-					return o;
+			Page page = null;
+			if (comp instanceof ShadowElement) {
+				final Component host = ((ShadowElement) comp).getShadowHost();
+				 page = Components.getCurrentPage(host);
+				if (page != null) {
+					final Object o = page.getZScriptVariable(host, name);
+					if (o != null)
+						return o;
+				}
+			} else {
+				page = Components.getCurrentPage(comp);
+				if (page != null) {
+					final Object o = page.getZScriptVariable(comp, name);
+					if (o != null)
+						return o;
+				}
 			}
-
 			Object o = _exec.getAttribute(name);
 			if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
 				return o;

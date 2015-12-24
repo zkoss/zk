@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3046-3.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 24 15:47:34 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<zscript><![CDATA[
+	   List locales = Arrays.asList(Locale.getAvailableLocales());
+	]]></zscript>
+	<label multiline="true">
+		1. Click each button, you should see the zk.log with the button's label.
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+		<groupbox closable="false">
+			<caption label="children binding - if shadow element (init binding) [EMPTY]" style="color: red"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<if test="@init(locale.language eq 'zh')">
+						<button label="@init(locale)" onClick="Clients.log(locale.getValue(null).toString())"/>
+					</if>
+				</template>
+			</div>
+		</groupbox>
+	</div>
+</window>

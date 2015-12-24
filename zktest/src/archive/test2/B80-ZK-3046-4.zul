@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3046-4.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 24 16:54:43 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<zscript><![CDATA[
+	   List locales = Arrays.asList(Locale.getAvailableLocales());
+	]]></zscript>
+	<label multiline="true">
+		1. Click each button, you should see the zk.log with the button's label.
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+		<groupbox closable="false">
+			<caption label="shadow foreach, other limitations occur"/>
+			<div>
+				<forEach items="@init(locales)" var="locale">
+<!-- 					<span> --><!-- workaround span to preserve the 'locale' variable -->
+					<if test="@init(locale.language eq 'zh')">
+						<button label="@init(locale)" onClick="Clients.log(locale.toString())"/><!-- locale undefined -->
+					</if>
+<!-- 					</span> -->
+				</forEach>
+			</div>
+		</groupbox>
+	</div>
+</window>

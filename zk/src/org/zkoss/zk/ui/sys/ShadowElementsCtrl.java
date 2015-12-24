@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.ShadowElementCtrl;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Template;
 
 /**
@@ -73,6 +75,14 @@ public class ShadowElementsCtrl {
 		if (length == 1) {
 			if (shadows[0] instanceof ShadowElement) {
 				ShadowElement se = ((ShadowElement) shadows[0]);
+				if (se.getDistributedChildren().isEmpty()) {
+					if (((ShadowElementCtrl) se).isDynamicValue()) {
+						// fixed ZK-3046
+						//to force init and load
+						Events.sendEvent(new Event("onBindInit", (Component) se));
+						Events.sendEvent(new Event("onBindingReady", (Component) se));
+					}
+				}
 				return se.getDistributedChildren().toArray(new Component[0]);
 			}
 		} else {

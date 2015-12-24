@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
@@ -455,11 +456,10 @@ implements SerializableAware, HierachicalAware {
 
 				//page is the IdSpace, so it might not be curr
 				if (curr instanceof Component) {
-					for (Component c = (Component)curr; c != null; c = c.getParent()) {
-						Object val = c.getAttribute(name);
-						if (val != null || c.hasAttribute(name))
-							return val;
-					}
+					// Bug ZK-3046, use getShadowVariable instead.
+					Object o = ((Component) curr).getShadowVariable(name, true);
+					if (o != null)
+						return o;
 				}
 			}
 
@@ -508,9 +508,16 @@ implements SerializableAware, HierachicalAware {
 				if (curr != _scope && curr instanceof Component) {
 					for (Component c = (Component)curr;
 					c != null && c != _scope; c = c.getParent()) {
-						Object val = c.getAttribute(name);
-						if (val != null || c.hasAttribute(name))
-							return val;
+						// Bug ZK-3046, use getShadowVariable instead.
+						if (c.getParent() instanceof ComponentCtrl && !((ComponentCtrl)c.getParent()).getShadowRoots().isEmpty()) {
+							Object o = c.getShadowVariable(name, true);
+							if (o != null)
+								return o;
+						} else {
+							Object o = c.getShadowVariable(name, false);
+							if (o != null)
+								return o;
+						}
 					}
 				}
 			}

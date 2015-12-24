@@ -2292,10 +2292,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
 				loadComponent0(kid,loadinit); //recursive
 			}
-		}
-		if (comp instanceof ComponentCtrl) {
-			for (ShadowElement se : ((ComponentCtrl) comp).getShadowRoots()) {
-				loadComponent0((Component)se,loadinit); //recursive
+
+			// Bug ZK-3046, we handle it in ShadowElementsCtrl.filterOutShadows() when invoked by BindChildRenderer.java
+			if (comp instanceof ComponentCtrl) {
+				for (ShadowElement se : ((ComponentCtrl) comp).getShadowRoots()) {
+					loadComponent0((Component)se,loadinit); //recursive
+				}
 			}
 		}
 	}

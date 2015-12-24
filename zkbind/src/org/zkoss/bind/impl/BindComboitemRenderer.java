@@ -115,18 +115,14 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 
 					@SuppressWarnings("unchecked")
 					public void setValue(BindELContext ctx, Object value) {
-						int idx = BindComboitemRenderer.this.getRenderedIndex(
-								cb, nci.getIndex());
 						ListModel<?> listmodel = cb.getModel();
-						if (idx >= 0 && idx < listmodel.getSize()) {
-			            	if (listmodel instanceof ListModelArray){
-			            		((ListModelArray<Object>)listmodel).set(idx, value);
-			            	} else if(listmodel instanceof ListModelList<?>){
-			            		((ListModelList<Object>)listmodel).set(idx, value);
-			            	}
-			            } else {
-			            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
-			            }
+						int idx = ((ListModelArray<Object>) listmodel).indexOf(data);
+
+						if (listmodel instanceof ListModelArray){
+							((ListModelArray<Object>)listmodel).set(idx, value);
+						} else if(listmodel instanceof ListModelList<?>){
+							((ListModelList<Object>)listmodel).set(idx, value);
+						}
 					}
 					
 					public Component getComponent() {
@@ -134,7 +130,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 					}
 
 					public Object getValue(BindELContext ctx) {
-						return model.getElementAt(BindComboitemRenderer.this.getRenderedIndex(cb, nci.getIndex()));
+						return data;
 					}
 				});
 				addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT

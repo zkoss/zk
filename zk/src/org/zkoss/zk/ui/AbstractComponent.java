@@ -997,7 +997,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Object getShadowVariable(String name, boolean recurse) {
 		try {
 			_variableSeeking = true;
-			return getShadowVariable0(this, name, true);
+			return getShadowVariable0(this, name, recurse);
 		} finally {
 			_variableSeeking = false;
 		}
@@ -1079,8 +1079,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 							}
 							return null; // avoid deadloop
 						}
-						if (shadowHost.getParent() != null)
-								return ((AbstractComponent)shadowHost.getParent()).getShadowVariable0(shadowHost, name, recurse);
+						return ((AbstractComponent)shadowHost).getShadowVariable0(shadowHost, name, recurse);
 					}
 				}
 			}

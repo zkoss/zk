@@ -110,17 +110,11 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = BindListitemRenderer.this.getRenderedIndex(
-							listbox, nli.getIndex());
 					ListModel<?> listmodel = listbox.getListModel();
-					if (idx >= 0 && idx < listmodel.getSize()) {
-						if (listmodel instanceof ListModelArray) {
-							((ListModelArray<Object>) listmodel).set(idx, value);
-						} else if (listmodel instanceof ListModelList<?>) {
-							((ListModelList<Object>) listmodel).set(idx, value);
-						}
-					} else {
-						// out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
+					if (listmodel instanceof ListModelArray) {
+						((ListModelArray<Object>) listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
+					} else if (listmodel instanceof ListModelList<?>) {
+						((ListModelList<Object>) listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
 					}
 				}
 				
@@ -129,8 +123,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return listbox.getModel().getElementAt(
-							BindListitemRenderer.this.getRenderedIndex(listbox, nli.getIndex()));
+					return data;
 				}
 			});
 			addItemReference(listbox, nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT

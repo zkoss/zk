@@ -107,18 +107,12 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				}
 
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = BindTabboxRenderer.this.getRenderedIndex(
-							tabs, ntab.getIndex());
 					ListModel<?> listmodel = tabbox.getModel();
-					if (idx >= 0 && idx < listmodel.getSize()) {
-		            	if (listmodel instanceof ListModelArray){
-		            		((ListModelArray<Object>)listmodel).set(idx, value);
-		            	} else if(listmodel instanceof ListModelList<?>){
-		            		((ListModelList<Object>)listmodel).set(idx, value);
-		            	}
-		            } else {
-		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
-		            }
+					if (listmodel instanceof ListModelArray){
+						((ListModelArray<Object>)listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
+					} else if(listmodel instanceof ListModelList<?>){
+						((ListModelList<Object>)listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
+					}
 				}
 				
 				public Component getComponent() {
@@ -126,8 +120,7 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return tabbox.getModel().getElementAt(BindTabboxRenderer.this.getRenderedIndex(
-							tabs, ntab.getIndex()));
+					return data;
 				}
 			});
 			addItemReference(tabbox, ntab, index, varnm); //kept the reference to the data, before ON_BIND_INIT
@@ -205,26 +198,19 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = BindTabboxRenderer.this.getRenderedIndex(
-							tabpanels, ntabpanel.getIndex());
 					ListModel<?> listmodel = tabbox.getModel();
-					if (idx >= 0 && idx < listmodel.getSize()) {
-		            	if (listmodel instanceof ListModelArray){
-		            		((ListModelArray<Object>)listmodel).set(idx, value);
-		            	} else if(listmodel instanceof ListModelList<?>){
-		            		((ListModelList<Object>)listmodel).set(idx, value);
-		            	}
-		            } else {
-		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
-		            }
+					if (listmodel instanceof ListModelArray){
+						((ListModelArray<Object>)listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
+					} else if(listmodel instanceof ListModelList<?>){
+						((ListModelList<Object>)listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
+					}
 				}
 				public Component getComponent() {
 					return ntabpanel;
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return tabbox.getModel().getElementAt(BindTabboxRenderer.this.getRenderedIndex(
-							tabpanels, ntabpanel.getIndex()));
+					return data;
 				}
 			});
 			addItemReference(tabbox, ntabpanel, index, varnm); //kept the reference to the data, before ON_BIND_INIT

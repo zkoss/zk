@@ -111,17 +111,12 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 				}
 				@SuppressWarnings("unchecked")
 				public void setValue(BindELContext ctx, Object value) {
-					int idx = BindRowRenderer.this.getRenderedIndex(grid, nr.getIndex());
 					ListModel<?> listmodel = grid.getListModel();
-					if (idx >= 0 && idx < listmodel.getSize()) {
-		            	if (listmodel instanceof ListModelArray){
-		            		((ListModelArray<Object>)listmodel).set(idx, value);
-		            	} else if(listmodel instanceof ListModelList<?>){
-		            		((ListModelList<Object>)listmodel).set(idx, value);
-		            	}
-		            } else {
-		            	//out of range, should ignore to compatible with old version(when we didn't implement save) or throw exception?
-		            }
+					if (listmodel instanceof ListModelArray){
+						((ListModelArray<Object>)listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
+					} else if(listmodel instanceof ListModelList<?>){
+						((ListModelList<Object>)listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
+					}
 				}
 				
 				public Component getComponent() {
@@ -129,7 +124,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 				}
 
 				public Object getValue(BindELContext ctx) {
-					return grid.getModel().getElementAt(BindRowRenderer.this.getRenderedIndex(grid, nr.getIndex()));
+					return data;
 				}
 			});
 			addItemReference(grid, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT

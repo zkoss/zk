@@ -152,11 +152,10 @@ public class BindChildRenderer extends AbstractRenderer {
 				}
 
 				public void setValue(BindELContext ctx, Object value) {
-					int index = BindChildRenderer.this.getRenderedIndex(owner,
-							comp.getParent().getChildren().indexOf(comp));
 					Collection<?> collection = (Collection<?>) owner.getAttribute(BindELContext.getModelName(owner));
 					if (collection instanceof List<?>) {
 						List<Object> list = (List<Object>) collection;
+						int index = list.indexOf(data);
 						try {
 							list.set(index, value);
 						} catch (UnsupportedOperationException e) {
@@ -167,23 +166,7 @@ public class BindChildRenderer extends AbstractRenderer {
 					}
 				}
 				public Object getValue(BindELContext ctx) {
-					final int index = BindChildRenderer.this.getRenderedIndex(owner,
-							comp.getParent().getChildren().indexOf(comp));
-					Collection<Object> collection = (Collection<Object>) owner.getAttribute(BindELContext.getModelName(owner));
-
-					if (collection != null) {
-						if (collection instanceof List<?>) {
-							return ((List<Object>) collection).get(index);
-						} else {
-							int i = -1;
-							for (Object o : collection) {
-								i++;
-								if (i == index)
-									return o;
-							}
-						}
-					}
-					return null;
+					return data;
 				}
 			});
 			

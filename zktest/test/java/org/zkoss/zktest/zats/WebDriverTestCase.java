@@ -52,6 +52,7 @@ public abstract class WebDriverTestCase {
 	private static final Logger log = LoggerFactory.getLogger(WebDriverTestCase.class);
 	private static Server server;
 	private static int port;
+	private static final String PACKAGE = WebDriverTestCase.class.getPackage().getName();
 	private static ThreadLocal<WebDriver> _local = new ThreadLocal<WebDriver>();
 	protected WebDriver driver;
 	protected static int getPort() {
@@ -107,8 +108,14 @@ public abstract class WebDriverTestCase {
 	public WebDriver connect() {
 		return connect("");
 	}
+	protected String getTestURL(String file) {
+		String simple = this.getClass().getSimpleName();
+		String name = this.getClass().getName().replace(PACKAGE, "").replace(".","/").replace(simple, "");
+
+		return name + file;
+	}
 	protected String getFileLocation() {
-		String className = this.getClass().getName().replace("org.zkoss.zktest.zats", "").replace(".","/");
+		String className = this.getClass().getName().replace(PACKAGE, "").replace(".","/");
 		int lastTest = className.lastIndexOf("Test");
 		return className.substring(0, lastTest) + ".zul";
 	}
