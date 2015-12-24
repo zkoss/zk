@@ -92,17 +92,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							//ZK-611 have wrong binding on a removed treecell in a template
 							//if it was detached, ignore it
 							if(comp.getPage()==null){
-
-								// Bug ZK-3045, we need to handle the detached component
-								// to remove all its references in a tracker.
-								if (comp.hasAttribute(BinderImpl.VAR)) {
-									Object ref = comp.getAttribute(
-											(String) comp.getAttribute(
-													BinderImpl.VAR));
-									if (ref instanceof ReferenceBinding) {
-										BinderUtil.markHandling(comp, ((ReferenceBinding)ref).getBinder());
-									}
-								}
 								return;
 							}
 							
@@ -121,7 +110,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							//ZK-1699 Performance issue ZK-Bind getters are called multiple times
 							//check if it is handling, if yes then skip to evaluate it.
 							if(getExtension().isLifeCycleHandling(comp)){
-								BinderUtil.markHandling(comp, binder); // Bug ZK-3045
 								return;
 							}
 							
@@ -159,6 +147,18 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				final Component comp = event.getTarget();
 				comp.removeAttribute(REMOVE_MARK);
 				comp.removeEventListener(BinderImpl.ON_BIND_CLEAN, this);
+
+				// Bug ZK-3045, we need to handle the detached component
+				// to remove all its references in a tracker.
+				if (comp.hasAttribute(BinderImpl.VAR)) {
+					Object ref = comp.getAttribute(
+							(String) comp.getAttribute(
+									BinderImpl.VAR));
+					if (ref instanceof ReferenceBinding) {
+						BinderUtil.markHandling(comp, ((ReferenceBinding)ref).getBinder());
+					}
+				}
+
 				removeBindings(comp);
 			}
 		});
