@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3041.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 23 11:53:28 CST 2015, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.ListSubModel;
+        import org.zkoss.zul.ListModels;
+        Collection getContacts() {
+            List l = new ArrayList();
+            l.add("Adam adam@company.org");
+            l.add("Bdam adam@company.org");
+            l.add("Cdam adam@company.org");
+            l.add("Ddam adam@company.org");
+            return l;
+        }
+        ListModelList model1 = new ListModelList(getContacts());
+        ListModelList model2 = new ListModelList(getContacts());
+
+        void newContact(String contact) {
+            model1.add(contact);
+            model1.addToSelection(contact);
+        }
+
+        Collection getDataList() {
+            List l = new ArrayList();
+            l.add("tag 1");
+            l.add("tag 2");
+            l.add("tag 3");
+            l.add("banana");
+            l.add("lemon");
+            l.add("orange");
+            l.add("car");
+            l.add("bike");
+            l.add("train");
+            return l;
+        }
+        ListModelList model3 = new ListModelList(getDataList());
+        ListModelList model4 = new ListModelList(getDataList());
+        ListSubModel subModel1 = ListModels.toListSubModel(model3);
+        ListSubModel subModel2 = ListModels.toListSubModel(model4);
+    	void newTag(String tag) {
+            model3.add(tag);
+            model3.addToSelection(tag);
+		}
+    ]]></zscript>
+    <label multiline="true">
+        -- In the 1st Chosenbox --
+        1. Focus in the chosenbox, you can see four options in the drop down list.
+        2. Type 'a' in the chosenbox, and you should see two options. The first one should be 'Create new ...', and the second one should be 'Adam adam@company.org'
+        3. Select one of the two options, and you should see a tag created in the input field of chosenbox.
+        4. Type 'a' again, and you should see the other option remaining. Click it and it should work as well.
+        -- In the 2nd Chosenbox --
+        1. Focus in the chosenbox, you can see four options in the drop down list.
+        2. Type 'a' in the chosenbox, and you should see only one option. The option should be 'Adam adam@company.org'.
+        3. Select it, and you should see a tag created in the input field of chosenbox.
+        -- In the 3rd Chosenbox --
+        1. Focus in the chosenbox, you should not see any option in the drop down list.
+        2. Type 't' in the chosenbox, and you should see five options. The first one should be 'Create new ...', and the others should be like normal data.
+        3. Select one of the options, and you should see a tag created in the input field of chosenbox.
+        4. Type 't' again, and you should see the other options remaining. Click it and it should work as well.
+        -- In the 4th Chosenbox --
+        1. Focus in the chosenbox, you should not see any option in the drop down list.
+        2. Type 't' in the chosenbox, and you should see four options. The options should be like normal data.
+        3. Select any of the options, and you should see a tag created in the input field of chosenbox.
+    </label>
+    <div>
+        <vlayout>
+            <separator />
+            <label value="model - creatable"/>
+            <chosenbox model="${model1}" creatable="true" width="500px" createMessage="Create new '{0}'"
+                       onSearch="newContact(event.value)" />
+            <label value="model - not creatable" />
+            <chosenbox model="${model2}" creatable="false" width="500px"/>
+            <separator />
+            <label value="submodel - creatable" />
+            <chosenbox model="${subModel1}" creatable="true" width="500px" createMessage="Create new '{0}'"
+                       onSearch="newTag(event.value)" />
+            <label value="submodel - not creatable" />
+            <chosenbox model="${subModel2}" creatable="false" width="500px" />
+        </vlayout>
+    </div>
+</zk>
