@@ -14,8 +14,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.zel;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
+import org.zkoss.xel.XelContext;
 import org.zkoss.zel.ArrayELResolver;
 import org.zkoss.zel.BeanELResolver;
 import org.zkoss.zel.CompositeELResolver;
@@ -29,11 +34,6 @@ import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.ResourceBundleELResolver;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.xel.XelContext;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.VariableResolverX;
-
 /**
  * An XEL implementation of ZEL ELResolver.
  *
@@ -41,6 +41,9 @@ import org.zkoss.xel.VariableResolverX;
  */
 public class XelELResolver extends ELResolver {
 	private static final CompositeELResolver DEFAULT;
+	private static final Class REFERENCE_BINDING;
+	private static final Method GET_VALUE;
+
 	static {
 		DEFAULT = new CompositeELResolver();
 		DEFAULT.add(new MapELResolver());
@@ -48,6 +51,19 @@ public class XelELResolver extends ELResolver {
 		DEFAULT.add(new ListELResolver());
 		DEFAULT.add(new ArrayELResolver());
 		DEFAULT.add(new BeanELResolver());
+
+		// Bug ZK-3021
+		Class tempCls = null;
+		Method tempMethod = null;
+		try {
+			tempCls = XelELResolver.class.getClassLoader().loadClass("org.zkoss.bind.sys.ReferenceBinding");
+			Class temp1 = XelELResolver.class.getClassLoader().loadClass("org.zkoss.bind.xel.zel.BindELContext");
+			tempMethod = tempCls.getDeclaredMethod("getValue", temp1);
+		} catch (ClassNotFoundException e) {
+		} catch (NoSuchMethodException e) {
+		}
+		REFERENCE_BINDING = tempCls;
+		GET_VALUE = tempMethod;
 	}
 	protected final XelContext _ctx;
 
@@ -78,6 +94,18 @@ public class XelELResolver extends ELResolver {
 			if (resolver instanceof VariableResolverX) {
 				final Object o = ((VariableResolverX)resolver)
 					.resolveVariable(_ctx, base, property);
+
+				// Bug ZK-3021
+				if (REFERENCE_BINDING != null && o != null) {
+					if (REFERENCE_BINDING.isAssignableFrom(o.getClass())) {
+						ctx.setPropertyResolved(true);
+						try {
+							return GET_VALUE.invoke(o, new Object[]{null});
+						} catch (Exception e) {
+							// do nothing.
+						}
+					}
+				}
 				ctx.setPropertyResolved(true);
 				return o;
 			} else if (base == null && property != null) {

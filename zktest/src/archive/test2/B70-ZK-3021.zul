@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3021.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 25 16:06:46 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_3021VM')">
+    The following labels below should be the same for each pair
+    <vlayout children="@init(vm.listMainBeans)">
+        <template name="children" var="mainBean">
+            <label value="@load(mainBean.name)" style="color: red;"/>
+            <label value="${mainBean.name}" style="color: green;"/>
+          <vlayout children="@init(mainBean.listChildrens)" style="margin-left: 15px;">
+              <template name="children" var="childBean">
+               	  <label value="@load(mainBean.name)" style="color: red;"/>
+                  <label value="${mainBean.name}" style="color: green;"/> <!-- this EL causes the exception -->
+                  <label value="@load(childBean.name)" style="color: blue;"/>
+               	  <label value="${childBean.name}" style="color: black;"/>
+              </template>
+          </vlayout>
+        </template>
+    </vlayout> 
+</window>
