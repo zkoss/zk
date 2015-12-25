@@ -628,7 +628,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (!isOpen()) renderer.render("open", false);
 		if (!isSelectable()) renderer.render("checkable", false);
 		render(renderer, "_loadedChildren", isLoaded());
-		render(renderer, "_loaded", isRendered());
+		render(renderer, "_loaded", isRendered() ? true : (getTree() != null ? getTree().getModel() == null : false));
 		
 		if (_value instanceof String)
 			render(renderer, "value", _value);

@@ -81,6 +81,7 @@ ZK 8.0.1
   ZK-3040: icon disappears in IE8 on mouse hover
   ZK-3045: Memory leak in MVVM binding
   ZK-3046: childrenBinding - conditional item rendering
+  ZK-2999: Calling tree.selectAll() doesn't select all items on a browser
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).

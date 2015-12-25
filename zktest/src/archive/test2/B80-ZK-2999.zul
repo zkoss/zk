@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2999.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 22 10:05:09 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click on the icon caret right to open the tree
+		2. click on the checkbox on the treecol to select all the treerows
+		3. all the tree rows should be checked
+
+	</label>
+	<tree id="tree" multiple="true" checkmark="true">
+		<treecols>
+			<treecol>
+				<checkbox label="Name"
+						  style="font-weight: bold;" id="selectAllCheckbox"
+						  onCheck="if(self.checked) tree.selectAll(); else tree.clearSelection();" />
+			</treecol>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem  checkable="false" open="false">
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
