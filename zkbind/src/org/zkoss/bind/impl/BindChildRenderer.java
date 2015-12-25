@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModel;
 
 /**
  * to renderer children of component
@@ -142,13 +143,17 @@ public class BindChildRenderer extends AbstractRenderer {
 			comp.setAttribute(BinderCtrl.VAR, varnm);
 			// ZK-2552
 			comp.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			comp.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+			comp.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {
 					return BinderUtil.getBinder(comp, true);
 				}
-				
+
 				public Component getComponent() {
 					return comp;
+				}
+
+				protected ListModel getModel() {
+					return null;
 				}
 
 				public void setValue(BindELContext ctx, Object value) {
@@ -158,6 +163,7 @@ public class BindChildRenderer extends AbstractRenderer {
 						int index = list.indexOf(data);
 						try {
 							list.set(index, value);
+							setData(value);
 						} catch (UnsupportedOperationException e) {
 							throw new PropertyNotWritableException(e);
 						} catch (IndexOutOfBoundsException e) {
@@ -165,11 +171,8 @@ public class BindChildRenderer extends AbstractRenderer {
 						}
 					}
 				}
-				public Object getValue(BindELContext ctx) {
-					return data;
-				}
 			});
-			
+
 			addItemReference(owner, comp, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			comp.setAttribute(itervarnm, iterStatus);
 			

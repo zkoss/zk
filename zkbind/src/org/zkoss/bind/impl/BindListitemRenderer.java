@@ -17,7 +17,6 @@ import java.io.Serializable;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
-import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -25,8 +24,6 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Attributes;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.ListModelArray;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listgroupfoot;
@@ -103,27 +100,17 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			recordRenderedIndex(listbox, items.length);
 			nli.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 
-			nli.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+			nli.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {
 					return BinderUtil.getBinder(nli, true);
 				}
 
-				@SuppressWarnings("unchecked")
-				public void setValue(BindELContext ctx, Object value) {
-					ListModel<?> listmodel = listbox.getListModel();
-					if (listmodel instanceof ListModelArray) {
-						((ListModelArray<Object>) listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
-					} else if (listmodel instanceof ListModelList<?>) {
-						((ListModelList<Object>) listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
-					}
-				}
-				
-				public Component getComponent() {
-					return nli;
+				protected ListModel getModel() {
+					return listbox.getListModel();
 				}
 
-				public Object getValue(BindELContext ctx) {
-					return data;
+				public Component getComponent() {
+					return nli;
 				}
 			});
 			addItemReference(listbox, nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT

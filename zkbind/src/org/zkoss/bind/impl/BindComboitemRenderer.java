@@ -15,7 +15,6 @@ package org.zkoss.bind.impl;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
-import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -28,8 +27,6 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.ListModelArray;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.ListSubModel;
 
 /**
@@ -108,29 +105,17 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 				recordRenderedIndex(cb, items.length);
 
 				nci.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 					public Binder getBinder() {
 						return BinderUtil.getBinder(nci, true);
 					}
 
-					@SuppressWarnings("unchecked")
-					public void setValue(BindELContext ctx, Object value) {
-						ListModel<?> listmodel = cb.getModel();
-						int idx = ((ListModelArray<Object>) listmodel).indexOf(data);
-
-						if (listmodel instanceof ListModelArray){
-							((ListModelArray<Object>)listmodel).set(idx, value);
-						} else if(listmodel instanceof ListModelList<?>){
-							((ListModelList<Object>)listmodel).set(idx, value);
-						}
+					protected ListModel getModel() {
+						return cb.getModel();
 					}
-					
+
 					public Component getComponent() {
 						return nci;
-					}
-
-					public Object getValue(BindELContext ctx) {
-						return data;
 					}
 				});
 				addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT

@@ -16,7 +16,6 @@ import java.io.Serializable;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
-import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -25,8 +24,6 @@ import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.ListModelArray;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.TabboxRenderer;
@@ -101,26 +98,17 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			// ZK-2552
 			recordRenderedIndex(tabs, items.length);
 			ntab.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {
 					return BinderUtil.getBinder(ntab, true);
 				}
 
-				public void setValue(BindELContext ctx, Object value) {
-					ListModel<?> listmodel = tabbox.getModel();
-					if (listmodel instanceof ListModelArray){
-						((ListModelArray<Object>)listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
-					} else if(listmodel instanceof ListModelList<?>){
-						((ListModelList<Object>)listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
-					}
-				}
-				
-				public Component getComponent() {
-					return ntab;
+				protected ListModel getModel() {
+					return tabbox.getModel();
 				}
 
-				public Object getValue(BindELContext ctx) {
-					return data;
+				public Component getComponent() {
+					return ntab;
 				}
 			});
 			addItemReference(tabbox, ntab, index, varnm); //kept the reference to the data, before ON_BIND_INIT
@@ -191,26 +179,16 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			recordRenderedIndex(tabpanels, items.length);
 
 			ntabpanel.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {
 					return BinderUtil.getBinder(ntabpanel, true);
 				}
 
-				@SuppressWarnings("unchecked")
-				public void setValue(BindELContext ctx, Object value) {
-					ListModel<?> listmodel = tabbox.getModel();
-					if (listmodel instanceof ListModelArray){
-						((ListModelArray<Object>)listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
-					} else if(listmodel instanceof ListModelList<?>){
-						((ListModelList<Object>)listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
-					}
+				protected ListModel getModel() {
+					return tabbox.getModel();
 				}
 				public Component getComponent() {
 					return ntabpanel;
-				}
-
-				public Object getValue(BindELContext ctx) {
-					return data;
 				}
 			});
 			addItemReference(tabbox, ntabpanel, index, varnm); //kept the reference to the data, before ON_BIND_INIT

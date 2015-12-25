@@ -18,7 +18,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_3045VM')">
 		<label multiline="true">
-            1. You should see the Components count is 2.
+            1. You should see the Components count is 1.
             2. Click the button of "Do memory leak" multi times, you should see the count is 6 forever.
         </label>
 		<vbox>

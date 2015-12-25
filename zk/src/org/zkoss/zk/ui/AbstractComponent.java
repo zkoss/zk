@@ -995,14 +995,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	private boolean _variableSeeking = false;
 	public Object getShadowVariable(String name, boolean recurse) {
+		return getShadowVariable(this, name, recurse);
+	}
+	public Object getShadowVariable(Component baseChild, String name, boolean recurse) {
 		try {
 			_variableSeeking = true;
-			return getShadowVariable0(this, name, recurse);
+			return getShadowVariable0(baseChild, name, recurse);
 		} finally {
 			_variableSeeking = false;
 		}
 	}
-	
 	protected Object getShadowVariable0(Component baseChild, String name, boolean recurse) {
 		try {
 			_variableSeeking = true;

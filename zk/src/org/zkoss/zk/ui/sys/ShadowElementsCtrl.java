@@ -72,17 +72,23 @@ public class ShadowElementsCtrl {
 		if (shadows == null || shadows.length == 0)
 			return shadows;
 		int length = shadows.length;
-		if (length == 1) {
-			if (shadows[0] instanceof ShadowElement) {
-				ShadowElement se = ((ShadowElement) shadows[0]);
+
+		// fixed ZK-3046
+		//to force init and load
+		for (Component shadow : shadows) {
+			if (shadow instanceof ShadowElement) {
+				ShadowElement se = (ShadowElement) shadow;
 				if (se.getDistributedChildren().isEmpty()) {
 					if (((ShadowElementCtrl) se).isDynamicValue()) {
-						// fixed ZK-3046
-						//to force init and load
 						Events.sendEvent(new Event("onBindInit", (Component) se));
 						Events.sendEvent(new Event("onBindingReady", (Component) se));
 					}
 				}
+			}
+		}
+		if (length == 1) {
+			if (shadows[0] instanceof ShadowElement) {
+				ShadowElement se = ((ShadowElement) shadows[0]);
 				return se.getDistributedChildren().toArray(new Component[0]);
 			}
 		} else {
@@ -101,15 +107,14 @@ public class ShadowElementsCtrl {
 				if (pCtrl.getShadowRoots().isEmpty())
 					return shadows; // no shadow available here, we can skip the filter.
 			}
-			
+
 			// the following code will filter the shadow element if any.
-			Component end = null;
-			if (shadows[0] instanceof ShadowElementCtrl) {
-				ShadowElementCtrl se = ((ShadowElementCtrl) shadows[length - 1]);
-				start = se.getLastInsertion();
-			} else {
-				end = shadows[length - 1];
+			Component end = shadows[length - 1];
+			if (end instanceof ShadowElementCtrl) {
+				ShadowElementCtrl se = (ShadowElementCtrl) end;
+				end = se.getLastInsertion();
 			}
+
 			LinkedList<Component> list = new LinkedList<Component>();
 			while (start != null) {
 				list.add(start);

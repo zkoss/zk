@@ -17,7 +17,6 @@ import java.io.Serializable;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
-import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -25,8 +24,6 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Attributes;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.ListModelArray;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.RadioRenderer;
 import org.zkoss.zul.Radiogroup;
@@ -98,27 +95,19 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			// ZK-2552
 			recordRenderedIndex(radiogroup, items.length);
 			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
-			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding() {
+			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {
 					return BinderUtil.getBinder(nr, true);
 				}
 
-				@SuppressWarnings("unchecked")
-				public void setValue(BindELContext ctx, Object value) {
-					ListModel<?> listmodel = radiogroup.getModel();
-					if (listmodel instanceof ListModelArray){
-						((ListModelArray<Object>)listmodel).set(((ListModelArray<Object>) listmodel).indexOf(data), value);
-					} else if(listmodel instanceof ListModelList<?>){
-						((ListModelList<Object>)listmodel).set(((ListModelList<Object>) listmodel).indexOf(data), value);
-					}
+				protected ListModel getModel() {
+					return radiogroup.getModel();
 				}
+
 				public Component getComponent() {
 					return nr;
 				}
 
-				public Object getValue(BindELContext ctx) {
-					return data;
-				}
 			});
 			addItemReference(radiogroup, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			

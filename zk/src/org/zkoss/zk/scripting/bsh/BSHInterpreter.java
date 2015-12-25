@@ -16,45 +16,41 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.bsh;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Collection;
-import java.io.Serializable;
-import java.io.Externalizable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 import bsh.BshClassManager;
-import bsh.NameSpace;
 import bsh.BshMethod;
-import bsh.Variable;
-import bsh.Primitive;
 import bsh.EvalError;
+import bsh.NameSpace;
+import bsh.Primitive;
 import bsh.UtilEvalError;
-
+import bsh.Variable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
-
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.SerializableAware;
+import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
-import org.zkoss.zk.scripting.util.GenericInterpreter;
-import org.zkoss.zk.scripting.SerializableAware;
-import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
@@ -509,15 +505,9 @@ implements SerializableAware, HierachicalAware {
 					for (Component c = (Component)curr;
 					c != null && c != _scope; c = c.getParent()) {
 						// Bug ZK-3046, use getShadowVariable instead.
-						if (c.getParent() instanceof ComponentCtrl && !((ComponentCtrl)c.getParent()).getShadowRoots().isEmpty()) {
-							Object o = c.getShadowVariable(name, true);
-							if (o != null)
-								return o;
-						} else {
-							Object o = c.getShadowVariable(name, false);
-							if (o != null)
-								return o;
-						}
+						Object o = c.getShadowVariable((Component) curr, name, false);
+						if (o != null)
+							return o;
 					}
 				}
 			}
