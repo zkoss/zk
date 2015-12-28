@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2905.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 23 10:53:28 CST 2015, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+        <label>You should see two windows without any exception</label>
+        <window title="Template 2" border="normal">
+            <include src="B80-ZK-2905-1.html" />
+        </window>
+        <apply templateURI="B80-ZK-2905-2.html" />
+    </vlayout>
+</zk>

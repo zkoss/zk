@@ -351,23 +351,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
-
-				// according to the spec if query string exists, it should be defer
-				// mode automatically.
-				if (_src.contains("?")) {
-					_instantMode = false;
-				} else {
-					String ext = Servlets.getExtension(_src);
-
-					// ZK-2567: use defer mode for unrecognized files
-					try {
-						LanguageDefinition lang = LanguageDefinition
-								.getByExtension(ext);
-						_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
-					} catch (DefinitionNotFoundException e) {
-						_instantMode = false;
-					}
-				}
+				// according to the spec if query string exists, it should be defer mode automatically.
+				_instantMode = !_src.contains("?") && (_src.endsWith(".zul") || _src.endsWith(".zhtml"));
 			} else
 				_instantMode = false;
 		} else
