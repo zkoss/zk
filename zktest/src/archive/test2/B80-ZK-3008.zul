@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3008.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 28 10:48:53 CST 2015, Created by Sefi
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+--><zk>
+<label multiline="true">
+1) focus into the combobox
+2) type "ge" 
+-> all the german locales appear in the popup (opening above the input field)
+3) hit backspace until only the letter "g" remains in the input field
+-> the combopopup should not overlaps the input field
+</label>
+	<zscript><![CDATA[
+	    public class MyComparator implements Comparator {
+			public int compare(Object a, Object b) {
+				//return 0;
+				String aString = ((String)a).toLowerCase();
+				String bString = ((Locale)b).getDisplayName(Locale.US).toLowerCase();
+				System.out.println(a);
+				System.out.println(bString);
+				return bString.startsWith(aString) ? 0 : 1;
+			}
+	    }
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+		ListModel subModel = ListModels.toListSubModel(model, new MyComparator(), 15);
+	]]></zscript>
+
+	<vlayout vflex="1">
+		<div vflex="1"/>
+		<combobox model="${subModel}" autodrop="true">
+			<template name="model">
+				<comboitem label="${each.displayName}"/>
+			</template>
+		</combobox>
+		<div height="100px"/>
+	</vlayout>
+</zk>
