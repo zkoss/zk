@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -31,19 +32,12 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Includer;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -351,7 +345,6 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
-
 				// according to the spec if query string exists, it should be defer
 				// mode automatically.
 				if (_src.contains("?")) {
@@ -485,9 +478,15 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				try {
 					getChildren().clear();
 					final int j = _src.indexOf('?');
-					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
-							this, _dynams);
-
+					// ZK-2642: Check if included html file will produce duplicated html, head and body tag
+					PageDefinition pdef = exec.getPageDefinition(j >= 0 ? _src.substring(0, j) : _src);
+					List<NodeInfo> nodes = pdef.getChildren();
+					if (nodes != null && nodes.size() > 0) {
+						NodeInfo firstNode = nodes.get(0);
+						if (firstNode instanceof ComponentInfo && "html".equals(((ComponentInfo)firstNode).getTag()))
+							throw new UiException("Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
+					}
+					exec.createComponents(pdef, this, _dynams);
 					if (j >= 0)
 						log.warn("Query string is not allowed in instant mode: [" + _src + "]");
 					exec.setAttribute(attrRenderedKey, _src);
@@ -595,6 +594,10 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					final StringWriter sw = new StringWriter();
 					include(sw);
 					incsb = sw.getBuffer();
+					// ZK-2642: Check if included html file will produce duplicated html, head and body tag
+					String str = incsb != null ? incsb.toString() : "";
+					if (!str.isEmpty() && (str.contains("<html>") || str.contains("<!DOCTYPE")))
+						throw new UiException("Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
 				}
 
 				//Don't output sw directly if getChildPage() is not null

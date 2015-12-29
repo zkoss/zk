@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2642-2.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Dec 29 10:53:28 CST 2015, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+        <label>You should see a exception "Root element &lt;html> is not allowed in included file" in this page</label>
+        <window title="Include (defer)" border="normal">
+            <include id="inc" src="F80-ZK-2642.xhtml" mode="defer" />
+        </window>
+    </vlayout>
+</zk>
