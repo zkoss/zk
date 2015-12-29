@@ -842,6 +842,9 @@ public class Listbox extends MeshElement {
 	 * @since 5.0.5
 	 */
 	public void setNonselectableTags(String tags) {
+	    if (Strings.isBlank(tags)) {
+	        tags = null;
+	    }
 		if (!Objects.equals(_nonselTags, tags)) {
 			_nonselTags = tags;
 			smartUpdate("nonselectableTags", tags);

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2970.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 25 17:34:21     2015, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	when trying to focus an input field, the focus is immediately lost and the listitem is focused instead
+	this happens in the combination multiple="true" and nonselectableTags=""
+	
+	the listbox below has set multiple="true" and nonselectableTags=""
+	when click the textbox, the focus should keep on it
+	</label>
+	<listbox model="${model}" width="800px" checkmark="true" nonselectableTags="" multiple="true">
+		<listitem forEach="1,2,3">
+			<listcell><textbox value="${each}"/></listcell>
+			<listcell><selectbox/></listcell>
+			<listcell><checkbox/></listcell>
+			<listcell><button label="button"/></listcell>
+		</listitem>
+	</listbox>
+</zk>
