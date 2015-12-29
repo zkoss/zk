@@ -28,6 +28,6 @@ public class F80_ZK_2642_3Test extends WebDriverTestCase {
 		waitResponse();
 		JQuery jq = jq(".z-messagebox span");
 		assertTrue(jq.exists());
-		assertTrue(jq.html().contains("Root element &lt;html&gt; is not allowed in included file"));
+		assertTrue(jq.html().contains("Root element &lt;html&gt; and DOCTYPE are not allowed in included file"));
 	}
 }

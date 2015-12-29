@@ -27,7 +27,7 @@ public class F80_ZK_2642_2Test extends ZATSTestCase {
 		try {
 			connect();
 		} catch (Exception e) {
-			assertTrue(e.getMessage().toString().contains("Root element <html> is not allowed in included file"));
+			assertTrue(e.getMessage().toString().contains("Root element <html> and DOCTYPE are not allowed in included file"));
 			return;
 		}
 		fail();
