@@ -24,6 +24,7 @@ import org.zkoss.zk.au.DeferredValue;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zul.Popup;
@@ -340,18 +341,20 @@ abstract public class XulElement extends HtmlBasedComponent {
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
 	static {
-		_properties.put("context", new StringPropertyAccess() {
-			public void setValue(Component cmp, String context) {
-				((XulElement) cmp).setContext(context);
+		_properties.put("context", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object context) {
+                if(context instanceof String)((XulElement) cmp).setContext((String)context);
+                else if(context instanceof Popup)((XulElement) cmp).setContext((Popup)context);
 			}
 
 			public String getValue(Component cmp) {
 				return ((XulElement) cmp).getContext();
 			}
 		});
-		_properties.put("popup", new StringPropertyAccess() {
-			public void setValue(Component cmp, String popup) {
-				((XulElement) cmp).setPopup(popup);
+		_properties.put("popup", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object popup) {
+                if(popup instanceof String)((XulElement) cmp).setPopup((String)popup);
+                else if(popup instanceof Popup)((XulElement) cmp).setPopup((Popup)popup);
 			}
 
 			public String getValue(Component cmp) {
@@ -359,10 +362,11 @@ abstract public class XulElement extends HtmlBasedComponent {
 			}
 		});
 
-		_properties.put("tooltip", new StringPropertyAccess() {
-			public void setValue(Component cmp, String tooltip) {
-				((XulElement) cmp).setTooltip(tooltip);
-			}
+		_properties.put("tooltip", new ObjectPropertyAccess() {
+            public void setValue(Component cmp, Object tooltip) {
+                if(tooltip instanceof String)((XulElement) cmp).setTooltip((String)tooltip);
+                else if(tooltip instanceof Popup)((XulElement) cmp).setTooltip((Popup)tooltip);
+            }
 
 			public String getValue(Component cmp) {
 				return ((XulElement) cmp).getTooltip();

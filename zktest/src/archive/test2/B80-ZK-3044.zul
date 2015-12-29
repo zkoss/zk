@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3044.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Dec 29, 2015 12:44:17 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	some component properties have overloaded signatures
+	In ZK 8 it is no longer possible to assign a popup directly using EL or ZK-Bind annotations.
+	
+	context menu, popup and tooltip should works on entire labels. 
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+		<popup id="mypop">TEST</popup>
+		<groupbox title="Context Menu (right click)">
+			<vlayout contextRef="@ref(mypop)" contextIdRef="@ref(mypop.id)">
+				<label context="@init(mypop)" value="contextMenu direct [no context in ZK 8, works in ZK 7]" style="color: red"/>
+				<label context="@init(contextRef)" value="contextMenu ref [no context in ZK 8, works in ZK 7]" style="color: red"/>
+				<label context="${mypop}" value="EL contextMenu direct [no context in ZK 8, works in ZK 7]" style="color: red"/>
+	
+				<label context="@init(mypop.id)" value="contextMenu direct [WORKAROUND]"/>
+				<label context="@init(contextIdRef)" value="contextMenu id ref [WORKAROUND]"/>
+				<label context="${mypop.id}" value="EL contextMenu id [WORKAROUND]"/>
+			</vlayout>
+		</groupbox>
+		<groupbox title="Popup (left click)">
+			<vlayout>
+				<label popup="${mypop}" value="EL popup direct [no popup in ZK 8, works in ZK 7]" style="color: red"/>
+				<label popup="${mypop.id}" value="EL popup id [WORKAROUND]"/>
+			</vlayout>
+		</groupbox>
+		<groupbox title="Tooltip (hover)">
+			<vlayout>
+				<label tooltip="${mypop}" value="EL toolip direct [no tooltip in ZK 8, works in ZK 7]" style="color: red"/>
+				<label tooltip="${mypop.id}" value="EL tooltip id [WORKAROUND]"/>
+			</vlayout>
+		</groupbox>
+	</div>
+</zk>
