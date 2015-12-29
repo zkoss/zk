@@ -85,6 +85,7 @@ ZK 8.0.1
   ZK-3021: lost variable in nested children-binding
   ZK-3008: combopopup overlapping inputfield
   ZK-2970: input fields losing focus in listbox
+  ZK-2971: listbox scrollposition not updating (keyboard control)
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).

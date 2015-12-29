@@ -208,21 +208,16 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {
-			var index = this.getSelectedIndex();
-			if (index >= 0) { // B50-ZK-56
-				var si, bar = this._scrollbar;
-				if (bar) {
-					for (var it = this.getBodyWidgetIterator(); index-- >= 0;)
-						si = it.next();
-					
-					if (si)
-						bar.scrollToElement(si.$n());
-				} else {
-					var si;
-					for (var it = this.getBodyWidgetIterator(); index-- >= 0;) 
-						si = it.next();
-					if (si) {
-						zk(si).scrollIntoView(this.ebody);
+			// ZK-2971: should scroll when not in paging or in paging but operating with keyboard
+			if (!this.paging || (this.$class.shallSyncSelInView && this.$class.shallSyncSelInView[this.uuid])) {
+				if (this.$class.shallSyncSelInView) this.$class.shallSyncSelInView[this.uuid] = false;
+				var selItem = this._selItems.length > 0 ? this._selItems[this._selItems.length - 1] : undefined;
+				if (selItem) {
+					var bar = this._scrollbar;
+					if (bar) {
+						bar.scrollToElement(selItem.$n());
+					} else {
+						zk(selItem).scrollIntoView(this.ebody);
 						this._tmpScrollTop = this.ebody.scrollTop;
 					}
 				}
