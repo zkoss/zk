@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2535.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Dec 24, 2015  3:39:01 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. hover mouse on the collapse, maximize, and close buttons should see tooltip showing their title
+		2. click on collapse, the icon should change to expand, also its tooltip
+		3. click on maximize, the icon should change to minimize, also its tooltip
+		2. tab onto any of the buttons and press and key besides TAB and SHIFT-TAB should trigger the button
+	</label>
+	<vlayout>
+		<hlayout>
+			<panel border="normal" collapsible="true" closable="true" maximizable="true">
+				<caption label="Panel with caption" />
+				<panelchildren>
+					<vlayout>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+					</vlayout>
+				</panelchildren>
+			</panel>
+			<panel title="Panel with title" border="normal" collapsible="true" closable="true" maximizable="true">
+				<panelchildren>
+					<vlayout>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+					</vlayout>
+				</panelchildren>
+			</panel>
+		</hlayout>
+		<hlayout>
+			<groupbox closable="true">
+				<caption label="Groupbox with caption" />
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</groupbox>
+			<groupbox title="Groupbox with title" closable="true">
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</groupbox>
+		</hlayout>
+		<hlayout>
+			<window border="normal" closable="true" maximizable="true">
+				<caption label="Window with caption" />
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</window>
+			<window title="Window with title" border="normal" closable="true" maximizable="true">
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</window>
+		</hlayout>
+	</vlayout>
+</zk>

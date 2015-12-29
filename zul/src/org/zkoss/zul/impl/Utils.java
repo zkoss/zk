@@ -255,6 +255,13 @@ public class Utils {
 
 		addLocaleJS(sb, "UPLOAD_CANCEL", MZul.UPLOAD_CANCEL);
 		addLocaleJS(sb, "ILLEGAL_VALUE", MZul.ILLEGAL_VALUE);
+		
+		addLocaleJS(sb, "PANEL_CLOSE", MZul.PANEL_CLOSE);
+		addLocaleJS(sb, "PANEL_MAXIMIZE", MZul.PANEL_MAXIMIZE);
+		addLocaleJS(sb, "PANEL_MINIMIZE", MZul.PANEL_MINIMIZE);
+		addLocaleJS(sb, "PANEL_EXPAND", MZul.PANEL_EXPAND);
+		addLocaleJS(sb, "PANEL_COLLAPSE", MZul.PANEL_COLLAPSE);
+		
 
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',') sb.setLength(j);

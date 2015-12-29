@@ -14,7 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var p = this.parent,
-		cnt = this.domContent_();
+		cnt = this.domContent_(),
+		tabi = this._tabindex;
 	
 	// ZK-2209: should show correct when caption has child
 	out.push('<div', this.domAttrs_(), '>',
@@ -33,7 +34,9 @@ function (out) {
 		picon = p.$s('icon');
 	if (this._isCloseVisible()) {
 		out.push('<div id="', puuid , '-close" class="', picon, ' ',
-			p.$s('close'), '"><i class="', p.getClosableIconClass_(), '"></i></div>');
+			p.$s('close'), '"');
+		if (tabi > -1) out.push(' tabindex="', tabi, '"');
+		out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', p.getClosableIconClass_(), '"></i></div>');
 	}
 	if (this._isMaximizeVisible()) {
 		var maxd = this._maximized;
@@ -41,17 +44,25 @@ function (out) {
 		if (maxd)
 			out.push(' ', p.$s('maximized'));
 		var maxIcon = maxd ? p.getMaximizedIconClass_() : p.getMaximizableIconClass_();
-		out.push('"><i class="', maxIcon, '"></i></div>');
+		if (tabi > -1) out.push('" tabindex="', tabi);
+		out.push('" title="', msgzul.PANEL_MAXIMIZE, '"><i class="', maxIcon, '"></i></div>');
 	}
 	if (this._isMinimizeVisible()) {
 		out.push('<div id="', puuid , '-min" class="', picon, ' ',
-				p.$s('minimize'), '" ><i class="',
-				p.getMinimizableIconClass_(), '"></i></div>');
+				p.$s('minimize'), '"');
+		if (tabi > -1) out.push(' tabindex="', tabi, '"');
+		out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', p.getMinimizableIconClass_(), '"></i></div>');
 	}
 	if (this._isCollapsibleVisible()) {
 		var openIcon = p._open ? p.getCollapseOpenIconClass_() : p.getCollapseCloseIconClass_();
 		out.push('<div id="', puuid , '-exp" class="', picon, ' ',
-			p.$s('expand'), '"><i class="', openIcon, '"></i></div>');
+			p.$s('expand'), '"');
+		if (tabi > -1) out.push(' tabindex="', tabi, '"');
+		if (openIcon)
+			out.push(' title="', msgzul.PANEL_COLLAPSE, '"')
+		else
+			out.push(' title="', msgzul.PANEL_EXPAND, '"')
+		out.push('><i class="', openIcon, '"></i></div>');
 	}
 	
 	out.push('</div>');
