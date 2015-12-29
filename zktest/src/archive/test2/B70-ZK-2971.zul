@@ -40,25 +40,52 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 			2. listbox should scroll to display the newly selected item
 	</label>
 
-	<hlayout>
-		<vlayout>
-			//single selection works as expected
-			<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="false">
-				<listhead>
-					<listheader label="col"/>
-				</listhead>
-				<listitem forEach="${items}" label="${each}"/>
-			</listbox>
-		</vlayout>
-
-		<vlayout>
-			//multiple selection: the scroll position is not updated when navigating across the page to the element 20 using keyboard controls
-			<listbox id="lb2" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="true">
-				<listhead>
-					<listheader label="col"/>
-				</listhead>
-				<listitem forEach="${items}" label="${each}"/>
-			</listbox>
-		</vlayout>
-	</hlayout>
+	<vlayout>
+		<label value="ROD Disabled"></label>
+		<hlayout>
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+			<vlayout>
+				//single selection works as expected
+				<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="false">
+					<listhead>
+						<listheader label="col"/>
+					</listhead>
+					<listitem forEach="${items}" label="${each}"/>
+				</listbox>
+			</vlayout>
+	
+			<vlayout>
+				//multiple selection: the scroll position is not updated when navigating across the page to the element 20 using keyboard controls
+				<listbox id="lb2" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="true">
+					<listhead>
+						<listheader label="col"/>
+					</listhead>
+					<listitem forEach="${items}" label="${each}"/>
+				</listbox>
+			</vlayout>
+		</hlayout>
+		<label value="ROD Enabled"></label>
+		<hlayout>
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<vlayout>
+				//single selection works as expected
+				<listbox id="lb3" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="false">
+					<listhead>
+						<listheader label="col"/>
+					</listhead>
+					<listitem forEach="${items}" label="${each}"/>
+				</listbox>
+			</vlayout>
+	
+			<vlayout>
+				//multiple selection: the scroll position is not updated when navigating across the page to the element 20 using keyboard controls
+				<listbox id="lb4" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="true">
+					<listhead>
+						<listheader label="col"/>
+					</listhead>
+					<listitem forEach="${items}" label="${each}"/>
+				</listbox>
+			</vlayout>
+		</hlayout>
+	</vlayout>
 </zk>
