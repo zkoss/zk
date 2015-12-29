@@ -80,6 +80,7 @@ public class BindChildRenderer extends AbstractRenderer {
 		if (tm == null) {
 			Label l = new Label(data==null?"":data.toString());
 			l.setParent(owner);
+			addChildrenBindingRenderedComps(owner, new Component[] {l});
 			return;
 		}
 		
@@ -130,14 +131,10 @@ public class BindChildRenderer extends AbstractRenderer {
 		boolean templateTracked = false;
 		
 		//ZK-2545 - Children binding support list model
-		if (isListModel) {
-			cbrCompsList = (List<Component[]>) owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
-			if (cbrCompsList == null) cbrCompsList = new LinkedList<Component[]>();
-			cbrCompsList.add(items);
-			owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
-		} else {
+		if (isListModel)
+			addChildrenBindingRenderedComps(owner, items);
+		else
 			recordRenderedIndex(owner, items.length);
-		}
 		
 		for(final Component comp: items){
 			comp.setAttribute(BinderCtrl.VAR, varnm);
@@ -194,6 +191,13 @@ public class BindChildRenderer extends AbstractRenderer {
 			//to force init and load
 			Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, comp));
 		}
+	}
+
+	private void addChildrenBindingRenderedComps(final Component owner, Component[] items) {
+		List<Component[]> cbrCompsList = (List<Component[]>) owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		if (cbrCompsList == null) cbrCompsList = new LinkedList<Component[]>();
+		cbrCompsList.add(items);
+		owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
 	}
 
 	private class ChildrenBindingForEachStatus extends AbstractForEachStatus {

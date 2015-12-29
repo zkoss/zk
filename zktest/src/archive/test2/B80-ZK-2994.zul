@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2994.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Dec 29 15:53:28 CST 2015, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window id="mywin" title="Filtered Model" border="normal" width="800px" height="400px"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2994VM')">
+        <label>Click the button, and you should not see any exception.</label>
+		<div children="@load(vm.child) @template(each)">
+			<template name="vlayout">
+				<vlayout children="@load(vm.filteredView)">
+					<template name="children">
+						<label value="@load('Value: '.concat(each))" />
+					</template>
+				</vlayout>
+			</template>
+		</div>
+		<button label="Refresh Content"
+			onClick="@command('refresh')"/>
+	</window>
+</zk>
