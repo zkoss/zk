@@ -554,3 +554,22 @@ if [ "${end%s}" = "${end}" ] ; then
 	echo "Total build process time: ${buildTimeMM} min ${buildTimeSS} sec."
 fi
 
+if [ "build" == $cmd ] ; then
+	cd $maindir/dist/lib/ext/
+	mkdir javassist
+	unzip javassist.jar -d $maindir/dist/lib/ext/javassist/
+
+	cp -v $maindir/zkbind/debug/javassist/util/proxy/* $maindir/dist/lib/ext/javassist/javassist/util/proxy/
+
+	cd $maindir/dist/lib/ext/javassist/META-INF/
+
+	sed -i "s/^Bundle-Version:.*/Bundle-Version: $prjver/g" MANIFEST.MF
+	sed -i "s/^Bundle-Name:.*/Bundle-Name: zjavassist/g" MANIFEST.MF
+	sed -i "s/^Bundle-SymbolicName:.*/Bundle-SymbolicName: zjavassist/g" MANIFEST.MF
+	sed -i "s/^Bundle-Description:.*/Bundle-Description: zjavassist, wraps Javassist (JAVA programming ASSISTant) and ZK javassist.util.proxy package together, makes Java bytecode manipulation    simple.  It is a class library for editing bytecodes in Java. ZK javassist.util.proxy package is to fix a javassist bug https:\/\/issues.jboss.org\/browse\/JASSIST-247 (during serialization)./" MANIFEST.MF
+
+	cd ..
+	zip -r ../../osgi/zjavassist.osgi.jar *
+
+	\rm -r $maindir/dist/lib/ext/javassist
+fi
