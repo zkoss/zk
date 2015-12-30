@@ -900,13 +900,8 @@ implements Constrainted, Readonly, Disable {
 		Utils.renderCrawlableText(coerceToString(_value));
 		
 		//ZK-2677
-		String errorboxSclass = getErrorboxSclass();
-		if (errorboxSclass != null)
-			render(renderer, "errorboxSclass", errorboxSclass);
-		
-		String errorboxIconSclass = getErrorboxIconSclass();
-		if (errorboxIconSclass != null)
-			render(renderer, "errorboxIconSclass", errorboxIconSclass);
+		render(renderer, "errorboxSclass", getErrorboxSclass());
+		render(renderer, "errorboxIconSclass", getErrorboxIconSclass());
 	}
 
 
