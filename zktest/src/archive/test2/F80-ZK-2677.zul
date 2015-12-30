@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2677.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Dec 30, 2015 11:51:12 AM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.customErrorStyle {
+			width: 150px;
+		}
+		.customErrorIcon:before{
+			content: "\f00c";
+		}
+	</style>
+	<label multiline="true">
+		the textbox on the left have custom style for the errorbox, and errorbox icon
+		the width haas been set to 150px
+		the icon have been replaced with a check mark
+	</label>
+	<hlayout>
+		<vlayout>
+			Custom Errorbox Style
+			<textbox constraint="no empty" errorboxSclass="customErrorStyle" errorboxIconSclass="customErrorIcon" />
+		</vlayout>
+		<separator width="150px"></separator>
+		<vlayout>
+			Default Errorbox Style
+			<textbox constraint="no empty" />
+		</vlayout>
+	</hlayout>
+</zk>

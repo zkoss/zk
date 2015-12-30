@@ -698,6 +698,50 @@ implements Constrainted, Readonly, Disable {
 		if (!_valided && _auxinf != null && _auxinf.constr != null)
 			setText(coerceToString(_value));
 	}
+	
+	/**
+	 * Returns the class name of the custom style applied to the errorbox of this component.
+	 * @return Sclass
+	 * @since 8.0.1
+	 */
+	public String getErrorboxSclass() {
+		return _auxinf != null ? _auxinf.errorboxSclass : null;
+	}
+	
+	/**
+	 * Sets the class name of the custom style to be applied to the errorbox of this component.
+	 * @param sclass
+	 * @since 8.0.1
+	 */
+	public void setErrorboxSclass(String sclass) {
+		if (sclass != null && sclass.length() == 0) sclass = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, sclass)) {
+			initAuxInfo().errorboxSclass = sclass;
+			smartUpdate("errorboxSclass", getErrorboxSclass());
+		}
+	}
+	
+	/**
+	 * Returns the class name of the custom style applied to the errorbox icon of this component.
+	 * @return Sclass
+	 * @since 8.0.1
+	 */
+	public String getErrorboxIconSclass() {
+		return _auxinf != null ? _auxinf.errorboxIconSclass : null;
+	}
+	
+	/**
+	 * Sets the class name of the custom style to be applied to the errorbox icon of this component.
+	 * @param iconSclass
+	 * @since 8.0.1
+	 */
+	public void setErrorboxIconSclass(String iconSclass) {
+		if (iconSclass != null && iconSclass.length() == 0) iconSclass = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, iconSclass)) {
+			initAuxInfo().errorboxIconSclass = iconSclass;
+			smartUpdate("errorboxIconSclass", getErrorboxIconSclass());
+		}
+	}
 
 	//-- Component --//
 	/** Not childable. */
@@ -854,12 +898,21 @@ implements Constrainted, Readonly, Disable {
 			renderer.render("constraint", "[s");
 
 		Utils.renderCrawlableText(coerceToString(_value));
+		
+		//ZK-2677
+		String errorboxSclass = getErrorboxSclass();
+		if (errorboxSclass != null)
+			render(renderer, "errorboxSclass", errorboxSclass);
+		
+		String errorboxIconSclass = getErrorboxIconSclass();
+		if (errorboxIconSclass != null)
+			render(renderer, "errorboxIconSclass", errorboxIconSclass);
 	}
 
 
 
 	//--ComponentCtrl--//
-	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(10);
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(12);
 	static {
 		_properties.put("name", new StringPropertyAccess() {
 			public void setValue(Component cmp, String name) {
@@ -958,6 +1011,26 @@ implements Constrainted, Readonly, Disable {
 				return ((InputElement) cmp).getTabindex();
 			}
 		});
+		
+		_properties.put("errorboxSclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String errorboxSclass) {
+				((InputElement) cmp).setErrorboxSclass(errorboxSclass);
+			}
+
+			public String getValue(Component cmp) {
+				return ((InputElement) cmp).getErrorboxSclass();
+			}
+		});
+		
+		_properties.put("errorboxIconSclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String errorboxIconSclass) {
+				((InputElement) cmp).setErrorboxIconSclass(errorboxIconSclass);
+			}
+
+			public String getValue(Component cmp) {
+				return ((InputElement) cmp).getErrorboxIconSclass();
+			}
+		});
 	}
 
 	public PropertyAccess getPropertyAccess(String prop) {
@@ -994,6 +1067,8 @@ implements Constrainted, Readonly, Disable {
 		private Constraint constr;
 		/** Whether the validation is caused by {@link #isValid}. */
 		private transient boolean checkOnly;
+		private String errorboxSclass;
+		private String errorboxIconSclass;
 
 		public Object clone() {
 			try {

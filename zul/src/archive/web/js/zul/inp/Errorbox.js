@@ -28,7 +28,16 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this.parent = owner; //fake
 		this.parent.__ebox = this;
 		this.msg = msg;
+		this.sclass = owner._errorboxSclass;
+		this.iconSclass = owner._errorboxIconSclass;
 		this.$supers('$init', [msg, {ref: parent}]);
+	},
+	domClass_: function (no) {
+		var sclass = this.sclass,
+			s = this.$supers(zul.inp.Errorbox, 'domClass_', arguments);
+		if (sclass)
+			s += ' ' + sclass;
+		return s;
 	},
 	/** Opens the popup.
 	 * @see zul.wgt.Popup#open
@@ -141,10 +150,11 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	},
 	redraw: function (out) {
 		var uuid = this.uuid,
-			icon = this.$s('icon');
+			icon = this.$s('icon'),
+			iconSclass = this.iconSclass;
 		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-p" class="',
 				this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
-				icon, ' z-icon-exclamation-triangle"></i><div id="', uuid,
+				icon, ' z-icon-exclamation-triangle', iconSclass ? ' ' + iconSclass : '','"></i><div id="', uuid,
 				'-cave" class="', this.$s('content'), '" title="',
 				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
 				zUtl.encodeXML(this.msg, {multiline:true}),
