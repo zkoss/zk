@@ -271,6 +271,11 @@ if="deploy.tomcat.required">
 
 <target name="build.osgi4" depends="build.jar" if="build.zkbind">
 	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="true" message="${line.separator}Import-Package:javassist.util.proxy;resolution:=optional,*;resolution:=optional"/>
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/zjavassist"/>
+		<arg value="${project.version}"/>
+		<arg value="${maindir}"/>
+	</exec>
 </target>
 
 <target name="build.osgi" depends="build.osgi1, build.osgi2, build.osgi3, build.osgi4" if="build.jar.required">
