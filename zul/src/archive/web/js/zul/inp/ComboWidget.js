@@ -233,7 +233,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				(ppDim.top >= inpDim.top && ppDim.top < inpBottom) ||
 				ppRelativeBottom >= jq.innerHeight() || 
 				(ppDim.top < inpDim.top && ppBottom < inpDim.top - 2) ||
-				(ppBottom > inpBottom)) {
+				(ppBottom > inpBottom && ppDim.top < inpDim.top)) {
 			return this._shallSyncPopupPosition = true;
 		}
 		return false;
