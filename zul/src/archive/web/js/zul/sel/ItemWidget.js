@@ -207,6 +207,41 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 				box._updHeaderCM(); //update in batch since we have to examine one-by-one
 		}
 	},
+	getDragMessage_: function () {
+		var iterator = this.getMeshWidget().itemIterator();
+		var cnt = 2;
+		var msg;
+		if (!this.isSelected())	return this.getLabel();
+		while(iterator.hasNext()){
+			var item = iterator.next();
+			if(item.isSelected()){
+				var label = item.getLabel();
+				if (label.length > 9)
+					label = label.substring(0, 9) + "...";
+				if (!msg)
+					msg = label;
+				else
+					msg += '</div><div class="z-drop-content"><span id="zk_ddghost-img'
+						+ (cnt++) + '" class="z-drop-icon"></span>&nbsp;'
+						+ label;
+			}
+		}
+		return msg;
+	},
+	// override it because msg cut in getDragMessage_,
+	// do not want cut again here, and change _dragImg to array
+	cloneDrag_: function (drag, ofs) {
+		//See also bug 1783363 and 1766244
+		var msg = this.getDragMessage_();
+		var dgelm = zk.DnD.ghost(drag, ofs, msg);
+
+		drag._orgcursor = document.body.style.cursor;
+		document.body.style.cursor = 'pointer';
+		jq(this.getDragNode()).addClass('z-dragged'); //after clone
+		// has multi drag image
+		drag._dragImg = jq('span[id^="zk_ddghost-img"]');
+		return dgelm;
+	},
 	//@Override
 	beforeParentChanged_: function (newp) {
 		if (!newp) {//remove
