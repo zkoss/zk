@@ -279,7 +279,29 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 * @param boolean instant
 		 * @since 6.0.0
 		 */
-		instant: null
+		instant: null,
+		/** Returns the custom style class name applied to the errorbox, if any.
+		 * <p>Default: null.
+		 * @return String
+		 * @since 8.0.1
+		 */
+		/**
+		 * Sets the custom style class name to be applied to the errorbox.
+		 * @param String errorboxSclass
+		 * @since 8.0.1
+		 */
+		errorboxSclass: null,
+		/** Returns the custom style icon class name applied to the errorbox, if any.
+		 * <p>Default: null.
+		 * @return String
+		 * @since 8.0.1
+		 */
+		/**
+		 * Sets the custom style icon class name to be applied to the errorbox.
+		 * @param String errorboxIconSclass
+		 * @since 8.0.1
+		 */
+		errorboxIconSclass: null
 	},
 	/** Returns the CSS style of inplace if inplace is not null
 	 * @return String
