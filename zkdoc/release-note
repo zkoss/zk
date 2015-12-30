@@ -89,6 +89,7 @@ ZK 8.0.1
   ZK-2971: listbox scrollposition not updating (keyboard control)
   ZK-2994: Removal causes a larger list in nested children binding
   ZK-2979: OSGi: Split Packages of javassist.util.proxy
+  ZK-3053: the ZK processing bar is shown unexpectedly
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
@@ -208,6 +209,7 @@ ZK 7.0.8
 * Bugs
   ZK-3045: Memory leak in MVVM binding
   ZK-3021: lost variable in nested children-binding
+  ZK-3053: the ZK processing bar is shown unexpectedly
 
 * Upgrade Notes
 
