@@ -47,6 +47,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_open: true,
 	_minheight: 100,
 	_minwidth: 200,
+	_tabindex: 0,
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -258,13 +259,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
 						jq(node).removeClass(this.$s('collapsed'));
-						jq(this.$n('exp')).children('.' + down)
-						.removeClass(down).addClass(up);
+						jq(this.$n('exp')).attr('title', msgzul.PANEL_COLLAPSE)
+						.children('.' + down).removeClass(down).addClass(up);
 						$body.zk.slideDown(this);
 					} else {
 						jq(node).addClass(this.$s('collapsed'));
-						jq(this.$n('exp')).children('.' + up)
-						.removeClass(up).addClass(down);
+						jq(this.$n('exp')).attr('title', msgzul.PANEL_EXPAND)
+						.children('.' + up).removeClass(up).addClass(down);
 						this._hideShadow();
 						$body.zk.slideUp(this);
 					}
@@ -300,6 +301,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				down = this.getMaximizedIconClass_();
 				if (maximized) {
 					jq(this.$n('max')).addClass(this.$s('maximized'))
+					.attr('title', msgzul.PANEL_MINIMIZE)
 					.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
@@ -373,8 +375,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				} else {
 					var max = this.$n('max'),
 						$max = jq(max);
-					$max.removeClass(this.$s('maximized')).children('.' + down)
-					.removeClass(down).addClass(up);
+					$max.removeClass(this.$s('maximized'))
+					.attr('title', msgzul.PANEL_MAXIMIZE)
+					.children('.' + down).removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;
@@ -492,6 +495,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (this.bbar == this.fbar)
 				this.bbar = null;
 			this.rerender();
+		},
+		/** Returns the tab order of this component.
+		 * <p>Default: 0 (icons will be tabbable by default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
+		tabindex: function (v) {
+			var n = this.$n();
+			if (n) n.tabIndex = v || '';
 		}
 	},
 
@@ -944,6 +958,36 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			return;
 		}
 		evt.stop();
+	},
+	doKeyDown_: function(evt) {
+		var n = evt.domTarget,
+			keyCode = evt.keyCode;
+		if (keyCode == '9' || keyCode == '16') { //TAB and SHIFT, skip them so tab/shift-tab will work as expected
+			this.$supers('doKeyDown_', arguments);
+			return;
+		}
+		if (!n.id) n = n.parentNode;
+		switch (n) {
+		case this.$n('close'):
+			this.fire('onClose');
+			break;
+		case this.$n('max'):
+			this.setMaximized(!this._maximized);
+			break;
+		case this.$n('min'):
+			this.setMinimized(!this._minimized);
+			break;
+		case this.$n('exp'):
+			var body = this.$n('body'),
+			open = body ? zk(body).isVisible() : this._open;
+			// force to open
+			if (!open == this._open)
+				this._open = open;
+			this.setOpen(!open);
+			break;
+		default:
+			this.$supers('doKeyDown_', arguments);
+		}
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);

@@ -61,4 +61,9 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int WS_PREV = 0x2601 + MESSAGE_ID;
 	static final int WS_NEXT = 0x2602 + MESSAGE_ID;
 	static final int WS_END = 0x2603 + MESSAGE_ID;
+	static final int PANEL_CLOSE = 0x2700 + MESSAGE_ID;
+	static final int PANEL_MAXIMIZE = 0x2701 + MESSAGE_ID;
+	static final int PANEL_MINIMIZE = 0x2702 + MESSAGE_ID;
+	static final int PANEL_EXPAND = 0x2703 + MESSAGE_ID;
+	static final int PANEL_COLLAPSE = 0x2704 + MESSAGE_ID;
 }

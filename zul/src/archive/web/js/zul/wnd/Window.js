@@ -399,6 +399,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_minheight: 100,
 	_minwidth: 200,
 	_shadow: true,
+	_tabindex: 0,
 
 	$init: function () {
 		this._fellows = {};
@@ -554,6 +555,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					down = this.getMaximizedIconClass_();
 				if (maximized) {
 					jq(this.$n('max')).addClass(this.$s('maximized'))
+						.attr('title', msgzul.PANEL_MINIMIZE)
 						.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
@@ -582,6 +584,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					var max = this.$n('max'),
 						$max = jq(max);
 					$max.removeClass(this.$s('maximized'))
+						.attr('title', msgzul.PANEL_MAXIMIZE)
 						.children('.' + down).removeClass(down).addClass(up);
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
@@ -753,6 +756,17 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				this._shadowWgt.destroy();
 				this._shadowWgt = null;
 			}
+		},
+		/** Returns the tab order of this component.
+		 * <p>Default: 0 (icons will be tabbable by default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
+		tabindex: function (v) {
+			var n = this.$n();
+			if (n) n.tabIndex = v || '';
 		}
 	},
 	/** Re-position the window based on the value of {@link #getPosition}.
@@ -1036,7 +1050,28 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		}
 		return false;
 	},
-	
+	doKeyDown_: function(evt) {
+		var n = evt.domTarget,
+			keyCode = evt.keyCode;
+		if (keyCode == '9' || keyCode == '16') { //TAB and SHIFT, skip them so tab/shift-tab will work as expected
+			this.$supers('doKeyDown_', arguments);
+			return;
+		}
+		if (!n.id) n = n.parentNode;
+		switch (n) {
+		case this.$n('close'):
+			this.fire('onClose');
+			break;
+		case this.$n('max'):
+			this.setMaximized(!this._maximized);
+			break;
+		case this.$n('min'):
+			this.setMinimized(!this._minimized);
+			break;
+		default:
+			this.$supers('doKeyDown_', arguments);
+		}
+	},
 	domClass_: function(no) {
 		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
 			bordercls = this._border;

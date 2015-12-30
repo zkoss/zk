@@ -20,6 +20,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
+	_tabindex: 0,
+	$define: {
+		/** Returns the tab order of this component.
+		 * <p>Default: 0 (icons will be tabbable by default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
+		tabindex: function (v) {
+			var n = this.$n();
+			if (n) n.tabIndex = v || '';
+		}
+	},
 	//super//
 	domDependent_: true, //DOM content depends on parent
 	rerender: function () {
@@ -121,7 +135,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			}
 			if (this._isCollapsibleVisible()) {
 				var exp = this.parent.$n('exp');
-				width += exp.offsetWidth + zk(exp).marginWidth();		
+				width += exp.offsetWidth + zk(exp).marginWidth();
 			}
 		}
 		this.$supers('setFlexSizeW_', arguments);

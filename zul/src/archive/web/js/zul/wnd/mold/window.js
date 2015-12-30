@@ -17,7 +17,8 @@ function (out, skipper) {
 		title = this.getTitle(),
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass();
+		contentSclass = this.getContentSclass(),
+		tabi = this._tabindex;
 
 	out.push('<div', this.domAttrs_(), '>');
 	
@@ -30,9 +31,9 @@ function (out, skipper) {
 		else {
 			var icon = this.$s('icon');
 			if (this._closable) {
-				out.push('<div id="', uuid , '-close" class="', icon, ' ',
-						this.$s('close'), '"><i class="',
-						this.getClosableIconClass_(), '"></i></div>');
+				out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '"');
+				if (tabi > -1) out.push(' tabindex="', tabi, '"');
+				out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', this.getClosableIconClass_(), '"></i></div>');
 			}
 			if (this._maximizable) {
 				var maxd = this._maximized;
@@ -41,12 +42,13 @@ function (out, skipper) {
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
 				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
-				out.push('"><i class="', maxIcon, '"></i></div>');
+				if (tabi > -1) out.push('" tabindex="', tabi);
+				out.push('" title="', msgzul.PANEL_MAXIMIZE, '"><i class="', maxIcon, '"></i></div>');
 			}
 			if (this._minimizable) {
-				out.push('<div id="', uuid , '-min" class="', icon, ' ',
-						this.$s('minimize'), '" ><i class="',
-						this.getMinimizableIconClass_(), '"></i></div>');
+				out.push('<div id="', uuid , '-min" class="', icon, ' ', this.$s('minimize'), '"');
+				if (tabi > -1) out.push(' tabindex="', tabi, '"');
+				out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', this.getMinimizableIconClass_(), '"></i></div>');
 			}
 			out.push(zUtl.encodeXML(title));
 		}
