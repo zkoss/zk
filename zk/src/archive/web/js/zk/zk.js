@@ -28,7 +28,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_statelesscnt = 0,
 		_logmsg,
 		_stamps = [],
-		_t0 = jq.now();
+		_t0 = jq.now(),
+		_procq = {}; // Bug ZK-3053
 
 	function newClass(copy) {
 		var init = function () {
@@ -1103,9 +1104,12 @@ zk.endProcessing();
 	 * @see #processing
 	 * @see #endProcessing
 	 */
-	startProcessing: function (timeout) {
+	startProcessing: function (timeout, pid /* internal use only */) {
 		zk.processing = true;
-		setTimeout(jq.isReady ? showprgb: showprgbInit, timeout > 0 ? timeout: 0);
+		var t = setTimeout(jq.isReady ? showprgb: showprgbInit, timeout > 0 ? timeout: 0);
+		if (pid) {
+			_procq[pid] = t;
+		}
 	},
 	/** Clears a flag, {@link #processing}, to indicate that it the processing has done. It also removes a message, if any, that indicates "processing".
 	 * <p>Example:
@@ -1116,13 +1120,20 @@ zk.endProcessing();
 </code></pre>
 	 * @see #startProcessing
 	 */
-	endProcessing: function () {
+	endProcessing: function (pid /* internal use only */) {
 		//F70-ZK-2495: delete init crash timer once endProcessing is called
 		if (window.zkInitCrashTimer) { 
 			clearTimeout(window.zkInitCrashTimer);
 			window.zkInitCrashTimer = false;
 		}
 		zk.processing = false;
+		if (pid) {
+			var t = _procq[pid];
+			if (t) {
+				clearTimeout(t);
+			}
+			delete _procq[pid];
+		}
 		zUtl.destroyProgressbox('zk_proc');
 	},
 

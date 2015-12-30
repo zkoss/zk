@@ -31,11 +31,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		_aftAuResp = []; //store callbacks to be triggered when au is back
 	
 	// Checks whether to turn off the progress prompt
-	function checkProgressing() {
+	function checkProgressing(sid) {
 		if (!zAu.processing()) {
 			_detached = []; //clean up
 			if (!zk.clientinfo)
-				zk.endProcessing();
+				zk.endProcessing(sid);
 				//setTimeout(zk.endProcessing, 50);
 				// using a timeout to stop the processing after doing onSize in the fireSized() method of the Utl.js
 				//Bug ZK-1505: using timeout cause progress bar disapper such as Thread.sleep(1000) case, so revert it back
@@ -147,13 +147,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	// Called when the response is received from ajaxReq.
 	function onResponseReady() {
-		var req = ajaxReq, reqInf = ajaxReqInf;
+		var req = ajaxReq, reqInf = ajaxReqInf, sid;
 		try {
 			if (req && req.readyState == 4) {
 				ajaxReq = ajaxReqInf = null;
 				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, pfGetIds(req));
 
-				var sid = req.getResponseHeader('ZK-SID'), rstatus;
+				sid = req.getResponseHeader('ZK-SID');
+
+				var rstatus;
 				if ((rstatus = req.status) == 200) { //correct
 					if (sid && sid != seqId) {
 						_errCode = 'ZK-SID ' + (sid ? 'mismatch': 'required');
@@ -251,10 +253,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 		}
 
-		afterResponse();
+		afterResponse(sid);
 	}
-	function afterResponse() {
-		zAu._doCmds(); //invokes checkProgressing
+	function afterResponse(sid) {
+		zAu._doCmds(sid); //invokes checkProgressing
 
 		//handle pending ajax send
 		if (sendPending && !ajaxReq && !pendingReqInf) {
@@ -318,7 +320,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			req.send(reqInf.content);
 
 			if (!reqInf.implicit)
-				zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
+				zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
 		} catch (e) {
 			//handle error
 			try {
@@ -683,7 +685,7 @@ zAu = {
 		pushCmds(cmds, rs);
 		zAu._doCmds();
 	},
-	_doCmds: function () { //called by mount.js, too
+	_doCmds: function (sid) { //called by mount.js, too
 		for (var fn; fn = doCmdFns.shift();)
 			fn();
 
@@ -733,11 +735,11 @@ zAu = {
 						if (v > 500 || (v < 0 && v > -500)) r = r2;
 					}
 					responseId = r;
-					zAu._doCmds();
+					zAu._doCmds(sid);
 				}
 			}, 3600);
 		} else
-			checkProgressing();
+			checkProgressing(sid);
 
 		if (ex) throw ex;
 	},

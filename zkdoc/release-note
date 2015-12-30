@@ -5,6 +5,7 @@ ZK 7.0.8
 * Bugs
   ZK-3045: Memory leak in MVVM binding
   ZK-3021: lost variable in nested children-binding
+  ZK-3053: the ZK processing bar is shown unexpectedly
 
 * Upgrade Notes
 

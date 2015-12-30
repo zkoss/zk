@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3053.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 30 10:17:53 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+	Please click the button and then if you can see the zk prcoessing bar appearing, that's a bug.
+    You should not see the zk.log with a message "bug exists" (this test case cannot use HTMLDriver to test)
+    </label>
+   <script><![CDATA[
+       function testProcessBar() {
+        var d = 300;
+        for (var i = 0; i < 10; i++) {
+            setTimeout(function () {
+            zAu.send(new zk.Event(zk.Desktop._dt, 'onClick', null));
+            }, i * d);
+        }
+        var intval = setInterval(function () {
+         if (jq("#zk_proc").length > 0) {
+            zk.log("bug exists");
+            clearInterval(intval);
+         }
+         }, 1);
+
+       }
+   ]]></script>
+    <button label="Click Me" xmlns:w="client" w:onClick="testProcessBar()"/>
+</zk>
