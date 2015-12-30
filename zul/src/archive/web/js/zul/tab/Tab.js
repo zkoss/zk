@@ -269,6 +269,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		
 		if (this.getHeight())
 			this._calcHgh();
+		
+		//ZK-3016 make sure parent always do scrollCheck on child bind
+		this.parent._shallCheck = true;
 	},
 	unbind_: function () {
 		var closebtn = this.$n('cls');
