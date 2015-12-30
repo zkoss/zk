@@ -596,7 +596,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					incsb = sw.getBuffer();
 					// ZK-2642: Check if included html file will produce duplicated html, head and body tag
 					String str = incsb != null ? incsb.toString() : "";
-					if (!str.isEmpty() && (str.contains("<html>") || str.contains("<!DOCTYPE")))
+					if (!str.isEmpty() && (str.contains("<html") || str.contains("<!DOCTYPE")))
 						throw new UiException("Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
 				}
 
