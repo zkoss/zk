@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
@@ -354,11 +355,12 @@ abstract public class LabelImageElement extends LabelElement {
 				return ((LabelImageElement) cmp).getImage();
 			}
 		});
-		_properties.put("imageContent", new PropertyAccess<Image>() {
-			public void setValue(Component cmp, Image image) {
-				((LabelImageElement) cmp).setImageContent(image);
+		_properties.put("imageContent", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object image) {
+                if(image instanceof Image)((LabelImageElement) cmp).setImageContent((Image)image);
+                else if(image instanceof RenderedImage)((LabelImageElement) cmp).setImageContent((RenderedImage)image);
 			}
-			public Class<Image> getType() {
+			public Class getType() {
 				return Image.class;
 			}
 
@@ -375,11 +377,12 @@ abstract public class LabelImageElement extends LabelElement {
 				return ((LabelImageElement) cmp).getHoverImage();
 			}
 		});
-		_properties.put("hoverImageContent", new PropertyAccess<Image>() {
-			public void setValue(Component cmp, Image image) {
-				((LabelImageElement) cmp).setHoverImageContent(image);
+		_properties.put("hoverImageContent", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object image) {
+                if(image instanceof Image)((LabelImageElement) cmp).setHoverImageContent((Image)image);
+                else if(image instanceof RenderedImage)((LabelImageElement) cmp).setHoverImageContent((RenderedImage)image);
 			}
-			public Class<Image> getType() {
+			public Class getType() {
 				return Image.class;
 			}
 

@@ -32,6 +32,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.math.RoundingModes;
 import org.zkoss.util.Locales;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
@@ -334,9 +335,10 @@ abstract public class NumberInputElement extends FormatInputElement {
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
 	static {
-		_properties.put("locale", new StringPropertyAccess() {
-			public void setValue(Component cmp, String locale) {
-				((NumberInputElement) cmp).setLocale(locale);
+		_properties.put("locale", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object locale) {
+				if(locale instanceof String)((NumberInputElement) cmp).setLocale((String)locale);
+				else if(locale instanceof Locale)((NumberInputElement) cmp).setLocale((Locale)locale);
 			}
 
 			public String getValue(Component cmp) {
