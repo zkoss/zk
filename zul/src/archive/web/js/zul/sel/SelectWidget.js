@@ -1135,7 +1135,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		this._changeSelect(row, toSel);
-		this._focus(row);
+		if(!skipFocus) this._focus(row);
 
 		//notify server
 		this.fireOnSelect(row, evt);
