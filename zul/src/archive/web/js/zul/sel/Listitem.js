@@ -64,34 +64,6 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	setLabel: function (val) {
 		this._autoFirstCell().setLabel(val);
 	},
-	// override this function for multiple z-drop-content
-	getDragMessage_: function () {
-		var p = this.parent,
-			p_sel = p._selItems,
-			length = p_sel.length,
-			inst = zul.sel.Listitem,
-			msg,
-			cnt = 2;
-		// if no other listitem selected or self is not selected,
-		// return self label
-		// else iterate through all listitems 
-		// ZK-803
-		if (!this.isSelected() || !length || (length == 1 && p_sel[0] == this))
-			return this.getLabel();
-		for (var w = p.firstChild; w; w = w.nextSibling)
-			if (w.$instanceof(inst) && w.isSelected()) {
-				var label = w.getLabel();
-				if (label.length > 9)
-					label = label.substring(0, 9) + "...";
-				if (!msg)
-					msg = label;
-				else
-					msg += '</div><div class="z-drop-content"><span id="zk_ddghost-img'
-						+ (cnt++) + '" class="z-drop-icon"></span>&nbsp;'
-						+ label;
-			}
-		return msg;
-	},
 	// replace the origional DD_dragging
 	getDragOptions_: function (map) {
 		var old = map.change;
@@ -101,20 +73,6 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 			updateImg(drag);
 		};
 		return this.$supers('getDragOptions_', arguments);
-	},
-	// override it because msg cut in getDragMessage_,
-	// do not want cut again here, and change _dragImg to array
-	cloneDrag_: function (drag, ofs) {
-		//See also bug 1783363 and 1766244
-		var msg = this.getDragMessage_();
-		var dgelm = zk.DnD.ghost(drag, ofs, msg);
-
-		drag._orgcursor = document.body.style.cursor;
-		document.body.style.cursor = 'pointer';
-		jq(this.getDragNode()).addClass('z-dragged'); //after clone
-		// has multi drag image
-		drag._dragImg = jq('span[id^="zk_ddghost-img"]');
-		return dgelm;
 	},
 	/** Sets the image of the {@link Listcell} it contains.
 	 *
