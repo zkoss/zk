@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3026.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Sun Jan 3 10:00:28 CST 2016, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="hello" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3026VM')">
+        <label>
+            Press "add" + "remove" several times, and you should always see "A A B C D E" and "A B C D E".
+        </label>
+        <div children="@load(vm.list)">
+            <template name="children" var="item">
+                <label value="@load(item)" />
+            </template>
+        </div>
+        <button label="add" onClick="@command('add')"/>
+        <button label="remove" onClick="@command('remove')"/>
+    </window>
+</zk>

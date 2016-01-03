@@ -27,10 +27,10 @@ import org.zkoss.zul.*;
  */
 public class B80_ZK_3013Composer extends SelectorComposer<Window> {
 
-	ListModelList<String> gridModel = new ListModelList<>();
-	ListModelList<String> comboModel = new ListModelList<>();
-	ListModelList<String> gridModel2 = new ListModelList<>();
-	ListModelList<String> comboModel2 = new ListModelList<>();
+	ListModelList<String> gridModel = new ListModelList();
+	ListModelList<String> comboModel = new ListModelList();
+	ListModelList<String> gridModel2 = new ListModelList();
+	ListModelList<String> comboModel2 = new ListModelList();
 
 	public ListModelList<String> getGridModel() {
 		return gridModel;
