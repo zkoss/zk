@@ -709,7 +709,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final Component comp = request.getComponent();
 		if (comp != null) {
 			final AuService svc = comp.getAuService();
-			if (svc == null || !svc.service(request, everError))
+			if ((svc == null || !svc.service(request, everError)) && comp.getDesktop() != null)
 				((ComponentCtrl)comp).service(request, everError);
 			return; //done (it's comp's job to handle it)
 		}

@@ -96,6 +96,7 @@ ZK 8.0.1
   ZK-3016: scrollable tabs problems with dynamic tab labels
   ZK-2890: Ghost and Drag Message from Tree / Treeitem
   ZK-3011: zhtml img src ignored before added to page
+  ZK-3013: unexpected events on Combobox with Grid+RowRenderer
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
