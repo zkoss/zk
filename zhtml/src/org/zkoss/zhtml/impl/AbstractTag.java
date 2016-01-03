@@ -24,6 +24,7 @@ import java.util.Map;
 import org.zkoss.html.HTMLs;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
+import org.zkoss.zk.au.DeferredValue;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -136,8 +137,11 @@ implements DynamicPropertied, RawId {
 			sval = filterStyle(sval);
 			setDynaProp(name, sval);
 		} else if ("src".equals(name)) {
-			sval = getEncodedURL(sval);
-			setDynaProp(name, sval);
+			// ZK-3011: should defer until render
+			EncodedURL url = new EncodedURL(sval);
+			setDynaProp(name, url);
+			smartUpdate("dynamicProperty", new Object[]{name, url}, true);
+			return;
 		} else if ("textContent".equals(name)) {
 			setDynaProp(name, sval);
 			if (!getChildren().isEmpty())
@@ -324,8 +328,13 @@ implements DynamicPropertied, RawId {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				if (!"textContent".equals(me.getKey())) { // ignore textContent
+					// ZK-3011: should getValue if it's a deferredValue
+					Object v = me.getValue();
+					if (v instanceof DeferredValue) {
+						v = ((DeferredValue) v).getValue();
+					}
 					sb.append(' ').append(me.getKey()).append("=\"")
-						.append(XMLs.encodeAttribute(Objects.toString(me.getValue())))
+						.append(XMLs.encodeAttribute(Objects.toString(v)))
 						.append('"');
 				}
 			}
@@ -421,5 +430,14 @@ implements DynamicPropertied, RawId {
 		return new ExtraCtrl();
 	}
 	protected class ExtraCtrl implements DirectContent {
+	}
+	private class EncodedURL implements org.zkoss.zk.au.DeferredValue {
+		private String _src;
+		public EncodedURL(String src) {
+			_src = src;
+		}
+		public Object getValue() {
+			return getEncodedURL(_src);
+		}
 	}
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3011.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 23 16:15:55 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml">
+	<label multiline="true">
+		1. should see an image on this page
+		2. click the "Change img" button
+		3. should now see two images
+
+	</label>
+	<label>init render</label>
+	<div id="container1">
+	</div>
+	<zscript><![CDATA[
+		org.zkoss.zhtml.Img img1 = new org.zkoss.zhtml.Img();
+		img1.setDynamicProperty("src", "img/icon_users.png");
+		img1.setParent(container1);
+	]]></zscript>
+	<label>ajax smartupdate</label>
+	<div id="container2">
+	</div>
+	<button label="Change img">
+		<attribute name="onClick"><![CDATA[
+		org.zkoss.zhtml.Img img1 = new org.zkoss.zhtml.Img();
+		img1.setDynamicProperty("src", "img/icon_users.png");
+		img1.setParent(container2);
+	]]></attribute>
+	</button>
+</zk>
