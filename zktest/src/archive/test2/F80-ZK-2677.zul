@@ -18,8 +18,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 		.customErrorStyle {
 			width: 150px;
 		}
-		.customErrorIcon:before{
-			content: "\f00c";
+		.customErrorStyle .z-errorbox-content {
+			background-color: #FFEE00;
+		}
+		.customErrorStyle2 .z-errorbox-content {
+			background-color: #CCFF00;
 		}
 	</style>
 	<label multiline="true">
@@ -27,15 +30,31 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 		the width haas been set to 150px
 		the icon have been replaced with a check mark
 	</label>
-	<hlayout>
-		<vlayout>
-			Custom Errorbox Style
-			<textbox constraint="no empty" errorboxSclass="customErrorStyle" errorboxIconSclass="customErrorIcon" />
-		</vlayout>
-		<separator width="150px"></separator>
-		<vlayout>
-			Default Errorbox Style
-			<textbox constraint="no empty" />
-		</vlayout>
-	</hlayout>
+	<vlayout>
+		<hlayout>
+			<vlayout>
+				Custom Errorbox Style
+				<textbox constraint="no empty" errorboxSclass="customErrorStyle" errorboxIconSclass="z-icon-check" />
+			</vlayout>
+			<separator width="150px"></separator>
+			<vlayout>
+				Default Errorbox Style
+				<textbox constraint="no empty" />
+			</vlayout>
+		</hlayout>
+		<separator height="50px"></separator>
+		<textbox errorMessage="z-icon-asterisk does not work" errorboxSclass="customErrorStyle" errorboxIconSclass="z-icon-asterisk"></textbox>
+		<textbox errorMessage="z-icon-bus works" errorboxSclass="customErrorStyle2" errorboxIconSclass="z-icon-bus"></textbox>
+		<textbox errorMessage="z-icon-cutlery works" errorboxSclass="customErrorStyle2" errorboxIconSclass="z-icon-cutlery"></textbox>
+		<textbox errorMessage="z-icon-envelope works" errorboxSclass="customErrorStyle2" errorboxIconSclass="z-icon-envelope"></textbox>
+		<textbox errorMessage="z-icon-eye does not work" errorboxSclass="customErrorStyle" errorboxIconSclass="z-icon-eye"></textbox>
+		<textbox errorMessage="z-icon-home does not work" errorboxSclass="customErrorStyle" errorboxIconSclass="z-icon-home"></textbox>
+		Verify all icons are available:
+		<div sclass="z-icon-asterisk"> z-icon-asterisk</div>
+		<div sclass="z-icon-bus"> z-icon-bus</div>
+		<div sclass="z-icon-cutlery"> z-icon-cutlery</div>
+		<div sclass="z-icon-envelope"> z-icon-envelope</div>
+		<div sclass="z-icon-eye"> z-icon-eye</div>
+		<div sclass="z-icon-home"> z-icon-home</div>
+	</vlayout>
 </zk>
