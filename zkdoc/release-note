@@ -98,6 +98,7 @@ ZK 8.0.1
   ZK-3011: zhtml img src ignored before added to page
   ZK-3013: unexpected events on Combobox with Grid+RowRenderer
   ZK-3026: ChildrenBinding breaks when adding an element not to the end of the ListModelList
+  ZK-3007: grid master detail columns not aligned
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
