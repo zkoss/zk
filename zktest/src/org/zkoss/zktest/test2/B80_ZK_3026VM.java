@@ -26,7 +26,7 @@ import java.io.*;
  */
 public class B80_ZK_3026VM implements Serializable {
 
-	ListModelList<String> list = new ListModelList<>();
+	ListModelList<String> list = new ListModelList<String>();
 
 	@Init
 	public void init(){
