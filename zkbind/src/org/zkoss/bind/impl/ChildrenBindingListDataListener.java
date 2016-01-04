@@ -67,19 +67,14 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 			if (index0 >= 0 && index1 >=0) {
 				renderModelData(model, index0, index1);
 				cbrCompsList = (List<Component[]>) _owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
-				for (int i = 0; i <= (index1 - index0); i++) {
-					//replace old with new
-					int oIndex = index0 + i;
+				int count = (index1 - index0) + 1;
+				for (int i = index1; i < count; i++) {
+					//remove old
+					int oIndex = i + count;
 					Component[] oldComps = cbrCompsList.get(oIndex);
-					int nIndex = oldsz + i;
-					Component[] newComps = cbrCompsList.get(nIndex);
-					for (Component nc : newComps)
-						_owner.insertBefore(nc, oldComps[0]);
 					for (Component oc : oldComps)
 						oc.detach();
-					cbrCompsList.add(oIndex, newComps);
-					cbrCompsList.remove(oIndex + 1);
-					cbrCompsList.remove(nIndex);
+					cbrCompsList.remove(oIndex);
 				}
 				refreshOwnerCBAttr = true;
 			} else //sync model
