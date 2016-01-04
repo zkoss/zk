@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3023.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan  4 11:58:23 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the bandbox button
+		2. should only see vertical scrollbar on bandpopup
+
+	</label>
+	<zscript><![CDATA[
+		private ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
+	]]></zscript>
+	<bandbox>
+		<bandpopup width="300px" height="300px">
+			<listbox vflex="1" model="${myModel}"/>
+		</bandpopup>
+	</bandbox>
+</zk>
