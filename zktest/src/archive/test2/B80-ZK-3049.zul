@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3049.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Dec 31, 2015  4:16:36 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+When using inplace editing with combobox, clicking on the drop-down button 3 times cause the combobox to loose its "editing" state and revert to "label" state.
+
+1 - click the combobox, toggle to the editing state and open popup.
+2 - click the combobox again, close popup
+3 - click the combobox again, popup should reopen.
+</label>
+					<combobox value="default value" inplace="true">
+						<comboitem>one</comboitem>
+						<comboitem>two</comboitem>
+						<comboitem>three</comboitem>
+					</combobox>
+</zk>
