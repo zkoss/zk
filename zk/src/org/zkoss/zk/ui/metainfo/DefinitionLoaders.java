@@ -426,6 +426,7 @@ public class DefinitionLoaders {
 			}
 
 			final String macroURI = el.getElementValue("macro-uri", true);
+			final String templateURI = el.getElementValue("template-uri", true);
 			final ComponentDefinitionImpl compdef;
 			boolean extend = false;
 			if (macroURI != null && macroURI.length() != 0) {
@@ -443,12 +444,37 @@ public class DefinitionLoaders {
 
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
+			} else if (templateURI != null && templateURI.length() != 0) { //apply template uri
+				extend = true;
+				String extendedCls = "apply";
+				final ComponentDefinition ref = (ComponentDefinitionImpl)langdef.getShadowDefinitionIfAny(extendedCls);
+
+				if (extendedCls.equals(name)) {
+					compdef = (ComponentDefinitionImpl)ref;
+				} else {
+					compdef = (ComponentDefinitionImpl)
+							ref.clone(ref.getLanguageDefinition(), name);
+					compdef.setDeclarationURL(url);
+				}
+
+				if (cls != null)
+					compdef.setImplementationClass(cls);
+				else if (clsnm != null)
+					compdef.setImplementationClass(clsnm);
+				langdef.addShadowDefinition(compdef);
+				compdef.addProperty("templateURI", templateURI);
 			} else if (el.getElement("extends") != null) { //extends
 				extend = true;
 
 				final String extnm = el.getElementValue("extends", true);
 				if (log.isTraceEnabled()) log.trace("Extends component definition, "+name+", from "+extnm);
-				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
+				ComponentDefinition tmpRef = langdef.getComponentDefinitionIfAny(extnm);
+
+				if (tmpRef == null) //search Shadow
+					tmpRef = langdef.getShadowDefinitionIfAny(extnm);
+
+				final ComponentDefinition ref = tmpRef;
+
 				if (ref == null) {
 					log.warn("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
 						//not throw exception since the derived component might be

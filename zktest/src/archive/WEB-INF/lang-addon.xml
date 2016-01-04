@@ -33,7 +33,48 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</property>
 	</component>
  	-->
- 	
+    <component>
+        <component-name>mycomp1</component-name>
+        <component-class>org.zkoss.zuti.zul.Apply</component-class>
+        <property>
+            <property-name>templateURI</property-name>
+            <property-value>/test2/F80-ZK-3039-template.zul</property-value>
+        </property>
+        <shadow-element/>
+    </component>
+
+    <component>
+        <component-name>mycomp2</component-name>
+        <extends>mycomp1</extends>
+        <property>
+            <property-name>title</property-name>
+            <property-value>amazing</property-value>
+        </property>
+    </component>
+
+    <component>
+        <component-name>mycomp3</component-name>
+        <extends>apply</extends>
+        <property>
+            <property-name>templateURI</property-name>
+            <property-value>/test2/F80-ZK-3039-template.zul</property-value>
+        </property>
+    </component>
+
+    <component>
+        <component-name>mycomp4</component-name>
+        <template-uri>/test2/F80-ZK-3039-template.zul</template-uri>
+    </component>
+
+    <component>
+        <component-name>mycomp5</component-name>
+        <template-uri>/test2/F80-ZK-3039-template.zul</template-uri>
+        <property>
+            <property-name>title</property-name>
+            <property-value>amazing</property-value>
+        </property>
+    </component>
+
 	<component>
 		<component-name>debugger</component-name>
 		<macro-uri>/WEB-INF/tool/debugger.zul</macro-uri>
