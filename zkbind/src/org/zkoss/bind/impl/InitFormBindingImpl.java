@@ -50,7 +50,7 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		if (!(value instanceof Form)) {
-			initFormBean(value, (Class<Object>) (value != null ? value.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())));
+			initFormBean(value, (Class<Object>) (value != null ? value.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())), ctx);
 			
 			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
 			if(collector!=null){

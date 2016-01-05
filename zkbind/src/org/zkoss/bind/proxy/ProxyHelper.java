@@ -12,8 +12,6 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +21,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import javassist.Modifier;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
-
 import org.zkoss.bind.Form;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
+import org.zkoss.bind.annotation.ImmutableFields;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.UiException;
 
@@ -61,10 +59,14 @@ public class ProxyHelper {
 		if (origin instanceof FormProxyObject) {
 			return origin;
 		}
+
+		boolean hasImmutableFields = false;
 		if (annotations != null) {
 			for (Annotation annot : annotations) {
 				if (annot.annotationType().isAssignableFrom(Immutable.class))
 					return origin;
+				if (annot.annotationType().isAssignableFrom(ImmutableFields.class))
+					hasImmutableFields = true;
 			}
 		}
 		if (isImmutable(origin))
@@ -84,7 +86,11 @@ public class ProxyHelper {
 		} else {
 			factory.setFilter(BeanProxyHandler.BEAN_METHOD_FILTER);
 			factory.setSuperclass(origin.getClass());
-			factory.setInterfaces(new Class[]{FormProxyObject.class});
+			if (hasImmutableFields) {
+				factory.setInterfaces(new Class[] {FormProxyObject.class, ImmutableFields.class});
+			} else {
+				factory.setInterfaces(new Class[] {FormProxyObject.class});
+			}
 			Class<?> proxyClass = factory.createClass();
 			Object p1 = null;
 			try {
@@ -132,6 +138,17 @@ public class ProxyHelper {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T extends Object> T createFormProxy(T origin, Class<?> type) {
+		return createFormProxy(origin, type, null);
+	}
+	/**
+	 * Creates a proxy form object from the given origin object, if any.
+	 * @param origin the origin data object
+	 * @param type the class type of the data object
+	 * @param interfaces the interface type of the data object, if any.
+	 * @since 8.0.1
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T extends Object> T createFormProxy(T origin, Class<?> type, Class[] interfaces) {
 
 		if (origin instanceof Form)
 			return origin;
@@ -139,9 +156,21 @@ public class ProxyHelper {
 		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
 		if (origin instanceof FormProxyObject)
 			type = ((FormProxyObject) origin).getOriginObject().getClass();
-		
+
 		factory.setSuperclass(type);
-		factory.setInterfaces(new Class[]{FormProxyObject.class, Form.class, FormFieldCleaner.class});
+		if (interfaces == null) {
+			factory.setInterfaces(new Class[] {FormProxyObject.class, Form.class,
+					FormFieldCleaner.class});
+		} else {
+			int len0 = interfaces.length;
+			Class[] newArray = new Class[len0+3];
+			System.arraycopy(interfaces, 0, newArray, 0, len0);
+			newArray[len0] = FormProxyObject.class;
+			newArray[len0+1] = Form.class;
+			newArray[len0+2] = FormFieldCleaner.class;
+			factory.setInterfaces(newArray);
+		}
+
 		Class<?> proxyClass = factory.createClass();
 		Object p1 = null;
 		try {

@@ -62,7 +62,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			throw new UiException(MiscUtil.formatLocationMessage("doesn't support to load a nested form , formId "+getFormId(),comp));
 		}
 		
-		final Form form = initFormBean(bean, (Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())));
+		final Form form = initFormBean(bean, (Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())), ctx);
 		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 
 			//ZK-1005 ZK 6.0.1 validation fails on nested bean

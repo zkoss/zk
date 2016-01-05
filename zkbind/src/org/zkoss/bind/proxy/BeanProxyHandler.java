@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.annotation.ImmutableFields;
 import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.xel.zel.BindELContext;
@@ -171,9 +172,11 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 
 					Object value = method.invoke(_origin, args);
 					if (value != null) {
-						
-						// ZK-2736 Form proxy with Immutable values
-						value = ProxyHelper.createProxyIfAny(value, method.getAnnotations());
+						if (_origin.getClass().getAnnotation(ImmutableFields.class) == null &&
+								!(self instanceof ImmutableFields)) {
+							// ZK-2736 Form proxy with Immutable values
+							value = ProxyHelper.createProxyIfAny(value, method.getAnnotations());
+						}
 						
 						addCache(attr, value);
 						if (value instanceof FormProxyObject) {

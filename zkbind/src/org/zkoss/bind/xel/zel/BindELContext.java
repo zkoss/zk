@@ -378,4 +378,17 @@ public class BindELContext extends XelELContext {
 	private static boolean isAnnotatedImmutable(Class<? extends Object> cls){
 		return cls.getAnnotation(Immutable.class)!=null; 
 	}
+
+	public void putContext(@SuppressWarnings("rawtypes") Class key,
+			Object contextObject) {
+
+		// Bug fixed for ZK-2787
+		if (contextObject instanceof Method && key == Method.class) {
+			BindContext bindCtx = (BindContext) getXelContext().getAttribute(BinderImpl.BINDCTX);
+			if (bindCtx != null) {
+				bindCtx.setAttribute(String.valueOf(key), ((Method)contextObject).getDeclaredAnnotations());
+			}
+		}
+		super.putContext(key, contextObject);
+	}
 }

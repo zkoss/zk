@@ -24,10 +24,9 @@ import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
-import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
-import org.zkoss.bind.sys.ConditionType; 
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
@@ -105,7 +104,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 
 			final Object bean = eval.getValue(ctx, comp,
 					_accessInfo.getProperty());;
-			form = initFormBean(bean,  (Class<Object>)(bean == null ? eval.getType(ctx, comp, _accessInfo.getProperty()) : bean.getClass()));
+			form = initFormBean(bean,  (Class<Object>)(bean == null ? eval.getType(ctx, comp, _accessInfo.getProperty()) : bean.getClass()), ctx);
 		}
 		return form;
 	}

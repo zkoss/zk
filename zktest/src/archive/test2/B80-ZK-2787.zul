@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2787.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan  5 17:52:29 CST 2016, Created by jumperchen
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2787VM')">
+    if you see any exception, that's a bug.
+	<div form="@id('f') @load(vm.foo)">
+		<label value="@load(f.date)"/>
+	</div>
+</window>

@@ -12,10 +12,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.annotation.ImmutableFields;
 import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.proxy.ProxyHelper;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -53,10 +57,28 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
 	}
 	
-	public <T> Form initFormBean(Object bean, Class<Object> class1) {
+	public <T> Form initFormBean(Object bean, Class<Object> class1, BindContext bindContext) {
 		Form form = ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
 		if (form == null) {
-			form = (Form) ProxyHelper.createFormProxy(bean, class1);
+			Class[] interfaces = null;
+
+			// Bug ZK-2787
+			if (bindContext.getAttribute(String.valueOf(Method.class)) != null) {
+				Annotation[] annotations = (Annotation[]) bindContext.getAttribute(String.valueOf(Method.class));
+
+				if (annotations != null) {
+					boolean found = false;
+					for (Annotation annot : annotations) {
+						if (annot.annotationType() == ImmutableFields.class) {
+							found = true;
+							break;
+						}
+					}
+					if (found)
+						interfaces = new Class[] {ImmutableFields.class};
+				}
+			}
+			form = (Form) ProxyHelper.createFormProxy(bean, class1, interfaces);
 			((BinderCtrl)getBinder()).storeForm(getComponent(), _formId, form);
 		}
 		if (!(bean instanceof Form) && form instanceof FormProxyObject)
