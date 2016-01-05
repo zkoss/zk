@@ -16,9 +16,11 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 <zk>
 	<label multiline="true">
 		1. scroll the first listbox to the buttom
-		2. should not see any white blank other then rows
+		2. should not see any white blank after the rows
 		3. scroll the second listbox to the right-most position
-		4. should not see any white blank other then cols
+		4. should not see any white blank after the cols
+		5. scroll the third listbox to the buttom and right-most position
+		6. should not see any white blank after the cols and rows
 
 	</label>
 	<zscript><![CDATA[
@@ -129,6 +131,79 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 						 id="nfa027Cln2" />
 			<listheader  width="82px" label="確認碼"
 						 id="nfa013Cln2" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<listbox width="600px" id="browseListbox3" mold="paging"
+			 height="200px" pageSize="10" model="${model}" pagingPosition="bottom">
+		<listhead sizable="true">
+			<listheader  width="20px"
+						 id="browseListbox3_dataOperationCln" />
+			<listheader  width="83px" label="傳票類別"
+						 id="nfa001Cln3" />
+			<listheader  width="194px" label="傳票編號"
+						 id="nfa002Cln3" />
+			<listheader  width="83px" label="傳票總號"
+						 id="nfa003Cln3" />
+			<listheader  width="83px" label="性質"
+						 id="nfa004Cln3" />
+			<listheader  width="83px" label="傳票日期"
+						 id="nfa005Cln3" />
+			<listheader  width="83px" label="會計人員"
+						 id="nfa006Cln3" />
+			<listheader  width="83px" label="備註"
+						 id="nfa010Cln3" />
+			<listheader  width="83px" label="覆核"
+						 id="nfa011Cln3" />
+			<listheader  width="83px" label="覆核姓名"
+						 id="nfa012Cln3" />
+			<listheader  width="83px" label="借方金額合計："
+						 id="nfa015Cln3" />
+			<listheader  width="83px" label="貸方金額合計："
+						 id="nfa016Cln3" />
+			<listheader  width="83px" label="列印次數 "
+						 id="nfa027Cln3" />
+			<listheader  width="82px" label="確認碼"
+						 id="nfa013Cln3" />
 		</listhead>
 		<template name="model">
 			<listitem>
