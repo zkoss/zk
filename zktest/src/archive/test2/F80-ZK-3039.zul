@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3039.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Dec 30 17:00:28 CST 2015, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        You should see five green-border boxes. The second box and the last box contain label - "amazing".
+    </label>
+    <vbox>
+        <mycomp1 />
+        <mycomp2 />
+        <mycomp3 />
+        <mycomp4 />
+        <mycomp5 />
+    </vbox>
+</zk>
