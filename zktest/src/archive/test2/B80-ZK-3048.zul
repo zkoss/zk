@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3048.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan  4 18:45:43 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. scroll the first listbox to the buttom
+		2. should not see any white blank other then rows
+		3. scroll the second listbox to the right-most position
+		4. should not see any white blank other then cols
+
+	</label>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList(Locale.getAvailableLocales());
+]]></zscript>
+	<custom-attributes org.zkoss.zul.nativebar="false"/>
+	<listbox width="1225px" id="browseListbox1" mold="paging"
+			 rows="9" pageSize="10" model="${model}" pagingPosition="bottom">
+		<listhead sizable="true">
+			<listheader  width="20px"
+						 id="browseListbox1_dataOperationCln" />
+			<listheader  width="83px" label="傳票類別"
+						 id="nfa001Cln1" />
+			<listheader  width="194px" label="傳票編號"
+						 id="nfa002Cln1" />
+			<listheader  width="83px" label="傳票總號"
+						 id="nfa003Cln1" />
+			<listheader  width="83px" label="性質"
+						 id="nfa004Cln1" />
+			<listheader  width="83px" label="傳票日期"
+						 id="nfa005Cln1" />
+			<listheader  width="83px" label="會計人員"
+						 id="nfa006Cln1" />
+			<listheader  width="83px" label="備註"
+						 id="nfa010Cln1" />
+			<listheader  width="83px" label="覆核"
+						 id="nfa011Cln1" />
+			<listheader  width="83px" label="覆核姓名"
+						 id="nfa012Cln1" />
+			<listheader  width="83px" label="借方金額合計："
+						 id="nfa015Cln1" />
+			<listheader  width="83px" label="貸方金額合計："
+						 id="nfa016Cln1" />
+			<listheader  width="83px" label="列印次數 "
+						 id="nfa027Cln1" />
+			<listheader  width="82px" label="確認碼"
+						 id="nfa013Cln1" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<listbox width="600px" id="browseListbox2" mold="paging"
+			 rows="10" pageSize="10" model="${model}" pagingPosition="bottom">
+		<listhead sizable="true">
+			<listheader  width="20px"
+						 id="browseListbox2_dataOperationCln" />
+			<listheader  width="83px" label="傳票類別"
+						 id="nfa001Cln2" />
+			<listheader  width="194px" label="傳票編號"
+						 id="nfa002Cln2" />
+			<listheader  width="83px" label="傳票總號"
+						 id="nfa003Cln2" />
+			<listheader  width="83px" label="性質"
+						 id="nfa004Cln2" />
+			<listheader  width="83px" label="傳票日期"
+						 id="nfa005Cln2" />
+			<listheader  width="83px" label="會計人員"
+						 id="nfa006Cln2" />
+			<listheader  width="83px" label="備註"
+						 id="nfa010Cln2" />
+			<listheader  width="83px" label="覆核"
+						 id="nfa011Cln2" />
+			<listheader  width="83px" label="覆核姓名"
+						 id="nfa012Cln2" />
+			<listheader  width="83px" label="借方金額合計："
+						 id="nfa015Cln2" />
+			<listheader  width="83px" label="貸方金額合計："
+						 id="nfa016Cln2" />
+			<listheader  width="83px" label="列印次數 "
+						 id="nfa027Cln2" />
+			<listheader  width="82px" label="確認碼"
+						 id="nfa013Cln2" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell></listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+</zk>

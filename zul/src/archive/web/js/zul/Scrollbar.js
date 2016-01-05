@@ -184,11 +184,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startX = opts.startPositionX,
 				wdh = cave.offsetWidth - startX,
-				swdh = hbar.offsetHeight + scroller.scrollWidth - startX + froenScrollWidth,
+				swdh = scroller.scrollWidth - startX + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
 			
+			if (vbar) swdh += vbar.offsetWidth;
+
 			if (swdh < wdh) //only happened with Frozen
 				swdh = wdh + froenScrollWidth;
 			
@@ -240,11 +242,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startY = opts.startPositionY,
 				hgh = cave.offsetHeight - startY,
-				shgh = vbar.offsetWidth + scrollHeight - startY,
+				shgh = scrollHeight - startY,
 				uhgh = up.offsetHeight
 				dhgh = down.offsetHeight,
 				vhgh = hgh - uhgh - dhgh;
 			
+			if (hbar) shgh += hbar.offsetHeight;
+
 			if (startY) {
 				vbar.style.top = jq.px(cave.offsetTop + startY);
 				down.style.bottom = jq.px(startY);
