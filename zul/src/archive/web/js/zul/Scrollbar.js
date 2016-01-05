@@ -188,8 +188,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
-			
-			if (vbar) swdh += vbar.offsetWidth;
 
 			if (swdh < wdh) //only happened with Frozen
 				swdh = wdh + froenScrollWidth;
@@ -204,6 +202,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			if (needV) {
 				ws.width = jq.px(hwdh - rwdh);
 				right.style.right = jq.px(rwdh);
+				var oldv = vbar.style.display;
+				vbar.style.display = 'block';
+				swdh += vbar.offsetWidth;
+				vbar.style.display = oldv;
 			} else {
 				ws.width = jq.px(hwdh);
 			}
@@ -246,8 +248,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				uhgh = up.offsetHeight
 				dhgh = down.offsetHeight,
 				vhgh = hgh - uhgh - dhgh;
-			
-			if (hbar) shgh += hbar.offsetHeight;
 
 			if (startY) {
 				vbar.style.top = jq.px(cave.offsetTop + startY);
@@ -258,6 +258,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			if (needH) {
 				ws.height = jq.px0(vhgh - dhgh);
 				down.style.bottom = jq.px(startY + dhgh);
+				var oldh = hbar.style.display;
+				hbar.style.display = 'block';
+				shgh += hbar.offsetHeight;
+				hbar.style.display = oldh;
 			} else {
 				ws.height = jq.px(vhgh);
 			}
