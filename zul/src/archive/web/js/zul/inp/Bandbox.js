@@ -27,10 +27,8 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		var bp = this.firstChild, //bandpopup
 			w, h;
 		if (bp) {
-			var ppw = zk(pp).padBorderWidth(),
-				pph = zk(pp).padBorderHeight();
-			w = bp._hflex == 'min' && bp._hflexsz ? jq.px0(bp._hflexsz + ppw) : jq.px0(parseInt(bp.getWidth()) + ppw);
-			h = bp._vflex == 'min' && bp._vflexsz ? jq.px0(bp._vflexsz + pph) : jq.px0(parseInt(bp.getHeight()) + pph);
+			w = bp._hflex == 'min' && bp._hflexsz ? jq.px0(bp._hflexsz + zk(pp).padBorderWidth()) : bp.getWidth();
+			h = bp._vflex == 'min' && bp._vflexsz ? jq.px0(bp._vflexsz + zk(pp).padBorderHeight()) : bp.getHeight();
 		}
 		return [w||'auto', h||'auto'];
 	},
