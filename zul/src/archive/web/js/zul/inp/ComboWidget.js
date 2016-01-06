@@ -357,11 +357,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				if (pp.offsetWidth > wd) pp.style.width = wd;
 			}
 		}
-
-		if (ppofs[0].endsWith('px')) {
-			var zkpp = zk(pp);
-			pp.style.width = zkpp.revisedWidth(parseInt(ppofs[0]) + zkpp.padBorderWidth()) + 'px';
-		}
 	},
 
 	dnPressed_: zk.$void, //function (evt) {}

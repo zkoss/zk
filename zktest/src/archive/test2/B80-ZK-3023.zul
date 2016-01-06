@@ -15,16 +15,39 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		1. click the bandbox button
-		2. should only see vertical scrollbar on bandpopup
+		1. click all the bandbox buttons
+		2. all the bandboxs shouldn't have any horizontal scrollbar
+		3. the third bandpopup's width should be 100%
+		4. the forth bandbox's width should be auto
 
 	</label>
 	<zscript><![CDATA[
 		private ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
 	]]></zscript>
+	<label>width="300px"</label>
+	<vlayout>
 	<bandbox>
 		<bandpopup width="300px" height="300px">
 			<listbox vflex="1" model="${myModel}"/>
 		</bandpopup>
 	</bandbox>
+	<label>width="20em"</label>
+	<bandbox>
+		<bandpopup width="20em" height="300px">
+			<listbox vflex="1" model="${myModel}"/>
+		</bandpopup>
+	</bandbox>
+	<label>width="80%"</label>
+	<bandbox>
+		<bandpopup width="80%" height="300px">
+			<listbox vflex="1" model="${myModel}"/>
+		</bandpopup>
+	</bandbox>
+	<label>no width</label>
+	<bandbox>
+		<bandpopup height="300px">
+			<listbox vflex="1" model="${myModel}"/>
+		</bandpopup>
+	</bandbox>
+	</vlayout>
 </zk>

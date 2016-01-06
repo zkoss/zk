@@ -73,5 +73,16 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		//bug 3287082: do not fire onChanging when children typing.
 		if(evt.domTarget == this.getInputNode())
 			this.$supers('doKeyUp_', arguments);
-	}
+	},
+	_fixsz: function (ppofs) {
+		this.$supers('_fixsz', arguments);
+		var pp = this.getPopupNode_(),
+			zkpp = zk(pp),
+			ppfc = pp.firstChild;
+		if (ppofs[0].endsWith('%')) {
+			ppfc.style.width = '100%';
+		} else if (ppofs[0] != 'auto') {
+			pp.style.width = zkpp.revisedWidth(ppfc.offsetWidth + zkpp.padBorderWidth()) +'px';
+		}
+    }
 });
