@@ -79,8 +79,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 		return model != null ? model.getSize() : rows != null ? rows.getVisibleItemCount() : 0;
 	}
 
-	private static int INVALIDATE_THRESHOLD = 10;	
+	private int INVALIDATE_THRESHOLD = -1;
 	public void doListDataChange(ListDataEvent event) {
+		if (INVALIDATE_THRESHOLD == -1) {
+			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10, true);
+		}
 		//when this is called _model is never null
 		final Rows rows = _grid.getRows();
 		final int newsz = event.getModel().getSize(), oldsz = rows == null ? 0 : rows.getChildren().size();

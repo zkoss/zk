@@ -56,6 +56,7 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A combobox.
@@ -205,8 +206,11 @@ public class Combobox extends Textbox {
 		}
 	}
 
-	private static int INVALIDATE_THRESHOLD = 10;
+	private int INVALIDATE_THRESHOLD = -1;
 	private void initDataListener() {
+		if (INVALIDATE_THRESHOLD == -1) {
+			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this, "org.zkoss.zul.invalidateThreshold", 10, true);
+		}
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {

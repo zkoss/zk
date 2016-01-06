@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2902.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan  6 10:43:09 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+
+	org.zkoss.lang.Library.setProperty("org.zkoss.zul.invalidateThreshold", "6");
+
+	ListModelList model0 = new ListModelList();
+	for(int i = 1; i < 3; i++) {
+		model0.add("item" + i);
+	}
+
+	ListModelList model1 = new ListModelList();
+	for(int i = 1; i < 3; i++) {
+		model1.add("item" + i);
+	}
+
+	ListModelList model2 = new ListModelList();
+	for(int i = 1; i < 3; i++) {
+		model2.add("item" + i);
+	}
+
+	ListModelList add3in0 = new ListModelList();
+	for(int i = 1; i < 4; i++) {
+		add3in0.add("item" + i);
+	}
+
+	ListModelList add4in0 = new ListModelList();
+	for(int i = 1; i < 5; i++) {
+		add4in0.add("item" + i);
+	}
+
+	ListModelList add4in1 = new ListModelList();
+	for(int i = 1; i < 5; i++) {
+		add4in1.add("item" + i);
+	}
+
+	ListModelList add5in1 = new ListModelList();
+	for(int i = 1; i < 6; i++) {
+		add5in1.add("item" + i);
+	}
+
+	ListModelList add6in2 = new ListModelList();
+	for(int i = 1; i < 7; i++) {
+		add6in2.add("item" + i);
+	}
+
+	ListModelList add7in2 = new ListModelList();
+	for(int i = 1; i < 8; i++) {
+		add7in2.add("item" + i);
+	}
+
+]]></zscript>
+	<label multiline="true">
+		1. click the button "add 3 rows to 1"
+		2. should only see 3 listitem from index 2 to 4 in network response
+		3. click the button "add 4 rows to 1"
+		4. should see a listbox and 9 listitem from index 0 to 8 in network response
+		5. click the button "add 4 rows to 2"
+		6. should only see 4 listitem from index 2 to 5 in network response
+		7. click the button "add 5 rows to 2"
+		8. should see a listbox and 11 listitem from index 0 to 10 in network response
+		9. click the button "add 6 rows to 3"
+		10. should only see 6 listitem from index 2 to 7 in network response
+		11. click the button "add 7 rows to 3"
+		12. should see a listbox and 15 listitem from index 0 to 14 in network response
+
+	</label>
+	<div>
+		<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+		<hlayout>
+			<vlayout hflex="1">
+				<listbox model="${model0}">
+					<custom-attributes org.zkoss.zul.invalidateThreshold="3"/>
+				</listbox>
+				<button label="add 3 rows to 1" onClick='model0.addAll(add3in0);'/>
+				<button label="add 4 rows to 1" onClick='model0.addAll(add4in0);'/>
+			</vlayout>
+			<vlayout hflex="1">
+				<listbox model="${model1}">
+					<custom-attributes org.zkoss.zul.invalidateThreshold="4"/>
+				</listbox>
+				<button label="add 4 rows to 2" onClick='model1.addAll(add4in1);'/>
+				<button label="add 5 rows to 2" onClick='model1.addAll(add5in1);'/>
+			</vlayout>
+			<vlayout hflex="1">
+				<listbox model="${model2}"/>
+				<button label="add 6 rows to 3" onClick='model2.addAll(add6in2);'/>
+				<button label="add 7 rows to 3" onClick='model2.addAll(add7in2);'/>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>
