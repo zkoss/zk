@@ -13,6 +13,7 @@ ZK 8.0.1
   ZK-2677: Provide a way to customize style and icon of Errorbox
   ZK-2535: Accessibility support for panel/window buttons
   ZK-3039: defining a template "component" in lang-addon.xml
+  ZK-2902: make INVALIDATE_THRESHOLD configurable
 
 * Bugs
   ZK-2912: Specifying a non-existing variable in "unless" attribute causes a NullPointerException if

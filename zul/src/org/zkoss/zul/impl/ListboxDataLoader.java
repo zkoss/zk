@@ -78,8 +78,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		return model != null ? model.getSize() : _listbox.getVisibleItemCount();
 	}
 
-	private static int INVALIDATE_THRESHOLD = 10;
+	private int INVALIDATE_THRESHOLD = -1;
 	public void doListDataChange(ListDataEvent event) {
+		if (INVALIDATE_THRESHOLD == -1) {
+			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10, true);
+		}
 		//when this is called _model is never null
 		final ListModel _model = _listbox.getModel();
 		final int newsz = _model.getSize(), oldsz = _listbox.getItemCount();
