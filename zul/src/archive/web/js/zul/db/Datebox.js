@@ -34,9 +34,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				zk(inp).focus();
 		}
 	}
-	function _blurInplace(db) {
-		zul.inp.RoundUtl.doBlur_(db);
-	}
 	function _equalDate(d1, d2) {
 		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
 	}
@@ -369,17 +366,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function (val, pattern) {
 		return val ? new zk.fmt.Calendar().formatDate(val, pattern || this.getFormat(), this._localizedSymbols) : '';
 	},
-	doFocus_: function (evt) {
-		this.$supers('doFocus_', arguments);
-
-		zul.inp.RoundUtl.doFocus_(this);
-	},
-	doBlur_: function (evt) {
-		if (this._inplace && this._pop && this._pop.isOpen())
-			return; // prevent blur if popup is opened
-		this.$supers('doBlur_', arguments);
-		_blurInplace(this);
-	},
 	doClick_: function (evt) {
 		if (this._disabled) return;
 		if (this._readonly && this._buttonVisible && this._pop && !this._pop.isOpen())
@@ -461,6 +447,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
+			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
 		zWatch.listen({onSize: this, onScroll: this});
@@ -473,16 +460,21 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 		if (btn = this.$n('btn')) {
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
+			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
 		zWatch.unlisten({onSize: this, onScroll: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
+		this._inplaceIgnore = false;
 		if (!this._buttonVisible) return;
 		if (!this._disabled)
 			this.setOpen(!jq(this.$n('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		evt.stop();
+	},
+	_doBtnMouseDown () {
+		this._inplaceIgnore = true;
 	},
 	_doTimeZoneChange: function (evt) {
 		var select = this.$n('dtzones'),
@@ -567,6 +559,12 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (!pp || !zk(pp).isVisible()) return;
 
+		if (db._inplace) {
+			db._inplaceIgnore = false;
+			db._inplaceTimerId = setTimeout(function(){
+				if (db.desktop) jq(db.$n()).addClass(db.getInplaceCSS());
+			}, db._inplaceTimeout);
+		}
 		// firefox only
 		try {
 			if (zk.ff && zk.currentFocus) {
@@ -605,7 +603,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			dbn = db.$n(), pp = db.$n('pp');
 		if (!dbn || !pp)
 			return;
-
+		if (db._inplace) db._inplaceIgnore = true;
 		db.setFloating_(true, {node:pp});
 		zWatch.fire('onFloatUp', db); //notify all
 		var topZIndex = this.setTopmost();
@@ -706,7 +704,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
-			db._inplaceout = true;
 			
 			// Bug 3122159 and 3301374
 			evt.data.value = date;
@@ -720,8 +717,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			var db = this.parent;
 			if (!zUtl.isAncestor(db, ctl.origin)) {
 				this.close(true);
-				db._inplaceout = true;
-				_blurInplace(db);
 			}
 		}
 	},
@@ -805,7 +800,6 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 		
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
-			db._inplaceout = true;
 		}
 		evt.stop();
 	}
