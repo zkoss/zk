@@ -135,6 +135,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	open: function (opts) {
 		if (this._open) return;
+		if (this._inplace) this._inplaceIgnore = true;
 		this._open = true;
 		if (opts && opts.focus)
 			this.focus();
@@ -292,7 +293,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	close: function (opts) {
 		if (!this._open) return;
-
+		if (this._inplace) this._inplaceIgnore = false;
 		var self = this;
 		// ZK-2192: Only need to determine if popup is animating
 		if (jq(this.getPopupNode_()).is(':animated')) {
@@ -302,7 +303,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._open = false;
 		if (opts && opts.focus) {
 			this.focus();
-			this._inplaceout = false;
 		}
 		
 		var pp = this.getPopupNode_();
@@ -399,16 +399,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if ('w' == attr)
 			zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
-	doFocus_: function (evt) {
-		this.$supers('doFocus_', arguments);
-		zul.inp.RoundUtl.doFocus_(this);
-	},
-	doBlur_: function (evt) {
-		if (this._inplace && this._open)
-			return; // prevent blur if popup is opened
-		this.$supers('doBlur_', arguments);
-		zul.inp.RoundUtl.doBlur_(this);
-	},
 	afterKeyDown_: function (evt,simulated) {
 		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
@@ -421,6 +411,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
+			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 		
 		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
@@ -432,6 +423,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var btn = this.$n('btn');
 		if (btn) {
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
+			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
 		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
@@ -443,6 +435,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		return true;
 	},
 	_doBtnClick: function (evt) {
+		this._inplaceIgnore = false;
 		if (!this._buttonVisible) return;
 		// ZK-2192: Only need to determine if popup is animating
 		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {		
@@ -455,6 +448,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 		// Bug ZK-2544, B70-ZK-2849
 		evt.stop((this._open ? {propagation: 1} : null));
+	},
+	_doBtnMouseDown: function (evt) {
+		this._inplaceIgnore = true;
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);
