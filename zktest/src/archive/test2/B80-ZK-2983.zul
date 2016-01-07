@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2983.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jan  5, 2016 10:17:32 AM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <label multiline="true">
+  If "invalidate()" is called and a chosenbox is inside the area of effect then the selection of the chosenbox becomes invisible.
+  The selection still exists but is not visible anymore. A notify can make the selection visible again if it's called later.
+  
+  1. reload the page
+  2. click button "Modify text and select Bob", the textbox should be "Value 1" and chosenbox should select "Bob"
+  </label>
+  <window border="normal" title="hello" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2983')" hflex="1">
+    <div id="divId">
+        <textbox value="@bind(vm.simpleText)"/>
+        <chosenbox model="@load(vm.persons)"
+                   selectedObjects="@bind(vm.selectedPersons)"
+                   creatable="false"/>
+    </div>
+    <div>
+        <button label="Modify text and select Bob" onClick="@command('select',divId=divId)"/>
+        <button label="Notify" onClick="@command('dummy',divId=divId)"/>
+    </div>
+ </window>
+</zk>

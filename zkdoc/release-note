@@ -105,6 +105,7 @@ ZK 8.0.1
   ZK-3049: Combobox drop-down button behavior with inplace="true"
   ZK-3048: Listheaders are mis-aligned with listcells under non-nativebar
   ZK-2787: 8.0.0-RC1 breaks ZkToDo2 demo with ZK error "cannot create proxy java.sql.Timestamp empty constructor needed"
+  ZK-2983: "Invalidate" corrupts the selection displayed in chosenbox
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
