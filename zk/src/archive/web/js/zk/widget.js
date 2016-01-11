@@ -3202,11 +3202,11 @@ unbind_: function (skipper, after) {
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		n.style.height = jq.px0(height - zkn.marginHeight());
+		n.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
 	},
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		n.style.width = jq.px0(width - zkn.marginWidth());
+		n.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden

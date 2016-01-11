@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3062.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 11 11:36:03 CST 2016, Created by jumperchen
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<?style content="
+        .z-groupbox{
+        background: #f6f6f6;
+        }
+        .z-groupbox{
+        margin: 15px;
+        }
+        "?>
+<zk>
+	If you see the message "true" in zk.log console, that bug has fixed.
+    <groupbox title="parent groupbox" mold="3d" closable="false" vflex="min" >
+        <vlayout style="height:50px;background:#fff;"  >
+            <label value="content with defined height" />
+        </vlayout>
+    </groupbox>
+    <script><![CDATA[
+        zk.afterMount(function () {
+            var h = jq('@vlayout').height();
+            zk.log(h <= zk(jq('@vlayout').parent()).contentHeight());
+        });
+    ]]></script>
+</zk>
