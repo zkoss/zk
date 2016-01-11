@@ -442,7 +442,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				// use w.offsetHeight instead of w.firstChild.offsetHeight
     				// for avoiding span's special gap when using HTML5 doctype
-    				var h = w.offsetHeight;
+    				var h = w.offsetHeight + zk(w.firstChild).marginHeight();
     				if (h > max)
     					max = h;
     			}
@@ -471,7 +471,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			} else {
     			var max = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				var wd = w.firstChild.offsetWidth;
+    				var wd = w.firstChild.offsetWidth + zk(w.firstChild).marginWidth();
     				if (wd > max)
     					max = wd;
     			}

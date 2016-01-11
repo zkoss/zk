@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3059.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 11 11:27:36 CST 2016, Created by jumperchen
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<?style content="
+        .z-groupbox {
+        background: #f6f6f6;
+        }
+        .z-groupbox > .z-groupbox-content .z-groupbox {
+        margin: 10px;
+        }
+        "?>
+<zk>
+    If you see the message "true" in zk.log console, that bug has fixed.
+    <window border="normal" title="Flex issues with container components">
+        <groupbox title="parent groupbox" closable="false" hflex="min" >
+            <vlayout id="layout" hflex="min">
+                <groupbox title="nested top" closable="false" hflex="min">
+                    <label value="some content" />
+                </groupbox>
+                <groupbox title="nested bottom" closable="false" hflex="min" >
+                    <label value="some longer content" />
+                </groupbox>
+            </vlayout>
+        </groupbox>
+    </window>
+    <script><![CDATA[
+        zk.afterMount(function () {
+            var outWid = jq('$layout').first().width();
+
+            zk.log(outWid == jq('@groupbox').last().outerWidth(true));
+        });
+    ]]></script>
+</zk>
+

@@ -108,6 +108,7 @@ ZK 8.0.1
   ZK-2787: 8.0.0-RC1 breaks ZkToDo2 demo with ZK error "cannot create proxy java.sql.Timestamp empty constructor needed"
   ZK-2983: "Invalidate" corrupts the selection displayed in chosenbox
   ZK-3051: Combobox drop-down menu cover the input textbox
+  ZK-3059: hflex="min" doesn't consider child components' margin
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
