@@ -244,8 +244,8 @@ public class BeanELResolver extends ELResolver {
 					}
 				}
 				if (matchingMethod == null) {
-					//maybe other resolver can resolve, we shouldn't throw exception here
-					return null;
+					throw new MethodNotFoundException("Unable to find method ["
+							+ methodName + "] with [" + paramCount + "] parameters");
 				}
 			}
 		} else {
@@ -268,8 +268,8 @@ public class BeanELResolver extends ELResolver {
 				}
 			}
 			if (matchingMethod == null) {
-				//maybe other resolver can resolve, we shouldn't throw exception here
-				return null;
+				throw new MethodNotFoundException("Unable to find method ["
+						+ methodName + "] with [" + paramCount + "] parameters");
 			}
 		}
 
