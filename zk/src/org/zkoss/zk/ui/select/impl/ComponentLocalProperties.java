@@ -11,7 +11,9 @@ import java.util.Set;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * A collection of utilities that check local properties of Components. 
@@ -56,9 +58,10 @@ public class ComponentLocalProperties {
 			&& matchID(comp, seq.getId()) 
 			&& matchClasses(comp, seq.getClasses()) 
 			&& matchAttributes(comp, seq.getAttributes()) 
-			&& matchPseudoClasses(context, seq.getPseudoClasses(), defs);
+			&& matchPseudoClasses(context, seq.getPseudoClasses(), defs)
+			&& matchPseudoElements(comp, seq.getPseudoElements());
 	}
-	
+
 	/*package*/ static boolean matchID(Component component, String id) {
 		if(id == null)
 			return true;
@@ -121,6 +124,23 @@ public class ComponentLocalProperties {
 		return true;
 	}
 	
+	private static boolean matchPseudoElements(Component comp, List<PseudoElement> pseudoElements) {
+		if (pseudoElements == null || pseudoElements.isEmpty()) return true;
+		if (comp instanceof ShadowElement) {
+			for (PseudoElement pe : pseudoElements) {
+				if ("shadow".equals(pe.getName())) {
+					Component parent = ((ShadowElement) comp).getShadowHost();
+					if (parent != null) {
+						ComponentCtrl parentCtrl = (ComponentCtrl) parent;
+						if (parentCtrl.getShadowRoots().contains(comp)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
 	
 	// helper //

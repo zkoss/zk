@@ -46,7 +46,7 @@ public class Token {
 		CBN_CHILD, CBN_ADJACENT_SIBLING, CBN_GENERAL_SIBLING,
 		
 		// selector notation //
-		NTN_ID, NTN_CLASS, NTN_PSDOCLS,
+		NTN_ID, NTN_CLASS, NTN_PSDOCLS, NTN_PSDOELEM,
 		
 		// attribute boolean operator //
 		OP_EQUAL, OP_BEGIN_WITH, OP_END_WITH, OP_CONTAIN,

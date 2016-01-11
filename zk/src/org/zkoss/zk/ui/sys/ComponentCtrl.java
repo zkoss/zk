@@ -480,7 +480,8 @@ public interface ComponentCtrl {
 	/**
 	 * Removes the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
-	 * @return true if child is added successfully
+	 * @return true if child is removed successfully; false if it doesn't
+	 * have the specified child
 	 * @since 8.0.0
 	 */
 	public boolean removeShadowRoot(ShadowElement shadow);
@@ -488,8 +489,7 @@ public interface ComponentCtrl {
 	/**
 	 * Adds the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
-	 * @return true if child is removed successfully; false if it doesn't
-	 * have the specified child
+	 * @return true if child is added successfully
 	 * @since 8.0.0
 	 */
 	public boolean addShadowRoot(ShadowElement shadow);
@@ -498,8 +498,7 @@ public interface ComponentCtrl {
 	 * Adds the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
 	 * @param insertBefore the shadow before which you want the new child
-	 * @return true if child is removed successfully; false if it doesn't
-	 * have the specified child
+	 * @return true if child is added successfully
 	 * @since 8.0.0
 	 */
 	public boolean addShadowRootBefore(ShadowElement shadow, ShadowElement insertBefore);
@@ -556,4 +555,12 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public Collection<Callback<ContentRenderer>> getRedrawCallback();
+	
+	/**
+	 * Returns the shadow element under this shadow host.
+	 * @param id
+	 * @return ShadowElement or null
+	 * @since 8.0.1
+	 */
+	public ShadowElement getShadowFellowIfAny(String id);
 }

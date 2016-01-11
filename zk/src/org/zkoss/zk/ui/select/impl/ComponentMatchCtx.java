@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ShadowElement;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * A wrapper of Component, providing a context for selector matching algorithm.
@@ -24,12 +26,14 @@ public class ComponentMatchCtx {
 	// pseudo-class support
 	private int _compChildIndex = -1;
 	
-	
+	// ::shadow support
+	private boolean _isShadowHost = false;
 	
 	/*package*/ ComponentMatchCtx(Component component) { // used by root jumping
 		_comp = component;
 		_qualified = new boolean[0][0];
 		_compChildIndex = getComponentIndex();
+		_isShadowHost = !((ComponentCtrl) component).getShadowRoots().isEmpty();
 	}
 	
 	/*package*/ ComponentMatchCtx(Component component, List<Selector> selectorList) { // root
@@ -40,6 +44,8 @@ public class ComponentMatchCtx {
 			_qualified[selector.getSelectorIndex()] = new boolean[selector.size()];
 		
 		_compChildIndex = getComponentIndex();
+		
+		_isShadowHost = !((ComponentCtrl) component).getShadowRoots().isEmpty();
 	}
 	
 	/*package*/ ComponentMatchCtx(Component component, ComponentMatchCtx parent) { // first child
@@ -50,6 +56,8 @@ public class ComponentMatchCtx {
 			_qualified[i] = new boolean[parent._qualified[i].length];
 		_parent = parent;
 		_compChildIndex = 0;
+		
+		_isShadowHost = !((ComponentCtrl) component).getShadowRoots().isEmpty();
 	}
 	
 	
@@ -58,15 +66,17 @@ public class ComponentMatchCtx {
 	/*package*/ void moveToNextSibling() {
 		_comp = _comp.getNextSibling();
 		_compChildIndex++;
-		// reset status for Bug ZK-1758: Selectors finds too many components when using CSS child selector
-		if (_parent == null) {
-			for(int i = 0; i < _qualified.length; i++) {
-				for(int j = 0; j < _qualified[i].length; j++) {
-					_qualified[i][j] = false;
-				}
-			}
-				
-		}
+		// ZK-2944: status clearing is conditional, let the caller handle it
+		// reset the status when moving to siblings 
+		_isShadowHost = !((ComponentCtrl) _comp).getShadowRoots().isEmpty();
+	}
+	
+	/*package*/ void moveToNextShadowSibling(Component next) {
+		_comp = next;
+		_compChildIndex++;
+		// ZK-2944: status clearing is conditional, let the caller handle it
+		// reset the status when moving to siblings 
+		_isShadowHost = !((ComponentCtrl) next).getShadowRoots().isEmpty();
 	}
 	
 	
@@ -167,7 +177,12 @@ public class ComponentMatchCtx {
 		return ComponentLocalProperties.match(this, seq, defs);
 	}
 	
-	
+	/**
+	 * Return true if the component is a shadow host, i.e. component's seRoots is not empty
+	 */
+	public boolean isShadowHost() {
+		return this._isShadowHost;
+	}
 	
 	// helper //
 	private int getComponentIndex() {
