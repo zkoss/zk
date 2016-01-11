@@ -473,7 +473,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.setOpen(!jq(this.$n('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		evt.stop();
 	},
-	_doBtnMouseDown () {
+	_doBtnMouseDown: function () {
 		this._inplaceIgnore = true;
 	},
 	_doTimeZoneChange: function (evt) {
