@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3022.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jan  5, 2016  6:21:42 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		blick the button to expand all three nodes
+		should see no exception and three layer of nodes all opened
+	</label>
+	<window apply="org.zkoss.zktest.test2.B80_ZK_3022Composer">
+		<button id="btn" label="toggle"></button>
+	</window>
+</zk>
