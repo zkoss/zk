@@ -67,10 +67,7 @@ public class BindELResolver extends XelELResolver {
 		_resolver.add(new TreeModelELResolver());
 		_resolver.add(new ValidationMessagesELResolver());
 		_resolver.add(getImplicitResolver());//ZK-1032 Able to wire Event to command method
-
-//  PropertyExpression will handle this
-// 	_resolver.add(new DynamicPropertiedELResolver());//ZK-1472 Bind Include Arg
-		
+	 	_resolver.add(new DynamicPropertiedELResolver());//ZK-1472 Bind Include Arg
 		_resolver.add(getSuperELResolver());
 	}
 	protected ELResolver getSuperELResolver () {
