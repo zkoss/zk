@@ -852,6 +852,9 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		this._width = data.width;
 	},
 	onSizeEvent: function (evt) {
+		this._hflex = undefined;
+		this._vflex = undefined;
+
 		var data = evt.data,
 			node = this.$n(),
 			s = node.style;

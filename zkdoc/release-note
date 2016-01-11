@@ -111,6 +111,7 @@ ZK 8.0.1
   ZK-3059: hflex="min" doesn't consider child components' margin
   ZK-3062: vflex="min" doesn't consider a component's margin
   ZK-3066: custom resolvers doesn't work while BindELResolver has outcommented
+  ZK-2938: Mutual blocking setHeight-setVflex and setWidth-setHflex is not satisfactory.
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
