@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2938.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 11 16:29:47 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. shrink the inside window vertically
+		2. the size should be as you resized
+
+	</label>
+	<window title="Vflex/Height" border="normal" width="300px" height="400px">
+		<window id="w1" vflex="1" hflex="1" border="normal" sizable="true">
+			Shrink me vertically!
+		</window>
+	</window>
+</zk>
