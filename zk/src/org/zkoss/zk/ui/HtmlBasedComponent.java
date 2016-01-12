@@ -242,6 +242,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	protected void setHflexDirectly(String hflex) {
 		initAuxInfo().hflex = hflex;
 	}
+	/** Sets the vflex directly without sending back the result
+	 * (smart update) to the client
+	 * @since 8.0.1
+	 */
+	protected void setVflexDirectly(String vflex) {
+		initAuxInfo().vflex = vflex;
+	}
 	/** Returns the text as the tooltip.
 	 * <p>Default: null.
 	 */
@@ -816,6 +823,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			SizeEvent evt = SizeEvent.getSizeEvent(request);
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
+			setHflexDirectly(null);
+			setVflexDirectly(null);
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_AFTER_SIZE)) {
 			AfterSizeEvent evt = AfterSizeEvent.getAfterSizeEvent(request);
