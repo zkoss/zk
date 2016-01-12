@@ -32,7 +32,7 @@ public class B80_ZK_3022Test extends ZATSTestCase{
 		DesktopAgent desktop = connect();
 		//collapsed tree at init, with one item visible
 		Assert.assertEquals(1, desktop.queryAll("treeitem").size());
-		ComponentAgent btn = desktop.query("#btn");
+		ComponentAgent btn = desktop.query("button");
 		btn.click();
 		//expand all nodes, three nodes should be visible
 		Assert.assertEquals(3, desktop.queryAll("treeitem").size());
