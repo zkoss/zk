@@ -3,11 +3,13 @@
  */
 package org.zkoss.zk.ui.select.impl;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.zkoss.fsm.*;
+import org.zkoss.fsm.MacroStateCtx;
+import org.zkoss.fsm.StateCtx;
 import org.zkoss.fsm.StateCtx.TransitionListener;
+import org.zkoss.fsm.StateMachine;
 import org.zkoss.fsm.StateMachine.StateMachineException;
 import org.zkoss.zk.ui.select.impl.Attribute.Operator;
 import org.zkoss.zk.ui.select.impl.InSeqMachine.SubState;
@@ -22,7 +24,7 @@ import org.zkoss.zk.ui.select.impl.Token.Type;
 public class Parser {
 	
 	private String _source;
-	private List<Selector> _selectorSet = new ArrayList<Selector>();
+	private List<Selector> _selectorSet = new LinkedList<Selector>(); //to preserve order
 	private Selector _selector;
 	
 	private InSeqMachine _submachine;

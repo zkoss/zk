@@ -327,7 +327,7 @@ public class ComponentIterator implements Iterator<Component> {
 		Component comp = _currCtx.getComponent();
 		if (comp instanceof ShadowElement) {
 			Component host = ((ShadowElement) comp).getShadowHost();
-			if (host != null && host instanceof ComponentCtrl) {
+			if (host instanceof ComponentCtrl) {
 				List<ShadowElement> seRoots = ((ComponentCtrl) host).getShadowRoots();
 				if (seRoots != null && seRoots.size() > 1) { //if equal to 1, then it is the current comp itelf
 					int index = seRoots.indexOf(comp) + 1;
@@ -353,7 +353,7 @@ public class ComponentIterator implements Iterator<Component> {
 				ComponentMatchCtx parent = ctx.getParent();
 				
 				// ZK-2944: descendant and child combinator should have nothing to do with the previous matching status, clear it
-				if (cb.equals(Selector.Combinator.DESCENDANT) || cb.equals(Selector.Combinator.CHILD)) {
+				if (cb == Selector.Combinator.DESCENDANT || cb == Selector.Combinator.CHILD) {
 					ctx.setQualified(i, j, false);
 				}
 				
@@ -454,7 +454,7 @@ public class ComponentIterator implements Iterator<Component> {
 				ComponentMatchCtx parent = ctx.getParent();
 				
 				// ZK-2944: descendant and child combinator should have nothing to do with the previous matching status, clear it
-				if (cb.equals(Selector.Combinator.DESCENDANT) || cb.equals(Selector.Combinator.CHILD)) {
+				if (cb == Selector.Combinator.DESCENDANT || cb == Selector.Combinator.CHILD) {
 					ctx.setQualified(i, j, false);
 				}
 				

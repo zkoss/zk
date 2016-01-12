@@ -3,11 +3,10 @@
  */
 package org.zkoss.zk.ui.select.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,10 +40,10 @@ public class SimpleSelectorSequence {
 	public SimpleSelectorSequence(){
 		_combinator = Combinator.DESCENDANT;
 		_classes = new LinkedHashSet<String>();
-		_attributes = new ArrayList<Attribute>();
-		_pseudoClasses = new ArrayList<PseudoClass>();
-		_pseudoElements = new ArrayList<PseudoElement>();
-		_toStringOrder = new ArrayList<Selectors>();
+		_attributes = new LinkedList<Attribute>();
+		_pseudoClasses = new LinkedList<PseudoClass>();
+		_pseudoElements = new LinkedList<PseudoElement>();
+		_toStringOrder = new LinkedList<Selectors>();
 	}
 	
 	public SimpleSelectorSequence(String type){

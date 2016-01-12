@@ -95,7 +95,7 @@ public class BasicPseudoClassDefs {
 				} else { // select the hosts that match the selector
 					ComponentIterator compIter = new ComponentIterator(ctx.getComponent(), parameters[0]);
 					// only run once, since we only handle type, #id, or .class, no need to traverse component tree
-					if (compIter.hasNext() && ctx.getComponent().getUuid().equals(compIter.next().getUuid())) {
+					if (compIter.hasNext() && ctx.getComponent() == compIter.next()) {
 						return true;
 					}
 				}

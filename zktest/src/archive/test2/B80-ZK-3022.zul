@@ -18,7 +18,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 		click the button to expand all three nodes
 		should see no exception and three layer of nodes all opened
 	</label>
-	<window apply="org.zkoss.zktest.test2.B80_ZK_3022Composer">
-		<button label="click"></button>
+	<window id="window" apply="org.zkoss.zktest.test2.B80_ZK_3022Composer">
+		<button id="btn" label="click"></button>
 	</window>
 </zk>
