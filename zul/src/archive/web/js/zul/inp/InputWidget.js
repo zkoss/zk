@@ -58,7 +58,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function clearInplaceTimeout(widget) {
+	function _clearInplaceTimeout(widget) {
 		if (widget._inplaceTimerId) {
 			clearTimeout(widget._inplaceTimerId);
 			widget._inplaceTimerId = null;
@@ -495,7 +495,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.$supers('doBlur_', arguments);
 		}
 		if (this._inplace) {
-			clearInplaceTimeout(this);
+			_clearInplaceTimeout(this);
 			if (!this._inplaceIgnore){
 				var self = this;
 				self._inplaceTimerId = setTimeout(function(){
