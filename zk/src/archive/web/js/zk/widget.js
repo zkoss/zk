@@ -1100,7 +1100,23 @@ new zul.wnd.Window({
 			if (!this._nhflex) {
 				this.setFlexSize_({width: 'auto'}); //clear the width
 				delete this._hflexsz;
+				this._hflex = undefined;
 				if (!this._nvflex)
+					_unlistenFlex(this);
+			} else
+				_listenFlex(this);
+		}
+	},
+	setVflex_: function (v) {
+		this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
+		if (this._nvflex < 0 && v != 'min')
+			this._nvflex = 0;
+		if (this.desktop) {
+			if (!this._nvflex) {
+				this.setFlexSize_({height: 'auto'});
+				delete this._vflexsz;
+				this._vflex = undefined;
+				if (!this._nhflex)
 					_unlistenFlex(this);
 			} else
 				_listenFlex(this);
