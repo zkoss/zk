@@ -966,22 +966,12 @@ new zul.wnd.Window({
 		 * @param String flex the vertical flex hint.
 		 */
 		vflex: function(v) {
-			this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
-			if (this._nvflex < 0 && v != 'min')
-				this._nvflex = 0;
-			if (this.desktop) { //if already bind
-				if (!this._nvflex) {
-					this.setFlexSize_({height: 'auto'}); //clear the height
-					delete this._vflexsz;
-					if (!this._nhflex)
-						_unlistenFlex(this);
-				} else
-					_listenFlex(this);
+			this.setVflex_(v);
 
-				var p;
-				if ((p = this.parent) && !p.isBinding()) //ZK-307
-					zUtl.fireSized(p, -1); //no beforeSize
-			}
+			var p;
+			if (this.desktop
+			&& (p = this.parent) && !p.isBinding()) //ZK-307
+				zUtl.fireSized(p, -1); //no beforeSize
 		},
 		/**
 		 * Sets horizontal flexibility hint of this widget. 
