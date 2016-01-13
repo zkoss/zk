@@ -172,14 +172,21 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		return true;
 	},
 	_doFocusIn: function () {
-		var n = this.$n();
+		var n = this.$n(),
+			mesh = this.getMeshWidget();
 		if (n) {
+			var cls = this.$s('focus'),
+				last = mesh ? mesh._focusItem : null,
+				lastn;
+			// ZK-3077: focus out the last focused item first (for draggable issue)
+			if (last && (lastn = last.$n()))
+				jq(lastn).removeClass(cls);
 			// Bugfix: add focus class on itself, not on its children elements
-			jq(n).addClass(this.$s('focus'));
+			jq(n).addClass(cls);
 		}
 
-		if (n = this.getMeshWidget())
-			n._focusItem = this;
+		if (mesh)
+			mesh._focusItem = this;
 	},
 	_doFocusOut: function () {
 		var n = this.$n();
