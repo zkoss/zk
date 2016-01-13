@@ -14,7 +14,6 @@ ZK 8.0.1
   ZK-2535: Accessibility support for panel/window buttons
   ZK-3039: defining a template "component" in lang-addon.xml
   ZK-2902: make INVALIDATE_THRESHOLD configurable
-  ZK-2788: navitem supports "autodisable" 
   ZK-2944: Support Shadow element selector
 
 * Bugs
