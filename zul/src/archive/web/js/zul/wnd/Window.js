@@ -1408,16 +1408,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
 			data = dg.z_szofs;
-		if (wgt._hflex) {
-			wgt.setHflex(null);
-			wgt._hflex = undefined;
-			wgt._hflexsz = undefined;
-		}
-		if (wgt._vflex) {
-			wgt.setVflex(null);
-			wgt._vflex = undefined;
-			wgt._vflexsz = undefined;
-		}
+		if (wgt._hflex) wgt.setHflex_(null);
+		if (wgt._vflex) wgt.setVflex_(null);
 		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
 		dg.z_szofs = null;
 	},

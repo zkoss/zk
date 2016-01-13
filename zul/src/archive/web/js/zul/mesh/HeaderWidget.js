@@ -446,7 +446,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			if (w._hflexWidth) {
 				w.setHflex_(null);
 				w._hflexWidth = undefined;
-				w._hflex = undefined;
 			}
 			if (mesh._minWd) {
 				mesh._minWd.wds[i] = wdInt;
