@@ -184,7 +184,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startX = opts.startPositionX,
 				wdh = cave.offsetWidth - startX,
-				swdh = hbar.offsetHeight + scroller.scrollWidth - startX + froenScrollWidth,
+				swdh = scroller.scrollWidth - startX + froenScrollWidth,
 				lwdh = left.offsetWidth,
 				rwdh = right.offsetWidth,
 				hwdh = wdh - lwdh - rwdh;
@@ -202,6 +202,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			if (needV) {
 				ws.width = jq.px(hwdh - rwdh);
 				right.style.right = jq.px(rwdh);
+				var oldv = vbar.style.display;
+				vbar.style.display = 'block';
+				swdh += vbar.offsetWidth;
+				vbar.style.display = oldv;
 			} else {
 				ws.width = jq.px(hwdh);
 			}
@@ -240,7 +244,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ws = wrapper.style,
 				startY = opts.startPositionY,
 				hgh = cave.offsetHeight - startY,
-				shgh = vbar.offsetWidth + scrollHeight - startY,
+				shgh = scrollHeight - startY,
 				uhgh = up.offsetHeight
 				dhgh = down.offsetHeight,
 				vhgh = hgh - uhgh - dhgh;
@@ -254,6 +258,10 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			if (needH) {
 				ws.height = jq.px0(vhgh - dhgh);
 				down.style.bottom = jq.px(startY + dhgh);
+				var oldh = hbar.style.display;
+				hbar.style.display = 'block';
+				shgh += hbar.offsetHeight;
+				hbar.style.display = oldh;
 			} else {
 				ws.height = jq.px(vhgh);
 			}
