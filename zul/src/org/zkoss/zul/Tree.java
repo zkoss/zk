@@ -1949,7 +1949,7 @@ public class Tree extends MeshElement {
 			tc.setParent(ti);
 			//ZK-3022: should render child also if current node is opened
 			if (ti.isOpen())
-				Tree.this.renderChildren(renderer, tc, childNode);
+				this.renderChildren(renderer, tc, childNode);
 		}
 	}
 	
@@ -2735,7 +2735,7 @@ public class Tree extends MeshElement {
 				Treeitem maxItem = null;
 				int maxIndex = -1;
 				//ZK-3022: process from back to front to avoid "render non existent child" problem
-				ArrayList<Treeitem> listItems = new ArrayList<Treeitem>(items);
+				List<Treeitem> listItems = new ArrayList<Treeitem>(items);
 				for (int j = listItems.size() - 1; j >= 0; j--) {
 					Treeitem ti = listItems.get(j);
 					if (ti.isRendered())
