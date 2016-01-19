@@ -287,8 +287,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!this._canActivate(evt)) return;
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			else if (!zk.ie || zk.ie > 10) // ZK-2471
-				this._uplder.openFileDialog();
+			else if (!zk.ie || zk.ie > 10) {// ZK-2471
+				if (!zk.chrome || evt.domTarget.type != 'file') //ZK-3089
+					this._uplder.openFileDialog();
+			}
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
@@ -343,7 +345,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	},
 	_getUploadRef: function () {
-		return this.isTopmost() ? this.$n() : this.$n('a');
+		return this.$n('a');
 	},
 	_doMouseEnter: function (evt) {
 		if (zul.menu._nOpen || this.isTopmost())

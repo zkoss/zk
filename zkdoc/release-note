@@ -114,6 +114,7 @@ ZK 8.0.1
   ZK-2938: Mutual blocking setHeight-setVflex and setWidth-setHflex is not satisfactory.
   ZK-3022: NPE when expand all node of Tree by set isOpen = true for all TreeItem
   ZK-3077: Focus class is not removed on listitem on unselection when draggable is active
+  ZK-3089: Upload dialogue open again after click 'cancel'
 
 * Upgrade Notes
   + Rename the method of ListModelArray, ListModelList, and ListModelSet from update(E) to notifyChange(E).
