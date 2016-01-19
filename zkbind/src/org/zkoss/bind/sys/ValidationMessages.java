@@ -127,7 +127,7 @@ public interface ValidationMessages{
 
 	/**
 	 * Returns the first field value from the given key and component, if any.
-	 * @Param comp the component refers to the value
+	 * @param comp the component refers to the value
 	 * @param key the custom key refers to this value, nullable
 	 * @since 8.0.1
 	 */
@@ -142,7 +142,7 @@ public interface ValidationMessages{
 
 	/**
 	 * Returns all field values from the given key and component, if any.
-	 * @Param comp the component refers to the value
+	 * @param comp the component refers to the value
 	 * @param key the custom key refers to this value, nullable
 	 * @since 8.0.1
 	 */
