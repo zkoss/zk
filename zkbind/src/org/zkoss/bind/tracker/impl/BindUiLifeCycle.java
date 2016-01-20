@@ -210,7 +210,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		
 		//F80: Speed up render, check component's subBinderAnnotation
 		comp.setAttribute(SKIP_BIND_INIT, false);
-		// post ON_BIND_INIT event
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
 	}
 
