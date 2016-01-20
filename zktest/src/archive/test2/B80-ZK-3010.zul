@@ -17,9 +17,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
         <vlayout>
             <label multiline="true">
                 1.Type "ban" and see "banana" option appear.
-                2.Press Enter and see the "banana" tag created.
+                2.Select banana and press Enter, see the "banana" tag is selected.
                 3.Type "ban" and see "Create new option 'ban'".
-                4.Press Enter or Click the option and see the "ban" tag created.
+                4.Press Enter or Click the option and see the newly created "ban" tag is selected.
             </label>
             <chosenbox width="200px" model="@load(vm.model)" onSearch="@command('newTag', tag=event.value)"
                        creatable="true" createMessage="Create new option '{0}'"/>
