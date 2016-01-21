@@ -58,13 +58,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function _clearInplaceTimeout(widget) {
-		if (widget._inplaceTimerId) {
-			clearTimeout(widget._inplaceTimerId);
-			widget._inplaceTimerId = null;
-		}
-	}
-
 	var _keyIgnorable = zk.ie < 11 ? function () {return true;}:
 		zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
@@ -114,23 +107,13 @@ zul.inp.RoundUtl = {
 	// @since 7.0.0
 	doFocus_: function (wgt) {
 		if (wgt._inplace) {
-			if (wgt._inplaceTimerId != null) {
-				clearTimeout(wgt._inplaceTimerId);
-				wgt._inplaceTimerId = null;
-			}
 			wgt.onSize();
 		}
 	},
 	doBlur_: function (wgt) {
-		if (wgt._inplace) {
+		if (wgt._inplace && wgt._inplaceout) {  
 			var n = wgt.$n();
-			if (wgt._inplaceTimerId != null) {
-				clearTimeout(wgt._inplaceTimerId);
-				wgt._inplaceTimerId = null;
-			}
-			wgt._inplaceTimerId = setTimeout(function(){
-				if (wgt.desktop) jq(wgt.$n()).addClass(wgt.getInplaceCSS());
-			}, wgt._inplaceTimeout);
+			jq(n).addClass(wgt.getInplaceCSS());
 			wgt.onSize();
 			// should not clear node width if hflex is true
 			if (!wgt.getHflex())
@@ -163,9 +146,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//_tabindex: 0,
 	_type: 'text',
 	_placeholder: null,
-	_inplaceTimerId: null,
-	_inplaceTimeout: 150,
-	_inplaceIgnore: false,
 	$define: {
 		/** Returns the name of this component.
 		 * <p>Default: null.
@@ -463,6 +443,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getConstraint: function () {
 		return this._cst;
 	},
+	doMouseOut_: function () {
+		this._inplaceout = true;
+		this.$supers('doMouseOut_', arguments);
+	},
+	doMouseOver_: function () {
+		this._inplaceout = false;
+		this.$supers('doMouseOver_', arguments);
+	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 
@@ -471,10 +459,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (evt.domTarget.tagName) { //Bug 2111900
 			if (this._inplace) {
 				jq(this.$n()).removeClass(this.getInplaceCSS());
-				if (this._inplaceTimerId != null) {
-					clearTimeout(this._inplaceTimerId);
-					this._inplaceTimerId = null;
-				}
+				if (!this._inplaceout)
+					this._inplaceout = true;
 			}
 			
 			// Bug #2280308
@@ -490,19 +476,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doBlur_: function (evt) {
 		_stopOnChanging(this, true);
+		
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus)) {
 			this.updateChange_();
 			this.$supers('doBlur_', arguments);
 		}
-		if (this._inplace) {
-			_clearInplaceTimeout(this);
-			if (!this._inplaceIgnore){
-				var self = this;
-				self._inplaceTimerId = setTimeout(function(){
-					if (self.desktop) jq(self.$n()).addClass(self.getInplaceCSS());
-				}, self._inplaceTimeout);
-			}
-		}
+		if (this._inplace && this._inplaceout)
+			jq(this.$n()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
 		if (zk.ios && jq(this.$n()).data('fixscrollposition')) { //only scroll back when data-fixScrollPosition attribute is applied
@@ -871,6 +851,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return;
 		}
 			
+		if (!this._inplaceout)
+			this._inplaceout = keyCode == 9;
 		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
 		&& this._tabbable) {
 			var inp = this.getInputNode(),
