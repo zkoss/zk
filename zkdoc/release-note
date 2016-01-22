@@ -244,6 +244,8 @@ ZK 7.0.8
   ZK-3045: Memory leak in MVVM binding
   ZK-3021: lost variable in nested children-binding
   ZK-3053: the ZK processing bar is shown unexpectedly
+  ZK-3048: Listheaders are mis-aligned with listcells under non-nativebar
+  ZK-3049: Combobox drop-down button behavior with inplace="true"
 
 * Upgrade Notes
 
