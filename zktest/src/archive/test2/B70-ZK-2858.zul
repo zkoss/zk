@@ -14,6 +14,18 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script>
+		function log() {
+			zk.log(this.getResponseHeader('content-type'))
+		}
+		zk.afterMount(function() {
+			var url = jq('.z-image')[0].src;
+			var x = new XMLHttpRequest();
+			x.open('GET', url, false);
+			x.onreadystatechange = log;
+			x.send();
+		})
+	</script>
 	<label multiline="true">
 		1. you should only see these steps on the page
 		2. open the developer tools, you should see the dom of the svg image fontawesome-webfont.svg
