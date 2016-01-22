@@ -15,7 +15,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		input these escaped characters (&#x27; &#x60; &amp;' &lt;' &gt;' &quot;), they should be displayed without any parsed value.
+		input these escaped characters &#x27;&#x60;&amp;&lt;&gt;&quot; together, should display [ Create new contact '&#x27;&#x60;&amp;&lt;&gt;&quot;' ] without any parsed value in the popup.
 
 	</label>
 	<zscript><![CDATA[
