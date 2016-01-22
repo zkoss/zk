@@ -24,8 +24,8 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 		<listitem >
 			<listcell label="1"></listcell>
-			<listcell >
-				<listbox   mold="select" >
+			<listcell>
+				<listbox id="inListbox" mold="select">
 					<listitem >
 						<listcell label="1"></listcell>
 					</listitem>

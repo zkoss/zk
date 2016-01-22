@@ -19,7 +19,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 	</label>
 	<div draggable="true">
-		<listbox mold="select" >
+		<listbox id="lb" mold="select" >
 			<listitem label="fasfsaf" selected="true" />
 			<listitem label="fasfsaf2" />
 		</listbox>
