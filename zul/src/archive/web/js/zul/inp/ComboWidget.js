@@ -242,6 +242,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inpRight = inpDim.left + inpDim.width;
 
 		if(ppRelativeBottom >= jq.innerHeight() || 
+			(ppDim.top < inpDim.top && ppBottom < inpDim.top) ||
 			ppDim.left < inpRight &&
 			ppRight > inpDim.left &&
 			ppBottom > inpDim.top &&
