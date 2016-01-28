@@ -13,12 +13,14 @@ package org.zkoss.zktest.test2;
 
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ToServerCommand;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
  * @author jumperchen
  *
  */
+@ToServerCommand("dataChange")
 public class F80_ZK_2650 {
 	public static class DataObject {
 		private String title;
