@@ -110,7 +110,7 @@ public class ParamCall {
 				Object val = bindingArgs.get(((BindingParam) anno).value());
 				if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
 					return _root.getDesktop().getComponentByUuidIfAny((String)val);
-				} else {
+				} else if (val instanceof JSONAware) {
 					BindContext bindContext = getBindContext();
 					Binder binder = getBinder();
 					@SuppressWarnings("rawtypes")
@@ -122,12 +122,14 @@ public class ParamCall {
 							Object result = converter.coerceToBean(val, binder.getView(), bindContext);
 							return result;
 						} catch (Exception ex) {
-							return val==null?null:Classes.coerce(returnType, val);	
+							return Classes.coerce(returnType, val);
 						} finally {
 							bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, null);
 						}
 					} else 
 						return Classes.coerce(returnType, val);
+				} else {
+					return val == null ? null : Classes.coerce(returnType, val);
 				}
 			}
 		});
