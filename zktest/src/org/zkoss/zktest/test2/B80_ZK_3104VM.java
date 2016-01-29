@@ -10,8 +10,8 @@ import org.zkoss.zk.ui.util.Clients;
 
 public class B80_ZK_3104VM {
 
-	private List<String> origList = new ArrayList<>(Arrays.asList("\"Peter\"")); 
-	private List<String> emptyList = new ArrayList<>(); 
+	private List<String> origList = new ArrayList<String>(Arrays.asList("\"Peter\""));
+	private List<String> emptyList = new ArrayList<String>();
 	
 	private Pojo origPojo = new Pojo();
 	
