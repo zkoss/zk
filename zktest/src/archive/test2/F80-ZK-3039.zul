@@ -17,11 +17,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
     <label>
         You should see five green-border boxes. The second box and the last box contain label - "amazing".
     </label>
-    <vbox>
+    <div id="div">
         <mycomp1 />
         <mycomp2 />
         <mycomp3 />
         <mycomp4 />
         <mycomp5 />
-    </vbox>
+    </div>
 </zk>
