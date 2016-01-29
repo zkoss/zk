@@ -1,9 +1,9 @@
 /** HtmlTreeBuilder.java.
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		5:21:43 PM Sep 25, 2014, Created by jumperchen
 
@@ -11,10 +11,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zhtml.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -57,7 +54,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 			6);
 	private final Map<Element, List<Namespace>> _elNSMap = new HashMap<Element, List<Namespace>>(
 			6);
-	
+
 	private static class UiExceptionX extends UiException {
 		private static final long serialVersionUID = 20140930153033L;
 		private String _keyword;
@@ -69,35 +66,6 @@ public class HtmlTreeBuilder implements TreeBuilder {
 			return _keyword;
 		}
 	}
-	
-	public org.zkoss.idom.Document parse(File file) throws Exception {
-		FileInputStream inStream = null;
-		try {
-			if (log.isDebugEnabled())
-				log.debug("Parsing file: [" + file.getAbsolutePath() + "]");
-			
-			inStream = new FileInputStream(file);
-			return convertToIDOM(Zsoup.parse(inStream, "UTF-8",
-					file.getAbsolutePath(), Parser.xhtmlParser()));
-		} catch (UiExceptionX ue) {
-			String lineNumber = getLineNumber(file, ue.getKeyword());
-			if (lineNumber != null)
-				throw new UiException(ue.getMessage() + lineNumber);
-			else
-				throw ue;
-		} catch (ExceptionInfo e) {
-			Document currentDocument = e.getCurrentDocument();
-			if (currentDocument != null) {
-				currentDocument.outputSettings(currentDocument.outputSettings().prettyPrint(false));
-				throw new UiException(" at [file:" + file.getAbsolutePath() + ", " + getLineNumber(new Scanner(currentDocument.toString())) + "]", e);
-			}
-			else
-				throw new UiException(" at [file:" + file.getAbsolutePath() + "]", e);
-		} finally {
-			if (inStream != null)
-				inStream.close();
-		}
-	}
 
 	private String getLineNumber(File file, String keyword) {
 		try {
@@ -106,7 +74,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		}
 		return null;
 	}
-	
+
 	private String getLineNumber(Reader file, String keyword) {
 		return getLineNumber(new Scanner(file), keyword);
 	}
@@ -144,7 +112,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
     	// bind "xmlns" prefix to the XMLNS uri
 		_nsMap.put("xmlns", new Pair<Element, Namespace>(null,
 				Namespace.getSpecial("xmlns")));
-		
+
 		for (Element ele : elements) {
 			for (Attribute attr : ele.attributes()) {
 				String key = attr.getOriginalKey();
@@ -228,7 +196,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 
 	private ProcessingInstruction convert(XmlDeclaration xd) {
 		String data = xd.getWholeDeclaration();
-		
+
 		// like <?taglib?>, we need to ignore the last char '?' here
 		if (data.endsWith("?"))
 			data = data.substring(0, data.length() - 1);
@@ -315,8 +283,33 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		}
 	}
 
+	public org.zkoss.idom.Document parse(File file) throws Exception {
+		return parse(file.toURI().toURL());
+	}
+
 	public org.zkoss.idom.Document parse(URL url) throws Exception {
-		return parse(new File(url.getFile()));
+		InputStream inStream = null;
+		try {
+			if (log.isDebugEnabled())
+				log.debug("Parsing file: [" + url.toString() + "]");
+
+			inStream = url.openStream();
+			return convertToIDOM(Zsoup.parse(inStream, "UTF-8",
+					url.getFile(), Parser.xhtmlParser()));
+		} catch (UiExceptionX ue) {
+			throw ue;
+		} catch (ExceptionInfo e) {
+			Document currentDocument = e.getCurrentDocument();
+			if (currentDocument != null) {
+				currentDocument.outputSettings(currentDocument.outputSettings().prettyPrint(false));
+				throw new UiException(" at [file:" + url.getFile() + ", " + getLineNumber(new Scanner(currentDocument.toString())) + "]", e);
+			}
+			else
+				throw new UiException(" at [file:" + url.getFile() + "]", e);
+		} finally {
+			if (inStream != null)
+				inStream.close();
+		}
 	}
 
 	public org.zkoss.idom.Document parse(Reader reader) throws Exception {
@@ -325,7 +318,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 
 			if (log.isDebugEnabled())
 				log.debug("Parsing reader: [" + reader + "]");
-			
+
 			inputStream = new ReaderInputStream(reader);
 			return convertToIDOM(Zsoup.parse(inputStream,
 				"UTF-8", null, Parser.xhtmlParser()));
