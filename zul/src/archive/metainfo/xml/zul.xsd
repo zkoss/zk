@@ -2094,6 +2094,7 @@
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="upload" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- menupopup -->
 	<xs:element name="menupopup" type="menupopupType" />
@@ -2122,6 +2123,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="badgetext" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- navbar -->
 	<xs:element name="navbar" type="navbarType" />
@@ -3445,9 +3447,10 @@
 	<xs:element name="apply" type="applyType" />
 	<xs:complexType name="applyType">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
-        <xs:attribute name="template" type="xs:string" use="required" />
-        <xs:attribute name="templateURI" type="xs:string" use="required" />
+        <xs:attribute name="template" type="xs:string" use="optional" />
+        <xs:attribute name="templateURI" type="xs:string" use="optional" />
         <xs:attribute name="dynamicValue" type="booleanType" use="optional" />
+        <xs:attribute name="templateName" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- shadow element: forEach -->
 	<xs:element name="forEach" type="forEachType" />
