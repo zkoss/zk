@@ -108,7 +108,9 @@ public class ParamCall {
 			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = bindingArgs.get(((BindingParam) anno).value());
-				if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
+				if (val != null && val.getClass().isAssignableFrom(returnType)) { //escape
+					return val;
+				} else if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
 					return _root.getDesktop().getComponentByUuidIfAny((String)val);
 				} else if (val instanceof JSONAware) {
 					BindContext bindContext = getBindContext();
