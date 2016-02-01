@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3111.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Feb 01, 2016  3:39:01 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. hover mouse on the collapse, maximize, and close buttons should see tooltip showing their title
+		2. click on collapse, the icon should change to expand, also its tooltip
+		3. click on maximize, the icon should change to minimize, also its tooltip
+		4. tab onto any of the buttons and press and key besides TAB and SHIFT-TAB should trigger the button
+		5. type the locale in the textbox and click the button to switch locale, icons should have either english or [locale] labels, not error messages.
+	</label>
+	<vlayout>
+		<textbox id="textbox"></textbox>
+		<button label="switch labels">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zk.ui.Executions.getCurrent().getSession().setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, org.zkoss.util.Locales.getLocale(textbox.getValue()));
+				org.zkoss.zk.ui.Executions.sendRedirect(null);
+			]]>
+			</attribute>
+		</button>
+		<hlayout>
+			<panel border="normal" collapsible="true" closable="true" maximizable="true">
+				<caption label="Panel with caption" />
+				<panelchildren>
+					<vlayout>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+					</vlayout>
+				</panelchildren>
+			</panel>
+			<panel title="Panel with title" border="normal" collapsible="true" closable="true" maximizable="true">
+				<panelchildren>
+					<vlayout>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+						<label value="some content here"></label>
+					</vlayout>
+				</panelchildren>
+			</panel>
+		</hlayout>
+		<hlayout>
+			<groupbox closable="true">
+				<caption label="Groupbox with caption" />
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</groupbox>
+			<groupbox title="Groupbox with title" closable="true">
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</groupbox>
+		</hlayout>
+		<hlayout>
+			<window border="normal" closable="true" maximizable="true">
+				<caption label="Window with caption" />
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</window>
+			<window title="Window with title" border="normal" closable="true" maximizable="true">
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</window>
+		</hlayout>
+	</vlayout>
+</zk>
