@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.event.SwipeEvent;
 import org.zkoss.zk.ui.event.ZIndexEvent;
 import org.zkoss.zk.ui.ext.DragControl;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
-import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
@@ -744,7 +744,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 				return ((HtmlBasedComponent) cmp).getTooltiptext();
 			}
 		});
-		_properties.put("zindex", new IntegerPropertyAccess() {
+		_properties.put("zindex", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer zindex) {
 				((HtmlBasedComponent) cmp).setZindex(zindex);
 			}
@@ -753,7 +753,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 				return ((HtmlBasedComponent) cmp).getZIndex();
 			}
 		});
-		_properties.put("renderdefer", new IntegerPropertyAccess() {
+		_properties.put("renderdefer", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer renderdefer) {
 				((HtmlBasedComponent) cmp).setRenderdefer(renderdefer);
 			}

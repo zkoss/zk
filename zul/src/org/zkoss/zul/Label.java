@@ -20,7 +20,7 @@ import java.util.HashMap;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
-import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zul.impl.XulElement;
@@ -150,7 +150,7 @@ public class Label extends XulElement {
 				return ((Label) cmp).isMultiline();
 			}
 		});
-		_properties.put("maxlength", new IntegerPropertyAccess() {
+		_properties.put("maxlength", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer maxlength) {
 				((Label) cmp).setMaxlength(maxlength);
 			}

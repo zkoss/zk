@@ -21,7 +21,7 @@ import java.util.HashMap;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
-import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 import org.zkoss.zul.impl.InputElement;
@@ -193,7 +193,7 @@ public class Textbox extends InputElement {
 				return ((Textbox) cmp).isTabbable();
 			}
 		});
-		_properties.put("rows", new IntegerPropertyAccess() {
+		_properties.put("rows", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer value) {
 				((Textbox) cmp).setRows(value);
 			}
