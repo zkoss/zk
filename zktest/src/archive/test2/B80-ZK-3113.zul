@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3113.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb  2, 2016 11:35:00 AM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+<label multiline="true">
+an EL expression applied to a setter of type int automatically coerced a NULL value into a ZERO in ZK 7.
+In ZK 8 some int component properties now have an IntegerPropertyAccess wrapping the int value. This affects NULL coercion, leading to NullPointerExceptions when NULL value is attempted to be applied to the real setter, which accepts only int, (and not Integer)
+
+1. load this page, it should not appear NullPointerException.
+</label>
+	<zscript>
+		Integer length = null;
+	</zscript>
+	<div>
+		<textbox maxlength="${length}" zindex="${length}" renderdefer="${length}" tabindex="${length}"/>
+		<label maxlength="${length}" value="v"/>
+		<forEach begin="${length}" step="${length}" end="${length}">
+		</forEach>
+	</div>
+</zk>
