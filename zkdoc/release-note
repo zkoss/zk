@@ -7,6 +7,7 @@ ZK 8.0.1.1
   ZK-3104: jsonBindingParam-converter interfering with "normal" @BindingParams
   ZK-3111: Message code not found in msgzul
   ZK-3113: setting int property causes NPE
+  ZK-3114: Chosenbox should clean selections after set new model
 
 * Upgrade Notes
 
