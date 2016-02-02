@@ -6,6 +6,7 @@ ZK 8.0.1.1
   ZK-3102: Combopopup wrong position
   ZK-3104: jsonBindingParam-converter interfering with "normal" @BindingParams
   ZK-3111: Message code not found in msgzul
+  ZK-3113: setting int property causes NPE
 
 * Upgrade Notes
 

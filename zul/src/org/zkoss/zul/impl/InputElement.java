@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.ext.Readonly;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
-import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
@@ -977,7 +977,7 @@ implements Constrainted, Readonly, Disable {
 			}
 		});
 
-		_properties.put("maxlength", new IntegerPropertyAccess() {
+		_properties.put("maxlength", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer maxlength) {
 				((InputElement) cmp).setMaxlength(maxlength);
 			}
@@ -987,7 +987,7 @@ implements Constrainted, Readonly, Disable {
 			}
 		});
 
-		_properties.put("cols", new IntegerPropertyAccess() {
+		_properties.put("cols", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer cols) {
 				((InputElement) cmp).setCols(cols);
 			}
@@ -997,7 +997,7 @@ implements Constrainted, Readonly, Disable {
 			}
 		});
 
-		_properties.put("tabindex", new IntegerPropertyAccess() {
+		_properties.put("tabindex", new IntPropertyAccess() {
 			public void setValue(Component cmp, Integer tabindex) {
 				((InputElement) cmp).setTabindex(tabindex);
 			}
