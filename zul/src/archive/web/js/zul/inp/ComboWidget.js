@@ -180,15 +180,24 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// throw in
 		pp.style.left = '';
 		
-		// given init position
-		$pp.position(inp, 'after_start');	
-		this._shallSyncPopupPosition = false;
-		
-		// B65-ZK-1588: bandbox popup should drop up 
-		// when the space between the bandbox and the bottom of browser is not enough
-		if (this._checkPopupPosition()) {
-			$pp.position(inp, 'before_start');	
+		//B80-ZK-3051
+		//check the popup space before position()
+		var ppHeight = $pp.dimension().height;
+		var inpDim = (inp.nodeType ? zk(inp) : inp).dimension(true);
+		var inpTop = inpDim.top;
+		var inpHeight = inpDim.height;
+		var screenY = jq.innerY();
+		var screenHeight = jq.innerHeight();
+
+		if (screenY + screenHeight - inpTop - inpHeight > ppHeight) {
+			$pp.position(inp, 'after_start');
+		} else if (inpTop - screenY > ppHeight) {
+			$pp.position(inp, 'before_start');
+		} else {
+			$pp.position(inp, 'after_start', {overflow: true});
 		}
+		this._shallSyncPopupPosition = false;
+
 		pp.style.display = 'none';
 		pp.style.visibility = '';
 		this.slideDown_(pp);
@@ -227,12 +236,17 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			ppDim = $pp.dimension(true),
 			inpDim = zk(inp).dimension(true),
 			ppBottom = ppDim.top + ppDim.height,
+			ppRight = ppDim.left + ppDim.width,
 			ppRelativeBottom = ppBottom - $pp.scrollOffset()[1], //minus scroll offset
-			inpBottom = inpDim.top + inpDim.height;
+			inpBottom = inpDim.top + inpDim.height,
+			inpRight = inpDim.left + inpDim.width;
 
-		if ((ppBottom < inpBottom && ppBottom >= inpDim.top) ||
-				(ppDim.top >= inpDim.top && ppDim.top < inpBottom) ||
-				ppRelativeBottom >= jq.innerHeight() || (ppDim.top < inpDim.top && ppBottom < inpDim.top - 2)) {
+		if (ppRelativeBottom >= jq.innerHeight()
+			|| (ppDim.top < inpDim.top && ppBottom < inpDim.top)
+			|| ppDim.left < inpRight
+			&& ppRight > inpDim.left
+			&& ppBottom > inpDim.top
+			&& ppDim.top < inpBottom) {
 			return this._shallSyncPopupPosition = true;
 		}
 		return false;
