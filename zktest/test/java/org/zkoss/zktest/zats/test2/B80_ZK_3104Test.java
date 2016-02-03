@@ -28,18 +28,12 @@ public class B80_ZK_3104Test extends WebDriverTestCase {
 	public void test() throws IOException {
 		connect();
 		JQuery btns = jq("@button");
-		click(btns.eq(0));
-		waitResponse();
-		assertEquals("true", getZKLog());
-		closeZKLog();
-		waitResponse();
-		click(btns.eq(1));
-		waitResponse();
-		assertEquals("true", getZKLog());
-		closeZKLog();
-		waitResponse();
-		click(btns.eq(2));
-		waitResponse();
-		assertEquals("true", getZKLog());
+		for (int i = 0; i < 6; i++) {
+			click(btns.eq(i));
+			waitResponse();
+			assertEquals("true", getZKLog());
+			closeZKLog();
+			waitResponse();
+		}
 	}
 }

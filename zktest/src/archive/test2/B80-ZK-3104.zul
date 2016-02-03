@@ -15,11 +15,14 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3104VM')">
         <vlayout>
             <label>click each button, and you should see "true" in ZK Log</label>
+            <button label="test client command" w:onClick='zkbind.$(this).command("dataChange", {data:{type: "myData"}});'/>
             <button label="test empty list " onClick="@command('testEmptyList', list=vm.emptyList)"/>
             <button label="test non-empty list " onClick="@command('testList', list=vm.origList)"/>
             <button label="test pojo" onClick="@command('testPojo', pojo=vm.origPojo)"/>
+            <button label="test sub pojo" onClick="@command('testPojoSub', pojo=vm.origSubPojo)"/>
             <button label="test pojoJ" onClick="@command('testPojoJ', pojo=vm.origPojoJ)"/>
-            <button label="test client command" w:onClick='zkbind.$(this).command("dataChange", {data:{type: "myData"}});'/>
+            <label>click the button, and you should see a exception</label>
+            <include src="./B80-ZK-3104-1.zul" />
         </vlayout>
 	</div>
 </zk>
