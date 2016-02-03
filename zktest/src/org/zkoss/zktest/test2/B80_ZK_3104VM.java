@@ -17,8 +17,14 @@ public class B80_ZK_3104VM {
 	private List<String> emptyList = new ArrayList<String>();
 	
 	private Pojo origPojo = new Pojo();
+	private SubPojo origSubPojo = new SubPojo();
 	private PojoJ origPojoJ = new PojoJ();
-	
+
+	@Command
+	public void dataChange(@BindingParam("data") B80_ZK_3104Object data) {
+		Clients.log(String.valueOf(data.getType().equals("myData")));
+	}
+
 	@Command
 	public void testEmptyList(@BindingParam("list") List<String> list) {
 		list.add("\"Monty\"");
@@ -37,14 +43,19 @@ public class B80_ZK_3104VM {
 	}
 
 	@Command
-	public void testPojoJ(@BindingParam("pojo") PojoJ pojoJ) {
-		Clients.log(String.valueOf(pojoJ.toString().equals(pojoJ.toString())));
-		Clients.log(String.valueOf(pojoJ.toJSONString().equals(pojoJ.toJSONString())));
+	public void testPojoSub(@BindingParam("pojo") Pojo pojo) {
+		Clients.log(String.valueOf(pojo.toString().equals(origSubPojo.toString())));
 	}
 
 	@Command
-	public void dataChange(@BindingParam("data") B80_ZK_3104Object data) {
-		Clients.log(String.valueOf(data.getType().equals("myData")));
+	public void testPojoJ(@BindingParam("pojo") PojoJ pojoJ) {
+		Clients.log(String.valueOf(pojoJ.toString().equals(pojoJ.toString())
+				&& pojoJ.toJSONString().equals(pojoJ.toJSONString())));
+	}
+
+	@Command
+	public void testPojoSubR(@BindingParam("pojo") SubPojo pojo) {
+		Clients.log(String.valueOf(pojo.toString().equals(origSubPojo.toString())));
 	}
 
 	public List<String> getOrigList() {
@@ -63,6 +74,9 @@ public class B80_ZK_3104VM {
 		return origPojoJ;
 	}
 
+	public SubPojo getOrigSubPojo() {
+		return origSubPojo;
+	}
 
 	public class Pojo {
 		private String name;
@@ -81,7 +95,7 @@ public class B80_ZK_3104VM {
 			this.name = name;
 		}
 
-		private String type = "withoutName";
+		private String type = "pojo";
 		public String getName() {
 			return name;
 		}
@@ -94,9 +108,17 @@ public class B80_ZK_3104VM {
 		}
 	}
 
+	public class SubPojo extends Pojo {
+		private String type = "subpojo";
+		@Override
+		public String toString() {
+			return getName() + " " + getType();
+		}
+	}
+
 	public class PojoJ implements JSONAware {
 		private String name;
-		private String type = "withoutName";
+		private String type = "pojojs";
 		public String getName() {
 			return name;
 		}

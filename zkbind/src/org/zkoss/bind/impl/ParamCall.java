@@ -108,7 +108,7 @@ public class ParamCall {
 			
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Object val = bindingArgs.get(((BindingParam) anno).value());
-				if (val != null && val.getClass().isAssignableFrom(returnType)) { //escape
+				if (val != null && returnType.isAssignableFrom(val.getClass())) { //escape
 					return val;
 				} else if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
 					return _root.getDesktop().getComponentByUuidIfAny((String)val);

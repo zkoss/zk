@@ -5,9 +5,9 @@
     Description:
         
     History:
-        Tue, Feb  2, 2016  3:13:59 PM, Created by Sefi
+        Tue, Feb 2, 2016 3:13:59 PM, Created by Sefi
 
-Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
