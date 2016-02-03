@@ -3,6 +3,15 @@ ZK 8.0.2
 * Features
 
 * Bugs
+
+* Upgrade Notes
+
+   --------
+ZK 8.0.1.1
+February 3, 2016
+* Features
+
+* Bugs
   ZK-3102: Combopopup wrong position
   ZK-3104: jsonBindingParam-converter interfering with "normal" @BindingParams
   ZK-3111: Message code not found in msgzul
