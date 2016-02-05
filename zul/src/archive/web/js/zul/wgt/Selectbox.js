@@ -104,7 +104,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			.domListen_(n, 'onBlur', 'doBlur_');
 		
 		if (!zk.gecko) {
-			var fn = [this,  this._fixSelIndex];
+			var fn = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
 
@@ -117,7 +117,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
 			.$supers(zul.wgt.Selectbox, 'unbind_', arguments);
 
-		var fn = [this,  this._fixSelIndex];
+		var fn = [this, this._fixSelIndex];
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	},
 	_doChange: function (evt) {
@@ -141,9 +141,9 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 	domAttrs_: function () {
 		var v;
 		return this.$supers('domAttrs_', arguments)
-			+ (this.isDisabled() ? ' disabled="disabled"' :'')
-			+ ((v=this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"': '')
-			+ ((v=this.getTabindex()) ? ' tabindex="' + v + '"': '')
-			+ ((v=this.getName()) ? ' name="' + v + '"': '');
+			+ (this.isDisabled() ? ' disabled="disabled"' : '')
+			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
+			+ ((v = this.getTabindex()) ? ' tabindex="' + v + '"' : '')
+			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
 	}
 });

@@ -58,7 +58,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 				if (jq.nodeName(n, 'img')) // ZK-1100
 					n.src = img;
 				else
-					jq(n).css('background-image', 'url('+img+')');
+					jq(n).css('background-image', 'url(' + img + ')');
 			} else if (this.desktop) //<IMG> might not be generated (Bug 3007738)
 				this.updateDomContent_();
 		},
@@ -88,7 +88,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 */
 	domImage_: function () {
 		var img = this._image;
-		return img ? '<img src="' + img + '" align="absmiddle" />': '';
+		return img ? '<img src="' + img + '" align="absmiddle" />' : '';
 	},
 	/**
 	 * Returns the icon font class name with HTML content.
@@ -97,7 +97,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 */
 	domIcon_: function () {
 		var icon = this.getIconSclass(); // use getIconSclass() to allow overriding
-		return icon ? '<i class="' + icon + '"></i>': '';
+		return icon ? '<i class="' + icon + '"></i>' : '';
 	},
 	/**
 	 * Returns the encoded label.
@@ -123,7 +123,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 			if (icon) {
 				return img + ' ' + icon + (label ? ' ' + label : ''); 
 			} else {
-				return label ? img + ' ' + label: img;
+				return label ? img + ' ' + label : img;
 			}
 		} else {
 			return icon ? label ? icon + ' ' + label : icon : label;
@@ -155,7 +155,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 			if (jq.nodeName(n, 'img'))
 				n.src = img;
 			else
-				jq(n).css('background-image', 'url('+img+')');
+				jq(n).css('background-image', 'url(' + img + ')');
 		}
 	},
 	//@Override

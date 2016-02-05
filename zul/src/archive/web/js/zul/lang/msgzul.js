@@ -13,8 +13,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzul = {
-UNKNOWN_TYPE: "Unknown component type: ",
-DATE_REQUIRED: "You must specify a date. Format: ",
-OUT_OF_RANGE: "Out of range",
-NO_AUDIO_SUPPORT: "Your browser doesn't support dynamic audio"
+	UNKNOWN_TYPE: 'Unknown component type: ',
+	DATE_REQUIRED: 'You must specify a date. Format: ',
+	OUT_OF_RANGE: 'Out of range',
+	NO_AUDIO_SUPPORT: "Your browser doesn't support dynamic audio"
 };

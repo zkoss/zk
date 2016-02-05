@@ -52,7 +52,7 @@ zk.override(jq.fn, _jq, {
 			}
 		} catch (e) {
 		}
-		return done ? this: _jq.replaceWith.apply(this, arguments);
+		return done ? this : _jq.replaceWith.apply(this, arguments);
 	}
 });
 zk.override(zjq, _zjq, {
@@ -68,7 +68,7 @@ zk.override(zjq, _zjq, {
 		var zoom = el.style.zoom;
 		el.style.zoom = 1;
 		_zjq._fixCSS(el);
-		setTimeout(function() {
+		setTimeout(function () {
 			try {el.style.zoom = zoom;} catch (e) {}
 		});
 	}

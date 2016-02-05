@@ -31,12 +31,12 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	 * @param Object value a number or a string
 	 */
 	$init: function (value) {
-		value = value ? '' + value: '0';
+		value = value ? '' + value : '0';
 		var jdot = -1;
 		for (var j = 0, len = value.length; j < len; ++j) {
 			var cc = value.charAt(j);
-			if (((cc < '0' || cc > '9') && cc != '-' && cc != '+') || 
-				(j && (cc == '-' || cc == '+')))
+			if (((cc < '0' || cc > '9') && cc != '-' && cc != '+')
+				|| (j && (cc == '-' || cc == '+')))
 				if (jdot < 0 && cc == '.') {
 					jdot = j;
 				} else {
@@ -62,7 +62,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	 * instead.
 	 * @return String
 	 */
-	$toString: function() { //toString is reserved keyword for IE
+	$toString: function () { //toString is reserved keyword for IE
 		if (this._value.length == 0) return ''; 
 		var j = this._value.length - this._precision,
 			valFixed = '';
@@ -74,7 +74,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	/** Returns a Locale-dependent string for this big decimal(for human's eye).
 	 * @return String
 	 */
-	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
+	$toLocaleString: function () { //toLocaleString is reserved keyword for IE
 		if (this._value.length == 0) return ''; 
 		var j = this._value.length - this._precision;
 		if (j <= 0) {
@@ -98,7 +98,7 @@ zk.Long = zk.$extends(zk.Object, {
 	//Note: it shall work like parseInt:
 	//1) consider '.' rather than zkDecimal
 	//2) ignore unrecognized characters
-		value = value ? '' + value: '0';
+		value = value ? '' + value : '0';
 		var len = value.length;
 		for (var j = 0; j < len; ++j) {
 			var cc = value.charAt(j);
@@ -120,7 +120,7 @@ zk.Long = zk.$extends(zk.Object, {
 	 * @since 5.0.10.
 	 */
 	scale: function (digits) {
-		var val = this._value||'',
+		var val = this._value || '',
 			n = val.length;
 		if (n)
 			if (digits > 0) {
@@ -128,17 +128,17 @@ zk.Long = zk.$extends(zk.Object, {
 					while (digits-- > 0) //in case if digits is not an integer
 						val += '0';
 			} else if (digits < 0)
-				this._value = (n += digits) <= 0 ? '0': val.substring(0, n);
+				this._value = (n += digits) <= 0 ? '0' : val.substring(0, n);
 	},
 	$toNumber: function () {
-		return parseFloat(this._value)
+		return parseFloat(this._value);
 	},
 	/** Returns a string for this long integer
 	 * To have a Locale-dependent string, use {@link #$toLocaleString}
 	 * instead.
 	 * @return String
 	 */
-	$toString: zkf = function() { //toString is reserved keyword for IE
+	$toString: zkf = function () { //toString is reserved keyword for IE
 		return this._value;
 	},
 	/** Returns a Locale-dependent string for this long integer.

@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _shallFixPercent = zk.gecko ? function (wgt) {
 			var s;
 			return (s = wgt._spacing) && s.endsWith('%');
-		}: zk.$void;
+		} : zk.$void;
 
 /**
  * A separator.

@@ -7,21 +7,21 @@
  * http://github.com/rstacruz/jquery.transit
  */
 
-(function($) {
+(function ($) {
   $.transit = {
-    version: "0.9.9",
+    version: '0.9.9',
 
     // Map of $.css() keys to values for 'transitionProperty'.
     // See https://developer.mozilla.org/en/CSS/CSS_transitions#Properties_that_can_be_animated
     propertyMap: {
-      marginLeft    : 'margin',
-      marginRight   : 'margin',
-      marginBottom  : 'margin',
-      marginTop     : 'margin',
-      paddingLeft   : 'padding',
-      paddingRight  : 'padding',
-      paddingBottom : 'padding',
-      paddingTop    : 'padding'
+      marginLeft: 'margin',
+      marginRight: 'margin',
+      marginBottom: 'margin',
+      marginTop: 'margin',
+      paddingLeft: 'padding',
+      paddingRight: 'padding',
+      paddingBottom: 'padding',
+      paddingTop: 'padding'
     },
 
     // Will simply transition "instantly" if false
@@ -45,7 +45,7 @@
 
     if (prop in div.style) { return prop; }
 
-    for (var i=0; i<prefixes.length; ++i) {
+    for (var i = 0; i < prefixes.length; ++i) {
       var vendorProp = prefixes[i] + prop_;
       if (vendorProp in div.style) { return vendorProp; }
     }
@@ -62,18 +62,18 @@
   var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 
   // Check for the browser's transitions support.
-  support.transition      = getVendorPropertyName('transition');
+  support.transition = getVendorPropertyName('transition');
   support.transitionDelay = getVendorPropertyName('transitionDelay');
-  support.transform       = getVendorPropertyName('transform');
+  support.transform = getVendorPropertyName('transform');
   support.transformOrigin = getVendorPropertyName('transformOrigin');
-  support.transform3d     = checkTransform3dSupport();
+  support.transform3d = checkTransform3dSupport();
 
   var eventNames = {
-    'transition':       'transitionEnd',
-    'MozTransition':    'transitionend',
-    'OTransition':      'oTransitionEnd',
+    'transition': 'transitionEnd',
+    'MozTransition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
     'WebkitTransition': 'webkitTransitionEnd',
-    'msTransition':     'MSTransitionEnd'
+    'msTransition': 'MSTransitionEnd'
   };
 
   // Detect the 'transitionend' event needed.
@@ -94,35 +94,35 @@
   // ## $.cssEase
   // List of easing aliases that you can use with `$.fn.transition`.
   $.cssEase = {
-    '_default':       'ease',
-    'in':             'ease-in',
-    'out':            'ease-out',
-    'in-out':         'ease-in-out',
-    'snap':           'cubic-bezier(0,1,.5,1)',
+    '_default': 'ease',
+    'in': 'ease-in',
+    'out': 'ease-out',
+    'in-out': 'ease-in-out',
+    'snap': 'cubic-bezier(0,1,.5,1)',
     // Penner equations
-    'easeOutCubic':   'cubic-bezier(.215,.61,.355,1)',
+    'easeOutCubic': 'cubic-bezier(.215,.61,.355,1)',
     'easeInOutCubic': 'cubic-bezier(.645,.045,.355,1)',
-    'easeInCirc':     'cubic-bezier(.6,.04,.98,.335)',
-    'easeOutCirc':    'cubic-bezier(.075,.82,.165,1)',
-    'easeInOutCirc':  'cubic-bezier(.785,.135,.15,.86)',
-    'easeInExpo':     'cubic-bezier(.95,.05,.795,.035)',
-    'easeOutExpo':    'cubic-bezier(.19,1,.22,1)',
-    'easeInOutExpo':  'cubic-bezier(1,0,0,1)',
-    'easeInQuad':     'cubic-bezier(.55,.085,.68,.53)',
-    'easeOutQuad':    'cubic-bezier(.25,.46,.45,.94)',
-    'easeInOutQuad':  'cubic-bezier(.455,.03,.515,.955)',
-    'easeInQuart':    'cubic-bezier(.895,.03,.685,.22)',
-    'easeOutQuart':   'cubic-bezier(.165,.84,.44,1)',
+    'easeInCirc': 'cubic-bezier(.6,.04,.98,.335)',
+    'easeOutCirc': 'cubic-bezier(.075,.82,.165,1)',
+    'easeInOutCirc': 'cubic-bezier(.785,.135,.15,.86)',
+    'easeInExpo': 'cubic-bezier(.95,.05,.795,.035)',
+    'easeOutExpo': 'cubic-bezier(.19,1,.22,1)',
+    'easeInOutExpo': 'cubic-bezier(1,0,0,1)',
+    'easeInQuad': 'cubic-bezier(.55,.085,.68,.53)',
+    'easeOutQuad': 'cubic-bezier(.25,.46,.45,.94)',
+    'easeInOutQuad': 'cubic-bezier(.455,.03,.515,.955)',
+    'easeInQuart': 'cubic-bezier(.895,.03,.685,.22)',
+    'easeOutQuart': 'cubic-bezier(.165,.84,.44,1)',
     'easeInOutQuart': 'cubic-bezier(.77,0,.175,1)',
-    'easeInQuint':    'cubic-bezier(.755,.05,.855,.06)',
-    'easeOutQuint':   'cubic-bezier(.23,1,.32,1)',
+    'easeInQuint': 'cubic-bezier(.755,.05,.855,.06)',
+    'easeOutQuint': 'cubic-bezier(.23,1,.32,1)',
     'easeInOutQuint': 'cubic-bezier(.86,0,.07,1)',
-    'easeInSine':     'cubic-bezier(.47,0,.745,.715)',
-    'easeOutSine':    'cubic-bezier(.39,.575,.565,1)',
-    'easeInOutSine':  'cubic-bezier(.445,.05,.55,.95)',
-    'easeInBack':     'cubic-bezier(.6,-.28,.735,.045)',
-    'easeOutBack':    'cubic-bezier(.175, .885,.32,1.275)',
-    'easeInOutBack':  'cubic-bezier(.68,-.55,.265,1.55)'
+    'easeInSine': 'cubic-bezier(.47,0,.745,.715)',
+    'easeOutSine': 'cubic-bezier(.39,.575,.565,1)',
+    'easeInOutSine': 'cubic-bezier(.445,.05,.55,.95)',
+    'easeInBack': 'cubic-bezier(.6,-.28,.735,.045)',
+    'easeOutBack': 'cubic-bezier(.175, .885,.32,1.275)',
+    'easeInOutBack': 'cubic-bezier(.68,-.55,.265,1.55)'
   };
 
   // ## 'transform' CSS hook
@@ -135,12 +135,12 @@
   //
   $.cssHooks['transit:transform'] = {
     // The getter returns a `Transform` object.
-    get: function(elem) {
+    get: function (elem) {
       return $(elem).data('transform') || new Transform();
     },
 
     // The setter accepts a `Transform` object or a string.
-    set: function(elem, v) {
+    set: function (elem, v) {
       var value = v;
 
       if (!(value instanceof Transform)) {
@@ -171,7 +171,7 @@
 
   // jQuery 1.8+ supports prefix-free transitions, so these polyfills will not
   // be necessary.
-  if ($.fn.jquery < "1.8") {
+  if ($.fn.jquery < '1.8') {
     // ## 'transformOrigin' CSS hook
     // Allows the use for `transformOrigin` to define where scaling and rotation
     // is pivoted.
@@ -179,10 +179,10 @@
     //     $("#hello").css({ transformOrigin: '0 0' });
     //
     $.cssHooks.transformOrigin = {
-      get: function(elem) {
+      get: function (elem) {
         return elem.style[support.transformOrigin];
       },
-      set: function(elem, value) {
+      set: function (elem, value) {
         elem.style[support.transformOrigin] = value;
       }
     };
@@ -193,10 +193,10 @@
     //     $("#hello").css({ transition: 'all 0 ease 0' });
     //
     $.cssHooks.transition = {
-      get: function(elem) {
+      get: function (elem) {
         return elem.style[support.transition];
       },
-      set: function(elem, value) {
+      set: function (elem, value) {
         elem.style[support.transition] = value;
       }
     };
@@ -251,9 +251,9 @@
     //     t.setFromString('scale', '2,4');
     //     // Same as set('scale', '2', '4');
     //
-    setFromString: function(prop, val) {
+    setFromString: function (prop, val) {
       var args =
-        (typeof val === 'string')  ? val.split(',') :
+        (typeof val === 'string') ? val.split(',') :
         (val.constructor === Array) ? val :
         [ val ];
 
@@ -267,7 +267,7 @@
     //
     //     t.set('scale', 2, 4);
     //
-    set: function(prop) {
+    set: function (prop) {
       var args = Array.prototype.slice.apply(arguments, [1]);
       if (this.setter[prop]) {
         this.setter[prop].apply(this, args);
@@ -276,7 +276,7 @@
       }
     },
 
-    get: function(prop) {
+    get: function (prop) {
       if (this.getter[prop]) {
         return this.getter[prop].apply(this);
       } else {
@@ -292,15 +292,15 @@
       //     .css({ rotate: "30deg" })
       //     .css({ rotate: "30deg" })
       //
-      rotate: function(theta) {
+      rotate: function (theta) {
         this.rotate = unit(theta, 'deg');
       },
 
-      rotateX: function(theta) {
+      rotateX: function (theta) {
         this.rotateX = unit(theta, 'deg');
       },
 
-      rotateY: function(theta) {
+      rotateY: function (theta) {
         this.rotateY = unit(theta, 'deg');
       },
 
@@ -309,22 +309,22 @@
       //     .css({ scale: 9 })      //=> "scale(9,9)"
       //     .css({ scale: '3,2' })  //=> "scale(3,2)"
       //
-      scale: function(x, y) {
+      scale: function (x, y) {
         if (y === undefined) { y = x; }
-        this.scale = x + "," + y;
+        this.scale = x + ',' + y;
       },
 
       // ### skewX + skewY
-      skewX: function(x) {
+      skewX: function (x) {
         this.skewX = unit(x, 'deg');
       },
 
-      skewY: function(y) {
+      skewY: function (y) {
         this.skewY = unit(y, 'deg');
       },
 
       // ### perspectvie
-      perspective: function(dist) {
+      perspective: function (dist) {
         this.perspective = unit(dist, 'px');
       },
 
@@ -334,11 +334,11 @@
       //     .css({ x: 4 })       //=> "translate(4px, 0)"
       //     .css({ y: 10 })      //=> "translate(4px, 10px)"
       //
-      x: function(x) {
+      x: function (x) {
         this.set('translate', x, null);
       },
 
-      y: function(y) {
+      y: function (y) {
         this.set('translate', null, y);
       },
 
@@ -347,28 +347,28 @@
       //
       //     .css({ translate: '2, 5' })    //=> "translate(2px, 5px)"
       //
-      translate: function(x, y) {
+      translate: function (x, y) {
         if (this._translateX === undefined) { this._translateX = 0; }
         if (this._translateY === undefined) { this._translateY = 0; }
 
         if (x !== null && x !== undefined) { this._translateX = unit(x, 'px'); }
         if (y !== null && y !== undefined) { this._translateY = unit(y, 'px'); }
 
-        this.translate = this._translateX + "," + this._translateY;
+        this.translate = this._translateX + ',' + this._translateY;
       }
     },
 
     getter: {
-      x: function() {
+      x: function () {
         return this._translateX || 0;
       },
 
-      y: function() {
+      y: function () {
         return this._translateY || 0;
       },
 
-      scale: function() {
-        var s = (this.scale || "1,1").split(',');
+      scale: function () {
+        var s = (this.scale || '1,1').split(',');
         if (s[0]) { s[0] = parseFloat(s[0]); }
         if (s[1]) { s[1] = parseFloat(s[1]); }
 
@@ -377,9 +377,9 @@
         return (s[0] === s[1]) ? s[0] : s;
       },
 
-      rotate3d: function() {
-        var s = (this.rotate3d || "0,0,0,0deg").split(',');
-        for (var i=0; i<=3; ++i) {
+      rotate3d: function () {
+        var s = (this.rotate3d || '0,0,0,0deg').split(',');
+        for (var i = 0; i <= 3; ++i) {
           if (s[i]) { s[i] = parseFloat(s[i]); }
         }
         if (s[3]) { s[3] = unit(s[3], 'deg'); }
@@ -390,9 +390,9 @@
 
     // ### parse()
     // Parses from a string. Called on constructor.
-    parse: function(str) {
+    parse: function (str) {
       var self = this;
-      str.replace(/([a-zA-Z0-9]+)\((.*?)\)/g, function(x, prop, val) {
+      str.replace(/([a-zA-Z0-9]+)\((.*?)\)/g, function (x, prop, val) {
         self.setFromString(prop, val);
       });
     },
@@ -400,7 +400,7 @@
     // ### toString()
     // Converts to a `transition` CSS property string. If `use3d` is given,
     // it converts to a `-webkit-transition` CSS property string instead.
-    toString: function(use3d) {
+    toString: function (use3d) {
       var re = [];
 
       for (var i in this) {
@@ -414,17 +414,17 @@
 
           if (i[0] !== '_') {
             if (use3d && (i === 'scale')) {
-              re.push(i + "3d(" + this[i] + ",1)");
+              re.push(i + '3d(' + this[i] + ',1)');
             } else if (use3d && (i === 'translate')) {
-              re.push(i + "3d(" + this[i] + ",0)");
+              re.push(i + '3d(' + this[i] + ',0)');
             } else {
-              re.push(i + "(" + this[i] + ")");
+              re.push(i + '(' + this[i] + ')');
             }
           }
         }
       }
 
-      return re.join(" ");
+      return re.join(' ');
     }
   };
 
@@ -444,7 +444,7 @@
   function getProperties(props) {
     var re = [];
 
-    $.each(props, function(key) {
+    $.each(props, function (key) {
       key = $.camelCase(key); // Convert "text-align" => "textAlign"
       key = $.transit.propertyMap[key] || $.cssProps[key] || key;
       key = uncamel(key); // Convert back to dasherized
@@ -477,7 +477,7 @@
     // For more properties, add them this way:
     // "margin 200ms ease, padding 200ms ease, ..."
     var transitions = [];
-    $.each(props, function(i, name) {
+    $.each(props, function (i, name) {
       transitions.push(name + ' ' + attribs);
     });
 
@@ -510,8 +510,8 @@
   //       complete: function() { /* ... */ }
   //      });
   //
-  $.fn.transition = $.fn.transit = function(properties, duration, easing, callback) {
-    var self  = this;
+  $.fn.transition = $.fn.transit = function (properties, duration, easing, callback) {
+    var self = this;
     var delay = 0;
     var queue = true;
 
@@ -555,7 +555,7 @@
 
     // Set defaults. (`400` duration, `ease` easing)
     if (typeof duration === 'undefined') { duration = $.fx.speeds._default; }
-    if (typeof easing === 'undefined')   { easing = $.cssEase._default; }
+    if (typeof easing === 'undefined') { easing = $.cssEase._default; }
 
     duration = toMS(duration);
 
@@ -569,7 +569,7 @@
 
     // If there's nothing to do...
     if (i === 0) {
-      var fn = function(next) {
+      var fn = function (next) {
         self.css(properties);
         if (callback) { callback.apply(self); }
         if (next) { next(); }
@@ -582,15 +582,15 @@
     // Save the old transitions of each element so we can restore it later.
     var oldTransitions = {};
 
-    var run = function(nextCall) {
+    var run = function (nextCall) {
       var bound = false;
 
       // Prepare the callback.
-      var cb = function() {
+      var cb = function () {
         if (bound) { self.unbind(transitionEnd, cb); }
 
         if (i > 0) {
-          self.each(function() {
+          self.each(function () {
             this.style[support.transition] = (oldTransitions[this] || null);
           });
         }
@@ -609,7 +609,7 @@
       }
 
       // Apply transitions.
-      self.each(function() {
+      self.each(function () {
         if (i > 0) {
           this.style[support.transition] = transitionValue;
         }
@@ -619,7 +619,7 @@
 
     // Defer running. This allows the browser to paint any pending CSS it hasn't
     // painted yet before doing the transitions.
-    var deferredRun = function(next) {
+    var deferredRun = function (next) {
         this.offsetWidth; // force a repaint
         run(next);
     };
@@ -638,12 +638,12 @@
     $.transit.propertyMap[prop] = support.transform;
 
     $.cssHooks[prop] = {
-      get: function(elem) {
+      get: function (elem) {
         var t = $(elem).css('transit:transform');
         return t.get(prop);
       },
 
-      set: function(elem, value) {
+      set: function (elem, value) {
         var t = $(elem).css('transit:transform');
         t.setFromString(prop, value);
 
@@ -657,7 +657,7 @@
   // Converts a camelcase string to a dasherized string.
   // (`marginLeft` => `margin-left`)
   function uncamel(str) {
-    return str.replace(/([A-Z])/g, function(letter) { return '-' + letter.toLowerCase(); });
+    return str.replace(/([A-Z])/g, function (letter) { return '-' + letter.toLowerCase(); });
   }
 
   // ### unit(number, unit)
@@ -668,10 +668,10 @@
   //     unit("30deg", 'rad')   //=> "30deg"
   //
   function unit(i, units) {
-    if ((typeof i === "string") && (!i.match(/^[\-0-9\.]+$/))) {
+    if ((typeof i === 'string') && (!i.match(/^[\-0-9\.]+$/))) {
       return i;
     } else {
-      return "" + i + units;
+      return '' + i + units;
     }
   }
 

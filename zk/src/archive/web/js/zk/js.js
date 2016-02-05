@@ -15,24 +15,24 @@ zk.copy(String.prototype, {
 		return this.substring(0,prefix.length) == prefix;
 	},
 	endsWith: function (suffix) {
-		return this.substring(this.length-suffix.length) == suffix;
+		return this.substring(this.length - suffix.length) == suffix;
 	},
 	trim: function () {
 		return jq.trim(this);
 	},
-	$camel: function() {
+	$camel: function () {
 		var parts = this.split('-'), len = parts.length;
 		if (len == 1) return parts[0];
 
 		var camelized = this.charAt(0) == '-' ?
-			parts[0].charAt(0).toUpperCase() + parts[0].substring(1): parts[0];
+			parts[0].charAt(0).toUpperCase() + parts[0].substring(1) : parts[0];
 
 		for (var i = 1; i < len; i++)
 			camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 		return camelized;
 	},
 	$inc: function (diff) {
-		return String.fromCharCode(this.charCodeAt(0) + diff)
+		return String.fromCharCode(this.charCodeAt(0) + diff);
 	},
 	$sub: function (cc) {
 		return this.charCodeAt(0) - cc.charCodeAt(0);
@@ -68,7 +68,7 @@ zk.copy(Array.prototype, {
 	$addAll: function (o) {
 		return this.push.apply(this, o);
 	},
-	$clone: function() {
+	$clone: function () {
 		return [].concat(this);
 	}
 });

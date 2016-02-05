@@ -75,7 +75,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			sc += ' ' + this.$s("vertical" == this.getOrient() ? 'vertical' : 'horizontal');
+			sc += ' ' + this.$s('vertical' == this.getOrient() ? 'vertical' : 'horizontal');
 		}
 		return sc;
 	},
@@ -141,15 +141,15 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			childs = jq(this.$n('cave')).children(),
 			totalWidth = 0;
 		
-		for (var i = childs.length; i-- ;)
+		for (var i = childs.length; i--;)
 			totalWidth += jq(childs[i]).outerWidth(true); //ZK-3095
 
 		if (zk.ie) // child width (text node) is not integer in IE 
 			totalWidth += childs.length;
 
-		var fixedSize = nodeWidth -
-						zk(this.$n('left')).offsetWidth() -
-						zk(this.$n('right')).offsetWidth();
+		var fixedSize = nodeWidth
+			- zk(this.$n('left')).offsetWidth()
+			- zk(this.$n('right')).offsetWidth();
 		if (this._scrolling) {
 			if (totalWidth < nodeWidth) {
 				this._scrolling = false;
@@ -219,14 +219,14 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			for (var i = 0; i < childLen; i++) {
 				// B50-ZK-381: Menu scrolling bug
 				// child width may be larger than body.offsetWidth 
-				if (childs[i].offsetLeft >= currScrollLeft ||
-						childs[i].offsetLeft+(childs[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
+				if (childs[i].offsetLeft >= currScrollLeft
+					|| childs[i].offsetLeft + (childs[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
 					var preChild = childs[i].previousSibling;
 					if (!preChild)	return;
 					movePos = currScrollLeft - (currScrollLeft - preChild.offsetLeft);
 					if (isNaN(movePos)) return;
 					self._runId = setInterval(function () {
-						if(!self._moveTo(body, movePos)){
+						if(!self._moveTo(body, movePos)) {
 							clearInterval(self._runId);
 							self._runId = null;
 						}
@@ -238,7 +238,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		case 'right':
 			var currRight = currScrollLeft + body.offsetWidth;
 			for (var i = 0; i < childLen; i++) {
-				var currChildRight =  childs[i].offsetLeft + childs[i].offsetWidth;
+				var currChildRight = childs[i].offsetLeft + childs[i].offsetWidth;
 				if (currChildRight > currRight) {
 					movePos = currScrollLeft + (currChildRight - currRight);
 					if (isNaN(movePos)) return;

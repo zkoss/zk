@@ -11,8 +11,8 @@ Copyright (C) 2005-2011 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-msgzul={};
-msgzul.UNKNOWN_TYPE="Neznámy typ komponentu: ";
-msgzul.DATE_REQUIRED="Je nutné zadať dátum. Formát: ";
-msgzul.OUT_OF_RANGE = "Hodnota je mimo daný rozsah";
-msgzul.NO_AUDIO_SUPPORT="Váš prehliadač nepodporuje streamované audio";
+msgzul = {};
+msgzul.UNKNOWN_TYPE = 'Neznámy typ komponentu: ';
+msgzul.DATE_REQUIRED = 'Je nutné zadať dátum. Formát: ';
+msgzul.OUT_OF_RANGE = 'Hodnota je mimo daný rozsah';
+msgzul.NO_AUDIO_SUPPORT = 'Váš prehliadač nepodporuje streamované audio';

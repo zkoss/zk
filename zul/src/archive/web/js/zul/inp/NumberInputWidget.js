@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	// Fixed merging JS issue
 	zk.load('zul.lang', function () {
-		_allowKeys = "0123456789"+zk.MINUS+zk.PERCENT+(zk.groupingDenied ? '': zk.GROUPING);
+		_allowKeys = '0123456789' + zk.MINUS + zk.PERCENT + (zk.groupingDenied ? '' : zk.GROUPING);
 	});
 /**
  * A skeletal implementation for number-type input box.
@@ -66,8 +66,8 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 			function () {
 				var symbols = this._localizedSymbols;
 				this._allowKeys = symbols ?
-					"0123456789"+symbols.MINUS+symbols.PERCENT +
-					(zk.groupingDenied ? '': symbols.GROUPING): null;
+					'0123456789' + symbols.MINUS + symbols.PERCENT
+					+ (zk.groupingDenied ? '' : symbols.GROUPING) : null;
 				this.rerender();
 			}
 		]
@@ -79,8 +79,8 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 	getAllowedKeys_: function () {
 		return this._allowKeys || _allowKeys;
 	},
-	doKeyPress_: function(evt){
-		//Bug ZK-1373: ALTGR + 3 key in Spanish keyboard is a combination of Ctrl + Alt + 3 for £á sign.
+	doKeyPress_: function (evt) {
+		//Bug ZK-1373: ALTGR + 3 key in Spanish keyboard is a combination of Ctrl + Alt + 3 for â‚¬ sign.
 		if (evt.ctrlKey && evt.altKey)
 			evt.stop();
 		if (!this._shallIgnore(evt, this.getAllowedKeys_()))

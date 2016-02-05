@@ -59,7 +59,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		jclass.prototype.$class = jclass;
 		jclass.$class = zk.Class;
 		(jclass._$extds = (jclass.superclass = superclass) ?
-			zk.copy({}, superclass._$extds): {})[oid] = jclass;
+			zk.copy({}, superclass._$extds) : {})[oid] = jclass;
 			//_$extds is a map of all super classes and jclass
 		return jclass;
 	}
@@ -107,8 +107,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function showprgbInit() {
 		//don't use jq() since it will be queued after others
-		if (jq.isReady||zk.Page.contained.length)
-			_showprgb(true, zk.pi ? 'z-initing': null);
+		if (jq.isReady || zk.Page.contained.length)
+			_showprgb(true, zk.pi ? 'z-initing' : null);
 		else
 			setTimeout(showprgbInit, 10);
 	}
@@ -119,7 +119,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var $jq;
 		if (zk.processing
 		&& !($jq = jq('#zk_proc')).length && !jq('#zk_showBusy').length) {
-			zUtl.progressbox('zk_proc', window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
+			zUtl.progressbox('zk_proc', window.msgzk ? msgzk.PLEASE_WAIT : 'Processing...', mask, icon);
 		} else if (icon == 'z-initing') {
 			var $jq = $jq || jq('#zk_proc');
 			if ($jq.length && $jq.hasClass('z-loading') && ($jq = $jq.parent()).hasClass('z-temp')) {
@@ -129,12 +129,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function wgt2s(w) {
 		var s = w.widgetName;
-		return s + (w.id ? '$' + w.id: '') + '#' + w.uuid + '$' + w.$oid;
+		return s + (w.id ? '$' + w.id : '') + '#' + w.uuid + '$' + w.$oid;
 	}
 	function toLogMsg(ars, detailed) {
 		var msg = [], Widget = zk.Widget;
 		for (var j = 0, len = ars.length; j < len; j++) {
-			if (msg.length) msg.push(", ");
+			if (msg.length) msg.push(', ');
 			var ar = ars[j];
 			if (ar && (jq.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
 				msg.push('[' + toLogMsg(ar, detailed) + ']');
@@ -142,7 +142,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				msg.push(wgt2s(ar));
 			else if (ar && ar.nodeType) {
 				var w = Widget && Widget.$(ar);
-				if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#'+ar.id+'.'+ar.className:''), ':', wgt2s(w));
+				if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#' + ar.id + '.' + ar.className : ''), ':', wgt2s(w));
 				else msg.push(jq.nodeName(ar), '#', ar.id);
 			} else if (detailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
@@ -155,8 +155,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else if (typeof ar == 'function') {
 				var s = '' + ar,
 					m = s.indexOf('{'),
-					k = m < 0 ? s.indexOf('\n'): -1;
-				msg.push(s.substring(0, m > 0 ? m: k > 0 ? k: s.length));
+					k = m < 0 ? s.indexOf('\n') : -1;
+				msg.push(s.substring(0, m > 0 ? m : k > 0 ? k : s.length));
 			} else
 				msg.push('' + ar);
 		}
@@ -168,8 +168,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!console.length) {
 				jq(document.body).append(
 	'<div id="zk_logbox" class="z-log">'
-	+'<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
-	+'<textarea id="zk_log" rows="10"></textarea></div>');
+	+ '<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
+	+ '<textarea id="zk_log" rows="10"></textarea></div>');
 				console = jq('#zk_log');
 			}
 			console = console[0];
@@ -188,11 +188,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	/* Overrides all subclasses. */
 	function _overrideSub(dstpt, nm, oldfn, newfn, tobak) {
-		for (var sub = dstpt._$subs, j = sub ? sub.length: 0; --j >= 0;) {
+		for (var sub = dstpt._$subs, j = sub ? sub.length : 0; --j >= 0;) {
 			var subpt = sub[j];
 			if (subpt[nm] === oldfn) {
 				if (tobak)
-					subpt['$'+nm] = oldfn; // B50-ZK-493
+					subpt['$' + nm] = oldfn; // B50-ZK-493
 				subpt[nm] = newfn;
 				_overrideSub(subpt, nm, oldfn, newfn, tobak); //recursive
 			}
@@ -554,7 +554,7 @@ try {
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
-				nm = k >= 0 ? name.substring(j, k): name.substring(j);
+				nm = k >= 0 ? name.substring(j, k) : name.substring(j);
 			var nxt = ref[nm], newpkg;
 			if (newpkg = !nxt) nxt = ref[nm] = {};
 			if (k < 0) {
@@ -604,7 +604,7 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 	 * @see #$import(String)
 	 * @see #load
 	 */
-	$import: (function() {
+	$import: (function () {
 		var _caches = {};
 		return function (name, fn) {
 			var last;
@@ -614,14 +614,15 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 			}
 			for (var j = 0, ref = window;;) {
 				var k = name.indexOf('.', j),
-					nm = k >= 0 ? name.substring(j, k): name.substring(j);
+					nm = k >= 0 ? name.substring(j, k) : name.substring(j);
 				var nxt = ref[nm];
 				if (k < 0 || !nxt) {
-					if (fn)
+					if (fn) {
 						if (nxt) fn(nxt);
 						else
 							zk.load(name.substring(0, name.lastIndexOf('.')),
 								function () {fn(zk.$import(name));});
+					}
 					_caches[name] = nxt;
 					return nxt;
 				}
@@ -723,7 +724,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 				var zf = zk.feature;
 				if (!(zf && zf.ee)) {
 					for (var p in superpt) {//inherit non-static
-						var $p = '|'+p+'|';
+						var $p = '|' + p + '|';
 						if ('|_$super|_$subs|$class|_$extds|superclass|className|widgetName|blankPreserved|'.indexOf($p) < 0) {
 							thispt[p] = superpt[p];	
 						} else if (thispt[p] == undefined && '|className|widgetName|blankPreserved|'.indexOf($p) >= 0) {
@@ -742,13 +743,13 @@ foo.Widget = zk.$extends(zk.Widget, {
 			jclass.$copied = true;
 		} else {
 			function _init() { this.constructor = jclass; };
-		    _init.prototype = superclass.prototype;
-		    jclass.prototype = new _init();
+			_init.prototype = superclass.prototype;
+			jclass.prototype = new _init();
 			thispt = jclass.prototype;
 		}
 		
 		for (var p in superclass) //inherit static
-			if ('|prototype|$copyf|$copied|'.indexOf('|'+p+'|') < 0)
+			if ('|prototype|$copyf|$copied|'.indexOf('|' + p + '|') < 0)
 				jclass[p] = superclass[p];
 
 		zk.copy(jclass, staticMembers);
@@ -871,9 +872,9 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 		case 'string':
 			// B50-ZK-493: shall update subclasses
 			if (fe)
-				_overrideSub(dst, backup, dst['$'+backup] = dst[backup], dst[backup] = src, true);
+				_overrideSub(dst, backup, dst['$' + backup] = dst[backup], dst[backup] = src, true);
 			else {
-				dst['$'+backup] = dst[backup];
+				dst['$' + backup] = dst[backup];
 				dst[backup] = src;
 			}
 			return dst;
@@ -979,12 +980,12 @@ wgt.setSomething(somevalue, {force:true});
 				pt = klass.prototype,
 				after = props[nm], before = null;
 			if (jq.isArray(after)) {
-				before = after.length ? after[0]: null;
-				after = after.length > 1 ? after[1]: null;
+				before = after.length ? after[0] : null;
+				after = after.length > 1 ? after[1] : null;
 			}
 			pt['set' + nm2] = before ?
-				after ? defSet11(nm1, before, after): defSet10(nm1, before):
-				after ? defSet01(nm1, after): defSet00(nm1);
+				after ? defSet11(nm1, before, after) : defSet10(nm1, before) :
+				after ? defSet01(nm1, after) : defSet00(nm1);
 			pt['get' + nm2] = pt['is' + nm2] = defGet(nm1);
 		}
 		return klass;
@@ -1002,7 +1003,7 @@ wgt.setSomething(somevalue, {force:true});
 	 * @return int the integer
 	 */
 	parseInt: function (v, b) {
-		return v && !isNaN(v = parseInt(v, b || 10)) ? v: 0;
+		return v && !isNaN(v = parseInt(v, b || 10)) ? v : 0;
 	},
 	/** Parses a string to a floating number.
 	 * <p>It is the same as the built-in parseFloat method except it never return
@@ -1012,7 +1013,7 @@ wgt.setSomething(somevalue, {force:true});
 	 * @since 5.0.2
 	 */
 	parseFloat: function (v) {
-		return v && !isNaN(v = parseFloat(v)) ? v: 0;
+		return v && !isNaN(v = parseFloat(v)) ? v : 0;
 	},
 
 	/** Assigns a value to the specified property.
@@ -1062,7 +1063,7 @@ zk.set(dst, src, ["foo", "mike"]);
 				n = value[j++];
 				m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
 				if (!extra || m || name[n] !== undefined) //extra: ignoreUndefined in this case
-					zk._set(o, n, m ? m.call(name): name[n]);
+					zk._set(o, n, m ? m.call(name) : name[n]);
 			}
 		return o;
 	},
@@ -1115,7 +1116,7 @@ zk.endProcessing();
 	 */
 	startProcessing: function (timeout, pid /* internal use only */) {
 		zk.processing = true;
-		var t = setTimeout(jq.isReady ? showprgb: showprgbInit, timeout > 0 ? timeout: 0);
+		var t = setTimeout(jq.isReady ? showprgb : showprgbInit, timeout > 0 ? timeout : 0);
 		if (pid) {
 			_procq[pid] = t;
 		}
@@ -1203,11 +1204,11 @@ zk.log('value is", value);
 				})(arguments)
 			, (detailed === zk)
 		);
-		_logmsg = (_logmsg ? _logmsg + msg: msg) + '\n';
+		_logmsg = (_logmsg ? _logmsg + msg : msg) + '\n';
 		if (zk.mobile) {
 			console.log(_logmsg);
 			_logmsg = null;
-		} else setTimeout(function(){jq(doLog);}, 300);
+		} else setTimeout(function () {jq(doLog);}, 300);
 	},
 	/** Make a time stamp for this momemt; used for performance tuning.
 	 * A time stamp is represented by a name. It is an easy way to measure
@@ -1251,9 +1252,9 @@ zk.log('value is", value);
 	 * @return String the encoded URI
 	 */
 	ajaxURI: function (uri, opts) {
-		var ctx = zk.Desktop.$(opts?opts.desktop:null),
+		var ctx = zk.Desktop.$(opts ? opts.desktop : null),
 			au = opts && opts.au;
-		ctx = (ctx ? ctx: zk)[au ? 'updateURI': 'contextURI'];
+		ctx = (ctx ? ctx : zk)[au ? 'updateURI' : 'contextURI'];
 		uri = uri || '';
 
 		var abs = uri.charAt(0) == '/';
@@ -1265,10 +1266,10 @@ zk.log('value is", value);
 
 		var j = ctx.indexOf(';'), //ZK-1668: may have multiple semicolon in the URL
 			k = ctx.lastIndexOf('?');
-		if (j < 0 && k < 0) return abs ? ctx + uri: uri;
+		if (j < 0 && k < 0) return abs ? ctx + uri : uri;
 
 		if (k >= 0 && (j < 0 || k < j)) j = k;
-		var prefix = abs ? ctx.substring(0, j): '';
+		var prefix = abs ? ctx.substring(0, j) : '';
 
 		if (opts && opts.ignoreSession)
 			return prefix + uri;
@@ -1277,8 +1278,8 @@ zk.log('value is", value);
 			l = uri.indexOf('?');
 		return l >= 0 ?
 			k >= 0 ?
-			  prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l+1):
-			  prefix + uri.substring(0, l) + suffix + uri.substring(l):
+			  prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l + 1) :
+			  prefix + uri.substring(0, l) + suffix + uri.substring(l) :
 			prefix + uri + suffix;
 	},
 	/** Declares the desktop is used for the stateless context.
@@ -1332,13 +1333,13 @@ zk.log('value is", value);
 					fun = jq.evalJSON(fun);
 				try {
 					dataValue = jq.parseJSON(dataValue);
-				} catch (e){}
+				} catch (e) {}
 				var dataHandlerService,
 					w = wgt;
-				for (; w ; w = w.parent) {
+				for (; w; w = w.parent) {
 					if (w['$ZKBINDER$']) {
 						if (!w._$binder) w._$binder = new zkbind.Binder(w, this);
-						dataHandlerService =  w._$binder;
+						dataHandlerService = w._$binder;
 						break;
 					} else if (w['$ZKAUS$']) {
 						if (!w._$service) w._$service = new zk.Service(w, this);
@@ -1361,7 +1362,7 @@ zk.log('value is", value);
 				fun.call(this, wgt, dataValue);
 			}};
 		}
-		zk.error('not found: '+ name);
+		zk.error('not found: ' + name);
 	}
 });
 
@@ -1372,15 +1373,15 @@ zk.log('value is", value);
 	}
 
 	// jQuery 1.9 remove the jQuery.browser
-	jq.uaMatch = function( ua ) {
+	jq.uaMatch = function (ua) {
 		ua = ua.toLowerCase();
 
-		var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
-			/(webkit)[ \/]([\w.]+)/.exec( ua ) ||
-			/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
-			/(msie) ([\w.]+)/.exec( ua ) ||
-			ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
-			[];
+		var match = /(chrome)[ \/]([\w.]+)/.exec(ua)
+			|| /(webkit)[ \/]([\w.]+)/.exec(ua)
+			|| /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua)
+			|| /(msie) ([\w.]+)/.exec(ua)
+			|| ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua)
+			|| [];
 
 		return {
 			browser: match[ 1 ] || '',
@@ -1389,19 +1390,19 @@ zk.log('value is", value);
 	};
 
 	// Don't clobber any existing jq.browser in case it's different
-	if ( !jq.browser ) {
-		matched = jq.uaMatch( navigator.userAgent );
+	if (!jq.browser) {
+		matched = jq.uaMatch(navigator.userAgent);
 		browser = {};
 
-		if ( matched.browser ) {
+		if (matched.browser) {
 			browser[ matched.browser ] = true;
 			browser.version = matched.version;
 		}
 
 		// Chrome is Webkit, but Webkit is also Safari.
-		if ( browser.chrome ) {
+		if (browser.chrome) {
 			browser.webkit = true;
-		} else if ( browser.webkit ) {
+		} else if (browser.webkit) {
 			browser.safari = true;
 		}
 
@@ -1420,7 +1421,7 @@ zk.log('value is", value);
 	zk.safari = browser.webkit && !zk.chrome; // safari only
 
 	// support W$'s Edge
-	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0) && _ver(agent.substring(iosver+5));
+	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0) && _ver(agent.substring(iosver + 5));
 	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent) && (
 		//ZK-2245: add version info to zk.ios
 		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
@@ -1452,7 +1453,7 @@ zk.log('value is", value);
 			zk.iex = ie11;
 		
 		if (zk.iex) {
-			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
+			if ((zk.ie = document.documentMode || zk.iex) < 6) //IE7 has no documentMode
 				zk.ie = 6; //assume quirk mode
 			// zk.ien: the version n or later but less than 11
 			if (zk.ie < 11 && zk.ie > 6) {
@@ -1517,16 +1518,16 @@ zk.Buffer = Array;
 	zk.Buffer.prototype = new Array;
 	zk.copy(zk.Buffer.prototype, {
 		push: function () {
-			for (var i = 0, j = arguments.length; i<j;i++)
+			for (var i = 0, j = arguments.length; i < j;i++)
 				if (arguments[i] != null || arguments[i] != undefined)
 					this.out += arguments[i];
 		},
 		join: function (str) {
 			if (str)
-				throw "Wrong usage here! Please run the script `zk.Buffer = Array;` instead."
+				throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
 			return this.out;
 		},
-		shift: _zkf = function () {throw "Wrong usage here! Please run the script `zk.Buffer = Array;` instead.";},
+		shift: _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';},
 		unshift: _zkf,
 		pop: _zkf,
 		slice: _zkf,
@@ -1536,7 +1537,7 @@ zk.Buffer = Array;
 	zk.Buffer = Array;
 }
 
-//zk.Object//
+	//zk.Object//
 	function getProxy(o, f) { //used by zk.Object
 		return function () {
 				return f.apply(o, arguments);
@@ -1787,15 +1788,15 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 			$id = '#' + id,
 			click = zk.mobild ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
- 			html = '<div class="z-error" id="' + id + '">' +
- 			        '<div id="' + id + '-p">' +
- 			        '<div class="errornumbers">' + (++_errcnt) + ' Errors</div>' +
- 					'<div class="button"' + click + '="zk._Erbx.remove()">' +
- 					'<i class="z-icon-times"></i></div>' +
- 					'<div class="button"' + click + '="zk._Erbx.redraw()">' +
- 					'<i class="z-icon-refresh"></i></div></div>' +
- 					'<div class="messagecontent"><div class="messages">' +
- 			        zUtl.encodeXML(msg, {multiline : true}) + '</div></div></div>';
+ 			html = '<div class="z-error" id="' + id + '">'
+			+ '<div id="' + id + '-p">'
+			+ '<div class="errornumbers">' + (++_errcnt) + ' Errors</div>'
+			+ '<div class="button"' + click + '="zk._Erbx.remove()">'
+			+ '<i class="z-icon-times"></i></div>'
+			+ '<div class="button"' + click + '="zk._Erbx.redraw()">'
+			+ '<i class="z-icon-refresh"></i></div></div>'
+			+ '<div class="messagecontent"><div class="messages">'
+			+ zUtl.encodeXML(msg, {multiline: true}) + '</div></div></div>';
 
 		jq(document.body).append(html);
 		_erbx = this;
@@ -1831,7 +1832,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 		jq('#' + id + ' .messages')
 			.append('<div class="newmessage">' + msg + '</hr></div>');
 		jq('#' + id + ' .newmessage')
-			.removeClass('newmessage').addClass('message').slideDown(600)
+			.removeClass('newmessage').addClass('message').slideDown(600);
 	},
 	remove: function () {
 		if (_erbx) _erbx.destroy();

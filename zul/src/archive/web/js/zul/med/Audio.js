@@ -81,7 +81,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		 * @param String preload
 		 * @since 7.0.0
 		 */	
-		preload: function(v) {
+		preload: function (v) {
 			var n = this.$n();
 			if (n && v !== undefined) n.preload = v;
 		},
@@ -132,9 +132,9 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	/** Stops the audio at the client.
 	 */
-    stop: function () {
-        _invoke(this, 'stop');
-    },
+	stop: function () {
+		_invoke(this, 'stop');
+	},
 	/** Pauses the audio at the client.
 	 */
 	pause: function () {
@@ -145,7 +145,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		this.stop();
 		this.$supers(Audio, 'unbind_', arguments);
 	},
-	domAttrs_: function(no){
+	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments);
 		if (this._autoplay) 
 			attr += ' autoplay';
@@ -159,16 +159,16 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			attr += ' muted';
 		return attr;
 	},
-	domContent_: function() {
+	domContent_: function () {
 		var src = this._src,
 			length = src.length,
 			result = '';
-		for (var i = 0; i < length; i ++) {
+		for (var i = 0; i < length; i++) {
 			result += '<source src="' + src[i] + '" type="' + this._MIMEtype(src[i]) + '">';
 		}
 		return result;
 	},
-	_MIMEtype: function(name) {
+	_MIMEtype: function (name) {
 		var start = name.lastIndexOf('.'),
 			type = 'wav';
 		if (start !== -1) {

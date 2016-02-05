@@ -15,7 +15,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 zk.override(zk.Widget.prototype, _WidgetX, {
 	$binder: function () {
 		var w = this;
-		for (; w ; w = w.parent) {
+		for (; w; w = w.parent) {
 			if (w['$ZKBINDER$'])
 				break;
 		}
@@ -77,7 +77,7 @@ zkbind.$ = function (n, opts) {
 		if (opts[prop]) {
 			var ignores = {};
 			for (var key in opts[prop]) {
-				ignores[prefix+key] = opts[prop][key];
+				ignores[prefix + key] = opts[prop][key];
 			}
 			opts[prop] = ignores;
 		}
@@ -117,7 +117,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 */
 	unAfter: function (cmd, fn) {
 		var ac = this._aftercmd[cmd];
-		for (var j = ac ? ac.length: 0; j--;) {
+		for (var j = ac ? ac.length : 0; j--;) {
 			if (ac[j] == fn)
 				ac.splice(j, 1);
 		}
@@ -146,7 +146,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 			if (opts.repeatIgnore)
 				_fixCommandName('onBindCommand$', opts, 'repeatIgnore');
 		}
-		zAu.send(new zk.Event(wgt, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), timeout != undefined ? timeout : 38);
+		zAu.send(new zk.Event(wgt, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
 		return this;
 	},
@@ -165,13 +165,13 @@ zkbind.Binder = zk.$extends(zk.Object, {
 			if (opts.repeatIgnore)
 				_fixCommandName('onBindGlobalCommand$', opts, 'repeatIgnore');
 		}
-		zAu.send(new zk.Event(wgt, "onBindGlobalCommand$" + cmd, {cmd: cmd, args: args}, zk.copy({toServer:true}, opts)), timeout != undefined ? timeout : 38);
+		zAu.send(new zk.Event(wgt, 'onBindGlobalCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
 		return this;
 	},
 	$doAfterCommand: function (cmd, args) {
 		var ac = this._aftercmd[cmd];
-		for (var i = 0, j = ac ? ac.length: 0; i < j; i++)
+		for (var i = 0, j = ac ? ac.length : 0; i < j; i++)
 			ac[i].apply(this, [args]);
 	}
 }, {

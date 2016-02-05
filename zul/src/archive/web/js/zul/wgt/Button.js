@@ -98,39 +98,39 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    // B60-ZK-1176
 		    // Autodisable should not re-enable when setDisabled(true) is called during onClick 
 		    function (v, opts) {
-		    	if (opts && opts.adbs)
-		    		// called from zul.wgt.ADBS.autodisable
-		    		this._adbs = true;	// Start autodisabling  
-		    	else if (!opts || opts.adbs === undefined)
-		    		// called somewhere else (including server-side)
-		    		this._adbs = false;	// Stop autodisabling
-		    	if (!v) {
-		    		if (this._adbs) {
-		    			// autodisable is still active, allow enabling
-		    			this._adbs = false;
-		    		} else if (opts && opts.adbs === false)
-		    			// ignore re-enable by autodisable mechanism
-		    			return this._disabled;
-		    	}
-		    	return v;
-		    }, 
-		    function (v) {
-		    	var self = this,
-		    		doDisable = function() { 
-			    		if (self.desktop) {
-			    			jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146 
-			    			// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
-			    			if (self._upload)
-			    				v ? _cleanUpld(self) : _initUpld(self);
-			    		}
-			    	};
-		    	
-		    	// ZK-2042: delay the setting when the button's type is submit 
-		    	if (this._type == 'submit')
-		    		setTimeout(doDisable, 50);
-		    	else
-		    		doDisable();
-		    }
+				if (opts && opts.adbs)
+					// called from zul.wgt.ADBS.autodisable
+					this._adbs = true;	// Start autodisabling  
+				else if (!opts || opts.adbs === undefined)
+					// called somewhere else (including server-side)
+					this._adbs = false;	// Stop autodisabling
+				if (!v) {
+					if (this._adbs) {
+						// autodisable is still active, allow enabling
+						this._adbs = false;
+					} else if (opts && opts.adbs === false)
+						// ignore re-enable by autodisable mechanism
+						return this._disabled;
+				}
+				return v;
+			}, 
+			function (v) {
+				var self = this,
+					doDisable = function () { 
+						if (self.desktop) {
+							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146 
+							// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
+							if (self._upload)
+								v ? _cleanUpld(self) : _initUpld(self);
+						}
+					};
+				
+				// ZK-2042: delay the setting when the button's type is submit 
+				if (this._type == 'submit')
+					setTimeout(doDisable, 50);
+				else
+					doDisable();
+			}
 		],
 		/*	 B70-ZK-2031: Use LabelImageWidget's define instead
 		image: function (v) {
@@ -148,7 +148,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n();
-			if (n) n.tabIndex = v||'';
+			if (n) n.tabIndex = v || '';
 		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this button.
@@ -242,7 +242,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (btn.disabled) {
 			if (!wgt._delayFocus) {
 				wgt._delayFocus = true;
-				setTimeout(function() {
+				setTimeout(function () {
 					if (wgt.desktop && !wgt.isDisabled()) {
 						if (!zk.focusBackFix || !wgt._upload) {
 							zk(wgt.$n()).focus(timeout);
@@ -252,7 +252,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				}, 0);
 			}
 			return false;
-    	}
+		}
 
 		// Bug ZK-354: refer to _docMouseDown in mount.js for details
 		if (!zk.focusBackFix || !this._upload) {
@@ -271,11 +271,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		else
 			img = '<img class="' + this.$s('image') + '" src="' + img + '" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
-		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
+		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
 		return this.getDir() == 'reverse' ?
-			label + space + img: img + space + label;
+			label + space + img : img + space + label;
 	},
-	onShow: function() {
+	onShow: function () {
 		// ZK-2233: should sync upload position when button showed
 		if (this.$n() && !this._disabled && this._uplder) {
 			this._uplder.sync();
@@ -333,7 +333,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		//Unlike DOM, we don't proprogate to parent (otherwise, onClick
 		//will fired)
 	},
-	setFlexSize_: function(sz) { //Bug #2870652
+	setFlexSize_: function (sz) { //Bug #2870652
 		var n = this.$n();
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
@@ -370,7 +370,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */
-	autodisable: function(wgt) {
+	autodisable: function (wgt) {
 		var ads = wgt._autodisable, aded, uplder;
 		if (ads) {
 			if (zk.chrome) wgt.domUnlisten_(wgt.$n(), 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
@@ -381,7 +381,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					var perm;
 					if (perm = ad.charAt(0) == '+')
 						ad = ad.substring(1);
-					ad = 'self' == ad ? wgt: wgt.$f(ad);
+					ad = 'self' == ad ? wgt : wgt.$f(ad);
 					//B50-3304877: autodisable and Upload
 					if (ad == wgt) { //backup uploader before disable
 						uplder = wgt._uplder;
@@ -391,11 +391,12 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					if (ad && !ad._disabled) {
 						// B60-ZK-1176: distinguish from other usages
 						ad.setDisabled(true, {adbs: true, skip: true});
-						if (wgt.inServer)
+						if (wgt.inServer) {
 							if (perm)
 								ad.smartUpdate('disabled', true);
 							else if (!aded) aded = [ad];
 							else aded.push(ad);
+						}
 					}
 				}
 			}
@@ -405,7 +406,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 			if (uplder) {
 				uplder._aded = aded;
 				wgt._uplder = uplder;//zul.Upload.sendResult came on it.
-			} else if (wgt.isListen('onClick', {asapOnly:true}))
+			} else if (wgt.isListen('onClick', {asapOnly: true}))
 				zWatch.listen({onResponse: aded});
 			else
 				setTimeout(function () {aded.onResponse();}, 800);

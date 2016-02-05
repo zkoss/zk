@@ -29,11 +29,11 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		this._localizedSymbols = wgt._localizedSymbols;
 	},
 	format: 'yyyyMMdd',
-	parseConstraint_: function(constraint){
+	parseConstraint_: function (constraint) {
 		var len = this.format.length + 1;
 		var arr = this._cstArr;
-		if (constraint.startsWith("between")) {
-			var j = constraint.indexOf("and", 7);
+		if (constraint.startsWith('between')) {
+			var j = constraint.indexOf('and', 7);
 			if (j < 0 && zk.debugJS) 
 				zk.error('Unknown constraint: ' + constraint);
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format);
@@ -47,11 +47,11 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			this._beg.setHours(0,0,0,0);
 			this._end.setHours(0,0,0,0);
 			arr[arr.length] = 'between';
-		} else if (constraint.startsWith("before") && !constraint.startsWith("before_")) {
+		} else if (constraint.startsWith('before') && !constraint.startsWith('before_')) {
 			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format);
 			this._end.setHours(0,0,0,0);
 			arr[arr.length] = 'before';
-		} else if (constraint.startsWith("after") && !constraint.startsWith("after_")) {
+		} else if (constraint.startsWith('after') && !constraint.startsWith('after_')) {
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format);
 			this._beg.setHours(0,0,0,0);
 			arr[arr.length] = 'after';
@@ -74,9 +74,9 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	 */
 	outOfRangeValue: function () {
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?
-				new zk.fmt.Calendar(null, this._localizedSymbols).formatDate(this._beg, this.format) + " ~ "
+				new zk.fmt.Calendar(null, this._localizedSymbols).formatDate(this._beg, this.format) + ' ~ '
 					+ new zk.fmt.Calendar().formatDate(this._end, this.format) :
-					">= " + new zk.fmt.Calendar().formatDate(this._beg, this.format):
-					"<= " + new zk.fmt.Calendar().formatDate(this._end, this.format));
+					'>= ' + new zk.fmt.Calendar().formatDate(this._beg, this.format) :
+					'<= ' + new zk.fmt.Calendar().formatDate(this._end, this.format));
 	}
 });

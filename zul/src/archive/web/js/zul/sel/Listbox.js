@@ -80,7 +80,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		 * @param String msg
 		 * @since 5.0.7
 		 */
-		emptyMessage: function(msg) {
+		emptyMessage: function (msg) {
 			if(this.desktop)
 				jq(this.$n('empty')).html(msg);
 		}
@@ -167,7 +167,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	onSize: function () {
 		this.$supers(Listbox, 'onSize', arguments);
 		var self = this,
-			canInitScrollbar =  this.desktop && !this.inSelectMold() && !this._nativebar;
+			canInitScrollbar = this.desktop && !this.inSelectMold() && !this._nativebar;
 		// refix ZK-2840: only init scrollbar when height or vflex is set in mobile
 		if (!this._scrollbar && canInitScrollbar) {
 			if (!zk.mobile || (zk.mobile && (this.getHeight() || this.getVflex()))) {
@@ -275,7 +275,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this.$n('rows') || this.$n('cave');
 	},	
 	insertChildHTML_: function (child, before, desktop) {
-		if (before = before && (!child.$instanceof(zul.sel.Listitem) || before.$instanceof(zul.sel.Listitem)) ? before.getFirstNode_(): null)
+		if (before = before && (!child.$instanceof(zul.sel.Listitem) || before.$instanceof(zul.sel.Listitem)) ? before.getFirstNode_() : null)
 			jq(before).before(child.redrawHTML_());
 		else
 			jq(this.getCaveNode()).append(child.redrawHTML_());
@@ -444,7 +444,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			lh._checked = this._isAllSelected();
 		this.$supers(Listbox, '_updHeaderCM', arguments);
 	},// @Override F70-ZK-2433
-	checkOnHighlightDisabled_: function() {
+	checkOnHighlightDisabled_: function () {
 		if (this._selectOnHighlightDisabled) {
 			var selection = window.getSelection || document.selection;
 			if (selection) {
@@ -479,18 +479,18 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 		}
 	},
 	 /**
-     * Returns <tt>true</tt> if the iteration has more elements
-     * @return boolean
-     */
+	 * Returns <tt>true</tt> if the iteration has more elements
+	 * @return boolean
+	 */
 	hasNext: function () {
 		this._init();
 		return this.p;
 	},
 	/**
-     * Returns the next element in the iteration.
-     *
-     * @return Listitem the next element in the iteration.
-     */
+	 * Returns the next element in the iteration.
+	 *
+	 * @return Listitem the next element in the iteration.
+	 */
 	next: function () {
 		this._init();
 		var p = this.p,

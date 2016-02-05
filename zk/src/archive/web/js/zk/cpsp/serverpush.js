@@ -13,9 +13,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 zk.cpsp.SPush = zk.$extends(zk.Object, {
 	start: function (dt, min, max, factor) {
 		this.desktop = dt;
-		this.min = min > 0 ? min: 1000;
-		this.max = max > 0 ? max: 15000;
-		this.factor = factor > 0 ? factor: 5;
+		this.min = min > 0 ? min : 1000;
+		this.max = max > 0 ? max : 15000;
+		this.factor = factor > 0 ? factor : 5;
 
 		var freq = this.min / 4;
 		if (freq < 500) freq = 500; //no less than 500

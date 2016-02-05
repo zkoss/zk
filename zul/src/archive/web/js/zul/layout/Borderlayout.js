@@ -136,11 +136,11 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		return o == 'w' ?
 			Math.max(
 				_getRegionSize(north, true), _getRegionSize(south, true),
-				_getRegionSize(east, true, true) + _getRegionSize(west, true, true) +
-				_getRegionSize(center, true)):
-			_getRegionSize(north, false, true) + 
-				_getRegionSize(south, false, true) +
-				Math.max(
+				_getRegionSize(east, true, true) + _getRegionSize(west, true, true)
+				+ _getRegionSize(center, true)) :
+			_getRegionSize(north, false, true)
+				+ _getRegionSize(south, false, true)
+				+ Math.max(
 					_getRegionSize(east), _getRegionSize(west),
 					_getRegionSize(center));
 	},
@@ -266,8 +266,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			el.style.width = jq.px0(ambit.w);
 			var contentWidth = $el.contentWidth(); 
 			//ZK-2750, prevent parent region grows up infinitely
-			if (zk.ie > 8 && (wgt.$instanceof(zul.layout.West) || 
-					wgt.$instanceof(zul.layout.East)) && !wgt._width && !wgt._hflex)
+			if (zk.ie > 8 && (wgt.$instanceof(zul.layout.West)
+				|| wgt.$instanceof(zul.layout.East)) && !wgt._width && !wgt._hflex)
 				contentWidth++; // B50-ZK-641: text wrap in IE
 			bs.width = jq.px0(contentWidth); 
 			
@@ -290,7 +290,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				zUtl.fireSized(wgt);
 		}
 	},
-	_ignoreResize : function(el, w, h) { 
+	_ignoreResize: function (el, w, h) { 
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
 		}

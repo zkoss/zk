@@ -57,7 +57,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
 				break;
 		}
-		return j1 > 0 || j2 > 0 ? j1 > j2 ? r1 : r2: wgt;
+		return j1 > 0 || j2 > 0 ? j1 > j2 ? r1 : r2 : wgt;
 	}
 
 /** @class zUtl
@@ -174,7 +174,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		};
 		 // Functions for escaping and unescaping strings to/from HTML interpolation.
 
-		var escaper = function(match) {
+		var escaper = function (match) {
 			return escapeMap[match];
 		};
 		// Regexes for identifying a key that needs to be escaped
@@ -187,9 +187,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		return function (txt) {
-			txt = txt != null ? String(txt):'';
-   			return _encodeXML0(txt);
-   		};
+			txt = txt != null ? String(txt) : '';
+			return _encodeXML0(txt);
+		};
 	})(),
 	/** Encodes the string to a valid XML string.
 	 * Refer to {@link Utl} for more XML utilities.
@@ -217,7 +217,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		};
 		 // Functions for escaping and unescaping strings to/from HTML interpolation.
 
-		var escaper = function(match) {
+		var escaper = function (match) {
 			return escapeMap[match];
 		};
 		// Regexes for identifying a key that needs to be escaped
@@ -230,7 +230,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		return function (txt, opts) {
-			txt = txt != null ? String(txt):'';
+			txt = txt != null ? String(txt) : '';
 
 			if (!opts) // speed up the replacement.
    				return _encodeXML0(txt);
@@ -267,8 +267,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				}
 			} else {
 				// fixed B65-ZK-1836 that opt may be an empty object.
-   				return _encodeXML0(txt);
-   			}
+				return _encodeXML0(txt);
+			}
 
 			if (!k) return txt;
 			if (k < tl)
@@ -293,8 +293,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				if (l >= 0) {
 					var dec = txt.charAt(j + 1) == '#' ?
 						String.fromCharCode(txt.charAt(j + 2).toLowerCase() == 'x' ?
-							parseInt(txt.substring(j + 3, l), 16):
-							parseInt(txt.substring(j + 2, l), 10)):
+							parseInt(txt.substring(j + 3, l), 16) :
+							parseInt(txt.substring(j + 2, l), 10)) :
 						_decs[txt.substring(j + 1, l)];
 					if (dec) {
 						out += txt.substring(k, j) + dec;
@@ -303,8 +303,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				}
 			}
 		}
-		return !k ? txt:
-			k < tl ? out + txt.substring(k): out;
+		return !k ? txt :
+			k < tl ? out + txt.substring(k) : out;
 	},
 
 	/** A shortcut of <code>' cellpadding="0" cellspacing="0" border="0"'</code>.
@@ -370,7 +370,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;
-		for (; c; c = c.getParent ? c.getParent(): c.parent)
+		for (; c; c = c.getParent ? c.getParent() : c.parent)
 			if (p == c)
 				return true;
 		return false;
@@ -405,15 +405,15 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		var x = jq.innerX(), y = jq.innerY(),
-			style = ' style="left:'+x+'px;top:'+y+'px"',
+			style = ' style="left:' + x + 'px;top:' + y + 'px"',
 			idtxt = id + '-t',
 			idmsk = id + '-m',
-			html = '<div id="'+id+'"';
+			html = '<div id="' + id + '"';
 		if (mask)
-			html += '><div id="' + idmsk + '" class="z-modal-mask"'+style+'></div';
-		html += '><div id="'+idtxt+'" class="z-loading"'+style
-			+'><div class="z-loading-indicator"><span class="z-loading-icon"></span> '
-			+msg+'</div></div>';
+			html += '><div id="' + idmsk + '" class="z-modal-mask"' + style + '></div';
+		html += '><div id="' + idtxt + '" class="z-loading"' + style
+			+ '><div class="z-loading-indicator"><span class="z-loading-icon"></span> '
+			+ msg + '</div></div>';
 		if (icon)
 			html += '<div class="' + icon + '"></div>';
 		jq(document.body).append(html + '</div>');
@@ -453,7 +453,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					top = offset[1] + 10;
 				} else {
 					if (pos.indexOf('left') >= 0) left = x;
-					else if (pos.indexOf('right') >= 0)	left = x + wdgap -1;
+					else if (pos.indexOf('right') >= 0)	left = x + wdgap - 1;
 					else if (pos.indexOf('center') >= 0) left = x + wdgap / 2;
 					else left = 0;
 					
@@ -509,7 +509,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (opts.target) {
 			open(url, opts.target);
 		} else if (opts.overwrite) {
-			location.replace(url ? url: location.href);
+			location.replace(url ? url : location.href);
 		} else {
 			if (url) {
 				location.href = url;
@@ -519,7 +519,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				if(j < 0)
 					return;
 				
-				var	un = j >= 0 ? url.substring(0, j): url,
+				var	un = j >= 0 ? url.substring(0, j) : url,
 					pn = _pathname(location.href);
 				
 				j = pn.indexOf('#');
@@ -575,7 +575,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		var list = [];
 		for (var j = 0;;) {
 			var k = text.indexOf(',', j),
-				s = (k >= 0 ? text.substring(j, k): text.substring(j)).trim();
+				s = (k >= 0 ? text.substring(j, k) : text.substring(j)).trim();
 			if (s.length == 0) {
 				if (k < 0) break;
 				list.push(defaultValue);
@@ -621,8 +621,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * If false (or omitted), it is the same as {@link #appendAttr(String, Object)}.
 	 * @since 5.0.3
 	 */
-	appendAttr: function (nm, val, force)  {
-		return val || force ? ' ' + nm + '="' + val + '"': '';
+	appendAttr: function (nm, val, force) {
+		return val || force ? ' ' + nm + '="' + val + '"' : '';
 	},
 	/** Fires beforeSize, onFitSize and onSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.

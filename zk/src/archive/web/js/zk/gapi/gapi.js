@@ -26,24 +26,24 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function() {
+(function () {
 zk.gapi.GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
-zk.gapi.loadAPIs = function(wgt, callback, msg, timeout) {
+zk.gapi.loadAPIs = function (wgt, callback, msg, timeout) {
 	var opts = {};
-	opts['condition'] = function() {return window.google && window.google.load};
-	opts['callback'] = function() {callback(); delete zk.gapi.LOADING;}
+	opts['condition'] = function () {return window.google && window.google.load;};
+	opts['callback'] = function () {callback(); delete zk.gapi.LOADING;};
 	opts['message'] = msg;
 	if (!opts.condition()) {
 		zk.gapi.waitUntil(wgt, opts);
 		if (!zk.gapi.LOADING) { //avoid double loading Google Ajax APIs
 			zk.gapi.LOADING = true;
 			if (!opts.condition())
-				zk.loadScript('http://www.google.com/jsapi?key='+zk.googleAPIkey);
+				zk.loadScript('http://www.google.com/jsapi?key=' + zk.googleAPIkey);
 		}
 	} else
 		callback();
 };
-zk.gapi.waitUntil = function(wgt, opts) {
+zk.gapi.waitUntil = function (wgt, opts) {
 	opts.inittime = opts.inittime || new Date().getTime();
 	opts.timeout = opts.timeout || zk.gapi.GOOGLE_API_LOADING_TIMEOUT;
 	initMask(wgt, opts);
@@ -53,7 +53,7 @@ function waitUntil(wgt, opts) {
 	if (!opts.condition()) {
 		var timestamp0 = new Date().getTime();
 		if ((timestamp0 - opts.inittime) < opts.timeout) {
-			setTimeout(function() {waitUntil(wgt, opts);}, 100);
+			setTimeout(function () {waitUntil(wgt, opts);}, 100);
 			return;
 		}
 	}

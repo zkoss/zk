@@ -27,10 +27,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			spacing = box._spacing,
 			spacing0 = _spacing0(spacing),
 			vert = box.isVertical(),
-			spstyle = spacing && spacing != 'auto' ? (vert?'height:':'width:') + spacing: '';
+			spstyle = spacing && spacing != 'auto' ? (vert ? 'height:' : 'width:') + spacing : '';
 
-		oo += '<t' + (vert ? 'r' : 'd') + ' id="' + child.uuid +
-			'-chdex2" class="' + box.$s('separator') + '"';
+		oo += '<t' + (vert ? 'r' : 'd') + ' id="' + child.uuid
+			+ '-chdex2" class="' + box.$s('separator') + '"';
 
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
@@ -50,16 +50,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					var c = child.$n();
 					if (vert) {
 						if (child._nhflex && child._nhflex > 0) // B50-ZK-159: skip when min flex
-							child.setFlexSize_({width:'auto'});
+							child.setFlexSize_({width: 'auto'});
 						else if (c && this._isStretchAlign()) {//release width of children might cause wider box
 									 //bug 2951825, widget not necessary with HTML dom element(<script>)
 									 //add StretchAlign checking, see revision: 13172
-							var oldwidth= c.style.width;
+							var oldwidth = c.style.width;
 							if (oldwidth) {
-								var oldoffwidth= c.offsetWidth;
-								c.style.width= ''; //release the width of children so td can shrink
+								var oldoffwidth = c.offsetWidth;
+								c.style.width = ''; //release the width of children so td can shrink
 								if (c.offsetWidth > oldoffwidth)
-									c.style.width= oldwidth;
+									c.style.width = oldwidth;
 							}
 						}
 						if (!child.$instanceof(zul.wgt.Cell) && this._nhflex) {
@@ -68,16 +68,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						}
 					} else {
 						if (child._nvflex && child._nvflex > 0) // B50-ZK-159: skip when min flex
-							child.setFlexSize_({height:'auto'});
+							child.setFlexSize_({height: 'auto'});
 						else if (c && this._isStretchAlign()) {//release height of children might cause higher box
 									 //bug 2951825, widget not necessary with HTML dom element(<script>)
 									 //add StretchAlign checking, see revision: 13172
-							var oldheight= c.style.height;
+							var oldheight = c.style.height;
 							if (oldheight) {
 								var oldoffheight = c.offsetHeight;
-								c.style.height= ''; //release the height of children so td can shrink
+								c.style.height = ''; //release the height of children so td can shrink
 								if (c.offsetHeight > oldoffheight)
-									c.style.height= oldheight;
+									c.style.height = oldheight;
 							}
 						}
 						if (!child.$instanceof(zul.wgt.Cell) && this._nvflex) {
@@ -150,7 +150,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		 * <p>Default: start</p>
 		 * @return String
 		 */
-		align:  _zkf = function () {
+		align: _zkf = function () {
 			this.rerender(); //TODO: a better algoithm
 		},
 		/** Sets the alignment of cells of this box
@@ -242,8 +242,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		 */
 		sizedByContent: _zkf,
 		widths: _zkf = function (val) {
-		    this._sizes = val;
-		    this.rerender();
+			this._sizes = val;
+			this.rerender();
 		}
 	},
 	setHeights: function (val) {
@@ -268,7 +268,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	//super//
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: this.isVertical() ? 'z-vbox' : 'z-hbox';
+		return zcs != null ? zcs : this.isVertical() ? 'z-vbox' : 'z-hbox';
 	},
 
 	onChildVisible_: function (child) {
@@ -289,15 +289,15 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	_fixChildDomVisible: function (child, visible) {
 		var n = this._chdextr(child);
-		if (n) n.style.display = visible ? '': 'none';
+		if (n) n.style.display = visible ? '' : 'none';
 		n = child.$n('chdex2');
-		if (n) n.style.display = visible && !_spacing0(this._spacing) ? '': 'none';
+		if (n) n.style.display = visible && !_spacing0(this._spacing) ? '' : 'none';
 
 		if (this.lastChild == child) {
 			n = child.previousSibling;
 			if (n) {
 				n = n.$n('chdex2');
-				if (n) n.style.display = visible ? '': 'none';
+				if (n) n.style.display = visible ? '' : 'none';
 			}
 		}
 	},
@@ -311,7 +311,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var n = this.$n('real'), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
 				n.appendChild(document.createElement('tbody'));
-			jq(this.isVertical() ? tbs[0]: tbs[0].rows[0]).append(
+			jq(this.isVertical() ? tbs[0] : tbs[0].rows[0]).append(
 				this.encloseChildHTML_(child, true));
 		}
 		child.bind(desktop);
@@ -388,7 +388,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 						++k;
 					if (kid._nvflex && kid.getVflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
+						kid.setFlexSize_({height: '', width: ''});
 						var chdex = kid.$n('chdex');
 						if (chdex) {
 							var n;
@@ -406,7 +406,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 						++k;
 					if (kid._nhflex && kid.getHflex() != 'min') {
-						kid.setFlexSize_({height:'', width:''});
+						kid.setFlexSize_({height: '', width: ''});
 						var chdex = kid.$n('chdex');
 						if (chdex) {
 							var n;
@@ -483,7 +483,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					: zkp.contentWidth(true);
 		return zkp ? {height: hgh, width: wdh} : {height: 0, width: 0};
 	},
-	beforeChildrenFlex_: function(child) {
+	beforeChildrenFlex_: function (child) {
 		child._flexFixed = true;
 		
 		var	vert = this.isVertical(),
@@ -516,14 +516,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		
 		for (; xc; xc = xc.nextSibling) {
 			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? 
-					xc.firstChild.id ? xc.firstChild: xc.firstChild.firstChild : xc.firstChild : xc;
+					xc.firstChild.id ? xc.firstChild : xc.firstChild.firstChild : xc.firstChild : xc;
 
 			// B70-ZK-2390
 			for (; c; c = c.nextSibling)
 				if (c.nodeType != 3) break; //until not a text node
 				
-				zkc = zk(c),
-				fixedSize = false;
+			zkc = zk(c),
+			fixedSize = false;
 			if (zkc.isVisible()) {
 				var j = c.id ? c.id.indexOf('-') : 1,
 						cwgt = j < 0 ? zk.Widget.$(c.id) : null;
@@ -585,7 +585,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				isInit = !cwgt.$n().style.height;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({height:isz - minus});
+			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = vsz - minus;
 			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {				
@@ -609,7 +609,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				isInit = !cwgt.$n().style.height;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({height:isz - minus});
+			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = lastsz - minus;
 			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
@@ -633,7 +633,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				isInit = !cwgt.$n().style.width;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({width:hsz - minus});
+			cwgt.setFlexSize_({width: hsz - minus});
 			cwgt._hflexsz = hsz - minus;
 			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
@@ -654,7 +654,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				isInit = !cwgt.$n().style.width;
 
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({width:lastsz - minus});
+			cwgt.setFlexSize_({width: lastsz - minus});
 			cwgt._hflexsz = lastsz - minus;
 			
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
@@ -705,7 +705,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			for (var j = 0, len = szes.length, c = this.firstChild;
 			c && j < len; c = c.nextSibling) {
 				if (child == c) {
-					style = (vert ? 'height:':'width:') + szes[j];
+					style = (vert ? 'height:' : 'width:') + szes[j];
 					break;
 				}
 				if (!c.$instanceof($Splitter))
@@ -715,14 +715,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 		if (!vert && !child.isVisible()) style += style ? ';display:none' : 'display:none';
 		if (!vert) style += style ? ';height:100%' : 'height:100%';
-		return style ? html + ' style="' + style + '"': html;
+		return style ? html + ' style="' + style + '"' : html;
 	},
-	_isStretchPack: function() {
+	_isStretchPack: function () {
 		//when pack has specifies 'stretch' or there are splitter kids which 
 		//implies pack='stretch'
 		return this._splitterKid || this._stretchPack;
 	},
-	_isStretchAlign: function() {
+	_isStretchAlign: function () {
 		return this._align == 'stretch';
 	},
 	//called by Splitter
@@ -732,13 +732,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zWatch.listen({onSize: this, onHide: this});
 		}
 	},
-	_unbindWatch: function() {
+	_unbindWatch: function () {
 		if (this._watchBound) {
 			zWatch.unlisten({onSize: this, onHide: this});
 			delete this._watchBound;
 		}
 	},
-	bind_: function() {
+	bind_: function () {
 		this.$supers(Box, 'bind_', arguments);
 		this._bindFixTd();
 		if (this._isStretchAlign())
@@ -752,13 +752,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this._unbindFixTd();
 		this.$supers(Box, 'unbind_', arguments);
 	},
-	_bindAlign: function() {
+	_bindAlign: function () {
 		if (!this._watchAlign) {
 			this._watchAlign = true;
 			zWatch.listen({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 		}
 	},
-	_unbindAlign: function() {
+	_unbindAlign: function () {
 		if (this._watchAlign) {
 			zWatch.unlisten({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 			delete this._watchAlign;
@@ -782,33 +782,33 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_bindFixTd: function() {
+	_bindFixTd: function () {
 		if (!this._watchTd) {
 			this._watchTd = true;
 			zWatch.listen({onSize: [this, _fixTd], onHide: [this, _fixTd]});
 		}
 	},
-	_unbindFixTd: function() {
+	_unbindFixTd: function () {
 		if (this._watchTd) {
 			zWatch.unlisten({onSize: [this, _fixTd], onHide: [this, _fixTd]});
 			delete this._watchTd;
 		}
 	},
-	_configPack: function() {
+	_configPack: function () {
 		var v = this._pack;
 		if (v) {
-	    	var v = v.split(',');
-	    	if (v[0].trim() == 'stretch') {
-	    		this._stretchPack = true;
-	    		this._pack2 = v.length > 1 ? v[1].trim() : null;
-	    	} else {
-	    		this._stretchPack = v.length > 1 && v[1].trim() == 'stretch';
-	    		this._pack2 = v[0].trim();
-	    	}
-    	} else {
-    		delete this._pack2;
-    		delete this._stretchPack;
-    	}
+			var v = v.split(',');
+			if (v[0].trim() == 'stretch') {
+				this._stretchPack = true;
+				this._pack2 = v.length > 1 ? v[1].trim() : null;
+			} else {
+				this._stretchPack = v.length > 1 && v[1].trim() == 'stretch';
+				this._pack2 = v[0].trim();
+			}
+		} else {
+			delete this._pack2;
+			delete this._stretchPack;
+		}
 	},
 	//watch//
 	onSize: _zkf = function () {
@@ -820,8 +820,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")
 
-		var nd = vert ? real.rows: real.rows[0].cells,
-			total = vert ? zk(real).revisedHeight(real.offsetHeight):
+		var nd = vert ? real.rows : real.rows[0].cells,
+			total = vert ? zk(real).revisedHeight(real.offsetHeight) :
 							zk(real).revisedWidth(real.offsetWidth),
 			sizes = this._sizes;
 
@@ -834,10 +834,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
-							c.style.height = zk(c).revisedHeight(i ? diff: total) + 'px';
+							c.style.height = zk(c).revisedHeight(i ? diff : total) + 'px';
 							d.style.height = ''; //just-in-case
 						} else {
-							d.style.height = zk(d).revisedHeight(i ? diff: total) + 'px';
+							d.style.height = zk(d).revisedHeight(i ? diff : total) + 'px';
 						}
 					}
 					total -= diff;
@@ -846,7 +846,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					//!sizes  B50-ZK-887: hbox's widths properties specified in Chrome is not precise
 					//if user set the widths , we freeze the with directly 
 					if(!sizes && d.id && !d.id.endsWith('-chdex2')) //TD
-						d.style.width = zk(d).revisedWidth(i ? diff: total) + 'px';
+						d.style.width = zk(d).revisedWidth(i ? diff : total) + 'px';
 					total -= diff;
 				}
 		}
@@ -854,11 +854,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	onHide: _zkf
 },{ //static
 	_toValign: function (v) {
-		return v ? 'start' == v ? 'top': 'center' == v ? 'middle':
-			'end' == v ? 'bottom': v: null;
+		return v ? 'start' == v ? 'top' : 'center' == v ? 'middle' :
+			'end' == v ? 'bottom' : v : null;
 	},
 	_toHalign: function (v) {
-		return v ? 'start' == v ? 'left': 'end' == v ? 'right': v: null;
+		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : null;
 	}
 });
 

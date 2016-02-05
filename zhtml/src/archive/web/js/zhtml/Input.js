@@ -25,7 +25,7 @@ zhtml.Input = zk.$extends(zhtml.Widget, {
 	_onChangeData: function (val, selbak) {
 		return {value: val,
 			start: zk(this.$n()).getSelectionRange()[0],
-			marshal: this._onChangeMarshal}
+			marshal: this._onChangeMarshal};
 	},
 	_onChangeMarshal: function () {
 		return [this.value, false, this.start];
@@ -34,11 +34,11 @@ zhtml.Input = zk.$extends(zhtml.Widget, {
 		this.$supers(zhtml.Input, 'bind_', arguments);
 		var n;
 
-		if (this.isListen('onChange', {any:true}) && (n = this.$n())) {
+		if (this.isListen('onChange', {any: true}) && (n = this.$n())) {
 			this._defValue = n.value;
 			this.domListen_(n, 'onChange');
 		}
-		if (this.isListen('onCheck', {any:true}) && (n = this.$n()))
+		if (this.isListen('onCheck', {any: true}) && (n = this.$n()))
 			this._defChecked = n.checked;
 	},
 	unbind_: function () {

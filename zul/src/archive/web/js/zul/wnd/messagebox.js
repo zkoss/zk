@@ -18,7 +18,7 @@ zul.wnd.Messagebox = {
 			var y1 = top - y;
 			if (y1 > 100) outer.style.top = jq.px0(top - (y1 - 100));
 		} else if (top > 100)
-			outer.style.top = "100px";
+			outer.style.top = '100px';
 		win.onSize();
 	}
 };

@@ -30,7 +30,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 			w = bp._hflex == 'min' && bp._hflexsz ? jq.px0(bp._hflexsz + zk(pp).padBorderWidth()) : bp.getWidth();
 			h = bp._vflex == 'min' && bp._vflexsz ? jq.px0(bp._vflexsz + zk(pp).padBorderHeight()) : bp.getHeight();
 		}
-		return [w||'auto', h||'auto'];
+		return [w || 'auto', h || 'auto'];
 	},
 	getCaveNode: function () {
 		return this.$n('pp') || this.$n();
@@ -52,7 +52,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		if (!this.firstChild) { 
 			// ignore when <bandpopup> is absent, but event is still fired
 			if (opts && opts.sendOnOpen)
-				this.fire('onOpen', {open:true, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
+				this.fire('onOpen', {open: true, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
 			return;
 		}
 		this.$supers('open', arguments);
@@ -69,7 +69,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		if(evt.domTarget == this.getInputNode())
 			this.$supers('enterPressed_', arguments);
 	},
-	doKeyUp_: function(evt) {
+	doKeyUp_: function (evt) {
 		//bug 3287082: do not fire onChanging when children typing.
 		if(evt.domTarget == this.getInputNode())
 			this.$supers('doKeyUp_', arguments);
@@ -82,7 +82,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		if (ppofs[0].endsWith('%')) {
 			ppfc.style.width = '100%';
 		} else if (ppofs[0] != 'auto') {
-			pp.style.width = zkpp.revisedWidth(ppfc.offsetWidth + zkpp.padBorderWidth()) +'px';
+			pp.style.width = zkpp.revisedWidth(ppfc.offsetWidth + zkpp.padBorderWidth()) + 'px';
 		}
-    }
+	}
 });

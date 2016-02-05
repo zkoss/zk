@@ -57,11 +57,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_hideShadow(wnd);
 		
 		jq(document.body).prepend(
-			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;' + 
-			'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;' + 
-			'width:' + ($el.width() + zk(el).padBorderWidth()) + 'px;' + 
-			'height:'+ ($el.height() + zk(el).padBorderHeight()) +'px;' + 
-			'z-index:'+el.style.zIndex+'"><dl></dl></div>');
+			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;'
+			+ 'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;'
+			+ 'width:' + ($el.width() + zk(el).padBorderWidth()) + 'px;'
+			+ 'height:' + ($el.height() + zk(el).padBorderHeight()) + 'px;'
+			+ 'z-index:' + el.style.zIndex + '"><dl></dl></div>');
 		dg._wndoffs = ofs;
 		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
@@ -111,7 +111,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//delete wgt._isDragging;
 
 		// Bug for ZK-385 clear position value after move
-        if (wgt._position && wgt._position != 'parent') {
+		if (wgt._position && wgt._position != 'parent') {
 			wgt._position = null;
 		}
 		wgt.zsync();
@@ -162,17 +162,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt.setTopmost();
 
 		if (!wgt._mask) {
-			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement(): null;
+			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement() : null;
 			wgt._mask = new zk.eff.FullMask({
 				id: wgt.uuid + '-mask',
-				anchor: anchor ? anchor: wgt.$n(),
+				anchor: anchor ? anchor : wgt.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: wgt._zIndex,
 				visible: realVisible
 			});
 			var tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
-			jq('#'+wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0 onclick="return false;" href="javascript:;" class="z-focus-a"></' + tag + '>');
-			wgt._anchor = jq('#'+wgt.uuid + '-mask-a')[0];
+			jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0 onclick="return false;" href="javascript:;" class="z-focus-a"></' + tag + '>');
+			wgt._anchor = jq('#' + wgt.uuid + '-mask-a')[0];
 		}
 		if (realVisible)
 			_markModal(wgt);
@@ -198,23 +198,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					else
 						wgt.focus();
 				}
-			}, -1)});
+			}, -1);});
 	}
 	function _unmarkModal(wgt) {
 		_modals.$remove(wgt);
 		if (zk.currentModal == wgt) {
 			var wnd = zk.currentModal = _modals[0],
-				fc = wnd ? wnd._lastfocus: _lastfocus;
+				fc = wnd ? wnd._lastfocus : _lastfocus;
 			if (!wnd)
 				_lastfocus = null;
 			if (!fc || !fc.desktop)
 				fc = wnd;
-			if (fc)
+			if (fc) {
 				if (wgt._updDOFocus === false)
 					wgt._updDOFocus = fc; //let _updDomOuter handle it
 				else
 					fc.focus(0); // use timeout for the bug 3057311
 					// use 0 instead of 10, otherwise it will cause this bug 1936366
+			}
 		}
 		wgt._lastfocus = null;
 	}
@@ -571,7 +572,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					
 					s.width = jq.px0($op[0].clientWidth - (!floated ? $op.zk.paddingWidth() : 0));
 					s.height = jq.px0($op[0].clientHeight - (!floated ? $op.zk.paddingHeight() : 0));
-					this._lastSize = {l:l, t:t, w:w, h:h};
+					this._lastSize = {l: l, t: t, w: w, h: h};
 
 					// restore.
 					s.top = '0';
@@ -828,8 +829,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				else
 					this._shadowWgt.sync();
 			}
-			if (this._mask ) { //ZK-1079
-				var n = (this._shadowWgt && this._shadowWgt.getBottomElement()) || this.$n() ; //null if ff3.5 (no shadow/stackup)
+			if (this._mask) { //ZK-1079
+				var n = (this._shadowWgt && this._shadowWgt.getBottomElement()) || this.$n(); //null if ff3.5 (no shadow/stackup)
 				if (n) this._mask.sync(n);
 			}
 		}
@@ -879,7 +880,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 
 		this.zsync();
 		var self = this;
-		setTimeout(function() {
+		setTimeout(function () {
 			zUtl.fireSized(self);
 		});
 	},
@@ -908,7 +909,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			this.zsync();
 		}
 	},
-	onSize: function() {
+	onSize: function () {
 		_hideShadow(this);
 		if (this._maximized)
 			_syncMaximized(this);
@@ -938,7 +939,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				floatFound = floatFound || wgt.isFloating_();
 			}
 			this.setVisible(false);
-			this.fire('onOpen', {open:false});
+			this.fire('onOpen', {open: false});
 		} else
 			for (; wgt; wgt = wgt.parent) {
 				if (wgt == this) {
@@ -1050,7 +1051,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		}
 		return false;
 	},
-	doKeyDown_: function(evt) {
+	doKeyDown_: function (evt) {
 		var n = evt.domTarget,
 			keyCode = evt.keyCode;
 		if (keyCode == '9' || keyCode == '16') { //TAB and SHIFT, skip them so tab/shift-tab will work as expected
@@ -1072,11 +1073,11 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			this.$supers('doKeyDown_', arguments);
 		}
 	},
-	domClass_: function(no) {
+	domClass_: function (no) {
 		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
 			bordercls = this._border;
 		
-		bordercls = 'normal' == bordercls ? '':
+		bordercls = 'normal' == bordercls ? '' :
 			'none' == bordercls ? 'noborder' : bordercls;
 		
 		if (bordercls)
@@ -1085,7 +1086,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (!(this.getTitle() || this.caption))
 			cls += ' ' + this.$s('noheader');
 		
-		cls += ' ' + this.$s(this._mode)   
+		cls += ' ' + this.$s(this._mode);   
 		return cls;	
 	},
 	
@@ -1110,9 +1111,9 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments);
 		if ((!no || !no.visible) && this._minimized)
-			style = 'display:none;'+style;
+			style = 'display:none;' + style;
 		if (this._mode != 'embedded')
-			style = 'position:absolute;'+style;
+			style = 'position:absolute;' + style;
 		return style;
 	},
 
@@ -1135,7 +1136,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 
 		if (this._maximizable && this._maximized) {
 			var self = this;
-			after.push(function() {
+			after.push(function () {
 				self._maximized = false;
 				self.setMaximized(true, true);
 			});
@@ -1146,7 +1147,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			zWatch.listen({onResponse: this});
 		}
 	},
-	detach: function() {
+	detach: function () {
 		// ZK-2247: remove iframe to prevent load twice
 		if (zk.ie > 8 || zk.chrome) {
 			var $jq = jq(this.$n()).find('iframe');
@@ -1214,10 +1215,10 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
-				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
-					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
-					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
-					c == 7 ? 'w-resize': 'nw-resize';
+				n.style.cursor = c == 1 ? 'n-resize' : c == 2 ? 'ne-resize' :
+					c == 3 ? 'e-resize' : c == 4 ? 'se-resize' :
+					c == 5 ? 's-resize' : c == 6 ? 'sw-resize' :
+					c == 7 ? 'w-resize' : 'nw-resize';
 				if (handle) jq(handle).removeClass(this.$s('header-move'));
 			} else {
 				n.style.cursor = this._backupCursor || ''; // bug #2977948
@@ -1304,7 +1305,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			return this.$supers('getContentEdgeWidth_', arguments);
 		}
 	},
-	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
+	setFlexSizeH_: function (n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n);
 		}
@@ -1346,10 +1347,10 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		var $el = jq(el);
 		jq(document.body).append(
 			'<div id="zk_ddghost" class="' + wnd.getZclass() + '-resize-faker"'
-			+' style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
-			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
+			+ ' style="position:absolute;top:'
+			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
+			+ $el.zk.offsetWidth() + 'px;height:' + $el.zk.offsetHeight()
+			+ 'px;z-index:' + el.style.zIndex + '"><dl></dl></div>');
 		return jq('#zk_ddghost')[0];
 	},
 	_endghostsizing: function (dg, origin) {
@@ -1362,7 +1363,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			};
 		}
 	},
-	_insizer: function(node, ofs, x, y) {
+	_insizer: function (node, ofs, x, y) {
 		var r = ofs[0] + node.offsetWidth, b = ofs[1] + node.offsetHeight;
 		if (x - ofs[0] <= 5) {
 			if (y - ofs[1] <= 5)
@@ -1413,7 +1414,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
 		dg.z_szofs = null;
 	},
-	_drawsizing: function(dg, pointer, evt) {
+	_drawsizing: function (dg, pointer, evt) {
 		if (dg.z_dir == 8 || dg.z_dir <= 2) {
 			var h = dg.z_box.height + dg.z_box.top - pointer[1];
 			if (h < dg.z_box.minHeight) {
@@ -1452,7 +1453,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_aftermove: _aftermove
 });
 
-zul.wnd.Skipper = zk.$extends(zk.Skipper, {
+	zul.wnd.Skipper = zk.$extends(zk.Skipper, {
 	$init: function (wnd) {
 		this._w = wnd;
 	},
@@ -1477,8 +1478,8 @@ zul.wnd.WindowRenderer = {
 	 * @param zul.wnd.Window wgt the window
 	 */
 	shallCheckBorder: function (wgt) {
-		return wgt._mode != 'popup' &&
-			(wgt._mode != 'embedded' || wgt.getBorder() != 'none');
+		return wgt._mode != 'popup'
+			&& (wgt._mode != 'embedded' || wgt.getBorder() != 'none');
 	}
 };
 })();

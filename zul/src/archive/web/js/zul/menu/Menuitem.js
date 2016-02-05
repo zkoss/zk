@@ -63,21 +63,21 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			//B60-ZK-1176
 			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
 			function (v, opts) {
-		    	if (opts && opts.adbs)
-		    		// called from zul.wgt.ADBS.autodisable
-		    		this._adbs = true;	// Start autodisabling  
-		    	else if (!opts || opts.adbs === undefined)
-		    		// called somewhere else (including server-side)
-		    		this._adbs = false;	// Stop autodisabling
-		    	if (!v) {
-		    		if (this._adbs)
-		    			// autodisable is still active, enable allowed
-		    			this._adbs = false;
-		    		else if (opts && opts.adbs === false)
-		    			// ignore re-enable by autodisable mechanism
-		    			return this._disabled;
-		    	}
-		    	return v;
+				if (opts && opts.adbs)
+					// called from zul.wgt.ADBS.autodisable
+					this._adbs = true;	// Start autodisabling
+				else if (!opts || opts.adbs === undefined)
+					// called somewhere else (including server-side)
+					this._adbs = false;	// Stop autodisabling
+				if (!v) {
+					if (this._adbs)
+					// autodisable is still active, enable allowed
+					this._adbs = false;
+					else if (opts && opts.adbs === false)
+					// ignore re-enable by autodisable mechanism
+					return this._disabled;
+				}
+				return v;
 			}, 
 			function (v, opts) {
 				this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
@@ -216,16 +216,16 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var added = this.isDisabled() ? this.$s('disabled') : '';
-			if (added) scls += (scls ? ' ': '') + added;
+			if (added) scls += (scls ? ' ' : '') + added;
 			added = (!this.getImage() && this.isCheckmark()) ? 
 						this.$s('checkable') + (this.isChecked() ? ' ' + this.$s('checked') : '') : '';
-			if (added) scls += (scls ? ' ': '') + added;
+			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;
 	},
 	domContent_: function () {
-		var label = '<span class="' + this.$s('text') + '">' + 
-				(zUtl.encodeXML(this.getLabel())) + '</span>',
+		var label = '<span class="' + this.$s('text') + '">'
+					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 			icon = '<i class="' + this.$s('icon') + ' z-icon-check"></i>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -237,9 +237,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (iconSclass) {
 				img = iconSclass;
 			} else {
-				img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '') +
-					' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' +
-					this.$s('image') + '" align="absmiddle" />';
+				img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '')
+					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' + this.$s('image') + '" align="absmiddle" />';
 			}
 		}
 		return img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + ' ' + label;
@@ -320,21 +319,23 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					// Bug #2154611 we shall eat the onclick event, if it is FF3.
 				}
 			}
-			if (!topmost)
-				for (var p = this.parent; p; p = p.parent)
+			if (!topmost) {
+				for (var p = this.parent; p; p = p.parent) {
 					if (p.$instanceof(zul.menu.Menupopup)) {
 						// if close the popup before choosing a file, the file chooser can't be triggered.
 						if (!p.isOpen() || this._uplder /*Bug #2911385 && !this._popup*/)
 							break;
 						this._updateHoverImage(); // remove hover image
-						p.close({sendOnOpen:true});
+						p.close({sendOnOpen: true});
 					} else if (!p.$instanceof(zul.menu.Menu)) //either menubar or non-menu*
 						break;
 					else
 						p._updateHoverImage(); // remove parent Menu hover image
+				}
+			}
 
 			var menubar;
-			if (zk.webkit && (menubar=this.getMenubar()) && menubar._autodrop)
+			if (zk.webkit && (menubar = this.getMenubar()) && menubar._autodrop)
 				menubar._noFloatUp = true;
 				//_noFloatUp used in Menu.js to fix Bug 1852304
 			this.$super('doClick_', evt, true);
@@ -353,7 +354,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	deferRedrawHTML_: function (out) {
 		var tag = this.isTopmost() ? 'td' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
+		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag,'>');
 	},
 	//@Override
 	getImageNode: function () {

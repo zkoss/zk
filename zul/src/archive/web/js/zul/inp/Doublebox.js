@@ -23,7 +23,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			raw = info.raw,
 			val = parseFloat(raw),
-			valstr = ''+val,
+			valstr = '' + val,
 			valind = valstr.indexOf('.'),
 			rawind = raw.indexOf('.');
 					
@@ -33,7 +33,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 				++rawind;
 			}
 
-			if (rawind >= 0 && raw.substring(raw.substring(rawind+1)) && valind < 0) { 
+			if (rawind >= 0 && raw.substring(raw.substring(rawind + 1)) && valind < 0) { 
 				valind = valstr.length;
 				valstr += '.';
 			}
@@ -42,7 +42,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 				vallen = valstr.length;
 		
 			//pre zeros
-			if (valind >=0 && valind < rawind) {
+			if (valind >= 0 && valind < rawind) {
 				vallen -= valind;
 				len -= rawind;
 				for(var zerolen = rawind - valind; zerolen-- > 0;)
@@ -55,37 +55,37 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 					valstr += '0';
 			}
 
-			if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
+			if (isNaN(val) || (raw != valstr && raw != '-' + valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
 				if (!isNaN(val) && raw != valstr) //Bug ZK-1218: show Illegal value instead if input is number but too long
 					return {error: zk.fmt.Text.format(msgzul.ILLEGAL_VALUE)};
 				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 			}
 		}
 
-		if(this._rounding == 7 && (this._errmsg/*server has to clean up*/ ||
-				zk.fmt.Number.isRoundingRequired(value, this.getFormat(), this._localizedSymbols)))
-					return {server:true};		
+		if(this._rounding == 7 && (this._errmsg/*server has to clean up*/
+			|| zk.fmt.Number.isRoundingRequired(value, this.getFormat(), this._localizedSymbols)))
+					return {server: true};		
 		
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
 		return val;
 	},
-	_allzero: function(val) {
-		for(var len= val.length; len-- > 0; )
+	_allzero: function (val) {
+		for(var len = val.length; len-- > 0;)
 			if (val.charAt(len) != '0') return false;
 		return true;
 	},
-	coerceToString_: function(value) {
+	coerceToString_: function (value) {
 		var fmt = this._format,
 			symbols = this._localizedSymbols,
-			DECIMAL = (symbols ? symbols: zk).DECIMAL;
+			DECIMAL = (symbols ? symbols : zk).DECIMAL;
 		return value == null ? '' : fmt ? 
 			zk.fmt.Number.format(fmt, value, this._rounding, symbols) : 
-			DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
+			DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL);
 	},
 	getAllowedKeys_: function () {
 		var symbols = this._localizedSymbols;
 		return this.$supers('getAllowedKeys_', arguments)
-			+ (symbols ? symbols: zk).DECIMAL + 'e';
+			+ (symbols ? symbols : zk).DECIMAL + 'e';
 		//supports scientific expression such as 1e2
 	}
 });

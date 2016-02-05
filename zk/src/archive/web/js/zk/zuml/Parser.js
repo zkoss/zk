@@ -21,7 +21,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		if (j >= 0)
 			txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
 		txt = txt.trim();
-		return txt ? '<div>' + txt.trim() + '</div>': null;
+		return txt ? '<div>' + txt.trim() + '</div>' : null;
 	}
 	function _aftCreate(wgt, cwgts, node, opts) {
 		var c;
@@ -50,7 +50,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 				cwgts[j].replaceHTML(ns[j]);
 		}
 
-		return cwgts.length <= 1 ? cwgts[0]: cwgts;
+		return cwgts.length <= 1 ? cwgts[0] : cwgts;
 	}
 	function _getPkgs(e) {
 		var pkgmap = {}, pkgs = []; //use {} to remove duplicate packages
@@ -65,7 +65,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			if (!zk.Widget.getClass(tn)) { //not register?
 				var clsnm = zk.wgt.WidgetInfo.getClassName(tn);
 				if (!clsnm) 
-					throw 'Unknown tag: '+tn;
+					throw 'Unknown tag: ' + tn;
 
 				var j = clsnm.lastIndexOf('.');
 				if (j >= 0)
@@ -102,13 +102,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			} else if ('attribute' == tn) {
 				var attnm = _eval(parent, e.getAttribute('name'), args);
 				if (!attnm)
-					throw 'The name attribute required, '+e;
+					throw 'The name attribute required, ' + e;
 				parent.set(attnm, zk.xml.Utl.getElementValue(e));
 				return;
 			} else {
 				var atts = e.attributes;
 
-				wgt = zk.Widget.newInstance(tn)
+				wgt = zk.Widget.newInstance(tn);
 				if (cwgts) cwgts.push(wgt);
 				if (parent) parent.appendChild(wgt);
 
@@ -155,18 +155,18 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 				t = s.substring(j, k);
 				l = s.indexOf('}', k + 2);
 				if (l < 0) {
-					s = s2 ? s2 + t: t; //ignore #{...
+					s = s2 ? s2 + t : t; //ignore #{...
 					break;
 				}
 
-				s2 = s2 ? s2 + t: t;
+				s2 = s2 ? s2 + t : t;
 				t = s.substring(k + 2, l); //EL
 
 				try {
 					var fn = new Function('var _=arguments[0];return ' + t);
-					t = wgt ? fn.call(wgt, args): fn(args);
+					t = wgt ? fn.call(wgt, args) : fn(args);
 				} catch (e) {
-					throw 'Failed to evaluate '+t;
+					throw 'Failed to evaluate ' + t;
 				}
 
 				if (!s2 && l == last) return t; //don't convert to string
@@ -180,28 +180,28 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 /** @class zk.zuml.Parser
  * The parser of using iZUML(Client-side ZUML).
  */
-  zk.zuml.Parser = {
-  	/** Parse the iZUML into widgets
-  	 * @param zk.Widget parent the root component
-  	 * @param String doc the content text of the domElement
-  	 * @param Map args a map of arguments
-  	 * @param Function fn the function to register for execution later
-  	 * @return zk.Widget
-  	 */
+zk.zuml.Parser = {
+/** Parse the iZUML into widgets
+ * @param zk.Widget parent the root component
+ * @param String doc the content text of the domElement
+ * @param Map args a map of arguments
+ * @param Function fn the function to register for execution later
+ * @return zk.Widget
+ */
 	create: function (parent, doc, args, fn) {
 		if (typeof args == 'function' && !fn) {
 			fn = args;
 			args = null;
 		}
 
-		doc = (typeof doc == 'string' ? zk.xml.Utl.parseXML(doc): doc).documentElement;
+		doc = (typeof doc == 'string' ? zk.xml.Utl.parseXML(doc) : doc).documentElement;
 
 		var cwgts = [];
 		zk.load(_getPkgs(doc), function () {
 			_create(parent, doc, args, cwgts);
-			if (fn) fn(cwgts.length <= 1 ? cwgts[0]: cwgts);
+			if (fn) fn(cwgts.length <= 1 ? cwgts[0] : cwgts);
 		});
-		return cwgts.length <= 1 ? cwgts[0]: cwgts;
+		return cwgts.length <= 1 ? cwgts[0] : cwgts;
 	},
 	/** Parse the iZUML into widgets
 	 * @param String node the id of the root component
@@ -228,5 +228,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 				});
 		return _aftCreate(wgt, cwgts, node, opts);
 	}
-  };
+};
 })();

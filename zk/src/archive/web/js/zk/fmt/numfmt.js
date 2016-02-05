@@ -15,10 +15,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _defaultSymbols = {
 		GROUPING: zk.GROUPING,
-		DECIMAL:  zk.DECIMAL,
-		PERCENT:  zk.PERCENT,
+		DECIMAL: zk.DECIMAL,
+		PERCENT: zk.PERCENT,
 		PER_MILL: zk.PER_MILL,
-		MINUS:    zk.MINUS
+		MINUS: zk.MINUS
 	};
 
 	function down(valStr, ri) {
@@ -39,7 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (j >= 0)
 			val = valStr.substring(0, j) + val;
-		return k ? '1'+val : val;
+		return k ? '1' + val : val;
 	}
 	function compareHalf(valStr, ri) {
 		var ch,
@@ -80,8 +80,8 @@ zk.fmt.Number = {
 		}
 	},
 	//Test if rounding is required (used if Rounding is UNNECESSARY
-	isRoundingRequired: function(val, fmt, localizedSymbols){
-		if(!fmt || val == null || val =='')
+	isRoundingRequired: function (val, fmt, localizedSymbols) {
+		if(!fmt || val == null || val == '')
 			return false;
 		
 		var useMinsuFmt;
@@ -103,7 +103,7 @@ zk.fmt.Number = {
 			ei = valStr.lastIndexOf('e'),
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
-			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei+1), 10));
+			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei + 1), 10));
 			
 		if(ei > 0) valStr = valStr.substring(0, ei);
 		if (shift > 0) {
@@ -122,7 +122,7 @@ zk.fmt.Number = {
 			} else {
 				//TODO finetune logic to prevent string operation.
 				if(indVal >= 0)
-					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1);
 				for(; nind++ < 0;)
 					valStr = '0' + valStr;
 				valStr = '0.' + valStr;
@@ -189,17 +189,17 @@ zk.fmt.Number = {
 			ei = valStr.lastIndexOf('e'),
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
-			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei+1), 10));
+			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei + 1), 10));
 			
 		if(ei > 0) valStr = valStr.substring(0, ei);
 		if (shift > 0) {
 			if (indVal >= 0) { //with dot
 				if (valFixed > shift) {
-					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1, indVal+1+shift) + '.' + valStr.substring(indVal+1+shift);
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1, indVal + 1 + shift) + '.' + valStr.substring(indVal + 1 + shift);
 					valFixed -= shift;
 					indVal += shift;
 				} else {
-					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1);
 					for(var len = shift - valFixed; len-- > 0;)
 						valStr = valStr + '0';
 					indVal = -1;
@@ -213,13 +213,13 @@ zk.fmt.Number = {
 			// ZK-1737 varStr is not correct variable name
 			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
 			if(nind > 0) {
-				valStr = valStr.substring(0, nind) + '.' + 
-					(indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVar) + valStr.substring(indVar+1));
+				valStr = valStr.substring(0, nind) + '.'
+					+ (indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVar) + valStr.substring(indVar + 1));
 				valFixed -= shift;
 				indVal = nind;
 			} else {
 				if(indVal >= 0)
-					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1);
 				for(; nind++ < 0;)
 					valStr = '0' + valStr;
 				valStr = '0.' + valStr;
@@ -258,9 +258,9 @@ zk.fmt.Number = {
 				xfmt += '#';
 		
 			// insert extra format into correct place.
-    		var beg = this._extraFmtIndex(fmt);
-    		prefmt += beg;
-    		fmt = fmt.substring(0, beg) + xfmt + fmt.substring(beg, fmt.length);
+			var beg = this._extraFmtIndex(fmt);
+			prefmt += beg;
+			fmt = fmt.substring(0, beg) + xfmt + fmt.substring(beg, fmt.length);
 		}
 		for (var len = ind - indVal; --len >= 0; indVal++)
 			valStr = '0' + valStr;
@@ -316,9 +316,9 @@ zk.fmt.Number = {
 		//remove optional '0' digit in sufpart
 		var e = -1;
 		for (var m = suf.length, n = fmt.length; m > 0; --m) {
-			var cc = suf.charAt(m-1),
+			var cc = suf.charAt(m - 1),
 				fmtcc = fmt.charAt(--n);
-			if (cc == '0' &&  fmtcc == '#') { //optional 0
+			if (cc == '0' && fmtcc == '#') { //optional 0
 				if (e < 0) e = m;
 			} else if (e >= 0 || /[1-9]/.test(cc))
 				break;
@@ -329,18 +329,18 @@ zk.fmt.Number = {
 		//combine
 		if (pre)
 			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre, localizedSymbols);
-		if (!pre && fmt.charAt(indFmt+1) == '#')
+		if (!pre && fmt.charAt(indFmt + 1) == '#')
 			pre = '0';
 		if (!suf && (pre == localizedSymbols.PERCENT || pre == localizedSymbols.PER_MILL))
 			pre = '0' + pre;
-		var rexp = new RegExp('^0*['+localizedSymbols.PERCENT+'|'+localizedSymbols.PER_MILL+']?$'),
-			shownZero = suf? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
-		return (val < 0 && !shownZero && !useMinsuFmt? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
+		var rexp = new RegExp('^0*[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']?$'),
+			shownZero = suf ? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
+		return (val < 0 && !shownZero && !useMinsuFmt ? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
 	},
 	_escapeQuote: function (fmt, localizedSymbols) {
 		//note we do NOT support mixing of quoted and unquoted percent
-		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej= -1,
-			validPercent = fmt ? !new RegExp('\(\'['+localizedSymbols.PERCENT+'|'+localizedSymbols.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
+			validPercent = fmt ? !new RegExp('\(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\'\)', 'g').test(fmt) : true; 
 			//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = fmt.length; j < len; ++j) {
 			cc = fmt.charAt(j);
@@ -351,7 +351,7 @@ zk.fmt.Number = {
 			
 			if (cc == '\'') { // a single quote
 				if (q >= 0) {//close single quote
-					ret += q == (j-1) ? '\'' : fmt.substring(q+1, j);
+					ret += q == (j - 1) ? '\'' : fmt.substring(q + 1, j);
 					q = -2;
 				} else
 					q = j; //open single quote
@@ -372,11 +372,11 @@ zk.fmt.Number = {
 				ret += cc;
 			}
 		}
-		return {shift:shift, fmt:ret, pureFmtStr: pure, jdot:jdot, purejdot:purejdot, prej:prej};
+		return {shift: shift, fmt: ret, pureFmtStr: pure, jdot: jdot, purejdot: purejdot, prej: prej};
 	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
-		for(var len=fmt.length; j < len; ++j) {
+		for(var len = fmt.length; j < len; ++j) {
 			var c = fmt.charAt(j);
 			if (c == '#' || c == '0' || c == ',')
 				break;
@@ -386,7 +386,7 @@ zk.fmt.Number = {
 	_removePrefixSharps: function (val, localizedSymbols) {
 		var ret = '',
 			sharp = true;
-		for(var len = val.length, j=0; j < len; ++j) {
+		for(var len = val.length, j = 0; j < len; ++j) {
 			var cc = val.charAt(j);
 			if (sharp) {
 				if (cc == '#' || cc == localizedSymbols.GROUPING) continue;
@@ -402,21 +402,21 @@ zk.fmt.Number = {
 		// localized symbols
 		localizedSymbols = localizedSymbols || {
 				GROUPING: zk.GROUPING,
-				DECIMAL:  zk.DECIMAL,
-				PERCENT:  zk.PERCENT,
+				DECIMAL: zk.DECIMAL,
+				PERCENT: zk.PERCENT,
 				PER_MILL: zk.PER_MILL,
-				MINUS:    zk.MINUS
+				MINUS: zk.MINUS
 			};
 			
 		var divscale = 0, //the second element
 			minus, sb, cc, ignore,
-			zkMinus = ignoreLocale ? '-': localizedSymbols.MINUS,
-			zkDecimal = ignoreLocale ? '.': localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
-			zkPercent = ignoreLocale ? '%': localizedSymbols.PERCENT,
+			zkMinus = ignoreLocale ? '-' : localizedSymbols.MINUS,
+			zkDecimal = ignoreLocale ? '.' : localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
+			zkPercent = ignoreLocale ? '%' : localizedSymbols.PERCENT,
 			permill = String.fromCharCode(0x2030),
-			zkPermill = ignoreLocale ? permill: localizedSymbols.PER_MILL, 
-			zkGrouping = ignoreLocale ? ',': localizedSymbols.GROUPING,
-			validPercent = !new RegExp('\(\'[%|'+permill+']+\'\)', 'g').test(fmt); 
+			zkPermill = ignoreLocale ? permill : localizedSymbols.PER_MILL, 
+			zkGrouping = ignoreLocale ? ',' : localizedSymbols.GROUPING,
+			validPercent = !new RegExp('\(\'[%|' + permill + ']+\'\)', 'g').test(fmt); 
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);
@@ -432,13 +432,13 @@ zk.fmt.Number = {
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
 				&& cc != zkDecimal && cc != zkMinus && cc != '+'
-				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zkGrouping
+				&& (zUtl.isChar(cc,{whitespace: 1}) || cc == zkGrouping
 					|| cc == ')' || (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null) sb = val.substring(0, j);
 			} else {
-				var c2 = cc == zkMinus ? '-':
-					cc == zkDecimal ? '.':  cc;
+				var c2 = cc == zkMinus ? '-' :
+					cc == zkDecimal ? '.' : cc;
 				if (cc != c2 && sb == null)
 					sb = val.substring(0, j);
 				if (sb != null) sb += c2;

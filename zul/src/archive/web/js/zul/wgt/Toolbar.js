@@ -67,7 +67,7 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	},
 	// Bug ZK-1706 issue: we have to expand the width of the content div when
 	// align="left", others won't support
-	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+	setFlexSizeW_: function (n, zkn, width, isFlexMin) {
 		this.$supers('setFlexSizeW_', arguments);
 		if (!isFlexMin && this.getAlign() == 'start') {
 			var cave = this.$n('cave');
@@ -79,16 +79,16 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	 * Returns whether is in panel mold or not.
 	 * @return boolean
 	 */
-	inPanelMold: function(){
+	inPanelMold: function () {
 		return this._mold == 'panel';
 	},
 	// protected
-	onChildAdded_: function(){
+	onChildAdded_: function () {
 		this.$supers('onChildAdded_', arguments);
 		if (this.inPanelMold()) 
 			this.rerender();
 	},
-	onChildRemoved_: function(){
+	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_ && this.inPanelMold())
 			this.rerender();

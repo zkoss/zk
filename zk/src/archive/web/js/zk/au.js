@@ -69,7 +69,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		return true;
 	}
 	function pushCmds(cmds, rs) {
-		for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
+		for (var j = 0, rl = rs ? rs.length : 0; j < rl; ++j) {
 			var r = rs[j],
 				cmd = r[0],
 				data = r[1];
@@ -89,10 +89,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			if (id = data[j] && data[j].$u) {
 				if (!(w = Widget.$(id))) { //not ready
 					zk.afterMount(function () {
-						do
+						do {
 							if (id = data[j] && data[j].$u)
 								data[j] = Widget.$(id);
-						while (j--)
+						} while (j--);
 						doProcess(cmd, data);
 					}, -1);
 					return true; //not ready
@@ -128,7 +128,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function ajaxReqResend(reqInf, timeout) {
 		if (seqId == reqInf.sid) {//skip if the response was recived
 			pendingReqInf = reqInf; //store as a pending request info
-			setTimeout(ajaxReqResend2, timeout ? timeout: 0);
+			setTimeout(ajaxReqResend2, timeout ? timeout : 0);
 		}
 	}
 	function ajaxReqResend2() {
@@ -158,17 +158,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				var rstatus;
 				if ((rstatus = req.status) == 200) { //correct
 					if (sid && sid != seqId) {
-						_errCode = 'ZK-SID ' + (sid ? 'mismatch': 'required');
+						_errCode = 'ZK-SID ' + (sid ? 'mismatch' : 'required');
 						afterResponse(); //continue the pending request if any
 						return;
 					} //if sid null, always process (usually for error msg)
 
 					var v;
 					if ((v = req.getResponseHeader('ZK-Error'))
-					&& !onError(req, v = zk.parseInt(v)||v)
+					&& !onError(req, v = zk.parseInt(v) || v)
 					&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
 					&& zAu.confirmRetry('FAILED_TO_RESPONSE',
-							v == 5501 ? 'Request out of sequence': 'Activation timeout')) {
+							v == 5501 ? 'Request out of sequence' : 'Activation timeout')) {
 						ajaxReqResend(reqInf);
 						return;
 					}
@@ -189,42 +189,42 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						zUtl.go(eru);
 						return;
 					}
-                    
-                    if (typeof zAu.ajaxErrorHandler == 'function') {
-                        ajaxReqTries = zAu.ajaxErrorHandler(req, rstatus, req.statusText, ajaxReqTries);
-                        if (ajaxReqTries > 0) {
-                            ajaxReqTries--;
-                            ajaxReqResend(reqInf, zk.resendTimeout);
-                            return;
-                        }
-                    } else {
-    					//handle MSIE's buggy HTTP status codes
-    					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
-    					switch (rstatus) { //auto-retry for certain case
-    					default:
-    						if (!ajaxReqTries) break;
-    						//fall thru
-    					case 12002: //server timeout
-    					case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
-    					case 12031:
-    					case 12152: // Connection closed by server.
-    					case 12159:
-    					case 13030:
-    					case 503: //service unavailable
-    						if (!ajaxReqTries) ajaxReqTries = 3; //two more try
-    						if (--ajaxReqTries) {
-    							ajaxReqResend(reqInf, zk.resendTimeout);
-    							return;
-    						}
-    					}
-    					if (!reqInf.ignorable && !zk.unloading) {
-    						var msg = req.statusText;
-    						if (zAu.confirmRetry('FAILED_TO_RESPONSE', rstatus+(msg?': '+msg:''))) {
-    							ajaxReqTries = 2; //one more try
-    							ajaxReqResend(reqInf);
-    							return;
-    						}
-					   }
+
+					if (typeof zAu.ajaxErrorHandler == 'function') {
+						ajaxReqTries = zAu.ajaxErrorHandler(req, rstatus, req.statusText, ajaxReqTries);
+						if (ajaxReqTries > 0) {
+							ajaxReqTries--;
+							ajaxReqResend(reqInf, zk.resendTimeout);
+							return;
+						}
+					} else {
+					//handle MSIE's buggy HTTP status codes
+					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
+						switch (rstatus) { //auto-retry for certain case
+						default:
+							if (!ajaxReqTries) break;
+							//fall thru
+						case 12002: //server timeout
+						case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+						case 12031:
+						case 12152: // Connection closed by server.
+						case 12159:
+						case 13030:
+						case 503: //service unavailable
+							if (!ajaxReqTries) ajaxReqTries = 3; //two more try
+							if (--ajaxReqTries) {
+								ajaxReqResend(reqInf, zk.resendTimeout);
+								return;
+							}
+						}
+						if (!reqInf.ignorable && !zk.unloading) {
+							var msg = req.statusText;
+							if (zAu.confirmRetry('FAILED_TO_RESPONSE', rstatus + (msg ? ': ' + msg : ''))) {
+								ajaxReqTries = 2; //one more try
+								ajaxReqResend(reqInf);
+								return;
+							}
+						}
 					}
 				}
 			}
@@ -245,7 +245,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				_errCode = '[Receive] ' + msg;
 				//if (e.fileName) _errCode += ", "+e.fileName;
 				//if (e.lineNumber) _errCode += ", "+e.lineNumber;
-				if (zAu.confirmRetry('FAILED_TO_RESPONSE', (msg&&msg.indexOf('NOT_AVAILABLE')<0?msg:''))) {
+				if (zAu.confirmRetry('FAILED_TO_RESPONSE', (msg && msg.indexOf('NOT_AVAILABLE') < 0 ? msg : ''))) {
 					ajaxReqResend(reqInf);
 					return;
 				}
@@ -266,12 +266,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 	}
 	function _exmsg(e) {
-		var msg = e.message||e, m2 = '';
-		if (e.name) m2 = ' ' +e.name;
+		var msg = e.message || e, m2 = '';
+		if (e.name) m2 = ' ' + e.name;
 //		if (e.fileName) m2 += " " +e.fileName;
 //		if (e.lineNumber) m2 += ":" +e.lineNumber;
 //		if (e.stack) m2 += " " +e.stack;
-		return msg + (m2 ? ' (' + m2.substring(1) + ')': m2);
+		return msg + (m2 ? ' (' + m2.substring(1) + ')' : m2);
 	}
 
 	function ajaxSend(dt, aureq, timeout) {
@@ -280,7 +280,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (!dt) {
 			//original dt is decided by aureq.target.desktop, so start by it's parent.
 			var wgt = aureq.target.parent;
-			while(!wgt.desktop){
+			while(!wgt.desktop) {
 				wgt = wgt.parent;
 			}
 			dt = wgt.desktop;			
@@ -294,7 +294,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function ajaxSend2(dt, timeout) {
 		if (!timeout) timeout = 0;
 		if (dt && timeout >= 0)
-			setTimeout(function(){zAu.sendNow(dt);}, timeout);
+			setTimeout(function () {zAu.sendNow(dt);}, timeout);
 	}
 	function ajaxSendNow(reqInf) {
 		var setting = zAu.ajaxSettings,
@@ -341,9 +341,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	 */
 	function toJSON(target, data) {
 		if (!jq.isArray(data)) {
-			if (data.pageX != null && data.x == null)  {
+			if (data.pageX != null && data.x == null) {
 				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
-						target.fromPageCoord(data.pageX, data.pageY):
+						target.fromPageCoord(data.pageX, data.pageY) :
 						[data.pageX, data.pageY];
 				data.x = ofs[0];
 				data.y = ofs[1];
@@ -358,7 +358,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 	function doCmdsNow(cmds) {
-		var rtags = cmds.rtags||{}, ex;
+		var rtags = cmds.rtags || {}, ex;
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
@@ -376,9 +376,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
 				// Bug ZK-2516
-				zWatch.fire('onCommandReady', null, {timeout:-1, rtags: rtags}); //won't use setTimeout
+				zWatch.fire('onCommandReady', null, {timeout: -1, rtags: rtags}); //won't use setTimeout
 
-				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
+				zWatch.fire('onResponse', null, {timeout: 0, rtags: rtags}); //use setTimeout
 				if (rtags.onClientInfo) {
 					setTimeout(zk.endProcessing, 50); // always stop the processing
 					delete zk.clientinfo;
@@ -457,7 +457,7 @@ zAu = {
 		}
 		if (zk.timeout > 0)
 			idTimeout = setTimeout(sendTimeout, zk.timeout * 1000);
-  	},
+	},
 	_onClientInfo: function () { //Called by mount.js when onReSize
 		if (zAu._cInfoReg) setTimeout(fireClientInfo, 20);
 			//we cannot pass zAu.cmd0.clientInfo directly
@@ -515,7 +515,7 @@ zAu = {
 	 */
 	confirmRetry: function (msgCode, msg2) {
 		var msg = msgzk[msgCode];
-		return jq.confirm((msg?msg:msgCode)+'\n'+msgzk.TRY_AGAIN+(msg2?'\n\n('+msg2+')':''));
+		return jq.confirm((msg ? msg : msgCode) + '\n' + msgzk.TRY_AGAIN + (msg2 ? '\n\n(' + msg2 + ')' : ''));
 	},
 	/** Called to shown an error if a severe error occurs.
 	 * By default, it is an orange box.
@@ -526,8 +526,8 @@ zAu = {
 	 */
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = msgzk[msgCode];
-		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2+': ':'')+(cmd||'')
-			+ (ex?'\n'+_exmsg(ex):''));
+		zk.error((msg ? msg : msgCode) + '\n' + (msg2 ? msg2 + ': ' : '') + (cmd || '')
+			+ (ex ? '\n' + _exmsg(ex) : ''));
 	},
 	/** Returns the URI for the specified error.
 	 * @param int code the error code
@@ -605,7 +605,7 @@ zAu = {
 
 		var t = aureq.target;
 		if (t) {
-			ajaxSend(t.className == 'zk.Desktop' ? t: t.desktop, aureq, timeout);
+			ajaxSend(t.className == 'zk.Desktop' ? t : t.desktop, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
@@ -623,7 +623,7 @@ zAu = {
 	sendAhead: function (aureq, timeout) {
 		var t = aureq.target;
 		if (t) {
-			var dt = t.className == 'zk.Desktop' ? t: t.desktop;
+			var dt = t.className == 'zk.Desktop' ? t : t.desktop;
 			zAu.getAuRequests(dt).unshift(aureq);
 			ajaxSend2(dt, timeout);
 		} else {
@@ -639,8 +639,8 @@ zAu = {
 	//remove desktop (used in mount.js and wiget.js)
 	_rmDesktop: function (dt, dummy) {
 		jq.ajax(zk.$default({
-			url: zk.ajaxURI(null, {desktop:dt,au:true}),
-			data: {dtid: dt.id, cmd_0: dummy ? 'dummy': 'rmDesktop', opt_0: 'i'},
+			url: zk.ajaxURI(null, {desktop: dt,au: true}),
+			data: {dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'},
 			beforeSend: function (xhr) {
 				if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 			},
@@ -664,7 +664,7 @@ zAu = {
 	 * @param String data the data in a JSON string.
 	 */
 	process: function (cmd, data) {
-		doProcess(cmd, data ? jq.evalJSON(data): []);
+		doProcess(cmd, data ? jq.evalJSON(data) : []);
 	},
 	/** Returns whether to ignore the ESC keystroke.
 	 * It returns true if ZK Client Engine is sending an AU request
@@ -783,7 +783,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			tag = '/' + encodeURIComponent(tag);
 			if (uri.indexOf('/_/') < 0) {
 				var v = target.desktop;
-				if ((v = v ? v.requestPath: "") && v.charAt(0) != '/')
+				if ((v = v ? v.requestPath : '') && v.charAt(0) != '/')
 					v = '/' + v; //just in case
 				tag = '/_' + v + tag;
 			}
@@ -813,29 +813,29 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	encode: function (j, aureq, dt) {
 		var target = aureq.target,
-			opts = aureq.opts||{},
+			opts = aureq.opts || {},
 			portlet2Namespace = '';
 			
 		// B65-ZK-2210: add porlet namespace
 		if(zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			portlet2Namespace = zk.portlet2Data[dt.id].namespace || '';
 		}
-		var content = j ? '': portlet2Namespace + 'dtid='+dt.id;
+		var content = j ? '' : portlet2Namespace + 'dtid=' + dt.id;
 
-		content += '&' + portlet2Namespace + 'cmd_'+j+'='+aureq.name;
+		content += '&' + portlet2Namespace + 'cmd_' + j + '=' + aureq.name;
 		if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
-			content += '&' + portlet2Namespace + 'opt_'+j+'=i';
+			content += '&' + portlet2Namespace + 'opt_' + j + '=i';
 			//thus, the server will ignore it if session timeout
 
 		if (target && target.className != 'zk.Desktop')
-			content += '&' + portlet2Namespace + 'uuid_'+j+'='+target.uuid;
+			content += '&' + portlet2Namespace + 'uuid_' + j + '=' + target.uuid;
 
 		var data = aureq.data, dtype = typeof data;
 		if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
 		|| jq.isArray(data))
-			data = {'':data};
+			data = {'': data};
 		if (data)
-			content += '&' + portlet2Namespace + 'data_'+j+'='+encodeURIComponent(toJSON(target, data));
+			content += '&' + portlet2Namespace + 'data_' + j + '=' + encodeURIComponent(toJSON(target, data));
 		return content;
 	},
 
@@ -853,7 +853,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			return false;
 
 		if (zk.mounting) {
-			zk.afterMount(function(){zAu.sendNow(dt);});
+			zk.afterMount(function () {zAu.sendNow(dt);});
 			return true; //wait
 		}
 
@@ -866,7 +866,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		var implicit, uri;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
-				opts = aureq.opts||{};
+				opts = aureq.opts || {};
 			if (opts.uri != uri) {
 				if (j) break;
 				uri = opts.uri;
@@ -888,24 +888,24 @@ zAu.beforeSend = function (uri, req, dt) {
 		var ignorable = true;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
-				opts = aureq.opts||{};
+				opts = aureq.opts || {};
 			if ((opts.uri != uri)
 			|| !(ignorable = ignorable && opts.ignorable)) //all ignorable
 				break;
 		}
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = '', rtags = {},
-			requri = uri || zk.ajaxURI(null, {desktop:dt,au:true});
+			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true});
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift();
-			if ((aureq.opts||{}).uri != uri) {
+			if ((aureq.opts || {}).uri != uri) {
 				es.unshift(aureq);
 				break;
 			}
 
 			requri = zAu.beforeSend(requri, aureq, dt);
 			content += zAu.encode(j, aureq, dt);
-			zk.copy(rtags, (aureq.opts||{}).rtags);
+			zk.copy(rtags, (aureq.opts || {}).rtags);
 		}
 		
 		// B65-ZK-2210: get resourceURL by desktop id
@@ -1012,7 +1012,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	 * <p>wrongValue_(wgt, msg): show an error message
 	 * <p>wrongValue_(wgt, false): clear an error message
 	 */
-	wrongValue_: function(wgt, msg) {
+	wrongValue_: function (wgt, msg) {
 		if (msg !== false)
 			jq.alert(msg);
 	}
@@ -1111,7 +1111,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	alert: function (msg, title, icon, disabledAuRequest) {
 		if (disabledAuRequest)
 			zAu.disabledRequest = true;
-		jq.alert(msg, {icon: icon||'ERROR', title: title});
+		jq.alert(msg, {icon: icon || 'ERROR', title: title});
 	},
 	/** Redirects to the specified URL.
 	 * @param String url the URL to redirect to
@@ -1126,7 +1126,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var idx;
 			if (url && !url.startsWith('/') && (idx = url.indexOf('#')) >= 0) {
 				var uri = url.substring(0, idx),
-					hash = url.substring(idx+1),
+					hash = url.substring(idx + 1),
 					locHash = window.location.hash,
 					locUrl = window.location.href;
 				if (locHash) {
@@ -1217,7 +1217,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
 			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
-			{implicit:true, rtags: {onClientInfo: 1}}));
+			{implicit: true, rtags: {onClientInfo: 1}}));
 	},
 	visibilityChange: function (dtid) {
 		var hidden = !!(document.hidden || document[zk.vendor_ + 'Hidden']),
@@ -1235,8 +1235,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			if (ifr) {
 				ifr.src = url; //It is OK to reuse the same iframe
 			} else {
-				var html = '<iframe src="'+url
-				+'" id="zk_download" name="zk_download" style="display:none;width:0;height:0;border:0" frameborder="0"></iframe>';
+				var html = '<iframe src="' + url
+				+ '" id="zk_download" name="zk_download" style="display:none;width:0;height:0;border:0" frameborder="0"></iframe>';
 				jq(document.body).append(html);
 			}
 		}
@@ -1306,7 +1306,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	showNotification: function (msg, type, pid, ref, pos, off, dur, closable) {
 		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
 		if (notif) {
-			var opts = {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable};
+			var opts = {ref: ref, pos: pos, off: off, dur: dur, type: type, closable: closable};
 			//ZK-2687, show notif after zAu.cmd0.scrollIntoView
 			zk.delayFunction(ref ? ref.uuid : 'nouuid', function () {
 				notif.show(msg, pid, opts);
@@ -1331,12 +1331,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 
 		zAu.cmd0.clearBusy(uuid);
 
-		var w = uuid ? Widget.$(uuid): null;
+		var w = uuid ? Widget.$(uuid) : null;
 		if (!uuid)
-			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy:true});
+			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
 		else if (w) {
 			zk.delayFunction(uuid, function () {
-				w.effects_.showBusy = new zk.eff.Mask( {
+				w.effects_.showBusy = new zk.eff.Mask({
 					id: w.uuid + '-shby',
 					anchor: w.$n(),
 					message: msg
@@ -1353,14 +1353,14 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (uuid) {
 			zk.delayFunction(uuid, function () {
 				var w = Widget.$(uuid),
-					efs = w ? w.effects_: null;
+					efs = w ? w.effects_ : null;
 				if (efs && efs.showBusy) {
 					efs.showBusy.destroy();
 					delete efs.showBusy;
 				}
-            });
+			});
 		} else
-			zUtl.destroyProgressbox('zk_showBusy', {busy:true}); //since user might want to show diff msg
+			zUtl.destroyProgressbox('zk_showBusy', {busy: true}); //since user might want to show diff msg
 	},
 	/** Closes the all error messages related to the specified widgets.
 	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
@@ -1374,10 +1374,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var wgt = Widget.$(arguments[i]);
 			if (wgt) {
 				var toClearErrMsg = function (w) {
-					return function() {
+					return function () {
 						if (w.clearErrorMessage) w.clearErrorMessage();
 						else zAu.wrongValue_(w, false);
-					}
+					};
 				};
 				zk.delayFunction(wgt.uuid, toClearErrMsg(wgt));
 			}
@@ -1403,13 +1403,13 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 					return function () {
 						if (w.setErrorMessage) w.setErrorMessage(m);
 						else zAu.wrongValue_(w, m);
-					}
+					};
 				};
 				zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
 			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
 				jq.alert(msg);
 		}
-        // for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
+		// for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
 		// has been removed since 7.0.6
 	},
 	/** Submit a form.
@@ -1421,7 +1421,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the FORM element.
 	 */
 	submit: function (id) {
-		setTimeout(function (){
+		setTimeout(function () {
 			var n = Widget.$(id);
 			if (n && n.submit)
 				n.submit();
@@ -1574,9 +1574,9 @@ zAu.cmd1 = /*prototype*/ {
 				wgt.appendChild(child);
 				if (!_afterAction(child, act) && !child.z_rod)
 					zUtl.fireSized(child);
-			}
+			};
 			for (var args = arguments, j = 1; j < args.length; ++j)
-            	zkx_(args[j], fn);
+				zkx_(args[j], fn);
 		} else {
 			for (var args = arguments, j = 1; j < args.length; ++j) {
 				//possible if <?page complete="true"?>
@@ -1618,7 +1618,7 @@ zAu.cmd1 = /*prototype*/ {
 						wgt.focus(100);
 					else
 						wgt.focus(0); //wgt.focus() failed in FF
-				}, -1)});
+				}, -1);});
 		}
 	},
 	/** Selects all text of the specified widget.
@@ -1649,7 +1649,7 @@ zAu.cmd1 = /*prototype*/ {
 			wgt[func].apply(wgt, args);
 		else {
 			var fn = zk.$import(func);
-			if (!fn) zk.error('not found: '+func);
+			if (!fn) zk.error('not found: ' + func);
 			fn.apply(null, args);
 		}
 	},
@@ -1663,7 +1663,7 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	echo2: function (wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, 'echo',
-			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
+			data != null ? [evtnm, data] : [evtnm], {ignorable: true}));
 	},
 	/** Ask the client to re-cacluate the size of the given widget.
 	 * @param zk.Widget wgt the widget to resize
@@ -1676,21 +1676,21 @@ zAu.cmd1 = /*prototype*/ {
 /** @partial zk
  */
 //@{
-    /** Adds a function that will be executed after onResponse events are done.
-     * That means, after au responses, the function added in the afterAuResponse() will be invoked
-     * @param Function fn the function to execute after au responses
-     * @since 7.0.6
-     */
+	/** Adds a function that will be executed after onResponse events are done.
+	 * That means, after au responses, the function added in the afterAuResponse() will be invoked
+	 * @param Function fn the function to execute after au responses
+	 * @since 7.0.6
+	 */
 	//afterAuResponse: function () {}
 //@};
 zk.afterAuResponse = function (fn) {
-    if (fn)
-        _aftAuResp.push(fn);
+	if (fn)
+		_aftAuResp.push(fn);
 };
 zk.doAfterAuResponse = function () {
-    for (var fn; fn = _aftAuResp.shift();) {
-        fn();
-    }
+	for (var fn; fn = _aftAuResp.shift();) {
+		fn();
+	}
 };
 })();
 

@@ -34,12 +34,7 @@
 
         Date.prototype.toJSON = function (key) {
 
-            return this.valueOf() ? this.getUTCFullYear()   + '-' +
-                 f(this.getUTCMonth() + 1) + '-' +
-                 f(this.getUTCDate())      + 'T' +
-                 f(this.getUTCHours())     + ':' +
-                 f(this.getUTCMinutes())   + ':' +
-                 f(this.getUTCSeconds())   + 'Z' : null;
+            return this.valueOf() ? this.getUTCFullYear() + '-' + f(this.getUTCMonth() + 1) + '-' + f(this.getUTCDate()) + 'T' + f(this.getUTCHours()) + ':' + f(this.getUTCMinutes()) + ':' + f(this.getUTCSeconds()) + 'Z' : null;
         };
 
         String.prototype.toJSON =
@@ -59,7 +54,7 @@
             '\n': '\\n',
             '\f': '\\f',
             '\r': '\\r',
-            '"' : '\\"',
+            '"': '\\"',
             '\\': '\\\\'
         },
         rep;
@@ -163,9 +158,7 @@
 // brackets.
 
                 v = partial.length === 0 ? '[]' :
-                    gap ? '[\n' + gap +
-                            partial.join(',\n' + gap) + '\n' +
-                                mind + ']' :
+                    gap ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' :
                           '[' + partial.join(',') + ']';
                 gap = mind;
                 return v;
@@ -185,8 +178,7 @@
 // and wrap them in braces.
 
             v = partial.length === 0 ? '{}' :
-                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
-                        mind + '}' : '{' + partial.join(',') + '}';
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' : '{' + partial.join(',') + '}';
             gap = mind;
             return v;
         }
@@ -214,7 +206,7 @@
         };
 //Tom: don't use eval(s) directly, since it won't (and cann't) be compressed)
 	$.evalJSON = function (s) {
-		return (new Function('return (' + s +')'))(); //won't count on the current scope
+		return (new Function('return (' + s + ')'))(); //won't count on the current scope
 		//return $eval("(" + s + ")"); //assume the current scope
 	};
 	$.j2d = function (s) { //json to date
@@ -226,7 +218,7 @@
 	};
 	$.d2j = function (d) { //date to json
 		return d ? [d.getFullYear(), d.getMonth() + 1, d.getDate(),
-			d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()].join('.'): null;
+			d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()].join('.') : null;
 	};
 //Tom//    }
 }(jq)); //Tom: jQuery might be another copy

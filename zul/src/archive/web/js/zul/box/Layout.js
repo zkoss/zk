@@ -157,7 +157,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
 						;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 					else
-						kid.setFlexSize_({height:'', width:''});
+						kid.setFlexSize_({height: '', width: ''});
 					if (chdex)
 						chdex.style.height = '';
 				}
@@ -166,7 +166,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) // keep the scroll status
 						;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 					else
-						kid.setFlexSize_({height:'', width:''});
+						kid.setFlexSize_({height: '', width: ''});
 					if (chdex)
 						chdex.style.width = '';
 				}
@@ -174,7 +174,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		}
 	},
 	//bug#3296056
-	afterResetChildSize_: function(orient) {
+	afterResetChildSize_: function (orient) {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			var chdex = kid.$n('chdex');
 			if (chdex) {
@@ -239,7 +239,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 
 		return w;
 	},
-	beforeChildrenFlex_: function(child) {
+	beforeChildrenFlex_: function (child) {
 		// optimized for performance
 		this._shallSize = false;
 		child._flexFixed = true;
@@ -300,8 +300,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					}
 				} else if (vert) {
 					// ZK-2038: fix the height of some div/span is not integer issue in ie
-					var isIssueComp = cwgt.$instanceof(zul.wgt.Label) || cwgt.$instanceof(zul.wgt.Span) ||
-							cwgt.$instanceof(zul.wgt.Div) || cwgt.$instanceof(zul.wgt.A);
+					var isIssueComp = cwgt.$instanceof(zul.wgt.Label) || cwgt.$instanceof(zul.wgt.Span)
+							|| cwgt.$instanceof(zul.wgt.Div) || cwgt.$instanceof(zul.wgt.A);
 					hgh -= (isIssueComp && zk.ie > 8 ? 1 : 0) + cp.offsetHeight + zkxc.marginHeight();
 				}
 
@@ -344,7 +344,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				isInit = !cwgt.$n().style.height;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({height:isz - minus});
+			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = vsz - minus;
 
 			// no need to subtract padding and border for border-box mode
@@ -364,7 +364,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				isInit = !cwgt.$n().style.height;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({height:isz - minus});
+			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = lastsz - minus;
 			
 			// no need to subtract padding and border for border-box mode
@@ -384,7 +384,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				isInit = !cwgt.$n().style.width;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({width:hsz - minus});
+			cwgt.setFlexSize_({width: hsz - minus});
 			cwgt._hflexsz = hsz - minus;
 
 			// no need to subtract padding and border for border-box mode
@@ -403,7 +403,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				isInit = !cwgt.$n().style.width;
 			
 			// we need to remove the chdex padding and border for border-box mode
-			cwgt.setFlexSize_({width:lastsz - minus});
+			cwgt.setFlexSize_({width: lastsz - minus});
 			cwgt._hflexsz = lastsz - minus;
 
 			// no need to subtract padding and border for border-box mode
@@ -424,63 +424,63 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var n = this.$n();
 		if (opts == 'h') {
 			if (this.isVertical_()) {
-    			var total = 0;
-    			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				var fchd = w.firstChild;
-    				if (fchd.style.height) {
-    					var hgh = fchd.offsetHeight
+				var total = 0;
+				for (var w = n.firstChild; w; w = w.nextSibling) {
+					var fchd = w.firstChild;
+					if (fchd.style.height) {
+						var hgh = fchd.offsetHeight
 								+ zk(w).padBorderHeight()
 								+ zk(fchd).marginHeight();
-    					w.style.height = jq.px0(hgh);
-    					total += hgh;
-    				} else
-    					total += w.offsetHeight;
-    			}
-    			n.style.height = jq.px0(total);
+						w.style.height = jq.px0(hgh);
+						total += hgh;
+					} else
+						total += w.offsetHeight;
+				}
+				n.style.height = jq.px0(total);
 			} else {
-    			var max = 0;
-    			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				// use w.offsetHeight instead of w.firstChild.offsetHeight
-    				// for avoiding span's special gap when using HTML5 doctype
-    				var h = w.offsetHeight + zk(w.firstChild).marginHeight();
-    				if (h > max)
-    					max = h;
-    			}
-    			n.style.height = jq.px0(max);
+				var max = 0;
+				for (var w = n.firstChild; w; w = w.nextSibling) {
+					// use w.offsetHeight instead of w.firstChild.offsetHeight
+					// for avoiding span's special gap when using HTML5 doctype
+					var h = w.offsetHeight + zk(w.firstChild).marginHeight();
+					if (h > max)
+						max = h;
+				}
+				n.style.height = jq.px0(max);
 			}
 		} else {
 			if (!this.isVertical_()) {
-    			var total = 0;
-    			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				var fchd = w.firstChild;
-    				if (fchd.style.width) {
-    					var wdh = fchd.offsetWidth
+				var total = 0;
+				for (var w = n.firstChild; w; w = w.nextSibling) {
+					var fchd = w.firstChild;
+					if (fchd.style.width) {
+						var wdh = fchd.offsetWidth
 								+ zk(w).padBorderWidth()
 								+ zk(fchd).marginWidth();
-    					w.style.width = jq.px0(wdh);
-    					total += wdh;
-    				} else
-    					total += w.offsetWidth;
-    			}
+						w.style.width = jq.px0(wdh);
+						total += wdh;
+					} else
+						total += w.offsetWidth;
+				}
 
 				// IE9+ bug ZK-483
 				if ((zk.ie > 8) && this._hflexsz)
 					total = Math.max(this._hflexsz, total);
 
-    			n.style.width = jq.px0(total);
+				n.style.width = jq.px0(total);
 			} else {
-    			var max = 0;
-    			for (var w = n.firstChild; w; w = w.nextSibling) {
-    				var wd = w.firstChild.offsetWidth + zk(w.firstChild).marginWidth();
-    				if (wd > max)
-    					max = wd;
-    			}
-    			
-    			// IE9+ bug ZK-483
-				if ((zk.ie > 8)&& this._hflexsz)
+				var max = 0;
+				for (var w = n.firstChild; w; w = w.nextSibling) {
+					var wd = w.firstChild.offsetWidth + zk(w.firstChild).marginWidth();
+					if (wd > max)
+						max = wd;
+				}
+
+				// IE9+ bug ZK-483
+				if ((zk.ie > 8) && this._hflexsz)
 					max = Math.max(this._hflexsz, max);
 				
-    			n.style.width = jq.px0(max);
+				n.style.width = jq.px0(max);
 			}
 		}
 	}

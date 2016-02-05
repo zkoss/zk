@@ -21,7 +21,7 @@ zhtml.Content = zk.$extends(zhtml.Widget, {
 		if (s) out.push(s);
 
 		// B65-ZK-1836
-		out.push((this._content||'').replace(/<\/(?=script>)/ig, '<\\/'));
+		out.push((this._content || '').replace(/<\/(?=script>)/ig, '<\\/'));
 
 		s = this.epilog;
 		if (s) out.push(s);

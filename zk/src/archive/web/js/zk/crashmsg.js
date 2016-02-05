@@ -74,7 +74,7 @@ window.zkInitCrashTimer = setTimeout(function () {
 				div = style + div + icon + msg + copyright + btn + '</div>';
 				body.style.background = 'rgb(35,48,64)';
 				body.innerHTML = div;
-			}
+			};
 		}
 		window.zkShowCrashMessage(zkErrorCode);
 	}

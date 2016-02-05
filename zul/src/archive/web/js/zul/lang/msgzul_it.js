@@ -13,7 +13,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzul = {};
-msgzul.UNKNOWN_TYPE = "Tipo di componente sconosciuto: ";
-msgzul.DATE_REQUIRED = "Devi inserire una data. Formato: ";
-msgzul.OUT_OF_RANGE = "Fuori limite";
-msgzul.NO_AUDIO_SUPPORT = "Il tuo browser non supporta la funzione di audio dinamico";
+msgzul.UNKNOWN_TYPE = 'Tipo di componente sconosciuto: ';
+msgzul.DATE_REQUIRED = 'Devi inserire una data. Formato: ';
+msgzul.OUT_OF_RANGE = 'Fuori limite';
+msgzul.NO_AUDIO_SUPPORT = 'Il tuo browser non supporta la funzione di audio dinamico';

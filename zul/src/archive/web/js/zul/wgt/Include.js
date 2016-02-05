@@ -41,7 +41,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	 * @return String
 	 * @since 7.0.4 
 	 */
-	getEnclosingTag: function() {
+	getEnclosingTag: function () {
 		return this._enclosingTag;
 	},
 	/**
@@ -49,7 +49,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	 * @param String enclosing tag
 	 * @since 7.0.4 
 	 */
-	setEnclosingTag: function(tag) {
+	setEnclosingTag: function (tag) {
 		this._enclosingTag = tag;
 	},
 

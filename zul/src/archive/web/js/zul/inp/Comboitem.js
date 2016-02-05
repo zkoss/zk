@@ -34,7 +34,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n();
 			if (n) {
 				var disd = this.$s('disabled');
-				v ? jq(n).addClass(disd): jq(n).removeClass(disd);
+				v ? jq(n).addClass(disd) : jq(n).removeClass(disd);
 			}
 		},
 		/** Returns the description (never null).
@@ -81,9 +81,9 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 
 			var cb = this.parent;
-			cb._select(this, {sendOnSelect:true, sendOnChange: true});
+			cb._select(this, {sendOnSelect: true, sendOnChange: true});
 			this._updateHoverImage();
-			cb.close({sendOnOpen:true, focus:true});
+			cb.close({sendOnOpen: true, focus: true});
 			
 			// Fixed the onFocus event is triggered too late in IE.
 			cb._shallClose = true;
@@ -100,6 +100,6 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<li', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></li>');
+		out.push('<li', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></li>');
 	}
 });

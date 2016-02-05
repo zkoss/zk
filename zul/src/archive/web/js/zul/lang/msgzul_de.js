@@ -13,8 +13,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzul = {
-UNKNOWN_TYPE: "Unbekannte Komponente: ",
-DATE_REQUIRED: "Sie müssen ein Datum angeben. Format: ",
-OUT_OF_RANGE: "Nicht im zulässigen Bereich",
-NO_AUDIO_SUPPORT: "Ihr Browser unterstützt keine Tonwiedergabe"
+	UNKNOWN_TYPE: 'Unbekannte Komponente: ',
+	DATE_REQUIRED: 'Sie müssen ein Datum angeben. Format: ',
+	OUT_OF_RANGE: 'Nicht im zulässigen Bereich',
+	NO_AUDIO_SUPPORT: 'Ihr Browser unterstützt keine Tonwiedergabe'
 };

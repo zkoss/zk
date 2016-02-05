@@ -130,7 +130,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	 * @return Radio
 	 */
 	getItemAtIndex: function (index) {
-		return index >= 0 ? _getAt(this, {value: 0}, index): null;
+		return index >= 0 ? _getAt(this, {value: 0}, index) : null;
 	},
 	/** Returns the number of radio buttons in this group.
 	 * @return int
@@ -168,7 +168,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	 * @return Radio
 	 */
 	getSelectedItem: function () {
-		return this._jsel >= 0 ? this.getItemAtIndex(this._jsel): null;
+		return this._jsel >= 0 ? this.getItemAtIndex(this._jsel) : null;
 	},
 	/**  Deselects all of the currently selected radio buttons and selects
 	 * the given radio button.

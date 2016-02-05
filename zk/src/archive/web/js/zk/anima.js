@@ -50,13 +50,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _saveProp(self, set) {
 		var ele = self.jq;
 		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.data('zk.cache.'+set[i], ele[0].style[set[i]]);
+			if(set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
 		return self;
 	}
 	function _restoreProp(self, set) {
 		var ele = self.jq;
 		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.css(set[i], ele.data('zk.cache.'+set[i]));
+			if(set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
 		return self;
 	}
 	function _checkAnimated(self, wgt, opts, anima) {
@@ -130,7 +130,7 @@ zk.copy(zjq.prototype, {
 	 * @return Object this value will be Integer or String.
 	 * @since 7.0.3
 	 */
-	getAnimationSpeed : function (defaultValue) {
+	getAnimationSpeed: function (defaultValue) {
 		var animationSpeed = jq(this.$().$n()).data('animationspeed'),
 			jqSpeed = jq.fx.speeds;
 		
@@ -165,7 +165,7 @@ zk.copy(zjq.prototype, {
 		if (_checkAnimated(this, wgt, opts, 'slideDown'))
 			return this;
 
-		var anchor = opts ? opts.anchor || 't': 't',
+		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
 			anima = {},
 			css = {overflow: 'hidden'},
@@ -224,7 +224,7 @@ zk.copy(zjq.prototype, {
 		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
 		
-		var anchor = opts ? opts.anchor || 't': 't',
+		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
 			anima = {},
 			css = {overflow: 'hidden'},
@@ -279,7 +279,7 @@ zk.copy(zjq.prototype, {
 		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
 		
-		var anchor = opts ? opts.anchor || 't': 't',
+		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'position'],
 			anima = {},
 			css = {},
@@ -330,7 +330,7 @@ zk.copy(zjq.prototype, {
 		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;
 		
-		var anchor = opts ? opts.anchor || 't': 't',
+		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'position'],
 			anima = {},
 			css = {},
@@ -364,7 +364,7 @@ zk.copy(zjq.prototype, {
 			complete: opts.afterAnima
 		});
 	},
-	_updateProp: function(prop) { //used by Bandpopup.js
+	_updateProp: function (prop) { //used by Bandpopup.js
 		_saveProp(this, prop);
 	},
 	/** Initializes the animation with the default effect, such as
@@ -382,7 +382,7 @@ zk.copy(zjq.prototype, {
 	 */
 	defaultAnimaOpts: function (wgt, opts, prop, visible) {
 		var self = this;
-		jq.timers.push(function() {
+		jq.timers.push(function () {
 			if (!visible)
 				zWatch.fireDown('onHide', wgt);
 			if (opts.beforeAnima)

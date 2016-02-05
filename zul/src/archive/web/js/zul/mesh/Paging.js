@@ -118,7 +118,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	setStyle: function () {
 		this.$supers('setStyle', arguments);
-		_rerenderIfBothPaging(this)
+		_rerenderIfBothPaging(this);
 	},
 	setSclass: function () {
 		this.$supers('setSclass', arguments);
@@ -290,7 +290,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			for (var i = input.length; i--;)
 				jq(input[i]).keydown(Paging._domKeyDown).blur(Paging._domBlur);
 
-		for (var k = postfix.length; k--; ) {
+		for (var k = postfix.length; k--;) {
 			var btn = jq.$$(uuid, postfix[k]);
 			for (var j = btn.length; j--;) {
 				if (!this.$weave)
@@ -349,7 +349,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 					focusInfo = zul.mesh.Paging._autoFocusInfo = {uuid: uuid};
 				focusInfo.lastPos = zk(inp).getSelectionRange();
 				// concern about _pagingPosition equals "both"
-				jq(jq.$$(uuid, 'real')).each(function(idx){
+				jq(jq.$$(uuid, 'real')).each(function (idx) {
 					if(this == inp) {
 						focusInfo.inpIdx = idx;
 						return false;
@@ -393,12 +393,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			break;
 		case 33: // PageUp
 			wgt.$class._increase(inp, wgt, -1);
-			wgt.$class.go(wgt, inp.value-1, inp);
+			wgt.$class.go(wgt, inp.value - 1, inp);
 			evt.stop();
 			break;
 		case 34: // PageDown
 			wgt.$class._increase(inp, wgt, +1);
-			wgt.$class.go(wgt, inp.value-1, inp);
+			wgt.$class.go(wgt, inp.value - 1, inp);
 			evt.stop();
 			break;
 		case 36://home
@@ -413,7 +413,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			break;
 		case 13: //enter
 			wgt.$class._increase(inp, wgt, 0);
-			wgt.$class.go(wgt, inp.value-1, inp);
+			wgt.$class.go(wgt, inp.value - 1, inp);
 			evt.stop();
 			break;
 		default:
@@ -429,10 +429,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			return;
 
 		wgt.$class._increase(inp, wgt, 0);
-		wgt.$class.go(wgt, inp.value-1);
+		wgt.$class.go(wgt, inp.value - 1);
 		evt.stop();
 	},
-	_increase: function (inp, wgt, add){
+	_increase: function (inp, wgt, add) {
 		var value = zk.parseInt(inp.value);
 		value += add;
 		if (value < 1)

@@ -75,10 +75,10 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	/** Returns the value in double. If null, zero is returned.
 	 * @return double
 	 */
-	doubleValue: function (){
+	doubleValue: function () {
 		return this.$supers('getValue', arguments);
 	},
-	setConstraint: function (constr){
+	setConstraint: function (constr) {
 		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
 			var constraint = new zul.inp.SimpleDoubleSpinnerConstraint(constr);
 			this._min = constraint._min;
@@ -92,52 +92,52 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
-    		raw = info.raw,
-    		val = parseFloat(raw),
-    		valstr = ''+val,
-    		valind = valstr.indexOf('.'),
-    		rawind = raw.indexOf('.');
-    
-    	if (isNaN(val) || valstr.indexOf('e') < 0) {
-    		if (rawind == 0) {
-    			raw = '0' + raw;
-    			++rawind;
-    		}
-    
-    		if (rawind >= 0 && raw.substring(raw.substring(rawind+1)) && valind < 0) { 
-    			valind = valstr.length;
-    			valstr += '.';
-    		}
-    
-    		var len = raw.length,	
-    			vallen = valstr.length;
-    	
-    		//pre zeros
-    		if (valind >=0 && valind < rawind) {
-    			vallen -= valind;
-    			len -= rawind;
-    			for(var zerolen = rawind - valind; zerolen-- > 0;)
-    				valstr = '0' + valstr;
-    		}
-    
-    		//post zeros
-    		if (vallen < len) {
-    			for(var zerolen = len - vallen; zerolen-- > 0;)
-    				valstr += '0';
-    		}
-    
-    		if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
-    			if (!isNaN(val) && raw != valstr) //Bug ZK-1218: show Illegal value instead if input is number but too long
+			raw = info.raw,
+			val = parseFloat(raw),
+			valstr = '' + val,
+			valind = valstr.indexOf('.'),
+			rawind = raw.indexOf('.');
+
+		if (isNaN(val) || valstr.indexOf('e') < 0) {
+			if (rawind == 0) {
+				raw = '0' + raw;
+				++rawind;
+			}
+
+			if (rawind >= 0 && raw.substring(raw.substring(rawind + 1)) && valind < 0) { 
+				valind = valstr.length;
+				valstr += '.';
+			}
+
+			var len = raw.length,	
+				vallen = valstr.length;
+
+			//pre zeros
+			if (valind >= 0 && valind < rawind) {
+				vallen -= valind;
+				len -= rawind;
+				for(var zerolen = rawind - valind; zerolen-- > 0;)
+					valstr = '0' + valstr;
+			}
+
+			//post zeros
+			if (vallen < len) {
+				for(var zerolen = len - vallen; zerolen-- > 0;)
+					valstr += '0';
+			}
+
+			if (isNaN(val) || (raw != valstr && raw != '-' + valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
+				if (!isNaN(val) && raw != valstr) //Bug ZK-1218: show Illegal value instead if input is number but too long
 					return {error: zk.fmt.Text.format(msgzul.ILLEGAL_VALUE)};
-    			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
-    		}
-    	}
-    
-    	if (info.divscale) val = val / Math.pow(10, info.divscale);
-		
+				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
+			}
+		}
+
+		if (info.divscale) val = val / Math.pow(10, info.divscale);
+
 		// B50-3322795
-    	_updateFixedDigits(this, val);
-    	return val;
+		_updateFixedDigits(this, val);
+		return val;
 	},
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format,
@@ -154,7 +154,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			
 		return value == null ? '' : fmt ? 
 			zk.fmt.Number.format(fmt, parseFloat(value), this._rounding, this._localizedSymbols) : 
-				DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
+				DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL);
 	},
 	onSize: function () {
 		zul.inp.RoundUtl.onSize(this);
@@ -162,11 +162,11 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
-	doKeyDown_: function(evt){
+	doKeyDown_: function (evt) {
 		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
 			return;
-	
+
 		switch (evt.keyCode) {
 		case 38://up
 			this.checkValue();
@@ -186,7 +186,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this._stopAutoIncProc();
 		this._currentbtn = null;
 	},
-	_btnDown: function(evt){
+	_btnDown: function (evt) {
 		if (!this._buttonVisible || this._disabled) return;
 
 		var btn = this.$n('btn');
@@ -202,7 +202,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this.checkValue();
 		
 		var ofs = zk(btn).revisedOffset(),
-			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
+			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
 		
 		if (isOverUpBtn) { //up
 			this._increase(true);
@@ -218,23 +218,23 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	/**
 	 * Sets bound value if the value out of range 
 	 */
-	checkValue: function(){
+	checkValue: function () {
 		var inp = this.getInputNode(),
 			min = this._min,
 			max = this._max;
 
 		if(!inp.value) {
 			if(min && max)
-				inp.value = (min<=0 && 0<=max) ? 0: min;
+				inp.value = (min <= 0 && 0 <= max) ? 0 : min;
 			else if (min)
-				inp.value = min<=0 ? 0: min;
+				inp.value = min <= 0 ? 0 : min;
 			else if (max)
-				inp.value = 0<=max ? 0: max;
+				inp.value = 0 <= max ? 0 : max;
 			else
 				inp.value = 0;
 		}
 	},
-	_btnUp: function(evt) {
+	_btnUp: function (evt) {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		this._onChanging();
@@ -247,7 +247,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		}
 		inp.focus();
 	},
-	_increase: function (asc){
+	_increase: function (asc) {
 		var inp = this.getInputNode(),
 			value = this.coerceFromString_(inp.value);
 		
@@ -258,30 +258,30 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			result = _shiftedSum(value, this._step, shiftLen, asc); // B50-3301517
 		
 		// control overflow
-		if ( result > Math.pow(2,63)-1 )	result = Math.pow(2,63)-1;
-		else if ( result < -Math.pow(2,63) ) result = -Math.pow(2,63);
+		if (result > Math.pow(2,63) - 1)	result = Math.pow(2,63) - 1;
+		else if (result < -Math.pow(2,63)) result = -Math.pow(2,63);
 
 		//over bound shall restore value
-		if (this._max!=null && result > this._max) result = value;
-		else if (this._min!=null && result < this._min) result = value;
+		if (this._max != null && result > this._max) result = value;
+		else if (this._min != null && result < this._min) result = value;
 
 		inp.value = this.coerceToString_(result);
 		
 		this._onChanging();
 		
 	},
-	_clearValue: function(){
+	_clearValue: function () {
 		this.getInputNode().value = this._defRawVal = '';
 		return true;
 	},
-	_startAutoIncProc: function (isup){
+	_startAutoIncProc: function (isup) {
 		var widget = this;
 		if(this.timerId)
 			clearInterval(this.timerId);
 
-		this.timerId = setInterval(function(){widget._increase(isup)}, 200);
+		this.timerId = setInterval(function () {widget._increase(isup);}, 200);
 	},
-	_stopAutoIncProc: function (){
+	_stopAutoIncProc: function () {
 		if(this.timerId)
 			clearTimeout(this.timerId);
 
@@ -301,16 +301,16 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this.$supers('doBlur_', arguments);
 		zul.inp.RoundUtl.doBlur_(this);
 	},
-	afterKeyDown_: function (evt,simulated) {
+	afterKeyDown_: function (evt, simulated) {
 		if(!simulated && this._inplace)
-			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
+			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
 			
 		return this.$supers('afterKeyDown_', arguments);
 	},
 	getAllowedKeys_: function () {
 		var symbols = this._localizedSymbols;
 		return this.$supers('getAllowedKeys_', arguments)
-			+ (symbols ? symbols: zk).DECIMAL + 'e';
+			+ (symbols ? symbols : zk).DECIMAL + 'e';
 		//supports scientific expression such as 1e2
 	},
 	bind_: function () {//after compose
@@ -324,7 +324,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		if(this.timerId){
+		if(this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}

@@ -48,7 +48,7 @@ zk.Swipe = zk.$extends(zk.Object, {
 	 */
 	$init: function (widget, node, opts) {
 		this.widget = widget;
-		this.node = node = node ? jq(node, zk)[0]: widget.node || (widget.$n ? widget.$n() : null);
+		this.node = node = node ? jq(node, zk)[0] : widget.node || (widget.$n ? widget.$n() : null);
 		if (!node)
 			throw 'Handle required for ' + widget;
 		

@@ -26,8 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				frozen._syncFrozen();
 			} else if ((hdfaker = mesh.ehdfaker)) {
 				//_scrollScale is used in Scrollbar.js
-				frozen._scrollScale = 
-					hdfaker.childNodes.length - frozen._columns - 1;
+				frozen._scrollScale = hdfaker.childNodes.length - frozen._columns - 1;
 				
 				// Bug ZK-2264
 				frozen._shallSyncScale = false;
@@ -65,7 +64,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		visible: function () {
 			this.rerender();
 			var mesh = this.getMeshWidget();
-			setTimeout(function() {
+			setTimeout(function () {
 				// ZK-2217: fix height if mesh.desktop exists
 				if (mesh && mesh.desktop) {
 					// ZK-2130: should fix ebody height
@@ -74,7 +73,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						pgib = mesh.$n('pgib'),
 						hgh = zk(mesh).contentHeight() - mesh.$n('head').offsetHeight 
 						- (foot ? foot.offsetHeight : 0) - (pgib ? pgib.offsetHeight : 0)
-						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n().offsetHeight : 0) 
+						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n().offsetHeight : 0); 
 					mesh.ebody.style.height = jq.px0(hgh);
 				}
 			}, 0);
@@ -126,13 +125,13 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		this.fixBorder_();
 	},
 	// B50-3306729: the first header should have border-left when the first column is covered with other header
-	fixBorder_: function() {
+	fixBorder_: function () {
 		var fc = jq(this).children(':first-child'),
 			rspan = fc.attr('rowspan'),
 			times = parseInt(rspan) - 1;
 		if (rspan && times > 0) {
 			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--) 
-				jq(head.firstChild).addClass(this.$s('border'))
+				jq(head.firstChild).addClass(this.$s('border'));
 		}
 		
 	},
@@ -187,7 +186,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						bar = $bar[0],
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
-						barstyle = '', hdfakerbarstyle ='',
+						barstyle = '', hdfakerbarstyle = '',
 						recoverFakerbar = !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false,
 						index = child.getChildIndex();
 
@@ -214,27 +213,27 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						jq($faker.find('col')[index - 1]).after(html);
 					else 
 						$faker.append(html);
-	          
+
 					// resync var
 					$bar = jq(mesh).find('.' + head.$s('bar'));
 					bar = $bar[0];
 					$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]');
 					hdfakerbar = $hdfakerbar[0];
-	          
+
 					if ((faker == 'hdfaker') && !bar && recoverFakerbar) {
 						if (!hdfakerbar)
-							jq(head.$n('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" />')
+							jq(head.$n('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" />');
 						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" />');
 					}
 				}
 			}
-	    }
+		}
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
 		if (this.desktop) {
-			if (!_fixOnChildChanged(this) && !this.childReplacing_ &&
-				this.parent._fixHeaders()) 
+			if (!_fixOnChildChanged(this) && !this.childReplacing_
+				&& this.parent._fixHeaders()) 
 				this.parent.onSize();
 			this.parent._minWd = null;
 			// Fix IE, FF for the issue B30-1926480-1.zul and B30-1926480.zul
@@ -292,7 +291,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
 },{ //static
 	redraw: function (out) {

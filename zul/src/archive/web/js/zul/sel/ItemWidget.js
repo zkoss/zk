@@ -152,14 +152,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
 			if (this.isDisabled())
-				scls += (scls ? ' ': '') + this.$s('disabled');
+				scls += (scls ? ' ' : '') + this.$s('disabled');
 			//Bug ZK-1998: only apply selected style if groupSelect is true
 			if (_isListgroup(this) || _isListgroupfoot(this)) {
 				if (this.getMeshWidget().groupSelect && this.isSelected())
-					scls += (scls ? ' ': '') + this.$s('selected');
+					scls += (scls ? ' ' : '') + this.$s('selected');
 			} else {
 				if (this.isSelected())
-					scls += (scls ? ' ': '') + this.$s('selected');
+					scls += (scls ? ' ' : '') + this.$s('selected');
 			}
 		}
 		return scls;
@@ -219,12 +219,12 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var cnt = 2;
 		var msg;
 		if (!this.isSelected())	return this.getLabel();
-		while(iterator.hasNext()){
+		while(iterator.hasNext()) {
 			var item = iterator.next();
-			if(item.isSelected()){
+			if(item.isSelected()) {
 				var label = item.getLabel();
 				if (label.length > 9)
-					label = label.substring(0, 9) + "...";
+					label = label.substring(0, 9) + '...';
 				if (!msg)
 					msg = label;
 				else
@@ -267,7 +267,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 
 	// event
-	doSelect_: function(evt) {
+	doSelect_: function (evt) {
 		if (this.isDisabled() || !this.isSelectable()) return;
 		try {
 			this._userSelection = true;
@@ -294,7 +294,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers('doKeyUp_', arguments);
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
 });
 })();

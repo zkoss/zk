@@ -63,16 +63,16 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			this._fixName();
 		}
 	},
-	bind_: function(){
+	bind_: function () {
 		this.$supers(zul.wgt.Radio, 'bind_', arguments);
-		if(this._group && this.desktop && !this._attachExternal){
+		if(this._group && this.desktop && !this._attachExternal) {
 			this._group._addExtern(this);
 			this._attachExternal = true;
 		}
 	},
-	unbind_: function(){
+	unbind_: function () {
 		this.$supers(zul.wgt.Radio, 'unbind_', arguments);
-		if(this._group && this._attachExternal){
+		if(this._group && this._attachExternal) {
 			this._group._rmExtern(this);
 			this._attachExternal = false;
 		}
@@ -139,7 +139,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 */
 	getName: function () {
 		var group = this.getRadiogroup();
-		return group != null ? group.getName(): this.uuid;
+		return group != null ? group.getName() : this.uuid;
 	},
 	_fixName: function () {
 		var n = this.$n('real');
@@ -151,7 +151,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			oldGroup = this.getRadiogroup(),
 			newGroup = newParent ? this.getRadiogroup(newParent) : null;
 		if (oldGroup != newGroup || !newParent) {
-			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)){
+			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)) {
 				oldGroup._fixOnRemove(this);
 				if (this._attachExternal) {
 					oldGroup._rmExtern(this);
@@ -159,7 +159,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				}
 			}
 			if (newGroup && newGroup.$instanceof(zul.wgt.Radiogroup)) {
-				if (!this._attachExternal && newGroup == this._group ) {
+				if (!this._attachExternal && newGroup == this._group) {
 					newGroup._addExtern(this);
 					this._attachExternal = true;
 				}
@@ -171,6 +171,6 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	fireOnCheck_: function (checked) {
 		// if Radiogroup listens to onCheck, we shall fire the event too.
 		var group = this.getRadiogroup();
-		this.fire('onCheck', checked, {toServer: group && group.isListen('onCheck')} );
+		this.fire('onCheck', checked, {toServer: group && group.isListen('onCheck')});
 	}
 });

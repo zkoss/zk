@@ -32,36 +32,36 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether it is disabled.
 		 * @param boolean disabled
 		 */
-		disabled:  [
-		    // Refer from Button.js for the following changes
-		    // B60-ZK-1176
-		    // Autodisable should not re-enable when setDisabled(true) is called during onClick 
-		    function (v, opts) {
-		    	if (opts && opts.adbs)
-		    		// called from zul.wgt.ADBS.autodisable
-		    		this._adbs = true;	// Start autodisabling  
-		    	else if (!opts || opts.adbs === undefined)
-		    		// called somewhere else (including server-side)
-		    		this._adbs = false;	// Stop autodisabling
-		    	if (!v) {
-		    		if (this._adbs) {
-		    			// autodisable is still active, allow enabling
-		    			this._adbs = false;
-		    		} else if (opts && opts.adbs === false)
-		    			// ignore re-enable by autodisable mechanism
-		    			return this._disabled;
-		    	}
-		    	return v;
-		    }, 
-		    function (v) {
-		    	var self = this,
-		    		doDisable = function() { 
-			    		if (self.desktop) {
-			    			jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
-			    		}
-			    	};
-		    	doDisable();
-		    }
+		disabled: [
+			// Refer from Button.js for the following changes
+			// B60-ZK-1176
+			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
+			function (v, opts) {
+				if (opts && opts.adbs)
+					// called from zul.wgt.ADBS.autodisable
+					this._adbs = true;	// Start autodisabling  
+				else if (!opts || opts.adbs === undefined)
+					// called somewhere else (including server-side)
+					this._adbs = false;	// Stop autodisabling
+				if (!v) {
+					if (this._adbs) {
+						// autodisable is still active, allow enabling
+						this._adbs = false;
+					} else if (opts && opts.adbs === false)
+						// ignore re-enable by autodisable mechanism
+						return this._disabled;
+				}
+			return v;
+			}, 
+			function (v) {
+				var self = this,
+					doDisable = function () { 
+						if (self.desktop) {
+							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						}
+					};
+				doDisable();
+			}
 		],
 		/** Returns the direction.
 		 * <p>Default: "normal".
@@ -112,7 +112,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n();
-			if (n) n.tabIndex = v||'';
+			if (n) n.tabIndex = v || '';
 		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this anchor.
@@ -159,7 +159,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	// super//
-	bind_: function(){
+	bind_: function () {
 		this.$supers(zul.wgt.A, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
@@ -167,14 +167,14 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 				.domListen_(n, 'onBlur', 'doBlur_');
 		}
 	},
-	unbind_: function(){
+	unbind_: function () {
 		var n = this.$n();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(zul.wgt.A, 'unbind_', arguments);
 	},
-	domContent_: function(){
+	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()), 
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -188,7 +188,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 				+ (iconSclass ? ' ' + iconSclass : '');
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
-	domAttrs_: function(no){
+	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments),
 			v;
 		if (v = this.getTarget())
@@ -203,7 +203,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			attr += ' disabled="disabled"';
 		return attr;
 	},
-	doClick_: function(evt) {
+	doClick_: function (evt) {
 		var href = this.getHref();
 		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
@@ -213,7 +213,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		}
 		// Bug ZK-2422
 		if (zk.ie < 11 && !href) {
-			evt.stop({dom:true});
+			evt.stop({dom: true});
 		}
 		if (this._disabled)
 			evt.stop(); // Prevent browser default

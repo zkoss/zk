@@ -11,14 +11,14 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
-(function() {
+(function () {
 //Note: we have to depend on client-side's zk.css3, since,
 //if Browser Mode=9 and Document Mode=8, it means non-CSS3 but server can't detect it
 if (!zk.css3) {
 	var _defShadowOpts = {left: 4, right: 4, top: 3, bottom: 3},
 		_shadowEnding = '" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
-		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
-		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>';
+		+ '<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
+		+ '<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>';
 
 	/** The shadow effect.
 	 * @disable(zkgwt)
@@ -54,7 +54,7 @@ if (!zk.css3) {
 		/** Hides the shadow, no matter the associated element is visible or not.
 		 * <p>Notice this method is rarely used. Rather, {@link #sync} is more convenient to use. 
 		 */
-		hide: function(){
+		hide: function () {
 			jq(this.shadow).hide();
 			jq(this.stackup).hide();
 		},
@@ -94,8 +94,7 @@ if (!zk.css3) {
 			var stackup = this.stackup;
 			if(opts.stackup) {
 				if(!stackup)
-					stackup = this.stackup =
-						jq.newStackup(node, node.id + '-sdwstk', shadow);
+					stackup = this.stackup = jq.newStackup(node, node.id + '-sdwstk', shadow);
 
 				st = stackup.style;
 				st.left = jq.px(l);

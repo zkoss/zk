@@ -67,7 +67,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		else
 			this.$supers('doClick_', arguments);
 	},
-	onFloatUp: function(ctl, opts) {
+	onFloatUp: function (ctl, opts) {
 		if (opts && opts.triggerByFocus) //only mouse click should close notification
 			return;
 		if (!this.isVisible())
@@ -84,7 +84,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			floatFound = floatFound || wgt.isFloating_();
 		}
 		if (!this._closable && this._dur <= 0)
-			this.close({sendOnOpen:true});
+			this.close({sendOnOpen: true});
 	},
 	open: function (ref, offset, position, opts) {
 		this.$supers(zul.wgt.Notification, 'open', arguments);
@@ -110,43 +110,43 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		n.style.padding = '0';
 		// cache arrow direction for _fixarrow() later
 		switch (position) {
-		case "before_start":
-		case "before_center":
-		case "before_end":
+		case 'before_start':
+		case 'before_center':
+		case 'before_end':
 			this._dir = 'd';
 			n.style.paddingBottom = ph + 'px';
 			break;
-		case "after_start":
-		case "after_center":
-		case "after_end":
+		case 'after_start':
+		case 'after_center':
+		case 'after_end':
 			this._dir = 'u';
 			n.style.paddingTop = ph + 'px';
 			break;
-		case "end_before":
-		case "end_center":
-		case "end_after":
+		case 'end_before':
+		case 'end_center':
+		case 'end_after':
 			this._dir = 'l';
 			n.style.paddingLeft = pw + 'px';
 			break;
-		case "start_before":
-		case "start_center":
-		case "start_after":
+		case 'start_before':
+		case 'start_center':
+		case 'start_after':
 			this._dir = 'r';
 			n.style.paddingRight = pw + 'px';
 			break;
-		case "top_left":
-		case "top_center":
-		case "top_right":
-		case "middle_left":
-		case "middle_center":
-		case "middle_right":
-		case "bottom_left":
-		case "bottom_center":
-		case "bottom_right":
-		case "overlap":
-		case "overlap_end":
-		case "overlap_before":
-		case "overlap_after":
+		case 'top_left':
+		case 'top_center':
+		case 'top_right':
+		case 'middle_left':
+		case 'middle_center':
+		case 'middle_right':
+		case 'bottom_left':
+		case 'bottom_center':
+		case 'bottom_right':
+		case 'overlap':
+		case 'overlap_end':
+		case 'overlap_before':
+		case 'overlap_after':
 			this._dir = 'n';
 			break;
 		// at_pointer, after_pointer, etc.
@@ -240,7 +240,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			return;
 		
 		if (!pos && !off)
-			pos = ref ? "end_center" : "middle_center";
+			pos = ref ? 'end_center' : 'middle_center';
 		
 		if (!parent) {
 			// bug ZK-1136: If target page is detached, append to current active page

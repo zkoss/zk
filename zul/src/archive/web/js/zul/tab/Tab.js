@@ -56,7 +56,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		 * Default: false.
 		 * @param boolean closable
 		 */
-		closable: _zkf = function() {
+		closable: _zkf = function () {
 			this.rerender();
 		},
 		image: function (v) {
@@ -84,7 +84,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		 * Sets whether this tab is selected.
 		 * @param boolean selected
 		 */
-		selected: function(selected) {
+		selected: function (selected) {
 			this._sel();
 		}
 	},
@@ -92,32 +92,32 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	 * Returns the tabbox owns this component.
 	 * @return Tabbox
 	 */
-	getTabbox: function() {
+	getTabbox: function () {
 		return this.parent ? this.parent.parent : null;
 	},
 	/**
 	 * Returns the index of this panel, or -1 if it doesn't belong to any tabs.
 	 * @return int
 	 */
-	getIndex: function() {
+	getIndex: function () {
 		return this.getChildIndex();
 	},
 	/**
 	 * Returns the panel associated with this tab.
 	 * @return Tabpanel
 	 */
-	getLinkedPanel: function() {
+	getLinkedPanel: function () {
 		var w;
 		return (w = this.getTabbox()) && (w = w.getTabpanels()) ?
-			w.getChildAt(this.getIndex()): null;
+			w.getChildAt(this.getIndex()) : null;
 	},
-	_doCloseClick : function(evt) {
+	_doCloseClick: function (evt) {
 		if (!this._disabled) {
 			this.fire('onClose');
 			evt.stop();
 		}
 	},
-	_sel: function(notify, init) {
+	_sel: function (notify, init) {
 		var tabbox = this.getTabbox();
 		
 		/* ZK-1441
@@ -137,7 +137,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			this._setSel(this, true, notify, init);
 		}
 	},
-	_setSel: function(tab, toSel, notify, init) {
+	_setSel: function (tab, toSel, notify, init) {
 		var tabbox = this.getTabbox(),
 			panel = tab.getLinkedPanel();
 		if (tab.isSelected() == toSel && notify)
@@ -146,7 +146,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (toSel) {
 			tabbox._selTab = tab; //avoid loopback
 			var ps;
-			if (ps = tabbox.tabpanels){
+			if (ps = tabbox.tabpanels) {
 				if(ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false, tabbox.inAccordionMold());
 				ps._selPnl = panel; //stored in tabpanels
 			}
@@ -210,7 +210,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	//protected
-	doClick_: function(evt) {
+	doClick_: function (evt) {
 		if (this._disabled) return;
 		this._sel(true);
 		this.$supers('doClick_', arguments);
@@ -235,7 +235,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		} else
 			img = '<img src="' + img + '" class="' + this.$s('image') + '"/>'
 			+ (iconSclass ? ' ' + iconSclass : '');
-		return label ? img + ' ' + label: img;
+		return label ? img + ' ' + label : img;
 	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tab
@@ -258,7 +258,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			zk.afterMount(function () {
 				if (tab.desktop && tab.getTabbox().inAccordionMold()) {
 					var panel = tab.getLinkedPanel(),
-						cave = panel? panel.$n('cave') : null;
+						cave = panel ? panel.$n('cave') : null;
 					// slide down if the cave node of panel is not visible before select
 					if (cave && cave.style.display == 'none')
 						panel._sel(true, true);
@@ -291,7 +291,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	deferRedrawHTML_: function (out) {
 		var tbx = this.getTabbox(),
 			tag = tbx.inAccordionMold() ? 'div' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
+		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag,'>');
 	},
 	rerender: function (skipper) {
 		// ZK-886

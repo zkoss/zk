@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _onChangeData(wgt, inf, selbk) {
 		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
-		if (selbk) inf.bySelectBack =  true;
+		if (selbk) inf.bySelectBack = true;
 		return inf;
 	}
 	function _startOnChanging(wgt) {
@@ -33,8 +33,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt._tidChg = null;
 		}
 		if (onBlur) {
-			if ((zul.inp.InputWidget.onChangingForced &&
-					wgt.isListen('onChanging')) || wgt._instant)
+			if ((zul.inp.InputWidget.onChangingForced
+				&& wgt.isListen('onChanging')) || wgt._instant)
 				_onChanging.call(wgt, -1); //force
 			_clearOnChanging(wgt);
 		}
@@ -52,7 +52,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this.valueSel_ = null;
 			if (this.isListen('onChanging'))
 				this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
-					{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
+					{ignorable: 1, rtags: {onChanging: 1}}, timeout || 5);
 			if (this._instant)
 				this.updateChange_();
 		}
@@ -65,10 +65,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	var _keyIgnorable = zk.ie < 11 ? function () {return true;}:
+	var _keyIgnorable = zk.ie < 11 ? function () {return true;} :
 		zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
-		}: function (code) {
+		} : function (code) {
 			return code >= 32;
 		},
 
@@ -77,7 +77,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (wgt == zk.currentFocus)
 					zjq.fixInput(wgt.getInputNode());
 			}, 0);
-		}: zk.$void;
+		} : zk.$void;
 	var windowX = windowY = 0;
 
 /** @class zul.inp.RoundUtl
@@ -105,7 +105,7 @@ zul.inp.RoundUtl = {
 	buttonVisible: function (wgt, v) {
 		var n = wgt.$n('btn');
 		if (n) {
-			var fnm = v ? 'removeClass': 'addClass';
+			var fnm = v ? 'removeClass' : 'addClass';
 			jq(n)[fnm](wgt.$s('disabled'));
 			jq(wgt.getInputNode())[fnm](wgt.$s('rightedge'));
 			wgt.onSize();
@@ -128,7 +128,7 @@ zul.inp.RoundUtl = {
 				clearTimeout(wgt._inplaceTimerId);
 				wgt._inplaceTimerId = null;
 			}
-			wgt._inplaceTimerId = setTimeout(function(){
+			wgt._inplaceTimerId = setTimeout(function () {
 				if (wgt.desktop) jq(wgt.$n()).addClass(wgt.getInplaceCSS());
 			}, wgt._inplaceTimeout);
 			wgt.onSize();
@@ -203,7 +203,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp) { //check if bind
 				inp.disabled = disabled;
-				var fnm = disabled ? 'addClass': 'removeClass';
+				var fnm = disabled ? 'addClass' : 'removeClass';
 				jq(this.$n())[fnm](this.$s('disabled'));
 			}
 		},
@@ -219,7 +219,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (inp) {
 				_fixInput(this);
 
-				var fnm = readonly ? 'addClass': 'removeClass';
+				var fnm = readonly ? 'addClass' : 'removeClass';
 				
 				inp.readOnly = readonly;
 				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
@@ -234,9 +234,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 */
 		cols: function (cols) {
 			var inp = this.getInputNode();
-			if (inp)
+			if (inp) {
 				if (this.isMultiline()) inp.cols = cols;
 				else inp.size = cols;
+			}
 		},
 		/** Returns the maxlength.
 		 * <p>Default: 0 (non-postive means unlimited).
@@ -260,7 +261,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		tabindex: function (tabindex) {
 			var inp = this.getInputNode();
 			if (inp)
-				inp.tabIndex = tabindex||'';
+				inp.tabIndex = tabindex || '';
 		},
 		/** Returns whether enable the inplace-editing.
 		 * <p>default: false.
@@ -353,7 +354,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMultiline: function() {
+	isMultiline: function () {
 		return false;
 	},
 	/**
@@ -361,7 +362,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * <p>Default: false, only combo component are true (@since 7.0.0)
 	 * @return boolean
 	 */
-	inRoundedMold: function(){
+	inRoundedMold: function () {
 		return true;
 	},
 
@@ -400,9 +401,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (fromServer)
 			this.clearErrorMessage(this.cst != null);
 		else {
- 			vi = this._validate(value);
- 			value = vi.value;
-	 	}
+			vi = this._validate(value);
+			value = vi.value;
+		}
 
 		_clearOnChanging(this);
 
@@ -451,7 +452,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (v > 0) html += ' maxlength="' + v + '"';
 		}
 		v = this._tabindex;
-		if (v) html += ' tabindex="' + v +'"';
+		if (v) html += ' tabindex="' + v + '"';
 		v = this._name;
 		if (v) html += ' name="' + v + '"';
 		if (this._disabled) html += ' disabled="disabled"';
@@ -518,9 +519,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 		if (this._inplace) {
 			_clearInplaceTimeout(this);
-			if (!this._inplaceIgnore){
+			if (!this._inplaceIgnore) {
 				var self = this;
-				self._inplaceTimerId = setTimeout(function(){
+				self._inplaceTimerId = setTimeout(function () {
 					if (self.desktop) jq(self.$n()).addClass(self.getInplaceCSS());
 				}, self._inplaceTimeout);
 			}
@@ -688,7 +689,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					this.clearErrorMessage(true);
 					if (val.server || this._cst == '[c') { //CustomConstraint
 						this._reVald = false;
-						return {rawValue: value||'', server: true}; //let server to validate it
+						return {rawValue: value || '', server: true}; //let server to validate it
 					}
 					this._markError(msg, val);
 					return val;
@@ -723,7 +724,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (zk.mac && evt.metaKey)
 			return;
 		else {
-			var code = (zk.ie < 11||zk.opera) ? evt.keyCode : evt.charCode;
+			var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode;
 			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
 			&& keys.indexOf(String.fromCharCode(code)) < 0) {
 				evt.stop();
@@ -740,13 +741,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		eb.show();
 		return eb;
 	},
-	_equalValue: function(a, b) {
+	_equalValue: function (a, b) {
 		return a == b || this.marshall_(a) == this.marshall_(b);
 	},
-	marshall_: function(val) {
+	marshall_: function (val) {
 		return val;
 	},
-	unmarshall_: function(val) {
+	unmarshall_: function (val) {
 		return val;
 	},
 	/** Updates the change to server by firing onChange if necessary.
@@ -789,8 +790,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (upd || vi.server)
 				this.fire('onChange',
 					_onChangeData(this,
-						data != null ? data: {value: this.marshall_(vi.value)}),
-					vi.server ? {toServer:true}: null, 90);
+						data != null ? data : {value: this.marshall_(vi.value)}),
+					vi.server ? {toServer: true} : null, 90);
 		}
 		return true;
 	},
@@ -879,10 +880,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				wgt.doBlur_(evt); //fire onBlur again
 		}, 10);
 	},
-	resetSize_: function(orient) {
+	resetSize_: function (orient) {
 		var n;
 		if (this.$n() != (n = this.getInputNode()))
-			n.style[orient == 'w' ? 'width': 'height'] = '';
+			n.style[orient == 'w' ? 'width' : 'height'] = '';
 		this.$supers('resetSize_', arguments);
 	},
 	doKeyDown_: function (evt) {
@@ -929,7 +930,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.$supers('doKeyUp_', arguments);
 	},
-	afterKeyDown_: function (evt,simulated) {
+	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
@@ -962,7 +963,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	onChangingForced: true,
 	
 	// for errorbox, datebox, combowidget
-	_isInView: function(wgt) {
+	_isInView: function (wgt) {
 		var n = wgt.getInputNode();
 		return zk(n).isRealScrollIntoView(true);
 	}

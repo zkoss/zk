@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _isPE = (function () {
 		var _isPE_ = zk.feature.pe;
 		return function () {
-				return _isPE_ && zk.isLoaded('zkex.grid')
+				return _isPE_ && zk.isLoaded('zkex.grid');
 			};
 	})();
 	function _syncFrozen(wgt) {
@@ -86,7 +86,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers(Rows, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this.desktop){
+		if (this.desktop) {
 			if (this._shallStripe) { //since bind_(...after)
 				this.stripe();
 				this.getGrid().onSize();
@@ -122,7 +122,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 				for (;n.rows[j] && n.rows[j].id != w.uuid;++j);
 
 				jq(n.rows[j])[even ? 'removeClass' : 'addClass'](scOdd);
-				w.fire("onStripe");
+				w.fire('onStripe');
 				even = !even;
 			}
 		}
@@ -155,7 +155,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (g) g._syncEmpty();
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tbody', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tbody>');
+		out.push('<tbody', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tbody>');
 	}
 });
 })();

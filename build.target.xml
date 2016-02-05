@@ -47,8 +47,8 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		 if="${checkstyle.js}">
 	<exec executable="bash" dir="." resultproperty="checkstyle.js.err">
 		<arg value="${bin.dir}/jscheck"/>
+		<arg value="${bin.dir}"/>
 		<arg value="${src.dir}"/>
-		<arg value="--reporter=checkstyle"/>
 		<arg value="--config=${bin.dir}/zk_jscheck.json"/>
 		<arg value="--max-errors=-1"/>
 	</exec>

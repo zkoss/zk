@@ -17,11 +17,11 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 	/** The class name (<code>zhtml.Widget</code>)
 	 * @type String
 	 */
-	className: "zhtml.Widget",
+	className: 'zhtml.Widget',
 	/** The widget name (<code>zhtml</code>).
 	 * @type String
 	 */
-	widgetName: "zhtml",
+	widgetName: 'zhtml',
 
 	setDynamicProperty: function (prop) {
 		var n = this.$n();
@@ -51,7 +51,7 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 	},
 	doClick_: function (wevt) {
 		var n = this.$n();
-		if (n)
+		if (n) {
 			if (n.tagName != 'INPUT')
 				this.$supers('doClick_', arguments);
 			else if (!n.disabled) {
@@ -60,6 +60,7 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 					//continue to fire onClick_ for backward compatibility
 				this.fireX(wevt); //no propagation
 			}
+		}
 	},
 	_doCheck: function () {
 		var n = this.$n();

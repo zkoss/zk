@@ -15,7 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 //define a package and returns the package info (used in WpdExtendlet)
 function zkpi(nm, wv) {
-	return zk.isLoaded(nm) ? null: {n: nm, p: zk.$package(nm, false, wv)};
+	return zk.isLoaded(nm) ? null : {n: nm, p: zk.$package(nm, false, wv)};
 }
 
 //ZK JSP: page creation (backward compatible)
@@ -51,14 +51,14 @@ function zkmld(wgtcls, molds) {
 	var ms = wgtcls.molds = {};
 	for (var nm in molds) {
 		var fn = molds[nm];
-		ms[nm] = typeof fn == 'function' ? fn: fn[0].molds[fn[1]];
+		ms[nm] = typeof fn == 'function' ? fn : fn[0].molds[fn[1]];
 	}		
 }
 
 //Run Ajax-as-a-service's main
 function zkamn(pkg, fn) {
 	zk.load(pkg, function () {
-		setTimeout(function(){
+		setTimeout(function () {
 			zk.afterMount(fn);
 		}, 20);
 	});
@@ -129,7 +129,7 @@ function zkamn(pkg, fn) {
 	//afterMount: function () {}
 //@};
 	zk.afterMount = function (fn, delay) { //part of zk
-		if (fn)
+		if (fn) {
 			if (!jq.isReady)
 				jq(function () {zk.afterMount(fn);}); //B3278524
 			else if (zk.mounting)
@@ -141,6 +141,7 @@ function zkamn(pkg, fn) {
 				return true; //called
 			} else
 				setTimeout(fn, delay);
+		}
 	};
 /** @partial zk
  */
@@ -158,15 +159,15 @@ function zkamn(pkg, fn) {
      */
     //afterResize: function () {}
 //@};
-    zk.afterResize = function (fn) {
-        if (fn)
-            _aftResizes.push(fn);
-    };
-    zk.doAfterResize = function () {
-        for (var fn; fn = _aftResizes.shift();) {
-            fn();
-        }
-    };
+	zk.afterResize = function (fn) {
+		if (fn)
+			_aftResizes.push(fn);
+	};
+	zk.doAfterResize = function () {
+		for (var fn; fn = _aftResizes.shift();) {
+			fn();
+		}
+	};
 	function _curdt() {
 		return _mntctx.curdt || (_mntctx.curdt = zk.Desktop.$());
 	}
@@ -210,7 +211,7 @@ function zkamn(pkg, fn) {
 			if (!inf)
 				break; //done
 
-			_crInfBL1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
+			_crInfBL1.push([inf[0], create(inf[3] || inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
 				//inf[3]: owner passed from zkx
 				//inf[2]: bindOnly
@@ -247,7 +248,7 @@ function zkamn(pkg, fn) {
 					if ($jq.hasClass('z-loading') && $jq.parent().hasClass('z-temp')) {
 						$jq[0].id = 'zna';
 						if (!jq('#zk_proc').length) //B65-ZK-1431: check if progressbox exists
-							zUtl.progressbox('zk_proc', window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+							zUtl.progressbox('zk_proc', window.msgzk ? msgzk.PLEASE_WAIT : 'Processing...', true);
 					}
 				}
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
@@ -289,7 +290,7 @@ function zkamn(pkg, fn) {
 				break; //done
 
 			if (filter = inf[4][1]) //inf[4] is extra if AU
-				Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
+				Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));};
 			try {
 				wgt = create(null, inf[1]);
 			} finally {
@@ -332,18 +333,18 @@ function zkamn(pkg, fn) {
 		var wgt, stub, v,
 			type = wi[0],
 			uuid = wi[1],
-			props = wi[2]||{},
-			seProps = wi[3]||{};
+			props = wi[2] || {},
+			seProps = wi[3] || {};
 		if (type === 0) { //page
-			type = zk.cut(props, 'wc')
-			var cls = type ? zk.$import(type): zk.Page;
+			type = zk.cut(props, 'wc');
+			var cls = type ? zk.$import(type) : zk.Page;
 			(wgt = new cls({uuid: uuid}, zk.cut(props, 'ct'))).inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			if ((stub = type == '#stub') || type == '#stubs') {
 				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
 						|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
-					throw 'Unknown stub '+uuid;
+					throw 'Unknown stub ' + uuid;
 				var w = new Widget();
 				//Bug ZK-1596: may already unbind
 				//Bug ZK-1821: should also unbind wgt if in ROD status
@@ -406,7 +407,7 @@ function zkamn(pkg, fn) {
 		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
 			_t0 = t;
 			dt >>= 6;
-			setTimeout(fn, dt < 10 ? dt: 10); //breathe
+			setTimeout(fn, dt < 10 ? dt : 10); //breathe
 				//IE optimize the display if delay is too short
 			return true;
 		}
@@ -487,8 +488,8 @@ function zkamn(pkg, fn) {
 			doAuCmds(aucmds);
 		} catch (e) {
 			zk.mounting = false;
-			zk.error('Failed to mount: '+(e.message||e));
-			setTimeout(function(){
+			zk.error('Failed to mount: ' + (e.message || e));
+			setTimeout(function () {
 				throw e;
 			},0);				
 		}
@@ -520,7 +521,7 @@ function zkamn(pkg, fn) {
 	zkmb: function (bindOnly) {
 		_mntctx.bindOnly = bindOnly;
 		var t = 390 - (jq.now() - _t0);
-		zk.startProcessing(t > 0 ? t: 0);
+		zk.startProcessing(t > 0 ? t : 0);
 	},
 	//end of mounting
 	zkme: function () {
@@ -536,7 +537,7 @@ function zkamn(pkg, fn) {
 })(window);
 
 //Event Handler//
-jq(function() {
+jq(function () {
 	var Widget = zk.Widget,
 		_bfUploads = [],
 		_reszInf = {},
@@ -595,8 +596,8 @@ jq(function() {
 		var target = evt.domTarget,
 			body = document.body,
 			old = zk.currentFocus;
-		if ((target != body && target != body.parentNode) ||
-				(evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
+		if ((target != body && target != body.parentNode)
+				|| (evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
 			
@@ -640,7 +641,7 @@ jq(function() {
 		_reszInf.inResize = true;
 		try {
 			zWatch.fire('beforeSize'); //notify all
-			zWatch.fire('onFitSize', null, {reverse:true}); //notify all
+			zWatch.fire('onFitSize', null, {reverse: true}); //notify all
 			zWatch.fire('onSize'); //notify all
 			_reszInf.lastTime = jq.now() + 8;
 		} finally {
@@ -669,7 +670,7 @@ jq(function() {
 	var lastTimestamp, lastTarget;
 	jq(document)
 	.keydown(function (evt) {
-		var wgt = Widget.$(evt, {child:true}),
+		var wgt = Widget.$(evt, {child: true}),
 			wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 		if (wgt) {
 			_doEvt(wevt);
@@ -688,12 +689,12 @@ jq(function() {
 	.keyup(function (evt) {
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
-		else wgt = Widget.$(evt, {child:true});
+		else wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 	})
 	.keypress(function (evt) {
 		var wgt = zk.keyCapture;
-		if (!wgt) wgt = Widget.$(evt, {child:true});
+		if (!wgt) wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
 	.bind('zcontextmenu', function (evt) {
@@ -703,7 +704,7 @@ jq(function() {
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
 
-		var wgt = Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child: true});
 		if (wgt) {
 			if (zk.ie < 11)
 				evt.which = 3;
@@ -714,17 +715,17 @@ jq(function() {
 		}
 		return !(zk.ie < 11) || evt.returnValue;
 	})
-	.bind('zmousedown', function(evt){
+	.bind('zmousedown', function (evt) {
 		if (zk.mobile) {
 			zk.currentPointer[0] = evt.pageX;
 			zk.currentPointer[1] = evt.pageY;
 		}
-		var wgt = Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child: true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
 	})
-	.bind('zmouseup', function(evt){
+	.bind('zmouseup', function (evt) {
 		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
 			return; //ignore
@@ -741,15 +742,15 @@ jq(function() {
 
 		wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
-		else wgt = Widget.$(evt, {child:true});
+		else wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
-	.bind('zmousemove', function(evt){
+	.bind('zmousemove', function (evt) {
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
 		var wgt = zk.mouseCapture;
-		if (!wgt) wgt = Widget.$(evt, {child:true});
+		if (!wgt) wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
@@ -757,10 +758,10 @@ jq(function() {
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
-		_doEvt(new zk.Event(Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), {ignorable:1}, evt));
+		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', evt.mouseData(), {ignorable: 1}, evt));
 	})
 	.mouseout(function (evt) {
-		_doEvt(new zk.Event(Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), {ignorable:1}, evt));
+		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', evt.mouseData(), {ignorable: 1}, evt));
 	})
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
@@ -776,7 +777,7 @@ jq(function() {
 			zjq._fixClick(evt);
 			
 			if (evt.which == 1)
-				_doEvt(new zk.Event(Widget.$(evt, {child:true}),
+				_doEvt(new zk.Event(Widget.$(evt, {child: true}),
 					'onClick', evt.mouseData(), {}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}
@@ -784,7 +785,7 @@ jq(function() {
 	.bind('zdblclick', function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
-		var wgt = Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child: true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
@@ -796,7 +797,7 @@ jq(function() {
 		zAu._onVisibilityChange();
 	});
 	
-	var _sizeHandler = function(evt){
+	var _sizeHandler = function (evt) {
 		if (zk.mounting)
 			return;
 
@@ -813,13 +814,13 @@ jq(function() {
 		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
-		var delay = zk.ie < 11 || zk.android ? 250: 50;
+		var delay = zk.ie < 11 || zk.android ? 250 : 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
 
 		if (zk.mobile && zAu._cInfoReg) {
 			if (!jq('#zk_proc').length && !jq('#zk_showBusy').length) {
-				zUtl.progressbox('zk_proc', window.msgzk?msgzk.PLEASE_WAIT:'Processing...', true);
+				zUtl.progressbox('zk_proc', window.msgzk ? msgzk.PLEASE_WAIT : 'Processing...', true);
 			}
 		}
 	};
@@ -896,7 +897,7 @@ jq(function() {
 		//Return nothing
 	};
 
-	zk.afterMount(function(){jq('script.z-runonce').remove();});
+	zk.afterMount(function () {jq('script.z-runonce').remove();});
 		//clean up the runonce script. otherwise, it might be run again if
 		//the script element is moved
 }); //jq()

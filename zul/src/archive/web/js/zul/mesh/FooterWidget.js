@@ -96,6 +96,6 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
+		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
 	}
 });

@@ -150,7 +150,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns whether it is a horizontal tabbox.
 	 * @return boolean
 	 */
-	isHorizontal: function() {
+	isHorizontal: function () {
 		var orient = this.getOrient();
 		return 'horizontal' == orient || 'top' == orient || 'bottom' == orient;
 	},
@@ -158,7 +158,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns whether it is the top orientation.
 	 * @return boolean
 	 */
-	isTop: function() {
+	isTop: function () {
 		var orient = this.getOrient();
 		return 'horizontal' == orient || 'top' == orient;
 	},
@@ -166,14 +166,14 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns whether it is the bottom orientation.
 	 * @return boolean
 	 */
-	isBottom: function() {
+	isBottom: function () {
 		return 'bottom' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is a vertical tabbox.
 	 * @return boolean
 	 */
-	isVertical: function() {
+	isVertical: function () {
 		var orient = this.getOrient();
 		return 'vertical' == orient || 'left' == orient || 'right' == orient;
 	},
@@ -181,7 +181,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns whether it is the right orientation.
 	 * @return boolean
 	 */
-	isRight: function() {
+	isRight: function () {
 		var orient = this.getOrient();
 		return 'vertical' == orient || 'left' == orient;
 	},
@@ -189,7 +189,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns whether it is the left orientation.
 	 * @return boolean
 	 */
-	isLeft: function() {
+	isLeft: function () {
 		return 'left' == this.getOrient();
 	},
 	/**
@@ -203,14 +203,14 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns the selected index.
 	 * @return int
 	 */
-	getSelectedIndex: function() {
-		return this._selTab ? this._selTab.getIndex() : -1 ;
+	getSelectedIndex: function () {
+		return this._selTab ? this._selTab.getIndex() : -1;
 	},
 	/**
 	 * Sets the selected index.
 	 * @param int index
 	 */
-	setSelectedIndex: function(index) {
+	setSelectedIndex: function (index) {
 		if (this.tabs)
 			this.setSelectedTab(this.tabs.getChildAt(index));
 	},
@@ -218,16 +218,16 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns the selected tab panel.
 	 * @return Tabpanel
 	 */
-	getSelectedPanel: function() {
+	getSelectedPanel: function () {
 		return this._selTab ? this._selTab.getLinkedPanel() : null;
 	},
 	/**
 	 * Sets the selected tab panel.
 	 * @param Tabpanel panel
 	 */
-	setSelectedPanel: function(panel) {
+	setSelectedPanel: function (panel) {
 		if (panel && panel.getTabbox() != this)
-			return
+			return;
 		var tab = panel.getLinkedTab();
 		if (tab)
 			this.setSelectedTab(tab);
@@ -236,14 +236,14 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Returns the selected tab.
 	 * @return Tab
 	 */
-	getSelectedTab: function() {
+	getSelectedTab: function () {
 		return this._selTab;
 	},
 	/**
 	 * Sets the selected tab.
 	 * @param Tab tab
 	 */
-	setSelectedTab: function(tab) {
+	setSelectedTab: function (tab) {
 		if (this._selTab != tab) {
 			if (tab)
 				tab.setSelected(true);
@@ -278,11 +278,11 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this._toolbarWidth = null;
 		this.$supers(zul.tab.Tabbox, 'unbind_', arguments);
 	},
-	_doClick: function(evt, direction) {
+	_doClick: function (evt, direction) {
 		if (!this.tabs || !this.tabs.nChildren) return; // nothing to do	
 
 		var cave = this.tabs.$n('cave'),
-			allTab =  jq(cave).children(),
+			allTab = jq(cave).children(),
 			move = 0,
 			tabbox = this,
 			head = this.tabs.$n(),
@@ -308,14 +308,14 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				if (allTab[i].offsetLeft >= scrollLength) {
 					//if no Sibling tab no scroll
 					var tabli = jq(allTab[i]).prev('li')[0];
-					if (!tabli)  return;
+					if (!tabli) return;
 					move = scrollLength - tabli.offsetLeft;
 					if (isNaN(move)) return;
 					this.tabs._doScroll('left', move);
 					return;
 				};
 			};
-			move = scrollLength - allTab[allTab.length-1].offsetLeft;
+			move = scrollLength - allTab[allTab.length - 1].offsetLeft;
 			if (isNaN(move)) return;
 			this.tabs._doScroll('left', move);
 			break;
@@ -324,21 +324,21 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				if (allTab[i].offsetTop >= scrollLength) {
 					var preli = jq(allTab[i]).prev('li')[0];
 					if (!preli) return;
-					move = scrollLength - preli.offsetTop ;
+					move = scrollLength - preli.offsetTop;
 					this.tabs._doScroll('up', move);
 					return;
 				};
 			};
-			var preli = allTab[allTab.length-1];
+			var preli = allTab[allTab.length - 1];
 			if (!preli) return;
-			move = scrollLength - preli.offsetTop ;
+			move = scrollLength - preli.offsetTop;
 			this.tabs._doScroll('up', move);
 			break;
 		case 'down':
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetTop + allTab[i].offsetHeight > plus) {
 					move = allTab[i].offsetTop + allTab[i].offsetHeight - scrollLength - offsetLength;
-					if (!move || isNaN(move)) return ;
+					if (!move || isNaN(move)) return;
 					this.tabs._doScroll('down', move);
 					return;
 				};
@@ -408,7 +408,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			zUtl.fireSized(this, -1); //no beforeSize
 	},
 	
-	_fixMaxHeight: function() {
+	_fixMaxHeight: function () {
 		var tabbox = this;
 		if (tabbox._maximalHeight) {
 			var max = 0,

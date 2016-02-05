@@ -42,7 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: 'horizontal',
 	_dir: 'normal',
-	_mode:'default',
+	_mode: 'default',
 	_checked: false,
 	//_tabindex: 0,
 
@@ -55,7 +55,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 * Sets the mode. (default/toggle)
 		 * @param String mode
 		 */
-		mode: function(mode) {
+		mode: function (mode) {
 			this.rerender();
 		},
 		/** Returns whether it is checked. (Note:It's only available in toggle mode.)
@@ -65,7 +65,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether it is checked. (Note:It's only available in toggle mode.)
 		 * @param boolean val
 		 */
-		checked: function(val) {
+		checked: function (val) {
 			if (this.desktop && this._mode == 'toggle')
 				jq(this.$n())[val ? 'addClass' : 'removeClass'](this.$s('checked'));
 		},
@@ -80,25 +80,25 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			//B60-ZK-1176
 			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
 			function (v, opts) {
-		    	if (opts && opts.adbs)
-		    		// called from zul.wgt.ADBS.autodisable
-		    		this._adbs = true;	// Start autodisabling  
-		    	else if (!opts || opts.adbs === undefined)
-		    		// called somewhere else (including server-side)
-		    		this._adbs = false;	// Stop autodisabling
-		    	if (!v) {
-		    		if (this._adbs)
-		    			// autodisable is still active, enable allowed
-		    			this._adbs = false;
-		    		else if (opts && opts.adbs === false)
-		    			// ignore re-enable by autodisable mechanism
-		    			return this._disabled;
-		    	}
-		    	return v;
-			}, 
+				if (opts && opts.adbs)
+					// called from zul.wgt.ADBS.autodisable
+					this._adbs = true;	// Start autodisabling  
+				else if (!opts || opts.adbs === undefined)
+					// called somewhere else (including server-side)
+					this._adbs = false;	// Stop autodisabling
+				if (!v) {
+					if (this._adbs)
+						// autodisable is still active, enable allowed
+						this._adbs = false;
+					else if (opts && opts.adbs === false)
+						// ignore re-enable by autodisable mechanism
+						return this._disabled;
+				}
+				return v;
+			},
 			function (v, opts) {
 				var self = this,
-					doDisable = function() {
+					doDisable = function () {
 						if (self.desktop) {
 							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 							if (self._upload)
@@ -162,7 +162,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n();
-			if (n) n.tabIndex = v||'';
+			if (n) n.tabIndex = v || '';
 		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this button.
@@ -253,7 +253,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	getTextNode: function () {
 		return this.$n('cnt');
 	},
-	bind_: function(){
+	bind_: function () {
 		this.$supers(zul.wgt.Toolbarbutton, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
@@ -262,7 +262,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 		if (!this._disabled && this._upload) _initUpld(this);
 	},
-	unbind_: function(){
+	unbind_: function () {
 		_cleanUpld(this);
 		var n = this.$n();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
@@ -270,7 +270,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers(zul.wgt.Toolbarbutton, 'unbind_', arguments);
 	},
-	domContent_: function(){
+	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
@@ -280,10 +280,10 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		else img = '<img src="' + img + '" align="absmiddle" />'
 					+ (iconSclass ? ' ' + iconSclass : '');
 		// B50-ZK-640: toolbarbutton with no label will display larger width blur box
-		var space = label? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
+		var space = label ? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
 	},
-	domClass_: function(no){
+	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments),
 			zcls = this.getZclass(),
 			nozcls = (!no || !no.zclass);
@@ -294,7 +294,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		
 		return scls;
 	},
-	domAttrs_: function(no){
+	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments),
 			v = this.getTabindex();
 		if (this._disabled)
@@ -307,7 +307,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		if (this._uplder)
 			this._uplder.sync();
 	},
-	doClick_: function(evt){
+	doClick_: function (evt) {
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);

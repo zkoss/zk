@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Note: {@link #setVisible} with false cannot work in IE. (Browser's limitation) 
  */
 zul.med.Applet = zk.$extends(zul.Widget, {
-	$init: function() {
+	$init: function () {
 		this._params = {};
 		this.$supers('$init', arguments);
 	},
@@ -110,18 +110,18 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 	/** Invokes the function of the applet running at the client.
 	 */
-	invoke: zk.ie ? function() {
+	invoke: zk.ie ? function () {
 		var n = this.$n(),
 			len = arguments.length;
 		if (n && len >= 1) {
 			var single = len < 3,
 				begin = single ? '(' : '([',
 				end = single ? ')' : '])',
-				expr = "n." + arguments[0] + begin;
+				expr = 'n.' + arguments[0] + begin;
 			for (var j = 1; j < len;) {
 				if (j != 1) expr += ',';
 				var s = arguments[j++];
-				expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
+				expr += '"' + (s ? s.replace('"', '\\"') : '') + '"';
 			}
 			try {
 				eval(expr + end); //don't use $eval since this function shall not be compressed
@@ -129,7 +129,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				zk.error('Failed to invoke applet\'s method: ' + expr + '\n' + e.message);
 			}
 		}
-	}: function(){
+	} : function () {
 		var n = this.$n();
 		if (n && arguments.length >= 1) {
 			var fn = arguments[0],
@@ -161,7 +161,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	 */
 	getField: function (name) {
 		var n = this.$n();
-		return n ? n[name]: null;
+		return n ? n[name] : null;
 	},
 	/** Sets the value of the specified filed.
 	 * @param String name
@@ -207,19 +207,19 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 	
 	//super
-	domAttrs_: function(no){
+	domAttrs_: function (no) {
 		return this.$supers('domAttrs_', arguments)
 				+ ' code="' + (this._code || '') + '"'
-				+ zUtl.appendAttr("codebase", this._codebase)
-				+ zUtl.appendAttr("archive", this._archive)
-				+ zUtl.appendAttr("align", this._align)
-				+ zUtl.appendAttr("hspace", this._hspace)
-				+ zUtl.appendAttr("vspace", this._vspace)
-				+ zUtl.appendAttr("mayscript", this._mayscript);
+				+ zUtl.appendAttr('codebase', this._codebase)
+				+ zUtl.appendAttr('archive', this._archive)
+				+ zUtl.appendAttr('align', this._align)
+				+ zUtl.appendAttr('hspace', this._hspace)
+				+ zUtl.appendAttr('vspace', this._vspace)
+				+ zUtl.appendAttr('mayscript', this._mayscript);
 	},
 	domStyle_: function (no) {
 		return this.$supers('domStyle_', arguments)
-			+ "visibility:visible;"; //bug 2815049
+			+ 'visibility:visible;'; //bug 2815049
 	},
 
 	_outParamHtml: function (out) {

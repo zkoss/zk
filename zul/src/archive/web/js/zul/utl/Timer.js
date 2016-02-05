@@ -85,7 +85,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 		var id = this._iid;
 		if (id) {
 			this._iid = null;
-			clearInterval(id)
+			clearInterval(id);
 		}
 		id = this._tid;
 		if (id) {

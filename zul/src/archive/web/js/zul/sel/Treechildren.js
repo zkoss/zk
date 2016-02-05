@@ -15,15 +15,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _prevsib(child) {
 		var p;
-		if ((p=child.parent) && p.lastChild == child)
+		if ((p = child.parent) && p.lastChild == child)
 			return child.previousSibling;
 	}
 	function _fixOnAdd(oldsib, child, ignoreDom) {
 		if (!ignoreDom) {
 			if (oldsib) oldsib._syncIcon();
 			var p;
-			if ((p=child.parent) && p.lastChild == child
-			&& (p=child.previousSibling))
+			if ((p = child.parent) && p.lastChild == child
+			&& (p = child.previousSibling))
 				p._syncIcon();
 		}
 	}
@@ -52,7 +52,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		this.$supers(Treechildren, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this.desktop){
+		if (this.desktop) {
 			var tree = this.getTree();
 			if (tree && tree.frozen) {
 				tree._shallSyncFrozen = true;
@@ -127,7 +127,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 				
 				// Bug 2909820
 				if (w.treechildren) {
-					var _cn  = w.treechildren.getCaveNode();
+					var _cn = w.treechildren.getCaveNode();
 					if (_cn)
 						cn = _cn;
 				}
@@ -140,8 +140,8 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	},
 	_isRealVisible: function () {
 		var p;
-		return this.isVisible() && (this.isTopmost() || 
-				((p = this.parent) && p.isOpen() && p._isRealVisible()));
+		return this.isVisible() && (this.isTopmost()
+				|| ((p = this.parent) && p.isOpen() && p._isRealVisible()));
 	},
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
@@ -183,7 +183,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			var tree = newParent.$instanceof(zul.sel.Tree) ? newParent : newParent.getTree();
 			if (tree) tree._onTreechildrenAdded(this);
 		}
-		this.$supers("beforeParentChanged_", arguments);
+		this.$supers('beforeParentChanged_', arguments);
 	},
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {

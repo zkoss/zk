@@ -13,8 +13,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzul = {
-UNKNOWN_TYPE: "Type inconnue de composant: ",
-DATE_REQUIRED: "Vous devez spécifier une date. Format: ",
-OUT_OF_RANGE: "Dépassement du rang",
-NO_AUDIO_SUPPORT: "Votre navigateur ne supporte pas l'audio dynamique"
+	UNKNOWN_TYPE: 'Type inconnue de composant: ',
+	DATE_REQUIRED: 'Vous devez spécifier une date. Format: ',
+	OUT_OF_RANGE: 'Dépassement du rang',
+	NO_AUDIO_SUPPORT: "Votre navigateur ne supporte pas l'audio dynamique"
 };

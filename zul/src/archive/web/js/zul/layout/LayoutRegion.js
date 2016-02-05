@@ -269,7 +269,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 			if (nonAnima) this.parent.resize();
 			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
-				this.fire('onOpen', {open:open});
+				this.fire('onOpen', {open: open});
 		}
 	},
 	//bug #3014664
@@ -336,7 +336,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var added = 'normal' == this.getBorder() ? '' : this.$s('noborder');
-			if (added) scls += (scls ? ' ': '') + added;
+			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;
 	},
@@ -367,7 +367,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		return this;
 	},
-	setVisible : function(visible) {
+	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
 			var real = this.$n('real'),
@@ -394,7 +394,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this;
 	},
 	//@Override to apply the calculated value on xxx-real element
-	setFlexSize_ : function(sz) {
+	setFlexSize_: function (sz) {
 		var n = this.$n('real'),
 			ns = n.style;
 		if (sz.height !== undefined) {
@@ -488,7 +488,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.parent.resize();
 		return this;
 	},
-	bind_: function(){
+	bind_: function () {
 		this.$supers(zul.layout.LayoutRegion, 'bind_', arguments);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.$n('split');
@@ -498,7 +498,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					LR = this.$class;
 
 				this._drag = new zk.Draggable(this, split, {
-					constraint: vert ? 'vertical': 'horizontal',
+					constraint: vert ? 'vertical' : 'horizontal',
 					ghosting: LR._ghosting,
 					snap: LR._snap,
 					zIndex: 12000,
@@ -516,7 +516,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					jq(real).hide();
 				}
 
-				if(!this._visible){
+				if(!this._visible) {
 					var colled = this.$n('colled'),
 						real = this.$n('real');
 					jq(real).hide();
@@ -604,9 +604,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var wgt = this,
 			embed = jq(wgt.$n('real')).data('embedscrollbar') !== false, // change default value to true since 7.0.2
 			cave = wgt.$n('cave');
-			scrollbar = new zul.Scrollbar(cave, cave.firstChild, {
+		scrollbar = new zul.Scrollbar(cave, cave.firstChild, {
 				embed: embed,
-				onScrollEnd: function() {
+				onScrollEnd: function () {
 					wgt._doScroll();
 				}
 			});
@@ -708,13 +708,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.$class.afterSlideUp.apply(this, [this.$n('real')]);
 				this.setOpen(true, false, true);
 				this.$n('real').style.zIndex = ''; //reset
-			} else
- 				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid)
+			} else if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid)
 						|| !zk.animating()) {
 					this._isSlideUp = true;
 					zk(this.$n('real')).slideUp(this, {
-						anchor : this.sanchor,
-						afterAnima : this.$class.afterSlideUp
+						anchor: this.sanchor,
+						afterAnima: this.$class.afterSlideUp
 					});
 				}
 		}
@@ -818,10 +817,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_fixFontIcon: function () {
 		zk(this).redoCSS(-1, {'fixFontIcon': true, 'selector': '.z-borderlayout-icon'});
 	},
-	_isVertical : function () {
+	_isVertical: function () {
 		var BL = zul.layout.Borderlayout;
-		return this.getPosition() != BL.WEST &&
-				this.getPosition() != BL.EAST;
+		return this.getPosition() != BL.WEST
+				&& this.getPosition() != BL.EAST;
 	},
 
 	// returns the ambit of the specified cmp for region calculation.
@@ -854,7 +853,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						0) : this.$n('real').offsetHeight
 			};
 		}
-		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0}: this.$n('split') || {offsetHeight:0, offsetWidth:0};
+		var split = ignoreSplit ? {offsetHeight: 0, offsetWidth: 0} : this.$n('split') || {offsetHeight: 0, offsetWidth: 0};
 		if (!ignoreSplit) this._fixSplit();
 
 		this._ambit2(ambit, mars, split);
@@ -988,69 +987,69 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	//drag
 	_ignoredrag: function (dg, pointer, evt) {
-			var target = evt.domTarget,
-				wgt = dg.control,
-				split = wgt.$n('split');
-			if (!target || (split != target && !jq.contains(split, target))) return true;
-			if (wgt.isSplittable() && wgt._open) {
-				var BL = zul.layout.Borderlayout,
-					pos = wgt.getPosition(),
-					maxs = wgt.getMaxsize(),
-					mins = wgt.getMinsize(),
-					ol = wgt.parent,
-					real = wgt.$n('real'),
-					mars = zul.layout.LayoutRegion._aryToObject(wgt._margins),
-					pbw = zk(real).padBorderWidth(),
-					lr = pbw + (pos == BL.WEST ? mars.left : mars.right),
-					tb = pbw + (pos == BL.NORTH ? mars.top : mars.bottom),
-					min = 0,
-					uuid = wgt.uuid;
-				switch (pos) {
-				case BL.NORTH:
-				case BL.SOUTH:
-					var r = ol.center || (pos == BL.NORTH ? ol.south : ol.north);
-					if (r) {
-						if (BL.CENTER == r.getPosition()) {
-							var east = ol.east,
-								west = ol.west;
-							maxs = Math.min(maxs, (real.offsetHeight + r.$n('real').offsetHeight)- min);
-						} else {
-							maxs = Math.min(maxs, ol.$n().offsetHeight
-									- r.$n('real').offsetHeight - r.$n('split').offsetHeight
-									- wgt.$n('split').offsetHeight - min);
-						}
+		var target = evt.domTarget,
+			wgt = dg.control,
+			split = wgt.$n('split');
+		if (!target || (split != target && !jq.contains(split, target))) return true;
+		if (wgt.isSplittable() && wgt._open) {
+			var BL = zul.layout.Borderlayout,
+				pos = wgt.getPosition(),
+				maxs = wgt.getMaxsize(),
+				mins = wgt.getMinsize(),
+				ol = wgt.parent,
+				real = wgt.$n('real'),
+				mars = zul.layout.LayoutRegion._aryToObject(wgt._margins),
+				pbw = zk(real).padBorderWidth(),
+				lr = pbw + (pos == BL.WEST ? mars.left : mars.right),
+				tb = pbw + (pos == BL.NORTH ? mars.top : mars.bottom),
+				min = 0,
+				uuid = wgt.uuid;
+			switch (pos) {
+			case BL.NORTH:
+			case BL.SOUTH:
+				var r = ol.center || (pos == BL.NORTH ? ol.south : ol.north);
+				if (r) {
+					if (BL.CENTER == r.getPosition()) {
+						var east = ol.east,
+							west = ol.west;
+						maxs = Math.min(maxs, (real.offsetHeight + r.$n('real').offsetHeight) - min);
 					} else {
-						maxs = ol.$n().offsetHeight - wgt.$n('split').offsetHeight;
+						maxs = Math.min(maxs, ol.$n().offsetHeight
+								- r.$n('real').offsetHeight - r.$n('split').offsetHeight
+								- wgt.$n('split').offsetHeight - min);
 					}
-					break;
-				case BL.WEST:
-				case BL.EAST:
-					var r = ol.center || (pos == BL.WEST ? ol.east : ol.west);
-					if (r) {
-						if (BL.CENTER == r.getPosition()) {
-							maxs = Math.min(maxs, (real.offsetWidth
-									+ r.$n('real').offsetWidth)- min);
-						} else {
-							maxs = Math.min(maxs, ol.$n().offsetWidth
-									- r.$n('real').offsetWidth - r.$n('split').offsetWidth
-									- wgt.$n('split').offsetWidth - min);
-						}
-					} else {
-						maxs = ol.$n().offsetWidth - wgt.$n('split').offsetWidth;
-					}
-					break;
+				} else {
+					maxs = ol.$n().offsetHeight - wgt.$n('split').offsetHeight;
 				}
-				var ofs = zk(real).cmOffset();
-				dg._rootoffs = {
-					maxs: maxs,
-					mins: mins,
-					top: ofs[1] + tb,
-					left : ofs[0] + lr,
-					right : real.offsetWidth,
-					bottom: real.offsetHeight
-				};
-				return false;
+				break;
+			case BL.WEST:
+			case BL.EAST:
+				var r = ol.center || (pos == BL.WEST ? ol.east : ol.west);
+				if (r) {
+					if (BL.CENTER == r.getPosition()) {
+						maxs = Math.min(maxs, (real.offsetWidth
+								+ r.$n('real').offsetWidth) - min);
+					} else {
+						maxs = Math.min(maxs, ol.$n().offsetWidth
+								- r.$n('real').offsetWidth - r.$n('split').offsetWidth
+								- wgt.$n('split').offsetWidth - min);
+					}
+				} else {
+					maxs = ol.$n().offsetWidth - wgt.$n('split').offsetWidth;
+				}
+				break;
 			}
+			var ofs = zk(real).cmOffset();
+			dg._rootoffs = {
+				maxs: maxs,
+				mins: mins,
+				top: ofs[1] + tb,
+				left: ofs[0] + lr,
+				right: real.offsetWidth,
+				bottom: real.offsetHeight
+				};
+			return false;
+		}
 		return true;
 	},
 	_endeffect: function (dg, evt) {
@@ -1119,9 +1118,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_ghosting: function (dg, ofs, evt) {
 		var el = dg.node, $el = zk(el);
 		jq(document.body).prepend('<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+$el.offsetWidth()+'px;height:'+$el.offsetHeight()
-			+'px;cursor:'+el.style.cursor+';"></div>');
+			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
+			+ $el.offsetWidth() + 'px;height:' + $el.offsetHeight()
+			+ 'px;cursor:' + el.style.cursor + ';"></div>');
 		return jq('#zk_layoutghost')[0];
 	}
 });

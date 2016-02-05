@@ -34,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _deactivate() {
 		_activedg = null;
-		if (_dnEvt) setTimeout(function(){_dnEvt=null;}, 0);
+		if (_dnEvt) setTimeout(function () {_dnEvt = null;}, 0);
 	}
 
 	function _docmousemove(devt) {
@@ -87,13 +87,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var node = dg.node;
 		node._$opacity = jq(node).css('opacity');
 		_dragging[node] = true;
-		new zk.eff.Opacity(node, {duration:0.2, from:node._$opacity, to:0.7}); 
+		new zk.eff.Opacity(node, {duration: 0.2, from: node._$opacity, to: 0.7}); 
 	}
 	function _defEndEffect(dg) {
 		var node = dg.node,
 			toOpacity = typeof node._$opacity == 'number' ? node._$opacity : 1.0;
-		new zk.eff.Opacity(node, {duration:0.2, from:0.7,
-			to:toOpacity, queue: {scope:'_draggable', position:'end'},
+		new zk.eff.Opacity(node, {duration: 0.2, from: 0.7,
+			to: toOpacity, queue: {scope: '_draggable', position: 'end'},
 			afterFinish: function () { 
 				delete _dragging[node];
 			}
@@ -101,12 +101,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _defRevertEffect(dg, offset) {
 		var dx, dy;
-		if ((dx=offset[0]) || (dy=offset[1])) {
+		if ((dx = offset[0]) || (dy = offset[1])) {
 			var node = dg.node,
 				orgpos = node.style.position,
-				dur = Math.sqrt(Math.abs(dy^2)+Math.abs(dx^2))*0.02;
+				dur = Math.sqrt(Math.abs(dy ^ 2) + Math.abs(dx ^ 2)) * 0.02;
 			new zk.eff.Move(node, { x: -dx, y: -dy,
-				duration: dur, queue: {scope:'_draggable', position:'end'},
+				duration: dur, queue: {scope: '_draggable', position: 'end'},
 				afterFinish: function () {node.style.position = orgpos;}});
 		}
 	}
@@ -307,9 +307,9 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		this.control = control;
-		this.node = node = node ? jq(node, zk)[0]: control.node || (control.$n ? control.$n() : null);
+		this.node = node = node ? jq(node, zk)[0] : control.node || (control.$n ? control.$n() : null);
 		if (!node)
-			throw 'Handle required for '+control;
+			throw 'Handle required for ' + control;
 
 		opts = zk.$default(opts, {
 //No default z-index (since caller, such as window, might set it)
@@ -490,21 +490,21 @@ String scroll; //DOM Element's ID</code></pre>
 				p = zk(this.opts.scroll).viewportOffset();
 				p[0] += this.opts.scroll.scrollLeft + this._innerOfs[0];
 				p[1] += this.opts.scroll.scrollTop + this._innerOfs[1];
-				p.push(p[0]+this.opts.scroll.offsetWidth);
-				p.push(p[1]+this.opts.scroll.offsetHeight);
+				p.push(p[0] + this.opts.scroll.offsetWidth);
+				p.push(p[1] + this.opts.scroll.offsetHeight);
 			}
 
 			var speed = [0,0],
 				v = this.opts.scrollSensitivity;
-			if(pt[0] < (p[0]+v)) speed[0] = pt[0]-(p[0]+v);
-			if(pt[1] < (p[1]+v)) speed[1] = pt[1]-(p[1]+v);
-			if(pt[0] > (p[2]-v)) speed[0] = pt[0]-(p[2]-v);
-			if(pt[1] > (p[3]-v)) speed[1] = pt[1]-(p[3]-v);
+			if(pt[0] < (p[0] + v)) speed[0] = pt[0] - (p[0] + v);
+			if(pt[1] < (p[1] + v)) speed[1] = pt[1] - (p[1] + v);
+			if(pt[0] > (p[2] - v)) speed[0] = pt[0] - (p[2] - v);
+			if(pt[1] > (p[3] - v)) speed[1] = pt[1] - (p[3] - v);
 			this._startScrolling(speed);
 		}
 
 		// fix AppleWebKit rendering
-		if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
+		if(navigator.appVersion.indexOf('AppleWebKit') > 0) window.scrollBy(0,0);
 
 		evt.stop();
 	},
@@ -555,7 +555,7 @@ String scroll; //DOM Element's ID</code></pre>
 			d2 = this.delta;
 		if(revert && this.opts.reverteffect) {
 			this.opts.reverteffect(this,
-				[d[0]-this.delta[0], d[1]-this.delta[1]]);
+				[d[0] - this.delta[0], d[1] - this.delta[1]]);
 		} else {
 			this.delta = d;
 		}
@@ -577,10 +577,10 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 		_deactivate(this);
 		var self = this;
-		setTimeout(function(){
-			zk.dragging=false;
+		setTimeout(function () {
+			zk.dragging = false;
 			zWatch.fire('onEndDrag', self, evt);
-		}, zk.ios ? 500: 0);
+		}, zk.ios ? 500 : 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
 
@@ -607,8 +607,8 @@ String scroll; //DOM Element's ID</code></pre>
 		var pos = zk(node).cmOffset(),
 			ofs = [pt[0] - pos[0], pt[1] - pos[1]], v;
 		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
-		if ( (v=node.clientWidth) && ofs[0] > v && node.offsetWidth > v + 3
-		|| (v=node.clientHeight) && ofs[1] > v && node.offsetHeight > v + 3) //scrollbar
+		if ((v = node.clientWidth) && ofs[0] > v && node.offsetWidth > v + 3
+		|| (v = node.clientHeight) && ofs[1] > v && node.offsetHeight > v + 3) //scrollbar
 			return;
 
 		this.offset = ofs;
@@ -666,12 +666,12 @@ String scroll; //DOM Element's ID</code></pre>
 		pos[0] -= d[0]; pos[1] -= d[1];
 
 		if(scroll && (scroll != window && this._isScrollChild)) {
-			pos[0] -= scroll.scrollLeft-this.orgScrlLeft;
-			pos[1] -= scroll.scrollTop-this.orgScrlTop;
+			pos[0] -= scroll.scrollLeft - this.orgScrlLeft;
+			pos[1] -= scroll.scrollTop - this.orgScrlTop;
 		}
 
-		var p = [point[0]-pos[0]-this.offset[0],
-			point[1]-pos[1]-this.offset[1]],
+		var p = [point[0] - pos[0] - this.offset[0],
+			point[1] - pos[1] - this.offset[1]],
 			snap = opts.snap;
 
 		if(snap)
@@ -679,11 +679,11 @@ String scroll; //DOM Element's ID</code></pre>
 				p = snap(this, p);
 			} else {
 				if(snap instanceof Array) {
-					p = [Math.round(p[0]/snap[0])*snap[0],
-						Math.round(p[1]/snap[1])*snap[1]];
+					p = [Math.round(p[0] / snap[0]) * snap[0],
+						Math.round(p[1] / snap[1]) * snap[1]];
 				} else {
-					p = [Math.round(p[0]/snap)*snap,
-						Math.round(p[1]/snap)*snap];
+					p = [Math.round(p[0] / snap) * snap,
+						Math.round(p[1] / snap) * snap];
 				}
 			}
 
@@ -700,16 +700,16 @@ String scroll; //DOM Element's ID</code></pre>
 			if (np) p = np;
 			p = this.snap_(p, opts);
 			style.left = jq.px(p[0]);
-			style.top  = jq.px(p[1]);
+			style.top = jq.px(p[1]);
 		} else {
 			p = this.snap_(p, opts);
-			if((!opts.constraint) || (opts.constraint=='horizontal'))
+			if((!opts.constraint) || (opts.constraint == 'horizontal'))
 				style.left = jq.px(p[0]);
-			if((!opts.constraint) || (opts.constraint=='vertical'))
-				style.top  = jq.px(p[1]);
+			if((!opts.constraint) || (opts.constraint == 'vertical'))
+				style.top = jq.px(p[1]);
 		}
 
-		if(style.visibility=='hidden') style.visibility = ''; // fix gecko rendering
+		if(style.visibility == 'hidden') style.visibility = ''; // fix gecko rendering
 	},
 
 	_stopScrolling: function () {
@@ -721,7 +721,7 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 	_startScrolling: function (speed) {
 		if(speed[0] || speed[1]) {
-			this.scrollSpeed = [speed[0]*this.opts.scrollSpeed,speed[1]*this.opts.scrollSpeed];
+			this.scrollSpeed = [speed[0] * this.opts.scrollSpeed,speed[1] * this.opts.scrollSpeed];
 			this.lastScrolled = new Date();
 			this.scrollInterval = setInterval(this.proxy(this._scroll), 10);
 		}
@@ -735,12 +735,12 @@ String scroll; //DOM Element's ID</code></pre>
 			if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
 				var o = this._getWndScroll(this.opts.scroll),
 					d = delta / 1000;
-				this.opts.scroll.scrollTo(o.left + d*this.scrollSpeed[0],
-					o.top + d*this.scrollSpeed[1]);
+				this.opts.scroll.scrollTo(o.left + d * this.scrollSpeed[0],
+					o.top + d * this.scrollSpeed[1]);
 			}
 		} else {
 			this.opts.scroll.scrollLeft += this.scrollSpeed[0] * delta / 1000;
-			this.opts.scroll.scrollTop  += this.scrollSpeed[1] * delta / 1000;
+			this.opts.scroll.scrollTop += this.scrollSpeed[1] * delta / 1000;
 		}
 
 		this._updateInnerOfs();
@@ -756,10 +756,10 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		if(this.opts.change) {
-			var devt = window.event ? jq.event.fix(window.event): null,
-				evt = devt ? jq.Event.zk(devt): null;
+			var devt = window.event ? jq.event.fix(window.event) : null,
+				evt = devt ? jq.Event.zk(devt) : null;
 			this.opts.change(this,
-				evt ? [evt.pageX, evt.pageY]: _lastPt, evt);
+				evt ? [evt.pageX, evt.pageY] : _lastPt, evt);
 		}
 	},
 
@@ -785,7 +785,7 @@ String scroll; //DOM Element's ID</code></pre>
 			H = de.clientHeight;
 		} else {
 			W = doc.body.offsetWidth;
-			H = doc.body.offsetHeight
+			H = doc.body.offsetHeight;
 		}
 		return {top: T, left: L, width: W, height: H};
 	},
@@ -805,9 +805,9 @@ String scroll; //DOM Element's ID</code></pre>
 		return pos;
 	}
 
-},{//static
+	},{//static
 	ignoreMouseUp: function () { //called by mount
-		return zk.dragging ? true: _dnEvt;
+		return zk.dragging ? true : _dnEvt;
 	},
 	ignoreClick: function () { //called by mount
 		return zk.dragging;

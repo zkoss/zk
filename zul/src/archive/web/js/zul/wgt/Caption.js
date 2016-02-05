@@ -45,15 +45,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = this.getLabel(),
 			img = this.getImage(),
-			title = this.parent ? this.parent._title: '',
+			title = this.parent ? this.parent._title : '',
 			iconSclass = this.domIcon_();
-		if (title) label = label ? title + ' - ' + label: title;
+		if (title) label = label ? title + ' - ' + label : title;
 		label = zUtl.encodeXML(label);
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
 		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" />' + (iconSclass ? ' ' + iconSclass : '');
-		return label ? img + ' ' + label: img;
+		return label ? img + ' ' + label : img;
 	},
 	updateDomContent_: function () {
 		var cnt = this.domContent_(),
@@ -68,8 +68,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		 // B50-ZK-313: only replace dom content
 		if (dn) {
 			// remove dom content
-			jq(dn).contents().filter(function(){
-			    return (size + index++) < total;
+			jq(dn).contents().filter(function () {
+				return (size + index++) < total;
 			}).remove();
 			this.clearCache(); //B70-ZK-2370: clearCache after remove dom content
 			jq(dn).prepend(cnt ? cnt : '&nbsp;');
@@ -82,7 +82,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!parent.$instanceof(zul.wgt.Groupbox))
 			return sc;
 			
-		return sc + (parent._closable ? '': ' ' + this.$s('readonly'));
+		return sc + (parent._closable ? '' : ' ' + this.$s('readonly'));
 	},
 	doClick_: function () {
 		if (this.parent.$instanceof(zul.wgt.Groupbox))
@@ -119,7 +119,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			this.$n().width = '';
 	},
 	// override for the bug ZK-1799
-	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+	setFlexSizeW_: function (n, zkn, width, isFlexMin) {
 		if (isFlexMin) {
 			if (this._isCloseVisible()) {
 				var close = this.parent.$n('close');

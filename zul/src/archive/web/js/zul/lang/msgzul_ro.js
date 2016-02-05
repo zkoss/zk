@@ -13,7 +13,7 @@ Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzul = {};
-msgzul.UNKNOWN_TYPE = "Tip necunoscut de componentă: ";
-msgzul.DATE_REQUIRED = "Trebuie să specificaţi o dată. Formatul: ";
-msgzul.OUT_OF_RANGE = "Se află în afara limitelor admise";
-msgzul.NO_AUDIO_SUPPORT = "Browser-ul dumneavoastră nu suportă audio dinamic";
+msgzul.UNKNOWN_TYPE = 'Tip necunoscut de componentă: ';
+msgzul.DATE_REQUIRED = 'Trebuie să specificaţi o dată. Formatul: ';
+msgzul.OUT_OF_RANGE = 'Se află în afara limitelor admise';
+msgzul.NO_AUDIO_SUPPORT = 'Browser-ul dumneavoastră nu suportă audio dinamic';

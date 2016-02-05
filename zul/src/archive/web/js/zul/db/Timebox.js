@@ -54,37 +54,37 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				break;
 			case 'K':
 				var start = i,
-					end = fmt.charAt(i+1) == 'K' ? ++i : i;
+					end = fmt.charAt(i + 1) == 'K' ? ++i : i;
 				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD));
 				break;
 			case 'h':
 				var start = i,
-					end = fmt.charAt(i+1) == 'h' ? ++i : i;
+					end = fmt.charAt(i + 1) == 'h' ? ++i : i;
 				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD));
 				break;
 			case 'H':
 				var start = i,
-					end = fmt.charAt(i+1) == 'H' ? ++i : i;
+					end = fmt.charAt(i + 1) == 'H' ? ++i : i;
 				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD));
 				break;;
 			case 'k':
 				var start = i,
-					end = fmt.charAt(i+1) == 'k' ? ++i : i;
+					end = fmt.charAt(i + 1) == 'k' ? ++i : i;
 				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD));
 				break;
 			case 'm':
 				var start = i,
-					end = fmt.charAt(i+1) == 'm' ? ++i : i;
+					end = fmt.charAt(i + 1) == 'm' ? ++i : i;
 				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD));
 				break;
 			case 's':
 				var start = i,
-					end = fmt.charAt(i+1) == 's' ? ++i : i;
+					end = fmt.charAt(i + 1) == 's' ? ++i : i;
 				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD));
 				break;
 			case 'z':
-				index.push({index:[i, i],format:(function(text){
-					return function(){
+				index.push({index: [i, i],format: (function (text) {
+					return function () {
 						return text;
 					};
 				})(wgt._timezone)});
@@ -102,7 +102,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					}
 				}
 				index.push({index: [start, end], format: (function (text) {
-					return function() {
+					return function () {
 						return text;
 					};
 				})(ary)});
@@ -137,8 +137,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hStart = hdler.index[0];
 			hEnd = hdler.index[1] + 1;
 			
-			if (hdler.type && 
-				(posOfs = hdler.isSingleLength())) {
+			if (hdler.type && (posOfs = hdler.isSingleLength())) {
 				//sync handler index
 				hdler._doShift(wgt, posOfs);
 				selEnd--;					
@@ -153,8 +152,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 			
 			if (hdler.type) {
-				prevStart = isFirst ? pos: hStart;
-				isFirst = false
+				prevStart = isFirst ? pos : hStart;
+				isFirst = false;
 				continue;
 			}
 			ofs = hStart - prevStart;
@@ -171,13 +170,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			len = 0, th, lastTh;
 		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
-			if (i == l-1) {
+			if (i == l - 1) {
 				len += th.format().length;
 			} else
-				len += (th.type ? th.getText(val): th.format()).length;
+				len += (th.type ? th.getText(val) : th.format()).length;
 			if (th.type) lastTh = th;
 		}
-		return (lastTh.digits == 1) ? ++len: len;
+		return (lastTh.digits == 1) ? ++len : len;
 	}
 	var globallocalizedSymbols = {};
 
@@ -198,7 +197,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_format: 'HH:mm',
 	_timezone: '',
-	$init: function() {		
+	$init: function () {		
 		this.$supers('$init', arguments);
 		_updFormat(this, this._format);
 	},
@@ -257,8 +256,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			text = th.format(date);
 			out += text;
 			//sync handler index
-			if (th.type && (offset = th.isSingleLength()) !== false && 
-				(offset += text.length - 1))
+			if (th.type && (offset = th.isSingleLength()) !== false
+				&& (offset += text.length - 1))
 				th._doShift(this, offset);
 		}
 		return out;
@@ -296,8 +295,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		
-		if (fmt.length == 
-			(hasAM ? --emptyCount: emptyCount)) {
+		if (fmt.length == (hasAM ? --emptyCount : emptyCount)) {
 			this._changed = false;//for return empty string
 			return;
 		}
@@ -318,7 +316,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
-	doClick_: function(evt) {
+	doClick_: function (evt) {
 		if (evt.domTarget == this.getInputNode())
 			this._doCheckPos();
 		this.$supers('doClick_', arguments);
@@ -330,7 +328,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this.$supers('doKeyPress_', arguments);
 	},
-	doKeyDown_: function(evt) {
+	doKeyDown_: function (evt) {
 		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
 			return;
@@ -349,7 +347,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			case 55:case 103://7
 			case 56:case 104://8
 			case 57:case 105://9
-				code = code - (code>=96?96:48);
+				code = code - (code >= 96 ? 96 : 48);
 				this._doType(code);
 				evt.stop();
 				return;
@@ -385,7 +383,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				return;
 			case 9:
 				// do nothing
-				break
+				break;
 			case 13: case 27://enter,esc,tab
 				break;
 			case 86: // ctrl + c
@@ -417,7 +415,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._stopAutoIncProc();
 		this._currentbtn = null;
 	},
-	_btnDown: function(evt) { // TODO: format the value first
+	_btnDown: function (evt) { // TODO: format the value first
 		if (!this._buttonVisible || this._disabled) return;
 
 		// cache it for IE and others to keep the same position at the first time being clicked.
@@ -441,7 +439,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			inp.value = this.coerceToString_();
 			
 		var ofs = zk(btn).revisedOffset(),
-			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
+			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
 		if (zk.webkit) {
 			zk(inp).focus(); //Bug ZK-1527: chrome and safari will trigger focus if executing setSelectionRange, focus it early here
 		}
@@ -485,7 +483,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// disable browser's text selection
 		evt.stop();
 	},
-	_btnUp: function(evt) {
+	_btnUp: function (evt) {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		if (zk.opera) zk(inp).focus();
@@ -503,12 +501,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_doCheckPos: function () {
 		this.lastPos = this._getPos();
 	},
-	_doUp: function() {
+	_doUp: function () {
 		this._changed = true;
 		this.getTimeHandler().increase(this, 1);
 		this._onChanging();
 	},
-	_doDown: function() {
+	_doDown: function () {
 		this._changed = true;
 		this.getTimeHandler().increase(this, -1);
 		this._onChanging();
@@ -549,23 +547,23 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			index = f.$indexOf(th),
 			lastHandler;
 			
-		while ((lastHandler = f[++index]) &&
-			(!lastHandler.type || lastHandler.type == AM_PM_FIELD));
+		while ((lastHandler = f[++index])
+				&& (!lastHandler.type || lastHandler.type == AM_PM_FIELD));
 		
 		return lastHandler;
 	},
-	_startAutoIncProc: function(up) {
+	_startAutoIncProc: function (up) {
 		if (this.timerId)
 			clearInterval(this.timerId);
 		var self = this,
 			fn = up ? '_doUp' : '_doDown';
-		this.timerId = setInterval(function() {
+		this.timerId = setInterval(function () {
 			if ((zk.ie < 11 || zk.webkit) && self._lastPos)
 				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);
 	},
-	_stopAutoIncProc: function() {
+	_stopAutoIncProc: function () {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 		this.currentStep = this.defaultStep;
@@ -599,9 +597,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		zul.inp.RoundUtl.doBlur_(this);
 	},
-	afterKeyDown_: function (evt,simulated) {
+	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace)
-			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
+			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
 
 		return this.$supers('afterKeyDown_', arguments);
 	},
@@ -615,7 +613,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		if(this.timerId){
+		if(this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
@@ -661,7 +659,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			singleLen = this.isSingleLength() !== false,
 			ofs;
 
-		text = zk.parseInt(singleLen ? text: 
+		text = zk.parseInt(singleLen ? text : 
 				text.replace(/ /g, '0')) + up;
 		
 		var max = this.maxsize + 1;
@@ -673,8 +671,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			ofs = -1;
 		} else if (singleLen) 
 			ofs = (up > 0) ? 
-					(text == 10) ? 1: 0:
-					(text == 9) ? -1: 0;
+					(text == 10) ? 1 : 0 :
+					(text == 9) ? -1 : 0;
 
 		if (text < 10 && !singleLen)
 			 text = '0' + text;
@@ -709,9 +707,9 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		} else {
 			var fmthdler = wgt._fmthdler,
 				index = fmthdler.$indexOf(this),
-				ofs = backspace? -1: 1,
-				ofs2 = backspace? 0: 1,
-				ofs3 = backspace? 1: 0,
+				ofs = backspace ? -1 : 1,
+				ofs2 = backspace ? 0 : 1,
+				ofs3 = backspace ? 1 : 0,
 				hdler, posOfs;
 			if (pos == this.index[ofs2] + ofs2) {// on start or end
 				//delete by sibling handler
@@ -723,8 +721,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			}
 			if (hdler) {
 				posOfs = hdler.isSingleLength();
-				inp.value = val.substring(0, (ofs3 += pos)-1) + 
-					(posOfs ? '': ' ') + val.substring(ofs3);
+				inp.value = val.substring(0, (ofs3 += pos) - 1)
+					+ (posOfs ? '' : ' ') + val.substring(ofs3);
 				if (posOfs)	
 					hdler._doShift(wgt, posOfs);
 			}
@@ -764,13 +762,13 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		// first number (hendle max bound)
 		if (pos == this.index[0]) {
 			var text = this.getText(val)
-						.substring((posOfs === 0)? 0: 2).trim(),
+						.substring((posOfs === 0) ? 0 : 2).trim(),
 				i;
 			if (!text.length) text = '0';
 			
 			if ((i = zk.parseInt(num + text)) > this.maxsize) {
 				if (posOfs !== 0) {
-					val = inp.value = val.substring(0, pos) + (posOfs ? '0': '00')
+					val = inp.value = val.substring(0, pos) + (posOfs ? '0' : '00')
 						+ val.substring(pos + 2);
 					if (!posOfs) pos++;
 					zk(inp).setSelectionRange(pos, Math.max(sel[1], pos));
@@ -787,8 +785,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					if (i && i < 10) // 1-9
 						pos--;
 					else if (i || posOfs) { // 0 or larger then 10, except zero and non-posOfs
-						val = inp.value = val.substring(0, (pos + posOfs)) +
-							(posOfs ? '' : '0') + val.substring(pos);
+						val = inp.value = val.substring(0, (pos + posOfs))
+								+ (posOfs ? '' : '0') + val.substring(pos);
 						if (i) // larger then 10
 							this._doShift(wgt, 1);
 						else { // 0
@@ -815,7 +813,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				this._doShift(wgt, ofs);
 				
 			inp.value = val.substring(0, pos++) + num 
-				+ s.substring(ofs ? 0: 1)
+				+ s.substring(ofs ? 0 : 1)
 				+ val.substring(sel[1]);
 		} else {
 			inp.value = val.substring(0, pos) 
@@ -848,7 +846,7 @@ zul.inp.HourInDayHandler = zk.$extends(zul.inp.TimeHandler, {
 	minsize: 0,
 	format: function (date) {
 		var singleLen = this.digits == 1;
-		if (!date) return singleLen ? '0': '00';
+		if (!date) return singleLen ? '0' : '00';
 		else {
 			var h = date.getHours();
 			if (!singleLen && h < 10)
@@ -911,7 +909,7 @@ zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
 	minsize: 0,
 	format: function (date) {
 		var singleLen = this.digits == 1;
-		if (!date) return singleLen ? '0': '00';
+		if (!date) return singleLen ? '0' : '00';
 		else {
 			var h = date.getHours();
 			h = (h % 12);
@@ -929,7 +927,7 @@ zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
 zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
 	format: function (date) {
 		var singleLen = this.digits == 1;
-		if (!date) return singleLen ? '0': '00';
+		if (!date) return singleLen ? '0' : '00';
 		else {
 			var m = date.getMinutes();
 			if (!singleLen && m < 10)
@@ -945,7 +943,7 @@ zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
 zul.inp.SecondHandler = zk.$extends(zul.inp.TimeHandler, {
 	format: function (date) {
 		var singleLen = this.digits == 1;
-		if (!date) return  singleLen ? '0': '00';
+		if (!date) return singleLen ? '0' : '00';
 		else {
 			var s = date.getSeconds();
 			if (!singleLen && s < 10)

@@ -27,7 +27,7 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	 * @return int
 	 */
 	getLevel: function () {
-		return this.parent ? this.parent.getLevel(): 0;
+		return this.parent ? this.parent.getLevel() : 0;
 	},
 	/** Returns the {@link Treechildren} associated with this
 	 * {@link Treerow}.
@@ -42,13 +42,13 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		if (p && (!no || !no.zclass)) {
 			var zcls = this.getZclass();
 			if (p.isDisabled())
-				scls += (scls ? ' ': '') + this.$s('disabled');
+				scls += (scls ? ' ' : '') + this.$s('disabled');
 			if (p.isSelected())
-				scls += (scls ? ' ': '') + this.$s('selected');
+				scls += (scls ? ' ' : '') + this.$s('selected');
 		}
 		return scls;
 	},
-	domTooltiptext_ : function () {
+	domTooltiptext_: function () {
 		return this._tooltiptext || this.parent._tooltiptext || this.parent.parent._tooltiptext;
 	},
 	//@Override
@@ -67,7 +67,7 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		this.$supers('removeChild', arguments);
 	},
 	//@Override
-	doClick_: function(evt) {
+	doClick_: function (evt) {
 		var ti = this.parent,
 			tg = evt.domTarget;
 		if (tg == this.$n('open') || tg == this.$n('icon')) {
@@ -87,6 +87,6 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		}
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
 });

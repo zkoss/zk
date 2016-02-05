@@ -76,7 +76,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			// ZK-2192: Only need to determine if popup is animating
 			if (jq(this.getPopupNode_()).is(':animated')) {
 				var self = this;
-				setTimeout(function() {if (self.desktop) self.onResponse(ctl, opts);}, 50);
+				setTimeout(function () {if (self.desktop) self.onResponse(ctl, opts);}, 50);
 				return;
 			}
 			var pp = this.getPopupNode_(),
@@ -105,7 +105,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				var inp = this.getInputNode();
 				// ZK-2211: should close when the input is out of view
 				if (inp && zul.inp.InputWidget._isInView(this))
-					zk(this.getPopupNode_()).position(inp, "after_start");
+					zk(this.getPopupNode_()).position(inp, 'after_start');
 				else
 					this.close();
 			}
@@ -144,14 +144,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inp = this.getInputNode();
 		if (!pp) return;
 
-		this.setFloating_(true, {node:pp});
+		this.setFloating_(true, {node: pp});
 		zWatch.fire('onFloatUp', this); //notify all
 		var topZIndex = this.setTopmost();
 
 		var ppofs = this.getPopupSize_(pp);
 		pp.style.width = ppofs[0];
 		pp.style.height = 'auto';
-		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1 ; //on-top of everything
+		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1; //on-top of everything
 
 		var pp2 = this.getPopupNode_(true);
 		if (pp2) pp2.style.width = pp2.style.height = 'auto';
@@ -189,9 +189,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var screenY = jq.innerY();
 		var screenHeight = jq.innerHeight();
 		
-		if(screenY + screenHeight - inpTop - inpHeight > ppHeight){
+		if(screenY + screenHeight - inpTop - inpHeight > ppHeight) {
 			$pp.position(inp, 'after_start');
-		} else if(inpTop - screenY > ppHeight){
+		} else if(inpTop - screenY > ppHeight) {
 			$pp.position(inp, 'before_start');
 		} else {
 			$pp.position(inp, 'after_start', {overflow: true});
@@ -206,7 +206,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		//If both horz and vert scrollbar are visible:
 		//a row might be hidden by the horz bar.
 		if (zk.gecko) {
-			var rows = pp2 ? pp2.rows: null;
+			var rows = pp2 ? pp2.rows : null;
 			if (rows) {
 				var gap = pp.offsetHeight - pp.clientHeight;
 				if (gap > 10 && pp.offsetHeight < 150) { //scrollbar
@@ -224,7 +224,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				{left: -4, right: 4, top: -2, bottom: 3});
 
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:true, value: inp.value}, {rtags: {onOpen: 1}});
+			this.fire('onOpen', {open: true, value: inp.value}, {rtags: {onOpen: 1}});
 
 		//add extra CSS class for easy customize
 		jq(pp).addClass(this.$s('open'));
@@ -241,12 +241,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inpBottom = inpDim.top + inpDim.height,
 			inpRight = inpDim.left + inpDim.width;
 
-		if(ppRelativeBottom >= jq.innerHeight() || 
-			(ppDim.top < inpDim.top && ppBottom < inpDim.top) ||
-			ppDim.left < inpRight &&
-			ppRight > inpDim.left &&
-			ppBottom > inpDim.top &&
-			ppDim.top < inpBottom
+		if(ppRelativeBottom >= jq.innerHeight()
+			|| (ppDim.top < inpDim.top && ppBottom < inpDim.top)
+			|| ppDim.left < inpRight
+			&& ppRight > inpDim.left
+			&& ppBottom > inpDim.top
+			&& ppDim.top < inpBottom
 		) {
 			return this._shallSyncPopupPosition = true;
 		}
@@ -298,7 +298,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @since 5.0.4
 	 */
 	getPopupNode_: function (inner) {
-		return inner ? this.$n('cave'): this.$n('pp');
+		return inner ? this.$n('cave') : this.$n('pp');
 	},
 
 	/** Closes the list of combo items ({@link Comboitem} if it was
@@ -312,7 +312,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var self = this;
 		// ZK-2192: Only need to determine if popup is animating
 		if (jq(this.getPopupNode_()).is(':animated')) {
-			setTimeout(function() {if (self.desktop) self.close(opts);}, 50);
+			setTimeout(function () {if (self.desktop) self.close(opts);}, 50);
 			return;
 		}
 		this._open = false;
@@ -327,7 +327,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.fireDown('onHide', this);
 		this.slideUp_(pp);
 
-		zk.afterAnimate(function() {
+		zk.afterAnimate(function () {
 			zk(pp).undoVParent();
 			zWatch.fireDown('onVParent', self);
 		}, -1);
@@ -338,7 +338,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
+			this.fire('onOpen', {open: false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
 
 		//remove extra CSS class
 		jq(pp).removeClass(this.$s('open'));
@@ -382,7 +382,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @see #close
 	 */
 	enterPressed_: function (evt) {
-		this.close({sendOnOpen:true});
+		this.close({sendOnOpen: true});
 		this.updateChange_();
 		evt.stop();
 	},
@@ -393,7 +393,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @see #close
 	 */
 	escPressed_: function (evt) {
-		this.close({sendOnOpen:true});
+		this.close({sendOnOpen: true});
 		evt.stop();
 	},
 
@@ -414,9 +414,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if ('w' == attr)
 			zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
-	afterKeyDown_: function (evt,simulated) {
+	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace)
-			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
+			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
 			
 		return this.$supers('afterKeyDown_', arguments);
 	},
@@ -454,8 +454,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!this._buttonVisible) return;
 		// ZK-2192: Only need to determine if popup is animating
 		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {		
-			if (this._open) this.close({focus:zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});
-			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});	
+			if (this._open) this.close({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});
+			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});	
 		}
 		if (zk.ios) { //Bug ZK-1313: keep window offset information before virtual keyboard opened on ipad
 			this._windowX = window.pageXOffset;
@@ -492,16 +492,16 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			bOpen = this._open;
 		if ((evt.target == this || !(evt.target.$instanceof(zul.inp.InputWidget)))// Bug ZK-475
 				&& (keyCode == 9 || (zk.webkit && keyCode == 0))) { //TAB or SHIFT-TAB (safari)
-			if (bOpen) this.close({sendOnOpen:true});
+			if (bOpen) this.close({sendOnOpen: true});
 			return;
 		}
 
 		if (evt.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
-			if (bOpen) this.close({sendOnOpen:true});
-			else this.open({sendOnOpen:true});
+			if (bOpen) this.close({sendOnOpen: true});
+			else this.open({sendOnOpen: true});
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
-			var opts = {propagation:true};
+			var opts = {propagation: true};
 			if (zk.ie < 11) opts.dom = true;
 			evt.stop(opts);
 			return;
@@ -519,7 +519,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			return; //ignore it (doc will handle it)
 
 		if (this._autodrop && !bOpen)
-			this.open({sendOnOpen:true});
+			this.open({sendOnOpen: true});
 
 		if (keyCode == 38) this.upPressed_(evt);
 		else if (keyCode == 40) this.dnPressed_(evt);
@@ -543,7 +543,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var uuid = this.uuid,
 			isButtonVisible = this._buttonVisible;
 			
-		out.push('<span', this.domAttrs_({text:true}), '><input id="',
+		out.push('<span', this.domAttrs_({text: true}), '><input id="',
 			uuid, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)

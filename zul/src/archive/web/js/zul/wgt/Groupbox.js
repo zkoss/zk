@@ -41,7 +41,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 				}
 				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
 				
-				if (!fromServer) this.fire('onOpen', {open:open});
+				if (!fromServer) this.fire('onOpen', {open: open});
 			}			
 		},
 		/** Returns whether user can open or close the group box.
@@ -100,9 +100,9 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 
 		s = this._contentStyle;
 		if (this.caption || this.getTitle()) // B60-ZK-987
-			s = 'border-top:0;' + (s||'');
+			s = 'border-top:0;' + (s || '');
 		if (!this._open)
-			s = 'display:none;' + (s||'');
+			s = 'display:none;' + (s || '');
 		if (s)
 			html += ' style="' + s + '"';
 		return html;
@@ -129,8 +129,8 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 			if (n = this.$n('cave')) {
 				var $n = zk(n);
 				// B50-ZK-487: height isuue in the groupbox (with specified caption)
-				n.style.height = ($n.revisedHeight($n.vflexHeight(), true) - 
-								 (this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0)) + 'px';
+				n.style.height = ($n.revisedHeight($n.vflexHeight(), true)
+								- (this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0)) + 'px';
 					//if (zk.gecko) setTimeout(fix, 0);
 					//Gecko bug: height is wrong if the browser visits the page first time
 					//(reload won't reproduce the problem) test case: test/z5.zul
@@ -146,7 +146,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		}
 	},
 	// B60-ZK-562: Groupbox vflex=min is wrong
-	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
+	setFlexSizeH_: function (n, zkn, height, isFlexMin) {
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			var node = this.$n(),
@@ -229,7 +229,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		
 		if (!this.caption && !this.getTitle()) {
 			if (cls) cls += ' ';
-			cls += ' '+ this.$s('notitle');
+			cls += ' ' + this.$s('notitle');
 		}
 			
 		if (!this._open && this._isDefault()) {

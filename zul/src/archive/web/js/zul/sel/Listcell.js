@@ -25,7 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * 
  * <p>Default {@link #getZclass}: z-listcell
  */
-zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
+	zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	_colspan: 1,
 	$define: {
     	/** Returns number of columns to span this cell.
@@ -38,7 +38,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
     	 */
 		colspan: [
 			function (colspan) {
-				return colspan > 1 ? colspan: 1;
+				return colspan > 1 ? colspan : 1;
 			},
 			function () {
 				var n = this.$n();
@@ -49,8 +49,8 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('setLabel', arguments);
 		if (this.desktop) {
 			var p = this.parent;
-	 		if (_isListgroup(p))
-				p.rerender();
+			if (_isListgroup(p))
+						p.rerender();
 			else if (p.$instanceof(zul.sel.Option))
 				this.getListbox().rerender(); // for IE, we cannot use this.parent.rerender();
 		}
@@ -60,7 +60,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	 */
 	getListbox: function () {
 		var p = this.parent;
-		return p ? p.parent: null;
+		return p ? p.parent : null;
 	},
 
 	//super//
@@ -103,7 +103,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();
-		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
+		return s1 ? s2 ? s2 + '&nbsp;' + s1 : s1 : s2;
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments),
@@ -144,12 +144,11 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 				var cls = p._open ? 
 						p.getIconOpenClass_() + ' ' + p.$s('icon-open') : 
 						p.getIconCloseClass_() + ' ' + p.$s('icon-close');
-				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + 
-					'"><i class="' + cls + '"></i></span>';
+				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + cls + '"></i></span>';
 			}
 			if (s) return s;
 		}
-		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? '&nbsp;': '';
+		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? '&nbsp;' : '';
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
@@ -161,7 +160,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if (frozen && node)
 			box._moveToHidingFocusCell(node.cellIndex);
 	},
-	doMouseOver_: function(evt) {
+	doMouseOver_: function (evt) {
 		var n = this.$n();
 		
 		// ZK-2136: all children should apply -moz-user-select: none
@@ -171,7 +170,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function(evt) {
+	doMouseOut_: function (evt) {
 		var n = this.$n();
 		
 		// ZK-2136: all children should apply -moz-user-select: none
@@ -210,7 +209,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			this.$supers('unbindChildren_', arguments);
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
+		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
 	}
 });
 })();

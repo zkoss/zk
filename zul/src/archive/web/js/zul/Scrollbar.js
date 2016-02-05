@@ -245,7 +245,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				startY = opts.startPositionY,
 				hgh = cave.offsetHeight - startY,
 				shgh = scrollHeight - startY,
-				uhgh = up.offsetHeight
+				uhgh = up.offsetHeight,
 				dhgh = down.offsetHeight,
 				vhgh = hgh - uhgh - dhgh;
 
@@ -324,18 +324,18 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			viewTop = jq(cave).offset().top,
 			viewBottom = viewTop + cave.offsetHeight,
 			viewLeft = jq(cave).offset().left,
-			viewRight = viewLeft + cave.offsetWidth
+			viewRight = viewLeft + cave.offsetWidth,
 			scrollUp = true,
 			// if the offsetWidth are the same, we don't need to move to left.
 			scrollLeft = dom.offsetWidth == cave.offsetWidth;
 		
 		// Bug ZK-2418 should consider the case when dom size is greater than view size
-		if (((domRight >= viewLeft && domRight <= viewRight) ||  
-			(domLeft >= viewLeft && domLeft <= viewRight) || 
-			(domLeft <= viewLeft && domRight >= viewRight)) &&
-			((domTop >= viewTop && domTop <= viewBottom) ||
-			(domBottom >= viewTop && domBottom <= viewBottom) ||
-			(domTop <= viewTop && domBottom >= viewBottom))) {
+		if (((domRight >= viewLeft && domRight <= viewRight)
+			|| (domLeft >= viewLeft && domLeft <= viewRight)
+			|| (domLeft <= viewLeft && domRight >= viewRight))
+			&& ((domTop >= viewTop && domTop <= viewBottom)
+			|| (domBottom >= viewTop && domBottom <= viewBottom)
+			|| (domTop <= viewTop && domBottom >= viewBottom))) {
 			return; //already in the view port
 		}
 		
@@ -387,8 +387,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			viewLeft = jq(cave).offset().left,
 			viewRight = viewLeft + cave.offsetWidth;
 		
-		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop) ||
-			(this.needH && domRight <= viewRight && domLeft >= viewLeft))
+		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop)
+			|| (this.needH && domRight <= viewRight && domLeft >= viewLeft))
 			return true;
 		else
 			return false;
@@ -555,8 +555,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		
 		self.dragging = false;
 		
-		if ((x < left || x > left + cave.offsetWidth) ||
-			(y < top || y > top + cave.offsetHeight)) {
+		if ((x < left || x > left + cave.offsetWidth)
+			|| (y < top || y > top + cave.offsetHeight)) {
 			_showScrollbar(self, 'hor', 0);
 			_showScrollbar(self, 'ver', 0);
 		}
@@ -673,14 +673,14 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				offset = isHor ? offset.left : offset.top,
 				ind = this.$n(orient + '-indicator'),
 				indsz = isHor ? ind.offsetWidth : ind.offsetHeight,
-				point = (isHor ? evt.pageX : evt.pageY) - offset  - indsz/2,
+				point = (isHor ? evt.pageX : evt.pageY) - offset - indsz / 2,
 				limit = isHor ? this.hLimit : this.vLimit,
 				ratio = isHor ? this.hRatio : this.vRatio,
 				pos = isHor ? this._pos[0] : this._pos[1],
 				barPos = isHor ? this._barPos[0] : this._barPos[1],
 				pointlimit = point * ratio,
 				rstep = step * 10;
-				self = this;
+			self = this;
 			
 			if (frozen) {
 				point = _setScrollPos(point, 0, hBarLimit);
@@ -701,7 +701,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 					pos += (isLeftDown ? rstep : -rstep);
 					//set and check if exceed scrolling limit
 					pos = _setScrollPos(pos, min, max);
-					bPos = pos/ratio;
+					bPos = pos / ratio;
 					if (pos == pointlimit || pos <= min || pos >= max) {
 						clearInterval(self._pressTimer);
 						self._pressTimer = null;
@@ -822,19 +822,19 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			out += '<div id="' + uid + '-embed" class="z-scrollbar-' + hv + '-embed"></div>';
 		}
 		out +=
-		'<div id="' + uid + '" class="z-scrollbar z-scrollbar-' + hv + '">' +
-			'<div id="' + uid + '-' + lu + '" class="z-scrollbar-' + lu + '">' +
-				'<i class="z-icon-caret-' + lu + '"></i>' +
-			'</div>' +
-			'<div id="' + uid + '-wrapper" class="z-scrollbar-wrapper">' +
-				'<div id="' + uid + '-indicator" class="z-scrollbar-indicator">' +
-					'<i class="z-scrollbar-icon z-icon-reorder"></i></div>' +
-				'<div id="' + uid + '-rail" class="z-scrollbar-rail"></div>' +
-			'</div>' +
-			'<div id="' + uid + '-' + rd + '" class="z-scrollbar-' + rd + '">' +
-				'<i class="z-icon-caret-' + rd + '"></i>' +
-			'</div>' +
-		'</div>';
+		'<div id="' + uid + '" class="z-scrollbar z-scrollbar-' + hv + '">'
+			+ '<div id="' + uid + '-' + lu + '" class="z-scrollbar-' + lu + '">'
+				+ '<i class="z-icon-caret-' + lu + '"></i>'
+			+ '</div>'
+			+ '<div id="' + uid + '-wrapper" class="z-scrollbar-wrapper">'
+				+ '<div id="' + uid + '-indicator" class="z-scrollbar-indicator">'
+					+ '<i class="z-scrollbar-icon z-icon-reorder"></i></div>'
+				+ '<div id="' + uid + '-rail" class="z-scrollbar-rail"></div>'
+			+ '</div>'
+			+ '<div id="' + uid + '-' + rd + '" class="z-scrollbar-' + rd + '">'
+				+ '<i class="z-icon-caret-' + rd + '"></i>'
+			+ '</div>'
+		+ '</div>';
 		jq(cave).append(out);
 	}
 });

@@ -14,10 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _posAllowed = [
-		"before_start", "before_end", "end_before", "end_after",
-		"after_end", "after_start", "start_after", "start_before",
-		"overlap", "overlap_end", "overlap_before", "overlap_after",
-		"at_pointer", "after_pointer"
+		'before_start', 'before_end', 'end_before', 'end_after',
+		'after_end', 'after_start', 'start_after', 'start_before',
+		'overlap', 'overlap_end', 'overlap_before', 'overlap_after',
+		'at_pointer', 'after_pointer'
 	];
 
 /**
@@ -40,8 +40,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this._cstArr = [];
 			this._init(a);
 		} else {
-			this._flags = typeof a == 'number' ? this._cvtNum(a): a||{};
-			this._regex = typeof b == 'string' ? new RegExp(b, 'g'): b;
+			this._flags = typeof a == 'number' ? this._cvtNum(a) : a || {};
+			this._regex = typeof b == 'string' ? new RegExp(b, 'g') : b;
 			this._errmsg = {};
 
 			if (this._regex) {
@@ -73,7 +73,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						if (cc == '/') break; //ending / found
 						if (cc == '\\') ++k; //skip one
 					}
-					this._regex = new RegExp(k >= 0 ? cst.substring(j, k): cst.substring(j), 'g');
+					this._regex = new RegExp(k >= 0 ? cst.substring(j, k) : cst.substring(j), 'g');
 					this._cstArr[this._cstArr.length] = 'regex'; 
 					continue l_out;
 				}
@@ -101,7 +101,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 							cst.substring(j, k).trim() : cst.substring(j).trim();
 					continue l_out;
 				}
-				if (!zUtl.isChar(cc,{whitespace:1}))
+				if (!zUtl.isChar(cc,{whitespace: 1}))
 					break;
 			}
 
@@ -145,38 +145,38 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		var f = this._flags;
 		var arr = this._cstArr;
 		
-		if (cst == "no positive") {
+		if (cst == 'no positive') {
 			f.NO_POSITIVE = true;
 			arr[arr.length] = 'NO_POSITIVE'; 
-		} else if (cst == "no negative") {
+		} else if (cst == 'no negative') {
 			f.NO_NEGATIVE = true;
 			arr[arr.length] = 'NO_NEGATIVE';
-		} else if (cst == "no zero") {
+		} else if (cst == 'no zero') {
 			f.NO_ZERO = true;
 			arr[arr.length] = 'NO_ZERO';
-		} else if (cst == "no empty") {
+		} else if (cst == 'no empty') {
 			f.NO_EMPTY = true;
 			arr[arr.length] = 'NO_EMPTY';
-		} else if (cst == "no future") {
+		} else if (cst == 'no future') {
 			f.NO_FUTURE = true;
 			arr[arr.length] = 'NO_FUTURE';
-		} else if (cst == "no past") {
+		} else if (cst == 'no past') {
 			f.NO_PAST = true;
 			arr[arr.length] = 'NO_PAST';
-		} else if (cst == "no today") {
+		} else if (cst == 'no today') {
 			f.NO_TODAY = true;
 			arr[arr.length] = 'NO_TODAY';
-		} else if (cst == "strict") {
+		} else if (cst == 'strict') {
 			f.STRICT = true;
 			arr[arr.length] = 'STRICT';
-		} else if (cst == "server") {
+		} else if (cst == 'server') {
 			f.SERVER = true;
 			this.serverValidate = true;
 			arr[arr.length] = 'SERVER';
 		} else if (cst && _posAllowed.$contains(cst))
 			this._pos = cst;
 		else if (!arr.length && zk.debugJS)
-			zk.error("Unknown constraint: "+cst);
+			zk.error('Unknown constraint: ' + cst);
 	},
 	_cvtNum: function (v) { //compatible with server side
 		var f = {};
@@ -249,7 +249,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		if (val && val.getFullYear) {
 			var today = zUtl.today(),
 				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
-			if ((today - val)/ 86400000 < 0) {
+			if ((today - val) / 86400000 < 0) {
 				if (f.NO_FUTURE) return msg['NO_FUTURE'] || this._msgDateDenied();
 			} else if (val - today == 0) {
 				if (f.NO_TODAY) return msg['NO_TODAY'] || this._msgDateDenied();
@@ -265,10 +265,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			msg = this._errmsg;
 		if (f.NO_POSITIVE)
 			return msg['NO_POSITIVE'] || (f.NO_ZERO ?
-				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE_ZERO: msgzul.NO_POSITIVE_ZERO:
-				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE: msgzul.NO_POSITIVE);
+				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE_ZERO : msgzul.NO_POSITIVE_ZERO :
+				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE : msgzul.NO_POSITIVE);
 		else if (f.NO_NEGATIVE)
-			return msg['NO_NEGATIVE'] || (f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO: msgzul.NO_NEGATIVE);
+			return msg['NO_NEGATIVE'] || (f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO : msgzul.NO_NEGATIVE);
 		else if (f.NO_ZERO)
 			return msg['NO_ZERO'] || msgzul.NO_ZERO;
 		return msg || msgzul.ILLEGAL_VALUE;
@@ -278,10 +278,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			msg = this._errmsg;
 		if (f.NO_FUTURE)
 			return msg['NO_FUTURE'] || (f.NO_TODAY ?
-				f.NO_PAST ? NO_FUTURE_PAST_TODAY: msgzul.NO_FUTURE_TODAY:
-				f.NO_PAST ? msgzul.NO_FUTURE_PAST: msgzul.NO_FUTURE);
+				f.NO_PAST ? NO_FUTURE_PAST_TODAY : msgzul.NO_FUTURE_TODAY :
+				f.NO_PAST ? msgzul.NO_FUTURE_PAST : msgzul.NO_FUTURE);
 		else if (f.NO_PAST)
-			return msg['NO_PAST'] || (f.NO_TODAY ? msgzul.NO_PAST_TODAY: msgzul.NO_PAST);
+			return msg['NO_PAST'] || (f.NO_TODAY ? msgzul.NO_PAST_TODAY : msgzul.NO_PAST);
 		else if (f.NO_TODAY)
 			return msg['NO_TODAY'] || msgzul.NO_TODAY;
 		return msg || msgzul.ILLEGAL_VALUE;

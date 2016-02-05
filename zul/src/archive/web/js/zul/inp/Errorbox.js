@@ -49,7 +49,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
 		// ZK-2069: show only if is in view
-		setTimeout(function(){
+		setTimeout(function () {
 			if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if 
 				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
 		}, 50); // B36-2935398: add time
@@ -101,7 +101,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
 	},
-	getInputNode: function() {
+	getInputNode: function () {
 		return this.parent ? this.parent.$n() : null;
 	},
 	/** Reset the position on scroll
@@ -112,7 +112,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			if (zul.inp.InputWidget._isInView(this)) {// B65-ZK-1632
 				if (!this.isOpen()) // for ZK-2371, we need to show it back when inside viewport.
 					this.open();
-				this.position(this.parent, null, 'end_before', {overflow:true});
+				this.position(this.parent, null, 'end_before', {overflow: true});
 				this._fixarrow();
 			} else {
 				this.close();
@@ -122,7 +122,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	setDomVisible_: function (node, visible) {
 		this.$supers('setDomVisible_', arguments);
 		var stackup = this._stackup;
-		if (stackup) stackup.style.display = visible ? '': 'none';
+		if (stackup) stackup.style.display = visible ? '' : 'none';
 	},
 	doClick_: function (evt) {
 		var p = evt.domTarget;
@@ -146,7 +146,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this.setVisible(false);
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false});
+			this.fire('onOpen', {open: false});
 	},
 	redraw: function (out) {
 		var uuid = this.uuid,
@@ -158,7 +158,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				icon, ' ', iconSclass,'"></i><div id="', uuid,
 				'-cave" class="', this.$s('content'), '" title="',
 				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
-				zUtl.encodeXML(this.msg, {multiline:true}),
+				zUtl.encodeXML(this.msg, {multiline: true}),
 				'</div><div id="', uuid, '-cls" class="',
 				// Bug ZK-2952: added missing id for the "x" icon
 				this.$s('close'), '"><i id="', uuid, '-clsIcon" class="', icon,
@@ -196,7 +196,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			var ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
 				ptbtm = ptofs[1] + pthgh;
-			y = elofs[1] + el.offsetHeight <=  ptbtm ? ptbtm: ptofs[1] - node.offsetHeight;
+			y = elofs[1] + el.offsetHeight <= ptbtm ? ptbtm : ptofs[1] - node.offsetHeight;
 				//we compare bottom because default is located below
 
 			var ofs = zk(node).toStyleOffset(0, y);
@@ -213,22 +213,22 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			dx = nodeofs[0] - ptofs[0], 
 			dy = nodeofs[1] - ptofs[1], 
 			dir,
-			s = node.style
+			s = node.style,
 			pw = 2 + (zk(pointer).borderWidth() / 2) || 0,
 			ph = 2 + (zk(pointer).borderHeight() / 2) || 0;
 		
 		// conditions of direction
 		if (dx >= parent.offsetWidth - pw)
-			dir = dy < ph - node.offsetHeight ? 'ld': dy >= parent.offsetHeight - ph ? 'lu': 'l';
+			dir = dy < ph - node.offsetHeight ? 'ld' : dy >= parent.offsetHeight - ph ? 'lu' : 'l';
 		else if (dx < pw - node.offsetWidth)
-			dir = dy < ph - node.offsetHeight ? 'rd': dy >= parent.offsetHeight - ph ? 'ru': 'r';
+			dir = dy < ph - node.offsetHeight ? 'rd' : dy >= parent.offsetHeight - ph ? 'ru' : 'r';
 		else
-			dir = dy < 0 ? 'd': 'u';
+			dir = dy < 0 ? 'd' : 'u';
 		
 		node.style.padding = '0';
 		// for setting the pointer position
 		if(dir == 'd' || dir == 'u') {
-			var md = (Math.max(dx, 0) + Math.min(node.offsetWidth + dx, parent.offsetWidth))/2 - dx - 6,
+			var md = (Math.max(dx, 0) + Math.min(node.offsetWidth + dx, parent.offsetWidth)) / 2 - dx - 6,
 				mx = node.offsetWidth - 11;
 			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
 			if(dir == 'd') { 
@@ -241,7 +241,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			}
 			
 		} else if(dir == 'l' || dir == 'r') {
-			var md = (Math.max(dy, 0) + Math.min(node.offsetHeight + dy, parent.offsetHeight))/2 - dy - 6,
+			var md = (Math.max(dy, 0) + Math.min(node.offsetHeight + dy, parent.offsetHeight)) / 2 - dy - 6,
 				mx = node.offsetHeight - 11;
 			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
 			if(dir == 'r') { 
