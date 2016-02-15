@@ -16,27 +16,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Collections;
-import java.util.Iterator;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.util.CollectionsX;
-
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
-import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.util.IDOMs;
+import org.zkoss.util.CollectionsX;
 
 /**
  * The locator searches the current thread's context class loader,
@@ -59,6 +58,8 @@ public class ClassLocator implements XMLResourcesLocator {
 	//XMLResourcesLocator//
 	public Enumeration<URL> getResources(String name) throws IOException {
 		name = resolveName(name);
+
+		// no need to use Classes.getContextClassLoader() here because of the loading order issue
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		if (cl != null) {
 			final Enumeration<URL> en = cl.getResources(name);
@@ -160,11 +161,13 @@ public class ClassLocator implements XMLResourcesLocator {
 		return null;
 	}
 	public URL getResource(String name) {
+		// no need to use Classes.getContextClassLoader() here because of the loading order issue
 		final ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		final URL url = cl != null ? cl.getResource(resolveName(name)): null;
 		return url != null ? url: ClassLocator.class.getResource(name);
 	}
 	public InputStream getResourceAsStream(String name) {
+		// no need to use Classes.getContextClassLoader() here because of the loading order issue
 		final ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		final InputStream is =
 			cl != null ? cl.getResourceAsStream(resolveName(name)): null;

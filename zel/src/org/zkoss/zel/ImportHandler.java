@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.zel.impl.util.ClassUtil;
+
 /**
  * @since EL 3.0
  */
@@ -145,7 +147,7 @@ public class ImportHandler {
         if (p == null) {
             // Either the package does not exist or no class has been loaded
             // from that package. Check if the package exists.
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            ClassLoader cl = ClassUtil.getContextClassLoader(ImportHandler.class);
             String path = name.replace('.', '/');
             URL url = cl.getResource(path);
             if (url == null) {

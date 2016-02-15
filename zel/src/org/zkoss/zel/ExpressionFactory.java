@@ -39,6 +39,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.zkoss.zel.impl.util.ClassUtil;
+
 /**
  *
  * @since 2.1
@@ -114,7 +116,7 @@ public abstract class ExpressionFactory {
     public static ExpressionFactory newInstance(Properties properties) {
         ExpressionFactory result = null;
 
-        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        ClassLoader tccl = ClassUtil.getContextClassLoader(ExpressionFactory.class);
 
         CacheValue cacheValue;
         Class<?> clazz;

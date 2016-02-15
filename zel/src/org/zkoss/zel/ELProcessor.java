@@ -21,6 +21,8 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.zkoss.zel.impl.util.ClassUtil;
+
 /**
  * @since EL 3.0
  */
@@ -95,7 +97,7 @@ public class ELProcessor {
 
         if (clazz == null) {
             clazz = Class.forName(className, true,
-                    Thread.currentThread().getContextClassLoader());
+                    ClassUtil.getContextClassLoader(ELProcessor.class));
         }
 
         if (!Modifier.isPublic(clazz.getModifiers())) {

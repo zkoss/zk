@@ -1,6 +1,7 @@
    --------
 ZK 8.0.2
 * Features
+  ZK-3100: support a way to customize classloading
 
 * Bugs
 

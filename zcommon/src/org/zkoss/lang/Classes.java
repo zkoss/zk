@@ -36,9 +36,8 @@ import org.zkoss.math.BigIntegers;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Cache;
-import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.FastReadCache;
-
+import org.zkoss.util.IllegalSyntaxException;
 
 /**
  * Utilities to handle java.lang.Class
@@ -1501,5 +1500,48 @@ public class Classes {
 				throw t;
 			}
 		}
+	}
+
+	// a thread-safe statically object for lazy initialized.
+	private static class LazyInitializationHolder {
+		private static ContextClassLoaderFactory instance;
+		static {
+			ContextClassLoaderFactory factory = null;
+			try {
+				String property = Library
+						.getProperty("org.zkoss.lang.contextClassLoader.class");
+				if (property != null)
+					factory = (ContextClassLoaderFactory) newInstanceByThread(property);
+				else factory = new ThreadBasedContextClassLoaderFactory();
+			} catch (Exception e) {
+				log.warn("", e);
+				if (factory == null)
+					factory = new ThreadBasedContextClassLoaderFactory();
+			}
+			instance = factory;
+		}
+	}
+
+
+	private static class ThreadBasedContextClassLoaderFactory
+			implements ContextClassLoaderFactory {
+
+		public ClassLoader getContextClassLoader(Class<?> reference) {
+			return Thread.currentThread().getContextClassLoader();
+		}
+	}
+
+	/**
+	 * Returns the context ClassLoader for the reference class.
+	 * <p>Default: return from the current thread.
+	 * <br/>
+	 * Or specify the library property of <code>org.zkoss.lang.contextClassLoader.class</code>
+	 * in zk.xml to provide a customized class loader.
+	 * </p>
+	 * @param reference the reference class where it is invoked from.
+	 * @since 8.0.2
+	 */
+	public static ClassLoader getContextClassLoader(Class<?> reference) {
+		return LazyInitializationHolder.instance.getContextClassLoader(reference);
 	}
 }

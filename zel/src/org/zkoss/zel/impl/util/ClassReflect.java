@@ -31,4 +31,11 @@ public interface ClassReflect {
 	public Object newInstance(Class<?> cls, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, IllegalAccessException;
+
+	/**
+	 * Returns the context ClassLoader for the reference class.
+	 * @param reference the reference class where it is invoked from.
+	 * @since 8.0.2
+	 */
+	public ClassLoader getContextClassLoader(Class<?> reference);
 }

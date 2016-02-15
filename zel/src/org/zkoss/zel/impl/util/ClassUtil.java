@@ -55,7 +55,19 @@ public class ClassUtil {
 			}
 		return ClassUtil.class.forName(clsName);
 	}
-
+	/**
+	 * Returns the context ClassLoader for the reference class.
+	 * <p>Default: returns from the current thread.
+	 * <br/>
+	 * Or specify the library property of <code>org.zkoss.lang.contextClassLoader.class</code>
+	 * in zk.xml to provide a customized class loader.
+	 * </p>
+	 * @param reference the reference class where it is invoked from.
+	 * @since 8.0.2
+	 */
+	public static ClassLoader getContextClassLoader(Class<?> reference) {
+		return _classReflect.getContextClassLoader(reference);
+	}
 	private static ClassReflect _classReflect;
 	static {
 		final String className = "org.zkoss.xel.zel.ClassReflect";

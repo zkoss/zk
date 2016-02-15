@@ -24,6 +24,8 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.zkoss.lang.Classes;
+
 /**
  * The fusion invocation handler. It is used to <i>fuse</i>
  * two or more instance into one object.
@@ -95,7 +97,7 @@ public class FusionInvoker implements InvocationHandler, java.io.Serializable {
 				targetClasses.add(allClass[j]);
 			}
 		}
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		ClassLoader cl = Classes.getContextClassLoader(FusionInvoker.class);
 		return Proxy.newProxyInstance(
 			cl != null ? cl: FusionInvoker.class.getClassLoader(),
 			targetClasses

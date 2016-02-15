@@ -230,7 +230,7 @@ implements SerializableAware, HierachicalAware {
 		super.init(owner, zslang);
 
 		_ip = new bsh.Interpreter();
-		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
+		_ip.setClassLoader(Classes.getContextClassLoader(BSHInterpreter.class));
 
 		_bshns = new GlobalNS(_ip.getClassManager(), "global");
 		_ip.setNameSpace(_bshns);
