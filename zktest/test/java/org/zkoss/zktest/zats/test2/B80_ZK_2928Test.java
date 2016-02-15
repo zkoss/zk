@@ -39,7 +39,7 @@ public class B80_ZK_2928Test extends WebDriverTestCase {
 
 		click(jq);
 		waitResponse();
-		assertEquals("showSelectedItem:ms_MY", getZKLog());
+		assertEquals("showSelectedItem:" + label, getZKLog());
 		closeZKLog();
 
 		type(jq("@combobox").find(".z-combobox-input"), "");

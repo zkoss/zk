@@ -13,6 +13,7 @@ package org.zkoss.zktest.test2;
 
 import java.util.Locale;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
@@ -22,7 +23,8 @@ import org.zkoss.zul.ListModelList;
  */
 public class B80_ZK_2928VM {
     private String ourProp;
-    private ListModel model = new ListModelList(Locale.getAvailableLocales());
+
+    private ListModel<String> model;
 
     public String getOurProp() {
         return ourProp;
@@ -32,6 +34,12 @@ public class B80_ZK_2928VM {
         this.ourProp = ourProp;
         Clients.log(">>" + ourProp);
     }
+
+	@Init
+	public void init() {
+		String[] opts = {"Option1", "Option2"};
+		model = new ListModelList<String>(opts);
+	}
 
     @Command
     public void showSelectedItem(){
