@@ -12,8 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.HashMap;
@@ -68,43 +67,6 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		public String getKeyword() {
 			return _keyword;
 		}
-	}
-	
-	public org.zkoss.idom.Document parse(File file) throws Exception {
-		FileInputStream inStream = null;
-		try {
-			if (log.isDebugEnabled())
-				log.debug("Parsing file: [" + file.getAbsolutePath() + "]");
-			
-			inStream = new FileInputStream(file);
-			return convertToIDOM(Zsoup.parse(inStream, "UTF-8",
-					file.getAbsolutePath(), Parser.xhtmlParser()));
-		} catch (UiExceptionX ue) {
-			String lineNumber = getLineNumber(file, ue.getKeyword());
-			if (lineNumber != null)
-				throw new UiException(ue.getMessage() + lineNumber);
-			else
-				throw ue;
-		} catch (ExceptionInfo e) {
-			Document currentDocument = e.getCurrentDocument();
-			if (currentDocument != null) {
-				currentDocument.outputSettings(currentDocument.outputSettings().prettyPrint(false));
-				throw new UiException(" at [file:" + file.getAbsolutePath() + ", " + getLineNumber(new Scanner(currentDocument.toString())) + "]", e);
-			}
-			else
-				throw new UiException(" at [file:" + file.getAbsolutePath() + "]", e);
-		} finally {
-			if (inStream != null)
-				inStream.close();
-		}
-	}
-
-	private String getLineNumber(File file, String keyword) {
-		try {
-			return " at [file:" + file.getAbsolutePath() + ", " + getLineNumber(new Scanner(file), keyword) + "]";
-		} catch (FileNotFoundException e) {
-		}
-		return null;
 	}
 	
 	private String getLineNumber(Reader file, String keyword) {
@@ -315,8 +277,30 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		}
 	}
 
+	public org.zkoss.idom.Document parse(File file) throws Exception {
+		return parse(file.toURI().toURL());
+	}
+
 	public org.zkoss.idom.Document parse(URL url) throws Exception {
-		return parse(new File(url.getFile()));
+		InputStream inStream = null;
+		try {
+			if (log.isDebugEnabled())
+				log.debug("Parsing file: [" + url.toString() + "]");
+			inStream = url.openStream();
+			return convertToIDOM(Zsoup.parse(inStream, "UTF-8", url.getFile(), Parser.xhtmlParser()));
+		} catch (UiExceptionX ue) {
+			throw ue;
+		} catch (ExceptionInfo e) {
+			Document currentDocument = e.getCurrentDocument();
+			if (currentDocument != null) {
+				currentDocument.outputSettings(currentDocument.outputSettings().prettyPrint(false));
+				throw new UiException(" at [file:" + url.getFile() + ", " + getLineNumber(new Scanner(currentDocument.toString())) + "]", e);
+			} else
+				throw new UiException(" at [file:" + url.getFile() + "]", e);
+		} finally {
+			if (inStream != null)
+				inStream.close();
+		}
 	}
 
 	public org.zkoss.idom.Document parse(Reader reader) throws Exception {
