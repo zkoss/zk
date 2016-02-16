@@ -31,9 +31,9 @@ import org.zkoss.zul.Textbox;
 public class B80_ZK_3113Test extends ZATSTestCase {
     @Test public void test() {
         try {
-            DesktopAgent desktop = connect();
+           	connect();
         } catch (Exception e){
-            fail("exception");
+            fail("connect fail : " + e.getMessage());
         }
         Textbox textbox = new Textbox();
         Integer i = null;
@@ -44,7 +44,7 @@ public class B80_ZK_3113Test extends ZATSTestCase {
             pa2.setValue(textbox, Classes.coerce(pa2.getType(), null));
 
         } catch (NullPointerException e){
-            fail("exception");
+            fail("NullPointerException exception" + e.getMessage());
         } catch (WrongValueException e){
             assertTrue(true);
         }
