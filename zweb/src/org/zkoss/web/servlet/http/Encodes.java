@@ -490,7 +490,9 @@ public class Encodes {
 
 		//prefix context path
 		if (!ctxpathSpecified && uri.charAt(0) == '/'
-		&& (request instanceof HttpServletRequest)) {
+				//ZK-3131: do not prefix context path to relative protocol urls that starts with //
+				&& !(uri.length() > 1 && uri.charAt(1) == '/')
+				&& (request instanceof HttpServletRequest)) {
 			//Work around with a bug when we wrap Pluto's RenderRequest (1.0.1)
 			String ctxpath = ((HttpServletRequest)request).getContextPath();
 			if (ctxpath.length() > 0 && ctxpath.charAt(0) != '/')
