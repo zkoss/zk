@@ -16,7 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,6 +62,7 @@ import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.metainfo.NamespaceParser;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.DiskFileItemFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
@@ -149,12 +149,14 @@ public class Configuration {
 	/** A list of client packages. */
 	private final FastReadArray<String> _clientpkgs = new FastReadArray<String>(String.class);
 	private Class<?> _wappcls, _wappftycls, _uiengcls, _dcpcls, _uiftycls,
-		_failmancls, _idgencls, _sesscachecls, _audeccls;
+		_failmancls, _idgencls, _sesscachecls, _audeccls, _fileFactory;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800, _autoResendTimeout = 200;
+	/** since 8.0.2 */
+	private String _fileRepository;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -1468,6 +1470,27 @@ public class Configuration {
 		return _sesscachecls;
 	}
 
+	/** Sets the class that is used to create a file item for fileupload,
+	 * or null to use the default.
+	 * It must implement {@link DiskFileItemFactory}.
+	 *
+	 * @since 8.0.2
+	 */
+	public void setFileItemFactoryClass(Class<?> cls) {
+		if (cls != null && !DiskFileItemFactory.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("DiskFileItemFactory not implemented: "+cls);
+		_fileFactory = cls;
+	}
+
+	/** Returns the class used to create a file item for fileupload, or null
+	 * if the default shall be used.
+	 * It must implement {@link DiskFileItemFactory}.
+	 * @since 8.0.2
+	 */
+	public Class<?> getFileItemFactoryClass() {
+		return _fileFactory;
+	}
+
 	/** Sets the class that is used to decode AU requests,
 	 * or null to use the default.
 	 * It must implement {@link AuDecoder}.
@@ -1547,6 +1570,25 @@ public class Configuration {
 	public int getFileSizeThreshold() {
 		return _fileSizeThreshold;
 	}
+
+	/**
+	 * Sets the directory in which uploaded files will be stored, if stored on disk.
+	 * @param directory
+	 * @since 8.0.2
+	 */
+	public void setFileRepository(String directory) {
+		_fileRepository = directory;
+	}
+
+	/**
+	 * Returns the directory in which uploaded files will be stored, if stored on disk.
+	 * <p>Default: null</p>
+	 * @since 8.0.2
+	 */
+	public String getFileRepository() {
+		return _fileRepository;
+	}
+
 	/** Returns the charset used to encode the uploaded text file
 	 * (never null).
 	 *

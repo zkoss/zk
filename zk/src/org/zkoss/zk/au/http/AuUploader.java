@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -276,10 +275,12 @@ public class AuUploader implements AuExtension {
 		final boolean alwaysNative = "true".equals(params.get("native"));
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
-			meds.add(processItem(desktop, (FileItem)fis, alwaysNative));
+			meds.add(processItem(desktop, (FileItem)fis, alwaysNative,
+					(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 		} else if (fis != null) {
 			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
-				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative));
+				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative,
+						(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 			}
 		}
 
@@ -292,7 +293,8 @@ public class AuUploader implements AuExtension {
 	/** Process the specified fileitem.
 	 */
 	private static final
-	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative)
+	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
+			org.zkoss.zk.ui.sys.DiskFileItemFactory factory)
 	throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
@@ -315,6 +317,11 @@ public class AuUploader implements AuExtension {
 				if (s != null)
 					ctypelc = ctype = s;
 			}
+		}
+
+		// ZK 3132, a way to customize it
+		if (factory != null) {
+			return factory.createMedia(fi, ctype, name, alwaysNative);
 		}
 
 		if (!alwaysNative && ctypelc != null) {
@@ -382,14 +389,36 @@ public class AuUploader implements AuExtension {
 	Desktop desktop, String key)
 	throws FileUploadException {
 		final Map<String, Object> params = new HashMap<String, Object>();
-		final ItemFactory fty = new ItemFactory(desktop, request, key);
-		final ServletFileUpload sfu = new ServletFileUpload(fty);
-		
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		int thrs = conf.getFileSizeThreshold();
+		int sizeThreadHold = 1024 * 128; // maximum size that will be stored in memory
+
 		if (thrs > 0)
-			fty.setSizeThreshold(1024*thrs);
-		
+			sizeThreadHold = 1024 * thrs;
+
+		File repository = null;
+
+		if (conf.getFileRepository() != null) {
+			repository = new File(conf.getFileRepository());
+			if (!repository.isDirectory()) {
+				log.warn("The file repository is not a directory! [" + repository + "]");
+			}
+		}
+
+		org.zkoss.zk.ui.sys.DiskFileItemFactory dfiFactory = null;
+		if (conf.getFileItemFactoryClass() != null) {
+			Class<?> cls = conf.getFileItemFactoryClass();
+			try {
+				dfiFactory = (org.zkoss.zk.ui.sys.DiskFileItemFactory) cls.newInstance();
+				params.put("diskFileItemFactory", dfiFactory);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
+			}
+		}
+
+		final ItemFactory fty = new ItemFactory(desktop, request, key, sizeThreadHold, repository, dfiFactory);
+		final ServletFileUpload sfu = new ServletFileUpload(fty);
+
 		sfu.setProgressListener(fty.new ProgressCallback());
 		
 		int maxsz = conf.getMaxUploadSize();
@@ -534,11 +563,14 @@ public class AuUploader implements AuExtension {
 		private long _cbtotal;
 		/** # of bytes being received. */
 		private long _cbrcv;
+		private org.zkoss.zk.ui.sys.DiskFileItemFactory _factory;
 
 		@SuppressWarnings("unchecked")
-		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key) {
-	    	setSizeThreshold(1024*128);	// maximum size that will be stored in memory
+		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key,
+				int sizeThreshold, File repository, org.zkoss.zk.ui.sys.DiskFileItemFactory factory) {
+			super(sizeThreshold, repository);
 
+			_factory = factory;
 			_desktop = desktop;
 			_key = key;
 			long cbtotal = 0;
@@ -571,10 +603,13 @@ public class AuUploader implements AuExtension {
 		}
 
 		//-- FileItemFactory --//
-	    public FileItem createItem(String fieldName, String contentType,
-		boolean isFormField, String fileName) {
+		public FileItem createItem(String fieldName, String contentType,
+				boolean isFormField, String fileName) {
+			if (_factory != null)
+				return _factory.createItem(fieldName, contentType, isFormField,
+						fileName, getSizeThreshold(), getRepository());
 			return new ZkFileItem(fieldName, contentType, isFormField, fileName,
-				getSizeThreshold(), getRepository());
+					getSizeThreshold(), getRepository());
 		}
 
 		//-- helper classes --//

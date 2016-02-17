@@ -21,7 +21,14 @@ import static org.zkoss.lang.Generics.cast;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -641,7 +648,12 @@ public class ConfigParser {
 
 		s = el.getElementValue("crawlable", true);
 		if (s != null) config.setCrawlable(!"false".equals(s));
-		
+
+		// ZK-3105
+		s = el.getElementValue("file-repository", true);
+		if (s != null)
+			config.setFileRepository(s);
+
 		//bug B50-3316543
 		for (Iterator it = el.getElements("label-location").iterator();it.hasNext();) {
 			final Element elinner = (Element)it.next();
@@ -673,6 +685,10 @@ public class ConfigParser {
 
 		cls = parseClass(el, "session-cache-class", SessionCache.class);
 		if (cls != null) config.setSessionCacheClass(cls);
+
+		// ZK-3105
+		cls = parseClass(el, "file-item-factory-class", DiskFileItemFactory.class);
+		if (cls != null) config.setFileItemFactoryClass(cls);
 
 		cls = parseClass(el, "au-decoder-class", AuDecoder.class);
 		if (cls != null) config.setAuDecoderClass(cls);

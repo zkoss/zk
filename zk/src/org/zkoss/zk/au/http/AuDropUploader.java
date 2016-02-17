@@ -187,10 +187,12 @@ public class AuDropUploader implements AuExtension {
 		final Object fis = params.get("file");
 		
 		if (fis instanceof FileItem) {
-			meds.add(processItem(desktop, (FileItem)fis, alwaysNative));
+			meds.add(processItem(desktop, (FileItem)fis, alwaysNative,
+					(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 		} else if (fis != null) {
 			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
-				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative));
+				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative,
+						(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 			}
 		}
 	}
@@ -198,7 +200,8 @@ public class AuDropUploader implements AuExtension {
 	/** Process the specified fileitem.
 	 */
 	private static final
-	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative)
+	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
+			org.zkoss.zk.ui.sys.DiskFileItemFactory factory)
 	throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
@@ -221,6 +224,11 @@ public class AuDropUploader implements AuExtension {
 				if (s != null)
 					ctypelc = ctype = s;
 			}
+		}
+
+		// ZK 3132, a way to customize it
+		if (factory != null) {
+			return factory.createMedia(fi, ctype, name, alwaysNative);
 		}
 
 		if (!alwaysNative && ctypelc != null) {
@@ -288,13 +296,36 @@ public class AuDropUploader implements AuExtension {
 	Desktop desktop, String key)
 	throws FileUploadException {
 		final Map<String, Object> params = new HashMap<String, Object>();
-		final ItemFactory fty = new ItemFactory(desktop, request, key);
-		final ServletFileUpload sfu = new ServletFileUpload(fty);
-		
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		int thrs = conf.getFileSizeThreshold();
+		int sizeThreadHold = 1024 * 128; // maximum size that will be stored in memory
+
 		if (thrs > 0)
-			fty.setSizeThreshold(1024*thrs);
+			sizeThreadHold = 1024 * thrs;
+
+		File repository = null;
+
+		if (conf.getFileRepository() != null) {
+			repository = new File(conf.getFileRepository());
+			if (!repository.isDirectory()) {
+				log.warn("The file repository is not a directory! [" + repository + "]");
+			}
+		}
+
+		org.zkoss.zk.ui.sys.DiskFileItemFactory dfiFactory = null;
+		if (conf.getFileItemFactoryClass() != null) {
+			Class<?> cls = conf.getFileItemFactoryClass();
+			try {
+				dfiFactory = (org.zkoss.zk.ui.sys.DiskFileItemFactory) cls.newInstance();
+				params.put("diskFileItemFactory", dfiFactory);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
+			}
+		}
+
+		final ItemFactory fty = new ItemFactory(sizeThreadHold, repository, dfiFactory);
+		final ServletFileUpload sfu = new ServletFileUpload(fty);
+
 				
 		int maxsz = conf.getMaxUploadSize();
 		try {
@@ -426,16 +457,24 @@ public class AuDropUploader implements AuExtension {
 	 * Customize DiskFileItemFactory (return ZkFileItem).
 	 */
 	private static class ItemFactory extends DiskFileItemFactory implements Serializable {
+		private org.zkoss.zk.ui.sys.DiskFileItemFactory _factory;
+
 		@SuppressWarnings("unchecked")
-		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key) {
-	    	setSizeThreshold(1024*128);	// maximum size that will be stored in memory
+		/*package*/ ItemFactory(int sizeThreshold, File repository,
+				org.zkoss.zk.ui.sys.DiskFileItemFactory factory) {
+			super(sizeThreshold, repository);
+
+			_factory = factory;
 		}
 
 		//-- FileItemFactory --//
-	    public FileItem createItem(String fieldName, String contentType,
-		boolean isFormField, String fileName) {
+		public FileItem createItem(String fieldName, String contentType,
+				boolean isFormField, String fileName) {
+			if (_factory != null)
+				return _factory.createItem(fieldName, contentType, isFormField,
+						fileName, getSizeThreshold(), getRepository());
 			return new ZkFileItem(fieldName, contentType, isFormField, fileName,
-				getSizeThreshold(), getRepository());
+					getSizeThreshold(), getRepository());
 		}
 
 		//-- helper classes --//

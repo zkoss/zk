@@ -2,6 +2,9 @@
 ZK 8.0.2
 * Features
   ZK-3100: support a way to customize classloading
+  ZK-3105: Users can specify uploading target path
+  ZK-3132: Make AuUploader and AuDropUploader can be extended and overridden
+
 
 * Bugs
 
