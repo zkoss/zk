@@ -4,10 +4,12 @@ ZK 8.0.2
   ZK-3100: support a way to customize classloading
   ZK-3105: Users can specify uploading target path
   ZK-3132: Make AuUploader and AuDropUploader can be extended and overridden
-  ZK-3123: File not found when loading external resource in a jar file
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
+  ZK-3123: File not found when loading external resource in a jar file
+  ZK-3082: Chosenbox onSearching does not fire with an empty value 
+  ZK-3083: NPE at VisibilityChangeEvent
 
 * Upgrade Notes
 
