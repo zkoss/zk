@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3082.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb 17 14:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Type a in each chosenbox and click backspace, you should see two onSearching in zk log.
+    </label>
+    <zscript>
+        ListModel model = new ListModelList(Locale.getAvailableLocales());
+        ListModel subModel = ListModels.toListSubModel(new ListModelList(Locale.getAvailableLocales()));
+    </zscript>
+    <div>
+        <label>model : </label>
+        <chosenbox width="300px" model="${model}" onSearching='Clients.log("onSearching");'/>
+    </div>
+    <div>
+        <label>subModel : </label>
+        <chosenbox width="300px" model="${subModel}" onSearching='Clients.log("onSearching");'/>
+    </div>
+    <div>
+        <label>model : </label>
+        <chosenbox width="300px" model="${subModel}" onSearching='Clients.log("onSearching");' creatable="true"/>
+    </div>
+    <div>
+        <label>subModel : </label>
+        <chosenbox width="300px" model="${subModel}" onSearching='Clients.log("onSearching");' creatable="true"/>
+    </div>
+</zk>

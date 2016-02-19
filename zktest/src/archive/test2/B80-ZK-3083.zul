@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3083.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb 17 16:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window apply="org.zkoss.zktest.test2.B80_ZK_3083_Composer" border="normal" width="600px" >
+        <label multiline="true" >
+            1. This issue only happens in Edge
+            2. Switch to another browser tab and switch back
+            3. You should see two "Visbility event triggered" in zklog and no exception
+        </label>
+    </window>
+</zk>

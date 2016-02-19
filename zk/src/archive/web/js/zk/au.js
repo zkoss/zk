@@ -1220,7 +1220,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			{implicit:true, rtags: {onClientInfo: 1}}));
 	},
 	visibilityChange: function (dtid) {
-		var hidden = document.hidden || document[zk.vendor_ + 'Hidden'],
+		var hidden = !!(document.hidden || document[zk.vendor_ + 'Hidden']),
 			visibilityState = document.visibilityState || document[zk.vendor_ + 'VisibilityState'];
 		
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onVisibilityChange',
