@@ -11,6 +11,7 @@ ZK 8.0.2
   ZK-3082: Chosenbox onSearching does not fire with an empty value 
   ZK-3083: NPE at VisibilityChangeEvent
   ZK-3094: Scrollable menubar body is not properly resized after container resizing.
+  ZK-3084: An EL in a command binding cannot access "event" object
 
 * Upgrade Notes
 

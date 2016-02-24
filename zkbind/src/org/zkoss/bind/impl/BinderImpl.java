@@ -82,6 +82,7 @@ import org.zkoss.bind.sys.debugger.impl.info.NotifyChangeInfo;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.bind.xel.zel.ImplicitObjectELResolver;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -1447,17 +1448,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			if (_commandBinding != null) {
 				final BindEvaluatorX eval = getEvaluatorX();
-				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_commandBinding).getCommand());
+				//ZK-3084: An EL in a command binding cannot access "event" object
+				Map<String, Object> implicit = _implicitContributor.contirbuteCommandObject(BinderImpl.this, _commandBinding, event);
+				BindContext ctx = new BindContextImpl(null, null, false, null, comp, null);
+				ctx.setAttribute(ImplicitObjectELResolver.IMPLICIT_OBJECTS, implicit);
+				command = (String) eval.getValue(ctx, comp, ((CommandBindingImpl)_commandBinding).getCommand());
 				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
-					
 					//ZK-1032 Able to wire Event to command method
-					Map<String,Object> implicit = null;
-					if(_implicitContributor!=null){
-						implicit = _implicitContributor.contirbuteCommandObject(BinderImpl.this,_commandBinding,event);
-					}
-					
 					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs(),implicit);
-					
 					cmdResult = BinderImpl.this.doCommand(comp, _commandBinding, command, event, args, notifys);
 				}
 			}
