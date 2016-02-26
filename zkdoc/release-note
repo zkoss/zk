@@ -13,6 +13,7 @@ ZK 8.0.2
   ZK-3094: Scrollable menubar body is not properly resized after container resizing
   ZK-3084: An EL in a command binding cannot access "event" object
   ZK-3095: Menubar ignore menuitem margin when calculating scrollable status
+  ZK-3117: Selection bug on listbox using checkmarkDeselectOthers functionality
 
 * Upgrade Notes
 

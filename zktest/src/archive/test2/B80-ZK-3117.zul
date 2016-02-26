@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3117.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Feb 24 16:36:03 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList();
+		for (int i = 1; i < 10; i++) {
+			model.add("Value " + i);
+		}
+		model.setMultiple(true);
+    ]]></zscript>
+    <window width="600px">
+        <vlayout>
+            <label multiline="true"><![CDATA[
+                1.For this case, you should add the following setting in zk.xml
+                <library-property>
+                    <name>org.zkoss.zul.listbox.checkmarkDeselectOthers</name>
+                    <value>true</value>
+                </library-property>
+                2.Click the checkmark in listheader, all the listitems should be selected. And you should see "Selected elements count: 9"
+                2.Click the one of the listitems, all the listitems should be usselected except the one you click. And you should see "Selected elements count: 1"
+
+            ]]></label>
+            <listbox id="grid" width="450px" height="400px" model="${model}" checkmark="true"
+                     onSelect='count.setValue("Selected elements count: " + grid.getSelectedCount())'>
+                <listhead>
+                    <listheader label="Some title" />
+                </listhead>
+                <template name="model">
+                    <listitem label="${each}" />
+                </template>
+            </listbox>
+            <label id="count" style="font-size: 20px; font-weight: bold;"
+                   onCreate='count.setValue("Selected elements count: " + grid.getSelectedCount())' />
+        </vlayout>
+    </window>
+</zk>

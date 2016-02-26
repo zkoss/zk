@@ -1217,6 +1217,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * is changed.
 	 */
 	_unsetSelectAllExcept: function (row) {
+		this.$$selectAll = undefined;
 		var changed = false;
 		for (var it = this.getSelectedItems(), j = it.length; j--;) {
 			if (it[j] != row && this._changeSelect(it[j], false))
