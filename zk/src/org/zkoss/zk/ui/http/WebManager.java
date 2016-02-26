@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -61,11 +60,13 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.Registry;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.WebAppFactory;
+import org.zkoss.zk.ui.sys.WebAppFactoryImpl;
 import org.zkoss.zk.ui.sys.WebAppsCtrl;
 import org.zkoss.zk.ui.util.Configuration;
 
@@ -259,6 +260,9 @@ public class WebManager {
 				}
 			}
 		}
+
+		Registry.sign(_wapp, Registry.class, WebManager.class,
+				WebAppFactoryImpl.class);
 	}
 	private void checkAndAddExtendlet(String ext, Extendlet extlet) {
 		if (_cwr.getExtendlet(ext, false) == null)

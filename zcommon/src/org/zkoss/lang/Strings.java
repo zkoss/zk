@@ -16,6 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import org.zkoss.mesg.MCommon;
@@ -743,6 +744,19 @@ public class Strings {
 			buf.append(array[i]);
 		}
 		return buf.toString();
+	}
+
+	/**
+	 * Converts the given byte[] to UTF-8 string, if possible. Or return with the default charset.
+	 * <p>This is a method helper for JDK 5</p>
+	 * @since 8.0.2
+	 */
+	public static final String toString(byte[] data) {
+		try {
+			return new String(data, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return new String(data);
+		}
 	}
 
 	/** Returns the ending parenthesis (such as }),

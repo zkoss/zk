@@ -1,2 +1,4 @@
 jar
 time=archive/metainfo/zk/build
+signdir=archive/metainfo/zk/buildsign
+signclasses=org.zkoss.zk.ui.sys.WebAppFactoryImpl,org.zkoss.zk.ui.http.WebManager,org.zkoss.zk.ui.sys.Registry

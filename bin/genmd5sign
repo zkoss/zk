@@ -1,0 +1,89 @@
+#!/bin/bash
+# genmd5sign
+#
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Wed Feb 24 17:46:58 CST 2016, Created by jumperchen
+#
+#Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+#
+function showhelp
+{
+	echo "genmd5sign - generate the file md5 from the signclasses"
+	echo "Copyright (C) 2016 Potix Corporation. All Rights Reserved."
+	echo
+	echo "Usage:"
+	echo "  genmd5sign [-h] [dstfl] [classes] [classpath] [build stamp path] [maindir]"
+	echo
+	echo "dstfl"
+	echo "    The destination file, if exists, it will be removed first"
+	echo
+	echo "classes"
+	echo "    The list of the classes to be output to stdout with md5 format, each of classes is sepecated by a comma ','"
+	echo "    For example,"
+	echo "        foo.bar,foo.bar1,foo.bar2"
+	echo
+	echo "classpath"
+	echo "    A directory where to put those classes."
+	echo
+	echo "build stamp path"
+	echo "    A file path where to output the zk build stamp"
+	echo
+	echo "maindir"
+	echo "    The ZK source directory"
+}
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
+	showhelp
+	exit 0
+fi
+os="$(uname)"
+
+dstfl=$1
+classes=$2
+debugdir=$3
+build=$4
+maindir=$5
+
+mkdir -p "${dstfl%/*}"
+
+if [ -f $build ] ; then
+	 build=$(cat $build) 
+elif [ -f $maindir/zk/format ] ; then
+	build=$(grep '^time=' $maindir/zk/format)
+	build=${build#time=}
+
+	if [ -f $maindir/zk/codegen/$build ] ; then
+		build=$(cat $maindir/zk/codegen/$build) 
+	else
+		echo "the build stamp path is not specified!"
+		exit -1	
+	fi
+else
+	echo "the build stamp path is not specified!"
+	exit -1
+fi
+
+if [ -f $dstfl ] ; then
+	rm $dstfl
+fi
+echo $maindir
+
+function md5java {
+	local src="$1"
+	java -cp "$maindir/dist/lib/ext/commons-codec.jar:$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+}
+
+export IFS=","
+echo "Generate md5 sign"
+for cls in $classes; do
+	echo "class => $cls"
+	clsdir=$(echo $cls | sed 's/\./\//g')
+  	filemd5=`md5java "$debugdir/$clsdir.class"`
+  	filemd5=`md5java "$filemd5$build"`
+  	name=`md5java "$cls"`
+  	echo "$name=$filemd5" >> $dstfl
+done

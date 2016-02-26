@@ -18,6 +18,7 @@ package org.zkoss.zk.ui.sys;
 
 import static org.zkoss.lang.Generics.cast;
 
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -28,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -177,10 +179,33 @@ public class ConfigParser {
 				org.zkoss.zk.ui.impl.Utils.getXMLResourcesLocator();
 			final List<XMLResourcesLocator.Resource> xmls = locator.getDependentXMLResources(
 				"metainfo/zk/config.xml", "config-name", "depends");
+
+			Registry reg = Registry.getInstance();
 			for (XMLResourcesLocator.Resource res: xmls) {
 				if (log.isDebugEnabled()) log.debug("Loading "+res.url);
 				try {
 					if (checkVersion(res.url, res.document)) {
+						try {
+							String path = res.url.toExternalForm();
+							int end = path.lastIndexOf(File.separator);
+							if (end >= 0) {
+								InputStream inputStream = null;
+								try {
+									path = path.substring(0, end + 1)
+											+ Strings.toString(Registry.PREFS_0);
+									inputStream = new URL(path).openStream();
+									if (inputStream != null) {
+										Properties props = new Properties();
+										props.load(inputStream);
+										for (Map.Entry<Object, Object> me : props.entrySet())
+											reg.addKeys((String)me.getKey(), (String)me.getValue());
+									}
+								} finally {
+									if (inputStream != null)
+										inputStream.close();
+								}
+							}
+						} catch (Exception e) {}
 						final Element el = res.document.getRootElement();
 						if (!syscfgLoaded) {
 							parseSubZScriptConfig(el);

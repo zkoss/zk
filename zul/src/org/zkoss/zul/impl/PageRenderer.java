@@ -16,18 +16,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 
 import org.zkoss.lang.Library;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.PageCtrl;
 
 /**
  * The page render for ZUL pages.
@@ -103,6 +104,12 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		out.write("<body>\n");
 		HtmlPageRenders.outPageContent(exec, page, out, false);
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
+
+		WebApp webApp = exec.getDesktop().getWebApp();
+		Object notice = webApp.getAttribute("org.zkoss.zk.ui.client.notice");
+		if (notice instanceof String) {
+			out.write((String) notice);
+		}
 		out.write("\n</body>\n</html>\n");
 	}
 	private static void outHeaders(Execution exec, Page page, Writer out)

@@ -11,3 +11,4 @@
 ../dist/lib/ext/jython.jar
 ../dist/lib/ext/slf4j-api.jar
 ../dist/lib/ext/javaee-api.jar
+../dist/lib/ext/commons-codec.jar

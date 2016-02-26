@@ -14,22 +14,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zhtml.impl;
 
-import java.util.Iterator;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.io.IOException;
+import java.util.Iterator;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zhtml.Text;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.sys.Attributes;
-import org.zkoss.zhtml.Text;
+import org.zkoss.zk.ui.sys.PageCtrl;
 
 /**
  * The page render for ZHTML pages.
@@ -145,8 +146,15 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			return; //nothing to do
 
 		final TagRenderContext rc = (TagRenderContext)param;
-		final String rcs = rc.complete();
+		String rcs = rc.complete();
+		WebApp webApp = exec.getDesktop().getWebApp();
+
 		if (rcs.length() > 0) {
+			Object notice = webApp.getAttribute("org.zkoss.zk.ui.client.notice");
+			if (notice instanceof String) {
+				rcs += '\n' + ((String) notice);
+			}
+
 			if (out instanceof StringWriter) {
 				final StringBuffer buf = ((StringWriter)out).getBuffer();
 				int j = buf.lastIndexOf("</body>");
@@ -160,8 +168,13 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		}
 
 		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
+		if (rcs.length() == 0) {
+			Object notice = webApp.getAttribute("org.zkoss.zk.ui.client.notice");
+			if (notice instanceof String) {
+				out.write((String) notice);
+			}
+		}
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
-
 		afterRenderTag(exec, param);
 	}
 

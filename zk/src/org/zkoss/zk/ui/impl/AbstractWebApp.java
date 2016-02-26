@@ -20,29 +20,25 @@ import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.util.Utils;
-
 import org.zkoss.io.Files;
-
+import org.zkoss.util.Utils;
 import org.zkoss.zk.Version;
-import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.http.SimpleUiFactory;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.http.SimpleSessionCache;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.http.SimpleUiFactory;
 import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCache;
-import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
-import org.zkoss.zk.ui.impl.UiEngineImpl;
-import org.zkoss.zk.au.AuDecoder;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * A skeletal implementation of {@link WebApp}.
@@ -87,6 +83,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return Version.RELEASE;
 	}
 	public final String getBuild() {
+		return getBuildStamp();
+	}
+	public final static String getBuildStamp() {
 		return _build == null ? loadBuild(): _build;
 	}
 	public int getSubversion(int portion) {

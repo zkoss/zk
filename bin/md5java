@@ -1,0 +1,26 @@
+String[] args = this.interpreter.get("bsh.args");
+if (args == null || args.length != 1) {
+	System.err.println("The source string must be specified");
+	System.exit(-1);
+}
+import org.apache.commons.codec.digest.DigestUtils;
+import java.io.*;
+
+if (args[0].endsWith(".class")) {
+	InputStream is = new FileInputStream(args[0]);
+	Reader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+	StringWriter sw = new StringWriter();
+
+	char[] buf = new char[1024];
+	int len;
+	while ((len = in.read(buf, 0, buf.length)) >= 0)
+		sw.write(buf, 0, len);
+	buf = null;
+	in.close();
+	is.close();
+
+	StringBuffer sb = sw.getBuffer();
+	System.out.println(DigestUtils.md5Hex(sb.toString()));
+} else {
+	 System.out.println(DigestUtils.md5Hex(args[0]));
+}

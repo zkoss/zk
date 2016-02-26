@@ -110,7 +110,7 @@ if [ "$1" = "" ] || [ "$1" = "lessc" ] ; then
 fi
 
 #-- parsing cmd
-cmdList=" bd br cd cr ud ur doc jsrc build.debug build.release clean clean.debug clean.release utest.debug utest.release javadoc jsdoc zipjs lessc help"
+cmdList=" bd br cd cr ud ur doc jsrc build.debug build.release clean clean.debug clean.release utest.debug utest.release javadoc jsdoc zipjs lessc dev help"
 if [ \( $# != 0 \) -a \( "${cmdList#* $1 }" != "$cmdList" \) ] ; then
 	cmd=$1
 	shift
@@ -476,6 +476,20 @@ function invoke_ant
 	else
 		gentime=$(grep '^time=' format)
 		gentime=${gentime#time=}
+		signdir=$(grep '^signdir=' format)
+		signdir=${signdir#signdir=}
+		signclasses=$(grep '^signclasses=' format)
+		signclasses=${signclasses#signclasses=}
+		if [ "$gentime" = "" ] && [ "$signdir" != "" ] && [ "$cmd" = "build" ] ; then
+			buildstamp=$(grep '^buildstamp=' format)
+			buildstamp=${buildstamp#buildstamp=}
+			if [ ! -f $maindir/zk/codegen/$buildstamp ] ; then
+				echo "zk's build stamp is not found, please build zk first"
+				exit -1
+			fi
+		else
+			buildstamp=$gentime
+		fi
 		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
@@ -495,6 +509,7 @@ function invoke_ant
 		-Dshare.javadoc.dir="$javadocdir" \
 		-Djavadoc.class.path="$DCP" -Dapp.name=$app $unziplist \
 		-Droot.context=$rootContext -Dgentime=$gentime \
+		-Dsigndir=$signdir -Dsignclasses=$signclasses -Dbuildstamp=$buildstamp \
 		$dfnList -buildfile $maindir/build.xml $1
 	fi
 

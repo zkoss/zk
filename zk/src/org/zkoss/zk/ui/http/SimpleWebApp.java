@@ -16,26 +16,26 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Iterator;
-import java.util.Enumeration;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.InputStream;
-
 import javax.servlet.ServletContext;
 
 import org.zkoss.util.CollectionsX;
 import org.zkoss.web.servlet.xel.AttributesMap;
-
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
 import org.zkoss.zk.ui.impl.ScopeListeners;
+import org.zkoss.zk.ui.sys.Registry;
+import org.zkoss.zk.ui.sys.WebAppFactoryImpl;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * A servlet-based Web application.
@@ -54,8 +54,10 @@ public class SimpleWebApp extends AbstractWebApp {
 		if (context == null)
 			throw new IllegalArgumentException("context");
 		_ctx = (ServletContext)context;
-
 		super.init(context, config);
+
+		Registry.sign(this, Registry.class, WebManager.class,
+				WebAppFactoryImpl.class);
 	}
 
 	private final Map<String, Object> _attrs = new AttributesMap() {

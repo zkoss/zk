@@ -106,6 +106,12 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 			</not>
 		</condition>
 
+		<condition property="genmd5sign.required">
+			<not>
+				<equals arg1="${signdir}" arg2=""/>
+			</not>
+		</condition>
+
 		<!-- deploy -->
 		<condition property="deploy.lib.required">
 			<equals arg1="${deploy}" arg2="lib"/>
