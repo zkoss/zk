@@ -122,7 +122,6 @@ public class Registry {
 			if (!INSTANCE.isValid(cls)) {
 				String sign = INSTANCE.getSign(cls);
 				String key = Strings.toString(Registry.PREFS_1);
-
 				if (sign == null) {
 					sign = INSTANCE.getKey(cls);
 				}
@@ -140,7 +139,7 @@ public class Registry {
 	private static String gen(String msg, String error) {
 		return String.format(toString(
 				byteMap.get(toString(new byte[] {109, 115, 103, 48}))), msg,
-				error != null ? "Error:" + error : "");
+				error != null ? toString(new byte[] {69, 114, 114, 111, 114, 58}) + error : "");
 	}
 
 	private synchronized String loadValue(Class cls) {
@@ -148,7 +147,8 @@ public class Registry {
 		Reader in = null;
 		try {
 			URL location = cls.getResource(
-					File.separator + cls.getName().replace(".", File.separator) + ".class");
+					File.separator + cls.getName().replace(".", File.separator)
+							+ toString(new byte[] {46, 99, 108, 97, 115, 115}));
 			is = location.openStream();
 			in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			StringWriter sw = new StringWriter();
