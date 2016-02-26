@@ -64,7 +64,14 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="tomcat.webapps.dir" value="${tomcat.home}/webapps"/>
 <property name="tomcat.conf.dir" value="${tomcat.home}/conf"/>
 
-<property name="exclude.list" value="tmp/**, temp/**, ${xar.name}, conf/*.properties"/>
+<!-- exclude debug/* -->
+<loadfile property="excludeList" srcfile="exclude" failonerror="false">
+	<filterchain>
+		<suffixlines suffix=", "/>
+		<striplinebreaks/>
+	</filterchain>
+</loadfile>
+<property name="exclude.list" value="tmp/**, temp/**, ${xar.name}, conf/*.properties, ${excludeList}"/>
 
 <property name="version.text.freshly" value="${zk.version}-FL$"/>
 <property name="version.text" value="${zk.version}$"/>
