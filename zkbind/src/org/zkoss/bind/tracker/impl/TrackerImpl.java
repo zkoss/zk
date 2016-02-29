@@ -92,6 +92,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		
 		TrackerNode parentNode = null;
 		for(String script : series) {
+			script = (String)AllocUtil.inst.processScript(script);
 			TrackerNode node = null;
 			if (parentNode == null) { //head node
 				node = nodes == null ? null : nodes.get(script);
