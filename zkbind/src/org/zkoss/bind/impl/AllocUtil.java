@@ -15,9 +15,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.List;
 
 /**
@@ -28,6 +30,8 @@ import java.util.List;
 public class AllocUtil {
 	public static AllocUtil inst = new AllocUtil();
 	
+	private final Interner<String> interner = new Interner<String>();
+	
 	/**
 	 * Put key, value into the specified map.
 	 * @param map the map to be put key, value in.
@@ -37,7 +41,7 @@ public class AllocUtil {
 	 */
 	public <K, V> Map<K, V> putMap(Map<K, V> map, K key, V value) {
 		if (map == null) {
-			map = new HashMap<K, V>();
+			map = new HashMap<K, V>(1);
 		}
 		map.put(key, value);
 		return map;
@@ -52,7 +56,7 @@ public class AllocUtil {
 	 */
 	public <K, V> Map<K, V> putLinkedHashMap(Map<K, V> map, K key, V value) {
 		if (map == null) {
-			map = new LinkedHashMap<K, V>();
+			map = new LinkedHashMap<K, V>(1);
 		}
 		map.put(key, value);
 		return map;
@@ -62,7 +66,7 @@ public class AllocUtil {
 	 * Prepare a suitable LinkedHashMap that optimize the space.
 	 */
 	public <K, V> Map<K, V> newLinkedHashMap(int size) {
-		return new LinkedHashMap<K, V>();
+		return new LinkedHashMap<K, V>(size);
 	}
 	
 	/**
@@ -81,7 +85,7 @@ public class AllocUtil {
 	
 	public <V> Set<V> addLinkedHashSet(Set<V> set, V value) {
 		if (set == null) {
-			set = new LinkedHashSet<V>();
+			set = new LinkedHashSet<V>(1);
 		}
 		set.add(value);
 		return set;
@@ -103,7 +107,7 @@ public class AllocUtil {
 	 */
 	public <V> List<V> addList(List<V> list, V value) {
 		if (list == null) {
-			list = new ArrayList<V>();
+			list = new ArrayList<V>(1);
 		}
 		list.add(value);
 		return list;
@@ -114,6 +118,30 @@ public class AllocUtil {
 	 * @param script
 	 */
 	public Object processScript(Object script) {
+		if (script instanceof String) {
+			return interner.intern((String) script);
+		}
 		return script;
+	}
+	
+	private static class Interner<E> {
+		
+		private final WeakHashMap<E, WeakReference<E>> map = new WeakHashMap<E, WeakReference<E>>(1024);
+		
+		public E intern(E value) {
+			synchronized(map) {
+				WeakReference<E> reference = map.get(value);
+				if (reference != null) {
+					E internedValue = reference.get();
+					if (internedValue != null) {
+						return internedValue;
+					}
+				}
+			
+				map.put(value, new WeakReference<E>(value));
+			}
+			
+			return value;
+		}
 	}
 }
