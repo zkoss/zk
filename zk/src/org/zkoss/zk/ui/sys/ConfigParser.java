@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.sys;
 
 import static org.zkoss.lang.Generics.cast;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -187,7 +186,7 @@ public class ConfigParser {
 					if (checkVersion(res.url, res.document)) {
 						try {
 							String path = res.url.toExternalForm();
-							int end = path.lastIndexOf(File.separator);
+							int end = path.lastIndexOf('/'); // no need to use OS's separator
 							if (end >= 0) {
 								InputStream inputStream = null;
 								try {

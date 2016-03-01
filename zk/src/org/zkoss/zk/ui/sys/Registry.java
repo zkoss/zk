@@ -12,7 +12,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -146,8 +145,7 @@ public class Registry {
 		InputStream is = null;
 		Reader in = null;
 		try {
-			URL location = cls.getResource(
-					File.separator + cls.getName().replace(".", File.separator)
+			URL location = cls.getResource("/" + cls.getName().replace(".", "/")
 							+ toString(new byte[] {46, 99, 108, 97, 115, 115}));
 			is = location.openStream();
 			in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
