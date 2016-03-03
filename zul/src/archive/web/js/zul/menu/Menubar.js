@@ -154,8 +154,8 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth < nodeWidth) {
 				this._scrolling = false;
 				body.scrollLeft = 0;
-				if (body.offsetWidth <= totalWidth)
-					body.style.width = jq.px0(fixedSize);
+				 //ZK-3094: Scrollable menubar body is not properly resized after container resizing.
+				body.style.width = '';
 			} else {
 				body.style.width = jq.px0(fixedSize);
 				this._fixScrollPos(node);
@@ -164,8 +164,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth >= nodeWidth) {
 				this._scrolling = true;
 				body.style.width = jq.px0(fixedSize);
-			} else { //ZK-3094: Scrollable menubar body is not properly resized after container resizing.
-				body.style.width = '';
 			}
 		}
 		this._fixButtonPos(node);
