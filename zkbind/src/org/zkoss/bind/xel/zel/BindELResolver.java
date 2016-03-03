@@ -312,8 +312,10 @@ public class BindELResolver extends XelELResolver {
 						final boolean prompt = bctx != null && bctx.getCommandName() == null; 
 						if (prompt) {
 							//FormBinding shall not check @DependsOn() for dependent nodes
-							if (!(binding instanceof LoadFormBindingImpl) || ((LoadFormBindingImpl)binding).getSeriesLength() <= path.size()) {
-								BindELContext.addDependsOnTrackings(m, path.getTrackBasePath(), path.getTrackFieldsList(), binding, bctx);
+							String basePath = path.getTrackBasePath();
+							boolean skipAddingDependsOn = (basePath == null || basePath.length() == 0); //Should ignore empty base
+							if (!skipAddingDependsOn && (!(binding instanceof LoadFormBindingImpl) || ((LoadFormBindingImpl)binding).getSeriesLength() <= path.size())) {
+								BindELContext.addDependsOnTrackings(m, basePath, path.getTrackFieldsList(), binding, bctx);
 							}
 						}
 					}

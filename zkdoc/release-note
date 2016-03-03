@@ -14,6 +14,7 @@ ZK 8.0.2
   ZK-3084: An EL in a command binding cannot access "event" object
   ZK-3095: Menubar ignore menuitem margin when calculating scrollable status
   ZK-3117: Selection bug on listbox using checkmarkDeselectOthers functionality
+  ZK-3107: error when using @DependsOn
 
 * Upgrade Notes
 
